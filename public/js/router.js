@@ -3,7 +3,7 @@
 
     var router = Backbone.Router.extend({
         routes: {
-            "/dashboard"    :   "dashboard",
+            "/"    :   "dashboard",
             "/login"        :   "login"
         },
 

@@ -12,7 +12,7 @@
         setup : function(){
             this.model.bind("saved", function(model){
                 chorus.user = model.attributes;
-                chorus.router.navigate("/dashboard", true);
+                chorus.router.navigate("/", true);
             })
         },
 
