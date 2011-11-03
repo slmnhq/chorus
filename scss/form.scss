@@ -1,0 +1,29 @@
+@import "colors.scss";
+
+form {
+    label {
+        text-align: left;
+        font-size: 13px;
+        color: $form-label-color;
+    }
+
+    input {
+        display: block;
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .controls {
+        position: relative;
+        bottom: 0;
+        margin-top: 25px;
+
+        button {
+            float: right;
+            margin-left: 8px;
+        }
+    }
+
+
+}
+

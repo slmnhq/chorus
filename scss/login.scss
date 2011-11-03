@@ -1,0 +1,40 @@
+@import "base.scss";
+@import "colors.scss";
+
+.login {
+    text-align: center;
+
+    img.logo {
+        width: 450px;
+        height: 180px;
+    }
+
+    .card {
+        @include borderbox;
+        background-color: $card-background;
+        padding: 20px;
+        border: 2px solid $card-border-color;
+        margin: auto;
+        width: 450px;
+        height: 220px;
+
+        h1 {
+            font-weight: bold;
+            font-size: 23px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        form {
+            .content {
+                margin: auto;
+                text-align: left;
+                width: 300px;
+
+                input {
+                    margin-bottom: 12px;
+                }
+            }
+        }
+    }
+}
