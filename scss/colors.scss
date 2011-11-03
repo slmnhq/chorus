@@ -1,8 +1,20 @@
 $body-background-color: #EAEFF6;
+
 $text-color : black;
+$secondary-text-color : #7D7D7D;
+$weak-text-color : #9D9E9F;
 
-$card-background: white;
-$card-border-color: #D0D0D0;
+$link-color : #2c95dd;
 
-$form-label-color: #7D7D7D;
+$border-color : #D0D0D0;
 
+$element-background: white;
+
+$button-background-color : white;
+
+
+
+
+// TODO Change these colors or the references to them
+$card-background: $element-background;
+$card-border-color: $border-color;

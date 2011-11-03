@@ -6,6 +6,15 @@
     box-sizing: border-box;
 };
 
+*:focus {
+    outline-color: $border-color;
+}
+
+a {
+    color: $link-color;
+    text-decoration : none;
+}
+
 body {
     color: $text-color;
     background-color: $body-background-color;
@@ -13,6 +22,17 @@ body {
 }
 
 button {
-    border-radius : 0;
     -webkit-appearance : initial;
+    color: $link-color;
+    border: 1px solid $border-color;
+    background : $button-background-color;
+    padding-left : 14px;
+    padding-right : 14px;
+    font-size : 9pt;
+    cursor : pointer;
+    outline-color: $border-color;
+    &:disabled {
+        color : $weak-text-color;
+        cursor : initial;
+    }
 }

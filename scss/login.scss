@@ -1,11 +1,12 @@
 @import "base.scss";
 @import "colors.scss";
 
+$login-width : 450px;
 .login {
     text-align: center;
 
     img.logo {
-        width: 450px;
+        width: $login-width;
         height: 180px;
     }
 
@@ -15,7 +16,7 @@
         padding: 20px;
         border: 2px solid $card-border-color;
         margin: auto;
-        width: 450px;
+        width: $login-width;
         height: 220px;
 
         h1 {
@@ -36,5 +37,20 @@
                 }
             }
         }
+    }
+
+    footer {
+        margin-top : 30px;
+        display : inline-block;
+        text-align : left;
+        width : $login-width;
+        color: $weak-text-color;
+        font-size : 12px;
+        div {
+            display : inline-block;
+        }
+    }
+    .version {
+        float : right;
     }
 }
