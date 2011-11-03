@@ -12,8 +12,7 @@
         setup : function(){
             this.model.bind("saved", function(model){
                 chorus.user = model.attributes;
-                chorus.navigate("/dashboard");
-                if(!window.jasmine) alert("Logged in as " + chorus.user.fullName);
+                chorus.router.navigate("/dashboard", true);
             })
         },
 

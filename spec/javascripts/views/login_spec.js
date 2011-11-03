@@ -42,12 +42,12 @@ describe("chorus.views.Login", function() {
 
     describe("when the login succeeds", function() {
         beforeEach(function() {
-            this.navigationSpy = spyOn(chorus, "navigate");
+            this.navigationSpy = spyOn(chorus.router, "navigate");
             this.view.model.trigger('saved', this.view.model);
         });
 
         it("navigates to the dashboard", function() {
-            expect(this.navigationSpy).toHaveBeenCalledWith("/dashboard");
+            expect(this.navigationSpy).toHaveBeenCalledWith("/dashboard", true);
         });
 
         it("sets chorus.user", function() {

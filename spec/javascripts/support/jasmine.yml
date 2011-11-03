@@ -16,6 +16,7 @@ src_files:
   - js/vendor/backbone-0.5.3.js
   - js/vendor/**/*.js
   - js/chorus.js
+  - js/router.js
   - js/base.js
   - js/**/*.js
 
