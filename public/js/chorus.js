@@ -6,7 +6,7 @@
 
         self.initialize = function() {
             Backbone.history.start();
-//            self.session = new self.models.Session();
+            self.session = new self.models.Session();
         }
     }
 
