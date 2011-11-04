@@ -75,8 +75,8 @@
 
                     context: function context() {
                         if (!this.resource) return false;
-                        var ctx = $.extend({},
-                            this.resource.attributes);
+                        var ctx = $.extend({}, this.resource.attributes);
+                        ctx.loaded = this.resource.loaded;
                         if (this.collection) {
                             ctx.models = _.pluck(this.collection.models, "attributes");
                         }

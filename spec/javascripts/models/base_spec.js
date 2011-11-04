@@ -150,6 +150,26 @@ describe("backbone base classes", function() {
                 it("serializes the attributes of the model", function() {
                     expect(this.view.context()).toEqual({ bar: "foo" });
                 })
+
+                describe("loaded:true", function(){
+                    beforeEach(function(){
+                        this.model.loaded = true;
+                    });
+
+                    it("returns loaded:true", function(){
+                        expect(this.view.context().loaded).toBeTruthy();
+                    });
+                });
+
+                describe("loaded:false", function(){
+                    beforeEach(function(){
+                        this.model.loaded = false;
+                    });
+
+                    it("returns loaded:false", function(){
+                        expect(this.view.context().loaded).toBeFalsy();
+                    });
+                });
             })
 
             describe("for a view with a collection", function () {
@@ -172,6 +192,26 @@ describe("backbone base classes", function() {
                     expect(modelContext[0]).toEqual({ bar: "foo" });
                     expect(modelContext[1]).toEqual({ bro: "baz" });
                 })
+
+                describe("loaded:true", function(){
+                    beforeEach(function(){
+                        this.collection.loaded = true;
+                    });
+
+                    it("returns loaded:true", function(){
+                        expect(this.view.context().loaded).toBeTruthy();
+                    });
+                });
+
+                describe("loaded:false", function(){
+                    beforeEach(function(){
+                        this.collection.loaded = false;
+                    });
+
+                    it("returns loaded:false", function(){
+                        expect(this.view.context().loaded).toBeFalsy();
+                    });
+                });
             })
         })
     })
