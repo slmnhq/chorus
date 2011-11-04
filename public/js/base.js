@@ -13,6 +13,11 @@
 
                 url: function() {
                     return "/edc/" + Handlebars.compile(this.urlTemplate)(this.attributes);
+                },
+
+                parse : function(data) {
+                    this.loaded = true;
+                    return data.resource;
                 }
             }),
             Base: Backbone.Model.extend({
@@ -24,6 +29,7 @@
                     if (data.status == "needsLogin") {
                         chorus.session.trigger("needsLogin");
                     }
+                    this.loaded = true;
                     if (data.status == "ok") {
                         return data.resource[0]
                     } else {

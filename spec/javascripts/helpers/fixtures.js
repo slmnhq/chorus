@@ -101,11 +101,11 @@
                     "message":
                     [
                     {
-                       "message": "Username or password is incorrect.",
-                       "msgcode": "E_2_0006",
-                       "description": null,
-                       "severity": "error",
-                       "msgkey": "USER.LOGIN_FAILED"
+                        "message": "Username or password is incorrect.",
+                        "msgcode": "E_2_0006",
+                        "description": null,
+                        "severity": "error",
+                        "msgkey": "USER.LOGIN_FAILED"
                     }
                     ],
                     "status": "fail",
@@ -119,8 +119,43 @@
                     "pagination": null,
                     "version": "0.1"
                 }
+            },
+
+            UserSet: {
+                fetch:
+                {
+                    "message": [],
+                    "status": "ok",
+                    "requestId": 8,
+                    "resource": [{
+                        "userName": "edcadmin",
+                        "fullName": "EDC Admin",
+                        "admin": true,
+                        "techniques": null,
+                        "expertise": null,
+                        "lastLogin": "2011-11-03 17:45:39",
+                        "isDeleted": false
+                    },{
+                        "userName": "markr",
+                        "fullName": "Mark Rushakoff",
+                        "admin": false,
+                        "techniques": null,
+                        "expertise": null,
+                        "lastLogin": "2011-11-03 17:45:39",
+                        "isDeleted": false
+                    }],
+                    "method": "GET",
+                    "resourcelink": "/edc/user/",
+                    "pagination": {
+                        "total": "2",
+                        "page": "1",
+                        "records": "2"
+                    },
+                    "version": "0.1"
+                }
+
             }
+
         });
     });
 })(jQuery);
-
