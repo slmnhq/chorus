@@ -21,6 +21,9 @@
                 },
 
                 parse: function(data) {
+                    if (data.status == "needsLogin") {
+                        chorus.session.trigger("needsLogin");
+                    }
                     if (data.status == "ok") {
                         return data.resource[0]
                     } else {

@@ -10,10 +10,12 @@
         },
 
         setup : function() {
-            this.model.bind("saved", function(model) {
-                chorus.user = model.attributes;
-                chorus.router.navigate("/", true);
-            })
+            this.model.bind("saved", this.navigateToDashboard)
+        },
+
+        navigateToDashboard: function(model) {
+            chorus.user = model.attributes;
+            chorus.router.navigate("/", true);
         },
 
         submitLoginForm: function submitLoginForm(e) {
