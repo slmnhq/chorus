@@ -71,7 +71,7 @@
                 return obj;
             },
 
-            Login: {
+            Session: {
                 save: {
                     "message":
                     [

@@ -47,7 +47,7 @@ describe("chorus.views.Login", function() {
         });
 
         it("navigates to the dashboard", function() {
-            expect(this.navigationSpy).toHaveBeenCalledWith("/dashboard", true);
+            expect(this.navigationSpy).toHaveBeenCalledWith("/", true);
         });
 
         it("sets chorus.user", function() {

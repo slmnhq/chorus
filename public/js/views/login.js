@@ -5,12 +5,12 @@
             "submit form" : "submitLoginForm"
         },
 
-        makeModel : function(){
-            this.model = new chorus.models.Login();
+        makeModel : function() {
+            this.model = new chorus.models.Session();
         },
 
-        setup : function(){
-            this.model.bind("saved", function(model){
+        setup : function() {
+            this.model.bind("saved", function(model) {
                 chorus.user = model.attributes;
                 chorus.router.navigate("/", true);
             })
