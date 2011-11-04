@@ -139,4 +139,40 @@ describe("backbone base classes", function() {
             })
         });
     });
+    describe("chorus.views", function() {
+        describe("#context", function() {
+            describe("for a view with a model", function() {
+                beforeEach(function() {
+                    this.model = new chorus.models.Base({ bar: "foo"});
+                    this.view = new chorus.views.Base({ model : this.model });
+                });
+
+                it("serializes the attributes of the model", function() {
+                    expect(this.view.context()).toEqual({ bar: "foo" });
+                })
+            })
+
+            describe("for a view with a collection", function () {
+                beforeEach(function() {
+                    this.collection = new chorus.models.Collection([
+                        new chorus.models.Base({ bar: "foo"}),
+                        new chorus.models.Base({ bro: "baz"})
+                    ], { custom: "stuff" });
+                    this.view = new chorus.views.Base({ collection: this.collection });
+                });
+
+                it("serializes the attributes of the collection", function() {
+                    expect(this.view.context().custom).toBe("stuff");
+                })
+
+                it("serializes the attributes of the collection objects into the 'models' key", function() {
+                    var modelContext = this.view.context().models;
+                    expect(modelContext).not.toBeUndefined();
+                    expect(modelContext.length).toBe(2);
+                    expect(modelContext[0]).toEqual({ bar: "foo" });
+                    expect(modelContext[1]).toEqual({ bro: "baz" });
+                })
+            })
+        })
+    })
 });

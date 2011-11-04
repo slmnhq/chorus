@@ -16,7 +16,7 @@ describe("chorus.views.Header", function() {
     });
 
     it("should have a link to the dashboard", function() {
-       expect(this.view.$(".logo a").attr("href")).toBe("#/dashboard");
+       expect(this.view.$(".logo a").attr("href")).toBe("#/");
     });
 
     describe("username", function() {

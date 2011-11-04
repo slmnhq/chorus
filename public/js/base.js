@@ -57,13 +57,13 @@
                 {
                     initialize: function initialize() {
                         this.makeModel();
-                        var resource = this.model || this.collection;
+                        this.resource = this.model || this.collection;
 
                         _.bindAll(this, 'render');
-                        if (resource) {
-                            if (!this.persistent) resource.bind("change", this.render);
-                            resource.bind("reset", this.render);
-                            resource.bind("add", this.render);
+                        if (this.resource) {
+                            if (!this.persistent) this.resource.bind("change", this.render);
+                            this.resource.bind("reset", this.render);
+                            this.resource.bind("add", this.render);
                         }
                         this.setup(arguments);
                     },
@@ -74,9 +74,12 @@
                     additionalContext: $.noop,
 
                     context: function context() {
-                        if (!this.model) return false;
+                        if (!this.resource) return false;
                         var ctx = $.extend({},
-                            this.model.attributes);
+                            this.resource.attributes);
+                        if (this.collection) {
+                            ctx.models = _.pluck(this.collection.models, "attributes");
+                        }
                         $.extend(ctx, this.additionalContext(ctx));
                         return ctx;
                     },

@@ -4,7 +4,8 @@
     var router = Backbone.Router.extend({
         routes: {
             "/"    :   "dashboard",
-            "/login"        :   "login"
+            "/login"        :   "login",
+            "/users"        :   "users"
         },
 
         dashboard : function() {
@@ -13,6 +14,10 @@
 
         login : function() {
             $("#content").html(new chorus.views.Login().render().el);
+        },
+
+        users : function () {
+            $("#content").html(new chorus.views.UserListPage().render().el);
         }
     });
 
