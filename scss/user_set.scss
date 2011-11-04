@@ -1,0 +1,43 @@
+@import "_colors.scss";
+@import "compass/css3/border-radius";
+
+.user_set {
+    .list-title {
+        background: white;
+        height: 36px;
+        border-bottom: 1px solid $subheader-border-color;
+        padding: 12px;
+        @include border-top-radius(3px);
+
+        h1 {
+            padding-top: 18px;
+            font-size: 22px;
+            font-weight: 600;
+        }
+    }
+
+    ul.users li {
+        padding: 11px;
+        border-bottom: 1px solid $subheader-border-color;
+        &:last-child {
+            border-bottom: none;
+        }
+
+        img {
+            display: inline;
+        }
+
+        div.fullname {
+            display: inline;
+            vertical-align: top;
+            padding-left: 10px;
+        }
+
+        .administrator {
+            float: right;
+            background: $administrator-background-color;
+            padding: 2px 5px;
+            font-size: 13px;
+        }
+    }
+}

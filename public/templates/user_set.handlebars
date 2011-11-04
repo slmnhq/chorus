@@ -1,4 +1,6 @@
-<h1>Users</h1>
+<div class="list-title">
+    <h1>Users</h1>
+</div>
 
 <div class="list-header">
 {{#if loaded}}
@@ -14,7 +16,7 @@
     <img src="/edc/userimage/{{userName}}?size=icon"/>
     <div class="fullname">{{fullName}}</div>
     {{#if admin}}
-        <span class="administrator"/>
+        <span class="administrator">Administrator</span>
     {{/if}}
 </li>
 {{/each}}
