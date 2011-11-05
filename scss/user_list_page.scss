@@ -1,0 +1,36 @@
+@import "_colors.scss";
+@import "compass/css3/border-radius";
+
+.user_list_page {
+    #guts {
+
+        &:after {
+            content: ".";
+            display: block;
+            height: 0;
+            font-size: 0;
+            clear: both;
+            visibility: hidden;
+        }
+
+        #user_list {
+            float: left;
+            width: 74%;
+            border: 1px solid $guts-border-color;
+            @include border-radius(3px);
+
+            div.user_count {
+                padding: 11px 0px 15px 10px;
+                height: 6px;
+                font-size: 13px;
+                border-bottom: 1px solid $pagination-border-color;
+            }
+        }
+
+        #sidebar {
+            width: 25%;
+            float: right;
+            text-align: center;
+        }
+    }
+}

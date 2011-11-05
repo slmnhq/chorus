@@ -17,7 +17,8 @@ $login-width : 450px;
         border: 2px solid $card-border-color;
         margin: auto;
         width: $login-width;
-        height: 220px;
+        min-height: 220px;
+        overflow: auto;
 
         h1 {
             font-weight: bold;
@@ -36,6 +37,10 @@ $login-width : 450px;
                     margin-bottom: 12px;
                 }
             }
+        }
+
+        .errors li {
+            margin-bottom: 10px;
         }
     }
 

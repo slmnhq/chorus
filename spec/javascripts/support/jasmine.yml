@@ -11,7 +11,7 @@
 #   - dist/**/*.js
 #
 src_files:
-  - js/vendor/jquery-1.6.4.js
+  - js/vendor/jquery-1.7.js
   - js/vendor/underscore-1.2.1.js
   - js/vendor/backbone-0.5.3.js
   - js/vendor/**/*.js
