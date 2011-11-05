@@ -82,7 +82,7 @@
                     "resource":
                     [
                     {
-                        "userName": "edcadmin",
+                        "userName": "edcadminlol",
                         "admin": true,
                         "firstName": "EDC",
                         "lastName": "Admin",

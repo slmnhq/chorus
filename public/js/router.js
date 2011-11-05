@@ -1,7 +1,5 @@
-(function($) {
-    var chorus = window.chorus = window.chorus || {};
-
-    var router = Backbone.Router.extend({
+(function($, ns) {
+    ns.Router = Backbone.Router.extend({
         routes: {
             "/"    :   "dashboard",
             "/login"        :   "login",
@@ -13,7 +11,7 @@
         },
 
         login : function() {
-            $("#content").html(new chorus.views.Login().render().el);
+            $("#content").html(new chorus.views.Login({model : chorus.session}).render().el);
         },
 
         users : function () {
@@ -21,5 +19,4 @@
         }
     });
 
-    window.chorus.router = new router();
-})(jQuery);
+})(jQuery, chorus);

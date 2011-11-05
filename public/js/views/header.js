@@ -1,14 +1,15 @@
 ; (function($, ns) {
     ns.Header = chorus.views.Base.extend({
         className : "header",
-        context : function() {
-            var name = chorus.user.fullName;
-            if (name.length > 20) {
-                name = chorus.user.firstName + ' ' + chorus.user.lastName[0] + '.';
-            }
+        makeModel : function(){
+            this.model = chorus.user;
+        },
 
-            return {
-                userName : name
+        additionalContext : function(ctx) {
+            if (ctx.fullName && ctx.fullName.length > 20){
+                return {
+                    fullName : ctx.firstName + ' ' + ctx.lastName[0] + '.'
+                }
             }
         }
     });

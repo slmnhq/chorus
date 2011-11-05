@@ -2,7 +2,7 @@ describe("chorus.views.Login", function() {
     beforeEach(function() {
         this.loadTemplate("login");
         fixtures.model = "Login";
-        this.view = new chorus.views.Login();
+        this.view = new chorus.views.Login({model : new chorus.models.Session()});
         this.view.render();
     });
 
@@ -42,6 +42,9 @@ describe("chorus.views.Login", function() {
 
     describe("when the login succeeds", function() {
         beforeEach(function() {
+            this.user = new chorus.models.User();
+            spyOn(chorus, "fetchUser").andReturn(this.user);
+
             this.navigationSpy = spyOn(chorus.router, "navigate");
             this.view.model.trigger('saved', this.view.model);
         });
@@ -50,8 +53,8 @@ describe("chorus.views.Login", function() {
             expect(this.navigationSpy).toHaveBeenCalledWith("/", true);
         });
 
-        it("sets chorus.user", function() {
-            expect(chorus.user).toBe(this.view.model.attributes);
+        it("resets chorus.user", function() {
+            expect(chorus.user).toBe(this.user);
         })
     })
 })

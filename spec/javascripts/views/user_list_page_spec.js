@@ -4,11 +4,11 @@ describe("chorus.views.UserListPage", function() {
         this.loadTemplate("header");
         this.loadTemplate("user_set");
         this.view = new chorus.views.UserListPage();
-        chorus.user = {
+        chorus.user = new chorus.models.User({
             "firstName" : "Daniel",
             "lastName" : "Burkes",
             "fullName": "Daniel Francis Burkes"
-        };
+        });
     });
 
     describe("#render", function() {

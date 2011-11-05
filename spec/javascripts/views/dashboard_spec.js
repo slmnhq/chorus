@@ -3,11 +3,11 @@ describe("chorus.views.Dashboard", function() {
         this.loadTemplate("dashboard");
         this.loadTemplate("header");
         this.view = new chorus.views.Dashboard();
-        chorus.user = {
+        chorus.user = new chorus.models.User({
             "firstName" : "Daniel",
             "lastName" : "Burkes",
             "fullName": "Daniel Francis Burkes"
-        };
+        });
     });
 
     describe("#render", function() {

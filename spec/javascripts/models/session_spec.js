@@ -1,7 +1,9 @@
-describe("chorus.models.Login", function() {
+describe("chorus.models.Session", function() {
+
+
     var models = chorus.models;
     beforeEach(function() {
-        fixtures.model = 'Login';
+        fixtures.model = 'Session';
     });
 
     describe("#save", function() {
@@ -17,7 +19,21 @@ describe("chorus.models.Login", function() {
         it("has the right method", function() {
             expect(this.server.requests[0].method).toBe("POST");
         });
+
     });
+
+    describe("saved", function() {
+        beforeEach(function() {
+            $.cookie("userName", null)
+            this.model = new models.Session({ userName : "ponyParty", password : "partytime"});
+            this.model.trigger("saved");
+        });
+        it("sets the authUser cookie", function() {
+            expect($.cookie("userName")).toBe("ponyParty")
+        })
+
+    })
+
 
     describe("#user", function() {
         beforeEach(function() {
@@ -26,28 +42,29 @@ describe("chorus.models.Login", function() {
             this.model.bind("needsLogin", this.needsLoginSpy);
             chorus.session = this.model;
         });
-        afterEach(function(){
+
+        afterEach(function() {
             chorus.session = null;
         })
 
 
         describe("when there is a cookie", function() {
             beforeEach(function() {
-                $.cookie("authuser", "edcadmin");
+                $.cookie("userName", "edcadmin");
             });
 
             it("returns a user with the correct userName", function() {
                 expect(this.model.user().get("userName")).toBe("edcadmin");
             });
 
-            describe("when the cookie isn't valid", function(){
-                beforeEach(function(){
+            describe("when the cookie isn't valid", function() {
+                beforeEach(function() {
                     this.model.user().parse({
                         status : "needsLogin"
                     })
                 });
 
-                it("should trigger needsLogin", function(){
+                it("should trigger needsLogin", function() {
                     expect(this.needsLoginSpy).toHaveBeenCalled();
                 })
             })
@@ -55,7 +72,7 @@ describe("chorus.models.Login", function() {
 
         describe("when there isn't a cookie", function() {
             beforeEach(function() {
-                $.cookie("authuser", null);
+                $.cookie("userName", null);
             });
             it("should trigger needsLogin on user request", function() {
                 var user = this.model.user();

@@ -6,6 +6,6 @@ describe("chorus.models.User", function() {
     });
 
     it("has the correct urlTemplate", function() {
-        expect(this.model.urlTemplate).toBe("/user/{{userName}}");
+        expect(this.model.urlTemplate).toBe("user/{{userName}}");
     })
 });

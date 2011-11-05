@@ -1,12 +1,12 @@
 describe("chorus.views.Header", function() {
     beforeEach(function() {
         this.loadTemplate("header");
-        this.view = new chorus.views.Header();
-        chorus.user = {
+        chorus.user = new chorus.models.User({
             "firstName" : "Daniel",
             "lastName" : "Burke",
             "fullName": "Daniel Francis Burke"
-        };
+        });
+        this.view = new chorus.views.Header();
         this.view.render();
     });
 
@@ -28,11 +28,10 @@ describe("chorus.views.Header", function() {
 
         describe("greater than 20 characters", function() {
             beforeEach(function() {
-                chorus.user = {
-                    "firstName" : "Daniel",
+                chorus.user.set({
                     "lastName" : "Burkes",
                     "fullName": "Daniel Francis Burkes"
-                };
+                });
                 this.view.render();
             });
 
