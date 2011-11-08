@@ -9,12 +9,12 @@
             self.session = new chorus.models.Session();
             self.router = new chorus.Router();
 
-            self.startHistory();
-
             //bind global state events here
             self.session.bind("needsLogin", self.requireLogin)
 
             self.user = self.fetchUser();
+
+            self.startHistory();
         }
 
 
@@ -24,7 +24,7 @@
             return user
         }
 
-        self.startHistory = function star() {
+        self.startHistory = function() {
             Backbone.history.start();
         }
 

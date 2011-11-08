@@ -1,6 +1,12 @@
 (function($, ns) {
-    ns.UserListPage = chorus.views.Base.extend({
-        className : "user_list_page",
+    ns.UserIndexPage = chorus.views.Base.extend({
+        className : "user_index_page",
+
+        setup: function() {
+            _.bindAll(this, 'render');
+            chorus.user.bind("change", this.render);
+        },
+
         postRender : function(el) {
             this.headerView = (this.headerView || new ns.Header({ el : el.find("#header") })).render();
 

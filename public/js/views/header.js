@@ -6,7 +6,11 @@
         },
 
         additionalContext : function(ctx) {
-            if (ctx.fullName && ctx.fullName.length > 20){
+            if (!ctx.fullName) {
+                ctx.fullName = ctx.firstName + ' ' + ctx.lastName;
+            }
+
+            if (ctx.fullName.length > 20){
                 return {
                     fullName : ctx.firstName + ' ' + ctx.lastName[0] + '.'
                 }

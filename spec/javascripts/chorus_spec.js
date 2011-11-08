@@ -1,16 +1,19 @@
 describe("chorus", function() {
     beforeEach(function() {
         this.chorus = new Chorus();
-        spyOn(Backbone.history, "start")
+        this.backboneSpy = spyOn(Backbone.history, "start")
     })
 
-    describe("#intiailize", function() {
+    describe("#initialize", function() {
         beforeEach(function(){
             this.user = new chorus.models.User()
             spyOn(this.chorus, "fetchUser").andReturn(this.user)
         })
 
-        it("should start the Backbone history", function() {
+        it("should start the Backbone history after the user has been set", function() {
+            var self = this;
+            expect(this.chorus.user).toBeUndefined();
+            this.backboneSpy.andCallFake(function(){expect(self.chorus.user).toBeDefined();});
             this.chorus.initialize()
             expect(Backbone.history.start).toHaveBeenCalled();
         })
