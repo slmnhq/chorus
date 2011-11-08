@@ -19,7 +19,6 @@
                 breadcrumbs: this.crumbs
             });
             this.$("#breadcrumbs").append(breadcrumbsView.render().el);
-            console.log(el.html());
 
             var userSet = new chorus.models.UserSet();
             new ns.UserSet({collection: userSet, el : el.find("#user_list") }).render();

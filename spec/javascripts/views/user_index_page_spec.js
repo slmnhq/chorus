@@ -33,7 +33,6 @@ describe("chorus.views.UserIndexPage", function() {
         });
 
         it("creates a BreadcrumbsView", function() {
-            console.log(this.view.el);
             expect(this.view.$("#breadcrumbs .breadcrumbs")).toExist();
         });
 
