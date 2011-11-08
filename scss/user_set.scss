@@ -17,8 +17,8 @@
     }
 
     ul.users li {
-        padding: 11px;
-        border-bottom: 1px solid $subheader-border-color;
+        margin: 11px;
+        border-bottom: 1px dotted $subheader-border-color;
         &:last-child {
             border-bottom: none;
         }
@@ -32,8 +32,7 @@
             border: 1px solid $guts-border-color;
         }
 
-        div.fullname {
-            display: inline;
+        .fullname {
             vertical-align: top;
             padding-left: 10px;
         }
