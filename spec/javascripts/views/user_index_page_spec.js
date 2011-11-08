@@ -2,6 +2,7 @@ describe("chorus.views.UserIndexPage", function() {
     beforeEach(function() {
         this.loadTemplate("user_index_page");
         this.loadTemplate("header");
+        this.loadTemplate("breadcrumbs");
         this.loadTemplate("user_set");
         chorus.user = new chorus.models.User({
             "firstName" : "Daniel",
@@ -29,6 +30,11 @@ describe("chorus.views.UserIndexPage", function() {
 
         it("creates a Header view", function() {
             expect(this.view.$("#header.header")).toExist();
+        });
+
+        it("creates a BreadcrumbsView", function() {
+            console.log(this.view.el);
+            expect(this.view.$("#breadcrumbs .breadcrumbs")).toExist();
         });
 
         it("creates a UserSet view", function() {

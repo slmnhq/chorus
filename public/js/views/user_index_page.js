@@ -7,11 +7,22 @@
             chorus.user.bind("change", this.render);
         },
 
+        crumbs : [
+                    { label: "Home", url: "/" },
+                    { label: "Users" }
+                ],
+
         postRender : function(el) {
-            this.headerView = (this.headerView || new ns.Header({ el : el.find("#header") })).render();
+            new ns.Header({ el : el.find("#header") }).render();
+
+            var breadcrumbsView = new ns.BreadcrumbsView({
+                breadcrumbs: this.crumbs
+            });
+            this.$("#breadcrumbs").append(breadcrumbsView.render().el);
+            console.log(el.html());
 
             var userSet = new chorus.models.UserSet();
-            this.userSetView = (this.userSetView || new ns.UserSet({collection: userSet, el : el.find("#user_list") })).render();
+            new ns.UserSet({collection: userSet, el : el.find("#user_list") }).render();
             userSet.fetch();
         }
     });
