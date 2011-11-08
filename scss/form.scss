@@ -1,18 +1,5 @@
 @import "colors.scss";
 
-label {
-    text-align: left;
-    font-size: 13px;
-    color: $secondary-text-color;
-}
-
-input {
-    display: block;
-    width: 100%;
-    font-size: 14px;
-    padding: 3px;
-}
-
 form {
     .controls {
         margin-top: 25px;

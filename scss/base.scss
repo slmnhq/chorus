@@ -34,3 +34,17 @@ button {
         cursor : initial;
     }
 }
+
+label {
+    text-align: left;
+    font-size: 13px;
+    color: $secondary-text-color;
+}
+
+input, textarea {
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    padding: 3px;
+    font-family: Myriad Pro;
+}
