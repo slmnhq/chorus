@@ -4,11 +4,7 @@
 $login-width : 450px;
 .login {
     text-align: center;
-
-    img.logo {
-        width: $login-width;
-        height: 180px;
-    }
+    margin-top: 40px;
 
     .card {
         @include borderbox;
