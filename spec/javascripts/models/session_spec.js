@@ -56,18 +56,6 @@ describe("chorus.models.Session", function() {
             it("returns a user with the correct userName", function() {
                 expect(this.model.user().get("userName")).toBe("edcadmin");
             });
-
-            describe("when the cookie isn't valid", function() {
-                beforeEach(function() {
-                    this.model.user().parse({
-                        status : "needlogin"
-                    })
-                });
-
-                it("should trigger needsLogin", function() {
-                    expect(this.needsLoginSpy).toHaveBeenCalled();
-                })
-            })
         });
 
         describe("when there isn't a cookie", function() {

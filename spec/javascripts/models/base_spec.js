@@ -9,7 +9,7 @@ describe("backbone base classes", function() {
             describe("#url", function() {
                 it("compiles the urlTemplate and renders it with model attributes", function() {
                     expect(this.model.url()).toBe("/edc/foo/foo");
-                }); 
+                });
             });
 
             describe("#save", function() {
@@ -101,6 +101,12 @@ describe("backbone base classes", function() {
 
                 it("returns the enclosed resource", function() {
                     expect(this.model.parse({ status: "ok", foo: "bar", resource: [ this.thing ]})).toBe(this.thing);
+                });
+
+                it("triggers needsLogin on chorus.session", function() {
+                    spyOn(chorus.session, "trigger");
+                    this.model.parse({status: "needlogin"});
+                    expect(chorus.session.trigger).toHaveBeenCalledWith("needsLogin");
                 })
             })
         });
@@ -125,7 +131,10 @@ describe("backbone base classes", function() {
 
             describe("#parse", function() {
                 beforeEach(function() {
-                    this.things = [{hi: "there"}, {go: "away"}];
+                    this.things = [
+                        {hi: "there"},
+                        {go: "away"}
+                    ];
                 })
 
                 it("sets loaded", function() {
@@ -135,6 +144,12 @@ describe("backbone base classes", function() {
 
                 it("returns the enclosed resource", function() {
                     expect(this.collection.parse({ foo: "bar", resource: this.things})).toBe(this.things);
+                })
+
+                it("triggers needsLogin on chorus.session", function() {
+                    spyOn(chorus.session, "trigger");
+                    this.collection.parse({status: "needlogin"});
+                    expect(chorus.session.trigger).toHaveBeenCalledWith("needsLogin");
                 })
             })
         });
@@ -151,22 +166,22 @@ describe("backbone base classes", function() {
                     expect(this.view.context()).toEqual({ bar: "foo" });
                 })
 
-                describe("loaded:true", function(){
-                    beforeEach(function(){
+                describe("loaded:true", function() {
+                    beforeEach(function() {
                         this.model.loaded = true;
                     });
 
-                    it("returns loaded:true", function(){
+                    it("returns loaded:true", function() {
                         expect(this.view.context().loaded).toBeTruthy();
                     });
                 });
 
-                describe("loaded:false", function(){
-                    beforeEach(function(){
+                describe("loaded:false", function() {
+                    beforeEach(function() {
                         this.model.loaded = false;
                     });
 
-                    it("returns loaded:false", function(){
+                    it("returns loaded:false", function() {
                         expect(this.view.context().loaded).toBeFalsy();
                     });
                 });
@@ -193,22 +208,22 @@ describe("backbone base classes", function() {
                     expect(modelContext[1]).toEqual({ bro: "baz" });
                 })
 
-                describe("loaded:true", function(){
-                    beforeEach(function(){
+                describe("loaded:true", function() {
+                    beforeEach(function() {
                         this.collection.loaded = true;
                     });
 
-                    it("returns loaded:true", function(){
+                    it("returns loaded:true", function() {
                         expect(this.view.context().loaded).toBeTruthy();
                     });
                 });
 
-                describe("loaded:false", function(){
-                    beforeEach(function(){
+                describe("loaded:false", function() {
+                    beforeEach(function() {
                         this.collection.loaded = false;
                     });
 
-                    it("returns loaded:false", function(){
+                    it("returns loaded:false", function() {
                         expect(this.view.context().loaded).toBeFalsy();
                     });
                 });
