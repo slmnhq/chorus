@@ -60,7 +60,7 @@ describe("chorus.models.Session", function() {
             describe("when the cookie isn't valid", function() {
                 beforeEach(function() {
                     this.model.user().parse({
-                        status : "needsLogin"
+                        status : "needlogin"
                     })
                 });
 

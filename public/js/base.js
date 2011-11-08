@@ -16,6 +16,9 @@
                 },
 
                 parse : function(data) {
+                    if (data.status == "needlogin") {
+                        chorus.session.trigger("needsLogin");
+                    }
                     this.loaded = true;
                     return data.resource;
                 }
@@ -26,7 +29,7 @@
                 },
 
                 parse: function(data) {
-                    if (data.status == "needsLogin") {
+                    if (data.status == "needlogin") {
                         chorus.session.trigger("needsLogin");
                     }
                     this.loaded = true;
