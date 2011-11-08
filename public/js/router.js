@@ -15,7 +15,7 @@
         },
 
         users : function () {
-            $("#content").html(new chorus.views.UserListPage().render().el);
+            $("#content").html(new chorus.views.UserIndexPage().render().el);
         }
     });
 

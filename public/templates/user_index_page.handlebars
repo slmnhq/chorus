@@ -4,6 +4,8 @@
 <div id="guts">
     <div id="user_list"/>
     <div id="sidebar">
-        <button>Add a User</button>
+        {{#ifAdmin}}
+            <button class="add_user">Add a User</button>
+        {{/ifAdmin}}
     </div>
 </div>

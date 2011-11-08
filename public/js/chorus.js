@@ -24,7 +24,7 @@
             return user
         }
 
-        self.startHistory = function star() {
+        self.startHistory = function() {
             Backbone.history.start();
         }
 

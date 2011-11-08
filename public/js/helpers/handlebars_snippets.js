@@ -5,3 +5,11 @@ Handlebars.registerPartial("errorDiv",
 Handlebars.registerHelper("cache_buster", function(){
     return new Date().getTime();
 });
+
+Handlebars.registerHelper("ifAdmin", function(block){
+    if (chorus && chorus.user && chorus.user.get("admin")) {
+        return block(this);
+    } else {
+        return block.inverse(this);
+    }
+});
