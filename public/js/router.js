@@ -9,20 +9,23 @@
         },
 
         dashboard : function() {
-            $("#content").html(new chorus.pages.DashboardPage().render().el);
+            page("Dashboard");
         },
 
         login : function() {
-            $("#content").html(new chorus.pages.LoginPage().render().el);
+            page("Login");
         },
 
         users : function () {
-            $("#content").html(new chorus.pages.UserIndexPage().render().el);
+            page("UserIndex");
         },
 
         userNew : function () {
-            $("#content").html(new chorus.pages.UserNewPage().render().el);
+            page("UserNew");
         }
     });
 
+    function page(className){
+        $("#content").html(new chorus.pages[className + "Page"]().render().el);
+    }
 })(jQuery, chorus);
