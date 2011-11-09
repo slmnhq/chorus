@@ -10,5 +10,8 @@ end
 require File.join(File.dirname(__FILE__), 'helpers','login_helpers')
 
 RSpec.configure do |c|
+  c.include Capybara::DSL
+  c.include Capybara::RSpecMatchers
+
   c.include LoginHelpers
 end

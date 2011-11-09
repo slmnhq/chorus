@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe "logging in", :type => :request do
+describe "logging in" do
   it "logs in" do
     login('edcadmin', 'secret')
     current_route.should == "/"
