@@ -1,8 +1,9 @@
-describe("chorus.views.Dashboard", function() {
+describe("chorus.pages.DashboardPage", function() {
     beforeEach(function() {
         this.loadTemplate("dashboard");
         this.loadTemplate("header");
         this.loadTemplate("breadcrumbs");
+        this.loadTemplate("dashboard_sidebar");
         this.view = new chorus.pages.DashboardPage();
         chorus.user = new chorus.models.User({
             "firstName" : "Daniel",
@@ -19,5 +20,8 @@ describe("chorus.views.Dashboard", function() {
         it("creates a Header view", function() {
             expect(this.view.$("#header.header")).toExist();
         })
+        it("has a create workspace button", function() {
+            expect(this.view.$("button:contains('Create a Workspace')")).toExist();
+        });
     })
 });
