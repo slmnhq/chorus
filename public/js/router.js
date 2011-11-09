@@ -1,6 +1,6 @@
 (function($, ns) {
     ns.Router = Backbone.Router.extend({
-        initialize : function(){
+        initialize : function() {
             this.route("", "dashboard", makePage("Dashboard"));
             this.route("/", "dashboard", makePage("Dashboard"));
             this.route("/login", "login", makePage("Login"));
@@ -9,10 +9,10 @@
         }
     });
 
-    function page(className){
-        $("#content").html(new chorus.pages[className + "Page"]().render().el);
-    }
     function makePage(className) {
-        return function() { page(className); }
+        return function() {
+            ns.page = new ns.pages[className + "Page"]()
+            $("#content").html(ns.page.render().el);
+        }
     }
 })(jQuery, chorus);
