@@ -1,6 +1,42 @@
 (function($) {
     var chorus = window.chorus = window.chorus || {};
 
+
+    var viewExtensions = Backbone.View.extend({
+        initialize: function initialize() {
+            this.preInitialize();
+            _.bindAll(this, 'render');
+            this.bindCallbacks()
+            this.setup(arguments);
+        },
+
+        preInitialize : $.noop,
+        setup: $.noop,
+        postRender: $.noop,
+        bindCallbacks: $.noop,
+
+        context : function() {
+            return {}
+        },
+
+        render: function render() {
+            $(this.el).html(this.template(this.context()))
+                .addClass(this.className)
+                .attr("title", this.options.title || this.title);
+            this.postRender($(this.el));
+            return this;
+        },
+
+        template: function template(content) {
+            if (!this.cachedTemplate) {
+                var tag = $('#' + this.className + "_template");
+                if (!tag.length) throw "No template for " + this.className;
+                this.cachedTemplate = Handlebars.compile(tag.html());
+            }
+            return this.cachedTemplate(content);
+        }
+    })
+
     $.extend(true, chorus, {
         models: {
             Collection: Backbone.Collection.extend({
@@ -55,55 +91,56 @@
             })
 
         },
+
         views: {
-            Base: Backbone.View.extend(
-                {
-                    initialize: function initialize() {
-                        this.makeModel();
-                        this.resource = this.model || this.collection;
+            Base : viewExtensions.extend({
+                makeModel : $.noop,
+                additionalContext: $.noop,
 
-                        _.bindAll(this, 'render');
-                        if (this.resource) {
-                            if (!this.persistent) this.resource.bind("change", this.render);
-                            this.resource.bind("reset", this.render);
-                            this.resource.bind("add", this.render);
-                        }
-                        this.setup(arguments);
-                    },
+                preInitialize : function() {
+                    this.makeModel();
+                    this.resource = this.model || this.collection;
 
-                    makeModel : $.noop,
-                    setup: $.noop,
-                    postRender: $.noop,
-                    additionalContext: $.noop,
+                },
 
-                    context: function context() {
-                        if (!this.resource) return false;
-                        var ctx = $.extend({}, this.resource.attributes);
-                        ctx.loaded = this.resource.loaded;
-                        if (this.collection) {
-                            ctx.models = _.pluck(this.collection.models, "attributes");
-                        }
-                        $.extend(ctx, this.additionalContext(ctx));
-                        return ctx;
-                    },
-
-                    render: function render() {
-                        $(this.el).html(this.template(this.context()))
-                            .addClass(this.className)
-                            .attr("title", this.options.title || this.title);
-                        this.postRender($(this.el));
-                        return this;
-                    },
-
-                    template: function template(content) {
-                        if (!this.cachedTemplate) {
-                            var tag = $('#' + this.className + "_template");
-                            if (!tag.length) throw "No template for " + this.className;
-                            this.cachedTemplate = Handlebars.compile(tag.html());
-                        }
-                        return this.cachedTemplate(content);
+                bindCallbacks : function() {
+                    if (this.resource) {
+                        if (!this.persistent) this.resource.bind("change", this.render);
+                        this.resource.bind("reset", this.render);
+                        this.resource.bind("add", this.render);
                     }
-                })
+                },
+
+                context: function context() {
+                    if (!this.resource) return false;
+                    var ctx = $.extend({}, this.resource.attributes);
+                    ctx.loaded = this.resource.loaded;
+                    if (this.collection) {
+                        ctx.models = _.pluck(this.collection.models, "attributes");
+                    }
+                    $.extend(ctx, this.additionalContext(ctx));
+                    return ctx;
+                }
+            })
+        },
+
+
+        pages : {
+            Base : viewExtensions.extend({
+                className : "logged_in_layout",
+
+                bindCallbacks: function() {
+                    chorus.user.bind("change", this.render);
+                },
+
+                postRender : function() {
+                    new chorus.views.Header({ el : this.$("#header") }).render();
+                    var mainContent = this.mainContent();
+                    mainContent.el = this.$("#main_content");
+                    mainContent.render();
+                    new chorus.views.BreadcrumbsView({ el : this.$("#breadcrumbs"), breadcrumbs: this.crumbs }).render();
+                }
+            })
         }
     });
 })(jQuery);

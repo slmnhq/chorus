@@ -3,7 +3,7 @@
         var self = this;
         self.models = {};
         self.views = {};
-
+        self.pages = {};
 
         self.initialize = function() {
             self.session = new chorus.models.Session();
