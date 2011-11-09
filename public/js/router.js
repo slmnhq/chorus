@@ -9,11 +9,11 @@
         },
 
         dashboard : function() {
-            $("#content").html(new chorus.views.Dashboard().render().el);
+            $("#content").html(new chorus.pages.DashboardPage().render().el);
         },
 
         login : function() {
-            $("#content").html(new chorus.views.Login({model : chorus.session}).render().el);
+            $("#content").html(new chorus.pages.LoginPage().render().el);
         },
 
         users : function () {

@@ -2,7 +2,8 @@ describe("chorus.views.Dashboard", function() {
     beforeEach(function() {
         this.loadTemplate("dashboard");
         this.loadTemplate("header");
-        this.view = new chorus.views.Dashboard();
+        this.loadTemplate("breadcrumbs");
+        this.view = new chorus.pages.DashboardPage();
         chorus.user = new chorus.models.User({
             "firstName" : "Daniel",
             "lastName" : "Burkes",

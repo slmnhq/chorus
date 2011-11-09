@@ -140,7 +140,7 @@
 
                     this.mainContent.el = this.$("#main_content");
                     this.mainContent.render();
-                    
+
                     this.breadcrumbs = new chorus.views.BreadcrumbsView({breadcrumbs: this.crumbs })
                     this.breadcrumbs.el = this.$("#breadcrumbs")
                     this.breadcrumbs.render();
@@ -150,6 +150,11 @@
                         this.sidebar.el = this.$("#sidebar")
                         this.sidebar.render();
                     }
+                }
+            }),
+            Bare : viewExtensions.extend({
+                bindCallbacks: function() {
+                    if (chorus.user) chorus.user.bind("change", this.render);
                 }
             })
         }
