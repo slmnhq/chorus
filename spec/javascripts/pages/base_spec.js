@@ -27,12 +27,24 @@ describe("chorus.pages.Base", function() {
         beforeEach(function() {
             this.view = new chorus.pages.Base();
 
-            this.view.mainContent = function() {return new Backbone.View()};
+            this.view.mainContent = new Backbone.View();
         })
 
-        it("creates a Header view", function() {
-            this.view.render();
-            expect(this.view.$("#header.header")).toExist();
+        context("when supplied with an explicit header", function() {
+            it("uses the supplied header", function() {
+                var header = stubView("I is yr header")
+                this.view.header = header
+                this.view.render();
+                expect(this.view.$("#header").text()).toBe("I is yr header")
+            });
+        });
+
+        context("when not supplied a header", function() {
+            it("creates a Header view", function() {
+                this.view.render();
+                expect(this.view.$("#header.header")).toExist();
+                expect(this.view.header instanceof chorus.views.Header).toBeTruthy();
+            });
         });
 
         it("creates a BreadcrumbsView", function() {
@@ -44,22 +56,25 @@ describe("chorus.pages.Base", function() {
         });
 
         it("populates the #main_content", function() {
-            stubView = Backbone.View.extend({
-                initialize : function() {
-                    _.bindAll(this, "render")
-                },
-
-                render :  function() {
-                    this.$(this.el).html("OH HAI BARABARA")
-                    return this;
-                }
-            })
-
-            this.view.mainContent = function(){ return new stubView()};
+            this.view.mainContent = stubView("OH HAI BARABARA");
 
             this.view.render();
 
             expect(this.view.$("#main_content").text()).toBe("OH HAI BARABARA");
         });
+
+        it("creates a Sidebar view", function() {
+            this.view.sidebar = stubView("VROOOOOOOOOM");
+            this.view.render();
+            expect(this.view.$("#sidebar").text()).toBe("VROOOOOOOOOM")
+        });
+
+        it("makes an empty sidebar when not provided with a sideBarContent function", function() {
+            this.view.render();
+            delete this.view.sidebar;
+            this.view.render();
+            expect(this.view.$("#sidebar").html().length).toBe(0)
+        });
     })
+
 });

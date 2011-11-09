@@ -3,6 +3,7 @@ describe("chorus.pages.UserIndexPage", function() {
         this.loadTemplate("header");
         this.loadTemplate("breadcrumbs");
         this.loadTemplate("user_set");
+        this.loadTemplate("user_set_sidebar");
 
         chorus.user = new chorus.models.User({
             "firstName" : "Daniel",
@@ -28,7 +29,7 @@ describe("chorus.pages.UserIndexPage", function() {
             })
 
             it("displays an 'add user' button", function() {
-                expect(this.view.$("button.add_user")).toExist();
+                expect(this.view.$("a.button.add_user")).toExist();
             })
         });
 
@@ -39,7 +40,7 @@ describe("chorus.pages.UserIndexPage", function() {
             })
 
             it("does not display an 'add user' button", function() {
-                expect(this.view.$("button.add_user")).not.toExist();
+                expect(this.view.$("a.button.add_user")).not.toExist();
             })
         });
     })

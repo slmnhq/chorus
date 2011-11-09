@@ -134,11 +134,22 @@
                 },
 
                 postRender : function() {
-                    new chorus.views.Header({ el : this.$("#header") }).render();
-                    var mainContent = this.mainContent();
-                    mainContent.el = this.$("#main_content");
-                    mainContent.render();
-                    new chorus.views.BreadcrumbsView({ el : this.$("#breadcrumbs"), breadcrumbs: this.crumbs }).render();
+                    this.header = this.header || new chorus.views.Header();
+                    this.header.el = this.$("#header");
+                    this.header.render();
+
+                    this.mainContent.el = this.$("#main_content");
+                    this.mainContent.render();
+                    
+                    this.breadcrumbs = new chorus.views.BreadcrumbsView({breadcrumbs: this.crumbs })
+                    this.breadcrumbs.el = this.$("#breadcrumbs")
+                    this.breadcrumbs.render();
+
+                    //do we make a default sidebar?
+                    if (this.sidebar) {
+                        this.sidebar.el = this.$("#sidebar")
+                        this.sidebar.render();
+                    }
                 }
             })
         }

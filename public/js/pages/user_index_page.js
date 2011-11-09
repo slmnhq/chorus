@@ -5,10 +5,11 @@
                     { label: "Users" }
                 ],
 
-        mainContent : function() {
+        setup : function() {
             var userSet = new chorus.models.UserSet();
             userSet.fetch();
-            return new chorus.views.UserSet({collection: userSet })
+            this.mainContent = new chorus.views.UserSet({collection: userSet });
+            this.sidebar = new chorus.views.StaticTemplate("user_set_sidebar");
         }
     });
 })(jQuery, chorus.pages);

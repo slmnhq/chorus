@@ -1,0 +1,36 @@
+<div id="add_new_user" class="main_content">
+   {{#ifAdmin}}
+       <form id="new_user_form" action="/edc/users">
+           <label for="user_firstName">first</label>
+           <input type="text" name="firstName" id="user_firstName"/>
+
+           <label for="user_lastName">last</label>
+           <input type="text" name="lastName" id="user_lastName"/>
+
+           <label for="user_userName">username</label>
+           <input type="text" name="userName" id="user_userName"/>
+
+           <label for="user_admin">admin</label>
+           <input type="checkbox" name="admin" id="user_admin"/>
+
+           <label for="user_emailAddress">email</label>
+           <input type="text" name="emailAddress" id="user_emailAddress"/>
+
+           <label for="user_password">password</label>
+           <input type="password" name="password" id="user_password"/>
+
+           <label for="user_passwordConfirmation">passwordConfirmation</label>
+           <input type="password" name="passwordConfirmation" id="user_passwordConfirmation"/>
+
+           <label for="user_title">title</label>
+           <input type="text" name="title" id="user_title"/>
+
+           <label for="user_department">department</label>
+           <input type="text" name="department" id="user_department"/>
+
+           <input type="submit" value="Create User"/>
+       </form>
+   {{else}}
+     <p class="aint_admin">You aren't an admin.</p>
+   {{/ifAdmin}}
+</div>
