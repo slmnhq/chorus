@@ -4,8 +4,10 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
         this.loadTemplate("breadcrumbs");
         this.loadTemplate("main_content");
         this.loadTemplate("default_content_header");
-        this.loadTemplate("workspace_count");
+        this.loadTemplate("count");
         this.loadTemplate("workspace_set");
+        this.loadTemplate("logged_in_layout");
+        this.loadTemplate("dashboard_sidebar");
 
         chorus.user = new chorus.models.User({
             "firstName" : "Daniel",

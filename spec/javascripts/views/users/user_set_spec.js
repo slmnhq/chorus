@@ -4,7 +4,7 @@ describe("chorus.views.UserIndexMain", function() {
         this.loadTemplate("breadcrumbs");
         this.loadTemplate("main_content");
         this.loadTemplate("default_content_header");
-        this.loadTemplate("user_count");
+        this.loadTemplate("count");
         this.loadTemplate("user_set");
         this.loadTemplate("user_set_sidebar");
 
@@ -22,7 +22,7 @@ describe("chorus.views.UserIndexMain", function() {
             this.view.render();
         })
         it("displays the number of users", function() {
-            expect(this.view.$(".user_count").text().trim()).toBe("0 Users");
+            expect(this.view.$(".count").text().trim()).toBe("0 Users");
         });
     })
 })
