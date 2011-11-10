@@ -1,8 +1,11 @@
 describe("chorus.views.Dialog", function() {
+    beforeEach(function() {
+        this.dialog = new chorus.dialogs.Base();
+    })
+
     describe("#render", function() {
         beforeEach(function() {
             this.loadTemplate("plain_text");
-            this.dialog = new chorus.dialogs.Base();
             this.dialog.title = "OH HAI";
             this.dialog.className = "plain_text";
             this.dialog.additionalContext = function() {
@@ -10,7 +13,6 @@ describe("chorus.views.Dialog", function() {
                     text : "OMG IM IN A DIALOG WHOA"
                 }
             }
-
             this.dialog.render()
         })
 
@@ -22,4 +24,22 @@ describe("chorus.views.Dialog", function() {
             expect(this.dialog.$("#dialog_content").text()).toBe("OMG IM IN A DIALOG WHOA")
         })
     })
+
+
+    describe("#initFacebox", function() {
+        beforeEach(function() {
+            spyOn($, "facebox")
+            spyOn(this.dialog, "render")
+            this.dialog.initFacebox()
+        })
+
+        it("creates a facebox", function() {
+            expect($.facebox).toHaveBeenCalledWith(this.dialog.container);
+        })
+
+        it("creates a facebox", function() {
+            expect(this.dialog.render).toHaveBeenCalled();
+        })
+    })
+
 })

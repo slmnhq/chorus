@@ -76,13 +76,20 @@ describe("chorus.pages.Base", function() {
             expect(this.view.$("#sidebar").html().length).toBe(0)
         });
 
-        it("instantiates javascripts.dialogs from dialog buttons", function() {
-            chorus.dialogs.Foo = chorus.dialogs.Base.extend({ title : 'Big Words' });
+        it("instantiates dialogs from dialog buttons", function() {
+
+            var fooDialogSpy = {
+                initFacebox : jasmine.createSpy()
+            }
+
+            chorus.dialogs.Foo = function() {
+                return fooDialogSpy
+            };
+
             this.view.sidebar = stubView("<button type='button' class='dialog' data-dialog='Foo'>Create a Foo</button>");
             this.view.render();
-            spyOn(chorus.dialogs, "Foo");
             this.view.$("button.dialog").click();
-            expect(chorus.dialogs.Foo).toHaveBeenCalled();
+            expect(fooDialogSpy.initFacebox).toHaveBeenCalled();
         })
     })
 });
