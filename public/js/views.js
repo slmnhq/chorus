@@ -100,7 +100,7 @@
             var collection = new chorus.models[modelClass + "Set"]();
             collection.fetch();
             this.content = new chorus.views[modelClass + "Set"]({collection: collection })
-            this.contentHeader = new chorus.views.StaticTemplate("default_content_header", {title: modelClass})
+            this.contentHeader = new chorus.views.StaticTemplate("default_content_header", {title: modelClass + "s"})
             this.contentDetails = new chorus.views.Count({collection : collection, modelClass : modelClass})
         }
     })

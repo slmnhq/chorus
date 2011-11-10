@@ -21,6 +21,10 @@ describe("chorus.pages.UserIndexPage", function() {
             this.view = new chorus.pages.UserIndexPage();
             this.view.render();
         })
+
+        it ("has the right header title", function(){
+            expect(this.view.$("#content_header").text()).toBe("Users");
+        })
          describe("when the collection is loading", function(){
             it("should have a loading element", function(){
                 expect(this.view.$(".loading")).toExist();
