@@ -13,14 +13,8 @@
     });
 
 
-    chorus.views.UserIndexMain = chorus.views.MainContentView.extend({
-        setup : function() {
-            var userSet = new chorus.models.UserSet();
-            userSet.fetch();
-            this.content = new chorus.views.UserSet({collection: userSet })
-            this.contentHeader = new chorus.views.StaticTemplate("default_content_header", {title: "Users"})
-            this.contentDetails = new chorus.views.UserCount({collection : userSet})
-        }
+    chorus.views.UserIndexMain = chorus.views.ListView.extend({
+        modelClass : "User"
     })
 })
     (jQuery, chorus.pages);

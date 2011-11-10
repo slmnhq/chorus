@@ -87,4 +87,14 @@
             this.content.render();
         }
     })
+
+    ns.ListView = ns.MainContentView.extend({
+        setup : function() {
+            var collection = new chorus.models[this.modelClass + "Set"]();
+            collection.fetch();
+            this.content = new chorus.views[this.modelClass + "Set"]({collection: collection })
+            this.contentHeader = new chorus.views.StaticTemplate("default_content_header", {title: this.modelClass})
+            this.contentDetails = new chorus.views[this.modelClass + "Count"]({collection : collection})
+        }
+    })
 })(chorus.views);
