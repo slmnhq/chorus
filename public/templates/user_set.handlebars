@@ -2,7 +2,7 @@
     <ul class="users">
     {{#each models}}
     <li data-userName="{{userName}}">
-        <img src="/edc/userimage/{{userName}}?size=icon"/>
+        <img src="/edc/userimage/{{userName}}?size=icon" class="profile"/>
         <a class="fullname">{{fullName}}</a>
         {{#if admin}}
             <span class="administrator">Administrator</span>

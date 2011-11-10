@@ -50,3 +50,10 @@ input, textarea {
     padding: 3px;
     font-family: Myriad Pro;
 }
+
+.required:after {
+    content: "*";
+    color: rgb(157, 30, 27);
+    vertical-align: middle;
+    margin-left: 5px;
+}

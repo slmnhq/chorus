@@ -1,0 +1,59 @@
+@import "_colors.scss";
+
+.user_new {
+    form {
+        margin-bottom : 15px;
+    }
+    .edit_photo {
+        width: 200px;
+        float: left;
+        text-align : center;
+        img {
+            padding : 5px;
+        }
+    }
+
+    .fields {
+        margin-left: 200px;
+    }
+
+    label, input {
+        display : block;
+    }
+
+    label {
+        height : 14px;
+
+        &[for=admin-checkbox] {
+            display: inline-block;
+            line-height:43px;
+            height : 42px;
+            vertical-align : middle;
+            margin-left : 3px;
+        }
+    }
+
+    input {
+        margin-top: 6px;
+        &[type=checkbox] {
+            margin : 0;
+            display: inline-block;
+            margin-left : 2px;
+            width: auto;
+        }
+    }
+    .row {
+        margin-top: 15px;
+
+        .left {
+            width: 48%;
+            display: inline-block;
+        }
+
+        .right {
+            float: right;
+            width: 48%;
+            margin-right : 10px;
+        }
+    }
+}

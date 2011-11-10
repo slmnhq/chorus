@@ -18,15 +18,13 @@
         submitNewUser : function submitNewUser(e) {
             e.preventDefault();
 
-            this.model.set({
-                firstName : this.$("#user_firstName").val(),
-                lastName : this.$("#user_lastName").val(),
-                userName : this.$("#user_userName").val(),
-                emailAddress : this.$("#user_emailAddress").val(),
-                password : this.$("#user_password").val(),
-                passwordConfirmation : this.$("#user_passwordConfirmation").val()
-            })
+            var updates = {};
+            _.each(this.$("input"), function(i){
+                var input = $(i);
+                updates[input.attr("name")] = input.val();
+            });
 
+            this.model.set(updates)
             this.model.save();
         }
 

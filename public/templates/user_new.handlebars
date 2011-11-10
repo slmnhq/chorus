@@ -1,37 +1,77 @@
-<div id="add_new_user">
-   {{> errorDiv }}
-   {{#ifAdmin}}
-       <form id="new_user_form" action="/edc/users" method="post">
-           <label for="user_firstName">first</label>
-           <input type="text" name="firstName" id="user_firstName"/>
+{{> errorDiv }}
+{{#ifAdmin}}
+   <div class="edit_photo">
+       <img src="/images/default-user-icon.png" class="profile"/>
+       <br/>
+       <a>Edit photo</a>
+   </div>
+   <div class="fields">
+       <form action="/edc/users" method="post">
 
-           <label for="user_lastName">last</label>
-           <input type="text" name="lastName" id="user_lastName"/>
+           <div class="row">
+               <span class="left">
+                   <label class="required">First Name</label>
+                   <input type="text" name="firstName"/>
+               </span>
 
-           <label for="user_userName">username</label>
-           <input type="text" name="userName" id="user_userName"/>
+               <span class="right">
+                   <label class="required">Last Name</label>
+                   <input type="text" name="lastName"/>
+               </span>
+           </div>
 
-           <label for="user_admin">admin</label>
-           <input type="checkbox" name="admin" id="user_admin"/>
+           <div class="row">
+               <span class="left">
+                   <label class="required">Username</label>
+                   <input type="text" name="userName"/>
+               </span>
 
-           <label for="user_emailAddress">email</label>
-           <input type="text" name="emailAddress" id="user_emailAddress"/>
+               <span class="right admin">
+                   <label class="placeholder"></label>
+                   <input type="checkbox" name="admin" id="admin-checkbox"/>
+                   <label for="admin-checkbox">Make this user an administrator</label>
+               </span>
+           </div>
 
-           <label for="user_password">password</label>
-           <input type="password" name="password" id="user_password"/>
+           <div class="row">
+               <span class="left">
+                   <label class="required">Email</label>
+                   <input type="text" name="emailAddress"/>
+               </span>
+           </div>
 
-           <label for="user_passwordConfirmation">passwordConfirmation</label>
-           <input type="password" name="passwordConfirmation" id="user_passwordConfirmation"/>
+           <div class="row">
+               <span class="left">
+                   <label class="required">Password</label>
+                   <input type="password" name="password"/>
+               </span>
 
-           <label for="user_title">title</label>
-           <input type="text" name="title" id="user_title"/>
+               <span class="right">
+                   <label class="required">Confirm Password</label>
+                   <input type="password" name="passwordConfirmation"/>
+               </span>
+           </div>
 
-           <label for="user_department">department</label>
-           <input type="text" name="department" id="user_department"/>
+           <div class="row">
+               <span class="left">
+                   <label>Title</label>
+                   <input type="text" name="title"/>
+               </span>
 
-           <button type="submit">Create User</button>
+               <span class="right">
+                   <label>Department</label>
+                   <input type="text" name="department"/>
+               </span>
+           </div>
+
+           <div class="row">
+               <span class="left">
+                   <button type="submit">Add This User</button>
+                   <button type="cancel">Cancel</button>
+               </span>
+           </div>
        </form>
-   {{else}}
-     <p class="aint_admin">You aren't an admin.</p>
-   {{/ifAdmin}}
-</div>
+   </div>
+{{else}}
+ <p class="aint_admin">You aren't an admin.</p>
+{{/ifAdmin}}

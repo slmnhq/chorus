@@ -25,22 +25,18 @@ describe("chorus.views.userNew", function() {
                 this.view.render();
             });
 
-            it("renders the new user form", function() {
-                expect(this.view.$("#new_user_form")).toExist();
-            });
-
             context("submitting the form", function() {
                 beforeEach(function() {
-                    this.view.$("#user_firstName").val("Frankie")
-                    this.view.$("#user_lastName").val("Knuckles")
-                    this.view.$("#user_userName").val("frankie2002")
-                    this.view.$("#user_emailAddress").val("frankie_knuckles@nyclol.com")
-                    this.view.$("#user_password").val("whoaomg")
-                    this.view.$("#user_passwordConfirmation").val("whoaomg")
+                    this.view.$("input[name=firstName]").val("Frankie")
+                    this.view.$("input[name=lastName]").val("Knuckles")
+                    this.view.$("input[name=userName]").val("frankie2002")
+                    this.view.$("input[name=emailAddress]").val("frankie_knuckles@nyclol.com")
+                    this.view.$("input[name=password]").val("whoaomg")
+                    this.view.$("input[name=passwordConfirmation]").val("whoaomg")
                 })
 
                 it("creates a user with the forms attributes", function() {
-                    this.view.$("#new_user_form").submit();
+                    this.view.$("form").submit();
                     expect(this.user.attributes["firstName"]).toBe("Frankie")
                     expect(this.user.attributes["lastName"]).toBe("Knuckles")
                     expect(this.user.attributes["userName"]).toBe("frankie2002")
@@ -55,23 +51,17 @@ describe("chorus.views.userNew", function() {
                     })
 
                     it("saves the user", function() {
-                        this.view.$("#new_user_form").submit();
+                        this.view.$("form").submit();
                         expect(this.user.save).toHaveBeenCalled()
                     })
 
 
                     context("when user creation is successful", function() {
-                        beforeEach(function() {
-                            this.view.$("#new_user_form").submit();
-                        })
-
                         it("redirects to user index", function() {
                             spyOn(chorus.router, "navigate");
                             this.view.model.trigger("saved");
                             expect(chorus.router.navigate).toHaveBeenCalledWith("/users", true);
                         });
-
-                        it("has a happy message")
                     })
 
                     context("when user creation is fails", function() {
@@ -86,7 +76,7 @@ describe("chorus.views.userNew", function() {
                         });
 
                         it("doesn't redirect", function() {
-                            expect(this.view.$("#new_user_form")).toExist();
+                            expect(this.view.$("form")).toExist();
                         })
                     })
                 })
