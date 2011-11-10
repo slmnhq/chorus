@@ -19,7 +19,6 @@
             userSet.fetch();
             this.content = new chorus.views.UserSet({collection: userSet })
             this.contentHeader = new chorus.views.StaticTemplate("default_content_header", {title: "Users"})
-            console.log(this.content.context())
             this.contentDetails = new chorus.views.UserCount({collection : userSet})
         }
     })
