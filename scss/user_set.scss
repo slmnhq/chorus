@@ -2,20 +2,6 @@
 @import "compass/css3/border-radius";
 
 .user_set {
-    .list-title {
-        background: white;
-        height: 36px;
-        border-bottom: 1px solid $subheader-border-color;
-        padding: 12px;
-        @include border-top-radius(3px);
-
-        h1 {
-            padding-top: 18px;
-            font-size: 22px;
-            font-weight: 600;
-        }
-    }
-
     ul.users li {
         margin: 11px;
         border-bottom: 1px dotted $subheader-border-color;

@@ -163,4 +163,27 @@
             })
         }
     });
+
+
+    chorus.views.MainContentView = chorus.views.Base.extend({
+        className : "main_content",
+
+        postRender : function() {
+            this.contentHeader.el = this.$("#content_header");
+            this.contentHeader.delegateEvents();
+            this.contentHeader.render();
+
+            if (this.contentDetails) {
+                this.contentDetails.el = this.$("#content_details");
+                this.contentDetails.delegateEvents();
+                this.contentDetails.render();
+            }
+
+            this.content.el = this.$("#content");
+            this.content.delegateEvents();
+            this.content.render();
+        }
+    })
+
+
 })(jQuery);

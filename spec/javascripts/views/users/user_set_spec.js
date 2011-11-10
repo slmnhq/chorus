@@ -1,27 +1,41 @@
+describe("chorus.views.UserIndexMain", function() {
+    beforeEach(function() {
+        this.loadTemplate("header");
+        this.loadTemplate("breadcrumbs");
+        this.loadTemplate("main_content");
+        this.loadTemplate("default_content_header");
+        this.loadTemplate("user_count");
+        this.loadTemplate("user_set");
+        this.loadTemplate("user_set_sidebar");
+
+        chorus.user = new chorus.models.User({
+            "firstName" : "Daniel",
+            "lastName" : "Burkes",
+            "fullName": "Daniel Francis Burkes"
+        });
+    });
+
+    describe("#render", function() {
+        beforeEach(function() {
+            this.view = new chorus.views.UserIndexMain();
+            this.view.content.collection.loaded = true
+            this.view.render();
+        })
+        it("displays the number of users", function() {
+            expect(this.view.$(".user_count").text().trim()).toBe("0 Users");
+        });
+    })
+})
+
 describe("chorus.views.UserSet", function() {
     beforeEach(function() {
         this.loadTemplate("user_set");
+        this.loadTemplate("main_content");
         fixtures.model = 'UserSet';
     });
 
     describe("#render", function() {
-        describe("when the collection is loading", function(){
-            beforeEach(function() {
-                this.collection = new chorus.models.UserSet();
-                this.view = new chorus.views.UserSet({collection: this.collection});
-                this.view.render();
-            });
-
-            it("should have a loading element", function(){
-                expect(this.view.$(".loading")).toExist();
-            });
-
-            it("has a header", function() {
-                expect(this.view.$("h1")).toExist();
-            })
-        });
-
-        describe("when the collection has loaded", function(){
+        describe("when the collection has loaded", function() {
             beforeEach(function() {
                 this.collection = fixtures.modelFor('fetch');
                 this.collection.loaded = true;
@@ -29,13 +43,10 @@ describe("chorus.views.UserSet", function() {
                 this.view.render();
             });
 
-            it("should not have a loading element", function(){
+            it("should not have a loading element", function() {
                 expect(this.view.$(".loading")).not.toExist();
             });
 
-            it("displays the number of users", function() {
-                expect(this.view.$(".user_count").text()).toBe("2 Users");
-            });
 
             it("displays the list of users", function() {
                 expect(this.view.$("ul.users")).toExist();
@@ -51,7 +62,7 @@ describe("chorus.views.UserSet", function() {
                 expect(this.view.$("ul.users li[data-userName=markr] .administrator")).not.toExist();
             });
 
-            it("displays an image for each user", function(){
+            it("displays an image for each user", function() {
                 expect(this.view.$("ul.users li img").length).toBe(2);
                 expect(this.view.$("ul.users li img").attr("src")).toBe("/edc/userimage/edcadmin?size=icon");
             });

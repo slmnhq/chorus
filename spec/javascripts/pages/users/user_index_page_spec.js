@@ -2,6 +2,9 @@ describe("chorus.pages.UserIndexPage", function() {
     beforeEach(function() {
         this.loadTemplate("header");
         this.loadTemplate("breadcrumbs");
+        this.loadTemplate("main_content");
+        this.loadTemplate("default_content_header");
+        this.loadTemplate("user_count");
         this.loadTemplate("user_set");
         this.loadTemplate("user_set_sidebar");
 
@@ -17,6 +20,15 @@ describe("chorus.pages.UserIndexPage", function() {
             this.view = new chorus.pages.UserIndexPage();
             this.view.render();
         })
+         describe("when the collection is loading", function(){
+            it("should have a loading element", function(){
+                expect(this.view.$(".loading")).toExist();
+            });
+
+            it("has a header", function() {
+                expect(this.view.$("h1")).toExist();
+            })
+        });
 
         it("creates a UserSet view", function() {
            expect(this.view.$(".user_set")).toExist();

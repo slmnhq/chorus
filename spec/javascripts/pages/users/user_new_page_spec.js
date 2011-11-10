@@ -7,6 +7,6 @@ describe("chorus.pages.UserNewPage", function() {
 
     describe("#render", function(){
         it("has the right breadcrumbs")
-        it("adds the right class to the main content aread")
+        it("adds the right class to the main content area")
     })
 })

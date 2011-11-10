@@ -12,7 +12,7 @@
     function makePage(className) {
         return function() {
             ns.page = new ns.pages[className + "Page"]()
-            $("#content").html(ns.page.render().el);
+            $("#page").html(ns.page.render().el);
         }
     }
 })(jQuery, chorus);

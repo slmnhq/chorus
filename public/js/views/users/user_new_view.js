@@ -36,4 +36,9 @@
         chorus.router.navigate("/users", true);
     }
 
+    ns.UserNewMain = chorus.views.MainContentView.extend({
+        content : new ns.UserNew(),
+        contentHeader : new ns.StaticTemplate("default_content_header", {title: "New User"})
+     })
+
 })(jQuery, chorus.views);

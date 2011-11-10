@@ -7,7 +7,7 @@
                 ],
 
         setup : function(){
-            this.mainContent = new chorus.views.UserNew();
+            this.mainContent = new chorus.views.UserNewMain()
         }
     });
 })(jQuery, chorus.pages);

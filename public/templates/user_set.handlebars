@@ -1,23 +1,13 @@
-<div class="list-title">
-    <h1>Users</h1>
+<div id="content">
+    <ul class="users">
+    {{#each models}}
+    <li data-userName="{{userName}}">
+        <img src="/edc/userimage/{{userName}}?size=icon"/>
+        <a class="fullname">{{fullName}}</a>
+        {{#if admin}}
+            <span class="administrator">Administrator</span>
+        {{/if}}
+    </li>
+    {{/each}}
+    </ul>
 </div>
-
-<div class="list-header">
-{{#if loaded}}
-    <div class="user_count">{{models.length}} Users</div>
-{{else}}
-    <div class="loading">Loading...</div>
-{{/if}}
-</div>
-
-<ul class="users">
-{{#each models}}
-<li data-userName="{{userName}}">
-    <img src="/edc/userimage/{{userName}}?size=icon"/>
-    <a class="fullname">{{fullName}}</a>
-    {{#if admin}}
-        <span class="administrator">Administrator</span>
-    {{/if}}
-</li>
-{{/each}}
-</ul>

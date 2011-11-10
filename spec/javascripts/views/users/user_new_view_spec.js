@@ -1,3 +1,14 @@
+describe("chorus.views.UserNewMain", function() {
+
+    it("is hella happy", function(){
+        this.loadTemplate("main_content")
+        this.loadTemplate("default_content_header")
+
+        var view = new chorus.views.UserNewMain()
+        view.render()
+    })
+
+})
 describe("chorus.views.userNew", function() {
     beforeEach(function() {
         this.loadTemplate("user_new");
