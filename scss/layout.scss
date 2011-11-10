@@ -40,6 +40,12 @@
     height: 6px;
     font-size: 13px;
     border-bottom: 1px solid $pagination-border-color;
+
+    &.hidden {
+        padding: 0;
+        height: 0;
+        border: none;
+    }
 }
 
 #sidebar {

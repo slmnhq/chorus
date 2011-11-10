@@ -177,6 +177,8 @@
                 this.contentDetails.el = this.$("#content_details");
                 this.contentDetails.delegateEvents();
                 this.contentDetails.render();
+            } else {
+                this.$("#content_details").addClass("hidden");
             }
 
             this.content.el = this.$("#content");

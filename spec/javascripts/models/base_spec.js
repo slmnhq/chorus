@@ -230,4 +230,50 @@ describe("backbone base classes", function() {
             })
         })
     })
+
+    describe("chorus.views.MainContentView", function(){
+        beforeEach(function(){
+            this.loadTemplate("main_content");
+        });
+        
+        describe("#render", function(){
+            beforeEach(function(){
+                this.view = new chorus.views.MainContentView();
+
+                this.view.contentHeader = stubView("header text");
+                this.view.content = stubView("content text");
+
+                this.view.render();
+            });
+
+            context("with a supplied contentHeader", function(){
+                it("should render the header", function(){
+                    expect(this.view.$("#content_header").text()).toBe("header text");
+                });
+            });
+
+            context("with a supplied content", function(){
+                it("should render the content", function(){
+                    expect(this.view.$("#content").text()).toBe("content text");
+                });
+            });
+
+            context("without a supplied contentDetails", function(){
+                it("should have the hidden class on the content_details div", function(){
+                    expect((this.view.$("#content_details"))).toHaveClass("hidden");
+                });
+            });
+
+            context("with a supplied contentDetails", function(){
+                beforeEach(function(){
+                    this.view.contentDetails = stubView("content details text");
+                    this.view.render();
+                });
+                
+                it("should render the contentDetails", function(){
+                    expect((this.view.$("#content_details").text())).toBe("content details text");
+                });
+            });
+        });
+    });
 });
