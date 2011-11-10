@@ -38,7 +38,8 @@
 
     ns.UserNewMain = chorus.views.MainContentView.extend({
         content : new ns.UserNew(),
-        contentHeader : new ns.StaticTemplate("default_content_header", {title: "New User"})
+        contentHeader : new ns.StaticTemplate("default_content_header", {title: "New User"}),
+        contentDetails : new ns.StaticTemplate("plain_text", {text: "Details"})
      })
 
 })(jQuery, chorus.views);
