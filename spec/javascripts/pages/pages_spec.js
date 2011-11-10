@@ -76,12 +76,13 @@ describe("chorus.pages.Base", function() {
             expect(this.view.$("#sidebar").html().length).toBe(0)
         });
 
-        it("instantiates dialogs from dialog buttons", function() {
-            this.view.sidebar = stubView("<button type='button' class='dialog' data-view='Base' data-title='Big Words'>Create a Foo</button>");
+        it("instantiates javascripts.dialogs from dialog buttons", function() {
+            chorus.dialogs.Foo = chorus.dialogs.Base.extend({ title : 'Big Words' });
+            this.view.sidebar = stubView("<button type='button' class='dialog' data-dialog='Foo'>Create a Foo</button>");
             this.view.render();
-            spyOn(chorus.dialogs, "Base");
+            spyOn(chorus.dialogs, "Foo");
             this.view.$("button.dialog").click();
-            expect(chorus.dialogs.Base).toHaveBeenCalledWith({ title: "Big Words" });
+            expect(chorus.dialogs.Foo).toHaveBeenCalled();
         })
     })
 });

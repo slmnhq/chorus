@@ -55,13 +55,19 @@
         },
 
         context: function context() {
-            if (!this.resource) return false;
-            var ctx = $.extend({}, this.resource.attributes);
-            ctx.loaded = this.resource.loaded;
-            if (this.collection) {
-                ctx.models = _.pluck(this.collection.models, "attributes");
+            var ctx;
+
+            if (this.resource) {
+                ctx = _.clone(this.resource.attributes);
+                ctx.loaded = this.resource.loaded;
+                if (this.collection) {
+                    ctx.models = _.pluck(this.collection.models, "attributes");
+                }
+                $.extend(ctx, this.additionalContext(ctx));
+            } else {
+                ctx = this.additionalContext({})
             }
-            $.extend(ctx, this.additionalContext(ctx));
+
             return ctx;
         }
     })
