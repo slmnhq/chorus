@@ -24,10 +24,11 @@
                 updates[input.attr("name")] = input.val();
             });
 
+            updates.admin = this.$("input#admin-checkbox").prop("checked") || false;
+
             this.model.set(updates)
             this.model.save();
         }
-
     });
 
     function userSuccessfullySaved() {

@@ -33,6 +33,7 @@ describe("chorus.views.userNew", function() {
                     this.view.$("input[name=emailAddress]").val("frankie_knuckles@nyclol.com")
                     this.view.$("input[name=password]").val("whoaomg")
                     this.view.$("input[name=passwordConfirmation]").val("whoaomg")
+                    this.view.$("input[name=admin]").prop("checked", true);
                 })
 
                 it("creates a user with the forms attributes", function() {
@@ -43,6 +44,18 @@ describe("chorus.views.userNew", function() {
                     expect(this.user.attributes["emailAddress"]).toBe("frankie_knuckles@nyclol.com")
                     expect(this.user.attributes["password"]).toBe("whoaomg")
                     expect(this.user.attributes["passwordConfirmation"]).toBe("whoaomg")
+                    expect(this.user.attributes["admin"]).toBe(true)
+                });
+
+                context("when the user form has admin unchecked", function(){
+                    beforeEach(function(){
+                        this.view.$("input[name=admin]").prop("checked", false);
+                    });
+
+                    it("sets the user attribute 'admin' to false", function(){
+                        this.view.$("form").submit();
+                        expect(this.user.attributes["admin"]).toBe(false);
+                    });
                 });
 
                 context("saving the user", function() {
