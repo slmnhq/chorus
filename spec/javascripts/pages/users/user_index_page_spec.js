@@ -7,6 +7,7 @@ describe("chorus.pages.UserIndexPage", function() {
         this.loadTemplate("count");
         this.loadTemplate("user_set");
         this.loadTemplate("user_set_sidebar");
+        this.loadTemplate("logged_in_layout");
 
         chorus.user = new chorus.models.User({
             "firstName" : "Daniel",

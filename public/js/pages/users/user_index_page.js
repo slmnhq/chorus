@@ -6,15 +6,9 @@
         ],
 
         setup : function() {
-
-            this.mainContent = new chorus.views.UserIndexMain()
+            this.mainContent = new chorus.views.ListView({modelClass : "User"})
             this.sidebar = new chorus.views.StaticTemplate("user_set_sidebar");
         }
     });
-
-
-    chorus.views.UserIndexMain = chorus.views.ListView.extend({
-        modelClass : "User"
-    })
 })
     (jQuery, chorus.pages);

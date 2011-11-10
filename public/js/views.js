@@ -89,12 +89,13 @@
     })
 
     ns.ListView = ns.MainContentView.extend({
-        setup : function() {
-            var collection = new chorus.models[this.modelClass + "Set"]();
+        setup : function(options) {
+            var modelClass = options[0].modelClass
+            var collection = new chorus.models[modelClass + "Set"]();
             collection.fetch();
-            this.content = new chorus.views[this.modelClass + "Set"]({collection: collection })
-            this.contentHeader = new chorus.views.StaticTemplate("default_content_header", {title: this.modelClass})
-            this.contentDetails = new chorus.views.Count({collection : collection, modelClass : this.modelClass})
+            this.content = new chorus.views[modelClass + "Set"]({collection: collection })
+            this.contentHeader = new chorus.views.StaticTemplate("default_content_header", {title: modelClass})
+            this.contentDetails = new chorus.views.Count({collection : collection, modelClass : modelClass})
         }
     })
 })(chorus.views);

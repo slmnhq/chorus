@@ -6,14 +6,9 @@
         ],
 
         setup : function() {
-            this.mainContent = new chorus.views.WorkspaceIndexMain()
+            this.mainContent = new chorus.views.ListView({modelClass : "Workspace"})
             this.sidebar = new chorus.views.StaticTemplate("dashboard_sidebar");
         }
     });
-
-
-    chorus.views.WorkspaceIndexMain = chorus.views.ListView.extend({
-        modelClass : "Workspace"
-    })
 })
     (jQuery, chorus.pages);
