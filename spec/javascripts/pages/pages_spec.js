@@ -79,7 +79,7 @@ describe("chorus.pages.Base", function() {
         it("instantiates dialogs from dialog buttons", function() {
 
             var fooDialogSpy = {
-                initFacebox : jasmine.createSpy()
+                launchDialog : jasmine.createSpy()
             }
 
             chorus.dialogs.Foo = function() {
@@ -89,7 +89,7 @@ describe("chorus.pages.Base", function() {
             this.view.sidebar = stubView("<button type='button' class='dialog' data-dialog='Foo'>Create a Foo</button>");
             this.view.render();
             this.view.$("button.dialog").click();
-            expect(fooDialogSpy.initFacebox).toHaveBeenCalled();
+            expect(fooDialogSpy.launchDialog).toHaveBeenCalled();
         })
     })
 });

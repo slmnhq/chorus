@@ -39,7 +39,7 @@
         createDialog : function(e) {
             var button = $(e.target);
             var dialog = new chorus.dialogs[button.data("dialog")]();
-            dialog.initFacebox();
+            dialog.launchDialog();
         }
     })
 

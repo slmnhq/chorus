@@ -26,11 +26,11 @@ describe("chorus.views.Dialog", function() {
     })
 
 
-    describe("#initFacebox", function() {
+    describe("#launchDialog", function() {
         beforeEach(function() {
             spyOn($, "facebox")
             spyOn(this.dialog, "render")
-            this.dialog.initFacebox()
+            this.dialog.launchDialog()
         })
 
         it("creates a facebox", function() {

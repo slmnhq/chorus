@@ -4,7 +4,7 @@
         header : $("<div id='dialog_header'/>"),
         content : $("<div id='dialog_content'/>"),
 
-        initFacebox : function() {
+        launchDialog : function() {
             $.facebox(this.container)
             this.render();
         },
