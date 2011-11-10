@@ -1,6 +1,7 @@
-<div id="add_new_user" class="main_content">
+<div id="add_new_user">
+   {{> errorDiv }}
    {{#ifAdmin}}
-       <form id="new_user_form" action="/edc/users">
+       <form id="new_user_form" action="/edc/users" method="post">
            <label for="user_firstName">first</label>
            <input type="text" name="firstName" id="user_firstName"/>
 
@@ -28,7 +29,7 @@
            <label for="user_department">department</label>
            <input type="text" name="department" id="user_department"/>
 
-           <input type="submit" value="Create User"/>
+           <button type="submit">Create User</button>
        </form>
    {{else}}
      <p class="aint_admin">You aren't an admin.</p>
