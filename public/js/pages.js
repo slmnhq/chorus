@@ -1,6 +1,6 @@
 (function(ns) {
 
-    ns.Bare = chorus.viewExtensions.extend({
+    ns.Bare = chorus.views.Bare.extend({
         bindCallbacks: function() {
             if (chorus.user) chorus.user.bind("change", this.render);
         }
@@ -8,6 +8,10 @@
 
     ns.Base = ns.Bare.extend({
         className : "logged_in_layout",
+
+        events : {
+            "click button.dialog" : "createDialog"
+        },
 
         postRender : function() {
             this.header = this.header || new chorus.views.Header();
@@ -30,6 +34,12 @@
                 this.sidebar.delegateEvents()
                 this.sidebar.render();
             }
+        },
+
+        createDialog : function(e) {
+            var button = $(e.target);
+            var view = button.data("view");
+            new chorus.dialogs[view]({ title : button.data("title") } );
         }
     })
 

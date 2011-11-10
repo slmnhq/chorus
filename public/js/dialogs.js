@@ -1,5 +1,5 @@
 (function(ns) {
-    ns.Base = chorus.viewExtensions.extend({
+    ns.Base = chorus.views.Base.extend({
 
     })
 })(chorus.dialogs)
