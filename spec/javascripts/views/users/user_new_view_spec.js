@@ -3,6 +3,7 @@ describe("chorus.views.UserNewMain", function() {
     it("is hella happy", function(){
         this.loadTemplate("main_content")
         this.loadTemplate("default_content_header")
+        this.loadTemplate("plain_text")
 
         var view = new chorus.views.UserNewMain()
         view.render()
