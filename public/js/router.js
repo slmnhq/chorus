@@ -6,6 +6,7 @@
             this.route("/login", "login", makePage("Login"));
             this.route("/users", "users", makePage("UserIndex"));
             this.route("/users/new", "userNew", makePage("UserNew"));
+            this.route("/workspaces", "workspaces", makePage("WorkspaceIndex"));
         }
     });
 

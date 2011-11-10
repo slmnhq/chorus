@@ -1,0 +1,13 @@
+<div id="content">
+    <ul class="workspaces">
+    {{#each models}}
+    <li data-userName="{{userName}}">
+        <img src="/edc/userimage/{{userName}}?size=icon"/>
+        <a class="fullname">{{fullName}}</a>
+        {{#if admin}}
+            <span class="administrator">Administrator</span>
+        {{/if}}
+    </li>
+    {{/each}}
+    </ul>
+</div>
