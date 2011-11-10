@@ -4,6 +4,7 @@ describe("chorus.pages.DashboardPage", function() {
         this.loadTemplate("header");
         this.loadTemplate("breadcrumbs");
         this.loadTemplate("dashboard_sidebar");
+        this.loadTemplate("logged_in_layout");
         this.view = new chorus.pages.DashboardPage();
         chorus.user = new chorus.models.User({
             "firstName" : "Daniel",
