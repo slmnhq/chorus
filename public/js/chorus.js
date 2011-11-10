@@ -4,6 +4,8 @@
         self.models = {};
         self.views = {};
         self.pages = {};
+        self.dialogs = {}
+
 
         self.initialize = function() {
             self.session = new chorus.models.Session();

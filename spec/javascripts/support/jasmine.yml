@@ -18,6 +18,9 @@ src_files:
   - js/chorus.js
   - js/router.js
   - js/base.js
+  - js/views.js
+  - js/pages.js
+  - js/dialogs.js
   - js/**/*.js
 
 # stylesheets

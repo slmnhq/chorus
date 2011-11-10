@@ -75,6 +75,13 @@ describe("chorus.pages.Base", function() {
             this.view.render();
             expect(this.view.$("#sidebar").html().length).toBe(0)
         });
-    })
 
+//        it("instantiates dialogs from dialog buttons", function() {
+//            this.view.sidebar = stubView("<button type='button' class='dialog' data-view='Base' data-title='Big Words'>Create a Foo</button>");
+//            this.view.render();
+//            spyOn(chorus.dialogs, "Base");
+//            this.view.$("button.dialog").click();
+//            expect(chorus.dialogs.Base).toHaveBeenCalledWith({ title: "Big Words" });
+//        })
+    })
 });
