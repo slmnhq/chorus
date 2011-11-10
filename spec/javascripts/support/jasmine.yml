@@ -17,7 +17,7 @@ src_files:
   - js/vendor/**/*.js
   - js/chorus.js
   - js/router.js
-  - js/base.js
+  - js/models.js
   - js/views.js
   - js/pages.js
   - js/dialogs.js
