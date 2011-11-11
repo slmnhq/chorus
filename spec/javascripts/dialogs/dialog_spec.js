@@ -30,11 +30,12 @@ describe("chorus.views.Dialog", function() {
         beforeEach(function() {
             spyOn($, "facebox")
             spyOn(this.dialog, "render")
+            spyOn(this.dialog, "el")
             this.dialog.launchDialog()
         })
 
         it("creates a facebox", function() {
-            expect($.facebox).toHaveBeenCalledWith(this.dialog.container);
+            expect($.facebox).toHaveBeenCalledWith(this.dialog.el);
         })
 
         it("creates a facebox", function() {

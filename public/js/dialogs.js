@@ -1,17 +1,16 @@
-(function(ns) {
+;(function(ns) {
     ns.Base = chorus.views.Base.extend({
         container: $("<div id='dialog'/>"),
         header : $("<div id='dialog_header'/>"),
         content : $("<div id='dialog_content'/>"),
 
         launchDialog : function() {
-            $.facebox(this.container)
             this.render();
+            $.facebox(this.el)
         },
 
         render: function render() {
-            this.header.html("<h1>"+this.title+"</h1>")
-
+            this.header.html($("<h1/>").text(this.title))
             this.content.html(this.template(this.context()));
 
             this.container.
@@ -28,4 +27,7 @@
             return this;
         }
     })
+
+    $.facebox.settings.closeImage = '/images/facebox/closelabel.png'
+    $.facebox.settings.loadingImage = '/images/facebox/loading.gif'
 })(chorus.dialogs)

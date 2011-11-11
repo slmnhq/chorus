@@ -35,7 +35,5 @@
         }
     }
 
-
-
     window.chorus = window.chorus || new Chorus();
 })(jQuery);

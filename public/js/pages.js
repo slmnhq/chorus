@@ -38,8 +38,8 @@
 
         createDialog : function(e) {
             var button = $(e.target);
-            var dialog = new chorus.dialogs[button.data("dialog")]();
-            dialog.launchDialog();
+            chorus.dialog = new chorus.dialogs[button.data("dialog")]();
+            chorus.dialog.launchDialog();
         }
     })
 
