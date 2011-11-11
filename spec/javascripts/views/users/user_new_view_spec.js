@@ -1,5 +1,9 @@
 describe("chorus.views.UserNewMain", function() {
 
+    it("doesn't cache", function(){
+        expect(new chorus.views.UserNewMain().content).not.toBe(new chorus.views.UserNewMain().content);
+    })
+
     it("is hella happy", function(){
         this.loadTemplate("main_content")
         this.loadTemplate("default_content_header")
