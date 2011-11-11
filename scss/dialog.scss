@@ -1,0 +1,26 @@
+@import "_common.scss";
+
+#dialog {
+    #dialog_header {
+        height: 54px;
+        border-bottom: 1px solid $border-color;
+
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 54px;
+            vertical-align: middle;
+            margin: 0 15px;
+        }
+    }
+
+    #dialog_content {
+        background-color: $body-background-color;
+        padding: 10px 15px;
+
+        .controls {
+            @include after-clearfix;
+        }
+    }
+}
+

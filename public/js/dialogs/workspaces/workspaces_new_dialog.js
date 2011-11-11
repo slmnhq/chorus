@@ -1,7 +1,7 @@
 (function($, ns) {
     ns.WorkspacesNew = chorus.dialogs.Base.extend({
         className : "workspaces_new",
-        title : "New Workspace",
+        title : "Create a New Workspace",
 
         events : {
             "submit form.new_workspace" : "createWorkspace"

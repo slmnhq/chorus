@@ -10,6 +10,11 @@
         },
 
         render: function render() {
+            this.events = this.events || {};
+            if (!this.events["click button.cancel"]) {
+                this.events["click button.cancel"] = "closeDialog";
+            }
+
             this.header.html($("<h1/>").text(this.title))
             this.content.html(this.template(this.context()));
 
@@ -21,10 +26,15 @@
                 attr("title", this.options.title || this.title);
 
             $(this.el).html(this.container)
+            this.delegateEvents();
 
             this.postRender($(this.el));
 
             return this;
+        },
+
+        closeDialog : function() {
+            $(document).trigger("close.facebox");
         }
     })
 

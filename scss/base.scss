@@ -51,6 +51,11 @@ input, textarea {
     font-family: Myriad Pro;
 }
 
+input[type=checkbox], input[type=radio] {
+    display: inline;
+    width: auto;
+}
+
 .required:after {
     content: "*";
     color: rgb(157, 30, 27);

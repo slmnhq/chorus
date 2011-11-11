@@ -13,7 +13,7 @@
     .content {
         @include after-clearfix();
         min-width: 400;
-        padding: 10px;
+        padding: 0;
         background: #fff;
 
         > p {
@@ -28,18 +28,10 @@
 
     .close {
         position: absolute;
-        top: 5px;
-        right: 5px;
+        top: 18px;
+        right: 15px;
         padding: 2px;
         background: #fff;
-
-        img {
-            opacity: 0.3;
-        }
-
-        &:hover img {
-            opacity: 1.0;
-        }
     }
 
     .loading, .image {
