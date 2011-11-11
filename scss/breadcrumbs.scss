@@ -25,6 +25,11 @@ $breadcrumb-margin: 8px;
     }
 
     .spacer {
-            margin-left : $breadcrumb-margin;
+        margin-left : $breadcrumb-margin;
+        background-image : url("/images/breadcrumb-separator.png");
+        background-repeat: no-repeat;
+        width: 3px;
+        height: 7px;
+        display: inline-block;
     }
 }
