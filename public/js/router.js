@@ -20,6 +20,10 @@
         return function() {
             ns.page = new ns.pages[className + "Page"]()
             $("#page").html(ns.page.render().el);
+            if (true) {
+                $("body > .routes").remove();
+                $("body").append(new ns.views.RouteSplat().render().el);
+            }
         }
     }
 })(jQuery, chorus);
