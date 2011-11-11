@@ -1,11 +1,11 @@
 <div id="content">
     <ul class="workspaces">
     {{#each models}}
-    <li data-userName="{{userName}}">
-        <img src="/edc/userimage/{{userName}}?size=icon"/>
-        <a class="fullname">{{fullName}}</a>
-        {{#if admin}}
-            <span class="administrator">Administrator</span>
+    <li data-id="{{id}}">
+        <img src="/edc/workspace/{{id}}/image?size=icon"/>
+        <a class="name">{{name}}</a>
+        {{#if isPublic}}
+            <span class="public">Public</span>
         {{/if}}
     </li>
     {{/each}}

@@ -6,7 +6,9 @@
         ],
 
         setup : function() {
-            this.mainContent = new chorus.views.ListView({modelClass : "User"})
+            this.collection = new chorus.models.UserSet();
+            this.collection.fetch();
+            this.mainContent = new chorus.views.ListView({modelClass : "User", collection : this.collection})
             this.sidebar = new chorus.views.StaticTemplate("user_set_sidebar");
         }
     });
