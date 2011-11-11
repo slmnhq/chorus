@@ -1,3 +1,5 @@
+@import "_common.scss";
+
 #facebox {
     position: absolute;
     top: 0;
@@ -16,8 +18,8 @@
         box-shadow: 0 0 18px rgba(0, 0, 0, 0.4);
     }
     .content {
-        display: table;
-        width: 370px;
+        @include after-clearfix();
+        min-width: 400;
         padding: 10px;
         background: #fff;
         -webkit-border-radius: 4px;

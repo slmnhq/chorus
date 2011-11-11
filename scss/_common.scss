@@ -1,3 +1,5 @@
+// Colors
+//
 $body-background-color: #EAEFF6;
 $body-glow-color : #C8DCED;
 
@@ -23,3 +25,23 @@ $administrator-background-color: #B1DBAF;
 // TODO Change these colors or the references to them
 $card-background: $element-background;
 $card-border-color: $border-color;
+
+// Mixins
+
+@mixin after-clearfix {
+    &:after {
+            content: ".";
+            display: block;
+            height: 0;
+            font-size: 0;
+            clear: both;
+            visibility: hidden;
+        }
+}
+
+@mixin borderbox {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+};
+
