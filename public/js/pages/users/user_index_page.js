@@ -1,8 +1,8 @@
 (function($, ns) {
     ns.UserIndexPage = chorus.pages.Base.extend({
         crumbs : [
-            { label: "Home", url: "/" },
-            { label: "Users" }
+            { label: t("breadcrumbs.home"), url: "/" },
+            { label: t("breadcrumbs.users") }
         ],
 
         setup : function() {

@@ -1,9 +1,9 @@
 (function($, ns) {
     ns.UserNewPage = chorus.pages.Base.extend({
         crumbs : [
-                    { label: "Home", url: "/" },
-                    { label: "Users", url: "/users" },
-                    { label : "New User" }
+                    { label: t("breadcrumbs.home"), url: "/" },
+                    { label: t("breadcrumbs.users"), url: "/users" },
+                    { label : t("breadcrumbs.new_user") }
                 ],
 
         setup : function(){
@@ -14,8 +14,8 @@
     chorus.views.UserNewMain = chorus.views.MainContentView.extend({
         setup : function(){
             this.content = new chorus.views.UserNew(),
-            this.contentHeader = new chorus.views.StaticTemplate("default_content_header", {title: "New User"}),
-            this.contentDetails = new chorus.views.StaticTemplate("plain_text", {text: "Details"})
+            this.contentHeader = new chorus.views.StaticTemplate("default_content_header", {title: t("users.new_user")}),
+            this.contentDetails = new chorus.views.StaticTemplate("plain_text", {text: t("users.details")})
         }
      })
 })(jQuery, chorus.pages);

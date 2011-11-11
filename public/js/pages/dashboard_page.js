@@ -2,7 +2,7 @@
 (function($, ns) {
     ns.DashboardPage = chorus.pages.Base.extend({
         crumbs : [
-            { label: "Home" }
+            { label: t("breadcrumbs.home") }
         ],
 
         setup : function(){

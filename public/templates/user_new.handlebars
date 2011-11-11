@@ -3,51 +3,51 @@
    <div class="edit_photo">
        <img src="/images/default-user-icon.png" class="profile"/>
        <br/>
-       <a>Edit photo</a>
+       <a>{{t "users.edit_photo"}}</a>
    </div>
    <div class="fields">
        <form action="/edc/users" method="post">
 
            <div class="row">
                <span class="left">
-                   <label class="required">First Name</label>
+                   <label class="required">{{t "users.first_name"}}</label>
                    <input type="text" name="firstName"/>
                </span>
 
                <span class="right">
-                   <label class="required">Last Name</label>
+                   <label class="required">{{t "users.last_name"}}</label>
                    <input type="text" name="lastName"/>
                </span>
            </div>
 
            <div class="row">
                <span class="left">
-                   <label class="required">Username</label>
+                   <label class="required">{{t "users.username"}}</label>
                    <input type="text" name="userName"/>
                </span>
 
                <span class="right admin">
                    <label class="placeholder"></label>
                    <input type="checkbox" name="admin" id="admin-checkbox"/>
-                   <label for="admin-checkbox">Make this user an administrator</label>
+                   <label for="admin-checkbox">{{t "users.make_admin"}}</label>
                </span>
            </div>
 
            <div class="row">
                <span class="left">
-                   <label class="required">Email</label>
+                   <label class="required">{{t "users.email"}}</label>
                    <input type="text" name="emailAddress"/>
                </span>
            </div>
 
            <div class="row">
                <span class="left">
-                   <label class="required">Password</label>
+                   <label class="required">{{t "users.password"}}</label>
                    <input type="password" name="password"/>
                </span>
 
                <span class="right">
-                   <label class="required">Confirm Password</label>
+                   <label class="required">{{t "users.confirm_password"}}</label>
                    <input type="password" name="passwordConfirmation"/>
                </span>
            </div>
@@ -59,19 +59,19 @@
                </span>
 
                <span class="right">
-                   <label>Department</label>
+                   <label>{{t "users.department"}}</label>
                    <input type="text" name="department"/>
                </span>
            </div>
 
            <div class="row controls">
                <span class="left">
-                   <button type="submit">Add This User</button>
-                   <button type="cancel">Cancel</button>
+                   <button type="submit">{{t "users.button.add"}}</button>
+                   <button type="cancel">{{t "actions.cancel"}}</button>
                </span>
            </div>
        </form>
    </div>
 {{else}}
- <p class="aint_admin">You aren't an admin.</p>
+ <p class="aint_admin">{{t "users.not_admin"}}</p>
 {{/ifAdmin}}

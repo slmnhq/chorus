@@ -1,11 +1,11 @@
 {{> errorDiv }}
 <form action="/edc/workspace/" class="new_workspace">
     <input type="text" name="name" placeholder="Name this workspace" tabindex=1></input>
-    <input type="checkbox" name="isPublic" id="isPublic" tabindex=2></input><label for="isPublic">Make this workspace available publicly</label>
+    <input type="checkbox" name="isPublic" id="isPublic" tabindex=2></input><label for="isPublic">{{t "workspaces.make_public"}}</label>
 
     <div class="controls">
-        <button type="button" class="cancel" tabindex=4>Cancel</button>
-        <button type="submit" class="submit" tabindex=3>Create Workspace</button>
+        <button type="button" class="cancel" tabindex=4>{{t "actions.cancel"}}</button>
+        <button type="submit" class="submit" tabindex=3>{{t "workspaces.button.create"}}</button>
     </div>
 </form>
 
