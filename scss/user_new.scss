@@ -55,5 +55,15 @@
             width: 48%;
             margin-right : 10px;
         }
+
+        &.controls {
+            button {
+                float: none;
+
+                &:first-child {
+                    margin-left: 0;
+                }
+            }
+        }
     }
 }
