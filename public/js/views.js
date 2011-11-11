@@ -77,21 +77,15 @@
         className : "main_content",
 
         postRender : function() {
-            this.contentHeader.el = this.$("#content_header");
-            this.contentHeader.delegateEvents();
-            this.contentHeader.render();
+            this.$("#content_header").html(this.contentHeader.render().el);
 
             if (this.contentDetails) {
-                this.contentDetails.el = this.$("#content_details");
-                this.contentDetails.delegateEvents();
-                this.contentDetails.render();
+                this.$("#content_details").html(this.contentDetails.render().el);
             } else {
                 this.$("#content_details").addClass("hidden");
             }
 
-            this.content.el = this.$("#content");
-            this.content.delegateEvents();
-            this.content.render();
+            this.$("#content").html(this.content.render().el);
         }
     })
 

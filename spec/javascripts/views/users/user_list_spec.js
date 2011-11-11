@@ -49,27 +49,26 @@ describe("chorus.views.UserList", function() {
 
 
             it("displays the list of users", function() {
-                expect(this.view.$("ul.users")).toExist();
-                expect(this.view.$("ul.users li").length).toBe(2);
+                expect(this.view.$("> li").length).toBe(2);
             });
 
             it("displays the Administrator tag for admin users", function() {
-                expect(this.view.$("ul.users li[data-userName=edcadmin] .administrator")).toExist();
+                expect(this.view.$("li[data-userName=edcadmin] .administrator")).toExist();
             });
 
             it("does not display the Administrator tag for non-admin users", function() {
-                expect(this.view.$("ul.users li[data-userName=markr]")).toExist();
-                expect(this.view.$("ul.users li[data-userName=markr] .administrator")).not.toExist();
+                expect(this.view.$("li[data-userName=markr]")).toExist();
+                expect(this.view.$("li[data-userName=markr] .administrator")).not.toExist();
             });
 
             it("displays an image for each user", function() {
-                expect(this.view.$("ul.users li img").length).toBe(2);
-                expect(this.view.$("ul.users li img").attr("src")).toBe("/edc/userimage/edcadmin?size=icon");
+                expect(this.view.$("li img").length).toBe(2);
+                expect(this.view.$("li img").attr("src")).toBe("/edc/userimage/edcadmin?size=icon");
             });
 
             it("displays a name for each user", function() {
-                expect(this.view.$("ul.users li:nth-child(1) .fullname").text()).toBe("EDC Admin");
-                expect(this.view.$("ul.users li:nth-child(2) .fullname").text()).toBe("Mark Rushakoff");
+                expect(this.view.$("li:nth-child(1) .fullname").text()).toBe("EDC Admin");
+                expect(this.view.$("li:nth-child(2) .fullname").text()).toBe("Mark Rushakoff");
             })
         });
     })
