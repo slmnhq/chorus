@@ -1,12 +1,18 @@
 (function($, ns) {
     ns.Router = Backbone.Router.extend({
+        maps : [
+            ["", "Dashboard"],
+            ["/", "Dashboard"],
+            ["/login", "Login"],
+            ["/users", "UserIndex"],
+            ["/users/new", "UserNew"],
+            ["/workspaces", "WorkspaceIndex"]
+        ],
         initialize : function() {
-            this.route("", "dashboard", makePage("Dashboard"));
-            this.route("/", "dashboard", makePage("Dashboard"));
-            this.route("/login", "login", makePage("Login"));
-            this.route("/users", "users", makePage("UserIndex"));
-            this.route("/users/new", "userNew", makePage("UserNew"));
-            this.route("/workspaces", "workspaces", makePage("WorkspaceIndex"));
+            var self = this;
+            _.each(this.maps, function(map){
+                self.route(map[0], map[1], makePage(map[1]))
+            });
         }
     });
 
