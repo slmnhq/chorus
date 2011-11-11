@@ -5,8 +5,8 @@ describe("chorus.pages.UserIndexPage", function() {
         this.loadTemplate("main_content");
         this.loadTemplate("default_content_header");
         this.loadTemplate("count");
-        this.loadTemplate("user_set");
-        this.loadTemplate("user_set_sidebar");
+        this.loadTemplate("user_list");
+        this.loadTemplate("user_index_sidebar");
         this.loadTemplate("logged_in_layout");
 
         chorus.user = new chorus.models.User({
@@ -35,8 +35,8 @@ describe("chorus.pages.UserIndexPage", function() {
             })
         });
 
-        it("creates a UserSet view", function() {
-           expect(this.view.$(".user_set")).toExist();
+        it("creates a UserList view", function() {
+           expect(this.view.$(".user_list")).toExist();
         });
 
         describe("when the authenticated user is an admin", function() {

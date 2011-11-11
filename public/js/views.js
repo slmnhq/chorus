@@ -98,7 +98,7 @@
         setup : function(options) {
             var modelClass = options[0].modelClass
             var collection = this.collection;
-            this.content = new chorus.views[modelClass + "Set"]({collection: collection })
+            this.content = new chorus.views[modelClass + "List"]({collection: collection })
             this.contentHeader = new chorus.views.StaticTemplate("default_content_header", {title: modelClass + "s"})
             this.contentDetails = new chorus.views.Count({collection : collection, modelClass : modelClass})
         }

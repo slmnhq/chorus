@@ -5,7 +5,7 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
         this.loadTemplate("main_content");
         this.loadTemplate("default_content_header");
         this.loadTemplate("count");
-        this.loadTemplate("workspace_set");
+        this.loadTemplate("workspace_list");
         this.loadTemplate("logged_in_layout");
         this.loadTemplate("dashboard_sidebar");
 
@@ -31,8 +31,8 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
             })
         });
 
-        it("creates a WorkspaceSet view", function() {
-           expect(this.view.$(".workspace_set")).toExist();
+        it("creates a WorkspaceList view", function() {
+           expect(this.view.$(".workspace_list")).toExist();
         });
 
         it("displays an 'add workspace' button", function() {

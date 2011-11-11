@@ -5,8 +5,8 @@ describe("chorus.views.UserIndexMain", function() {
         this.loadTemplate("main_content");
         this.loadTemplate("default_content_header");
         this.loadTemplate("count");
-        this.loadTemplate("user_set");
-        this.loadTemplate("user_set_sidebar");
+        this.loadTemplate("user_list");
+        this.loadTemplate("user_index_sidebar");
 
         chorus.user = new chorus.models.User({
             "firstName" : "Daniel",
@@ -17,7 +17,7 @@ describe("chorus.views.UserIndexMain", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.view = new chorus.views.ListView({modelClass : "User"});
+            this.view = new chorus.views.ListView({modelClass : "User", collection : new chorus.models.UserSet()});
             this.view.content.collection.loaded = true
             this.view.render();
         })
@@ -27,9 +27,9 @@ describe("chorus.views.UserIndexMain", function() {
     })
 })
 
-describe("chorus.views.UserSet", function() {
+describe("chorus.views.UserList", function() {
     beforeEach(function() {
-        this.loadTemplate("user_set");
+        this.loadTemplate("user_list");
         this.loadTemplate("main_content");
         fixtures.model = 'UserSet';
     });
@@ -39,7 +39,7 @@ describe("chorus.views.UserSet", function() {
             beforeEach(function() {
                 this.collection = fixtures.modelFor('fetch');
                 this.collection.loaded = true;
-                this.view = new chorus.views.UserSet({collection: this.collection});
+                this.view = new chorus.views.UserList({collection: this.collection});
                 this.view.render();
             });
 
