@@ -20,7 +20,8 @@
         render: function render() {
             $(this.el).html(this.template(this.context()))
                 .addClass(this.className)
-                .attr("title", this.options.title || this.title);
+                .attr("title", this.options.title || this.title || "")
+                .addClass(this.additionalClass || "");
             this.postRender($(this.el));
             return this;
         },
@@ -101,6 +102,7 @@
             this.content = new chorus.views[modelClass + "List"]({collection: collection })
             this.contentHeader = new chorus.views.StaticTemplate("default_content_header", {title: modelClass + "s"})
             this.contentDetails = new chorus.views.Count({collection : collection, modelClass : modelClass})
-        }
+        },
+        additionalClass : "main_content_list"
     })
 })(chorus.views);

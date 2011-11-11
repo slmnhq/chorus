@@ -1,0 +1,24 @@
+@import "_common.scss";
+
+.main_content_list li{
+    margin: 11px;
+    border-bottom: 1px dotted $subheader-border-color;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    :nth-child(2) {
+        padding-left: 10px;
+    }
+
+    * {
+        vertical-align: top
+    }
+
+    .tag {
+        float: right;
+        padding: 2px 5px;
+        font-size: 13px;
+    }
+}
