@@ -17,7 +17,7 @@ describe("chorus.views.UserIndexMain", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.view = new chorus.views.ListView({modelClass : "User", collection : new chorus.models.UserSet()});
+            this.view = new chorus.views.MainContentList({modelClass : "User", collection : new chorus.models.UserSet()});
             this.view.content.collection.loaded = true
             this.view.render();
         })

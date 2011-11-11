@@ -94,7 +94,7 @@
         }
     })
 
-    ns.ListView = ns.MainContentView.extend({
+    ns.MainContentList = ns.MainContentView.extend({
         setup : function(options) {
             var modelClass = options[0].modelClass
             var collection = this.collection;

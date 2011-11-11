@@ -8,7 +8,7 @@
         setup : function() {
             this.collection = new chorus.models.WorkspaceSet();
             this.collection.fetch();
-            this.mainContent = new chorus.views.ListView({modelClass : "Workspace", collection : this.collection})
+            this.mainContent = new chorus.views.MainContentList({modelClass : "Workspace", collection : this.collection})
             this.sidebar = new chorus.views.StaticTemplate("dashboard_sidebar");
         }
     });

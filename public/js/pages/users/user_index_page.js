@@ -8,7 +8,7 @@
         setup : function() {
             this.collection = new chorus.models.UserSet();
             this.collection.fetch();
-            this.mainContent = new chorus.views.ListView({modelClass : "User", collection : this.collection})
+            this.mainContent = new chorus.views.MainContentList({modelClass : "User", collection : this.collection})
             this.sidebar = new chorus.views.StaticTemplate("user_index_sidebar");
         }
     });
