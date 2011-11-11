@@ -14,8 +14,8 @@
     chorus.views.UserNewMain = chorus.views.MainContentView.extend({
         setup : function(){
             this.content = new chorus.views.UserNew(),
-            this.contentHeader = new chorus.views.StaticTemplate("default_content_header", {title: "New User"}),
-            this.contentDetails = new chorus.views.StaticTemplate("plain_text", {text: "Details"})
+            this.contentHeader = new chorus.views.StaticTemplate("default_content_header", {title: t("users.new_user")}),
+            this.contentDetails = new chorus.views.StaticTemplate("plain_text", {text: t("users.details")})
         }
      })
 })(jQuery, chorus.pages);
