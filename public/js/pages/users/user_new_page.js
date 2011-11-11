@@ -1,9 +1,9 @@
 (function($, ns) {
     ns.UserNewPage = chorus.pages.Base.extend({
         crumbs : [
-                    { label: "Home", url: "/" },
-                    { label: "Users", url: "/users" },
-                    { label : "New User" }
+                    { label: t("breadcrumbs.home"), url: "/" },
+                    { label: t("breadcrumbs.users"), url: "/users" },
+                    { label : t("breadcrumbs.new_user") }
                 ],
 
         setup : function(){
