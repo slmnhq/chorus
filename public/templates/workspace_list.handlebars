@@ -1,13 +1,11 @@
-<div id="content">
-    <ul class="workspaces">
+<ul class="workspaces">
     {{#each models}}
-    <li data-id="{{id}}">
-        <img src="/edc/workspace/{{id}}/image?size=icon"/>
-        <a class="name">{{name}}</a>
-        {{#if isPublic}}
-            <span class="public tag">Public</span>
-        {{/if}}
-    </li>
+        <li data-id="{{id}}">
+            <img src="/edc/workspace/{{id}}/image?size=icon"/>
+            <a class="name">{{name}}</a>
+            {{#if isPublic}}
+                <span class="public tag">Public</span>
+            {{/if}}
+        </li>
     {{/each}}
-    </ul>
-</div>
+</ul>
