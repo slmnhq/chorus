@@ -1,23 +1,23 @@
 <img class="logo" src="images/logo-large.png"></img>
 <div class="card">
-<h1>Login to Chorus</h1>
+<h1>{{t "login.title"}}</h1>
 {{> errorDiv }}
 <form class="login" action="/edc/auth/login/" method="post">
     <div class="content">
-        <label for="userName">Username</label>
+        <label for="userName">{{t "login.username"}}</label>
         <input type="text" name="userName" id="userName"/>
 
-        <label for="password">Password</label>
+        <label for="password">{{t "login.password"}}</label>
         <input type="password" name="password" id="password"/>
     </div>
     <div class="controls">
-        <button type="submit">Login</button>
+        <button type="submit">{{t "login.button"}}</button>
     </div>
 </form>
 </div>
 <footer>
 <div class="legal">
-    &copy; Copyright 2011 <a href="http://www.greenplum.com">Greenplum</a>. All rights reserved.
+    {{t "login.copyright"}} <a href="http://www.greenplum.com">Greenplum</a>. {{t "login.rights"}}
 </div>
-<div class="version">Version: 0.9.0</div>
+<div class="version">{{t "login.version"}} 0.9.0</div>
 </footer>
