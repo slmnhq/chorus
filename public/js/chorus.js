@@ -36,4 +36,16 @@
     }
 
     window.chorus = window.chorus || new Chorus();
+
+    window.t = function(key) {
+        if (_.isEmpty($.i18n.map)) {
+            jQuery.i18n.properties({
+                name:'Messages',
+                path:'messages/',
+                mode:'map',
+                language: "en_US"});
+        }
+        
+        return $.i18n.prop.apply(this, arguments);
+    }
 })(jQuery);
