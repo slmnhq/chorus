@@ -2,7 +2,8 @@
     ns.Header = chorus.views.Base.extend({
         className : "header",
         events : {
-            "click .username a" : "togglePopup"
+            "click .username a" : "togglePopupUsername",
+            "click .account a" : "togglePopupAccount"
         },
 
         makeModel : function(){
@@ -21,9 +22,13 @@
             }
         },
 
-        togglePopup : function(e) {
+        togglePopupUsername : function(e) {
             e.preventDefault();
             this.$(".menu").toggleClass("hidden");
+        },
+
+        togglePopupAccount : function(e) {
+            e.preventDefault();
         }
     });
 })(jQuery, chorus.views);
