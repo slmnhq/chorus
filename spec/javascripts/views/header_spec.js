@@ -32,7 +32,7 @@ describe("chorus.views.Header", function() {
                 });
 
                 it("displays the synthesized full name", function() {
-                    expect(this.view.$(".username").text()).toBe("0123456789 012345");
+                    expect(this.view.$(".username a").text().trim()).toBe("0123456789 012345");
                 });
             })
 
@@ -43,7 +43,7 @@ describe("chorus.views.Header", function() {
                 })
 
                 it("displays the abbreviated synthesized full name", function() {
-                    expect(this.view.$(".username").text()).toBe("012345678901234 0.");
+                    expect(this.view.$(".username a").text().trim()).toBe("012345678901234 0.");
                 });
              })
 
@@ -52,7 +52,7 @@ describe("chorus.views.Header", function() {
         describe("where the user has a fullName", function() {
             describe("less than or equal to 20 characters", function() {
                 it("displays the user's full name", function() {
-                    expect(this.view.$(".username").text()).toBe("Daniel Francis Burke");
+                    expect(this.view.$(".username a").text().trim()).toBe("Daniel Francis Burke");
                 })
             })
 
@@ -66,9 +66,32 @@ describe("chorus.views.Header", function() {
                 });
 
                 it("displays the user's abbreviated full name", function() {
-                    expect(this.view.$(".username").text()).toBe("Daniel B.");
+                    expect(this.view.$(".username a").text().trim()).toBe("Daniel B.");
                 })
             })
+        })
+
+        it("has a hidden popup menu", function() {
+            expect(this.view.$(".menu")).toHaveClass("hidden");
+        })
+        
+        describe("when clicked", function() {
+            beforeEach(function() {
+                this.view.$(".username a").click();
+            })
+
+            it("shows a popup menu", function() {
+                expect(this.view.$(".menu")).not.toHaveClass("hidden");
+            })
+
+            describe("and when clicked again", function(){
+                beforeEach(function() {
+                    this.view.$(".username a").click();
+                });
+                it("becomes hidden again", function(){
+                    expect(this.view.$(".menu")).toHaveClass("hidden");
+                });
+            });
         })
     })
 });

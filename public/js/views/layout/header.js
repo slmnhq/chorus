@@ -1,6 +1,10 @@
 ; (function($, ns) {
     ns.Header = chorus.views.Base.extend({
         className : "header",
+        events : {
+            "click .username a" : "togglePopup"
+        },
+
         makeModel : function(){
             this.model = chorus.user;
         },
@@ -15,6 +19,11 @@
                     fullName : ctx.firstName + ' ' + ctx.lastName[0] + '.'
                 }
             }
+        },
+
+        togglePopup : function(e) {
+            e.preventDefault();
+            this.$(".menu").toggleClass("hidden");
         }
     });
 })(jQuery, chorus.views);

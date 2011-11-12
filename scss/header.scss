@@ -4,14 +4,16 @@
 
 $header-padding : 13px;
 .header {
-    height: 50px;
+    height: 49px;
     @include linear-gradient(color-stops(#eeeeee, #cccccc));
     vertical-align : middle;
+    border-bottom: 1px solid $header-border-color;
+    
     > div {
         margin: 4px 5px;
         vertical-align: middle;
         line-height: 30px;
-        div {
+        > div {
             display : inline-block;
         }
     }
@@ -69,6 +71,15 @@ $header-padding : 13px;
         font-size: 11px;
         text-align: right;
         padding-right: 8px;
+
+        a {
+            color: inherit;
+        }
+    }
+
+    .menu {
+        right: 75px;
+        top: 42px;
     }
 
     .account {

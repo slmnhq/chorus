@@ -1,0 +1,33 @@
+@import "_common.scss";
+
+.menu {
+    display: inline;
+    position: absolute;
+    background: white;
+    padding: 9px 20px;
+    border-top: 1px solid $menu-border-color;
+    border-right: 1px solid $menu-border-color;
+
+    .pointer {
+        width: 21px;
+        height: 13px;
+        background-image : url("/images/menu-triangle.png");
+        background-repeat: no-repeat;
+        position: absolute;
+        top: -13px;
+        left: 49px;
+    }
+
+
+    a {
+        font-size: 14px;
+        line-height: 14px;
+        vertical-align: middle;
+        color: $text-color;
+    }
+
+    &.hidden {
+        display: none;
+    }
+}
+
