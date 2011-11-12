@@ -1,4 +1,4 @@
-(function($, ns) {
+;(function($, ns) {
     ns.WorkspaceIndexPage = chorus.pages.Base.extend({
         crumbs : [
             { label: t("breadcrumbs.home"), url: "/" },
@@ -12,5 +12,4 @@
             this.sidebar = new chorus.views.StaticTemplate("dashboard_sidebar");
         }
     });
-})
-    (jQuery, chorus.pages);
+})(jQuery, chorus.pages);

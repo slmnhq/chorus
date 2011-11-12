@@ -87,5 +87,33 @@ describe("chorus.router", function() {
                 })
             })
         })
+    });
+
+    describe(".initialize", function(){
+        beforeEach(function(){
+            this.chorus = new Chorus();
+            this.backboneSpy = spyOn(Backbone.history, "start")
+            spyOn(this.chorus, "fetchUser")
+            this.chorus.initialize();
+
+            this.chorus.router.showDevLinks = false
+
+
+            this.loadTemplate("header");
+             this.loadTemplate("breadcrumbs");
+             this.loadTemplate("main_content");
+             this.loadTemplate("default_content_header");
+             this.loadTemplate("routes");
+             this.loadTemplate("user_list");
+             this.loadTemplate("dashboard_sidebar");
+             this.loadTemplate("logged_in_layout");
+
+        })
+
+        it("renders the page with parameters", function(){
+            this.chorus.router.navigate("/workspaces/5", true);
+
+            expect(this.chorus.page.model.get("id")).toBe("5");
+        });
     })
 })
