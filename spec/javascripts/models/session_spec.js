@@ -39,8 +39,6 @@ describe("chorus.models.Session", function() {
             this.model = new models.Session();
             this.needsLoginSpy = jasmine.createSpy();
             this.model.bind("needsLogin", this.needsLoginSpy);
-
-
         })
 
         describe("when there is no chorus.user", function() {
@@ -61,7 +59,7 @@ describe("chorus.models.Session", function() {
                 this.model.logout();
             })
 
-            it("navigates to /login", function() {
+            it("triggers needsLogin", function() {
                 expect(this.needsLoginSpy).toHaveBeenCalled();
             })
         })
@@ -92,15 +90,13 @@ describe("chorus.models.Session", function() {
                     this.server.respond();
                 })
 
-                it("navigates to /login", function() {
+                it("triggers needsLogin", function() {
                     expect(this.needsLoginSpy).toHaveBeenCalled();
                 })
             })
 
         });
     })
-
-
 
     describe("#user", function() {
         beforeEach(function() {

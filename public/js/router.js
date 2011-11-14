@@ -41,17 +41,6 @@
             } else {
                 this.__proto__.navigate(fragment, triggerRoute);
             }
-        },
-
-        logout : function() {
-            var self = this;
-            if (!self.app.user || self.app.user.get("errors")) {
-                this.navigate("/login", true);
-            } else {
-                $.get("/edc/auth/logout/?authid=" + $.cookie("authid"), function() {
-                    self.navigate("/login", true);
-                })
-            }
         }
     });
 

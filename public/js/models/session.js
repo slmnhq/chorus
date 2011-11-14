@@ -13,9 +13,11 @@
         },
 
         logout : function() {
+            var self = this;
+
             if (this.loggedInUser && !this.loggedInUser.get("errors")) {
                 $.get("/edc/auth/logout/?authid=" + $.cookie("authid"), function() {
-                    this.trigger("needsLogin")
+                    self.trigger("needsLogin")
                 })
             } else {
                 this.trigger("needsLogin")
