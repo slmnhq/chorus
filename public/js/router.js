@@ -17,6 +17,15 @@
             self.route("/logout", "logout", this.logout);
         },
 
+        navigate : function(fragment, triggerRoute) {
+            if (Backbone.history.fragment == fragment) {
+                Backbone.history.loadUrl(fragment);
+
+            } else {
+                this.__proto__.navigate(fragment, triggerRoute);
+            }
+        },
+
         logout : function() {
             var self = this;
             if (!chorus.user || chorus.user.get("errors")) {
