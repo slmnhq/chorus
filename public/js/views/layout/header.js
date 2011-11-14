@@ -24,11 +24,22 @@
 
         togglePopupUsername : function(e) {
             e.preventDefault();
-            this.$(".menu").toggleClass("hidden");
+
+            var userNameWasPoppedUp = !this.$(".menu.popup_username").hasClass("hidden");
+            this.dismissPopups();
+            this.$(".menu.popup_username").toggleClass("hidden", userNameWasPoppedUp);
         },
 
         togglePopupAccount : function(e) {
             e.preventDefault();
+
+            var accountNameWasPoppedUp = !this.$(".menu.popup_account").hasClass("hidden");
+            this.dismissPopups();
+            this.$(".menu.popup_account").toggleClass("hidden", accountNameWasPoppedUp)
+        },
+
+        dismissPopups : function() {
+            this.$(".menu").addClass("hidden");
         }
     });
 })(jQuery, chorus.views);

@@ -83,9 +83,19 @@ $header-padding : 13px;
         }
     }
 
-    .menu {
+    .menu.popup_username {
         right: 75px;
         top: 42px;
+    }
+
+    .menu.popup_account {
+        right: 10px;
+        top: 42px;
+
+        .pointer {
+            right: 17px;
+            left: auto;
+        }
     }
 
     .account {

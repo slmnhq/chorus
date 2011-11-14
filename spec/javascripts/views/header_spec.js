@@ -72,7 +72,7 @@ describe("chorus.views.Header", function() {
         })
 
         it("has a hidden popup menu", function() {
-            expect(this.view.$(".menu")).toHaveClass("hidden");
+            expect(this.view.$(".menu.popup_username")).toHaveClass("hidden");
         })
         
         describe("when clicked", function() {
@@ -81,7 +81,7 @@ describe("chorus.views.Header", function() {
             })
 
             it("shows a popup menu", function() {
-                expect(this.view.$(".menu")).not.toHaveClass("hidden");
+                expect(this.view.$(".menu.popup_username")).not.toHaveClass("hidden");
             })
 
             describe("and when clicked again", function(){
@@ -89,9 +89,46 @@ describe("chorus.views.Header", function() {
                     this.view.$(".username a").click();
                 });
                 it("becomes hidden again", function(){
-                    expect(this.view.$(".menu")).toHaveClass("hidden");
+                    expect(this.view.$(".menu.popup_username")).toHaveClass("hidden");
                 });
             });
         })
     })
+
+    describe("account", function(){
+        describe("when clicked", function() {
+            beforeEach(function() {
+                this.view.$(".account a").click();
+            })
+
+            it("shows a popup menu", function() {
+                expect(this.view.$(".menu.popup_account")).not.toHaveClass("hidden");
+            })
+
+            describe("and when clicked again", function(){
+                beforeEach(function() {
+                    this.view.$(".account a").click();
+                });
+                it("becomes hidden again", function(){
+                    expect(this.view.$(".menu.popup_account")).toHaveClass("hidden");
+                });
+            });
+        })
+    });
+
+    describe("multiple popups", function(){
+        describe("at most one is ever visible", function(){
+            beforeEach(function(){
+                this.view.$(".username a").click();
+            });
+
+            it("hides the old popup when you create a new popup", function(){
+                expect(this.view.$(".menu.popup_username")).not.toHaveClass("hidden");
+
+                this.view.$(".account a").click();
+                expect(this.view.$(".menu.popup_username")).toHaveClass("hidden");
+                expect(this.view.$(".menu.popup_account")).not.toHaveClass("hidden");
+            });
+        });
+    });
 });
