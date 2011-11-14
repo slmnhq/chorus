@@ -10,6 +10,16 @@
             var userName = $.cookie("userName");
             if (!userName) this.trigger("needsLogin");
             return new ns.User({userName : userName });
+        },
+
+        logout : function() {
+            if (this.loggedInUser && !this.loggedInUser.get("errors")) {
+                $.get("/edc/auth/logout/?authid=" + $.cookie("authid"), function() {
+                    this.trigger("needsLogin")
+                })
+            } else {
+                this.trigger("needsLogin")
+            }
         }
     });
 

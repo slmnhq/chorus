@@ -14,11 +14,14 @@
             //bind global state events here
             self.session.bind("needsLogin", self.requireLogin)
 
-            self.user = self.fetchUser();
-
+            self.setLoggedInUser();
             self.startHistory();
-        }
+        },
 
+        self.setLoggedInUser = function(){
+            self.user = self.session.loggedInUser = self.fetchUser();
+
+        }
 
         self.fetchUser = function(){
             var user = self.session.user();
@@ -45,7 +48,7 @@
                 mode:'map',
                 language: "en_US"});
         }
-        
+
         return $.i18n.prop.apply(this, arguments);
     }
 })(jQuery);

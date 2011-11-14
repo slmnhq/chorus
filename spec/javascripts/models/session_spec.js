@@ -32,7 +32,74 @@ describe("chorus.models.Session", function() {
             expect($.cookie("userName")).toBe("ponyParty")
         })
 
+    }),
+
+    describe("#logout", function() {
+        beforeEach(function(){
+            this.model = new models.Session();
+            this.needsLoginSpy = jasmine.createSpy();
+            this.model.bind("needsLogin", this.needsLoginSpy);
+
+
+        })
+
+        describe("when there is no chorus.user", function() {
+            beforeEach(function() {
+                spyOn(chorus.router, "navigate")
+                this.model.logout();
+            })
+
+            it("navigates to /login", function() {
+                expect(this.needsLoginSpy).toHaveBeenCalled();
+            })
+        })
+
+        describe("when there is a chorus.user, but it has errors", function() {
+            beforeEach(function() {
+                spyOn(chorus.router, "navigate")
+                this.model.loggedInUser = new models.User({errors : "party"})
+                this.model.logout();
+            })
+
+            it("navigates to /login", function() {
+                expect(this.needsLoginSpy).toHaveBeenCalled();
+            })
+        })
+
+        describe("when there is a chorus.user without errors", function(){
+            beforeEach(function(){
+                spyOn(chorus.router, "navigate")
+                $.cookie("authid", "1234");
+                this.model.loggedInUser = new models.User()
+                this.model.logout();
+            });
+
+            afterEach(function(){
+                $.cookie("authid", null);
+            });
+
+            it("calls the logout API", function(){
+                expect(this.server.requests[0].url).toBe("/edc/auth/logout/?authid=1234");
+            });
+
+            describe("and the server responds", function() {
+                beforeEach(function() {
+                    this.server.respondWith(
+                        'GET',
+                        '/edc/auth/logout/?authid=1234',
+                        this.prepareResponse('{"message":[],"status":"ok","requestId":2694,"resource":[],"method":"GET","resourcelink":"/edc/auth/logout/","pagination":null,"version":"0.1"}'));
+
+                    this.server.respond();
+                })
+
+                it("navigates to /login", function() {
+                    expect(this.needsLoginSpy).toHaveBeenCalled();
+                })
+            })
+
+        });
     })
+
 
 
     describe("#user", function() {

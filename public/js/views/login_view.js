@@ -10,7 +10,7 @@
         },
 
         navigateToDashboard: function(model) {
-            chorus.user = chorus.fetchUser();
+            chorus.setLoggedInUser();
             chorus.router.navigate("/", true);
         },
 

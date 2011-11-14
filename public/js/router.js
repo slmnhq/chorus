@@ -18,8 +18,8 @@
             _.each(this.maps, function(map){
                 self.route(map[0], map[1], generateRouteCallback(map[1]))
             });
-
-            self.route("/logout", "logout", this.logout);
+            
+            self.route("/logout", "logout", self.app.session.logout);
 
             function generateRouteCallback(className) {
                 return function(id) {
@@ -54,5 +54,6 @@
             }
         }
     });
+
 
 })(jQuery, chorus);
