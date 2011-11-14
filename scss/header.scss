@@ -71,16 +71,21 @@ $header-padding : 13px;
         font-size: 11px;
         text-align: right;
         padding-right: 8px;
-        @include ellipsis;
-        max-width: 145px;
+
+        a {
+            span {
+                display: inline-block;
+                @include ellipsis;
+                max-width: 140px;
+            }
+        }
     }
 
     .username, .account {
         a {
             color: inherit;
             img {
-                margin-left: 10px;
-                margin-bottom: 1px;
+                padding: 0 0 1px 10px;
             }
         }
     }
