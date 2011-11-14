@@ -71,6 +71,8 @@ $header-padding : 13px;
         font-size: 11px;
         text-align: right;
         padding-right: 8px;
+        @include ellipsis;
+        max-width: 145px;
     }
 
     .username, .account {

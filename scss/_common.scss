@@ -45,3 +45,8 @@ $card-border-color: $border-color;
     box-sizing: border-box;
 };
 
+@mixin ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

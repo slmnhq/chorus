@@ -15,11 +15,7 @@
                 ctx.fullName = ctx.firstName + ' ' + ctx.lastName;
             }
 
-            if (ctx.fullName.length > 20){
-                return {
-                    fullName : ctx.firstName + ' ' + ctx.lastName[0] + '.'
-                }
-            }
+            return { displayName : (ctx.fullName.length > 20 ? (ctx.firstName + ' ' + ctx.lastName[0] + '.') : ctx.fullName) }
         },
 
         togglePopupUsername : function(e) {

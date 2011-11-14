@@ -74,7 +74,17 @@ describe("chorus.views.Header", function() {
         it("has a hidden popup menu", function() {
             expect(this.view.$(".menu.popup_username")).toHaveClass("hidden");
         })
-        
+
+        it("has a title attribute equal to the non-abbreviated full name", function() {
+            chorus.user.set({
+                "lastName" : "Burkes",
+                "fullName": "Daniel Francis Burkes, III"
+            });
+            this.view.render();
+
+            expect(this.view.$(".username a").attr('title')).toBe("Daniel Francis Burkes, III");
+        })
+
         describe("when clicked", function() {
             beforeEach(function() {
                 this.view.$(".username a").click();
