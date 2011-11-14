@@ -2,6 +2,10 @@
 @import "compass/css3/border-radius";
 $sidebar-width : 250px;
 
+#page {
+    min-width: 750px;
+}
+
 #guts {
     padding: 0 7px 7px 7px;
     @include after-clearfix;

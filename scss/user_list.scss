@@ -11,4 +11,12 @@
     .administrator {
         background: $administrator-background-color;
     }
+
+    a {
+        span {
+            display: inline-block;
+            @include ellipsis;
+            max-width: 68%;
+        }
+    }
 }
