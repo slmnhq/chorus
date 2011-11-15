@@ -11,6 +11,7 @@
             // chorus.router supplies arguments to setup
             this.model = new chorus.models.Workspace({id : workspaceId});
             this.model.fetch();
+            this.breadcrumbs = new chorus.views.WorkspaceBreadcrumbsView({model: this.model});
             this.mainContent = new chorus.views.SubNavContent({modelClass : "Workspace", tab : "summary", model : this.model});
         }
     });

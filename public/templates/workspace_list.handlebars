@@ -1,10 +1,10 @@
 {{#each models}}
     <li data-id="{{id}}">
         <img src="/edc/workspace/{{id}}/image?size=icon"/>
-        <a class="name" href="#/workspace/{{id}}">{{name}}</a>
+        <a class="name" href="#/workspaces/{{id}}">{{name}}</a>
         {{#if isPublic}}
             <span class="public tag">{{t "workspaces.public"}}</span>
         {{/if}}
-        <a href="#/workspace/{{id}}/workfiles">(Temporary link to workfiles for workspace)</a>
+        <a href="#/workspaces/{{id}}/workfiles">(Temporary link to workfiles for workspace)</a>
     </li>
 {{/each}}
