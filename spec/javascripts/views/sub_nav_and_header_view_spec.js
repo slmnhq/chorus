@@ -12,19 +12,19 @@ describe("chorus.views.SubNavAndHeader", function() {
         })
 
         it("renders the subnav tabs", function() {
-            expect(this.view.$(".nav li").length).toBe(3);
+            expect(this.view.$(".sub_nav_nav li").length).toBe(3);
         })
 
         it("renders the subnav header", function() {
-            expect(this.view.$(".subnav_header")).toExist();
+            expect(this.view.$(".sub_nav_header")).toExist();
         })
 
         it("selects the correct tab", function() {
-            expect(this.view.$(".nav li.workfiles")).toHaveClass("selected");
+            expect(this.view.$(".sub_nav_nav li.workfiles")).toHaveClass("selected");
         })
 
         it("fills in the header title", function() {
-            expect(this.view.$(".subnav_header h1").text()).toBe(this.view.$("li.selected").text());
+            expect(this.view.$(".sub_nav_header h1").text()).toBe(this.view.$("li.selected").text());
         })
     })
 })

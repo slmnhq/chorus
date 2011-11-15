@@ -103,12 +103,18 @@
         additionalClass : "main_content_list"
     })
 
-    ns.SubNavContent = ns.MainContentView.extend({
+    ns.SubNavContent = ns.Base.extend({
+        className : "sub_nav_content",
+
         setup : function(options) {
-            var modelClass = options.modelClass
-            this.contentHeader = new chorus.views.SubNavHeader({ tab : options.tab, model : this.model });
+            var modelClass = options[0].modelClass
+            this.header = new chorus.views.SubNavHeader({ tab : options[0].tab, model : this.model });
             this.content = new chorus.views[modelClass + "Detail"]({model: this.model })
         },
-        additionalClass : "sub_nav_content"
+
+        postRender : function () {
+            this.$("#sub_nav_header").html(this.header.render().el);
+            this.$("#content").html(this.content.render().el);
+        }
     })
 })(chorus.views);

@@ -2,24 +2,26 @@
 @import "compass/css3/border-radius";
 
 #main_content.sub_nav_content {
-    #content_header {
+    border: none;
+    
+    #sub_nav_header {
         height: auto;
         background: transparent;
         border: none;
 
-        .nav {
+        .sub_nav_nav {
             li {
                 display: inline;
                 float: right;
                 height: 16px;
-                border-left: 1px solid $header-border-color;
-                border-top: 1px solid $header-border-color;
+                border-left: 1px solid $guts-border-color;
+                border-top: 1px solid $guts-border-color;
                 @include border-top-left-radius(3px);
                 @include border-top-right-radius(3px);
                 padding: 8px 20px;
 
                 &:first-child {
-                    border-right: 1px solid $header-border-color;
+                    border-right: 1px solid $guts-border-color;
                 }
 
                 &.selected {
@@ -28,6 +30,19 @@
             }
 
             @include after-clearfix;
+        }
+
+        .sub_nav_header {
+            height: 62px;
+            background: white;
+            border: 1px solid $guts-border-color;
+            @include border-top-left-radius(3px);
+
+            h1 {
+                font-size: 24px;
+                font-weight: 600;
+                padding: 28px 10px;
+            }
         }
     }
 }

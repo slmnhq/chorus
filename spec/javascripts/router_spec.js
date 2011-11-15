@@ -52,7 +52,8 @@ describe("chorus.router", function() {
 
         it("renders the page with parameters", function(){
             this.loadTemplate("workspace_detail");
-            this.loadTemplate("sub_nav_and_header")
+            this.loadTemplate("sub_nav_content");
+            this.loadTemplate("sub_nav_and_header");
             var savedLocation = window.location.hash;
             this.chorus.router.navigate("/workspaces/5", true);
             window.location.hash = savedLocation;
