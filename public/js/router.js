@@ -19,7 +19,7 @@
                 self.route(map[0], map[1], generateRouteCallback(map[1]))
             });
             self.route("/logout", "logout", self.app.session.logout);
-            self.route("/workspace/:id/workfiles", "WorkfileIndex", generateRouteCallback("WorkfileIndex"))
+            self.route("/workspaces/:id/workfiles", "WorkfileIndex", generateRouteCallback("WorkfileIndex"))
 
             function generateRouteCallback(className) {
                 return function() {
