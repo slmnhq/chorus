@@ -15,6 +15,8 @@
                 self.route(map[0], map[1], makePage(map[1]))
             });
             self.route("/logout", "logout", this.logout);
+
+            self.route("/workspace/:id/workfiles", "WorkfileIndex", makePage("WorkfileIndex"))
         },
 
         navigate : function(fragment, triggerRoute) {
@@ -40,7 +42,19 @@
 
     function makePage(className) {
         return function() {
-            ns.page = new ns.pages[className + "Page"]()
+            // apply arbitrary number of arguments to constructor (for routes with parameters)
+            // code taken from http://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible/1608546#1608546
+            var args = arguments;
+            function construct() {
+                var cls = ns.pages[className + "Page"];
+                function F() {
+                    return cls.apply(this, args);
+                }
+
+                F.prototype = cls.prototype;
+                return new F();
+            }
+            ns.page = construct();
             $("#page").html(ns.page.render().el);
             if (true) {
                 $("body > .routes").remove();

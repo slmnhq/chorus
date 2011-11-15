@@ -5,7 +5,7 @@
             this.preInitialize();
             _.bindAll(this, 'render');
             this.bindCallbacks()
-            this.setup(arguments);
+            this.setup.apply(this, arguments);
         },
 
         preInitialize : $.noop,
@@ -91,7 +91,7 @@
 
     ns.MainContentList = ns.MainContentView.extend({
         setup : function(options) {
-            var modelClass = options[0].modelClass
+            var modelClass = options.modelClass
             var collection = this.collection;
             this.content = new chorus.views[modelClass + "List"]({collection: collection })
             this.contentHeader = new chorus.views.StaticTemplate("default_content_header", {title: modelClass + "s"})
