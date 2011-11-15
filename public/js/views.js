@@ -78,14 +78,17 @@
 
         postRender : function() {
             this.$("#content_header").html(this.contentHeader.render().el);
+            this.contentHeader.delegateEvents();
 
             if (this.contentDetails) {
                 this.$("#content_details").html(this.contentDetails.render().el);
+                this.contentDetails.delegateEvents();
             } else {
                 this.$("#content_details").addClass("hidden");
             }
 
             this.$("#content").html(this.content.render().el);
+            this.content.delegateEvents();
         }
     })
 

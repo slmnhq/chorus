@@ -47,6 +47,31 @@ describe("WorkfileListView", function(){
                 expect($(this.view.$("li p")[0]).text()).toBe(this.model1.get("description"));
                 expect($(this.view.$("li p")[1]).text()).toBe(this.model2.get("description"));
             });
+
+            context("clicking on the first item", function(){
+                beforeEach(function(){
+                    this.li1 = this.view.$("li")[0];
+                    $(this.li1).click();
+                });
+
+                it("adds the selected class to that item", function(){
+                    expect($(this.li1)).toHaveClass("selected");
+                });
+
+                context("and then clicking on the second item", function(){
+                    beforeEach(function(){
+                        this.li2 = this.view.$("li")[1];
+                        $(this.li2).click();
+                    });
+                    it("removes the selected class from the first li", function(){
+                        expect($(this.li1)).not.toHaveClass("selected");
+                    });
+
+                    it("adds the selected class to the second li", function(){
+                        expect($(this.li2)).toHaveClass("selected");
+                    });
+                });
+            });
         });
     });
 });
