@@ -4,7 +4,9 @@
             // chorus.router supplies arguments to setup
             var workspaceId = arguments[0];
 
-            this.crumbs =[{ label: t("breadcrumbs.home"), url: "/" }, {label : "workspace name placeholder"}];
+            var workspace = new chorus.models.Workspace({id: workspaceId});
+            workspace.fetch();
+            this.breadcrumbs = new chorus.views.WorkspaceBreadcrumbsView({model: workspace});
 
             this.collection = new chorus.models.WorkfileSet([], {workspaceId: workspaceId});
             this.collection.fetch();
