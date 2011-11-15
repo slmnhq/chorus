@@ -29,7 +29,7 @@
 
         workspaceSaved : function () {
             $(document).trigger("close.facebox");
-            chorus.router.navigate("/workspaces", true);
+            chorus.router.navigate("/workspaces/" + this.model.get("id"), true);
         }
     });
 })(jQuery, chorus.dialogs);

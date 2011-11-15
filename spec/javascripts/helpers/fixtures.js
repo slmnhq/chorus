@@ -154,6 +154,33 @@
                     "version": "0.1"
                 }
 
+            },
+
+            Workspace : {
+                fetch : {
+                    "message":[],
+                    "status":"ok",
+                    "requestId":3697,
+                    "resource":[{
+                        "id":"10013",
+                        "ownerFullName":"EDC Admin",
+                        "name":"fortune",
+                        "description":"a cool workspace",
+                        "createdStamp":"2011-11-14",
+                        "owner":"edcadmin",
+                        "isPublic":true,
+                        "iconId":null,
+                        "state":1,
+                        "summary":null,
+                        "sandboxId":null,
+                        "active":true,
+                        "permission":["admin"]
+                    }],
+                    "method":"GET",
+                    "resourcelink":"/edc/workspace/10013",
+                    "pagination":null,
+                    "version":"0.1"
+                }
             }
 
         });

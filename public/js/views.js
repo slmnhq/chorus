@@ -99,4 +99,13 @@
         },
         additionalClass : "main_content_list"
     })
+
+    ns.SubNavContent = ns.MainContentView.extend({
+        setup : function(options) {
+            var modelClass = options[0].modelClass
+            this.contentHeader = new chorus.views.SubNavHeader({ tab : options[0].tab, model : this.model });
+            this.content = new chorus.views[modelClass + "Detail"]({model: this.model })
+        },
+        additionalClass : "sub_nav_content"
+    })
 })(chorus.views);

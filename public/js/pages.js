@@ -23,7 +23,7 @@
             this.mainContent.delegateEvents();
             this.mainContent.render();
 
-            this.breadcrumbs = new chorus.views.BreadcrumbsView({breadcrumbs: this.crumbs })
+            this.breadcrumbs = new chorus.views.BreadcrumbsView({breadcrumbs: _.isFunction(this.crumbs) ? this.crumbs() : this.crumbs })
             this.breadcrumbs.el = this.$("#breadcrumbs")
             this.breadcrumbs.delegateEvents();
             this.breadcrumbs.render();

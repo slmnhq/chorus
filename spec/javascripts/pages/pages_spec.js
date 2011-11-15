@@ -47,7 +47,37 @@ describe("chorus.pages.Base", function() {
             });
         });
 
-        it("creates a BreadcrumbsView", function() {
+        describe("breadcrumb handling", function() {
+            context("with static breadcrumbs", function() {
+                beforeEach(function() {
+                    this.view.crumbs = [
+                        {label : "Home"}
+                    ]
+                    this.view.render();
+                })
+
+                it("creates a BreadcrumbsView with the static breadcrumbs", function() {
+                    expect(this.view.breadcrumbs.options.breadcrumbs).toEqual(this.view.crumbs);
+                });
+            })
+
+            context("with dynamic breadcrumbs", function() {
+                beforeEach(function() {
+                    this.view.crumbs = function() {
+                        return [
+                            {label : "There"}
+                        ]
+                    }
+                    this.view.render();
+                })
+
+                it("creates a BreadcrumbsView with the dynamic breadcrumbs", function() {
+                    expect(this.view.breadcrumbs.options.breadcrumbs).toEqual(this.view.crumbs());
+                });
+            })
+        })
+
+        it("renders the breadcrumbs", function() {
             this.view.crumbs = [
                 {label : "Home"}
             ]

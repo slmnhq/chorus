@@ -46,11 +46,12 @@ describe("WorkspacesNewDialog", function() {
                     this.dialog.$("form.new_workspace").submit();
                     spyOn(chorus.router, "navigate");
                     spyOnEvent($(document), "close.facebox");
+                    this.dialog.resource.set({ id: "10102" }, { silent: true })
                     this.dialog.resource.trigger("saved");
                 })
 
-                it("redirects to workspaces index", function() {
-                    expect(chorus.router.navigate).toHaveBeenCalledWith("/workspaces", true);
+                it("redirects to the new workspace show page", function() {
+                    expect(chorus.router.navigate).toHaveBeenCalledWith("/workspaces/10102", true);
                 });
 
                 it("dismisses the dialog", function() {
