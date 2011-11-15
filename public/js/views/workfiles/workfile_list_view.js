@@ -9,6 +9,7 @@
             e.preventDefault();
             this.$("li").removeClass("selected");
             $(e.currentTarget).addClass("selected");
+            this.trigger("workfile:selected", $(e.currentTarget).data("workfileid"));
         }
     });
 })(jQuery, chorus.views);

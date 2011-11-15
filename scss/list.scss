@@ -1,7 +1,7 @@
 @import "_common.scss";
 
 .main_content_list li{
-    margin: 11px;
+    padding: 11px 11px 0px 11px;
     border-bottom: 1px dotted $subheader-border-color;
 
     &:last-child {
