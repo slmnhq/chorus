@@ -7,8 +7,9 @@
             ]
         },
 
-        setup : function(args) {
-            this.model = new chorus.models.Workspace({id : args[0]});
+        setup : function(workspaceId) {
+            // chorus.router supplies arguments to setup
+            this.model = new chorus.models.Workspace({id : workspaceId});
             this.model.fetch();
             this.mainContent = new chorus.views.SubNavContent({modelClass : "Workspace", tab : "summary", model : this.model});
         }

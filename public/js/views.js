@@ -5,7 +5,7 @@
             this.preInitialize();
             _.bindAll(this, 'render');
             this.bindCallbacks()
-            this.setup(arguments);
+            this.setup.apply(this, arguments);
         },
 
         preInitialize : $.noop,
@@ -78,20 +78,23 @@
 
         postRender : function() {
             this.$("#content_header").html(this.contentHeader.render().el);
+            this.contentHeader.delegateEvents();
 
             if (this.contentDetails) {
                 this.$("#content_details").html(this.contentDetails.render().el);
+                this.contentDetails.delegateEvents();
             } else {
                 this.$("#content_details").addClass("hidden");
             }
 
             this.$("#content").html(this.content.render().el);
+            this.content.delegateEvents();
         }
     })
 
     ns.MainContentList = ns.MainContentView.extend({
         setup : function(options) {
-            var modelClass = options[0].modelClass
+            var modelClass = options.modelClass
             var collection = this.collection;
             this.content = new chorus.views[modelClass + "List"]({collection: collection })
             this.contentHeader = new chorus.views.StaticTemplate("default_content_header", {title: modelClass + "s"})
@@ -102,8 +105,8 @@
 
     ns.SubNavContent = ns.MainContentView.extend({
         setup : function(options) {
-            var modelClass = options[0].modelClass
-            this.contentHeader = new chorus.views.SubNavHeader({ tab : options[0].tab, model : this.model });
+            var modelClass = options.modelClass
+            this.contentHeader = new chorus.views.SubNavHeader({ tab : options.tab, model : this.model });
             this.content = new chorus.views[modelClass + "Detail"]({model: this.model })
         },
         additionalClass : "sub_nav_content"

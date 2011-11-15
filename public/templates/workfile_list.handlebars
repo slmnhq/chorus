@@ -1,8 +1,12 @@
 {{#each models}}
-    <li data-workfileId="{{workfileId}}">
-        <img src="{{workfileIconUrl fileType}}"/>
-        <a title="{{fileName}}"><span class="ellipsis">{{fileName}}</span></a>
-        <p>{{description}}</p>
-        {{! API does not yet support recent comment activity}}
+    <li data-workfileId="{{id}}">
+        <div class="icon">
+            <img src="{{workfileIconUrl fileType}}"/>
+        </div>
+        <div class="details">
+            <a title="{{fileName}}"><span class="ellipsis">{{fileName}}</span></a>
+            <p>{{description}}</p>
+            {{! API does not yet support recent comment activity}}
+        </div>
     </li>
 {{/each}}

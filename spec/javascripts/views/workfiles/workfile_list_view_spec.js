@@ -17,8 +17,8 @@ describe("WorkfileListView", function(){
 
         context("with some workfiles in the collection", function(){
             beforeEach(function(){
-                this.model1 = new chorus.models.Workfile({workfileId: 12, fileType: "sql", fileName: "some_file.sql", description: "describe 1"});
-                this.model2 = new chorus.models.Workfile({workfileId: 34, fileType: "txt", fileName: "other_file.txt", description: "describe 2"});
+                this.model1 = new chorus.models.Workfile({id: 12, fileType: "sql", fileName: "some_file.sql", description: "describe 1"});
+                this.model2 = new chorus.models.Workfile({id: 34, fileType: "txt", fileName: "other_file.txt", description: "describe 2"});
                 this.collection = new chorus.models.WorkfileSet([this.model1, this.model2], {workspaceId: 1234});
                 this.view = new chorus.views.WorkfileList({collection: this.collection});
                 this.view.render();
@@ -29,8 +29,8 @@ describe("WorkfileListView", function(){
             });
 
             it("includes data-workfileId for each item", function(){
-                expect($(this.view.$("li")[0]).data("workfileid")).toBe(this.model1.get("workfileId"));
-                expect($(this.view.$("li")[1]).data("workfileid")).toBe(this.model2.get("workfileId"));
+                expect($(this.view.$("li")[0]).data("workfileid")).toBe(this.model1.get("id"));
+                expect($(this.view.$("li")[1]).data("workfileid")).toBe(this.model2.get("id"));
             });
 
             it("includes the filename as a link", function(){
@@ -46,6 +46,41 @@ describe("WorkfileListView", function(){
             it("includes the description", function(){
                 expect($(this.view.$("li p")[0]).text()).toBe(this.model1.get("description"));
                 expect($(this.view.$("li p")[1]).text()).toBe(this.model2.get("description"));
+            });
+
+            context("clicking on the first item", function(){
+                beforeEach(function(){
+                    this.eventSpy = jasmine.createSpy();
+                    this.view.bind("workfile:selected", this.eventSpy);
+                    this.li1 = this.view.$("li")[0];
+                    $(this.li1).click();
+                });
+
+                it("adds the selected class to that item", function(){
+                    expect($(this.li1)).toHaveClass("selected");
+                });
+
+                it("triggers the workfile:selected event", function(){
+                    expect(this.eventSpy).toHaveBeenCalledWith(this.model1.get("id"));
+                });
+
+                context("and then clicking on the second item", function(){
+                    beforeEach(function(){
+                        this.li2 = this.view.$("li")[1];
+                        $(this.li2).click();
+                    });
+                    it("removes the selected class from the first li", function(){
+                        expect($(this.li1)).not.toHaveClass("selected");
+                    });
+
+                    it("adds the selected class to the second li", function(){
+                        expect($(this.li2)).toHaveClass("selected");
+                    });
+
+                    it("triggers the workfile:selected event", function(){
+                        expect(this.eventSpy).toHaveBeenCalledWith(this.model2.get("id"));
+                    });
+                });
             });
         });
     });
