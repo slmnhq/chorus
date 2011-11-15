@@ -107,8 +107,8 @@
         className : "sub_nav_content",
 
         setup : function(options) {
-            var modelClass = options[0].modelClass
-            this.header = new chorus.views.SubNavHeader({ tab : options[0].tab, model : this.model });
+            var modelClass = options.modelClass
+            this.header = new chorus.views.SubNavHeader({ tab : options.tab, model : this.model });
             this.content = new chorus.views[modelClass + "Detail"]({model: this.model })
         },
 
