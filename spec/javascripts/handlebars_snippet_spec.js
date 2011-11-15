@@ -66,5 +66,24 @@ describe("handlebars", function() {
                 });
             })
         });
+
+        describe("workfileIconUrl", function(){
+            function verifyUrl(fileType, fileName) {
+                expect(Handlebars.helpers.workfileIconUrl(fileType)).toBe("/images/workfileIcons/" + fileName + ".png");
+            }
+
+            it("maps known fileTypes to URLs correctly", function(){
+                verifyUrl("C", "c");
+                verifyUrl("C++", "cplusplus");
+                verifyUrl("Java", "java");
+                verifyUrl("sql", "sql");
+                verifyUrl("txt", "text");
+            });
+
+            it("maps unknown fileTypes to binary.png", function(){
+                verifyUrl("foobar", "binary");
+                verifyUrl("N/A", "binary");
+            });
+        });
     });
 });
