@@ -4,6 +4,7 @@
 
         initialize : function() {
             this.bind("saved", setUsernameCookie)
+            _.bindAll(this);
         },
 
         user : function() {
