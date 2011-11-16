@@ -1,5 +1,5 @@
 ;(function($, ns) {
-    ns.WorkspaceShowPage = chorus.pages.Base.extend({
+    ns.WorkspaceSummaryPage = chorus.pages.Base.extend({
         crumbs : function() {
             return [
                 { label: t("breadcrumbs.home"), url: "/" },

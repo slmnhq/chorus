@@ -1,4 +1,4 @@
-describe("chorus.pages.WorkspaceShowPage", function() {
+describe("chorus.pages.WorkspaceSummaryPage", function() {
     beforeEach(function() {
         fixtures.model = "Workspace";
         this.loadTemplate("workspace_detail")
@@ -6,7 +6,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
     describe("#initialize", function() {
         beforeEach(function() {
-            this.page = new chorus.pages.WorkspaceShowPage(4);
+            this.page = new chorus.pages.WorkspaceSummaryPage(4);
         })
 
         it("sets up the model properly", function() {

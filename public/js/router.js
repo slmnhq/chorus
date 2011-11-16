@@ -8,7 +8,7 @@
             ["/users", "UserIndex"],
             ["/users/new", "UserNew"],
             ["/workspaces", "WorkspaceIndex"],
-            ["/workspaces/:id", "WorkspaceShow"]
+            ["/workspaces/:id", "WorkspaceSummary"]
         ],
 
         initialize : function(app) {
