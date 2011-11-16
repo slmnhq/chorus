@@ -10,12 +10,15 @@
         border: none;
 
         .sub_nav_nav {
+            margin-bottom: -1px;
+
             li {
                 display: inline;
                 float: right;
                 height: 16px;
                 border-left: 1px solid $guts-border-color;
                 border-top: 1px solid $guts-border-color;
+                border-bottom: none;
                 @include border-top-left-radius(3px);
                 @include border-top-right-radius(3px);
                 padding: 8px 20px;
