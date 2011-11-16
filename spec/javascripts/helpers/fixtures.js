@@ -74,23 +74,23 @@
             Session: {
                 save: {
                     "message":
-                    [
+                        [
 
-                    ],
+                        ],
                     "status": "ok",
                     "requestId": 4,
                     "resource":
-                    [
-                    {
-                        "userName": "edcadminlol",
-                        "admin": true,
-                        "firstName": "EDC",
-                        "lastName": "Admin",
-                        "fullName": "EDC Admin",
-                        "authid": "4b11614a29bb62f3a56f7ff141e90db91320194325353.539273276006",
-                        "use_external_ldap": false
-                    }
-                    ],
+                        [
+                            {
+                                "userName": "edcadminlol",
+                                "admin": true,
+                                "firstName": "EDC",
+                                "lastName": "Admin",
+                                "fullName": "EDC Admin",
+                                "authid": "4b11614a29bb62f3a56f7ff141e90db91320194325353.539273276006",
+                                "use_external_ldap": false
+                            }
+                        ],
                     "method": "POST",
                     "resourcelink": "/edc/auth/login/",
                     "pagination": null,
@@ -99,25 +99,65 @@
 
                 saveFailure: {
                     "message":
-                    [
-                    {
-                        "message": "Username or password is incorrect.",
-                        "msgcode": "E_2_0006",
-                        "description": null,
-                        "severity": "error",
-                        "msgkey": "USER.LOGIN_FAILED"
-                    }
-                    ],
+                        [
+                            {
+                                "message": "Username or password is incorrect.",
+                                "msgcode": "E_2_0006",
+                                "description": null,
+                                "severity": "error",
+                                "msgkey": "USER.LOGIN_FAILED"
+                            }
+                        ],
                     "status": "fail",
                     "requestId": 3,
                     "resource":
-                    [
+                        [
 
-                    ],
+                        ],
                     "method": "POST",
                     "resourcelink": "/edc/auth/login/",
                     "pagination": null,
                     "version": "0.1"
+                }
+            },
+
+            User: {
+                fetch : {
+                    "message":[],
+                    "status":"ok",
+                    "requestId":108,
+                    "resource":[
+                        {
+                            "id":"InitialUser",
+                            "userName":"edcadmin",
+                            "firstName":"EDC",
+                            "lastName":"Admin",
+                            "emailAddress":"edcadmin@example.com",
+                            "title":null,
+                            "ou":null,
+                            "manager":null,
+                            "streetAddress":null,
+                            "l":null,
+                            "st":null,
+                            "c":null,
+                            "admin":true,
+                            "techniques":null,
+                            "expertise":null,
+                            "lastLogin":"2011-11-16 09:40:27.916",
+                            "imageId":"10036",
+                            "dn":null,
+                            "isDeleted":false,
+                            "dumb":null,
+                            "lastUpdatedStamp":"2011-11-16 12:34:47.632",
+                            "lastUpdatedTxStamp":"2011-11-16 12:34:47.454",
+                            "createdStamp":"2011-11-03 10:49:41.346",
+                            "createdTxStamp":"2011-11-03 10:49:41.342"
+                        }
+                    ],
+                    "method":"GET",
+                    "resourcelink":"/edc/user/edcadmin",
+                    "pagination":null,
+                    "version":"0.1"
                 }
             },
 
@@ -127,23 +167,26 @@
                     "message": [],
                     "status": "ok",
                     "requestId": 8,
-                    "resource": [{
-                        "userName": "edcadmin",
-                        "fullName": "EDC Admin",
-                        "admin": true,
-                        "techniques": null,
-                        "expertise": null,
-                        "lastLogin": "2011-11-03 17:45:39",
-                        "isDeleted": false
-                    },{
-                        "userName": "markr",
-                        "fullName": "Mark Rushakoff",
-                        "admin": false,
-                        "techniques": null,
-                        "expertise": null,
-                        "lastLogin": "2011-11-03 17:45:39",
-                        "isDeleted": false
-                    }],
+                    "resource": [
+                        {
+                            "userName": "edcadmin",
+                            "fullName": "EDC Admin",
+                            "admin": true,
+                            "techniques": null,
+                            "expertise": null,
+                            "lastLogin": "2011-11-03 17:45:39",
+                            "isDeleted": false
+                        },
+                        {
+                            "userName": "markr",
+                            "fullName": "Mark Rushakoff",
+                            "admin": false,
+                            "techniques": null,
+                            "expertise": null,
+                            "lastLogin": "2011-11-03 17:45:39",
+                            "isDeleted": false
+                        }
+                    ],
                     "method": "GET",
                     "resourcelink": "/edc/user/",
                     "pagination": {
@@ -161,21 +204,23 @@
                     "message":[],
                     "status":"ok",
                     "requestId":3697,
-                    "resource":[{
-                        "id":"10013",
-                        "ownerFullName":"EDC Admin",
-                        "name":"fortune",
-                        "description":"a cool workspace",
-                        "createdStamp":"2011-11-14",
-                        "owner":"edcadmin",
-                        "isPublic":true,
-                        "iconId":null,
-                        "state":1,
-                        "summary":null,
-                        "sandboxId":null,
-                        "active":true,
-                        "permission":["admin"]
-                    }],
+                    "resource":[
+                        {
+                            "id":"10013",
+                            "ownerFullName":"EDC Admin",
+                            "name":"fortune",
+                            "description":"a cool workspace",
+                            "createdStamp":"2011-11-14",
+                            "owner":"edcadmin",
+                            "isPublic":true,
+                            "iconId":null,
+                            "state":1,
+                            "summary":null,
+                            "sandboxId":null,
+                            "active":true,
+                            "permission":["admin"]
+                        }
+                    ],
                     "method":"GET",
                     "resourcelink":"/edc/workspace/10013",
                     "pagination":null,
