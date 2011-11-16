@@ -5,6 +5,8 @@ describe("user_show_page", function(){
         this.loadTemplate("plain_text");
         this.loadTemplate("breadcrumbs");
         this.loadTemplate("user_show");
+        this.loadTemplate("default_content_header");
+        this.loadTemplate("main_content");
     });
 
     describe("#setup", function(){
@@ -23,14 +25,17 @@ describe("user_show_page", function(){
 
     describe("#render", function(){
         beforeEach(function(){
+            fixtures.model = 'User';
+
             this.view = new chorus.pages.UserShowPage("johndoe");
-            this.view.model.set({firstName : "John", lastName: "Doe"});
+
+            this.view.model.set(fixtures.jsonFor('fetch').resource[0]);
             this.view.model.loaded = true;
             this.view.render();
         });
 
         it("displays the first + last name in the header", function(){
-            expect(this.view.$("#content_header h1").text().trim()).toBe("John Doe");
+            expect(this.view.$("#content_header h1").text().trim()).toBe("EDC Admin");
         });
 
         it("displays the word 'details' in the details-header", function(){

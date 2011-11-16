@@ -25,7 +25,7 @@
     chorus.views.UserShowMain = chorus.views.MainContentView.extend({
         setup : function(model) {
             this.resource = this.model = model;
-            this.content = new chorus.views.UserShow();
+            this.content = new chorus.views.UserShow({model : model});
             this.contentHeader = new updatingUserNameView({model: model});
             this.contentDetails = new chorus.views.StaticTemplate("plain_text", {text : t("users.details")});
         }

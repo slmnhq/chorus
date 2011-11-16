@@ -1,0 +1,18 @@
+<div class="edit_photo">
+    <img src="/edc/userimage/{{userName}}?size=profile"/>
+    <br/>
+    <a>{{t "users.edit_photo"}}</a>
+</div>
+<div class="title">{{title}}</div>
+<div class="department">{{department}}</div>
+
+<div class="emailAddress">{{emailAddress}}</div>
+
+
+{{#if admin}}
+    <div>
+        <span class="administrator tag">{{t "users.administrator"}}</span>
+    </div>
+{{/if}}
+
+<div class="notes">{{notes}}</div>
