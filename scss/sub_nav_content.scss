@@ -45,4 +45,18 @@
             }
         }
     }
+
+
+    #content_details {
+        border-left: 1px solid $guts-border-color;
+        border-right: 1px solid $guts-border-color;
+    }
+
+    #content {
+        border-left: 1px solid $guts-border-color;
+        border-bottom: 1px solid $guts-border-color;
+        border-right: 1px solid $guts-border-color;
+        @include border-bottom-radius(3px);
+    }
+
 }

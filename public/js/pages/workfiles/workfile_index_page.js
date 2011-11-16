@@ -9,7 +9,7 @@
 
             this.collection = new chorus.models.WorkfileSet([], {workspaceId: workspaceId});
             this.collection.fetch();
-            this.mainContent = new chorus.views.MainContentList({modelClass : "Workfile", collection : this.collection})
+            this.mainContent = new chorus.views.SubNavContentList({modelClass : "Workfile", tab : "workfiles", collection : this.collection, model : workspace});
         }
     });
 })(jQuery, chorus.pages);

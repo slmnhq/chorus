@@ -48,15 +48,18 @@ describe("chorus.router", function() {
              this.loadTemplate("dashboard_sidebar");
              this.loadTemplate("logged_in_layout");
 
+            this.savedLocation = window.location.hash;
+        })
+
+        afterEach(function() {
+            window.location.hash = this.savedLocation;
         })
 
         it("renders the page with parameters", function(){
             this.loadTemplate("workspace_detail");
             this.loadTemplate("sub_nav_content");
             this.loadTemplate("sub_nav_and_header");
-            var savedLocation = window.location.hash;
             this.chorus.router.navigate("/workspaces/5", true);
-            window.location.hash = savedLocation;
             expect(this.chorus.page.model.get("id")).toBe("5");
         });
     })

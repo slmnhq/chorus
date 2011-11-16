@@ -74,13 +74,13 @@ describe("chorus.views", function() {
         })
     })
 
-    describe("MainContentView", function(){
-        beforeEach(function(){
+    describe("MainContentView", function() {
+        beforeEach(function() {
             this.loadTemplate("main_content");
         });
 
-        describe("#render", function(){
-            beforeEach(function(){
+        describe("#render", function() {
+            beforeEach(function() {
                 this.view = new chorus.views.MainContentView();
 
                 this.view.contentHeader = stubView("header text");
@@ -89,82 +89,135 @@ describe("chorus.views", function() {
                 this.view.render();
             });
 
-            context("with a supplied contentHeader", function(){
-                it("should render the header", function(){
+            context("with a supplied contentHeader", function() {
+                it("should render the header", function() {
                     expect(this.view.$("#content_header").text()).toBe("header text");
                 });
             });
 
-            context("with a supplied content", function(){
-                it("should render the content", function(){
+            context("with a supplied content", function() {
+                it("should render the content", function() {
                     expect(this.view.$("#content").text()).toBe("content text");
                 });
             });
 
-            context("without a supplied contentDetails", function(){
-                it("should have the hidden class on the content_details div", function(){
+            context("without a supplied contentDetails", function() {
+                it("should have the hidden class on the content_details div", function() {
                     expect((this.view.$("#content_details"))).toHaveClass("hidden");
                 });
             });
 
-            context("with a supplied contentDetails", function(){
-                beforeEach(function(){
+            context("with a supplied contentDetails", function() {
+                beforeEach(function() {
                     this.view.contentDetails = stubView("content details text");
                     this.view.render();
                 });
 
-                it("should render the contentDetails", function(){
+                it("should render the contentDetails", function() {
                     expect((this.view.$("#content_details").text())).toBe("content details text");
                 });
             });
         });
     });
 
-    describe("MainContentView", function(){
-        beforeEach(function(){
-            this.loadTemplate("main_content");
+    describe("SubNavContentView", function() {
+        beforeEach(function() {
+            this.loadTemplate("sub_nav_content");
         });
 
-        describe("#render", function(){
-            beforeEach(function(){
-                this.view = new chorus.views.MainContentView();
+        describe("#setup", function() {
+            beforeEach(function() {
+                spyOn(chorus.views, "SubNavHeader")
+                this.model = new chorus.models.Workspace();
+                this.view = new chorus.views.SubNavContentView({ modelClass : "Workspace", tab : "summary", model : this.model});
+            })
 
-                this.view.contentHeader = stubView("header text");
+            it("creates a SubNavHeader", function() {
+                expect(chorus.views.SubNavHeader).toHaveBeenCalled();
+            });
+        })
+
+        describe("#postRender", function() {
+            beforeEach(function() {
+                this.view = new chorus.views.SubNavContentView({ modelClass : "Workspace", tab : "summary" });
+
+                this.view.header = stubView("header text");
                 this.view.content = stubView("content text");
+                this.view.contentDetails = stubView("content details text");
 
+                spyOn(this.view.header, "delegateEvents");
+                spyOn(this.view.content, "delegateEvents");
+                spyOn(this.view.contentDetails, "delegateEvents");
                 this.view.render();
             });
 
-            context("with a supplied contentHeader", function(){
-                it("should render the header", function(){
-                    expect(this.view.$("#content_header").text()).toBe("header text");
-                });
+            it("should render the header", function() {
+                expect(this.view.$("#sub_nav_header").text()).toBe("header text");
             });
 
-            context("with a supplied content", function(){
-                it("should render the content", function(){
-                    expect(this.view.$("#content").text()).toBe("content text");
-                });
+            it("should render the content", function() {
+                expect(this.view.$("#content").text()).toBe("content text");
             });
 
-            context("without a supplied contentDetails", function(){
-                it("should have the hidden class on the content_details div", function(){
+            context("without a supplied contentDetails", function() {
+                beforeEach(function() {
+                    this.view.contentDetails = undefined;
+                    this.view.render();
+                });
+
+                it("should have the hidden class on the content_details div", function() {
                     expect((this.view.$("#content_details"))).toHaveClass("hidden");
                 });
             });
 
-            context("with a supplied contentDetails", function(){
-                beforeEach(function(){
-                    this.view.contentDetails = stubView("content details text");
-                    this.view.render();
-                });
-
-                it("should render the contentDetails", function(){
+            context("with a supplied contentDetails", function() {
+                it("should render the contentDetails", function() {
                     expect((this.view.$("#content_details").text())).toBe("content details text");
                 });
             });
+
+            it("delegates events to the child views", function() {
+                expect(this.view.header.delegateEvents).toHaveBeenCalled();
+                expect(this.view.content.delegateEvents).toHaveBeenCalled();
+                expect(this.view.contentDetails.delegateEvents).toHaveBeenCalled();
+            })
         });
     });
 
+    describe("SubNavContentList", function() {
+        beforeEach(function() {
+            this.loadTemplate("sub_nav_content");
+            this.loadTemplate("count");
+        });
 
+        describe("#setup", function() {
+            beforeEach(function() {
+                spyOn(chorus.views, "WorkfileList");
+                spyOn(chorus.views, "Count");
+
+                this.collection = new chorus.models.WorkfileSet();
+                this.view = new chorus.views.SubNavContentList({
+                    modelClass : "Workfile",
+                    tab : "workfiles",
+                    collection : this.collection
+                });
+            });
+
+            it("creates a list view for the collection", function() {
+                expect(chorus.views.WorkfileList).toHaveBeenCalledWith({ collection : this.collection });
+            })
+
+            it("creates a count view", function() {
+                expect(chorus.views.Count).toHaveBeenCalledWith({collection : this.collection, modelClass : "Workfile" });
+            })
+
+            it("sets the content view", function() {
+                expect(this.view.content).toBeDefined();
+            })
+
+            it("sets the content detail view", function() {
+                expect(this.view.contentDetails).toBeDefined();
+            })
+        });
+    })
 })

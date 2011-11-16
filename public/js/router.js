@@ -8,7 +8,8 @@
             ["/users", "UserIndex"],
             ["/users/new", "UserNew"],
             ["/workspaces", "WorkspaceIndex"],
-            ["/workspaces/:id", "WorkspaceSummary"]
+            ["/workspaces/:id", "WorkspaceSummary"],
+            ["/workspaces/:id/workfiles", "WorkfileIndex"]
         ],
 
         initialize : function(app) {
@@ -19,7 +20,6 @@
                 self.route(map[0], map[1], generateRouteCallback(map[1]))
             });
             self.route("/logout", "logout", self.app.session.logout);
-            self.route("/workspaces/:id/workfiles", "WorkfileIndex", generateRouteCallback("WorkfileIndex"))
 
             function generateRouteCallback(className) {
                 return function() {
