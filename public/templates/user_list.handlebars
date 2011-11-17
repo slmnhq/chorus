@@ -1,7 +1,9 @@
 {{#each models}}
     <li data-userName="{{userName}}">
-        <img src="/edc/userimage/{{userName}}?size=icon" class="profile"/>
-        <a href="#/users/{{userName}}" class="fullname"><span>{{fullName}}</span></a>
+        <a href="#/users/{{userName}}" class="fullname">
+          <img src="/edc/userimage/{{userName}}?size=icon" class="profile"/>
+          <span>{{fullName}}</span>
+        </a>
         {{#if admin}}
             <span class="administrator tag">{{t "users.administrator"}}</span>
         {{/if}}
