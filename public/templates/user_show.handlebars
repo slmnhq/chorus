@@ -16,3 +16,11 @@
 {{/if}}
 
 <div class="notes">{{notes}}</div>
+
+<div class="workspaces">
+    <ul>
+        {{#each workspaces.models}}
+            <li>{{attributes.name}}</li>
+        {{/each}}
+    </ul>
+</div>
