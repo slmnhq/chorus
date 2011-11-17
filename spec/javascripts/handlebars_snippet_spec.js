@@ -67,6 +67,113 @@ describe("handlebars", function() {
             })
         });
 
+        describe("ifAll", function() {
+          beforeEach(function() {
+              this.ifAllSpy = jasmine.createSpy('ifAll');
+              this.ifAllSpy.inverse = jasmine.createSpy('ifAll.inverse');
+          });
+
+          it("throws an exception if no arguments were passed", function(){
+            var exceptionThrown;
+            try {
+              Handlebars.helpers.ifAll(this.ifAllSpy, this.ifAllSpy.inverse);
+            } catch (e) {
+              exceptionThrown = e;
+            }
+            expect(exceptionThrown).toMatch(/argument/);
+          });
+
+          context("when an else block is present", function() {
+            beforeEach(function() {
+              this.template = "{{#ifAll first second}}yes{{else}}no{{/ifAll}}";
+            });
+
+            it("renders the else block if any arguments are falsy", function(){
+              var context = {first: true, second: false};
+              var string = Handlebars.compile(this.template)(context);
+              expect(string).toBe("no");
+            });
+
+            it("renders the block if all arguments are truthy", function(){
+              var context = {first: true, second: true};
+              var string = Handlebars.compile(this.template)(context);
+              expect(string).toBe("yes");
+            });
+          });
+
+          context("when an else block is not present", function() {
+            beforeEach(function() {
+              this.template = "{{#ifAll first second}}yes{{/ifAll}}";
+            });
+
+            it("renders nothing if any arguments are falsy", function(){
+              var context = {first: true, second: false};
+              var string = Handlebars.compile(this.template)(context);
+              expect(string).toBe("");
+            });
+
+            it("renders the block if all arguments are truthy", function(){
+              var context = {first: true, second: true};
+              var string = Handlebars.compile(this.template)(context);
+              expect(string).toBe("yes");
+            });
+          });
+        });
+
+        describe("ifAny", function() {
+          beforeEach(function() {
+              this.ifAnySpy = jasmine.createSpy('ifAny');
+              this.ifAnySpy.inverse = jasmine.createSpy('ifAny.inverse');
+          });
+
+          it("throws an exception if no arguments were passed", function(){
+            var exceptionThrown;
+            try {
+              Handlebars.helpers.ifAny(this.ifAnySpy, this.ifAnySpy.inverse);
+            } catch (e) {
+              exceptionThrown = e;
+            }
+            expect(exceptionThrown).toMatch(/argument/);
+          });
+
+          context("when an else block is present", function() {
+            beforeEach(function() {
+              this.template = "{{#ifAny first second}}yes{{else}}no{{/ifAny}}";
+            });
+
+            it("renders the else block if all arguments are falsy", function(){
+              var context = {first: false, second: false};
+              var string = Handlebars.compile(this.template)(context);
+              expect(string).toBe("no");
+            });
+
+            it("renders the block if any arguments are truthy", function(){
+              var context = {first: false, second: true};
+              var string = Handlebars.compile(this.template)(context);
+              expect(string).toBe("yes");
+            });
+          });
+
+          context("when an else block is not present", function() {
+            beforeEach(function() {
+              this.template = "{{#ifAny first second}}yes{{/ifAny}}";
+            });
+
+            it("renders nothing if all arguments are falsy", function(){
+              var context = {first: false, second: false};
+              var string = Handlebars.compile(this.template)(context);
+              expect(string).toBe("");
+            });
+
+            it("renders the block if any arguments are truthy", function(){
+              var context = {first: true, second: false};
+              var string = Handlebars.compile(this.template)(context);
+              expect(string).toBe("yes");
+            });
+          });
+        });
+
+
         describe("workfileIconUrl", function(){
             function verifyUrl(fileType, fileName) {
                 expect(Handlebars.helpers.workfileIconUrl(fileType)).toBe("/images/workfileIcons/" + fileName + ".png");

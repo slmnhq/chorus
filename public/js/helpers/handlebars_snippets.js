@@ -14,6 +14,32 @@ Handlebars.registerHelper("ifAdmin", function(block){
     }
 });
 
+Handlebars.registerHelper("ifAll", function() {
+  // Handlebars actually passes in two functions: the first is block with block.inverse,
+  // and the second function is just the block.inverse function itself.
+  var args = _.toArray(arguments);
+  var elseBlock = args.pop();
+  var block = args.pop();
+  if (args.length == 0) { throw "ifAll expects arguments"; }
+  if (_.all(args, _.identity)) {
+    return block(this);
+  } else {
+    return elseBlock(this);
+  }
+});
+
+Handlebars.registerHelper("ifAny", function() {
+  var args = _.toArray(arguments);
+  var elseBlock = args.pop();
+  var block = args.pop();
+  if (args.length == 0) { throw "ifAny expects arguments"; }
+  if (_.any(args)) {
+    return block(this);
+  } else {
+    return elseBlock(this);
+  }
+});
+
 (function() {
     var map = {
         "C" : "c",
