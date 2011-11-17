@@ -1,26 +1,29 @@
-<div class="edit_photo">
-    <img src="/edc/userimage/{{userName}}?size=profile"/>
-    <br/>
-    <a>{{t "users.edit_photo"}}</a>
-</div>
-<div class="title">{{title}}</div>
-<div class="department">{{department}}</div>
-
-<div class="emailAddress">{{emailAddress}}</div>
-
-
-{{#if admin}}
-    <div>
-        <span class="administrator tag">{{t "users.administrator"}}</span>
-    </div>
-{{/if}}
-
-<div class="notes">{{notes}}</div>
-
 <div class="workspaces">
+    <h2>{{t "users.workspaces_header"}}</h2>
     <ul>
         {{#each workspaces.models}}
-            <li>{{attributes.name}}</li>
+          <li><img src="/images/workspace.png"/><a href="#/workspaces/{{id}}">{{attributes.name}}</a></li>
         {{/each}}
     </ul>
+</div>
+<div class="user">
+    <div class="edit_photo">
+        <img src="/edc/userimage/{{userName}}?size=profile" class="profile"/>
+        <br/>
+        <a>{{t "users.edit_photo"}}</a>
+    </div>
+    <div class="user_info">
+        <div class="title">{{title}}</div>
+        <div class="department">{{department}}</div>
+
+        <div class="emailAddress">{{emailAddress}}</div>
+
+        <div class="admin">
+            {{#if admin}}
+                <span class="administrator tag">{{t "users.administrator"}}</span>
+            {{/if}}
+        </div>
+
+        <div class="notes">{{notes}}</div>
+    </div>
 </div>

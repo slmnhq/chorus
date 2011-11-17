@@ -14,8 +14,8 @@ describe("chorus.views.UserShow", function() {
                 notes: "My Notes"
             });
             var workspaces = new chorus.models.WorkspaceSet();
-            workspaces.add(new chorus.models.Workspace({name: "ws1"}));
-            workspaces.add(new chorus.models.Workspace({name: "ws2"}));
+            workspaces.add(new chorus.models.Workspace({id: 1, name: "ws1"}));
+            workspaces.add(new chorus.models.Workspace({id: 2, name: "ws2"}));
             this.model.getWorkspaces = function(){
               return workspaces;
             }
@@ -56,6 +56,11 @@ describe("chorus.views.UserShow", function() {
         it("renders the workspaces' names'", function(){
           expect(this.view.$(".workspaces li").eq(0).text()).toBe('ws1');
           expect(this.view.$(".workspaces li").eq(1).text()).toBe('ws2');
+        });
+
+        it("renders the workspaces with the correct hrefs", function() {
+          expect(this.view.$(".workspaces li a").eq(0).attr('href')).toBe('#/workspaces/1');
+          expect(this.view.$(".workspaces li a").eq(1).attr('href')).toBe('#/workspaces/2');
         });
 
         context("When the user is not the administrator", function() {

@@ -1,0 +1,67 @@
+@import "_common.scss";
+
+.user_show {
+    width: 100%;
+    overflow: auto;
+
+    .user {
+        /*width: 100%;*/
+        /*overflow: auto;*/
+
+        margin-right: 225px;
+
+        .edit_photo {
+            display: inline-block;
+            width: 200px;
+            float: left;
+            text-align: center;
+            padding-top: 15px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .user_info {
+            display: inline;
+            vertical-align: top;
+            margin-top: 15px;
+
+            .title {
+                padding-top: 20px;
+            }
+
+            .emailAddress {
+                padding: 25px 0;
+            }
+
+            div.admin {
+                margin-bottom: 25px;
+            }
+        }
+    }
+
+    .workspaces {
+        width: 185px;
+        /*height: 100%;*/
+        float: right;
+        background: $shaded-background-color;
+        padding: 20px 10px 20px 10px;
+
+        h2 {
+            font-size: 13px;
+            padding-left: 2px;
+            padding-bottom: 5px;
+        }
+
+        img {
+            height: 25px;
+            width: 25px;
+            display: inline;
+        }
+
+        li a {
+            line-height: 25px;
+            vertical-align: bottom;
+            padding-left: 5px;
+        }
+    }
+}
