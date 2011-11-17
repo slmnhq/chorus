@@ -10,7 +10,6 @@
 <div class="right">
     <div class="username">
         <a href="#" title="{{fullName}}"><span>{{displayName}}</span><img src="/images/menu-indicator.png"/></a>
-
     </div>
     <div class="menu hidden popup_username">
         <div class="pointer"/>
@@ -21,7 +20,10 @@
     </div>
     <div class="menu hidden popup_account">
         <div class="pointer"/>
-        <a href="#/users">{{t "header.users_list"}}</a>
+        <ul>
+            <li><a href="#/users/{{userName}}">{{t "header.your_profile"}}</a></li>
+            <li><a href="#/users">{{t "header.users_list"}}</a></li>
+        </ul>
     </div>
 </div>
 <div class="search">

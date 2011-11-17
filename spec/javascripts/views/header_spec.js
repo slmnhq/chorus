@@ -4,7 +4,8 @@ describe("chorus.views.Header", function() {
         chorus.user = new chorus.models.User({
             "firstName" : "Daniel",
             "lastName" : "Burke",
-            "fullName": "Daniel Francis Burke"
+            "fullName": "Daniel Francis Burke",
+            userName: "dburke"
         });
         this.view = new chorus.views.Header();
         this.view.render();
@@ -102,7 +103,13 @@ describe("chorus.views.Header", function() {
                     expect(this.view.$(".menu.popup_username")).toHaveClass("hidden");
                 });
             });
-        })
+        });
+
+        describe("the popup menu", function(){
+            it("has a link to 'your profile'", function(){
+                expect(this.view.$(".menu.popup_username a[href='#/logout']").text()).toBe(t("header.sign_out"));
+            });
+        });
     })
 
     describe("account", function(){
@@ -124,6 +131,16 @@ describe("chorus.views.Header", function() {
                 });
             });
         })
+
+        describe("the popup menu", function(){
+            it("has a link to 'your profile'", function(){
+                expect(this.view.$(".menu.popup_account a[href='#/users/dburke']").text()).toBe(t("header.your_profile"));
+            });
+
+            it("has a link to 'Users'", function(){
+                expect(this.view.$(".menu.popup_account a[href='#/users']").text()).toBe(t("header.users_list"));
+            });
+        });
     });
 
     describe("multiple popups", function(){

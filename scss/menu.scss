@@ -6,6 +6,7 @@
     background: white;
     padding: 9px 20px;
     border: 1px solid $menu-border-color;
+    text-align: left;
 
     .pointer {
         width: 21px;
@@ -16,7 +17,6 @@
         top: -13px;
         left: 49px;
     }
-
 
     a {
         font-size: 14px;
