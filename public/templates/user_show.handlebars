@@ -1,3 +1,28 @@
+<div class="user_info">
+    {{#ifAny title department}}
+      <div class="titleAndDepartment">
+        <div class="title">{{title}}</div>
+        <div class="department">{{department}}</div>
+      </div>
+    {{/ifAny}}
+
+    {{#if emailAddress}}
+      <div class="emailAddress">{{emailAddress}}</div>
+    {{/if}}
+
+    {{#if admin}}
+        <div class="admin">
+            <span class="administrator tag">{{t "users.administrator"}}</span>
+        </div>
+    {{/if}}
+
+    {{#if notes}}<div class="notes">{{notes}}</div>{{/if}}
+</div>
+
+<div class="edit_photo">
+    <img src="/edc/userimage/{{userName}}?size=profile" class="profile"/>
+</div>
+
 <div class="workspaces">
     <h2>{{t "users.workspaces_header"}}</h2>
     <ul>
@@ -5,25 +30,4 @@
           <li><img src="/images/workspace-icon-small.png"/><a href="#/workspaces/{{id}}">{{attributes.name}}</a></li>
         {{/each}}
     </ul>
-</div>
-<div class="user">
-    <div class="edit_photo">
-        <img src="/edc/userimage/{{userName}}?size=profile" class="profile"/>
-        <br/>
-        <a>{{t "users.edit_photo"}}</a>
-    </div>
-    <div class="user_info">
-        <div class="title">{{title}}</div>
-        <div class="department">{{department}}</div>
-
-        <div class="emailAddress">{{emailAddress}}</div>
-
-        <div class="admin">
-            {{#if admin}}
-                <span class="administrator tag">{{t "users.administrator"}}</span>
-            {{/if}}
-        </div>
-
-        <div class="notes">{{notes}}</div>
-    </div>
 </div>
