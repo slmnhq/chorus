@@ -10,7 +10,6 @@
         },
 
         navigateToDashboard: function(model) {
-            chorus.setLoggedInUser();
             chorus.router.navigate("/", true);
         },
 

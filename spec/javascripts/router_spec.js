@@ -29,24 +29,23 @@ describe("chorus.router", function() {
         })
     });
 
-    describe(".initialize", function(){
-        beforeEach(function(){
+    describe(".initialize", function() {
+        beforeEach(function() {
             this.chorus = new Chorus();
             this.backboneSpy = spyOn(Backbone.history, "start")
-            spyOn(this.chorus, "fetchUser")
             this.chorus.initialize();
 
             this.chorus.router.showDevLinks = false
 
 
             this.loadTemplate("header");
-             this.loadTemplate("breadcrumbs");
-             this.loadTemplate("main_content");
-             this.loadTemplate("default_content_header");
-             this.loadTemplate("routes");
-             this.loadTemplate("user_list");
-             this.loadTemplate("dashboard_sidebar");
-             this.loadTemplate("logged_in_layout");
+            this.loadTemplate("breadcrumbs");
+            this.loadTemplate("main_content");
+            this.loadTemplate("default_content_header");
+            this.loadTemplate("routes");
+            this.loadTemplate("user_list");
+            this.loadTemplate("dashboard_sidebar");
+            this.loadTemplate("logged_in_layout");
 
             this.savedLocation = window.location.hash;
         })
@@ -55,12 +54,19 @@ describe("chorus.router", function() {
             window.location.hash = this.savedLocation;
         })
 
-        it("renders the page with parameters", function(){
+        it("renders the page with parameters", function() {
             this.loadTemplate("workspace_detail");
             this.loadTemplate("sub_nav_content");
             this.loadTemplate("sub_nav_and_header");
             this.chorus.router.navigate("/workspaces/5", true);
             expect(this.chorus.page.model.get("id")).toBe("5");
         });
+
+        it("triggers a route event on the router", function() {
+            var routeSpy = jasmine.createSpy("routeSpy");
+            this.chorus.router.bind("route", routeSpy);
+            this.chorus.router.navigate("/", true);
+            expect(routeSpy).toHaveBeenCalled();
+        })
     })
 })

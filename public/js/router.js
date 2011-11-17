@@ -20,10 +20,11 @@
             _.each(this.maps, function(map){
                 self.route(map[0], map[1], generateRouteCallback(map[1]))
             });
-            self.route("/logout", "logout", self.app.session.logout);
+            self.route("/logout", "Logout", self.app.session.logout);
 
             function generateRouteCallback(className) {
                 return function() {
+                    self.trigger("route", className, arguments);
                     // apply arbitrary number of arguments to constructor (for routes with parameters)
                     // code taken from http://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible/1608546#1608546
                     var args = arguments;

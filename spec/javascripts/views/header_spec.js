@@ -1,12 +1,13 @@
 describe("chorus.views.Header", function() {
     beforeEach(function() {
         this.loadTemplate("header");
-        chorus.user = new chorus.models.User({
+        chorus.session = new chorus.models.Session({
             "firstName" : "Daniel",
             "lastName" : "Burke",
             "fullName": "Daniel Francis Burke",
             userName: "dburke"
         });
+        chorus.user = chorus.session;
         this.view = new chorus.views.Header();
         this.view.render();
     });

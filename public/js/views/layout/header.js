@@ -7,7 +7,7 @@
         },
 
         makeModel : function(){
-            this.model = chorus.user;
+            this.model = chorus.session;
         },
 
         additionalContext : function(ctx) {

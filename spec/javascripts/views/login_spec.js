@@ -47,9 +47,6 @@ describe("chorus.views.Login", function() {
 
     describe("when the login succeeds", function() {
         beforeEach(function() {
-            this.user = new chorus.models.User();
-            spyOn(chorus, "fetchUser").andReturn(this.user);
-
             this.navigationSpy = spyOn(chorus.router, "navigate");
             this.view.model.trigger('saved', this.view.model);
         });
@@ -57,9 +54,5 @@ describe("chorus.views.Login", function() {
         it("navigates to the dashboard", function() {
             expect(this.navigationSpy).toHaveBeenCalledWith("/", true);
         });
-
-        it("resets chorus.user", function() {
-            expect(chorus.user).toBe(this.user);
-        })
     })
 })
