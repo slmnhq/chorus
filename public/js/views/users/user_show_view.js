@@ -1,11 +1,14 @@
 ;(function($, ns) {
     ns.UserShow = chorus.views.Base.extend({
-        className : "user_show",
+        className: "user_show",
 
-        additionalContext : function(){
-            var workspaces = this.model.getWorkspaces();
-            if (!workspaces.loaded) workspaces.fetch();
-            return {workspaces: workspaces}
+        additionalContext: function(){
+            if (!this._fetchedWorkspaces) {
+                this.model.getWorkspaces().fetch();
+                this._fetchedWorkspaces = true;
+            }
+
+            return {workspaces: this.model.getWorkspaces()}
         }
     });
 })(jQuery, chorus.views);
