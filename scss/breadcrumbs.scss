@@ -3,7 +3,7 @@
 
 $breadcrumb-margin: 8px;
 
-#breadcrumbs {
+.breadcrumbs {
     height: 26px;
     @include linear-gradient(color-stops($body-glow-color, $body-background-color));
 

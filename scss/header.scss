@@ -19,11 +19,11 @@ $header-padding : 13px;
     }
 
     .right {
-            float: right;
-            width : $sidebar-width;
-            text-align : right;
-
-            margin : 4px 0px;
+        position: relative;
+        float: right;
+        width : $sidebar-width;
+        text-align : right;
+        margin : 4px 0px;
     }
 
     .left {

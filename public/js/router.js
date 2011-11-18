@@ -10,7 +10,8 @@
             ["/users/new", "UserNew"],
             ["/workspaces", "WorkspaceIndex"],
             ["/workspaces/:id", "WorkspaceSummary"],
-            ["/workspaces/:id/workfiles", "WorkfileIndex"]
+            ["/workspaces/:id/workfiles", "WorkfileIndex"],
+            ["/styleguide", "StyleGuide"]
         ],
 
         initialize : function(app) {
