@@ -41,7 +41,7 @@ describe("chorus.pages.UserIndexPage", function() {
 
         describe("when the authenticated user is an admin", function() {
             beforeEach(function() {
-                chorus.user.set({ admin: true });
+                chorus.user.set({ admin: true}, {silent : true});
                 this.view.render();
             })
 

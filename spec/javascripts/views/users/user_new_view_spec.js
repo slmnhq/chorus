@@ -1,10 +1,10 @@
 describe("chorus.views.UserNewMain", function() {
 
-    it("doesn't cache", function(){
+    it("doesn't cache", function() {
         expect(new chorus.views.UserNewMain().content).not.toBe(new chorus.views.UserNewMain().content);
     })
 
-    it("is hella happy", function(){
+    it("is hella happy", function() {
         this.loadTemplate("main_content")
         this.loadTemplate("default_content_header")
         this.loadTemplate("plain_text")
@@ -53,18 +53,18 @@ describe("chorus.views.userNew", function() {
                     expect(this.user.attributes["admin"]).toBe(true);
                 });
 
-                context("when the user form has admin unchecked", function(){
-                    beforeEach(function(){
+                context("when the user form has admin unchecked", function() {
+                    beforeEach(function() {
                         this.view.$("input[name=admin]").prop("checked", false);
                     });
 
-                    it("sets the user attribute 'admin' to false", function(){
+                    it("sets the user attribute 'admin' to false", function() {
                         this.view.$("form").submit();
                         expect(this.user.attributes["admin"]).toBe(false);
                     });
                 });
 
-                context("saving the user", function() {
+                context("saving the user with valid data", function() {
                     beforeEach(function() {
                         spyOn(this.user, "save")
                     })
@@ -83,11 +83,12 @@ describe("chorus.views.userNew", function() {
                         });
                     })
 
-                    context("when user creation is fails", function() {
+                    context("when user creation fails on the server", function() {
                         beforeEach(function() {
-                            this.view.model.set({ errors : [
-                                { message: "Hi there" }
-                            ] });
+                            this.view.model.serverErrors = [
+                                {message : "Hi there"}
+                            ];
+                            this.view.render();
                         });
 
                         it("displays the error message", function() {
@@ -98,7 +99,7 @@ describe("chorus.views.userNew", function() {
                             expect(this.view.$("form")).toExist();
                         })
                     })
-                })
+                });
 
             })
         });

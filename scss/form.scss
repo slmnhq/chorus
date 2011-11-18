@@ -7,5 +7,9 @@ form {
             margin-left: 14px;
         }
     }
+
+    input.has_error, textarea.has_error {
+        border: 1px solid red;
+    }
 }
 

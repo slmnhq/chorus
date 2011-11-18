@@ -23,49 +23,50 @@ describe("chorus.models", function() {
         });
 
         describe("#save", function() {
-            beforeEach(function() {
-                this.model.save();
-                this.savedSpy = jasmine.createSpy();
-                this.model.bind("saved", this.savedSpy);
-            });
-
-            describe("when the request succeeds", function() {
+            describe("with valid model data", function () {
                 beforeEach(function() {
-                    this.response = { status: "ok", resource : [
-                        { foo : "hi" }
-                    ] };
+                    this.model.save();
+                    this.savedSpy = jasmine.createSpy();
+                    this.model.bind("saved", this.savedSpy);
+                });
+                describe("when the request succeeds", function() {
+                    beforeEach(function() {                
+                         this.response = { status: "ok", resource : [
+                            { foo : "hi" }
+                        ] };
 
-                    this.server.respondWith(
-                        'POST',
-                        '/edc/my_items/foo',
-                        this.prepareResponse(this.response));
+                        this.server.respondWith(
+                            'POST',
+                            '/edc/my_items/foo',
+                            this.prepareResponse(this.response));
+    
+                        this.server.respond();
+                    });
 
-                    this.server.respond();
+                    it("triggers a saved event", function() {
+                        expect(this.savedSpy).toHaveBeenCalled();
+                    })
                 });
 
-                it("triggers a saved event", function() {
-                    expect(this.savedSpy).toHaveBeenCalled();
-                })
-            })
+                describe("when the request fails", function() {
+                    beforeEach(function() {
 
-            describe("when the request fails", function() {
-                beforeEach(function() {
-
-                    this.response = { status: "fail", message : [
-                        { message : "hi" },
-                        { message : "bye" }
-                    ] };
-                    this.server.respondWith(
-                        'POST',
-                        '/edc/my_items/foo',
-                        this.prepareResponse(this.response));
-                    this.server.respond();
-
+                        this.response = { status: "fail", message : [
+                            { message : "hi" },
+                            { message : "bye" }
+                        ] };
+                        this.server.respondWith(
+                            'POST',
+                            '/edc/my_items/foo',
+                            this.prepareResponse(this.response));
+                        this.server.respond();
+    
+                    });
+    
+                    it("returns the error information", function() {
+                        expect(this.model.serverErrors).toEqual(this.response.message);
+                    })
                 });
-
-                it("returns the error information", function() {
-                    expect(this.model.get('errors')).toEqual(this.response.message);
-                })
 
                 describe("and then another request succeeds", function() {
                     beforeEach(function() {
@@ -73,22 +74,93 @@ describe("chorus.models", function() {
                             { foo : "hi" }
                         ] };
 
-                        this.server = sinon.fakeServer.create();
                         this.server.respondWith(
                             'POST',
                             '/edc/my_items/foo',
                             this.prepareResponse(this.response));
 
-                        this.model.save();
                         this.server.respond();
                     });
-                    it("should trigger the saved event", function() {
+
+                    it("triggers a saved event", function() {
                         expect(this.savedSpy).toHaveBeenCalled();
+                    })
+                })
+
+                describe("when the request fails on the server", function() {
+                    beforeEach(function() {
+
+                        this.response = { status: "fail", message : [
+                            { message : "hi" },
+                            { message : "bye" }
+                        ] };
+                        this.server.respondWith(
+                            'POST',
+                            '/edc/my_items/foo',
+                            this.prepareResponse(this.response));
+                        this.server.respond();
+
                     });
 
-                    it("clears the error information", function() {
-                        expect(this.model.get('errors')).toBeUndefined();
+                    it("returns the error information", function() {
+                        expect(this.model.serverErrors).toEqual(this.response.message);
                     })
+
+                    describe("and then another request succeeds", function() {
+                        beforeEach(function() {
+                            this.response = { status: "ok", resource : [
+                                { foo : "hi" }
+                            ] };
+
+                            this.server = sinon.fakeServer.create();
+                            this.server.respondWith(
+                                'POST',
+                                '/edc/my_items/foo',
+                                this.prepareResponse(this.response));
+
+                            this.model.save();
+                            this.server.respond();
+                        });
+                        it("should trigger the saved event", function() {
+                            expect(this.savedSpy).toHaveBeenCalled();
+                        });
+
+                        it("clears the error information", function() {
+                            expect(this.model.serverErrors).toBeUndefined();
+                        })
+                    })
+                })
+            })
+
+            describe("when the model is invalid", function() {
+                beforeEach(function() {
+                    this.model.performValidation = function() {
+                        return false;
+                    }
+                    this.savedSpy = jasmine.createSpy();
+                    this.model.bind("saved", this.savedSpy);
+                    this.validationFailedSpy = jasmine.createSpy();
+                    this.model.bind("validationFailed", this.validationFailedSpy);
+                    spyOn(Backbone.Model.prototype, "save");
+                })
+
+                it("returns false", function() {
+                    expect(this.model.save()).toBeFalsy();
+                })
+
+                it("does not save the object", function() {
+                    this.model.save();
+                    expect(Backbone.Model.prototype.save).not.toHaveBeenCalled();
+                })
+
+                it("does not trigger saved", function() {
+                    this.model.save();
+                    expect(this.savedSpy).not.toHaveBeenCalled();
+                })
+
+                it("triggers validationFailed", function() {
+                    this.model.save();
+                    expect(this.validationFailedSpy).toHaveBeenCalled();
                 })
             })
         });
@@ -118,6 +190,75 @@ describe("chorus.models", function() {
                 this.model.parse({status: "needlogin"});
                 expect(chorus.session.trigger).toHaveBeenCalledWith("needsLogin");
             });
+        })
+
+        describe("#require", function() {
+            beforeEach(function() {
+                this.model.errors = {};
+            })
+
+            it("sets an error if the attribute isn't present", function() {
+                this.model.require("foo");
+                expect(this.model.errors.foo).toBeDefined();
+            })
+
+            it("does not set an error if the attribute is present", function() {
+                this.model.set({ foo : "bar" });
+                this.model.require("foo");
+                expect(this.model.errors.foo).not.toBeDefined();
+            })
+        })
+
+        describe("requirePattern", function() {
+            beforeEach(function() {
+                this.model.errors = {};
+            })
+
+            it("sets an error if the attribute isn't present", function() {
+                this.model.requirePattern("foo");
+                expect(this.model.errors.foo).toBeDefined();
+            })
+
+            it("sets an error if the attribute is present but doesn't match the pattern", function() {
+                this.model.set({ foo : "bar" });
+                this.model.requirePattern("foo", /baz/);
+                expect(this.model.errors.foo).toBeDefined();
+            })
+
+            it("does not set an error if the attribute is present and matches the pattern", function() {
+                this.model.set({ foo : "bar" }, { silent : true });
+                this.model.requirePattern("foo", /bar/);
+                expect(this.model.errors.foo).not.toBeDefined();
+            })
+        })
+
+        describe("requireConfirmation", function() {
+            beforeEach(function() {
+                this.model.errors = {};
+            })
+
+            it("sets an error if the attribute isn't present", function () {
+                this.model.requireConfirmation("foo");
+                expect(this.model.errors.foo).toBeDefined();
+            })
+
+            it("sets an error if the confirmation isn't present", function () {
+                this.model.set({ foo : "bar" })
+                this.model.requireConfirmation("foo");
+                expect(this.model.errors.foo).toBeDefined();
+            })
+
+            it("sets an error if the confirmation doesn't match the attribute", function() {
+                this.model.set({ foo : "bar", fooConfirmation : "baz" })
+                this.model.requireConfirmation("foo");
+                expect(this.model.errors.foo).toBeDefined();
+            })
+
+            it("does not set an error if the confirmation matches the attribute", function() {
+                this.model.set({ foo : "bar", fooConfirmation : "bar" })
+                this.model.requireConfirmation("foo");
+                expect(this.model.errors.foo).not.toBeDefined();
+            })
         })
     });
 

@@ -75,10 +75,11 @@ describe("chorus.views.UserShow", function() {
             });
 
             context("When the user is not the administrator", function() {
-                beforeEach(function() {
-                    this.model.set({admin: false});
-                });
-
+                       beforeEach(function() {
+                           this.model.set({admin: false}, {silent : true});
+                           this.view.render();
+                       });
+            
                 it("does not render administrator", function() {
                     expect(this.view.$(".administrator")).not.toExist();
                 });

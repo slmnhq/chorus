@@ -63,9 +63,10 @@ describe("WorkspacesNewDialog", function() {
                 beforeEach(function() {
                     this.dialog.$("form.new_workspace").submit();
                     spyOn(chorus.router, "navigate");
-                    this.dialog.resource.set({ errors : [
+                    this.dialog.resource.serverErrors = [
                         { message: "Hi there" }
-                    ] });
+                    ]
+                    this.dialog.render();
                 });
 
                 it("displays the error message", function() {

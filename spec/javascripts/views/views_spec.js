@@ -127,6 +127,38 @@ describe("chorus.views", function() {
                 });
             });
         })
+
+        describe("validation failures", function() {
+            beforeEach(function() {
+                this.model = new chorus.models.Base();
+                this.model.performValidation = function() {
+                    this.errors = {};
+                    this.require("foo");
+                }
+
+                this.view = new chorus.views.Base({ model : this.model });
+                this.view.template = function() {
+                    return "<form><input name='foo'/><input name='bar'/><input name='whiz' class='has_error'/></form>";
+                }
+
+                spyOn(this.view, "render").andCallThrough();
+                this.view.render();
+                this.model.save();
+            });
+
+            it("sets the has_error class on fields with errors", function() {
+                expect(this.view.$("input[name=foo]")).toHaveClass("has_error");
+            })
+
+            it("clears the has_error class on all fields without errors", function() {
+                expect(this.view.$("input[name=bar]")).not.toHaveClass("has_error");
+                expect(this.view.$("input[name=whiz]")).not.toHaveClass("has_error");
+            })
+
+            it("does not re-render", function() {
+                expect(this.view.render.callCount).toBe(1);
+            })
+        })
     })
 
     describe("MainContentView", function() {

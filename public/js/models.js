@@ -42,9 +42,7 @@
                 if (data.status == "ok") {
                     return data.resource[0]
                 } else {
-                    return {
-                        errors: data.message
-                    };
+                    this.serverErrors = data.message;
                 }
             },
 
@@ -52,11 +50,41 @@
                 options || (options = {});
                 var success = options.success;
                 options.success = function(model, resp, xhr) {
-                    if (!model.get("errors")) model.trigger('saved', model, resp, xhr);
+                    if (!model.serverErrors) model.trigger('saved', model, resp, xhr);
                     if (success) success(model, resp, xhr);
                 };
-                this.unset("errors", { silent: true });
-                return Backbone.Model.prototype.save.call(this, attrs, options);
+                this.serverErrors = undefined;
+                if (this.performValidation(this.attributes)) {
+                    return Backbone.Model.prototype.save.call(this, attrs, options);
+                } else {
+                    this.trigger("validationFailed");
+                    return false;
+                }
+            },
+
+            performValidation: function() { return true; },
+
+            require : function(attrname) {
+                if (!this.get(attrname)) {
+                    this.errors[attrname] = t("validation.required", attrname);
+                }
+            },
+
+            requirePattern : function(attrname, regex) {
+                var attr = this.get(attrname)
+                if (!attr || !attr.match(regex)) {
+                    this.errors[attrname] = t("validation.required_pattern", attrname);
+                }
+
+            },
+
+            requireConfirmation : function(attr) {
+                var val = this.get(attr);
+                var conf = this.get(attr + "Confirmation");
+
+                if (!val || !conf || val != conf) {
+                    this.errors[attr] = t("validation.confirmation", attr);
+                }
             }
         })
     }

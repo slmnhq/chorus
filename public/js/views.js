@@ -53,6 +53,7 @@
                 if (!this.persistent) this.resource.bind("change", this.render);
                 this.resource.bind("reset", this.render);
                 this.resource.bind("add", this.render);
+                this.resource.bind("validationFailed", this.showErrors, this);
             }
         },
 
@@ -68,8 +69,21 @@
                         return _.extend(_.clone(model.attributes), self.collectionModelContext(model));
                     });
                 }
+                $.extend(ctx, {serverErrors : this.resource.serverErrors}, this.additionalContext(ctx));
+            } else {
+                ctx = this.additionalContext({})
             }
-            return _.extend(ctx, this.additionalContext(ctx));
+            return ctx;
+        },
+
+        showErrors : function() {
+            var self = this;
+
+            self.$(".has_error").removeClass("has_error")
+
+            _.each(this.resource.errors, function(val, key) {
+                self.$("form input[name=" + key + "], form textarea[name=" + name + "]").addClass("has_error");
+            })
         }
     }),
 

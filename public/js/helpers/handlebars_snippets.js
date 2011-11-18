@@ -1,5 +1,5 @@
 Handlebars.registerPartial("errorDiv",
-    "<div class='errors'><ul>{{#each errors}}<li>{{message}}</li>{{/each}}</ul></div>"
+    "<div class='errors'><ul>{{#each serverErrors}}<li>{{message}}</li>{{/each}}</ul></div>"
 );
 
 Handlebars.registerHelper("cache_buster", function(){

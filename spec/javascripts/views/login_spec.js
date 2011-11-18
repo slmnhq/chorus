@@ -35,9 +35,10 @@ describe("chorus.views.Login", function() {
 
     describe("when the login fails", function() {
         beforeEach(function() {
-            this.view.model.set({ errors : [
+            this.view.model.serverErrors = [
                 { message: "Hi there" }
-            ] });
+            ]
+            this.view.render();
         });
 
         it("displays the error message", function() {

@@ -1,3 +1,4 @@
+;
 (function(ns) {
     ns.User = chorus.models.Base.extend({
         urlTemplate : "user/{{userName}}",
@@ -12,6 +13,16 @@
                 }, this);
             }
             return this._workspaces;
+        },
+
+        performValidation: function() {
+            this.errors = {};
+            this.require('firstName');
+            this.require('lastName');
+            this.require('userName');
+            this.requirePattern('emailAddress', /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/);
+            this.requireConfirmation('password')
+            return _(this.errors).isEmpty();
         }
     });
 })(chorus.models);

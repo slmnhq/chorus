@@ -170,7 +170,10 @@
                     "resource": [
                         {
                             "userName": "edcadmin",
+                            "firstName": "EDC",
+                            "lastName": "Admin",
                             "fullName": "EDC Admin",
+                            "emailAddress": "edcadmin@greenplum.com",
                             "admin": true,
                             "techniques": null,
                             "expertise": null,
@@ -179,7 +182,10 @@
                         },
                         {
                             "userName": "markr",
+                            "firstName": "Mark",
+                            "lastName": "Rushakoff",
                             "fullName": "Mark Rushakoff",
+                            "emailAddress": "markymark@pivotallabs.com",
                             "admin": false,
                             "techniques": null,
                             "expertise": null,
