@@ -23,7 +23,7 @@
     <img src="/edc/userimage/{{userName}}?size=profile" class="profile"/>
 </div>
 
-<div class="workspaces">
+<div class="workspaces {{#unless workspaces.models.length}} hidden {{/unless}}">
     <h2>{{t "users.workspaces_header"}}</h2>
     <ul>
         {{#each workspaces.models}}

@@ -84,7 +84,6 @@ describe("chorus.views.UserShow", function() {
                 });
             });
 
-
             context("when the view changes and re-renders several times before workspaces is fetched", function(){
                 beforeEach(function(){
                     this.view.render();
@@ -93,6 +92,20 @@ describe("chorus.views.UserShow", function() {
                 });
                 it("fetches the user's workspaces exactly once", function() {
                     expect(this.model.getWorkspaces().fetch.calls.length).toBe(1);
+                });
+            });
+
+            context("when the user has no workspaces", function() {
+                beforeEach(function() {
+                    var workspaces = new chorus.models.WorkspaceSet();
+                    this.model.getWorkspaces = function(){
+                        return workspaces;
+                    };
+                    this.view.render();
+                });
+
+                it("it hides the workspaces column", function() {
+                    expect(this.view.$(".workspaces")).toHaveClass('hidden');
                 });
             });
         });
