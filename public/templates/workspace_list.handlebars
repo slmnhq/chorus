@@ -1,9 +1,28 @@
 {{#each models}}
     <li data-id="{{id}}">
-        <img src="/edc/workspace/{{id}}/image?size=icon"/>
-        <a class="name" href="#/workspaces/{{id}}">{{name}}</a>
-        {{#if isPublic}}
-            <span class="public tag">{{t "workspaces.public"}}</span>
-        {{/if}}
+        <img src="{{imageUrl}}"/>
+        <div class="text">
+            <a class="name" href="{{showUrl}}">{{name}}</a>
+            <div class="summary">
+                {{summary}}
+            </div>
+            <div class="details">
+                <span class="owner">
+                    {{#if active}}
+                        {{t "workspaces.owned_by"}}
+                    {{else}}
+                        {{t "workspaces.archived_by"}}
+                    {{/if}}
+
+                    <a href="{{ownerUrl}}">{{ownerFullName}}</a>
+                </span>
+                {{#unless isPublic}}
+                    <span class="private">
+                        <img src="/images/workspace-lock.png"/>
+                        {{t "workspaces.private"}}
+                    </span>
+                {{/unless}}
+            </div>
+        </div>
     </li>
 {{/each}}
