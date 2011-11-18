@@ -7,26 +7,8 @@ describe("chorus.views", function() {
             });
 
             it("serializes the attributes of the model", function() {
-                expect(this.view.context().bar).toBe("foo");
-            });
-
-            it("adds the model's viewContext() hash to the context as 'dynamic'", function(){
-                // the default viewContext function returns an empty hash
-                expect(this.view.context().dynamic).toBeDefined();
-                expect(_.isEmpty(this.view.context().dynamic)).toBeTruthy();
-            });
-
-            context("when the model overrides a viewContext() method", function(){
-                beforeEach(function(){
-                    this.model.viewContext = function(){
-                        return {one: 1};
-                    }
-                });
-
-                it("adds the content of model#viewContext to view#context", function(){
-                    expect(this.view.context().dynamic.one).toBe(1);
-                });
-            });
+                expect(this.view.context()).toEqual({ bar: "foo" });
+            })
 
             describe("loaded:true", function() {
                 beforeEach(function() {
@@ -62,49 +44,13 @@ describe("chorus.views", function() {
                 expect(this.view.context().custom).toBe("stuff");
             })
 
-            it("adds the collection's viewContext() hash to the context as 'dynamic'", function(){
-                expect(this.view.context().dynamic).toBeDefined();
-                expect(_.isEmpty(this.view.context().dynamic)).toBeTruthy();
-            });
-
             it("serializes the attributes of the collection objects into the 'models' key", function() {
                 var modelContext = this.view.context().models;
                 expect(modelContext).not.toBeUndefined();
                 expect(modelContext.length).toBe(2);
-                expect(modelContext[0].bar).toBe("foo");
-                expect(modelContext[1].bro).toBe("baz");
-                expect(modelContext[0].dynamic).toBeDefined();
-                expect(modelContext[1].dynamic).toBeDefined();
-                expect(_.isEmpty(modelContext[0].dynamic)).toBeTruthy();
-                expect(_.isEmpty(modelContext[1].dynamic)).toBeTruthy();
+                expect(modelContext[0]).toEqual({ bar: "foo" });
+                expect(modelContext[1]).toEqual({ bro: "baz" });
             })
-
-            context("when the collection overrides viewContext()", function(){
-                beforeEach(function(){
-                    this.collection.viewContext = function(){
-                        return {one: 1}
-                    }
-                });
-
-                it("adds the collection's viewContext() hash to the context as 'dynamic'", function(){
-                    expect(this.view.context().dynamic.one).toBe(1);
-                });
-            });
-
-            context("when the models override viewContext()", function(){
-                beforeEach(function(){
-                    this.collection.models[0].viewContext = function(){ return {a : "a"} };
-                    this.collection.models[1].viewContext = function(){ return {b : "b"} };
-                });
-
-                it("adds those models' viewContext() calls to the context as 'dynamic'", function(){
-                    var modelContext = this.view.context().models;
-                    expect(modelContext[0].bar).toBe("foo");
-                    expect(modelContext[1].bro).toBe("baz");
-                    expect(modelContext[0].dynamic.a).toBe("a");
-                    expect(modelContext[1].dynamic.b).toBe("b");
-                });
-            });
 
             describe("loaded:true", function() {
                 beforeEach(function() {

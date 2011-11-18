@@ -18,10 +18,6 @@
                 }
                 this.loaded = true;
                 return data.resource;
-            },
-
-            viewContext : function(){
-                return {};
             }
         }),
 
@@ -53,10 +49,6 @@
                 };
                 this.unset("errors", { silent: true });
                 return Backbone.Model.prototype.save.call(this, attrs, options);
-            },
-
-            viewContext : function() {
-                return {};
             }
         })
     }
