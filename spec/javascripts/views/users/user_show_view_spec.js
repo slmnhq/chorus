@@ -8,7 +8,7 @@ describe("chorus.views.UserShow", function() {
             this.model = new chorus.models.User({
                 emailAddress: "a@b.com",
                 title: "My Title",
-                department: "My Department",
+                ou: "My Department",
                 admin: true,
                 userName: "gabe1",
                 notes: "My Notes"
@@ -45,7 +45,7 @@ describe("chorus.views.UserShow", function() {
             });
 
             it("renders the department text", function() {
-                expect(this.view.$(".department").text()).toBe(this.model.get("department"));
+                expect(this.view.$(".department").text()).toBe(this.model.get("ou"));
             });
 
             it("renders the email text", function() {

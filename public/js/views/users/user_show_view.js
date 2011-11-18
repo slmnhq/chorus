@@ -8,7 +8,10 @@
                 this._fetchedWorkspaces = true;
             }
 
-            return {workspaces: this.model.getWorkspaces()}
+            return {
+                workspaces: this.model.getWorkspaces(),
+                department: this.model.get("ou")
+            }
         }
     });
 })(jQuery, chorus.views);
