@@ -87,4 +87,16 @@ describe("chorus.models.User", function() {
             expect(this.model.requireConfirmation).toHaveBeenCalledWith("password");
         })
     });
+
+    describe("#imageUrl", function() {
+        it("uses the right URL", function(){
+            var user = new models.User({userName: 'foo'});
+            expect(user.imageUrl()).toBe("/edc/userimage/foo?size=original");
+        });
+
+        it("accepts the size argument", function(){
+            var user = new models.User({userName: 'foo'});
+            expect(user.imageUrl({size: "icon"})).toBe("/edc/userimage/foo?size=icon");
+        });
+    });
 });

@@ -23,6 +23,11 @@
             this.requirePattern('emailAddress', /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/);
             this.requireConfirmation('password')
             return _(this.errors).isEmpty();
+        },
+
+        imageUrl : function(options){
+            options = (options || {});
+            return "/edc/userimage/" + this.get("userName") + "?size=" + (options.size || "original");
         }
     });
 })(chorus.models);
