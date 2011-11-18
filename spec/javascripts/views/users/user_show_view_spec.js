@@ -17,7 +17,7 @@ describe("chorus.views.UserShow", function() {
             spyOn(workspaces, "fetch");
             workspaces.add(new chorus.models.Workspace({id: 1, name: "ws1"}));
             workspaces.add(new chorus.models.Workspace({id: 2, name: "ws2"}));
-            this.model.getWorkspaces = function(){
+            this.model.workspaces = function(){
               return workspaces;
             };
             this.view = new chorus.views.UserShow({model: this.model});
@@ -25,7 +25,7 @@ describe("chorus.views.UserShow", function() {
 
         context("before render is called", function(){
             it("does not call .fetch on workspaces", function(){
-                expect(this.model.getWorkspaces().fetch.calls.length).toBe(0);
+                expect(this.model.workspaces().fetch.calls.length).toBe(0);
             });
         });
 
@@ -92,14 +92,14 @@ describe("chorus.views.UserShow", function() {
                     this.view.render();
                 });
                 it("fetches the user's workspaces exactly once", function() {
-                    expect(this.model.getWorkspaces().fetch.calls.length).toBe(1);
+                    expect(this.model.workspaces().fetch.calls.length).toBe(1);
                 });
             });
 
             context("when the user has no workspaces", function() {
                 beforeEach(function() {
                     var workspaces = new chorus.models.WorkspaceSet();
-                    this.model.getWorkspaces = function(){
+                    this.model.workspaces = function(){
                         return workspaces;
                     };
                     this.view.render();

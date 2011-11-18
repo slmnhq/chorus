@@ -13,10 +13,10 @@ describe("chorus.models.User", function() {
         expect(this.model.urlTemplate).toBe("user/{{userName}}");
     });
 
-    describe("#getWorkspaces", function() {
+    describe("#workspaces", function() {
         beforeEach(function() {
             this.user = new models.User({userName: "dr_charlzz"});
-            this.workspaces = this.user.getWorkspaces();
+            this.workspaces = this.user.workspaces();
         });
 
         it("returns an instance of WorkspaceSet", function() {
@@ -24,7 +24,7 @@ describe("chorus.models.User", function() {
         });
 
         it("returns the same instance every time", function() {
-            expect(this.user.getWorkspaces()).toBe(this.workspaces);
+            expect(this.user.workspaces()).toBe(this.workspaces);
         });
 
         context("when the workspaces instance raises its reset event", function() {
@@ -36,8 +36,8 @@ describe("chorus.models.User", function() {
             });
 
             it("only fires the change event once, even if the method was called multiple times", function() {
-                this.user.getWorkspaces();
-                this.user.getWorkspaces();
+                this.user.workspaces();
+                this.user.workspaces();
                 var spy = jasmine.createSpy("changeHandler");
                 this.user.bind("change", spy);
                 this.workspaces.trigger("reset");

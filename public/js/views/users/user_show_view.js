@@ -4,12 +4,12 @@
 
         additionalContext: function(){
             if (!this._fetchedWorkspaces) {
-                this.model.getWorkspaces().fetch();
+                this.model.workspaces().fetch();
                 this._fetchedWorkspaces = true;
             }
 
             return {
-                workspaces: this.model.getWorkspaces(),
+                workspaces: this.model.workspaces(),
                 department: this.model.get("ou"),
                 imageUrl: this.model.imageUrl()
             }

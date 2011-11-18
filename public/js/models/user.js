@@ -4,7 +4,7 @@
         urlTemplate : "user/{{userName}}",
         showUrlTemplate : "users/{{userName}}",
 
-        getWorkspaces: function() {
+        workspaces: function() {
             if (!this._workspaces) {
                 this._workspaces = new ns.WorkspaceSet();
                 this._workspaces.urlTemplate = "workspace/?user=" + this.get("userName");
