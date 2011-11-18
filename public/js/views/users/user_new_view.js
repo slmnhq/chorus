@@ -4,7 +4,6 @@
 
         events : {
             "submit form" : 'submitNewUser',
-            "click button" : 'submitNewUser'
         },
 
         setup : function(){
@@ -26,7 +25,7 @@
 
             updates.admin = this.$("input#admin-checkbox").prop("checked") || false;
 
-            this.model.set(updates)
+            this.model.set(updates, {silent : true})
             this.model.save();
         }
     });

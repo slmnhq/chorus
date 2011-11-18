@@ -101,7 +101,22 @@ describe("chorus.views.userNew", function() {
                     })
                 });
 
-            })
+                context("saving the user with invalid data", function() {
+                    beforeEach(function() {
+                        spyOn(Backbone.Model.prototype, 'save');
+                        this.view.$("input[name=emailAddress]").val("bademail");
+                        this.view.$("form").submit();
+                    });
+                    it("does not save the user", function() {
+                        expect(Backbone.Model.prototype.save).not.toHaveBeenCalled();
+                    });
+
+                    it("retains the data already entered", function() {
+                        expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
+                    });
+                });
+
+            });
         });
 
         context("as a non admin", function() {
