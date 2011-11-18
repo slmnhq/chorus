@@ -40,6 +40,7 @@
     ns.Base = ns.Bare.extend({
         makeModel : $.noop,
         additionalContext: $.noop,
+        collectionModelContext: $.noop,
 
         preInitialize : function() {
             this.makeModel();
@@ -56,22 +57,21 @@
         },
 
         context: function context() {
-            var ctx;
+            var ctx = {};
+            var self = this;
 
             if (this.resource) {
                 ctx = _.clone(this.resource.attributes);
                 ctx.loaded = this.resource.loaded;
                 if (this.collection) {
-                    ctx.models = _.pluck(this.collection.models, "attributes");
+                    ctx.models = _.map(this.collection.models, function(model) {
+                        return _.extend(_.clone(model.attributes), self.collectionModelContext(model));
+                    });
                 }
-                $.extend(ctx, this.additionalContext(ctx));
-            } else {
-                ctx = this.additionalContext({})
             }
-
-            return ctx;
+            return _.extend(ctx, this.additionalContext(ctx));
         }
-    })
+    }),
 
     ns.MainContentView = ns.Base.extend({
         className : "main_content",

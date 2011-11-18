@@ -29,7 +29,36 @@ describe("chorus.views", function() {
                     expect(this.view.context().loaded).toBeFalsy();
                 });
             });
-        })
+
+            describe("when an additionalContext is defined", function() {
+                beforeEach(function(){
+                    this.view.additionalContext = function(){
+                        return {one: 1};
+                    };
+                });
+
+                it("still contains the attributes of the model", function(){
+                    expect(this.view.context().bar).toBe("foo");
+                });
+
+                it("includes the additionalContext in the context", function() {
+                    expect(this.view.context().one).toBe(1);
+                });
+            });
+        });
+
+        describe("when an additionalContext is defined", function() {
+            beforeEach(function(){
+                this.view = new chorus.views.Base();
+                spyOn(this.view, "additionalContext").andCallFake(function(){
+                    return {one: 1};
+                });
+            });
+
+            it("includes the additionalContext in the context", function() {
+                expect(this.view.context().one).toBe(1);
+            });
+        });
 
         describe("for a view with a collection", function () {
             beforeEach(function() {
@@ -51,6 +80,32 @@ describe("chorus.views", function() {
                 expect(modelContext[0]).toEqual({ bar: "foo" });
                 expect(modelContext[1]).toEqual({ bro: "baz" });
             })
+
+            context("when a collectionModelContext is defined", function() {
+                beforeEach(function() {
+                    this.view.collectionModelContext = function(model) {
+                        return {my_cid: model.cid}
+                    };
+                });
+
+                it("includes the collectionModelContext in the context for each model", function() {
+                    var context = this.view.context();
+                    expect(context.models[0].my_cid).toBe(this.collection.models[0].cid);
+                    expect(context.models[1].my_cid).toBe(this.collection.models[1].cid);
+                });
+            });
+
+            describe("when an additionalContext is defined", function() {
+                beforeEach(function(){
+                    spyOn(this.view, "additionalContext").andCallFake(function(){
+                        return {one: 1};
+                    });
+                });
+
+                it("includes the additionalContext in the context", function() {
+                    expect(this.view.context().one).toBe(1);
+                });
+            });
 
             describe("loaded:true", function() {
                 beforeEach(function() {
