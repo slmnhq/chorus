@@ -1,7 +1,7 @@
 {{#each models}}
     <li data-userName="{{userName}}">
-        <a href="#/users/{{userName}}" class="fullname">
-          <img src="/edc/userimage/{{userName}}?size=icon" class="profile"/>
+        <a href="{{showUrl}}" class="fullname">
+          <img src="{{imageUrl}}" class="profile"/>
           <span>{{fullName}}</span>
         </a>
         {{#if admin}}

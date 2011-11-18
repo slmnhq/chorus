@@ -63,7 +63,7 @@ describe("chorus.views.UserList", function() {
 
             it("displays an image for each user", function() {
                 expect(this.view.$("li img").length).toBe(2);
-                expect(this.view.$("li img").attr("src")).toBe("/edc/userimage/edcadmin?size=icon");
+                expect(this.view.$("li img").attr("src")).toBe(this.collection.models[0].imageUrl({size: "icon"}));
             });
 
             it("displays a name for each user", function() {
@@ -72,8 +72,8 @@ describe("chorus.views.UserList", function() {
             });
 
             it("links the user's name to the user show page", function(){
-                expect(this.view.$("li:nth-child(1) a").attr("href")).toBe("#/users/edcadmin")
-                expect(this.view.$("li:nth-child(2) a").attr("href")).toBe("#/users/markr")
+                expect(this.view.$("li:nth-child(1) a").attr("href")).toBe(this.collection.models[0].showUrl());
+                expect(this.view.$("li:nth-child(2) a").attr("href")).toBe(this.collection.models[1].showUrl());
             });
 
             it("links the user's image to the user show page", function(){
