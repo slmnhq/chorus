@@ -5,6 +5,10 @@ describe("chorus.models.User", function() {
         this.model = new models.User();
     });
 
+    it("has the correct showUrlTemplate", function() {
+        expect(this.model.showUrlTemplate).toBe("users/{{userName}}");
+    });
+
     it("has the correct urlTemplate", function() {
         expect(this.model.urlTemplate).toBe("user/{{userName}}");
     });

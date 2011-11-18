@@ -1,6 +1,7 @@
 (function(ns) {
     ns.User = chorus.models.Base.extend({
         urlTemplate : "user/{{userName}}",
+        showUrlTemplate : "users/{{userName}}",
 
         getWorkspaces: function() {
             if (!this._workspaces) {
