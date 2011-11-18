@@ -12,8 +12,13 @@ describe("chorus.models", function() {
         });
 
         describe("#showUrl", function() {
-            it("returns #/{{urlTemplate}} by default", function() {
-                expect(this.model.showUrl()).toBe("#/my_items/foo")
+            it("returns #/{{showUrlTemplate}}", function() {
+                this.model.showUrlTemplate = "my_items/show/{{bar}}";
+                expect(this.model.showUrl()).toBe("#/my_items/show/foo")
+            });
+
+            it("throws when showUrlTemplate is not set", function(){
+                expect(this.model.showUrl).toThrow("No showUrlTemplate defined");
             });
         });
 

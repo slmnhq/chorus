@@ -27,7 +27,11 @@
             },
 
             showUrl: function() {
-                return "#/" + Handlebars.compile(this.urlTemplate)(this.attributes);
+                if (!this.showUrlTemplate) {
+                    throw "No showUrlTemplate defined";
+                }
+
+                return "#/" + Handlebars.compile(this.showUrlTemplate)(this.attributes);
             },
 
             parse: function(data) {
