@@ -61,8 +61,13 @@
             if (this.resource) {
                 ctx = _.clone(this.resource.attributes);
                 ctx.loaded = this.resource.loaded;
+                ctx.dynamic = this.resource.viewContext();
                 if (this.collection) {
-                    ctx.models = _.pluck(this.collection.models, "attributes");
+                    ctx.models = _.map(this.collection.models, function(model) {
+                        var modelCtx = _.clone(model.attributes);
+                        modelCtx.dynamic = model.viewContext();
+                        return modelCtx;
+                    });
                 }
                 $.extend(ctx, this.additionalContext(ctx));
             } else {
