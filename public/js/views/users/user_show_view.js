@@ -10,7 +10,8 @@
 
             return {
                 workspaces: this.model.getWorkspaces(),
-                department: this.model.get("ou")
+                department: this.model.get("ou"),
+                imageUrl: this.model.imageUrl()
             }
         }
     });

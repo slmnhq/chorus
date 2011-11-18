@@ -26,6 +26,11 @@ $column-padding-y : 20px;
     padding-left:  $column-padding-x;
     padding-right: $column-padding-x;
     margin-left: -100%;
+    text-align: center;
+
+    img {
+        width: $left-column-width - (4 * $column-padding-x);          /* LC width */
+    }
   }
 
   .workspaces {
@@ -55,7 +60,7 @@ $column-padding-y : 20px;
     padding-top:   $column-padding-y;
     position: relative;
     float: left;
-    padding-bottom: 20010px;  /* X + padding-bottom */
+    padding-bottom: 20000px + $column-padding-y;  /* X + padding-bottom */
     margin-bottom: -20000px;  /* X */
   }
 }
