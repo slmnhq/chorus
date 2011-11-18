@@ -2,12 +2,18 @@ describe("chorus.models", function() {
     describe("Base", function() {
         beforeEach(function() {
             this.model = new chorus.models.Base({ bar: "foo"});
-            this.model.urlTemplate = "foo/{{bar}}";
+            this.model.urlTemplate = "my_items/{{bar}}";
         });
 
         describe("#url", function() {
             it("compiles the urlTemplate and renders it with model attributes", function() {
-                expect(this.model.url()).toBe("/edc/foo/foo");
+                expect(this.model.url()).toBe("/edc/my_items/foo");
+            });
+        });
+
+        describe("#showUrl", function() {
+            it("returns #/{{urlTemplate}} by default", function() {
+                expect(this.model.showUrl()).toBe("#/my_items/foo")
             });
         });
 
@@ -26,7 +32,7 @@ describe("chorus.models", function() {
 
                     this.server.respondWith(
                         'POST',
-                        '/edc/foo/foo',
+                        '/edc/my_items/foo',
                         this.prepareResponse(this.response));
 
                     this.server.respond();
@@ -46,7 +52,7 @@ describe("chorus.models", function() {
                     ] };
                     this.server.respondWith(
                         'POST',
-                        '/edc/foo/foo',
+                        '/edc/my_items/foo',
                         this.prepareResponse(this.response));
                     this.server.respond();
 
@@ -65,7 +71,7 @@ describe("chorus.models", function() {
                         this.server = sinon.fakeServer.create();
                         this.server.respondWith(
                             'POST',
-                            '/edc/foo/foo',
+                            '/edc/my_items/foo',
                             this.prepareResponse(this.response));
 
                         this.model.save();
@@ -106,7 +112,7 @@ describe("chorus.models", function() {
                 spyOn(chorus.session, "trigger");
                 this.model.parse({status: "needlogin"});
                 expect(chorus.session.trigger).toHaveBeenCalledWith("needsLogin");
-            })
+            });
         })
     });
 

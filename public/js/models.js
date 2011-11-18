@@ -26,6 +26,10 @@
                 return "/edc/" + Handlebars.compile(this.urlTemplate)(this.attributes);
             },
 
+            showUrl: function() {
+                return "#/" + Handlebars.compile(this.urlTemplate)(this.attributes);
+            },
+
             parse: function(data) {
                 if (data.status == "needlogin") {
                     chorus.session.trigger("needsLogin");
