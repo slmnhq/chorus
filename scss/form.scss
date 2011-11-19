@@ -11,5 +11,10 @@ form {
     input.has_error, textarea.has_error {
         border: 1px solid red;
     }
+
+    .data-error {
+        background: red;
+        color: white;
+    }
 }
 
