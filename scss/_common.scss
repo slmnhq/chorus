@@ -9,10 +9,12 @@ $body-glow-color : #C8DCED;
 $shaded-background-color: #E1E5E9;
 
 $text-color : black;
+$dark-text-color : #5f5f5f;
 $secondary-text-color : #7D7D7D;
-$weak-text-color : #9D9E9F;
+$weak-text-color : #959595;
 
 $link-color : #2c95dd;
+$weak-link-color: #4e85c1;
 
 $element-background: white;
 $button-background-color : white;
@@ -30,6 +32,9 @@ $administrator-background-color: #B1DBAF;
 // TODO Change these colors or the references to them
 $card-background: $element-background;
 $card-border-color: $border-color;
+
+// Font weights
+$semibold: 600;
 
 // Mixins
 
