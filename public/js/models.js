@@ -64,14 +64,14 @@
 
             performValidation: function() { return true; },
 
-            require : function(attrname) {
-                if (!this.get(attrname)) {
-                    this.errors[attrname] = t("validation.required", attrname);
+            require : function(attr) {
+                if (!this.get(attr)) {
+                    this.errors[attr] = t("validation.required", attr);
                 }
             },
 
             requirePattern : function(attrname, regex) {
-                var attr = this.get(attrname)
+                var attr = this.get(attrname);
                 if (!attr || !attr.match(regex)) {
                     this.errors[attrname] = t("validation.required_pattern", attrname);
                 }
@@ -84,6 +84,13 @@
 
                 if (!val || !conf || val != conf) {
                     this.errors[attr] = t("validation.confirmation", attr);
+                }
+            },
+
+            setMaxLength : function(attrname, size) {
+                var attr = this.get(attrname);
+                if (attr && attr.length > size) {
+                    this.errors[attrname] = t("validation.max_length", attrname);
                 }
             }
         })

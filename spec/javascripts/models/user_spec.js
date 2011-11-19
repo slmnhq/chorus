@@ -62,11 +62,12 @@ describe("chorus.models.User", function() {
             spyOn(this.model, "require").andCallThrough();
             spyOn(this.model, "requirePattern").andCallThrough();
             spyOn(this.model, "requireConfirmation").andCallThrough();
-        })
+            spyOn(this.model, "setMaxLength").andCallThrough();
+        });
 
         it("should return a truthy value for a valid user", function() {
             this.model.set(fixtures.modelFor('fetch'));
-            this.model.set({ password : "foo", passwordConfirmation : "foo" })
+            this.model.set({ password : "foo", passwordConfirmation : "foo" });
             expect(this.model.performValidation()).toBeTruthy();
         });
 
@@ -74,18 +75,26 @@ describe("chorus.models.User", function() {
             it("requires " + attr, function() {
                 this.model.performValidation();
                 expect(this.model.require).toHaveBeenCalledWith(attr);
-            })
-        })
+            });
+        });
+
+        _.each(["firstName", "lastName", "userName", "emailAddress", "password",
+            "passwordConfirmation", "title", "department"], function(attr) {
+           it("sets the max length for " + attr, function() {
+               this.model.performValidation();
+               expect(this.model.setMaxLength).toHaveBeenCalledWith(attr, 255);
+           });
+        });
 
         it("requires emailAddress", function() {
             this.model.performValidation();
-            expect(this.model.requirePattern).toHaveBeenCalledWith("emailAddress", /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/)
-        })
+            expect(this.model.requirePattern).toHaveBeenCalledWith("emailAddress", /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/);
+        });
 
         it("requires password confirmation", function() {
             this.model.performValidation();
             expect(this.model.requireConfirmation).toHaveBeenCalledWith("password");
-        })
+        });
     });
 
     describe("#imageUrl", function() {

@@ -230,35 +230,58 @@ describe("chorus.models", function() {
                 this.model.requirePattern("foo", /bar/);
                 expect(this.model.errors.foo).not.toBeDefined();
             })
-        })
+        });
 
         describe("requireConfirmation", function() {
             beforeEach(function() {
                 this.model.errors = {};
-            })
+            });
 
             it("sets an error if the attribute isn't present", function () {
                 this.model.requireConfirmation("foo");
                 expect(this.model.errors.foo).toBeDefined();
-            })
+            });
 
             it("sets an error if the confirmation isn't present", function () {
-                this.model.set({ foo : "bar" })
+                this.model.set({ foo : "bar" });
                 this.model.requireConfirmation("foo");
                 expect(this.model.errors.foo).toBeDefined();
-            })
+            });
 
             it("sets an error if the confirmation doesn't match the attribute", function() {
-                this.model.set({ foo : "bar", fooConfirmation : "baz" })
+                this.model.set({ foo : "bar", fooConfirmation : "baz" });
                 this.model.requireConfirmation("foo");
                 expect(this.model.errors.foo).toBeDefined();
-            })
+            });
 
             it("does not set an error if the confirmation matches the attribute", function() {
-                this.model.set({ foo : "bar", fooConfirmation : "bar" })
+                this.model.set({ foo : "bar", fooConfirmation : "bar" });
                 this.model.requireConfirmation("foo");
                 expect(this.model.errors.foo).not.toBeDefined();
-            })
+            });
+        });
+        describe("setMaxLength", function() {
+            beforeEach(function() {
+                this.model.errors = {};
+            });
+
+            it("sets an error if the attribute is too long", function () {
+                this.model.set({foo : "barbaz"});
+                this.model.setMaxLength("foo", 4);
+                expect(this.model.errors.foo).toBeDefined();
+            });
+
+            it("does not set an error if the attribute is missing", function() {
+                this.model.unset("foo");
+                this.model.setMaxLength("foo", 4);
+                expect(this.model.errors.foo).not.toBeDefined();
+            });
+
+            it("does not set an error otherwise", function() {
+                this.model.set({ foo : "bar"});
+                this.model.setMaxLength("foo", 4);
+                expect(this.model.errors.foo).not.toBeDefined();
+            });
         })
     });
 

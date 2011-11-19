@@ -80,6 +80,7 @@
             var self = this;
 
             self.$(".has_error").removeClass("has_error");
+            self.$(".data-error").remove();
 
             _.each(this.resource.errors, function(val, key) {
                 var input = self.$("form input[name=" + key + "], form textarea[name=" + name + "]");

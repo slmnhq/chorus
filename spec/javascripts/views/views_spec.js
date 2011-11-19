@@ -126,7 +126,7 @@ describe("chorus.views", function() {
                     expect(this.view.context().loaded).toBeFalsy();
                 });
             });
-        })
+        });
 
         describe("validation failures", function() {
             beforeEach(function() {
@@ -134,12 +134,12 @@ describe("chorus.views", function() {
                 this.model.performValidation = function() {
                     this.errors = {};
                     this.require("foo");
-                }
+                };
 
                 this.view = new chorus.views.Base({ model : this.model });
                 this.view.template = function() {
                     return "<form><input name='foo'/><input name='bar'/><input name='whiz' class='has_error'/></form>";
-                }
+                };
 
                 spyOn(this.view, "render").andCallThrough();
                 this.view.render();
@@ -148,23 +148,28 @@ describe("chorus.views", function() {
 
             it("sets the has_error class on fields with errors", function() {
                 expect(this.view.$("input[name=foo]")).toHaveClass("has_error");
-            })
+            });
 
             it("clears the has_error class on all fields without errors", function() {
                 expect(this.view.$("input[name=bar]")).not.toHaveClass("has_error");
                 expect(this.view.$("input[name=whiz]")).not.toHaveClass("has_error");
-            })
+            });
 
             it("does not re-render", function() {
                 expect(this.view.render.callCount).toBe(1);
             });
 
             it("injects error html", function() {
-               console.log(this.view.$("[.data-error][id=foo]"));
-               expect(this.view.$("[.data-error][id=foo]").length).toBe(1);
+               expect(this.view.$("[.data-error][id=foo]")[0].innerHTML).toBe(t("validation.required", 'foo'));
+            });
+
+            it("clears error html that is not applicable", function() {
+                this.model.set({"foo": "bar"}, {silent: true});
+                this.model.save();
+                expect(this.view.$("[.data-error][id=foo]").length).toBe(0);
             });
         })
-    })
+    });
 
     describe("MainContentView", function() {
         beforeEach(function() {
