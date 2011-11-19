@@ -79,10 +79,14 @@
         showErrors : function() {
             var self = this;
 
-            self.$(".has_error").removeClass("has_error")
+            self.$(".has_error").removeClass("has_error");
 
             _.each(this.resource.errors, function(val, key) {
-                self.$("form input[name=" + key + "], form textarea[name=" + name + "]").addClass("has_error");
+                var input = self.$("form input[name=" + key + "], form textarea[name=" + name + "]");
+                input.addClass("has_error");
+                errorHTML = "<span class=data-error id="+key+">"+ val + "</span>";
+                input.after(errorHTML);
+
             })
         }
     }),

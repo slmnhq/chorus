@@ -157,7 +157,12 @@ describe("chorus.views", function() {
 
             it("does not re-render", function() {
                 expect(this.view.render.callCount).toBe(1);
-            })
+            });
+
+            it("injects error html", function() {
+               console.log(this.view.$("[.data-error][id=foo]"));
+               expect(this.view.$("[.data-error][id=foo]").length).toBe(1);
+            });
         })
     })
 
