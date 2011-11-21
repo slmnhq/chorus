@@ -1,12 +1,14 @@
 {{> errorDiv }}
 {{#ifAdmin}}
-   <div class="edit_photo">
-       <img src="/images/default-user-icon.png" class="profile"/>
-   </div>
-   <div class="fields">
-       <form action="/edc/users" method="post">
+<div class="edit_photo">
+    <img src="/images/default-user-icon.png" class="profile"/>
+</div>
 
-           <div class="row">
+
+<div class="fields">
+    <form action="/edc/users" method="post">
+
+        <div class="row">
                <span class="left">
                    <label class="required">{{t "users.first_name"}}</label>
                    <input type="text" name="firstName"/>
@@ -16,9 +18,9 @@
                    <label class="required">{{t "users.last_name"}}</label>
                    <input type="text" name="lastName"/>
                </span>
-           </div>
+        </div>
 
-           <div class="row">
+        <div class="row">
                <span class="left">
                    <label class="required">{{t "users.username"}}</label>
                    <input type="text" name="userName"/>
@@ -29,16 +31,16 @@
                    <input type="checkbox" name="admin" id="admin-checkbox"/>
                    <label for="admin-checkbox">{{t "users.make_admin"}}</label>
                </span>
-           </div>
+        </div>
 
-           <div class="row">
+        <div class="row">
                <span class="left">
                    <label class="required">{{t "users.email"}}</label>
                    <input type="text" name="emailAddress"/>
                </span>
-           </div>
+        </div>
 
-           <div class="row">
+        <div class="row">
                <span class="left">
                    <label class="required">{{t "users.password"}}</label>
                    <input type="password" name="password"/>
@@ -48,9 +50,9 @@
                    <label class="required">{{t "users.confirm_password"}}</label>
                    <input type="password" name="passwordConfirmation"/>
                </span>
-           </div>
+        </div>
 
-           <div class="row">
+        <div class="row">
                <span class="left">
                    <label>Title</label>
                    <input type="text" name="title"/>
@@ -60,16 +62,16 @@
                    <label>{{t "users.department"}}</label>
                    <input type="text" name="ou"/>
                </span>
-           </div>
+        </div>
 
-           <div class="row controls">
+        <div class="row controls">
                <span class="left">
                    <button type="submit">{{t "users.button.add"}}</button>
                    <button type="cancel">{{t "actions.cancel"}}</button>
                </span>
-           </div>
-       </form>
-   </div>
+        </div>
+    </form>
+</div>
 {{else}}
- <p class="aint_admin">{{t "users.not_admin"}}</p>
+<p class="aint_admin">{{t "users.not_admin"}}</p>
 {{/ifAdmin}}

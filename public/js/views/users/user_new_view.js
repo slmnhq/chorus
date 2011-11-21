@@ -3,7 +3,7 @@
         className : "user_new",
 
         events : {
-            "submit form" : 'submitNewUser',
+            "submit form" : 'submitNewUser'
         },
 
         setup : function(){

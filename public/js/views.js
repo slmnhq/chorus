@@ -85,12 +85,19 @@
             _.each(this.resource.errors, function(val, key) {
                 var input = self.$("form input[name=" + key + "], form textarea[name=" + name + "]");
                 input.addClass("has_error");
-                errorHTML = "<span class=data-error id="+key+">"+ val + "</span>";
-                input.after(errorHTML);
-
-            })
+                input.qtip({
+                    content: val,
+                    style: "chorus",
+                    position : {
+                        corner : {
+                            target: "rightMiddle",
+                            tooltip: "leftMiddle"
+                        }
+                    }
+                });
+            });
         }
-    }),
+    });
 
     ns.MainContentView = ns.Base.extend({
         className : "main_content",
