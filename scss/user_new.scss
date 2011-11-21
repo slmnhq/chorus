@@ -2,11 +2,12 @@
 
 .user_new {
     form {
+        position: relative;
         margin-bottom : 15px;
     }
     .edit_photo {
         width: 200px;
-        float: left;
+        position: absolute;
         text-align : center;
         img {
             padding : 5px;

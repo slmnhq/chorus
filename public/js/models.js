@@ -50,11 +50,13 @@
                 options || (options = {});
                 var success = options.success;
                 options.success = function(model, resp, xhr) {
-                    if (!model.serverErrors) model.trigger('saved', model, resp, xhr);
+                    var savedEvent = model.serverErrors ? "saveFailed" : "saved"
+                    model.trigger(savedEvent, model, resp, xhr);
                     if (success) success(model, resp, xhr);
                 };
                 this.serverErrors = undefined;
                 if (this.performValidation(this.attributes)) {
+                    this.trigger("validated");
                     return Backbone.Model.prototype.save.call(this, attrs, options);
                 } else {
                     this.trigger("validationFailed");
