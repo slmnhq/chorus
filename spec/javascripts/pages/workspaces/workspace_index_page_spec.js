@@ -22,7 +22,8 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
             this.view = new chorus.pages.WorkspaceIndexPage();
             this.view.render();
         })
-         describe("when the collection is loading", function(){
+
+        describe("when the collection is loading", function(){
             it("should have a loading element", function(){
                 expect(this.view.$(".loading")).toExist();
             });
@@ -33,11 +34,45 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
         });
 
         it("creates a WorkspaceList view", function() {
-           expect(this.view.$(".workspace_list")).toExist();
+            expect(this.view.$(".workspace_list")).toExist();
         });
 
         it("displays an 'add workspace' button", function() {
             expect(this.view.$("button:contains('Create a Workspace')")).toExist();
-        })
-    })
+        });
+
+    });
+
+    describe("events", function() {
+        beforeEach(function() {
+            spyOn(chorus.views.WorkspaceList.prototype, 'filterActive');
+            spyOn(chorus.views.WorkspaceList.prototype, 'filterAll');
+            this.view = new chorus.pages.WorkspaceIndexPage();
+            this.view.render();
+        });
+
+        describe("when the 'filter:all' event is triggered on the content header", function() {
+            it("calls #filterAll on its list view", function() {
+                var listView = this.view.mainContent.content;
+                var header = this.view.mainContent.contentHeader;
+
+                header.trigger("filter:all");
+
+                expect(listView.filterAll).toHaveBeenCalled();
+                expect(listView.filterAll.mostRecentCall.object).toBe(listView);
+            });
+        });
+
+        describe("when the 'filter:active' event is triggered on the content header", function() {
+            it("calls #filterActive on its list view", function() {
+                var listView = this.view.mainContent.content;
+                var header = this.view.mainContent.contentHeader;
+
+                header.trigger("filter:active");
+
+                expect(listView.filterActive).toHaveBeenCalled();
+                expect(listView.filterActive.mostRecentCall.object).toBe(listView);
+            });
+        });
+    });
 });

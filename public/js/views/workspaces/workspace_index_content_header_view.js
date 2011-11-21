@@ -14,14 +14,14 @@
 
         triggerActive: function(e) {
             e.preventDefault();
-            this.trigger("workspaces:filter:active");
+            this.trigger("filter:active");
             this.$(".menu").addClass("hidden");
             this.$(".link.filter a span").text(t("filter.active_workspaces"));
         },
 
         triggerAll: function(e) {
             e.preventDefault();
-            this.trigger("workspaces:filter:all");
+            this.trigger("filter:all");
             this.$(".menu").addClass("hidden");
             this.$(".link.filter a span").text(t("filter.all_workspaces"));
         }

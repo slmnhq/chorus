@@ -9,6 +9,14 @@
                 showUrl: model.showUrl(),
                 ownerUrl: model.owner().showUrl()
             };
+        },
+
+        filterActive: function() {
+          this.$("li.archived").addClass("hidden");
+        },
+
+        filterAll: function() {
+          this.$("li.archived").removeClass("hidden");
         }
     });
 })(jQuery, chorus.views);
