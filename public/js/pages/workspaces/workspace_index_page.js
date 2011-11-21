@@ -8,11 +8,16 @@
             this.contentDetails = new chorus.views.Count({collection: collection, modelClass: "Workspace"});
 
             this.setupEvents();
+            this.contentHeader.triggerActive();
         },
 
         setupEvents: function() {
-            this.contentHeader.bind("filter:active", this.content.filterActive, this.content);
-            this.contentHeader.bind("filter:all", this.content.filterAll, this.content);
+            this.contentHeader.bind("filter:all", function() {
+                this.content.setFilter("all");
+            }, this);
+            this.contentHeader.bind("filter:active", function() {
+                this.content.setFilter("active");
+            }, this);
         }
     });
 

@@ -17,8 +17,16 @@ describe("WorkspaceIndexContentHeader", function() {
             expect(this.view.$(".menu.popup_filter")).toExist();
         });
 
+        it("defaults to the active filter", function() {
+            var activeCheck = this.view.$(".menu li[data-type=active] .check");
+            var allCheck = this.view.$(".menu li[data-type=all] .check");
+            expect(activeCheck).not.toHaveClass('hidden');
+            expect(allCheck).toHaveClass('hidden');
+        });
+
         describe("clicking on the filter link", function(){
             beforeEach(function(){
+                this.view.render();
                 this.view.$(".link.filter a").click();
             });
 
@@ -38,7 +46,7 @@ describe("WorkspaceIndexContentHeader", function() {
                     this.filterSpy = jasmine.createSpy("filter:all");
                     this.view.bind("filter:all", this.filterSpy);
 
-                    this.view.$(".menu a[data-type=all]").click();
+                    this.view.$(".menu li[data-type=all] a").click();
                 });
 
                 it("triggers the filter:all", function() {
@@ -52,6 +60,21 @@ describe("WorkspaceIndexContentHeader", function() {
                 it("Sets the text of the filter link", function(){
                     expect(this.view.$(".link.filter a span").text()).toBe(t("filter.all_workspaces"));
                 });
+
+                it("shows only the check for the 'all' link", function() {
+                    var activeCheck = this.view.$(".menu li[data-type=active] .check");
+                    var allCheck = this.view.$(".menu li[data-type=all] .check");
+
+                    this.view.$(".menu li[data-type=active] a").click();
+
+                    expect(activeCheck).not.toHaveClass('hidden')
+                    expect(allCheck).toHaveClass('hidden')
+
+                    this.view.$(".menu li[data-type=all] a").click();
+
+                    expect(activeCheck).toHaveClass('hidden')
+                    expect(allCheck).not.toHaveClass('hidden')
+                });
             });
 
             describe("clicking on the 'active workspaces' link", function() {
@@ -59,7 +82,7 @@ describe("WorkspaceIndexContentHeader", function() {
                     this.filterSpy = jasmine.createSpy("filter:active");
                     this.view.bind("filter:active", this.filterSpy);
 
-                    this.view.$(".menu a[data-type=active]").click();
+                    this.view.$(".menu li[data-type=active] a").click();
                 });
 
                 it("triggers the filter:active", function() {
@@ -74,6 +97,20 @@ describe("WorkspaceIndexContentHeader", function() {
                     expect(this.view.$(".link.filter a span").text()).toBe(t("filter.active_workspaces"));
                 });
 
+                it("shows only the check for the 'active' link", function() {
+                    var activeCheck = this.view.$(".menu li[data-type=active] .check");
+                    var allCheck = this.view.$(".menu li[data-type=all] .check");
+
+                    this.view.$(".menu li[data-type=all] a").click();
+
+                    expect(activeCheck).toHaveClass('hidden')
+                    expect(allCheck).not.toHaveClass('hidden')
+
+                    this.view.$(".menu li[data-type=active] a").click();
+
+                    expect(activeCheck).not.toHaveClass('hidden')
+                    expect(allCheck).toHaveClass('hidden')
+                });
             });
         });
     });

@@ -41,12 +41,41 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
             expect(this.view.$("button:contains('Create a Workspace')")).toExist();
         });
 
+        context("when the header has the 'active' filter", function() {
+            beforeEach(function() {
+                var header = this.view.mainContent.contentHeader;
+                this.listView = this.view.mainContent.content;
+                header.triggerActive();
+            });
+
+            it("calls filterActive on the list view", function() {
+                spyOn(this.listView, 'filterActive');
+                this.view.render();
+                expect(this.listView.filterActive).toHaveBeenCalled();
+            });
+        });
+
+        context("when the header has the 'all' filter", function() {
+            beforeEach(function() {
+                var header = this.view.mainContent.contentHeader;
+                this.listView = this.view.mainContent.content;
+                header.triggerAll();
+            });
+
+            it("calls filterAll on the list view", function() {
+                spyOn(this.listView, 'filterAll');
+                this.view.render();
+                expect(this.listView.filterAll).toHaveBeenCalled();
+            });
+        });
     });
 
     describe("events", function() {
         beforeEach(function() {
             spyOn(chorus.views.WorkspaceList.prototype, 'filterActive');
             spyOn(chorus.views.WorkspaceList.prototype, 'filterAll');
+            spyOn(chorus.views.WorkspaceIndexContentHeader.prototype, 'triggerActive').andCallThrough();
+
             this.view = new chorus.pages.WorkspaceIndexPage();
             this.view.render();
         });
