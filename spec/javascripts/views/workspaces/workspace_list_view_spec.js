@@ -63,4 +63,44 @@ describe("chorus.views.WorkspaceList", function() {
             expect($(".owner a", this.privateEl).attr('href')).toBe(this.privateWorkspace.owner().showUrl());
         });
     });
+
+    describe("#filterActive", function() {
+        beforeEach(function() {
+            this.view.render();
+        });
+
+        it("hides all archived workspaces", function() {
+            var activeLi = this.view.$("li[data-id=" + this.activeWorkspace.get("id") + "]");
+            var archivedLi = this.view.$("li[data-id=" + this.archivedWorkspace.get("id") + "]");
+
+            expect(archivedLi).not.toHaveClass("hidden");
+            expect(activeLi).not.toHaveClass("hidden");
+
+            this.view.filterActive();
+
+            expect(archivedLi).toHaveClass("hidden");
+            expect(activeLi).not.toHaveClass("hidden");
+        });
+    });
+
+    describe("#filterAll", function() {
+        beforeEach(function() {
+            this.view.render();
+        });
+
+        it("shows all the workspaces, including the archived ones", function() {
+            var activeLi = this.view.$("li[data-id=" + this.activeWorkspace.get("id") + "]");
+            var archivedLi = this.view.$("li[data-id=" + this.archivedWorkspace.get("id") + "]");
+
+            this.view.filterActive();
+
+            expect(archivedLi).toHaveClass("hidden");
+            expect(activeLi).not.toHaveClass("hidden");
+
+            this.view.filterAll();
+
+            expect(archivedLi).not.toHaveClass("hidden");
+            expect(activeLi).not.toHaveClass("hidden");
+        });
+    });
 });

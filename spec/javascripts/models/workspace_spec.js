@@ -50,4 +50,20 @@ describe("chorus.models.Workspace", function() {
             expect(this.server.requests.length).toBe(numberOfServerRequests);
         });
     });
+
+    describe("#performValidation", function() {
+        beforeEach(function() {
+            spyOn(this.model, "require").andCallThrough();
+        });
+
+        it("should return a truthy value for a valid workspace", function() {
+            this.model.set(fixtures.modelFor('fetch'));
+            expect(this.model.performValidation()).toBeTruthy();
+        });
+
+        it("requires name", function() {
+            this.model.performValidation();
+            expect(this.model.require).toHaveBeenCalledWith("name");
+        });
+    });
 });

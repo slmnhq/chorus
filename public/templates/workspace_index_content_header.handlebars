@@ -11,8 +11,14 @@
     <div class="menu hidden popup_filter">
         <div class="pointer"/>
         <ul>
-            <li><a data-type="all" href="#">{{t "filter.all_workspaces"}}</a></li>
-            <li><a data-type="active" href="#">{{t "filter.active_workspaces"}}</a></li>
+            <li data-type="all">
+                <div class="check"></div>
+                <a href="#">{{t "filter.all_workspaces"}}</a>
+            </li>
+            <li data-type="active">
+                <div class="check"></div>
+                <a href="#">{{t "filter.active_workspaces"}}</a>
+            </li>
         </ul>
     </div>
 

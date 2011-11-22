@@ -4,10 +4,10 @@
     .menus {
         float: right;
         position: relative;
-        background: red;
         text-align : right;
         line-height: 100%;
         height: 100%;
+        width: 200px;
 
         >.link {
             position: absolute;
@@ -17,7 +17,26 @@
 
         .menu.popup_filter {
             right: 10px;
-            top: 42px;
+            top: 46px;
+
+            .pointer {
+                left: 120px;
+            }
+
+            .check {
+                background-repeat: no-repeat;
+                background-image: url("/images/check.png");
+                display: inline-block;
+                width: 10px;
+                height: 10px;
+                margin-right: 8px;
+                position: relative;
+                top: 1px;
+
+                &.hidden {
+                    visibility: hidden;
+                }
+            }
         }
     }
 }

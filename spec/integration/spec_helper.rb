@@ -7,7 +7,8 @@ def current_route
   route if route and not route.empty?
 end
 
-require File.join(File.dirname(__FILE__), 'helpers','login_helpers')
+
+Dir[File.join(File.dirname(__FILE__), 'helpers', "**", "*")].each {|f| require f}
 
 RSpec.configure do |c|
   c.include Capybara::DSL

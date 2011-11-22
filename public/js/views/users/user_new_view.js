@@ -6,8 +6,11 @@
             "submit form" : 'submitNewUser'
         },
 
+        persistent: true,
+
         setup : function(){
             this.model.bind("saved", userSuccessfullySaved, this);
+            this.model.bind("saveFailed", showErrors, this);
         },
 
         makeModel : function() {
@@ -25,13 +28,17 @@
 
             updates.admin = this.$("input#admin-checkbox").prop("checked") || false;
 
-            this.model.set(updates, {silent : true})
+            this.model.set(updates)
             this.model.save();
         }
     });
 
     function userSuccessfullySaved() {
         chorus.router.navigate("/users", true);
+    }
+
+    function showErrors(){
+        this.$(".errors").replaceWith(Handlebars.partials.errorDiv(this.context()));
     }
 
 })(jQuery, chorus.views);

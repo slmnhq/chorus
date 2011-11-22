@@ -6,6 +6,18 @@
             this.content = new chorus.views.WorkspaceList({collection: collection});
             this.contentHeader = new chorus.views.WorkspaceIndexContentHeader();
             this.contentDetails = new chorus.views.Count({collection: collection, modelClass: "Workspace"});
+
+            this.setupEvents();
+            this.contentHeader.triggerActive();
+        },
+
+        setupEvents: function() {
+            this.contentHeader.bind("filter:all", function() {
+                this.content.setFilter("all");
+            }, this);
+            this.contentHeader.bind("filter:active", function() {
+                this.content.setFilter("active");
+            }, this);
         }
     });
 
