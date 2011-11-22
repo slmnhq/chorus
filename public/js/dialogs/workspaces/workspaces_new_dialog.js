@@ -4,15 +4,11 @@
         title : "Create a New Workspace",
 
         persistent: true,
-        
+
         events : {
             "submit form.new_workspace" : "createWorkspace"
         },
 
-        postRender : function () {
-            console.log("rendered dialog", this);
-        },
-        
         makeModel : function() {
             this.model = this.model || new chorus.models.Workspace()
         },

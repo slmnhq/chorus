@@ -10,6 +10,7 @@
             this.collection = new chorus.models.WorkfileSet([], {workspaceId: workspaceId});
             this.collection.fetch();
             this.mainContent = new chorus.views.SubNavContentList({modelClass : "Workfile", tab : "workfiles", collection : this.collection, model : workspace});
+            this.sidebar = new chorus.views.WorkfileCreateSidebar({model : workspace});
         }
     });
 })(jQuery, chorus.pages);
