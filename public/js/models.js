@@ -87,13 +87,6 @@
                 if (!val || !conf || val != conf) {
                     this.errors[attr] = t("validation.confirmation", attr);
                 }
-            },
-
-            setMaxLength : function(attrname, size) {
-                var attr = this.get(attrname);
-                if (attr && attr.length > size) {
-                    this.errors[attrname] = t("validation.max_length", attrname);
-                }
             }
         })
     }

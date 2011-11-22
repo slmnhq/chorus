@@ -273,29 +273,6 @@ describe("chorus.models", function() {
                 expect(this.model.errors.foo).not.toBeDefined();
             });
         });
-        describe("setMaxLength", function() {
-            beforeEach(function() {
-                this.model.errors = {};
-            });
-
-            it("sets an error if the attribute is too long", function () {
-                this.model.set({foo : "barbaz"});
-                this.model.setMaxLength("foo", 4);
-                expect(this.model.errors.foo).toBeDefined();
-            });
-
-            it("does not set an error if the attribute is missing", function() {
-                this.model.unset("foo");
-                this.model.setMaxLength("foo", 4);
-                expect(this.model.errors.foo).not.toBeDefined();
-            });
-
-            it("does not set an error otherwise", function() {
-                this.model.set({ foo : "bar"});
-                this.model.setMaxLength("foo", 4);
-                expect(this.model.errors.foo).not.toBeDefined();
-            });
-        })
     });
 
     describe("Collection", function() {
