@@ -25,7 +25,6 @@ $header-item-spacing : 2*$padding-x;
         float: right;
         width : $sidebar-width;
         text-align : right;
-        margin : 4px 0px;
     }
 
     .left {
@@ -51,18 +50,27 @@ $header-item-spacing : 2*$padding-x;
         font-size: 11px;
         font-weight: 600;
         padding-left: $header-item-spacing;
+        vertical-align: middle;
 
-        a {
+        .alerts {
+            display: inline-block;
+            height: 16px;
+            width: 16px;
             background: red;
-            color: white;
-            padding: 5px;
+            text-align: center;
             margin-left: $padding-x;
+            padding-top: 3px;
+
+            a {
+                line-height: 16px;
+                vertical-align: middle;
+                color: white;
+            }
         }
     }
 
     .search {
         overflow: hidden;
-        padding-top: 4px;
         padding-left: $header-item-spacing;
         margin-right: 0px;
         input {
