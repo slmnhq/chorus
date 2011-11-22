@@ -5,6 +5,8 @@
             "submit form" : "submitLoginForm"
         },
 
+        persistent: true,
+
         setup : function() {
             this.model.bind("saved", this.navigateToDashboard)
         },

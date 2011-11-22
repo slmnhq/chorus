@@ -1,8 +1,8 @@
 <img class="logo" src="images/logo-large.png"></img>
 <div class="card">
-<h1>{{t "login.title"}}</h1>
 {{> errorDiv }}
 <form class="login" action="/edc/auth/login/" method="post">
+    <h1>{{t "login.title"}}</h1>
     <div class="content">
         <label for="userName">{{t "login.username"}}</label>
         <input type="text" name="userName" id="userName"/>
