@@ -3,6 +3,7 @@
 
 .breadcrumbs {
     @include linear-gradient(color-stops($body-glow-color, $body-background-color));
+    height: 32px;
 
     ol {
         padding: $padding-y ($padding-x + $guts-padding + 1px);
