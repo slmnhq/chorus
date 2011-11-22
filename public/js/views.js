@@ -92,14 +92,19 @@
                         corner : {
                             target: "rightMiddle",
                             tooltip: "leftMiddle"
-                        }
+                        },
+                        container: self.el
                     }
                 });
             });
         },
-         clearErrors : function() {
-            this.$(".has_error").removeClass("has_error");
-            this.$(".error_detail").remove();
+
+        clearErrors : function() {
+            var errors = this.$(".has_error");
+            // qtip('destroy') clears the form, removeData clears the objects -- need to call both
+            errors.qtip("destroy");
+            errors.removeData("qtip");
+            errors.removeClass("has_error");
         }
     });
 

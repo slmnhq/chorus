@@ -135,7 +135,7 @@ describe("chorus.views", function() {
             this.model = new chorus.models.Base();
             this.view = new chorus.views.Base({ model : this.model });
             this.view.template = function() {
-                return "<form><input name='foo'/><input name='bar'/><input name='whiz' class='has_error'/></form>";
+                return "<form><input name='foo'/><input name='bar'/><input name='whiz'/></form>";
             };
 
             spyOn(Backbone.Model.prototype, "save");
@@ -155,11 +155,14 @@ describe("chorus.views", function() {
 
             it("sets the has_error class on fields with errors", function() {
                 expect(this.view.$("input[name=foo]")).toHaveClass("has_error");
+                expect(this.view.$("input[name=foo]").hasQtip()).toBeTruthy();
             });
 
             it("clears the has_error class on all fields without errors", function() {
                 expect(this.view.$("input[name=bar]")).not.toHaveClass("has_error");
                 expect(this.view.$("input[name=whiz]")).not.toHaveClass("has_error");
+                expect(this.view.$("input[name=bar]").hasQtip()).toBeFalsy();
+                expect(this.view.$("input[name=whiz]").hasQtip()).toBeFalsy();
             });
 
             it("does not re-render", function() {
@@ -177,7 +180,8 @@ describe("chorus.views", function() {
             it("clears error html that is not applicable", function() {
                 this.model.set({"foo": "bar"}, {silent: true});
                 this.model.save();
-                expect(this.view.$(".error_detail[id=foo]").length).toBe(0);
+                expect(this.view.$("input[id=foo]").hasQtip()).toBeFalsy();
+                expect($(".qtip").length).toBe(0);
             });
 
             describe("success after failure", function() {
@@ -186,7 +190,10 @@ describe("chorus.views", function() {
                 })
 
                 it("clears client-side errors", function() {
-                     expect(this.view.$(".error_detail")).not.toExist();
+                    expect(this.view.$(".has_error").length).toBe(0);
+                    expect(this.view.$("input[name=bar]").hasQtip()).toBeFalsy();
+                    expect(this.view.$("input[name=foo]").hasQtip()).toBeFalsy();
+                    expect(this.view.$("input[name=whiz]").hasQtip()).toBeFalsy();
                 })
             })
         })

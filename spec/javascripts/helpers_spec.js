@@ -18,6 +18,15 @@ describe("#hasQtip", function(){
         expect($('span', doc).hasQtip()).toBeTruthy();
     });
 
+    it("returns false for an object that was qtipped and then qtip('destroy')ed", function(){
+        var doc = $('<div> <span class="foo"/><span class="bar"/></div>');
+        var item1 = $('.foo', doc);
+        item1.qtip();
+        // qtip('destroy') clears the form, removeData clears the objects -- need to call both
+        item1.qtip('destroy');
+        item1.removeData("qtip");
+        expect(item1.hasQtip()).toBeFalsy();
+    });
 
     it("returns false for an empty jQuery collection", function(){
         expect($().hasQtip()).toBeFalsy();
