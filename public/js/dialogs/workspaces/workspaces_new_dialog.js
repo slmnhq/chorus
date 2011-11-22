@@ -3,17 +3,23 @@
         className : "workspaces_new",
         title : "Create a New Workspace",
 
+        persistent: true,
+        
         events : {
             "submit form.new_workspace" : "createWorkspace"
         },
 
-
+        postRender : function () {
+            console.log("rendered dialog", this);
+        },
+        
         makeModel : function() {
             this.model = this.model || new chorus.models.Workspace()
         },
 
         setup : function(){
             this.resource.bind("saved", this.workspaceSaved, this);
+            this.model.bind("saveFailed", showErrors, this);
         },
 
         createWorkspace : function createWorkspace(e){
@@ -32,4 +38,7 @@
             chorus.router.navigate("/workspaces/" + this.model.get("id"), true);
         }
     });
+    function showErrors(){
+        this.$(".errors").replaceWith(Handlebars.partials.errorDiv(this.context()));
+    }
 })(jQuery, chorus.dialogs);

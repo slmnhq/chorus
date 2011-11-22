@@ -11,9 +11,7 @@
 
         render: function render() {
             this.events = this.events || {};
-            if (!this.events["click button.cancel"]) {
-                this.events["click button.cancel"] = "closeDialog";
-            }
+            this.events["click button.cancel"] = this.events["click button.cancel"] || "closeDialog";
 
             this.header.html($("<h1/>").text(this.title))
             this.content.html(this.template(this.context()));
@@ -21,6 +19,7 @@
             $(this.el).
                 empty().
                 append(this.header).
+                append(Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", {}, Handlebars.helpers, Handlebars.partials)).
                 append(this.content).
                 addClass(this.className).
                 attr("title", this.options.title || this.title);
