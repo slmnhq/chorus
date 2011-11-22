@@ -63,12 +63,9 @@ describe("WorkspacesNewDialog", function() {
         context("when workspace creation fails", function() {
             beforeEach(function() {
                 spyOn(chorus.router, "navigate");
-                console.log("setting");
                 this.dialog.resource.set({serverErrors : [
                     { message: "Hi there" }
                 ]});
-                console.log(this.dialog.render);
-                console.log(this.dialog.render.callCount);
                 this.dialog.resource.trigger("saveFailed");
             });
 
