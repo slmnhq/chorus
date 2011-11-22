@@ -1,7 +1,7 @@
 (function($, ns) {
     ns.WorkfilesNew = chorus.dialogs.Base.extend({
         className : "workfiles_new",
-        title : "Create a New Workfile",
+        title : t("workfiles.dialog.title"),
 
         persistent: true,
 
