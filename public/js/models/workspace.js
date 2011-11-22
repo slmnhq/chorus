@@ -3,6 +3,12 @@
         urlTemplate : "workspace/{{id}}",
         showUrlTemplate : "workspaces/{{id}}",
 
+        performValidation : function(){
+            this.errors = {}
+            this.require("name")
+            return _(this.errors).isEmpty();
+        },
+
         customIconUrl: function(options) {
             options = (options || {});
             return "/edc/workspace/" + this.get("id") + "/image?size=" + (options.size || "original");
