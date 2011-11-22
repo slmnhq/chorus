@@ -3,6 +3,7 @@
         id : "dialog",
         header : $("<div id='dialog_header'/>"),
         content : $("<div id='dialog_content'/>"),
+        errors : $("<div class='errors'/>"),
 
         launchDialog : function() {
             this.render();
@@ -19,7 +20,7 @@
             $(this.el).
                 empty().
                 append(this.header).
-                append(Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", {}, Handlebars.helpers, Handlebars.partials)).
+                append(this.errors).
                 append(this.content).
                 addClass(this.className).
                 attr("title", this.options.title || this.title);

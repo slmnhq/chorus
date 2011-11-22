@@ -55,6 +55,7 @@
                 this.resource.bind("add", this.render);
                 this.resource.bind("validationFailed", this.showErrors, this);
                 this.resource.bind("validated", this.clearErrors, this);
+                this.resource.bind("saveFailed", this.showErrors, this);
             }
         },
 
@@ -89,6 +90,8 @@
                 input.after(errorHTML);
 
             })
+
+            this.$(".errors").replaceWith(Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context(), Handlebars.helpers, Handlebars.partials));
         },
 
         clearErrors : function() {

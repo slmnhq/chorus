@@ -19,7 +19,6 @@
 
         setup : function(){
             this.resource.bind("saved", this.workspaceSaved, this);
-            this.model.bind("saveFailed", showErrors, this);
         },
 
         createWorkspace : function createWorkspace(e){
@@ -38,7 +37,4 @@
             chorus.router.navigate("/workspaces/" + this.model.get("id"), true);
         }
     });
-    function showErrors(){
-        this.$(".errors").replaceWith(Handlebars.partials.errorDiv(this.context()));
-    }
 })(jQuery, chorus.dialogs);
