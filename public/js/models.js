@@ -68,25 +68,28 @@
 
             require : function(attr) {
                 if (!this.get(attr)) {
-                    this.errors[attr] = t("validation.required", attr);
+                    this.errors[attr] = t("validation.required", this._textForAttr(attr));
                 }
             },
 
-            requirePattern : function(attrname, regex) {
-                var attr = this.get(attrname);
-                if (!attr || !attr.match(regex)) {
-                    this.errors[attrname] = t("validation.required_pattern", attrname);
+            requirePattern : function(attr, regex) {
+                var value = this.get(attr);
+                if (!value || !value.match(regex)) {
+                    this.errors[attr] = t("validation.required_pattern", this._textForAttr(attr));
                 }
-
             },
 
             requireConfirmation : function(attr) {
-                var val = this.get(attr);
+                var value = this.get(attr);
                 var conf = this.get(attr + "Confirmation");
 
-                if (!val || !conf || val != conf) {
-                    this.errors[attr] = t("validation.confirmation", attr);
+                if (!value || !conf || value != conf) {
+                    this.errors[attr] = t("validation.confirmation", this._textForAttr(attr));
                 }
+            },
+
+            _textForAttr : function(attr){
+                return (this.attrToLabel && this.attrToLabel[attr]) ? t(this.attrToLabel[attr]) : attr;
             }
         })
     }

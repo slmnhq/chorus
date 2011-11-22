@@ -220,6 +220,24 @@ describe("chorus.models", function() {
                 this.model.require("foo");
                 expect(this.model.errors.foo).not.toBeDefined();
             })
+
+            it("contains the attr name", function(){
+                this.model.require("foo");
+                expect(this.model.errors.foo).toContain("foo");
+            });
+
+            context("model has attrToLabel set", function(){
+                beforeEach(function(){
+                    this.model.attrToLabel = {
+                        "foo" : "users.first_name"
+                    }
+                });
+
+                it("includes the translation in the error message", function(){
+                    this.model.require("foo");
+                    expect(this.model.errors.foo).toContain(t("users.first_name"));
+                });
+            });
         })
 
         describe("requirePattern", function() {
@@ -243,6 +261,24 @@ describe("chorus.models", function() {
                 this.model.requirePattern("foo", /bar/);
                 expect(this.model.errors.foo).not.toBeDefined();
             })
+
+            it("contains the attr name in the error", function(){
+                this.model.requirePattern("foo", /hello/);
+                expect(this.model.errors.foo).toContain("foo");
+            });
+
+            context("model has attrToLabel set", function(){
+                beforeEach(function(){
+                    this.model.attrToLabel = {
+                        "foo" : "users.first_name"
+                    }
+                });
+
+                it("includes the translation in the error message", function(){
+                    this.model.require("foo", /hello/);
+                    expect(this.model.errors.foo).toContain(t("users.first_name"));
+                });
+            });
         });
 
         describe("requireConfirmation", function() {
@@ -271,6 +307,26 @@ describe("chorus.models", function() {
                 this.model.set({ foo : "bar", fooConfirmation : "bar" });
                 this.model.requireConfirmation("foo");
                 expect(this.model.errors.foo).not.toBeDefined();
+            });
+
+            it("contains the attr name in the error", function(){
+                this.model.set({ foo : "bar", fooConfirmation : "baz" });
+                this.model.requireConfirmation("foo");
+                expect(this.model.errors.foo).toContain("foo");
+            });
+
+            context("model has attrToLabel set", function(){
+                beforeEach(function(){
+                    this.model.attrToLabel = {
+                        "foo" : "users.first_name"
+                    }
+                });
+
+                it("includes the translation in the error message", function(){
+                    this.model.set({ foo : "bar", fooConfirmation : "baz" });
+                    this.model.requireConfirmation("foo");
+                    expect(this.model.errors.foo).toContain(t("users.first_name"));
+                });
             });
         });
     });

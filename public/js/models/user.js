@@ -28,6 +28,17 @@
         imageUrl : function(options){
             options = (options || {});
             return "/edc/userimage/" + this.get("userName") + "?size=" + (options.size || "original");
+        },
+
+        attrToLabel : {
+            "emailAddress" : "users.email",
+            "firstName" : "users.first_name",
+            "lastName" : "users.last_name",
+            "userName" : "users.username",
+            "password" : "users.password",
+            "title" : "users.title",
+            "department" : "users.department",
+            "admin" : "users.administrator"
         }
     });
 })(chorus.models);
