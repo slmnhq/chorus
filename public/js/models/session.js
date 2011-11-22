@@ -24,6 +24,7 @@
             
             options.success = function(model, response, xhr) {
                 if (response.status !== "ok") {
+                    self.serverErrors = undefined;
                     self.trigger("needsLogin");
                 }
               if (success) success(model, resp);

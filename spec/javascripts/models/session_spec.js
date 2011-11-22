@@ -165,13 +165,17 @@ describe("chorus.models.Session", function() {
                 this.server.respondWith(
                     'GET',
                     '/edc/auth/checkLogin/?authid=1234',
-                    this.prepareResponse({ status :"fail"}));
+                    this.prepareResponse({ status :"fail", message : "no way"}));
 
                 this.server.respond();
             })
 
             it("triggers needsLogin", function() {
                 expect(this.needsLoginSpy).toHaveBeenCalled();
+            })
+
+            it("clears the session error messages", function() {
+                expect(this.model.serverErrors).toBeUndefined();
             })
         })
     })
