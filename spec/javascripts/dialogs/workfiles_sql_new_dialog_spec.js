@@ -1,7 +1,7 @@
-describe("WorkfilesNewDialog", function() {
+describe("WorkfilesSqlNewDialog", function() {
     beforeEach(function() {
-        this.dialog = new chorus.dialogs.WorkfilesNew({workspaceId : 4})
-        this.loadTemplate("workfiles_new")
+        this.dialog = new chorus.dialogs.WorkfilesSqlNew({workspaceId : 4})
+        this.loadTemplate("workfiles_sql_new")
     });
 
     it("does not re-render when the model changes", function() {

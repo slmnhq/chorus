@@ -1,7 +1,7 @@
 (function($, ns) {
-    ns.WorkfilesNew = chorus.dialogs.Base.extend({
-        className : "workfiles_new",
-        title : t("workfiles.dialog.title"),
+    ns.WorkfilesSqlNew = chorus.dialogs.Base.extend({
+        className : "workfiles_sql_new",
+        title : t("workfiles.sql_dialog.title"),
 
         persistent: true,
 
