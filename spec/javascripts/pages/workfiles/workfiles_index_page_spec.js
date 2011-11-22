@@ -23,7 +23,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             this.page.render();
         })
          it("should have a new workfile button", function(){
-            expect(this.page.$("button:contains('Create a Workfile')")).toExist();
+            expect(this.page.$("button:contains('Create SQL File')")).toExist();
          })
     });
 });
