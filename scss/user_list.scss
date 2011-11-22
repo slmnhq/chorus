@@ -13,6 +13,7 @@
     }
 
     a {
+        font-size: 18px;
         span {
             display: inline-block;
             @include ellipsis;
