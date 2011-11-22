@@ -94,6 +94,10 @@
                             target: "rightMiddle",
                             tooltip: "leftMiddle"
                         },
+                        adjust : {
+                            screen : true
+                        },
+                        type : 'fixed',
                         container: self.el
                     }
                 });
