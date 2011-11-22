@@ -1,5 +1,5 @@
 def field_errors
-   page.all(".error_detail")
+   page.all(".has_error")
 end
 
 def server_errors
