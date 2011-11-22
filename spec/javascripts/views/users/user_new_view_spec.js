@@ -8,6 +8,7 @@ describe("chorus.views.UserNewMain", function() {
         this.loadTemplate("main_content")
         this.loadTemplate("default_content_header")
         this.loadTemplate("plain_text")
+        this.loadTemplate("validating");
 
         var view = new chorus.views.UserNewMain()
         view.render()
@@ -18,7 +19,6 @@ describe("chorus.views.userNew", function() {
     beforeEach(function() {
         this.loadTemplate("user_new");
         this.loadTemplate("errors")
-
     })
 
 
@@ -91,10 +91,6 @@ describe("chorus.views.userNew", function() {
                                 {message : "Hi there"}
                             ];
                             this.view.model.trigger("saveFailed")
-                        });
-
-                        it("displays the error message", function() {
-                            expect(this.view.$(".errors").text()).toContain("Hi there")
                         });
 
                         it("doesn't redirect", function() {

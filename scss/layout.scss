@@ -32,7 +32,6 @@
 }
 
 #content_details {
-    padding: 11px $padding-x;
     font-size: 13px;
     border-bottom: 1px solid $pagination-border-color;
 
@@ -40,6 +39,10 @@
         padding: 0;
         height: 0;
         border: none;
+    }
+
+    .plain_text, .count {
+        padding: 11px $padding-x;
     }
 }
 
