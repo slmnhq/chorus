@@ -43,12 +43,13 @@
     }
 
     // set up default qTip style
+    var errorColor = "#B61B1D";
     $.fn.qtip.styles.chorus = {
-        background: "red",
+        background: errorColor,
         color: "white",
         tip: {
             corner :"leftMiddle",
-            color: "red"
+            color: errorColor
         },
         border: {
             width: 0

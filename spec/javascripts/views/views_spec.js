@@ -159,8 +159,12 @@ describe("chorus.views", function() {
                 expect(this.view.render.callCount).toBe(1);
             });
 
-            it("injects error html", function() {
-               expect(this.view.$("[.data-error][id=foo]")[0].innerHTML).toBe(t("validation.required", 'foo'));
+            it("adds tooltips to the has_error fields", function() {
+                expect(this.view.$(".has_error").hasQtip()).toBeTruthy();
+            });
+
+            it("does not add tooltips to the other input fields", function(){
+                expect(this.view.$("input[name=bar]").hasQtip()).toBeFalsy();
             });
 
             it("clears error html that is not applicable", function() {
