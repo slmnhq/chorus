@@ -53,6 +53,28 @@ describe("WorkfilesNewDialog", function() {
           expect(this.server.requests[0].url).toBe("/edc/workspace/4/workfile")
         })
 
+        context("when save is successful", function(){
+          beforeEach(function() {
+            spyOn(chorus.router, "navigate");
+            spyOnEvent($(document), "close.facebox");
+            this.dialog.resource.set({ id: "10108" }, { silent: true })
+            this.dialog.resource.trigger("saved");
+          })
+
+          it("redirects to the new workspace show page", function() {
+            expect(chorus.router.navigate).toHaveBeenCalledWith("/workspace/4/workfile/10108", true);
+          });
+
+          it("dismisses the dialog", function() {
+            expect("close.facebox").toHaveBeenTriggeredOn($(document))
+          })
+        })
+
+        context("when save fails", function(){
+          beforeEach(function(){
+            this.dialog.model.trigger("saveFailed")
+          })
+        })
       })
     })
 })

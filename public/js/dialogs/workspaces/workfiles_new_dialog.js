@@ -29,7 +29,7 @@
 
         saved : function () {
             $(document).trigger("close.facebox");
-            chorus.router.navigate("/workfiles/" + this.model.get("id"), true);
+            chorus.router.navigate("/workspace/"+this.options.workspaceId+"/workfile/" + this.model.get("id"), true);
         }
     });
 })(jQuery, chorus.dialogs);
