@@ -14,14 +14,14 @@
     }
 
     div.text {
+        margin-left: $padding-x;
         display: inline-block;
+        vertical-align: top;
+        line-height: 19px;
     }
 
     a.name {
         font-size: 18px;
-    }
-    .summary {
-        margin-bottom: 10px;
     }
     .owner {
         font-size: 13px;
