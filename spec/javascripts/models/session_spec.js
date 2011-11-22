@@ -213,4 +213,27 @@ describe("chorus.models.Session", function() {
             })
         })
     })
+
+    describe("#performValidation", function() {
+        beforeEach(function() {
+            this.model = new models.Session();
+            spyOn(this.model, "require").andCallThrough();
+        });
+
+        it("should return a truthy value for a valid session", function() {
+            this.model.set({ userName : "barn", password : "door" });
+            expect(this.model.performValidation()).toBeTruthy();
+        });
+
+        it("requires userName", function() {
+            this.model.performValidation();
+            expect(this.model.require).toHaveBeenCalledWith("userName");
+        });
+
+        it("requires password", function() {
+            this.model.performValidation();
+            expect(this.model.require).toHaveBeenCalledWith("password");
+        });
+    });
+
 });

@@ -48,6 +48,13 @@
             } else {
                 this.trigger("needsLogin")
             }
+        },
+
+        performValidation : function() {
+            this.errors = {}
+            this.require("userName")
+            this.require("password")
+            return _(this.errors).isEmpty();
         }
     });
 

@@ -10,7 +10,6 @@
 
         setup : function(){
             this.model.bind("saved", userSuccessfullySaved, this);
-            this.model.bind("saveFailed", showErrors, this);
         },
 
         makeModel : function() {
@@ -36,9 +35,4 @@
     function userSuccessfullySaved() {
         chorus.router.navigate("/users", true);
     }
-
-    function showErrors(){
-        this.$(".errors").replaceWith(Handlebars.partials.errorDiv(this.context()));
-    }
-
 })(jQuery, chorus.views);

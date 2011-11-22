@@ -11,6 +11,8 @@
 
         .sub_nav_nav {
             margin-bottom: -1px;
+            overflow: hidden;
+            padding-top: 3px;
 
             li {
                 display: inline;
@@ -21,7 +23,7 @@
                 border-bottom: none;
                 @include border-top-left-radius(3px);
                 @include border-top-right-radius(3px);
-                padding: 8px 20px;
+                padding: 8px 30px;
 
                 &:first-child {
                     border-right: 1px solid $guts-border-color;
@@ -29,6 +31,9 @@
 
                 &.selected {
                     background: white;
+                    -moz-box-shadow    : 1px 2px 5px #999;
+                    -webkit-box-shadow : 1px 2px 5px #999;
+                    box-shadow         : 1px 2px 5px #999;
                 }
             }
 

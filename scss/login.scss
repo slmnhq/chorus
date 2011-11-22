@@ -8,7 +8,6 @@ div.login {
     .card {
         @include borderbox;
         background-color: $card-background;
-        padding: 20px;
         border: 2px solid $card-border-color;
         margin: auto;
         width: $login-width;
@@ -22,6 +21,7 @@ div.login {
         }
 
         form {
+            padding: 11px 15px 9px 20px;
             .content {
                 margin: auto;
                 text-align: left;
@@ -31,10 +31,10 @@ div.login {
                     margin-bottom: 12px;
                 }
             }
-        }
 
-        .errors li {
-            margin-bottom: 10px;
+            .controls {
+                @include after-clearfix;
+            }
         }
     }
 

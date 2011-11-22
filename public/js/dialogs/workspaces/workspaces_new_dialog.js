@@ -3,10 +3,11 @@
         className : "workspaces_new",
         title : "Create a New Workspace",
 
+        persistent: true,
+
         events : {
             "submit form.new_workspace" : "createWorkspace"
         },
-
 
         makeModel : function() {
             this.model = this.model || new chorus.models.Workspace()

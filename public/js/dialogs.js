@@ -3,6 +3,7 @@
         id : "dialog",
         header : $("<div id='dialog_header'/>"),
         content : $("<div id='dialog_content'/>"),
+        errors : $("<div class='errors'/>"),
 
         launchDialog : function() {
             this.render();
@@ -11,9 +12,7 @@
 
         render: function render() {
             this.events = this.events || {};
-            if (!this.events["click button.cancel"]) {
-                this.events["click button.cancel"] = "closeDialog";
-            }
+            this.events["click button.cancel"] = this.events["click button.cancel"] || "closeDialog";
 
             this.header.html($("<h1/>").text(this.title))
             this.content.html(this.template(this.context()));
@@ -21,6 +20,7 @@
             $(this.el).
                 empty().
                 append(this.header).
+                append(this.errors).
                 append(this.content).
                 addClass(this.className).
                 attr("title", this.options.title || this.title);

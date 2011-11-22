@@ -6,7 +6,8 @@
 }
 
 #guts {
-    padding: 0 7px 7px 7px;
+    padding: $guts-padding;
+    padding-top: 0;
     @include after-clearfix;
 }
 
@@ -14,7 +15,7 @@
     background: white;
     height: 36px;
     border-bottom: 1px solid $subheader-border-color;
-    padding: 12px;
+    padding: 12px $padding-x;
     @include border-top-radius(3px);
 
     h1 {
@@ -31,8 +32,7 @@
 }
 
 #content_details {
-    padding: 11px 0px 15px 10px;
-    height: 6px;
+    padding: 11px $padding-x;
     font-size: 13px;
     border-bottom: 1px solid $pagination-border-color;
 
