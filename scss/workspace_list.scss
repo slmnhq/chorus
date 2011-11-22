@@ -2,7 +2,7 @@
 
 .workspace_list {
     li {
-        padding: 8px $padding-x;
+        padding: $padding-y $padding-x;
     }
 
     li.archived .name {

@@ -1,31 +1,26 @@
 @import "_common.scss";
 @import "compass/css3/gradient";
 
-$breadcrumb-margin: 8px;
-
 .breadcrumbs {
-    height: 26px;
     @include linear-gradient(color-stops($body-glow-color, $body-background-color));
 
     ol {
-        margin-left: 10px;
+        padding: $padding-y ($padding-x + $guts-padding + 1px);
     }
 
     li {
         display: inline-block;
         font-size: 13px;
-        line-height: 26px;
-        vertical-align: middle;
-        margin-left : $breadcrumb-margin;
     }
 
     a {
         color : $text-color;
         border-bottom : 1px dotted $text-color;
+        margin-right : $padding-x;
     }
 
     .spacer {
-        margin-left : $breadcrumb-margin;
+        margin-right : $padding-x;
         background-image : url("/images/breadcrumb-separator.png");
         background-repeat: no-repeat;
         width: 3px;
