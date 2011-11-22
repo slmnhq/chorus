@@ -3,14 +3,16 @@
 @import "layout.scss";
 
 $header-padding : 13px;
+$header-item-spacing : 2*$padding-left;
+
 .header {
-    height: 49px;
+    // height: 49px;
     @include linear-gradient(color-stops(#eeeeee, #cccccc));
     vertical-align : middle;
     border-bottom: 1px solid $header-border-color;
-    
+	padding: $header-padding ($guts-padding + $padding-left + 1px);
+
     > div {
-        margin: 4px 5px;
         vertical-align: middle;
         line-height: 30px;
         > div {
@@ -41,26 +43,27 @@ $header-padding : 13px;
                 margin-left: 5px;
             }
         }
-        padding-right : 15px;
+        padding-right : $header-item-spacing;
         border-right: 1px solid $header-border-color;
     }
 
     .messages {
         font-size: 11px;
         font-weight: 600;
-        padding-left: 10px;
+        padding-left: $header-item-spacing;
+
         a {
             background: red;
             color: white;
             padding: 5px;
-            margin-left: 10px;
+            margin-left: $padding-left;
         }
     }
 
     .search {
         overflow: hidden;
         padding-top: 4px;
-        padding-left: 5px;
+        padding-left: $header-item-spacing;
         margin-right: 0px;
         input {
             padding: 4px;
@@ -69,9 +72,6 @@ $header-padding : 13px;
 
     .username {
         border-right: 1px solid $header-border-color;
-        font-size: 11px;
-        text-align: right;
-        padding-right: 8px;
 
         a {
             span {
@@ -83,6 +83,10 @@ $header-padding : 13px;
     }
 
     .username, .account {
+        padding: 0 $header-item-spacing;
+        font-size: 11px;
+        text-align: right;
+
         a {
             color: inherit;
             img {
@@ -104,12 +108,5 @@ $header-padding : 13px;
             right: 17px;
             left: auto;
         }
-    }
-
-    .account {
-        font-size: 11px;
-        text-align: right;
-        padding-right: 15px;
-        padding-left: 10px;
     }
 }
