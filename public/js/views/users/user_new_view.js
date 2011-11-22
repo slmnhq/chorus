@@ -22,7 +22,7 @@
             var updates = {};
             _.each(this.$("input"), function(i){
                 var input = $(i);
-                updates[input.attr("name")] = input.val();
+                updates[input.attr("name")] = input.val().trim();
             });
 
             updates.admin = this.$("input#admin-checkbox").prop("checked") || false;

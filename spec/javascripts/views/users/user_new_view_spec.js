@@ -122,6 +122,17 @@ describe("chorus.views.userNew", function() {
                     });
                 });
 
+                context("the form has extra whitespace around an input", function(){
+                    beforeEach(function(){
+                        this.view.$("input[name=firstName]").val("     spaces     ");
+                        this.view.$("form").submit();
+                    });
+
+                    it("trims the whitespace before submission", function(){
+                        expect(this.user.attributes["firstName"]).toBe("spaces");
+                    });
+                });
+
             });
         });
 
