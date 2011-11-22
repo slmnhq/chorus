@@ -15,7 +15,7 @@ describe "creating a user" do
     # user is a duplicate
     create_valid_user("edcadmin")
     field_errors.should be_empty
-    server_errors.should_not be_empty
+    wait_until { !server_errors.empty? }
 
     #user should be valid
     create_valid_user("partyman#{Time.now.to_i}")
