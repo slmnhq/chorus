@@ -13,6 +13,19 @@
             position: absolute;
             bottom: 0;
             right: 0;
+            font-size: 12px;
+            font-weight: 600;
+            color: $dark-text-color;
+
+            a {
+                span {
+                    border-bottom: 1px dotted $link-color;
+                }
+
+                img {
+                   margin: 2px;
+                }
+            }
         }
 
         .menu.popup_filter {
@@ -23,20 +36,26 @@
                 left: 120px;
             }
 
-            .check {
-                background-repeat: no-repeat;
-                background-image: url("/images/check.png");
-                display: inline-block;
-                width: 10px;
-                height: 10px;
-                margin-right: 8px;
-                position: relative;
-                top: 1px;
+            li {
+                margin: 4px;
 
-                &.hidden {
-                    visibility: hidden;
+                .check {
+                    background-repeat: no-repeat;
+                    background-image: url("/images/check.png");
+                    display: inline-block;
+                    width: 10px;
+                    height: 10px;
+                    margin-right: 8px;
+                    position: relative;
+                    top: 1px;
+
+                    &.hidden {
+                        visibility: hidden;
+                    }
                 }
             }
+
+
         }
     }
 }
