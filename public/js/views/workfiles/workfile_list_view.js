@@ -2,6 +2,7 @@
     ns.WorkfileList = chorus.views.Base.extend({
         tagName : "ul",
         className : "workfile_list",
+        additionalClass : "list",
         events : {
             "click li" : "selectItem"
         },

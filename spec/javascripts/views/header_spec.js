@@ -14,7 +14,7 @@ describe("chorus.views.Header", function() {
 
     it("should have a search field", function() {
         this.view.render();
-        expect(this.view.$("input[type=text].search")).toExist();
+        expect(this.view.$(".search input[type=text]")).toExist();
     });
 
     it("should have a link to the dashboard", function() {

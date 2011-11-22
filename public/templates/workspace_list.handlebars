@@ -1,8 +1,14 @@
 {{#each models}}
     <li data-id="{{id}}" {{#unless active}}class="archived"{{/unless}}>
-        <img src="{{imageUrl}}"/>
+        <a class="image" href="{{showUrl}}">
+            <img src="{{imageUrl}}"/>
+        </a>
         <div class="text">
-            <a class="name" href="{{showUrl}}">{{name}}</a>
+            <div class="main">
+                <a class="name" href="{{showUrl}}">
+                    <span>{{name}}</span>
+                </a>
+            </div>
             <div class="summary">
                 {{summary}}
             </div>

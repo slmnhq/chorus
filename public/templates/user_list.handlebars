@@ -1,11 +1,18 @@
 {{#each models}}
     <li data-userName="{{userName}}">
-        <a href="{{showUrl}}" class="fullname">
-          <img src="{{imageUrl}}" class="profile"/>
-          <span>{{fullName}}</span>
+        <a class="image" href="{{showUrl}}">
+            <img src="{{imageUrl}}" class="profile"/>
         </a>
-        {{#if admin}}
-            <span class="administrator tag">{{t "users.administrator"}}</span>
-        {{/if}}
+        <div class="text">
+            <div class="main">
+                <a class="name" href="{{showUrl}}">
+                    <span>{{fullName}}</span>
+                </a>
+                {{#if admin}}
+                    <span class="administrator tag">{{t "users.administrator"}}</span>
+                {{/if}}
+            </div>
+            <div class="details"/>
+        </div>
     </li>
 {{/each}}

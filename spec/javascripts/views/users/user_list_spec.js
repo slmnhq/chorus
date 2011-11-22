@@ -67,8 +67,8 @@ describe("chorus.views.UserList", function() {
             });
 
             it("displays a name for each user", function() {
-                expect(this.view.$("li:nth-child(1) .fullname").text().trim()).toBe("EDC Admin");
-                expect(this.view.$("li:nth-child(2) .fullname").text().trim()).toBe("Mark Rushakoff");
+                expect(this.view.$("li:nth-child(1) .name").text().trim()).toBe("EDC Admin");
+                expect(this.view.$("li:nth-child(2) .name").text().trim()).toBe("Mark Rushakoff");
             });
 
             it("links the user's name to the user show page", function(){

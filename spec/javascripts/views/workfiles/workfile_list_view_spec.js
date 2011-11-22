@@ -34,8 +34,8 @@ describe("WorkfileListView", function(){
             });
 
             it("includes the filename as a link", function(){
-                expect($(this.view.$("li a")[0]).text()).toBe(this.model1.get("fileName"));
-                expect($(this.view.$("li a")[1]).text()).toBe(this.model2.get("fileName"));
+                expect($(this.view.$("li a.name")[0]).text().trim()).toBe(this.model1.get("fileName"));
+                expect($(this.view.$("li a.name")[1]).text().trim()).toBe(this.model2.get("fileName"));
             });
 
             it("includes the correct workspace file icon", function(){
@@ -44,8 +44,8 @@ describe("WorkfileListView", function(){
             });
 
             it("includes the description", function(){
-                expect($(this.view.$("li p")[0]).text()).toBe(this.model1.get("description"));
-                expect($(this.view.$("li p")[1]).text()).toBe(this.model2.get("description"));
+                expect($(this.view.$("li .summary")[0]).text().trim()).toBe(this.model1.get("description"));
+                expect($(this.view.$("li .summary")[1]).text().trim()).toBe(this.model2.get("description"));
             });
 
             context("clicking on the first item", function(){

@@ -43,7 +43,7 @@ describe("chorus.views.WorkspaceList", function() {
         });
 
         it("links the workspace name to the show url", function(){
-            expect($("a", this.activeEl).text()).toBe(this.activeWorkspace.get("name"));
+            expect($("a", this.activeEl).text().trim()).toBe(this.activeWorkspace.get("name"));
             expect($("a", this.activeEl).attr("href")).toBe(this.activeWorkspace.showUrl());
         });
 

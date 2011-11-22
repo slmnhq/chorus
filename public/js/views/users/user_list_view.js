@@ -2,6 +2,7 @@
     ns.UserList = chorus.views.Base.extend({
         tagName : "ul",
         className : "user_list",
+        additionalClass : "list",
 
         collectionModelContext : function(model) {
             return {

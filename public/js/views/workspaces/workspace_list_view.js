@@ -2,6 +2,7 @@
     ns.WorkspaceList = chorus.views.Base.extend({
         className : "workspace_list",
         tagName : "ul",
+        additionalClass : "list",
 
         collectionModelContext: function(model) {
             return {

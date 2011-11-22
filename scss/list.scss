@@ -1,25 +1,62 @@
 @import "_common.scss";
 
-.main_content_list li, .sub_nav_content_list li {
-    padding: $padding-y $padding-x;
-    padding-bottom: 0;
-    border-bottom: 1px dotted $subheader-border-color;
+.list {
+    li {
+        padding: $padding-y 0;
+        border-bottom: 1px dotted $subheader-border-color;
+        margin: 0 $padding-x;
+        position: relative;
+        &.selected {
+            background: white;
+        }
 
-    &:last-child {
-        border-bottom: none;
-    }
+        &:last-child {
+            border-bottom: none;
+        }
 
-    :nth-child(2) {
-        padding-left: 10px;
-    }
+        div.text {
+            display: inline-block;
+            vertical-align: top;
+            line-height: 19px;
+            position: absolute;
+            right: $padding-x;
+            left: 60px;
+            top: $padding-y;
+            bottom: $padding-y;
+        }
 
-    * {
-        vertical-align: top
-    }
+        div.details {
+            font-size: 13px;
+            position: absolute;
+            bottom: 0;
+        }
 
-    .tag {
-        float: right;
-        padding: 2px 5px;
-        font-size: 13px;
+        div.summary {
+            color: $weak-text-color;
+            font-size: 14px;
+        }
+
+        a.name span {
+            max-width: none;
+        }
+
+        * {
+            vertical-align: top
+        }
+
+        a.name {
+            font-size: 18px;
+            span {
+                display: inline-block;
+                @include ellipsis;
+                max-width: 68%;
+            }
+        }
+
+        .tag {
+            float: right;
+            padding: 2px 5px;
+            font-size: 13px;
+        }
     }
 }
