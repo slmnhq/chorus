@@ -1,10 +1,15 @@
 describe("chorus.models.Session", function() {
-
-
     var models = chorus.models;
     beforeEach(function() {
+        this.savedAuthCookie = $.cookie("authid")
+        this.savedUsernameCookie = $.cookie("userName");
         fixtures.model = 'Session';
     });
+
+    afterEach(function() {
+        $.cookie("authid", this.savedAuthCookie);
+        $.cookie("userName", this.savedUsernameCookie);
+    })
 
     describe("#save", function() {
         beforeEach(function() {
