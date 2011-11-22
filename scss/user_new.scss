@@ -4,11 +4,14 @@
     padding: $padding-x;
 
     form {
+        position: relative;
         margin-bottom : 15px;
     }
+
     .edit_photo {
         width: 180px;
         float: left;
+
         img {
             padding : 5px;
         }

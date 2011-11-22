@@ -62,7 +62,6 @@ describe("chorus.models.User", function() {
             spyOn(this.model, "require").andCallThrough();
             spyOn(this.model, "requirePattern").andCallThrough();
             spyOn(this.model, "requireConfirmation").andCallThrough();
-            spyOn(this.model, "setMaxLength").andCallThrough();
         });
 
         it("should return a truthy value for a valid user", function() {
@@ -76,14 +75,6 @@ describe("chorus.models.User", function() {
                 this.model.performValidation();
                 expect(this.model.require).toHaveBeenCalledWith(attr);
             });
-        });
-
-        _.each(["firstName", "lastName", "userName", "emailAddress", "password",
-            "passwordConfirmation", "title", "department"], function(attr) {
-           it("sets the max length for " + attr, function() {
-               this.model.performValidation();
-               expect(this.model.setMaxLength).toHaveBeenCalledWith(attr, 255);
-           });
         });
 
         it("requires emailAddress", function() {

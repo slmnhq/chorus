@@ -17,6 +17,8 @@ describe("chorus.views.UserNewMain", function() {
 describe("chorus.views.userNew", function() {
     beforeEach(function() {
         this.loadTemplate("user_new");
+        this.loadTemplate("errors")
+
     })
 
 
@@ -88,7 +90,7 @@ describe("chorus.views.userNew", function() {
                             this.view.model.serverErrors = [
                                 {message : "Hi there"}
                             ];
-                            this.view.render();
+                            this.view.model.trigger("saveFailed")
                         });
 
                         it("displays the error message", function() {
@@ -98,6 +100,10 @@ describe("chorus.views.userNew", function() {
                         it("doesn't redirect", function() {
                             expect(this.view.$("form")).toExist();
                         })
+
+                        it("retains the data already entered", function() {
+                            expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
+                        });
                     })
                 });
 

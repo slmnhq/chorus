@@ -1,0 +1,13 @@
+@import "_common.scss";
+
+.errors {
+    ul {
+        background-color: $error-background-color;
+        
+        li {
+            padding: 10px 10px 10px 16px;
+            color: $error-color;
+            font-size: 14px;
+        }
+    }
+}

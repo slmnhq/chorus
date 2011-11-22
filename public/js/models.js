@@ -50,11 +50,13 @@
                 options || (options = {});
                 var success = options.success;
                 options.success = function(model, resp, xhr) {
-                    if (!model.serverErrors) model.trigger('saved', model, resp, xhr);
+                    var savedEvent = model.serverErrors ? "saveFailed" : "saved"
+                    model.trigger(savedEvent, model, resp, xhr);
                     if (success) success(model, resp, xhr);
                 };
                 this.serverErrors = undefined;
                 if (this.performValidation(this.attributes)) {
+                    this.trigger("validated");
                     return Backbone.Model.prototype.save.call(this, attrs, options);
                 } else {
                     this.trigger("validationFailed");
@@ -84,13 +86,6 @@
 
                 if (!val || !conf || val != conf) {
                     this.errors[attr] = t("validation.confirmation", attr);
-                }
-            },
-
-            setMaxLength : function(attrname, size) {
-                var attr = this.get(attrname);
-                if (attr && attr.length > size) {
-                    this.errors[attrname] = t("validation.max_length", attrname);
                 }
             }
         })

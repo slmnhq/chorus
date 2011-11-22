@@ -54,6 +54,7 @@
                 this.resource.bind("reset", this.render);
                 this.resource.bind("add", this.render);
                 this.resource.bind("validationFailed", this.showErrors, this);
+                this.resource.bind("validated", this.clearErrors, this);
             }
         },
 
@@ -79,16 +80,20 @@
         showErrors : function() {
             var self = this;
 
-            self.$(".has_error").removeClass("has_error");
-            self.$(".data-error").remove();
+            this.clearErrors();
 
             _.each(this.resource.errors, function(val, key) {
                 var input = self.$("form input[name=" + key + "], form textarea[name=" + name + "]");
                 input.addClass("has_error");
-                errorHTML = "<span class=data-error id="+key+">"+ val + "</span>";
+                errorHTML = "<span class='error_detail' id="+key+">"+ val + "</span>";
                 input.after(errorHTML);
 
             })
+        },
+
+        clearErrors : function() {
+            this.$(".has_error").removeClass("has_error");
+            this.$(".error_detail").remove();
         }
     }),
 

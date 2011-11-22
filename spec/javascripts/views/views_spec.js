@@ -31,13 +31,13 @@ describe("chorus.views", function() {
             });
 
             describe("when an additionalContext is defined", function() {
-                beforeEach(function(){
-                    this.view.additionalContext = function(){
+                beforeEach(function() {
+                    this.view.additionalContext = function() {
                         return {one: 1};
                     };
                 });
 
-                it("still contains the attributes of the model", function(){
+                it("still contains the attributes of the model", function() {
                     expect(this.view.context().bar).toBe("foo");
                 });
 
@@ -48,9 +48,9 @@ describe("chorus.views", function() {
         });
 
         describe("when an additionalContext is defined", function() {
-            beforeEach(function(){
+            beforeEach(function() {
                 this.view = new chorus.views.Base();
-                spyOn(this.view, "additionalContext").andCallFake(function(){
+                spyOn(this.view, "additionalContext").andCallFake(function() {
                     return {one: 1};
                 });
             });
@@ -96,8 +96,8 @@ describe("chorus.views", function() {
             });
 
             describe("when an additionalContext is defined", function() {
-                beforeEach(function(){
-                    spyOn(this.view, "additionalContext").andCallFake(function(){
+                beforeEach(function() {
+                    spyOn(this.view, "additionalContext").andCallFake(function() {
                         return {one: 1};
                     });
                 });
@@ -128,21 +128,28 @@ describe("chorus.views", function() {
             });
         });
 
-        describe("validation failures", function() {
+    });
+
+    describe("validation", function() {
+        beforeEach(function() {
+            this.model = new chorus.models.Base();
+            this.view = new chorus.views.Base({ model : this.model });
+            this.view.template = function() {
+                return "<form><input name='foo'/><input name='bar'/><input name='whiz' class='has_error'/></form>";
+            };
+
+            spyOn(Backbone.Model.prototype, "save");
+            spyOn(this.view, "render").andCallThrough();
+            this.view.render();
+        });
+
+
+        describe("failure", function() {
             beforeEach(function() {
-                this.model = new chorus.models.Base();
                 this.model.performValidation = function() {
                     this.errors = {};
                     this.require("foo");
                 };
-
-                this.view = new chorus.views.Base({ model : this.model });
-                this.view.template = function() {
-                    return "<form><input name='foo'/><input name='bar'/><input name='whiz' class='has_error'/></form>";
-                };
-
-                spyOn(this.view, "render").andCallThrough();
-                this.view.render();
                 this.model.save();
             });
 
@@ -160,16 +167,28 @@ describe("chorus.views", function() {
             });
 
             it("injects error html", function() {
-               expect(this.view.$("[.data-error][id=foo]")[0].innerHTML).toBe(t("validation.required", 'foo'));
+                expect(this.view.$(".error_detail[id=foo]")[0].innerHTML).toBe(t("validation.required", 'foo'));
             });
 
             it("clears error html that is not applicable", function() {
                 this.model.set({"foo": "bar"}, {silent: true});
                 this.model.save();
-                expect(this.view.$("[.data-error][id=foo]").length).toBe(0);
+                expect(this.view.$(".error_detail[id=foo]").length).toBe(0);
             });
+
+            describe("success after failure", function() {
+                beforeEach(function() {
+                    this.model.trigger("validated");
+                })
+
+                it("clears client-side errors", function() {
+                     expect(this.view.$(".error_detail")).not.toExist();
+                })
+            })
+
         })
-    });
+    })
+
 
     describe("MainContentView", function() {
         beforeEach(function() {

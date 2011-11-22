@@ -25,10 +25,19 @@ describe("chorus.models", function() {
         describe("#save", function() {
             describe("with valid model data", function () {
                 beforeEach(function() {
+                    this.validatedSpy = jasmine.createSpy();
+                    this.model.bind("validated", this.validatedSpy);
                     this.model.save();
                     this.savedSpy = jasmine.createSpy();
+                    this.saveFailedSpy = jasmine.createSpy();
                     this.model.bind("saved", this.savedSpy);
+                    this.model.bind("saveFailed", this.saveFailedSpy);
                 });
+
+                it("triggers the validated event", function() {
+                    expect(this.validatedSpy).toHaveBeenCalled();
+                })
+
                 describe("when the request succeeds", function() {
                     beforeEach(function() {                
                          this.response = { status: "ok", resource : [
@@ -65,6 +74,10 @@ describe("chorus.models", function() {
     
                     it("returns the error information", function() {
                         expect(this.model.serverErrors).toEqual(this.response.message);
+                    })
+
+                    it("triggers a saveFailed event", function() {
+                        expect(this.saveFailedSpy).toHaveBeenCalled();
                     })
                 });
 
@@ -260,29 +273,6 @@ describe("chorus.models", function() {
                 expect(this.model.errors.foo).not.toBeDefined();
             });
         });
-        describe("setMaxLength", function() {
-            beforeEach(function() {
-                this.model.errors = {};
-            });
-
-            it("sets an error if the attribute is too long", function () {
-                this.model.set({foo : "barbaz"});
-                this.model.setMaxLength("foo", 4);
-                expect(this.model.errors.foo).toBeDefined();
-            });
-
-            it("does not set an error if the attribute is missing", function() {
-                this.model.unset("foo");
-                this.model.setMaxLength("foo", 4);
-                expect(this.model.errors.foo).not.toBeDefined();
-            });
-
-            it("does not set an error otherwise", function() {
-                this.model.set({ foo : "bar"});
-                this.model.setMaxLength("foo", 4);
-                expect(this.model.errors.foo).not.toBeDefined();
-            });
-        })
     });
 
     describe("Collection", function() {
