@@ -6,11 +6,11 @@
         persistent: true,
 
         events : {
-            "submit" : "create"
+            "submit form" : "create"
         },
 
         makeModel : function() {
-            this.model = this.model || new chorus.models.Workfile({workspaceId : 4})
+            this.model = this.model || new chorus.models.Workfile({workspaceId : this.options.workspaceId})
         },
 
         setup : function(){
@@ -21,11 +21,10 @@
             e.preventDefault();
 
             this.resource.set({
-                name : this.$("input[name=name]").val(),
-                type : "sql"
+                fileName : this.$("input[name=fileName]").val() + ".sql",
             })
 
-            this.resource.save();
+            this.resource.save({source : "empty"},{url : $(e.target).attr("action")});
         },
 
         saved : function () {

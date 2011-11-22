@@ -23,7 +23,9 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             this.page.render();
         })
          it("should have a new workfile button", function(){
-            expect(this.page.$("button:contains('Create SQL File')")).toExist();
+            var button = this.page.$("button:contains('Create SQL File')")
+            expect(button).toExist();
+            expect(button.data("workspaceId")).toBe(4);
          })
     });
 });

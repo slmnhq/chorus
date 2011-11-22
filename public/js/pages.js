@@ -38,7 +38,8 @@
 
         createDialog : function(e) {
             var button = $(e.target);
-            chorus.dialog = new chorus.dialogs[button.data("dialog")]();
+            var workspaceId = button.data("workspace-id");
+            chorus.dialog = new chorus.dialogs[button.data("dialog")]({workspaceId : workspaceId});
             chorus.dialog.launchDialog();
         }
     })
