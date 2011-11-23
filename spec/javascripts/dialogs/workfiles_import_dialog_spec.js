@@ -16,17 +16,76 @@ describe("WorkfilesImportDialog", function() {
         it("has the right action url", function() {
             expect(this.dialog.$("form").attr("action")).toBe("/edc/workspace/4/workfile");
         });
+
+        it("disables the upload button", function() {
+                expect(this.dialog.$("button.submit").attr("disabled")).toBe("disabled");
+        });
+
+        context("clicking on the cancel button", function(){
+            it("closes the dialog", function(){
+                spyOn(this.dialog, "closeDialog");
+                this.dialog.$("button.cancel").click();
+                expect(this.dialog.closeDialog).toHaveBeenCalled();
+            });
+        });
     });
 
-    describe("submit", function(){
-      beforeEach(function() {
-        this.dialog.render()
-      })
+    context("when a file has been chosen", function() {
+        beforeEach(function() {
+            this.dialog.render();
+            this.fileList = [{fileName: 'foo.txt'}];
+            this.dialog.$("input[type=file]").fileupload('add', {files: this.fileList});
+        });
 
-      context("with invalid form values", function(){
-      })
+        it("disables the upload button", function() {
+            expect(this.dialog.$("button.submit").attr("disabled")).toBeUndefined();
+        });
 
-      context("with valid form values", function(){
-      })
-    })
+        it("displays the chosen filename", function() {
+            expect(this.dialog.$("span.fileName").text()).toBe("foo.txt");
+        });
+
+        it("displays the appropriate file icon", function() {
+            expect(this.dialog.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("txt"));
+        });
+
+        context("when the submit is clicked", function() {
+            beforeEach(function() {
+                spyOn(this.dialog.uploadObj, "submit").andCallThrough();
+                this.dialog.$("button.submit").click();
+            });
+
+            it("uploads the specified file", function() {
+                expect(this.dialog.uploadObj.submit).toHaveBeenCalled();
+                expect(this.server.requests[1].method).toBe("POST");
+                expect(this.server.requests[1].url).toMatch(/\/edc\/workspace\/4\/workfile$/);
+            });
+
+            it("displays a spinner on the upload button", function() {
+
+            });
+
+            it("disables the upload button", function() {
+                expect(this.dialog.$("button.submit").attr("disabled")).toBe("disabled");
+            });
+
+            context("when the upload completes", function(){
+                beforeEach(function(){
+                    spyOn(this.dialog, "closeDialog");
+                    spyOn(chorus.router, "navigate");
+                    // calls any 'done' callbacks
+                    this.server.respondWith("OK");
+                    this.server.respond();
+                });
+
+                it("closes the dialog", function(){
+                    expect(this.dialog.closeDialog).toHaveBeenCalled();
+                });
+
+                it("navigates to the workfile index", function(){
+                    expect(chorus.router.navigate).toHaveBeenCalledWith("/workspace/4/workfiles", true);
+                });
+            });
+        });
+    });
 })

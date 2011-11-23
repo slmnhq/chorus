@@ -6,23 +6,54 @@
         persistent: true,
 
         events : {
-            "submit form" : "create"
+            "click button.submit" : "upload",
+            "click button.cancel" : "cancelUploadAndClose"
         },
 
         makeModel : function() {
             this.model = this.model || new chorus.models.Workfile({workspaceId : this.options.workspaceId})
         },
 
-        setup : function(){
-            this.resource.bind("saved", this.saved, this);
+        upload : function(e) {
+            e.preventDefault();
+            if (this.uploadObj) {
+                this.request = this.uploadObj.submit();
+            }
+            this.$("button.submit").attr("disabled", "disabled");
         },
 
-        create: function create(e){
+        cancelUploadAndClose : function(e) {
+            e.preventDefault();
+            if (this.request) {
+                this.request.abort();
+            }
+
+            this.closeDialog();
         },
 
-        saved : function () {
-            $(document).trigger("close.facebox");
-            chorus.router.navigate("/workspace/"+this.options.workspaceId+"/workfile/" + this.model.get("id"), true);
+        postRender : function() {
+            var self = this;
+            var updateName = function(e,data) {
+                if (data.files.length > 0) {
+                    self.$("button.submit").removeAttr("disabled");
+                    self.uploadObj = data;
+                    var filename = data.files[0].fileName;
+                    var iconSrc = chorus.urlHelpers.fileIconUrl(_.last(filename.split('.')));
+                    self.$('img').attr('src', iconSrc);
+                    self.$('span.fileName').text(filename);
+                }
+            }
+
+            var uploadFinished = function(){
+                self.closeDialog();
+                chorus.router.navigate("/workspace/" + self.options.workspaceId + "/workfiles", true);
+            }
+            
+            this.$("input[type=file]").fileupload({
+                change : updateName,
+                add : updateName,
+                done : uploadFinished
+            });
         }
     });
 })(jQuery, chorus.dialogs);
