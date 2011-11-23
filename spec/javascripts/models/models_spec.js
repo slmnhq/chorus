@@ -1,8 +1,8 @@
 describe("chorus.models", function() {
     describe("Base", function() {
         beforeEach(function() {
-            this.model = new chorus.models.Base({ bar: "foo"});
-            this.model.urlTemplate = "my_items/{{bar}}";
+            this.model = new chorus.models.Base({ id: "foo"});
+            this.model.urlTemplate = "my_items/{{id}}";
         });
 
         describe("#url", function() {
@@ -13,11 +13,11 @@ describe("chorus.models", function() {
 
         describe("#showUrl", function() {
             it("returns #/{{showUrlTemplate}}", function() {
-                this.model.showUrlTemplate = "my_items/show/{{bar}}";
+                this.model.showUrlTemplate = "my_items/show/{{id}}";
                 expect(this.model.showUrl()).toBe("#/my_items/show/foo")
             });
 
-            it("throws when showUrlTemplate is not set", function(){
+            it("throws when showUrlTemplate is not set", function() {
                 expect(this.model.showUrl).toThrow("No showUrlTemplate defined");
             });
         });
@@ -39,16 +39,16 @@ describe("chorus.models", function() {
                 })
 
                 describe("when the request succeeds", function() {
-                    beforeEach(function() {                
-                         this.response = { status: "ok", resource : [
+                    beforeEach(function() {
+                        this.response = { status: "ok", resource : [
                             { foo : "hi" }
                         ] };
 
                         this.server.respondWith(
-                            'POST',
+                            'PUT',
                             '/edc/my_items/foo',
                             this.prepareResponse(this.response));
-    
+
                         this.server.respond();
                     });
 
@@ -65,13 +65,13 @@ describe("chorus.models", function() {
                             { message : "bye" }
                         ] };
                         this.server.respondWith(
-                            'POST',
+                            'PUT',
                             '/edc/my_items/foo',
                             this.prepareResponse(this.response));
                         this.server.respond();
-    
+
                     });
-    
+
                     it("returns the error information", function() {
                         expect(this.model.serverErrors).toEqual(this.response.message);
                     })
@@ -88,7 +88,7 @@ describe("chorus.models", function() {
                         ] };
 
                         this.server.respondWith(
-                            'POST',
+                            'PUT',
                             '/edc/my_items/foo',
                             this.prepareResponse(this.response));
 
@@ -108,7 +108,7 @@ describe("chorus.models", function() {
                             { message : "bye" }
                         ] };
                         this.server.respondWith(
-                            'POST',
+                            'PUT',
                             '/edc/my_items/foo',
                             this.prepareResponse(this.response));
                         this.server.respond();
@@ -127,7 +127,7 @@ describe("chorus.models", function() {
 
                             this.server = sinon.fakeServer.create();
                             this.server.respondWith(
-                                'POST',
+                                'PUT',
                                 '/edc/my_items/foo',
                                 this.prepareResponse(this.response));
 
@@ -178,6 +178,55 @@ describe("chorus.models", function() {
             })
         });
 
+        describe("#destroy", function () {
+            beforeEach(function() {
+                this.destroySpy = jasmine.createSpy();
+                this.destroyFailedSpy = jasmine.createSpy();
+                this.model.bind("destroy", this.destroySpy);
+                this.model.bind("destroyFailed", this.destroyFailedSpy);
+                this.model.destroy();
+            });
+
+            describe("when the request succeeds", function() {
+                beforeEach(function() {
+                    this.response = { status: "ok", resource : [
+                        { foo : "hi" }
+                    ] };
+
+                    this.server.respondWith(
+                        'DELETE',
+                        '/edc/my_items/foo',
+                        this.prepareResponse(this.response));
+
+                    this.server.respond();
+                });
+
+                it("triggers a destroy event", function() {
+                    expect(this.destroySpy).toHaveBeenCalled();
+                })
+            });
+
+            describe("when the request fails", function() {
+                beforeEach(function() {
+                    this.response = { status: "fail", message : [
+                        { message : "hi" },
+                        { message : "bye" }
+                    ] };
+
+                    this.server.respondWith(
+                        'DELETE',
+                        '/edc/my_items/foo',
+                        this.prepareResponse(this.response));
+
+                    this.server.respond();
+                });
+
+                it("triggers a destroyFailed event", function() {
+                    expect(this.destroyFailedSpy).toHaveBeenCalled();
+                })
+            });
+        })
+
         describe("before parsing", function() {
             it("is not loaded", function() {
                 expect(this.model.loaded).toBeFalsy();
@@ -221,19 +270,19 @@ describe("chorus.models", function() {
                 expect(this.model.errors.foo).not.toBeDefined();
             })
 
-            it("contains the attr name", function(){
+            it("contains the attr name", function() {
                 this.model.require("foo");
                 expect(this.model.errors.foo).toContain("foo");
             });
 
-            context("model has attrToLabel set", function(){
-                beforeEach(function(){
+            context("model has attrToLabel set", function() {
+                beforeEach(function() {
                     this.model.attrToLabel = {
                         "foo" : "users.first_name"
                     }
                 });
 
-                it("includes the translation in the error message", function(){
+                it("includes the translation in the error message", function() {
                     this.model.require("foo");
                     expect(this.model.errors.foo).toContain(t("users.first_name"));
                 });
@@ -262,19 +311,19 @@ describe("chorus.models", function() {
                 expect(this.model.errors.foo).not.toBeDefined();
             })
 
-            it("contains the attr name in the error", function(){
+            it("contains the attr name in the error", function() {
                 this.model.requirePattern("foo", /hello/);
                 expect(this.model.errors.foo).toContain("foo");
             });
 
-            context("model has attrToLabel set", function(){
-                beforeEach(function(){
+            context("model has attrToLabel set", function() {
+                beforeEach(function() {
                     this.model.attrToLabel = {
                         "foo" : "users.first_name"
                     }
                 });
 
-                it("includes the translation in the error message", function(){
+                it("includes the translation in the error message", function() {
                     this.model.require("foo", /hello/);
                     expect(this.model.errors.foo).toContain(t("users.first_name"));
                 });
@@ -309,20 +358,20 @@ describe("chorus.models", function() {
                 expect(this.model.errors.foo).not.toBeDefined();
             });
 
-            it("contains the attr name in the error", function(){
+            it("contains the attr name in the error", function() {
                 this.model.set({ foo : "bar", fooConfirmation : "baz" });
                 this.model.requireConfirmation("foo");
                 expect(this.model.errors.foo).toContain("foo");
             });
 
-            context("model has attrToLabel set", function(){
-                beforeEach(function(){
+            context("model has attrToLabel set", function() {
+                beforeEach(function() {
                     this.model.attrToLabel = {
                         "foo" : "users.first_name"
                     }
                 });
 
-                it("includes the translation in the error message", function(){
+                it("includes the translation in the error message", function() {
                     this.model.set({ foo : "bar", fooConfirmation : "baz" });
                     this.model.requireConfirmation("foo");
                     expect(this.model.errors.foo).toContain(t("users.first_name"));

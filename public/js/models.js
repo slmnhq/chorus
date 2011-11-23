@@ -64,7 +64,24 @@
                 }
             },
 
-            performValidation: function() { return true; },
+            destroy : function(options) {
+                console.log("destroying...", this, options)
+                options || (options = {});
+                if (this.isNew()) return this.trigger('destroy', this, this.collection, options);
+                var model = this;
+                var success = options.success;
+                options.success = function(resp) {
+                    console.log("success", resp)
+                    if (resp.status != "ok") {
+                        model.trigger('destroyFailed', model, model.collection, options);
+                    }
+                };
+                return Backbone.Model.prototype.destroy.call(this, options);
+            },
+
+            performValidation: function() {
+                return true;
+            },
 
             require : function(attr) {
                 if (!this.get(attr)) {
@@ -88,7 +105,7 @@
                 }
             },
 
-            _textForAttr : function(attr){
+            _textForAttr : function(attr) {
                 return (this.attrToLabel && this.attrToLabel[attr]) ? t(this.attrToLabel[attr]) : attr;
             }
         })
