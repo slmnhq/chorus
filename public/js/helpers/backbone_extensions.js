@@ -70,10 +70,7 @@ Backbone.sync = function(method, model, options) {
 
 // super function, taken from here:
 // -- http://forrst.com/posts/Backbone_js_super_function-4co
-Backbone.Model.prototype._super = function(funcName) {
-    return this.constructor.__super__[funcName].apply(this, _.rest(arguments));
-}
-Backbone.View.prototype._super = function(funcName) {
+Backbone.Model.prototype._super = Backbone.View.prototype._super = function(funcName) {
     return this.constructor.__super__[funcName].apply(this, _.rest(arguments));
 }
 
