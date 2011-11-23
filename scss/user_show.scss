@@ -49,9 +49,12 @@ $column-padding-y : $padding-x;
     }
 
     li a {
+        @include ellipsis;
         line-height: 25px;
         vertical-align: bottom;
         padding-left: 5px;
+        display: inline-block;
+        width: $right-column-width - (2 * $column-padding-x) - 33 - 5;
     }
   }
 

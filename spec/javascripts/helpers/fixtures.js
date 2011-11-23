@@ -172,7 +172,6 @@
                             "userName": "edcadmin",
                             "firstName": "EDC",
                             "lastName": "Admin",
-                            "fullName": "EDC Admin",
                             "emailAddress": "edcadmin@greenplum.com",
                             "admin": true,
                             "techniques": null,
@@ -184,7 +183,6 @@
                             "userName": "markr",
                             "firstName": "Mark",
                             "lastName": "Rushakoff",
-                            "fullName": "Mark Rushakoff",
                             "emailAddress": "markymark@pivotallabs.com",
                             "admin": false,
                             "techniques": null,
@@ -231,6 +229,179 @@
                     "resourcelink":"/edc/workspace/10013",
                     "pagination":null,
                     "version":"0.1"
+                }
+            },
+
+            Workfile : {
+                fetch : {
+                    "message":[],
+                    "status":"ok",
+                    "requestId":17,
+                    "resource":[
+                        {
+                            "createdStamp":"2011-11-22",
+                            "lastUpdatedStamp":"2011-11-22 14:40:42.11",
+                            "modifiedBy":"edcadmin",
+                            "ownerFullName":"EDC Admin",
+                            "imageId":null,
+                            "id":"10020",
+                            "fileName":"who.sql",
+                            "mimeType":"text/x-sql",
+                            "fileType":"sql",
+                            "isBinary":false,
+                            "workspaceId":"10000",
+                            "source":"empty",
+                            "owner":"edcadmin",
+                            "description":null,
+                            "latestVersionNum":1,
+                            "isDeleted":false,
+                            "modifiedByFirstName":"EDC",
+                            "modifiedByLastName":"Admin",
+                            "commentCount":0,
+                            "commentBody":"",
+                            "firstName":"",
+                            "lastName":""
+                        }
+                    ],
+                    "method":"GET",
+                    "resourcelink":"/edc/workspace/10000/workfile/10020",
+                    "pagination":null,
+                    "version":"0.1"
+                }
+            },
+
+            ActivitySet : {
+                fetch : {
+                    "message" : [ ],
+                    "status" : "ok",
+                    "requestId" : 256,
+                    "resource" : [
+                        {
+                            "createTime" : "23 minutes ago",
+                            "body" :
+                            {
+                                "text" : "created a file",
+                                "children" :
+                                [
+                                    {
+                                        "text" : "to workspace",
+                                        "children" :
+                                        [
+
+                                        ],
+                                        "mention" :
+                                        {
+                                            "workspaceId" : "10000",
+                                            "entityId" : "10022",
+                                            "entityType" : "workfile",
+                                            "entityName" : "012345678901234567890123456789012345678901234567890123456799.sql"
+                                        }
+                                    },
+                                    {
+                                        "text" : "",
+                                        "children" :
+                                        [
+
+                                        ],
+                                        "mention" :
+                                        {
+                                            "entityId" : "10000",
+                                            "entityType" : "workspace",
+                                            "entityName" : "test"
+                                        }
+                                    }
+                                ],
+                                "mention" :
+                                {
+                                    "entityId" : "edcadmin",
+                                    "entityType" : "user",
+                                    "entityName" : "EDC Admin"
+                                }
+                            },
+                            "subCommentList" :
+                            [
+
+                            ],
+                            "totalSubComments" : 0,
+                            "entityId" : "10000",
+                            "type" : "auto",
+                            "entityType" : "workspace",
+                            "entityName" : "test",
+                            "id" : 10032,
+                            "fileId" : -1,
+                            "authorName" : "edcadmin",
+                            "fileName" : "",
+                            "fileDisplayName" : "",
+                            "userfullname" : "EDC Admin"
+                        },
+                        {
+                            "createTime" : "29 minutes ago",
+                            "body" :
+                            {
+                                "text" : "created a file",
+                                "children" :
+                                [
+                                    {
+                                        "text" : "to workspace",
+                                        "children" :
+                                        [
+
+                                        ],
+                                        "mention" :
+                                        {
+                                            "workspaceId" : "10000",
+                                            "entityId" : "10021",
+                                            "entityType" : "workfile",
+                                            "entityName" : ".sql"
+                                        }
+                                    },
+                                    {
+                                        "text" : "",
+                                        "children" :
+                                        [
+
+                                        ],
+                                        "mention" :
+                                        {
+                                            "entityId" : "10000",
+                                            "entityType" : "workspace",
+                                            "entityName" : "test"
+                                        }
+                                    }
+                                ],
+                                "mention" :
+                                {
+                                    "entityId" : "edcadmin",
+                                    "entityType" : "user",
+                                    "entityName" : "EDC Admin"
+                                }
+                            },
+                            "subCommentList" :
+                            [
+
+                            ],
+                            "totalSubComments" : 0,
+                            "entityId" : "10000",
+                            "type" : "auto",
+                            "entityType" : "workspace",
+                            "entityName" : "test",
+                            "id" : 10031,
+                            "fileId" : -1,
+                            "authorName" : "edcadmin",
+                            "fileName" : "",
+                            "fileDisplayName" : "",
+                            "userfullname" : "EDC Admin"
+                        }
+                    ],
+                    "method" : "GET",
+                    "resourcelink" : "/edc/activitystream/workspace/10000",
+                    "pagination" :
+                    {
+                        "total" : "1",
+                        "page" : "1",
+                        "records" : "8"
+                    },
+                    "version" : "0.1"
                 }
             }
 

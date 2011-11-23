@@ -20,8 +20,10 @@
         create: function create(e){
             e.preventDefault();
 
+            var fileName = this.$("input[name=fileName]").val();
+
             this.resource.set({
-                fileName : this.$("input[name=fileName]").val() + ".sql",
+                fileName : fileName ? fileName + ".sql" : ""
             })
 
             this.resource.save({source : "empty"},{url : $(e.target).attr("action")});

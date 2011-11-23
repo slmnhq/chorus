@@ -28,11 +28,9 @@ describe("WorkfilesSqlNewDialog", function() {
           this.dialog.$("form").submit()
         })
 
-        xit("doesn't freak out'", function(){
+        it("doesn't freak out'", function(){
           expect(this.dialog.model.get("fileName")).toBe("")
         })
-
-
       })
 
       context("with valid form values", function(){

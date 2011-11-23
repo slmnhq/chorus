@@ -7,7 +7,8 @@
         collectionModelContext : function(model) {
             return {
                 imageUrl : model.imageUrl({size: "icon"}),
-                showUrl : model.showUrl()
+                showUrl : model.showUrl(),
+                fullName : [model.get("firstName"), model.get("lastName")].join(' ')
             }
         }
     });

@@ -61,7 +61,7 @@ describe("WorkfileListView", function(){
                 });
 
                 it("triggers the workfile:selected event", function(){
-                    expect(this.eventSpy).toHaveBeenCalledWith(this.model1.get("id"));
+                    expect(this.eventSpy).toHaveBeenCalledWith(this.model1);
                 });
 
                 context("and then clicking on the second item", function(){
@@ -78,7 +78,7 @@ describe("WorkfileListView", function(){
                     });
 
                     it("triggers the workfile:selected event", function(){
-                        expect(this.eventSpy).toHaveBeenCalledWith(this.model2.get("id"));
+                        expect(this.eventSpy).toHaveBeenCalledWith(this.model2);
                     });
                 });
             });

@@ -56,6 +56,11 @@
             this.require("userName")
             this.require("password")
             return _(this.errors).isEmpty();
+        },
+
+        attrToLabel : {
+            "userName" : "login.username",
+            "password" : "login.password"
         }
     });
 
