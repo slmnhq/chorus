@@ -18,8 +18,11 @@
             e.preventDefault();
             if (this.uploadObj) {
                 this.request = this.uploadObj.submit();
+                var spinner = new Spinner().spin();
+                this.$("button.submit").append(spinner.el);
+
+                this.$("button.submit").attr("disabled", "disabled");
             }
-            this.$("button.submit").attr("disabled", "disabled");
         },
 
         cancelUploadAndClose : function(e) {

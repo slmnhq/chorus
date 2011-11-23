@@ -41,6 +41,10 @@ describe("WorkfilesImportDialog", function() {
             expect(this.dialog.$("button.submit").attr("disabled")).toBeUndefined();
         });
 
+        it("does not display a spinner on the upload button", function() {
+            expect(this.dialog.$("button.submit div[aria-role=progressbar]").length).toBe(0);
+        });
+
         it("displays the chosen filename", function() {
             expect(this.dialog.$("span.fileName").text()).toBe("foo.txt");
         });
@@ -62,7 +66,7 @@ describe("WorkfilesImportDialog", function() {
             });
 
             it("displays a spinner on the upload button", function() {
-
+                expect(this.dialog.$("button.submit div[aria-role=progressbar]").length).toBe(1);
             });
 
             it("disables the upload button", function() {
