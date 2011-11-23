@@ -232,6 +232,44 @@
                     "pagination":null,
                     "version":"0.1"
                 }
+            },
+
+            Workfile : {
+                fetch : {
+                    "message":[],
+                    "status":"ok",
+                    "requestId":17,
+                    "resource":[
+                        {
+                            "createdStamp":"2011-11-22",
+                            "lastUpdatedStamp":"2011-11-22 14:40:42.11",
+                            "modifiedBy":"edcadmin",
+                            "ownerFullName":"EDC Admin",
+                            "imageId":null,
+                            "id":"10020",
+                            "fileName":"who.sql",
+                            "mimeType":"text/x-sql",
+                            "fileType":"sql",
+                            "isBinary":false,
+                            "workspaceId":"10000",
+                            "source":"empty",
+                            "owner":"edcadmin",
+                            "description":null,
+                            "latestVersionNum":1,
+                            "isDeleted":false,
+                            "modifiedByFirstName":"EDC",
+                            "modifiedByLastName":"Admin",
+                            "commentCount":0,
+                            "commentBody":"",
+                            "firstName":"",
+                            "lastName":""
+                        }
+                    ],
+                    "method":"GET",
+                    "resourcelink":"/edc/workspace/10000/workfile/10020",
+                    "pagination":null,
+                    "version":"0.1"
+                }
             }
 
         });

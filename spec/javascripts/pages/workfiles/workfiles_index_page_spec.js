@@ -2,7 +2,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
     beforeEach(function() {
         fixtures.model = "Workfile";
         this.loadTemplate("workfile_list")
-        this.loadTemplate("workfile_create_sidebar")
+        this.loadTemplate("workfile_list_sidebar")
         this.loadTemplate("sub_nav_content")
         this.loadTemplate("sub_nav_and_header")
     })
@@ -17,15 +17,21 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         })
     });
 
-    describe("#render", function(){
-         beforeEach(function() {
+    describe("when the workfile:selected event is triggered on the list view", function() {
+        beforeEach(function() {
             this.page = new chorus.pages.WorkfileIndexPage(4);
             this.page.render();
         })
-         it("should have a new workfile button", function(){
-            var button = this.page.$("button:contains('Create SQL File')")
-            expect(button).toExist();
-            expect(button.data("workspaceId")).toBe(4);
-         })
+        
+        it("triggers the event on the sidebar view", function() {
+            var listView = this.page.mainContent.content;
+            var sidebar = this.page.sidebar;
+            var workfileSelectedSpy = jasmine.createSpy("workfile:selected");
+            var workfile = fixtures.modelFor("fetch");
+            sidebar.bind("workfile:selected", workfileSelectedSpy);
+            listView.trigger("workfile:selected", workfile);
+
+            expect(workfileSelectedSpy).toHaveBeenCalledWith(workfile);
+        });
     });
 });

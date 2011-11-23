@@ -1,5 +1,13 @@
 ;(function(ns) {
     ns.Workfile = chorus.models.Base.extend({
-        urlTemplate : "workspace/{{workspaceId}}/workfile/{{workfileId}}"
+        urlTemplate : "workspace/{{workspaceId}}/workfile/{{workfileId}}",
+
+        modifier : function() {
+            return new ns.User({
+                userName : this.get("modifiedBy"),
+                firstName : this.get("modifierFirstName"),
+                lastName : this.get("modifierLastName")
+            })
+        }
     });
 })(chorus.models);
