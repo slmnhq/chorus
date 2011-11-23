@@ -5,6 +5,7 @@
         margin: 20px 0;
 
         .fileName {
+            @include ellipsis;
             font-size: 19px;
             color: $dark-text-color;
             font-weight: $semibold;
