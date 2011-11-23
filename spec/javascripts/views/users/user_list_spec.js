@@ -47,10 +47,15 @@ describe("chorus.views.UserList", function() {
                 expect(this.view.$(".loading")).not.toExist();
             });
 
-
             it("displays the list of users", function() {
                 expect(this.view.$("> li").length).toBe(2);
             });
+
+            it("displays the users' names", function() {
+                _.each(this.view.$("a.name span"), function(el) {
+                    expect($(el).text().trim()).not.toBeEmpty();
+                })
+            })
 
             it("displays the Administrator tag for admin users", function() {
                 expect(this.view.$("li[data-userName=edcadmin] .administrator")).toExist();
