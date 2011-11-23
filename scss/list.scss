@@ -8,10 +8,29 @@
         position: relative;
         &.selected {
             background: white;
+
+            .spacer {
+                background: white;
+            }
         }
 
         &:last-child {
             border-bottom: none;
+        }
+
+        .spacer {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: $padding-x;
+
+            &:first-child {
+                left: -$padding-x;
+            }
+            
+            &:last-child {
+                right: -$padding-x;
+            }
         }
 
         div.text {
