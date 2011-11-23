@@ -19,4 +19,7 @@
         <div title="{{workfile.fileName}}" class="fileName">{{workfile.fileName}}</div>
         <div class="updated">Updated by <a class="updatedBy" href="{{workfile.modifierUrl}}">{{workfile.updatedBy}}</a> on <span class="updatedOn">{{workfile.updatedAt}}</span></div>
     </div>
+    <div class="actions">
+        <a href="#" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspaceId}}" class="delete">{{t "actions.delete"}}</a>
+    </div>
 {{/if}}

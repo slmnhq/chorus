@@ -48,5 +48,12 @@ describe("WorkfileListSidebar", function() {
         it("links to the profile page of the modifier", function() {
             expect(this.view.$("a.updatedBy").attr("href")).toBe("#/users/" + this.workfile.get("modifiedBy"))
         })
+
+        it("displays a link to delete the workfile", function() {
+            var deleteLink = this.view.$(".actions a.delete");
+            expect(deleteLink).toExist();
+            expect(deleteLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"))
+            expect(deleteLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
+        })
     })
 });
