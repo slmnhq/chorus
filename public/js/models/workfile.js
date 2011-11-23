@@ -14,6 +14,10 @@
             this.errors = {}
             this.require("fileName")
             return _(this.errors).isEmpty();
+        },
+
+        attrToLabel : {
+            "fileName" : "workfiles.validation.name"
         }
     });
 })(chorus.models);
