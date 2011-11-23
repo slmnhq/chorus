@@ -1,10 +1,15 @@
 <form action="/edc/workspace/{{workspaceId}}/workfile" enctype="multipart/form-data" method="post">
-    <img/> <span class="fileName"/>
-    <label>
-        Choose a File
+    <div class="details">
+        <img src="/images/workfileIcons/binary.png"/>
+        <span class="fileName"/>
+        <!--<label>
+            {{t "workfiles.import_dialog.upload_file"}}
+        </label>-->
         <input type="file" name="importFile"/>
-    </label>
-    <input type="text" name="fileName" placeholder='{{t "workfiles.import_placeholder"}}' tabindex="1" maxlength="256"></input>
+    </div>
+    <div class="comment">
+        <input type="text" name="description" placeholder='{{t "workfiles.import_placeholder"}}' tabindex="1" maxlength="256"></input>
+    </div>
 
     <div class="controls">
         <button type="button" class="cancel" tabindex=4>{{t "actions.cancel"}}</button>

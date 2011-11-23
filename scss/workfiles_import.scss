@@ -1,0 +1,51 @@
+@import "_common.scss";
+
+$image-height : 48px;
+$image-width: 48px;
+
+.workfiles_import {
+    .details {
+        img, span, label, input[type=file] {
+            display: inline-block;
+        }
+
+        img {
+            vertical-align: middle;
+        }
+
+        input[type=file] {
+            width: auto;
+        }
+    }
+
+    div.comment {
+        margin-left: $image-width;
+    }
+
+    input[type=text] {
+        /*margin-left: $image-width;*/
+    }
+    
+    /*input[type=file] {*/
+        /*width: 0px;*/
+        /*height: 0px;*/
+        /*opacity: 0;*/
+        /*display: inline;*/
+        /*padding: 0;*/
+    /*}*/
+
+    label, input[type=file] {
+        text-align: right;
+        color: $link-color;
+        &:hover {
+            cursor : pointer;
+        }
+    }
+
+    .fileName {
+        color: $secondary-text-color;
+        font-size: 15px;
+        vertical-align: middle;
+        line-height: $image-height;
+    }
+}

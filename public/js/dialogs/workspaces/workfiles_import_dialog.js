@@ -49,7 +49,7 @@
                 if (data.files.length > 0) {
                     self.$("button.submit").removeAttr("disabled");
                     self.uploadObj = data;
-                    var filename = data.files[0].fileName;
+                    var filename = data.files[0].name;
                     var iconSrc = chorus.urlHelpers.fileIconUrl(_.last(filename.split('.')));
                     self.$('img').attr('src', iconSrc);
                     self.$('span.fileName').text(filename);
