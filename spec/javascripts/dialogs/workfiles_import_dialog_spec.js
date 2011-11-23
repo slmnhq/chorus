@@ -62,8 +62,8 @@ describe("WorkfilesImportDialog", function() {
 
             it("uploads the specified file", function() {
                 expect(this.dialog.uploadObj.submit).toHaveBeenCalled();
-                expect(this.server.requests[1].method).toBe("POST");
-                expect(this.server.requests[1].url).toMatch(/\/edc\/workspace\/4\/workfile$/);
+                expect(_.last(this.server.requests).method).toBe("POST");
+                expect(_.last(this.server.requests).url).toMatch(/\/edc\/workspace\/4\/workfile$/);
             });
 
             it("displays a spinner on the upload button", function() {
