@@ -32,6 +32,7 @@ describe("WorkfilesImportDialog", function() {
 
     context("when a file has been chosen", function() {
         beforeEach(function() {
+            spyOn(this.dialog, "closeDialog");
             this.dialog.render();
             this.fileList = [{fileName: 'foo.txt'}];
             this.dialog.$("input[type=file]").fileupload('add', {files: this.fileList});
@@ -73,9 +74,34 @@ describe("WorkfilesImportDialog", function() {
                 expect(this.dialog.$("button.submit").attr("disabled")).toBe("disabled");
             });
 
+            context("when cancel is clicked before the upload completes", function(){
+                beforeEach(function(){
+                    spyOn(this.dialog.request, "abort");
+                    this.dialog.$("button.cancel").click();
+                });
+
+                it("closes the dialog", function(){
+                    expect(this.dialog.closeDialog).toHaveBeenCalled();
+                });
+
+                it("cancels the upload", function(){
+                    expect(this.dialog.request.abort).toHaveBeenCalled();
+                });
+            });
+
+            context("when the close 'X' is clicked", function(){
+                beforeEach(function(){
+                    spyOn(this.dialog.request, "abort");
+                    $(document).trigger("close.facebox");
+                });
+
+                it("cancels the upload", function(){
+                    expect(this.dialog.request.abort).toHaveBeenCalled();
+                });
+            });
+
             context("when the upload completes", function(){
                 beforeEach(function(){
-                    spyOn(this.dialog, "closeDialog");
                     spyOn(chorus.router, "navigate");
                     // calls any 'done' callbacks
                     this.server.respondWith("OK");

@@ -14,6 +14,15 @@
             this.model = this.model || new chorus.models.Workfile({workspaceId : this.options.workspaceId})
         },
 
+        setup : function() {
+            var self = this;
+            $(document).one('close.facebox', function(){
+                if (self.request) {
+                    self.request.abort();
+                }
+            });
+        },
+
         upload : function(e) {
             e.preventDefault();
             if (this.uploadObj) {
