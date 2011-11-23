@@ -39,17 +39,3 @@ Handlebars.registerHelper("ifAny", function() {
     return elseBlock(this);
   }
 });
-
-(function() {
-    var map = {
-        "C" : "c",
-        "C++" : "cplusplus",
-        "Java" : "java",
-        "sql" : "sql",
-        "txt" : "text"
-    }
-
-    Handlebars.registerHelper("workfileIconUrl", function(fileType) {
-        return "/images/workfileIcons/" + (map[fileType] || "binary") + ".png";
-    });
-})();

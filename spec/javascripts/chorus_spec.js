@@ -23,4 +23,25 @@ describe("chorus", function() {
             expect(this.chorus.user).toBeDefined();
         });
     });
+
+    describe("fileIconUrl", function(){
+        function verifyUrl(fileType, fileName) {
+            expect(chorus.urlHelpers.fileIconUrl(fileType)).toBe("/images/workfileIcons/" + fileName + ".png");
+        }
+
+        it("maps known fileTypes to URLs correctly", function(){
+            verifyUrl("C", "c");
+            verifyUrl("C++", "cplusplus");
+            verifyUrl("Java", "java");
+            verifyUrl("sql", "sql");
+            verifyUrl("txt", "text");
+            verifyUrl("xml", "xml");
+            verifyUrl("html", "html");
+        });
+
+        it("maps unknown fileTypes to binary.png", function(){
+            verifyUrl("foobar", "binary");
+            verifyUrl("N/A", "binary");
+        });
+    });
 });
