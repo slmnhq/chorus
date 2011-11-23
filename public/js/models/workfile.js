@@ -8,6 +8,12 @@
                 firstName : this.get("modifierFirstName"),
                 lastName : this.get("modifierLastName")
             })
+        },
+
+        performValidation : function(){
+            this.errors = {}
+            this.require("fileName")
+            return _(this.errors).isEmpty();
         }
     });
 })(chorus.models);
