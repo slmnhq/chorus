@@ -26,12 +26,20 @@
         }
     }
 
+    .alert .content {
+        background: $body-background-color;
+    }
+
     .close {
         position: absolute;
         top: 18px;
         right: 15px;
         padding: 2px;
         background: #fff;
+    }
+
+    &.alert_facebox .close {
+        display: none;
     }
 
     .loading, .image {

@@ -17,10 +17,6 @@
     #dialog_content {
         background-color: $body-background-color;
         padding: 10px 15px;
-
-        .controls {
-            @include after-clearfix;
-        }
     }
 }
 

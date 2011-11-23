@@ -10,7 +10,8 @@
         className : "logged_in_layout",
 
         events : {
-            "click button.dialog" : "createDialog"
+            "click button.dialog" : "createDialog",
+            "click a.alert" : "createAlert"
         },
 
         postRender : function() {
@@ -39,8 +40,15 @@
         createDialog : function(e) {
             var button = $(e.target);
             var workspaceId = button.data("workspace-id");
-            chorus.dialog = new chorus.dialogs[button.data("dialog")]({workspaceId : workspaceId});
-            chorus.dialog.launchDialog();
+            var dialog = new chorus.dialogs[button.data("dialog")]({workspaceId : workspaceId});
+            dialog.launchDialog();
+        },
+
+        createAlert : function(e) {
+            e.preventDefault();
+            var launchElement = $(e.target);
+            var alert = new chorus.alerts[launchElement.data("alert")]({launchElement : launchElement});
+            alert.launchAlert();
         }
     })
 

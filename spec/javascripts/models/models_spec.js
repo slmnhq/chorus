@@ -204,6 +204,10 @@ describe("chorus.models", function() {
                 it("triggers a destroy event", function() {
                     expect(this.destroySpy).toHaveBeenCalled();
                 })
+
+                it("does not trigger a destroyFailed event", function() {
+                    expect(this.destroyFailedSpy).not.toHaveBeenCalled();
+                })
             });
 
             describe("when the request fails", function() {
@@ -223,6 +227,10 @@ describe("chorus.models", function() {
 
                 it("triggers a destroyFailed event", function() {
                     expect(this.destroyFailedSpy).toHaveBeenCalled();
+                })
+
+                it("does not trigger a destroy event", function() {
+                    expect(this.destroySpy).not.toHaveBeenCalled();
                 })
             });
         })

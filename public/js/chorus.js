@@ -5,7 +5,7 @@
         self.views = {};
         self.pages = {};
         self.dialogs = {};
-
+        self.alerts = {};
 
         self.initialize = function() {
             self.session = new chorus.models.Session();

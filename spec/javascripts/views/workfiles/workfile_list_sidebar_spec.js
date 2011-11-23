@@ -50,10 +50,11 @@ describe("WorkfileListSidebar", function() {
         })
 
         it("displays a link to delete the workfile", function() {
-            var deleteLink = this.view.$(".actions a.delete");
+            var deleteLink = this.view.$(".actions a[data-alert=DeleteWorkfile]");
             expect(deleteLink).toExist();
             expect(deleteLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"))
             expect(deleteLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
+            expect(deleteLink).toHaveAttr("data-workfile-name", this.workfile.get("fileName"))
         })
     })
 });

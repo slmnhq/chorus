@@ -65,18 +65,23 @@
             },
 
             destroy : function(options) {
-                console.log("destroying...", this, options)
                 options || (options = {});
                 if (this.isNew()) return this.trigger('destroy', this, this.collection, options);
                 var model = this;
                 var success = options.success;
                 options.success = function(resp) {
-                    console.log("success", resp)
-                    if (resp.status != "ok") {
+                    if (!model.set(model.parse(resp), options)) return false;
+
+                    if (resp.status == "ok") {
+                        model.trigger('destroy', model, model.collection, options);
+                    } else {
                         model.trigger('destroyFailed', model, model.collection, options);
                     }
+
+                    if (success) success(model, resp);
                 };
-                return Backbone.Model.prototype.destroy.call(this, options);
+
+                return (this.sync || Backbone.sync).call(this, 'delete', this, options);
             },
 
             performValidation: function() {
