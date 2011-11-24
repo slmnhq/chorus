@@ -9,7 +9,8 @@
 
             this.collection = new chorus.models.WorkfileSet([], {workspaceId: workspaceId});
             this.collection.fetch();
-            this.mainContent = new chorus.views.SubNavContentList({modelClass : "Workfile", tab : "workfiles", collection : this.collection, model : workspace});
+            this.subNav = new chorus.views.SubNav({workspace: workspace, tab: "workfiles"});
+            this.mainContent = new chorus.views.MainContentList({modelClass : "Workfile", collection : this.collection, model : workspace});
             this.sidebar = new chorus.views.WorkfileListSidebar({model : workspace});
 
             this.mainContent.content.bind("workfile:selected", function(workfileId) {

@@ -4,8 +4,10 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         this.loadTemplate("workfile_list")
         this.loadTemplate("workfile_list_sidebar")
         this.loadTemplate("breadcrumbs");
-        this.loadTemplate("sub_nav_content")
-        this.loadTemplate("sub_nav_and_header")
+        this.loadTemplate("sub_nav");
+        this.loadTemplate("logged_in_layout");
+        this.loadTemplate("main_content");
+        this.loadTemplate("header");
     })
 
     describe("#initialize", function() {

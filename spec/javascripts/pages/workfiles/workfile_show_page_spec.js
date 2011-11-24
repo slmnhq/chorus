@@ -1,7 +1,8 @@
 describe("chorus.pages.WorkfileShowPage", function() {
     beforeEach(function() {
-        this.loadTemplate("sub_nav_content");
-        this.loadTemplate("sub_nav_and_header");
+        this.loadTemplate("main_conent");
+        this.loadTemplate("sub_nav");
+        this.loadTemplate("logged_in_layout");
         this.loadTemplate("breadcrumbs");
 
         this.workspaceId = 4;
@@ -33,7 +34,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
         xit("it displays the workfile name in the content header", function() {
             var workfile = this.page.model;
-            expect(this.page.mainContent.header.$("h1").text()).toBe("A file");
+            expect(this.page.mainContent.contentHeader.$("h1").text()).toBe("A file");
         });
 
         // describe("breadcrumbs", function() {

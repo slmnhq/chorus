@@ -12,12 +12,10 @@
             this.model = new chorus.models.Workspace({id : workspaceId});
             this.model.fetch();
             this.breadcrumbs = new chorus.views.WorkspaceBreadcrumbsView({model: this.model});
-            this.mainContent = new chorus.views.SubNavContentView({
-                modelClass : "Workspace",
-                tab : "summary",
-                model : this.model,
-                content : new chorus.views.WorkspaceDetail({model: this.model })
-            });
+            this.subNav = new chorus.views.SubNav({workspace : this.model, tab: "Summary"})
+            this.mainContent = new chorus.views.MainContentView({model: this.model})
+            this.mainContent.content = new chorus.views.WorkspaceDetail({model: this.model });
+            this.mainContent.contentHeader = new chorus.views.StaticTemplate("plain_text", {text: "Summary"});
         }
     });
 })(jQuery, chorus.pages);

@@ -1,5 +1,4 @@
-;
-(function(ns) {
+;(function(ns) {
     ns.Bare = Backbone.View.extend({
         initialize: function initialize() {
             this.preInitialize();
@@ -118,6 +117,13 @@
     ns.MainContentView = ns.Base.extend({
         className : "main_content",
 
+        setup : function(options) {
+            options = options || {}
+            this.contentHeader = this.contentHeader || options.contentHeader;
+            this.contentDetails = this.contentDetails || options.contentDetails;
+            this.content = this.content || options.content;
+        },
+
         postRender : function() {
             this.$("#content_header").html(this.contentHeader.render().el);
             this.contentHeader.delegateEvents();
@@ -132,7 +138,7 @@
             this.$("#content").html(this.content.render().el);
             this.content.delegateEvents();
         }
-    })
+    });
 
     ns.MainContentList = ns.MainContentView.extend({
         setup : function(options) {
@@ -143,41 +149,5 @@
             this.contentDetails = new chorus.views.Count({collection : collection, modelClass : modelClass})
         },
         additionalClass : "main_content_list"
-    })
-
-    ns.SubNavContentView = ns.Base.extend({
-        className : "sub_nav_content",
-
-        setup : function(options) {
-            var modelClass = options.modelClass
-            this.header = new chorus.views.SubNavHeader({ tab : options.tab, model : this.model });
-            this.content = options.content;
-        },
-
-        postRender : function () {
-            this.$("#sub_nav_header").html(this.header.render().el);
-            this.header.delegateEvents();
-
-            if (this.contentDetails) {
-                this.$("#content_details").html(this.contentDetails.render().el);
-                this.contentDetails.delegateEvents();
-            } else {
-                this.$("#content_details").addClass("hidden");
-            }
-
-            this.$("#content").html(this.content.render().el);
-            this.content.delegateEvents();
-        }
-    })
-
-    ns.SubNavContentList = ns.SubNavContentView.extend({
-        setup : function(options) {
-            var collection = this.collection;
-            options.content = this.content = new chorus.views[options.modelClass + "List"]({collection: collection })
-            this.__proto__.__proto__.setup.call(this, options);
-            this.contentDetails = new chorus.views.Count({collection : collection, modelClass : options.modelClass})
-        },
-        additionalClass : "sub_nav_content_list"
-    })
-
+    });
 })(chorus.views);

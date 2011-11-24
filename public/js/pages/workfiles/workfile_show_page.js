@@ -8,10 +8,10 @@
 
             this.breadcrumbs = new chorus.views.WorkspaceBreadcrumbsView({model: this.workspace});
 
-            this.mainContent = new chorus.views.SubNavContentView({ 
-                modelClass : "Workfile",
-                tab : "summary",
+            this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "workfiles"});
+            this.mainContent = new chorus.views.MainContentView({
                 model : this.model,
+                contentHeader : new chorus.views.StaticTemplate("plain_text", {text : "You go girl"}),
                 content : new chorus.views.StaticTemplate("plain_text", {text : t("users.details")})
             });
             

@@ -36,6 +36,10 @@
                 this.sidebar.delegateEvents()
                 this.sidebar.render();
             }
+
+            if (this.subNav) {
+                this.$("#sub_nav").replaceWith(this.subNav.render().el);
+            }
         },
 
         createDialog : function(e) {
