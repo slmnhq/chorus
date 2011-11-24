@@ -27,7 +27,7 @@
         },
 
         revealed : function () {
-            $("#facebox").addClass("alert_facebox");
+            $("#facebox").removeClass().addClass("alert_facebox");
         },
 
         closeAlert : function() {

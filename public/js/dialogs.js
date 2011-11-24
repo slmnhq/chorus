@@ -7,6 +7,8 @@
 
         launchDialog : function() {
             this.render();
+            _.bind(this.revealed, this);
+            $(document).bind('reveal.facebox', this.revealed);
             $.facebox(this.el)
         },
 
@@ -28,6 +30,10 @@
             this.postRender($(this.el));
 
             return this;
+        },
+
+        revealed : function () {
+            $("#facebox").removeClass().addClass("dialog_facebox");
         },
 
         closeDialog : function() {
