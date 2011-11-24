@@ -20,6 +20,9 @@
         <div class="updated">Updated by <a class="updatedBy" href="{{workfile.modifierUrl}}">{{workfile.updatedBy}}</a> on <span class="updatedOn">{{workfile.updatedAt}}</span></div>
     </div>
     <div class="actions">
-        <a href="#"  class="alert" data-alert="DeleteWorkfile" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspaceId}}" data-workfile-name="{{workfile.fileName}}">{{t "actions.delete"}}</a>
+        <ul>
+        <li><a href="#" class="dialog" data-dialog="CopyWorkfile" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspaceId}}"">{{t "actions.copy_to_another_workspace"}}</a></li>
+        <li><a href="#" class="alert" data-alert="DeleteWorkfile" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspaceId}}" data-workfile-name="{{workfile.fileName}}">{{t "actions.delete"}}</a></li>
+        </ul>
     </div>
 {{/if}}

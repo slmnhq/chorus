@@ -1,6 +1,7 @@
 describe("WorkfilesImportDialog", function() {
     beforeEach(function() {
-        this.dialog = new chorus.dialogs.WorkfilesImport({workspaceId : 4});
+        this.launchElement = $("<a data-workspace-id='4'></a>")
+        this.dialog = new chorus.dialogs.WorkfilesImport({launchElement : this.launchElement});
         this.loadTemplate("workfiles_import");
     });
 

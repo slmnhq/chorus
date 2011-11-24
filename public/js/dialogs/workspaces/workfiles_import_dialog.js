@@ -11,7 +11,7 @@
         },
 
         makeModel : function() {
-            this.model = this.model || new chorus.models.Workfile({workspaceId : this.options.workspaceId})
+            this.model = this.model || new chorus.models.Workfile({workspaceId : this.options.launchElement.data("workspace-id")})
         },
 
         setup : function() {
@@ -58,7 +58,7 @@
 
             var uploadFinished = function(){
                 self.closeDialog();
-                chorus.router.navigate("/workspace/" + self.options.workspaceId + "/workfiles", true);
+                chorus.router.navigate("/workspace/" + self.model.get("workspaceId") + "/workfiles", true);
             }
             
             this.$("input[type=file]").fileupload({

@@ -11,6 +11,7 @@
 
         events : {
             "click button.dialog" : "createDialog",
+            "click a.dialog" : "createDialog",
             "click a.alert" : "createAlert"
         },
 
@@ -38,9 +39,9 @@
         },
 
         createDialog : function(e) {
+            e.preventDefault();
             var button = $(e.target);
-            var workspaceId = button.data("workspace-id");
-            var dialog = new chorus.dialogs[button.data("dialog")]({workspaceId : workspaceId});
+            var dialog = new chorus.dialogs[button.data("dialog")]({launchElement : button });
             dialog.launchDialog();
         },
 

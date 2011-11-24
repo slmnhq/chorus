@@ -99,4 +99,14 @@ describe("chorus.models.User", function() {
             expect(user.imageUrl({size: "icon"})).toBe("/edc/userimage/foo?size=icon");
         });
     });
+
+    describe("#displayName", function() {
+        beforeEach(function() {
+            this.model.set({ firstName : "Danny", lastName : "Burkes" });
+        })
+
+        it("returns the full name", function() {
+            expect(this.model.displayName()).toBe("Danny Burkes");
+        })
+    })
 });

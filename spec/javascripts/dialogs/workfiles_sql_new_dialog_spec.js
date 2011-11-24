@@ -1,6 +1,7 @@
 describe("WorkfilesSqlNewDialog", function() {
     beforeEach(function() {
-        this.dialog = new chorus.dialogs.WorkfilesSqlNew({workspaceId : 4})
+        this.launchElement = $("<a data-workspace-id='4'></a>")
+        this.dialog = new chorus.dialogs.WorkfilesSqlNew({launchElement : this.launchElement})
         this.loadTemplate("workfiles_sql_new")
     });
 

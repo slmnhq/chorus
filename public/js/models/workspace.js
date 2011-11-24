@@ -29,6 +29,15 @@
             return _(this.errors).isEmpty();
         },
 
+        displayName : function() {
+            return this.get("name");
+        },
+
+        imageUrl : function(options){
+            options = (options || {});
+            return "/edc/workspace/" + this.get("id") + "/image?size=" + (options.size || "original");
+        },
+
         attrToLabel : {
             "name" : "workspace.validation.name"
         }

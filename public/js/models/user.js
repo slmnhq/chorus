@@ -30,6 +30,10 @@
             return "/edc/userimage/" + this.get("userName") + "?size=" + (options.size || "original");
         },
 
+        displayName : function() {
+            return [this.get("firstName"), this.get("lastName")].join(' ');
+        },
+
         attrToLabel : {
             "emailAddress" : "users.email",
             "firstName" : "users.first_name",

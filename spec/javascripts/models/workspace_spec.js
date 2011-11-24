@@ -66,4 +66,28 @@ describe("chorus.models.Workspace", function() {
             expect(this.model.require).toHaveBeenCalledWith("name");
         });
     });
+
+    describe("#displayName", function() {
+        beforeEach(function() {
+            this.model = fixtures.modelFor("fetch");
+        })
+
+        it("returns the name", function() {
+            expect(this.model.displayName()).toBe(this.model.get("name"));
+        })
+    })
+
+    describe("#imageUrl", function() {
+        beforeEach(function() {
+            this.model = fixtures.modelFor("fetch");
+        })
+
+        it("uses the right URL", function(){
+            expect(this.model.imageUrl()).toBe("/edc/workspace/10013/image?size=original");
+        });
+
+        it("accepts the size argument", function(){
+            expect(this.model.imageUrl({size: "icon"})).toBe("/edc/workspace/10013/image?size=icon");
+        });
+    });
 });

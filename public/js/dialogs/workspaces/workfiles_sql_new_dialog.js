@@ -10,7 +10,9 @@
         },
 
         makeModel : function() {
-            this.model = this.model || new chorus.models.Workfile({workspaceId : this.options.workspaceId})
+            this.model = this.model || new chorus.models.Workfile({
+                workspaceId : this.options.launchElement.data("workspace-id")
+            })
         },
 
         setup : function(){
@@ -31,7 +33,7 @@
 
         saved : function () {
             $(document).trigger("close.facebox");
-            chorus.router.navigate("/workspace/"+this.options.workspaceId+"/workfile/" + this.model.get("id"), true);
+            chorus.router.navigate("/workspace/"+ this.model.get("workspaceId") + "/workfile/" + this.model.get("id"), true);
         }
     });
 })(jQuery, chorus.dialogs);

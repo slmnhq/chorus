@@ -108,33 +108,64 @@ describe("chorus.pages.Base", function() {
     });
 
     context("dialogs", function() {
-        beforeEach(function() {
-            this.view = new chorus.pages.Base();
-            this.view.mainContent = new Backbone.View();
+        context("from buttons", function() {
+            beforeEach(function() {
+                this.view = new chorus.pages.Base();
+                this.view.mainContent = new Backbone.View();
 
-            var spy = this.fooDialogSpy = {
-                launchDialog : jasmine.createSpy()
-            }
+                var spy = this.fooDialogSpy = {
+                    launchDialog : jasmine.createSpy()
+                }
 
-            chorus.dialogs.Foo = function(opts) {
-                spy.workspaceId = opts.workspaceId;
-                return spy
-            };
+                chorus.dialogs.Foo = function(opts) {
+                    spy.launchElement = opts.launchElement;
+                    return spy
+                };
 
-            this.view.sidebar = stubView("<button type='button' class='dialog' data-dialog='Foo'>Create a Foo</button>");
-            this.view.render();
+                this.view.sidebar = stubView("<button type='button' class='dialog' data-dialog='Foo'>Create a Foo</button>");
+                this.view.render();
+            })
+
+            it("instantiates dialogs from dialog buttons", function() {
+                this.view.$("button.dialog").click();
+                expect(this.fooDialogSpy.launchDialog).toHaveBeenCalled();
+            })
+
+            it("passes the launch element to the dialog", function() {
+                var elem = this.view.$("button.dialog");
+                elem.click();
+                expect(this.fooDialogSpy.launchElement).toBe(elem);
+            })
         })
 
-        it("instantiates dialogs from dialog buttons", function() {
-            this.view.$("button.dialog").click();
-            expect(this.fooDialogSpy.launchDialog).toHaveBeenCalled();
-        })
+        context("from links", function() {
+            beforeEach(function() {
+                this.view = new chorus.pages.Base();
+                this.view.mainContent = new Backbone.View();
 
-        it("passses the workspace-id through to the dialog", function() {
-            this.view.sidebar.$("button").data("workspace-id", 15)
-            this.view.$("button.dialog").click();
-            expect(this.fooDialogSpy.launchDialog).toHaveBeenCalled();
-            expect(this.fooDialogSpy.workspaceId).toBe(15);
+                var spy = this.fooDialogSpy = {
+                    launchDialog : jasmine.createSpy()
+                }
+
+                chorus.dialogs.Foo = function(opts) {
+                    spy.launchElement = opts.launchElement;
+                    return spy
+                };
+
+                this.view.sidebar = stubView("<a class='dialog' data-dialog='Foo'>Create a Foo</button>");
+                this.view.render();
+            })
+
+            it("instantiates dialogs from dialog buttons", function() {
+                this.view.$("a.dialog").click();
+                expect(this.fooDialogSpy.launchDialog).toHaveBeenCalled();
+            })
+
+            it("passes the launch element to the dialog", function() {
+                var elem = this.view.$("a.dialog");
+                elem.click();
+                expect(this.fooDialogSpy.launchElement).toBe(elem);
+            })
         })
     })
 

@@ -27,5 +27,4 @@ describe("chorus.models.Workfile", function() {
             expect(this.model.require).toHaveBeenCalledWith("fileName");
         });
     });
-
 });

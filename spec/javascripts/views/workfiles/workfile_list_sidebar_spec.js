@@ -56,5 +56,12 @@ describe("WorkfileListSidebar", function() {
             expect(deleteLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
             expect(deleteLink).toHaveAttr("data-workfile-name", this.workfile.get("fileName"))
         })
+
+        it("displays a link to copy the workfile to another workspace", function() {
+            var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
+            expect(copyLink).toExist();
+            expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"))
+            expect(copyLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
+        })
     })
 });
