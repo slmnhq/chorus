@@ -64,7 +64,9 @@
             this.$("input[type=file]").fileupload({
                 change : updateName,
                 add : updateName,
-                done : uploadFinished
+                done : uploadFinished,
+                // multipart : false required for FF3.6 compatibility
+                multipart : false
             });
         }
     });
