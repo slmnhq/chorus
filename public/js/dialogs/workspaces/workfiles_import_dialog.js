@@ -50,23 +50,31 @@
                     self.$("button.submit").removeAttr("disabled");
                     self.uploadObj = data;
                     var filename = data.files[0].name;
-                    var iconSrc = chorus.urlHelpers.fileIconUrl(_.last(filename.split('.')));
+                    self.uploadExtension = _.last(filename.split('.'));
+                    var iconSrc = chorus.urlHelpers.fileIconUrl(self.uploadExtension);
                     self.$('img').attr('src', iconSrc);
                     self.$('span.fileName').text(filename);
                 }
             }
 
-            var uploadFinished = function(){
+            var uploadFinished = function(e, data){
                 self.closeDialog();
-                chorus.router.navigate("/workspace/" + self.model.get("workspaceId") + "/workfiles", true);
+                var suffix = '';
+                if (self.uploadExtension.toLowerCase() == "txt" || self.uploadExtension.toLowerCase() == "sql") {
+                    var id = data.result.resource[0].id;
+                    suffix = "/" + id;
+                }
+                chorus.router.navigate("/workspace/" + self.model.get("workspaceId") + "/workfiles" + suffix, true);
             }
+
+            // FF3.6 fails tests with multipart true, but it will only upload in the real world with multipart false
+            var multipart = !window.jasmine;
             
             this.$("input[type=file]").fileupload({
                 change : updateName,
                 add : updateName,
                 done : uploadFinished,
-                // multipart : false required for FF3.6 compatibility
-                multipart : false
+                multipart : multipart
             });
         }
     });

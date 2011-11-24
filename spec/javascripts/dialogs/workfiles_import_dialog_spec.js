@@ -31,11 +31,31 @@ describe("WorkfilesImportDialog", function() {
         });
     });
 
+    context("when a text file has been chosen", function(){
+        context("when the upload completes", function(){
+            beforeEach(function(){
+                this.dialog.render();
+                this.fileList = [{fileName: 'foo.txt'}];
+                this.dialog.$("input[type=file]").fileupload('add', {files: this.fileList});
+                this.dialog.$("button.submit").click();
+
+                spyOn(chorus.router, "navigate");
+                // calls any 'done' callbacks
+                this.server.respondWith([200, {'Content-Type': 'application/json'}, '{"resource":[{"id":"9"}]}']);
+                this.server.respond();
+            });
+
+            it("navigates to the workfile index", function(){
+                expect(chorus.router.navigate).toHaveBeenCalledWith("/workspace/4/workfiles/9", true);
+            });
+        });
+    });
+
     context("when a file has been chosen", function() {
         beforeEach(function() {
             spyOn(this.dialog, "closeDialog");
             this.dialog.render();
-            this.fileList = [{fileName: 'foo.txt'}];
+            this.fileList = [{fileName: 'foo.bar'}];
             this.dialog.$("input[type=file]").fileupload('add', {files: this.fileList});
         });
 
@@ -48,11 +68,11 @@ describe("WorkfilesImportDialog", function() {
         });
 
         it("displays the chosen filename", function() {
-            expect(this.dialog.$("span.fileName").text()).toBe("foo.txt");
+            expect(this.dialog.$("span.fileName").text()).toBe("foo.bar");
         });
 
         it("displays the appropriate file icon", function() {
-            expect(this.dialog.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("txt"));
+            expect(this.dialog.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("bar"));
         });
 
         context("when the submit is clicked", function() {
