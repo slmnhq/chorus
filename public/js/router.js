@@ -10,7 +10,8 @@
             ["/users/new", "UserNew"],
             ["/workspaces", "WorkspaceIndex"],
             ["/workspaces/:id", "WorkspaceSummary"],
-            ["/workspaces/:id/workfiles", "WorkfileIndex"],
+            ["/workspaces/:workspaceId/workfiles", "WorkfileIndex"],
+            ["/workspaces/:workspaceId/workfiles/:workspaceId", "WorkfileShow"],
             ["/styleguide", "StyleGuide"]
         ],
 

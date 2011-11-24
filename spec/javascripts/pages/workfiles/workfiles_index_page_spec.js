@@ -3,6 +3,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         fixtures.model = "Workfile";
         this.loadTemplate("workfile_list")
         this.loadTemplate("workfile_list_sidebar")
+        this.loadTemplate("breadcrumbs");
         this.loadTemplate("sub_nav_content")
         this.loadTemplate("sub_nav_and_header")
     })

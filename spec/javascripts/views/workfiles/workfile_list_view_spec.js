@@ -17,8 +17,8 @@ describe("WorkfileListView", function(){
 
         context("with some workfiles in the collection", function(){
             beforeEach(function(){
-                this.model1 = new chorus.models.Workfile({id: 12, fileType: "sql", fileName: "some_file.sql", description: "describe 1"});
-                this.model2 = new chorus.models.Workfile({id: 34, fileType: "txt", fileName: "other_file.txt", description: "describe 2"});
+                this.model1 = new chorus.models.Workfile({id: 12, fileType: "sql", fileName: "some_file.sql", description: "describe 1", workspaceId: 1});
+                this.model2 = new chorus.models.Workfile({id: 34, fileType: "txt", fileName: "other_file.txt", description: "describe 2", workspaceId: 1});
                 this.collection = new chorus.models.WorkfileSet([this.model1, this.model2], {workspaceId: 1234});
                 this.view = new chorus.views.WorkfileList({collection: this.collection});
                 this.view.render();
@@ -28,9 +28,14 @@ describe("WorkfileListView", function(){
                 expect(this.view.$("li").length).toBe(2);
             });
 
-            it("includes data-workfileId for each item", function(){
-                expect($(this.view.$("li")[0]).data("workfileid")).toBe(this.model1.get("id"));
-                expect($(this.view.$("li")[1]).data("workfileid")).toBe(this.model2.get("id"));
+            it("links each workfile to its show page", function(){
+                expect($(this.view.$("a.name")[0]).attr("href")).toBe(this.model1.showUrl());
+                expect($(this.view.$("a.name")[1]).attr("href")).toBe(this.model2.showUrl());
+            });
+
+            it("includes data-id for each item", function(){
+                expect($(this.view.$("li")[0]).data("id")).toBe(this.model1.get("id"));
+                expect($(this.view.$("li")[1]).data("id")).toBe(this.model2.get("id"));
             });
 
             it("includes the filename as a link", function(){

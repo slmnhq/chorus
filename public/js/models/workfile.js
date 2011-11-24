@@ -1,6 +1,7 @@
 ;(function(ns) {
     ns.Workfile = chorus.models.Base.extend({
         urlTemplate : "workspace/{{workspaceId}}/workfile/{{id}}",
+        showUrlTemplate : "workspaces/{{workspaceId}}/workfiles/{{id}}",
 
         modifier : function() {
             return new ns.User({

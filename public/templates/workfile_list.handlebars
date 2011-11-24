@@ -1,12 +1,12 @@
 {{#each models}}
-    <li data-workfileId="{{id}}">
+    <li data-id="{{id}}">
         <span class="spacer"/>
         <a class="image" href="{{showUrl}}">
             <img src="{{iconUrl}}"/>
-        </div>
+        </a>
         <div class="text">
             <div class="main">
-                <a title="{{fileName}}" class="name" href="#">
+                <a title="{{fileName}}" class="name" href="{{showUrl}}">
                     <span>{{fileName}}</span>
                 </a>
             </div>
