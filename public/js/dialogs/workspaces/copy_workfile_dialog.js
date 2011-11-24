@@ -19,7 +19,7 @@
 
         postRender : function() {
             this.picklistView.render();
-            $(this.el).append(this.picklistView.el);
+            this.$("#dialog_content .picklist").append(this.picklistView.el);
         }
     });
 })(jQuery, chorus.dialogs);
