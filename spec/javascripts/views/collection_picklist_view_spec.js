@@ -61,7 +61,7 @@ describe("chorus.views.CollectionPicklist", function() {
         })
     })
 
-    describe("selection", function() {
+    describe("#selectedItem", function() {
         beforeEach(function() {
             this.collection.loaded = true;
             this.view.render();
@@ -70,6 +70,11 @@ describe("chorus.views.CollectionPicklist", function() {
         it("defaults to no selection", function() {
             expect(this.view.$("li.selected")).not.toExist();
         })
+
+        it("returns undefined", function() {
+            expect(this.view.selectedItem()).toBeUndefined();
+        })
+
 
         describe("clicking on a list item", function() {
             beforeEach(function() {
@@ -84,6 +89,10 @@ describe("chorus.views.CollectionPicklist", function() {
 
             it("triggers an item:selected event", function() {
                 expect(this.itemSelectedSpy).toHaveBeenCalledWith(this.collection.at(0));
+            })
+
+            it("returns the selected item", function() {
+                expect(this.view.selectedItem()).toBe(this.collection.at(0));
             })
 
             describe("clicking on another list item", function () {
@@ -102,6 +111,10 @@ describe("chorus.views.CollectionPicklist", function() {
 
                 it("triggers another item:selected event", function() {
                     expect(this.itemSelectedSpy).toHaveBeenCalledWith(this.collection.at(2));
+                })
+
+                it("returns the selected item", function() {
+                    expect(this.view.selectedItem()).toBe(this.collection.at(2));
                 })
             })
         })

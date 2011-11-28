@@ -19,6 +19,10 @@ describe("chorus.dialogs.CopyWorkfile", function() {
             expect(this.server.requests[0].url).toBe("/edc/workspace/");
         })
 
+        it("fetches the source workfile", function() {
+            expect(this.server.requests[1].url).toBe("/edc/workspace/4/workfile/10")
+        })
+
         it("instantiates a CollectionPicklist with the workspace collection", function() {
             expect(this.dialog.picklistView.collection).toBe(this.dialog.collection);
         })
@@ -51,7 +55,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
                 this.dialog.picklistView.trigger("item:selected", true);
             })
 
-            it("should enable the button", function(){
+            it("should enable the button", function() {
                 expect(this.dialog.$("button.submit")).not.toBeDisabled();
             })
 
@@ -60,7 +64,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
                     this.dialog.picklistView.trigger("item:selected", undefined);
                 })
 
-                it("should disable the button", function(){
+                it("should disable the button", function() {
                     expect(this.dialog.$("button.submit")).toBeDisabled();
                 })
             })
@@ -68,21 +72,64 @@ describe("chorus.dialogs.CopyWorkfile", function() {
         })
     })
 
-//    context("when a workspace has been chosen", function() {
-//        beforeEach(function() {
-//            this.dialog.render();
-//            this.dialog.selectedIndex = 2;
-//            this.dialog.$("input[type=file]").fileupload('add', {files: this.fileList});
-//        });
-//
-//        context("when the submit is clicked", function() {
-//            it("closes the dialog", function() {
-//                expect(this.dialog.closeDialog).toHaveBeenCalled();
-//            });
-//
-//            it("navigates to the workfile index", function() {
-//                expect(chorus.router.navigate).toHaveBeenCalledWith("/workspace/4/workfiles", true);
-//            });
-//        });
-//    });
+    describe("clicking Copy File", function() {
+        beforeEach(function() {
+            fixtures.model = "Workspace";
+            this.workspace = fixtures.modelFor("fetch");
+            fixtures.model = "Workfile";
+            this.workfile = fixtures.modelFor("fetch");
+            this.dialog = new chorus.dialogs.CopyWorkfile({launchElement : this.launchElement });
+            this.dialog.workfile = this.workfile;
+            this.dialog.render();
+
+            spyOn(this.dialog.picklistView, "selectedItem").andReturn(this.workspace);
+            this.dialog.picklistView.trigger("item:selected", this.workspace);
+            spyOn(chorus.router, "navigate")
+            spyOn(this.dialog, "closeDialog")
+            this.dialog.$("button.submit").click();
+        });
+
+        it("calls the API", function() {
+            expect(_.last(this.server.requests).url).toBe("/edc/workspace/" + this.workspace.get("id") + "/workfile");
+            expect(_.last(this.server.requests).method).toBe("POST");
+        })
+
+        describe("when the API is successful", function() {
+            beforeEach(function() {
+                this.server.respondWith(
+                    'POST',
+                    "/edc/workspace/" + this.workspace.get("id") + "/workfile",
+                    this.prepareResponse(fixtures.jsonFor("copy")));
+
+                this.server.respond();
+            })
+
+            it("closes the dialog", function() {
+                expect(this.dialog.closeDialog).toHaveBeenCalled();
+            });
+
+            it("does not navigate", function() {
+                expect(chorus.router.navigate).not.toHaveBeenCalled();
+            });
+        })
+
+        describe("when the API fails", function() {
+            beforeEach(function() {
+                this.server.respondWith(
+                    'POST',
+                    "/edc/workspace/" + this.workspace.get("id") + "/workfile",
+                    this.prepareResponse(fixtures.jsonFor("copyFailed")));
+
+                this.server.respond();
+            })
+
+            it("does not close the dialog", function() {
+                expect(this.dialog.closeDialog).not.toHaveBeenCalled();
+            })
+
+            it("displays the server error message", function() {
+                expect(this.dialog.$(".errors").text().trim()).toBe("Workspace already has a workfile with this name. Specify a different name.")
+            })
+        })
+    });
 })

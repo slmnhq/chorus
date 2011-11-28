@@ -278,6 +278,55 @@
                     "resourcelink":"/edc/workspace/10000/workfile/10020",
                     "pagination":null,
                     "version":"0.1"
+                },
+
+                copy : {
+                    "message":[],
+                    "status":"ok",
+                    "requestId":1137,
+                    "resource":[
+                        {
+                            "fileName":"test.sql",
+                            "mimeType":"text/x-sql",
+                            "fileType":"sql",
+                            "isBinary":false,
+                            "workspaceId":"10010",
+                            "source":"chorus",
+                            "owner":"edcadmin",
+                            "description":"null",
+                            "latestVersionNum":1,
+                            "isDeleted":false,
+                            "modifiedBy":"edcadmin",
+                            "id":"10026",
+                            "lastUpdatedTxStamp":"2011-11-28 13:47:42.245",
+                            "createdTxStamp":"2011-11-28 13:47:42.245",
+                            "lastUpdatedStamp":"2011-11-28 13:47:42.253",
+                            "createdStamp":"2011-11-28 13:47:42.253"
+                        }
+                    ],
+                    "method":"POST",
+                    "resourcelink":"/edc/workspace/10010/workfile",
+                    "pagination":null,
+                    "version":"0.1"
+                },
+
+                copyFailed : {
+                    "message":[
+                        {
+                            "message":"Workspace already has a workfile with this name. Specify a different name.",
+                            "msgcode":"E_14_0013",
+                            "description":null,
+                            "severity":"error",
+                            "msgkey":"WORKFILE.FILENAME_EXISTS"
+                        }
+                    ],
+                    "status":"fail",
+                    "requestId":1156,
+                    "resource":[],
+                    "method":"POST",
+                    "resourcelink":"/edc/workspace/10010/workfile",
+                    "pagination":null,
+                    "version":"0.1"
                 }
             },
 

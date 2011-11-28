@@ -43,7 +43,12 @@
             var index = this.$("ul li").index($(e.currentTarget));
             this.$("li").removeClass("selected");
             $(e.currentTarget).addClass("selected");
-            this.trigger("item:selected", this.collection.at(index))
+            this.trigger("item:selected", this.selectedItem())
+        },
+
+        selectedItem : function() {
+            var index = this.$("ul li").index(this.$("li.selected"));
+            return this.collection.at(index);
         },
 
         sortItems : function(item) {
