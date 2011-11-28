@@ -1,6 +1,7 @@
 describe("chorus.dialogs.CopyWorkfile", function() {
     beforeEach(function() {
         this.loadTemplate("copy_workfile");
+        this.loadTemplate("collection_picklist");
         this.launchElement = $("<a data-workspace-id='4' data-workfile-id='10'></a>")
     });
 
@@ -11,7 +12,6 @@ describe("chorus.dialogs.CopyWorkfile", function() {
 
     describe("#setup", function() {
         beforeEach(function() {
-            spyOn(chorus.views, "CollectionPicklist")
             this.dialog = new chorus.dialogs.CopyWorkfile({launchElement : this.launchElement });
         })
 
@@ -20,7 +20,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
         })
 
         it("instantiates a CollectionPicklist with the workspace collection", function() {
-            expect(chorus.views.CollectionPicklist).toHaveBeenCalledWith({ collection : this.dialog.collection });
+            expect(this.dialog.picklistView.collection).toBe(this.dialog.collection);
         })
     })
 
@@ -33,6 +33,38 @@ describe("chorus.dialogs.CopyWorkfile", function() {
 
         it("renders the picklist view", function() {
             expect(this.dialog.picklistView.render).toHaveBeenCalled();
+        })
+    })
+
+    describe("copy file button", function() {
+        beforeEach(function() {
+            this.dialog = new chorus.dialogs.CopyWorkfile({launchElement : this.launchElement });
+            this.dialog.render();
+        })
+
+        it("is initially disabled", function() {
+            expect(this.dialog.$("button.submit")).toBeDisabled();
+        })
+
+        describe("when an item is selected", function() {
+            beforeEach(function() {
+                this.dialog.picklistView.trigger("item:selected", true);
+            })
+
+            it("should enable the button", function(){
+                expect(this.dialog.$("button.submit")).not.toBeDisabled();
+            })
+
+            describe("and it is subsequently deselected", function() {
+                beforeEach(function() {
+                    this.dialog.picklistView.trigger("item:selected", undefined);
+                })
+
+                it("should disable the button", function(){
+                    expect(this.dialog.$("button.submit")).toBeDisabled();
+                })
+            })
+
         })
     })
 

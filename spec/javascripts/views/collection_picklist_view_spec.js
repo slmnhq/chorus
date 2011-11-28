@@ -73,6 +73,8 @@ describe("chorus.views.CollectionPicklist", function() {
 
         describe("clicking on a list item", function() {
             beforeEach(function() {
+                this.itemSelectedSpy = jasmine.createSpy();
+                this.view.bind("item:selected", this.itemSelectedSpy);
                 this.view.$("li:first").click();
             })
 
@@ -80,19 +82,28 @@ describe("chorus.views.CollectionPicklist", function() {
                 expect(this.view.$("li:first")).toHaveClass("selected");
             })
 
+            it("triggers an item:selected event", function() {
+                expect(this.itemSelectedSpy).toHaveBeenCalledWith(this.collection.at(0));
+            })
+
             describe("clicking on another list item", function () {
                 beforeEach(function() {
+                    this.itemSelectedSpy.reset();
                     this.view.$("li:last").click();
                 })
+
                 it("marks the clicked item as selected", function() {
                     expect(this.view.$("li:last")).toHaveClass("selected");
                 })
+
                 it("unselects previously selected items", function() {
                     expect(this.view.$("li:first")).not.toHaveClass("selected");
                 })
+
+                it("triggers another item:selected event", function() {
+                    expect(this.itemSelectedSpy).toHaveBeenCalledWith(this.collection.at(2));
+                })
             })
-
-
         })
     })
 
@@ -116,6 +127,8 @@ describe("chorus.views.CollectionPicklist", function() {
 
             describe("typing another character", function() {
                 beforeEach(function() {
+                    this.itemSelectedSpy = jasmine.createSpy();
+                    this.view.bind("item:selected", this.itemSelectedSpy);
                     this.view.$("input").val("of");
                     this.view.$(".search input").trigger("textchange");
                 })
@@ -124,6 +137,10 @@ describe("chorus.views.CollectionPicklist", function() {
                     expect(this.view.$("li:eq(0)")).toHaveClass("filtered");
                     expect(this.view.$("li:eq(1)")).toHaveClass("filtered");
                     expect(this.view.$("li:eq(2)")).not.toHaveClass("filtered");
+                })
+
+                it("triggers item:selected with undefined", function() {
+                    expect(this.itemSelectedSpy).toHaveBeenCalledWith(undefined);
                 })
 
                 describe("backspacing", function() {
