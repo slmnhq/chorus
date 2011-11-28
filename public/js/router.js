@@ -40,12 +40,15 @@
                         return new F();
                     }
                     self.app.page = construct();
-                    $("#page").html(self.app.page.render().el);
+                    $("#page").
+                        html(self.app.page.render().el).
+                        attr("data-page", className);
 
                     if (self.showDevLinks) {
                         $("body > .routes").remove();
                         $("body").append(new ns.views.RouteSplat().render().el);
                     }
+
                 }
             }
         },

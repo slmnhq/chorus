@@ -13,15 +13,23 @@
 
 #content_header {
     background: white;
-    height: 36px;
-    border-bottom: 1px solid $subheader-border-color;
+    min-height: 36px;
     padding: 12px $padding-x;
+    border-bottom: 1px solid $subheader-border-color;
     @include border-top-radius(3px);
+
+    a {
+        color: $content-header-link-color;
+    }
 
     h1 {
         padding-top: 18px;
         font-size: 22px;
         font-weight: 600;
+    }
+
+    .icon {
+        float: left;
     }
 }
 
