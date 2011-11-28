@@ -48,7 +48,7 @@ describe("chorus.views.UserList", function() {
             });
 
             it("displays the list of users", function() {
-                expect(this.view.$("> li").length).toBe(2);
+                expect(this.view.$("> li").length).toBe(3);
             });
 
             it("displays the users' names", function() {
@@ -67,13 +67,13 @@ describe("chorus.views.UserList", function() {
             });
 
             it("displays an image for each user", function() {
-                expect(this.view.$("li img").length).toBe(2);
+                expect(this.view.$("li img").length).toBe(3);
                 expect(this.view.$("li img").attr("src")).toBe(this.collection.models[0].imageUrl({size: "icon"}));
             });
 
             it("displays a name for each user", function() {
-                expect(this.view.$("li:nth-child(1) .name").text().trim()).toBe("EDC Admin");
-                expect(this.view.$("li:nth-child(2) .name").text().trim()).toBe("Mark Rushakoff");
+                expect(this.view.$("li:nth-child(1) .name").text().trim()).toBe("Mark Rushakoff");
+                expect(this.view.$("li:nth-child(2) .name").text().trim()).toBe("EDC Admin");
             });
 
             it("links the user's name to the user show page", function(){

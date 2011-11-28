@@ -169,6 +169,17 @@
                     "requestId": 8,
                     "resource": [
                         {
+                            "userName": "markr",
+                            "firstName": "Mark",
+                            "lastName": "Rushakoff",
+                            "emailAddress": "markymark@pivotallabs.com",
+                            "admin": false,
+                            "techniques": null,
+                            "expertise": null,
+                            "lastLogin": "2011-11-03 17:45:39",
+                            "isDeleted": false
+                        },
+                        {
                             "userName": "edcadmin",
                             "firstName": "EDC",
                             "lastName": "Admin",
@@ -180,10 +191,10 @@
                             "isDeleted": false
                         },
                         {
-                            "userName": "markr",
-                            "firstName": "Mark",
-                            "lastName": "Rushakoff",
-                            "emailAddress": "markymark@pivotallabs.com",
+                            "userName": "frogman",
+                            "firstName": "frog",
+                            "lastName": "man",
+                            "emailAddress": "frogman@greenplum.com",
                             "admin": false,
                             "techniques": null,
                             "expertise": null,

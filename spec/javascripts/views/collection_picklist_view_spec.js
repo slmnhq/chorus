@@ -46,6 +46,12 @@ describe("chorus.views.CollectionPicklist", function() {
                     expect($(item).attr("src")).toBe(this.collection.at(index).imageUrl())
                 }, this)
             })
+
+            it("sorts the items alphabetically, case-insensitively", function() {
+                expect(this.view.$("li .name").eq(0).text().trim()).toBe("EDC Admin");
+                expect(this.view.$("li .name").eq(1).text().trim()).toBe("frog man");
+                expect(this.view.$("li .name").eq(2).text().trim()).toBe("Mark Rushakoff");
+            })
         })
     })
 
