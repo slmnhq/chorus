@@ -36,7 +36,7 @@ describe("WorkfilesSqlNewDialog", function() {
 
       context("with valid form values", function(){
         beforeEach(function(){
-          this.dialog.$("input[name=fileName]").val("awesomesqlfile")
+          this.dialog.$("input[name=fileName]").val("   awesomesqlfile   ")
           this.dialog.$("form").submit()
         })
 
@@ -44,7 +44,7 @@ describe("WorkfilesSqlNewDialog", function() {
           expect(this.dialog.model.get("source")).toBe("empty")
         })
 
-        it("sets the fileName to the file name with extension", function(){
+        it("sets the fileName to the trimmed file name with extension", function(){
           expect(this.dialog.model.get("fileName")).toBe("awesomesqlfile.sql")
         })
 

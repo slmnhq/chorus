@@ -22,7 +22,7 @@
         create: function create(e){
             e.preventDefault();
 
-            var fileName = this.$("input[name=fileName]").val();
+            var fileName = this.$("input[name=fileName]").val().trim();
 
             this.resource.set({
                 fileName : fileName ? fileName + ".sql" : ""
