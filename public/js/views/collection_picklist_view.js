@@ -30,7 +30,7 @@
             this.$("li").removeClass("filtered");
             this.collection.each(function(item, index) {
                 if(item.displayName().toLowerCase().indexOf(compare) == -1){
-                    self.$("li:eq(" + index + ")").addClass("filtered");
+                    self.$("li:eq(" + index + ")").addClass("filtered").removeClass("selected");
                 }
             })
         },

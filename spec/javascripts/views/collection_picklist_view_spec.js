@@ -140,5 +140,33 @@ describe("chorus.views.CollectionPicklist", function() {
                 })
             })
         })
+
+        describe("with a selection", function() {
+            beforeEach(function() {
+                this.view.$("li:first").addClass("selected");
+            })
+
+            describe("when the filter text matches the selected item", function() {
+                beforeEach(function() {
+                    this.view.$("input").val("c");
+                    this.view.$(".search input").trigger("textchange");
+                })
+
+                it("retains the selection", function() {
+                    expect(this.view.$("li:first")).toHaveClass("selected");
+                })
+            })
+
+            describe("when the filter text does not match the selected item", function() {
+                beforeEach(function() {
+                    this.view.$("input").val("z");
+                    this.view.$(".search input").trigger("textchange");
+                })
+
+                it("clears the selection", function() {
+                    expect(this.view.$("li.selected")).not.toExist();
+                })
+            })
+        })
     })
 })
