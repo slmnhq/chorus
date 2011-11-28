@@ -8,10 +8,11 @@
         line-height: 100%;
         height: 100%;
         width: 200px;
+        @include after-clearfix;
 
         >.link {
             position: absolute;
-            bottom: 0;
+            top: 24px;
             right: 0;
             font-size: 12px;
             font-weight: $semibold;
@@ -20,6 +21,7 @@
             a {
                 span {
                     border-bottom: 1px dotted $link-color;
+                    color: $link-color;
                 }
 
                 img {
@@ -29,11 +31,12 @@
         }
 
         .menu.popup_filter {
-            right: 10px;
+            right: 0px;
             top: 46px;
+            padding: 9px 2px;
 
             .pointer {
-                left: 120px;
+                left: 100px;
             }
 
             li {
@@ -52,6 +55,10 @@
                     &.hidden {
                         visibility: hidden;
                     }
+                }
+
+                a {
+                    color: black !important;
                 }
             }
 
