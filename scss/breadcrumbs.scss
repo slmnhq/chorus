@@ -3,6 +3,7 @@
 
 .breadcrumbs {
     @include linear-gradient(color-stops($body-glow-color, $body-background-color));
+    @include ellipsis;
     height: 32px;
 
     ol {
