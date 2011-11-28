@@ -54,4 +54,39 @@ describe("chorus.views.CollectionPicklist", function() {
             expect(this.view.collectionModelContext(this.collection.at(0)).name).toBe(this.collection.at(0).displayName());
         })
     })
+
+    describe("selection", function() {
+        beforeEach(function() {
+            this.collection.loaded = true;
+            this.view.render();
+        })
+
+        it("defaults to no selection", function() {
+            expect(this.view.$("li.selected")).not.toExist();
+        })
+
+        describe("clicking on a list item", function() {
+            beforeEach(function() {
+                this.view.$("li:first").click();
+            })
+
+            it("marks the clicked item as selected", function() {
+                expect(this.view.$("li:first")).toHaveClass("selected");
+            })
+
+            describe("clicking on another list item", function (){
+                beforeEach(function() {
+                    this.view.$("li:last").click();
+                })
+                it("marks the clicked item as selected", function() {
+                    expect(this.view.$("li:last")).toHaveClass("selected");
+                })
+                it("unselects previously selected items", function() {
+                    expect(this.view.$("li:first")).not.toHaveClass("selected");
+                })
+            })
+
+
+        })
+    })
 })
