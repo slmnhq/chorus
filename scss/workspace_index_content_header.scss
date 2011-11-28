@@ -19,6 +19,7 @@
             color: $dark-text-color;
 
             a {
+                margin-left: 3px;
                 span {
                     border-bottom: 1px dotted $link-color;
                     color: $link-color;
@@ -31,9 +32,9 @@
         }
 
         .menu.popup_filter {
-            right: 0px;
+            right: -2px;
             top: 46px;
-            padding: 9px 2px;
+            padding: 9px 7px 9px 2px;
 
             .pointer {
                 left: 100px;
@@ -48,7 +49,7 @@
                     display: inline-block;
                     width: 10px;
                     height: 10px;
-                    margin-right: 8px;
+                    margin-right: 2px;
                     position: relative;
                     top: 1px;
 
