@@ -1,3 +1,5 @@
+@import "_common.scss";
+
 #page[data-page=WorkfileShow]  {
     #content_header {
         a.workfile_list {
@@ -7,6 +9,30 @@
 
         h1 {
             padding:13px 0 5px;
+        }
+    }
+
+    #content_details {
+        background: $workfiles-action-details-background-color;
+        height: 30px;
+        line-height: 30px;
+        vertical-align: middle;
+        color: $workfiles-action-details-link-color;
+
+        a {
+            padding: 5px 16px; 
+            margin-left: 4px;
+            color: $workfiles-action-details-link-color;
+            font-weight: $semibold;
+            font-size: 13px;
+            @include border-radius(30px);
+            border: 1px solid $workfiles-action-details-link-border-color;
+        }
+        
+        span.view {
+            float: right;
+            margin-right: 9px;
+            font-size: 11px
         }
     }
 }

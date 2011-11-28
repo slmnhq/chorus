@@ -1,3 +1,6 @@
+@import "compass/utilities";
+@import "compass/css3";
+
 // Dimensions
 $sidebar-width : 250px;
 $page-min-width : 750px;
@@ -20,6 +23,7 @@ $weak-text-color : #959595;
 $link-color : #2c95dd;
 $weak-link-color: #4e85c1;
 $content-header-link-color: $weak-text-color;
+$workfiles-action-details-link-color: #44681B;
 
 $element-background: white;
 $button-background-color : white;
@@ -32,6 +36,7 @@ $pagination-border-color: #A4A6A8;
 $menu-border-color: #B0B0B0;
 $header-border-color: #8A97A2;
 $list-border-color: #B9BBBD;
+$workfiles-action-details-link-border-color: #98B675;
 
 $administrator-background-color: #B1DBAF;
 
@@ -42,6 +47,7 @@ $card-border-color: $border-color;
 $error-background-color: #B61B1D;
 $error-color: white;
 $alert-background-color: #B5121B;
+$workfiles-action-details-background-color: #B4D88B;
 
 // Font weights
 $semibold: 600;

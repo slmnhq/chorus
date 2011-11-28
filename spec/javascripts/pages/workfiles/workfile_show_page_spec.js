@@ -42,14 +42,9 @@ describe("chorus.pages.WorkfileShowPage", function() {
             expect(this.page.mainContent.contentHeader.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl('txt'));
         });
 
-        it("it displays the workfile name in the content detail", function() {
-            expect(this.page.mainContent.contentDetails.$("h1").text()).toBe("Afile.txt");
+        it("has the three action links in the details bar", function() {
+            //rudimentary test, testing that it renders properly, feel free to make better
+            expect(this.page.mainContent.contentDetails.$("a").length).toBe(3);
         });
-
-        // describe("breadcrumbs", function() {
-        //     it("links to  ", function() {
-                
-        //     });
-        // });
     })
 });
