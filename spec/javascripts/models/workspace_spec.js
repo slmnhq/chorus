@@ -90,4 +90,14 @@ describe("chorus.models.Workspace", function() {
             expect(this.model.imageUrl({size: "icon"})).toBe("/edc/workspace/10013/image?size=icon");
         });
     });
+
+    describe("#picklistImageUrl", function() {
+        beforeEach(function() {
+            this.model = fixtures.modelFor("fetch");
+        })
+
+        it("uses the right URL", function(){
+            expect(this.model.picklistImageUrl()).toBe("/images/workspace-icon-small.png");
+        });
+    });
 });

@@ -30,6 +30,10 @@
             return "/edc/userimage/" + this.get("userName") + "?size=" + (options.size || "original");
         },
 
+        picklistImageUrl : function(){
+            return this.imageUrl();
+        },
+
         displayName : function() {
             return [this.get("firstName"), this.get("lastName")].join(' ');
         },

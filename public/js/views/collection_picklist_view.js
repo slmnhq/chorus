@@ -3,7 +3,7 @@
         className : "collection_picklist",
 
         events : {
-            'click li': 'selectItem',
+            'click li': 'selectItem'
         },
 
         preRender : function(el) {
@@ -20,7 +20,7 @@
         collectionModelContext : function(model) {
             return {
                 name : model.displayName(),
-                imageUrl : model.imageUrl()
+                imageUrl : model.picklistImageUrl()
             }
         },
 

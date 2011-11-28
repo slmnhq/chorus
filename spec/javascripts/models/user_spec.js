@@ -100,6 +100,13 @@ describe("chorus.models.User", function() {
         });
     });
 
+    describe("#picklistImageUrl", function() {
+        it("uses the right URL", function(){
+            var user = new models.User({userName: 'foo'});
+            expect(user.picklistImageUrl()).toBe("/edc/userimage/foo?size=original");
+        });
+    })
+
     describe("#displayName", function() {
         beforeEach(function() {
             this.model.set({ firstName : "Danny", lastName : "Burkes" });

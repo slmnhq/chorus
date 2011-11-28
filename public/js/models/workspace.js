@@ -38,6 +38,10 @@
             return "/edc/workspace/" + this.get("id") + "/image?size=" + (options.size || "original");
         },
 
+        picklistImageUrl : function(){
+          return "/images/workspace-icon-small.png";
+        },
+
         attrToLabel : {
             "name" : "workspace.validation.name"
         }
