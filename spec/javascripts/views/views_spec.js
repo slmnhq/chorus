@@ -1,5 +1,6 @@
 describe("chorus.views", function() {
     describe("#context", function() {
+
         describe("for a view with a model", function() {
             beforeEach(function() {
                 this.model = new chorus.models.Base({ bar: "foo"});
@@ -45,6 +46,29 @@ describe("chorus.views", function() {
                     expect(this.view.context().one).toBe(1);
                 });
             });
+
+            describe("#preRender", function() {
+                beforeEach(function() {
+                    var self = this;
+                    this.postRenderCallCountWhenPreRenderCalled = 0;
+                    this.view.template = function() {
+                        return "<form><input name='foo'/><input name='bar'/><input name='whiz'/></form>";
+                    };
+
+                    spyOn(this.view, "postRender").andCallThrough();
+                    spyOn(this.view, "preRender").andCallFake(function() {
+                        self.postRenderCallCountWhenPreRenderCalled = self.view.postRender.callCount;
+                    })
+
+                    this.view.render();
+                });
+
+                it("is called before postRender", function() {
+                    expect(this.postRenderCallCountWhenPreRenderCalled).toBe(0);
+                    expect(this.view.postRender.callCount).toBe(1);
+                })
+            })
+
         });
 
         describe("when an additionalContext is defined", function() {

@@ -12,12 +12,14 @@
         setup: $.noop,
         postRender: $.noop,
         bindCallbacks: $.noop,
+        preRender: $.noop,
 
         context : function() {
             return {}
         },
 
         render: function render() {
+            this.preRender($(this.el));
             $(this.el).html(this.template(this.context()))
                 .addClass(this.className)
                 .attr("title", this.options.title || this.title || "")
