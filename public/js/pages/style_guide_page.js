@@ -49,33 +49,7 @@
 
                 "List Page (loading)" : new chorus.views.MainContentList({modelClass : "User", collection : loadingCollection}),
 
-                "List Page" : new chorus.views.MainContentList({modelClass : "User", collection : userCollection}),
-
-                "SubNav View" : new chorus.views.SubNavContentView({
-                    modelClass : "Workspace",
-                    tab : "summary",
-                    model : workspace,
-                    content : emptyView
-                }),
-
-                "SubNav View (rightmost tab)" : new chorus.views.SubNavContentView({
-                    modelClass : "Workspace",
-                    tab : "workfiles",
-                    model : workspace,
-                    content : emptyView
-                }),
-
-                "SubNav List (loading)" : new chorus.views.SubNavContentList({
-                    modelClass : "Workfile",
-                    tab : "workfiles",
-                    collection : loadingCollection,
-                    model : workspace}),
-
-                "SubNav List" : new chorus.views.SubNavContentList({
-                    modelClass : "Workfile",
-                    tab : "workfiles",
-                    collection : workfileCollection,
-                    model : workspace})
+                "List Page" : new chorus.views.MainContentList({modelClass : "User", collection : userCollection})
             }
         },
 

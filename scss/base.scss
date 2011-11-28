@@ -51,6 +51,11 @@ input, textarea {
     font-family: Myriad Pro;
 }
 
+input:not([type="image"]), textarea {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
 input[type=checkbox], input[type=radio] {
     display: inline;
     width: auto;
