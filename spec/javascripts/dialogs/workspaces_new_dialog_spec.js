@@ -21,12 +21,12 @@ describe("WorkspacesNewDialog", function() {
     describe("submitting the form", function() {
         beforeEach(function() {
             this.dialog.render();
-            this.dialog.$("input[name=name]").val("Super Dataland");
+            this.dialog.$("input[name=name]").val("   Super Dataland   ");
             this.dialog.$("input[type=checkbox][name=isPublic]").attr("checked", "checked");
             this.dialog.$("form.new_workspace").submit();
         })
 
-        it("fills in the workspace", function() {
+        it("fills in the workspace, with trim", function() {
             expect(this.dialog.resource.get("name")).toBe("Super Dataland")
             expect(this.dialog.resource.get("isPublic")).toBe(true)
         })

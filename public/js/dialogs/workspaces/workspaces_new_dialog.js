@@ -21,7 +21,7 @@
             e.preventDefault();
 
             this.resource.set({
-                name : this.$("input[name=name]").val(),
+                name : this.$("input[name=name]").val().trim(),
                 isPublic : !!this.$("input[name=isPublic]").is(":checked")
             })
 
