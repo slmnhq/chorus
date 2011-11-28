@@ -8,7 +8,6 @@ describe("chorus.views.SubNav", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            console.log(this.view);
             this.view.render();
         })
 
