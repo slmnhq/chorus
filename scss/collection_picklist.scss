@@ -1,5 +1,21 @@
 @import "_common.scss";
+@import "compass/css3/border-radius";
 
 .collection_picklist {
     background-color: $body-background-color;
+
+    .search {
+        padding: 4px 12px;
+        margin: 0;
+        height: 25px;
+        border-bottom: 1px solid $pagination-border-color;
+        
+        input[type=text] {
+            margin: 0;
+            @include border-radius(12px);
+            font-size: 14px;
+            padding: 2px 4px 0px 24px;
+        }
+
+    }
 }
