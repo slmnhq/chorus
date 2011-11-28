@@ -1,26 +1,26 @@
 ;(function($, ns) {
     ns.pages.WorkfileShowPage = ns.pages.Base.extend({
         setup : function(workspaceId, workfileId) {
-            this.workspace = new chorus.models.Workspace({id: workspaceId});
+            this.workspace = new ns.models.Workspace({id: workspaceId});
             this.workspace.fetch();
-            this.model = new chorus.models.Workfile({workfileId: workfileId, workspaceId: workspaceId});
+            this.model = new ns.models.Workfile({id: workfileId, workspaceId: workspaceId});
             this.model.fetch();
 
-            this.breadcrumbs = new chorus.views.WorkspaceBreadcrumbsView({model: this.workspace});
+            this.breadcrumbs = new ns.views.WorkspaceBreadcrumbsView({model: this.workspace});
 
-            this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "workfiles"});
-            this.mainContent = new chorus.views.MainContentView({
+            this.subNav = new ns.views.SubNav({workspace: this.workspace, tab: "workfiles"});
+
+            this.mainContent = new ns.views.MainContentView({
                 model : this.model,
-                contentHeader : new chorus.views.StaticTemplate("plain_text", {text : "You go girl"}),
-                content : new chorus.views.StaticTemplate("plain_text", {text : t("users.details")})
+                contentHeader : new ns.views.WorkfileHeader({model : this.model}),
+                content : new ns.views.StaticTemplate("plain_text", {text : t("users.details")})
             });
-            
-            // this.sidebar = new chorus.views.WorkfileListSidebar({model : workspace});
-            // this.mainContent.content.bind("workfile:selected", function(workfileId) {
-            //     this.sidebar.trigger("workfile:selected", workfileId)
-            // }, this);
         }
     });
+
+    ns.views.WorkfileHeader = ns.views.Base.extend({
+        className : "workfile_header",
+    })
 
 
 })(jQuery, chorus);

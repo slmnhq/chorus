@@ -1,9 +1,10 @@
 describe("chorus.pages.WorkfileShowPage", function() {
     beforeEach(function() {
-        this.loadTemplate("main_conent");
+        this.loadTemplate("main_content");
         this.loadTemplate("sub_nav");
         this.loadTemplate("logged_in_layout");
         this.loadTemplate("breadcrumbs");
+        this.loadTemplate("workfile_header");
 
         this.workspaceId = 4;
         this.workfileId = 5;
@@ -19,7 +20,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
         it("instantiates and fetches a workfile with ehe given id", function() {
             var workfile = this.page.model;
-            expect(workfile.get("workfileId")).toBe(this.workfileId);
+            expect(workfile.get("id")).toBe(this.workfileId);
             expect(this.server.requests[1].url).toBe(workfile.url());
         });
     });
@@ -27,14 +28,14 @@ describe("chorus.pages.WorkfileShowPage", function() {
     describe("#render", function(){
         beforeEach(function() {
             this.page.model.set({
-                name: "A file"
+                fileName: "Afile.foo"
             });
             this.page.render();
         });
 
-        xit("it displays the workfile name in the content header", function() {
+        it("it displays the workfile name in the content header", function() {
             var workfile = this.page.model;
-            expect(this.page.mainContent.contentHeader.$("h1").text()).toBe("A file");
+            expect(this.page.mainContent.contentHeader.$("h1").text()).toBe("Afile.foo");
         });
 
         // describe("breadcrumbs", function() {
