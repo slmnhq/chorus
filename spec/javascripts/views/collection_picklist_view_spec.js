@@ -10,7 +10,7 @@ describe("chorus.views.CollectionPicklist", function() {
         beforeEach(function() {
             this.view.render();
         })
-        
+
         context("when the collection is not loaded", function() {
             it("displays a loading message", function() {
                 expect(this.view.$(".loading")).toExist();
@@ -22,7 +22,7 @@ describe("chorus.views.CollectionPicklist", function() {
                 this.collection.loaded = true;
                 this.view.render();
             })
-            
+
             it("renders a search input", function() {
                 expect(this.view.$(".search input")).toExist();
             })
@@ -49,7 +49,7 @@ describe("chorus.views.CollectionPicklist", function() {
 
             it("sorts the items alphabetically, case-insensitively", function() {
                 expect(this.view.$("li .name").eq(0).text().trim()).toBe("EDC Admin");
-                expect(this.view.$("li .name").eq(1).text().trim()).toBe("frog man");
+                expect(this.view.$("li .name").eq(1).text().trim()).toBe("frOg man");
                 expect(this.view.$("li .name").eq(2).text().trim()).toBe("Mark Rushakoff");
             })
         })
@@ -80,7 +80,7 @@ describe("chorus.views.CollectionPicklist", function() {
                 expect(this.view.$("li:first")).toHaveClass("selected");
             })
 
-            describe("clicking on another list item", function (){
+            describe("clicking on another list item", function () {
                 beforeEach(function() {
                     this.view.$("li:last").click();
                 })
@@ -93,6 +93,52 @@ describe("chorus.views.CollectionPicklist", function() {
             })
 
 
+        })
+    })
+
+    describe("search", function() {
+        beforeEach(function() {
+            this.collection.loaded = true;
+            this.view.render();
+        })
+
+        describe("typing the first character", function() {
+            beforeEach(function() {
+                this.view.$("input").val("o");
+                this.view.$(".search input").trigger("textchange");
+            })
+
+            it("hides items not containing that character", function() {
+                expect(this.view.$("li:eq(0)")).toHaveClass("filtered");
+                expect(this.view.$("li:eq(1)")).not.toHaveClass("filtered");
+                expect(this.view.$("li:eq(2)")).not.toHaveClass("filtered");
+            })
+
+            describe("typing another character", function() {
+                beforeEach(function() {
+                    this.view.$("input").val("of");
+                    this.view.$(".search input").trigger("textchange");
+                })
+
+                it("hides items not containing the adjacent character sequence", function() {
+                    expect(this.view.$("li:eq(0)")).toHaveClass("filtered");
+                    expect(this.view.$("li:eq(1)")).toHaveClass("filtered");
+                    expect(this.view.$("li:eq(2)")).not.toHaveClass("filtered");
+                })
+
+                describe("backspacing", function() {
+                    beforeEach(function() {
+                        this.view.$("input").val("o");
+                        this.view.$(".search input").trigger("textchange");
+                    })
+
+                    it("hides items not containing that character", function() {
+                        expect(this.view.$("li:eq(0)")).toHaveClass("filtered");
+                        expect(this.view.$("li:eq(1)")).not.toHaveClass("filtered");
+                        expect(this.view.$("li:eq(2)")).not.toHaveClass("filtered");
+                    })
+                })
+            })
         })
     })
 })

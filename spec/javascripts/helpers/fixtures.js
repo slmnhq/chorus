@@ -192,7 +192,7 @@
                         },
                         {
                             "userName": "frogman",
-                            "firstName": "frog",
+                            "firstName": "frOg",
                             "lastName": "man",
                             "emailAddress": "frogman@greenplum.com",
                             "admin": false,
