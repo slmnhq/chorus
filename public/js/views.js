@@ -1,4 +1,5 @@
-;(function(ns) {
+;
+(function(ns) {
     ns.Bare = Backbone.View.extend({
         initialize: function initialize() {
             this.preInitialize();
@@ -86,7 +87,7 @@
                 var input = self.$("form input[name=" + key + "], form textarea[name=" + name + "]");
                 input.addClass("has_error");
                 input.qtip({
-                    content: val,
+                    content: { text : val , prerender: 'true' },
                     style: "chorus",
                     position : {
                         corner : {
@@ -98,10 +99,20 @@
                         },
                         type : 'fixed',
                         container: self.el
+                    },
+                    hide: 'mouseout',
+                    show: 'focus',
+                    api: {
+                        beforeRender: function() {
+                            this.elements.target.bind('mouseover', this.show);
+                            this.elements.target.bind('blur', this.hide);
+                        }
                     }
                 });
+
             });
-            
+
+
             this.$(".errors").replaceWith(Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context(), Handlebars.helpers, Handlebars.partials));
         },
 
