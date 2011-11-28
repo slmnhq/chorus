@@ -29,7 +29,7 @@
     })
 
     ns.views.WorkfileContentDetails = ns.views.Base.extend({
-        className : "workfile_content_details",
+        className : "workfile_content_details"
     })
 
 })(jQuery, chorus);

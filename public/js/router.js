@@ -58,7 +58,9 @@
                 Backbone.history.loadUrl(fragment);
 
             } else {
-                this.__proto__.navigate(fragment, triggerRoute);
+//                this.__proto__.navigate(fragment, triggerRoute);
+//                alert(this.__proto__, Object.getPrototypeOf(this), this.constructor.prototype);
+                  Backbone.Router.prototype.navigate(fragment, triggerRoute);
             }
         }
     });
