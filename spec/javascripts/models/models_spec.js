@@ -439,6 +439,28 @@ describe("chorus.models", function() {
                 expect(this.server.requests[0].url).toBe("/edc/bar/bar?page=1&rows=1000");
             })
 
+            context("when the collection is sorted ascending", function() {
+                beforeEach(function() {
+                    this.collection.sortAsc("name");
+                    this.collection.fetchAll();
+                });
+
+                it("puts the sort parameters in the URL", function() {
+                    expect(this.server.requests[1].url).toBe("/edc/bar/bar?page=1&rows=1000&sidx=name&sord=asc");
+                });
+            });
+
+            context("when the collection is sorted descending", function() {
+                beforeEach(function() {
+                    this.collection.sortDesc("name");
+                    this.collection.fetchAll();
+                });
+
+                it("puts the sort parameters in the URL", function() {
+                    expect(this.server.requests[1].url).toBe("/edc/bar/bar?page=1&rows=1000&sidx=name&sord=desc");
+                });
+            });
+
             describe("and the server responds successfully", function() {
                 beforeEach(function() {
                     this.pageOneResponse = { status: "ok", resource : [

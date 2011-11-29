@@ -19,8 +19,10 @@
             fetchPage : function(page) {
                 var baseUrl = this.url();
 
+                var url =  baseUrl + "?page=" + page + "&rows=1000"
+                url = this.sortIndex && this.sortOrder ? url + "&sidx=" + this.sortIndex + "&sord=" + this.sortOrder : url
                 this.fetch({
-                    url : baseUrl + "?page=" + page + "&rows=1000",
+                    url :url,
                     silent: true,
                     add : page != 1,
                     success : function(collection, resp) {
@@ -46,6 +48,19 @@
                 }
                 this.loaded = true;
                 return data.resource;
+            },
+
+            sortDesc : function(idx) {
+                this._sort(idx, "desc")
+            },
+
+            sortAsc : function(idx) {
+                this._sort(idx, "asc")
+            }, 
+
+            _sort : function(idx, order) {
+                this.sortIndex = idx
+                this.sortOrder = order
             }
         }),
 
