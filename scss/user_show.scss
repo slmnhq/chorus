@@ -65,4 +65,8 @@ $column-padding-y : $padding-x;
     padding-bottom: 20000px + $column-padding-y;  /* X + padding-bottom */
     margin-bottom: -20000px;  /* X */
   }
+
+  div.title {
+    margin-bottom : 3px;
+  }
 }
