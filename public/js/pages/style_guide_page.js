@@ -3,38 +3,23 @@
         className : "style_guide",
 
         setup : function() {
-            var loadingCollection = new chorus.models.UserSet();
+            this.loadingCollection = new chorus.models.UserSet();
 
-            var userCollection = new chorus.models.UserSet([
+            this.userCollection = new chorus.models.UserSet([
                 new chorus.models.User({ userName: "edcadmin", fullName: "Johnny Danger", admin : false}),
                 new chorus.models.User({ userName: "edcadmin", fullName: "Laurie Blakenship", admin : true}),
                 new chorus.models.User({ userName: "edcadmin", fullName: "George Gorilla", admin : false})
             ]);
-            userCollection.loaded = true;
+            this.userCollection.loaded = true;
 
-            var workfileCollection = new chorus.models.WorkfileSet([
-                new chorus.models.Workfile({ fileType: "sql", fileName: "topsecret.sql", description: "Don't tell anytone about this"}),
-                new chorus.models.Workfile({ fileType: "txt", fileName: "contacts.txt", description: "Ma peeps"}),
-                new chorus.models.Workfile({ fileType: "Java", fileName: "boxplot.java", description: "This is rad, yo"})
-            ])
-            workfileCollection.loaded = true;
+            this.workspace = new chorus.models.Workspace({ description: "One awesome workspace"})
+            this.workspace.loaded = true;
+        },
 
-            var loadingWorkspace = new chorus.models.Workspace()
+        postRender : function() {
+            var self = this;
 
-            var workspace = new chorus.models.Workspace({ description: "One awesome workspace"})
-            workspace.loaded = true;
-
-            var emptyView = new chorus.views.StaticTemplate("plain_text", {text: ""});
-
-            var showPageStub = chorus.views.MainContentView.extend({
-                setup : function() {
-                    this.content = emptyView;
-                    this.contentHeader = new chorus.views.StaticTemplate("default_content_header", {title: t("users.new_user")});
-                    this.contentDetails = new chorus.views.StaticTemplate("plain_text", {text: t("users.details")});
-                }
-            });
-
-            this.views = {
+            this.elements = {
                 "Header" : new chorus.views.Header(),
 
                 breadcrumbs : new chorus.views.BreadcrumbsView({
@@ -45,16 +30,27 @@
                     ]
                 }),
 
-                "Show Page Header" : new showPageStub(),
-
-                "List Page (loading)" : new chorus.views.MainContentList({modelClass : "User", collection : loadingCollection}),
-
-                "List Page" : new chorus.views.MainContentList({modelClass : "User", collection : userCollection})
+                "Sub Nav" : new chorus.views.SubNav({model : this.workspace, tab : "workfiles"}),
             }
-        },
 
-        postRender : function() {
-            var self = this;
+            this.views = {
+                "Basic Main Content Stucture" : new chorus.views.MainContentView({
+                    content : new chorus.views.StaticTemplate("style_guide_content"),
+                    contentHeader : new chorus.views.StaticTemplate("default_content_header", {title: 'Content Header'}),
+                    contentDetails : new chorus.views.StaticTemplate("plain_text", {text: 'Content Details'}),
+                }),
+
+                "List Page (loading)" : new chorus.views.MainContentList({modelClass : "User", collection : this.loadingCollection}),
+
+                "List Page" : new chorus.views.MainContentList({modelClass : "User", collection : this.userCollection})
+            }
+
+            _.each(this.elements, function(element, name) {
+                self.$("ul.views").append("<li class='view'><h1>" + name + "</h1><div class='element_guts'/></li>")
+                element.el = self.$(".element_guts:last");
+                element.delegateEvents();
+                element.render();
+            })
 
             _.each(this.views, function(view, name) {
                 self.$("ul.views").append("<li class='view'><h1>" + name + "</h1><div class='view_guts'/></li>")

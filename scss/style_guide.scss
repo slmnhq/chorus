@@ -1,3 +1,5 @@
+@import "layout.scss";
+
 .style_guide {
     padding: 0 10px;
     
@@ -12,5 +14,9 @@
                 color: #0000CC;
             }
         }
+    }
+
+    div.view_guts {
+        @extend #main_content;
     }
 }
