@@ -4,6 +4,7 @@
             this.workspace = new ns.models.Workspace({id: workspaceId});
             this.workspace.fetch();
             this.model = new ns.models.Workfile({id: workfileId, workspaceId: workspaceId});
+            this.model.bind("change", this.modelChanged, this);
             this.model.fetch();
 
             this.breadcrumbs = new ns.views.WorkspaceBreadcrumbsView({model: this.workspace});
@@ -12,10 +13,17 @@
 
             this.mainContent = new ns.views.MainContentView({
                 model : this.model,
-                contentHeader : new ns.views.WorkfileHeader({model : this.model}),
-                contentDetails : new ns.views.WorkfileContentDetails({model : this.model}),
-                content : new ns.views.StaticTemplate("plain_text", {text : t("users.details")})
+                contentHeader : new ns.views.WorkfileHeader({model : this.model})
             });
+        },
+
+        modelChanged : function() {
+            if (!this.mainContent.contentDetails) {
+                this.mainContent.contentDetails = ns.views.WorkfileContentDetails.buildFor(this.model);
+                this.mainContent.content = ns.views.WorkfileContent.buildFor(this.model);
+            }
+
+            this.render();
         }
     });
 
@@ -26,10 +34,6 @@
                 iconUrl : this.model.get("fileName") && chorus.urlHelpers.fileIconUrl(_.last(this.model.get("fileName").split('.')))
             };
         }
-    })
-
-    ns.views.WorkfileContentDetails = ns.views.Base.extend({
-        className : "workfile_content_details"
     })
 
 })(jQuery, chorus);

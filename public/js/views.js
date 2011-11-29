@@ -148,8 +148,12 @@
                 this.$("#content_details").addClass("hidden");
             }
 
-            this.$("#content").html(this.content.render().el);
-            this.content.delegateEvents();
+            if (this.content) {
+                this.$("#content").html(this.content.render().el);
+                this.content.delegateEvents();
+            } else {
+                this.$("#content").addClass("hidden");
+            }
         }
     });
 

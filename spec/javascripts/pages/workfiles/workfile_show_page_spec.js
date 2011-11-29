@@ -6,9 +6,12 @@ describe("chorus.pages.WorkfileShowPage", function() {
         this.loadTemplate("breadcrumbs");
         this.loadTemplate("workfile_header");
         this.loadTemplate("workfile_content_details");
+        this.loadTemplate("header")
 
         this.workspaceId = 4;
         this.workfileId = 5;
+        spyOn(chorus.views.WorkfileContentDetails, 'buildFor');
+        spyOn(chorus.views.WorkfileContent, 'buildFor');
         this.page = new chorus.pages.WorkfileShowPage(this.workspaceId, this.workfileId);
     });
 
@@ -23,6 +26,30 @@ describe("chorus.pages.WorkfileShowPage", function() {
             var workfile = this.page.model;
             expect(workfile.get("id")).toBe(this.workfileId);
             expect(this.server.requests[1].url).toBe(workfile.url());
+        });
+
+        it("does not instantiate views for the content details or content", function() {
+            expect(this.page.mainContent.contentDetails).toBeUndefined();
+            expect(this.page.mainContent.content).toBeUndefined();
+        });
+
+        describe("when the workfile is fetched", function() {
+            beforeEach(function() {
+                spyOn(this.page.mainContent, "render");
+                this.page.model.trigger('change', this.page.model);
+            })
+
+            it("instantiates the content details view", function() {
+                expect(chorus.views.WorkfileContentDetails.buildFor).toHaveBeenCalledWith(this.page.model)
+            })
+
+            it("instantiates the content view", function() {
+                expect(chorus.views.WorkfileContent.buildFor).toHaveBeenCalledWith(this.page.model)
+            })
+            
+            it("re-renders the mainContent", function() {
+                expect(this.page.mainContent.render).toHaveBeenCalled();
+            })
         });
     });
 
@@ -40,11 +67,6 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
         it("displays the file icon in the content header", function() {
             expect(this.page.mainContent.contentHeader.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl('txt'));
-        });
-
-        it("has the three action links in the details bar", function() {
-            //rudimentary test, testing that it renders properly, feel free to make better
-            expect(this.page.mainContent.contentDetails.$("a").length).toBe(3);
         });
     })
 });

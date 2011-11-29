@@ -250,6 +250,17 @@ describe("chorus.views", function() {
                 });
             });
 
+            context("without a supplied content", function() {
+                beforeEach(function() {
+                    this.view.content = undefined;
+                    this.view.render();
+                });
+
+                it("should have the hidden class on the content div", function() {
+                    expect((this.view.$("#content"))).toHaveClass("hidden");
+                });
+            })
+
             context("without a supplied contentDetails", function() {
                 it("should have the hidden class on the content_details div", function() {
                     expect((this.view.$("#content_details"))).toHaveClass("hidden");
