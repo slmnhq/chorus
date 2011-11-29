@@ -327,6 +327,39 @@
                     "resourcelink":"/edc/workspace/10010/workfile",
                     "pagination":null,
                     "version":"0.1"
+                },
+
+                image : {
+                    "message": [],
+                    "status": "ok",
+                    "requestId": 1913,
+                    "resource": [{
+                        "id": "10035",
+                        "fileName": "avatar.jpg",
+                        "mimeType": "image/jpeg",
+                        "fileType": "N/A",
+                        "isBinary": true,
+                        "workspaceId": "10000",
+                        "source": "fs",
+                        "owner": "edcadmin",
+                        "description": null,
+                        "latestVersionNum": 1,
+                        "isDeleted": false,
+                        "modifiedBy": "edcadmin",
+                        "lastUpdatedStamp": "2011-11-29 10:31:15.153",
+                        "lastUpdatedTxStamp": "2011-11-29 10:31:15.143",
+                        "createdStamp": "2011-11-29 10:31:15.153",
+                        "createdTxStamp": "2011-11-29 10:31:15.143",
+                        "versionFileId": "1322591475139_3804",
+                        "versionNum": "1",
+                        "versionOwner": "edcadmin",
+                        "hasDraft": false,
+                        "sandboxId": null
+                    }],
+                    "method": "GET",
+                    "resourcelink": "/edc/workspace/10000/workfile/10035",
+                    "pagination": null,
+                    "version": "0.1"
                 }
             },
 
