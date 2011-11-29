@@ -130,6 +130,22 @@ describe("chorus.views.userNew", function() {
                 });
 
             });
+
+            context("cancelling", function() {
+                beforeEach(function() {
+                    spyOn(this.view.$("form")[0], "submit");
+                    spyOn(window.history, "back");
+                    this.view.$("button.cancel").click();
+                })
+
+                it("does not submit the form", function() {
+                    expect(this.view.$("form")[0].submit).not.toHaveBeenCalled();
+                })
+
+                it("navigates back", function() {
+                    expect(window.history.back).toHaveBeenCalled();
+                })
+            })
         });
 
         context("as a non admin", function() {
