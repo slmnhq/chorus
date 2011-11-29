@@ -2,13 +2,15 @@
 
 .alert {
     .guts {
+        max-width: 450px;
         background-color: $body-background-color;
         padding: 18px 15px 10px 18px;
 
         .content {
 
             .left {
-                float: left;
+                float: right;
+                max-width: 360px;
 
                 h1 {
                     color: black;
@@ -25,6 +27,7 @@
 
             .right {
                 float: right;
+                width: 90px;
 
                 img {
                     float: right;
