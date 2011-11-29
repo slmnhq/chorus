@@ -68,7 +68,8 @@
             }
 
             function uploadFinished(e, data){
-                self.model.set({id: $.parseJSON(data.result).resource[0].id});
+                var json = $.parseJSON(data.result)
+                self.model.set({id: json.resource[0].id});
                 self.closeDialog();
                 var url;
                 if (self.uploadExtension.toLowerCase() == "txt" || self.uploadExtension.toLowerCase() == "sql") {

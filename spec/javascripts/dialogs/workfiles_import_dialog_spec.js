@@ -41,7 +41,7 @@ describe("WorkfilesImportDialog", function() {
 
                 spyOn(chorus.router, "navigate");
                 // calls any 'done' callbacks
-                this.server.respondWith([200, {'Content-Type': 'application/json'}, '{"resource":[{"id":"9"}]}']);
+                this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"resource":[{"id":"9"}]}']);
                 this.server.respond();
             });
 
@@ -126,6 +126,7 @@ describe("WorkfilesImportDialog", function() {
                     spyOn(chorus.router, "navigate");
                     // calls any 'done' callbacks
                     this.server.respondWith("OK");
+                    this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"resource":[{"id":"9"}]}']);
                     this.server.respond();
                 });
 
