@@ -18,7 +18,6 @@
         },
 
         submitNewUser : function submitNewUser(e) {
-            console.log(e);
             e.preventDefault();
 
             var updates = {};

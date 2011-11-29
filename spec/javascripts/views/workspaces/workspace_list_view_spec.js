@@ -3,13 +3,14 @@ describe("chorus.views.WorkspaceList", function() {
         this.loadTemplate("workspace_list");
 
         this.activeWorkspace = new chorus.models.Workspace({id: 1, active: true, name: "my active workspace"});
-        this.archivedWorkspace = new chorus.models.Workspace({id: 2, active: false});
-        this.publicWorkspace = new chorus.models.Workspace({id: 4, isPublic: true});
+        this.archivedWorkspace = new chorus.models.Workspace({id: 2, active: false, name: "my archived workspace"});
+        this.publicWorkspace = new chorus.models.Workspace({id: 4, isPublic: true, name: "my public workspace"});
         this.privateWorkspace = new chorus.models.Workspace({
             id: 3,
             isPublic: false,
             active: true,
-            ownerFullName: "Dr Mario"
+            ownerFullName: "Dr Mario",
+            name: "my private workspace"
         });
 
         this.collection = new chorus.models.WorkspaceSet([
@@ -33,6 +34,14 @@ describe("chorus.views.WorkspaceList", function() {
         it("displays all the workspaces", function(){
             expect(this.view.$("li").length).toBe(4);
         });
+
+        it("sets title attributes for the workspace names", function() {
+            var self = this;
+
+            _.each(this.view.$("a.name span"), function(el, index) {
+                expect($(el).attr("title")).toBe(self.collection.at(index).get("name"));
+            })
+        })
 
         it("displays the active workspace icon for the active workspace", function(){
             expect(this.view.$("li[data-id=1] img").attr("src")).toBe(this.activeWorkspace.defaultIconUrl());

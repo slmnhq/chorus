@@ -69,6 +69,11 @@ describe("chorus.views.UserShow", function() {
               expect(this.view.$(".workspaces li").eq(1).text()).toBe('ws2');
             });
 
+            it("sets title attributes on the workspace names", function() {
+                expect(this.view.$(".workspaces li a").eq(0).attr("title")).toBe('ws1');
+                expect(this.view.$(".workspaces li a").eq(1).attr("title")).toBe('ws2');
+            })
+
             it("renders the workspaces with the correct hrefs", function() {
               expect(this.view.$(".workspaces li a").eq(0).attr('href')).toBe('#/workspaces/1');
               expect(this.view.$(".workspaces li a").eq(1).attr('href')).toBe('#/workspaces/2');

@@ -57,6 +57,15 @@ describe("chorus.views.UserList", function() {
                 })
             })
 
+            it("sets title attributes", function() {
+                var self = this;
+
+                _.each(this.view.$("a.name span"), function(el, index) {
+                    var model = self.collection.at(index);
+                    expect($(el).attr("title")).toBe([model.get("firstName"), model.get("lastName")].join(' '));
+                })
+            })
+
             it("displays the Administrator tag for admin users", function() {
                 expect(this.view.$("li[data-userName=edcadmin] .administrator")).toExist();
             });

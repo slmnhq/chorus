@@ -25,6 +25,12 @@ describe("chorus.views.BreadcrumbView", function() {
             expect(this.view.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
             expect(this.view.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/foo");
         })
+
+        it("sets title attributes", function() {
+            expect(this.view.$(".breadcrumb:eq(0) a").attr("title")).toBe("Home");
+            expect(this.view.$(".breadcrumb:eq(1) a").attr("title")).toBe("Foo");
+            expect(this.view.$(".breadcrumb:eq(2) span").attr("title")).toBe("Bar");
+        })
     })
 });
 
