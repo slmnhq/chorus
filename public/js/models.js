@@ -22,16 +22,18 @@
         }),
 
         Base: Backbone.Model.extend({
-            url: function() {
-                return "/edc/" + Handlebars.compile(this.urlTemplate)(this.attributes);
+            url: function(hidePrefix) {
+                var prefix = (hidePrefix ? '' : "/edc/")
+                return prefix + Handlebars.compile(this.urlTemplate)(this.attributes);
             },
 
-            showUrl: function() {
+            showUrl: function(hidePrefix) {
                 if (!this.showUrlTemplate) {
                     throw "No showUrlTemplate defined";
                 }
 
-                return "#/" + Handlebars.compile(this.showUrlTemplate)(this.attributes);
+                var prefix = hidePrefix ? '' : "#/"
+                return prefix + Handlebars.compile(this.showUrlTemplate)(this.attributes);
             },
 
             parse: function(data) {

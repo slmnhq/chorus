@@ -33,7 +33,7 @@
 
         saved : function () {
             $(document).trigger("close.facebox");
-            chorus.router.navigate("/workspace/"+ this.model.get("workspaceId") + "/workfile/" + this.model.get("id"), true);
+            chorus.router.navigate(this.model.showUrl(), true);
         }
     });
 })(jQuery, chorus.dialogs);

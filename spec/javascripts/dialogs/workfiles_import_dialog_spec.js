@@ -46,7 +46,7 @@ describe("WorkfilesImportDialog", function() {
             });
 
             it("navigates to the workfile index", function(){
-                expect(chorus.router.navigate).toHaveBeenCalledWith("/workspace/4/workfiles/9", true);
+                expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.model.showUrl(), true);
             });
         });
     });
@@ -134,7 +134,7 @@ describe("WorkfilesImportDialog", function() {
                 });
 
                 it("navigates to the workfile index", function(){
-                    expect(chorus.router.navigate).toHaveBeenCalledWith("/workspace/4/workfiles", true);
+                    expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/4/workfiles", true);
                 });
             });
         });

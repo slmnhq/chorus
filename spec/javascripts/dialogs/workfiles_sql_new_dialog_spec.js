@@ -61,7 +61,7 @@ describe("WorkfilesSqlNewDialog", function() {
           })
 
           it("redirects to the new workspace show page", function() {
-            expect(chorus.router.navigate).toHaveBeenCalledWith("/workspace/4/workfile/10108", true);
+            expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/4/workfiles/10108", true);
           });
 
           it("dismisses the dialog", function() {

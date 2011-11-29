@@ -45,7 +45,17 @@
 
         postRender : function() {
             var self = this;
-            var updateName = function(e,data) {
+            // FF3.6 fails tests with multipart true, but it will only upload in the real world with multipart false
+            var multipart = !window.jasmine;
+            
+            this.$("input[type=file]").fileupload({
+                change : updateName,
+                add : updateName,
+                done : uploadFinished,
+                multipart : multipart
+            });
+
+            function updateName(e,data) {
                 if (data.files.length > 0) {
                     self.$("button.submit").removeAttr("disabled");
                     self.uploadObj = data;
@@ -57,25 +67,18 @@
                 }
             }
 
-            var uploadFinished = function(e, data){
+            function uploadFinished(e, data){
+                self.model.set({id: $.parseJSON(data.result).resource[0].id});
                 self.closeDialog();
-                var suffix = '';
+                var url;
                 if (self.uploadExtension.toLowerCase() == "txt" || self.uploadExtension.toLowerCase() == "sql") {
-                    var id = data.result.resource[0].id;
-                    suffix = "/" + id;
+                    url = self.model.showUrl();
+                } else {
+                    url = self.model.workspace.showUrl() +"/workfiles"
                 }
-                chorus.router.navigate("/workspace/" + self.model.get("workspaceId") + "/workfiles" + suffix, true);
-            }
 
-            // FF3.6 fails tests with multipart true, but it will only upload in the real world with multipart false
-            var multipart = !window.jasmine;
-            
-            this.$("input[type=file]").fileupload({
-                change : updateName,
-                add : updateName,
-                done : uploadFinished,
-                multipart : multipart
-            });
+                chorus.router.navigate(url, true);
+            }
         }
     });
 })(jQuery, chorus.dialogs);
