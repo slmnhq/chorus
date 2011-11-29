@@ -6,7 +6,7 @@ $list-border-width: 1px;
 
 .collection_picklist {
     background-color: $body-background-color;
-    min-width: 315px;
+    width: 315px;
 
     .search {
         padding: 4px 12px;
@@ -35,6 +35,7 @@ $list-border-width: 1px;
                 border-bottom: $list-border-width dotted $list-border-color;
                 padding: 0 8px;
                 line-height: $list-item-height;
+                @include ellipsis;
 
                 img {
                     vertical-align: middle;
