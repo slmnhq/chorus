@@ -22,6 +22,10 @@
 
         attrToLabel : {
             "fileName" : "workfiles.validation.name"
+        },
+
+        isImage: function() {
+            return this.get("mimeType").indexOf("image/") == 0;
         }
     });
 })(chorus.models);

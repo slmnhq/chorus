@@ -43,4 +43,26 @@ describe("chorus.models.Workfile", function() {
             expect(this.model.showUrl(true)).toBe("workspaces/10/workfiles/5");
         });
     });
+
+    describe("isImage", function() {
+        context("when the workfile is an image", function() {
+            beforeEach(function() {
+                this.model.set({ mimeType : "image/jpeg" });
+            })
+
+            it("returns true", function() {
+                expect(this.model.isImage()).toBeTruthy();
+            })
+        })
+
+        context("when the workfile is NOT an image", function() {
+            beforeEach(function() {
+                this.model.set({ mimeType : "text/plain" });
+            })
+
+            it("returns false", function() {
+                expect(this.model.isImage()).toBeFalsy();
+            })
+        })
+    })
 });
