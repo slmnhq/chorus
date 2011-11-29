@@ -95,6 +95,14 @@ describe("WorkfilesImportDialog", function() {
                 expect(this.dialog.$("button.submit").attr("disabled")).toBe("disabled");
             });
 
+            it("adds the expanded class to the upload button", function(){
+                expect(this.dialog.$("button.submit")).toHaveClass("expanded");
+            });
+
+            it("changes the text on the upload button to 'uploading'", function() {
+                expect(this.dialog.$("button.submit").text()).toBe(t("workfiles.import_dialog.uploading"));
+            });
+
             context("when cancel is clicked before the upload completes", function(){
                 beforeEach(function(){
                     spyOn(this.dialog.request, "abort");

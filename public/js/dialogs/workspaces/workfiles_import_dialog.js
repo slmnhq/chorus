@@ -28,9 +28,11 @@
             if (this.uploadObj) {
                 this.request = this.uploadObj.submit();
                 var spinner = new Spinner().spin();
-                this.$("button.submit").append(spinner.el);
-
-                this.$("button.submit").attr("disabled", "disabled");
+                this.$("button.submit").
+                    text(t("workfiles.import_dialog.uploading")).
+                    append(spinner.el).
+                    attr("disabled", "disabled").
+                    addClass("expanded");
             }
         },
 
@@ -49,13 +51,13 @@
             var multipart = !window.jasmine;
             
             this.$("input[type=file]").fileupload({
-                change : updateName,
-                add : updateName,
+                change : fileChosen,
+                add : fileChosen,
                 done : uploadFinished,
                 multipart : multipart
             });
 
-            function updateName(e,data) {
+            function fileChosen(e,data) {
                 if (data.files.length > 0) {
                     self.$("button.submit").removeAttr("disabled");
                     self.uploadObj = data;
