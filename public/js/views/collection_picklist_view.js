@@ -33,7 +33,7 @@
                     self.$("li:eq(" + index + ")").addClass("filtered").removeClass("selected");
                 }
             })
-
+    
             if(this.$("li.selected").length == 0) {
                 this.trigger("item:selected", undefined);
             }

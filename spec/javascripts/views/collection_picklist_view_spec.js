@@ -39,6 +39,13 @@ describe("chorus.views.CollectionPicklist", function() {
                 }, this)
             })
 
+            it("sets the title attribute for each collection item", function() {
+                var items = this.view.$(".items li .name");
+                _.each(items, function(item, index) {
+                    expect($(item).attr("title")).toBe(this.collection.at(index).displayName())
+                }, this)
+            })
+
             it("displays an image for each collection item", function() {
                 var items = this.view.$(".items li img");
                 expect(items).toExist();
