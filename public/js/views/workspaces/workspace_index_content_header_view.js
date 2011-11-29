@@ -16,7 +16,6 @@
                 {data : "all", text : t("filter.all_workspaces")}
             ]});
             this.$(".menus").append(menu.render().el);
-            this.updateFilterMenu();
         },
 
         triggerActive: function(e) {
@@ -24,7 +23,6 @@
             this.filter = 'active';
             this.trigger("filter:active");
             this.$(".menu").addClass("hidden");
-            this.updateFilterMenu();
         },
 
         triggerAll: function(e) {
@@ -32,19 +30,7 @@
             this.filter = 'all';
             this.trigger("filter:all");
             this.$(".menu").addClass("hidden");
-            this.updateFilterMenu();
-        },
-
-        updateFilterMenu: function() {
-            if (this.filter === 'all') {
-                this.$(".link_menu > a span").text(t("filter.all_workspaces"));
-                this.$("li[data-type=all] .check").removeClass("hidden");
-                this.$("li[data-type=active] .check").addClass("hidden");
-            } else {
-                this.$(".link_menu > a span").text(t("filter.active_workspaces"));
-                this.$("li[data-type=active] .check").removeClass("hidden");
-                this.$("li[data-type=all] .check").addClass("hidden");
-            }
         }
+
     });
 })(jQuery, chorus);

@@ -31,6 +31,9 @@ describe("chorus.views.LinkMenu", function() {
             describe("chosen option", function() {
                 it("defaults to the first option", function() {
                     expect(this.view.$(".chosen")).toHaveText("bob")
+                    expect(this.view.$(".menu li[data-type=mark] .check")).not.toHaveClass("hidden");
+                    expect(this.view.$(".menu li[data-type=joanne] .check")).toHaveClass("hidden")
+
                 })
                 it("renders the chosen option", function() {
                     this.view.options.chosen = "alice"
@@ -73,6 +76,11 @@ describe("chorus.views.LinkMenu", function() {
                     it("should display the new choice", function() {
                         expect(this.view.$(".popup .chosen")).toHaveText("alice")
                     })
+
+                    it("shows change what is checked", function() {
+                        expect(this.view.$(".menu li[data-type=mark] .check")).toHaveClass("hidden")
+                        expect(this.view.$(".menu li[data-type=joanne] .check")).not.toHaveClass("hidden")
+                    });
                 });
 
             })

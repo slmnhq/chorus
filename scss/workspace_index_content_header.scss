@@ -8,6 +8,7 @@
         width: 200px;
         margin-top:25px;
         @include after-clearfix;
+        z-index : 100;
 
         >.link_menu {
             .title {
