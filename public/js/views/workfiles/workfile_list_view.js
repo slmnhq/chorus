@@ -20,6 +20,12 @@
                 iconUrl : chorus.urlHelpers.fileIconUrl(model.get('fileType')),
                 showUrl : model.showUrl()
             }
+        },
+
+        filter: function(type){
+            this.collection.attributes.type = type;
+            this.collection.fetch();
+            return this;
         }
     });
 })(jQuery, chorus.views);
