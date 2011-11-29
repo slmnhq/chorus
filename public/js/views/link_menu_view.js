@@ -2,9 +2,7 @@
     ns.views.LinkMenu = ns.views.Base.extend({
         className : "link_menu",
         context : function(){
-            return {
-                options : this.options.options
-            }
+            return this.options
         }
     })
 })(jQuery, chorus);

@@ -12,7 +12,7 @@
         },
 
         postRender: function() {
-            var menu = new ns.views.LinkMenu({options : [
+            var menu = new ns.views.LinkMenu({title : t("filter.show"), options : [
                 {data : "active", text : t("filter.active_workspaces")},
                 {data : "all", text : t("filter.all_workspaces")}
             ]});

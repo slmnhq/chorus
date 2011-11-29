@@ -16,6 +16,7 @@ describe("WorkspaceIndexContentHeader", function() {
 
         it("contains a filter menu", function() {
             expect(this.view.$(".menu.popup_filter")).toExist();
+            expect(this.view.$(".link_menu").text()).toContain("Show");
         });
 
         it("defaults to the active filter", function() {
