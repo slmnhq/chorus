@@ -1,6 +1,7 @@
 describe("WorkspaceIndexContentHeader", function() {
     beforeEach(function() {
         this.loadTemplate("workspace_index_content_header");
+        this.loadTemplate("link_menu");
         this.view = new chorus.views.WorkspaceIndexContentHeader();
     });
 
@@ -27,7 +28,7 @@ describe("WorkspaceIndexContentHeader", function() {
         describe("clicking on the filter link", function(){
             beforeEach(function(){
                 this.view.render();
-                this.view.$(".link.filter a").click();
+                this.view.$(".link_menu > a").click();
             });
 
             it("shows the popup menu", function(){
@@ -36,7 +37,7 @@ describe("WorkspaceIndexContentHeader", function() {
 
             describe("clicking on the link again", function() {
                 it("closes the popup menu", function() {
-                    this.view.$(".link.filter a").click();
+                    this.view.$(".link_menu > a").click();
                     expect(this.view.$(".menu")).toHaveClass("hidden");
                 });
             });
@@ -58,7 +59,7 @@ describe("WorkspaceIndexContentHeader", function() {
                 });
 
                 it("Sets the text of the filter link", function(){
-                    expect(this.view.$(".link.filter a span").text()).toBe(t("filter.all_workspaces"));
+                    expect(this.view.$(".link_menu > a span").text()).toBe(t("filter.all_workspaces"));
                 });
 
                 it("shows only the check for the 'all' link", function() {
@@ -94,7 +95,7 @@ describe("WorkspaceIndexContentHeader", function() {
                 });
 
                 it("Sets the text of the filter link", function(){
-                    expect(this.view.$(".link.filter a span").text()).toBe(t("filter.active_workspaces"));
+                    expect(this.view.$(".link_menu > a span").text()).toBe(t("filter.active_workspaces"));
                 });
 
                 it("shows only the check for the 'active' link", function() {

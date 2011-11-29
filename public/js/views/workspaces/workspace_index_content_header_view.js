@@ -2,7 +2,7 @@
     ns.views.WorkspaceIndexContentHeader = ns.views.Base.extend({
         className : "workspace_index_content_header",
         events : {
-            "click .link.filter a" : "togglePopup",
+            "click .menus .link_menu > a" : "togglePopup",
             "click .menu.popup_filter li[data-type=active] a" : "triggerActive",
             "click .menu.popup_filter li[data-type=all] a" : "triggerAll"
         },
@@ -12,6 +12,8 @@
         },
 
         postRender: function() {
+            var menu = new ns.views.LinkMenu();
+            this.$(".menus").append(menu.render().el);
             this.updateFilterMenu();
         },
 
@@ -38,11 +40,11 @@
 
         updateFilterMenu: function() {
             if (this.filter === 'all') {
-                this.$(".link.filter a span").text(t("filter.all_workspaces"));
+                this.$(".link_menu > a span").text(t("filter.all_workspaces"));
                 this.$("li[data-type=all] .check").removeClass("hidden");
                 this.$("li[data-type=active] .check").addClass("hidden");
             } else {
-                this.$(".link.filter a span").text(t("filter.active_workspaces"));
+                this.$(".link_menu > a span").text(t("filter.active_workspaces"));
                 this.$("li[data-type=active] .check").removeClass("hidden");
                 this.$("li[data-type=all] .check").addClass("hidden");
             }

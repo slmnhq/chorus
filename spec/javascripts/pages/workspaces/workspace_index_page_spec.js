@@ -9,6 +9,7 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
         this.loadTemplate("logged_in_layout");
         this.loadTemplate("dashboard_sidebar");
         this.loadTemplate("workspace_index_content_header");
+        this.loadTemplate("link_menu");
 
         chorus.user = new chorus.models.User({
             "firstName" : "Daniel",
