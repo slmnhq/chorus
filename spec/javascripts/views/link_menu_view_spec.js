@@ -13,10 +13,17 @@ describe("chorus.views.LinkMenu", function() {
                     options : [
                         {data : "mark", text : "bob"},
                         {data : "joanne", text : "alice"}
-                    ]
+                    ],
+                    title: "Link Menu"
                 })
                 this.view.render();
             })
+
+            it("contains a filter menu", function() {
+                expect(this.view.$(".menu.popup_filter")).toExist();
+                expect(this.view.$(".title")).toHaveText("Link Menu");
+            });
+
             it("should have the correct popup options", function() {
                 expect(this.view.$("li[data-type=mark] a")).toHaveText("bob")
                 expect(this.view.$("li[data-type=joanne] a")).toHaveText("alice")
@@ -57,13 +64,13 @@ describe("chorus.views.LinkMenu", function() {
                         this.view.bind("choice", this.choiceSpy);
                         this.view.$(".menu li[data-type=joanne] a").click();
                     });
-                    it("should trigger a choice event with the data", function(){
+                    it("should trigger a choice event with the data", function() {
                         expect(this.choiceSpy).toHaveBeenCalledWith("alice");
                     });
-                    it("should set the chosen property", function(){
+                    it("should set the chosen property", function() {
                         expect(this.view.options.chosen).toBe("alice")
                     });
-                    it("should display the new choice", function(){
+                    it("should display the new choice", function() {
                         expect(this.view.$(".popup .chosen")).toHaveText("alice")
                     })
                 });

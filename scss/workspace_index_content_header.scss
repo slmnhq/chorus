@@ -10,11 +10,15 @@
         @include after-clearfix;
 
         >.link_menu {
-            font-size: 12px;
-            font-weight: $semibold;
-            color: $dark-text-color;
+            .title {
+                font-size: 12px;
+                font-weight: $semibold;
+                color: $dark-text-color;
+
+            }
 
             a {
+                font-size: 12px;
                 margin-left: 3px;
                 span {
                     color : $link-color;
