@@ -2,7 +2,6 @@
     ns.views.WorkspaceIndexContentHeader = ns.views.Base.extend({
         className : "workspace_index_content_header",
         events : {
-            "click .menus .link_menu > a" : "togglePopup",
             "click .menu.popup_filter li[data-type=active] a" : "triggerActive",
             "click .menu.popup_filter li[data-type=all] a" : "triggerAll"
         },
@@ -18,11 +17,6 @@
             ]});
             this.$(".menus").append(menu.render().el);
             this.updateFilterMenu();
-        },
-
-        togglePopup : function(e){
-            e.preventDefault();
-            this.$(".menu").toggleClass("hidden");
         },
 
         triggerActive: function(e) {

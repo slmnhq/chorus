@@ -16,7 +16,7 @@ describe("WorkspaceIndexContentHeader", function() {
 
         it("contains a filter menu", function() {
             expect(this.view.$(".menu.popup_filter")).toExist();
-            expect(this.view.$(".link_menu").text()).toContain("Show");
+            expect(this.view.$(".link_menu .title")).toHaveText("Show");
         });
 
         it("defaults to the active filter", function() {
@@ -30,17 +30,6 @@ describe("WorkspaceIndexContentHeader", function() {
             beforeEach(function(){
                 this.view.render();
                 this.view.$(".link_menu > a").click();
-            });
-
-            it("shows the popup menu", function(){
-                expect(this.view.$(".menu")).not.toHaveClass("hidden");
-            });
-
-            describe("clicking on the link again", function() {
-                it("closes the popup menu", function() {
-                    this.view.$(".link_menu > a").click();
-                    expect(this.view.$(".menu")).toHaveClass("hidden");
-                });
             });
 
             describe("clicking on the 'all workspaces' link", function() {
