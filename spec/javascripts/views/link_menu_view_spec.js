@@ -68,7 +68,7 @@ describe("chorus.views.LinkMenu", function() {
                         this.view.$(".menu li[data-type=joanne] a").click();
                     });
                     it("should trigger a choice event with the data", function() {
-                        expect(this.choiceSpy).toHaveBeenCalledWith("alice");
+                        expect(this.choiceSpy).toHaveBeenCalledWith("joanne");
                     });
                     it("should set the chosen property", function() {
                         expect(this.view.options.chosen).toBe("alice")

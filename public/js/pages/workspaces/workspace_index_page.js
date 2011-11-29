@@ -8,7 +8,7 @@
             this.contentDetails = new chorus.views.Count({collection: collection, modelClass: "Workspace"});
 
             this.setupEvents();
-            this.contentHeader.triggerActive();
+            this.contentHeader.choose("active");
         },
 
         setupEvents: function() {

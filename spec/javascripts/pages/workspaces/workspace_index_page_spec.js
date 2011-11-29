@@ -46,7 +46,6 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
             beforeEach(function() {
                 var header = this.view.mainContent.contentHeader;
                 this.listView = this.view.mainContent.content;
-                header.triggerActive();
             });
 
             it("calls filterActive on the list view", function() {
@@ -60,7 +59,7 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
             beforeEach(function() {
                 var header = this.view.mainContent.contentHeader;
                 this.listView = this.view.mainContent.content;
-                header.triggerAll();
+                header.choose("all");
             });
 
             it("calls filterAll on the list view", function() {
@@ -75,7 +74,6 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
         beforeEach(function() {
             spyOn(chorus.views.WorkspaceList.prototype, 'filterActive');
             spyOn(chorus.views.WorkspaceList.prototype, 'filterAll');
-            spyOn(chorus.views.WorkspaceIndexContentHeader.prototype, 'triggerActive').andCallThrough();
 
             this.view = new chorus.pages.WorkspaceIndexPage();
             this.view.render();

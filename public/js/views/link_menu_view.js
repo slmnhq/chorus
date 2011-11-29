@@ -25,7 +25,7 @@
 
         choose : function(e) {
             e.preventDefault();
-            this.trigger("choice", $(e.target).text());
+            this.trigger("choice", $(e.target).closest('li').data("type"));
             this.options.chosen = $(e.target).text();
             this.render();
         }
