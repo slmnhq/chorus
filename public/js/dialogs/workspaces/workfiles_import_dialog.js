@@ -27,7 +27,16 @@
             e.preventDefault();
             if (this.uploadObj) {
                 this.request = this.uploadObj.submit();
-                var spinner = new Spinner().spin();
+                var spinner = new Spinner({
+                    lines: 12,
+                    length: 3,
+                    width: 2,
+                    radius: 3,
+                    color: '#000',
+                    speed: 1,
+                    trail: 75,
+                    shadow: false
+                }).spin();
                 this.$("button.submit").
                     text(t("workfiles.import_dialog.uploading")).
                     append(spinner.el).
@@ -47,7 +56,7 @@
 
         postRender : function() {
             var self = this;
-            // FF3.6 fails tests with multipart true, but it will only upload in the real world with multipart false
+            // FF3.6 fails tests with multipart true, but it will only upload in the real world with multipart true
             var multipart = !window.jasmine;
             
             this.$("input[type=file]").fileupload({
