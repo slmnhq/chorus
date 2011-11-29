@@ -12,7 +12,10 @@
         },
 
         postRender: function() {
-            var menu = new ns.views.LinkMenu();
+            var menu = new ns.views.LinkMenu({options : [
+                {data : "active", text : t("filter.active_workspaces")},
+                {data : "all", text : t("filter.all_workspaces")}
+            ]});
             this.$(".menus").append(menu.render().el);
             this.updateFilterMenu();
         },
