@@ -17,7 +17,7 @@
 
         makeModel : function() {
             this.collection = this.collection || new chorus.models.WorkspaceSet();
-            this.collection.fetch();
+            this.collection.fetchAll();
         },
 
         setup : function() {

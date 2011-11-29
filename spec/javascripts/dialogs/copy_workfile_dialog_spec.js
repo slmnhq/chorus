@@ -15,8 +15,8 @@ describe("chorus.dialogs.CopyWorkfile", function() {
             this.dialog = new chorus.dialogs.CopyWorkfile({launchElement : this.launchElement });
         })
 
-        it("fetches a collection of workspaces", function() {
-            expect(this.server.requests[0].url).toBe("/edc/workspace/");
+        it("fetches all the workspaces", function() {
+            expect(this.server.requests[0].url).toBe("/edc/workspace/?page=1&rows=1000");
         })
 
         it("fetches the source workfile", function() {
