@@ -429,6 +429,119 @@ describe("chorus.models", function() {
                 expect(chorus.session.trigger).toHaveBeenCalledWith("needsLogin");
             })
         })
+
+        describe("#fetchAll", function() {
+            beforeEach(function() {
+                this.collection.fetchAll();
+            })
+
+            it("requests page one from the server", function() {
+                expect(this.server.requests[0].url).toBe("/edc/bar/bar?page=1&rows=1000");
+            })
+
+            describe("and the server responds successfully", function() {
+                beforeEach(function() {
+                    this.pageOneResponse = { status: "ok", resource : [
+                        { foo : "hi" },
+                        { foo : "there" }
+                    ],
+                        "pagination": {
+                            "total": "2",
+                            "page": "1",
+                            "records": "3"
+                        }
+                    };
+
+                    this.server.respondWith(
+                        'GET',
+                        '/edc/bar/bar?page=1&rows=1000',
+                        this.prepareResponse(this.pageOneResponse));
+
+                    this.pageTwoResponse = { status: "ok", resource : [
+                        { foo : "hi" },
+                        { foo : "there" }
+                    ],
+                        "pagination": {
+                            "total": "2",
+                            "page": "2",
+                            "records": "3"
+                        }
+                    };
+
+                    this.server.respondWith(
+                        'GET',
+                        '/edc/bar/bar?page=2&rows=1000',
+                        this.prepareResponse(this.pageTwoResponse));
+
+                    var self = this;
+
+                    this.resetListener = function(collection) {
+                        self.collectionLengthOnReset = collection.length;
+                    }
+                    this.collection.bind("reset", this.resetListener)
+                    this.server.respond();
+                })
+
+                it("requests subsequent pages", function() {
+                    expect(this.server.requests[1].url).toBe("/edc/bar/bar?page=2&rows=1000");
+                })
+
+                it("triggers the reset event after all models are in the collection", function() {
+                    expect(this.collectionLengthOnReset).toBe(4)
+                })
+            })
+
+            describe("and the server responds with an error", function() {
+                beforeEach(function() {
+                    this.pageOneResponse = { status: "ok", resource : [
+                        { foo : "hi" },
+                        { foo : "there" }
+                    ],
+                        "pagination": {
+                            "total": "2",
+                            "page": "1",
+                            "records": "3"
+                        }
+                    };
+
+                    this.server.respondWith(
+                        'GET',
+                        '/edc/bar/bar?page=1&rows=1000',
+                        this.prepareResponse(this.pageOneResponse));
+
+                    this.pageTwoResponse = {
+                        status: "fail",
+                        resource: [],
+                        message:[
+                            {
+                                "message":"Something went sideways"
+                            }
+                        ]
+                    };
+
+                    this.server.respondWith(
+                        'GET',
+                        '/edc/bar/bar?page=2&rows=1000',
+                        this.prepareResponse(this.pageTwoResponse));
+
+                    var self = this;
+
+                    this.resetListener = function(collection) {
+                        self.collectionLengthOnReset = collection.length;
+                    }
+                    this.collection.bind("reset", this.resetListener)
+                    this.server.respond();
+                })
+
+                it("requests subsequent pages", function() {
+                    expect(this.server.requests[1].url).toBe("/edc/bar/bar?page=2&rows=1000");
+                })
+
+                it("triggers the reset event when the error occurs", function() {
+                    expect(this.collectionLengthOnReset).toBe(2)
+                })
+            })
+        })
     });
 });
 

@@ -12,6 +12,34 @@
                 return "/edc/" + Handlebars.compile(this.urlTemplate)(this.attributes);
             },
 
+            fetchAll : function() {
+                this.fetchPage(1);
+            },
+
+            fetchPage : function(page) {
+                var baseUrl = this.url();
+
+                this.fetch({
+                    url : baseUrl + "?page=" + page + "&rows=1000",
+                    silent: true,
+                    add : page != 1,
+                    success : function(collection, resp) {
+                        if (resp.status == "ok") {
+                            var total = parseInt(resp.pagination.total);
+                            var page = parseInt(resp.pagination.page);
+                            if (page >= total) {
+                                collection.trigger("reset", collection);
+                            } else {
+                                collection.fetchPage(page + 1);
+                            }
+                        } else {
+                            collection.trigger("reset", collection);
+
+                        }
+                    }
+                });
+            },
+
             parse : function(data) {
                 if (data.status == "needlogin") {
                     chorus.session.trigger("needsLogin");
