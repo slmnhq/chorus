@@ -15,7 +15,7 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
             "firstName" : "Daniel",
             "lastName" : "Burkes",
             "fullName": "Daniel Francis Burkes"
-        });
+        }); 
     });
 
     describe("#render", function() {

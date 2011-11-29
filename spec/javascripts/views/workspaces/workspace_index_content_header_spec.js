@@ -26,14 +26,16 @@ describe("WorkspaceIndexContentHeader", function() {
             expect(allCheck).toHaveClass('hidden');
         });
 
-        describe("clicking on the filter link", function(){
-            beforeEach(function(){
+        describe("clicking on the filter link", function() {
+            var activeCheckSelector = ".menu li[data-type=active] .check";
+            var allCheckSelector = ".menu li[data-type=all] .check";
+            beforeEach(function() {
                 this.view.render();
                 this.view.$(".link_menu > a").click();
             });
 
             describe("clicking on the 'all workspaces' link", function() {
-                beforeEach(function(){
+                beforeEach(function() {
                     this.filterSpy = jasmine.createSpy("filter:all");
                     this.view.bind("filter:all", this.filterSpy);
 
@@ -44,32 +46,29 @@ describe("WorkspaceIndexContentHeader", function() {
                     expect(this.filterSpy).toHaveBeenCalled();
                 });
 
-                it("dismisses the popup", function(){
+                it("dismisses the popup", function() {
                     expect(this.view.$(".menu")).toHaveClass("hidden");
                 });
 
-                it("Sets the text of the filter link", function(){
+                it("Sets the text of the filter link", function() {
                     expect(this.view.$(".link_menu > a span").text()).toBe(t("filter.all_workspaces"));
                 });
 
                 it("shows only the check for the 'all' link", function() {
-                    var activeCheck = this.view.$(".menu li[data-type=active] .check");
-                    var allCheck = this.view.$(".menu li[data-type=all] .check");
-
                     this.view.$(".menu li[data-type=active] a").click();
 
-                    expect(activeCheck).not.toHaveClass('hidden')
-                    expect(allCheck).toHaveClass('hidden')
+                    expect(this.view.$(activeCheckSelector)).not.toHaveClass('hidden')
+                    expect(this.view.$(allCheckSelector)).toHaveClass('hidden')
 
                     this.view.$(".menu li[data-type=all] a").click();
 
-                    expect(activeCheck).toHaveClass('hidden')
-                    expect(allCheck).not.toHaveClass('hidden')
+                    expect(this.view.$(activeCheckSelector)).toHaveClass('hidden')
+                    expect(this.view.$(allCheckSelector)).not.toHaveClass('hidden')
                 });
             });
 
             describe("clicking on the 'active workspaces' link", function() {
-                beforeEach(function(){
+                beforeEach(function() {
                     this.filterSpy = jasmine.createSpy("filter:active");
                     this.view.bind("filter:active", this.filterSpy);
 
@@ -80,27 +79,24 @@ describe("WorkspaceIndexContentHeader", function() {
                     expect(this.filterSpy).toHaveBeenCalled();
                 });
 
-                it("dismisses the popup", function(){
+                it("dismisses the popup", function() {
                     expect(this.view.$(".menu")).toHaveClass("hidden");
                 });
 
-                it("Sets the text of the filter link", function(){
+                it("Sets the text of the filter link", function() {
                     expect(this.view.$(".link_menu > a span").text()).toBe(t("filter.active_workspaces"));
                 });
 
                 it("shows only the check for the 'active' link", function() {
-                    var activeCheck = this.view.$(".menu li[data-type=active] .check");
-                    var allCheck = this.view.$(".menu li[data-type=all] .check");
-
                     this.view.$(".menu li[data-type=all] a").click();
 
-                    expect(activeCheck).toHaveClass('hidden')
-                    expect(allCheck).not.toHaveClass('hidden')
+                    expect(this.view.$(activeCheckSelector)).toHaveClass('hidden')
+                    expect(this.view.$(allCheckSelector)).not.toHaveClass('hidden')
 
                     this.view.$(".menu li[data-type=active] a").click();
 
-                    expect(activeCheck).not.toHaveClass('hidden')
-                    expect(allCheck).toHaveClass('hidden')
+                    expect(this.view.$(activeCheckSelector)).not.toHaveClass('hidden')
+                    expect(this.view.$(allCheckSelector)).toHaveClass('hidden')
                 });
             });
         });

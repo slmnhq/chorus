@@ -32,7 +32,7 @@ describe("chorus.views.LinkMenu", function() {
                 })
             })
 
-            it("should have a hidden menu", function(){
+            it("should have a hidden menu", function() {
                 expect(this.view.$(".menu")).toHaveClass("hidden");
             })
 
@@ -40,7 +40,7 @@ describe("chorus.views.LinkMenu", function() {
                 beforeEach(function() {
                     this.view.$("a.popup").click();
                 });
-                it("shows the popup menu", function(){
+                it("shows the popup menu", function() {
                     expect(this.view.$(".menu")).not.toHaveClass("hidden");
                 });
 
@@ -50,6 +50,24 @@ describe("chorus.views.LinkMenu", function() {
                         expect(this.view.$(".menu")).toHaveClass("hidden");
                     });
                 });
+
+                describe("clicking on an option", function() {
+                    beforeEach(function() {
+                        this.choiceSpy = jasmine.createSpy("choice");
+                        this.view.bind("choice", this.choiceSpy);
+                        this.view.$(".menu li[data-type=joanne] a").click();
+                    });
+                    it("should trigger a choice event with the data", function(){
+                        expect(this.choiceSpy).toHaveBeenCalledWith("alice");
+                    });
+                    it("should set the chosen property", function(){
+                        expect(this.view.options.chosen).toBe("alice")
+                    });
+                    it("should display the new choice", function(){
+                        expect(this.view.$(".popup .chosen")).toHaveText("alice")
+                    })
+                });
+
             })
         })
     });
