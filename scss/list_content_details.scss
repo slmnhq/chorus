@@ -5,8 +5,9 @@ $link-padding: 15px;
 .list_content_details {
     div {
         display: inline;
-        color: $secondary-text-color;
-        font-size: 11px;
+        color: $dark-text-color;
+        font-size: 12px;
+        font-weight: $semibold;
 
         &.pagination {
             float: right;
@@ -15,6 +16,7 @@ $link-padding: 15px;
                 padding-left: $link-padding;
 
                 .next, .previous {
+                    font-size: 12px;
                     padding: 4px $link-padding;
                 }
 
