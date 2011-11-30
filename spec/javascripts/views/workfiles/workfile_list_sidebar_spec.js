@@ -63,5 +63,29 @@ describe("WorkfileListSidebar", function() {
             expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"))
             expect(copyLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
         })
+
+        it("displays a link to download the workfile", function() {
+            var downloadLink = this.view.$(".actions a.download");
+            expect(downloadLink).toExist();
+            expect(downloadLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"))
+            expect(downloadLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
+        })
+
+        it("clicking download does not do anything unless fetch has succeeded ",function(){
+            var downloadLink = this.view.$(".actions a.download");
+            expect(downloadLink).toExist();
+            expect(downloadLink).toHaveAttr("href",  "javascript:void(0)");
+
+        })
+
+        context("workfile has been fetched", function() {
+            beforeEach(function() {
+                this.view.setDownloadUrl();
+            })
+            it("download the correct file", function() {
+                var downloadLink = this.view.$(".actions a.download");
+                expect(downloadLink).toHaveAttr("href", "/edc/workspace/" + this.workfile.get("workspaceId") + "/workfile/" + this.workfile.get("id") + "/file/" + this.workfile.get("versionFileId") + "?download=true")
+            })
+        })
     })
 });

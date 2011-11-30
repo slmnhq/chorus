@@ -261,6 +261,7 @@
                             "owner":"edcadmin",
                             "description":null,
                             "latestVersionNum":1,
+                            "versionFileId":"1111_1111",
                             "isDeleted":false,
                             "modifiedByFirstName":"EDC",
                             "modifiedByLastName":"Admin",
