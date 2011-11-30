@@ -157,12 +157,28 @@
         }
     });
 
+    ns.ListHeaderView = ns.Base.extend({
+        className : "default_content_header",
+        context : function(){
+            return this.options
+        },
+        postRender : function(){
+            var self=this;
+            if (this.options.linkMenu) {
+                var menu = new chorus.views.LinkMenu(this.options.linkMenu);
+                this.$(".menus").append(
+                    menu.render().el
+                )
+            }
+        }
+    })
+
     ns.MainContentList = ns.MainContentView.extend({
         setup : function(options) {
             var modelClass = options.modelClass
             var collection = this.collection;
             this.content = new chorus.views[modelClass + "List"]({collection: collection })
-            this.contentHeader = new chorus.views.StaticTemplate("default_content_header", {title: modelClass + "s"})
+            this.contentHeader = new chorus.views.ListHeaderView({title: modelClass + "s", linkMenu : options.linkMenu})
             this.contentDetails = new chorus.views.Count({collection : collection, modelClass : modelClass})
         },
         additionalClass : "main_content_list"

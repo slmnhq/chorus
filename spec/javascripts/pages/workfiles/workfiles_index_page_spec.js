@@ -8,6 +8,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         this.loadTemplate("logged_in_layout");
         this.loadTemplate("main_content");
         this.loadTemplate("header");
+        this.loadTemplate("link_menu");
     })
 
     describe("#initialize", function() {
@@ -25,7 +26,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             this.page = new chorus.pages.WorkfileIndexPage(4);
             this.page.render();
         })
-        
+
         it("triggers the event on the sidebar view", function() {
             var listView = this.page.mainContent.content;
             var sidebar = this.page.sidebar;
@@ -37,4 +38,16 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             expect(workfileSelectedSpy).toHaveBeenCalledWith(workfile);
         });
     });
+
+    describe("menus", function() {
+        beforeEach(function() {
+            this.page = new chorus.pages.WorkfileIndexPage(4);
+            this.page.render();
+        })
+
+        it("has filters for the types", function() {
+            expect(this.page.$("li[data-type]=all")).toExist();
+            expect(this.page.$("li[data-type]=sql")).toExist();
+        })
+    })
 });
