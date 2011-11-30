@@ -54,6 +54,7 @@
         },
 
         navigate : function(fragment, triggerRoute) {
+            fragment = fragment.match(/#?(.+)/)[1];
             if (Backbone.history.fragment == fragment) {
                 Backbone.history.loadUrl(fragment);
 

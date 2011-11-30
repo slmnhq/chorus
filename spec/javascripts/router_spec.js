@@ -25,6 +25,12 @@ describe("chorus.router", function() {
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo");
                     expect(Backbone.history.navigate).not.toHaveBeenCalled();
                 })
+
+                it("calls loadUrl on the fragment, even if the target fragment is prefixed by #", function() {
+                    chorus.router.navigate("#/foo", true);
+                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo");
+                    expect(Backbone.history.navigate).not.toHaveBeenCalled();
+                })
             })
         })
     });
