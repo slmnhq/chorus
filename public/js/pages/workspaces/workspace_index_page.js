@@ -24,12 +24,11 @@
             );
             this.sidebar = new chorus.views.StaticTemplate("dashboard_sidebar");
 
-            this.mainContent.contentHeader.bind("choice:filter", function(choice) {
-                // setup filter in collection and re-fetch
-                this.mainContent.content.setFilter(choice);
-//                this.collection.fetch();
-            }, this)
-            this.mainContent.content.setFilter("active")
+            this.mainContent.contentHeader.bind("choice:filter", this.choose, this)
+            this.choose("active");
+        },
+        choose : function(choice) {
+            this.collection.attributes.active = (choice == "active")
             this.collection.fetch();
         }
     });

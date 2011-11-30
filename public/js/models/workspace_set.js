@@ -1,6 +1,6 @@
 (function(ns) {
     ns.WorkspaceSet = ns.Collection.extend({
         model : ns.Workspace,
-        urlTemplate : "workspace/"
+        urlTemplate : "workspace/{{#if active}}?active=true{{/if}}"
     });
 })(chorus.models);
