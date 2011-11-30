@@ -30,7 +30,6 @@
                 this.sidebar.trigger("workfile:selected", workfileId)
             }, this)
             this.mainContent.contentHeader.bind("choice", function(choice) {
-                console.log(choice, this.collection.attributes);
                 this.collection.attributes.type = choice;
                 this.collection.fetch();
             }, this)
