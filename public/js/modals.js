@@ -10,10 +10,6 @@
             $(document).one('close.facebox', function(){delete ns.modal});
         },
 
-        revealed : function () {
-            $("#facebox").removeClass().addClass("dialog_facebox");
-        },
-
         closeModal : function() {
             $(document).trigger("close.facebox");
         }

@@ -1,4 +1,5 @@
-;(function(ns) {
+;
+(function(ns) {
 
 
     ns.dialogs.Base = ns.Modal.extend({
@@ -26,6 +27,10 @@
 
             return this;
         },
+
+        revealed : function () {
+            $("#facebox").removeClass().addClass("dialog_facebox");
+        }
 
     })
 })(chorus)

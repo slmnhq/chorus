@@ -1,7 +1,8 @@
-;(function(ns) {
+;
+(function(ns) {
     ns.alerts.Base = ns.Modal.extend({
         className : "alert",
-        
+
         events : {
             "click button.cancel" : "closeModal",
         },
@@ -20,6 +21,9 @@
             this.events["click button.cancel"] = this.events["click button.cancel"] || "closeModal";
             this.delegateEvents();
         },
+        revealed : function () {
+            $("#facebox").removeClass().addClass("alert_facebox");
+        }
     })
 
     ns.alerts.ModelDelete = ns.alerts.Base.extend({
@@ -29,7 +33,7 @@
 
         persistent: true, //here for documentation, doesn't actually do anything as we've overwritten bindCallbacks
 
-        bindCallbacks : function(){
+        bindCallbacks : function() {
             this.model.bind("destroy", this.modelDeleted, this);
             this.model.bind("destroyFailed", this.render, this);
         },
