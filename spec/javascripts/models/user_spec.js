@@ -57,6 +57,15 @@ describe("chorus.models.User", function() {
         });
     });
 
+    describe("#destroy", function() {
+        it("should make a delete request", function() {
+            //testing that the idAttribute is set properly
+            this.model.set({ userName : "heath" });
+            this.model.destroy();
+            expect(this.server.requests[0].url).toBe(this.model.url());
+        });
+    });
+
     describe("#performValidation", function() {
         beforeEach(function() {
             spyOn(this.model, "require").andCallThrough();
