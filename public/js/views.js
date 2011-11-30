@@ -169,6 +169,9 @@
                 this.$(".menus").append(
                     menu.render().el
                 )
+                menu.bind("choice", function(choice){
+                    self.trigger("choice", choice);
+                })
             }
         }
     })

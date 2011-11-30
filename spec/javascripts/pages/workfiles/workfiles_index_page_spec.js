@@ -46,8 +46,16 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         })
 
         it("has filters for the types", function() {
-            expect(this.page.$("li[data-type]=all")).toExist();
-            expect(this.page.$("li[data-type]=sql")).toExist();
+            expect(this.page.$("li[data-type=all]")).toExist();
+            expect(this.page.$("li[data-type=sql]")).toExist();
+        })
+
+        it("has proper file when type chosen" ,function(){
+            var collection = this.page.collection;
+            spyOn(collection, "fetch");
+            this.page.$("li[data-type=sql] a").click();
+            expect(collection.attributes.type).toBe("sql");
+            expect(collection.fetch).toHaveBeenCalled();
         })
     })
 });
