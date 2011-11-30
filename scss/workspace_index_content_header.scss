@@ -35,10 +35,12 @@
     }
 
     .popup_filter {
+        min-width:130px;
         right: -2px;
         top: 28px;
         padding: 9px 7px 9px 2px;
-    z-index : 100;
+        z-index : 100;
+
 
         .pointer {
             left: 100px;
