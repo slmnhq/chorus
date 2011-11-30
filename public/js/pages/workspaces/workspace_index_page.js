@@ -5,7 +5,7 @@
 
             this.content = new chorus.views.WorkspaceList({collection: collection});
             this.contentHeader = new chorus.views.WorkspaceIndexContentHeader();
-            this.contentDetails = new chorus.views.Count({collection: collection, modelClass: "Workspace"});
+            this.contentDetails = new chorus.views.ListContentDetails({collection: collection, modelClass: "Workspace"});
 
             this.setupEvents();
             this.contentHeader.choose("active");

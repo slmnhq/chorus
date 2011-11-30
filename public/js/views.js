@@ -182,7 +182,7 @@
             var collection = this.collection;
             this.content = new chorus.views[modelClass + "List"]({collection: collection })
             this.contentHeader = new chorus.views.ListHeaderView({title: modelClass + "s", linkMenu : options.linkMenu})
-            this.contentDetails = new chorus.views.Count({collection : collection, modelClass : modelClass})
+            this.contentDetails = new chorus.views.ListContentDetails({collection : collection, modelClass : modelClass})
         },
         additionalClass : "main_content_list"
     });

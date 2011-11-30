@@ -1,32 +1,3 @@
-describe("chorus.views.UserIndexMain", function() {
-    beforeEach(function() {
-        this.loadTemplate("header");
-        this.loadTemplate("breadcrumbs");
-        this.loadTemplate("main_content");
-        this.loadTemplate("default_content_header");
-        this.loadTemplate("count");
-        this.loadTemplate("user_list");
-        this.loadTemplate("user_index_sidebar");
-
-        chorus.user = new chorus.models.User({
-            "firstName" : "Daniel",
-            "lastName" : "Burkes",
-            "fullName": "Daniel Francis Burkes"
-        });
-    });
-
-    describe("#render", function() {
-        beforeEach(function() {
-            this.view = new chorus.views.MainContentList({modelClass : "User", collection : new chorus.models.UserSet()});
-            this.view.content.collection.loaded = true
-            this.view.render();
-        })
-        it("displays the number of users", function() {
-            expect(this.view.$(".count").text().trim()).toBe("0 Users");
-        });
-    })
-})
-
 describe("chorus.views.UserList", function() {
     beforeEach(function() {
         this.loadTemplate("user_list");

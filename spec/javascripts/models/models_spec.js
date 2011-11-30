@@ -395,9 +395,49 @@ describe("chorus.models", function() {
         })
 
         describe("#url", function() {
-            it("compiles the urlTemplate and renders it with model attributes", function() {
-                expect(this.collection.url()).toBe("/edc/bar/bar");
+            context("when the collection has a page property", function() {
+                beforeEach(function() {
+                    this.collection.page = 3;
+                });
+
+                it("fetches the corresponding page of the collection", function() {
+                    expect(this.collection.url()).toBe("/edc/bar/bar?page=3&rows=50");
+                });
             });
+
+            context("when the collection has pagination information from the server", function() {
+                beforeEach(function() {
+                    this.collection.pagination = {
+                        page: '4',
+                        total: '5',
+                        records: '250'
+                    };
+                });
+
+                it("fetches the corresponding page of the collection", function() {
+                    expect(this.collection.url()).toBe("/edc/bar/bar?page=4&rows=50");
+                });
+            });
+
+            context("when the collection has NO pagination or page property", function() {
+                it("fetches the first page of the collection", function() {
+                    expect(this.collection.url()).toBe("/edc/bar/bar?page=1&rows=50");
+                });
+            });
+
+            it("takes an optional page size", function() {
+                expect(this.collection.url({ rows : 1000 })).toBe("/edc/bar/bar?page=1&rows=1000");
+            })
+
+            it("mixes in sortIndex and sortOrder from the collection", function() {
+                this.collection.sortAsc("foo");
+                expect(this.collection.url()).toBe("/edc/bar/bar?page=1&rows=50&sidx=foo&sord=asc");
+            })
+
+            it("plays nicely with existing parameters in the url template", function() {
+                this.collection.urlTemplate = "bar/{{foo}}?why=not";
+                expect(this.collection.url()).toBe("/edc/bar/bar?why=not&page=1&rows=50");
+            })
         });
 
         describe("before parsing", function() {
@@ -428,7 +468,42 @@ describe("chorus.models", function() {
                 this.collection.parse({status: "needlogin"});
                 expect(chorus.session.trigger).toHaveBeenCalledWith("needsLogin");
             })
+
+            it("stores pagination info on the collection", function() {
+                var pagination = {
+                    total : "2",
+                    page : "1",
+                    records : "52"
+                }
+
+                this.collection.parse({ resource : this.things, pagination : pagination });
+                expect(this.collection.pagination).toBe(pagination);
+            })
         })
+
+        describe("#fetch", function() {
+            context("when the collection does not contain pagination information", function() {
+                it("fetches the first page of items", function() {
+                    this.collection.fetch();
+                    expect(this.server.requests[0].url).toBe("/edc/bar/bar?page=1&rows=50")
+                })
+            })
+
+            context("when the collection has pagination information", function() {
+                beforeEach(function() {
+                    this.collection.pagination = {
+                        page : "2",
+                        total : "3",
+                        records : "22"
+                    }
+                })
+
+                it("fetches the page specified in the pagination information", function() {
+                    this.collection.fetch();
+                    expect(this.server.requests[0].url).toBe("/edc/bar/bar?page=2&rows=50")
+                })
+            })
+        });
 
         describe("#fetchAll", function() {
             beforeEach(function() {
@@ -438,28 +513,6 @@ describe("chorus.models", function() {
             it("requests page one from the server", function() {
                 expect(this.server.requests[0].url).toBe("/edc/bar/bar?page=1&rows=1000");
             })
-
-            context("when the collection is sorted ascending", function() {
-                beforeEach(function() {
-                    this.collection.sortAsc("name");
-                    this.collection.fetchAll();
-                });
-
-                it("puts the sort parameters in the URL", function() {
-                    expect(this.server.requests[1].url).toBe("/edc/bar/bar?page=1&rows=1000&sidx=name&sord=asc");
-                });
-            });
-
-            context("when the collection is sorted descending", function() {
-                beforeEach(function() {
-                    this.collection.sortDesc("name");
-                    this.collection.fetchAll();
-                });
-
-                it("puts the sort parameters in the URL", function() {
-                    expect(this.server.requests[1].url).toBe("/edc/bar/bar?page=1&rows=1000&sidx=name&sord=desc");
-                });
-            });
 
             describe("and the server responds successfully", function() {
                 beforeEach(function() {
@@ -562,6 +615,20 @@ describe("chorus.models", function() {
                 it("triggers the reset event when the error occurs", function() {
                     expect(this.collectionLengthOnReset).toBe(2)
                 })
+            })
+        })
+
+        describe("#fetchPage", function() {
+            it("requests page one from the server", function() {
+                this.collection.fetchPage(2);
+                expect(this.server.requests[0].url).toBe("/edc/bar/bar?page=2&rows=50");
+            })
+
+            it("passes options through to fetch", function() {
+                spyOn(this.collection, "fetch");
+                this.collection.fetchPage(2, { foo : "bar" })
+                var options = this.collection.fetch.mostRecentCall.args[0];
+                expect(options.foo).toBe("bar");
             })
         })
     });

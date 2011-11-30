@@ -40,17 +40,17 @@
 }
 
 #content_details {
+    height: 32px;
+    line-height: 32px;
+    vertical-align: middle;
     font-size: 13px;
     border-bottom: 1px solid $pagination-border-color;
+    padding: 0 $padding-x;
 
     &.hidden {
         padding: 0;
         height: 0;
         border: none;
-    }
-
-    .plain_text, .count {
-        padding: 11px $padding-x;
     }
 }
 

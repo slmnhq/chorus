@@ -19,6 +19,10 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         it("fetches the model", function() {
             expect(this.server.requests[0].url).toBe("/edc/workspace/4");
         })
+
+        it("fetches the first page of the collection", function() {
+            expect(this.server.requests[1].url).toBe("/edc/workspace/4/workfile?page=1&rows=50")
+        })
     });
 
     describe("when the workfile:selected event is triggered on the list view", function() {

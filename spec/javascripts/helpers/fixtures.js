@@ -27,7 +27,7 @@
                     if (obj.set) {
                         obj.set(data);
                     } else {
-                        return new klass(data, options);
+                        obj.reset(data, options);
                     }
                     return obj;
                 }
@@ -66,7 +66,7 @@
                 if (obj.set) {
                     obj.set(data);
                 } else {
-                    return new klass(data, options);
+                    obj.reset(data, options);
                 }
                 return obj;
             },
@@ -203,7 +203,7 @@
                     "pagination": {
                         "total": "2",
                         "page": "1",
-                        "records": "2"
+                        "records": "22"
                     },
                     "version": "0.1"
                 }

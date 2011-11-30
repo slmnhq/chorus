@@ -7,11 +7,12 @@ describe("chorus.views.CollectionPicklist", function() {
     })
 
     describe("#render", function() {
-        beforeEach(function() {
-            this.view.render();
-        })
-
         context("when the collection is not loaded", function() {
+            beforeEach(function() {
+                this.collection.loaded = undefined;
+                this.view.render();
+            })
+
             it("displays a loading message", function() {
                 expect(this.view.$(".loading")).toExist();
             })
@@ -19,7 +20,6 @@ describe("chorus.views.CollectionPicklist", function() {
 
         context("when the collection is loaded", function() {
             beforeEach(function() {
-                this.collection.loaded = true;
                 this.view.render();
             })
 

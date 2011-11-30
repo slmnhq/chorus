@@ -12,6 +12,7 @@ describe("chorus.views.ActivityList", function() {
 
         describe("before the collection has loaded", function() {
             beforeEach(function() {
+                this.collection.loaded = undefined;
                 this.view.render();
             })
 
@@ -22,7 +23,6 @@ describe("chorus.views.ActivityList", function() {
 
         describe("when the collection has loaded", function() {
             beforeEach(function() {
-                this.collection.loaded = true;
                 this.view.render();
             });
 

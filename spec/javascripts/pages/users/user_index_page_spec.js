@@ -4,7 +4,7 @@ describe("chorus.pages.UserIndexPage", function() {
         this.loadTemplate("breadcrumbs");
         this.loadTemplate("main_content");
         this.loadTemplate("default_content_header");
-        this.loadTemplate("count");
+        this.loadTemplate("list_content_details");
         this.loadTemplate("user_list");
         this.loadTemplate("user_index_sidebar");
         this.loadTemplate("logged_in_layout");

@@ -4,7 +4,7 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
         this.loadTemplate("breadcrumbs");
         this.loadTemplate("main_content");
         this.loadTemplate("default_content_header");
-        this.loadTemplate("count");
+        this.loadTemplate("list_content_details");
         this.loadTemplate("workspace_list");
         this.loadTemplate("logged_in_layout");
         this.loadTemplate("dashboard_sidebar");

@@ -8,44 +8,77 @@
 
             setup: $.noop,
 
-            url: function() {
-                return "/edc/" + Handlebars.compile(this.urlTemplate)(this.attributes);
+            url: function(options) {
+                options = options || { rows : 50 }
+
+                var url = "/edc/" + Handlebars.compile(this.urlTemplate)(this.attributes);
+
+                var params = [];
+                if (this.page) {
+                    params.push("page=" + this.page);
+                } else if (this.pagination) {
+                    params.push("page=" + this.pagination.page)
+                } else {
+                    params.push("page=1")
+                }
+
+                params.push("rows=" + options.rows);
+
+                if (this.sortIndex && this.sortOrder) {
+                    params.push("sidx=" + this.sortIndex);
+                    params.push("sord=" + this.sortOrder);
+                }
+
+                var paramsStr = params.join("&");
+                if (url.indexOf('?') != -1) {
+                    url = [url, paramsStr].join('&')
+                } else {
+                    url = [url, paramsStr].join('?')
+                }
+
+                return url;
             },
 
-            fetchAll : function() {
-                this.fetchPage(1);
+            fetchPage: function(page, options) {
+                this.page = page;
+                this.fetch(options);
             },
 
-            fetchPage : function(page) {
-                var baseUrl = this.url();
-
-                var url =  baseUrl + "?page=" + page + "&rows=1000"
-                url = this.sortIndex && this.sortOrder ? url + "&sidx=" + this.sortIndex + "&sord=" + this.sortOrder : url
-                this.fetch({
-                    url :url,
-                    silent: true,
-                    add : page != 1,
-                    success : function(collection, resp) {
-                        if (resp.status == "ok") {
-                            var total = parseInt(resp.pagination.total);
-                            var page = parseInt(resp.pagination.page);
-                            if (page >= total) {
-                                collection.trigger("reset", collection);
+            fetchAll : (function() {
+                var fetchPage = function(page) {
+                    this.page = page;
+                    this.fetch({
+                        url : this.url({ rows: 1000 }),
+                        silent: true,
+                        add : page != 1,
+                        success : function(collection, resp) {
+                            if (resp.status == "ok") {
+                                var total = parseInt(resp.pagination.total);
+                                var page = parseInt(resp.pagination.page);
+                                if (page >= total) {
+                                    collection.trigger("reset", collection);
+                                } else {
+                                    fetchPage.call(collection, page + 1);
+                                }
                             } else {
-                                collection.fetchPage(page + 1);
-                            }
-                        } else {
-                            collection.trigger("reset", collection);
+                                collection.trigger("reset", collection);
 
+                            }
                         }
-                    }
-                });
-            },
+                    });
+                };
+
+                return function() {
+                    fetchPage.call(this, 1);
+                }
+            })(),
+
 
             parse : function(data) {
                 if (data.status == "needlogin") {
                     chorus.session.trigger("needsLogin");
                 }
+                this.pagination = data.pagination;
                 this.loaded = true;
                 return data.resource;
             },

@@ -51,7 +51,7 @@ describe("chorus.models.User", function() {
             });
 
             it("hits the right url for that user", function() {
-                var expectedUrl = "/edc/workspace/?user=" + this.user.get("userName");
+                var expectedUrl = "/edc/workspace/?user=" + this.user.get("userName") + "&page=1&rows=50";
                 expect(this.server.requests[0].url).toBe(expectedUrl);
             });
         });
