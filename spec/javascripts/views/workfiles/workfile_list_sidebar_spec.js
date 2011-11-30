@@ -50,7 +50,7 @@ describe("WorkfileListSidebar", function() {
         })
 
         it("displays a link to delete the workfile", function() {
-            var deleteLink = this.view.$(".actions a[data-alert=DeleteWorkfile]");
+            var deleteLink = this.view.$(".actions a[data-alert=WorkfileDelete]");
             expect(deleteLink).toExist();
             expect(deleteLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"))
             expect(deleteLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))

@@ -22,7 +22,7 @@
         },
     })
 
-    ns.alerts.DeleteModel = ns.alerts.Base.extend({
+    ns.alerts.ModelDelete = ns.alerts.Base.extend({
         events : _.extend({}, ns.alerts.Base.prototype.events, {
             "click button.submit" : "deleteModel"
         }),

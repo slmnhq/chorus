@@ -1,7 +1,7 @@
-describe("DeleteWorkfileAlert", function() {
+describe("WorkfileDelete", function() {
     beforeEach(function() {
         this.launchElement = $("<a data-workspace-id='10' data-workfile-id='100' data-workfile-name='foo.sql'></a>")
-        this.alert = new chorus.alerts.DeleteWorkfile({ launchElement : this.launchElement });
+        this.alert = new chorus.alerts.WorkfileDelete({ launchElement : this.launchElement });
         this.loadTemplate("alert")
     });
 

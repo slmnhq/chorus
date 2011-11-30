@@ -1,5 +1,5 @@
 ;(function(ns) {
-    ns.alerts.UserDelete = ns.alerts.DeleteModel.extend({
+    ns.alerts.UserDelete = ns.alerts.ModelDelete.extend({
         redirectUrl : "/users",
         text: t("user.delete.text"),
         title: t("user.delete.title"),

@@ -70,11 +70,11 @@ describe("chorus.views.Alert", function() {
     });
 })
 
-describe("DeleteAlert", function() {
+describe("ModelDelete alert", function() {
     beforeEach(function() {
         this.loadTemplate("alert")
         
-        this.alert = new chorus.alerts.DeleteModel({  model: new chorus.models.User() });
+        this.alert = new chorus.alerts.ModelDelete({  model: new chorus.models.User() });
         this.alert.redirectUrl = "/partyTime"
         this.alert.text = "Are you really really sure?"
         this.alert.title = "A standard delete alert"
