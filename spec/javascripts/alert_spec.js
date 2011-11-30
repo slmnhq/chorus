@@ -40,12 +40,12 @@ describe("chorus.views.Alert", function() {
     })
 
 
-    describe("#launchAlert", function() {
+    describe("#launchModal", function() {
         beforeEach(function() {
             spyOn($, "facebox")
             spyOn(this.alert, "render")
             spyOn(this.alert, "el")
-            this.alert.launchAlert()
+            this.alert.launchModal()
         })
 
         it("creates a facebox", function() {

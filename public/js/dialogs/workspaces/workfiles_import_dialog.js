@@ -51,7 +51,7 @@
                 this.request.abort();
             }
 
-            this.closeDialog();
+            this.closeModal();
         },
 
         postRender : function() {
@@ -81,7 +81,7 @@
             function uploadFinished(e, data){
                 var json = $.parseJSON(data.result)
                 self.model.set({id: json.resource[0].id});
-                self.closeDialog();
+                self.closeModal();
                 var url;
                 if (self.uploadExtension.toLowerCase() == "txt" || self.uploadExtension.toLowerCase() == "sql") {
                     url = self.model.showUrl();

@@ -85,7 +85,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
             spyOn(this.dialog.picklistView, "selectedItem").andReturn(this.workspace);
             this.dialog.picklistView.trigger("item:selected", this.workspace);
             spyOn(chorus.router, "navigate")
-            spyOn(this.dialog, "closeDialog")
+            spyOn(this.dialog, "closeModal")
             this.dialog.$("button.submit").click();
         });
 
@@ -105,7 +105,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
             })
 
             it("closes the dialog", function() {
-                expect(this.dialog.closeDialog).toHaveBeenCalled();
+                expect(this.dialog.closeModal).toHaveBeenCalled();
             });
 
             it("does not navigate", function() {
@@ -124,7 +124,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
             })
 
             it("does not close the dialog", function() {
-                expect(this.dialog.closeDialog).not.toHaveBeenCalled();
+                expect(this.dialog.closeModal).not.toHaveBeenCalled();
             })
 
             it("displays the server error message", function() {

@@ -24,9 +24,9 @@ describe("WorkfilesImportDialog", function() {
 
         context("clicking on the cancel button", function(){
             it("closes the dialog", function(){
-                spyOn(this.dialog, "closeDialog");
+                spyOn(this.dialog, "closeModal");
                 this.dialog.$("button.cancel").click();
-                expect(this.dialog.closeDialog).toHaveBeenCalled();
+                expect(this.dialog.closeModal).toHaveBeenCalled();
             });
         });
     });
@@ -53,7 +53,7 @@ describe("WorkfilesImportDialog", function() {
 
     context("when a file has been chosen", function() {
         beforeEach(function() {
-            spyOn(this.dialog, "closeDialog");
+            spyOn(this.dialog, "closeModal");
             this.dialog.render();
             this.fileList = [{fileName: 'foo.bar'}];
             this.dialog.$("input[type=file]").fileupload('add', {files: this.fileList});
@@ -110,7 +110,7 @@ describe("WorkfilesImportDialog", function() {
                 });
 
                 it("closes the dialog", function(){
-                    expect(this.dialog.closeDialog).toHaveBeenCalled();
+                    expect(this.dialog.closeModal).toHaveBeenCalled();
                 });
 
                 it("cancels the upload", function(){
@@ -139,7 +139,7 @@ describe("WorkfilesImportDialog", function() {
                 });
 
                 it("closes the dialog", function(){
-                    expect(this.dialog.closeDialog).toHaveBeenCalled();
+                    expect(this.dialog.closeModal).toHaveBeenCalled();
                 });
 
                 it("navigates to the workfile index", function(){
