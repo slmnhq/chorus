@@ -49,6 +49,10 @@
         return new stubClass
     }
 
+    window.stubModals = function(){
+        return spyOn($, "facebox") 
+    }
+
 
     //initialization
     ;(function safeStart() {

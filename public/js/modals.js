@@ -5,6 +5,9 @@
             _.bind(this.revealed, this);
             $(document).one('reveal.facebox', this.revealed);
             $.facebox(this.el)
+
+            ns.modal = this;
+            $(document).one('close.facebox', function(){delete ns.modal});
         },
 
         revealed : function () {

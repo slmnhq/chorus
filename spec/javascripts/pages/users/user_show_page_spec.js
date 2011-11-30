@@ -4,9 +4,11 @@ describe("user_show_page", function(){
         this.loadTemplate("header");
         this.loadTemplate("plain_text");
         this.loadTemplate("breadcrumbs");
-        this.loadTemplate("user_show");
         this.loadTemplate("default_content_header");
         this.loadTemplate("main_content");
+        this.loadTemplate("user_show");
+        this.loadTemplate("user_show_sidebar");
+        this.loadTemplate("alert");
     });
 
     describe("#setup", function(){
@@ -57,5 +59,28 @@ describe("user_show_page", function(){
                 expect(this.view.$("#breadcrumbs .breadcrumb .slug").text()).toBe(t("breadcrumbs.user_profile"));
             });
         });
+
+        context("sidebar", function(){
+            beforeEach(function(){
+                setLoggedInUser({admin: true})
+                this.view.render();
+            });
+
+            it("puts a UserShowSidebar in the sidebar", function(){
+                expect(this.view.sidebar instanceof chorus.views.UserShowSidebar).toBeTruthy();
+            })
+
+            it("sets the sidebar's model to the user", function(){
+                expect(this.view.sidebar.model).toBe(this.view.model);
+            })
+
+            context("clicking on the delete user link", function(){
+                it("launches a delete user alert", function(){
+                    stubModals();
+                    this.view.sidebar.$("a.delete_user").click()
+                    expect(chorus.modal instanceof chorus.alerts.UserDelete).toBeTruthy();
+                }) 
+            });
+        })
     });
 });

@@ -8,7 +8,15 @@
         setup : function(userName){
             this.model = new chorus.models.User({userName: userName});
             this.model.fetch();
-            this.mainContent = new chorus.views.UserShowMain(this.model);
+
+            this.mainContent = new chorus.views.MainContentView({
+                model : this.model,
+                content : new chorus.views.UserShow({model : this.model}),
+                contentHeader : new updatingUserNameView({model: this.model}),
+                contentDetails : new chorus.views.StaticTemplate("plain_text", {text : t("users.details")}),
+            });
+
+            this.sidebar = new chorus.views.UserShowSidebar({model: this.model})
         }
     });
 
@@ -22,12 +30,4 @@
         }
     });
 
-    chorus.views.UserShowMain = chorus.views.MainContentView.extend({
-        setup : function(model) {
-            this.resource = this.model = model;
-            this.content = new chorus.views.UserShow({model : model});
-            this.contentHeader = new updatingUserNameView({model: model});
-            this.contentDetails = new chorus.views.StaticTemplate("plain_text", {text : t("users.details")});
-        }
-    });
 })(jQuery, chorus.pages);
