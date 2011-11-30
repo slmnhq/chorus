@@ -22,7 +22,10 @@
                             title : t("workfiles.header.menu.filter.title"),
                             options : [
                                 {data : "", text : t("workfiles.header.menu.filter.all")},
-                                {data : "sql", text : t("workfiles.header.menu.filter.sql")}
+                                {data : "sql", text : t("workfiles.header.menu.filter.sql")},
+                                {data : "code", text : t("workfiles.header.menu.filter.code")},
+                                {data : "text", text : t("workfiles.header.menu.filter.text")},
+                                {data : "other", text : t("workfiles.header.menu.filter.other")}
                             ],
                             event : "filter"
                         },

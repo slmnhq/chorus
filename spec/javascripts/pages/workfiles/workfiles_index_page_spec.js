@@ -69,6 +69,9 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             it("has options for filtering", function() {
                 expect(this.page.$("ul[data-event=filter] li[data-type=]")).toExist();
                 expect(this.page.$("ul[data-event=filter] li[data-type=sql]")).toExist();
+                expect(this.page.$("ul[data-event=filter] li[data-type=code]")).toExist();
+                expect(this.page.$("ul[data-event=filter] li[data-type=text]")).toExist();
+                expect(this.page.$("ul[data-event=filter] li[data-type=other]")).toExist();
             })
 
             it("can filter the list by 'all'", function() {
@@ -82,6 +85,25 @@ describe("chorus.pages.WorkfileIndexPage", function() {
                 expect(this.page.collection.attributes.fileType).toBe("sql");
                 expect(this.page.collection.fetch).toHaveBeenCalled();
             })
+
+            it("has can filter the list by 'code'" ,function(){
+                this.page.$("li[data-type=code] a").click();
+                expect(this.page.collection.attributes.fileType).toBe("code");
+                expect(this.page.collection.fetch).toHaveBeenCalled();
+            })
+
+            it("has can filter the list by 'text'" ,function(){
+                this.page.$("li[data-type=text] a").click();
+                expect(this.page.collection.attributes.fileType).toBe("text");
+                expect(this.page.collection.fetch).toHaveBeenCalled();
+            })
+
+            it("has can filter the list by 'other'" ,function(){
+                this.page.$("li[data-type=other] a").click();
+                expect(this.page.collection.attributes.fileType).toBe("other");
+                expect(this.page.collection.fetch).toHaveBeenCalled();
+            })
+
         })
 
         describe("sorting", function() {
