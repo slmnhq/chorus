@@ -37,8 +37,12 @@
                 "Basic Main Content Stucture" : new chorus.views.MainContentView({
                     content : new chorus.views.StaticTemplate("style_guide_content"),
                     contentHeader : new chorus.views.StaticTemplate("default_content_header", {title: 'Content Header'}),
-                    contentDetails : new chorus.views.StaticTemplate("plain_text", {text: 'Content Details'}),
+                    contentDetails : new chorus.views.StaticTemplate("plain_text", {text: 'Content Details'})
                 }),
+                "Link Menu" : new chorus.views.LinkMenu({title : "Link Menu", options : [
+                    {data : "first", text : "Text of first option"},
+                    {data : "second", text : "Text of second option"}
+                ]}),
 
                 "List Page (loading)" : new chorus.views.MainContentList({modelClass : "User", collection : this.loadingCollection}),
 

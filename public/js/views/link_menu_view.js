@@ -9,8 +9,10 @@
             var self=this;
             if (!this.options.chosen) this.options.chosen = this.options.options[0].text
             var chosen = _.find(this.options.options, function(option) {
+                console.log(self.options.chosen, self.options.options)
                 return option.text == self.options.chosen;
             })
+            console.log(chosen)
             _.each(this.options.options, function(option){
                 option.hiddenClass = "hidden";
             })
