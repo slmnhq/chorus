@@ -9,19 +9,15 @@
             setup: $.noop,
 
             url: function(options) {
-                options = options || { rows : 50 }
+                options = _.extend({
+                    rows : 50,
+                    page : 1
+                }, options);
 
                 var url = "/edc/" + Handlebars.compile(this.urlTemplate)(this.attributes);
 
                 var params = [];
-                if (this.page) {
-                    params.push("page=" + this.page);
-                } else if (this.pagination) {
-                    params.push("page=" + this.pagination.page)
-                } else {
-                    params.push("page=1")
-                }
-
+                params.push("page=" + options.page);
                 params.push("rows=" + options.rows);
 
                 if (this.sortIndex && this.sortOrder) {
@@ -40,15 +36,15 @@
             },
 
             fetchPage: function(page, options) {
-                this.page = page;
+                var url = this.url({page : page});
+                options = _.extend({}, options, { url: url });
                 this.fetch(options);
             },
 
             fetchAll : (function() {
                 var fetchPage = function(page) {
-                    this.page = page;
                     this.fetch({
-                        url : this.url({ rows: 1000 }),
+                        url : this.url({ page: page, rows: 1000 }),
                         silent: true,
                         add : page != 1,
                         success : function(collection, resp) {

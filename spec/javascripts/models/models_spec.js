@@ -395,16 +395,6 @@ describe("chorus.models", function() {
         })
 
         describe("#url", function() {
-            context("when the collection has a page property", function() {
-                beforeEach(function() {
-                    this.collection.page = 3;
-                });
-
-                it("fetches the corresponding page of the collection", function() {
-                    expect(this.collection.url()).toBe("/edc/bar/bar?page=3&rows=50");
-                });
-            });
-
             context("when the collection has pagination information from the server", function() {
                 beforeEach(function() {
                     this.collection.pagination = {
@@ -415,7 +405,7 @@ describe("chorus.models", function() {
                 });
 
                 it("fetches the corresponding page of the collection", function() {
-                    expect(this.collection.url()).toBe("/edc/bar/bar?page=4&rows=50");
+                    expect(this.collection.url()).toBe("/edc/bar/bar?page=1&rows=50");
                 });
             });
 
@@ -427,7 +417,11 @@ describe("chorus.models", function() {
 
             it("takes an optional page size", function() {
                 expect(this.collection.url({ rows : 1000 })).toBe("/edc/bar/bar?page=1&rows=1000");
-            })
+            });
+
+            it("takes an optional page number", function() {
+                expect(this.collection.url({ page : 4 })).toBe("/edc/bar/bar?page=4&rows=50");
+            });
 
             it("mixes in sortIndex and sortOrder from the collection", function() {
                 this.collection.sortAsc("foo");
@@ -500,7 +494,7 @@ describe("chorus.models", function() {
 
                 it("fetches the page specified in the pagination information", function() {
                     this.collection.fetch();
-                    expect(this.server.requests[0].url).toBe("/edc/bar/bar?page=2&rows=50")
+                    expect(this.server.requests[0].url).toBe("/edc/bar/bar?page=1&rows=50")
                 })
             })
         });
@@ -630,6 +624,13 @@ describe("chorus.models", function() {
                 var options = this.collection.fetch.mostRecentCall.args[0];
                 expect(options.foo).toBe("bar");
             })
+
+            it("does not affect subsequent calls to fetch", function() {
+                this.collection.fetchPage(2);
+                this.collection.fetch();
+                expect(this.server.requests[1].url).toBe("/edc/bar/bar?page=1&rows=50");
+            })
+
         })
     });
 });
