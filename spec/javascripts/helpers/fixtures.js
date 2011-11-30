@@ -356,7 +356,45 @@
                     "resourcelink": "/edc/workspace/10000/workfile/10035",
                     "pagination": null,
                     "version": "0.1"
-                }
+                },
+
+                fetchText : {
+	                    "message":[],
+	                    "status":"ok",
+	                    "requestId":449,
+	                    "resource":[
+
+	                        {
+	                            "id":"10004",
+	                            "fileName":"editabletextfile.txt",
+	                            "mimeType":"text/plain",
+	                            "fileType":"txt",
+	                            "isBinary":false,
+	                            "workspaceId":"10001",
+	                            "source":"fs",
+	                            "owner":"edcadmin",
+	                            "description":null,
+	                            "latestVersionNum":1,
+	                            "isDeleted":false,
+	                            "modifiedBy":"edcadmin",
+	                            "lastUpdatedStamp":"2011-11-29 10:46:03.152",
+	                            "lastUpdatedTxStamp":"2011-11-29 10:46:03.145",
+	                            "createdStamp":"2011-11-29 10:46:03.152",
+	                            "createdTxStamp":"2011-11-29 10:46:03.145",
+	                            "versionFileId":"1322592363143_7126",
+	                            "versionNum":"1",
+	                            "versionOwner":"edcadmin",
+	                            "content":"This is a text file.\n\nThis is the 3rd line.\n\nReally really long line.  Really really long line.  Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.",
+	                            "editable":true,
+	                            "hasDraft":false,
+	                            "sandboxId":null
+	                        }
+	                    ],
+	                    "method":"GET",
+	                    "resourcelink":"/edc/workspace/10001/workfile/10004",
+	                    "pagination":null,
+	                    "version":"0.1"
+		                }
             },
 
             ActivitySet : {

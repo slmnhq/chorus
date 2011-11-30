@@ -15,6 +15,7 @@ src_files:
   - js/vendor/underscore-1.2.1.js
   - js/vendor/backbone-0.5.3.js
   - js/vendor/jquery.ui.*.js
+  - js/vendor/codemirror-2.16.js
   - js/vendor/**/*.js
   - js/chorus.js
   - js/router.js

@@ -48,21 +48,52 @@ describe("chorus.models.Workfile", function() {
         context("when the workfile is an image", function() {
             beforeEach(function() {
                 this.model.set({ mimeType : "image/jpeg" });
-            })
+            });
 
             it("returns true", function() {
                 expect(this.model.isImage()).toBeTruthy();
-            })
-        })
+            });
+        });
 
         context("when the workfile is NOT an image", function() {
             beforeEach(function() {
                 this.model.set({ mimeType : "text/plain" });
-            })
+            });
 
             it("returns false", function() {
                 expect(this.model.isImage()).toBeFalsy();
-            })
-        })
-    })
+            });
+        });
+    });
+
+    describe("isTextfile", function() {
+        context("when the workfile is a textfile", function() {
+            beforeEach(function() {
+                this.model.set({ mimeType : "text/plain" });
+            });
+
+            it("returns true", function() {
+                expect(this.model.isTextfile()).toBeTruthy();
+            });
+        });
+
+        context("when the workfile is NOT text", function() {
+            beforeEach(function() {
+                this.model.set({ mimeType : "image/jpeg" });
+            });
+
+            it("returns false", function() {
+                expect(this.model.isTextfile()).toBeFalsy();
+            });
+        });
+        context("when the workfile is an html", function() {
+            beforeEach(function() {
+                this.model.set({ mimeType : "text/html" });
+            });
+
+            it("returns false", function() {
+                expect(this.model.isTextfile()).toBeFalsy();
+            });
+        });
+    });
 });
