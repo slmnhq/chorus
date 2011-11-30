@@ -63,6 +63,7 @@ describe("user_show_page", function(){
         context("sidebar", function(){
             beforeEach(function(){
                 setLoggedInUser({admin: true})
+                this.view.model.set({userName : "inspectorHenderson"})
                 this.view.render();
             });
 
@@ -79,6 +80,7 @@ describe("user_show_page", function(){
                     stubModals();
                     this.view.sidebar.$("a.delete_user").click()
                     expect(chorus.modal instanceof chorus.alerts.UserDelete).toBeTruthy();
+                    expect(chorus.modal.model.get("userName")).toBe("inspectorHenderson");
                 }) 
             });
         })
