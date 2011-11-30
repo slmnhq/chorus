@@ -46,6 +46,16 @@ describe("chorus.views.LinkMenu", function() {
                 expect(this.view.$(".menu")).toHaveClass("hidden");
             })
 
+            describe("clicking the chosen span", function(){
+                beforeEach(function() {
+                    this.view.$("a.popup span").click();
+                });
+                it("shows the popup menu", function() {
+                    expect(this.view.$(".menu")).not.toHaveClass("hidden");
+                });
+
+            });
+
             describe("clicking the filter link", function() {
                 beforeEach(function() {
                     this.view.$("a.popup").click();

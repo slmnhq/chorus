@@ -3,7 +3,7 @@
         className : "link_menu",
         events : {
             "click a.popup" : "togglePopup",
-            "click li a" : "choose"
+            "click .menu a" : "choose"
         },
         context : function(){
             var self=this;
