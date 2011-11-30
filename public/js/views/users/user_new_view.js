@@ -29,6 +29,8 @@
             updates.admin = this.$("input#admin-checkbox").prop("checked") || false;
 
             this.model.set(updates)
+
+            this.model.id = undefined; // since User#idAttribute is userName, we need this for isNew to return true
             this.model.save();
         },
 
