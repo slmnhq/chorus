@@ -11,10 +11,10 @@ describe("workfile_set", function() {
         })
         describe("with filtering", function() {
             beforeEach(function() {
-                this.collection.attributes.type = "sql"
+                this.collection.attributes.fileType = "sql"
             })
             it("it has correct Url", function() {
-                expect(this.collection.url()).toBe("/edc/workspace/1234/workfile?type=sql&page=1&rows=50");
+                expect(this.collection.url()).toBe("/edc/workspace/1234/workfile?fileType=sql&page=1&rows=50");
             })
         })
     });

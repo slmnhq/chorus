@@ -18,7 +18,7 @@
                     linkMenu : {
                         title : "Title",
                         options : [
-                            {data : "all", text : "All"},
+                            {data : "", text : "All"},
                             {data : "sql", text : "SQL"}
                         ]
                     }
@@ -30,7 +30,7 @@
                 this.sidebar.trigger("workfile:selected", workfileId)
             }, this)
             this.mainContent.contentHeader.bind("choice", function(choice) {
-                this.collection.attributes.type = choice;
+                this.collection.attributes.fileType = choice;
                 this.collection.fetch();
             }, this)
         }

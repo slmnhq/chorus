@@ -50,7 +50,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         })
 
         it("has filters for the types", function() {
-            expect(this.page.$("li[data-type=all]")).toExist();
+            expect(this.page.$("li[data-type=]")).toExist();
             expect(this.page.$("li[data-type=sql]")).toExist();
         })
 
@@ -58,7 +58,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             var collection = this.page.collection;
             spyOn(collection, "fetch");
             this.page.$("li[data-type=sql] a").click();
-            expect(collection.attributes.type).toBe("sql");
+            expect(collection.attributes.fileType).toBe("sql");
             expect(collection.fetch).toHaveBeenCalled();
         })
     })
