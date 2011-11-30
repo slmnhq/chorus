@@ -54,17 +54,7 @@ describe("WorkspaceIndexContentHeader", function() {
                     expect(this.view.$(".link_menu > a span").text()).toBe(t("filter.all_workspaces"));
                 });
 
-                it("shows only the check for the 'all' link", function() {
-                    this.view.$(".menu li[data-type=active] a").click();
 
-                    expect(this.view.$(activeCheckSelector)).not.toHaveClass('hidden')
-                    expect(this.view.$(allCheckSelector)).toHaveClass('hidden')
-
-                    this.view.$(".menu li[data-type=all] a").click();
-
-                    expect(this.view.$(activeCheckSelector)).toHaveClass('hidden')
-                    expect(this.view.$(allCheckSelector)).not.toHaveClass('hidden')
-                });
             });
 
             describe("clicking on the 'active workspaces' link", function() {

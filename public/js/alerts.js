@@ -1,8 +1,9 @@
 ;(function(ns) {
-    ns.Base = chorus.views.Base.extend({
+    ns.alerts.Base = ns.Modal.extend({
         className : "alert",
+        
         events : {
-            "click button.cancel" : "closeAlert"
+            "click button.cancel" : "closeModal"
         },
 
         additionalContext : function (ctx) {
@@ -15,23 +16,8 @@
 
         postRender : function () {
             this.events = this.events || {};
-            this.events["click button.cancel"] = this.events["click button.cancel"] || "closeAlert";
+            this.events["click button.cancel"] = this.events["click button.cancel"] || "closeModal";
             this.delegateEvents();
         },
-
-        launchAlert : function() {
-            this.render();
-            _.bind(this.revealed, this);
-            $(document).bind('reveal.facebox', this.revealed);
-            $.facebox(this.el)
-        },
-
-        revealed : function () {
-            $("#facebox").removeClass().addClass("alert_facebox");
-        },
-
-        closeAlert : function() {
-            $(document).trigger("close.facebox");
-        }
     })
-})(chorus.alerts)
+})(chorus)

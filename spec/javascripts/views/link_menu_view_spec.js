@@ -13,10 +13,17 @@ describe("chorus.views.LinkMenu", function() {
                     options : [
                         {data : "mark", text : "bob"},
                         {data : "joanne", text : "alice"}
-                    ]
+                    ],
+                    title: "Link Menu"
                 })
                 this.view.render();
             })
+
+            it("contains a filter menu", function() {
+                expect(this.view.$(".menu.popup_filter")).toExist();
+                expect(this.view.$(".title")).toHaveText("Link Menu");
+            });
+
             it("should have the correct popup options", function() {
                 expect(this.view.$("li[data-type=mark] a")).toHaveText("bob")
                 expect(this.view.$("li[data-type=joanne] a")).toHaveText("alice")
@@ -24,6 +31,9 @@ describe("chorus.views.LinkMenu", function() {
             describe("chosen option", function() {
                 it("defaults to the first option", function() {
                     expect(this.view.$(".chosen")).toHaveText("bob")
+                    expect(this.view.$(".menu li[data-type=mark] .check")).not.toHaveClass("hidden");
+                    expect(this.view.$(".menu li[data-type=joanne] .check")).toHaveClass("hidden")
+
                 })
                 it("renders the chosen option", function() {
                     this.view.options.chosen = "alice"
@@ -35,6 +45,16 @@ describe("chorus.views.LinkMenu", function() {
             it("should have a hidden menu", function() {
                 expect(this.view.$(".menu")).toHaveClass("hidden");
             })
+
+            describe("clicking the chosen span", function(){
+                beforeEach(function() {
+                    this.view.$("a.popup span").click();
+                });
+                it("shows the popup menu", function() {
+                    expect(this.view.$(".menu")).not.toHaveClass("hidden");
+                });
+
+            });
 
             describe("clicking the filter link", function() {
                 beforeEach(function() {
@@ -57,15 +77,20 @@ describe("chorus.views.LinkMenu", function() {
                         this.view.bind("choice", this.choiceSpy);
                         this.view.$(".menu li[data-type=joanne] a").click();
                     });
-                    it("should trigger a choice event with the data", function(){
-                        expect(this.choiceSpy).toHaveBeenCalledWith("alice");
+                    it("should trigger a choice event with the data", function() {
+                        expect(this.choiceSpy).toHaveBeenCalledWith("joanne");
                     });
-                    it("should set the chosen property", function(){
+                    it("should set the chosen property", function() {
                         expect(this.view.options.chosen).toBe("alice")
                     });
-                    it("should display the new choice", function(){
+                    it("should display the new choice", function() {
                         expect(this.view.$(".popup .chosen")).toHaveText("alice")
                     })
+
+                    it("shows change what is checked", function() {
+                        expect(this.view.$(".menu li[data-type=mark] .check")).toHaveClass("hidden")
+                        expect(this.view.$(".menu li[data-type=joanne] .check")).not.toHaveClass("hidden")
+                    });
                 });
 
             })

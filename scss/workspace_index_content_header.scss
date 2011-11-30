@@ -1,67 +1,74 @@
 @import "_common.scss";
 
-.workspace_index_content_header {
+.workspace_index_content_header, .default_content_header {
     .menus {
         float: right;
-        position: relative;
         text-align : right;
         width: 200px;
         margin-top:25px;
         @include after-clearfix;
+        
+    }
+}
+.link_menu {
+    position: relative;
+    z-index : 100;
+    display:inline;
+    .title {
+        font-size: 12px;
+        font-weight: $semibold;
+        color: $dark-text-color;
 
-        >.link_menu {
-            font-size: 12px;
-            font-weight: $semibold;
-            color: $dark-text-color;
+    }
 
-            a {
-                margin-left: 3px;
-                span {
-                    color : $link-color;
-                    border-bottom: 1px dotted $link-color;
-                    color: $link-color;
-                }
-
-                img {
-                   margin: 2px;
-                }
-            }
+    a {
+        font-size: 12px;
+        margin-left: 3px;
+        span {
+            color : $link-color;
+            border-bottom: 1px dotted $link-color;
+            color: $link-color;
         }
 
-        .menu.popup_filter {
-            right: -2px;
-            top: 28px;
-            padding: 9px 7px 9px 2px;
+        img {
+           margin: 2px;
+        }
+    }
 
-            .pointer {
-                left: 100px;
+    .popup_filter {
+        min-width:130px;
+        right: -2px;
+        top: 28px;
+        padding: 9px 7px 9px 2px;
+        z-index : 100;
+
+
+        .pointer {
+            left: 100px;
+        }
+
+        li {
+            margin: 4px;
+
+            .check {
+                background-repeat: no-repeat;
+                background-image: url("/images/check.png");
+                display: inline-block;
+                width: 10px;
+                height: 10px;
+                margin-right: 2px;
+                position: relative;
+                top: 1px;
+
+                &.hidden {
+                    visibility: hidden;
+                }
             }
 
-            li {
-                margin: 4px;
-
-                .check {
-                    background-repeat: no-repeat;
-                    background-image: url("/images/check.png");
-                    display: inline-block;
-                    width: 10px;
-                    height: 10px;
-                    margin-right: 2px;
-                    position: relative;
-                    top: 1px;
-
-                    &.hidden {
-                        visibility: hidden;
-                    }
-                }
-
-                a {
-                    font-weight : 400;
-                    color: black !important;
-                }
+            a {
+                font-weight : 400;
+                color: black !important;
             }
-
-
         }
     }
 }

@@ -53,7 +53,7 @@
             },
             function(data) {
                 if (data.status == "ok") {
-                    self.closeDialog();
+                    self.closeModal();
                 } else {
                     self.serverErrors = data.message;
                     self.render();

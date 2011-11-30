@@ -21,7 +21,9 @@ src_files:
   - js/models.js
   - js/views.js
   - js/pages.js
+  - js/modals.js
   - js/dialogs.js
+  - js/alerts.js
   - js/views/workfiles/workfile_content_details_view.js
   - js/views/workfiles/workfile_content_view.js
   - js/views/**/*.js

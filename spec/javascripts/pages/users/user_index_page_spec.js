@@ -23,7 +23,7 @@ describe("chorus.pages.UserIndexPage", function() {
         })
 
         it ("has the right header title", function(){
-            expect(this.view.$("#content_header").text()).toBe("Users");
+            expect(this.view.$("#content_header h1").text()).toBe("Users");
         })
          describe("when the collection is loading", function(){
             it("should have a loading element", function(){

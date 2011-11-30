@@ -114,7 +114,7 @@ describe("chorus.pages.Base", function() {
                 this.view.mainContent = new Backbone.View();
 
                 var spy = this.fooDialogSpy = {
-                    launchDialog : jasmine.createSpy()
+                    launchModal : jasmine.createSpy()
                 }
 
                 chorus.dialogs.Foo = function(opts) {
@@ -128,7 +128,7 @@ describe("chorus.pages.Base", function() {
 
             it("instantiates dialogs from dialog buttons", function() {
                 this.view.$("button.dialog").click();
-                expect(this.fooDialogSpy.launchDialog).toHaveBeenCalled();
+                expect(this.fooDialogSpy.launchModal).toHaveBeenCalled();
             })
 
             it("passes the launch element to the dialog", function() {
@@ -144,7 +144,7 @@ describe("chorus.pages.Base", function() {
                 this.view.mainContent = new Backbone.View();
 
                 var spy = this.fooDialogSpy = {
-                    launchDialog : jasmine.createSpy()
+                    launchModal : jasmine.createSpy()
                 }
 
                 chorus.dialogs.Foo = function(opts) {
@@ -158,7 +158,7 @@ describe("chorus.pages.Base", function() {
 
             it("instantiates dialogs from dialog buttons", function() {
                 this.view.$("a.dialog").click();
-                expect(this.fooDialogSpy.launchDialog).toHaveBeenCalled();
+                expect(this.fooDialogSpy.launchModal).toHaveBeenCalled();
             })
 
             it("passes the launch element to the dialog", function() {
@@ -175,7 +175,7 @@ describe("chorus.pages.Base", function() {
             this.view.mainContent = new Backbone.View();
 
             var spy = this.fooAlertSpy = {
-                launchAlert : jasmine.createSpy()
+                launchModal : jasmine.createSpy()
             }
 
             chorus.alerts.Foo = function(opts) {
@@ -189,7 +189,7 @@ describe("chorus.pages.Base", function() {
 
         it("instantiates alerts from alert links", function() {
             this.view.$("a.alert").click();
-            expect(this.fooAlertSpy.launchAlert).toHaveBeenCalled();
+            expect(this.fooAlertSpy.launchModal).toHaveBeenCalled();
         })
 
         it("passses the launch element to the alert", function() {
