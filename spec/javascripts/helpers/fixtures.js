@@ -141,8 +141,7 @@
                             "st":null,
                             "c":null,
                             "admin":true,
-                            "techniques":null,
-                            "expertise":null,
+                            "notes":null,
                             "lastLogin":"2011-11-16 09:40:27.916",
                             "imageId":"10036",
                             "dn":null,
@@ -174,8 +173,7 @@
                             "lastName": "Rushakoff",
                             "emailAddress": "markymark@pivotallabs.com",
                             "admin": false,
-                            "techniques": null,
-                            "expertise": null,
+                            "notes": null,
                             "lastLogin": "2011-11-03 17:45:39",
                             "isDeleted": false
                         },
@@ -185,8 +183,7 @@
                             "lastName": "Admin",
                             "emailAddress": "edcadmin@greenplum.com",
                             "admin": true,
-                            "techniques": null,
-                            "expertise": null,
+                            "notes": null,
                             "lastLogin": "2011-11-03 17:45:39",
                             "isDeleted": false
                         },
@@ -196,8 +193,7 @@
                             "lastName": "man",
                             "emailAddress": "frogman@greenplum.com",
                             "admin": false,
-                            "techniques": null,
-                            "expertise": null,
+                            "notes": null,
                             "lastLogin": "2011-11-03 17:45:39",
                             "isDeleted": false
                         }
