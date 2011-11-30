@@ -159,18 +159,20 @@
 
     ns.ListHeaderView = ns.Base.extend({
         className : "default_content_header",
-        context : function(){
+        context : function() {
             return this.options
         },
-        postRender : function(){
-            var self=this;
-            if (this.options.linkMenu) {
-                var menu = new chorus.views.LinkMenu(this.options.linkMenu);
-                this.$(".menus").append(
-                    menu.render().el
-                )
-                menu.bind("choice", function(choice){
-                    self.trigger("choice", choice);
+        postRender : function() {
+            var self = this;
+            if (this.options.linkMenus) {
+                _.each(_.keys(this.options.linkMenus), function(key) {
+                    var menu = new chorus.views.LinkMenu(self.options.linkMenus[key]);
+                    self.$(".menus").append(
+                        menu.render().el
+                    )
+                    menu.bind("choice", function(eventType, choice) {
+                        self.trigger("choice:" + eventType, choice);
+                    })
                 })
             }
         }
@@ -181,7 +183,7 @@
             var modelClass = options.modelClass
             var collection = this.collection;
             this.content = new chorus.views[modelClass + "List"]({collection: collection })
-            this.contentHeader = new chorus.views.ListHeaderView({title: modelClass + "s", linkMenu : options.linkMenu})
+            this.contentHeader = new chorus.views.ListHeaderView({title: modelClass + "s", linkMenus : options.linkMenus})
             this.contentDetails = new chorus.views.ListContentDetails({collection : collection, modelClass : modelClass})
         },
         additionalClass : "main_content_list"

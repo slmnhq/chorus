@@ -9,6 +9,8 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         this.loadTemplate("main_content");
         this.loadTemplate("header");
         this.loadTemplate("link_menu");
+        this.loadTemplate("default_content_header");
+        this.loadTemplate("list_content_details");
     })
 
     describe("#initialize", function() {
@@ -20,8 +22,17 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             expect(this.server.requests[0].url).toBe("/edc/workspace/4");
         })
 
+        it("defaults to alphabetical sorting", function() {
+            expect(this.page.collection.sortIndex).toBe("fileName")
+            expect(this.page.collection.sortOrder).toBe("asc");
+        })
+
+        it("defaults to all files", function() {
+            expect(this.page.collection.fileType).toBe("");
+        })
+
         it("fetches the first page of the collection", function() {
-            expect(this.server.requests[1].url).toBe("/edc/workspace/4/workfile?page=1&rows=50")
+            expect(this.server.requests[1].url).toBe("/edc/workspace/4/workfile?page=1&rows=50&sidx=fileName&sord=asc")
         })
     });
 
@@ -49,17 +60,55 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             this.page.render();
         })
 
-        it("has filters for the types", function() {
-            expect(this.page.$("li[data-type=]")).toExist();
-            expect(this.page.$("li[data-type=sql]")).toExist();
+        describe("filtering", function() {
+            beforeEach(function() {
+                this.page.collection.fileType = undefined;
+                spyOn(this.page.collection, "fetch");
+            })
+
+            it("has options for filtering", function() {
+                expect(this.page.$("ul[data-event=filter] li[data-type=]")).toExist();
+                expect(this.page.$("ul[data-event=filter] li[data-type=sql]")).toExist();
+            })
+
+            it("can filter the list by 'all'", function() {
+                this.page.$("li[data-type=] a").click();
+                expect(this.page.collection.attributes.fileType).toBe("");
+                expect(this.page.collection.fetch).toHaveBeenCalled();
+            })
+
+            it("has can filter the list by 'sql'" ,function(){
+                this.page.$("li[data-type=sql] a").click();
+                expect(this.page.collection.attributes.fileType).toBe("sql");
+                expect(this.page.collection.fetch).toHaveBeenCalled();
+            })
         })
 
-        it("has proper file when type chosen" ,function(){
-            var collection = this.page.collection;
-            spyOn(collection, "fetch");
-            this.page.$("li[data-type=sql] a").click();
-            expect(collection.attributes.fileType).toBe("sql");
-            expect(collection.fetch).toHaveBeenCalled();
+        describe("sorting", function() {
+            beforeEach(function() {
+                this.page.collection.sortOrder = this.page.collection.sortIndex = undefined;
+                spyOn(this.page.collection, "fetch");
+            })
+
+            it("has options for sorting", function(){
+                expect(this.page.$("ul[data-event=sort] li[data-type=alpha]")).toExist();
+                expect(this.page.$("ul[data-event=sort] li[data-type=date]")).toExist();
+            })
+
+            it("can sort the list alphabetically", function() {
+                this.page.$("li[data-type=alpha] a").click();
+                expect(this.page.collection.sortIndex).toBe("fileName")
+                expect(this.page.collection.sortOrder).toBe("asc")
+                expect(this.page.collection.fetch).toHaveBeenCalled();
+            })
+
+            it("can sort the list bu date", function() {
+                this.page.$("li[data-type=date] a").click();
+                expect(this.page.collection.sortIndex).toBe("lastUpdatedStamp")
+                expect(this.page.collection.sortOrder).toBe("asc")
+                expect(this.page.collection.fetch).toHaveBeenCalled();
+            })
         })
+
     })
 });

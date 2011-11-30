@@ -4,7 +4,6 @@
     .menus {
         float: right;
         text-align : right;
-        width: 200px;
         margin-top:25px;
         @include after-clearfix;
         
@@ -14,6 +13,7 @@
     position: relative;
     z-index : 100;
     display:inline;
+    padding-left: 12px;
     .title {
         font-size: 12px;
         font-weight: $semibold;

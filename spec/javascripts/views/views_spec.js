@@ -279,4 +279,54 @@ describe("chorus.views", function() {
             });
         });
     });
+
+    describe("ListHeaderView", function() {
+        beforeEach(function() {
+            this.loadTemplate("default_content_header");
+            this.loadTemplate("link_menu");
+            this.view = new chorus.views.ListHeaderView({
+                title : "Hi there",
+                linkMenus : {
+                    type : {
+                        title : "Title",
+                        options : [
+                            {data : "", text : "All"},
+                            {data : "sql", text : "SQL"}
+                        ],
+                        event : "filter"
+                    }
+                }
+            });
+        });
+
+        describe("#render", function() {
+            beforeEach(function() {
+                this.view.render();
+            })
+
+            it("renders link menus", function() {
+                expect(this.view.$(".menus ul[data-event=filter]")).toExist();
+            })
+
+            it("renders the header title", function() {
+                expect(this.view.$("h1").text().trim()).toBe("Hi there")
+            })
+        })
+
+        describe("event propagation", function() {
+            beforeEach(function() {
+                this.view.render();
+            })
+
+            it("propagates choice events as choice: events", function() {
+                this.choiceSpy = jasmine.createSpy("choice:filter")
+                this.view.bind("choice:filter", this.choiceSpy);
+                this.view.$("li[data-type=sql] a").click();
+                expect(this.choiceSpy).toHaveBeenCalledWith("sql");
+            })
+
+        })
+
+    });
+
 })

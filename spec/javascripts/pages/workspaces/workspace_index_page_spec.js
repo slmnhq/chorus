@@ -44,27 +44,24 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
 
         context("when the header has the 'active' filter", function() {
             beforeEach(function() {
-                var header = this.view.mainContent.contentHeader;
                 this.listView = this.view.mainContent.content;
+                spyOn(this.listView, 'filterActive');
+                this.view.mainContent.contentHeader.$("li[data-type=active] a").click();
             });
 
             it("calls filterActive on the list view", function() {
-                spyOn(this.listView, 'filterActive');
-                this.view.render();
                 expect(this.listView.filterActive).toHaveBeenCalled();
             });
         });
 
         context("when the header has the 'all' filter", function() {
             beforeEach(function() {
-                var header = this.view.mainContent.contentHeader;
                 this.listView = this.view.mainContent.content;
-                header.choose("all");
+                spyOn(this.listView, 'filterAll');
+                this.view.mainContent.contentHeader.$("li[data-type=all] a").click();
             });
 
             it("calls filterAll on the list view", function() {
-                spyOn(this.listView, 'filterAll');
-                this.view.render();
                 expect(this.listView.filterAll).toHaveBeenCalled();
             });
         });
@@ -72,34 +69,27 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
 
     describe("events", function() {
         beforeEach(function() {
-            spyOn(chorus.views.WorkspaceList.prototype, 'filterActive');
-            spyOn(chorus.views.WorkspaceList.prototype, 'filterAll');
-
             this.view = new chorus.pages.WorkspaceIndexPage();
             this.view.render();
+            this.listView = this.view.mainContent.content;
+            this.headerView = this.view.mainContent.contentHeader;
+            spyOn(this.listView, 'filterActive');
+            spyOn(this.listView, 'filterAll');
         });
 
-        describe("when the 'filter:all' event is triggered on the content header", function() {
+        describe("when the 'chioce:filter' event is triggered on the content header with 'all'", function() {
             it("calls #filterAll on its list view", function() {
-                var listView = this.view.mainContent.content;
-                var header = this.view.mainContent.contentHeader;
-
-                header.trigger("filter:all");
-
-                expect(listView.filterAll).toHaveBeenCalled();
-                expect(listView.filterAll.mostRecentCall.object).toBe(listView);
+                this.headerView.trigger("choice:filter", "all");
+                expect(this.listView.filterAll).toHaveBeenCalled();
+                expect(this.listView.filterAll.mostRecentCall.object).toBe(this.listView);
             });
         });
 
-        describe("when the 'filter:active' event is triggered on the content header", function() {
+        describe("when the 'chioce:filter' event is triggered on the content header with 'active'", function() {
             it("calls #filterActive on its list view", function() {
-                var listView = this.view.mainContent.content;
-                var header = this.view.mainContent.contentHeader;
-
-                header.trigger("filter:active");
-
-                expect(listView.filterActive).toHaveBeenCalled();
-                expect(listView.filterActive.mostRecentCall.object).toBe(listView);
+                this.headerView.trigger("choice:filter", "active");
+                expect(this.listView.filterActive).toHaveBeenCalled();
+                expect(this.listView.filterActive.mostRecentCall.object).toBe(this.listView);
             });
         });
     });

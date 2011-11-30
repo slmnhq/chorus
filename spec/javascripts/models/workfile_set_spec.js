@@ -17,5 +17,14 @@ describe("workfile_set", function() {
                 expect(this.collection.url()).toBe("/edc/workspace/1234/workfile?fileType=sql&page=1&rows=50");
             })
         })
+        describe("with sorting", function() {
+            beforeEach(function() {
+                this.collection.attributes.fileType = "sql"
+                this.collection.sortAsc("name")
+            })
+            it("it has correct Url", function() {
+                expect(this.collection.url()).toBe("/edc/workspace/1234/workfile?fileType=sql&page=1&rows=50&sidx=name&sord=asc");
+            })
+        })
     });
 });

@@ -14,7 +14,8 @@ describe("chorus.views.LinkMenu", function() {
                         {data : "mark", text : "bob"},
                         {data : "joanne", text : "alice"}
                     ],
-                    title: "Link Menu"
+                    title: "Link Menu",
+                    event : "name"
                 })
                 this.view.render();
             })
@@ -78,7 +79,7 @@ describe("chorus.views.LinkMenu", function() {
                         this.view.$(".menu li[data-type=joanne] a").click();
                     });
                     it("should trigger a choice event with the data", function() {
-                        expect(this.choiceSpy).toHaveBeenCalledWith("joanne");
+                        expect(this.choiceSpy).toHaveBeenCalledWith("name", "joanne");
                     });
                     it("should set the chosen property", function() {
                         expect(this.view.options.chosen).toBe("alice")
