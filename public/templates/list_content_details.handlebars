@@ -1,26 +1,27 @@
 {{#if loaded}}
     <div class="count">
-        <span class="number">{{pagination.records}}</span> {{modelClass}}s
+        <span class="number">{{records}}</span> {{modelClass}}s
     </div>
 
-    <div class="pagination">
-        <div class="page">
-            {{t "pagination.page"}} <span class="current">{{pagination.page}}</span> {{t "pagination.of"}} <span class="total">{{pagination.total}}</span>
-        </div>
+    {{#if pagination}}
+        <div class="pagination">
+            <div class="page">
+                {{t "pagination.page"}} <span class="current">{{pagination.page}}</span> {{t "pagination.of"}} <span class="total">{{pagination.total}}</span>
+            </div>
 
-        <div class="links">
-            {{#if prevPage}}
-                <a class="previous"><span>{{t "pagination.previous"}}</span></a>
-            {{else}}
-                <span class="previous">{{t "pagination.previous"}}</span>
-            {{/if}}
-            {{#if nextPage}}
-                <a class="next"><span>{{t "pagination.next"}}</span></a>
-            {{else}}
-                <span class="next">{{t "pagination.next"}}</span>
-            {{/if}}
-        </div>
-
+            <div class="links">
+                {{#if prevPage}}
+                    <a class="previous"><span>{{t "pagination.previous"}}</span></a>
+                {{else}}
+                    <span class="previous">{{t "pagination.previous"}}</span>
+                {{/if}}
+                {{#if nextPage}}
+                    <a class="next"><span>{{t "pagination.next"}}</span></a>
+                {{else}}
+                    <span class="next">{{t "pagination.next"}}</span>
+                {{/if}}
+            </div>
+        {{/if}}
 {{else}}
     <div class="loading">Loading...</div>
 {{/if}}
