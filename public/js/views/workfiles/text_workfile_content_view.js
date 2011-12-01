@@ -9,11 +9,12 @@
         },
 
         postRender : function() {
-           var opts = {
+            var opts = {
                readOnly : "nocursor",
                lineNumbers: true,
-               mode: "null", // null -> plain text
-               fixedGutter: true
+               mode: this.model.get("mimeType"),
+               fixedGutter: true,
+               theme: "default"
             };
 
             this.editor = CodeMirror.fromTextArea(this.$(".text_editor")[0], opts);

@@ -1,4 +1,7 @@
 ;(function(ns) {
+    var imageRegex = /^image\//;
+    var textRegex = /^text\//;
+
     ns.Workfile = chorus.models.Base.extend({
         initialize : function() {
             this.workspace = new chorus.models.Workspace({id: this.get("workspaceId")})
@@ -25,11 +28,13 @@
         },
 
         isImage: function() {
-            return this.get("mimeType").indexOf("image/") == 0;
+            var type = this.get("mimeType");
+            return type && type.match(imageRegex);
         },
 
-        isTextfile: function() {
-            return this.get("mimeType").indexOf("text/plain") == 0;
+        isText: function() {
+            var type = this.get("mimeType");
+            return type && type.match(textRegex);
         }
     });
 })(chorus.models);

@@ -9,7 +9,7 @@
                     return new ns.ImageWorkfileContent({ model : model });
                 }
 
-                if (model.isTextfile()) {
+                if (model.isText()) {
                     return new ns.TextWorkfileContent({ model : model });
                 }
 

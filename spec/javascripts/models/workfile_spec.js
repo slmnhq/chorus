@@ -66,14 +66,34 @@ describe("chorus.models.Workfile", function() {
         });
     });
 
-    describe("isTextfile", function() {
-        context("when the workfile is a textfile", function() {
+    describe("isText", function() {
+        context("when the workfile is a plain textfile", function() {
             beforeEach(function() {
                 this.model.set({ mimeType : "text/plain" });
             });
 
             it("returns true", function() {
-                expect(this.model.isTextfile()).toBeTruthy();
+                expect(this.model.isText()).toBeTruthy();
+            });
+        });
+
+        context("when the workfile is an html file", function() {
+            beforeEach(function() {
+                this.model.set({ mimeType : "text/html" });
+            });
+
+            it("returns true", function() {
+                expect(this.model.isText()).toBeTruthy();
+            });
+        });
+
+        context("when the workfile is an sql file", function() {
+            beforeEach(function() {
+                this.model.set({ mimeType : "text/x-sql" });
+            });
+
+            it("returns true", function() {
+                expect(this.model.isText()).toBeTruthy();
             });
         });
 
@@ -83,16 +103,7 @@ describe("chorus.models.Workfile", function() {
             });
 
             it("returns false", function() {
-                expect(this.model.isTextfile()).toBeFalsy();
-            });
-        });
-        context("when the workfile is an html", function() {
-            beforeEach(function() {
-                this.model.set({ mimeType : "text/html" });
-            });
-
-            it("returns false", function() {
-                expect(this.model.isTextfile()).toBeFalsy();
+                expect(this.model.isText()).toBeFalsy();
             });
         });
     });

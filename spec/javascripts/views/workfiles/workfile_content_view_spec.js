@@ -7,7 +7,7 @@ describe("WorkfileContent", function() {
         context("when the given workfile is an image", function() {
             beforeEach(function() {
                 spyOn(this.model, 'isImage').andReturn(true);
-                spyOn(this.model, 'isTextfile').andReturn(false);
+                spyOn(this.model, 'isText').andReturn(false);
                 spyOn(chorus.views, "ImageWorkfileContent");
                 chorus.views.WorkfileContent.buildFor(this.model);
             });
@@ -20,7 +20,7 @@ describe("WorkfileContent", function() {
         context("when the given workfile is a text file", function() {
             beforeEach(function() {
                 spyOn(this.model, 'isImage').andReturn(false);
-                spyOn(this.model, 'isTextfile').andReturn(true);
+                spyOn(this.model, 'isText').andReturn(true);
                 spyOn(chorus.views, "TextWorkfileContent");
                 chorus.views.WorkfileContent.buildFor(this.model);
             });
@@ -33,7 +33,7 @@ describe("WorkfileContent", function() {
         context("when the given workfile is nothing special", function() {
             beforeEach(function() {
                 spyOn(this.model, 'isImage').andReturn(false);
-                spyOn(this.model, 'isTextfile').andReturn(false);
+                spyOn(this.model, 'isText').andReturn(false);
                 spyOn(chorus.views, "WorkfileContent");
                 chorus.views.WorkfileContent.buildFor = chorus.views.WorkfileContent.originalValue.buildFor;
                 chorus.views.WorkfileContent.buildFor(this.model);

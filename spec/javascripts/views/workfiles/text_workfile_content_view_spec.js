@@ -28,6 +28,21 @@ describe("chorus.views.TextWorkfileContentView", function() {
         it("displays the text file content", function() {
             expect(this.view.editor.getValue()).toBe(this.textfile.get("content"));
         });
+
+        it("uses the 'text/plain' mode for plain text files", function() {
+            expect(this.view.editor.getOption("mode")).toBe("text/plain");
+        });
+
+        context("when the model is an SQL file", function() {
+            beforeEach(function() {
+                this.textfile.set({ mimeType : "text/x-sql" });
+                this.view.render();
+            });
+
+            it("uses the 'text/x-sql' mode", function() {
+                expect(this.view.editor.getOption("mode")).toBe("text/x-sql");
+            });
+        });
     });
 
     describe("#editText", function() {
