@@ -3,8 +3,15 @@ describe("WorkfileShowSidebar", function() {
         fixtures.model = 'Workfile';
         this.workfile = fixtures.modelFor("fetch");
         this.loadTemplate("workfile_show_sidebar");
+        this.loadTemplate("activity_list");
         this.view = new chorus.views.WorkfileShowSidebar({ model : this.workfile });
     });
+
+    describe("initialization", function() {
+        it("has an ActivityListView", function() {
+            expect(this.view.activityList).toBeDefined();
+        })
+    })
 
     describe("#render", function() {
         beforeEach(function() {
@@ -31,6 +38,21 @@ describe("WorkfileShowSidebar", function() {
 
         it("displays a link to download the workfile", function() {
             expect(this.view.$(".actions a.download")).toHaveAttr("href", "/edc/workspace/10000/workfile/10020/file/1111_1111?download=true")
+        })
+
+        it("displays the activity list", function() {
+            expect(this.view.$(".activity_list")).toExist();
+        })
+    })
+
+    describe("when the model is changed", function() {
+        beforeEach(function() {
+            spyOn(this.view.activityList, "render");
+            this.view.model.trigger("change")
+        })
+
+        it("re-renders the activity list", function() {
+            expect(this.view.activityList.render).toHaveBeenCalled();
         })
     })
 });
