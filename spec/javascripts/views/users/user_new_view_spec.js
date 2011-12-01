@@ -73,7 +73,10 @@ describe("chorus.views.userNew", function() {
                             this.view.model.serverErrors = [
                                 {message : "Hi there"}
                             ];
-                            this.view.model.trigger("saveFailed")
+                            this.view.$("form").submit();
+                            this.view.model.trigger("saveFailed");
+
+                            this.view.render();
                         });
 
                         it("doesn't redirect", function() {
@@ -82,6 +85,14 @@ describe("chorus.views.userNew", function() {
 
                         it("retains the data already entered", function() {
                             expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
+                            expect(this.view.$("input[name=lastName]").val()).toBe("Knuckles");
+                            expect(this.view.$("input[name=userName]").val()).toBe("frankie2002");
+                            expect(this.view.$("input[name=emailAddress]").val()).toBe("frankie_knuckles@nyclol.com");
+                            expect(this.view.$("input[name=password]").val()).toBe("whoaomg");
+                            expect(this.view.$("input[name=passwordConfirmation]").val()).toBe("whoaomg");
+                            expect(this.view.$("input[name=ou]").val()).toBe("awesomeness dept");
+                            expect(this.view.$("input[name=admin]")).toBeChecked();
+                            
                         });
                     })
                 });
@@ -129,6 +140,7 @@ describe("chorus.views.userNew", function() {
                     expect(window.history.back).toHaveBeenCalled();
                 })
             })
+
         });
 
         context("as a non admin", function() {

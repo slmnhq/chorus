@@ -8,24 +8,24 @@
         <div class="row">
                <span class="left">
                    <label class="required">{{t "users.first_name"}}</label>
-                   <input type="text" name="firstName" maxlength="256"/>
+                   <input type="text" name="firstName" maxlength="256" value="{{firstName}}"/>
                </span>
 
                <span class="right">
                    <label class="required">{{t "users.last_name"}}</label>
-                   <input type="text" name="lastName" maxlength="256"/>
+                   <input type="text" name="lastName" maxlength="256" value="{{lastName}}"/>
                </span>
         </div>
 
         <div class="row">
                <span class="left">
                    <label class="required">{{t "users.username"}}</label>
-                   <input type="text" name="userName" maxlength="256"/>
+                   <input type="text" name="userName" maxlength="256" value="{{userName}}"/>
                </span>
 
                <span class="right admin">
                    <label class="placeholder"></label>
-                   <input type="checkbox" name="admin" id="admin-checkbox"/>
+                   <input type="checkbox" name="admin" id="admin-checkbox" {{#if admin}}checked{{/if}}/>
                    <label for="admin-checkbox">{{t "users.make_admin"}}</label>
                </span>
         </div>
@@ -33,31 +33,31 @@
         <div class="row">
                <span class="left">
                    <label class="required">{{t "users.email"}}</label>
-                   <input type="text" name="emailAddress" maxlength="256"/>
+                   <input type="text" name="emailAddress" maxlength="256" value="{{emailAddress}}"/>
                </span>
         </div>
 
         <div class="row">
                <span class="left">
                    <label class="required">{{t "users.password"}}</label>
-                   <input type="password" name="password" maxlength="256"/>
+                   <input type="password" name="password" maxlength="256" value="{{password}}"/>
                </span>
 
                <span class="right">
                    <label class="required">{{t "users.confirm_password"}}</label>
-                   <input type="password" name="passwordConfirmation" maxlength="256"/>
+                   <input type="password" name="passwordConfirmation" maxlength="256" value="{{passwordConfirmation}}"/>
                </span>
         </div>
 
         <div class="row">
                <span class="left">
                    <label>Title</label>
-                   <input type="text" name="title" maxlength="256"/>
+                   <input type="text" name="title" maxlength="256" value="{{title}}"/>
                </span>
 
                <span class="right">
                    <label>{{t "users.department"}}</label>
-                   <input type="text" name="ou" maxlength="256"/>
+                   <input type="text" name="ou" maxlength="256" value="{{ou}}"/>
                </span>
         </div>
 
