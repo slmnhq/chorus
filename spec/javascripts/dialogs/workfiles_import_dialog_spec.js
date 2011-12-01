@@ -79,10 +79,10 @@ describe("WorkfilesImportDialog", function() {
             expect(this.dialog.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("bar"));
         });
 
-        context("when the submit is clicked", function() {
+        context("#upload", function() {
             beforeEach(function() {
                 spyOn(this.dialog.uploadObj, "submit").andCallThrough();
-                this.dialog.$("button.submit").click();
+                this.dialog.upload();
             });
 
             it("uploads the specified file", function() {
@@ -158,7 +158,6 @@ describe("WorkfilesImportDialog", function() {
                     this.server.respondWith("OK");
                     this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"status": "fail", "message" :[{"message":"Workspace already has a workfile with this name. Specify a different name."}]}']);
                     this.server.respond();
-//                    this.dialog.uploadFinished();
                 });
 
                 it("cancels the upload", function() {
@@ -177,6 +176,27 @@ describe("WorkfilesImportDialog", function() {
                     expect(this.dialog.$(".errors").text()).toBe("Workspace already has a workfile with this name. Specify a different name.")
                 })
                 
+            });
+        });
+        context("when the Enter key is pressed" , function() {
+            beforeEach(function() {
+                spyOn(this.dialog.uploadObj, "submit").andCallThrough();
+                this.dialog.$("form").submit();
+            });
+
+            it("uploads the specified file", function() {
+                expect(this.dialog.uploadObj.submit).toHaveBeenCalled();
+            });
+        });
+
+        context("when the upload button is clicked" , function() {
+            beforeEach(function() {
+                spyOn(this.dialog.uploadObj, "submit").andCallThrough();
+                this.dialog.$("button.submit").click();
+            });
+
+            it("uploads the specified file", function() {
+                expect(this.dialog.uploadObj.submit).toHaveBeenCalled();
             });
         });
     });

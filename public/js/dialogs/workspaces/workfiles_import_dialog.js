@@ -7,6 +7,7 @@
 
         events : {
             "click button.submit" : "upload",
+            "submit form": "upload",
             "click button.cancel" : "cancelUploadAndClose"
         },
 
@@ -30,7 +31,7 @@
         },
 
         upload : function(e) {
-            e.preventDefault();
+            if(e) {e.preventDefault();}
             if (this.uploadObj) {
                 this.request = this.uploadObj.submit();
                 var spinner = new Spinner({
