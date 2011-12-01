@@ -3,6 +3,9 @@
 $link-padding: 15px;
 
 .list_content_details {
+    width: 100%;
+    overflow: hidden;
+    
     div {
         display: inline;
         color: $dark-text-color;
