@@ -9,7 +9,6 @@ describe("WorkfileShowSidebar", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.view.render();
-            console.log(this.view.el)
         })
 
         it("displays the filename", function() {
