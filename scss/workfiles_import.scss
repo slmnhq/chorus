@@ -32,8 +32,11 @@ $image-width: 48px;
         display: inline;
     }
 
-    label, input[type=file] {
+    label {
         text-align: right;
+    }
+
+    label, input[type=file] {
         color: $link-color;
         &:hover {
             cursor : pointer;
