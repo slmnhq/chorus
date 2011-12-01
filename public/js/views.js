@@ -41,8 +41,10 @@
 
     ns.Base = ns.Bare.extend({
         makeModel : $.noop,
-        additionalContext: $.noop,
         collectionModelContext: $.noop,
+        additionalContext: function() {
+            return {}
+        },
 
         preInitialize : function() {
             this.makeModel();
