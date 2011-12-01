@@ -172,5 +172,15 @@ describe("handlebars", function() {
             });
           });
         });
+
+        describe("currentUserName", function() {
+            beforeEach(function() {
+                this.template = "{{currentUserName}}";
+                chorus.session.set({userName : "bob"});
+            });
+            it("should return the user", function(){
+                expect(Handlebars.compile(this.template)({})).toBe(chorus.session.get("userName"));
+            });
+        });
     });
 });

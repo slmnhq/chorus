@@ -12,11 +12,12 @@ describe("chorus.dialogs.CopyWorkfile", function() {
 
     describe("#setup", function() {
         beforeEach(function() {
+            chorus.session.set({userName: "currentUser"});
             this.dialog = new chorus.dialogs.CopyWorkfile({launchElement : this.launchElement });
         })
 
         it("fetches all the workspaces", function() {
-            expect(this.server.requests[0].url).toBe("/edc/workspace/?page=1&rows=1000");
+            expect(this.server.requests[0].url).toBe("/edc/workspace/?user=currentUser&page=1&rows=1000");
         })
 
         it("fetches the source workfile", function() {
@@ -25,6 +26,10 @@ describe("chorus.dialogs.CopyWorkfile", function() {
 
         it("instantiates a CollectionPicklist with the workspace collection", function() {
             expect(this.dialog.picklistView.collection).toBe(this.dialog.collection);
+        })
+
+        it("only gets editable workspaces", function(){
+            expect(this.dialog.collection.attributes.membersOnly).toBe(true);
         })
     })
 

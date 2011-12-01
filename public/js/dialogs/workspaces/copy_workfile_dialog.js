@@ -16,7 +16,7 @@
         },
 
         makeModel : function() {
-            this.collection = this.collection || new chorus.models.WorkspaceSet();
+            this.collection = this.collection || new chorus.models.WorkspaceSet([], {membersOnly : true});
             this.collection.fetchAll();
         },
 

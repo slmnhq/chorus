@@ -39,3 +39,7 @@ Handlebars.registerHelper("ifAny", function() {
     return elseBlock(this);
   }
 });
+
+Handlebars.registerHelper("currentUserName", function(block){
+    return chorus.session.get("userName");
+});
