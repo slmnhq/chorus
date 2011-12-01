@@ -58,6 +58,29 @@ describe("chorus.views.TextWorkfileContentView", function() {
         });
     });
 
+    describe("#saveChanges", function(){
+        beforeEach(function(){
+            this.view.render();
+
+            spyOn(this.view.model, "save");
+
+            this.view.editText();
+            this.view.saveChanges();
+        });
+
+        it("removes the editable class from the CodeMirror div", function(){
+            expect(this.view.$(".CodeMirror")).not.toHaveClass("editable");
+        });
+
+        it("sets readonly to nocursor", function() {
+            expect(this.view.editor.getOption("readOnly")).toBe("nocursor");
+        });
+
+        it("saves the model", function(){
+            expect(this.view.model.save).toHaveBeenCalled();
+        });
+    });
+
     describe("event file:edit", function(){
         beforeEach(function(){
             // this.view.editor becomes set in view.render
@@ -71,6 +94,22 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
         it("calls editText", function(){
             expect(this.view.editor.focus).toHaveBeenCalled();
+        });
+    });
+
+    describe("event file:save", function(){
+        beforeEach(function(){
+            // this.view.editor becomes set in view.render
+            this.view.render();
+
+            // Because view.saveChanges is bound in view.setup, it is difficult/impossible to spy on the proper function...
+            // so we'll spy on the side-effect of calling that function.
+            spyOn(this.view.model, "save");
+            this.view.trigger("file:save");
+        });
+
+        it("calls saveChanges", function(){
+            expect(this.view.model.save).toHaveBeenCalled();
         });
     });
 });

@@ -5,6 +5,7 @@
 
         setup : function(){
             this.bind("file:edit", this.editText);
+            this.bind("file:save", this.saveChanges);
         },
 
         postRender : function() {
@@ -23,6 +24,13 @@
             this.editor.setOption("readOnly", false);
             this.$(".CodeMirror").addClass("editable");
             this.editor.focus();
+        },
+
+        saveChanges : function() {
+            this.model.set({"content" : this.editor.getValue()});
+            this.model.save();
+            this.editor.setOption("readOnly", "nocursor");
+            this.$(".CodeMirror").removeClass("editable");
         }
     });
 

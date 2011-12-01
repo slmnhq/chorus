@@ -26,6 +26,9 @@
                 this.mainContent.contentDetails.bind("file:edit", function() {
                     this.mainContent.content.trigger("file:edit");
                 }, this);
+                this.mainContent.contentDetails.bind("file:save", function() {
+                    this.mainContent.content.trigger("file:save");
+                }, this);
             }
 
             this.render();

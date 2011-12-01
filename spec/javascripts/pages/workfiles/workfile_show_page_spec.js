@@ -90,5 +90,18 @@ describe("chorus.pages.WorkfileShowPage", function() {
                 expect(this.editSpy).toHaveBeenCalled();
             });
         });
+
+        describe("the workfile detail view raises file:save event", function() {
+            beforeEach(function() {
+                this.saveSpy = jasmine.createSpy("file:save");
+                this.page.mainContent.content.bind("file:save", this.saveSpy);
+
+                this.page.mainContent.contentDetails.trigger("file:save");
+            });
+
+            it("relays the event to the workfile content", function() {
+                expect(this.saveSpy).toHaveBeenCalled();
+            });
+        });
     })
 });
