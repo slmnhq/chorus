@@ -18,6 +18,7 @@ src_files:
   - js/vendor/codemirror-2.16.js
   - js/vendor/**/*.js
   - js/chorus.js
+  - js/mixins.js
   - js/router.js
   - js/models.js
   - js/views.js
