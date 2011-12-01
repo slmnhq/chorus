@@ -3,6 +3,11 @@
 .user_new {
     padding: $padding-x;
 
+    .errors {
+        margin: -$padding-y -$padding-x;
+        margin-bottom: 0;
+    }
+
     form {
         position: relative;
         margin-bottom : 15px;
