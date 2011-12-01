@@ -43,9 +43,7 @@
             );
             this.sidebar = new chorus.views.WorkfileListSidebar({model : workspace});
 
-            this.mainContent.content.bind("workfile:selected", function(workfileId) {
-                this.sidebar.trigger("workfile:selected", workfileId)
-            }, this)
+            this.mainContent.content.forwardEvent("workfile:selected", this.sidebar);
 
             this.mainContent.contentHeader.bind("choice:filter", function(choice) {
                 this.collection.attributes.fileType = choice;

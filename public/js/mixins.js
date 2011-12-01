@@ -2,11 +2,11 @@
 (function(ns) {
     ns.Mixins = ns.Mixins || {};
 
-    ns.Mixins.EventRelay = {
-        relay : function relay(source, target, eventName) {
-            source.bind(eventName, function() {
+    ns.Mixins.Events = {
+        forwardEvent: function(eventName, target) {
+            this.bind(eventName, function() {
                 var args = _.toArray(arguments);
-                args.unshift(eventName)
+                args.unshift(eventName);
                 target.trigger.apply(target, args);
             });
         }

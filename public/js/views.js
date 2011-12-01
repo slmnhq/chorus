@@ -1,6 +1,6 @@
 ;
 (function(ns) {
-    ns.Bare = Backbone.View.extend({
+    ns.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
         initialize: function initialize() {
             this.preInitialize();
             _.bindAll(this, 'render');
@@ -37,7 +37,7 @@
 
             return this.cachedTemplate(content);
         }
-    });
+    }));
 
     ns.Base = ns.Bare.extend({
         makeModel : $.noop,

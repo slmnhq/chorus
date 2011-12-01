@@ -1,14 +1,12 @@
-describe("chorus.Mixins.EventRelay", function(){
+describe("chorus.Mixins.Events", function(){
     beforeEach(function(){
-        this.relayObj = {};
         this.source = {};
         this.target = {};
 
-        _.extend(this.relayObj, Backbone.Events, chorus.Mixins.EventRelay);
-        _.extend(this.source, Backbone.Events, chorus.Mixins.EventRelay);
-        _.extend(this.target, Backbone.Events, chorus.Mixins.EventRelay);
+        _.extend(this.source, Backbone.Events, chorus.Mixins.Events);
+        _.extend(this.target, Backbone.Events, chorus.Mixins.Events);
 
-        this.relayObj.relay(this.source, this.target, "my_event");
+        this.source.forwardEvent("my_event", this.target);
     });
 
     it("triggers the event on the target, when the source is triggered", function(){

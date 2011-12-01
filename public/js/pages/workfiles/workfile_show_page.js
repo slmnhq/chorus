@@ -23,12 +23,8 @@
             if (!this.mainContent.contentDetails) {
                 this.mainContent.contentDetails = ns.views.WorkfileContentDetails.buildFor(this.model);
                 this.mainContent.content = ns.views.WorkfileContent.buildFor(this.model);
-                this.mainContent.contentDetails.bind("file:edit", function() {
-                    this.mainContent.content.trigger("file:edit");
-                }, this);
-                this.mainContent.contentDetails.bind("file:save", function() {
-                    this.mainContent.content.trigger("file:save");
-                }, this);
+                this.mainContent.contentDetails.forwardEvent("file:save", this.mainContent.content);
+                this.mainContent.contentDetails.forwardEvent("file:edit", this.mainContent.content);
             }
 
             this.render();
