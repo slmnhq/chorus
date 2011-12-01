@@ -82,7 +82,7 @@
                     self.$('img').attr('src', iconSrc);
                     self.$('span.fileName').text(filename);
                 }
-            }http://localhost:8888/?spec=WorkfilesImportDialog%20when%20a%20text%20file%20has%20been%20chosen%20when%20the%20upload%20completes%20navigates%20to%20the%20workfile%20index.
+            }
 
             function uploadFinished(e, data) {
                 var json = $.parseJSON(data.result)
