@@ -45,20 +45,26 @@
         copyWorkfile : function() {
             var self = this;
 
-            $.post("/edc/workspace/" + this.picklistView.selectedItem().get("id") + "/workfile", {
+            var params = {
                 source : "chorus",
                 fileName : this.workfile.get("fileName"),
-                description : this.workfile.get("description"),
                 workfileId : this.workfile.get("id")
-            },
-            function(data) {
-                if (data.status == "ok") {
-                    self.closeModal();
-                } else {
-                    self.serverErrors = data.message;
-                    self.render();
-                }
-            }, "json");
+            }
+
+            var description = this.workfile.get("description");
+            if (description) {
+                params.description = description;
+            }
+
+            $.post("/edc/workspace/" + this.picklistView.selectedItem().get("id") + "/workfile", params,
+                function(data) {
+                    if (data.status == "ok") {
+                        self.closeModal();
+                    } else {
+                        self.serverErrors = data.message;
+                        self.render();
+                    }
+                }, "json");
         }
     });
 })(jQuery, chorus.dialogs);

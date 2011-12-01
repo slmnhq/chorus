@@ -94,6 +94,27 @@ describe("chorus.dialogs.CopyWorkfile", function() {
             expect(_.last(this.server.requests).method).toBe("POST");
         })
 
+        describe("when the workfile contains a description", function() {
+            beforeEach(function() {
+                this.workfile.set({ description : "my workfile" });
+                this.dialog.$("button.submit").click();
+            })
+
+            it("includes the description in the API call", function() {
+                expect(_.last(this.server.requests).requestBody).toContain("description=my+workfile");
+            })
+        })
+
+        describe("when the workfile does not contain a description", function() {
+            beforeEach(function() {
+                this.workfile.unset("description");
+                this.dialog.$("button.submit").click();
+            })
+
+            it("does not include the description in the API call", function() {
+                expect(_.last(this.server.requests).requestBody).not.toContain("description=my+workfile");
+            })
+        })
         describe("when the API is successful", function() {
             beforeEach(function() {
                 this.server.respondWith(
