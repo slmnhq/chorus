@@ -21,6 +21,7 @@
         editText : function() {
             this.editor.setCursor(0, 0);
             this.editor.setOption("readOnly", false);
+            this.$(".CodeMirror").addClass("editable");
             this.editor.focus();
         }
     });

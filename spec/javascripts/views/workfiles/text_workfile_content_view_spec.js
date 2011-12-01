@@ -52,6 +52,10 @@ describe("chorus.views.TextWorkfileContentView", function() {
             expect(coords.line).toBe(0);
             expect(coords.ch).toBe(0);
         });
+
+        it("adds the editable class to the CodeMirror div", function(){
+            expect(this.view.$(".CodeMirror")).toHaveClass("editable");
+        });
     });
 
     describe("event file:edit", function(){
