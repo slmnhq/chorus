@@ -9,6 +9,8 @@
 
             this.breadcrumbs = new ns.views.WorkspaceBreadcrumbsView({model: this.workspace});
 
+            this.sidebar = new chorus.views.WorkfileShowSidebar({model : this.model });
+            
             this.subNav = new ns.views.SubNav({workspace: this.workspace, tab: "workfiles"});
 
             this.mainContent = new ns.views.MainContentView({

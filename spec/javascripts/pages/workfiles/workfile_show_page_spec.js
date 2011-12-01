@@ -8,7 +8,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
         this.loadTemplate("workfile_content_details");
         this.loadTemplate("header");
         this.loadTemplate("text_workfile_content");
-
+        this.loadTemplate("workfile_show_sidebar")
 
         this.workspaceId = 4;
         this.workfileId = 5;

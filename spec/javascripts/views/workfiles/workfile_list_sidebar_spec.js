@@ -37,16 +37,16 @@ describe("WorkfileListSidebar", function() {
 
         it("displays the selected workfile's date", function() {
             var updatedDate = new Date(this.workfile.get("lastUpdatedStamp"));
-            expect(this.view.$(".updatedOn").text().trim()).toBe(updatedDate.toString("MMMM d"));
+            expect(this.view.$(".updated_on").text().trim()).toBe(updatedDate.toString("MMMM d"));
         });
 
         it("displays the name of the person who updated the workfile", function() {
             var updaterName = this.workfile.get("modifiedByFirstName") + " " + this.workfile.get("modifiedByLastName");
-            expect(this.view.$(".updatedBy").text().trim()).toBe(updaterName);
+            expect(this.view.$(".updated_by").text().trim()).toBe(updaterName);
         });
 
         it("links to the profile page of the modifier", function() {
-            expect(this.view.$("a.updatedBy").attr("href")).toBe("#/users/" + this.workfile.get("modifiedBy"))
+            expect(this.view.$("a.updated_by").attr("href")).toBe("#/users/" + this.workfile.get("modifiedBy"))
         })
 
         it("displays a link to delete the workfile", function() {
