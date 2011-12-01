@@ -1,3 +1,3 @@
 Handlebars.registerHelper("t", function(key) {
-    return t(key);
+    return t.apply(this, arguments);
 });

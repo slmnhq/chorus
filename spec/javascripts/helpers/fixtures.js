@@ -398,6 +398,54 @@
 		                }
             },
 
+            Activity : {
+                fetch : {
+                    "message" : [ ],
+                    "status" : "ok",
+                    "requestId" : 256,
+                    "resource" : [
+                        {
+                            id : 10000,
+                            timestamp : "2011-11-23 15:42:02.321",
+                            type : "NOT_IMPLEMENTED",
+                            author : {
+                                username : "edcadmin",
+                                firstName : "EDC",
+                                lastName : "Admin"
+                            },
+
+                            comments : [
+                                {
+                                    id : 10023,
+                                    timestamp : "2011-11-23 15:42:02.321",
+                                    author : {
+                                        username : "msofaer",
+                                        firstName : "Michael",
+                                        lastName : "Sofaer"
+                                    },
+                                    text : "hi there"
+                                },
+                                {
+                                    id : 10024,
+                                    timestamp : "2011-11-23 15:42:02.321",
+                                    author : {
+                                        username : "mrushakoff",
+                                        firstName : "Mark",
+                                        lastName : "Rushakoff"
+                                    },
+                                    text : "hello"
+                                }
+                            ]
+                        }
+                    ],
+                    "method" : "GET",
+                    "resourcelink" : "/edc/activitystream/workspace/10000",
+                    "pagination" : null,
+                    "version" : "0.1"
+                }
+
+            },
+
             ActivitySet : {
                 fetch : {
                     "message" : [ ],
@@ -405,120 +453,49 @@
                     "requestId" : 256,
                     "resource" : [
                         {
-                            "createTime" : "23 minutes ago",
-                            "body" :
-                            {
-                                "text" : "created a file",
-                                "children" :
-                                [
-                                    {
-                                        "text" : "to workspace",
-                                        "children" :
-                                        [
-
-                                        ],
-                                        "mention" :
-                                        {
-                                            "workspaceId" : "10000",
-                                            "entityId" : "10022",
-                                            "entityType" : "workfile",
-                                            "entityName" : "012345678901234567890123456789012345678901234567890123456799.sql"
-                                        }
-                                    },
-                                    {
-                                        "text" : "",
-                                        "children" :
-                                        [
-
-                                        ],
-                                        "mention" :
-                                        {
-                                            "entityId" : "10000",
-                                            "entityType" : "workspace",
-                                            "entityName" : "test"
-                                        }
-                                    }
-                                ],
-                                "mention" :
-                                {
-                                    "entityId" : "edcadmin",
-                                    "entityType" : "user",
-                                    "entityName" : "EDC Admin"
-                                }
+                            id : 10000,
+                            timestamp : "2011-11-23 15:42:02.321",
+                            type : "NOT_IMPLEMENTED",
+                            author : {
+                                username : "edcadmin",
+                                firstName : "EDC",
+                                lastName : "Admin"
                             },
-                            "subCommentList" :
-                            [
 
-                            ],
-                            "totalSubComments" : 0,
-                            "entityId" : "10000",
-                            "type" : "auto",
-                            "entityType" : "workspace",
-                            "entityName" : "test",
-                            "id" : 10032,
-                            "fileId" : -1,
-                            "authorName" : "edcadmin",
-                            "fileName" : "",
-                            "fileDisplayName" : "",
-                            "userfullname" : "EDC Admin"
+                            comments : [
+                                {
+                                    id : 10023,
+                                    timestamp : "2011-11-23 15:42:02.321",
+                                    author : {
+                                        username : "msofaer",
+                                        firstName : "Michael",
+                                        lastName : "Sofaer"
+                                    },
+                                    text : "hi there"
+                                },
+                                {
+                                    id : 10024,
+                                    timestamp : "2011-05-23 15:42:02.321",
+                                    author : {
+                                        username : "mrushakoff",
+                                        firstName : "Mark",
+                                        lastName : "Rushakoff"
+                                    },
+                                    text : "hello"
+                                }
+                            ]
                         },
                         {
-                            "createTime" : "29 minutes ago",
-                            "body" :
-                            {
-                                "text" : "created a file",
-                                "children" :
-                                [
-                                    {
-                                        "text" : "to workspace",
-                                        "children" :
-                                        [
-
-                                        ],
-                                        "mention" :
-                                        {
-                                            "workspaceId" : "10000",
-                                            "entityId" : "10021",
-                                            "entityType" : "workfile",
-                                            "entityName" : ".sql"
-                                        }
-                                    },
-                                    {
-                                        "text" : "",
-                                        "children" :
-                                        [
-
-                                        ],
-                                        "mention" :
-                                        {
-                                            "entityId" : "10000",
-                                            "entityType" : "workspace",
-                                            "entityName" : "test"
-                                        }
-                                    }
-                                ],
-                                "mention" :
-                                {
-                                    "entityId" : "edcadmin",
-                                    "entityType" : "user",
-                                    "entityName" : "EDC Admin"
-                                }
+                            id : 10001,
+                            timestamp : "2011-04-23 15:42:02.321",
+                            type : "NOT_IMPLEMENTED",
+                            author : {
+                                username : "dburkes",
+                                firstName : "Danny",
+                                lastName : "Burkes"
                             },
-                            "subCommentList" :
-                            [
 
-                            ],
-                            "totalSubComments" : 0,
-                            "entityId" : "10000",
-                            "type" : "auto",
-                            "entityType" : "workspace",
-                            "entityName" : "test",
-                            "id" : 10031,
-                            "fileId" : -1,
-                            "authorName" : "edcadmin",
-                            "fileName" : "",
-                            "fileDisplayName" : "",
-                            "userfullname" : "EDC Admin"
+                            comments : []
                         }
                     ],
                     "method" : "GET",

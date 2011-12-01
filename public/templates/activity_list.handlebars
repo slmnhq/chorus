@@ -1,6 +1,27 @@
 {{#if loaded}}
     {{#each models}}
-        <li data-id="{{id}}">
+        <li data-activity-id="{{id}}">
+            <div class="title">{{type}}</div>
+            <div class="timestamp">{{displayTimestamp timestamp}}</div>
+            <div class="author">
+                <img title="{{displayNameFromPerson author}}" src="/edc/userimage/{{author.username}}?size=icon"/>
+                <span class="name">{{displayNameFromPerson author}}</span>
+            </div>
+            {{#if comments.length}}
+                <ul class="comments">
+                    {{#eachWithMoreLink comments 2}}
+                        <li data-comment-id="{{id}}">
+                            <img title="{{displayNameFromPerson author}}" src="/edc/userimage/{{author.username}}?size=icon"/>
+                            <div class="timestamp">{{displayTimestamp timestamp}}</div>
+                            <div class="author">
+                                <img title="{{displayNameFromPerson author}}" src="/edc/userimage/{{author.username}}?size=icon"/>
+                                <span class="name">{{displayNameFromPerson author}}</span>
+                            </div>
+                            <div class="text">{{text}}</div>
+                        </li>
+                    {{/eachWithMoreLink}}
+                </ul>
+            {{/if}}
         </li>
     {{/each}}
 {{else}}
