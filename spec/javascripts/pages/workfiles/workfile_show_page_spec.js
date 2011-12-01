@@ -42,8 +42,12 @@ describe("chorus.pages.WorkfileShowPage", function() {
         describe("when the workfile is fetched", function() {
             beforeEach(function() {
                 spyOn(this.page.mainContent, "render");
-                this.page.model.set({mimeType: "text/plain"});
-                this.page.model.trigger('change', this.page.model);
+                fixtures.model = "Workfile";
+                this.server.respondWith(
+                    'GET',
+                    this.page.model.url(),
+                    this.prepareResponse(fixtures.jsonFor("fetch")));
+                this.server.respond();
             });
 
             it("instantiates the content details view", function() {
@@ -64,19 +68,20 @@ describe("chorus.pages.WorkfileShowPage", function() {
     describe("#render", function(){
         beforeEach(function() {
             this.page = new chorus.pages.WorkfileShowPage(this.workspaceId, this.workfileId);
-            this.page.model.set({
-                fileName: "Afile.txt",
-                mimeType: "text/plain"
-            });
-            this.page.render();
+            fixtures.model = "Workfile";
+            this.server.respondWith(
+                'GET',
+                this.page.model.url(),
+                this.prepareResponse(fixtures.jsonFor("fetch")));
+            this.server.respond();
         });
 
         it("it displays the workfile name in the content header", function() {
-            expect(this.page.mainContent.contentHeader.$("h1").text()).toBe("Afile.txt");
+            expect(this.page.mainContent.contentHeader.$("h1").text()).toBe("who.sql");
         });
 
         it("displays the file icon in the content header", function() {
-            expect(this.page.mainContent.contentHeader.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl('txt'));
+            expect(this.page.mainContent.contentHeader.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl('sql'));
         });
 
         describe("the workfile detail view raises file:edit event", function() {

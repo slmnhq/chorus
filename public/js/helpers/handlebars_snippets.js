@@ -53,7 +53,8 @@ Handlebars.registerHelper("displayNameFromPerson", function(person) {
 })
 
 Handlebars.registerHelper("displayTimestamp", function(timestamp) {
-    return new Date(timestamp).toString("MMMM d")
+    var dt = timestamp.match(/(.+)\.\d{1,3}/)[1];
+    return Date.parse(dt, "yyyy-mm-dd H:m:s").toString("MMMM d")
 })
 
 Handlebars.registerHelper("moreLink", function(context) {

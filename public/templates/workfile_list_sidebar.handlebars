@@ -17,7 +17,7 @@
 {{#if workfile}}
     <div class="info">
         <div title="{{workfile.fileName}}" class="fileName">{{workfile.fileName}}</div>
-        <div class="updated">Updated by <a class="updated_by" href="{{workfile.modifierUrl}}">{{workfile.updatedBy}}</a> on <span class="updated_on">{{workfile.updatedAt}}</span></div>
+        <div class="updated">Updated by <a class="updated_by" href="{{workfile.modifierUrl}}">{{workfile.updatedBy}}</a> on <span class="updated_on">{{displayTimestamp workfile.lastUpdatedStamp}}</span></div>
     </div>
     <div class="actions">
         <ul>

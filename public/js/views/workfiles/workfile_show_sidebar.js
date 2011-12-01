@@ -59,9 +59,8 @@
             this.activityList = new ns.ActivityList({ collection : activitySet });
         },
 
-        additionalContext : function() {
+        additionalContext : function(ctx) {
             return {
-                updatedAt : new Date(this.model.get("lastUpdatedStamp")).toString("MMMM d"),
                 updatedBy : [this.model.get("modifiedByFirstName"), this.model.get("modifiedByLastName")].join(' '),
                 modifierUrl : this.model.modifier().showUrl()
             }

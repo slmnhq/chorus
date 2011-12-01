@@ -23,7 +23,6 @@
             function() {
                 if (this.workfile) {
                     var attributes = _.extend({}, this.workfile.attributes);
-                    attributes["updatedAt"] = new Date(attributes.lastUpdatedStamp).toString("MMMM d")
                     attributes["updatedBy"] = [this.workfile.attributes.modifiedByFirstName, this.workfile.attributes.modifiedByLastName].join(' '),
                     attributes["modifierUrl"] = this.workfile.modifier().showUrl()
                     return { workfile: attributes };

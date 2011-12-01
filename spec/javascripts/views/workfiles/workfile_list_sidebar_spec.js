@@ -36,8 +36,7 @@ describe("WorkfileListSidebar", function() {
         });
 
         it("displays the selected workfile's date", function() {
-            var updatedDate = new Date(this.workfile.get("lastUpdatedStamp"));
-            expect(this.view.$(".updated_on").text().trim()).toBe(updatedDate.toString("MMMM d"));
+            expect(this.view.$(".updated_on").text().trim()).toBe("November 22");
         });
 
         it("displays the name of the person who updated the workfile", function() {
