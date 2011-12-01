@@ -1,4 +1,5 @@
 // taken from https://github.com/myape/CodeMirror2/blob/bf8a1b97d0ef70b1d6e6fdb660067fd511820c47/mode/sql/sql.js
+// modified lines 21-22
 
 CodeMirror.defineMode("sql", function(config, parserConfig) {
     var indentUnit  = config.indentUnit,
@@ -17,16 +18,17 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
     var type;
     function ret(tp, style) {
         type = tp;
-        return style;
+        return tp;
+//        return style;
     }
-    
+
     function tokenBase(stream, state) {
         var ch = stream.next();
         // start of string?
         if (ch == '"' || ch == "'" || ch == "`") {
             return chain(stream, state, tokenString(ch));
         }
-        // is it one of the special signs []{}().? 
+        // is it one of the special signs []{}().?
         else if (/[\[\]{}\(\)\.]/.test(ch)) {
             return ret(ch);
         }
@@ -147,7 +149,7 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
         for (var i = 0; i < words.length; ++i) obj[words[i]] = true;
         return obj;
     }
-    var cKeywords = 
+    var cKeywords =
         "alter grant revoke primary key table start top " +
         "transaction select update insert delete create describe " +
         "from into values where join inner left natural and " +
@@ -155,11 +157,11 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
         "asc desc limit offset union all as distinct set " +
         "commit rollback replace view database separator if " +
         "exists null truncate status show lock unique having " +
-        "drop procedure begin end delimiter call else leave " + 
+        "drop procedure begin end delimiter call else leave " +
         "declare temporary then";
 
 
-    var cFunctions = 
+    var cFunctions =
         "abs acos adddate aes_encrypt aes_decrypt ascii " +
         "asin atan atan2 avg benchmark bin bit_and " +
         "bit_count bit_length bit_or cast ceil ceiling " +
@@ -185,7 +187,7 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
         "to_days trim ucase unique_users unix_timestamp upper " +
         "user version week weekday yearweek";
 
-    var cTypes = 
+    var cTypes =
         "bigint binary bit blob bool char character date " +
         "datetime dec decimal double enum float float4 float8 " +
         "int int1 int2 int3 int4 int8 integer long longblob " +
@@ -193,7 +195,7 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
         "numeric real set smallint text time timestamp tinyblob " +
         "tinyint tinytext varbinary varchar year";
 
-    var cOperators = 
+    var cOperators =
         ":= < <= == <> > >= like rlike in xor between";
 
     CodeMirror.defineMIME("text/x-sql", {
