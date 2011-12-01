@@ -6,7 +6,11 @@
         <!--<label>
             {{t "workfiles.import_dialog.upload_file"}}
         </label>-->
-        <input type="file" name="importFile"/>
+
+        <span class="file-wrapper">
+            <button type="button" class="choose">{{t "workfiles.import_choosefile"}}</button>
+            <input type="file" name="importFile"/>
+        </span>
     </div>
     <div class="comment">
         <input type="text" name="description" placeholder='{{t "workfiles.import_placeholder"}}' tabindex="1" maxlength="256"></input>

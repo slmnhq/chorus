@@ -7,6 +7,7 @@
 
         events : {
             "click button.submit" : "upload",
+            "click button.choose" : "chooseFile",
             "submit form": "upload",
             "click button.cancel" : "cancelUploadAndClose"
         },
@@ -59,6 +60,11 @@
             }
 
             this.closeModal();
+        },
+
+        chooseFile : function(e) {
+            e.preventDefault();
+            this.$("input").click();
         },
 
         postRender : function() {

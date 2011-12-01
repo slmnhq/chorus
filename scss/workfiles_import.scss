@@ -12,10 +12,6 @@ $image-width: 48px;
         img {
             vertical-align: middle;
         }
-
-        input[type=file] {
-            width: auto;
-        }
     }
 
     div.comment {
@@ -49,6 +45,24 @@ $image-width: 48px;
         vertical-align: middle;
         line-height: $image-height;
     }
+
+    .file-wrapper {
+        overflow: hidden;
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .file-wrapper button {
+        display: inline-block;
+    }
+    .file-wrapper input {
+        width: 1px;
+        position: relative;
+        top: 0px;
+        left: -130px;
+        opacity: 0;
+     }
 
     .expanded {
         padding-right: 35px;
