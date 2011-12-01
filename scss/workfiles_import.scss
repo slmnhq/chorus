@@ -22,6 +22,10 @@ $image-width: 48px;
         margin-left: $image-width;
     }
 
+    .errors {
+        width: 100%;
+    }
+
     div[aria-role=progressbar] {
         top: 7px;
         left: 17px;
