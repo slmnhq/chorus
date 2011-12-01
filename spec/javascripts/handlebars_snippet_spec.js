@@ -183,6 +183,14 @@ describe("handlebars", function() {
             it("renders the timestamp", function() {
                 expect(Handlebars.helpers.displayTimestamp("2011-11-23 15:42:02.321")).toBe("November 23");
             })
+
+            it("tolerates bogus timestamps", function() {
+                expect(Handlebars.helpers.displayTimestamp("yo momma")).toBe("WHENEVER");
+            })
+
+            it("tolerates undefined", function() {
+                expect(Handlebars.helpers.displayTimestamp()).toBe("WHENEVER");
+            })
         })
 
         describe("moreLink", function() {
