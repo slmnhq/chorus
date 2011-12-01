@@ -8,8 +8,8 @@ describe("chorus.models.Workfile", function() {
         it("returns a partially constructed user, based on the workfile's modifier attribute", function() {
             var modifier = this.model.modifier();
             expect(modifier.get("userName")).toBe(this.model.get("modifiedBy"));
-            expect(modifier.get("firstName")).toBe(this.model.get("modifierFirstName"));
-            expect(modifier.get("lastName")).toBe(this.model.get("modifierLastName"));
+            expect(modifier.get("firstName")).toBe(this.model.get("modifiedByFirstName"));
+            expect(modifier.get("lastName")).toBe(this.model.get("modifiedByLastName"));
         });
     })
 

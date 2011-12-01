@@ -9,8 +9,8 @@
         modifier : function() {
             return new ns.User({
                 userName : this.get("modifiedBy"),
-                firstName : this.get("modifierFirstName"),
-                lastName : this.get("modifierLastName")
+                firstName : this.get("modifiedByFirstName"),
+                lastName : this.get("modifiedByLastName")
             })
         },
 
