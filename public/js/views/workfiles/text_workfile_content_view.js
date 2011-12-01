@@ -3,6 +3,10 @@
     ns.views.TextWorkfileContent = ns.views.Base.extend({
         className : "text_workfile_content",
 
+        setup : function(){
+            this.bind("file:edit", this.editText);
+        },
+
         postRender : function() {
            var opts = {
                readOnly : "nocursor",
@@ -15,7 +19,9 @@
         },
 
         editText : function() {
+            this.editor.setCursor(0, 0);
             this.editor.setOption("readOnly", false);
+            this.editor.focus();
         }
     });
 

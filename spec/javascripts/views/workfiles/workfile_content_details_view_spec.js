@@ -35,11 +35,36 @@ describe("WorkfileContentDetails", function() {
             this.loadTemplate("workfile_content_details")
             this.view = new chorus.views.WorkfileContentDetails(this.model);
             this.view.render();
-        })
-
-        it("has the three action links in the details bar", function() {
-            expect(this.view.$("a").length).toBe(3);
         });
 
-    })
+        it("has the three action links in the details bar", function() {
+            expect(this.view.$("button").length).toBe(3);
+        });
+
+        it("should disabled class from the save as link", function(){
+                expect(this.view.$(".save_as")).toHaveAttr("disabled");
+            });
+
+        context("when user click on the edit file button", function() {
+            beforeEach(function(){
+                this.fileSpy = jasmine.createSpy("file:edit");
+                this.view.bind("file:edit", this.fileSpy);
+                this.view.$(".edit_file").click();
+            });
+
+            it("should trigger file edit", function() {
+                expect(this.fileSpy).toHaveBeenCalled();
+            });
+
+            it("should apply the disabled class to the edit link", function(){
+                expect(this.view.$(".edit_file")).toHaveAttr("disabled");
+            });
+
+            it("should remove the disabled class from the save as link", function(){
+                expect(this.view.$(".save_as")).not.toHaveAttr("disabled");
+            });
+
+        });
+    });
+
 });

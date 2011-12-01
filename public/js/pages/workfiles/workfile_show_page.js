@@ -21,6 +21,9 @@
             if (!this.mainContent.contentDetails) {
                 this.mainContent.contentDetails = ns.views.WorkfileContentDetails.buildFor(this.model);
                 this.mainContent.content = ns.views.WorkfileContent.buildFor(this.model);
+                this.mainContent.contentDetails.bind("file:edit", function() {
+                    this.mainContent.content.trigger("file:edit");
+                }, this);
             }
 
             this.render();
