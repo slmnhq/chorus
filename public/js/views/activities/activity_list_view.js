@@ -73,7 +73,7 @@
                         timestamp : "2011-04-23 15:42:02.321",
                         type : "NOT_IMPLEMENTED",
                         author : {
-                            username : "dburkes",
+                            username : "edcadmin",
                             firstName : "Danny",
                             lastName : "Burkes"
                         },
