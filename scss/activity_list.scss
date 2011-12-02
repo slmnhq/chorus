@@ -63,8 +63,14 @@ $comment-padding-x: 6px;
                     display: none;
                 }
 
-                a.more {
-                    font-size: 12px;
+                .morelinks {
+                    a {
+                        font-size: 12px;
+
+                        &.less {
+                            display: none;
+                        }
+                    }
                 }
 
                 &.more {
@@ -72,8 +78,14 @@ $comment-padding-x: 6px;
                         display: block;
                     }
 
-                    a.more {
-                        display: none;
+                    .morelinks {
+                        a.less {
+                            display: inline;
+                        }
+
+                        a.more {
+                            display: none;
+                        }
                     }
                 }
             }

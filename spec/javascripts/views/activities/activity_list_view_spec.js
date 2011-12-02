@@ -103,7 +103,7 @@ describe("chorus.views.ActivityList", function() {
                         comments.push(comments[0]);
                         this.view.render();
                     })
-                    
+
                     it("renders a 'more comments' link", function() {
                         expect(this.view.$("li[data-activity-id=10000] .comments a.more")).toExist();
                     })
@@ -119,18 +119,33 @@ describe("chorus.views.ActivityList", function() {
         });
     });
 
-    describe("clicking a 'more comments' link", function() {
+    describe("comments", function() {
         beforeEach(function() {
             this.collection = fixtures.modelFor('fetch');
             var comments = this.collection.at(0).get("comments");
             comments.push(comments[0]);
             this.view = new chorus.views.ActivityList({collection: this.collection});
             this.view.render();
-            this.view.$("a.more:eq(0)").click();
         })
 
-        it("adds the 'more' class to the surrounding comment list", function() {
-            expect(this.view.$("ul.comments:eq(0)")).toHaveClass("more");
+        describe("expanding", function() {
+            beforeEach(function() {
+                this.view.$(".morelinks:eq(0) a.more").click();
+            })
+
+            it("adds the 'more' class to the surrounding comment list", function() {
+                expect(this.view.$("ul.comments:eq(0)")).toHaveClass("more");
+            })
+
+            describe("then contracting", function() {
+                beforeEach(function() {
+                    this.view.$(".morelinks:eq(0) a.less").click();
+                })
+
+                it("removes the 'more' class from the surrounding comment list", function() {
+                    expect(this.view.$("ul.comments:eq(0)")).not.toHaveClass("more");
+                })
+            })
         })
     })
 });

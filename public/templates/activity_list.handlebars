@@ -19,7 +19,7 @@
         </div>
         {{#if comments.length}}
         <ul class="comments">
-            {{#eachWithMoreLink comments 2}}
+            {{#eachWithMoreLink comments 2 "activity_stream.comments.more" "activity_stream.comments.less"}}
                 <li data-comment-id="{{id}}" class="{{moreClass}}">
                     <div class="image">
                         <a href="#/users/{{author.username}}">

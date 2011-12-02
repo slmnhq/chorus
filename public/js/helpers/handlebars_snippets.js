@@ -44,7 +44,7 @@ Handlebars.registerHelper("ifAny", function() {
     }
 });
 
-Handlebars.registerHelper("currentUserName", function(block){
+Handlebars.registerHelper("currentUserName", function(block) {
     return chorus.session.get("userName");
 });
 
@@ -61,15 +61,23 @@ Handlebars.registerHelper("displayTimestamp", function(timestamp) {
     }
 })
 
-Handlebars.registerHelper("moreLink", function(context) {
-    if (context && context.length > 2) {
-        return new Handlebars.SafeString("<a class='more' href='#'>" + t("activity_stream.comments.more", context.length - 2) + "</a>");
+Handlebars.registerHelper("moreLink", function(collection, max, more_key, less_key) {
+    if (collection && collection.length > max) {
+        return Handlebars.compile("\
+            <ul class='morelinks'>\
+            <li><a class='more' href='#'>{{t more_key more_count}}</a></li>\
+            <li><a class='less' href='#'>{{t less_key more_count}}</a></li>\
+            </ul>")({
+            more_key : more_key,
+            more_count : collection.length - max,
+            less_key : less_key
+        });
     } else {
         return "";
     }
 })
 
-Handlebars.registerHelper("eachWithMoreLink", function(context, max, fn, inverse) {
+Handlebars.registerHelper("eachWithMoreLink", function(context, max, more_key, less_key, fn, inverse) {
     var ret = "";
 
     if (context && context.length > 0) {
@@ -77,7 +85,7 @@ Handlebars.registerHelper("eachWithMoreLink", function(context, max, fn, inverse
             context[i].moreClass = (i >= max) ? "more" : "";
             ret = ret + fn(context[i]);
         }
-        ret += Handlebars.helpers.moreLink(context);
+        ret += Handlebars.helpers.moreLink(context, max, more_key, less_key);
     } else {
         ret = inverse(this);
     }

@@ -4,12 +4,12 @@
             className : "activity_list",
 
             events : {
-                "click a.more" : "expandCommentList"
+                "click .morelinks a.more,.morelinks a.less" : "toggleCommentList"
             },
 
-            expandCommentList : function(event) {
+            toggleCommentList : function(event) {
                 event.preventDefault();
-                $(event.target).closest("ul.comments").addClass("more")
+                $(event.target).closest("ul.comments").toggleClass("more")
             }
         },
         {
