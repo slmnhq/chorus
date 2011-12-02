@@ -88,6 +88,10 @@ describe("chorus.views.ActivityList", function() {
                     it("does not render a 'more comments' link", function() {
                         expect(this.view.$("li[data-activity-id=10000] .comments a.more")).not.toExist();
                     })
+
+                    it("does not apply the 'more' class to any comments", function() {
+                        expect(this.view.$(".comments li.more")).not.toExist();
+                    })
                 })
                 context("when there are three or more comments", function() {
                     beforeEach(function() {
@@ -98,6 +102,12 @@ describe("chorus.views.ActivityList", function() {
                     
                     it("renders a 'more comments' link", function() {
                         expect(this.view.$("li[data-activity-id=10000] .comments a.more")).toExist();
+                    })
+
+                    it("applies the 'more' class to trailing elements", function() {
+                        expect(this.view.$(".comments li:eq(0)")).not.toHaveClass("more");
+                        expect(this.view.$(".comments li:eq(1)")).not.toHaveClass("more");
+                        expect(this.view.$(".comments li:eq(2)")).toHaveClass("more");
                     })
                 })
             })

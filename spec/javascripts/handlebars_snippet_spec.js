@@ -225,31 +225,49 @@ describe("handlebars", function() {
 
             describe("when the collection has more than max elements", function() {
                 beforeEach(function() {
-                    this.collection = [1,2,3];
+                    this.collection = [
+                        { name: "foo" },
+                        { name: "bar" },
+                        { name: "bro" }
+                    ];
                     Handlebars.helpers.eachWithMoreLink(this.collection, 2, this.yieldSpy, this.yieldSpy.inverse);
                 })
 
-                it("yields to the block the maximum number of times", function() {
+                it("yields to the block for each element", function() {
+                    expect(this.yieldSpy.callCount).toBe(3);
+                })
+
+                it("calls moreLink", function() {
+                    expect(Handlebars.helpers.moreLink).toHaveBeenCalledWith(this.collection);
+                })
+
+                it("sets the 'more' context attribute when yielding for each element with an index greater than max", function() {
+                    expect(this.yieldSpy.calls[0].args[0].moreClass).toBe("");
+                    expect(this.yieldSpy.calls[1].args[0].moreClass).toBe("");
+                    expect(this.yieldSpy.calls[2].args[0].moreClass).toBe("more");
+                })
+            })
+
+            describe("when the collection has less than or equal to max elements", function() {
+                beforeEach(function() {
+                    this.collection = [
+                        { name: "foo" },
+                        { name: "bar" }
+                    ];
+                    Handlebars.helpers.eachWithMoreLink(this.collection, 2, this.yieldSpy, this.yieldSpy.inverse);
+                })
+
+                it("yields to the block for each element", function() {
                     expect(this.yieldSpy.callCount).toBe(2);
                 })
 
                 it("calls moreLink", function() {
                     expect(Handlebars.helpers.moreLink).toHaveBeenCalledWith(this.collection);
                 })
-            })
 
-            describe("when the collection has less than max elements", function() {
-                beforeEach(function() {
-                    this.collection = [1];
-                    Handlebars.helpers.eachWithMoreLink(this.collection, 2, this.yieldSpy, this.yieldSpy.inverse);
-                })
-
-                it("yields to the block for each element", function() {
-                    expect(this.yieldSpy.callCount).toBe(1);
-                })
-
-                it("calls moreLink", function() {
-                    expect(Handlebars.helpers.moreLink).toHaveBeenCalledWith(this.collection);
+                it("does not set the 'more' context attribute when yielding for any element", function() {
+                    expect(this.yieldSpy.calls[0].args[0].moreClass).toBe("");
+                    expect(this.yieldSpy.calls[1].args[0].moreClass).toBe("");
                 })
             })
         })

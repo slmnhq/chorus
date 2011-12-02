@@ -73,10 +73,11 @@ Handlebars.registerHelper("eachWithMoreLink", function(context, max, fn, inverse
     var ret = "";
 
     if (context && context.length > 0) {
-        for (var i = 0, j = Math.min(context.length, max); i < j; i++) {
+        for (var i = 0, j = context.length; i < j; i++) {
+            context[i].moreClass = (i >= max) ? "more" : "";
             ret = ret + fn(context[i]);
-            ret += Handlebars.helpers.moreLink(context);
         }
+        ret += Handlebars.helpers.moreLink(context);
     } else {
         ret = inverse(this);
     }

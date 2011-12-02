@@ -36,6 +36,26 @@
                                     lastName : "Rushakoff"
                                 },
                                 text : "hello"
+                            },
+                            {
+                                id : 10000,
+                                timestamp : "2011-05-23 15:42:02.321",
+                                author : {
+                                    username : "edcadmin",
+                                    firstName : "Mark",
+                                    lastName : "Rushakoff"
+                                },
+                                text : "hello"
+                            },
+                            {
+                                id : 10000,
+                                timestamp : "2011-05-23 15:42:02.321",
+                                author : {
+                                    username : "edcadmin",
+                                    firstName : "Mark",
+                                    lastName : "Rushakoff"
+                                },
+                                text : "hello"
                             }
                         ]
                     },
