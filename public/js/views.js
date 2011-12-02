@@ -88,7 +88,7 @@
             this.clearErrors();
 
             _.each(this.resource.errors, function(val, key) {
-                var input = self.$("form input[name=" + key + "], form textarea[name=" + name + "]");
+                var input = self.$("form input[name=" + key + "], form textarea[name=" + key + "]");
                 input.addClass("has_error");
                 input.qtip({
                     content: { text : val , prerender: 'true' },

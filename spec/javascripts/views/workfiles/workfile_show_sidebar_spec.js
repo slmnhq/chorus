@@ -37,7 +37,14 @@ describe("WorkfileShowSidebar", function() {
 
         it("displays a link to download the workfile", function() {
             expect(this.view.$(".actions a.download")).toHaveAttr("href", "/edc/workspace/10000/workfile/10020/file/1111_1111?download=true")
-        })
+        });
+
+        it("displays a link to add a note", function() {
+            var addLink = this.view.$(".actions a.dialog[data-dialog=NotesNew]");
+            expect(addLink).toExist();
+            expect(addLink).toHaveAttr("data-entity-type", "workfile")
+            expect(addLink).toHaveAttr("data-entity-id", this.workfile.get("id"))
+        });
 
         it("displays the activity list", function() {
             expect(this.view.$(".activity_list")).toExist();
