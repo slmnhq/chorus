@@ -84,6 +84,10 @@ describe("chorus.views.ActivityList", function() {
                     expect(this.view.$("li[data-comment-id=10024] > .text")).toHaveText("hello");
                 })
 
+                it("does not initially add the 'more' class to any comment list", function() {
+                    expect(this.view.$("ul.comments")).not.toHaveClass("more");
+                })
+
                 context("when there are less than three comments", function() {
                     it("does not render a 'more comments' link", function() {
                         expect(this.view.$("li[data-activity-id=10000] .comments a.more")).not.toExist();
@@ -113,5 +117,20 @@ describe("chorus.views.ActivityList", function() {
             })
 
         });
+    });
+
+    describe("clicking a 'more comments' link", function() {
+        beforeEach(function() {
+            this.collection = fixtures.modelFor('fetch');
+            var comments = this.collection.at(0).get("comments");
+            comments.push(comments[0]);
+            this.view = new chorus.views.ActivityList({collection: this.collection});
+            this.view.render();
+            this.view.$("a.more:eq(0)").click();
+        })
+
+        it("adds the 'more' class to the surrounding comment list", function() {
+            expect(this.view.$("ul.comments:eq(0)")).toHaveClass("more");
+        })
     })
 });

@@ -57,9 +57,22 @@ $comment-padding-x: 6px;
                     }
                 }
 
+                li.more {
+                    display: none;
+                }
 
                 a.more {
                     font-size: 12px;
+                }
+
+                &.more {
+                    li.more {
+                        display: block;
+                    }
+
+                    a.more {
+                        display: none;
+                    }
                 }
             }
         }

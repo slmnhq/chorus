@@ -63,7 +63,7 @@ Handlebars.registerHelper("displayTimestamp", function(timestamp) {
 
 Handlebars.registerHelper("moreLink", function(context) {
     if (context && context.length > 2) {
-        return new Handlebars.SafeString("<a class='more'>" + t("activity_stream.comments.more", context.length - 2) + "</a>");
+        return new Handlebars.SafeString("<a class='more' href='#'>" + t("activity_stream.comments.more", context.length - 2) + "</a>");
     } else {
         return "";
     }

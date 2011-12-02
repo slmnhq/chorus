@@ -1,7 +1,16 @@
 (function($, ns) {
     ns.ActivityList = chorus.views.Base.extend({
             tagName : "ul",
-            className : "activity_list"
+            className : "activity_list",
+
+            events : {
+                "click a.more" : "expandCommentList"
+            },
+
+            expandCommentList : function(event) {
+                event.preventDefault();
+                $(event.target).closest("ul.comments").addClass("more")
+            }
         },
         {
             cannedActivitySetFor : function(workfile) {
