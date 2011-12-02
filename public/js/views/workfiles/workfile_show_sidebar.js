@@ -3,60 +3,7 @@
         className : "workfile_show_sidebar",
 
         setup : function() {
-            var activitySet = new chorus.models.ActivitySet([
-                        {
-                            id : 10000,
-                            timestamp : "2011-11-23 15:42:02.321",
-                            type : "NOT_IMPLEMENTED",
-                            author : {
-                                username : "edcadmin",
-                                firstName : "EDC",
-                                lastName : "Admin"
-                            },
-
-                            comments : [
-                                {
-                                    id : 10000,
-                                    timestamp : "2011-11-23 15:42:02.321",
-                                    author : {
-                                        username : "edcadmin",
-                                        firstName : "Michael",
-                                        lastName : "Sofaer"
-                                    },
-                                    text : "hi there"
-                                },
-                                {
-                                    id : 10000,
-                                    timestamp : "2011-05-23 15:42:02.321",
-                                    author : {
-                                        username : "edcadmin",
-                                        firstName : "Mark",
-                                        lastName : "Rushakoff"
-                                    },
-                                    text : "hello"
-                                }
-                            ]
-                        },
-                        {
-                            id : 10001,
-                            timestamp : "2011-04-23 15:42:02.321",
-                            type : "NOT_IMPLEMENTED",
-                            author : {
-                                username : "dburkes",
-                                firstName : "Danny",
-                                lastName : "Burkes"
-                            },
-
-                            comments : []
-                        }
-                    ], {
-                entityType : "workfile",
-                entityId : this.model.get("id")
-            });
-            activitySet.loaded = true;
-//            activitySet.fetch();
-
-            this.activityList = new ns.ActivityList({ collection : activitySet });
+            this.activityList = new ns.ActivityList({ collection : ns.ActivityList.cannedActivitySetFor(this.model) });
         },
 
         additionalContext : function(ctx) {

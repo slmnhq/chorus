@@ -2,6 +2,7 @@ describe("WorkfileListSidebar", function() {
     beforeEach(function() {
         fixtures.model = 'Workspace';
         this.loadTemplate("workfile_list_sidebar");
+        this.loadTemplate("activity_list")
         this.workspace = fixtures.modelFor("fetch");
         this.view = new chorus.views.WorkfileListSidebar({ model : this.workspace });
     });
@@ -19,6 +20,10 @@ describe("WorkfileListSidebar", function() {
 
         context("when no workfile is selected", function () {
             it("does not render the info section", function() {
+                expect(this.view.$(".info")).not.toExist();
+            });
+            
+            it("does not render the activity stream", function() {
                 expect(this.view.$(".info")).not.toExist();
             });
         })
@@ -75,6 +80,10 @@ describe("WorkfileListSidebar", function() {
             expect(downloadLink).toExist();
             expect(downloadLink).toHaveAttr("href",  "javascript:void(0)");
 
+        })
+
+        it("displays the activity list", function() {
+            expect(this.view.$(".activity_list")).toExist();
         })
 
         context("workfile has been fetched", function() {
