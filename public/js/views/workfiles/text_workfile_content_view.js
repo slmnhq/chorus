@@ -18,6 +18,7 @@
             };
 
             this.editor = CodeMirror.fromTextArea(this.$(".text_editor")[0], opts);
+            _.defer(_.bind(this.editor.refresh, this.editor));
         },
 
         editText : function() {
