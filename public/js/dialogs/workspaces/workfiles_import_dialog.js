@@ -25,12 +25,6 @@
             });
         },
 
-        additionalContext : function(ctx) {
-            return {
-                serverErrors : this.serverErrors
-            }
-        },
-
         upload : function(e) {
             if(e) {e.preventDefault();}
             if (this.uploadObj) {
@@ -47,7 +41,7 @@
                 }).spin();
                 this.$("button.submit").
                     text(t("workfiles.import_dialog.uploading")).
-                    append($('<span class="spinner"/>').append(spinner.el)).
+                    append(spinner.el).
                     attr("disabled", "disabled").
                     addClass("expanded");
             }
@@ -107,12 +101,14 @@
                 }
                 else {
                     e.preventDefault();
-                    if (self.request) {
-                        self.request.abort();
-                    }
-                    self.serverErrors = json.message
-                    self.render();
+                    self.resource.serverErrors = json.message;
+                    self.$("button.submit").
+                        text(t("workfiles.button.import")).
+                        removeClass("expanded");
 
+                    // $.text(val) clears the selected element, so .text here kills the spinner inside the button.
+
+                    self.resource.trigger("saveFailed");
                 }
             }
         }

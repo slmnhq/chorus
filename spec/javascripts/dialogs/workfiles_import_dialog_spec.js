@@ -154,14 +154,16 @@ describe("WorkfilesImportDialog", function() {
             context("when the upload gives a server error", function() {
                 beforeEach(function() {
                     spyOn(this.dialog.request, "abort");
+                    this.saveFailedSpy = jasmine.createSpy();
+                    this.dialog.resource.bind("saveFailed", this.saveFailedSpy);
                     // calls any 'done' callbacks
                     this.server.respondWith("OK");
                     this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"status": "fail", "message" :[{"message":"Workspace already has a workfile with this name. Specify a different name."}]}']);
                     this.server.respond();
                 });
 
-                it("cancels the upload", function() {
-                    expect(this.dialog.request.abort).toHaveBeenCalled();
+                it("triggers saveFailed on the model", function(){
+                    expect(this.saveFailedSpy).toHaveBeenCalled();
                 });
 
                 it("disables the upload button", function() {
@@ -174,8 +176,15 @@ describe("WorkfilesImportDialog", function() {
 
                 it("display the correct error" ,function(){
                     expect(this.dialog.$(".errors").text()).toBe("Workspace already has a workfile with this name. Specify a different name.")
-                })
-                
+                });
+
+                it("sets the button text back to 'Uploading'", function(){
+                    expect(this.dialog.$("button.submit").text()).toMatchTranslation("workfiles.button.import");
+                });
+
+                it("removes the expanded class from the button", function(){
+                    expect(this.dialog.$("button.submit")).not.toHaveClass("expanded");
+                });
             });
         });
         context("when the Enter key is pressed" , function() {
