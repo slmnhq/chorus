@@ -1,9 +1,11 @@
-{{#ifAdmin}}
+{{#if permission}}
     <div class="actions">
         <h1>Actions</h1>
         <ul>
-            <li><a href="#/users/{{userName}}/edit">Edit Profile</a></li>
+            <li><a href="#/users/{{userName}}/edit" class="edit_user">Edit Profile</a></li>
+            {{#ifAdmin}}
             <li><a href="#" class="alert delete_user" data-username="{{userName}}" data-alert="UserDelete">Delete User</a></li>
+            {{/ifAdmin}}
         </ul>
     </div>
-{{/ifAdmin}}
+{{/if}}

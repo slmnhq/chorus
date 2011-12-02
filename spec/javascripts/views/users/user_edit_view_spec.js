@@ -168,12 +168,25 @@ describe("chorus.views.userEdit", function() {
                 this.view.model.set(fixtures.jsonFor('fetch').resource[0]);
 
                 this.view.model.loaded = true;
-                setLoggedInUser({'userName' : 'notedcadmin'})
+                setLoggedInUser({'userName' : 'notedcadmin', 'admin': false})
                 this.view.render();
             })
             it("renders the admin-only warning", function() {
                 expect(this.view.$(".aint_admin")).toExist();
             });
+
+            context("as an admin", function() {
+                beforeEach(function() {
+                    setLoggedInUser({'userName' : 'notedcadmin', 'admin': true})
+                    this.view.render();
+                })
+                it("gives you permission to edit the user", function() {
+                    expect(this.view.$(".aint_admin")).not.toExist();
+                    expect(this.view.$("input[name=firstName]").val()).toBe("EDC");
+                    expect(this.view.$("input[name=lastName]").val()).toBe("Admin");
+                    expect(this.view.$("span[name=userName]").text()).toBe("edcadmin");
+                })
+            })
         })
 
 
