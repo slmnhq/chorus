@@ -75,6 +75,13 @@ describe("WorkfileListSidebar", function() {
             expect(downloadLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
         })
 
+        it("displays a link add a note", function() {
+            var addLink = this.view.$(".actions a.dialog[data-dialog=NotesNew]");
+            expect(addLink).toExist();
+            expect(addLink).toHaveAttr("data-entity-type", "workfile");
+            expect(addLink).toHaveAttr("data-entity-id", this.workfile.get("id"));
+        });
+
         it("clicking download does not do anything unless fetch has succeeded ",function(){
             var downloadLink = this.view.$(".actions a.download");
             expect(downloadLink).toExist();
