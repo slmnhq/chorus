@@ -13,15 +13,15 @@ describe("user_show_page", function(){
 
     describe("#setup", function(){
         beforeEach(function(){
-            this.view = new chorus.pages.UserShowPage("mark");
+            this.view = new chorus.pages.UserShowPage("44");
         });
         
-        it("sets up the model with the supplied username", function(){
-            expect(this.view.model.get("userName")).toBe("mark");
+        it("sets up the model with the supplied user id", function(){
+            expect(this.view.model.get("id")).toBe("44");
         });
 
         it("fetches the model automatically", function(){
-            expect(this.server.requests[0].url).toBe("/edc/user/mark");
+            expect(this.server.requests[0].url).toBe("/edc/user/44");
         });
     });
 
@@ -63,7 +63,7 @@ describe("user_show_page", function(){
         context("sidebar", function(){
             beforeEach(function(){
                 setLoggedInUser({admin: true})
-                this.view.model.set({userName : "inspectorHenderson"})
+                this.view.model.set({id : "42"})
                 this.view.render();
             });
 
@@ -80,7 +80,7 @@ describe("user_show_page", function(){
                     stubModals();
                     this.view.sidebar.$("a.delete_user").click()
                     expect(chorus.modal instanceof chorus.alerts.UserDelete).toBeTruthy();
-                    expect(chorus.modal.model.get("userName")).toBe("inspectorHenderson");
+                    expect(chorus.modal.model.get("id")).toBe(42);
                 }) 
             });
         })

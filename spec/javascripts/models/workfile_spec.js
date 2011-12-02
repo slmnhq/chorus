@@ -10,6 +10,7 @@ describe("chorus.models.Workfile", function() {
             expect(modifier.get("userName")).toBe(this.model.get("modifiedBy"));
             expect(modifier.get("firstName")).toBe(this.model.get("modifiedByFirstName"));
             expect(modifier.get("lastName")).toBe(this.model.get("modifiedByLastName"));
+            expect(modifier.get("id")).toBe(this.model.get("modifiedById"))
         });
     })
 

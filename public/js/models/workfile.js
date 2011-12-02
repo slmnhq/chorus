@@ -13,7 +13,8 @@
             return new ns.User({
                 userName : this.get("modifiedBy"),
                 firstName : this.get("modifiedByFirstName"),
-                lastName : this.get("modifiedByLastName")
+                lastName : this.get("modifiedByLastName"),
+                id: this.get("modifiedById")
             })
         },
 

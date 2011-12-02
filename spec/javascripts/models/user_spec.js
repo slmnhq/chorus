@@ -6,11 +6,11 @@ describe("chorus.models.User", function() {
     });
 
     it("has the correct showUrlTemplate", function() {
-        expect(this.model.showUrlTemplate).toBe("users/{{userName}}");
+        expect(this.model.showUrlTemplate).toBe("users/{{id}}");
     });
 
     it("has the correct urlTemplate", function() {
-        expect(this.model.urlTemplate).toBe("user/{{userName}}");
+        expect(this.model.urlTemplate).toBe("user/{{id}}");
     });
 
     describe("#workspaces", function() {
@@ -60,7 +60,7 @@ describe("chorus.models.User", function() {
     describe("#destroy", function() {
         it("should make a delete request", function() {
             //testing that the idAttribute is set properly
-            this.model.set({ userName : "heath" });
+            this.model.set({ id : "27" });
             this.model.destroy();
             expect(this.server.requests[0].url).toBe(this.model.url());
         });

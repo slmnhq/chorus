@@ -31,7 +31,8 @@
             "lastName" : "Blissett",
             "fullName": "Luther Blissett",
             "admin" : !!options['admin'],
-            "userName" : options['userName'] || "edcadmin"
+            "userName" : options['userName'] || "edcadmin",
+            "id" : options['id'] || "10000"
         });
     }
 

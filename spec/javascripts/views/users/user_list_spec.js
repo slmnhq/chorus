@@ -38,12 +38,12 @@ describe("chorus.views.UserList", function() {
             })
 
             it("displays the Administrator tag for admin users", function() {
-                expect(this.view.$("li[data-userName=edcadmin] .administrator")).toExist();
+                expect(this.view.$("li[data-userId=10001] .administrator")).toExist();
             });
 
             it("does not display the Administrator tag for non-admin users", function() {
-                expect(this.view.$("li[data-userName=markr]")).toExist();
-                expect(this.view.$("li[data-userName=markr] .administrator")).not.toExist();
+                expect(this.view.$("li[data-userId=10000]")).toExist();
+                expect(this.view.$("li[data-userId=10000] .administrator")).not.toExist();
             });
 
             it("displays an image for each user", function() {

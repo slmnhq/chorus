@@ -8,8 +8,8 @@
                 { label: t("breadcrumbs.user_edit") }
             ]
         },
-        setup : function(userName) {
-            this.model = new chorus.models.User({userName: userName});
+        setup : function(userId) {
+            this.model = new chorus.models.User({id: userId});
             this.model.fetch();
 
             this.mainContent = new chorus.views.MainContentView({

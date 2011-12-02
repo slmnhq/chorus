@@ -6,9 +6,8 @@
         ok: t("user.delete.button"),
 
         makeModel : function() {
-            this.model = this.model || new chorus.models.User({ userName : this.options.launchElement.data("username") });
-        },
-
+            this.model = this.model || new chorus.models.User({ id : this.options.launchElement.data("id") });
+        }
     })
 })(chorus);
 

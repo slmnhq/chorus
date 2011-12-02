@@ -15,15 +15,15 @@ describe("chorus.pages.UserEditPage", function() {
 
     describe("#setup", function() {
         beforeEach(function() {
-            this.view = new chorus.pages.UserEditPage("mark");
+            this.view = new chorus.pages.UserEditPage("42");
         });
 
-        it("sets up the model with the supplied username", function() {
-            expect(this.view.model.get("userName")).toBe("mark");
+        it("sets up the model with the supplied user id", function() {
+            expect(this.view.model.get("id")).toBe("42");
         });
 
         it("fetches the model automatically", function() {
-            expect(this.server.requests[0].url).toBe("/edc/user/mark");
+            expect(this.server.requests[0].url).toBe("/edc/user/42");
         });
     });
 

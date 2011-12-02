@@ -168,6 +168,7 @@
                     "requestId": 8,
                     "resource": [
                         {
+                            "id":"10000",
                             "userName": "markr",
                             "firstName": "Mark",
                             "lastName": "Rushakoff",
@@ -178,6 +179,7 @@
                             "isDeleted": false
                         },
                         {
+                            "id":"10001",
                             "userName": "edcadmin",
                             "firstName": "EDC",
                             "lastName": "Admin",
@@ -188,6 +190,7 @@
                             "isDeleted": false
                         },
                         {
+                            "id":"10002",
                             "userName": "frogman",
                             "firstName": "frOg",
                             "lastName": "man",
@@ -265,6 +268,7 @@
                             "isDeleted":false,
                             "modifiedByFirstName":"EDC",
                             "modifiedByLastName":"Admin",
+                            "modifiedById":"10010",
                             "commentCount":0,
                             "commentBody":"",
                             "firstName":"",

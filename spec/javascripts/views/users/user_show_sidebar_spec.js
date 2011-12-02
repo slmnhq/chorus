@@ -2,7 +2,7 @@ describe("chorus.views.UserShowSidebar", function() {
     beforeEach(function() {
         this.loadTemplate("user_show_sidebar");
 
-        this.user = new chorus.models.User({userName: "bill"})
+        this.user = new chorus.models.User({userName: "bill", id: "42"})
     });
 
     describe("#render", function() {
@@ -45,11 +45,12 @@ describe("chorus.views.UserShowSidebar", function() {
         });
         context("user being shown is user logged in", function() {
             beforeEach(function() {
-                setLoggedInUser({'userName': 'bill'});
+                setLoggedInUser({'userName': 'bill', 'id' : "42"});
                 this.view.render();
             });
             it("should have the edit user action", function() {
                 expect(this.view.$("a.edit_user")).toExist();
+                expect(this.view.$("a.edit_user")).toHaveAttr("href", "#/users/42/edit")
             });
             it("should not allow delete user", function() {
                 expect(this.view.$("a.delete_user")).not.toExist();

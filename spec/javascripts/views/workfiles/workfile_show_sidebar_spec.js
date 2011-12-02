@@ -32,7 +32,7 @@ describe("WorkfileShowSidebar", function() {
         });
 
         it("links to the profile page of the modifier", function() {
-            expect(this.view.$("a.updated_by").attr("href")).toBe("#/users/" + this.workfile.get("modifiedBy"))
+            expect(this.view.$("a.updated_by").attr("href")).toBe("#/users/" + this.workfile.get("modifiedById"))
         })
 
         it("displays a link to download the workfile", function() {
