@@ -14,6 +14,25 @@
         };
 
         clearRenderedDOM();
+
+        this.addMatchers({
+            toMatchTranslation: function(translationKey) {
+                this.message = function() {
+                    return [
+                        "Expected text '" + this.actual + "' to match the translation for '" + translationKey + "'",
+                        "Expected text '" + this.actual + "' not to match the translation for '" + translationKey + "'"
+                    ];
+                };
+
+                var translatedText = t(translationKey);
+                if (translatedText === '[' + translationKey + ']') {
+                    throw("No entry in messages.properties for " + translationKey);
+                }
+
+                return this.actual === translatedText;
+            }
+        })
+
     });
 
     afterEach(function() {
