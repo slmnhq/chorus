@@ -1,6 +1,6 @@
 @import "_common.scss";
 
-.user_new {
+.user_new, .user_edit {
     padding: $padding-x;
 
     .errors {
@@ -19,6 +19,7 @@
 
         img {
             padding : 5px;
+
         }
     }
 
@@ -76,4 +77,16 @@
             }
         }
     }
+}
+
+.user_edit {
+    .notes {
+        width:100%;
+    }
+    .edit_photo {
+        img{
+        width: 150px;
+        }
+    }
+
 }

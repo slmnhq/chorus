@@ -22,7 +22,10 @@
             this.require('lastName');
             this.require('userName');
             this.requirePattern('emailAddress', /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/);
-            this.requireConfirmation('password');
+            if(this.isNew())
+            {
+                this.requireConfirmation('password');
+            }
             return _(this.errors).isEmpty();
         },
 

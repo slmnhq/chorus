@@ -7,6 +7,7 @@
             ["/login", "Login"],
             ["/users", "UserIndex"],
             ["/users/:username", "UserShow"],
+            ["/users/:username/edit", "UserEdit"],
             ["/users/new", "UserNew"],
             ["/workspaces", "WorkspaceIndex"],
             ["/workspaces/:id", "WorkspaceSummary"],
