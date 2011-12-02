@@ -47,5 +47,10 @@ describe("NotesNewDialog", function() {
             this.dialog.model.trigger("savedFailed")
             expect(this.dialog.closeModal).not.toHaveBeenCalled();
         });
+        it("trims the note", function(){
+            this.dialog.$("textarea[name=body]").val("  trim me  ");
+            this.dialog.$("form").trigger("submit");
+            expect(this.dialog.model.get("body")).toBe("trim me")
+        })
     }); 
 });

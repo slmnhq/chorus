@@ -16,7 +16,7 @@
 
         save: function(e) {
             e.preventDefault();
-            this.model.set({body : this.$("textarea[name=body]").val()})
+            this.model.set({body : this.$("textarea[name=body]").val().trim()})
             this.model.save();
         }
 
