@@ -35,21 +35,30 @@ describe("chorus.views.ActivityList", function() {
                 expect(this.view.$("li[data-activity-id=10001]")).toExist();
             });
 
+            it("displays an image link to the author for each activity", function() {
+                expect(this.view.$("li[data-activity-id=10000] > .image a")).toHaveAttr("href", "#/users/edcadmin")
+                expect(this.view.$("li[data-activity-id=10000] > .image a img")).toHaveAttr("src", "/edc/userimage/edcadmin?size=icon")
+                expect(this.view.$("li[data-activity-id=10001] > .image a")).toHaveAttr("href", "#/users/dburkes")
+                expect(this.view.$("li[data-activity-id=10001] > .image a img")).toHaveAttr("src", "/edc/userimage/dburkes?size=icon")
+            })
+
             it("displays a title for each activity", function() {
                 expect(this.view.$("li[data-activity-id=10000] .title")).toHaveText("NOT_IMPLEMENTED")
                 expect(this.view.$("li[data-activity-id=10001] .title")).toHaveText("NOT_IMPLEMENTED")
             })
 
-            it("displays author information for each activity", function() {
-                expect(this.view.$("li[data-activity-id=10000] > .author img")).toHaveAttr("src", "/edc/userimage/edcadmin?size=icon")
-                expect(this.view.$("li[data-activity-id=10000] > .author .name")).toHaveText("EDC Admin");
-                expect(this.view.$("li[data-activity-id=10001] > .author img")).toHaveAttr("src", "/edc/userimage/dburkes?size=icon")
-                expect(this.view.$("li[data-activity-id=10001] > .author .name")).toHaveText("Danny Burkes");
+            it("displays information for each activity", function() {
+                expect(this.view.$("li[data-activity-id=10000] > .info a")).toHaveAttr("href", "#/users/edcadmin")
+                expect(this.view.$("li[data-activity-id=10000] > .info a .name")).toHaveText("EDC Admin");
+                expect(this.view.$("li[data-activity-id=10000] > .info .timestamp")).toHaveText("November 23");
+
+                expect(this.view.$("li[data-activity-id=10001] > .info a")).toHaveAttr("href", "#/users/dburkes")
+                expect(this.view.$("li[data-activity-id=10001] > .info a .name")).toHaveText("Danny Burkes");
+                expect(this.view.$("li[data-activity-id=10001] > .info .timestamp")).toHaveText("April 23");
             })
 
-            it("displays a timestamp for each activity", function() {
-                expect(this.view.$("li[data-activity-id=10000] > .timestamp")).toHaveText("November 23");
-                expect(this.view.$("li[data-activity-id=10001] > .timestamp")).toHaveText("April 23");
+            it("displays a Comment link for each activity", function() {
+                expect(this.view.$("li[data-activity-id=10000] > .links a.comment")).toExist();
             })
 
             describe("comment rendering", function() {
@@ -59,16 +68,15 @@ describe("chorus.views.ActivityList", function() {
                     expect(this.view.$("li[data-activity-id=10001] .comments")).not.toExist();
                 })
 
-                it("displays author information for each comment", function() {
-                    expect(this.view.$("li[data-comment-id=10023] > .author img")).toHaveAttr("src", "/edc/userimage/msofaer?size=icon")
-                    expect(this.view.$("li[data-comment-id=10023] > .author .name")).toHaveText("Michael Sofaer");
-                    expect(this.view.$("li[data-comment-id=10024] > .author img")).toHaveAttr("src", "/edc/userimage/mrushakoff?size=icon")
-                    expect(this.view.$("li[data-comment-id=10024] > .author .name")).toHaveText("Mark Rushakoff");
-                })
-
-                it("displays a timestamp for each comment", function() {
-                    expect(this.view.$("li[data-comment-id=10023] > .timestamp")).toHaveText("November 23");
-                    expect(this.view.$("li[data-comment-id=10024] > .timestamp")).toHaveText("May 23");
+                it("displays information for each comment", function() {
+                    expect(this.view.$("li[data-comment-id=10023] > .image a")).toHaveAttr("href", "#/users/msofaer")
+                    expect(this.view.$("li[data-comment-id=10023] > .image a img")).toHaveAttr("src", "/edc/userimage/msofaer?size=icon")
+                    expect(this.view.$("li[data-comment-id=10023] > .info a .name")).toHaveText("Michael Sofaer");
+                    expect(this.view.$("li[data-comment-id=10023] > .info .timestamp")).toHaveText("November 23");
+                    expect(this.view.$("li[data-comment-id=10024] > .image a")).toHaveAttr("href", "#/users/mrushakoff")
+                    expect(this.view.$("li[data-comment-id=10024] > .image a img")).toHaveAttr("src", "/edc/userimage/mrushakoff?size=icon")
+                    expect(this.view.$("li[data-comment-id=10024] > .info a .name")).toHaveText("Mark Rushakoff");
+                    expect(this.view.$("li[data-comment-id=10024] > .info .timestamp")).toHaveText("May 23");
                 })
 
                 it("displays the text of each comment", function() {

@@ -1,29 +1,43 @@
 {{#if loaded}}
+<ul class="activities">
     {{#each models}}
-        <li data-activity-id="{{id}}">
-            <div class="title">{{type}}</div>
-            <div class="timestamp">{{displayTimestamp timestamp}}</div>
-            <div class="author">
+    <li data-activity-id="{{id}}">
+        <div class="image">
+            <a href="#/users/{{author.username}}">
                 <img title="{{displayNameFromPerson author}}" src="/edc/userimage/{{author.username}}?size=icon"/>
-                <span class="name">{{displayNameFromPerson author}}</span>
-            </div>
-            {{#if comments.length}}
-                <ul class="comments">
-                    {{#eachWithMoreLink comments 2}}
-                        <li data-comment-id="{{id}}">
-                            <img title="{{displayNameFromPerson author}}" src="/edc/userimage/{{author.username}}?size=icon"/>
-                            <div class="timestamp">{{displayTimestamp timestamp}}</div>
-                            <div class="author">
-                                <img title="{{displayNameFromPerson author}}" src="/edc/userimage/{{author.username}}?size=icon"/>
-                                <span class="name">{{displayNameFromPerson author}}</span>
-                            </div>
-                            <div class="text">{{text}}</div>
-                        </li>
-                    {{/eachWithMoreLink}}
-                </ul>
-            {{/if}}
-        </li>
+            </a>
+        </div>
+        <div class="title">{{type}}</div>
+        <div class="info">
+            <a href="#/users/{{author.username}}"><span class="name">{{displayNameFromPerson author}}</span></a>
+            {{t "activity_stream.on"}}
+            <span class="timestamp">{{displayTimestamp timestamp}}</div>
+        </div>
+        <div class="text">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</div>
+        <div class="links">
+            <a class="comment" href="javascript:void(0)">{{t "activity_stream.comment"}}</a>
+        </div>
+        {{#if comments.length}}
+        <ul class="comments">
+            {{#eachWithMoreLink comments 2}}
+            <li data-comment-id="{{id}}">
+                <div class="image">
+                    <a href="#/users/{{author.username}}">
+                        <img title="{{displayNameFromPerson author}}" src="/edc/userimage/{{author.username}}?size=icon"/>
+                    </a>
+                </div>
+                <div class="info">
+                    <a href="#/users/{{author.username}}"><span class="name">{{displayNameFromPerson author}}</span></a>
+                    <div class="timestamp">{{displayTimestamp timestamp}}</div>
+                </div>
+                <div class="text">{{text}}</div>
+            </li>
+            {{/eachWithMoreLink}}
+        </ul>
+        {{/if}}
+    </li>
     {{/each}}
+</ul>
 {{else}}
-    <div class="loading">{{t "loading"}}</div>
+<div class="loading">{{t "loading"}}</div>
 {{/if}}

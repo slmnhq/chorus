@@ -16,20 +16,20 @@
 
                             comments : [
                                 {
-                                    id : 10023,
+                                    id : 10000,
                                     timestamp : "2011-11-23 15:42:02.321",
                                     author : {
-                                        username : "msofaer",
+                                        username : "edcadmin",
                                         firstName : "Michael",
                                         lastName : "Sofaer"
                                     },
                                     text : "hi there"
                                 },
                                 {
-                                    id : 10024,
+                                    id : 10000,
                                     timestamp : "2011-05-23 15:42:02.321",
                                     author : {
-                                        username : "mrushakoff",
+                                        username : "edcadmin",
                                         firstName : "Mark",
                                         lastName : "Rushakoff"
                                     },

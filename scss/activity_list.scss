@@ -1,0 +1,62 @@
+@import "_common.scss";
+
+$image-width: 36px;
+$image-height: 36px;
+$image-gutter: 8px;
+$text-padding-y: 4px;
+$comment-padding-x: 6px;
+
+.activity_list {
+    ul.activities {
+        li {
+            padding-top: 8px;
+
+            .image {
+                float: left;
+                img {
+                    width: $image-width;
+                    height: $image-height;
+                    padding-right: $image-gutter;
+                }
+            }
+
+            .title {
+                font-size: 12px;
+                color: $link-color;
+                padding-bottom: $text-padding-y;
+            }
+
+            .info {
+                font-size: 12px;
+                color: $weak-text-color;
+                margin: 0;
+                padding-bottom: $text-padding-y;
+            }
+
+            .text {
+                font-size: 13px;
+                padding-left: $image-width + $image-gutter;
+                padding-bottom: $text-padding-y;
+            }
+
+            .links {
+                padding: 4px 0 0 $image-width + $image-gutter;
+                font-size: 12px;
+                padding-bottom: $text-padding-y;
+            }
+
+            ul.comments {
+                padding: $text-padding-y $comment-padding-x;
+                background-color: $activity-stream-comment-background-color;
+
+                li {
+                    .info {
+                        .name {
+                            font-size: 14px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
