@@ -79,7 +79,6 @@
                 }
                 $.extend(ctx, {serverErrors : this.resource.serverErrors}, this.additionalContext(ctx));
             } else {
-                console.log("calling additionalContext")
                 ctx = this.additionalContext({})
             }
             return ctx;
