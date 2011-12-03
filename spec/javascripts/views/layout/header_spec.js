@@ -5,7 +5,8 @@ describe("chorus.views.Header", function() {
             "firstName" : "Daniel",
             "lastName" : "Burke",
             "fullName": "Daniel Francis Burke",
-            userName: "dburke"
+            userName: "dburke",
+            id: "55"
         });
         chorus.user = chorus.session;
         this.view = new chorus.views.Header();
@@ -135,7 +136,7 @@ describe("chorus.views.Header", function() {
 
         describe("the popup menu", function(){
             it("has a link to 'your profile'", function(){
-                expect(this.view.$(".menu.popup_account a[href='#/users/dburke']").text()).toBe(t("header.your_profile"));
+                expect(this.view.$(".menu.popup_account a[href='#/users/55']").text()).toBe(t("header.your_profile"));
             });
 
             it("has a link to 'Users'", function(){

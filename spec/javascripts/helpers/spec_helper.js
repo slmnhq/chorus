@@ -38,7 +38,7 @@
     afterEach(function() {
         this.server.restore();
         this.spies.restore();
-        $.cookie("userName", null)
+        $.cookie("userId", null)
     });
 
     //global helpers
