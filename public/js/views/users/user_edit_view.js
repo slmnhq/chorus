@@ -40,7 +40,7 @@
     });
 
     function userSuccessfullySaved() {
-        chorus.router.navigate("/users/" + this.model.get("id"), true);
+        chorus.router.navigate(this.model.showUrl(), true);
     }
 
 })(jQuery, chorus.views);

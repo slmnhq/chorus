@@ -10,7 +10,6 @@ describe("chorus.pages.UserEditPage", function() {
         this.loadTemplate("logged_in_layout");
         this.loadTemplate("user_edit")
         this.loadTemplate("user_show_sidebar")
-        this.page = new chorus.pages.UserNewPage()
     });
 
     describe("#setup", function() {
@@ -32,10 +31,11 @@ describe("chorus.pages.UserEditPage", function() {
             fixtures.model = 'User';
             chorus.session = new chorus.models.Session();
             setLoggedInUser({"userName" : "edcadmin"});
-            this.view = new chorus.pages.UserEditPage("johndoe");
 
-            this.view.model.set(fixtures.jsonFor('fetch').resource[0]);
-            this.view.model.loaded = true;
+            this.user = fixtures.modelFor('fetch')
+
+            this.view = new chorus.pages.UserEditPage(this.user.get("id"));
+            this.view.model.set(this.user.attributes)
             this.view.render();
         });
 
@@ -59,7 +59,7 @@ describe("chorus.pages.UserEditPage", function() {
             });
 
             it("links to user show for the third crumb", function() {
-                expect(this.view.$("#breadcrumbs .breadcrumb a").eq(2).attr("href")).toBe("#/users/" + this.view.model.get("userName"));
+                expect(this.view.$("#breadcrumbs .breadcrumb a").eq(2).attr("href")).toBe(this.view.model.showUrl());
                 expect(this.view.$("#breadcrumbs .breadcrumb a").eq(2).text()).toBe(t("breadcrumbs.user_profile"));
             });
 

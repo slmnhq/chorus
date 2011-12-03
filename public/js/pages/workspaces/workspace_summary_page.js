@@ -2,7 +2,7 @@
     ns.WorkspaceSummaryPage = chorus.pages.Base.extend({
         crumbs : function() {
             return [
-                { label: t("breadcrumbs.home"), url: "/" },
+                { label: t("breadcrumbs.home"), url: "#/" },
                 { label: this.model.get("name") }
             ]
         },
@@ -13,9 +13,12 @@
             this.model.fetch();
             this.breadcrumbs = new chorus.views.WorkspaceBreadcrumbsView({model: this.model});
             this.subNav = new chorus.views.SubNav({workspace : this.model, tab: "Summary"})
-            this.mainContent = new chorus.views.MainContentView({model: this.model})
-            this.mainContent.content = new chorus.views.WorkspaceDetail({model: this.model });
-            this.mainContent.contentHeader = new chorus.views.StaticTemplate("plain_text", {text: "Summary"});
+
+            this.mainContent = new chorus.views.MainContentView({
+                model: this.model,
+                content : new chorus.views.WorkspaceDetail({model: this.model }),
+                contentHeader : new chorus.views.StaticTemplate("plain_text", {text: "Summary"}),
+            })
         }
     });
 })(jQuery, chorus.pages);

@@ -21,7 +21,7 @@
     ns.WorkspaceBreadcrumbsView = ns.ModelBoundBreadcrumbsView.extend({
         getLoadedCrumbs : function(){
             return [
-                    {label: t("breadcrumbs.home"), url: "/"},
+                    {label: t("breadcrumbs.home"), url: "#/"},
                     {label: this.model.get("name")}
                 ];
         }

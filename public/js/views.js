@@ -20,7 +20,9 @@
 
         render: function render() {
             this.preRender($(this.el));
-            $(this.el).html(this.template(this.context()))
+
+            var evaluatedContext = typeof(this.context) === 'function' ? this.context() : this.context;
+            $(this.el).html(this.template(evaluatedContext))
                 .addClass(this.className)
                 .attr("title", this.options.title || this.title || "")
                 .addClass(this.additionalClass || "");
@@ -77,6 +79,7 @@
                 }
                 $.extend(ctx, {serverErrors : this.resource.serverErrors}, this.additionalContext(ctx));
             } else {
+                console.log("calling additionalContext")
                 ctx = this.additionalContext({})
             }
             return ctx;
