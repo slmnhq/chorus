@@ -91,9 +91,67 @@ describe("chorus.models.User", function() {
             expect(this.model.requirePattern).toHaveBeenCalledWith("emailAddress", /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/);
         });
 
-        it("requires password confirmation", function() {
-            this.model.performValidation();
-            expect(this.model.requireConfirmation).toHaveBeenCalledWith("password");
+
+        context("when the user is new", function() {
+            beforeEach(function() {
+                this.model = new chorus.models.User();
+                this.model.set({
+                    firstName: "bob",
+                    lastName: "jenkins",
+                    userName: "bobjenk",
+                    emailAddress: "bobj@raisetheroof.us"
+                });
+            });
+
+            context("when there is a password confirmation", function() {
+                it("returns true", function() {
+                    this.model.set({ password : "secret", passwordConfirmation: "secret" });
+                    expect(this.model.performValidation()).toBeTruthy();
+                });
+            });
+
+            context("when there is no password confirmation", function() {
+                it("returns false", function() {
+                    this.model.set({ password : "secret" });
+                    expect(this.model.performValidation()).toBeFalsy();
+                });
+            });
+        });
+
+        context("when the user is already saved", function() {
+            beforeEach(function() {
+                this.model = new chorus.models.User();
+                this.model.set({
+                    id: 5,
+                    firstName: "bob",
+                    lastName: "jenkins",
+                    userName: "bobjenk",
+                    password: "original_password",
+                    passwordConfirmation: "original_password",
+                    emailAddress: "bobj@raisetheroof.us"
+                });
+                this.model.save();
+                this.model.change();
+            });
+
+            context("when the password has not changed", function() {
+                it("returns true", function() {
+                    this.model.set({ emailAddress : "bobjanky@coolpalace.us" });
+                    expect(this.model.performValidation()).toBeTruthy();
+                });
+            });
+
+            context("when the password has changed and no confirmation is specified", function() {
+                it("returns false", function() {
+
+                    // when setting the password, we need to set 'silent' to true,
+                    // so that later, when we perform validation, we can tell that
+                    // the password has changed
+
+                    this.model.set({ password : "new_password" }, { silent : true });
+                    expect(this.model.performValidation()).toBeFalsy();
+                });
+            });
         });
     });
 
