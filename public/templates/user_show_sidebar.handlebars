@@ -6,6 +6,10 @@
             {{#ifAdmin}}
             <li><a href="#" class="alert delete_user" data-id="{{id}}" data-alert="UserDelete">Delete User</a></li>
             {{/ifAdmin}}
+
+            {{#ifCurrentUserNameIs userName}}
+            <li><a href="#" class="dialog change_password" data-username ="{{userName}}" data-dialog = "ChangePassword"> Change password</a></li>
+            {{/ifCurrentUserNameIs}}
         </ul>
     </div>
 {{/if}}

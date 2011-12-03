@@ -9,13 +9,14 @@ describe("user_show_page", function(){
         this.loadTemplate("user_show");
         this.loadTemplate("user_show_sidebar");
         this.loadTemplate("alert");
+        this.loadTemplate("change_password")
     });
 
     describe("#setup", function(){
         beforeEach(function(){
             this.view = new chorus.pages.UserShowPage("44");
         });
-        
+
         it("sets up the model with the supplied user id", function(){
             expect(this.view.model.get("id")).toBe("44");
         });
@@ -79,7 +80,21 @@ describe("user_show_page", function(){
                     this.view.sidebar.$("a.delete_user").click()
                     expect(chorus.modal instanceof chorus.alerts.UserDelete).toBeTruthy();
                     expect(chorus.modal.model.get("id")).toBe(42);
-                }) 
+                });
+            });
+
+            context("clicking on the change password link", function(){
+                beforeEach(function(){
+                    setLoggedInUser({userName: "edcadmin"})
+                    this.view.model.set({userName : "edcadmin"})
+                    this.view.render();
+                });
+
+                it("launches a change password dialog", function(){
+                    stubModals();
+                    this.view.sidebar.$("a.change_password").click()
+                    expect(chorus.modal instanceof chorus.dialogs.ChangePassword).toBeTruthy();
+                })
             });
         })
     });

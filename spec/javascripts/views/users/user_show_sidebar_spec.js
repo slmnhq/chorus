@@ -1,6 +1,14 @@
 describe("chorus.views.UserShowSidebar", function() {
     beforeEach(function() {
         this.loadTemplate("user_show_sidebar");
+        this.loadTemplate("logged_in_layout");
+        this.loadTemplate("header");
+        this.loadTemplate("main_content");
+        this.loadTemplate("default_content_header");
+        this.loadTemplate("plain_text");
+        this.loadTemplate("user_show");
+        this.loadTemplate("breadcrumbs");
+        this.loadTemplate("alert");
 
         this.user = new chorus.models.User({userName: "bill", id: "42"})
     });
@@ -9,8 +17,10 @@ describe("chorus.views.UserShowSidebar", function() {
         context("when logged in as an admin", function() {
             beforeEach(function() {
                 setLoggedInUser({admin: true});
-                this.view = new chorus.views.UserShowSidebar({model: this.user});
-                this.view.render();
+                this.page = new chorus.pages.UserShowPage("bill");
+                this.page.render();
+                this.user = this.page.model;
+                this.view = this.page.sidebar;
             })
 
             it("should have actions", function() {
@@ -19,6 +29,7 @@ describe("chorus.views.UserShowSidebar", function() {
 
             context("clicking the delete User link", function() {
                 beforeEach(function() {
+                    stubModals();
                     this.view.$("a.delete_user").click()
                 })
 
@@ -58,5 +69,31 @@ describe("chorus.views.UserShowSidebar", function() {
 
         })
 
+    })
+
+    context("user being shown is user logged in", function() {
+        beforeEach(function() {
+            setLoggedInUser({userName: "inspectorHenderson"});
+            this.view = new chorus.views.UserShowSidebar({model: this.user});
+            this.view.model.set({userName : "inspectorHenderson"});
+
+        });
+
+        it("should allow change password", function() {
+            expect(this.view.$("a.change_password")).toExist();
+        });
+    })
+
+    context("user being shown is not the user logged in", function() {
+        beforeEach(function() {
+            setLoggedInUser({userName: "inspectorHenderson"});
+
+            this.view = new chorus.views.UserShowSidebar({model: this.user});
+                this.view.model.set({userName : "edcadmin"});
+        });
+
+        it("should not show change password option", function() {
+            expect(this.view.$("a.change_password")).not.toExist();
+        });
     })
 });

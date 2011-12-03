@@ -45,7 +45,7 @@
         createDialog : function(e) {
             e.preventDefault();
             var button = $(e.target);
-            var dialog = new chorus.dialogs[button.data("dialog")]({launchElement : button });
+            var dialog = new chorus.dialogs[button.data("dialog")]({launchElement : button, model: this.model });
             dialog.launchModal();
         },
 

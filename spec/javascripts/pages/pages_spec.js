@@ -119,6 +119,7 @@ describe("chorus.pages.Base", function() {
 
                 chorus.dialogs.Foo = function(opts) {
                     spy.launchElement = opts.launchElement;
+                    spy.model = opts.model;
                     return spy
                 };
 
@@ -131,10 +132,13 @@ describe("chorus.pages.Base", function() {
                 expect(this.fooDialogSpy.launchModal).toHaveBeenCalled();
             })
 
-            it("passes the launch element to the dialog", function() {
+            it("passes the launch element and the model to the dialog", function() {
+                this.view.model = new chorus.models.User();
                 var elem = this.view.$("button.dialog");
                 elem.click();
+
                 expect(this.fooDialogSpy.launchElement).toBe(elem);
+                expect(this.fooDialogSpy.model).toBe(this.view.model);
             })
         })
 
