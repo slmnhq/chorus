@@ -5,12 +5,13 @@
 
         events : {
             "submit form" : 'saveEditUser',
-            "click button.cancel" : "goBack"
+            "click button.cancel" : "goBack",
+            "click .edit_photo .action" : "chooseFile"
         },
 
         additionalContext: function() {
             return {
-                permission : ((this.model.get("userName") == chorus.user.get("userName"))|| chorus.user.get("admin")) ,
+                permission : ((this.model.get("userName") == chorus.user.get("userName")) || chorus.user.get("admin")) ,
                 imageUrl: this.model.imageUrl()
             }
         },
@@ -36,6 +37,11 @@
 
         goBack : function() {
             window.history.back();
+        },
+
+        chooseFile : function(e) {
+            e.preventDefault();
+            this.$("input[type=file]").click();
         },
 
         postRender : function() {

@@ -61,7 +61,7 @@ $image-width: 48px;
         position: relative;
         top: 0px;
         left: -130px;
-        opacity: 0;
+        @include opacity(0);
      }
 
     .expanded {
