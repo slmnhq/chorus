@@ -2,7 +2,7 @@
     ns.StaticTemplate = function(className, context) {
         var klass = chorus.views.Base.extend({
             className : className,
-            context : function() { return context },
+            context : context,
 
             postRender : function() {
                 this.$(this.el).addClass(className)

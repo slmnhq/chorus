@@ -1,7 +1,7 @@
 ;(function($, ns) {
     ns.pages.WorkspaceIndexPage = chorus.pages.Base.extend({
         crumbs : [
-            { label: t("breadcrumbs.home"), url: "/" },
+            { label: t("breadcrumbs.home"), url: "#/" },
             { label: t("breadcrumbs.workspaces") }
         ],
 

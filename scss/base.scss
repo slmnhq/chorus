@@ -5,6 +5,11 @@
     outline-color: $border-color;
 }
 
+a:focus {
+    outline: none;
+}
+
+
 a {
     color: $link-color;
     text-decoration : none;

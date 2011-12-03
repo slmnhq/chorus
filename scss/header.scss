@@ -93,7 +93,9 @@ $header-item-spacing : 2*$padding-x;
             span {
 
                 @include ellipsis;
-                max-width: 140px;
+                max-width: 100px;
+                display: inline-block;
+                vertical-align: middle;
             }
         }
     }

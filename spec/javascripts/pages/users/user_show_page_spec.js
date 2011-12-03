@@ -28,11 +28,9 @@ describe("user_show_page", function(){
     describe("#render", function(){
         beforeEach(function(){
             fixtures.model = 'User';
-
-            this.view = new chorus.pages.UserShowPage("johndoe");
-
-            this.view.model.set(fixtures.jsonFor('fetch').resource[0]);
-            this.view.model.loaded = true;
+            this.user = fixtures.modelFor("fetch")
+            this.view = new chorus.pages.UserShowPage(this.user.get("id"));
+            this.view.model.set(this.user.attributes);
             this.view.render();
         });
 

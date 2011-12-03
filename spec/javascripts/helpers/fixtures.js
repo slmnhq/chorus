@@ -128,7 +128,7 @@
                     "requestId":108,
                     "resource":[
                         {
-                            "id":"InitialUser",
+                            "id":"42",
                             "userName":"edcadmin",
                             "firstName":"EDC",
                             "lastName":"Admin",

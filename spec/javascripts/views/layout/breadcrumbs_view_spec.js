@@ -6,8 +6,8 @@ describe("chorus.views.BreadcrumbView", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.view = new chorus.views.BreadcrumbsView({ breadcrumbs : [
-                {label : "Home", url : "/"},
-                {label : "Foo", url : "/foo"},
+                {label : "Home", url : "#/"},
+                {label : "Foo", url : "#/foo"},
                 {label : "Bar"}
             ]});
             this.view.render();
