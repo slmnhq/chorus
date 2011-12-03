@@ -67,6 +67,48 @@ describe("handlebars", function() {
             })
         });
 
+        describe("ifCurrentUserNameIs", function() {
+            beforeEach(function() {
+                this.originalUser = chorus.user;
+                this.currentUser = chorus.user;
+                this.currentUser.set({ userName : "benjamin" });
+                this.spy = jasmine.createSpy("ifCurrentUserNameIs");
+                this.spy.inverse = jasmine.createSpy("ifCurrentUserNameIs inverse");
+            });
+
+            describe("when the given userName matches the current user's name'", function() {
+                it("executes the block", function() {
+                    Handlebars.helpers.ifCurrentUserNameIs("benjamin", this.spy);
+                    expect(this.spy).toHaveBeenCalled();
+                    expect(this.spy.inverse).not.toHaveBeenCalled();
+                })
+            });
+
+            describe("when the given userName does NOT match the current user's name", function() {
+                it("execute the inverse block", function() {
+                    Handlebars.helpers.ifCurrentUserNameIs("noe valley", this.spy)
+                    expect(this.spy.inverse).toHaveBeenCalled();
+                    expect(this.spy).not.toHaveBeenCalled();
+                });
+            });
+
+            describe("when chorus.user is undefined", function() {
+                beforeEach(function() {
+                    chorus.user = undefined;
+                });
+
+                afterEach(function() {
+                    chorus.user = this.originalUser;
+                });
+
+                it("executes the inverse block", function() {
+                    Handlebars.helpers.ifCurrentUserNameIs("superman", this.spy);
+                    expect(this.spy.inverse).toHaveBeenCalled();
+                    expect(this.spy).not.toHaveBeenCalled();
+                });
+            })
+        });
+
         describe("ifAll", function() {
             beforeEach(function() {
                 this.ifAllSpy = jasmine.createSpy('ifAll');

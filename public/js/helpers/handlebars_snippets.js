@@ -14,6 +14,14 @@ Handlebars.registerHelper("ifAdmin", function(block) {
     }
 });
 
+Handlebars.registerHelper("ifCurrentUserNameIs", function(userName, block) {
+    if (chorus && chorus.user && (chorus.user.get("userName") == userName)) {
+        return block(this);
+    } else if (block.inverse) {
+        return block.inverse(this);
+    }
+})
+
 Handlebars.registerHelper("ifAll", function() {
     // Handlebars actually passes in two functions: the first is block with block.inverse,
     // and the second function is just the block.inverse function itself.
