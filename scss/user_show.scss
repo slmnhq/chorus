@@ -28,7 +28,7 @@ $column-padding-y : $padding-x;
     margin-left: -100%;
 
     img {
-        width: 150px;
+        width: $user-detail-image-width;
     }
   }
 

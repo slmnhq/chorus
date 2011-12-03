@@ -1,7 +1,11 @@
 {{#if permission}}
 <form action="/edc/users/{{userName}}" method="put">
     <div class="edit_photo">
-        <img src="{{imageUrl}}" class="profile"/>
+        <div class="spinner_container">
+            <img src="{{imageUrl}}" class="profile"/>
+        </div>
+        <span>Edit Photo</span>
+        <input type="file"/>
     </div>
     <div class="fields">
 

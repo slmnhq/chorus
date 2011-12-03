@@ -19,7 +19,11 @@
 
         img {
             padding : 5px;
+            width: $user-detail-image-width;
+        }
 
+        .spinner_container {
+            width: $user-detail-image-width;
         }
     }
 
@@ -83,10 +87,4 @@
     .notes {
         width:100%;
     }
-    .edit_photo {
-        img{
-        width: 150px;
-        }
-    }
-
 }

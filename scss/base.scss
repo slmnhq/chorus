@@ -75,3 +75,7 @@ input[type=checkbox], input[type=radio] {
 .administrator {
     background: $administrator-background-color;
 }
+
+img.disabled {
+    @include opacity(0.25);
+}

@@ -151,11 +151,70 @@ describe("chorus.views.userEdit", function() {
             context("as a non admin", function() {
                 beforeEach(function() {
                     setLoggedInUser({'admin': false});
+                    this.view.render();
                 });
 
                 it("does not display the admin checkbox", function() {
                     expect(this.view.$("input[name=admin]")).not.toExist();
+                });
+            });
 
+            context("when a photo to upload has been chosen", function() {
+                beforeEach(function() {
+                    this.view.render();
+
+                    this.fileList = [
+                        {fileName: 'foo.png'}
+                    ];
+
+                    this.view.$("input[type=file]").fileupload('add', {files: this.fileList});
+                });
+
+                it("starts the upload", function() {
+                    expect(_.last(this.server.requests).method).toBe("POST");
+                    // this will change to id, not userName, in the near future
+                    expect(_.last(this.server.requests).url).toContain("/edc/userimage/"+this.view.model.get("userName"));
+                });
+
+                it("displays a spinner", function() {
+                    expect(this.view.$(".edit_photo div[aria-role=progressbar]").length).toBe(1);
+                });
+
+                it("adds the disabled class to the image", function() {
+                    expect(this.view.$(".edit_photo img")).toHaveClass("disabled");
+                });
+
+                it("disables the upload button", function() {
+
+                });
+
+                context("when the upload has finished successfully", function() {
+                    beforeEach(function(){
+                        this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"status": "ok"}']);
+                        this.server.respond();
+                    });
+
+                    it("removes the spinner", function(){
+                        expect(this.view.$(".edit_photo div[aria-role=progressbar]").length).toBe(0);
+                    });
+
+                    it("removes the disabled class from the image", function(){
+                        expect(this.view.$(".edit_photo img")).not.toHaveClass("disabled");
+                    });
+
+                    it("changes/adds the cache-buster on the original image's URL", function(){
+                        var originalUrl = this.view.model.imageUrl();
+                        var newUrl = this.view.$(".edit_photo img").attr("src");
+
+                        expect(newUrl).not.toBe(originalUrl);
+                        expect(newUrl).toContain("buster=");
+                    });
+                });
+
+                context("when the upload gives a server error", function() {
+                    it("renders the errors", function() {
+
+                    });
                 });
             });
         });
@@ -188,8 +247,6 @@ describe("chorus.views.userEdit", function() {
                 })
             })
         })
-
-
     });
 });
 
