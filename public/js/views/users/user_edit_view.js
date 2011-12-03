@@ -69,6 +69,8 @@
                 }).spin(self.$(".spinner_container")[0]);
 
                 self.$(".edit_photo img").addClass("disabled");
+                self.$(".edit_photo input[type=file]").attr("disabled", "disabled");
+                self.$(".edit_photo .action").addClass("disabled");
 
                 data.submit();
             }
@@ -77,6 +79,8 @@
                 originalUrl = self.model.imageUrl();
                 self.spinner.stop();
                 self.$(".edit_photo img").removeClass("disabled");
+                self.$(".edit_photo input[type=file]").removeAttr("disabled");
+                self.$(".edit_photo .action").removeClass("disabled");
                 self.$(".edit_photo img").attr('src', originalUrl + "&buster=" + (new Date().getTime()));
             }
         }

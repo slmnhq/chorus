@@ -185,7 +185,8 @@ describe("chorus.views.userEdit", function() {
                 });
 
                 it("disables the upload button", function() {
-
+                    expect(this.view.$(".edit_photo input[type=file]").attr("disabled")).toBe("disabled");
+                    expect(this.view.$(".edit_photo .action")).toHaveClass("disabled");
                 });
 
                 context("when the upload has finished successfully", function() {
@@ -208,6 +209,11 @@ describe("chorus.views.userEdit", function() {
 
                         expect(newUrl).not.toBe(originalUrl);
                         expect(newUrl).toContain("buster=");
+                    });
+
+                    it("re-enables the upload button", function() {
+                        expect(this.view.$(".edit_photo input[type=file]").attr("disabled")).toBeUndefined();
+                        expect(this.view.$(".edit_photo .action")).not.toHaveClass("disabled");
                     });
                 });
 
