@@ -47,11 +47,13 @@
         postRender : function() {
             var self = this;
 
+            var multipart = !window.jasmine;
             this.$("input[type=file]").fileupload({
                 url : '/edc/userimage/' + this.model.get("userName"),
                 type: 'POST',
                 add : fileSelected,
-                done: uploadFinished
+                done: uploadFinished,
+                multipart: multipart
             });
 
             function fileSelected(e, data) {
