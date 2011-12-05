@@ -8,7 +8,8 @@
             return {
                 imageUrl : model.imageUrl({size: "icon"}),
                 showUrl : model.showUrl(),
-                fullName : [model.get("firstName"), model.get("lastName")].join(' ')
+                fullName : [model.get("firstName"), model.get("lastName")].join(' '),
+                title: model.get("title")
             }
         }
     });
