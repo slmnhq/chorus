@@ -4,9 +4,9 @@ describe("chorus.models.Activity", function() {
         this.model = fixtures.modelFor("fetch")
     });
 
-    describe("#authorDisplayName", function() {
-        it("returns the full name", function() {
-            expect(this.model.authorDisplayName()).toBe("EDC Admin");
+    describe("#author", function() {
+        it("creates a user", function() {
+            expect(this.model.author().displayName()).toBe("EDC Admin");
         });
     })
 });
