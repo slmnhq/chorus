@@ -8,13 +8,75 @@ describe("ListContentDetails", function() {
 
     describe("#render", function() {
         context("when the collection is loaded", function() {
-            context("and the collection is not empty", function() {
+            context("and the hideCounts option is falsy", function() {
                 beforeEach(function() {
+                    this.view.options.hideCounts = false;
                     this.view.render();
                 })
 
                 it("renders the total number of items in the collection", function() {
-                    expect(this.view.$(".count .number").text().trim()).toBe(this.collection.pagination.records);
+                    expect(this.view.$(".count .number").text().trim()).toBe("22");
+                })
+            })
+
+            context("and the hideCounts option is truthy", function() {
+                beforeEach(function() {
+                    this.view.options.hideCounts = true;
+                    this.view.render();
+                })
+
+                it("does not render the total number of items in the collection", function() {
+                    expect(this.view.$(".count")).not.toExist();
+                })
+
+                it("does not render the current page or total page count", function() {
+                    expect(this.view.$(".pagination .page")).not.toExist();
+                })
+            });
+
+            context("and there is only one page of items", function() {
+                beforeEach(function() {
+                    this.collection.pagination.page = "1";
+                    this.collection.pagination.total = "1";
+                    this.view.render();
+                })
+
+                it("does not display the pagination controls", function() {
+                    expect(this.view.$(".pagination")).not.toExist();
+                })
+
+                context("and the hideIfNoPagination option is falsy", function() {
+                    beforeEach(function() {
+                        this.view.options.hideIfNoPagination = false;
+                        this.view.render();
+                    })
+
+                    it("does not add the hidden class to the container", function() {
+                        expect($(this.view.el)).not.toHaveClass("hidden")
+                    })
+                })
+
+                context("and the hideIfNoPagination option is truthy", function() {
+                    beforeEach(function() {
+                        this.view.options.hideIfNoPagination = true;
+                        this.view.render();
+                    })
+
+                    it("adds the hidden class to the container", function() {
+                        expect($(this.view.el)).toHaveClass("hidden")
+                    })
+                })
+            })
+
+            context("and there is more than one page of items", function() {
+                beforeEach(function() {
+                    this.collection.pagination.page = "1";
+                    this.collection.pagination.total = "2";
+                    this.view.render();
+                })
+
+                it("displays the pagination controls", function() {
+                    expect(this.view.$(".pagination")).toExist();
                 })
 
                 it("displays the page number of the collection", function() {
@@ -24,6 +86,10 @@ describe("ListContentDetails", function() {
                 it("displays the total number of pages in the collection", function() {
                     expect(this.view.$(".pagination .page .total").text().trim()).toBe(this.collection.pagination.total);
                 });
+
+                it("does not add the hidden class to the container", function() {
+                    expect($(this.view.el)).not.toHaveClass("hidden")
+                })
 
                 context("when there is a next page", function() {
                     beforeEach(function() {
@@ -75,7 +141,8 @@ describe("ListContentDetails", function() {
                         expect(this.view.$(".pagination .links a.previous")).not.toExist();
                         expect(this.view.$(".pagination .links span.previous")).toExist();
                     });
-                });
+                })
+
             });
 
             context("and the collection is empty", function() {
@@ -86,6 +153,28 @@ describe("ListContentDetails", function() {
 
                 it("does not display the pagination controls", function() {
                     expect(this.view.$(".pagination")).not.toExist();
+                })
+
+                context("and the hideIfNoPagination option is falsy", function() {
+                    beforeEach(function() {
+                        this.view.options.hideIfNoPagination = false;
+                        this.view.render();
+                    })
+
+                    it("does not add the hidden class to the container", function() {
+                        expect($(this.view.el)).not.toHaveClass("hidden")
+                    })
+                })
+
+                context("and the hideIfNoPagination option is truthy", function() {
+                    beforeEach(function() {
+                        this.view.options.hideIfNoPagination = true;
+                        this.view.render();
+                    })
+
+                    it("adds the hidden class to the container", function() {
+                        expect($(this.view.el)).toHaveClass("hidden")
+                    })
                 })
             })
         })

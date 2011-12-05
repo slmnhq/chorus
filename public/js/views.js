@@ -164,6 +164,10 @@
             if (this.contentFooter) {
                 this.$("#content_footer").html(this.contentFooter.render().el);
                 this.contentFooter.delegateEvents();
+
+                if ($(this.contentFooter.el).hasClass("hidden")) {
+                    this.$("#content_footer").addClass("hidden");
+                }
             } else {
                 this.$("#content_footer").addClass("hidden");
             }
@@ -198,7 +202,7 @@
             this.content = new chorus.views[modelClass + "List"]({collection: collection })
             this.contentHeader = new chorus.views.ListHeaderView({title: modelClass + "s", linkMenus : options.linkMenus})
             this.contentDetails = new chorus.views.ListContentDetails({collection : collection, modelClass : modelClass});
-            this.contentFooter = new chorus.views.ListContentDetails({collection : collection, modelClass : modelClass})
+            this.contentFooter = new chorus.views.ListContentDetails({collection : collection, modelClass : modelClass, hideCounts : true, hideIfNoPagination : true})
         },
         additionalClass : "main_content_list"
     });
