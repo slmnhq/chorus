@@ -34,6 +34,10 @@
         isText: function() {
             var type = this.get("mimeType");
             return type && type.match(textRegex);
+        },
+
+        downloadUrl : function() {
+            return this.url() + "/file/" + this.get("versionFileId") + "?download";
         }
     });
 })(chorus.models);

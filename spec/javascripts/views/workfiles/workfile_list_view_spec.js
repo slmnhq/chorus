@@ -17,40 +17,49 @@ describe("WorkfileListView", function() {
 
         context("with some workfiles in the collection", function() {
             beforeEach(function() {
-                this.model1 = new chorus.models.Workfile({id: 12, fileType: "sql", fileName: "some_file.sql", description: "describe 1", workspaceId: 1});
-                this.model2 = new chorus.models.Workfile({id: 34, fileType: "txt", fileName: "other_file.txt", description: "describe 2", workspaceId: 1});
-                this.collection = new chorus.models.WorkfileSet([this.model1, this.model2], {workspaceId: 1234});
+                this.model1 = new chorus.models.Workfile({id: 12, fileType: "sql", fileName: "some_file.sql", description: "describe 1", workspaceId: 1, mimeType: "text/x-sql"});
+                this.model2 = new chorus.models.Workfile({id: 34, fileType: "txt", fileName: "other_file.txt", description: "describe 2", workspaceId: 1, mimeType: "text/plain"});
+                this.model3 = new chorus.models.Workfile({id: 56, fileType: "N/A", fileName: "zipfile.zip", description: "describe 3", workspaceId: 1, mimeType: "application/zip"});
+                this.collection = new chorus.models.WorkfileSet([this.model1, this.model2, this.model3], {workspaceId: 1234});
                 this.view = new chorus.views.WorkfileList({collection: this.collection});
                 this.view.render();
             });
 
             it("renders an li for each item in the collection", function() {
-                expect(this.view.$("li").length).toBe(2);
+                expect(this.view.$("li").length).toBe(3);
             });
 
-            it("links each workfile to its show page", function() {
+            it("links each workfile to its show page for text or image files", function() {
                 expect($(this.view.$("a.name")[0]).attr("href")).toBe(this.model1.showUrl());
                 expect($(this.view.$("a.name")[1]).attr("href")).toBe(this.model2.showUrl());
+            });
+
+            it("links to file download for other file types", function() {
+                expect($(this.view.$("a.name")[2]).attr("href")).toBe(this.model3.downloadUrl());
             });
 
             it("includes data-id for each item", function() {
                 expect($(this.view.$("li")[0]).data("id")).toBe(this.model1.get("id"));
                 expect($(this.view.$("li")[1]).data("id")).toBe(this.model2.get("id"));
+                expect($(this.view.$("li")[2]).data("id")).toBe(this.model3.get("id"));
             });
 
             it("includes the filename as a link", function() {
                 expect($(this.view.$("li a.name")[0]).text().trim()).toBe(this.model1.get("fileName"));
                 expect($(this.view.$("li a.name")[1]).text().trim()).toBe(this.model2.get("fileName"));
+                expect($(this.view.$("li a.name")[2]).text().trim()).toBe(this.model3.get("fileName"));
             });
 
             it("includes the correct workspace file icon", function() {
                 expect($(this.view.$("li img")[0]).attr("src")).toBe("/images/workfileIcons/sql.png");
                 expect($(this.view.$("li img")[1]).attr("src")).toBe("/images/workfileIcons/text.png");
+                expect($(this.view.$("li img")[2]).attr("src")).toBe("/images/workfileIcons/binary.png");
             });
 
             it("includes the description", function() {
                 expect($(this.view.$("li .summary")[0]).text().trim()).toBe(this.model1.get("description"));
                 expect($(this.view.$("li .summary")[1]).text().trim()).toBe(this.model2.get("description"));
+                expect($(this.view.$("li .summary")[2]).text().trim()).toBe(this.model3.get("description"));
             });
 
             context("clicking on the first item", function() {

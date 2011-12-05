@@ -16,9 +16,10 @@
         },
 
         collectionModelContext : function(model) {
+            var isOther = !(model.isImage() || model.isText());
             return {
                 iconUrl : chorus.urlHelpers.fileIconUrl(model.get('fileType')),
-                showUrl : model.showUrl()
+                showUrl : isOther ? model.downloadUrl() : model.showUrl()
             }
         },
 

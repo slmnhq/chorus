@@ -43,6 +43,16 @@ describe("chorus.models.Workfile", function() {
             expect(this.model.showUrl()).toBe("#/workspaces/10/workfiles/5");
             expect(this.model.showUrl(true)).toBe("workspaces/10/workfiles/5");
         });
+
+        describe("#downloadUrl", function() {
+            beforeEach(function(){
+                this.model.set({versionFileId: "12345"});
+            });
+
+            it("returns the correct URL", function() {
+                expect(this.model.downloadUrl()).toBe("/edc/workspace/10/workfile/5/file/12345?download");
+            });
+        });
     });
 
     describe("isImage", function() {
