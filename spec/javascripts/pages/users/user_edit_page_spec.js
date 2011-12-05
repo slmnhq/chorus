@@ -36,6 +36,7 @@ describe("chorus.pages.UserEditPage", function() {
 
             this.view = new chorus.pages.UserEditPage(this.user.get("id"));
             this.view.model.set(this.user.attributes)
+            this.view.model.loaded = true;
             this.view.render();
         });
 

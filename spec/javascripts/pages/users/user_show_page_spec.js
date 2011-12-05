@@ -32,6 +32,7 @@ describe("user_show_page", function(){
             this.user = fixtures.modelFor("fetch")
             this.view = new chorus.pages.UserShowPage(this.user.get("id"));
             this.view.model.set(this.user.attributes);
+            this.view.model.loaded = true;
             this.view.render();
         });
 
