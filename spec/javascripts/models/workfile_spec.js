@@ -50,7 +50,7 @@ describe("chorus.models.Workfile", function() {
             });
 
             it("returns the correct URL", function() {
-                expect(this.model.downloadUrl()).toBe("/edc/workspace/10/workfile/5/file/12345?download");
+                expect(this.model.downloadUrl()).toBe("/edc/workspace/10/workfile/5/file/12345?download=true");
             });
         });
     });

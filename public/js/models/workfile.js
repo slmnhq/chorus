@@ -37,7 +37,7 @@
         },
 
         downloadUrl : function() {
-            return this.url() + "/file/" + this.get("versionFileId") + "?download";
+            return this.url() + "/file/" + this.get("versionFileId") + "?download=true";
         }
     });
 })(chorus.models);
