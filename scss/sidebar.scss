@@ -1,0 +1,12 @@
+@import "_common.scss";
+
+#sidebar {
+    .actions {
+        margin-left: 10px;
+        
+        a {
+            font-size: 13px;
+            font-weight: $semibold;
+        }
+    }
+}

@@ -25,6 +25,12 @@ describe("chorus.router", function() {
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo");
                     expect(Backbone.history.navigate).not.toHaveBeenCalled();
                 })
+
+                it("calls loadUrl on the fragment, even if the target fragment is prefixed by #", function() {
+                    chorus.router.navigate("#/foo", true);
+                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo");
+                    expect(Backbone.history.navigate).not.toHaveBeenCalled();
+                })
             })
         })
     });
@@ -57,7 +63,7 @@ describe("chorus.router", function() {
         it("renders the page with parameters", function() {
             this.loadTemplate("workspace_detail");
             this.loadTemplate("sub_nav_content");
-            this.loadTemplate("sub_nav_and_header");
+            this.loadTemplate("sub_nav");
             this.chorus.router.navigate("/workspaces/5", true);
             expect(this.chorus.page.model.get("id")).toBe("5");
         });

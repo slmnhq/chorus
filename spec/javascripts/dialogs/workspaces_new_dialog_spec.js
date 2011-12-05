@@ -21,12 +21,12 @@ describe("WorkspacesNewDialog", function() {
     describe("submitting the form", function() {
         beforeEach(function() {
             this.dialog.render();
-            this.dialog.$("input[name=name]").val("Super Dataland");
+            this.dialog.$("input[name=name]").val("   Super Dataland   ");
             this.dialog.$("input[type=checkbox][name=isPublic]").attr("checked", "checked");
             this.dialog.$("form.new_workspace").submit();
         })
 
-        it("fills in the workspace", function() {
+        it("fills in the workspace, with trim", function() {
             expect(this.dialog.resource.get("name")).toBe("Super Dataland")
             expect(this.dialog.resource.get("isPublic")).toBe(true)
         })
@@ -63,12 +63,9 @@ describe("WorkspacesNewDialog", function() {
         context("when workspace creation fails", function() {
             beforeEach(function() {
                 spyOn(chorus.router, "navigate");
-                console.log("setting");
                 this.dialog.resource.set({serverErrors : [
                     { message: "Hi there" }
                 ]});
-                console.log(this.dialog.render);
-                console.log(this.dialog.render.callCount);
                 this.dialog.resource.trigger("saveFailed");
             });
 

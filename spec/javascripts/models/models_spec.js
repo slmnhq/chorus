@@ -1,8 +1,8 @@
 describe("chorus.models", function() {
     describe("Base", function() {
         beforeEach(function() {
-            this.model = new chorus.models.Base({ bar: "foo"});
-            this.model.urlTemplate = "my_items/{{bar}}";
+            this.model = new chorus.models.Base({ id: "foo"});
+            this.model.urlTemplate = "my_items/{{id}}";
         });
 
         describe("#url", function() {
@@ -13,11 +13,11 @@ describe("chorus.models", function() {
 
         describe("#showUrl", function() {
             it("returns #/{{showUrlTemplate}}", function() {
-                this.model.showUrlTemplate = "my_items/show/{{bar}}";
+                this.model.showUrlTemplate = "my_items/show/{{id}}";
                 expect(this.model.showUrl()).toBe("#/my_items/show/foo")
             });
 
-            it("throws when showUrlTemplate is not set", function(){
+            it("throws when showUrlTemplate is not set", function() {
                 expect(this.model.showUrl).toThrow("No showUrlTemplate defined");
             });
         });
@@ -39,16 +39,16 @@ describe("chorus.models", function() {
                 })
 
                 describe("when the request succeeds", function() {
-                    beforeEach(function() {                
-                         this.response = { status: "ok", resource : [
+                    beforeEach(function() {
+                        this.response = { status: "ok", resource : [
                             { foo : "hi" }
                         ] };
 
                         this.server.respondWith(
-                            'POST',
+                            'PUT',
                             '/edc/my_items/foo',
                             this.prepareResponse(this.response));
-    
+
                         this.server.respond();
                     });
 
@@ -65,13 +65,13 @@ describe("chorus.models", function() {
                             { message : "bye" }
                         ] };
                         this.server.respondWith(
-                            'POST',
+                            'PUT',
                             '/edc/my_items/foo',
                             this.prepareResponse(this.response));
                         this.server.respond();
-    
+
                     });
-    
+
                     it("returns the error information", function() {
                         expect(this.model.serverErrors).toEqual(this.response.message);
                     })
@@ -88,7 +88,7 @@ describe("chorus.models", function() {
                         ] };
 
                         this.server.respondWith(
-                            'POST',
+                            'PUT',
                             '/edc/my_items/foo',
                             this.prepareResponse(this.response));
 
@@ -108,7 +108,7 @@ describe("chorus.models", function() {
                             { message : "bye" }
                         ] };
                         this.server.respondWith(
-                            'POST',
+                            'PUT',
                             '/edc/my_items/foo',
                             this.prepareResponse(this.response));
                         this.server.respond();
@@ -127,7 +127,7 @@ describe("chorus.models", function() {
 
                             this.server = sinon.fakeServer.create();
                             this.server.respondWith(
-                                'POST',
+                                'PUT',
                                 '/edc/my_items/foo',
                                 this.prepareResponse(this.response));
 
@@ -178,6 +178,63 @@ describe("chorus.models", function() {
             })
         });
 
+        describe("#destroy", function () {
+            beforeEach(function() {
+                this.destroySpy = jasmine.createSpy();
+                this.destroyFailedSpy = jasmine.createSpy();
+                this.model.bind("destroy", this.destroySpy);
+                this.model.bind("destroyFailed", this.destroyFailedSpy);
+                this.model.destroy();
+            });
+
+            describe("when the request succeeds", function() {
+                beforeEach(function() {
+                    this.response = { status: "ok", resource : [
+                        { foo : "hi" }
+                    ] };
+
+                    this.server.respondWith(
+                        'DELETE',
+                        '/edc/my_items/foo',
+                        this.prepareResponse(this.response));
+
+                    this.server.respond();
+                });
+
+                it("triggers a destroy event", function() {
+                    expect(this.destroySpy).toHaveBeenCalled();
+                })
+
+                it("does not trigger a destroyFailed event", function() {
+                    expect(this.destroyFailedSpy).not.toHaveBeenCalled();
+                })
+            });
+
+            describe("when the request fails", function() {
+                beforeEach(function() {
+                    this.response = { status: "fail", message : [
+                        { message : "hi" },
+                        { message : "bye" }
+                    ] };
+
+                    this.server.respondWith(
+                        'DELETE',
+                        '/edc/my_items/foo',
+                        this.prepareResponse(this.response));
+
+                    this.server.respond();
+                });
+
+                it("triggers a destroyFailed event", function() {
+                    expect(this.destroyFailedSpy).toHaveBeenCalled();
+                })
+
+                it("does not trigger a destroy event", function() {
+                    expect(this.destroySpy).not.toHaveBeenCalled();
+                })
+            });
+        })
+
         describe("before parsing", function() {
             it("is not loaded", function() {
                 expect(this.model.loaded).toBeFalsy();
@@ -220,6 +277,24 @@ describe("chorus.models", function() {
                 this.model.require("foo");
                 expect(this.model.errors.foo).not.toBeDefined();
             })
+
+            it("contains the attr name", function() {
+                this.model.require("foo");
+                expect(this.model.errors.foo).toContain("foo");
+            });
+
+            context("model has attrToLabel set", function() {
+                beforeEach(function() {
+                    this.model.attrToLabel = {
+                        "foo" : "users.first_name"
+                    }
+                });
+
+                it("includes the translation in the error message", function() {
+                    this.model.require("foo");
+                    expect(this.model.errors.foo).toContain(t("users.first_name"));
+                });
+            });
         })
 
         describe("requirePattern", function() {
@@ -243,6 +318,24 @@ describe("chorus.models", function() {
                 this.model.requirePattern("foo", /bar/);
                 expect(this.model.errors.foo).not.toBeDefined();
             })
+
+            it("contains the attr name in the error", function() {
+                this.model.requirePattern("foo", /hello/);
+                expect(this.model.errors.foo).toContain("foo");
+            });
+
+            context("model has attrToLabel set", function() {
+                beforeEach(function() {
+                    this.model.attrToLabel = {
+                        "foo" : "users.first_name"
+                    }
+                });
+
+                it("includes the translation in the error message", function() {
+                    this.model.require("foo", /hello/);
+                    expect(this.model.errors.foo).toContain(t("users.first_name"));
+                });
+            });
         });
 
         describe("requireConfirmation", function() {
@@ -272,6 +365,26 @@ describe("chorus.models", function() {
                 this.model.requireConfirmation("foo");
                 expect(this.model.errors.foo).not.toBeDefined();
             });
+
+            it("contains the attr name in the error", function() {
+                this.model.set({ foo : "bar", fooConfirmation : "baz" });
+                this.model.requireConfirmation("foo");
+                expect(this.model.errors.foo).toContain("foo");
+            });
+
+            context("model has attrToLabel set", function() {
+                beforeEach(function() {
+                    this.model.attrToLabel = {
+                        "foo" : "users.first_name"
+                    }
+                });
+
+                it("includes the translation in the error message", function() {
+                    this.model.set({ foo : "bar", fooConfirmation : "baz" });
+                    this.model.requireConfirmation("foo");
+                    expect(this.model.errors.foo).toContain(t("users.first_name"));
+                });
+            });
         });
     });
 
@@ -282,9 +395,43 @@ describe("chorus.models", function() {
         })
 
         describe("#url", function() {
-            it("compiles the urlTemplate and renders it with model attributes", function() {
-                expect(this.collection.url()).toBe("/edc/bar/bar");
+            context("when the collection has pagination information from the server", function() {
+                beforeEach(function() {
+                    this.collection.pagination = {
+                        page: '4',
+                        total: '5',
+                        records: '250'
+                    };
+                });
+
+                it("fetches the corresponding page of the collection", function() {
+                    expect(this.collection.url()).toBe("/edc/bar/bar?page=1&rows=50");
+                });
             });
+
+            context("when the collection has NO pagination or page property", function() {
+                it("fetches the first page of the collection", function() {
+                    expect(this.collection.url()).toBe("/edc/bar/bar?page=1&rows=50");
+                });
+            });
+
+            it("takes an optional page size", function() {
+                expect(this.collection.url({ rows : 1000 })).toBe("/edc/bar/bar?page=1&rows=1000");
+            });
+
+            it("takes an optional page number", function() {
+                expect(this.collection.url({ page : 4 })).toBe("/edc/bar/bar?page=4&rows=50");
+            });
+
+            it("mixes in sortIndex and sortOrder from the collection", function() {
+                this.collection.sortAsc("foo");
+                expect(this.collection.url()).toBe("/edc/bar/bar?page=1&rows=50&sidx=foo&sord=asc");
+            })
+
+            it("plays nicely with existing parameters in the url template", function() {
+                this.collection.urlTemplate = "bar/{{foo}}?why=not";
+                expect(this.collection.url()).toBe("/edc/bar/bar?why=not&page=1&rows=50");
+            })
         });
 
         describe("before parsing", function() {
@@ -315,6 +462,175 @@ describe("chorus.models", function() {
                 this.collection.parse({status: "needlogin"});
                 expect(chorus.session.trigger).toHaveBeenCalledWith("needsLogin");
             })
+
+            it("stores pagination info on the collection", function() {
+                var pagination = {
+                    total : "2",
+                    page : "1",
+                    records : "52"
+                }
+
+                this.collection.parse({ resource : this.things, pagination : pagination });
+                expect(this.collection.pagination).toBe(pagination);
+            })
+        })
+
+        describe("#fetch", function() {
+            context("when the collection does not contain pagination information", function() {
+                it("fetches the first page of items", function() {
+                    this.collection.fetch();
+                    expect(this.server.requests[0].url).toBe("/edc/bar/bar?page=1&rows=50")
+                })
+            })
+
+            context("when the collection has pagination information", function() {
+                beforeEach(function() {
+                    this.collection.pagination = {
+                        page : "2",
+                        total : "3",
+                        records : "22"
+                    }
+                })
+
+                it("fetches the page specified in the pagination information", function() {
+                    this.collection.fetch();
+                    expect(this.server.requests[0].url).toBe("/edc/bar/bar?page=1&rows=50")
+                })
+            })
+        });
+
+        describe("#fetchAll", function() {
+            beforeEach(function() {
+                this.collection.fetchAll();
+            })
+
+            it("requests page one from the server", function() {
+                expect(this.server.requests[0].url).toBe("/edc/bar/bar?page=1&rows=1000");
+            })
+
+            describe("and the server responds successfully", function() {
+                beforeEach(function() {
+                    this.pageOneResponse = { status: "ok", resource : [
+                        { foo : "hi" },
+                        { foo : "there" }
+                    ],
+                        "pagination": {
+                            "total": "2",
+                            "page": "1",
+                            "records": "3"
+                        }
+                    };
+
+                    this.server.respondWith(
+                        'GET',
+                        '/edc/bar/bar?page=1&rows=1000',
+                        this.prepareResponse(this.pageOneResponse));
+
+                    this.pageTwoResponse = { status: "ok", resource : [
+                        { foo : "hi" },
+                        { foo : "there" }
+                    ],
+                        "pagination": {
+                            "total": "2",
+                            "page": "2",
+                            "records": "3"
+                        }
+                    };
+
+                    this.server.respondWith(
+                        'GET',
+                        '/edc/bar/bar?page=2&rows=1000',
+                        this.prepareResponse(this.pageTwoResponse));
+
+                    var self = this;
+
+                    this.resetListener = function(collection) {
+                        self.collectionLengthOnReset = collection.length;
+                    }
+                    this.collection.bind("reset", this.resetListener)
+                    this.server.respond();
+                })
+
+                it("requests subsequent pages", function() {
+                    expect(this.server.requests[1].url).toBe("/edc/bar/bar?page=2&rows=1000");
+                })
+
+                it("triggers the reset event after all models are in the collection", function() {
+                    expect(this.collectionLengthOnReset).toBe(4)
+                })
+            })
+
+            describe("and the server responds with an error", function() {
+                beforeEach(function() {
+                    this.pageOneResponse = { status: "ok", resource : [
+                        { foo : "hi" },
+                        { foo : "there" }
+                    ],
+                        "pagination": {
+                            "total": "2",
+                            "page": "1",
+                            "records": "3"
+                        }
+                    };
+
+                    this.server.respondWith(
+                        'GET',
+                        '/edc/bar/bar?page=1&rows=1000',
+                        this.prepareResponse(this.pageOneResponse));
+
+                    this.pageTwoResponse = {
+                        status: "fail",
+                        resource: [],
+                        message:[
+                            {
+                                "message":"Something went sideways"
+                            }
+                        ]
+                    };
+
+                    this.server.respondWith(
+                        'GET',
+                        '/edc/bar/bar?page=2&rows=1000',
+                        this.prepareResponse(this.pageTwoResponse));
+
+                    var self = this;
+
+                    this.resetListener = function(collection) {
+                        self.collectionLengthOnReset = collection.length;
+                    }
+                    this.collection.bind("reset", this.resetListener)
+                    this.server.respond();
+                })
+
+                it("requests subsequent pages", function() {
+                    expect(this.server.requests[1].url).toBe("/edc/bar/bar?page=2&rows=1000");
+                })
+
+                it("triggers the reset event when the error occurs", function() {
+                    expect(this.collectionLengthOnReset).toBe(2)
+                })
+            })
+        })
+
+        describe("#fetchPage", function() {
+            it("requests page one from the server", function() {
+                this.collection.fetchPage(2);
+                expect(this.server.requests[0].url).toBe("/edc/bar/bar?page=2&rows=50");
+            })
+
+            it("passes options through to fetch", function() {
+                spyOn(this.collection, "fetch");
+                this.collection.fetchPage(2, { foo : "bar" })
+                var options = this.collection.fetch.mostRecentCall.args[0];
+                expect(options.foo).toBe("bar");
+            })
+
+            it("does not affect subsequent calls to fetch", function() {
+                this.collection.fetchPage(2);
+                this.collection.fetch();
+                expect(this.server.requests[1].url).toBe("/edc/bar/bar?page=1&rows=50");
+            })
+
         })
     });
 });

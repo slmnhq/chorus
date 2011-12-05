@@ -1,0 +1,118 @@
+@import "_common.scss";
+
+.user_new, .user_edit {
+    padding: $padding-x;
+
+    .errors {
+        margin: -$padding-y -$padding-x;
+        margin-bottom: 0;
+    }
+
+    form {
+        position: relative;
+        margin-bottom : 15px;
+    }
+
+    .edit_photo {
+        width: 180px;
+        float: left;
+
+        img {
+            padding : 5px;
+            width: $user-detail-image-width;
+        }
+
+        .spinner_container {
+            width: $user-detail-image-width;
+        }
+    }
+
+    .fields {
+        margin-left: 180px;
+    }
+
+    label, input {
+        display : block;
+    }
+
+    label {
+        height : 14px;
+
+        &[for=admin-checkbox] {
+            display: inline-block;
+            line-height:43px;
+            height : 42px;
+            vertical-align : middle;
+            margin-left : 3px;
+        }
+    }
+
+    input {
+        margin-top: 6px;
+        padding-right: 20px;
+        &[type=checkbox] {
+            margin : 0;
+            display: inline-block;
+            margin-left : 2px;
+            width: auto;
+        }
+    }
+    .row {
+        margin-top: 15px;
+
+        .left {
+            width: 48%;
+            display: inline-block;
+        }
+
+        .right {
+            float: right;
+            width: 48%;
+            margin-right : 10px;
+        }
+
+        &.controls {
+            button {
+                float: none;
+
+                &:first-child {
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+}
+
+.user_edit {
+    .notes {
+        width:100%;
+    }
+
+    .file-wrapper {
+        overflow: hidden;
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+    }
+
+    .file-wrapper .action {
+        display: inline-block;
+        color: $link-color;
+        cursor: pointer;
+
+        &.disabled {
+            color: $weak-text-color;
+            cursor: normal;
+        }
+    }
+
+    .file-wrapper input {
+        width: auto;
+        position: absolute;
+        top: -12px;
+        left: 0px;
+        @include opacity(0.0);
+        cursor: pointer;
+     }
+}

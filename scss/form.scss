@@ -1,15 +1,12 @@
+@import "_common.scss";
+
 form {
-    .controls {
-        margin-top: 25px;
-
-        button {
-            float: right;
-            margin-left: 14px;
-        }
-    }
-
     input.has_error, textarea.has_error {
-        border: 1px solid red;
+        border: 2px solid $error-background-color;
+        background-image: url("/images/error-exclamation.png");
+        background-repeat: no-repeat;
+        background-position: 99%;
+        padding-right: 20px;
     }
 
     .error_detail {

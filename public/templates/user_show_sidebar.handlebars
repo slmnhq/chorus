@@ -1,0 +1,15 @@
+{{#if permission}}
+    <div class="actions">
+        <h1>Actions</h1>
+        <ul>
+            <li><a href="#/users/{{id}}/edit" class="edit_user">Edit Profile</a></li>
+            {{#ifAdmin}}
+            <li><a href="#" class="alert delete_user" data-id="{{id}}" data-alert="UserDelete">Delete User</a></li>
+            {{/ifAdmin}}
+
+            {{#ifCurrentUserNameIs userName}}
+            <li><a href="#" class="dialog change_password" data-username ="{{userName}}" data-dialog = "ChangePassword"> Change password</a></li>
+            {{/ifCurrentUserNameIs}}
+        </ul>
+    </div>
+{{/if}}

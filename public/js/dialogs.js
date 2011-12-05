@@ -1,18 +1,16 @@
-;(function(ns) {
-    ns.Base = chorus.views.Base.extend({
+;
+(function(ns) {
+
+
+    ns.dialogs.Base = ns.Modal.extend({
         id : "dialog",
         header : $("<div id='dialog_header'/>"),
         content : $("<div id='dialog_content'/>"),
         errors : $("<div class='errors'/>"),
 
-        launchDialog : function() {
-            this.render();
-            $.facebox(this.el)
-        },
-
         render: function render() {
             this.events = this.events || {};
-            this.events["click button.cancel"] = this.events["click button.cancel"] || "closeDialog";
+            this.events["click button.cancel"] = this.events["click button.cancel"] || "closeModal";
 
             this.header.html($("<h1/>").text(this.title))
             this.content.html(this.template(this.context()));
@@ -30,11 +28,9 @@
             return this;
         },
 
-        closeDialog : function() {
-            $(document).trigger("close.facebox");
+        revealed : function () {
+            $("#facebox").removeClass().addClass("dialog_facebox");
         }
-    })
 
-    $.facebox.settings.closeImage = '/images/facebox/closelabel.png'
-    $.facebox.settings.loadingImage = '/images/facebox/loading.gif'
-})(chorus.dialogs)
+    })
+})(chorus)

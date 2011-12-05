@@ -1,10 +1,15 @@
 describe("chorus.models.Session", function() {
-
-
     var models = chorus.models;
     beforeEach(function() {
+        this.savedAuthCookie = $.cookie("authid")
+        this.savedUserIdCookie = $.cookie("userId");
         fixtures.model = 'Session';
     });
+
+    afterEach(function() {
+        $.cookie("authid", this.savedAuthCookie);
+        $.cookie("userId", this.savedUserIdCookie);
+    })
 
     describe("#save", function() {
         beforeEach(function() {
@@ -24,12 +29,12 @@ describe("chorus.models.Session", function() {
 
     describe("saved", function() {
         beforeEach(function() {
-            $.cookie("userName", null)
-            this.model = new models.Session({ userName : "ponyParty", password : "partytime"});
+            $.cookie("userId", null)
+            this.model = new models.Session({ id : "66", userName : "ponyParty", password : "partytime"});
             this.model.trigger("saved");
         });
         it("sets the authUser cookie", function() {
-            expect($.cookie("userName")).toBe("ponyParty")
+            expect($.cookie("userId")).toBe("66")
         })
 
     });
@@ -88,41 +93,6 @@ describe("chorus.models.Session", function() {
         })
     });
 
-    describe("#user", function() {
-        beforeEach(function() {
-            this.model = new models.Session();
-            this.needsLoginSpy = jasmine.createSpy();
-            this.model.bind("needsLogin", this.needsLoginSpy);
-            chorus.session = this.model;
-        });
-
-        afterEach(function() {
-            chorus.session = null;
-        })
-
-
-        describe("when there is a cookie", function() {
-            beforeEach(function() {
-                $.cookie("userName", "edcadmin");
-            });
-
-            it("returns a user with the correct userName", function() {
-                expect(this.model.user().get("userName")).toBe("edcadmin");
-            });
-        });
-
-        describe("when there isn't a cookie", function() {
-            beforeEach(function() {
-                $.cookie("userName", null);
-            });
-            it("should trigger needsLogin on user request", function() {
-                var user = this.model.user();
-//                expect(user).toBeUndefined();
-                expect(this.needsLoginSpy).toHaveBeenCalled();
-            });
-        });
-    });
-
     describe("#fetch", function() {
         beforeEach(function() {
             this.model = new models.Session();
@@ -160,13 +130,17 @@ describe("chorus.models.Session", function() {
                 this.server.respondWith(
                     'GET',
                     '/edc/auth/checkLogin/?authid=1234',
-                    this.prepareResponse({ status :"fail"}));
+                    this.prepareResponse({ status :"fail", message : "no way"}));
 
                 this.server.respond();
             })
 
             it("triggers needsLogin", function() {
                 expect(this.needsLoginSpy).toHaveBeenCalled();
+            })
+
+            it("clears the session error messages", function() {
+                expect(this.model.serverErrors).toBeUndefined();
             })
         })
     })

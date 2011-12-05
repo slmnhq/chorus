@@ -1,0 +1,14 @@
+@import "_common.scss";
+
+.copy_workfile {
+
+    &#dialog #dialog_content {
+        padding: 0;
+    }
+    
+    .controls {
+        margin: 0;
+        padding: 14px;
+        border-top: 1px solid $pagination-border-color;
+    }
+}

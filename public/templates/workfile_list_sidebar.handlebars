@@ -1,0 +1,31 @@
+<button
+  type="button"
+  class="dialog"
+  data-dialog="WorkfilesImport"
+  data-workspace-id="{{id}}"
+  >
+  {{t "actions.import_workfile"}}
+</button>
+<button
+  type="button"
+  class="dialog"
+  data-dialog="WorkfilesSqlNew"
+  data-workspace-id="{{id}}"
+  >
+  {{t "actions.create_sql_workfile"}}
+</button>
+{{#if workfile}}
+    <div class="info">
+        <div title="{{workfile.fileName}}" class="fileName">{{workfile.fileName}}</div>
+        <div class="updated">Updated by <a class="updated_by" href="{{workfile.modifierUrl}}">{{workfile.updatedBy}}</a> on <span class="updated_on">{{displayTimestamp workfile.lastUpdatedStamp}}</span></div>
+    </div>
+    <div class="actions">
+        <ul>
+            <li><a href="#" class="dialog" data-dialog="CopyWorkfile" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspaceId}}">{{t "actions.copy_to_another_workspace"}}</a></li>
+            <li><a href="#" class="alert" data-alert="WorkfileDelete" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspaceId}}" data-workfile-name="{{workfile.fileName}}">{{t "actions.delete"}}</a></li>
+            <li><a href="javascript:void(0)" class="download" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspaceId}}" data-workfile-name="{{workfile.fileName}}">{{t "actions.download"}}</a></li>
+            <li><a class="dialog" href="#" data-entity-id="{{workfile.id}}" data-entity-type="workfile" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+        </ul>
+    </div>
+    <div class="activities"/>
+{{/if}}

@@ -6,11 +6,13 @@
             ["/", "Dashboard"],
             ["/login", "Login"],
             ["/users", "UserIndex"],
-            ["/users/:username", "UserShow"],
+            ["/users/:id", "UserShow"],
+            ["/users/:id/edit", "UserEdit"],
             ["/users/new", "UserNew"],
             ["/workspaces", "WorkspaceIndex"],
             ["/workspaces/:id", "WorkspaceSummary"],
-            ["/workspaces/:id/workfiles", "WorkfileIndex"],
+            ["/workspaces/:workspaceId/workfiles", "WorkfileIndex"],
+            ["/workspaces/:workspaceId/workfiles/:workspaceId", "WorkfileShow"],
             ["/styleguide", "StyleGuide"]
         ],
 
@@ -39,22 +41,28 @@
                         return new F();
                     }
                     self.app.page = construct();
-                    $("#page").html(self.app.page.render().el);
+                    $("#page").
+                        html(self.app.page.render().el).
+                        attr("data-page", className);
 
                     if (self.showDevLinks) {
                         $("body > .routes").remove();
                         $("body").append(new ns.views.RouteSplat().render().el);
                     }
+
                 }
             }
         },
 
         navigate : function(fragment, triggerRoute) {
+            fragment = fragment.match(/#?(.+)/)[1];
             if (Backbone.history.fragment == fragment) {
                 Backbone.history.loadUrl(fragment);
 
             } else {
-                this.__proto__.navigate(fragment, triggerRoute);
+//                this.__proto__.navigate(fragment, triggerRoute);
+//                alert(this.__proto__, Object.getPrototypeOf(this), this.constructor.prototype);
+                  Backbone.Router.prototype.navigate(fragment, triggerRoute);
             }
         }
     });

@@ -3,12 +3,6 @@
         urlTemplate : "workspace/{{id}}",
         showUrlTemplate : "workspaces/{{id}}",
 
-        performValidation : function(){
-            this.errors = {}
-            this.require("name")
-            return _(this.errors).isEmpty();
-        },
-
         customIconUrl: function(options) {
             options = (options || {});
             return "/edc/workspace/" + this.get("id") + "/image?size=" + (options.size || "original");
@@ -27,6 +21,29 @@
                 fullName: this.get("ownerFullName"),
                 userName: this.get("owner")
             });
+        },
+
+        performValidation : function(){
+            this.errors = {}
+            this.require("name")
+            return _(this.errors).isEmpty();
+        },
+
+        displayName : function() {
+            return this.get("name");
+        },
+
+        imageUrl : function(options){
+            options = (options || {});
+            return "/edc/workspace/" + this.get("id") + "/image?size=" + (options.size || "original");
+        },
+
+        picklistImageUrl : function(){
+          return "/images/workspace-icon-small.png";
+        },
+
+        attrToLabel : {
+            "name" : "workspace.validation.name"
         }
     });
 })(chorus.models);

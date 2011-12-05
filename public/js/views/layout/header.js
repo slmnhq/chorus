@@ -15,7 +15,12 @@
                 ctx.fullName = ctx.firstName + ' ' + ctx.lastName;
             }
 
-            return { displayName : (ctx.fullName.length > 20 ? (ctx.firstName + ' ' + ctx.lastName[0] + '.') : ctx.fullName) }
+            var user = this.model.user()
+
+            return { 
+                displayName : (ctx.fullName.length > 20 ? (ctx.firstName + ' ' + ctx.lastName[0] + '.') : ctx.fullName),
+                userUrl : user && user.showUrl()
+            }
         },
 
         togglePopupUsername : function(e) {

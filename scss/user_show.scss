@@ -28,7 +28,7 @@ $column-padding-y : $padding-x;
     margin-left: -100%;
 
     img {
-        width: $left-column-width - (4 * $column-padding-x);          /* LC width */
+        width: $user-detail-image-width;
     }
   }
 
@@ -49,9 +49,12 @@ $column-padding-y : $padding-x;
     }
 
     li a {
+        @include ellipsis;
         line-height: 25px;
         vertical-align: bottom;
         padding-left: 5px;
+        display: inline-block;
+        width: $right-column-width - (2 * $column-padding-x) - 33 - 5;
     }
   }
 
@@ -61,5 +64,9 @@ $column-padding-y : $padding-x;
     float: left;
     padding-bottom: 20000px + $column-padding-y;  /* X + padding-bottom */
     margin-bottom: -20000px;  /* X */
+  }
+
+  div.title {
+    margin-bottom : 3px;
   }
 }

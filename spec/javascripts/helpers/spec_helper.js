@@ -14,12 +14,31 @@
         };
 
         clearRenderedDOM();
+
+        this.addMatchers({
+            toMatchTranslation: function(translationKey) {
+                this.message = function() {
+                    return [
+                        "Expected text '" + this.actual + "' to match the translation for '" + translationKey + "'",
+                        "Expected text '" + this.actual + "' not to match the translation for '" + translationKey + "'"
+                    ];
+                };
+
+                var translatedText = t(translationKey);
+                if (translatedText === '[' + translationKey + ']') {
+                    throw("No entry in messages.properties for " + translationKey);
+                }
+
+                return this.actual === translatedText;
+            }
+        })
+
     });
 
     afterEach(function() {
         this.server.restore();
         this.spies.restore();
-        $.cookie("userName", null)
+        $.cookie("userId", null)
     });
 
     //global helpers
@@ -30,7 +49,9 @@
             "firstName" : "Luther",
             "lastName" : "Blissett",
             "fullName": "Luther Blissett",
-            "admin" : !!options['admin']
+            "admin" : !!options['admin'],
+            "userName" : options['userName'] || "edcadmin",
+            "id" : options['id'] || "10000"
         });
     }
 
@@ -47,6 +68,10 @@
         });
 
         return new stubClass
+    }
+
+    window.stubModals = function(){
+        return spyOn($, "facebox") 
     }
 
 

@@ -4,8 +4,8 @@
         self.models = {};
         self.views = {};
         self.pages = {};
-        self.dialogs = {}
-
+        self.dialogs = {};
+        self.alerts = {};
 
         self.initialize = function() {
             self.session = new chorus.models.Session();
@@ -13,19 +13,19 @@
             self.user = self.session;
 
             //bind global state events here
-            self.session.bind("needsLogin", self.requireLogin)
-            self.router.bind("route", self.session.check)
+            self.session.bind("needsLogin", self.requireLogin);
+            self.router.bind("route", self.session.check);
 
             self.startHistory();
-        },
+        };
 
         self.startHistory = function() {
             Backbone.history.start();
-        }
+        };
 
         self.requireLogin = function requireLogin() {
-            self.router.navigate("/login", true)
-        }
+            self.router.navigate("/login", true);
+        };
     }
 
     window.chorus = window.chorus || new Chorus();
@@ -41,4 +41,18 @@
 
         return $.i18n.prop.apply(this, arguments);
     }
+
+    // set up default qTip style
+    var errorColor = "#B61B1D";
+    $.fn.qtip.styles.chorus = {
+        background: errorColor,
+        color: "white",
+        tip: {
+            corner :"leftMiddle",
+            color: errorColor
+        },
+        border: {
+            width: 0
+        }
+    };
 })(jQuery);

@@ -12,7 +12,6 @@
     }
     .content {
         @include after-clearfix();
-        min-width: 400;
         padding: 0;
         background: #fff;
 
@@ -26,12 +25,20 @@
         }
     }
 
+    .alert .content {
+        background: $body-background-color;
+    }
+
     .close {
         position: absolute;
         top: 18px;
         right: 15px;
         padding: 2px;
         background: #fff;
+    }
+
+    &.alert_facebox .close {
+        display: none;
     }
 
     .loading, .image {

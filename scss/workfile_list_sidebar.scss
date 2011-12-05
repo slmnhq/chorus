@@ -1,0 +1,6 @@
+@import "_common.scss";
+@import "_workfile_sidebar.scss";
+
+.workfile_list_sidebar {
+    @include workfile_sidebar;
+}

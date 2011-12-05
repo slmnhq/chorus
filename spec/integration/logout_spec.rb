@@ -5,6 +5,6 @@ describe "logging out" do
     login('edcadmin', 'secret')
     page.find(".header .username a").click
     page.find('.menu.popup_username a[href="#/logout"]').click
-    current_route.should == "/login"
+    wait_until { current_route == "/login" }
   end
 end

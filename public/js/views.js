@@ -1,6 +1,6 @@
 ;
 (function(ns) {
-    ns.Bare = Backbone.View.extend({
+    ns.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
         initialize: function initialize() {
             this.preInitialize();
             _.bindAll(this, 'render');
@@ -12,13 +12,17 @@
         setup: $.noop,
         postRender: $.noop,
         bindCallbacks: $.noop,
+        preRender: $.noop,
 
         context : function() {
             return {}
         },
 
         render: function render() {
-            $(this.el).html(this.template(this.context()))
+            this.preRender($(this.el));
+
+            var evaluatedContext = typeof(this.context) === 'function' ? this.context() : this.context;
+            $(this.el).html(this.template(evaluatedContext))
                 .addClass(this.className)
                 .attr("title", this.options.title || this.title || "")
                 .addClass(this.additionalClass || "");
@@ -35,12 +39,14 @@
 
             return this.cachedTemplate(content);
         }
-    });
+    }));
 
     ns.Base = ns.Bare.extend({
         makeModel : $.noop,
-        additionalContext: $.noop,
         collectionModelContext: $.noop,
+        additionalContext: function() {
+            return {}
+        },
 
         preInitialize : function() {
             this.makeModel();
@@ -84,24 +90,56 @@
             this.clearErrors();
 
             _.each(this.resource.errors, function(val, key) {
-                var input = self.$("form input[name=" + key + "], form textarea[name=" + name + "]");
+                var input = self.$("form input[name=" + key + "], form textarea[name=" + key + "]");
                 input.addClass("has_error");
-                errorHTML = "<span class='error_detail' id="+key+">"+ val + "</span>";
-                input.after(errorHTML);
+                input.qtip({
+                    content: { text : val , prerender: 'true' },
+                    style: "chorus",
+                    position : {
+                        corner : {
+                            target: "rightMiddle",
+                            tooltip: "leftMiddle"
+                        },
+                        adjust : {
+                            screen : true
+                        },
+                        type : 'fixed',
+                        container: self.el
+                    },
+                    hide: 'mouseout',
+                    show: 'focus',
+                    api: {
+                        beforeRender: function() {
+                            this.elements.target.bind('mouseover', this.show);
+                            this.elements.target.bind('blur', this.hide);
+                        }
+                    }
+                });
 
-            })
+            });
+
 
             this.$(".errors").replaceWith(Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context(), Handlebars.helpers, Handlebars.partials));
         },
 
         clearErrors : function() {
-            this.$(".has_error").removeClass("has_error");
-            this.$(".error_detail").remove();
+            var errors = this.$(".has_error");
+            // qtip('destroy') clears the form, removeData clears the objects -- need to call both
+            errors.qtip("destroy");
+            errors.removeData("qtip");
+            errors.removeClass("has_error");
         }
-    }),
+    });
 
     ns.MainContentView = ns.Base.extend({
         className : "main_content",
+
+        setup : function(options) {
+            options = options || {}
+            this.contentHeader = this.contentHeader || options.contentHeader;
+            this.contentDetails = this.contentDetails || options.contentDetails;
+            this.content = this.content || options.content;
+        },
 
         postRender : function() {
             this.$("#content_header").html(this.contentHeader.render().el);
@@ -114,8 +152,33 @@
                 this.$("#content_details").addClass("hidden");
             }
 
-            this.$("#content").html(this.content.render().el);
-            this.content.delegateEvents();
+            if (this.content) {
+                this.$("#content").html(this.content.render().el);
+                this.content.delegateEvents();
+            } else {
+                this.$("#content").addClass("hidden");
+            }
+        }
+    });
+
+    ns.ListHeaderView = ns.Base.extend({
+        className : "default_content_header",
+        context : function() {
+            return this.options
+        },
+        postRender : function() {
+            var self = this;
+            if (this.options.linkMenus) {
+                _.each(_.keys(this.options.linkMenus), function(key) {
+                    var menu = new chorus.views.LinkMenu(self.options.linkMenus[key]);
+                    self.$(".menus").append(
+                        menu.render().el
+                    )
+                    menu.bind("choice", function(eventType, choice) {
+                        self.trigger("choice:" + eventType, choice);
+                    })
+                })
+            }
         }
     })
 
@@ -124,45 +187,9 @@
             var modelClass = options.modelClass
             var collection = this.collection;
             this.content = new chorus.views[modelClass + "List"]({collection: collection })
-            this.contentHeader = new chorus.views.StaticTemplate("default_content_header", {title: modelClass + "s"})
-            this.contentDetails = new chorus.views.Count({collection : collection, modelClass : modelClass})
+            this.contentHeader = new chorus.views.ListHeaderView({title: modelClass + "s", linkMenus : options.linkMenus})
+            this.contentDetails = new chorus.views.ListContentDetails({collection : collection, modelClass : modelClass})
         },
         additionalClass : "main_content_list"
-    })
-
-    ns.SubNavContentView = ns.Base.extend({
-        className : "sub_nav_content",
-
-        setup : function(options) {
-            var modelClass = options.modelClass
-            this.header = new chorus.views.SubNavHeader({ tab : options.tab, model : this.model });
-            this.content = options.content;
-        },
-
-        postRender : function () {
-            this.$("#sub_nav_header").html(this.header.render().el);
-            this.header.delegateEvents();
-
-            if (this.contentDetails) {
-                this.$("#content_details").html(this.contentDetails.render().el);
-                this.contentDetails.delegateEvents();
-            } else {
-                this.$("#content_details").addClass("hidden");
-            }
-
-            this.$("#content").html(this.content.render().el);
-            this.content.delegateEvents();
-        }
-    })
-
-    ns.SubNavContentList = ns.SubNavContentView.extend({
-        setup : function(options) {
-            var collection = this.collection;
-            options.content = this.content = new chorus.views[options.modelClass + "List"]({collection: collection })
-            this.__proto__.__proto__.setup.call(this, options);
-            this.contentDetails = new chorus.views.Count({collection : collection, modelClass : options.modelClass})
-        },
-        additionalClass : "sub_nav_content_list"
-    })
-
+    });
 })(chorus.views);

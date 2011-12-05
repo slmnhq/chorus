@@ -3,13 +3,14 @@ describe("chorus.views.WorkspaceList", function() {
         this.loadTemplate("workspace_list");
 
         this.activeWorkspace = new chorus.models.Workspace({id: 1, active: true, name: "my active workspace"});
-        this.archivedWorkspace = new chorus.models.Workspace({id: 2, active: false});
-        this.publicWorkspace = new chorus.models.Workspace({id: 4, isPublic: true});
+        this.archivedWorkspace = new chorus.models.Workspace({id: 2, active: false, name: "my archived workspace"});
+        this.publicWorkspace = new chorus.models.Workspace({id: 4, isPublic: true, name: "my public workspace"});
         this.privateWorkspace = new chorus.models.Workspace({
             id: 3,
             isPublic: false,
             active: true,
-            ownerFullName: "Dr Mario"
+            ownerFullName: "Dr Mario",
+            name: "my private workspace"
         });
 
         this.collection = new chorus.models.WorkspaceSet([
@@ -34,6 +35,14 @@ describe("chorus.views.WorkspaceList", function() {
             expect(this.view.$("li").length).toBe(4);
         });
 
+        it("sets title attributes for the workspace names", function() {
+            var self = this;
+
+            _.each(this.view.$("a.name span"), function(el, index) {
+                expect($(el).attr("title")).toBe(self.collection.at(index).get("name"));
+            })
+        })
+
         it("displays the active workspace icon for the active workspace", function(){
             expect(this.view.$("li[data-id=1] img").attr("src")).toBe(this.activeWorkspace.defaultIconUrl());
         });
@@ -43,7 +52,7 @@ describe("chorus.views.WorkspaceList", function() {
         });
 
         it("links the workspace name to the show url", function(){
-            expect($("a", this.activeEl).text()).toBe(this.activeWorkspace.get("name"));
+            expect($("a", this.activeEl).text().trim()).toBe(this.activeWorkspace.get("name"));
             expect($("a", this.activeEl).attr("href")).toBe(this.activeWorkspace.showUrl());
         });
 
@@ -61,46 +70,6 @@ describe("chorus.views.WorkspaceList", function() {
 
         it("links to the owner's profile", function() {
             expect($(".owner a", this.privateEl).attr('href')).toBe(this.privateWorkspace.owner().showUrl());
-        });
-    });
-
-    describe("#filterActive", function() {
-        beforeEach(function() {
-            this.view.render();
-        });
-
-        it("hides all archived workspaces", function() {
-            var activeLi = this.view.$("li[data-id=" + this.activeWorkspace.get("id") + "]");
-            var archivedLi = this.view.$("li[data-id=" + this.archivedWorkspace.get("id") + "]");
-
-            expect(archivedLi).not.toHaveClass("hidden");
-            expect(activeLi).not.toHaveClass("hidden");
-
-            this.view.filterActive();
-
-            expect(archivedLi).toHaveClass("hidden");
-            expect(activeLi).not.toHaveClass("hidden");
-        });
-    });
-
-    describe("#filterAll", function() {
-        beforeEach(function() {
-            this.view.render();
-        });
-
-        it("shows all the workspaces, including the archived ones", function() {
-            var activeLi = this.view.$("li[data-id=" + this.activeWorkspace.get("id") + "]");
-            var archivedLi = this.view.$("li[data-id=" + this.archivedWorkspace.get("id") + "]");
-
-            this.view.filterActive();
-
-            expect(archivedLi).toHaveClass("hidden");
-            expect(activeLi).not.toHaveClass("hidden");
-
-            this.view.filterAll();
-
-            expect(archivedLi).not.toHaveClass("hidden");
-            expect(activeLi).not.toHaveClass("hidden");
         });
     });
 });

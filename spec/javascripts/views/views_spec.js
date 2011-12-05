@@ -1,5 +1,6 @@
 describe("chorus.views", function() {
     describe("#context", function() {
+
         describe("for a view with a model", function() {
             beforeEach(function() {
                 this.model = new chorus.models.Base({ bar: "foo"});
@@ -45,6 +46,29 @@ describe("chorus.views", function() {
                     expect(this.view.context().one).toBe(1);
                 });
             });
+
+            describe("#preRender", function() {
+                beforeEach(function() {
+                    var self = this;
+                    this.postRenderCallCountWhenPreRenderCalled = 0;
+                    this.view.template = function() {
+                        return "<form><input name='foo'/><input name='bar'/><input name='whiz'/></form>";
+                    };
+
+                    spyOn(this.view, "postRender").andCallThrough();
+                    spyOn(this.view, "preRender").andCallFake(function() {
+                        self.postRenderCallCountWhenPreRenderCalled = self.view.postRender.callCount;
+                    })
+
+                    this.view.render();
+                });
+
+                it("is called before postRender", function() {
+                    expect(this.postRenderCallCountWhenPreRenderCalled).toBe(0);
+                    expect(this.view.postRender.callCount).toBe(1);
+                })
+            })
+
         });
 
         describe("when an additionalContext is defined", function() {
@@ -135,7 +159,7 @@ describe("chorus.views", function() {
             this.model = new chorus.models.Base();
             this.view = new chorus.views.Base({ model : this.model });
             this.view.template = function() {
-                return "<form><input name='foo'/><input name='bar'/><input name='whiz' class='has_error'/></form>";
+                return "<form><input name='foo'/><input name='bar'/><input name='whiz'/></form>";
             };
 
             spyOn(Backbone.Model.prototype, "save");
@@ -155,25 +179,33 @@ describe("chorus.views", function() {
 
             it("sets the has_error class on fields with errors", function() {
                 expect(this.view.$("input[name=foo]")).toHaveClass("has_error");
+                expect(this.view.$("input[name=foo]").hasQtip()).toBeTruthy();
             });
 
             it("clears the has_error class on all fields without errors", function() {
                 expect(this.view.$("input[name=bar]")).not.toHaveClass("has_error");
                 expect(this.view.$("input[name=whiz]")).not.toHaveClass("has_error");
+                expect(this.view.$("input[name=bar]").hasQtip()).toBeFalsy();
+                expect(this.view.$("input[name=whiz]").hasQtip()).toBeFalsy();
             });
 
             it("does not re-render", function() {
                 expect(this.view.render.callCount).toBe(1);
             });
 
-            it("injects error html", function() {
-                expect(this.view.$(".error_detail[id=foo]")[0].innerHTML).toBe(t("validation.required", 'foo'));
+            it("adds tooltips to the has_error fields", function() {
+                expect(this.view.$(".has_error").hasQtip()).toBeTruthy();
+            });
+
+            it("does not add tooltips to the other input fields", function(){
+                expect(this.view.$("input[name=bar]").hasQtip()).toBeFalsy();
             });
 
             it("clears error html that is not applicable", function() {
                 this.model.set({"foo": "bar"}, {silent: true});
                 this.model.save();
-                expect(this.view.$(".error_detail[id=foo]").length).toBe(0);
+                expect(this.view.$("input[id=foo]").hasQtip()).toBeFalsy();
+                expect($(".qtip").length).toBe(0);
             });
 
             describe("success after failure", function() {
@@ -182,13 +214,14 @@ describe("chorus.views", function() {
                 })
 
                 it("clears client-side errors", function() {
-                     expect(this.view.$(".error_detail")).not.toExist();
+                    expect(this.view.$(".has_error").length).toBe(0);
+                    expect(this.view.$("input[name=bar]").hasQtip()).toBeFalsy();
+                    expect(this.view.$("input[name=foo]").hasQtip()).toBeFalsy();
+                    expect(this.view.$("input[name=whiz]").hasQtip()).toBeFalsy();
                 })
             })
-
         })
     })
-
 
     describe("MainContentView", function() {
         beforeEach(function() {
@@ -217,6 +250,17 @@ describe("chorus.views", function() {
                 });
             });
 
+            context("without a supplied content", function() {
+                beforeEach(function() {
+                    this.view.content = undefined;
+                    this.view.render();
+                });
+
+                it("should have the hidden class on the content div", function() {
+                    expect((this.view.$("#content"))).toHaveClass("hidden");
+                });
+            })
+
             context("without a supplied contentDetails", function() {
                 it("should have the hidden class on the content_details div", function() {
                     expect((this.view.$("#content_details"))).toHaveClass("hidden");
@@ -236,104 +280,53 @@ describe("chorus.views", function() {
         });
     });
 
-    describe("SubNavContentView", function() {
+    describe("ListHeaderView", function() {
         beforeEach(function() {
-            this.loadTemplate("sub_nav_content");
+            this.loadTemplate("default_content_header");
+            this.loadTemplate("link_menu");
+            this.view = new chorus.views.ListHeaderView({
+                title : "Hi there",
+                linkMenus : {
+                    type : {
+                        title : "Title",
+                        options : [
+                            {data : "", text : "All"},
+                            {data : "sql", text : "SQL"}
+                        ],
+                        event : "filter"
+                    }
+                }
+            });
         });
 
-        describe("#setup", function() {
+        describe("#render", function() {
             beforeEach(function() {
-                spyOn(chorus.views, "SubNavHeader")
-                this.model = new chorus.models.Workspace();
-                this.view = new chorus.views.SubNavContentView({ modelClass : "Workspace", tab : "summary", model : this.model});
+                this.view.render();
             })
 
-            it("creates a SubNavHeader", function() {
-                expect(chorus.views.SubNavHeader).toHaveBeenCalled();
-            });
+            it("renders link menus", function() {
+                expect(this.view.$(".menus ul[data-event=filter]")).toExist();
+            })
+
+            it("renders the header title", function() {
+                expect(this.view.$("h1").text().trim()).toBe("Hi there")
+            })
         })
 
-        describe("#postRender", function() {
+        describe("event propagation", function() {
             beforeEach(function() {
-                this.view = new chorus.views.SubNavContentView({ modelClass : "Workspace", tab : "summary" });
-
-                this.view.header = stubView("header text");
-                this.view.content = stubView("content text");
-                this.view.contentDetails = stubView("content details text");
-
-                spyOn(this.view.header, "delegateEvents");
-                spyOn(this.view.content, "delegateEvents");
-                spyOn(this.view.contentDetails, "delegateEvents");
                 this.view.render();
-            });
-
-            it("should render the header", function() {
-                expect(this.view.$("#sub_nav_header").text()).toBe("header text");
-            });
-
-            it("should render the content", function() {
-                expect(this.view.$("#content").text()).toBe("content text");
-            });
-
-            context("without a supplied contentDetails", function() {
-                beforeEach(function() {
-                    this.view.contentDetails = undefined;
-                    this.view.render();
-                });
-
-                it("should have the hidden class on the content_details div", function() {
-                    expect((this.view.$("#content_details"))).toHaveClass("hidden");
-                });
-            });
-
-            context("with a supplied contentDetails", function() {
-                it("should render the contentDetails", function() {
-                    expect((this.view.$("#content_details").text())).toBe("content details text");
-                });
-            });
-
-            it("delegates events to the child views", function() {
-                expect(this.view.header.delegateEvents).toHaveBeenCalled();
-                expect(this.view.content.delegateEvents).toHaveBeenCalled();
-                expect(this.view.contentDetails.delegateEvents).toHaveBeenCalled();
             })
-        });
+
+            it("propagates choice events as choice: events", function() {
+                this.choiceSpy = jasmine.createSpy("choice:filter")
+                this.view.bind("choice:filter", this.choiceSpy);
+                this.view.$("li[data-type=sql] a").click();
+                expect(this.choiceSpy).toHaveBeenCalledWith("sql");
+            })
+
+        })
+
     });
 
-    describe("SubNavContentList", function() {
-        beforeEach(function() {
-            this.loadTemplate("sub_nav_content");
-            this.loadTemplate("count");
-        });
-
-        describe("#setup", function() {
-            beforeEach(function() {
-                spyOn(chorus.views, "WorkfileList");
-                spyOn(chorus.views, "Count");
-
-                this.collection = new chorus.models.WorkfileSet();
-                this.view = new chorus.views.SubNavContentList({
-                    modelClass : "Workfile",
-                    tab : "workfiles",
-                    collection : this.collection
-                });
-            });
-
-            it("creates a list view for the collection", function() {
-                expect(chorus.views.WorkfileList).toHaveBeenCalledWith({ collection : this.collection });
-            })
-
-            it("creates a count view", function() {
-                expect(chorus.views.Count).toHaveBeenCalledWith({collection : this.collection, modelClass : "Workfile" });
-            })
-
-            it("sets the content view", function() {
-                expect(this.view.content).toBeDefined();
-            })
-
-            it("sets the content detail view", function() {
-                expect(this.view.contentDetails).toBeDefined();
-            })
-        });
-    })
 })

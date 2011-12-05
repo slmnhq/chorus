@@ -11,16 +11,13 @@
             line-height: 54px;
             vertical-align: middle;
             margin: 0 15px;
+            padding-right: 25px;
         }
     }
 
     #dialog_content {
         background-color: $body-background-color;
         padding: 10px 15px;
-
-        .controls {
-            @include after-clearfix;
-        }
     }
 }
 

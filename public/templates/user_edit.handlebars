@@ -1,0 +1,77 @@
+{{#if permission}}
+<form action="/edc/users/{{userName}}" method="put">
+    <div class="edit_photo">
+        <div class="spinner_container">
+            <img src="{{imageUrl}}" class="profile"/>
+        </div>
+        <div class="file-wrapper">
+            <div class="action">Edit Photo</div>
+            <input type="file"/>
+        </div>
+    </div>
+    <div class="fields">
+
+        <div class="row">
+               <span class="left">
+                   <label class="required">{{t "users.first_name"}}</label>
+                   <input type="text" name="firstName" maxlength="256" value="{{firstName}}"/>
+               </span>
+
+               <span class="right">
+                   <label class="required">{{t "users.last_name"}}</label>
+                   <input type="text" name="lastName" maxlength="256" value="{{lastName}}"/>
+               </span>
+        </div>
+
+        <div class="row">
+               <span class="left">
+                   <label class="required">{{t "users.username"}}</label>
+                   <span name="userName">{{userName}}</span>
+               </span>
+
+            {{#ifAdmin}}
+               <span class="right admin">
+                   <label class="placeholder"></label>
+                   <input type="checkbox" name="admin" id="admin-checkbox" {{#if admin}} checked="true" {{/if}}>
+                   <label for="admin-checkbox">{{t "users.make_admin"}}</label>
+               </span>
+            {{/ifAdmin}}
+        </div>
+
+        <div class="row">
+               <span class="left">
+                   <label class="required">{{t "users.email"}}</label>
+                   <input type="text" name="emailAddress" maxlength="256" value="{{emailAddress}}"/>
+               </span>
+        </div>
+
+        <div class="row">
+               <span class="left">
+                   <label>Title</label>
+                   <input type="text" name="title" maxlength="256" value="{{title}}"/>
+               </span>
+
+               <span class="right">
+                   <label>{{t "users.department"}}</label>
+                   <input type="text" name="ou" maxlength="256" value="{{ou}}"/>
+               </span>
+        </div>
+
+        <div class="row">
+               <span class="notes">
+                   <label>Notes</label>
+                   <textarea rows="4" cols="1" name="notes">{{notes}}</textarea>
+               </span>
+        </div>
+
+        <div class="row controls">
+               <span class="left">
+                   <button type="submit" class="submit">{{t "users.button.save_changes"}}</button>
+                   <button type="button" class="cancel">{{t "actions.cancel"}}</button>
+               </span>
+        </div>
+    </div>
+</form>
+        {{else}}
+<p class="aint_admin">{{t "users.edit.no_permission"}}</p>
+        {{/if}}

@@ -2,21 +2,14 @@
 @import "compass/css3/border-radius";
 
 .user_list {
-    li {
-        padding: $padding-y $padding-x;
-    }
-
     img {
         display: inline;
         width: 32px;
         height: 32px;
     }
 
-    a {
-        span {
-            display: inline-block;
-            @include ellipsis;
-            max-width: 68%;
-        }
+    li div.text {
+        left: 57px;
     }
+
 }

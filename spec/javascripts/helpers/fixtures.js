@@ -27,7 +27,7 @@
                     if (obj.set) {
                         obj.set(data);
                     } else {
-                        return new klass(data, options);
+                        obj.reset(data, options);
                     }
                     return obj;
                 }
@@ -66,7 +66,7 @@
                 if (obj.set) {
                     obj.set(data);
                 } else {
-                    return new klass(data, options);
+                    obj.reset(data, options);
                 }
                 return obj;
             },
@@ -128,7 +128,7 @@
                     "requestId":108,
                     "resource":[
                         {
-                            "id":"InitialUser",
+                            "id":"42",
                             "userName":"edcadmin",
                             "firstName":"EDC",
                             "lastName":"Admin",
@@ -141,8 +141,7 @@
                             "st":null,
                             "c":null,
                             "admin":true,
-                            "techniques":null,
-                            "expertise":null,
+                            "notes":null,
                             "lastLogin":"2011-11-16 09:40:27.916",
                             "imageId":"10036",
                             "dn":null,
@@ -169,26 +168,35 @@
                     "requestId": 8,
                     "resource": [
                         {
-                            "userName": "edcadmin",
-                            "firstName": "EDC",
-                            "lastName": "Admin",
-                            "fullName": "EDC Admin",
-                            "emailAddress": "edcadmin@greenplum.com",
-                            "admin": true,
-                            "techniques": null,
-                            "expertise": null,
+                            "id":"10000",
+                            "userName": "markr",
+                            "firstName": "Mark",
+                            "lastName": "Rushakoff",
+                            "emailAddress": "markymark@pivotallabs.com",
+                            "admin": false,
+                            "notes": null,
                             "lastLogin": "2011-11-03 17:45:39",
                             "isDeleted": false
                         },
                         {
-                            "userName": "markr",
-                            "firstName": "Mark",
-                            "lastName": "Rushakoff",
-                            "fullName": "Mark Rushakoff",
-                            "emailAddress": "markymark@pivotallabs.com",
+                            "id":"10001",
+                            "userName": "edcadmin",
+                            "firstName": "EDC",
+                            "lastName": "Admin",
+                            "emailAddress": "edcadmin@greenplum.com",
+                            "admin": true,
+                            "notes": null,
+                            "lastLogin": "2011-11-03 17:45:39",
+                            "isDeleted": false
+                        },
+                        {
+                            "id":"10002",
+                            "userName": "frogman",
+                            "firstName": "frOg",
+                            "lastName": "man",
+                            "emailAddress": "frogman@greenplum.com",
                             "admin": false,
-                            "techniques": null,
-                            "expertise": null,
+                            "notes": null,
                             "lastLogin": "2011-11-03 17:45:39",
                             "isDeleted": false
                         }
@@ -198,7 +206,7 @@
                     "pagination": {
                         "total": "2",
                         "page": "1",
-                        "records": "2"
+                        "records": "22"
                     },
                     "version": "0.1"
                 }
@@ -231,6 +239,278 @@
                     "resourcelink":"/edc/workspace/10013",
                     "pagination":null,
                     "version":"0.1"
+                }
+            },
+
+            Workfile : {
+                fetch : {
+                    "message":[],
+                    "status":"ok",
+                    "requestId":17,
+                    "resource":[
+                        {
+                            "createdStamp":"2011-11-22",
+                            "lastUpdatedStamp":"2011-11-22 14:40:42.11",
+                            "modifiedBy":"edcadmin",
+                            "ownerFullName":"EDC Admin",
+                            "imageId":null,
+                            "id":"10020",
+                            "fileName":"who.sql",
+                            "mimeType":"text/x-sql",
+                            "fileType":"sql",
+                            "isBinary":false,
+                            "workspaceId":"10000",
+                            "source":"empty",
+                            "owner":"edcadmin",
+                            "description":null,
+                            "latestVersionNum":1,
+                            "versionFileId":"1111_1111",
+                            "isDeleted":false,
+                            "modifiedByFirstName":"EDC",
+                            "modifiedByLastName":"Admin",
+                            "modifiedById":"10010",
+                            "commentCount":0,
+                            "commentBody":"",
+                            "firstName":"",
+                            "lastName":""
+                        }
+                    ],
+                    "method":"GET",
+                    "resourcelink":"/edc/workspace/10000/workfile/10020",
+                    "pagination":null,
+                    "version":"0.1"
+                },
+
+                copy : {
+                    "message":[],
+                    "status":"ok",
+                    "requestId":1137,
+                    "resource":[
+                        {
+                            "fileName":"test.sql",
+                            "mimeType":"text/x-sql",
+                            "fileType":"sql",
+                            "isBinary":false,
+                            "workspaceId":"10010",
+                            "source":"chorus",
+                            "owner":"edcadmin",
+                            "description":"null",
+                            "latestVersionNum":1,
+                            "isDeleted":false,
+                            "modifiedBy":"edcadmin",
+                            "id":"10026",
+                            "lastUpdatedTxStamp":"2011-11-28 13:47:42.245",
+                            "createdTxStamp":"2011-11-28 13:47:42.245",
+                            "lastUpdatedStamp":"2011-11-28 13:47:42.253",
+                            "createdStamp":"2011-11-28 13:47:42.253"
+                        }
+                    ],
+                    "method":"POST",
+                    "resourcelink":"/edc/workspace/10010/workfile",
+                    "pagination":null,
+                    "version":"0.1"
+                },
+
+                copyFailed : {
+                    "message":[
+                        {
+                            "message":"Workspace already has a workfile with this name. Specify a different name.",
+                            "msgcode":"E_14_0013",
+                            "description":null,
+                            "severity":"error",
+                            "msgkey":"WORKFILE.FILENAME_EXISTS"
+                        }
+                    ],
+                    "status":"fail",
+                    "requestId":1156,
+                    "resource":[],
+                    "method":"POST",
+                    "resourcelink":"/edc/workspace/10010/workfile",
+                    "pagination":null,
+                    "version":"0.1"
+                },
+
+                image : {
+                    "message": [],
+                    "status": "ok",
+                    "requestId": 1913,
+                    "resource": [{
+                        "id": "10035",
+                        "fileName": "avatar.jpg",
+                        "mimeType": "image/jpeg",
+                        "fileType": "N/A",
+                        "isBinary": true,
+                        "workspaceId": "10000",
+                        "source": "fs",
+                        "owner": "edcadmin",
+                        "description": null,
+                        "latestVersionNum": 1,
+                        "isDeleted": false,
+                        "modifiedBy": "edcadmin",
+                        "lastUpdatedStamp": "2011-11-29 10:31:15.153",
+                        "lastUpdatedTxStamp": "2011-11-29 10:31:15.143",
+                        "createdStamp": "2011-11-29 10:31:15.153",
+                        "createdTxStamp": "2011-11-29 10:31:15.143",
+                        "versionFileId": "1322591475139_3804",
+                        "versionNum": "1",
+                        "versionOwner": "edcadmin",
+                        "hasDraft": false,
+                        "sandboxId": null
+                    }],
+                    "method": "GET",
+                    "resourcelink": "/edc/workspace/10000/workfile/10035",
+                    "pagination": null,
+                    "version": "0.1"
+                },
+
+                fetchText : {
+	                    "message":[],
+	                    "status":"ok",
+	                    "requestId":449,
+	                    "resource":[
+
+	                        {
+	                            "id":"10004",
+	                            "fileName":"editabletextfile.txt",
+	                            "mimeType":"text/plain",
+	                            "fileType":"txt",
+	                            "isBinary":false,
+	                            "workspaceId":"10001",
+	                            "source":"fs",
+	                            "owner":"edcadmin",
+	                            "description":null,
+	                            "latestVersionNum":1,
+	                            "isDeleted":false,
+	                            "modifiedBy":"edcadmin",
+	                            "lastUpdatedStamp":"2011-11-29 10:46:03.152",
+	                            "lastUpdatedTxStamp":"2011-11-29 10:46:03.145",
+	                            "createdStamp":"2011-11-29 10:46:03.152",
+	                            "createdTxStamp":"2011-11-29 10:46:03.145",
+	                            "versionFileId":"1322592363143_7126",
+	                            "versionNum":"1",
+	                            "versionOwner":"edcadmin",
+	                            "content":"This is a text file.\n\nThis is the 3rd line.\n\nReally really long line.  Really really long line.  Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.",
+	                            "editable":true,
+	                            "hasDraft":false,
+	                            "sandboxId":null
+	                        }
+	                    ],
+	                    "method":"GET",
+	                    "resourcelink":"/edc/workspace/10001/workfile/10004",
+	                    "pagination":null,
+	                    "version":"0.1"
+		                }
+            },
+
+            Activity : {
+                fetch : {
+                    "message" : [ ],
+                    "status" : "ok",
+                    "requestId" : 256,
+                    "resource" : [
+                        {
+                            id : 10000,
+                            timestamp : "2011-11-23 15:42:02.321",
+                            type : "NOT_IMPLEMENTED",
+                            author : {
+                                username : "edcadmin",
+                                firstName : "EDC",
+                                lastName : "Admin"
+                            },
+
+                            comments : [
+                                {
+                                    id : 10023,
+                                    timestamp : "2011-11-23 15:42:02.321",
+                                    author : {
+                                        username : "msofaer",
+                                        firstName : "Michael",
+                                        lastName : "Sofaer"
+                                    },
+                                    text : "hi there"
+                                },
+                                {
+                                    id : 10024,
+                                    timestamp : "2011-11-23 15:42:02.321",
+                                    author : {
+                                        username : "mrushakoff",
+                                        firstName : "Mark",
+                                        lastName : "Rushakoff"
+                                    },
+                                    text : "hello"
+                                }
+                            ]
+                        }
+                    ],
+                    "method" : "GET",
+                    "resourcelink" : "/edc/activitystream/workspace/10000",
+                    "pagination" : null,
+                    "version" : "0.1"
+                }
+
+            },
+
+            ActivitySet : {
+                fetch : {
+                    "message" : [ ],
+                    "status" : "ok",
+                    "requestId" : 256,
+                    "resource" : [
+                        {
+                            id : 10000,
+                            timestamp : "2011-11-23 15:42:02.321",
+                            type : "NOT_IMPLEMENTED",
+                            author : {
+                                username : "edcadmin",
+                                firstName : "EDC",
+                                lastName : "Admin"
+                            },
+
+                            comments : [
+                                {
+                                    id : 10023,
+                                    timestamp : "2011-11-23 15:42:02.321",
+                                    author : {
+                                        username : "msofaer",
+                                        firstName : "Michael",
+                                        lastName : "Sofaer"
+                                    },
+                                    text : "hi there"
+                                },
+                                {
+                                    id : 10024,
+                                    timestamp : "2011-05-23 15:42:02.321",
+                                    author : {
+                                        username : "mrushakoff",
+                                        firstName : "Mark",
+                                        lastName : "Rushakoff"
+                                    },
+                                    text : "hello"
+                                }
+                            ]
+                        },
+                        {
+                            id : 10001,
+                            timestamp : "2011-04-23 15:42:02.321",
+                            type : "NOT_IMPLEMENTED",
+                            author : {
+                                username : "dburkes",
+                                firstName : "Danny",
+                                lastName : "Burkes"
+                            },
+
+                            comments : []
+                        }
+                    ],
+                    "method" : "GET",
+                    "resourcelink" : "/edc/activitystream/workspace/10000",
+                    "pagination" :
+                    {
+                        "total" : "1",
+                        "page" : "1",
+                        "records" : "8"
+                    },
+                    "version" : "0.1"
                 }
             }
 

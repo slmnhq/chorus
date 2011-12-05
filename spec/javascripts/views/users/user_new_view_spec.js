@@ -1,24 +1,7 @@
-describe("chorus.views.UserNewMain", function() {
-
-    it("doesn't cache", function() {
-        expect(new chorus.views.UserNewMain().content).not.toBe(new chorus.views.UserNewMain().content);
-    })
-
-    it("is hella happy", function() {
-        this.loadTemplate("main_content")
-        this.loadTemplate("default_content_header")
-        this.loadTemplate("plain_text")
-
-        var view = new chorus.views.UserNewMain()
-        view.render()
-    })
-
-})
 describe("chorus.views.userNew", function() {
     beforeEach(function() {
         this.loadTemplate("user_new");
         this.loadTemplate("errors")
-
     })
 
 
@@ -90,11 +73,10 @@ describe("chorus.views.userNew", function() {
                             this.view.model.serverErrors = [
                                 {message : "Hi there"}
                             ];
-                            this.view.model.trigger("saveFailed")
-                        });
+                            this.view.$("form").submit();
+                            this.view.model.trigger("saveFailed");
 
-                        it("displays the error message", function() {
-                            expect(this.view.$(".errors").text()).toContain("Hi there")
+                            this.view.render();
                         });
 
                         it("doesn't redirect", function() {
@@ -103,6 +85,14 @@ describe("chorus.views.userNew", function() {
 
                         it("retains the data already entered", function() {
                             expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
+                            expect(this.view.$("input[name=lastName]").val()).toBe("Knuckles");
+                            expect(this.view.$("input[name=userName]").val()).toBe("frankie2002");
+                            expect(this.view.$("input[name=emailAddress]").val()).toBe("frankie_knuckles@nyclol.com");
+                            expect(this.view.$("input[name=password]").val()).toBe("whoaomg");
+                            expect(this.view.$("input[name=passwordConfirmation]").val()).toBe("whoaomg");
+                            expect(this.view.$("input[name=ou]").val()).toBe("awesomeness dept");
+                            expect(this.view.$("input[name=admin]")).toBeChecked();
+                            
                         });
                     })
                 });
@@ -122,7 +112,35 @@ describe("chorus.views.userNew", function() {
                     });
                 });
 
+                context("the form has extra whitespace around an input", function(){
+                    beforeEach(function(){
+                        this.view.$("input[name=firstName]").val("     spaces     ");
+                        this.view.$("form").submit();
+                    });
+
+                    it("trims the whitespace before submission", function(){
+                        expect(this.user.attributes["firstName"]).toBe("spaces");
+                    });
+                });
+
             });
+
+            context("cancelling", function() {
+                beforeEach(function() {
+                    spyOn(this.view.$("form")[0], "submit");
+                    spyOn(window.history, "back");
+                    this.view.$("button.cancel").click();
+                })
+
+                it("does not submit the form", function() {
+                    expect(this.view.$("form")[0].submit).not.toHaveBeenCalled();
+                })
+
+                it("navigates back", function() {
+                    expect(window.history.back).toHaveBeenCalled();
+                })
+            })
+
         });
 
         context("as a non admin", function() {

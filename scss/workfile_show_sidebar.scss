@@ -1,0 +1,10 @@
+@import "_common.scss";
+@import "_workfile_sidebar.scss";
+
+.workfile_show_sidebar {
+    @include workfile_sidebar;
+
+    .info {
+        margin: 5px 0 20px 0;
+    }
+}

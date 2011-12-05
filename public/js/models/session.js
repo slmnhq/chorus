@@ -4,14 +4,12 @@
         urlTemplate : "auth/login/",
 
         initialize : function() {
-            this.bind("saved", setUsernameCookie)
+            this.bind("saved", setUserIdCookie)
             _.bindAll(this);
         },
 
         user : function() {
-            var userName = $.cookie("userName");
-            if (!userName) this.trigger("needsLogin");
-            return new ns.User({userName : userName });
+              return new ns.User(this.attributes);
         },
 
         fetch : function(options) {
@@ -24,9 +22,11 @@
             
             options.success = function(model, response, xhr) {
                 if (response.status !== "ok") {
+                    self.serverErrors = undefined;
                     self.trigger("needsLogin");
                 }
               if (success) success(model, resp);
+              
             };
 
             return chorus.models.Base.prototype.fetch.call(this, options);
@@ -55,11 +55,16 @@
             this.require("userName")
             this.require("password")
             return _(this.errors).isEmpty();
+        },
+
+        attrToLabel : {
+            "userName" : "login.username",
+            "password" : "login.password"
         }
     });
 
-    function setUsernameCookie() {
-        $.cookie("userName", this.get("userName"))
+    function setUserIdCookie() {
+        $.cookie("userId", this.get("id"))
     }
 })(chorus.models);
 

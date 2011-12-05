@@ -105,21 +105,101 @@ describe("chorus.pages.Base", function() {
             this.view.render();
             expect(this.view.$("#sidebar").html().length).toBe(0)
         });
+    });
 
-        it("instantiates dialogs from dialog buttons", function() {
+    context("dialogs", function() {
+        context("from buttons", function() {
+            beforeEach(function() {
+                this.view = new chorus.pages.Base();
+                this.view.mainContent = new Backbone.View();
 
-            var fooDialogSpy = {
-                launchDialog : jasmine.createSpy()
-            }
+                var spy = this.fooDialogSpy = {
+                    launchModal : jasmine.createSpy()
+                }
 
-            chorus.dialogs.Foo = function() {
-                return fooDialogSpy
-            };
+                chorus.dialogs.Foo = function(opts) {
+                    spy.launchElement = opts.launchElement;
+                    spy.model = opts.model;
+                    return spy
+                };
 
-            this.view.sidebar = stubView("<button type='button' class='dialog' data-dialog='Foo'>Create a Foo</button>");
-            this.view.render();
-            this.view.$("button.dialog").click();
-            expect(fooDialogSpy.launchDialog).toHaveBeenCalled();
+                this.view.sidebar = stubView("<button type='button' class='dialog' data-dialog='Foo'>Create a Foo</button>");
+                this.view.render();
+            })
+
+            it("instantiates dialogs from dialog buttons", function() {
+                this.view.$("button.dialog").click();
+                expect(this.fooDialogSpy.launchModal).toHaveBeenCalled();
+            })
+
+            it("passes the launch element and the model to the dialog", function() {
+                this.view.model = new chorus.models.User();
+                var elem = this.view.$("button.dialog");
+                elem.click();
+
+                expect(this.fooDialogSpy.launchElement).toBe(elem);
+                expect(this.fooDialogSpy.model).toBe(this.view.model);
+            })
+        })
+
+        context("from links", function() {
+            beforeEach(function() {
+                this.view = new chorus.pages.Base();
+                this.view.mainContent = new Backbone.View();
+
+                var spy = this.fooDialogSpy = {
+                    launchModal : jasmine.createSpy()
+                }
+
+                chorus.dialogs.Foo = function(opts) {
+                    spy.launchElement = opts.launchElement;
+                    return spy
+                };
+
+                this.view.sidebar = stubView("<a class='dialog' data-dialog='Foo'>Create a Foo</button>");
+                this.view.render();
+            })
+
+            it("instantiates dialogs from dialog buttons", function() {
+                this.view.$("a.dialog").click();
+                expect(this.fooDialogSpy.launchModal).toHaveBeenCalled();
+            })
+
+            it("passes the launch element to the dialog", function() {
+                var elem = this.view.$("a.dialog");
+                elem.click();
+                expect(this.fooDialogSpy.launchElement).toBe(elem);
+            })
         })
     })
-});
+
+    context("alerts", function() {
+        beforeEach(function() {
+            this.view = new chorus.pages.Base();
+            this.view.mainContent = new Backbone.View();
+
+            var spy = this.fooAlertSpy = {
+                launchModal : jasmine.createSpy()
+            }
+
+            chorus.alerts.Foo = function(opts) {
+                spy.launchElement = opts.launchElement;
+                return spy
+            };
+
+            this.view.sidebar = stubView("<a class='alert' data-alert='Foo'>Create a Foo</button>");
+            this.view.render();
+        })
+
+        it("instantiates alerts from alert links", function() {
+            this.view.$("a.alert").click();
+            expect(this.fooAlertSpy.launchModal).toHaveBeenCalled();
+        })
+
+        it("passses the launch element to the alert", function() {
+            var elem = this.view.$("a.alert");
+            elem.click();
+            expect(this.fooAlertSpy.launchElement).toBe(elem);
+        })
+    })
+})

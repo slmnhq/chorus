@@ -10,7 +10,9 @@
         className : "logged_in_layout",
 
         events : {
-            "click button.dialog" : "createDialog"
+            "click button.dialog" : "createDialog",
+            "click a.dialog" : "createDialog",
+            "click a.alert" : "createAlert"
         },
 
         postRender : function() {
@@ -34,12 +36,24 @@
                 this.sidebar.delegateEvents()
                 this.sidebar.render();
             }
+
+            if (this.subNav) {
+                this.$("#sub_nav").replaceWith(this.subNav.render().el);
+            }
         },
 
         createDialog : function(e) {
+            e.preventDefault();
             var button = $(e.target);
-            chorus.dialog = new chorus.dialogs[button.data("dialog")]();
-            chorus.dialog.launchDialog();
+            var dialog = new chorus.dialogs[button.data("dialog")]({launchElement : button, model: this.model });
+            dialog.launchModal();
+        },
+
+        createAlert : function(e) {
+            e.preventDefault();
+            var launchElement = $(e.target);
+            var alert = new chorus.alerts[launchElement.data("alert")]({launchElement : launchElement});
+            alert.launchModal();
         }
     })
 
