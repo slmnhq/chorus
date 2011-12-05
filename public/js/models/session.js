@@ -50,11 +50,9 @@
             }
         },
 
-        performValidation : function() {
-            this.errors = {}
+        declareValidations : function() {
             this.require("userName")
             this.require("password")
-            return _(this.errors).isEmpty();
         },
 
         attrToLabel : {

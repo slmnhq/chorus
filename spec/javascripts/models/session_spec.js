@@ -188,7 +188,7 @@ describe("chorus.models.Session", function() {
         })
     })
 
-    describe("#performValidation", function() {
+    describe("validation", function() {
         beforeEach(function() {
             this.model = new models.Session();
             spyOn(this.model, "require").andCallThrough();

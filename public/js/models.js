@@ -158,8 +158,12 @@
                 return (this.sync || Backbone.sync).call(this, 'delete', this, options);
             },
 
+            declareValidations: $.noop,
+
             performValidation: function() {
-                return true;
+                this.errors = {};
+                this.declareValidations();
+                return _(this.errors).isEmpty();
             },
 
             require : function(attr) {

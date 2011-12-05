@@ -66,7 +66,7 @@ describe("chorus.models.User", function() {
         });
     });
 
-    describe("#performValidation", function() {
+    describe("validation", function() {
         beforeEach(function() {
             spyOn(this.model, "require").andCallThrough();
             spyOn(this.model, "requirePattern").andCallThrough();

@@ -15,8 +15,7 @@
             return this._workspaces;
         },
 
-        performValidation: function() {
-            this.errors = {};
+        declareValidations : function() {
             this.require('firstName');
             this.require('lastName');
             this.require('userName');
@@ -24,7 +23,6 @@
             if(this.isNew() || this.hasChanged("password")) {
                 this.requireConfirmation('password');
             }
-            return _(this.errors).isEmpty();
         },
 
         imageUrl : function(options){

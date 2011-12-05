@@ -23,10 +23,8 @@
             });
         },
 
-        performValidation : function(){
-            this.errors = {}
+        declareValidations : function(){
             this.require("name")
-            return _(this.errors).isEmpty();
         },
 
         displayName : function() {

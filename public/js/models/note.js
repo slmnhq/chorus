@@ -3,10 +3,8 @@
     ns.Note = chorus.models.Base.extend({
         urlTemplate : "comment/{{entityType}}/{{entityId}}",
 
-        performValidation: function() {
-            this.errors = {};
+        declareValidations: function() {
             this.require('body');
-            return _(this.errors).isEmpty();
         },
 
         attrToLabel : {
