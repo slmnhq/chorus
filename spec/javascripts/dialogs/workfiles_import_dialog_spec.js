@@ -157,7 +157,6 @@ describe("WorkfilesImportDialog", function() {
                     this.saveFailedSpy = jasmine.createSpy();
                     this.dialog.resource.bind("saveFailed", this.saveFailedSpy);
                     // calls any 'done' callbacks
-                    this.server.respondWith("OK");
                     this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"status": "fail", "message" :[{"message":"Workspace already has a workfile with this name. Specify a different name."}]}']);
                     this.server.respond();
                 });

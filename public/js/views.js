@@ -128,6 +128,8 @@
             errors.qtip("destroy");
             errors.removeData("qtip");
             errors.removeClass("has_error");
+
+            this.$(".errors").empty();
         }
     });
 

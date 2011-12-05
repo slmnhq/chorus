@@ -76,12 +76,21 @@
             }
 
             function uploadFinished(e, data) {
-                originalUrl = self.model.imageUrl();
+                var originalUrl = self.model.imageUrl();
                 self.spinner.stop();
                 self.$(".edit_photo img").removeClass("disabled");
                 self.$(".edit_photo input[type=file]").removeAttr("disabled");
                 self.$(".edit_photo .action").removeClass("disabled");
                 self.$(".edit_photo img").attr('src', originalUrl + "&buster=" + (new Date().getTime()));
+
+                var json = $.parseJSON(data.result);
+                if (json.status == "ok") {
+                    self.resource.serverErrors = [];
+                    self.resource.trigger("validated");
+                } else {
+                    self.resource.serverErrors = json.message;
+                    self.resource.trigger("saveFailed");
+                }
             }
         }
     });
