@@ -272,10 +272,11 @@
                             "modifiedByFirstName":"EDC",
                             "modifiedByLastName":"Admin",
                             "modifiedById":"10010",
-                            "commentCount":0,
-                            "commentBody":"",
-                            "firstName":"",
-                            "lastName":""
+                            "commentCount":2,
+                            "commentBody":"I am loving commenting",
+                            "commenterId":"InitialUser",
+                            "commenterFirstName":"EDC",
+                            "commenterLastName":"Admin"
                         }
                     ],
                     "method":"GET",

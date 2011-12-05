@@ -14,6 +14,30 @@ describe("chorus.models.Workfile", function() {
         });
     })
 
+    describe("#lastComment", function() {
+        beforeEach(function() {
+            this.model.set({
+                commentBody : "lol I think that is redunkulous!",
+                commenterFirstName : "Superstar",
+                commenterLastName : "Commenter",
+                commenterId : "134"
+            });
+
+            this.comment = this.model.lastComment();
+        });
+
+        it("has the right body", function() {
+            expect(this.comment.get("body")).toBe("lol I think that is redunkulous!");
+        });
+
+        it("has the right creator", function() {
+            var creator = this.comment.creator()
+            expect(creator.get("id")).toBe("134");
+            expect(creator.get("firstName")).toBe("Superstar");
+            expect(creator.get("lastName")).toBe("Commenter");
+        });
+    });
+
     describe("validation", function() {
         beforeEach(function() {
             spyOn(this.model, "require").andCallThrough();

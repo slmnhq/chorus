@@ -18,6 +18,15 @@
             })
         },
 
+        lastComment : function() {
+            return new ns.Comment({
+                body : this.get("commentBody"),
+                creatorId : this.get("commenterId"),
+                creatorFirstName : this.get("commenterFirstName"),
+                creatorLastName : this.get("commenterLastName")
+            });
+        },
+
         declareValidations : function(){
             this.require("fileName")
         },
