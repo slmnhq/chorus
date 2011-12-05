@@ -69,6 +69,7 @@ describe("chorus.models.Session", function() {
 
         context("when the model does not have errors", function() {
             beforeEach(function() {
+                this.model.set({ foo: "bar", bro: "baz" });
                 this.model.logout();
             })
 
@@ -88,6 +89,10 @@ describe("chorus.models.Session", function() {
 
                 it("triggers needsLogin", function() {
                     expect(this.needsLoginSpy).toHaveBeenCalled();
+                })
+
+                it("clears all attributes in the model", function() {
+                    expect(_.size(this.model.attributes)).toBe(0);
                 })
             })
         })

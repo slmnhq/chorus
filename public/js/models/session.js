@@ -43,6 +43,7 @@
 
             if (!this.get("errors")) {
                 $.get("/edc/auth/logout/?authid=" + $.cookie("authid"), function() {
+                    self.clear();
                     self.trigger("needsLogin")
                 })
             } else {
