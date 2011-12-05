@@ -19,7 +19,7 @@
         },
 
         lastComment : function() {
-            return new ns.Comment({
+            return this.get("commenterId") && new ns.Comment({
                 body : this.get("commentBody"),
                 creatorId : this.get("commenterId"),
                 creatorFirstName : this.get("commenterFirstName"),

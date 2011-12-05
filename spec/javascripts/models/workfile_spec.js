@@ -36,6 +36,12 @@ describe("chorus.models.Workfile", function() {
             expect(creator.get("firstName")).toBe("Superstar");
             expect(creator.get("lastName")).toBe("Commenter");
         });
+
+        context("when the workfile doesn't have any comments", function() {
+            it("returns null", function() {
+                expect(new chorus.models.Workfile().lastComment()).toBeFalsy();
+            });
+        });
     });
 
     describe("validation", function() {
