@@ -99,6 +99,8 @@
     .file-wrapper .action {
         display: inline-block;
         color: $link-color;
+        font-size: 12px;
+        font-weight: $semibold;
         cursor: pointer;
 
         &.disabled {
