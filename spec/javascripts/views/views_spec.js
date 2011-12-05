@@ -277,6 +277,23 @@ describe("chorus.views", function() {
                     expect((this.view.$("#content_details").text())).toBe("content details text");
                 });
             });
+
+            context("without a supplied contentFooter", function() {
+                it("should have the hidden class on the content_footer div", function() {
+                    expect((this.view.$("#content_footer"))).toHaveClass("hidden");
+                });
+            });
+
+            context("with a supplied contentFooter", function() {
+                beforeEach(function() {
+                    this.view.contentFooter = stubView("content footer text");
+                    this.view.render();
+                });
+
+                it("should render the contentFooter", function() {
+                    expect((this.view.$("#content_footer").text())).toBe("content footer text");
+                });
+            });
         });
     });
 

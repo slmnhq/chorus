@@ -160,6 +160,13 @@
             } else {
                 this.$("#content").addClass("hidden");
             }
+
+            if (this.contentFooter) {
+                this.$("#content_footer").html(this.contentFooter.render().el);
+                this.contentFooter.delegateEvents();
+            } else {
+                this.$("#content_footer").addClass("hidden");
+            }
         }
     });
 
@@ -190,7 +197,8 @@
             var collection = this.collection;
             this.content = new chorus.views[modelClass + "List"]({collection: collection })
             this.contentHeader = new chorus.views.ListHeaderView({title: modelClass + "s", linkMenus : options.linkMenus})
-            this.contentDetails = new chorus.views.ListContentDetails({collection : collection, modelClass : modelClass})
+            this.contentDetails = new chorus.views.ListContentDetails({collection : collection, modelClass : modelClass});
+            this.contentFooter = new chorus.views.ListContentDetails({collection : collection, modelClass : modelClass})
         },
         additionalClass : "main_content_list"
     });
