@@ -167,7 +167,14 @@
             },
 
             require : function(attr) {
-                if (!this.get(attr)) {
+                var val = this.get(attr);
+                var present = val;
+
+                if (val && typeof val == "string" && !val.match(/[^\s]/)) {
+                    present = false;
+                }
+
+                if (!present) {
                     this.errors[attr] = t("validation.required", this._textForAttr(attr));
                 }
             },
