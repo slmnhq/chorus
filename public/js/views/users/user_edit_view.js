@@ -53,7 +53,8 @@
                 type: 'POST',
                 add : fileSelected,
                 done: uploadFinished,
-                multipart: multipart
+                multipart: multipart,
+                dataType: "text"
             });
 
             function fileSelected(e, data) {
