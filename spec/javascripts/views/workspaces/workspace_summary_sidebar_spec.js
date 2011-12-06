@@ -14,6 +14,10 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
             expect(this.view.$("h1").text().trim()).toBe(this.model.get("name"));
         });
 
+        it("has a link to edit workspace settings", function() {
+            expect(this.view.$("a[data-dialog=WorkspaceSettings]").text().trim()).toMatchTranslation("actions.edit_workspace");
+        })
+
         it("has a link to add a note", function(){
             expect(this.view.$("a[data-dialog=NotesNew]").text().trim()).toMatchTranslation("actions.add_note");
             expect(this.view.$("a[data-dialog=NotesNew]").attr("data-entity-type")).toBe("workspace");
