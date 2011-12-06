@@ -18,6 +18,7 @@
         submitLoginForm: function submitLoginForm(e) {
             e.preventDefault();
 
+            this.model.clear();
             this.model.set({
                 userName: this.$("input[name='userName']").val(),
                 password: this.$("input[name='password']").val()
