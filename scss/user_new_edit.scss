@@ -92,32 +92,28 @@
         overflow: hidden;
         cursor: pointer;
         display: inline-block;
-        vertical-align: middle;
         position: relative;
         padding-left: 3px;
-    }
 
-    .file-wrapper .action {
-        float: left;
-        color: $link-color;
-        font-size: 12px;
-        font-weight: $semibold;
-        cursor: pointer;
-        z-index: 99;
+        .action {
+            color: $link-color;
+            font-size: 12px;
+            font-weight: $semibold;
+            cursor: pointer;
 
-        &.disabled {
-            color: $weak-text-color;
-            cursor: normal;
+            &.disabled {
+                color: $weak-text-color;
+                cursor: normal;
+            }
+        }
+
+        input {
+            position: absolute;
+            @include opacity(0.0);
+            margin: 0;
+            padding: 0;
+            cursor: pointer;
+            z-index: 2;
         }
     }
-
-    .file-wrapper input {
-        width: auto;
-        position: absolute;
-        top: -12px;
-        left: 0px;
-        @include opacity(0.0);
-        cursor: pointer;
-        z-index: -1;
-     }
 }
