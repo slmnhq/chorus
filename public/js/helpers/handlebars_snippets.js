@@ -1,3 +1,4 @@
+(function(ns, Handlebars){
 Handlebars.registerPartial("errorDiv",
     "<div class='errors'><ul>{{#each serverErrors}}<li>{{message}}</li>{{/each}}</ul></div>"
 );
@@ -99,3 +100,16 @@ Handlebars.registerHelper("eachWithMoreLink", function(context, max, more_key, l
     }
     return ret;
 })
+
+    ns.helpers = {
+        userProfileLink : function(user) {
+            this.userLinkTemplate = this.userLinkTemplate || Handlebars.compile("<a class='user' href='{{url}}'>{{name}}</a>");
+            return this.userLinkTemplate({ url : user.showUrl(), name : user.displayName() });
+        }
+    }
+
+    _.each(ns.helpers, function(helper, name) {
+        Handlebars.registerHelper(name, helper);
+    });
+
+}).call({}, chorus, Handlebars);

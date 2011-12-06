@@ -19,9 +19,7 @@
                     <div class="body">
                         {{lastComment.body}}
                     </div>
-                    <a class="user" href="">
-                        {{lastComment.creatorName}}
-                    </a>
+                    {{{userProfileLink lastComment.creator}}}
                 </div>
             {{/if}}
         </div>

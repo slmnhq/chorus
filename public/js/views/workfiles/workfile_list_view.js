@@ -23,7 +23,7 @@
                 showUrl : isOther ? model.downloadUrl() : model.showUrl(),
                 lastComment : lastComment && {
                     body : lastComment.get("body"),
-                    creatorName : lastComment.creator().displayName()
+                    creator : lastComment.creator()
                 }
             };
         },
