@@ -23,7 +23,11 @@ describe("NotesNewDialog", function() {
             this.dialog.model.set({body : "cats"})
             this.dialog.render();
             expect(this.dialog.$("textarea[name=body]").val()).toBe("cats")
-        })
+        });
+
+        it("has the right placeholder", function() {
+            expect(this.dialog.$("textarea[name=body]").attr("placeholder")).toBe(t("notes.placeholder", "workfile"));
+        });
     });
 
     describe("submit", function() {
