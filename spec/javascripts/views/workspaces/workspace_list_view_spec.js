@@ -131,8 +131,7 @@ describe("chorus.views.WorkspaceList", function() {
             });
 
             it("displays archived relative time", function() {
-                var twoHoursAgo = new Date(Date.now().getTime() - 9000000)
-                var whackyDateFormat = twoHoursAgo.toJSON().replace(/T/, " ").slice(0, -1) //its like iso except with a space instead of T, and no trailing Z
+                var whackyDateFormat = (2).hours().ago().toString("yyyy-MM-dd HH:mm:ss") + ".001"
                 this.archivedWorkspace.set({"archivedTimestamp": whackyDateFormat})
                 this.view.render();
                 expect($(".timestamp", this.view.$("li[data-id=2]")).text()).toBe("2 hours ago");

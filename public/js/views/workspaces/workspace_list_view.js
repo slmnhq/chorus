@@ -8,8 +8,11 @@
         },
 
         collectionModelContext: function(model) {
+            var archivedTimeMatch = model.get("archivedTimestamp") && model.get("archivedTimestamp").match(/(.+)\.\d{1,3}/);
+            if (archivedTimeMatch && archivedTimeMatch[1]) {
+                var timeAgo = Date.parse(archivedTimeMatch[1]).toRelativeTime()
+            }
 
-            var utcDate = model.get("archivedTimestamp") && model.get("archivedTimestamp").trim().replace(/\s/, "T").slice(0, -4)
             return {
                 imageUrl: model.defaultIconUrl(),
                 showUrl: model.showUrl(),
@@ -18,7 +21,7 @@
                 archiverFullName : model.archiver().get("fullName"),
                 truncatedSummary : model.truncatedSummary(100),
                 isTruncated: model.isTruncated(),
-                timeAgo : utcDate && new Date(utcDate).toRelativeTime()
+                timeAgo : timeAgo
             };
         },
 
