@@ -23,7 +23,11 @@
                 self.closeModal()
             });
 
-            this.resource = this.pageModel; // for the context function
+            // for the context function
+            this.resource = this.pageModel;
+
+            // When bindCallbacks is called originally, this.resource has not yet been set.
+            this.bindCallbacks();
         }
     });
 })(chorus);
