@@ -33,7 +33,7 @@ describe("NotesNewDialog", function() {
     describe("submit", function() {
         beforeEach(function() {
             this.dialog.render();
-            spyOn(this.dialog.model, "save");
+            spyOn(this.dialog.model, "save").andCallThrough();
             spyOn(this.dialog, "closeModal");
             this.dialog.$("textarea[name=body]").val("The body of a note");
             this.dialog.$("form").trigger("submit");
@@ -43,14 +43,17 @@ describe("NotesNewDialog", function() {
             expect(this.dialog.model.get("body")).toBe("The body of a note")
             expect(this.dialog.model.save).toHaveBeenCalled();
         });
+
         it("closes the dialog box if saved successfully", function() {
-            this.dialog.model.trigger("saved")
+            this.dialog.model.trigger("saved");
             expect(this.dialog.closeModal).toHaveBeenCalled();
         });
+
         it("doesn't close the dialog box if it not saved successfully", function() {
-            this.dialog.model.trigger("savedFailed")
+            this.dialog.model.trigger("savedFailed");
             expect(this.dialog.closeModal).not.toHaveBeenCalled();
         });
+
         it("trims the note", function(){
             this.dialog.$("textarea[name=body]").val("  trim me  ");
             this.dialog.$("form").trigger("submit");

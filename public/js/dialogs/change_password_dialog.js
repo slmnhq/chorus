@@ -5,15 +5,15 @@
         events: {
             "submit form": "save"
         },
+        persistent: true,
 
         save: function(e) {
             e.preventDefault();
-            this.model.set({
+            this.model.bind("saved", this.saved, this);
+            this.model.save({
                 password : this.$("input[name=password]").val(),
                 passwordConfirmation: this.$("input[name=passwordConfirmation]").val()
-            }, { silent : true })
-            this.model.bind("saved", this.saved, this);
-            this.model.save();
+            });
         },
 
         saved: function() {

@@ -22,6 +22,7 @@ describe("chorus.views.userEdit", function() {
                     setLoggedInUser({'admin': true});
                     this.view.render();
                 });
+
                 context("load the form with proper values", function() {
                     it("load a user with the forms attributes", function() {
                         expect(this.view.$("input[name=firstName]").val()).toBe("EDC");
@@ -42,40 +43,38 @@ describe("chorus.views.userEdit", function() {
                         this.view.$("input[name=ou]").val("awesomeness dept");
                         this.view.$("textarea[name=notes]").text("Here are some notes\n more than one line")
                         this.view.$("form").submit();
-                    })
-
-                    it("modify the user with the form attributes", function() {
-                        //                 this.view.$("form").submit();
-                        expect(this.user.attributes["firstName"]).toBe("Frankie");
-                        expect(this.user.attributes["lastName"]).toBe("Admin");
-                        expect(this.user.attributes["userName"]).toBe("edcadmin");
-                        expect(this.user.attributes["emailAddress"]).toBe("frankie_knuckles@nyclol.com");
-                        expect(this.user.attributes["ou"]).toBe("awesomeness dept");
-                        expect(this.user.attributes["admin"]).toBe(true);
-                        expect(this.user.attributes["notes"]).toBe("Here are some notes\n more than one line");
-                    });
-
-                    context("when the user form has admin unchecked", function() {
-                        beforeEach(function() {
-                            this.view.$("input[name=admin]").prop("checked", false);
-                        });
-
-                        it("sets the user attribute 'admin' to false", function() {
-                            this.view.$("form").submit();
-                            expect(this.user.attributes["admin"]).toBe(false);
-                        });
                     });
 
                     context("saving the user with valid data", function() {
                         beforeEach(function() {
-                            spyOn(this.user, "save")
-                        })
+                            spyOn(this.user, "save").andCallThrough()
+                        });
+
+                        it("modify the user with the form attributes", function() {
+                            expect(this.user.attributes["firstName"]).toBe("Frankie");
+                            expect(this.user.attributes["lastName"]).toBe("Admin");
+                            expect(this.user.attributes["userName"]).toBe("edcadmin");
+                            expect(this.user.attributes["emailAddress"]).toBe("frankie_knuckles@nyclol.com");
+                            expect(this.user.attributes["ou"]).toBe("awesomeness dept");
+                            expect(this.user.attributes["admin"]).toBe(true);
+                            expect(this.user.attributes["notes"]).toBe("Here are some notes\n more than one line");
+                        });
+
+                        context("when the user form has admin unchecked", function() {
+                            beforeEach(function() {
+                                this.view.$("input[name=admin]").prop("checked", false);
+                            });
+
+                            it("sets the user attribute 'admin' to false", function() {
+                                this.view.$("form").submit();
+                                expect(this.user.attributes["admin"]).toBe(false);
+                            });
+                        });
 
                         it("saves the user", function() {
                             this.view.$("form").submit();
                             expect(this.user.save).toHaveBeenCalled()
-                        })
-
+                        });
 
                         context("when user creation is successful", function() {
                             it("redirects to user index", function() {
@@ -84,23 +83,23 @@ describe("chorus.views.userEdit", function() {
                                 expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.model.showUrl(), true);
                             });
                         })
+                    });
 
-                        context("when user creation fails on the server", function() {
-                            beforeEach(function() {
-                                this.view.model.serverErrors = [
-                                    {message : "Hi there"}
-                                ];
-                                this.view.model.trigger("saveFailed")
-                            });
+                    context("when user creation fails on the server", function() {
+                        beforeEach(function() {
+                            this.view.model.serverErrors = [
+                                {message : "Hi there"}
+                            ];
+                            this.view.model.trigger("saveFailed")
+                        });
 
-                            it("doesn't redirect", function() {
-                                expect(this.view.$("form")).toExist();
-                            })
+                        it("doesn't redirect", function() {
+                            expect(this.view.$("form")).toExist();
+                        });
 
-                            it("retains the data already entered", function() {
-                                expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
-                            });
-                        })
+                        it("retains the data already entered", function() {
+                            expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
+                        });
                     });
 
                     context("saving the user with invalid data", function() {
@@ -116,6 +115,10 @@ describe("chorus.views.userEdit", function() {
                         it("retains the data already entered", function() {
                             expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
                         });
+
+                        it("does not change the local model", function() {
+                            expect(this.view.model.get("emailAddress")).not.toBe("bademail");
+                        })
                     });
 
                     context("the form has extra whitespace around an input", function() {

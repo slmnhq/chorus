@@ -31,8 +31,7 @@
             updates.admin = this.$("input#admin-checkbox").prop("checked") || false;
             updates.notes = this.$("textarea").val().trim()
 
-            this.model.set(updates);
-            this.model.save();
+            this.model.save(updates);
         },
 
         goBack : function() {

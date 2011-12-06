@@ -136,20 +136,13 @@ describe("chorus.models.User", function() {
 
             context("when the password has not changed", function() {
                 it("returns true", function() {
-                    this.model.set({ emailAddress : "bobjanky@coolpalace.us" });
-                    expect(this.model.performValidation()).toBeTruthy();
+                    expect(this.model.performValidation({ emailAddress : "bobjanky@coolpalace.us" })).toBeTruthy();
                 });
             });
 
             context("when the password has changed and no confirmation is specified", function() {
                 it("returns false", function() {
-
-                    // when setting the password, we need to set 'silent' to true,
-                    // so that later, when we perform validation, we can tell that
-                    // the password has changed
-
-                    this.model.set({ password : "new_password" }, { silent : true });
-                    expect(this.model.performValidation()).toBeFalsy();
+                    expect(this.model.performValidation({password: "new_password", passwordConfirmation: ""})).toBeFalsy();
                 });
             });
         });

@@ -20,7 +20,7 @@
             this.require('lastName', newAttrs);
             this.require('userName', newAttrs);
             this.requirePattern('emailAddress', /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/, newAttrs);
-            if(this.isNew() || this.hasChanged("password")) {
+            if(this.isNew() || (newAttrs && newAttrs.hasOwnProperty("password"))) {
                 this.requireConfirmation('password', newAttrs);
             }
         },
