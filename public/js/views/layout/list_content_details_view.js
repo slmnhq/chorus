@@ -10,11 +10,17 @@
         fetchNextPage : function() {
             var page = parseInt(this.collection.pagination.page);
             this.collection.fetchPage(page + 1);
+            this.scrollToTopOfPage();
         },
 
         fetchPreviousPage : function() {
             var page = parseInt(this.collection.pagination.page);
             this.collection.fetchPage(page - 1);
+            this.scrollToTopOfPage();
+        },
+
+        scrollToTopOfPage : function() {
+            window.scroll(0, 0);
         },
 
         postRender : function(el) {

@@ -195,6 +195,7 @@ describe("ListContentDetails", function() {
         beforeEach(function() {
             this.collection.pagination.page = "2";
             this.collection.pagination.total = "3";
+            spyOn(window, 'scroll');
             this.view.render();
         })
 
@@ -207,6 +208,10 @@ describe("ListContentDetails", function() {
             it("fetches the next page of the collection", function() {
                 expect(this.collection.fetchPage).toHaveBeenCalledWith(3);
             })
+
+            it("scrolls the viewport to the top of the page", function() {
+                expect(window.scroll).toHaveBeenCalledWith(0, 0)
+            })
         })
 
         describe("when the 'previous' link is clicked", function() {
@@ -217,6 +222,10 @@ describe("ListContentDetails", function() {
 
             it("fetches the previous page of the collection", function() {
                 expect(this.collection.fetchPage).toHaveBeenCalledWith(1);
+            })
+
+            it("scrolls the viewport to the top of the page", function() {
+                expect(window.scroll).toHaveBeenCalledWith(0, 0)
             })
         })
     })
