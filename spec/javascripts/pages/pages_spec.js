@@ -113,9 +113,10 @@ describe("chorus.pages.Base", function() {
                 this.view = new chorus.pages.Base();
                 this.view.mainContent = new Backbone.View();
 
-                var spy = this.fooDialogSpy = {
-                    launchModal : jasmine.createSpy()
-                }
+                var spy = this.fooDialogSpy = new chorus.dialogs.Base();
+                spyOn(spy, "launchModal");
+                spyOn(spy, "attachPageModel").andCallThrough();
+
 
                 chorus.dialogs.Foo = function(opts) {
                     spy.launchElement = opts.launchElement;
@@ -129,6 +130,7 @@ describe("chorus.pages.Base", function() {
 
             it("instantiates dialogs from dialog buttons", function() {
                 this.view.$("button.dialog").click();
+                expect(this.fooDialogSpy.attachPageModel).toHaveBeenCalled();
                 expect(this.fooDialogSpy.launchModal).toHaveBeenCalled();
             })
 
@@ -153,9 +155,9 @@ describe("chorus.pages.Base", function() {
                 this.view = new chorus.pages.Base();
                 this.view.mainContent = new Backbone.View();
 
-                var spy = this.fooDialogSpy = {
-                    launchModal : jasmine.createSpy()
-                }
+                var spy = this.fooDialogSpy = new chorus.dialogs.Base();
+                spyOn(spy, "launchModal");
+                spyOn(spy, "attachPageModel").andCallThrough();
 
                 chorus.dialogs.Foo = function(opts) {
                     spy.launchElement = opts.launchElement;
@@ -168,6 +170,7 @@ describe("chorus.pages.Base", function() {
 
             it("instantiates dialogs from dialog buttons", function() {
                 this.view.$("a.dialog").click();
+                expect(this.fooDialogSpy.attachPageModel).toHaveBeenCalled();
                 expect(this.fooDialogSpy.launchModal).toHaveBeenCalled();
             })
 
@@ -192,9 +195,9 @@ describe("chorus.pages.Base", function() {
             this.view = new chorus.pages.Base();
             this.view.mainContent = new Backbone.View();
 
-            var spy = this.fooAlertSpy = {
-                launchModal : jasmine.createSpy()
-            }
+            var spy = this.fooAlertSpy = new chorus.alerts.Base();
+            spyOn(spy, "launchModal");
+            spyOn(spy, "attachPageModel").andCallThrough();
 
             chorus.alerts.Foo = function(opts) {
                 spy.launchElement = opts.launchElement;
@@ -207,6 +210,7 @@ describe("chorus.pages.Base", function() {
 
         it("instantiates alerts from alert links", function() {
             this.view.$("a.alert").click();
+            expect(this.fooAlertSpy.attachPageModel).toHaveBeenCalled();
             expect(this.fooAlertSpy.launchModal).toHaveBeenCalled();
         })
 
