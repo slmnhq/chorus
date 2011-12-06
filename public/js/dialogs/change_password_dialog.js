@@ -9,11 +9,13 @@
 
         save: function(e) {
             e.preventDefault();
-            this.model.bind("saved", this.saved, this);
-            this.model.save({
+
+            var user = this.pageModel;
+            user.bind("saved", this.saved, this);
+            user.save({
                 password : this.$("input[name=password]").val(),
                 passwordConfirmation: this.$("input[name=passwordConfirmation]").val()
-            });
+            })
         },
 
         saved: function() {
