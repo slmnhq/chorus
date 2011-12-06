@@ -1,5 +1,5 @@
 (function($, ns) {
-    ns.WorkfileListSidebar = chorus.views.Base.extend({
+    ns.views.WorkfileListSidebar = chorus.views.Base.extend({
         className : "workfile_list_sidebar",
 
         setup: function() {
@@ -8,9 +8,14 @@
 
         setWorkfile: function(workfile) {
             this.workfile = workfile;
+            this.collection = new ns.models.ActivitySet([], { entityType : "workfile", entityId : this.workfile.get("id") });
+            this.collection.fetch();
+            
+            this.collection.bind("changed", this.render, this);
             this.workfile.bind("changed", this.render, this);
+            this.workfile.bind("invalidated", this.collection.fetch, this.collection);
 
-            this.activityList = new ns.ActivityList({ collection : ns.ActivityList.cannedActivitySetFor(this.workfile) });
+            this.activityList = new ns.views.ActivityList({ collection : this.collection });
             this.render();
         },
 
@@ -36,4 +41,4 @@
             }
         }
     });
-})(jQuery, chorus.views);
+})(jQuery, chorus);

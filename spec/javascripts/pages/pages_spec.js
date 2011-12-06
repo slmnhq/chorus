@@ -132,14 +132,20 @@ describe("chorus.pages.Base", function() {
                 expect(this.fooDialogSpy.launchModal).toHaveBeenCalled();
             })
 
-            it("passes the launch element and the pageModel to the dialog", function() {
-                this.view.model = new chorus.models.User();
+            it("passes the launch element to the dialog", function() {
                 var elem = this.view.$("button.dialog");
                 elem.click();
 
                 expect(this.fooDialogSpy.launchElement).toBe(elem);
+            });
+
+            it("sets the pageModel on the dialog", function() {
+                this.view.model = new chorus.models.User();
+                var elem = this.view.$("button.dialog");
+                elem.click();
+
                 expect(this.fooDialogSpy.pageModel).toBe(this.view.model);
-            })
+            });
         })
 
         context("from links", function() {
@@ -170,6 +176,14 @@ describe("chorus.pages.Base", function() {
                 elem.click();
                 expect(this.fooDialogSpy.launchElement).toBe(elem);
             })
+
+            it("sets the pageModel on the dialog", function() {
+                this.view.model = new chorus.models.User();
+                var elem = this.view.$("a.dialog");
+                elem.click();
+
+                expect(this.fooDialogSpy.pageModel).toBe(this.view.model);
+            });
         })
     })
 
@@ -201,5 +215,13 @@ describe("chorus.pages.Base", function() {
             elem.click();
             expect(this.fooAlertSpy.launchElement).toBe(elem);
         })
+
+        it("sets the pageModel on the alert", function() {
+            this.view.model = new chorus.models.User();
+            var elem = this.view.$("a.alert");
+            elem.click();
+
+            expect(this.fooAlertSpy.pageModel).toBe(this.view.model);
+        });
     })
 })

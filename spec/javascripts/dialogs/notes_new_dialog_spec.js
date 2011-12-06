@@ -1,7 +1,8 @@
 describe("NotesNewDialog", function() {
     beforeEach(function() {
         this.launchElement = $("<a data-entity-type='workfile' data-entity-id='1'></a>")
-        this.dialog = new chorus.dialogs.NotesNew({launchElement : this.launchElement});
+        this.dialog = new chorus.dialogs.NotesNew({launchElement : this.launchElement });
+        this.dialog.pageModel = new chorus.models.Workfile();
         this.loadTemplate("notes_new");
     });
 
@@ -58,6 +59,13 @@ describe("NotesNewDialog", function() {
             this.dialog.$("textarea[name=body]").val("  trim me  ");
             this.dialog.$("form").trigger("submit");
             expect(this.dialog.model.get("body")).toBe("trim me")
+        });
+
+        it("triggers the 'invalidated' event on the model", function() {
+            var invalidatedSpy = jasmine.createSpy("invalidated");
+            this.dialog.pageModel.bind("invalidated", invalidatedSpy);
+            this.dialog.model.trigger("saved");
+            expect(invalidatedSpy).toHaveBeenCalled();
         })
     }); 
 });

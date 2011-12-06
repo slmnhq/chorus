@@ -9,17 +9,22 @@
             this.entityType = this.options.launchElement.data("entity-type");
             this.entityId = this.options.launchElement.data("entity-id");
 
-            var self=this
             this.model = new chorus.models.Note({
                 entityType : this.entityType,
                 entityId : this.entityId
             });
-            this.model.bind("saved", function(){self.closeModal()});
+
+            this.model.bind("saved", this.saved, this);
         },
 
         save: function(e) {
             e.preventDefault();
             this.model.save({body : this.$("textarea[name=body]").val().trim()})
+        },
+
+        saved : function() {
+            this.pageModel.trigger("invalidated");
+            this.closeModal();
         },
 
         additionalContext : function() {

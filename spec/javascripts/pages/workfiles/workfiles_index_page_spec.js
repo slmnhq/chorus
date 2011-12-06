@@ -53,6 +53,13 @@ describe("chorus.pages.WorkfileIndexPage", function() {
 
             expect(workfileSelectedSpy).toHaveBeenCalledWith(workfile);
         });
+
+        it("sets the model of the page", function() {
+            var listView = this.page.mainContent.content;
+            var workfile = fixtures.modelFor("fetch");
+            listView.trigger("workfile:selected", workfile);
+            expect(this.page.model).toBe(workfile);
+        })
     });
 
     describe("menus", function() {

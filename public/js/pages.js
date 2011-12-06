@@ -54,6 +54,7 @@
             e.preventDefault();
             var launchElement = $(e.target);
             var alert = new chorus.alerts[launchElement.data("alert")]({launchElement : launchElement});
+            alert.pageModel = this.model;
             alert.launchModal();
         }
     })

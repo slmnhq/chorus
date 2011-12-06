@@ -11,6 +11,11 @@ describe("WorkfileShowSidebar", function() {
         it("has an ActivityListView", function() {
             expect(this.view.activityList).toBeDefined();
         })
+
+        it("fetches the ActivitySet for the workfile", function() {
+            expect(this.server.requests[0].url).toBe("/edc/activitystream/workfile/10020?page=1&rows=50");
+            expect(this.server.requests[0].method).toBe("GET");
+        })
     })
 
     describe("#render", function() {

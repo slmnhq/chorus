@@ -44,6 +44,7 @@
             this.sidebar = new chorus.views.WorkfileListSidebar({model : workspace});
 
             this.mainContent.content.forwardEvent("workfile:selected", this.sidebar);
+            this.mainContent.content.bind("workfile:selected", this.setModel, this);
 
             this.mainContent.contentHeader.bind("choice:filter", function(choice) {
                 this.collection.attributes.fileType = choice;
@@ -55,6 +56,10 @@
                 this.collection.sortAsc(field)
                 this.collection.fetch();
             }, this)
+        },
+
+        setModel: function(workfile) {
+            this.model = workfile;
         }
     });
 })(jQuery, chorus.pages);

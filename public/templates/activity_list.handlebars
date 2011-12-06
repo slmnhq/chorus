@@ -13,11 +13,11 @@
             {{t "activity_stream.on"}}
             <span class="timestamp">{{displayTimestamp timestamp}}</div>
         </div>
-        <div class="text">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</div>
+        <div class="text">{{text}}</div>
         <div class="links">
             <a class="comment" href="javascript:void(0)">{{t "activity_stream.comment"}}</a>
         </div>
-        {{#if comments.length}}
+        {{#if comments}} {{#if comments.length}}
         <ul class="comments">
             {{#eachWithMoreLink comments 2 "activity_stream.comments.more" "activity_stream.comments.less"}}
                 <li data-comment-id="{{id}}" class="{{moreClass}}">
@@ -34,7 +34,7 @@
                 </li>
             {{/eachWithMoreLink}}
         </ul>
-        {{/if}}
+        {{/if}} {{/if}}
     </li>
     {{/each}}
 </ul>
