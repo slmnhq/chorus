@@ -15,7 +15,7 @@ describe("chorus.models.User", function() {
 
     describe("#workspaces", function() {
         beforeEach(function() {
-            this.user = new models.User({userName: "dr_charlzz"});
+            this.user = new models.User({userName: "dr_charlzz", id : "457"});
             this.workspaces = this.user.workspaces();
         });
 
@@ -51,7 +51,7 @@ describe("chorus.models.User", function() {
             });
 
             it("hits the right url for that user", function() {
-                var expectedUrl = "/edc/workspace/?user=" + this.user.get("userName") + "&page=1&rows=50";
+                var expectedUrl = "/edc/workspace/?user=457&page=1&rows=50";
                 expect(this.server.requests[0].url).toBe(expectedUrl);
             });
         });

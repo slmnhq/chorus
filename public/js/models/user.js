@@ -7,7 +7,7 @@
         workspaces: function() {
             if (!this._workspaces) {
                 this._workspaces = new ns.WorkspaceSet();
-                this._workspaces.urlTemplate = "workspace/?user=" + this.get("userName");
+                this._workspaces.urlTemplate = "workspace/?user=" + this.get("id");
                 this._workspaces.bind("reset", function() {
                     this.trigger("change");
                 }, this);
