@@ -17,5 +17,9 @@ describe("chorus.models.Comment", function() {
             expect(this.creator.get("firstName")).toBe("LeBron");
             expect(this.creator.get("lastName")).toBe("James");
         });
+
+        it("memoizes", function() {
+            expect(this.creator).toBe(this.model.creator());
+        });
     });
 });
