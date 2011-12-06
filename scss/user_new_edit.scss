@@ -94,14 +94,16 @@
         display: inline-block;
         vertical-align: middle;
         position: relative;
+        padding-left: 3px;
     }
 
     .file-wrapper .action {
-        display: inline-block;
+        float: left;
         color: $link-color;
         font-size: 12px;
         font-weight: $semibold;
         cursor: pointer;
+        z-index: 99;
 
         &.disabled {
             color: $weak-text-color;
@@ -116,5 +118,6 @@
         left: 0px;
         @include opacity(0.0);
         cursor: pointer;
+        z-index: -1;
      }
 }

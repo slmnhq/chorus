@@ -54,14 +54,17 @@ $image-width: 48px;
     }
 
     .file-wrapper button {
-        display: inline-block;
+        float: left;
+        z-index: 99;
     }
+
     .file-wrapper input {
         width: 1px;
         position: relative;
         top: 0px;
         left: -130px;
         @include opacity(0);
+        z-index: -1;
      }
 
     .expanded {
