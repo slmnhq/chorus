@@ -5,7 +5,8 @@
         setup : function() {
             this.collection = new ns.models.ActivitySet([], { entityType : "workfile", entityId : this.model.get("id") });
             this.collection.fetch();
-//            this.model.bind("change", this.collection.fetch, this.collection)
+            this.model.bind("invalidated", this.collection.fetch, this.collection);
+            this.collection.bind("changed", this.render, this);
             this.activityList = new ns.views.ActivityList({ collection : this.collection });
         },
 

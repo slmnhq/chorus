@@ -66,4 +66,22 @@ describe("WorkfileShowSidebar", function() {
             expect(this.view.activityList.render).toHaveBeenCalled();
         })
     })
+
+    describe("when the model is invalidated", function() {
+        it("fetches the activity set", function() {
+            this.view.model.trigger("invalidated")
+            expect(this.server.requests[0].url).toBe(this.view.collection.url())
+        })
+    })
+
+    describe("when the activity list collection is changed", function() {
+        beforeEach(function() {
+            spyOn(this.view, "postRender"); // check for #postRender because #render is bound
+            this.view.collection.trigger("changed")
+        })
+
+        it("re-renders", function() {
+            expect(this.view.postRender).toHaveBeenCalled();
+        })
+    })
 });
