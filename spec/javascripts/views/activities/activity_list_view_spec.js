@@ -116,6 +116,32 @@ describe("chorus.views.ActivityList", function() {
                 })
             })
 
+            describe("pagination", function() {
+                context("when there is no next page", function() {
+                    it("does not render a 'more' link", function() {
+                        expect(this.view.$("a.more_activities")).not.toExist();
+                    })
+                })
+
+                context("when there is a next page", function() {
+                    beforeEach(function() {
+                        this.collection.pagination.total = "4";
+                        this.view.render();
+                    })
+                    
+                    it("renders a 'more' link", function() {
+                        expect(this.view.$("a.more_activities")).toExist();
+                    })
+
+                    describe("when the 'more' link is clicked", function() {
+                        it("fetches the next page of the activity stream", function() {
+                            spyOn(this.collection, 'fetchPage');
+                            this.view.$("a.more_activities").click();
+                            expect(this.collection.fetchPage).toHaveBeenCalledWith(2, { add : true });
+                        })
+                    })
+                })
+            })
         });
     });
 
