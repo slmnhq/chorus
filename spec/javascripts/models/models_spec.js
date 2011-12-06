@@ -174,8 +174,8 @@ describe("chorus.models", function() {
 
             context("passing attrs to the save method", function() {
                 beforeEach(function() {
-                    this.model.declareValidations = function() {
-                        this.require('requiredAttr');
+                    this.model.declareValidations = function(newAttrs) {
+                        this.require('requiredAttr', newAttrs);
                     };
 
                     this.model.set({requiredAttr : 'foo'});
@@ -197,7 +197,7 @@ describe("chorus.models", function() {
 
                     it("triggers validated", function() {
                         expect(this.validatedSpy).toHaveBeenCalled();
-                    })
+                    });
                 });
 
                 context("when the attrs are invalid", function() {
@@ -327,6 +327,20 @@ describe("chorus.models", function() {
                 expect(this.model.errors.foo).toContain("foo");
             });
 
+            it("sets an error if newAttrs is invalid but the existing value is valid", function() {
+                this.model.set({foo: "bar"});
+                this.model.require("foo", {foo: ""});
+
+                expect(this.model.errors.foo).toBeDefined();
+            });
+
+            it("does not set an error if the newAttrs is valid", function() {
+                this.model.set({foo: "bar"});
+                this.model.require("foo", {foo: "quux"});
+
+                expect(this.model.errors.foo).not.toBeDefined();
+            });
+
             context("model has attrToLabel set", function() {
                 beforeEach(function() {
                     this.model.attrToLabel = {
@@ -366,6 +380,20 @@ describe("chorus.models", function() {
             it("contains the attr name in the error", function() {
                 this.model.requirePattern("foo", /hello/);
                 expect(this.model.errors.foo).toContain("foo");
+            });
+
+            it("sets an error if newAttrs is invalid but the existing value is valid", function() {
+                this.model.set({foo: "bar"});
+                this.model.requirePattern("foo", /bar/, {foo: ""});
+
+                expect(this.model.errors.foo).toBeDefined();
+            });
+
+            it("does not set an error if the newAttrs is valid", function() {
+                this.model.set({foo: "123"});
+                this.model.requirePattern("foo", /\d+/, {foo: "456"});
+
+                expect(this.model.errors.foo).not.toBeDefined();
             });
 
             context("model has attrToLabel set", function() {
@@ -414,6 +442,31 @@ describe("chorus.models", function() {
                 this.model.set({ foo : "bar", fooConfirmation : "baz" });
                 this.model.requireConfirmation("foo");
                 expect(this.model.errors.foo).toContain("foo");
+            });
+
+            it("sets an error if newAttrs is invalid but the existing value is valid", function() {
+                this.model.set({foo: "bar", fooConfirmation: "bar"});
+                this.model.requireConfirmation("foo", {foo: "a", fooConfirmation: "b"});
+
+                expect(this.model.errors.foo).toBeDefined();
+            });
+
+            it("does not set an error if the newAttrs is valid", function() {
+                this.model.set({foo: "123", fooConfirmation: "123"});
+                this.model.requireConfirmation("foo", {foo: "456", fooConfirmation: "456"});
+
+                expect(this.model.errors.foo).not.toBeDefined();
+            });
+
+            it("throws if newAttrs supplies an original and not a confirmation", function() {
+                this.model.set({foo: "123", fooConfirmation: "123"});
+
+                try {
+                    this.model.requireConfirmation("foo", {foo: "456"});
+                    expect("should never get here").toBe("wtf");
+                } catch (e) {
+                    // test passed
+                }
             });
 
             context("model has attrToLabel set", function() {
