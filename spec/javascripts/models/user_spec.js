@@ -82,13 +82,13 @@ describe("chorus.models.User", function() {
         _.each(["firstName", "lastName", "userName"], function(attr) {
             it("requires " + attr, function() {
                 this.model.performValidation();
-                expect(this.model.require).toHaveBeenCalledWith(attr);
+                expect(this.model.require).toHaveBeenCalledWith(attr, undefined);
             });
         });
 
         it("requires emailAddress", function() {
             this.model.performValidation();
-            expect(this.model.requirePattern).toHaveBeenCalledWith("emailAddress", /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/);
+            expect(this.model.requirePattern).toHaveBeenCalledWith("emailAddress", /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/, undefined);
         });
 
 

@@ -206,12 +206,12 @@ describe("chorus.models.Session", function() {
 
         it("requires userName", function() {
             this.model.performValidation();
-            expect(this.model.require).toHaveBeenCalledWith("userName");
+            expect(this.model.require).toHaveBeenCalledWith("userName", undefined);
         });
 
         it("requires password", function() {
             this.model.performValidation();
-            expect(this.model.require).toHaveBeenCalledWith("password");
+            expect(this.model.require).toHaveBeenCalledWith("password", undefined);
         });
     });
 

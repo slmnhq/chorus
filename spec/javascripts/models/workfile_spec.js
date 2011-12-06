@@ -55,7 +55,7 @@ describe("chorus.models.Workfile", function() {
 
         it("requires fileName", function() {
             this.model.performValidation();
-            expect(this.model.require).toHaveBeenCalledWith("fileName");
+            expect(this.model.require).toHaveBeenCalledWith("fileName", undefined);
         });
     });
 

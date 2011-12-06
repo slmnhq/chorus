@@ -27,8 +27,8 @@
             });
         },
 
-        declareValidations : function(){
-            this.require("fileName")
+        declareValidations : function(newAttrs){
+            this.require("fileName", newAttrs);
         },
 
         attrToLabel : {

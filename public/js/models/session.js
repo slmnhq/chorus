@@ -51,9 +51,9 @@
             }
         },
 
-        declareValidations : function() {
-            this.require("userName")
-            this.require("password")
+        declareValidations : function(newAttrs) {
+            this.require("userName", newAttrs);
+            this.require("password", newAttrs);
         },
 
         attrToLabel : {

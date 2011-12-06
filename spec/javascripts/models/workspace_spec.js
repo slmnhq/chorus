@@ -100,7 +100,7 @@ describe("chorus.models.Workspace", function() {
 
         it("requires name", function() {
             this.model.performValidation();
-            expect(this.model.require).toHaveBeenCalledWith("name");
+            expect(this.model.require).toHaveBeenCalledWith("name", undefined);
         });
     });
 

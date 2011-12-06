@@ -23,8 +23,8 @@
             });
         },
 
-        declareValidations : function(){
-            this.require("name")
+        declareValidations : function(newAttrs) {
+            this.require("name", newAttrs);
         },
 
         archiver: function() {

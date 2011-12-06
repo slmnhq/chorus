@@ -15,13 +15,13 @@
             return this._workspaces;
         },
 
-        declareValidations : function() {
-            this.require('firstName');
-            this.require('lastName');
-            this.require('userName');
-            this.requirePattern('emailAddress', /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/);
+        declareValidations : function(newAttrs) {
+            this.require('firstName', newAttrs);
+            this.require('lastName', newAttrs);
+            this.require('userName', newAttrs);
+            this.requirePattern('emailAddress', /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/, newAttrs);
             if(this.isNew() || this.hasChanged("password")) {
-                this.requireConfirmation('password');
+                this.requireConfirmation('password', newAttrs);
             }
         },
 
