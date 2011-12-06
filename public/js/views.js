@@ -164,10 +164,6 @@
             if (this.contentFooter) {
                 this.$("#content_footer").html(this.contentFooter.render().el);
                 this.contentFooter.delegateEvents();
-
-                if ($(this.contentFooter.el).hasClass("hidden")) {
-                    this.$("#content_footer").addClass("hidden");
-                }
             } else {
                 this.$("#content_footer").addClass("hidden");
             }
