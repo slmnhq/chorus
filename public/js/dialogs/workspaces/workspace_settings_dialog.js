@@ -11,25 +11,19 @@
 
         updateWorkspace : function(e) {
             e.preventDefault();
-            this.model.set({
+            this.pageModel.save({
                 name: this.$("input[name=name]").val().trim(),
                 summary: this.$("textarea[name=summary]").val().trim()
             });
-
-            this.model.save();
         },
 
-        makeModel : function() {
-            this.id = this.options.launchElement.data("id");
-
-            var self = this
-            this.model = new chorus.models.Workspace({
-                id : this.id
-            });
-            this.model.fetch();
-            this.model.bind("saved", function() {
+        bindPageModelCallbacks : function() {
+            var self = this;
+            this.pageModel.bind("saved", function() {
                 self.closeModal()
             });
+
+            this.resource = this.pageModel; // for the context function
         }
     });
 })(chorus);
