@@ -31,11 +31,11 @@
             width: $padding-x;
 
             &:first-child {
-                left: -$padding-x;
+                left: $padding-x;
             }
             
             &:last-child {
-                right: -$padding-x;
+                right: $padding-x;
             }
         }
 
@@ -89,6 +89,11 @@
             float: right;
             padding: 2px 5px;
             font-size: 13px;
+        }
+
+        .timestamp {
+            font-size: 12px;
+            font-style: italic;
         }
     }
 }

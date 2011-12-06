@@ -28,14 +28,16 @@
         .truncated {
             display : block;
         }
-    }
-    .more {
-        .full {
-            display : block;
+        &.more {
+            .full {
+                display : block;
+            }
+            .truncated {
+                display : none;
+            }
         }
-        .truncated {
-            display : none;
-        }
+
     }
+
 }
 

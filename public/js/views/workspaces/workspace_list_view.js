@@ -9,6 +9,7 @@
 
         collectionModelContext: function(model) {
 
+            var utcDate = model.get("archivedTimestamp") && model.get("archivedTimestamp").trim().replace(/\s/, "T").slice(0, -4)
             return {
                 imageUrl: model.defaultIconUrl(),
                 showUrl: model.showUrl(),
@@ -16,7 +17,8 @@
                 archiverUrl: model.archiver().showUrl(),
                 archiverFullName : model.archiver().get("fullName"),
                 truncatedSummary : model.truncatedSummary(100),
-                isTruncated: model.isTruncated()
+                isTruncated: model.isTruncated(),
+                timeAgo : utcDate && new Date(utcDate).toRelativeTime()
             };
         },
 

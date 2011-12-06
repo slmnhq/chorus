@@ -9,7 +9,8 @@ describe("chorus.views.WorkspaceList", function() {
             name: "my archived workspace",
             archiverFirstName: "John",
             archiverLastName: "Henry",
-            summary: " this is an archived workspace"
+            summary: " this is an archived workspace",
+            archivedTimestamp: "2011-12-05 13:25:25.704"
         });
 
 
@@ -66,22 +67,6 @@ describe("chorus.views.WorkspaceList", function() {
             })
         })
 
-        it("displays the active workspace icon for the active workspace", function() {
-            expect(this.view.$("li[data-id=1] img").attr("src")).toBe(this.activeWorkspace.defaultIconUrl());
-        });
-
-        it("displays the archived workspace icon for the archived workspace", function() {
-            expect($("img", this.archivedEl).attr("src")).toBe(this.archivedWorkspace.defaultIconUrl());
-        });
-
-        it("displays the archiver FullName for the archived workspace", function() {
-            expect($(".owner a", this.archivedEl).text()).toContain(this.archivedWorkspace.archiver().get("fullName"));
-        });
-
-        it("links to the archiver's profile", function() {
-            expect($(".owner a", this.archivedEl).attr('href')).toBe(this.archivedWorkspace.archiver().showUrl());
-        });
-
         it("links the workspace name to the show url", function() {
             expect($("a", this.activeEl).text().trim()).toBe(this.activeWorkspace.get("name"));
             expect($("a", this.activeEl).attr("href")).toBe(this.activeWorkspace.showUrl());
@@ -113,13 +98,12 @@ describe("chorus.views.WorkspaceList", function() {
                 expect($(".summary", this.archivedEl).text()).toContain(this.archivedWorkspace.get("summary"));
                 expect($(".summary a", this.archivedEl)).not.toHaveClass("moreLink");
             });
-
         });
 
         describe("when the summary is more than 100", function() {
             it("displays the truncated summary with option 'More' ", function() {
                 expect($(this.archivedBigSummaryEl)).not.toHaveClass("more");
-                expect($(".summary", this.archivedBigSummaryEl).text()).toContain(this.archivedBigSummaryWorkspace.get("summary").substring(0,100));
+                expect($(".summary", this.archivedBigSummaryEl).text()).toContain(this.archivedBigSummaryWorkspace.get("summary").substring(0, 100));
             });
 
             it("displays the full summary with option 'Less' when clicked on More ", function() {
@@ -129,6 +113,30 @@ describe("chorus.views.WorkspaceList", function() {
                 expect($(".summary", this.archivedBigSummaryEl).text()).toContain(this.archivedBigSummaryWorkspace.get("summary"));
             });
         });
+        describe("archived workspace", function() {
+            it("displays the active workspace icon for the active workspace", function() {
+                expect(this.view.$("li[data-id=1] img").attr("src")).toBe(this.activeWorkspace.defaultIconUrl());
+            });
 
+            it("displays the archived workspace icon for the archived workspace", function() {
+                expect($("img", this.archivedEl).attr("src")).toBe(this.archivedWorkspace.defaultIconUrl());
+            });
+
+            it("displays the archiver FullName for the archived workspace", function() {
+                expect($(".owner a", this.archivedEl).text()).toContain(this.archivedWorkspace.archiver().get("fullName"));
+            });
+
+            it("links to the archiver's profile", function() {
+                expect($(".owner a", this.archivedEl).attr('href')).toBe(this.archivedWorkspace.archiver().showUrl());
+            });
+
+            it("displays archived relative time", function() {
+                var twoHoursAgo = new Date(Date.now().getTime() - 9000000)
+                var whackyDateFormat = twoHoursAgo.toJSON().replace(/T/, " ").slice(0, -1) //its like iso except with a space instead of T, and no trailing Z
+                this.archivedWorkspace.set({"archivedTimestamp": whackyDateFormat})
+                this.view.render();
+                expect($(".timestamp", this.view.$("li[data-id=2]")).text()).toBe("2 hours ago");
+            });
+        });
     });
 });
