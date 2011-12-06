@@ -27,21 +27,38 @@
             this.require("name")
         },
 
+        archiver: function() {
+            return new ns.User({
+                fullName: (this.get("archiverFirstName") + ' ' + this.get("archiverLastName")),
+                userName: this.get("archiver")
+            });
+        },
+
         displayName : function() {
             return this.get("name");
         },
 
-        imageUrl : function(options){
+        imageUrl : function(options) {
             options = (options || {});
             return "/edc/workspace/" + this.get("id") + "/image?size=" + (options.size || "original");
         },
 
-        picklistImageUrl : function(){
-          return "/images/workspace-icon-small.png";
+        picklistImageUrl : function() {
+            return "/images/workspace-icon-small.png";
         },
 
         attrToLabel : {
             "name" : "workspace.validation.name"
+        },
+
+        truncatedSummary: function(length) {
+            if (this.get("summary")) {
+                return this.get("summary").substring(0, length);
+            }
+        },
+
+        isTruncated: function() {
+            return this.get("summary") ? this.get("summary").length > 100 : false;
         }
     });
 })(chorus.models);

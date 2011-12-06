@@ -11,17 +11,24 @@
                 </a>
             </div>
             <div class="summary">
-                {{summary}}
+                {{#if isTruncated }}
+                    <span class="truncated">{{truncatedSummary}} <a href ="#" class="link">{{t "workspace.more"}}</a></span>
+                    <span class="full">{{summary}} <a href ="#" class="link">{{t "workspace.less"}}</a></span>
+                {{else}}
+                    {{summary}}
+                {{/if}}
             </div>
             <div class="details">
                 <span class="owner">
                     {{#if active}}
                         {{t "workspaces.owned_by"}}
+                        <a href="{{ownerUrl}}">{{ownerFullName}}</a>
                     {{else}}
                         {{t "workspaces.archived_by"}}
+                        <a href="{{archiverUrl}}">{{archiverFullName}}</a>
                     {{/if}}
 
-                    <a href="{{ownerUrl}}">{{ownerFullName}}</a>
+
                 </span>
                 {{#unless isPublic}}
                     <span class="private">
