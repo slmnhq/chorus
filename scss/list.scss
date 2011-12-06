@@ -8,10 +8,7 @@
         border-bottom: 1px dotted $subheader-border-color;
         margin: 0 $padding-x;
         position: relative;
-        overflow:hidden;  //http://www.stubbornella.org/content/2010/06/25/the-media-object-saves-hundreds-of-lines-of-code/
-        _overflow:visible;
-        zoom:1;
-        
+
         &.selected {
             background: white;
 
@@ -31,11 +28,11 @@
             width: $padding-x;
 
             &:first-child {
-                left: $padding-x;
+                left: -$padding-x;
             }
             
             &:last-child {
-                right: $padding-x;
+                right: -$padding-x;
             }
         }
 
