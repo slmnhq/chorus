@@ -1,4 +1,15 @@
 @import "_common.scss";
 
 ul.workfile_list {
+    .comment {
+        font-size: 14px;
+
+        .body {
+            color: $dark-text-color;
+        }
+
+        .user {
+            color: $weak-link-color;
+        }
+    }
 }

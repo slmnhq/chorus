@@ -17,9 +17,38 @@ describe("WorkfileListView", function() {
 
         context("with some workfiles in the collection", function() {
             beforeEach(function() {
-                this.model1 = new chorus.models.Workfile({id: 12, fileType: "sql", fileName: "some_file.sql", description: "describe 1", workspaceId: 1, mimeType: "text/x-sql"});
-                this.model2 = new chorus.models.Workfile({id: 34, fileType: "txt", fileName: "other_file.txt", description: "describe 2", workspaceId: 1, mimeType: "text/plain"});
-                this.model3 = new chorus.models.Workfile({id: 56, fileType: "N/A", fileName: "zipfile.zip", description: "describe 3", workspaceId: 1, mimeType: "application/zip"});
+                this.model1 = new chorus.models.Workfile({
+                    id: 12,
+                    fileType: "sql",
+                    fileName: "some_file.sql",
+                    description: "describe 1",
+                    workspaceId: 1,
+                    mimeType: "text/x-sql",
+                    commentBody: "Comment 1",
+                    commenterId: "21",
+                    commenterFirstName: "Wayne",
+                    commenterLastName: "Wayneson"
+                });
+                this.model2 = new chorus.models.Workfile({
+                    id: 34,
+                    fileType: "txt",
+                    fileName: "other_file.txt",
+                    description: "describe 2",
+                    workspaceId: 1,
+                    mimeType: "text/plain",
+                    commentBody: "Comment 2",
+                    commenterId: "22",
+                    commenterFirstName: "Garth",
+                    commenterLastName: "Garthson"
+                });
+                this.model3 = new chorus.models.Workfile({
+                    id: 56,
+                    fileType: "N/A",
+                    fileName: "zipfile.zip",
+                    description: "describe 3",
+                    workspaceId: 1,
+                    mimeType: "application/zip"
+                });
                 this.collection = new chorus.models.WorkfileSet([this.model1, this.model2, this.model3], {workspaceId: 1234});
                 this.view = new chorus.views.WorkfileList({collection: this.collection});
                 this.view.render();
@@ -60,6 +89,16 @@ describe("WorkfileListView", function() {
                 expect($(this.view.$("li .summary")[0]).text().trim()).toBe(this.model1.get("description"));
                 expect($(this.view.$("li .summary")[1]).text().trim()).toBe(this.model2.get("description"));
                 expect($(this.view.$("li .summary")[2]).text().trim()).toBe(this.model3.get("description"));
+            });
+
+            it("includes the most recent comment body", function() {
+                expect($(this.view.$("li .comment .body")[0]).text().trim()).toBe(this.model1.lastComment().get("body"));
+                expect($(this.view.$("li .comment .body")[1]).text().trim()).toBe(this.model2.lastComment().get("body"));
+            });
+
+            it("includes the full name of the most recent commenter", function() {
+                expect($(this.view.$("li .comment .user")[0]).text().trim()).toBe(this.model1.lastComment().creator().displayName());
+                expect($(this.view.$("li .comment .user")[1]).text().trim()).toBe(this.model2.lastComment().creator().displayName());
             });
 
             context("clicking on the first item", function() {

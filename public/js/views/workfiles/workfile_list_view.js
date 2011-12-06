@@ -17,10 +17,15 @@
 
         collectionModelContext : function(model) {
             var isOther = !(model.isImage() || model.isText());
+            var lastComment = model.lastComment();
             return {
                 iconUrl : chorus.urlHelpers.fileIconUrl(model.get('fileType')),
-                showUrl : isOther ? model.downloadUrl() : model.showUrl()
-            }
+                showUrl : isOther ? model.downloadUrl() : model.showUrl(),
+                lastComment : lastComment && {
+                    body : lastComment.get("body"),
+                    creatorName : lastComment.creator().displayName()
+                }
+            };
         },
 
         filter: function(type){
