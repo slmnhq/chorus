@@ -293,28 +293,6 @@ describe("chorus.views", function() {
                 it("should render the contentFooter", function() {
                     expect((this.view.$("#content_footer").text())).toBe("content footer text");
                 });
-
-                context("when the rendered footer has the hidden class", function() {
-                    beforeEach(function() {
-                        $(this.view.contentFooter.el).addClass("hidden");
-                        this.view.render();
-                    });
-
-                    it("adds the hidden class to the content footer element", function() {
-                        expect(this.view.$("#content_footer")).toHaveClass("hidden")
-                    })
-                })
-
-                context("when the rendered footer does not have the hidden class", function() {
-                    beforeEach(function() {
-                        $(this.view.contentFooter.el).removeClass("hidden");
-                        this.view.render();
-                    });
-
-                    it("does not add the hidden class to the content footer element", function() {
-                        expect(this.view.$("#content_footer")).not.toHaveClass("hidden")
-                    })
-                })
             });
         });
     });
