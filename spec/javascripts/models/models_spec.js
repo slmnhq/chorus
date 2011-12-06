@@ -166,16 +166,54 @@ describe("chorus.models", function() {
                     expect(Backbone.Model.prototype.save).not.toHaveBeenCalled();
                 })
 
-                it("does not trigger saved", function() {
-                    this.model.save();
-                    expect(this.savedSpy).not.toHaveBeenCalled();
-                })
-
                 it("triggers validationFailed", function() {
                     this.model.save();
                     expect(this.validationFailedSpy).toHaveBeenCalled();
                 })
             })
+
+            context("passing attrs to the save method", function() {
+                beforeEach(function() {
+                    this.model.declareValidations = function() {
+                        this.require('requiredAttr');
+                    };
+
+                    this.model.set({requiredAttr : 'foo'});
+                    this.validationFailedSpy = jasmine.createSpy();
+                    this.model.bind("validationFailed", this.validationFailedSpy);
+                    this.validatedSpy = jasmine.createSpy();
+                    this.model.bind("validated", this.validatedSpy);
+                    spyOn(Backbone.Model.prototype, "save");
+                });
+
+                context("when the attrs are valid", function() {
+                    beforeEach(function() {
+                        this.model.save({requiredAttr : "bar"})
+                    });
+
+                    it("saves the model", function() {
+                        expect(Backbone.Model.prototype.save).toHaveBeenCalled();
+                    });
+
+                    it("triggers validated", function() {
+                        expect(this.validatedSpy).toHaveBeenCalled();
+                    })
+                });
+
+                context("when the attrs are invalid", function() {
+                    beforeEach(function() {
+                        this.model.save({requiredAttr : ""})
+                    });
+
+                    it("does not save the model", function() {
+                        expect(Backbone.Model.prototype.save).not.toHaveBeenCalled();
+                    })
+
+                    it("triggers validationFailed", function() {
+                        expect(this.validationFailedSpy).toHaveBeenCalled();
+                    })
+                });
+            });
         });
 
         describe("#destroy", function () {

@@ -129,7 +129,8 @@
                     if (success) success(model, resp, xhr);
                 };
                 this.serverErrors = undefined;
-                if (this.performValidation(this.attributes)) {
+                _.extend(this.attributes, attrs);
+                if (this.performValidation()) {
                     this.trigger("validated");
                     return Backbone.Model.prototype.save.call(this, attrs, options);
                 } else {
