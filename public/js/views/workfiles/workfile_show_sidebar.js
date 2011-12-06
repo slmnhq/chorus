@@ -3,9 +3,8 @@
         className : "workfile_show_sidebar",
 
         setup : function() {
-            this.collection = new ns.models.ActivitySet([], { entityType : "workfile", entityId : this.model.get("id") });
+            this.collection = this.model.activities();
             this.collection.fetch();
-            this.model.bind("invalidated", this.collection.fetch, this.collection);
             this.collection.bind("changed", this.render, this);
             this.activityList = new ns.views.ActivityList({ collection : this.collection });
         },

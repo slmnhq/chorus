@@ -8,12 +8,11 @@
 
         setWorkfile: function(workfile) {
             this.workfile = workfile;
-            this.collection = new ns.models.ActivitySet([], { entityType : "workfile", entityId : this.workfile.get("id") });
+            this.collection = this.workfile.activities();
             this.collection.fetch();
             
             this.collection.bind("changed", this.render, this);
             this.workfile.bind("changed", this.render, this);
-            this.workfile.bind("invalidated", this.collection.fetch, this.collection);
 
             this.activityList = new ns.views.ActivityList({ collection : this.collection });
             this.render();

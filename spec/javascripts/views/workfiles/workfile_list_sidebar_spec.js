@@ -84,5 +84,20 @@ describe("WorkfileListSidebar", function() {
         it("displays the activity list", function() {
             expect(this.view.$(".activity_list")).toExist();
         })
+
+        it("sets the collection to the activities of the selected workfile", function() {
+            expect(this.view.collection).toBe(this.workfile.activities());
+        })
+
+        describe("when the activity set is changed", function() {
+            beforeEach(function() {
+               spyOn(this.view, 'postRender');
+            });
+
+            it("re-renders", function() {
+                this.view.collection.trigger("changed");
+                expect(this.view.postRender).toHaveBeenCalled();
+            });
+        })
     })
 });

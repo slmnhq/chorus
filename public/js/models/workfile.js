@@ -31,6 +31,15 @@
             this.require("fileName", newAttrs);
         },
 
+        activities : function() {
+            if (!this._activities) {
+                this._activities = new chorus.models.ActivitySet([], { entityType : "workfile", entityId : this.get("id") });
+                this.bind("invalidated", this._activities.fetch, this._activities)
+            }
+
+            return this._activities;
+        },
+
         attrToLabel : {
             "fileName" : "workfiles.validation.name"
         },
