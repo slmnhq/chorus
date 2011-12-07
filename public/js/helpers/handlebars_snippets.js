@@ -3,6 +3,7 @@
     Handlebars.registerPartial("errorDiv", "<div class='errors'><ul>{{#each serverErrors}}<li>{{message}}</li>{{/each}}</ul></div>");
 
     var templates = {}; //for memoizing handlebars helpers templates
+    var expectedDateFormat = /^(\d{4}-\d{1,2}-\d{1,2}\s+\d{1,2}:\d{2}:\d{2})/;
     ns.helpers = {
         cache_buster: function() {
             return new Date().getTime();
@@ -63,10 +64,12 @@
         },
 
         displayTimestamp: function(timestamp) {
-            var match = timestamp && timestamp.match(/(.+)\.\d{1,3}/);
+            var match = timestamp && timestamp.match(expectedDateFormat);
             if (match && match[1]) {
                 return Date.parse(match[1], "yyyy-mm-dd H:m:s").toString("MMMM d")
             } else {
+                // We could throw an exception here, but returning a bogus string
+                // makes it probably easier for the client to notice if/when parse fails.
                 return "WHENEVER";
             }
         },
