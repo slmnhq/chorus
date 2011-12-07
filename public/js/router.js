@@ -2,6 +2,9 @@
     ns.Router = Backbone.Router.extend({
         showDevLinks : true,
         maps : [
+            // routes are evaluated in LIFO format, so adding a match-all route first will act as a fallback properly
+            // (as long as `maps` is evaluated in order)
+            ["*path", "InvalidRoute"],
             ["", "Dashboard"],
             ["/", "Dashboard"],
             ["/login", "Login"],
@@ -49,7 +52,6 @@
                         $("body > .routes").remove();
                         $("body").append(new ns.views.RouteSplat().render().el);
                     }
-
                 }
             }
         },
@@ -58,11 +60,8 @@
             fragment = fragment.match(/#?(.+)/)[1];
             if (Backbone.history.fragment == fragment) {
                 Backbone.history.loadUrl(fragment);
-
             } else {
-//                this.__proto__.navigate(fragment, triggerRoute);
-//                alert(this.__proto__, Object.getPrototypeOf(this), this.constructor.prototype);
-                  Backbone.Router.prototype.navigate(fragment, triggerRoute);
+                Backbone.Router.prototype.navigate(fragment, triggerRoute);
             }
         }
     });
