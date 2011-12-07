@@ -3,13 +3,13 @@
     {{#each models}}
         <li data-activity-id="{{id}}">
             <div class="image">
-                <a href="#/users/{{author.username}}">
+                <a href="{{authorUrl}}">
                     <img title="{{displayNameFromPerson author}}" src="/edc/userimage/{{author.username}}?size=icon"/>
                 </a>
             </div>
             <div class="title">{{type}}</div>
             <div class="info">
-                <a href="#/users/{{author.username}}"><span class="name">{{displayNameFromPerson author}}</span></a>
+                <a href="{{authorUrl}}"><span class="name">{{displayNameFromPerson author}}</span></a>
                 {{t "activity_stream.on"}}
                 <span class="timestamp">{{displayTimestamp timestamp}}</div>
             </div>
@@ -22,12 +22,12 @@
                 {{#eachWithMoreLink comments 2 "activity_stream.comments.more" "activity_stream.comments.less"}}
                     <li data-comment-id="{{id}}" class="{{moreClass}}">
                         <div class="image">
-                            <a href="#/users/{{author.username}}">
+                            <a href="#/users/{{author.id}}">
                                 <img title="{{displayNameFromPerson author}}" src="/edc/userimage/{{author.username}}?size=icon"/>
                             </a>
                         </div>
                         <div class="info">
-                            <a href="#/users/{{author.username}}"><span class="name">{{displayNameFromPerson author}}</span></a>
+                            <a href="#/users/{{author.id}}"><span class="name">{{displayNameFromPerson author}}</span></a>
                             <div class="timestamp">{{displayTimestamp timestamp}}</div>
                         </div>
                         <div class="text">{{text}}</div>

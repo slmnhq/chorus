@@ -21,6 +21,10 @@
             }
         },
 
+        collectionModelContext: function(model) {
+            return { authorUrl : model.author().showUrl() };
+        },
+
         fetchMoreActivities : function(ev) {
             ev.preventDefault();
             var pageToFetch = parseInt(this.collection.pagination.page) + 1;
