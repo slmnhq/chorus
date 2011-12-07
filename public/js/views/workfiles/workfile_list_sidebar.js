@@ -10,7 +10,7 @@
             this.workfile = workfile;
             this.collection = this.workfile.activities();
             this.collection.fetch();
-            
+
             this.collection.bind("changed", this.render, this);
             this.workfile.bind("changed", this.render, this);
 
@@ -20,24 +20,23 @@
 
         postRender : function() {
             if (this.activityList) {
-            this.activityList.el = this.$(".activities")
-            this.activityList.delegateEvents()
-            this.activityList.render();
+                this.activityList.el = this.$(".activities")
+                this.activityList.delegateEvents()
+                this.activityList.render();
             }
         },
 
         additionalContext : function() {
+            var ctx = {canUpdate : this.model.canUpdate()};
             if (this.workfile) {
                 var attributes = _.extend({}, this.workfile.attributes);
                 attributes.updatedBy = [this.workfile.attributes.modifiedByFirstName, this.workfile.attributes.modifiedByLastName].join(' ');
                 attributes.modifierUrl = this.workfile.modifier().showUrl();
                 attributes.downloadUrl = this.workfile.downloadUrl();
-                return {
-                    workfile: attributes
-                };
-            } else {
-                return {};
+                ctx.workfile = attributes;
             }
+
+            return ctx;
         }
     });
 })(jQuery, chorus);
