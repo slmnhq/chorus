@@ -53,6 +53,7 @@ describe("chorus.router", function() {
             this.loadTemplate("dashboard_sidebar");
             this.loadTemplate("logged_in_layout");
             this.loadTemplate("plain_text")
+            this.loadTemplate("truncated_text")
 
             this.savedLocation = window.location.hash;
         })
