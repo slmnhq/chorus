@@ -1,21 +1,28 @@
 describe("chorus.views.userEdit", function() {
     beforeEach(function() {
         this.loadTemplate("user_edit");
+        this.loadTemplate("image_upload");
         this.loadTemplate("errors")
+
+        chorus.session = new chorus.models.Session();
+        setLoggedInUser({'userName': 'edcadmin'})
+        fixtures.model = 'User';
+        this.user = new chorus.models.User()
+        this.view = new chorus.views.UserEdit({model : this.user});
+        this.view.model.set(fixtures.jsonFor('fetch').resource[0]);
+        this.view.model.loaded = true;
     })
 
+    describe("#setup", function() {
+        it("instantiates an ImageUpload view with the model", function() {
+            var imageUpload = this.view.imageUpload;
+            expect(imageUpload instanceof chorus.views.ImageUpload).toBeTruthy();
+            expect(imageUpload.model).toBe(this.view.model);
+        });
+    });
 
     describe("#render", function() {
         context("when editing yourself", function() {
-            beforeEach(function() {
-                chorus.session = new chorus.models.Session();
-                setLoggedInUser({'userName': 'edcadmin'})
-                fixtures.model = 'User';
-                this.user = new chorus.models.User()
-                this.view = new chorus.views.UserEdit({model : this.user});
-                this.view.model.set(fixtures.jsonFor('fetch').resource[0]);
-                this.view.model.loaded = true;
-            });
             context("as an admin", function() {
                 beforeEach(function() {
 
@@ -162,108 +169,8 @@ describe("chorus.views.userEdit", function() {
                 });
             });
 
-            context("when a photo to upload has been chosen", function() {
-                beforeEach(function() {
-                    this.view.render();
-
-                    this.fileList = [
-                        {fileName: 'foo.png'}
-                    ];
-
-                    this.view.$("input[type=file]").fileupload('add', {files: this.fileList});
-                });
-
-                it("starts the upload", function() {
-                    expect(_.last(this.server.requests).method).toBe("POST");
-                    // this will change to id, not userName, in the near future
-                    expect(_.last(this.server.requests).url).toContain("/edc/userimage/" + this.view.model.get("userName"));
-                });
-
-                it("displays a spinner", function() {
-                    expect(this.view.$(".edit_photo div[aria-role=progressbar]").length).toBe(1);
-                });
-
-                it("adds the disabled class to the image", function() {
-                    expect(this.view.$(".edit_photo img")).toHaveClass("disabled");
-                });
-
-                it("disables the upload button", function() {
-                    expect(this.view.$(".edit_photo input[type=file]").attr("disabled")).toBe("disabled");
-                    expect(this.view.$(".edit_photo .action")).toHaveClass("disabled");
-                });
-
-                context("when the upload has finished successfully", function() {
-                    beforeEach(function() {
-                        this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"status": "ok"}']);
-                        this.server.respond();
-                    });
-
-                    it("removes the spinner", function() {
-                        expect(this.view.$(".edit_photo div[aria-role=progressbar]").length).toBe(0);
-                    });
-
-                    it("removes the disabled class from the image", function() {
-                        expect(this.view.$(".edit_photo img")).not.toHaveClass("disabled");
-                    });
-
-                    it("changes/adds the cache-buster on the original image's URL", function() {
-                        var originalUrl = this.view.model.imageUrl();
-                        var newUrl = this.view.$(".edit_photo img").attr("src");
-
-                        expect(newUrl).not.toBe(originalUrl);
-                        expect(newUrl).toContain("buster=");
-                    });
-
-                    it("re-enables the upload button", function() {
-                        expect(this.view.$(".edit_photo input[type=file]").attr("disabled")).toBeUndefined();
-                        expect(this.view.$(".edit_photo .action")).not.toHaveClass("disabled");
-                    });
-                });
-
-                context("when the upload gives a server error", function() {
-                    beforeEach(function() {
-                        this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"status": "fail", "message" :[{"message":"Fake error message."}]}']);
-                        this.server.respond();
-                    });
-
-                    it("renders the errors", function() {
-                        expect(this.view.$(".errors").text()).toContain("Fake error message.");
-                    });
-
-                    it("removes the spinner", function() {
-                        expect(this.view.$(".edit_photo div[aria-role=progressbar]").length).toBe(0);
-                    });
-
-                    it("removes the disabled class from the image", function() {
-                        expect(this.view.$(".edit_photo img")).not.toHaveClass("disabled");
-                    });
-
-                    it("re-enables the upload button", function() {
-                        expect(this.view.$(".edit_photo input[type=file]").attr("disabled")).toBeUndefined();
-                        expect(this.view.$(".edit_photo .action")).not.toHaveClass("disabled");
-                    });
-
-                    context("when the user submits a good image after a bad image", function() {
-                        beforeEach(function() {
-                            this.originalUrl = this.view.$(".edit_photo img").attr("src");
-                            this.fileList = [
-                                {fileName: 'foo.png'}
-                            ];
-                            this.view.$("input[type=file]").fileupload('add', {files: this.fileList});
-                            this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"status": "ok", "message" :[]}']);
-                            this.server.respond();
-                        });
-
-                        it("clears the errors", function() {
-                            expect(this.view.$(".errors").text()).toBe("");
-                        });
-
-                        it("renders the good image", function() {
-                            var newUrl = this.view.$(".edit_photo img").attr("src");
-                            expect(newUrl).not.toBe(this.originalUrl);
-                        });
-                    })
-                });
+            it("has an .image_upload element", function() {
+                expect(this.view.$(".image_upload")).toExist();
             });
         });
 

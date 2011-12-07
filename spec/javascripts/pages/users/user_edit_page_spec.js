@@ -10,6 +10,7 @@ describe("chorus.pages.UserEditPage", function() {
         this.loadTemplate("logged_in_layout");
         this.loadTemplate("user_edit")
         this.loadTemplate("user_show_sidebar")
+        this.loadTemplate("image_upload");
     });
 
     describe("#setup", function() {

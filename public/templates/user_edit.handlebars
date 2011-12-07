@@ -1,15 +1,7 @@
 {{> errorDiv}}
 {{#if permission}}
 <form action="/edc/users/{{userName}}" method="put">
-    <div class="edit_photo">
-        <div class="spinner_container">
-            <img src="{{imageUrl}}" class="profile"/>
-        </div>
-        <div class="file-wrapper">
-            <input type="file"/>
-            <div class="action" href="#">Edit Photo</div>
-        </div>
-    </div>
+    <div class="edit_photo"></div>
     <div class="fields">
 
         <div class="row">
