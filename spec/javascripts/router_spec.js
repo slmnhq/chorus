@@ -52,6 +52,7 @@ describe("chorus.router", function() {
             this.loadTemplate("user_list");
             this.loadTemplate("dashboard_sidebar");
             this.loadTemplate("logged_in_layout");
+            this.loadTemplate("plain_text")
 
             this.savedLocation = window.location.hash;
         })

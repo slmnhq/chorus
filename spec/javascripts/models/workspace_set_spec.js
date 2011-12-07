@@ -11,7 +11,7 @@ describe("WorkspaceSet", function() {
             expect(this.collection.url()).toBe("/edc/workspace/?page=1&rows=50");
         });
     })
-    describe("with filtering", function() {
+    describe("with filtering active is true", function() {
         beforeEach(function() {
             this.collection.attributes.active = true
         });
@@ -19,14 +19,22 @@ describe("WorkspaceSet", function() {
             expect(this.collection.url()).toBe("/edc/workspace/?active=true&page=1&rows=50");
         });
     });
-    describe("with filtering", function() {
+
+    context("members", function(){
         beforeEach(function() {
             this.collection.attributes.membersOnly = true;
             if (!chorus.session) chorus.session = new chorus.models.Session();
-            chorus.session.set({userName : "currentUser"});
+            chorus.session.set({id : 199});
         });
+
         it("it has correct Url", function() {
-            expect(this.collection.url()).toBe("/edc/workspace/?user=currentUser&page=1&rows=50");
+            expect(this.collection.url()).toBe("/edc/workspace/?user=199&page=1&rows=50");
+        });
+
+        it("it has correct Url when both are true", function() {
+            this.collection.attributes.membersOnly = true;
+            this.collection.attributes.active = true;
+            expect(this.collection.url()).toBe("/edc/workspace/?active=true&user=199&page=1&rows=50");
         });
     });
 });

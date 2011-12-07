@@ -4,12 +4,19 @@
         urlTemplate : "auth/login/",
 
         initialize : function() {
-            this.bind("saved", setUserIdCookie)
+            this.bind("saved", storeSessionState, this)
             _.bindAll(this);
         },
 
         user : function() {
-              return new ns.User(this.attributes);
+            this._user = this._user || new ns.User();
+
+            //only mutate user when necessary so you can bind to chorus.session.user change
+            if(!this._user.get("id") || !this._user.get("id") != this.get("id")) {
+                this._user.set( _.extend({id: $.cookie("userId")}, this.attributes))
+            }
+
+            return this._user
         },
 
         fetch : function(options) {
@@ -62,8 +69,9 @@
         }
     });
 
-    function setUserIdCookie() {
+    function storeSessionState() {
         $.cookie("userId", this.get("id"))
+        this.user().set({id: this.get("id")})
     }
 })(chorus.models);
 

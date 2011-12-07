@@ -7,6 +7,7 @@
             },
 
             setup: $.noop,
+            additionalParams: $.noop,
 
             url: function(options) {
                 options = _.extend({
@@ -17,6 +18,11 @@
                 var url = "/edc/" + Handlebars.compile(this.urlTemplate)(this.attributes);
 
                 var params = [];
+
+                 _.each(this.additionalParams(), function(param){
+                    params.push(param)
+                })
+
                 params.push("page=" + options.page);
                 params.push("rows=" + options.rows);
 
@@ -25,12 +31,8 @@
                     params.push("sord=" + this.sortOrder);
                 }
 
-                var paramsStr = params.join("&");
-                if (url.indexOf('?') != -1) {
-                    url = [url, paramsStr].join('&')
-                } else {
-                    url = [url, paramsStr].join('?')
-                }
+                var paramsJoiner = (url.indexOf('?') != -1) ? '&' : '?'
+                url = url + paramsJoiner + params.join("&")
 
                 return url;
             },

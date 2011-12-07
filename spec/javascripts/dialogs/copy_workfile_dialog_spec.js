@@ -12,12 +12,12 @@ describe("chorus.dialogs.CopyWorkfile", function() {
 
     describe("#setup", function() {
         beforeEach(function() {
-            chorus.session.set({userName: "currentUser"});
+            chorus.session.set({id: 4003});
             this.dialog = new chorus.dialogs.CopyWorkfile({launchElement : this.launchElement });
         })
 
         it("fetches all the workspaces", function() {
-            expect(this.server.requests[0].url).toBe("/edc/workspace/?user=currentUser&page=1&rows=1000");
+            expect(this.server.requests[0].url).toBe("/edc/workspace/?user=4003&page=1&rows=1000");
         })
 
         it("fetches the source workfile", function() {
