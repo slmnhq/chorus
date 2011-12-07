@@ -18,7 +18,7 @@
             this.mainContent = new chorus.views.MainContentView({
                 model: this.model,
                 content : new chorus.views.WorkspaceDetail({model: this.model }),
-                contentHeader : new chorus.views.StaticTemplate("plain_text", {text: "Summary"}),
+                contentHeader : new chorus.views.TruncatedText({model: this.model, attribute: "summary", length: 300})
             });
         }
     });

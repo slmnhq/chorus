@@ -232,7 +232,7 @@
                             "isPublic":true,
                             "iconId":null,
                             "state":1,
-                            "summary":null,
+                            "summary":"this is the workspace summary",
                             "sandboxId":null,
                             "active":true,
                             "permission":["admin"]
