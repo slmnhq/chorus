@@ -465,6 +465,7 @@
                             timestamp : "2011-11-23 15:42:02.321",
                             type : "NOT_IMPLEMENTED",
                             author : {
+                                id : "11",
                                 username : "edcadmin",
                                 firstName : "EDC",
                                 lastName : "Admin"
@@ -475,6 +476,7 @@
                                     id : 10023,
                                     timestamp : "2011-11-23 15:42:02.321",
                                     author : {
+                                        id : "12",
                                         username : "msofaer",
                                         firstName : "Michael",
                                         lastName : "Sofaer"
@@ -485,6 +487,7 @@
                                     id : 10024,
                                     timestamp : "2011-05-23 15:42:02.321",
                                     author : {
+                                        id : "13",
                                         username : "mrushakoff",
                                         firstName : "Mark",
                                         lastName : "Rushakoff"
@@ -498,6 +501,7 @@
                             timestamp : "2011-04-23 15:42:02.321",
                             type : "NOT_IMPLEMENTED",
                             author : {
+                                id : "14",
                                 username : "dburkes",
                                 firstName : "Danny",
                                 lastName : "Burkes"
