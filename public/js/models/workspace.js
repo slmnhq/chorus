@@ -57,6 +57,10 @@
             }
         },
 
+        hasImage: function() {
+            return this.get("iconId") != null;
+        },
+
         isTruncated: function() {
             return this.get("summary") ? this.get("summary").length > 100 : false;
         },
