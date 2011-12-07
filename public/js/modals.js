@@ -10,13 +10,15 @@
             $(document).one('close.facebox', function(){delete ns.modal});
         },
 
-        closeModal : function() {
-            $(document).trigger("close.facebox");
+        makeModel : function(options) {
+            if (options && options.pageModel) {
+                this.pageModel = options.pageModel;
+            }
+            this.bindPageModelCallbacks();
         },
 
-        attachPageModel : function(pageModel) {
-            this.pageModel = pageModel;
-            this.bindPageModelCallbacks();
+        closeModal : function() {
+            $(document).trigger("close.facebox");
         },
 
         bindPageModelCallbacks : $.noop

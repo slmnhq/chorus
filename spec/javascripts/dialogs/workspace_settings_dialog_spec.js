@@ -1,9 +1,8 @@
 describe("WorkspaceSettings", function() {
     beforeEach(function() {
         this.launchElement = $("<a></a>");
-        this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement : this.launchElement});
-        var model = new chorus.models.Workspace({name: "my name", summary: "my summary"});
-        this.dialog.attachPageModel(model);
+        this.workspace = new chorus.models.Workspace({name: "my name", summary: "my summary", id: "457"});
+        this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement : this.launchElement, pageModel : this.workspace });
         this.loadTemplate("workspace_settings");
     });
 

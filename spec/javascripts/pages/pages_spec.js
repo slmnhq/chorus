@@ -115,12 +115,11 @@ describe("chorus.pages.Base", function() {
 
                 var spy = this.fooDialogSpy = new chorus.dialogs.Base();
                 spyOn(spy, "launchModal");
-                spyOn(spy, "attachPageModel").andCallThrough();
 
 
                 chorus.dialogs.Foo = function(opts) {
                     spy.launchElement = opts.launchElement;
-                    spy.model = opts.model;
+                    spy.pageModel = opts.pageModel;
                     return spy
                 };
 
@@ -130,7 +129,6 @@ describe("chorus.pages.Base", function() {
 
             it("instantiates dialogs from dialog buttons", function() {
                 this.view.$("button.dialog").click();
-                expect(this.fooDialogSpy.attachPageModel).toHaveBeenCalled();
                 expect(this.fooDialogSpy.launchModal).toHaveBeenCalled();
             })
 
@@ -141,7 +139,7 @@ describe("chorus.pages.Base", function() {
                 expect(this.fooDialogSpy.launchElement).toBe(elem);
             });
 
-            it("sets the pageModel on the dialog", function() {
+            it("passes the pageModel to the dialog", function() {
                 this.view.model = new chorus.models.User();
                 var elem = this.view.$("button.dialog");
                 elem.click();
@@ -157,10 +155,10 @@ describe("chorus.pages.Base", function() {
 
                 var spy = this.fooDialogSpy = new chorus.dialogs.Base();
                 spyOn(spy, "launchModal");
-                spyOn(spy, "attachPageModel").andCallThrough();
 
                 chorus.dialogs.Foo = function(opts) {
                     spy.launchElement = opts.launchElement;
+                    spy.pageModel = opts.pageModel;
                     return spy
                 };
 
@@ -170,7 +168,6 @@ describe("chorus.pages.Base", function() {
 
             it("instantiates dialogs from dialog buttons", function() {
                 this.view.$("a.dialog").click();
-                expect(this.fooDialogSpy.attachPageModel).toHaveBeenCalled();
                 expect(this.fooDialogSpy.launchModal).toHaveBeenCalled();
             })
 
@@ -180,7 +177,7 @@ describe("chorus.pages.Base", function() {
                 expect(this.fooDialogSpy.launchElement).toBe(elem);
             })
 
-            it("sets the pageModel on the dialog", function() {
+            it("passes the pageModel to the dialog", function() {
                 this.view.model = new chorus.models.User();
                 var elem = this.view.$("a.dialog");
                 elem.click();
@@ -197,10 +194,10 @@ describe("chorus.pages.Base", function() {
 
             var spy = this.fooAlertSpy = new chorus.alerts.Base();
             spyOn(spy, "launchModal");
-            spyOn(spy, "attachPageModel").andCallThrough();
 
             chorus.alerts.Foo = function(opts) {
                 spy.launchElement = opts.launchElement;
+                spy.pageModel = opts.pageModel;
                 return spy
             };
 
@@ -210,7 +207,6 @@ describe("chorus.pages.Base", function() {
 
         it("instantiates alerts from alert links", function() {
             this.view.$("a.alert").click();
-            expect(this.fooAlertSpy.attachPageModel).toHaveBeenCalled();
             expect(this.fooAlertSpy.launchModal).toHaveBeenCalled();
         })
 
@@ -220,7 +216,7 @@ describe("chorus.pages.Base", function() {
             expect(this.fooAlertSpy.launchElement).toBe(elem);
         })
 
-        it("sets the pageModel on the alert", function() {
+        it("passes the pageModel to the dialog", function() {
             this.view.model = new chorus.models.User();
             var elem = this.view.$("a.alert");
             elem.click();

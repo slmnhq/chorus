@@ -2,8 +2,7 @@ describe("chorus.dialogs.ChangePassword", function() {
     beforeEach(function() {
         this.loadTemplate("change_password");
         this.user = new chorus.models.User({ userName: "john" });
-        this.view = new chorus.dialogs.ChangePassword();
-        this.view.pageModel = this.user;
+        this.view = new chorus.dialogs.ChangePassword({ pageModel : this.user });
         this.view.render();
     });
 

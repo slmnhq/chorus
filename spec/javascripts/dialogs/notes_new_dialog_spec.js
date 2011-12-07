@@ -1,8 +1,10 @@
 describe("NotesNewDialog", function() {
     beforeEach(function() {
         this.launchElement = $("<a data-entity-type='workfile' data-entity-id='1'></a>")
-        this.dialog = new chorus.dialogs.NotesNew({launchElement : this.launchElement });
-        this.dialog.pageModel = new chorus.models.Workfile();
+        this.dialog = new chorus.dialogs.NotesNew({
+            launchElement : this.launchElement,
+            pageModel : new chorus.models.Workfile()
+        });
         this.loadTemplate("notes_new");
     });
 

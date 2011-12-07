@@ -5,15 +5,14 @@
         events: {
             "submit form": "save"
         },
-        makeModel : function(){
-            this.entityType = this.options.launchElement.data("entity-type");
-            this.entityId = this.options.launchElement.data("entity-id");
+
+        makeModel : function(options){
+            this._super("makeModel", options);
 
             this.model = new chorus.models.Note({
-                entityType : this.entityType,
-                entityId : this.entityId
+                entityType : this.options.launchElement.data("entity-type"),
+                entityId : this.options.launchElement.data("entity-id")
             });
-
             this.model.bind("saved", this.saved, this);
         },
 
@@ -28,7 +27,7 @@
         },
 
         additionalContext : function() {
-            return {entityType: this.entityType};
+            return {entityType: this.model.get("entityType") };
         }
     });
 })(jQuery, chorus.dialogs);
