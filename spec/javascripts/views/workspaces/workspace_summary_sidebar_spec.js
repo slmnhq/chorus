@@ -14,9 +14,27 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
             expect(this.view.$("h1").text().trim()).toBe(this.model.get("name"));
         });
 
-        it("has a link to edit workspace settings", function() {
-            expect(this.view.$("a[data-dialog=WorkspaceSettings]").text().trim()).toMatchTranslation("actions.edit_workspace");
-        })
+        context("the current user has update permissions on the workspace", function() {
+            beforeEach(function() {
+                spyOn(this.model, "canUpdate").andReturn(true);
+                this.view.render();
+            });
+
+            it("has a link to edit workspace settings", function() {
+                expect(this.view.$("a[data-dialog=WorkspaceSettings]").text().trim()).toMatchTranslation("actions.edit_workspace");
+            });
+        });
+
+        context("the current user does not have update permissions on the workspace", function() {
+            beforeEach(function() {
+                spyOn(this.model, "canUpdate").andReturn(false);
+                this.view.render();
+            });
+
+            it("does not have a link to edit workspace settings", function() {
+                expect(this.view.$("a[data-dialog=WorkspaceSettings]").length).toBe(0);
+            });
+        });
 
         it("has a link to add a note", function(){
             expect(this.view.$("a[data-dialog=NotesNew]").text().trim()).toMatchTranslation("actions.add_note");
