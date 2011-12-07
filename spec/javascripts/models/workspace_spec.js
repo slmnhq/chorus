@@ -137,5 +137,58 @@ describe("chorus.models.Workspace", function() {
             expect(this.model.picklistImageUrl()).toBe("/images/workspace-icon-small.png");
         });
     });
+
+    describe("permissions checking", function() {
+        describe("canRead", function() {
+            it("is true when permission contains 'read'", function() {
+                this.model.set({permission: ['read', 'commenting']});
+                expect(this.model.canRead()).toBeTruthy();
+            });
+
+            it("is true when permission contains 'admin'", function() {
+                this.model.set({permission: ['admin']});
+                expect(this.model.canRead()).toBeTruthy();
+            });
+
+            it("is false when it does not contain either 'read' or 'admin'", function() {
+                this.model.set({permission: []});
+                expect(this.model.canRead()).toBeFalsy();
+            });
+        });
+
+        describe("canComment", function() {
+            it("is true when permission contains 'commenting'", function() {
+                this.model.set({permission: ['commenting']});
+                expect(this.model.canComment()).toBeTruthy();
+            });
+
+            it("is true when permission contains 'admin'", function() {
+                this.model.set({permission: ['admin']});
+                expect(this.model.canComment()).toBeTruthy();
+            });
+
+            it("is false when it does not contain either 'commenting' or 'admin'", function() {
+                this.model.set({permission: []});
+                expect(this.model.canComment()).toBeFalsy();
+            });
+        });
+
+        describe("canUpdate", function() {
+            it("is true when permission contains 'commenting'", function() {
+                this.model.set({permission: ['read', 'update']});
+                expect(this.model.canUpdate()).toBeTruthy();
+            });
+
+            it("is true when permission contains 'admin'", function() {
+                this.model.set({permission: ['admin']});
+                expect(this.model.canUpdate()).toBeTruthy();
+            });
+
+            it("is false when it does not contain either 'update' or 'admin'", function() {
+                this.model.set({permission: []});
+                expect(this.model.canUpdate()).toBeFalsy();
+            });
+        });
+    });
 })
     ;

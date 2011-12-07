@@ -59,6 +59,22 @@
 
         isTruncated: function() {
             return this.get("summary") ? this.get("summary").length > 100 : false;
+        },
+
+        canRead : function() {
+            return this._hasPermission(['admin', 'read']);
+        },
+
+        canComment : function() {
+            return this._hasPermission(['admin', 'commenting']);
+        },
+
+        canUpdate : function() {
+            return this._hasPermission(['admin', 'update']);
+        },
+
+        _hasPermission : function(validPermissions) {
+            return _.intersection(this.get("permission"), validPermissions).length > 0;
         }
     });
 })(chorus.models);
