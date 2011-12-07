@@ -245,8 +245,8 @@ describe("handlebars", function() {
                     var el = $("<div>" + Handlebars.helpers.moreLink([1,2,3,4], 3, "activity_stream.comments.more", "activity_stream.comments.less") + "</div>");
                     expect(el.find(".morelinks a.more")).toExist();
                     expect(el.find(".morelinks a.less")).toExist();
-                    expect(el.find(".morelinks a.more")).toHaveText("1 more comments");
-                    expect(el.find(".morelinks a.less")).toHaveText("Less comments");
+                    expect(el.find(".morelinks a.more")).toHaveText(t("activity_stream.comments.more", 1));
+                    expect(el.find(".morelinks a.less")).toHaveText(t("activity_stream.comments.less"));
                 })
             });
             describe("when the collection has less than max + 1 elements", function() {
