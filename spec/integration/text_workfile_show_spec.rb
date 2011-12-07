@@ -20,6 +20,6 @@ describe "workfile show page" do
 
     # If the code editor didn't render properly, it will have a 1px height.
     # This asserts that a "whole line" is present.
-    evaluate_script('$("#content").css("height")').to_i.should > 10
+    evaluate_script('$(".content").css("height")').to_i.should > 10
   end
 end

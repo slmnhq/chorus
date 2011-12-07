@@ -37,11 +37,11 @@ describe("user_show_page", function(){
         });
 
         it("displays the first + last name in the header", function(){
-            expect(this.view.$("#content_header h1").text().trim()).toBe("EDC Admin");
+            expect(this.view.$(".content_header h1").text().trim()).toBe("EDC Admin");
         });
 
         it("displays the word 'details' in the details-header", function(){
-            expect(this.view.$("#content_details").text().trim()).toBe(t("users.details"));
+            expect(this.view.$(".content_details").text().trim()).toBe(t("users.details"));
         });
 
         context("breadcrumbs", function(){

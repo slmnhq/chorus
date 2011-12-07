@@ -144,28 +144,28 @@
         },
 
         postRender : function() {
-            this.$("#content_header").html(this.contentHeader.render().el);
+            this.$(".content_header").html(this.contentHeader.render().el);
             this.contentHeader.delegateEvents();
 
             if (this.contentDetails) {
-                this.$("#content_details").html(this.contentDetails.render().el);
+                this.$(".content_details").html(this.contentDetails.render().el);
                 this.contentDetails.delegateEvents();
             } else {
-                this.$("#content_details").addClass("hidden");
+                this.$(".content_details").addClass("hidden");
             }
 
             if (this.content) {
-                this.$("#content").html(this.content.render().el);
+                this.$(".content").html(this.content.render().el);
                 this.content.delegateEvents();
             } else {
-                this.$("#content").addClass("hidden");
+                this.$(".content").addClass("hidden");
             }
 
             if (this.contentFooter) {
-                this.$("#content_footer").html(this.contentFooter.render().el);
+                this.$(".content_footer").html(this.contentFooter.render().el);
                 this.contentFooter.delegateEvents();
             } else {
-                this.$("#content_footer").addClass("hidden");
+                this.$(".content_footer").addClass("hidden");
             }
         }
     });

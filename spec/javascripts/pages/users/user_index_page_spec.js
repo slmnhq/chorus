@@ -35,7 +35,7 @@ describe("chorus.pages.UserIndexPage", function() {
         })
 
         it("has the right header title", function() {
-            expect(this.view.$("#content_header h1").text()).toBe("Users");
+            expect(this.view.$(".content_header h1").text()).toBe("Users");
         })
 
         it("defaults to last name sorting", function() {

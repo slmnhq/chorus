@@ -1,7 +1,7 @@
 @import "_common.scss";
 
 #page[data-page=WorkfileShow]  {
-    #content_header {
+    .content_header {
         a.workfile_list {
            display: block;
            font-size: 13px; 
@@ -12,7 +12,7 @@
         }
     }
 
-    #content_details {
+    .content_details {
         background: $workfiles-action-details-background-color;
         height: 30px;
         line-height: 30px;
@@ -40,7 +40,7 @@
         }
     }
 
-    #content {
+    .content {
         width: 100%;
         height: 100%;
     }

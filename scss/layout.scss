@@ -11,7 +11,7 @@
     @include after-clearfix;
 }
 
-#content_header {
+.content_header {
     background: white;
     min-height: 36px;
     padding: 12px $padding-x;
@@ -35,7 +35,7 @@
     @include border-radius(3px);
 }
 
-#content_details, #content_footer {
+.content_details, .content_footer {
     height: 32px;
     line-height: 32px;
     vertical-align: middle;
@@ -50,7 +50,7 @@
     }
 }
 
-#content_footer {
+.content_footer {
     height: auto;
     border-bottom: none;
     border-top: 1px solid $pagination-border-color;
