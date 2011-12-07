@@ -15,9 +15,6 @@ describe("chorus.views.ImageUpload", function() {
             this.view.render();
         });
 
-        it("displays an image with the model's imageUrl", function() {
-            expect(this.view.$("img").attr("src")).toBe(this.user.imageUrl());
-        });
 
         context("when the model does NOT have an image", function() {
             beforeEach(function() {
@@ -28,6 +25,10 @@ describe("chorus.views.ImageUpload", function() {
             it("displays the link with the 'add image' text", function() {
                 expect(this.view.$("a.action").text()).toMatchTranslation(this.view.addImageKey);
             });
+
+            it("does assign a 'src' attribute to the image", function() {
+                expect(this.view.$("img").attr('src')).toBeUndefined();
+            })
         });
 
         context("when the model has an image", function() {
@@ -39,6 +40,11 @@ describe("chorus.views.ImageUpload", function() {
             it("displays the link with the 'change image' text", function() {
                 expect(this.view.$("a.action").text()).toMatchTranslation(this.view.changeImageKey);
             });
+
+            it("displays an image with the model's imageUrl", function() {
+                expect(this.view.$("img").attr("src")).toBe(this.user.imageUrl());
+            });
+
         });
 
         context("when a photo to upload has been chosen", function() {
