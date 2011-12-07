@@ -17,7 +17,7 @@
             <div class="links">
                 <a class="comment" href="javascript:void(0)">{{t "activity_stream.comment"}}</a>
             </div>
-            {{#if comments}} {{#if comments.length}}
+            {{#if comments.length}}
             <ul class="comments">
                 {{#eachWithMoreLink comments 2 "activity_stream.comments.more" "activity_stream.comments.less"}}
                     <li data-comment-id="{{id}}" class="{{moreClass}}">
@@ -34,7 +34,7 @@
                     </li>
                 {{/eachWithMoreLink}}
             </ul>
-            {{/if}} {{/if}}
+            {{/if}}
         </li>
     {{/each}}
 </ul>
