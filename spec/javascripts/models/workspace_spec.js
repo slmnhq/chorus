@@ -35,13 +35,15 @@ describe("chorus.models.Workspace", function() {
 
     describe("#owner", function() {
         beforeEach(function() {
-            this.model.set({owner: "jhenry", ownerFullName: "John Henry"})
+            this.model.set({owner: "jhenry", ownerFullName: "John Henry", ownerId: "47"})
         });
 
-        it("returns a new User with the right username and fullName", function() {
-            var owner = this.model.owner();
-            expect(owner.get("fullName")).toBe("John Henry");
-            expect(owner.get("userName")).toBe("jhenry");
+        it("has the right fullName", function() {
+            expect(this.model.owner().get("fullName")).toBe("John Henry");
+        });
+
+        it("has the right userId", function() {
+            expect(this.model.owner().get("id")).toBe("47");
         });
 
         it("doesn't automatically fetch the User", function() {

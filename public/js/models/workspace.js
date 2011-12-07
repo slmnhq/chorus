@@ -19,7 +19,7 @@
         owner: function() {
             return new ns.User({
                 fullName: this.get("ownerFullName"),
-                userName: this.get("owner")
+                id: this.get("ownerId")
             });
         },
 
