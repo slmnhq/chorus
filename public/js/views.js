@@ -2,7 +2,7 @@
 (function(ns) {
     ns.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
         initialize: function initialize() {
-            this.preInitialize();
+            this.preInitialize.apply(this, arguments);
             _.bindAll(this, 'render');
             this.bindCallbacks()
             this.setup.apply(this, arguments);
@@ -49,7 +49,7 @@
         },
 
         preInitialize : function() {
-            this.makeModel();
+            this.makeModel.apply(this, arguments);
             this.resource = this.model || this.collection;
 
         },
