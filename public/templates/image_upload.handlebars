@@ -3,5 +3,5 @@
 </div>
 <div class="file-wrapper">
     <input type="file"/>
-    <a class="action" href="#">Edit Photo</a>
+    <a class="action" href="#">{{#if hasImage}}{{t changeImageKey}}{{else}}{{t addImageKey}}{{/if}}</a>
 </div>

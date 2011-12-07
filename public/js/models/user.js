@@ -25,6 +25,10 @@
             }
         },
 
+        hasImage: function() {
+            return true;
+        },
+
         imageUrl : function(options){
             options = (options || {});
             return "/edc/userimage/" + this.get("userName") + "?size=" + (options.size || "original");

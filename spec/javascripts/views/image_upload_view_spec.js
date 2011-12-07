@@ -10,11 +10,35 @@ describe("chorus.views.ImageUpload", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            this.view.addImageKey = "workspace.settings.image.add";
+            this.view.changeImageKey = "workspace.settings.image.change";
             this.view.render();
         });
 
         it("displays an image with the model's imageUrl", function() {
             expect(this.view.$("img").attr("src")).toBe(this.user.imageUrl());
+        });
+
+        context("when the model does NOT have an image", function() {
+            beforeEach(function() {
+                spyOn(this.view.model, 'hasImage').andReturn(false);
+                this.view.render();
+            });
+
+            it("displays the link with the 'add image' text", function() {
+                expect(this.view.$("a.action").text()).toMatchTranslation(this.view.addImageKey);
+            });
+        });
+
+        context("when the model has an image", function() {
+            beforeEach(function() {
+                spyOn(this.view.model, 'hasImage').andReturn(true);
+                this.view.render();
+            });
+
+            it("displays the link with the 'change image' text", function() {
+                expect(this.view.$("a.action").text()).toMatchTranslation(this.view.changeImageKey);
+            });
         });
 
         context("when a photo to upload has been chosen", function() {

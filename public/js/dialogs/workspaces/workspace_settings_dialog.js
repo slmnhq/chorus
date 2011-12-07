@@ -9,6 +9,26 @@
             "click button.submit" : "updateWorkspace"
         },
 
+        additionalContext : function() {
+            return {
+                imageUrl : this.pageModel.imageUrl(),
+                hasImage : this.pageModel.hasImage()
+            }
+        },
+
+        setup : function() {
+            this.imageUpload = new ns.views.ImageUpload({
+               model : this.pageModel,
+               addImageKey: "workspace.settings.image.add",
+               changeImageKey: "workspace.settings.image.change"
+            });
+            this.pageModel.bind("saved", this.closeModal, this);
+        },
+
+        postRender : function() {
+            this.$(".edit_photo").html(this.imageUpload.render().el);
+        },
+
         updateWorkspace : function(e) {
             e.preventDefault();
             this.pageModel.save({
@@ -17,17 +37,9 @@
             });
         },
 
-        bindPageModelCallbacks : function() {
-            var self = this;
-            this.pageModel.bind("saved", function() {
-                self.closeModal()
-            });
-
-            // for the context function
-            this.resource = this.pageModel;
-
-            // When bindCallbacks is called originally, this.resource has not yet been set.
-            this.bindCallbacks();
+        makeModel: function(options) {
+            this._super("makeModel", options)
+            this.model = this.pageModel;
         }
     });
 })(chorus);

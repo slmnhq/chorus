@@ -172,6 +172,10 @@ describe("chorus.views.userEdit", function() {
             it("has an .image_upload element", function() {
                 expect(this.view.$(".image_upload")).toExist();
             });
+
+            it("shows the correct action text on image upload", function() {
+                expect(this.view.$(".image_upload a.action").text()).toMatchTranslation("users.edit_photo");
+            })
         });
 
         context("editing a user that is not yourself", function() {

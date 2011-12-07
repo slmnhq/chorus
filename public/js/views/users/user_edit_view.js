@@ -17,7 +17,7 @@
 
         setup : function() {
             this.model.bind("saved", userSuccessfullySaved, this);
-            this.imageUpload = new ns.ImageUpload({ model : this.model });
+            this.imageUpload = new ns.ImageUpload({ model : this.model, changeImageKey: "users.edit_photo" });
         },
 
         saveEditUser : function saveEditUser(e) {

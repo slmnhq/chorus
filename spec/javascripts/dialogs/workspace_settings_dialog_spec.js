@@ -4,6 +4,7 @@ describe("WorkspaceSettings", function() {
         this.workspace = new chorus.models.Workspace({name: "my name", summary: "my summary", id: "457"});
         this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement : this.launchElement, pageModel : this.workspace });
         this.loadTemplate("workspace_settings");
+        this.loadTemplate("image_upload");
     });
 
     describe("#render", function() {
@@ -19,6 +20,41 @@ describe("WorkspaceSettings", function() {
         it("has a text area for summary", function() {
             expect(this.dialog.$("textarea[name=summary]").val()).toBe(this.dialog.pageModel.get("summary"));
         });
+
+
+        context("when the workspace has an image", function() {
+            beforeEach(function() {
+                spyOn(this.workspace, 'hasImage').andReturn(true);
+                this.dialog.render();
+            });
+
+            it("displays the workspace image", function() {
+                var image = this.dialog.$("img");
+                expect(image.attr("src")).toBe(this.workspace.imageUrl());
+            });
+
+            it("displays the 'change image' link", function() {
+                expect(this.dialog.$(".edit_photo a.action")).toExist();
+                expect(this.dialog.$(".edit_photo a.action").text().trim()).toMatchTranslation('workspace.settings.image.change');
+            });
+        });
+
+        context("when the workspace has no image", function() {
+            beforeEach(function() {
+                spyOn(this.workspace, 'hasImage').andReturn(false);
+                this.dialog.render();
+            });
+
+            it("does not display an image", function() {
+                // expect(this.dialog.$("img")).not.toExist();
+            });
+
+            it("displays the 'add image' link", function() {
+                expect(this.dialog.$(".edit_photo a.action")).toExist();
+                expect(this.dialog.$(".edit_photo a.action").text().trim()).toMatchTranslation('workspace.settings.image.add');
+            });
+        });
+
         context("submitting the form with valid data", function() {
             beforeEach(function() {
                 spyOnEvent($(document), "close.facebox");

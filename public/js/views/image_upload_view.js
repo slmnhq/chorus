@@ -5,8 +5,16 @@
 
         additionalContext: function() {
             return {
-                imageUrl: this.model.imageUrl({ size : "original" })
+                imageUrl: this.model.imageUrl({ size : "original" }),
+                hasImage: this.model.hasImage(),
+                addImageKey : this.addImageKey,
+                changeImageKey : this.changeImageKey
             }
+        },
+
+        setup : function(options) {
+            this.addImageKey = options.addImageKey;
+            this.changeImageKey = options.changeImageKey;
         },
 
         postRender : function() {
