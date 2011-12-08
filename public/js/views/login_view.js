@@ -19,6 +19,7 @@
             e.preventDefault();
 
             this.model.clear({ silent : true });
+            delete this.model.id;
             this.model.set({
                 userName: this.$("input[name='userName']").val(),
                 password: this.$("input[name='password']").val()

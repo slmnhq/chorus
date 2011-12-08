@@ -1,7 +1,6 @@
 describe("chorus.views.Login", function() {
     beforeEach(function() {
         this.loadTemplate("login");
-        fixtures.model = "Login";
         chorus.session = new chorus.models.Session();
         this.view = new chorus.views.Login({model : chorus.session});
         this.view.render();
@@ -18,6 +17,7 @@ describe("chorus.views.Login", function() {
     describe("attempting to login", function() {
         beforeEach(function() {
             this.view.model.set({ foo: "bar" })
+            this.view.model.id = "foo"
             this.saveSpy = spyOn(this.view.model, "save");
             this.view.$("input[name=userName]").val("johnjohn");
             this.view.$("input[name=password]").val("partytime");
@@ -31,6 +31,10 @@ describe("chorus.views.Login", function() {
 
         it("clears other attributes on the model", function() {
             expect(_.size(this.view.model.attributes)).toBe(2);
+        })
+
+        it("configures the model for POST, not PUT", function() {
+            expect(this.view.model.isNew()).toBeTruthy();
         })
 
         it("attempts to save the model", function() {
