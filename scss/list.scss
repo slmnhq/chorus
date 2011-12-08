@@ -1,15 +1,14 @@
 @import "_common.scss";
 
-$list-image-width: 48px;
-$list-image-height: 48px;
-
 .list {
+    position: relative;
+
     li {
         padding: $padding-y 0;
         border-bottom: 1px dotted $subheader-border-color;
         margin: 0 $padding-x;
         position: relative;
-        min-height: $list-image-height + (2 * $padding-y);
+        @include after-clearfix(left);
 
         &.selected {
             background: white;
@@ -41,15 +40,13 @@ $list-image-height: 48px;
         a.image {
             display: block;
             float: left;
-            width: $list-image-width;
-            height: $list-image-height;
         }
 
         div.text {
             vertical-align: top;
             line-height: 19px;
             overflow:hidden;
-            _overflow:visible; 
+            _overflow:visible;
             zoom:1;
             padding-left: $padding-x;
 

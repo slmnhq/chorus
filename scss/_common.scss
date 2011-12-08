@@ -61,13 +61,13 @@ $semibold: 600;
 
 // Mixins
 
-@mixin after-clearfix {
+@mixin after-clearfix($which: both) {
     &:after {
             content: ".";
             display: block;
             height: 0;
             font-size: 0;
-            clear: both;
+            clear: $which;
             visibility: hidden;
         }
 }
