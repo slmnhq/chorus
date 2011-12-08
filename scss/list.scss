@@ -5,7 +5,7 @@
 
     li {
         padding: $padding-y 0;
-        border-bottom: 1px dotted $subheader-border-color;
+        border-bottom: $dotted-list-item-border;
         margin: 0 $padding-x;
         position: relative;
         @include after-clearfix;
