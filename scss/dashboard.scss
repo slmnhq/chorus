@@ -14,15 +14,20 @@ div[data-page="Dashboard"] {
     .main_content.workspace_list {
         float: right;
         width: $workspace-list-width;
+        font-weight: $semibold;
 
         .dashboard_workspace_list > li:last-child {
             border-bottom:  $dotted-list-item-border;
         }
         .content_footer {
+            line-height : 27px;
+            color: $link-color;
             border-top : none;
+
             a {
-            font-size: 12px;
-            font-weight: $semibold;
+                padding: 0 10px;
+                font-size: 12px;
+                font-weight: $semibold;
             }
         }
     }
