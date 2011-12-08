@@ -4,6 +4,15 @@ $dialog-width : 550px;
 $image-width : 230px;
 
 .workspace_settings {
+    input[name=name] {
+        width: 430px;
+        display: inline;
+    }
+
+    input#public_checkbox, label[for=public_checkbox] {
+        display : inline;
+    }
+
     label {
         display: block;
         margin-top: 15px;
