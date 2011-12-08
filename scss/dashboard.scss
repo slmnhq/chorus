@@ -20,12 +20,15 @@ div[data-page="Dashboard"] {
         }
         .content_footer {
             border-top : none;
+            a {
+            font-size: 12px;
+            font-weight: $semibold;
+            }
         }
     }
 
     .main_content.dashboard_main {
         margin-right:  $workspace-list-width;
     }
-
 
 }
