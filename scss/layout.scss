@@ -61,8 +61,8 @@
 
 #sidebar {
     width: $sidebar-width;
-    float: right;
-    min-height:400px;
+    position: absolute;
+    right: $guts-padding;
     padding: $padding-y $sidebar-padding-x;
 }
 

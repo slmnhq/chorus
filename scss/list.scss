@@ -8,7 +8,7 @@
         border-bottom: 1px dotted $subheader-border-color;
         margin: 0 $padding-x;
         position: relative;
-        @include after-clearfix(left);
+        @include after-clearfix;
 
         &.selected {
             background: white;
