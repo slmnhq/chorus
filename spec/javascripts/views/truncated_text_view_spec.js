@@ -9,7 +9,7 @@ describe("chorus.views.TruncatedText", function() {
         context("when the model is not yet loaded", function() {
             beforeEach(function() {
                 this.model.loaded = undefined;
-                this.view = new chorus.views.TruncatedText({model: this.model, attribute: "summary", length : 20 })
+                this.view = new chorus.views.TruncatedText({model: this.model, attribute: "summary", characters : 20 })
                 this.view.render();
             })
 
@@ -19,56 +19,137 @@ describe("chorus.views.TruncatedText", function() {
         })
 
         context("after the model is loaded", function() {
-            context("when the text has equal to or greater than the maximum number of characters", function() {
+            context("when there is no maximum number of lines", function() {
+                context("when the text has equal to or greater than the maximum number of characters", function() {
+                    beforeEach(function() {
+                        this.text = "Now is the time for all good men to come to the aid of their country";
+                        this.model.set({ summary : this.text });
+                        this.displayText = this.text.substring(0, 20)
+                        this.truncatedText = this.text.substring(20);
+                        this.view = new chorus.views.TruncatedText({model: this.model, attribute: "summary", characters : 20 })
+                        this.view.render();
+                    })
+
+                    it("truncates the text", function() {
+                        expect(this.view.$(".text").text()).toBe(this.displayText);
+                    })
+
+                    it("renders the truncated text", function() {
+                        expect(this.view.$(".truncated").text()).toBe(this.truncatedText)
+                    })
+
+                    it("does not add space between displayText and truncatedText", function() {
+                        expect(this.view.$(".entire_text .text, .entire_text .truncated").text()).toBe(this.text);
+                    });
+
+                    it("renders 'read more' and 'read less' links", function() {
+                        expect(this.view.$(".links a.more")).toExist();
+                        expect(this.view.$(".links a.less")).toExist();
+                        expect(this.view.$(".links a.more").text().trim()).toMatchTranslation("truncated_text.more");
+                        expect(this.view.$(".links a.less").text().trim()).toMatchTranslation("truncated_text.less");
+                    })
+
+                    it("starts out without the 'more' class on the surrounding div", function() {
+                        expect(this.view.$("> div")).not.toHaveClass("more");
+                    });
+                })
+                context("when the text has less than the maximum number of characters", function() {
+                    beforeEach(function() {
+                        this.text = "Now is the time for all good men to come to the aid of their country";
+                        this.model.set({ summary : this.text });
+                        this.view = new chorus.views.TruncatedText({model: this.model, attribute: "summary", characters : 200 })
+                        this.view.render();
+                    })
+
+                    it("renders the bare text", function() {
+                        expect($(this.view.el).text().trim()).toBe(this.text);
+                    })
+                })
+            });
+
+            context("with a maximum number of lines", function() {
                 beforeEach(function() {
-                    this.text = "Now is the time for all good men to come to the aid of their country";
-                    this.model.set({ summary : this.text });
-                    this.displayText = this.text.substring(0, 20)
-                    this.truncatedText = this.text.substring(20);
-                    this.view = new chorus.views.TruncatedText({model: this.model, attribute: "summary", length : 20 })
+                    this.view = new chorus.views.TruncatedText({model: this.model, attribute: "summary", characters : 20, lines: 2 })
                     this.view.render();
-                })
-
-                it("truncates the text", function() {
-                    expect(this.view.$(".text").text()).toBe(this.displayText);
-                })
-
-                it("renders the truncated text", function() {
-                    expect(this.view.$(".truncated").text()).toBe(this.truncatedText)
-                })
-
-                it("does not add space between displayText and truncatedText", function() {
-                    expect(this.view.$(".entire_text").text()).toBe(this.text);
                 });
 
-                it("renders 'read more' and 'read less' links", function() {
-                    expect(this.view.$(".links a.more")).toExist();
-                    expect(this.view.$(".links a.less")).toExist();
-                    expect(this.view.$(".links a.more").text().trim()).toMatchTranslation("truncated_text.more");
-                    expect(this.view.$(".links a.less").text().trim()).toMatchTranslation("truncated_text.less");
-                })
+                context("when the text has less than the maximum number of characters", function() {
+                    context("when the text has less than or equal to the maximum number of lines", function() {
+                        beforeEach(function() {
+                            this.model.set({summary : "really short"});
+                        });
 
-                it("starts out without the 'more' class on the surrounding div", function() {
-                    expect(this.view.$("> div")).not.toHaveClass("more");
+                        it("renders the bare text", function() {
+                            expect($(this.view.el).text().trim()).toBe("really short");
+                        })
+                    });
+
+                    context("when the text has more than the maximum number of lines", function() {
+                        beforeEach(function() {
+                            this.model.set({summary : "1\n2\n3\n"});
+                        });
+
+                        it("renders the first two lines of the text", function() {
+                            expect(this.view.$(".text").text()).toBe("1\n2");
+                        });
+
+                        it("renders the truncated text", function() {
+                            expect(this.view.$(".truncated").text()).toBe("\n3\n");
+                        })
+                    });
                 });
-            })
-            context("when the text has less than the maximum number of characters", function() {
-                beforeEach(function() {
-                    this.text = "Now is the time for all good men to come to the aid of their country";
-                    this.model.set({ summary : this.text });
-                    this.view = new chorus.views.TruncatedText({model: this.model, attribute: "summary", length : 200 })
-                    this.view.render();
-                })
 
-                it("renders the bare text", function() {
-                    expect($(this.view.el).text().trim()).toBe(this.text);
-                })
-            })
+                context("when the text has more than the maximum number of characters", function() {
+                    context("when the text has less than or equal to the maximum number of lines", function() {
+                        beforeEach(function() {
+                            this.model.set({summary : "1234567890123456789012345"});
+                        });
+
+                        it("renders the first {limit} characters of the text", function() {
+                            expect(this.view.$(".text").text()).toBe("12345678901234567890");
+                        });
+
+                        it("renders the truncated text", function() {
+                            expect(this.view.$(".truncated").text()).toBe("12345");
+                        });
+                    });
+
+                    context("when the text has more than the maximum number of lines", function() {
+                        context("when the character limit is reached before the line limit", function() {
+                            beforeEach(function() {
+                                this.model.set({summary : "123456789012\n4567890AB\nC\nD\nE"});
+                            });
+
+                            it("renders the first {limit} characters of the text", function() {
+                                expect(this.view.$(".text").text()).toBe("123456789012\n4567890");
+                            });
+
+                            it("renders the truncated text", function() {
+                                expect(this.view.$(".truncated").text()).toBe("AB\nC\nD\nE");
+                            });
+                        });
+
+                        context("when the line limit is reached before the character limit", function() {
+                            beforeEach(function() {
+                                this.model.set({summary : "12345\n6789012\n3456789012345"});
+                            });
+
+                            it("renders the first {limit} characters of the text", function() {
+                                expect(this.view.$(".text").text()).toBe("12345\n6789012");
+                            });
+
+                            it("renders the truncated text", function() {
+                                expect(this.view.$(".truncated").text()).toBe("\n3456789012345");
+                            });
+                        });
+                    });
+                });
+            });
         });
 
         context("when the attribute does not exist on the model", function() {
             beforeEach(function() {
-                this.view = new chorus.views.TruncatedText({model: this.model, attribute: "herpderp", length : 200 })
+                this.view = new chorus.views.TruncatedText({model: this.model, attribute: "herpderp", characters : 200 })
                 this.view.render();
             })
 
@@ -82,7 +163,7 @@ describe("chorus.views.TruncatedText", function() {
         beforeEach(function() {
             this.text = "Now is the time for all good men to come to the aid of their country";
             this.model.set({ summary : this.text });
-            this.view = new chorus.views.TruncatedText({model: this.model, attribute: "summary", length : 20 })
+            this.view = new chorus.views.TruncatedText({model: this.model, attribute: "summary", characters : 20 })
             this.view.render();
         })
 

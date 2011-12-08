@@ -9,19 +9,18 @@
 
         additionalContext: function() {
             var ctx = {isExpanded : this.isExpanded};
-            var text = this.model.get(this.options.attribute);
-            if (this.model.loaded && text && text.length > this.options.length) {
-                _.extend(ctx, {
-                    displayText : text.substring(0, this.options.length),
-                    truncatedText : text.substring(this.options.length),
-                    doTruncate : true
-                });
-            } else {
-                _.extend(ctx, {
-                    doTruncate : false,
-                    fullText : text
-                });
-            }
+            var originalText = this.model.get(this.options.attribute);
+            var pieces = truncate(originalText, this.options.characters, this.options.lines);
+            var displayText = pieces[0];
+            var truncatedText = pieces[1];
+
+            var wasTruncated = !!pieces[1];
+
+            _.extend(ctx, {
+                displayText : displayText,
+                truncatedText : truncatedText,
+                doTruncate : wasTruncated
+            });
 
             // scope our additional context to avoid any possible conflicts with model attributes
             return { truncateContext : ctx }
@@ -33,4 +32,18 @@
             this.$("> div").toggleClass("more", this.isExpanded);
         }
     });
+
+    function truncate(text, characters, lines) {
+        if (!text) {
+            return ['', ''];
+        }
+
+        var index = characters;
+        if (lines) {
+            var lineIndex = text.split('\n').slice(0, lines).join('\n').length;
+            index = Math.min(index, lineIndex);
+        }
+
+        return [text.substring(0, index), text.substring(index)];
+    }
 })(jQuery, chorus);
