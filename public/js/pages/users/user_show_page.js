@@ -7,7 +7,6 @@
         ],
 
         setup : function(userId){
-            var self = this;
             this.model = new chorus.models.User({id: userId});
             this.model.fetch();
 

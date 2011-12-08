@@ -1,11 +1,18 @@
 describe("chorus.views.Dashboard", function(){
     beforeEach(function(){
-        this.loadTemplate("plain_text")
-        this.view = new chorus.views.Dashboard()
-        this.view.render()
-    })
+        this.loadTemplate("workspace_list");
+        this.loadTemplate("plain_text");
+        this.view = new chorus.views.Dashboard();
+        this.view.render();
+    });
     
-    it("should render plain text", function(){
-        expect($(this.view.el).text()).toBe("party_time")
-    })
-})
+    describe("#render", function() {
+        it("creates users active workspace list view", function() {
+
+        });
+
+        it("has workspace list", function() {
+            expect(this.view.$(".main_content.workspace_list")).toExist();
+        })
+    });
+});

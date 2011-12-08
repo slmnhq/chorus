@@ -8,12 +8,8 @@ describe("chorus.pages.DashboardPage", function() {
         this.loadTemplate("main_content")
         this.loadTemplate("workspace_list")
         this.loadTemplate("default_content_header")
+        this.loadTemplate("plain_text")
         this.page = new chorus.pages.DashboardPage();
-        chorus.user = new chorus.models.User({
-            "firstName" : "Daniel",
-            "lastName" : "Burkes",
-            "fullName": "Daniel Francis Burkes"
-        });
     });
 
     describe("#render", function() {
@@ -27,7 +23,7 @@ describe("chorus.pages.DashboardPage", function() {
 
         context("the workspace list", function(){
             beforeEach(function(){
-                this.workspaceList = this.page.mainContent;
+                this.workspaceList = this.page.mainContent.workspaceList;
             })
 
             it("has a title", function() {
@@ -39,4 +35,25 @@ describe("chorus.pages.DashboardPage", function() {
             });
         });
     });
+
+    context("#setup", function(){
+        it("passes the collection with through to the workspaceSet view view", function(){
+            expect(this.page.mainContent.workspaceList.collection).toBe(this.page.workspaceSet);
+        })
+
+        it("only fetches active workspaces", function(){
+            expect(this.page.workspaceSet.attributes.active).toBeTruthy();
+        })
+
+        it("fetches workspaces for the logged in user", function(){
+            expect(this.page.workspaceSet.attributes.user).toBe(chorus.session.user());
+        })
+
+        xit("fetches the right url when the sesison changes", function(){
+            console.log("there is a problem in testing the seams in login/fetch to triggering save")
+            chorus.session.set({id: 14})
+            chorus.session.trigger("saved")
+            //last request url should have user=14 in it
+        })
+    })
 });

@@ -6,7 +6,7 @@
         additionalParams : function(){
             var params = []
             if(this.attributes.active) params.push("active=true");
-            if(this.attributes.membersOnly) params.push("user=" + chorus.session.user().get("id"));
+            if(this.attributes.user) params.push("user=" + this.attributes.user.get("id"));
             return params;
         }
     });

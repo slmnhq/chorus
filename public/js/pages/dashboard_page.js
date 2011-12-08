@@ -6,16 +6,20 @@
         ],
 
         setup : function(){
-            this.collection = new ns.models.WorkspaceSet();
-            this.collection.attributes.active = true;
-            this.collection.attributes.membersOnly = true;
-            this.collection.fetchAll();
+            this.collection = this.workspaceSet = new ns.models.WorkspaceSet();
+            this.workspaceSet.attributes.active = true;
+            this.workspaceSet.attributes.user = chorus.session.user()
+            this.workspaceSet.fetchAll()
 
-            this.mainContent = new ns.views.MainContentView({
-                contentHeader : ns.views.StaticTemplate("default_content_header", {title : t("header.my_workspaces")}),
-                content : new ns.views.WorkspaceList({collection : this.collection})
-            });
+//          chorus.session.user().bind("change", this.workspaceSet.fetchAll); //why don't I work in chrome?
+            chorus.session.user().bind("change", fetchWorkspaceSet, this);
+
+
+            this.mainContent = new ns.views.Dashboard({collection : this.workspaceSet})
         }
     });
 
+    function fetchWorkspaceSet() {
+        this.workspaceSet.fetchAll()
+    }
 })(jQuery, chorus);

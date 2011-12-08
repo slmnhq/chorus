@@ -13,6 +13,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
     describe("#setup", function() {
         beforeEach(function() {
             chorus.session.set({id: 4003});
+            chorus.session.trigger("saved")
             this.dialog = new chorus.dialogs.CopyWorkfile({launchElement : this.launchElement });
         })
 
@@ -28,8 +29,8 @@ describe("chorus.dialogs.CopyWorkfile", function() {
             expect(this.dialog.picklistView.collection).toBe(this.dialog.collection);
         })
 
-        it("only gets editable workspaces", function(){
-            expect(this.dialog.collection.attributes.membersOnly).toBe(true);
+        it("only gets the chorus.session.users()'s workspaces", function(){
+            expect(this.dialog.collection.attributes.user).toBe(chorus.session.user());
         })
     })
 

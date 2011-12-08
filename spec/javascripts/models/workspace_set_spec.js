@@ -7,34 +7,30 @@ describe("WorkspaceSet", function() {
     });
 
     describe("without filtering", function() {
-        it("creates the right URL", function() {
+        it("has the pagination/row params by default", function() {
             expect(this.collection.url()).toBe("/edc/workspace/?page=1&rows=50");
         });
-    })
+    });
+
     describe("with filtering active is true", function() {
-        beforeEach(function() {
+        it("it sets the 'active' param", function() {
             this.collection.attributes.active = true
-        });
-        it("it has correct Url", function() {
             expect(this.collection.url()).toBe("/edc/workspace/?active=true&page=1&rows=50");
         });
     });
 
-    context("members", function(){
-        beforeEach(function() {
-            this.collection.attributes.membersOnly = true;
-            if (!chorus.session) chorus.session = new chorus.models.Session();
-            chorus.session.set({id : 199});
-        });
-
-        it("it has correct Url", function() {
+    context("with a userId", function(){
+        it("sets the 'user' param", function() {
+            this.collection.attributes.user = new chorus.models.User({id: 199});
             expect(this.collection.url()).toBe("/edc/workspace/?user=199&page=1&rows=50");
         });
+    })
 
+    context("with multiple paramaters", function(){
         it("it has correct Url when both are true", function() {
-            this.collection.attributes.membersOnly = true;
+            this.collection.attributes.user = new chorus.models.User({id: 20});
             this.collection.attributes.active = true;
-            expect(this.collection.url()).toBe("/edc/workspace/?active=true&user=199&page=1&rows=50");
+            expect(this.collection.url()).toBe("/edc/workspace/?active=true&user=20&page=1&rows=50");
         });
     });
 });

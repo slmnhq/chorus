@@ -70,6 +70,7 @@
     });
 
     function storeSessionState() {
+//        console.log("this is never getting put")
         $.cookie("userId", this.get("id"))
         this.user().set({id: this.get("id")})
     }
