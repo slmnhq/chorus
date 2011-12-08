@@ -8,6 +8,12 @@
         },
 
         selectItem : function selectItem(e){
+            if ($(e.currentTarget).hasClass("selected")) {
+                // don't repeatedly raise events for the same item
+                // e.g. the user clicks the item to highlight text
+                return;
+            }
+            
             this.$("li").removeClass("selected");
             $(e.currentTarget).addClass("selected");
             var workfileId = $(e.currentTarget).data("id");
@@ -17,15 +23,23 @@
 
         collectionModelContext : function(model) {
             var isOther = !(model.isImage() || model.isText());
-            var lastComment = model.lastComment();
-            return {
+
+            var ctx = {
                 iconUrl : chorus.urlHelpers.fileIconUrl(model.get('fileType')),
-                showUrl : isOther ? model.downloadUrl() : model.showUrl(),
-                lastComment : lastComment && {
+                showUrl : isOther ? model.downloadUrl() : model.showUrl()
+            }
+
+            var lastComment = model.lastComment();
+            if (lastComment) {
+                ctx.lastComment = {
                     body : lastComment.get("body"),
                     creator : lastComment.creator()
                 }
+
+                ctx.otherCommentCount = parseInt(model.get("commentCount")) - 1;
             };
+
+            return ctx;
         },
 
         filter: function(type){

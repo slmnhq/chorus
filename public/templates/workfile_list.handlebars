@@ -10,9 +10,6 @@
                     <span>{{fileName}}</span>
                 </a>
             </div>
-            <div class="summary">
-                {{description}}
-            </div>
             <div class="details"/>
             {{#if lastComment}}
                 <div class="comment">
@@ -20,6 +17,12 @@
                         {{lastComment.body}}
                     </div>
                     {{{userProfileLink lastComment.creator}}}
+                    <span class="comment_info">
+                        {{t "workfiles.commented_on"}} NEED_DATE_FROM_API
+                        {{#if otherCommentCount }}
+                            - {{t "workfiles.other_comments" otherCommentCount}}
+                        {{/if}}
+                    </span>
                 </div>
             {{/if}}
         </div>

@@ -27,7 +27,8 @@ describe("WorkfileListView", function() {
                     commentBody: "Comment 1",
                     commenterId: "21",
                     commenterFirstName: "Wayne",
-                    commenterLastName: "Wayneson"
+                    commenterLastName: "Wayneson",
+                    commentCount: "1"
                 });
                 this.model2 = new chorus.models.Workfile({
                     id: 34,
@@ -39,7 +40,8 @@ describe("WorkfileListView", function() {
                     commentBody: "Comment 2",
                     commenterId: "22",
                     commenterFirstName: "Garth",
-                    commenterLastName: "Garthson"
+                    commenterLastName: "Garthson",
+                    commentCount: "2"
                 });
                 this.model3 = new chorus.models.Workfile({
                     id: 56,
@@ -85,12 +87,6 @@ describe("WorkfileListView", function() {
                 expect($(this.view.$("li img")[2]).attr("src")).toBe("/images/workfileIcons/binary.png");
             });
 
-            it("includes the description", function() {
-                expect($(this.view.$("li .summary")[0]).text().trim()).toBe(this.model1.get("description"));
-                expect($(this.view.$("li .summary")[1]).text().trim()).toBe(this.model2.get("description"));
-                expect($(this.view.$("li .summary")[2]).text().trim()).toBe(this.model3.get("description"));
-            });
-
             it("includes the most recent comment body", function() {
                 expect($(this.view.$("li .comment .body")[0]).text().trim()).toBe(this.model1.lastComment().get("body"));
                 expect($(this.view.$("li .comment .body")[1]).text().trim()).toBe(this.model2.lastComment().get("body"));
@@ -99,6 +95,15 @@ describe("WorkfileListView", function() {
             it("includes the full name of the most recent commenter", function() {
                 expect($(this.view.$("li .comment .user")[0]).text().trim()).toBe(this.model1.lastComment().creator().displayName());
                 expect($(this.view.$("li .comment .user")[1]).text().trim()).toBe(this.model2.lastComment().creator().displayName());
+            });
+
+            it("does not display 'other comments' on the workfile with only 1 comment", function() {
+                expect(this.view.$("li .comment").eq(0).text()).not.toContain(t("workfiles.other_comments", 0));
+                expect(this.view.$("li .comment").eq(0).text()).not.toContain(t("workfiles.other_comments", 1));
+            });
+
+            it("displays 'other comments' on the workfile with more than 1 comment", function() {
+                expect(this.view.$("li .comment").eq(1).text()).toContain(t("workfiles.other_comments", 1))
             });
 
             context("clicking on the first item", function() {
@@ -115,6 +120,18 @@ describe("WorkfileListView", function() {
 
                 it("triggers the workfile:selected event", function() {
                     expect(this.eventSpy).toHaveBeenCalledWith(this.model1);
+                });
+
+                context("clicking on the same item again", function() {
+                    beforeEach(function() {
+                        this.eventCount = this.eventSpy.calls.length;
+                        this.view.$("li").eq(0).click();
+                    });
+
+                    it("does not raise the event again", function() {
+                        // raising the event again causes unnecessary fetches
+                        expect(this.eventSpy.calls.length).toBe(this.eventCount);
+                    });
                 });
 
                 context("and then clicking on the second item", function() {

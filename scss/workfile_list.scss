@@ -1,6 +1,9 @@
 @import "_common.scss";
 
 ul.workfile_list {
+    .comment_info {
+        color: $weak-text-color;
+    }
     .comment {
         font-size: 14px;
 
