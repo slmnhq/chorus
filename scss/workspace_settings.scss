@@ -1,14 +1,17 @@
 @import "_common.scss";
 
-$dialog-width : 580px;
+$dialog-width : 550px;
 $image-width : 230px;
 
 .workspace_settings {
-
     label {
         display: block;
         margin-top: 15px;
         margin-bottom: $padding-y;
+
+        &:first-child {
+            margin-top: 0;
+        }
     }
 
     #dialog_content {
