@@ -6,7 +6,12 @@
     <textarea name="summary" maxlength="4095" rows="6" tabindex="2">{{summary}}</textarea>
 
     <label>Workspace Image</label>
-    <div class='edit_photo'/>
+    <div class="image_container">
+        <div class='edit_photo'/>
+        <div class="instructions">
+            {{t "workspace.settings.image.instructions"}}
+        </div>
+    </div>
 
     <div class="controls">
         <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>

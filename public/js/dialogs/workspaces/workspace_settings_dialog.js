@@ -20,7 +20,8 @@
             this.imageUpload = new ns.views.ImageUpload({
                model : this.pageModel,
                addImageKey: "workspace.settings.image.add",
-               changeImageKey: "workspace.settings.image.change"
+               changeImageKey: "workspace.settings.image.change",
+               spinnerSmall: true
             });
             this.pageModel.bind("saved", this.closeModal, this);
         },

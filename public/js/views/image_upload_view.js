@@ -15,6 +15,7 @@
         setup : function(options) {
             this.addImageKey = options.addImageKey;
             this.changeImageKey = options.changeImageKey;
+            this.spinnerSmall = options.spinnerSmall;
         },
 
         postRender : function() {
@@ -31,22 +32,35 @@
             });
 
             function fileSelected(e, data) {
-                self.spinner = new Spinner({
-                    lines: 30,
-                    length: 40,
-                    width: 6,
-                    radius: 25,
-                    color: '#000',
-                    speed: 0.5,
-                    trail: 75,
-                    shadow: false
-                }).spin(self.$(".spinner_container")[0]);
-
+                if (self.spinnerSmall) {
+                    self.spinner = new Spinner({
+                        lines: 14,
+                        length: 8,
+                        width: 3,
+                        radius: 10,
+                        color: '#000',
+                        speed: 1,
+                        trail: 75,
+                        shadow: false
+                    }).spin(self.$(".spinner_container")[0]);
+                } else {
+                    self.spinner = new Spinner({
+                        lines: 30,
+                        length: 40,
+                        width: 6,
+                        radius: 25,
+                        color: '#000',
+                        speed: 0.5,
+                        trail: 75,
+                        shadow: false
+                    }).spin(self.$(".spinner_container")[0]);
+                }
                 self.$("img").addClass("disabled");
                 self.$("input[type=file]").attr("disabled", "disabled");
                 self.$("a.action").addClass("disabled");
 
                 data.submit();
+
             }
 
             function uploadFinished(e, data) {
