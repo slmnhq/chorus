@@ -9,7 +9,7 @@ describe("chorus.models.Note", function() {
         expect(this.model.urlTemplate).toBe("comment/{{entityType}}/{{entityId}}");
     });
 
-    describe("#performValidation", function() {
+    describe("validation", function() {
         it("should return a falsyy value if there is no body", function() {
             this.model.set({ body : "" });
             expect(this.model.performValidation()).toBeFalsy();

@@ -15,7 +15,7 @@ describe("chorus.models.User", function() {
 
     describe("#workspaces", function() {
         beforeEach(function() {
-            this.user = new models.User({userName: "dr_charlzz"});
+            this.user = new models.User({userName: "dr_charlzz", id : "457"});
             this.workspaces = this.user.workspaces();
         });
 
@@ -51,7 +51,7 @@ describe("chorus.models.User", function() {
             });
 
             it("hits the right url for that user", function() {
-                var expectedUrl = "/edc/workspace/?user=" + this.user.get("userName") + "&page=1&rows=50";
+                var expectedUrl = "/edc/workspace/?user=457&page=1&rows=50";
                 expect(this.server.requests[0].url).toBe(expectedUrl);
             });
         });
@@ -66,7 +66,7 @@ describe("chorus.models.User", function() {
         });
     });
 
-    describe("#performValidation", function() {
+    describe("validation", function() {
         beforeEach(function() {
             spyOn(this.model, "require").andCallThrough();
             spyOn(this.model, "requirePattern").andCallThrough();
@@ -82,13 +82,13 @@ describe("chorus.models.User", function() {
         _.each(["firstName", "lastName", "userName"], function(attr) {
             it("requires " + attr, function() {
                 this.model.performValidation();
-                expect(this.model.require).toHaveBeenCalledWith(attr);
+                expect(this.model.require).toHaveBeenCalledWith(attr, undefined);
             });
         });
 
         it("requires emailAddress", function() {
             this.model.performValidation();
-            expect(this.model.requirePattern).toHaveBeenCalledWith("emailAddress", /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/);
+            expect(this.model.requirePattern).toHaveBeenCalledWith("emailAddress", /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/, undefined);
         });
 
 
@@ -136,20 +136,13 @@ describe("chorus.models.User", function() {
 
             context("when the password has not changed", function() {
                 it("returns true", function() {
-                    this.model.set({ emailAddress : "bobjanky@coolpalace.us" });
-                    expect(this.model.performValidation()).toBeTruthy();
+                    expect(this.model.performValidation({ emailAddress : "bobjanky@coolpalace.us" })).toBeTruthy();
                 });
             });
 
             context("when the password has changed and no confirmation is specified", function() {
                 it("returns false", function() {
-
-                    // when setting the password, we need to set 'silent' to true,
-                    // so that later, when we perform validation, we can tell that
-                    // the password has changed
-
-                    this.model.set({ password : "new_password" }, { silent : true });
-                    expect(this.model.performValidation()).toBeFalsy();
+                    expect(this.model.performValidation({password: "new_password", passwordConfirmation: ""})).toBeFalsy();
                 });
             });
         });

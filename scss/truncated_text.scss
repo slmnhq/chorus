@@ -1,0 +1,49 @@
+@import "_common.scss";
+
+.truncated_text {
+    font-size: 14px;
+    .entire_text {
+        white-space: pre-wrap;
+    }
+
+
+    .content {
+        color: $weak-text-color;
+        .truncated {
+            display: none;
+        }
+    }
+
+    .links {
+        .less {
+            display: none;
+        }
+
+        .more {
+            display: inline;
+        }
+    }
+
+    > div.more {
+        .content {
+            .truncated {
+                display: inline;
+            }
+
+            .ellipsis {
+                display: none;
+            }
+        }
+
+        .links {
+            .less {
+                display: inline;
+            }
+
+            .more {
+                display: none;
+            }
+        }
+
+    }
+}

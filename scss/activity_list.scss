@@ -16,7 +16,7 @@ $comment-padding-x: 6px;
                 img {
                     width: $image-width;
                     height: $image-height;
-                    padding-right: $image-gutter;
+                    margin-right: $image-gutter;
                 }
             }
 
@@ -90,5 +90,9 @@ $comment-padding-x: 6px;
                 }
             }
         }
+    }
+
+    a.more_activities {
+        font-size: 12px;
     }
 }

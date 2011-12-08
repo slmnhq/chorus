@@ -166,16 +166,54 @@ describe("chorus.models", function() {
                     expect(Backbone.Model.prototype.save).not.toHaveBeenCalled();
                 })
 
-                it("does not trigger saved", function() {
-                    this.model.save();
-                    expect(this.savedSpy).not.toHaveBeenCalled();
-                })
-
                 it("triggers validationFailed", function() {
                     this.model.save();
                     expect(this.validationFailedSpy).toHaveBeenCalled();
                 })
             })
+
+            context("passing attrs to the save method", function() {
+                beforeEach(function() {
+                    this.model.declareValidations = function(newAttrs) {
+                        this.require('requiredAttr', newAttrs);
+                    };
+
+                    this.model.set({requiredAttr : 'foo'});
+                    this.validationFailedSpy = jasmine.createSpy();
+                    this.model.bind("validationFailed", this.validationFailedSpy);
+                    this.validatedSpy = jasmine.createSpy();
+                    this.model.bind("validated", this.validatedSpy);
+                    spyOn(Backbone.Model.prototype, "save");
+                });
+
+                context("when the attrs are valid", function() {
+                    beforeEach(function() {
+                        this.model.save({requiredAttr : "bar"})
+                    });
+
+                    it("saves the model", function() {
+                        expect(Backbone.Model.prototype.save).toHaveBeenCalled();
+                    });
+
+                    it("triggers validated", function() {
+                        expect(this.validatedSpy).toHaveBeenCalled();
+                    });
+                });
+
+                context("when the attrs are invalid", function() {
+                    beforeEach(function() {
+                        this.model.save({requiredAttr : ""})
+                    });
+
+                    it("does not save the model", function() {
+                        expect(Backbone.Model.prototype.save).not.toHaveBeenCalled();
+                    })
+
+                    it("triggers validationFailed", function() {
+                        expect(this.validationFailedSpy).toHaveBeenCalled();
+                    })
+                });
+            });
         });
 
         describe("#destroy", function () {
@@ -272,6 +310,12 @@ describe("chorus.models", function() {
                 expect(this.model.errors.foo).toBeDefined();
             })
 
+            it("sets an error if the attribute is present, is a String, and contains only whitespace", function() {
+                this.model.set({ foo : "    " })
+                this.model.require("foo");
+                expect(this.model.errors.foo).toBeDefined();
+            })
+
             it("does not set an error if the attribute is present", function() {
                 this.model.set({ foo : "bar" });
                 this.model.require("foo");
@@ -281,6 +325,20 @@ describe("chorus.models", function() {
             it("contains the attr name", function() {
                 this.model.require("foo");
                 expect(this.model.errors.foo).toContain("foo");
+            });
+
+            it("sets an error if newAttrs is invalid but the existing value is valid", function() {
+                this.model.set({foo: "bar"});
+                this.model.require("foo", {foo: ""});
+
+                expect(this.model.errors.foo).toBeDefined();
+            });
+
+            it("does not set an error if the newAttrs is valid", function() {
+                this.model.set({foo: "bar"});
+                this.model.require("foo", {foo: "quux"});
+
+                expect(this.model.errors.foo).not.toBeDefined();
             });
 
             context("model has attrToLabel set", function() {
@@ -322,6 +380,20 @@ describe("chorus.models", function() {
             it("contains the attr name in the error", function() {
                 this.model.requirePattern("foo", /hello/);
                 expect(this.model.errors.foo).toContain("foo");
+            });
+
+            it("sets an error if newAttrs is invalid but the existing value is valid", function() {
+                this.model.set({foo: "bar"});
+                this.model.requirePattern("foo", /bar/, {foo: ""});
+
+                expect(this.model.errors.foo).toBeDefined();
+            });
+
+            it("does not set an error if the newAttrs is valid", function() {
+                this.model.set({foo: "123"});
+                this.model.requirePattern("foo", /\d+/, {foo: "456"});
+
+                expect(this.model.errors.foo).not.toBeDefined();
             });
 
             context("model has attrToLabel set", function() {
@@ -370,6 +442,31 @@ describe("chorus.models", function() {
                 this.model.set({ foo : "bar", fooConfirmation : "baz" });
                 this.model.requireConfirmation("foo");
                 expect(this.model.errors.foo).toContain("foo");
+            });
+
+            it("sets an error if newAttrs is invalid but the existing value is valid", function() {
+                this.model.set({foo: "bar", fooConfirmation: "bar"});
+                this.model.requireConfirmation("foo", {foo: "a", fooConfirmation: "b"});
+
+                expect(this.model.errors.foo).toBeDefined();
+            });
+
+            it("does not set an error if the newAttrs is valid", function() {
+                this.model.set({foo: "123", fooConfirmation: "123"});
+                this.model.requireConfirmation("foo", {foo: "456", fooConfirmation: "456"});
+
+                expect(this.model.errors.foo).not.toBeDefined();
+            });
+
+            it("throws if newAttrs supplies an original and not a confirmation", function() {
+                this.model.set({foo: "123", fooConfirmation: "123"});
+
+                try {
+                    this.model.requireConfirmation("foo", {foo: "456"});
+                    expect("should never get here").toBe("wtf");
+                } catch (e) {
+                    // test passed
+                }
             });
 
             context("model has attrToLabel set", function() {

@@ -1,7 +1,7 @@
 @import "_common.scss";
 
 .workspace_list {
-    li.archived .name {
+    li.archived .name span  {
         text-decoration: line-through;
     }
 
@@ -21,5 +21,23 @@
         margin-left: 5px;
         padding: 3px $padding-x 1px;
     }
+    li {
+        .full {
+            display: none;
+        }
+        .truncated {
+            display : block;
+        }
+        &.more {
+            .full {
+                display : block;
+            }
+            .truncated {
+                display : none;
+            }
+        }
+
+    }
+
 }
 

@@ -1,0 +1,7 @@
+<div class='actions'>
+<h1>{{name}}</h1>
+<ul>
+    {{#if canUpdate}}<li><a class="dialog" href="#" data-dialog="WorkspaceSettings">{{t "actions.edit_workspace"}}</a></li>{{/if}}
+    <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workspace" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+</ul>
+</div>

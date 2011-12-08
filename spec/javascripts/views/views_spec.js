@@ -240,13 +240,13 @@ describe("chorus.views", function() {
 
             context("with a supplied contentHeader", function() {
                 it("should render the header", function() {
-                    expect(this.view.$("#content_header").text()).toBe("header text");
+                    expect(this.view.$(".content_header").text()).toBe("header text");
                 });
             });
 
             context("with a supplied content", function() {
                 it("should render the content", function() {
-                    expect(this.view.$("#content").text()).toBe("content text");
+                    expect(this.view.$(".content").text()).toBe("content text");
                 });
             });
 
@@ -257,13 +257,13 @@ describe("chorus.views", function() {
                 });
 
                 it("should have the hidden class on the content div", function() {
-                    expect((this.view.$("#content"))).toHaveClass("hidden");
+                    expect((this.view.$(".content"))).toHaveClass("hidden");
                 });
             })
 
             context("without a supplied contentDetails", function() {
                 it("should have the hidden class on the content_details div", function() {
-                    expect((this.view.$("#content_details"))).toHaveClass("hidden");
+                    expect((this.view.$(".content_details"))).toHaveClass("hidden");
                 });
             });
 
@@ -274,7 +274,24 @@ describe("chorus.views", function() {
                 });
 
                 it("should render the contentDetails", function() {
-                    expect((this.view.$("#content_details").text())).toBe("content details text");
+                    expect((this.view.$(".content_details").text())).toBe("content details text");
+                });
+            });
+
+            context("without a supplied contentFooter", function() {
+                it("should have the hidden class on the content_footer div", function() {
+                    expect((this.view.$(".content_footer"))).toHaveClass("hidden");
+                });
+            });
+
+            context("with a supplied contentFooter", function() {
+                beforeEach(function() {
+                    this.view.contentFooter = stubView("content footer text");
+                    this.view.render();
+                });
+
+                it("should render the contentFooter", function() {
+                    expect((this.view.$(".content_footer").text())).toBe("content footer text");
                 });
             });
         });

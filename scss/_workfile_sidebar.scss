@@ -1,6 +1,12 @@
 @import "_common.scss";
 
 @mixin workfile_sidebar {
+    h2 {
+        font-size: 16px;
+        color: $dark-text-color;
+        padding-top: 12px;
+    }
+    
     .info {
         margin: 20px 0;
 
@@ -17,9 +23,4 @@
         }
     }
 
-    .actions {
-        li {
-            padding-bottom: 8px;
-        }
-    }
 }

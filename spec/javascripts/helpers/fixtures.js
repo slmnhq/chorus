@@ -173,6 +173,7 @@
                             "firstName": "Mark",
                             "lastName": "Rushakoff",
                             "emailAddress": "markymark@pivotallabs.com",
+                            "title": "Title",
                             "admin": false,
                             "notes": null,
                             "lastLogin": "2011-11-03 17:45:39",
@@ -184,6 +185,7 @@
                             "firstName": "EDC",
                             "lastName": "Admin",
                             "emailAddress": "edcadmin@greenplum.com",
+                            "title": "Engineer",
                             "admin": true,
                             "notes": null,
                             "lastLogin": "2011-11-03 17:45:39",
@@ -195,6 +197,7 @@
                             "firstName": "frOg",
                             "lastName": "man",
                             "emailAddress": "frogman@greenplum.com",
+                            "title": "Frog-man",
                             "admin": false,
                             "notes": null,
                             "lastLogin": "2011-11-03 17:45:39",
@@ -229,7 +232,7 @@
                             "isPublic":true,
                             "iconId":null,
                             "state":1,
-                            "summary":null,
+                            "summary":"this is the workspace summary",
                             "sandboxId":null,
                             "active":true,
                             "permission":["admin"]
@@ -269,10 +272,11 @@
                             "modifiedByFirstName":"EDC",
                             "modifiedByLastName":"Admin",
                             "modifiedById":"10010",
-                            "commentCount":0,
-                            "commentBody":"",
-                            "firstName":"",
-                            "lastName":""
+                            "commentCount":2,
+                            "commentBody":"I am loving commenting",
+                            "commenterId":"InitialUser",
+                            "commenterFirstName":"EDC",
+                            "commenterLastName":"Admin"
                         }
                     ],
                     "method":"GET",
@@ -461,6 +465,7 @@
                             timestamp : "2011-11-23 15:42:02.321",
                             type : "NOT_IMPLEMENTED",
                             author : {
+                                id : "11",
                                 username : "edcadmin",
                                 firstName : "EDC",
                                 lastName : "Admin"
@@ -471,6 +476,7 @@
                                     id : 10023,
                                     timestamp : "2011-11-23 15:42:02.321",
                                     author : {
+                                        id : "12",
                                         username : "msofaer",
                                         firstName : "Michael",
                                         lastName : "Sofaer"
@@ -481,6 +487,7 @@
                                     id : 10024,
                                     timestamp : "2011-05-23 15:42:02.321",
                                     author : {
+                                        id : "13",
                                         username : "mrushakoff",
                                         firstName : "Mark",
                                         lastName : "Rushakoff"
@@ -494,6 +501,7 @@
                             timestamp : "2011-04-23 15:42:02.321",
                             type : "NOT_IMPLEMENTED",
                             author : {
+                                id : "14",
                                 username : "dburkes",
                                 firstName : "Danny",
                                 lastName : "Burkes"

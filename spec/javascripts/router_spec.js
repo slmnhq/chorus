@@ -52,6 +52,8 @@ describe("chorus.router", function() {
             this.loadTemplate("user_list");
             this.loadTemplate("dashboard_sidebar");
             this.loadTemplate("logged_in_layout");
+            this.loadTemplate("plain_text")
+            this.loadTemplate("truncated_text")
 
             this.savedLocation = window.location.hash;
         })
@@ -64,6 +66,7 @@ describe("chorus.router", function() {
             this.loadTemplate("workspace_detail");
             this.loadTemplate("sub_nav_content");
             this.loadTemplate("sub_nav");
+            this.loadTemplate("workspace_summary_sidebar");
             this.chorus.router.navigate("/workspaces/5", true);
             expect(this.chorus.page.model.get("id")).toBe("5");
         });

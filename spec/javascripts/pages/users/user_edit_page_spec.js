@@ -10,6 +10,7 @@ describe("chorus.pages.UserEditPage", function() {
         this.loadTemplate("logged_in_layout");
         this.loadTemplate("user_edit")
         this.loadTemplate("user_show_sidebar")
+        this.loadTemplate("image_upload");
     });
 
     describe("#setup", function() {
@@ -36,15 +37,16 @@ describe("chorus.pages.UserEditPage", function() {
 
             this.view = new chorus.pages.UserEditPage(this.user.get("id"));
             this.view.model.set(this.user.attributes)
+            this.view.model.loaded = true;
             this.view.render();
         });
 
         it("displays the first + last name in the header", function() {
-            expect(this.view.$("#content_header h1").text().trim()).toBe("EDC Admin");
+            expect(this.view.$(".content_header h1").text().trim()).toBe("EDC Admin");
         });
 
         it("displays the word 'details' in the details-header", function() {
-            expect(this.view.$("#content_details").text().trim()).toBe(t("users.details"));
+            expect(this.view.$(".content_details").text().trim()).toBe(t("users.details"));
         });
 
         context("breadcrumbs", function() {

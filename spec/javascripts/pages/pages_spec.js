@@ -113,13 +113,13 @@ describe("chorus.pages.Base", function() {
                 this.view = new chorus.pages.Base();
                 this.view.mainContent = new Backbone.View();
 
-                var spy = this.fooDialogSpy = {
-                    launchModal : jasmine.createSpy()
-                }
+                var spy = this.fooDialogSpy = new chorus.dialogs.Base();
+                spyOn(spy, "launchModal");
+
 
                 chorus.dialogs.Foo = function(opts) {
                     spy.launchElement = opts.launchElement;
-                    spy.model = opts.model;
+                    spy.pageModel = opts.pageModel;
                     return spy
                 };
 
@@ -132,14 +132,20 @@ describe("chorus.pages.Base", function() {
                 expect(this.fooDialogSpy.launchModal).toHaveBeenCalled();
             })
 
-            it("passes the launch element and the model to the dialog", function() {
-                this.view.model = new chorus.models.User();
+            it("passes the launch element to the dialog", function() {
                 var elem = this.view.$("button.dialog");
                 elem.click();
 
                 expect(this.fooDialogSpy.launchElement).toBe(elem);
-                expect(this.fooDialogSpy.model).toBe(this.view.model);
-            })
+            });
+
+            it("passes the pageModel to the dialog", function() {
+                this.view.model = new chorus.models.User();
+                var elem = this.view.$("button.dialog");
+                elem.click();
+
+                expect(this.fooDialogSpy.pageModel).toBe(this.view.model);
+            });
         })
 
         context("from links", function() {
@@ -147,12 +153,12 @@ describe("chorus.pages.Base", function() {
                 this.view = new chorus.pages.Base();
                 this.view.mainContent = new Backbone.View();
 
-                var spy = this.fooDialogSpy = {
-                    launchModal : jasmine.createSpy()
-                }
+                var spy = this.fooDialogSpy = new chorus.dialogs.Base();
+                spyOn(spy, "launchModal");
 
                 chorus.dialogs.Foo = function(opts) {
                     spy.launchElement = opts.launchElement;
+                    spy.pageModel = opts.pageModel;
                     return spy
                 };
 
@@ -170,6 +176,14 @@ describe("chorus.pages.Base", function() {
                 elem.click();
                 expect(this.fooDialogSpy.launchElement).toBe(elem);
             })
+
+            it("passes the pageModel to the dialog", function() {
+                this.view.model = new chorus.models.User();
+                var elem = this.view.$("a.dialog");
+                elem.click();
+
+                expect(this.fooDialogSpy.pageModel).toBe(this.view.model);
+            });
         })
     })
 
@@ -178,12 +192,12 @@ describe("chorus.pages.Base", function() {
             this.view = new chorus.pages.Base();
             this.view.mainContent = new Backbone.View();
 
-            var spy = this.fooAlertSpy = {
-                launchModal : jasmine.createSpy()
-            }
+            var spy = this.fooAlertSpy = new chorus.alerts.Base();
+            spyOn(spy, "launchModal");
 
             chorus.alerts.Foo = function(opts) {
                 spy.launchElement = opts.launchElement;
+                spy.pageModel = opts.pageModel;
                 return spy
             };
 
@@ -201,5 +215,13 @@ describe("chorus.pages.Base", function() {
             elem.click();
             expect(this.fooAlertSpy.launchElement).toBe(elem);
         })
+
+        it("passes the pageModel to the dialog", function() {
+            this.view.model = new chorus.models.User();
+            var elem = this.view.$("a.alert");
+            elem.click();
+
+            expect(this.fooAlertSpy.pageModel).toBe(this.view.model);
+        });
     })
 })

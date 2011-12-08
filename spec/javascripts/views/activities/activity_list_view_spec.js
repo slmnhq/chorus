@@ -36,9 +36,9 @@ describe("chorus.views.ActivityList", function() {
             });
 
             it("displays an image link to the author for each activity", function() {
-                expect(this.view.$("li[data-activity-id=10000] > .image a")).toHaveAttr("href", "#/users/edcadmin")
+                expect(this.view.$("li[data-activity-id=10000] > .image a")).toHaveAttr("href", "#/users/11")
                 expect(this.view.$("li[data-activity-id=10000] > .image a img")).toHaveAttr("src", "/edc/userimage/edcadmin?size=icon")
-                expect(this.view.$("li[data-activity-id=10001] > .image a")).toHaveAttr("href", "#/users/dburkes")
+                expect(this.view.$("li[data-activity-id=10001] > .image a")).toHaveAttr("href", "#/users/14")
                 expect(this.view.$("li[data-activity-id=10001] > .image a img")).toHaveAttr("src", "/edc/userimage/dburkes?size=icon")
             })
 
@@ -48,11 +48,11 @@ describe("chorus.views.ActivityList", function() {
             })
 
             it("displays information for each activity", function() {
-                expect(this.view.$("li[data-activity-id=10000] > .info a")).toHaveAttr("href", "#/users/edcadmin")
+                expect(this.view.$("li[data-activity-id=10000] > .info a")).toHaveAttr("href", "#/users/11")
                 expect(this.view.$("li[data-activity-id=10000] > .info a .name")).toHaveText("EDC Admin");
                 expect(this.view.$("li[data-activity-id=10000] > .info .timestamp")).toHaveText("November 23");
 
-                expect(this.view.$("li[data-activity-id=10001] > .info a")).toHaveAttr("href", "#/users/dburkes")
+                expect(this.view.$("li[data-activity-id=10001] > .info a")).toHaveAttr("href", "#/users/14")
                 expect(this.view.$("li[data-activity-id=10001] > .info a .name")).toHaveText("Danny Burkes");
                 expect(this.view.$("li[data-activity-id=10001] > .info .timestamp")).toHaveText("April 23");
             })
@@ -69,11 +69,11 @@ describe("chorus.views.ActivityList", function() {
                 })
 
                 it("displays information for each comment", function() {
-                    expect(this.view.$("li[data-comment-id=10023] > .image a")).toHaveAttr("href", "#/users/msofaer")
+                    expect(this.view.$("li[data-comment-id=10023] > .image a")).toHaveAttr("href", "#/users/12")
                     expect(this.view.$("li[data-comment-id=10023] > .image a img")).toHaveAttr("src", "/edc/userimage/msofaer?size=icon")
                     expect(this.view.$("li[data-comment-id=10023] > .info a .name")).toHaveText("Michael Sofaer");
                     expect(this.view.$("li[data-comment-id=10023] > .info .timestamp")).toHaveText("November 23");
-                    expect(this.view.$("li[data-comment-id=10024] > .image a")).toHaveAttr("href", "#/users/mrushakoff")
+                    expect(this.view.$("li[data-comment-id=10024] > .image a")).toHaveAttr("href", "#/users/13")
                     expect(this.view.$("li[data-comment-id=10024] > .image a img")).toHaveAttr("src", "/edc/userimage/mrushakoff?size=icon")
                     expect(this.view.$("li[data-comment-id=10024] > .info a .name")).toHaveText("Mark Rushakoff");
                     expect(this.view.$("li[data-comment-id=10024] > .info .timestamp")).toHaveText("May 23");
@@ -116,6 +116,32 @@ describe("chorus.views.ActivityList", function() {
                 })
             })
 
+            describe("pagination", function() {
+                context("when there is no next page", function() {
+                    it("does not render a 'more' link", function() {
+                        expect(this.view.$("a.more_activities")).not.toExist();
+                    })
+                })
+
+                context("when there is a next page", function() {
+                    beforeEach(function() {
+                        this.collection.pagination.total = "4";
+                        this.view.render();
+                    })
+
+                    it("renders a 'more' link", function() {
+                        expect(this.view.$("a.more_activities")).toExist();
+                    })
+
+                    describe("when the 'more' link is clicked", function() {
+                        it("fetches the next page of the activity stream", function() {
+                            spyOn(this.collection, 'fetchPage');
+                            this.view.$("a.more_activities").click();
+                            expect(this.collection.fetchPage).toHaveBeenCalledWith(2, { add : true });
+                        })
+                    })
+                })
+            })
         });
     });
 

@@ -4,12 +4,19 @@
         urlTemplate : "auth/login/",
 
         initialize : function() {
-            this.bind("saved", setUserIdCookie)
+            this.bind("saved", storeSessionState, this)
             _.bindAll(this);
         },
 
         user : function() {
-              return new ns.User(this.attributes);
+            this._user = this._user || new ns.User();
+
+            //only mutate user when necessary so you can bind to chorus.session.user change
+            if(!this._user.get("id") || !this._user.get("id") != this.get("id")) {
+                this._user.set( _.extend({id: $.cookie("userId")}, this.attributes))
+            }
+
+            return this._user
         },
 
         fetch : function(options) {
@@ -43,6 +50,7 @@
 
             if (!this.get("errors")) {
                 $.get("/edc/auth/logout/?authid=" + $.cookie("authid"), function() {
+                    self.clear();
                     self.trigger("needsLogin")
                 })
             } else {
@@ -50,11 +58,9 @@
             }
         },
 
-        performValidation : function() {
-            this.errors = {}
-            this.require("userName")
-            this.require("password")
-            return _(this.errors).isEmpty();
+        declareValidations : function(newAttrs) {
+            this.require("userName", newAttrs);
+            this.require("password", newAttrs);
         },
 
         attrToLabel : {
@@ -63,8 +69,10 @@
         }
     });
 
-    function setUserIdCookie() {
+    function storeSessionState() {
+//        console.log("this is never getting put")
         $.cookie("userId", this.get("id"))
+        this.user().set({id: this.get("id")})
     }
 })(chorus.models);
 

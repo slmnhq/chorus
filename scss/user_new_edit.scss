@@ -87,32 +87,4 @@
     .notes {
         width:100%;
     }
-
-    .file-wrapper {
-        overflow: hidden;
-        cursor: pointer;
-        display: inline-block;
-        vertical-align: middle;
-        position: relative;
-    }
-
-    .file-wrapper .action {
-        display: inline-block;
-        color: $link-color;
-        cursor: pointer;
-
-        &.disabled {
-            color: $weak-text-color;
-            cursor: normal;
-        }
-    }
-
-    .file-wrapper input {
-        width: auto;
-        position: absolute;
-        top: -12px;
-        left: 0px;
-        @include opacity(0.0);
-        cursor: pointer;
-     }
 }

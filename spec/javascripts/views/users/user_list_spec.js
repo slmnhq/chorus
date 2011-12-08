@@ -28,6 +28,10 @@ describe("chorus.views.UserList", function() {
                 })
             })
 
+            it("displays the users' title", function() {
+                    expect(this.view.$("a[title=title] .title")).not.toBeEmpty();
+            })
+
             it("sets title attributes", function() {
                 var self = this;
 

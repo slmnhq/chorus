@@ -1,3 +1,4 @@
+{{#if canUpdate}}
 <button
   type="button"
   class="dialog"
@@ -14,6 +15,7 @@
   >
   {{t "actions.create_sql_workfile"}}
 </button>
+{{/if}}
 {{#if workfile}}
     <div class="info">
         <div title="{{workfile.fileName}}" class="fileName">{{workfile.fileName}}</div>
@@ -23,9 +25,10 @@
         <ul>
             <li><a href="#" class="dialog" data-dialog="CopyWorkfile" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspaceId}}">{{t "actions.copy_to_another_workspace"}}</a></li>
             <li><a href="#" class="alert" data-alert="WorkfileDelete" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspaceId}}" data-workfile-name="{{workfile.fileName}}">{{t "actions.delete"}}</a></li>
-            <li><a href="javascript:void(0)" class="download" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspaceId}}" data-workfile-name="{{workfile.fileName}}">{{t "actions.download"}}</a></li>
+            <li><a href="{{workfile.downloadUrl}}" class="download">{{t "actions.download"}}</a></li>
             <li><a class="dialog" href="#" data-entity-id="{{workfile.id}}" data-entity-type="workfile" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
         </ul>
     </div>
+    <h2>{{t "workfiles.sidebar.activity"}}</h2>
     <div class="activities"/>
 {{/if}}

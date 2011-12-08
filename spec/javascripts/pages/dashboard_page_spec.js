@@ -5,24 +5,55 @@ describe("chorus.pages.DashboardPage", function() {
         this.loadTemplate("breadcrumbs");
         this.loadTemplate("dashboard_sidebar");
         this.loadTemplate("logged_in_layout");
-        this.view = new chorus.pages.DashboardPage();
-        chorus.user = new chorus.models.User({
-            "firstName" : "Daniel",
-            "lastName" : "Burkes",
-            "fullName": "Daniel Francis Burkes"
-        });
+        this.loadTemplate("main_content")
+        this.loadTemplate("workspace_list")
+        this.loadTemplate("default_content_header")
+        this.loadTemplate("plain_text")
+        this.page = new chorus.pages.DashboardPage();
     });
 
     describe("#render", function() {
         beforeEach(function() {
-            this.view.render();
+            this.page.render();
         })
 
         it("creates a Header view", function() {
-            expect(this.view.$("#header.header")).toExist();
+            expect(this.page.$("#header.header")).toExist();
         })
-        it("has a create workspace button", function() {
-            expect(this.view.$("button:contains('Create a Workspace')")).toExist();
+
+        context("the workspace list", function(){
+            beforeEach(function(){
+                this.workspaceList = this.page.mainContent.workspaceList;
+            })
+
+            it("has a title", function() {
+                expect(this.workspaceList.$("h1").text()).toBe("My Workspaces");
+            });
+
+            it("creates a WorkspaceList view", function() {
+                expect(this.page.$(".workspace_list")).toExist();
+            });
         });
+    });
+
+    context("#setup", function(){
+        it("passes the collection with through to the workspaceSet view view", function(){
+            expect(this.page.mainContent.workspaceList.collection).toBe(this.page.workspaceSet);
+        })
+
+        it("only fetches active workspaces", function(){
+            expect(this.page.workspaceSet.attributes.active).toBeTruthy();
+        })
+
+        it("fetches workspaces for the logged in user", function(){
+            expect(this.page.workspaceSet.attributes.user).toBe(chorus.session.user());
+        })
+
+        xit("fetches the right url when the sesison changes", function(){
+            console.log("there is a problem in testing the seams in login/fetch to triggering save")
+            chorus.session.set({id: 14})
+            chorus.session.trigger("saved")
+            //last request url should have user=14 in it
+        })
     })
 });

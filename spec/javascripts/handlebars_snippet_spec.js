@@ -222,9 +222,13 @@ describe("handlebars", function() {
         })
 
         describe("displayTimestamp", function() {
-            it("renders the timestamp", function() {
+            it("renders the timestamp with milliseconds", function() {
                 expect(Handlebars.helpers.displayTimestamp("2011-11-23 15:42:02.321")).toBe("November 23");
             })
+
+            it("renders the timestamp without milliseconds", function() {
+                expect(Handlebars.helpers.displayTimestamp("2011-1-23 15:42:02")).toBe("January 23");
+            });
 
             it("tolerates bogus timestamps", function() {
                 expect(Handlebars.helpers.displayTimestamp("yo momma")).toBe("WHENEVER");
@@ -241,8 +245,8 @@ describe("handlebars", function() {
                     var el = $("<div>" + Handlebars.helpers.moreLink([1,2,3,4], 3, "activity_stream.comments.more", "activity_stream.comments.less") + "</div>");
                     expect(el.find(".morelinks a.more")).toExist();
                     expect(el.find(".morelinks a.less")).toExist();
-                    expect(el.find(".morelinks a.more")).toHaveText("1 more comments");
-                    expect(el.find(".morelinks a.less")).toHaveText("Less comments");
+                    expect(el.find(".morelinks a.more")).toHaveText(t("activity_stream.comments.more", 1));
+                    expect(el.find(".morelinks a.less")).toHaveText(t("activity_stream.comments.less"));
                 })
             });
             describe("when the collection has less than max + 1 elements", function() {

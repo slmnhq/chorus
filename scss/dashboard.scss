@@ -1,0 +1,16 @@
+div[data-page="Dashboard"] {
+    $workspace-list-width: 350px;
+
+    #sidebar {
+        display: none;
+    }
+
+    .main_content.workspace_list {
+        float: right;
+        width: $workspace-list-width;
+    }
+
+    .main_content.dashboard_main {
+        overflow: hidden;
+    }
+}

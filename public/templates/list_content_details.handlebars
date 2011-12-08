@@ -1,13 +1,17 @@
 {{#if loaded}}
-    <div class="count">
-        <span class="number">{{records}}</span> {{modelClass}}s
-    </div>
+    {{#unless hideCounts}}
+        <div class="count">
+            <span class="number">{{records}}</span> {{modelClass}}s
+        </div>
+    {{/unless}}
 
-    {{#if pagination}}
+    {{#if multiPage}}
         <div class="pagination">
-            <div class="page">
-                {{t "pagination.page"}} <span class="current">{{pagination.page}}</span> {{t "pagination.of"}} <span class="total">{{pagination.total}}</span>
-            </div>
+            {{#unless hideCounts}}
+                <div class="page">
+                    {{t "pagination.page"}} <span class="current">{{pagination.page}}</span> {{t "pagination.of"}} <span class="total">{{pagination.total}}</span>
+                </div>
+            {{/unless}}
 
             <div class="links">
                 {{#if prevPage}}
@@ -21,7 +25,8 @@
                     <span class="next">{{t "pagination.next"}}</span>
                 {{/if}}
             </div>
-        {{/if}}
+        </div>
+    {{/if}}
 {{else}}
     <div class="loading">Loading...</div>
 {{/if}}

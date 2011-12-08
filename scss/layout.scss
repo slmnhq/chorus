@@ -11,16 +11,12 @@
     @include after-clearfix;
 }
 
-#content_header {
+.content_header {
     background: white;
     min-height: 36px;
     padding: 12px $padding-x;
     border-bottom: 1px solid $subheader-border-color;
     @include border-top-radius(3px);
-
-    a {
-        color: $content-header-link-color;
-    }
 
     h1 {
         padding-top: 18px;
@@ -39,7 +35,7 @@
     @include border-radius(3px);
 }
 
-#content_details {
+.content_details, .content_footer {
     height: 32px;
     line-height: 32px;
     vertical-align: middle;
@@ -52,6 +48,12 @@
         height: 0;
         border: none;
     }
+}
+
+.content_footer {
+    height: auto;
+    border-bottom: none;
+    border-top: 1px solid $pagination-border-color;
 }
 
 #sidebar {

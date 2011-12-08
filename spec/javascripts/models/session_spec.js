@@ -30,14 +30,32 @@ describe("chorus.models.Session", function() {
     describe("saved", function() {
         beforeEach(function() {
             $.cookie("userId", null)
-            this.model = new models.Session({ id : "66", userName : "ponyParty", password : "partytime"});
-            this.model.trigger("saved");
+            this.model = new models.Session({ id : 96, userName : "ponyParty", password : "partytime"});
+            this.user = this.model.user()
+            spyOn(this.user, "fetch")
         });
+
         it("sets the authUser cookie", function() {
-            expect($.cookie("userId")).toBe("66")
+            this.model.trigger("saved");
+            expect($.cookie("userId")).toBe('96')
         })
 
+        it("sets the user id", function(){
+            expect(this.user.get("id")).toBe(96)
+            this.model.set({id : 39})
+            expect(this.user.get("id")).toBe(96) //not really an important assertion, but describes the way the system is working
+
+            this.model.trigger("saved");
+            expect(this.user.get("id")).toBe(39)
+        })
+
+        //this is debatable so it is currently xit'ed
+        xit("fetches the user", function(){
+            this.model.trigger("saved");
+            expect(this.user.fetch).toHaveBeenCalled()
+        })
     });
+
 
     describe("#logout", function() {
         beforeEach(function() {
@@ -69,6 +87,7 @@ describe("chorus.models.Session", function() {
 
         context("when the model does not have errors", function() {
             beforeEach(function() {
+                this.model.set({ foo: "bar", bro: "baz" });
                 this.model.logout();
             })
 
@@ -88,6 +107,10 @@ describe("chorus.models.Session", function() {
 
                 it("triggers needsLogin", function() {
                     expect(this.needsLoginSpy).toHaveBeenCalled();
+                })
+
+                it("clears all attributes in the model", function() {
+                    expect(_.size(this.model.attributes)).toBe(0);
                 })
             })
         })
@@ -188,7 +211,7 @@ describe("chorus.models.Session", function() {
         })
     })
 
-    describe("#performValidation", function() {
+    describe("validation", function() {
         beforeEach(function() {
             this.model = new models.Session();
             spyOn(this.model, "require").andCallThrough();
@@ -201,13 +224,50 @@ describe("chorus.models.Session", function() {
 
         it("requires userName", function() {
             this.model.performValidation();
-            expect(this.model.require).toHaveBeenCalledWith("userName");
+            expect(this.model.require).toHaveBeenCalledWith("userName", undefined);
         });
 
         it("requires password", function() {
             this.model.performValidation();
-            expect(this.model.require).toHaveBeenCalledWith("password");
+            expect(this.model.require).toHaveBeenCalledWith("password", undefined);
         });
     });
+
+    describe("#user", function() {
+        beforeEach(function(){
+            this.session = new models.Session()
+        });
+
+       it("returns a User", function(){
+            expect(this.session.user() instanceof(chorus.models.User)).toBeTruthy();
+       })
+
+        it("returns the same user object", function(){
+            expect(this.session.user()).toBe(this.session.user())
+        })
+
+       context("when there is a userId Cookie", function(){
+           beforeEach(function(){
+                $.cookie("userId", 973)
+           })
+
+           it("sets the user's user ID from the cookie", function() {
+                expect(this.session.user().get("id")).toBe("973");
+           });
+           
+
+           context("when the session is fetched and has differnt attributes", function(){
+               beforeEach(function(){
+                   this.session.set({id: 489})
+               })
+
+               it("sets the user's user ID from the session", function() {
+                    expect(this.session.user().get("id")).toBe(489);
+               });
+           })
+
+       })
+    });
+
 
 });

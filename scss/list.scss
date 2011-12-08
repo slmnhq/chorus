@@ -2,10 +2,13 @@
 
 .list {
     li {
+        @include after-clearfix;
+
         padding: $padding-y 0;
         border-bottom: 1px dotted $subheader-border-color;
         margin: 0 $padding-x;
         position: relative;
+
         &.selected {
             background: white;
 
@@ -33,15 +36,22 @@
             }
         }
 
+        a.image {
+            display: block;
+            float: left;
+        }
+
         div.text {
-            display: inline-block;
             vertical-align: top;
             line-height: 19px;
-            position: absolute;
-            right: $padding-x;
-            left: 60px;
-            top: $padding-y;
-            bottom: $padding-y;
+            overflow:hidden;
+            _overflow:visible; 
+            zoom:1;
+            padding-left: $padding-x;
+
+            .summary {
+                padding-bottom: 15px;
+            }
         }
 
         div.details {
@@ -76,6 +86,11 @@
             float: right;
             padding: 2px 5px;
             font-size: 13px;
+        }
+
+        .timestamp {
+            font-size: 12px;
+            font-style: italic;
         }
     }
 }

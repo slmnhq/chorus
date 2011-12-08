@@ -1,9 +1,12 @@
 (function($, ns) {
-    ns.WorkfileShowSidebar = chorus.views.Base.extend({
+    ns.views.WorkfileShowSidebar = ns.views.Base.extend({
         className : "workfile_show_sidebar",
 
         setup : function() {
-            this.activityList = new ns.ActivityList({ collection : ns.ActivityList.cannedActivitySetFor(this.model) });
+            this.collection = this.model.activities();
+            this.collection.fetch();
+            this.collection.bind("changed", this.render, this);
+            this.activityList = new ns.views.ActivityList({ collection : this.collection });
         },
 
         additionalContext : function(ctx) {
@@ -19,4 +22,4 @@
             this.activityList.render();
         }
     });
-})(jQuery, chorus.views);
+})(jQuery, chorus);

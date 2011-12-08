@@ -2,7 +2,7 @@
 (function(ns) {
     ns.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
         initialize: function initialize() {
-            this.preInitialize();
+            this.preInitialize.apply(this, arguments);
             _.bindAll(this, 'render');
             this.bindCallbacks()
             this.setup.apply(this, arguments);
@@ -49,7 +49,7 @@
         },
 
         preInitialize : function() {
-            this.makeModel();
+            this.makeModel.apply(this, arguments);
             this.resource = this.model || this.collection;
 
         },
@@ -128,6 +128,8 @@
             errors.qtip("destroy");
             errors.removeData("qtip");
             errors.removeClass("has_error");
+
+            this.$(".errors").empty();
         }
     });
 
@@ -142,21 +144,28 @@
         },
 
         postRender : function() {
-            this.$("#content_header").html(this.contentHeader.render().el);
+            this.$(".content_header").html(this.contentHeader.render().el);
             this.contentHeader.delegateEvents();
 
             if (this.contentDetails) {
-                this.$("#content_details").html(this.contentDetails.render().el);
+                this.$(".content_details").html(this.contentDetails.render().el);
                 this.contentDetails.delegateEvents();
             } else {
-                this.$("#content_details").addClass("hidden");
+                this.$(".content_details").addClass("hidden");
             }
 
             if (this.content) {
-                this.$("#content").html(this.content.render().el);
+                this.$(".content").html(this.content.render().el);
                 this.content.delegateEvents();
             } else {
-                this.$("#content").addClass("hidden");
+                this.$(".content").addClass("hidden");
+            }
+
+            if (this.contentFooter) {
+                this.$(".content_footer").html(this.contentFooter.render().el);
+                this.contentFooter.delegateEvents();
+            } else {
+                this.$(".content_footer").addClass("hidden");
             }
         }
     });
@@ -188,7 +197,8 @@
             var collection = this.collection;
             this.content = new chorus.views[modelClass + "List"]({collection: collection })
             this.contentHeader = new chorus.views.ListHeaderView({title: modelClass + "s", linkMenus : options.linkMenus})
-            this.contentDetails = new chorus.views.ListContentDetails({collection : collection, modelClass : modelClass})
+            this.contentDetails = new chorus.views.ListContentDetails({collection : collection, modelClass : modelClass});
+            this.contentFooter = new chorus.views.ListContentDetails({collection : collection, modelClass : modelClass, hideCounts : true, hideIfNoPagination : true})
         },
         additionalClass : "main_content_list"
     });

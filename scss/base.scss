@@ -61,6 +61,10 @@ input:not([type="image"]), textarea {
     -moz-box-sizing: border-box;
 }
 
+textarea {
+    resize: none;
+}
+
 input[type=checkbox], input[type=radio] {
     display: inline;
     width: auto;

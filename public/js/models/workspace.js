@@ -19,31 +19,66 @@
         owner: function() {
             return new ns.User({
                 fullName: this.get("ownerFullName"),
-                userName: this.get("owner")
+                id: this.get("ownerId")
             });
         },
 
-        performValidation : function(){
-            this.errors = {}
-            this.require("name")
-            return _(this.errors).isEmpty();
+        declareValidations : function(newAttrs) {
+            this.require("name", newAttrs);
+        },
+
+        archiver: function() {
+            return new ns.User({
+                fullName: (this.get("archiverFirstName") + ' ' + this.get("archiverLastName")),
+                userName: this.get("archiver")
+            });
         },
 
         displayName : function() {
             return this.get("name");
         },
 
-        imageUrl : function(options){
+        imageUrl : function(options) {
             options = (options || {});
             return "/edc/workspace/" + this.get("id") + "/image?size=" + (options.size || "original");
         },
 
-        picklistImageUrl : function(){
-          return "/images/workspace-icon-small.png";
+        picklistImageUrl : function() {
+            return "/images/workspace-icon-small.png";
         },
 
         attrToLabel : {
             "name" : "workspace.validation.name"
+        },
+
+        truncatedSummary: function(length) {
+            if (this.get("summary")) {
+                return this.get("summary").substring(0, length);
+            }
+        },
+
+        hasImage: function() {
+            return this.get("iconId") != null;
+        },
+
+        isTruncated: function() {
+            return this.get("summary") ? this.get("summary").length > 100 : false;
+        },
+
+        canRead : function() {
+            return this._hasPermission(['admin', 'read']);
+        },
+
+        canComment : function() {
+            return this._hasPermission(['admin', 'commenting']);
+        },
+
+        canUpdate : function() {
+            return this._hasPermission(['admin', 'update']);
+        },
+
+        _hasPermission : function(validPermissions) {
+            return _.intersection(this.get("permission"), validPermissions).length > 0;
         }
     });
 })(chorus.models);

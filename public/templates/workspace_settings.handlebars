@@ -1,0 +1,20 @@
+<form>
+    <label class="required">{{t "workspace.settings.name"}}</label>
+    <input type="text" name="name" maxlength="256" value="{{name}}" tabindex="1"/>
+
+    <label>{{t "workspace.settings.summary"}}</label>
+    <textarea name="summary" maxlength="4095" rows="6" tabindex="2">{{summary}}</textarea>
+
+    <label>Workspace Image</label>
+    <div class="image_container">
+        <div class='edit_photo'/>
+        <div class="instructions">
+            {{t "workspace.settings.image.instructions"}}
+        </div>
+    </div>
+
+    <div class="controls">
+        <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
+        <button type="submit" class="submit" tabindex="99">{{t "actions.save_changes"}}</button>
+    </div>
+</form>

@@ -2,11 +2,22 @@
 
 #sidebar {
     .actions {
-        margin-left: 10px;
+        h1 {
+            font-size: 19px;
+            @include ellipsis;
+            color: $dark-text-color;
+            font-weight: $semibold;
+            margin-bottom: 10px;
+        }
         
         a {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: $semibold;
+        }
+
+        li {
+            padding-bottom: 8px;
+            margin-left: 10px;
         }
     }
 }

@@ -5,8 +5,7 @@
 
         events : {
             "submit form" : 'saveEditUser',
-            "click button.cancel" : "goBack",
-            "click .edit_photo .action" : "chooseFile"
+            "click button.cancel" : "goBack"
         },
 
         additionalContext: function() {
@@ -18,6 +17,7 @@
 
         setup : function() {
             this.model.bind("saved", userSuccessfullySaved, this);
+            this.imageUpload = new ns.ImageUpload({ model : this.model, changeImageKey: "users.edit_photo" });
         },
 
         saveEditUser : function saveEditUser(e) {
@@ -31,58 +31,15 @@
             updates.admin = this.$("input#admin-checkbox").prop("checked") || false;
             updates.notes = this.$("textarea").val().trim()
 
-            this.model.set(updates);
-            this.model.save();
+            this.model.save(updates);
         },
 
         goBack : function() {
             window.history.back();
         },
 
-        chooseFile : function(e) {
-            e.preventDefault();
-            this.$("input[type=file]").click();
-        },
-
         postRender : function() {
-            var self = this;
-
-            var multipart = !window.jasmine;
-            this.$("input[type=file]").fileupload({
-                url : '/edc/userimage/' + this.model.get("userName"),
-                type: 'POST',
-                add : fileSelected,
-                done: uploadFinished,
-                multipart: multipart
-            });
-
-            function fileSelected(e, data) {
-                self.spinner = new Spinner({
-                    lines: 30,
-                    length: 40,
-                    width: 6,
-                    radius: 25,
-                    color: '#000',
-                    speed: 0.5,
-                    trail: 75,
-                    shadow: false
-                }).spin(self.$(".spinner_container")[0]);
-
-                self.$(".edit_photo img").addClass("disabled");
-                self.$(".edit_photo input[type=file]").attr("disabled", "disabled");
-                self.$(".edit_photo .action").addClass("disabled");
-
-                data.submit();
-            }
-
-            function uploadFinished(e, data) {
-                originalUrl = self.model.imageUrl();
-                self.spinner.stop();
-                self.$(".edit_photo img").removeClass("disabled");
-                self.$(".edit_photo input[type=file]").removeAttr("disabled");
-                self.$(".edit_photo .action").removeClass("disabled");
-                self.$(".edit_photo img").attr('src', originalUrl + "&buster=" + (new Date().getTime()));
-            }
+            this.$(".edit_photo").html(this.imageUpload.render().el);
         }
     });
 

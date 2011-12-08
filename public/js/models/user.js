@@ -7,7 +7,7 @@
         workspaces: function() {
             if (!this._workspaces) {
                 this._workspaces = new ns.WorkspaceSet();
-                this._workspaces.urlTemplate = "workspace/?user=" + this.get("userName");
+                this._workspaces.urlTemplate = "workspace/?user=" + this.get("id");
                 this._workspaces.bind("reset", function() {
                     this.trigger("change");
                 }, this);
@@ -15,16 +15,18 @@
             return this._workspaces;
         },
 
-        performValidation: function() {
-            this.errors = {};
-            this.require('firstName');
-            this.require('lastName');
-            this.require('userName');
-            this.requirePattern('emailAddress', /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/);
-            if(this.isNew() || this.hasChanged("password")) {
-                this.requireConfirmation('password');
+        declareValidations : function(newAttrs) {
+            this.require('firstName', newAttrs);
+            this.require('lastName', newAttrs);
+            this.require('userName', newAttrs);
+            this.requirePattern('emailAddress', /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/, newAttrs);
+            if(this.isNew() || (newAttrs && newAttrs.hasOwnProperty("password"))) {
+                this.requireConfirmation('password', newAttrs);
             }
-            return _(this.errors).isEmpty();
+        },
+
+        hasImage: function() {
+            return true;
         },
 
         imageUrl : function(options){

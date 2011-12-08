@@ -7,6 +7,7 @@
             },
 
             setup: $.noop,
+            additionalParams: $.noop,
 
             url: function(options) {
                 options = _.extend({
@@ -17,6 +18,11 @@
                 var url = "/edc/" + Handlebars.compile(this.urlTemplate)(this.attributes);
 
                 var params = [];
+
+                 _.each(this.additionalParams(), function(param){
+                    params.push(param)
+                })
+
                 params.push("page=" + options.page);
                 params.push("rows=" + options.rows);
 
@@ -25,12 +31,8 @@
                     params.push("sord=" + this.sortOrder);
                 }
 
-                var paramsStr = params.join("&");
-                if (url.indexOf('?') != -1) {
-                    url = [url, paramsStr].join('&')
-                } else {
-                    url = [url, paramsStr].join('?')
-                }
+                var paramsJoiner = (url.indexOf('?') != -1) ? '&' : '?'
+                url = url + paramsJoiner + params.join("&")
 
                 return url;
             },
@@ -129,7 +131,8 @@
                     if (success) success(model, resp, xhr);
                 };
                 this.serverErrors = undefined;
-                if (this.performValidation(this.attributes)) {
+
+                if (this.performValidation(attrs)) {
                     this.trigger("validated");
                     return Backbone.Model.prototype.save.call(this, attrs, options);
                 } else {
@@ -158,26 +161,51 @@
                 return (this.sync || Backbone.sync).call(this, 'delete', this, options);
             },
 
-            performValidation: function() {
-                return true;
+            declareValidations: $.noop,
+
+            performValidation: function(newAttrs) {
+                this.errors = {};
+                this.declareValidations(newAttrs);
+                return _(this.errors).isEmpty();
             },
 
-            require : function(attr) {
-                if (!this.get(attr)) {
+            require : function(attr, newAttrs) {
+                var value = newAttrs && newAttrs.hasOwnProperty(attr) ? newAttrs[attr] : this.get(attr);
+
+                var present = value;
+
+                if (value && _.isString(value) && value.match(/^\s*$/)) {
+                    present = false;
+                }
+
+                if (!present) {
                     this.errors[attr] = t("validation.required", this._textForAttr(attr));
                 }
             },
 
-            requirePattern : function(attr, regex) {
-                var value = this.get(attr);
+            requirePattern : function(attr, regex, newAttrs) {
+                var value = newAttrs && newAttrs.hasOwnProperty(attr) ? newAttrs[attr] : this.get(attr);
+
                 if (!value || !value.match(regex)) {
                     this.errors[attr] = t("validation.required_pattern", this._textForAttr(attr));
                 }
             },
 
-            requireConfirmation : function(attr) {
-                var value = this.get(attr);
-                var conf = this.get(attr + "Confirmation");
+            requireConfirmation : function(attr, newAttrs) {
+                var confAttrName = attr + "Confirmation";
+                var value, conf;
+
+                if (newAttrs && newAttrs.hasOwnProperty(attr)) {
+                    if (newAttrs.hasOwnProperty(confAttrName)) {
+                        value = newAttrs[attr];
+                        conf = newAttrs[confAttrName];
+                    } else {
+                        throw "newAttrs supplied an original value but not a confirmation";
+                    }
+                } else {
+                    value = this.get(attr);
+                    conf = this.get(confAttrName);
+                }
 
                 if (!value || !conf || value != conf) {
                     this.errors[attr] = t("validation.confirmation", this._textForAttr(attr));

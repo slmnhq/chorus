@@ -18,10 +18,26 @@
             })
         },
 
-        performValidation : function(){
-            this.errors = {}
-            this.require("fileName")
-            return _(this.errors).isEmpty();
+        lastComment : function() {
+            return this.get("commenterId") && new ns.Comment({
+                body : this.get("commentBody"),
+                creatorId : this.get("commenterId"),
+                creatorFirstName : this.get("commenterFirstName"),
+                creatorLastName : this.get("commenterLastName")
+            });
+        },
+
+        declareValidations : function(newAttrs){
+            this.require("fileName", newAttrs);
+        },
+
+        activities : function() {
+            if (!this._activities) {
+                this._activities = new chorus.models.ActivitySet([], { entityType : "workfile", entityId : this.get("id") });
+                this.bind("invalidated", this._activities.fetch, this._activities)
+            }
+
+            return this._activities;
         },
 
         attrToLabel : {
@@ -36,6 +52,10 @@
         isText: function() {
             var type = this.get("mimeType");
             return type && type.match(textRegex);
+        },
+
+        downloadUrl : function() {
+            return this.url() + "/file/" + this.get("versionFileId") + "?download=true";
         }
     });
 })(chorus.models);

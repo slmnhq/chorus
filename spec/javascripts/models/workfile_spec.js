@@ -14,7 +14,59 @@ describe("chorus.models.Workfile", function() {
         });
     })
 
-    describe("#performValidation", function() {
+    describe("#lastComment", function() {
+        beforeEach(function() {
+            this.model.set({
+                commentBody : "lol I think that is redunkulous!",
+                commenterFirstName : "Superstar",
+                commenterLastName : "Commenter",
+                commenterId : "134"
+            });
+
+            this.comment = this.model.lastComment();
+        });
+
+        it("has the right body", function() {
+            expect(this.comment.get("body")).toBe("lol I think that is redunkulous!");
+        });
+
+        it("has the right creator", function() {
+            var creator = this.comment.creator()
+            expect(creator.get("id")).toBe("134");
+            expect(creator.get("firstName")).toBe("Superstar");
+            expect(creator.get("lastName")).toBe("Commenter");
+        });
+
+        context("when the workfile doesn't have any comments", function() {
+            it("returns null", function() {
+                expect(new chorus.models.Workfile().lastComment()).toBeFalsy();
+            });
+        });
+    });
+
+    describe("#activities", function() {
+        beforeEach(function() {
+            this.model.set({ id : "1074" });
+            this.activitySet = this.model.activities();
+        });
+
+        it("has the right 'entityType' and 'entityId'", function() {
+            expect(this.activitySet.attributes.entityType).toBe("workfile");
+            expect(this.activitySet.attributes.entityId).toBe("1074");
+        });
+
+        describe("when the workfile is invalidated", function() {
+            beforeEach(function() {
+                this.model.trigger("invalidated");
+            })
+
+            it("fetches the activities", function() {
+                expect(_.last(this.server.requests).url).toBe(this.activitySet.url());
+            })
+        })
+    });
+
+    describe("validation", function() {
         beforeEach(function() {
             spyOn(this.model, "require").andCallThrough();
         });
@@ -25,7 +77,7 @@ describe("chorus.models.Workfile", function() {
 
         it("requires fileName", function() {
             this.model.performValidation();
-            expect(this.model.require).toHaveBeenCalledWith("fileName");
+            expect(this.model.require).toHaveBeenCalledWith("fileName", undefined);
         });
     });
 
@@ -42,6 +94,16 @@ describe("chorus.models.Workfile", function() {
         it("constructs the right frontend show URL", function() {
             expect(this.model.showUrl()).toBe("#/workspaces/10/workfiles/5");
             expect(this.model.showUrl(true)).toBe("workspaces/10/workfiles/5");
+        });
+
+        describe("#downloadUrl", function() {
+            beforeEach(function(){
+                this.model.set({versionFileId: "12345"});
+            });
+
+            it("returns the correct URL", function() {
+                expect(this.model.downloadUrl()).toBe("/edc/workspace/10/workfile/5/file/12345?download=true");
+            });
         });
     });
 

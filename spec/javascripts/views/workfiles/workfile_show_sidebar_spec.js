@@ -11,6 +11,11 @@ describe("WorkfileShowSidebar", function() {
         it("has an ActivityListView", function() {
             expect(this.view.activityList).toBeDefined();
         })
+
+        it("fetches the ActivitySet for the workfile", function() {
+            expect(this.server.requests[0].url).toBe("/edc/activitystream/workfile/10020?page=1&rows=50");
+            expect(this.server.requests[0].method).toBe("GET");
+        })
     })
 
     describe("#render", function() {
@@ -59,6 +64,24 @@ describe("WorkfileShowSidebar", function() {
 
         it("re-renders the activity list", function() {
             expect(this.view.activityList.render).toHaveBeenCalled();
+        })
+    })
+
+    describe("when the model is invalidated", function() {
+        it("fetches the activity set", function() {
+            this.view.model.trigger("invalidated")
+            expect(this.server.requests[0].url).toBe(this.view.collection.url())
+        })
+    })
+
+    describe("when the activity list collection is changed", function() {
+        beforeEach(function() {
+            spyOn(this.view, "postRender"); // check for #postRender because #render is bound
+            this.view.collection.trigger("changed")
+        })
+
+        it("re-renders", function() {
+            expect(this.view.postRender).toHaveBeenCalled();
         })
     })
 });
