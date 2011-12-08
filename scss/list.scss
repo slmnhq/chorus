@@ -1,13 +1,15 @@
 @import "_common.scss";
 
+$list-image-width: 48px;
+$list-image-height: 48px;
+
 .list {
     li {
-        @include after-clearfix;
-
         padding: $padding-y 0;
         border-bottom: 1px dotted $subheader-border-color;
         margin: 0 $padding-x;
         position: relative;
+        min-height: $list-image-height + (2 * $padding-y);
 
         &.selected {
             background: white;
@@ -39,6 +41,8 @@
         a.image {
             display: block;
             float: left;
+            width: $list-image-width;
+            height: $list-image-height;
         }
 
         div.text {

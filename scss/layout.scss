@@ -9,6 +9,10 @@
     padding: $guts-padding;
     padding-top: 0;
     @include after-clearfix;
+
+    #left {
+        margin-right: $sidebar-width + (2 * $sidebar-padding-x);
+    }
 }
 
 .content_header {
@@ -31,7 +35,6 @@
 
 #main_content {
     border: 1px solid $guts-border-color;
-    overflow:hidden;
     @include border-radius(3px);
 }
 
@@ -60,7 +63,7 @@
     width: $sidebar-width;
     float: right;
     min-height:400px;
-    padding: $padding-y 16px;
+    padding: $padding-y $sidebar-padding-x;
 }
 
 
