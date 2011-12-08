@@ -79,7 +79,7 @@ describe("chorus.models.User", function() {
             expect(this.model.performValidation()).toBeTruthy();
         });
 
-        _.each(["firstName", "lastName", "userName"], function(attr) {
+        _.each(["firstName", "lastName", "userName", "password"], function(attr) {
             it("requires " + attr, function() {
                 this.model.performValidation();
                 expect(this.model.require).toHaveBeenCalledWith(attr, undefined);

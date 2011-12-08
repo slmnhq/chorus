@@ -169,6 +169,10 @@
                 return _(this.errors).isEmpty();
             },
 
+            setValidationError : function(attr, message_key) {
+                this.errors[attr] = this.errors[attr] || t(message_key, this._textForAttr(attr));
+            },
+
             require : function(attr, newAttrs) {
                 var value = newAttrs && newAttrs.hasOwnProperty(attr) ? newAttrs[attr] : this.get(attr);
 
@@ -179,7 +183,7 @@
                 }
 
                 if (!present) {
-                    this.errors[attr] = t("validation.required", this._textForAttr(attr));
+                    this.setValidationError(attr, "validation.required");
                 }
             },
 
@@ -187,7 +191,7 @@
                 var value = newAttrs && newAttrs.hasOwnProperty(attr) ? newAttrs[attr] : this.get(attr);
 
                 if (!value || !value.match(regex)) {
-                    this.errors[attr] = t("validation.required_pattern", this._textForAttr(attr));
+                    this.setValidationError(attr, "validation.required_pattern");
                 }
             },
 
@@ -208,7 +212,7 @@
                 }
 
                 if (!value || !conf || value != conf) {
-                    this.errors[attr] = t("validation.confirmation", this._textForAttr(attr));
+                    this.setValidationError(attr, "validation.confirmation");
                 }
             },
 
