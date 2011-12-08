@@ -4,7 +4,7 @@
         <li data-activity-id="{{id}}">
             <div class="image">
                 <a href="{{authorUrl}}">
-                    <img title="{{displayNameFromPerson author}}" src="/edc/userimage/{{author.username}}?size=icon"/>
+                    <img class="profile" title="{{displayNameFromPerson author}}" src="/edc/userimage/{{author.username}}?size=icon"/>
                 </a>
             </div>
             <div class="title">{{type}}</div>
@@ -23,7 +23,7 @@
                     <li data-comment-id="{{id}}" class="{{moreClass}}">
                         <div class="image">
                             <a href="#/users/{{author.id}}">
-                                <img title="{{displayNameFromPerson author}}" src="/edc/userimage/{{author.username}}?size=icon"/>
+                                <img class="profile" title="{{displayNameFromPerson author}}" src="/edc/userimage/{{author.username}}?size=icon"/>
                             </a>
                         </div>
                         <div class="info">
