@@ -141,6 +141,7 @@
             this.contentHeader = this.contentHeader || options.contentHeader;
             this.contentDetails = this.contentDetails || options.contentDetails;
             this.content = this.content || options.content;
+            this.contentFooter = this.contentFooter || options.contentFooter;
         },
 
         postRender : function() {

@@ -8,8 +8,9 @@
         setup : function(){
             this.collection = this.workspaceSet = new ns.models.WorkspaceSet();
             this.workspaceSet.attributes.active = true;
-            this.workspaceSet.attributes.user = chorus.session.user()
-            this.workspaceSet.fetchAll()
+            this.workspaceSet.attributes.user = chorus.session.user();
+            this.workspaceSet.sortAsc("name");
+            this.workspaceSet.fetchAll();
 
 //          chorus.session.user().bind("change", this.workspaceSet.fetchAll); //why don't I work in chrome?
             chorus.session.user().bind("change", fetchWorkspaceSet, this);
