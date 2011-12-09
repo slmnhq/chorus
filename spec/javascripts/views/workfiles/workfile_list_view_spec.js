@@ -28,7 +28,8 @@ describe("WorkfileListView", function() {
                     commenterId: "21",
                     commenterFirstName: "Wayne",
                     commenterLastName: "Wayneson",
-                    commentCount: "1"
+                    commentCount: "1",
+                    commentCreatedStamp: "2011-12-08 17:16:47.308-08"
                 });
                 this.model2 = new chorus.models.Workfile({
                     id: 34,
@@ -105,6 +106,10 @@ describe("WorkfileListView", function() {
             it("displays 'other comments' on the workfile with more than 1 comment", function() {
                 expect(this.view.$("li .comment").eq(1).text()).toContain(t("workfiles.other_comments", 1))
             });
+
+            it("displays the abbreviated date of the most recent comment", function() {
+                expect(this.view.$("li:first-child .comment_info .on").text().trim()).toBe("Dec 8");
+            })
 
             it("pre-selects the first item in the list", function() {
                 expect(this.view.$("li:first-child")).toHaveClass("selected");

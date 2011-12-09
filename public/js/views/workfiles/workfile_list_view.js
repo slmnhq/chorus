@@ -31,9 +31,16 @@
 
             var lastComment = model.lastComment();
             if (lastComment) {
+                var commentOnMatch = lastComment.get("commentCreatedStamp") && lastComment.get("commentCreatedStamp").match(/(.+)\.\d{1,3}/)
+                if (commentOnMatch && commentOnMatch[1]) {
+                    var commentOn = Date.parse(commentOnMatch[1]).toString("MMM d");
+                }
+
+                var commentOn =
                 ctx.lastComment = {
                     body : lastComment.get("body"),
-                    creator : lastComment.creator()
+                    creator : lastComment.creator(),
+                    on : commentOn
                 }
 
                 ctx.otherCommentCount = parseInt(model.get("commentCount")) - 1;

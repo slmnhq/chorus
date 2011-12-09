@@ -23,7 +23,8 @@
                 body : this.get("commentBody"),
                 creatorId : this.get("commenterId"),
                 creatorFirstName : this.get("commenterFirstName"),
-                creatorLastName : this.get("commenterLastName")
+                creatorLastName : this.get("commenterLastName"),
+                commentCreatedStamp : this.get("commentCreatedStamp")
             });
         },
 
