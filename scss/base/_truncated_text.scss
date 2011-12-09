@@ -2,48 +2,65 @@
 
 .truncated_text {
     font-size: 14px;
-    .entire_text {
-        white-space: pre-wrap;
-        color: $weak-text-color;
-    }
 
-    .text_content {
-        color: $weak-text-color;
-        .truncated {
-            display: none;
-        }
-    }
+    .text_container {
+        overflow: hidden;
 
-    .links {
-        .less {
-            display: none;
-        }
-
-        .more {
-            display: inline;
-        }
-    }
-
-    > div.more {
         .text_content {
+            color: $weak-text-color;
             .truncated {
-                display: inline;
+                display: none;
             }
 
-            .ellipsis {
-                display: none;
+            .entire_text {
+                @include after-clearfix;
+                white-space: pre-wrap;
+                color: $weak-text-color;
+
+                .text {
+                    white-space: pre-wrap;
+                    overflow: hidden;
+                }
             }
         }
 
         .links {
             .less {
-                display: inline;
+                display: none;
             }
 
             .more {
-                display: none;
+                display: inline;
             }
         }
 
+        &.more {
+            .text_content {
+                .truncated {
+                    display: inline;
+                }
+
+                .entire_text {
+                    word-wrap: break-word;
+                    
+                    .text {
+                        white-space: pre-wrap;
+                        float: none;
+                        width: auto;
+                        display: inline;
+                    }
+                }
+            }
+
+            .links {
+                .less {
+                    display: inline;
+                }
+
+                .more {
+                    display: none;
+                }
+            }
+        }
     }
 }
