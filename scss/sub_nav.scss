@@ -18,6 +18,8 @@
         padding: 8px 30px;
 
         color: $link-color;
+        font-size: $medium-font;
+        font-weight: $semibold;
 
         &:first-child {
             border-right: 1px solid $guts-border-color;
