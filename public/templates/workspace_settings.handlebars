@@ -1,16 +1,53 @@
 <form>
     <label class="required">{{t "workspace.settings.name"}}</label>
     <input type="text" name="name" maxlength="256" value="{{name}}" tabindex="1"/>
+    <input type="checkbox" id="public_checkbox" name="isPublic"
+        {{#if isPublic}}
+            checked="checked"
+        {{/if}}
+        {{#unless permission}}
+            disabled="disabled"
+        {{/unless}}
+    />
+    <label for="public_checkbox">{{t "workspace.settings.publicly_available"}}</label>
 
     <label>{{t "workspace.settings.summary"}}</label>
     <textarea name="summary" maxlength="4095" rows="6" tabindex="2">{{summary}}</textarea>
 
     <label>Workspace Image</label>
+
     <div class="image_container">
         <div class='edit_photo'/>
         <div class="instructions">
             {{t "workspace.settings.image.instructions"}}
         </div>
+    </div>
+
+    <div class="workspace_status">
+        <label>{{t "workspace.settings.status"}}</label>
+        <div class="radio">
+            <input type="radio" id="workspace_active" name="status"
+                {{#if active}}
+                    checked="checked"
+                {{/if}}
+                {{#unless permission}}
+                    disabled="disabled"
+                {{/unless}}
+            />
+            <label for="workspace_active"><span>{{t "workspace.settings.active"}}</span> - {{t "workspace.settings.active_description"}}</label>
+        </div>
+        <div class="radio">
+            <input type="radio" id="workspace_archived" name="status"
+                {{#unless active}}
+                    checked="checked"
+                {{/unless}}
+                {{#unless permission}}
+                    disabled="disabled"
+                {{/unless}}
+            />
+            <label for="workspace_archived"><span>{{t "workspace.settings.archived"}}</span> - {{t "workspace.settings.archived_description"}}</label>
+        </div>
+
     </div>
 
     <div class="controls">

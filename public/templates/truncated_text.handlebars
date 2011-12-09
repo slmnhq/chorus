@@ -2,7 +2,7 @@
     {{#with truncateContext}}
         {{#if doTruncate}}
         <div {{#if isExpanded}}class="more"{{/if}}>
-            <span class="content">
+            <span class="text_content">
                 <span class="entire_text"><span class="text">{{displayText}}</span><span class="truncated">{{truncatedText}}</span></span><span class="ellipsis">...</span>
             </span>
 
@@ -12,7 +12,7 @@
             </span>
         </div>
         {{else}}
-            <span class="entire_text">{{fullText}}</span>
+            <span class="entire_text">{{displayText}}</span>
         {{/if}}
     {{/with}}
 {{/if}}

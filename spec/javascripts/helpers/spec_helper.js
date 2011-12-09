@@ -33,6 +33,23 @@
             }
         })
 
+        var fakeSpinner = {
+            spin : jasmine.createSpy('MockSpinner.spin').andCallFake(function(parentEl) {
+                this.el = $('<div aria-role="progressbar"/>')[0];
+                parentEl && parentEl.appendChild(this.el);
+                return this;
+            }),
+
+            stop : jasmine.createSpy('MockSpinner.stop').andCallFake(function() {
+                if (this.el) {
+                    $(this.el).detach();
+                }
+            })
+        };
+
+        window.Spinner = jasmine.createSpy('MockSpinner').andCallFake(function() {
+            return fakeSpinner
+        });
     });
 
     afterEach(function() {

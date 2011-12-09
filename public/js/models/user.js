@@ -21,6 +21,7 @@
             this.require('userName', newAttrs);
             this.requirePattern('emailAddress', /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/, newAttrs);
             if(this.isNew() || (newAttrs && newAttrs.hasOwnProperty("password"))) {
+                this.require("password", newAttrs);
                 this.requireConfirmation('password', newAttrs);
             }
         },

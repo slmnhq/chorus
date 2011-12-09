@@ -12,7 +12,8 @@
         additionalContext : function() {
             return {
                 imageUrl : this.pageModel.imageUrl(),
-                hasImage : this.pageModel.hasImage()
+                hasImage : this.pageModel.hasImage(),
+                permission :  ((this.pageModel.get("ownerId") == chorus.user.get("id"))|| chorus.user.get("admin"))
             }
         },
 
@@ -32,9 +33,14 @@
 
         updateWorkspace : function(e) {
             e.preventDefault();
+            var active = !!this.$("input#workspace_active").is(":checked");
+
             this.pageModel.save({
                 name: this.$("input[name=name]").val().trim(),
-                summary: this.$("textarea[name=summary]").val().trim()
+                summary: this.$("textarea[name=summary]").val().trim(),
+                isPublic : !!this.$("input[name=isPublic]").is(":checked"),
+                active: active,
+                archived: !active
             });
         },
 

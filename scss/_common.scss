@@ -1,9 +1,13 @@
 @import "compass/utilities";
 @import "compass/css3";
 @import "compass/css3/opacity";
+@import "compass/css3/border-radius";
+@import "compass/css3/gradient";
+
 
 // Dimensions
 $sidebar-width : 250px;
+$sidebar-padding-x : 16px;
 $page-min-width : 750px;
 $padding-x : 10px;
 $padding-y : 8px;
@@ -39,6 +43,8 @@ $menu-border-color: #B0B0B0;
 $header-border-color: #8A97A2;
 $list-border-color: #B9BBBD;
 $workfiles-action-details-link-border-color: #98B675;
+$dotted-list-item-border: 1px dotted $subheader-border-color;
+
 
 $administrator-background-color: #B1DBAF;
 
@@ -55,18 +61,22 @@ $picklist-selected-background-color: #3795DD;
 
 $activity-stream-comment-background-color: #DFE5EB;
 
+
+//ie colors
+$ie-header-color: #c7c7c7;
+
 // Font weights
 $semibold: 600;
 
 // Mixins
 
-@mixin after-clearfix {
+@mixin after-clearfix($which: both) {
     &:after {
             content: ".";
             display: block;
             height: 0;
             font-size: 0;
-            clear: both;
+            clear: $which;
             visibility: hidden;
         }
 }

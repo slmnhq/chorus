@@ -1,0 +1,31 @@
+@import "../_common";
+
+.breadcrumbs {
+    @include linear-gradient(color-stops($body-glow-color, $body-background-color));
+    @include ellipsis;
+    height: 32px;
+
+    ol {
+        padding: $padding-y ($padding-x + $guts-padding + 1px);
+    }
+
+    li {
+        display: inline-block;
+        font-size: 13px;
+    }
+
+    a {
+        color : $text-color;
+        border-bottom : 1px dotted $text-color;
+        margin-right : $padding-x;
+    }
+
+    .spacer {
+        margin-right : $padding-x;
+        background-image : url("/images/breadcrumb-separator.png");
+        background-repeat: no-repeat;
+        width: 3px;
+        height: 7px;
+        display: inline-block;
+    }
+}

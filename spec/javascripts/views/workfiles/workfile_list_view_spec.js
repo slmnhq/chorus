@@ -106,26 +106,30 @@ describe("WorkfileListView", function() {
                 expect(this.view.$("li .comment").eq(1).text()).toContain(t("workfiles.other_comments", 1))
             });
 
-            context("clicking on the first item", function() {
+            it("pre-selects the first item in the list", function() {
+                expect(this.view.$("li:first-child")).toHaveClass("selected");
+            })
+
+            context("clicking on another item", function() {
                 beforeEach(function() {
                     this.eventSpy = jasmine.createSpy();
                     this.view.bind("workfile:selected", this.eventSpy);
-                    this.li1 = this.view.$("li")[0];
-                    $(this.li1).click();
+                    this.li2 = this.view.$("li")[1];
+                    $(this.li2).click();
                 });
 
                 it("adds the selected class to that item", function() {
-                    expect($(this.li1)).toHaveClass("selected");
+                    expect($(this.li2)).toHaveClass("selected");
                 });
 
                 it("triggers the workfile:selected event", function() {
-                    expect(this.eventSpy).toHaveBeenCalledWith(this.model1);
+                    expect(this.eventSpy).toHaveBeenCalledWith(this.model2);
                 });
 
                 context("clicking on the same item again", function() {
                     beforeEach(function() {
                         this.eventCount = this.eventSpy.calls.length;
-                        this.view.$("li").eq(0).click();
+                        this.view.$("li").eq(1).click();
                     });
 
                     it("does not raise the event again", function() {
@@ -134,21 +138,21 @@ describe("WorkfileListView", function() {
                     });
                 });
 
-                context("and then clicking on the second item", function() {
+                context("and then clicking on yet another item", function() {
                     beforeEach(function() {
-                        this.li2 = this.view.$("li")[1];
-                        $(this.li2).click();
+                        this.li3 = this.view.$("li")[2];
+                        $(this.li3).click();
                     });
                     it("removes the selected class from the first li", function() {
-                        expect($(this.li1)).not.toHaveClass("selected");
+                        expect($(this.li2)).not.toHaveClass("selected");
                     });
 
                     it("adds the selected class to the second li", function() {
-                        expect($(this.li2)).toHaveClass("selected");
+                        expect($(this.li3)).toHaveClass("selected");
                     });
 
                     it("triggers the workfile:selected event", function() {
-                        expect(this.eventSpy).toHaveBeenCalledWith(this.model2);
+                        expect(this.eventSpy).toHaveBeenCalledWith(this.model3);
                     });
                 });
             });

@@ -1,0 +1,97 @@
+@import "../_common.scss";
+
+.list {
+    position: relative;
+
+    li {
+        padding: $padding-y 0;
+        border-bottom: $dotted-list-item-border;
+        margin: 0 $padding-x;
+        position: relative;
+        @include after-clearfix;
+
+        &.selected {
+            background: white;
+
+            .spacer {
+                background: white;
+            }
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        .spacer {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: $padding-x;
+
+            &:first-child {
+                left: -$padding-x;
+            }
+            
+            &:last-child {
+                right: -$padding-x;
+            }
+        }
+
+        a.image {
+            display: block;
+            float: left;
+        }
+
+        div.text {
+            vertical-align: top;
+            line-height: 19px;
+            overflow:hidden;
+            _overflow:visible;
+            zoom:1;
+            padding-left: $padding-x;
+
+            .summary {
+                padding-bottom: 15px;
+            }
+        }
+
+        div.details {
+            font-size: 13px;
+            position: absolute;
+            bottom: 0;
+        }
+
+        div.summary {
+            color: $weak-text-color;
+            font-size: 14px;
+        }
+
+        a.name span {
+            max-width: none;
+        }
+
+        * {
+            vertical-align: top
+        }
+
+        a.name {
+            font-size: 18px;
+            span {
+                display: inline-block;
+                @include ellipsis;
+                max-width: 68%;
+            }
+        }
+
+        .tag {
+            float: right;
+            padding: 2px 5px;
+            font-size: 13px;
+        }
+
+        .timestamp {
+            font-size: 12px;
+            font-style: italic;
+        }
+    }
+}

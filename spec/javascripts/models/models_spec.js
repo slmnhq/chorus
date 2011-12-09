@@ -310,6 +310,12 @@ describe("chorus.models", function() {
                 expect(this.model.errors.foo).toBeDefined();
             })
 
+            it("does not clobber a previously-existing error", function() {
+                this.model.errors["foo"] = "nope";
+                this.model.require("foo");
+                expect(this.model.errors.foo).toBe("nope");
+            })
+
             it("sets an error if the attribute is present, is a String, and contains only whitespace", function() {
                 this.model.set({ foo : "    " })
                 this.model.require("foo");
@@ -365,6 +371,11 @@ describe("chorus.models", function() {
                 expect(this.model.errors.foo).toBeDefined();
             })
 
+            it("does not clobber a previously-existing error", function() {
+                this.model.errors["foo"] = "nope";
+                this.model.requirePattern("foo");
+                expect(this.model.errors.foo).toBe("nope");
+            })
             it("sets an error if the attribute is present but doesn't match the pattern", function() {
                 this.model.set({ foo : "bar" });
                 this.model.requirePattern("foo", /baz/);
@@ -419,6 +430,12 @@ describe("chorus.models", function() {
                 this.model.requireConfirmation("foo");
                 expect(this.model.errors.foo).toBeDefined();
             });
+
+            it("does not clobber a previously-existing error", function() {
+                this.model.errors["foo"] = "nope";
+                this.model.requireConfirmation("foo");
+                expect(this.model.errors.foo).toBe("nope");
+            })
 
             it("sets an error if the confirmation isn't present", function () {
                 this.model.set({ foo : "bar" });

@@ -1,5 +1,11 @@
 @import "_common.scss";
-@import "compass/css3/border-radius";
+@import "layout/_breadcrumbs";
+@import "layout/_header.scss";
+@import "layout/_list.scss";
+@import "layout/_list_content_details.scss";
+@import "layout/_main_content.scss";
+@import "layout/_sidebar.scss";
+@import "layout/_sub_nav.scss";
 
 #page {
     min-width: $page-min-width;
@@ -11,59 +17,6 @@
     @include after-clearfix;
 }
 
-.content_header {
-    background: white;
-    min-height: 36px;
-    padding: 12px $padding-x;
-    border-bottom: 1px solid $subheader-border-color;
-    @include border-top-radius(3px);
-
-    h1 {
-        padding-top: 18px;
-        font-size: 22px;
-        font-weight: 600;
-    }
-
-    .icon {
-        float: left;
-    }
-}
-
-#main_content {
-    border: 1px solid $guts-border-color;
-    overflow:hidden;
-    @include border-radius(3px);
-}
-
-.content_details, .content_footer {
-    height: 32px;
-    line-height: 32px;
-    vertical-align: middle;
-    font-size: 13px;
-    border-bottom: 1px solid $pagination-border-color;
-    padding: 0 $padding-x;
-
-    &.hidden {
-        padding: 0;
-        height: 0;
-        border: none;
-    }
-}
-
-.content_footer {
-    height: auto;
-    border-bottom: none;
-    border-top: 1px solid $pagination-border-color;
-}
-
-#sidebar {
-    width: $sidebar-width;
-    float: right;
-    min-height:400px;
-    padding: $padding-y 16px;
-}
-
-
-#routes a {
- color : $secondary-text-color;
+#left {
+    margin-right: $sidebar-width + (2 * $sidebar-padding-x);
 }

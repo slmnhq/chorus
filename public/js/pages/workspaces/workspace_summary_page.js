@@ -18,7 +18,7 @@
             this.mainContent = new chorus.views.MainContentView({
                 model: this.model,
                 content : new chorus.views.WorkspaceDetail({model: this.model }),
-                contentHeader : new chorus.views.TruncatedText({model: this.model, attribute: "summary", length: 300})
+                contentHeader : new chorus.views.TruncatedText({model: this.model, attribute: "summary", characters: 300, lines: 2})
             });
         }
     });

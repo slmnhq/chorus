@@ -1,0 +1,38 @@
+@import "../_common.scss";
+
+.alert {
+    .guts {
+        max-width: 450px;
+        background-color: $body-background-color;
+        padding: 18px 15px 10px 18px;
+
+        .content {
+
+            .left {
+                float: right;
+                max-width: 360px;
+
+                h1 {
+                    color: black;
+                    font-size: 14px;
+                    font-weight: $semibold;
+                    margin-bottom: 10px;
+                }
+
+                p {
+                    color: $dark-text-color;
+                    font-size: 14px;
+                }
+            }
+
+            .right {
+                float: right;
+                width: 90px;
+
+                img {
+                    float: right;
+                }
+            }
+        }
+    }
+}

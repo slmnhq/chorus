@@ -1,0 +1,142 @@
+@import "../_common.scss";
+@import "compass/css3/gradient";
+
+$header-padding : 13px;
+$header-item-spacing : 2*$padding-x;
+
+.header {
+    height: 49px;
+    @include linear-gradient(color-stops(#eeeeee, #cccccc));
+    vertical-align : middle;
+    border-bottom: 1px solid $header-border-color;
+    line-height: 49px;
+    vertical-align: middle;
+
+    html.ie8 & { background-color: $ie-header-color }
+
+    > div {
+        vertical-align: middle;
+
+        > div {
+            display : inline-block;
+        }
+    }
+
+    .right {
+        position: relative;
+        float: right;
+        width : $sidebar-width + $padding-x;
+        text-align : right;
+    }
+
+    .left {
+        float : left;
+    }
+
+    .logo {
+        height: 22px;
+        line-height: 22px;
+	    padding: 0 ($guts-padding + $padding-x + 1px);
+        
+        a {
+            font-family: Arial;
+            font-size: 18px;
+            color: black;
+
+            em {
+                font-weight: bold;
+                margin-left: 5px;
+            }
+        }
+        padding-right : $header-item-spacing;
+        border-right: 1px solid $header-border-color;
+    }
+
+    .messages {
+        font-size: 11px;
+        font-weight: 600;
+        padding-left: $header-item-spacing;
+        height: 22px;
+        line-height: 22px;
+
+
+        .alerts {
+            display: inline-block;
+            height: 16px;
+            width: 16px;
+            background: $alert-background-color;
+            text-align: center;
+            margin-left: $padding-x;
+            padding-top: 3px;
+
+            a {
+                line-height: 16px;
+                vertical-align: middle;
+                color: white;
+            }
+        }
+    }
+
+    .search {
+        overflow: hidden;
+        padding: 12px 0 0 $header-item-spacing;
+        margin: 0;
+        
+        input {
+            padding: 4px;
+            height: 26px;
+            line-height: 26px;
+
+             html.ie8 & { height: 17px; }
+        }
+    }
+
+    .username {
+        border-right: 1px solid $header-border-color;
+
+        a {
+            span {
+
+                @include ellipsis;
+                max-width: 100px;
+                display: inline-block;
+                vertical-align: middle;
+            }
+        }
+    }
+
+    .username, .account {
+        padding: 0 $header-item-spacing;
+        display: inline-block;
+        font-size: 12px;
+        text-align: right;
+        height: 22px;
+        line-height: 22px;
+
+        a {
+            color: inherit;
+            img {
+                padding: 0 0 1px 10px;
+            }
+        }
+    }
+
+    .menu {
+        line-height: 24px;
+    }
+
+    .menu.popup_username {
+        right: 110px;
+        top: 42px;
+    }
+
+    .menu.popup_account {
+        right: 10px;
+        top: 42px;
+
+        .pointer {
+            right: 17px;
+            left: auto;
+        }
+    }
+}

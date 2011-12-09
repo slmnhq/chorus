@@ -46,6 +46,12 @@
             this.collection.attributes.type = type;
             this.collection.fetch();
             return this;
+        },
+
+        postRender : function() {
+            if (this.$("li.selected").length == 0) {
+                this.$("li:first-child").click();
+            }
         }
     });
 })(jQuery, chorus.views);

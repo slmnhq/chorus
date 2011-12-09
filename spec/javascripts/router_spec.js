@@ -54,6 +54,7 @@ describe("chorus.router", function() {
             this.loadTemplate("logged_in_layout");
             this.loadTemplate("plain_text")
             this.loadTemplate("truncated_text")
+            this.loadTemplate("dashboard_workspace_list_footer");
 
             this.savedLocation = window.location.hash;
         })

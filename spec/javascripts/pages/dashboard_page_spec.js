@@ -6,9 +6,10 @@ describe("chorus.pages.DashboardPage", function() {
         this.loadTemplate("dashboard_sidebar");
         this.loadTemplate("logged_in_layout");
         this.loadTemplate("main_content")
-        this.loadTemplate("workspace_list")
+        this.loadTemplate("dashboard_workspace_list")
         this.loadTemplate("default_content_header")
         this.loadTemplate("plain_text")
+        this.loadTemplate("dashboard_workspace_list_footer")
         this.page = new chorus.pages.DashboardPage();
     });
 
@@ -31,7 +32,7 @@ describe("chorus.pages.DashboardPage", function() {
             });
 
             it("creates a WorkspaceList view", function() {
-                expect(this.page.$(".workspace_list")).toExist();
+                expect(this.page.$(".dashboard_workspace_list")).toExist();
             });
         });
     });
@@ -43,6 +44,11 @@ describe("chorus.pages.DashboardPage", function() {
 
         it("only fetches active workspaces", function(){
             expect(this.page.workspaceSet.attributes.active).toBeTruthy();
+        })
+
+        it("should sort the workspaceSet by name Descending", function(){
+            expect(this.page.workspaceSet.sortIndex).toBe("name");
+            expect(this.page.workspaceSet.sortOrder).toBe("asc");
         })
 
         it("fetches workspaces for the logged in user", function(){

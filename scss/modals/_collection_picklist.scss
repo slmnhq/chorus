@@ -1,0 +1,70 @@
+@import "../_common.scss";
+@import "compass/css3/border-radius";
+
+$list-item-height: 39px;
+$list-border-width: 1px;
+
+.collection_picklist {
+    background-color: $body-background-color;
+    width: 315px;
+
+    .search {
+        padding: 4px 12px;
+        margin: 0;
+        height: 25px;
+        border-bottom: 1px solid $pagination-border-color;
+        
+        input[type=text] {
+            margin: 0;
+            @include border-radius(12px);
+            font-size: 14px;
+            padding: 2px 4px 0px 29px;
+            background: url("/images/search-icon.png") no-repeat 9px 3px;
+            outline: none;
+            background-color: white;
+            border-color: $subheader-border-color;
+        }
+    }
+
+    .items {
+        max-height: (($list-item-height + $list-border-width) * 8) + $list-item-height;
+        overflow: auto;
+        
+        ul {
+            li {
+                height: $list-item-height;
+                border-bottom: $list-border-width dotted $list-border-color;
+                padding: 0 8px;
+                line-height: $list-item-height;
+                @include ellipsis;
+
+                img {
+                    vertical-align: middle;
+                    padding-right: 4px;
+                }
+
+                .name {
+                    vertical-align: middle;
+                    color: $dark-text-color;
+                    font-size: 14px;
+                }
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                &.selected {
+                    background-color: $picklist-selected-background-color;
+
+                    .name {
+                        color: white;
+                    }
+                }
+
+                &.filtered {
+                    display: none;
+                }
+            }
+        }
+    }
+}
