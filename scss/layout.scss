@@ -15,6 +15,7 @@
     padding: $guts-padding;
     padding-top: 0;
     @include after-clearfix;
+    z-index: 0;
 }
 
 #left {
