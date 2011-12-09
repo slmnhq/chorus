@@ -34,7 +34,7 @@
                     disabled="disabled"
                 {{/unless}}
             />
-            <label for="workspace_active"><span>{{t "workspace.settings.active"}}</span> - {{t "workspace.settings.active_description"}}</label>
+            <label for="workspace_active"><span>{{t "workspace.settings.active"}}</span></label>
         </div>
         <div class="radio">
             <input type="radio" id="workspace_archived" name="status"
@@ -45,9 +45,11 @@
                     disabled="disabled"
                 {{/unless}}
             />
-            <label for="workspace_archived"><span>{{t "workspace.settings.archived"}}</span> - {{t "workspace.settings.archived_description"}}</label>
+            <label for="workspace_archived"><span>{{t "workspace.settings.archived"}}</span></label>
         </div>
-
+    </div>
+    <div class="archived_text">
+        {{t "workspace.settings.archived_description"}}
     </div>
 
     <div class="controls">

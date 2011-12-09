@@ -24,6 +24,10 @@ describe("WorkspaceSettings", function() {
             expect(this.dialog.$("textarea[name=summary]").val()).toBe(this.dialog.pageModel.get("summary"));
         });
 
+        it("renders the archiving instructions", function() {
+            expect(this.dialog.$(".archived_text").text().trim()).toMatchTranslation("workspace.settings.archived_description");
+        });
+
         context("when the workspace is public", function() {
             beforeEach(function() {
                 this.workspace.set({ isPublic : true })
