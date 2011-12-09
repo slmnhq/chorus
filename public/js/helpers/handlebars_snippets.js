@@ -34,7 +34,7 @@
             if (args.length == 0) {
                 throw "ifAll expects arguments";
             }
-            if (_.all(args, _.identity)) {
+            if (_.all(args, function(arg) { return !!arg })) {
                 return block(this);
             } else {
                 return elseBlock(this);
@@ -48,7 +48,7 @@
             if (args.length == 0) {
                 throw "ifAny expects arguments";
             }
-            if (_.any(args)) {
+            if (_.any(args, function(arg) { return !!arg })) {
                 return block(this);
             } else {
                 return elseBlock(this);

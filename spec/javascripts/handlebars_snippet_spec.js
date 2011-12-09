@@ -137,7 +137,7 @@ describe("handlebars", function() {
                 });
 
                 it("renders the block if all arguments are truthy", function() {
-                    var context = {first: true, second: true};
+                    var context = {first: true, second: 'this string is not normally truthy in IE8'};
                     var string = Handlebars.compile(this.template)(context);
                     expect(string).toBe("yes");
                 });
@@ -190,7 +190,7 @@ describe("handlebars", function() {
                 });
 
                 it("renders the block if any arguments are truthy", function() {
-                    var context = {first: false, second: true};
+                    var context = {first: false, second: 'hello'};
                     var string = Handlebars.compile(this.template)(context);
                     expect(string).toBe("yes");
                 });
@@ -208,7 +208,7 @@ describe("handlebars", function() {
                 });
 
                 it("renders the block if any arguments are truthy", function() {
-                    var context = {first: true, second: false};
+                    var context = {first: 'ie8 is cool', second: false};
                     var string = Handlebars.compile(this.template)(context);
                     expect(string).toBe("yes");
                 });
