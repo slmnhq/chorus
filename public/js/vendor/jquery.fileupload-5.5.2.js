@@ -1,5 +1,5 @@
 /*
- * jQuery File Upload Plugin 5.5
+ * jQuery File Upload Plugin 5.5.2
  * https://github.com/blueimp/jQuery-File-Upload
  *
  * Copyright 2010, Sebastian Tschan
@@ -9,7 +9,7 @@
  * http://creativecommons.org/licenses/MIT/
  */
 
-/*jslint white: true, nomen: true, unparam: true, regexp: true */
+/*jslint nomen: true, unparam: true, regexp: true */
 /*global document, XMLHttpRequestUpload, Blob, File, FormData, location, jQuery */
 
 (function ($) {
@@ -397,7 +397,11 @@
             }
             if (ub >= fs) {
                 file.error = 'uploadedBytes';
-                return this._getXHRPromise(false);
+                return this._getXHRPromise(
+                    false,
+                    options.context,
+                    [null, 'error', file.error]
+                );
             }
             // n is the number of blobs to upload,
             // calculated via filesize, uploaded bytes and max chunk size:
@@ -405,7 +409,7 @@
             // The chunk upload method accepting the chunk number as parameter:
             upload = function (i) {
                 if (!i) {
-                    return that._getXHRPromise(true);
+                    return that._getXHRPromise(true, options.context);
                 }
                 // Upload the blobs in sequential order:
                 return upload(i -= 1).pipe(function () {
@@ -435,7 +439,7 @@
                                 }), o);
                             }
                             options.uploadedBytes = o.uploadedBytes +=
-                              o.chunkSize;
+                                o.chunkSize;
                         });
                     return jqXHR;
                 });
@@ -491,10 +495,16 @@
             }
         },
 
-        _onAlways: function (jqXHR, textStatus, options) {
+        _onAlways: function (jqXHRorResult, textStatus, jqXHRorError, options) {
             this._active -= 1;
-            options.jqXHR = jqXHR;
             options.textStatus = textStatus;
+            if (jqXHRorError && jqXHRorError.always) {
+                options.jqXHR = jqXHRorError;
+                options.result = jqXHRorResult;
+            } else {
+                options.jqXHR = jqXHRorResult;
+                options.errorThrown = jqXHRorError;
+            }
             this._trigger('always', null, options);
             if (this._active === 0) {
                 // The stop callback is triggered when all uploads have
@@ -522,12 +532,14 @@
                         that._onDone(result, textStatus, jqXHR, options);
                     }).fail(function (jqXHR, textStatus, errorThrown) {
                         that._onFail(jqXHR, textStatus, errorThrown, options);
-                    }).complete(function (jqXHR, textStatus) {
-                        // jqXHR.complete() will be deprecated in jQuery 1.8,
-                        // but is preferable over jqXHR.always() due to this bug:
-                        // http://bugs.jquery.com/ticket/10723 (jQuery 1.7)
+                    }).always(function (jqXHRorResult, textStatus, jqXHRorError) {
                         that._sending -= 1;
-                        that._onAlways(jqXHR, textStatus, options);
+                        that._onAlways(
+                            jqXHRorResult,
+                            textStatus,
+                            jqXHRorError,
+                            options
+                        );
                         if (options.limitConcurrentUploads &&
                                 options.limitConcurrentUploads > that._sending) {
                             // Start the next queued upload,
@@ -594,8 +606,10 @@
                 var files = fileSet ? element : [element],
                     newData = $.extend({}, data, {files: files});
                 newData.submit = function () {
-                    return (that._trigger('submit', e, newData) !== false) &&
-                        that._onSend(e, newData);
+                    newData.jqXHR = this.jqXHR =
+                        (that._trigger('submit', e, this) !== false) &&
+                        that._onSend(e, this);
+                    return this.jqXHR;
                 };
                 return (result = that._trigger('add', e, newData));
             });
