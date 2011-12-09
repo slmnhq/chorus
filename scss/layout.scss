@@ -1,5 +1,11 @@
 @import "_common.scss";
-@import "compass/css3/border-radius";
+@import "layout/_breadcrumbs";
+@import "layout/_header.scss";
+@import "layout/_list.scss";
+@import "layout/_list_content_details.scss";
+@import "layout/_main_content.scss";
+@import "layout/_sidebar.scss";
+@import "layout/_sub_nav.scss";
 
 #page {
     min-width: $page-min-width;
@@ -13,131 +19,4 @@
 
 #left {
     margin-right: $sidebar-width + (2 * $sidebar-padding-x);
-}
-
-.content_header {
-    background: white;
-    min-height: 36px;
-    padding: 12px $padding-x;
-    border-bottom: 1px solid $subheader-border-color;
-    @include border-top-radius(3px);
-
-    h1 {
-        padding-top: 18px;
-        font-size: 22px;
-        font-weight: 600;
-    }
-
-    .icon {
-        float: left;
-    }
-
-    .menus {
-        float: right;
-        text-align : right;
-        margin-top:25px;
-        @include after-clearfix;
-    }
-}
-
-#main_content {
-    border: 1px solid $guts-border-color;
-    @include border-radius(3px);
-}
-
-.content_details, .content_footer {
-    height: 32px;
-    line-height: 32px;
-    vertical-align: middle;
-    font-size: 13px;
-    border-bottom: 1px solid $pagination-border-color;
-    padding: 0 $padding-x;
-
-    &.hidden {
-        padding: 0;
-        height: 0;
-        border: none;
-    }
-}
-
-.content_footer {
-    height: auto;
-    border-bottom: none;
-    border-top: 1px solid $pagination-border-color;
-}
-
-#sidebar {
-    width: $sidebar-width;
-    position: absolute;
-    right: $guts-padding;
-    padding: $padding-y $sidebar-padding-x;
-}
-
-
-#routes a {
- color : $secondary-text-color;
-}
-
-.link_menu {
-    position: relative;
-    z-index : 100;
-    display:inline;
-    padding-left: 12px;
-    .title {
-        font-size: 12px;
-        font-weight: $semibold;
-        color: $dark-text-color;
-
-    }
-
-    a {
-        font-size: 12px;
-        margin-left: 3px;
-        span {
-            color : $link-color;
-            border-bottom: 1px dotted $link-color;
-            color: $link-color;
-        }
-
-        img {
-           margin: 2px;
-        }
-    }
-
-    .popup_filter {
-        min-width:130px;
-        right: -2px;
-        top: 28px;
-        padding: 9px 7px 9px 2px;
-        z-index : 100;
-
-
-        .pointer {
-            left: 100px;
-        }
-
-        li {
-            margin: 4px;
-
-            .check {
-                background-repeat: no-repeat;
-                background-image: url("/images/check.png");
-                display: inline-block;
-                width: 10px;
-                height: 10px;
-                margin-right: 2px;
-                position: relative;
-                top: 1px;
-
-                &.hidden {
-                    visibility: hidden;
-                }
-            }
-
-            a {
-                font-weight : 400;
-                color: black !important;
-            }
-        }
-    }
 }

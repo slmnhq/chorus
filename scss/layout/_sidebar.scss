@@ -1,6 +1,11 @@
-@import "_common.scss";
+@import "../_common.scss";
 
 #sidebar {
+    width: $sidebar-width;
+    position: absolute;
+    right: $guts-padding;
+    padding: $padding-y $sidebar-padding-x;
+
     .actions {
         h1 {
             font-size: 19px;

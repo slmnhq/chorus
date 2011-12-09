@@ -1,0 +1,88 @@
+
+*:focus {
+    outline-color: $border-color;
+}
+
+a:focus {
+    outline: none;
+}
+
+
+a {
+    color: $link-color;
+    text-decoration : none;
+}
+
+body {
+    color: $text-color;
+    background-color: $body-background-color;
+    font-family: Myriad Pro;
+}
+
+a.button, button, input[type=submit] {
+    -webkit-appearance : initial;
+    display: inline-block;
+    color: $link-color;
+    border: 1px solid $border-color;
+    background : $button-background-color;
+    font-size : 16px;
+    line-height: 26px;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0 14px;
+    vertical-align: middle;
+    cursor : pointer;
+    outline-color: $border-color;
+    font-family: Myriad Pro;
+    &:disabled {
+        color : $weak-text-color;
+        cursor : initial;
+    }
+}
+
+label {
+    text-align: left;
+    font-size: 13px;
+    color: $secondary-text-color;
+}
+
+input, textarea {
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    padding: 3px;
+    font-family: Myriad Pro;
+}
+
+input:not([type="image"]), textarea {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+textarea {
+    resize: none;
+}
+
+input[type=checkbox], input[type=radio] {
+    display: inline;
+    width: auto;
+}
+
+.required:after {
+    content: "*";
+    color: $error-background-color;
+    vertical-align: middle;
+    margin-left: 5px;
+}
+
+.hidden {
+    display: none;
+}
+
+.administrator {
+    background: $administrator-background-color;
+}
+
+img.disabled {
+    @include opacity(0.25);
+}
