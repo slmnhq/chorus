@@ -32,6 +32,9 @@ src_files:
   - js/views/**/*.js
   - js/**/*.js
 
+non_spec_src_files:
+  - js_non_spec/**/*.js
+
 # stylesheets
 #
 # Return an array of stylesheet filepaths relative to src_dir to include before jasmine specs.
