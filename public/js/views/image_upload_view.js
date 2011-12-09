@@ -5,7 +5,7 @@
 
         additionalContext: function() {
             return {
-                imageUrl: this.model.imageUrl({ size : "original" }),
+                imageUrl: this.model.imageUrl()+"&buster="+(new Date().getTime()),
                 hasImage: this.model.hasImage(),
                 addImageKey : this.addImageKey,
                 changeImageKey : this.changeImageKey
@@ -69,12 +69,13 @@
                 self.$("img").removeClass("disabled");
                 self.$("input[type=file]").removeAttr("disabled");
                 self.$("a.action").removeClass("disabled");
-                self.$("img").attr('src', originalUrl + "&buster=" + (new Date().getTime()));
 
                 var json = $.parseJSON(data.result);
                 if (json.status == "ok") {
                     self.resource.serverErrors = [];
                     self.resource.trigger("validated");
+                    self.model.change();
+                    self.$("img").attr('src', originalUrl + "&buster=" + (new Date().getTime()));
                 } else {
                     self.resource.serverErrors = json.message;
                     self.resource.trigger("saveFailed");

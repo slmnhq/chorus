@@ -42,7 +42,7 @@ describe("chorus.views.ImageUpload", function() {
             });
 
             it("displays an image with the model's imageUrl", function() {
-                expect(this.view.$("img").attr("src")).toBe(this.user.imageUrl());
+                expect(this.view.$("img").attr("src")).toContain(this.user.imageUrl());
             });
 
         });

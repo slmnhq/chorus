@@ -181,7 +181,7 @@ describe("WorkspaceSettings", function() {
 
             it("displays the workspace image", function() {
                 var image = this.dialog.$("img");
-                expect(image.attr("src")).toBe(this.workspace.imageUrl());
+                expect(image.attr("src")).toContain(this.workspace.imageUrl());
             });
 
             it("displays the 'change image' link", function() {

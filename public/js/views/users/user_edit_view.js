@@ -10,8 +10,7 @@
 
         additionalContext: function() {
             return {
-                permission : ((this.model.get("userName") == chorus.user.get("userName")) || chorus.user.get("admin")) ,
-                imageUrl: this.model.imageUrl()
+                permission : ((this.model.get("userName") == chorus.user.get("userName")) || chorus.user.get("admin"))
             }
         },
 

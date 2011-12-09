@@ -6,10 +6,17 @@
         additionalContext : function() {
             return {
                 canUpdate : this.model.canUpdate(),
-                imageUrl : this.model.imageUrl(),
+                imageUrl : this.model.imageUrl()+"&buster="+(new Date().getTime()),
                 hasImage : this.model.hasImage()
 
             };
+        },
+
+        postRender : function() {
+            var self = this;
+            this.$("img").load(function() {
+                self.$(".actions").removeClass("hidden");
+            });
         }
     });
 })(chorus);

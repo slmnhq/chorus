@@ -13,16 +13,16 @@
             return {
                 imageUrl : this.pageModel.imageUrl(),
                 hasImage : this.pageModel.hasImage(),
-                permission :  ((this.pageModel.get("ownerId") == chorus.user.get("id"))|| chorus.user.get("admin"))
+                permission :  ((this.pageModel.get("ownerId") == chorus.user.get("id")) || chorus.user.get("admin"))
             }
         },
 
         setup : function() {
             this.imageUpload = new ns.views.ImageUpload({
-               model : this.pageModel,
-               addImageKey: "workspace.settings.image.add",
-               changeImageKey: "workspace.settings.image.change",
-               spinnerSmall: true
+                model : this.pageModel,
+                addImageKey: "workspace.settings.image.add",
+                changeImageKey: "workspace.settings.image.change",
+                spinnerSmall: true
             });
             this.pageModel.bind("saved", this.closeModal, this);
         },

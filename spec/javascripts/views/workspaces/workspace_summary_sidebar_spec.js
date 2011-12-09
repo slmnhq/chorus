@@ -22,7 +22,7 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
             });
 
             it("renders the workspace image", function() {
-                expect(this.view.$("img.workspace_image").attr("src")).toBe('http://partytime.com/party.gif');
+                expect(this.view.$("img.workspace_image").attr("src")).toContain('http://partytime.com/party.gif');
             });
         });
 
