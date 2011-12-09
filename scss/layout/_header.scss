@@ -1,4 +1,4 @@
-@import "_common.scss";
+@import "../_common.scss";
 @import "compass/css3/gradient";
 
 $header-padding : 13px;
@@ -11,6 +11,8 @@ $header-item-spacing : 2*$padding-x;
     border-bottom: 1px solid $header-border-color;
     line-height: 49px;
     vertical-align: middle;
+
+    html.ie8 & { background-color: $ie-header-color }
 
     > div {
         vertical-align: middle;
@@ -83,6 +85,9 @@ $header-item-spacing : 2*$padding-x;
         input {
             padding: 4px;
             height: 26px;
+            line-height: 26px;
+
+             html.ie8 & { height: 17px; }
         }
     }
 

@@ -1,5 +1,4 @@
-@import "_common.scss";
-@import "compass/css3/gradient";
+@import "../_common";
 
 .breadcrumbs {
     @include linear-gradient(color-stops($body-glow-color, $body-background-color));

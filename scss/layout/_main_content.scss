@@ -1,0 +1,52 @@
+@import "../_common.scss";
+
+#main_content {
+    border: 1px solid $guts-border-color;
+    @include border-radius(3px);
+}
+
+.content_header {
+    background: white;
+    min-height: 36px;
+    padding: 12px $padding-x;
+    border-bottom: 1px solid $subheader-border-color;
+    @include border-top-radius(3px);
+
+    h1 {
+        padding-top: 18px;
+        font-size: 22px;
+        font-weight: 600;
+    }
+
+    .icon {
+        float: left;
+    }
+
+    .menus {
+        float: right;
+        text-align : right;
+        margin-top:25px;
+        @include after-clearfix;
+    }
+}
+
+.content_details, .content_footer {
+    height: 32px;
+    line-height: 32px;
+    vertical-align: middle;
+    font-size: 13px;
+    border-bottom: 1px solid $pagination-border-color;
+    padding: 0 $padding-x;
+
+    &.hidden {
+        padding: 0;
+        height: 0;
+        border: none;
+    }
+}
+
+.content_footer {
+    height: auto;
+    border-bottom: none;
+    border-top: 1px solid $pagination-border-color;
+}

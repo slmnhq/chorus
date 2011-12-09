@@ -58,4 +58,26 @@ $image-width : 230px;
         color: $secondary-text-color;
         font-size: 14px;
     }
+
+    .workspace_status {
+        padding-top: 10px;
+
+        label:first-child {
+            padding-bottom: 6px;
+            margin-bottom: 0;
+            display: block;
+        }
+        
+        label {
+            display: inline;
+
+            span {
+                color: black;
+            }
+        }
+
+        .radio {
+            padding: 6px 0 0 8px;
+        }
+    }
 }

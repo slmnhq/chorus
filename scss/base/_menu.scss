@@ -1,14 +1,40 @@
-@import "_common.scss";
+@import "../_common.scss";
 
-.workspace_index_content_header, .default_content_header {
-    .menus {
-        float: right;
-        text-align : right;
-        margin-top:25px;
-        @include after-clearfix;
-        
+.menu {
+    display: inline;
+    position: absolute;
+    background: white;
+    padding: 9px 20px;
+    border: 1px solid $menu-border-color;
+    text-align: left;
+    z-index: 100;
+
+    .pointer {
+        width: 21px;
+        height: 13px;
+        background-image : url("/images/menu-triangle.png");
+        background-repeat: no-repeat;
+        position: absolute;
+        top: -13px;
+        left: 49px;
+    }
+
+    a {
+        font-size: 14px;
+        line-height: 14px;
+        vertical-align: middle;
+        color: $text-color;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    &.hidden {
+        display: none;
     }
 }
+
 .link_menu {
     position: relative;
     z-index : 100;
