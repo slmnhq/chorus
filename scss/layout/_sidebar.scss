@@ -6,6 +6,10 @@
     right: $guts-padding;
     padding: $padding-y $sidebar-padding-x;
 
+    .image {
+        padding-bottom: 16px;
+    }
+    
     .actions {
         h1 {
             font-size: 19px;
