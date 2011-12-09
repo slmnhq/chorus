@@ -20,4 +20,9 @@
             margin-left: 10px;
         }
     }
+
+
+    img {
+        max-width: $sidebar-width - 20px;
+    }
 }

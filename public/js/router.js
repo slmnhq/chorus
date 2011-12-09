@@ -1,6 +1,5 @@
 (function($, ns) {
     ns.Router = Backbone.Router.extend({
-        showDevLinks : true,
         maps : [
             // routes are evaluated in LIFO format, so adding a match-all route first will act as a fallback properly
             // (as long as `maps` is evaluated in order)
@@ -44,14 +43,7 @@
                         return new F();
                     }
                     self.app.page = construct();
-                    $("#page").
-                        html(self.app.page.render().el).
-                        attr("data-page", className);
-
-                    if (self.showDevLinks) {
-                        $("body > .routes").remove();
-                        $("body").append(new ns.views.RouteSplat().render().el);
-                    }
+                    $("#page").html(self.app.page.render().el).attr("data-page", className);
                 }
             }
         },

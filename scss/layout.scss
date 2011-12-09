@@ -9,10 +9,10 @@
     padding: $guts-padding;
     padding-top: 0;
     @include after-clearfix;
+}
 
-    #left {
-        margin-right: $sidebar-width + (2 * $sidebar-padding-x);
-    }
+#left {
+    margin-right: $sidebar-width + (2 * $sidebar-padding-x);
 }
 
 .content_header {

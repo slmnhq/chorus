@@ -11,16 +11,77 @@ describe("WorkspaceSettings", function() {
         beforeEach(function() {
             this.dialog.render();
         });
+
         it("has the correct title", function() {
             expect(this.dialog.title).toMatchTranslation("workspace.settings.title");
         });
+
         it("has an input for workspace name", function() {
             expect(this.dialog.$("input[name=name]").val()).toBe(this.dialog.pageModel.get("name"))
         });
+
         it("has a text area for summary", function() {
             expect(this.dialog.$("textarea[name=summary]").val()).toBe(this.dialog.pageModel.get("summary"));
         });
 
+        context("when the workspace is public", function() {
+            beforeEach(function() {
+                this.workspace.set({ isPublic : true })
+            })
+
+            it("checks the 'Publicly available' checkbox", function() {
+                expect(this.dialog.$("input[name=isPublic]")).toBeChecked();
+            })
+        })
+
+        context("when the workspace is not public", function() {
+            beforeEach(function() {
+                this.workspace.set({ isPublic : false })
+            })
+
+            it("does not check the 'Publicly available' checkbox", function() {
+                expect(this.dialog.$("input[name=isPublic]")).not.toBeChecked();
+            })
+        })
+
+        context("when the user is the owner of the workspace", function() {
+            beforeEach(function() {
+                setLoggedInUser({ id : 10101 });
+                this.workspace.set({ ownerId : 10101 })
+            })
+
+            it("does not disable the 'Publicly available' checkbox", function() {
+                expect(this.dialog.$("input[name=isPublic]")).not.toBeDisabled();
+            })
+        })
+
+        context("when the user is not the owner of the workspace", function() {
+            beforeEach(function() {
+                this.workspace.set({ ownerId : 10101 }, { silent : true })
+            })
+
+            context("and the user is not an admin", function() {
+                beforeEach(function() {
+                    setLoggedInUser({ id : 10102 });
+                    this.dialog.render();
+                })
+
+                it("disables the 'Publicly available' checkbox", function() {
+                    expect(this.dialog.$("input[name=isPublic]")).toBeDisabled();
+                })
+            });
+
+            context("and the user is an admin", function() {
+                beforeEach(function() {
+                    setLoggedInUser({ id : 10102, admin : true });
+                    this.dialog.render();
+                })
+
+                it("does not disable the 'Publicly available' checkbox", function() {
+                    expect(this.dialog.$("input[name=isPublic]")).not.toBeDisabled();
+                })
+            });
+        })
 
         context("when the workspace has an image", function() {
             beforeEach(function() {
@@ -79,6 +140,28 @@ describe("WorkspaceSettings", function() {
             it("does not close the dialog before the server responds", function() {
                 expect("close.facebox").not.toHaveBeenTriggeredOn($(document));
             });
+
+            context("when the isPublic checkbox is checked", function() {
+                beforeEach(function() {
+                    this.dialog.$("input[name=isPublic]").attr("checked", "checked");
+                    this.dialog.$('form').submit();
+                })
+
+                it("sets the isPublic model attribute to true", function() {
+                    expect(this.dialog.pageModel.get("isPublic")).toBe(true);
+                })
+            })
+
+            context("when the isPublic checkbox is not checked", function() {
+                beforeEach(function() {
+                    this.dialog.$("input[name=isPublic]").removeAttr("checked");
+                    this.dialog.$('form').submit();
+                })
+
+                it("sets the isPublic model attribute to false", function() {
+                    expect(this.dialog.pageModel.get("isPublic")).toBe(false);
+                })
+            })
 
             context("the server responds with success", function() {
                 beforeEach(function() {

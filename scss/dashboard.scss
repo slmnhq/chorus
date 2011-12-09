@@ -1,16 +1,39 @@
+@import "_common";
+
 div[data-page="Dashboard"] {
     $workspace-list-width: 350px;
 
-    #sidebar {
-        display: none;
+    #left {
+        margin-right: 0;
+    }
+
+    #main_content {
+        @include after-clearfix();
     }
 
     .main_content.workspace_list {
         float: right;
         width: $workspace-list-width;
+        font-weight: $semibold;
+
+        .dashboard_workspace_list > li:last-child {
+            border-bottom:  $dotted-list-item-border;
+        }
+        .content_footer {
+            line-height : 27px;
+            color: $link-color;
+            border-top : none;
+
+            a {
+                padding: 0 10px;
+                font-size: 12px;
+                font-weight: $semibold;
+            }
+        }
     }
 
     .main_content.dashboard_main {
-        overflow: hidden;
+        margin-right:  $workspace-list-width;
     }
+
 }

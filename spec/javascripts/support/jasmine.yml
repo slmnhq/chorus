@@ -17,6 +17,7 @@ src_files:
   - js/vendor/jquery.ui.*.js
   - js/vendor/codemirror-2.16.js
   - js/vendor/**/*.js
+  - js/bootstrap.js
   - js/chorus.js
   - js/mixins.js
   - js/router.js

@@ -2,6 +2,6 @@
     <img {{#if hasImage}} src="{{imageUrl}}" {{/if}}/>
 </div>
 <div class="file-wrapper">
+    <a class="action">{{#if hasImage}}{{t changeImageKey}}{{else}}{{t addImageKey}}{{/if}}</a>
     <input type="file"/>
-    <a class="action" href="#">{{#if hasImage}}{{t changeImageKey}}{{else}}{{t addImageKey}}{{/if}}</a>
 </div>

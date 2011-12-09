@@ -10,8 +10,32 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
             this.view.render();
         });
 
-        it("renders the name of the workspace in an h1", function(){
+        it("renders the name of the workspace in an h1", function() {
             expect(this.view.$("h1").text().trim()).toBe(this.model.get("name"));
+        });
+
+        context("the workspace has an image", function() {
+            beforeEach(function() {
+                spyOn(this.view.model, 'hasImage').andReturn(true);
+                spyOn(this.view.model, 'imageUrl').andReturn("http://partytime.com/party.gif")
+                this.view.render();
+            });
+
+            it("renders the workspace image", function() {
+                expect(this.view.$("img.workspace_image").attr("src")).toBe('http://partytime.com/party.gif');
+            });
+        });
+
+        context("the workspace does not have an image", function() {
+            beforeEach(function() {
+                spyOn(this.view.model, 'hasImage').andReturn(false);
+                spyOn(this.view.model, 'imageUrl').andReturn("http://partytime.com/party.gif")
+                this.view.render();
+            });
+
+            it("does not render the workspace image", function() {
+                expect(this.view.$("img.workspace_image")).not.toExist();
+            });
         });
 
         context("the current user has update permissions on the workspace", function() {
@@ -36,7 +60,7 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
             });
         });
 
-        it("has a link to add a note", function(){
+        it("has a link to add a note", function() {
             expect(this.view.$("a[data-dialog=NotesNew]").text().trim()).toMatchTranslation("actions.add_note");
             expect(this.view.$("a[data-dialog=NotesNew]").attr("data-entity-type")).toBe("workspace");
             expect(this.view.$("a[data-dialog=NotesNew]").attr("data-entity-id")).toBe(this.model.get("id"))
