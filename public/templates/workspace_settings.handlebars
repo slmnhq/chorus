@@ -23,6 +23,33 @@
         </div>
     </div>
 
+    <div class="workspace_status">
+        <label>{{t "workspace.settings.status"}}</label>
+        <div class="radio">
+            <input type="radio" id="workspace_active" name="status"
+                {{#if active}}
+                    checked="checked"
+                {{/if}}
+                {{#unless permission}}
+                    disabled="disabled"
+                {{/unless}}
+            />
+            <label for="workspace_active"><span>{{t "workspace.settings.active"}}</span> - {{t "workspace.settings.active_description"}}</label>
+        </div>
+        <div class="radio">
+            <input type="radio" id="workspace_archived" name="status"
+                {{#unless active}}
+                    checked="checked"
+                {{/unless}}
+                {{#unless permission}}
+                    disabled="disabled"
+                {{/unless}}
+            />
+            <label for="workspace_archived"><span>{{t "workspace.settings.archived"}}</span> - {{t "workspace.settings.archived_description"}}</label>
+        </div>
+
+    </div>
+
     <div class="controls">
         <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
         <button type="submit" class="submit" tabindex="99">{{t "actions.save_changes"}}</button>

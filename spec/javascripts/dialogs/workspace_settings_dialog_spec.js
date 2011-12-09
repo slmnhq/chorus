@@ -53,6 +53,36 @@ describe("WorkspaceSettings", function() {
             it("does not disable the 'Publicly available' checkbox", function() {
                 expect(this.dialog.$("input[name=isPublic]")).not.toBeDisabled();
             })
+
+            context("and the workspace is not archived", function() {
+                beforeEach(function() {
+                    this.workspace.set({ active : true })
+                })
+
+                it("displays enabled radio buttons with 'active' selected", function() {
+                    var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
+                    var archivedRadio = this.dialog.$("input[type=radio][id=workspace_archived]");
+                    expect(activeRadio).not.toBeDisabled();
+                    expect(activeRadio).toBeChecked();
+                    expect(archivedRadio).not.toBeDisabled();
+                    expect(archivedRadio).not.toBeChecked();
+                })
+            })
+
+            context("and the workspace is archived", function() {
+                beforeEach(function() {
+                    this.workspace.set({ active : false })
+                })
+
+                it("displays enabled radio buttons with 'archived' selected", function() {
+                    var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
+                    var archivedRadio = this.dialog.$("input[type=radio][id=workspace_archived]");
+                    expect(activeRadio).not.toBeDisabled();
+                    expect(activeRadio).not.toBeChecked();
+                    expect(archivedRadio).not.toBeDisabled();
+                    expect(archivedRadio).toBeChecked();
+                })
+            })
         })
 
         context("when the user is not the owner of the workspace", function() {
@@ -69,6 +99,36 @@ describe("WorkspaceSettings", function() {
                 it("disables the 'Publicly available' checkbox", function() {
                     expect(this.dialog.$("input[name=isPublic]")).toBeDisabled();
                 })
+
+                context("and the workspace is not archived", function() {
+                    beforeEach(function() {
+                        this.workspace.set({ active : true })
+                    })
+
+                    it("displays disabled radio buttons with 'active' selected", function() {
+                        var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
+                        var archivedRadio = this.dialog.$("input[type=radio][id=workspace_archived]");
+                        expect(activeRadio).toBeDisabled();
+                        expect(activeRadio).toBeChecked();
+                        expect(archivedRadio).toBeDisabled();
+                        expect(archivedRadio).not.toBeChecked();
+                    })
+                })
+
+                context("and the workspace is archived", function() {
+                    beforeEach(function() {
+                        this.workspace.set({ active : false })
+                    })
+
+                    it("displays disabled radio buttons with 'archived' selected", function() {
+                        var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
+                        var archivedRadio = this.dialog.$("input[type=radio][id=workspace_archived]");
+                        expect(activeRadio).toBeDisabled();
+                        expect(activeRadio).not.toBeChecked();
+                        expect(archivedRadio).toBeDisabled();
+                        expect(archivedRadio).toBeChecked();
+                    })
+                })
             });
 
             context("and the user is an admin", function() {
@@ -79,6 +139,36 @@ describe("WorkspaceSettings", function() {
 
                 it("does not disable the 'Publicly available' checkbox", function() {
                     expect(this.dialog.$("input[name=isPublic]")).not.toBeDisabled();
+                })
+
+                context("and the workspace is not archived", function() {
+                    beforeEach(function() {
+                        this.workspace.set({ active : true })
+                    })
+
+                    it("displays enabled radio buttons with 'active' selected", function() {
+                        var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
+                        var archivedRadio = this.dialog.$("input[type=radio][id=workspace_archived]");
+                        expect(activeRadio).not.toBeDisabled();
+                        expect(activeRadio).toBeChecked();
+                        expect(archivedRadio).not.toBeDisabled();
+                        expect(archivedRadio).not.toBeChecked();
+                    })
+                })
+
+                context("and the workspace is archived", function() {
+                    beforeEach(function() {
+                        this.workspace.set({ active : false })
+                    })
+
+                    it("displays enabled radio buttons with 'archived' selected", function() {
+                        var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
+                        var archivedRadio = this.dialog.$("input[type=radio][id=workspace_archived]");
+                        expect(activeRadio).not.toBeDisabled();
+                        expect(activeRadio).not.toBeChecked();
+                        expect(archivedRadio).not.toBeDisabled();
+                        expect(archivedRadio).toBeChecked();
+                    })
                 })
             });
         })
@@ -163,6 +253,36 @@ describe("WorkspaceSettings", function() {
                 })
             })
 
+            context("when the active radio is checked", function() {
+                beforeEach(function() {
+                    this.dialog.$("input#workspace_active").attr("checked", "checked");
+                    this.dialog.$('form').submit();
+                })
+
+                it("sets the active model attribute to true", function() {
+                    expect(this.dialog.pageModel.get("active")).toBe(true);
+                })
+
+                it("sets the archived model attribute to false", function() {
+                    expect(this.dialog.pageModel.get("archived")).toBe(false);
+                })
+            })
+
+            context("when the archived radio is checked", function() {
+                beforeEach(function() {
+                    this.dialog.$("input#workspace_archived").attr("checked", "checked");
+                    this.dialog.$('form').submit();
+                })
+
+                it("sets the active model attribute to false", function() {
+                    expect(this.dialog.pageModel.get("active")).toBe(false);
+                })
+
+                it("sets the archived model attribute to true", function() {
+                    expect(this.dialog.pageModel.get("archived")).toBe(true);
+                })
+            })
+            
             context("the server responds with success", function() {
                 beforeEach(function() {
                     this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"resource":[{"id":"9"}], "status": "ok"}']);
