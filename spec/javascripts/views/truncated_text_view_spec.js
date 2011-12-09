@@ -1,3 +1,4 @@
+
 describe("chorus.views.TruncatedText", function() {
     beforeEach(function() {
         this.loadTemplate("truncated_text");
@@ -71,6 +72,13 @@ describe("chorus.views.TruncatedText", function() {
                 beforeEach(function() {
                     this.view = new chorus.views.TruncatedText({model: this.model, attribute: "summary", characters : 20, lines: 2 })
                     this.view.render();
+                    this.expectSimilarStrings = function(expectedDisplay, expectedTruncated) {
+                        var truncated = this.view.truncate(this.view.model.get("summary"), 20, 2);
+                        expect(truncated[0]).toBe(expectedDisplay);
+                        expect(truncated[1]).toBe(expectedTruncated);
+                        expect(this.view.$(".text").text().replace(/\s+/g, ' ')).toBe((expectedDisplay).replace(/\s+/g, ' '));
+                        expect(this.view.$(".truncated").text().replace(/\s+/g, ' ')).toBe((expectedTruncated).replace(/\s+/g, ' '));
+                    }
                 });
 
                 context("when the text has less than the maximum number of characters", function() {
@@ -89,13 +97,9 @@ describe("chorus.views.TruncatedText", function() {
                             this.model.set({summary : "1\n2\n3\n"});
                         });
 
-                        it("renders the first two lines of the text", function() {
-                            expect(this.view.$(".text").text()).toBe("1\n2");
+                        it("renders as expected", function() {
+                            this.expectSimilarStrings("1\n2", "\n3\n");
                         });
-
-                        it("renders the truncated text", function() {
-                            expect(this.view.$(".truncated").text()).toBe("\n3\n");
-                        })
                     });
                 });
 
@@ -105,12 +109,8 @@ describe("chorus.views.TruncatedText", function() {
                             this.model.set({summary : "1234567890123456789012345"});
                         });
 
-                        it("renders the first {limit} characters of the text", function() {
-                            expect(this.view.$(".text").text()).toBe("12345678901234567890");
-                        });
-
-                        it("renders the truncated text", function() {
-                            expect(this.view.$(".truncated").text()).toBe("12345");
+                        it("renders as expected", function() {
+                            this.expectSimilarStrings("12345678901234567890", "12345");
                         });
                     });
 
@@ -120,12 +120,8 @@ describe("chorus.views.TruncatedText", function() {
                                 this.model.set({summary : "123456789012\n4567890AB\nC\nD\nE"});
                             });
 
-                            it("renders the first {limit} characters of the text", function() {
-                                expect(this.view.$(".text").text()).toBe("123456789012\n4567890");
-                            });
-
-                            it("renders the truncated text", function() {
-                                expect(this.view.$(".truncated").text()).toBe("AB\nC\nD\nE");
+                            it("renders as expected", function() {
+                                this.expectSimilarStrings("123456789012\n4567890", "AB\nC\nD\nE");
                             });
                         });
 
@@ -134,12 +130,8 @@ describe("chorus.views.TruncatedText", function() {
                                 this.model.set({summary : "12345\n6789012\n3456789012345"});
                             });
 
-                            it("renders the first {limit} characters of the text", function() {
-                                expect(this.view.$(".text").text()).toBe("12345\n6789012");
-                            });
-
-                            it("renders the truncated text", function() {
-                                expect(this.view.$(".truncated").text()).toBe("\n3456789012345");
+                            it("renders as expected", function() {
+                                this.expectSimilarStrings("12345\n6789012", "\n3456789012345");
                             });
                         });
                     });
