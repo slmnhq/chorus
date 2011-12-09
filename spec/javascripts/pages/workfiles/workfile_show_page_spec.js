@@ -89,6 +89,9 @@ describe("chorus.pages.WorkfileShowPage", function() {
                 this.editSpy = jasmine.createSpy("file:edit");
                 this.page.mainContent.content.bind("file:edit", this.editSpy);
 
+                // In Jasmine with IE8, editor.focus causes a silent-ish failure
+                spyOn(this.page.mainContent.content.editor, 'focus');
+
                 this.page.mainContent.contentDetails.trigger("file:edit");
             });
 

@@ -1,33 +1,36 @@
 describe("chorus.Mixins.Events", function(){
-    beforeEach(function(){
-        this.source = {};
-        this.target = {};
 
-        _.extend(this.source, Backbone.Events, chorus.Mixins.Events);
-        _.extend(this.target, Backbone.Events, chorus.Mixins.Events);
+    describe("forwardEvent", function() {
+        beforeEach(function(){
+            this.source = {};
+            this.target = {};
 
-        this.source.forwardEvent("my_event", this.target);
-    });
+            _.extend(this.source, Backbone.Events, chorus.Mixins.Events);
+            _.extend(this.target, Backbone.Events, chorus.Mixins.Events);
 
-    it("triggers the event on the target, when the source is triggered", function(){
-        var spy = jasmine.createSpy("relay spy");
-        this.target.bind("my_event", spy);
-        this.source.trigger("my_event");
+            this.source.forwardEvent("my_event", this.target);
+        });
 
-        expect(spy).toHaveBeenCalled();
-    });
+        it("triggers the event on the target, when the source is triggered", function(){
+            var spy = jasmine.createSpy("relay spy");
+            this.target.bind("my_event", spy);
+            this.source.trigger("my_event");
 
-    it("triggers the event on the target, when the source is triggered, retaining arguments", function(){
-        var obj = {}
-        var spy = function(arg1, arg2) {
-            obj.arg1 = arg1
-            obj.arg2 = arg2
-        }
+            expect(spy).toHaveBeenCalled();
+        });
 
-        this.target.bind("my_event", spy);
-        this.source.trigger("my_event", 1, 2);
+        it("triggers the event on the target, when the source is triggered, retaining arguments", function(){
+            var obj = {}
+            var spy = function(arg1, arg2) {
+                obj.arg1 = arg1
+                obj.arg2 = arg2
+            }
 
-        expect(obj.arg1).toBe(1);
-        expect(obj.arg2).toBe(2);
+            this.target.bind("my_event", spy);
+            this.source.trigger("my_event", 1, 2);
+
+            expect(obj.arg1).toBe(1);
+            expect(obj.arg2).toBe(2);
+        });
     });
 });
