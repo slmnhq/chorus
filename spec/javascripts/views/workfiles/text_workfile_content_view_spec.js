@@ -5,6 +5,9 @@ describe("chorus.views.TextWorkfileContentView", function() {
         this.textfile = fixtures.modelFor("fetchText");
 
         this.view = new chorus.views.TextWorkfileContent({model: this.textfile});
+
+        // in IE8, we can't 'select' a textrange whose textarea is not on the DOM
+        if ($.browser.msie) { spyOn(window.TextRange.prototype, 'select'); }
     })
 
     describe("#render", function() {
