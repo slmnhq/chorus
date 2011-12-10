@@ -8,10 +8,7 @@
         },
 
         collectionModelContext: function(model) {
-            var archivedTimeMatch = model.get("archivedTimestamp") && model.get("archivedTimestamp").match(/(.+)\.\d{1,3}/);
-            if (archivedTimeMatch && archivedTimeMatch[1]) {
-                var timeAgo = Date.parse(archivedTimeMatch[1]).toRelativeTime()
-            }
+            var date = Date.parseFromApi(model.get("archivedTimestamp"));
 
             return {
                 imageUrl: model.defaultIconUrl(),
@@ -21,7 +18,7 @@
                 archiverFullName : model.archiver().get("fullName"),
                 truncatedSummary : model.truncatedSummary(100),
                 isTruncated: model.isTruncated(),
-                timeAgo : timeAgo
+                timeAgo : date && date.toRelativeTime()
             };
         },
 

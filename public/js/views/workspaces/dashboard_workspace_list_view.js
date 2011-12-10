@@ -7,10 +7,9 @@
         collectionModelContext: function(model) {
             return {
                 imageUrl : model.defaultIconUrl(),
-                showUrl : model.showUrl()
+                showUrl : model.showUrl(),
+                latestComment : model.get("latestCommentList")[0]
             }
         }
-
-
     });
 })(jQuery, chorus.views);

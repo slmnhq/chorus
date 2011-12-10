@@ -64,14 +64,8 @@
         },
 
         displayTimestamp: function(timestamp) {
-            var match = timestamp && timestamp.match(expectedDateFormat);
-            if (match && match[1]) {
-                return Date.parse(match[1], "yyyy-mm-dd H:m:s").toString("MMMM d")
-            } else {
-                // We could throw an exception here, but returning a bogus string
-                // makes it probably easier for the client to notice if/when parse fails.
-                return "WHENEVER";
-            }
+            var date = Date.parseFromApi(timestamp)
+            return date ? date.toString("MMMM d") : "WHENEVER"
         },
 
         moreLink: function(collection, max, more_key, less_key) {

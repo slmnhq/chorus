@@ -26,6 +26,13 @@ describe("WorkspaceSet", function() {
         });
     })
 
+    context("with showLatestComments", function() {
+        it("it sets the 'showLatestComments' param", function() {
+            this.collection.attributes.showLatestComments = true
+            expect(this.collection.url()).toBe("/edc/workspace/?showLatestComments=true&page=1&rows=50");
+        });
+    })
+
     context("with multiple paramaters", function(){
         it("it has correct Url when both are true", function() {
             this.collection.attributes.user = new chorus.models.User({id: 20});

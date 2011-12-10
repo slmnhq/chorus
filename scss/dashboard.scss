@@ -16,9 +16,42 @@ div[data-page="Dashboard"] {
         width: $workspace-list-width;
         font-weight: $semibold;
 
-        .dashboard_workspace_list > li:last-child {
-            border-bottom:  $dotted-list-item-border;
+        .dashboard_workspace_list {
+            li {
+                padding-bottom : 4px;
+                
+                .comment {
+                    line-height : 16px;
+                    padding-top : 3px;
+                    .count {
+                        font-size: 13px;
+                        font-weight: normal;
+                        color: $link-color;
+                    }
+
+                    .date {
+                        font-size: 12px;
+                        font-weight: normal;
+                        color: $dark-text-color;
+                    }
+
+                    .recent {
+                        font-size: 12px;
+                        font-weight: normal;
+                        color: $dark-text-color;
+
+                        .author {
+                            font-weight: $semibold;
+                        }
+                    }
+                }
+            }
+
+            > li:last-child {
+                border-bottom:  $dotted-list-item-border;
+            }
         }
+
         .content_footer {
             line-height : 27px;
             color: $link-color;

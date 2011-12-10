@@ -242,7 +242,47 @@
                     "resourcelink":"/edc/workspace/10013",
                     "pagination":null,
                     "version":"0.1"
+                },
+                fetchWithLatestComments : {
+                    "message":[],
+                    "status":"ok",
+                    "requestId":3697,
+                    "resource":[
+                        {
+                            "id":"10013",
+                            "ownerFullName":"EDC Admin",
+                            "name":"fortune",
+                            "description":"a cool workspace",
+                            "createdStamp":"2011-11-14",
+                            "owner":"edcadmin",
+                            "isPublic":true,
+                            "iconId":null,
+                            "state":1,
+                            "summary":"this is the workspace summary",
+                            "sandboxId":null,
+                            "active":true,
+                            "permission":["admin"],
+                            "latestCommentList": [{
+                                "timestamp": "2011-12-08 17:16:47",
+                                "id": 10050,
+                                "author": {
+                                    "id": "InitialUser",
+                                    "lastName": "Admin",
+                                    "firstName": "EDC"
+                                },
+                                "text": "This rocks, man",
+                                "attachments": [],
+                                "type": "NOTE",
+                                "comments": []
+                            }]
+                        }
+                    ],
+                    "method":"GET",
+                    "resourcelink":"/edc/workspace/10013",
+                    "pagination":null,
+                    "version":"0.1"
                 }
+
             },
 
             Workfile : {

@@ -42,8 +42,8 @@ describe("chorus.pages.DashboardPage", function() {
             expect(this.page.mainContent.workspaceList.collection).toBe(this.page.workspaceSet);
         })
 
-        it("only fetches active workspaces", function(){
-            expect(this.page.workspaceSet.attributes.active).toBeTruthy();
+        it("fetches active workspaces for the current user, including recent comments", function() {
+            expect(this.page.workspaceSet.attributes.showLatestComments).toBeTruthy();
         })
 
         it("should sort the workspaceSet by name Descending", function(){
@@ -51,12 +51,8 @@ describe("chorus.pages.DashboardPage", function() {
             expect(this.page.workspaceSet.sortOrder).toBe("asc");
         })
 
-        it("fetches workspaces for the logged in user", function(){
-            expect(this.page.workspaceSet.attributes.user).toBe(chorus.session.user());
-        })
-
         xit("fetches the right url when the sesison changes", function(){
-            console.log("there is a problem in testing the seams in login/fetch to triggering save")
+//            partyConsole.log("there is a problem in testing the seams in login/fetch to triggering save")
             chorus.session.set({id: 14})
             chorus.session.trigger("saved")
             //last request url should have user=14 in it

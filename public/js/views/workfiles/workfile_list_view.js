@@ -13,7 +13,7 @@
                 // e.g. the user clicks the item to highlight text
                 return;
             }
-            
+
             this.$("li").removeClass("selected");
             $(e.currentTarget).addClass("selected");
             var workfileId = $(e.currentTarget).data("id");
@@ -31,16 +31,12 @@
 
             var lastComment = model.lastComment();
             if (lastComment) {
-                var commentOnMatch = lastComment.get("commentCreatedStamp") && lastComment.get("commentCreatedStamp").match(/(.+)\.\d{1,3}/)
-                if (commentOnMatch && commentOnMatch[1]) {
-                    var commentOn = Date.parse(commentOnMatch[1]).toString("MMM d");
-                }
+                var date = Date.parseFromApi(lastComment.get("commentCreatedStamp"))
 
-                var commentOn =
                 ctx.lastComment = {
                     body : lastComment.get("body"),
                     creator : lastComment.creator(),
-                    on : commentOn
+                    on : date && date.toString("MMM d")
                 }
 
                 ctx.otherCommentCount = parseInt(model.get("commentCount")) - 1;

@@ -11,9 +11,16 @@
                 </a>
             </div>
 
-            <div class="details">
-
-            </div>
+            {{#if latestComment}}
+                <div class="comment">
+                    <div class="count">
+                        {{t "dashboard.workspaces.recent_comments" latestCommentList.length}}
+                    </div>
+                    <div class="recent">
+                        {{t "dashboard.workspaces.most_recent_on"}}<span class="date">{{displayTimestamp latestComment.timestamp}}</span> by <span class="author">{{displayNameFromPerson latestComment.author}}</span>
+                    </div>
+                </div>
+            {{/if}}
         </div>
         <span class="spacer"/>
     </li>
