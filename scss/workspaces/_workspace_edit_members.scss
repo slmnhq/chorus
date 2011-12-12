@@ -10,12 +10,13 @@
 
 $list-item-height: 39px;
 $list-border-width: 1px;
+$shuttle-width: 720px;
 
-
-.shuttle {
+.shuttle_widget {
     background-color: $body-background-color;
-    width: 720px;
+    width: $shuttle-width;
     border-bottom: 1px solid $list-border-color;
+    border-top: 1px solid $list-border-color;
 
     .was_added {
         color: $weak-text-color;
@@ -63,7 +64,7 @@ $list-border-width: 1px;
     overflow: auto;
 
     ul {
-        width : 48%;
+        width : $shuttle-width/2 - 2px;
         display : inline-block;
         vertical-align: top;
 

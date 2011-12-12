@@ -2,6 +2,7 @@
 (function(ns) {
     ns.dialogs.WorkspaceEditMembers = ns.dialogs.Base.extend({
         className : "workspace_edit_members",
+        title: t("workspace.edit_members.title"),
 
         makeModel : function () {
             this.collection = new chorus.models.UserSet();
