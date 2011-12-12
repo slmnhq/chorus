@@ -1,7 +1,11 @@
 <ul class="available">
     {{#each models}}
         <li data-id="{{id}}" {{#if isAdded}}class="added"{{/if}}>
-            {{name}}
+            <div class="image">
+                <img class="profile" src="{{{imageUrl}}}"/>
+                <img class="checkmark" src="/images/checkmark.png"/>
+            </div>
+            <span class="name">{{displayName}}</span>
             <a class="add" href="#">{{t "shuttle.add_entry"}}</a>
             <span class="was_added">{{t "shuttle.was_added"}}</span>
         </li>
@@ -12,7 +16,10 @@
 <ul class="selected">
     {{#each models}}
         <li data-id="{{id}}" {{#if isAdded}}class="added"{{/if}}>
-            {{name}}
+            <div class="image">
+                <img class="profile" src="{{{imageUrl}}}"/>
+            </div>
+            <span class="name">{{displayName}}</span>
             <a class="remove" href="#">{{t "shuttle.remove_entry"}}</a>
         </li>
     {{/each}}

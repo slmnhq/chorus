@@ -1,0 +1,128 @@
+@import "_common.scss";
+
+
+.workspace_edit_members {
+
+
+
+}
+
+
+$list-item-height: 39px;
+$list-border-width: 1px;
+
+
+.shuttle {
+    background-color: $body-background-color;
+    width: 720px;
+    border-bottom: 1px solid $list-border-color;
+
+    .was_added {
+        color: $weak-text-color;
+        float: right;
+    }
+
+    a {
+        float: right;
+    }
+
+    img.profile {
+        max-height: 100%;
+        max-width: 100%;
+        vertical-align: middle;
+        margin-top: -6px;
+    }
+
+    div.image {
+        position: relative;
+        display: inline-block;
+        padding: 2px;
+        width: $list-item-height - 6px;
+        height: $list-item-height - 6px;
+    }
+
+    .search {
+        padding: 4px 12px;
+        margin: 0;
+        height: 25px;
+        border-bottom: 1px solid $pagination-border-color;
+
+        input[type=text] {
+            margin: 0;
+            @include border-radius(12px);
+            font-size: 14px;
+            padding: 2px 4px 0px 29px;
+            background: url("/images/search-icon.png") no-repeat 9px 3px;
+            outline: none;
+            background-color: white;
+            border-color: $subheader-border-color;
+        }
+    }
+
+    max-height: (($list-item-height + $list-border-width) * 8) + $list-item-height;
+    overflow: auto;
+
+    ul {
+        width : 48%;
+        display : inline-block;
+        vertical-align: top;
+
+        li {
+            height: $list-item-height;
+            border-bottom: $list-border-width dotted $list-border-color;
+            padding: 0 8px;
+            line-height: $list-item-height;
+            @include ellipsis;
+
+            .name {
+                vertical-align: middle;
+                color: $dark-text-color;
+                font-size: 14px;
+                padding-left: 10px;
+            }
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+
+        &.available {
+            border-right: 1px solid $list-border-color;
+            
+            li {
+                img.checkmark {
+                    position: absolute;
+                    bottom: 0px;
+                    right: 0px;
+                }
+
+                &.added {
+                    a {
+                        display : none;
+                    }
+
+                    .was_added {
+                        display : inline;
+                    }
+                }
+
+                a {
+                    display : inline;
+                }
+
+                .was_added {
+                    display : none;
+                }
+            }
+        }
+
+        &.selected {
+            li {
+                display: none;
+                &.added {
+                    display: block;
+                }
+            }
+        }
+    }
+}

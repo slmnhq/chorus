@@ -10,6 +10,8 @@
         collectionModelContext : function(model) {
             var ctx = {};
             ctx.isAdded = _.include(this.options.selectedIDs, model.get("id"));
+            ctx.displayName = model.displayName();
+            ctx.imageUrl = model.imageUrl();
 
             return ctx;
         },

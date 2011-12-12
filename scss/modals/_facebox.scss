@@ -44,9 +44,11 @@
     .loading, .image {
         text-align: center;
     }
+}
 
+.dialog_facebox, .alert_facebox {
     img {
-       border: 0;
+        border: 0;
         margin: 0;
     }
 }
