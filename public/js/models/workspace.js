@@ -24,7 +24,7 @@
         },
 
         members: function(){
-            this._members = this._members || new chorus.models.MemberSet([], {workspace : this})
+            this._members = this._members || new chorus.models.MemberSet([], {workspaceId : this.get("id")})
             return this._members
         },
 
