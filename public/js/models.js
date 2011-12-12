@@ -3,7 +3,7 @@
         Collection: Backbone.Collection.extend(_.extend({}, chorus.Mixins.Events, {
             initialize: function(models, options) {
                 this.attributes = options || {};
-                this.setup(arguments);
+                this.setup.apply(this, arguments);
             },
 
             setup: $.noop,

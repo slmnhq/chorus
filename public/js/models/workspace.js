@@ -23,6 +23,11 @@
             });
         },
 
+        members: function(){
+            this._members = this._members || new chorus.models.MemberSet({workspace : this})
+            return this._members
+        },
+
         declareValidations : function(newAttrs) {
             this.require("name", newAttrs);
         },

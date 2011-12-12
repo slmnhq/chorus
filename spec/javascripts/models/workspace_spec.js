@@ -53,6 +53,21 @@ describe("chorus.models.Workspace", function() {
         });
     });
 
+    describe("#members", function() {
+        beforeEach(function() {
+            this.model.set({id: 5});
+            this.members = this.model.members();
+        });
+
+        it("has the right url", function() {
+            expect(this.model.members().url()).toContain("/edc/workspace/5/member");
+        });
+
+        it("memoizes", function() {
+            expect(this.members).toBe(this.model.members());
+        });
+    });
+
     describe("#hasImage", function() {
         it("returns false when the workspace's 'imageId' field is null", function() {
             this.model.set({ iconId: null });
