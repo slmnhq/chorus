@@ -6,7 +6,10 @@
 <div class='actions{{#if hasImage}} hidden{{/if}}'>
 <h1>{{name}}</h1>
 <ul>
-    {{#if canUpdate}}<li><a class="dialog" href="#" data-dialog="WorkspaceSettings">{{t "actions.edit_workspace"}}</a></li>{{/if}}
+    {{#if canUpdate}}
+        <li><a class="dialog" href="#" data-dialog="WorkspaceSettings">{{t "actions.edit_workspace"}}</a></li>
+        <li><a class="alert" href="#" data-alert="WorkspaceDelete">{{t "actions.delete_workspace"}}</a></li>
+    {{/if}}
     <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workspace" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
 </ul>
 </div>

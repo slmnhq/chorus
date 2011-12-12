@@ -45,8 +45,12 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
             });
 
             it("has a link to edit workspace settings", function() {
-                expect(this.view.$("a[data-dialog=WorkspaceSettings]").text().trim()).toMatchTranslation("actions.edit_workspace");
+                expect(this.view.$("a.dialog[data-dialog=WorkspaceSettings]").text().trim()).toMatchTranslation("actions.edit_workspace");
             });
+
+            it("has a link to delete the workspace", function() {
+                expect(this.view.$("a.alert[data-alert=WorkspaceDelete]").text().trim()).toMatchTranslation("actions.delete_workspace");
+            })
         });
 
         context("the current user does not have update permissions on the workspace", function() {
@@ -58,6 +62,10 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
             it("does not have a link to edit workspace settings", function() {
                 expect(this.view.$("a[data-dialog=WorkspaceSettings]").length).toBe(0);
             });
+
+            it("does not have a link to delete the workspace", function() {
+                expect(this.view.$("a[data-alert=WorkspaceDelete]").length).toBe(0);
+            })
         });
 
         it("has a link to add a note", function() {
