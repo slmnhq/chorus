@@ -1,0 +1,20 @@
+<ul class="available">
+    {{#each models}}
+        <li data-id="{{id}}" {{#if isAdded}}class="added"{{/if}}>
+            {{name}}
+            <a class="add" href="#">{{t "shuttle.add_entry"}}</a>
+            <span class="was_added">{{t "shuttle.was_added"}}</span>
+        </li>
+    {{/each}}
+</ul>
+
+
+<ul class="selected">
+    {{#each models}}
+        <li data-id="{{id}}" {{#if isAdded}}class="added"{{/if}}>
+            {{name}}
+            <a class="remove" href="#">{{t "shuttle.remove_entry"}}</a>
+        </li>
+    {{/each}}
+</ul>
+
