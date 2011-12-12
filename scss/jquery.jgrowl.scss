@@ -1,3 +1,4 @@
+@import "_common.scss";
 
 div.jGrowl {
 	padding: 			10px;
@@ -55,7 +56,7 @@ div.jGrowl.top-left {
 
 div.jGrowl.top-right {
 	right: 				0px;
-	top: 				0px;
+	top: 				$header-height;
 }
 
 div.jGrowl.bottom-left {
@@ -82,20 +83,18 @@ div.center div.jGrowl-notification, div.center div.jGrowl-closer {
 
 div.jGrowl div.jGrowl-notification, div.jGrowl div.jGrowl-closer {
 	background-color: 		#000;
-	opacity: 				.85;
-    -ms-filter: 			"progid:DXImageTransform.Microsoft.Alpha(Opacity=85)"; 
-    filter: 				progid:DXImageTransform.Microsoft.Alpha(Opacity=85); 
+	opacity: 				.71;
+    -ms-filter: 			"progid:DXImageTransform.Microsoft.Alpha(Opacity=71)"; 
+    filter: 				progid:DXImageTransform.Microsoft.Alpha(Opacity=71); 
 	zoom: 					1;
-	width: 					235px;
+	width: 					280px;
 	padding: 				10px;
 	margin-top: 			5px;
 	margin-bottom: 			5px;
-	font-family: 			Tahoma, Arial, Helvetica, sans-serif;
-	font-size: 				1em;
+	font-family: 			Myriad Pro;
+	font-size: 				14px;
 	text-align: 			left;
 	display: 				none;
-	-moz-border-radius: 	5px;
-	-webkit-border-radius:	5px;
 }
 
 div.jGrowl div.jGrowl-notification {

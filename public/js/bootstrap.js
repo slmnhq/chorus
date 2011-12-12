@@ -25,6 +25,8 @@
         }
     };
 
+    $.jGrowl.defaults.closerTemplate = '';
+
     _.mixin(_.str.exports());
 
     // set up string.trim if it doesn't exist.
