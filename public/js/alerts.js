@@ -4,7 +4,7 @@
         className : "alert",
 
         events : {
-            "click button.cancel" : "closeModal",
+            "click button.cancel" : "closeModal"
         },
 
 
@@ -36,6 +36,11 @@
         bindCallbacks : function() {
             this.model.bind("destroy", this.modelDeleted, this);
             this.model.bind("destroyFailed", this.render, this);
+        },
+
+        close : function() {
+            this.model.unbind("destroy", this.modelDeleted);
+            this.model.unbind("destroyFailed", this.render);
         },
 
         deleteModel : function (e) {

@@ -1,13 +1,19 @@
 ;(function(ns, $) {
     ns.Modal = ns.views.Base.extend({
         launchModal : function() {
+            var self = this;
+
             this.render();
             _.bind(this.revealed, this);
             $(document).one('reveal.facebox', this.revealed);
             $.facebox(this.el)
 
             ns.modal = this;
-            $(document).one('close.facebox', function(){delete ns.modal});
+
+            $(document).one('close.facebox', function() {
+                self.close();
+                delete ns.modal;
+            });
         },
 
         makeModel : function(options) {
@@ -21,6 +27,8 @@
             $(document).trigger("close.facebox");
         },
 
+        close : $.noop,
+        revealed : $.noop,
         bindPageModelCallbacks : $.noop
     })
 

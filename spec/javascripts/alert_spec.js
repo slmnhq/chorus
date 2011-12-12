@@ -73,8 +73,10 @@ describe("chorus.views.Alert", function() {
 describe("ModelDelete alert", function() {
     beforeEach(function() {
         this.loadTemplate("alert")
-        
-        this.alert = new chorus.alerts.ModelDelete({  model: new chorus.models.User() });
+        this.model = new chorus.models.User();
+        this.alert = new chorus.alerts.ModelDelete({  model: this.model });
+        stubModals();
+        this.alert.launchModal();
         this.alert.redirectUrl = "/partyTime"
         this.alert.text = "Are you really really sure?"
         this.alert.title = "A standard delete alert"
@@ -135,6 +137,19 @@ describe("ModelDelete alert", function() {
             it("does not dismiss the dialog", function() {
                 expect("close.facebox").not.toHaveBeenTriggeredOn($(document));
             })
+        })
+    })
+
+    describe("clicking cancel", function() {
+        beforeEach(function() {
+            this.alert.render();
+            this.alert.$("button.cancel").click();
+            spyOn(chorus.router, "navigate");
+            this.alert.model.trigger("destroy", this.alert.model);
+        })
+
+        it("unbinds events on the model", function() {
+            expect(chorus.router.navigate).not.toHaveBeenCalled();
         })
     })
 })
