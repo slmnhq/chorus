@@ -239,6 +239,21 @@ describe("handlebars", function() {
             })
         })
 
+        describe("relativeTimestamp", function() {
+            it("renders the relative timestamp", function() {
+                var tm = (50).hours().ago().toString("yyyy-MM-dd hh:mm:ss");
+                expect(Handlebars.helpers.relativeTimestamp(tm)).toBe("2 days ago");
+            })
+
+            it("tolerates bogus timestamps", function() {
+                expect(Handlebars.helpers.relativeTimestamp("yo momma")).toBe("WHENEVER");
+            })
+
+            it("tolerates undefined", function() {
+                expect(Handlebars.helpers.relativeTimestamp()).toBe("WHENEVER");
+            })
+        })
+
         describe("moreLink", function() {
             describe("when the collection has more than max elements", function() {
                 it("returns markup", function() {
