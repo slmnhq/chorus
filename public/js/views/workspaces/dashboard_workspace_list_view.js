@@ -5,10 +5,13 @@
         additionalClass : "list",
 
         collectionModelContext: function(model) {
+            var latestComment = model.get("latestCommentList")[0];
+
             return {
                 imageUrl : model.defaultIconUrl(),
                 showUrl : model.showUrl(),
-                latestComment : model.get("latestCommentList")[0]
+                latestComment : latestComment,
+                latestCommentTime : latestComment && Date.parseFromApi(latestComment.timestamp).toRelativeTime()
             }
         }
     });

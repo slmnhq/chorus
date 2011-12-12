@@ -3,6 +3,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
         this.loadTemplate("dashboard_workspace_list");
         fixtures.model = "Workspace"
         this.workspace = fixtures.modelFor("fetchWithLatestComments")
+        this.workspace.get("latestCommentList")[0].timestamp = (50).hours().ago().toString("yyyy-MM-dd hh:mm:ss");
         this.collection = new chorus.models.WorkspaceSet([this.workspace]);
         this.view = new chorus.views.DashboardWorkspaceList({collection : this.collection});
     });
@@ -29,8 +30,8 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                 expect(this.view.$("li:first-child .comment .count").text().trim()).toBe(t("dashboard.workspaces.recent_comments", 1))
             })
 
-            it("displays the full month and day of the most recent comment", function() {
-                expect(this.view.$("li:first-child .comment .recent .date").text().trim()).toBe("December 8")
+            it("displays the relative time of the most recent comment", function() {
+                expect(this.view.$("li:first-child .comment .recent .date").text().trim()).toBe("2 days ago")
             })
 
             it("displays the name of the most recent commenter", function() {
