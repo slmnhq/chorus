@@ -70,14 +70,23 @@ describe("chorus.views.TruncatedText", function() {
 
             context("with a maximum number of lines", function() {
                 beforeEach(function() {
+                    function textRegularize(str) {
+                        if ($.browser.msie) {
+                            // IE8 removes all leading whitespace, compresses any other whitespace
+                            return str.replace(/^\s+/, '').replace(/\s+/g, ' ');
+                        } else {
+                            return str;
+                        }
+                    }
+
                     this.view = new chorus.views.TruncatedText({model: this.model, attribute: "summary", characters : 20, lines: 2 })
                     this.view.render();
                     this.expectSimilarStrings = function(expectedDisplay, expectedTruncated) {
                         var truncated = this.view.truncate(this.view.model.get("summary"), 20, 2);
                         expect(truncated[0]).toBe(expectedDisplay);
                         expect(truncated[1]).toBe(expectedTruncated);
-                        expect(this.view.$(".text").text().replace(/\s+/g, ' ')).toBe((expectedDisplay).replace(/\s+/g, ' '));
-                        expect(this.view.$(".truncated").text().replace(/\s+/g, ' ')).toBe((expectedTruncated).replace(/\s+/g, ' '));
+                        expect(textRegularize(this.view.$(".text").text())).toBe(textRegularize(expectedDisplay));
+                        expect(textRegularize(this.view.$(".truncated").text())).toBe(textRegularize(expectedTruncated));
                     }
                 });
 
