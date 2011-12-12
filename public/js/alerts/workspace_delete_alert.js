@@ -10,8 +10,9 @@
             this.model = this.model || this.pageModel;
         },
 
-        setup : function() {
-            this.model.bind("destroy", this.showToast, this);
+        modelDeleted : function() {
+            this.showToast();
+            this._super("modelDeleted");
         },
 
         showToast : function() {
