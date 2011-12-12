@@ -21,8 +21,16 @@ describe("WorkspaceDelete", function() {
     describe("when the workspace deletion is successful", function() {
         beforeEach(function() {
             spyOn(chorus.router, "navigate");
+            spyOn($, 'jGrowl');
             spyOnEvent($(document), "close.facebox");
             this.alert.model.trigger("destroy", this.alert.model);
+        })
+
+        it("displays a toast message", function() {
+            expect($.jGrowl).toHaveBeenCalledWith(t("workspace.delete.toast", this.model.get("name")), {
+                sticky : false,
+                life : 5000
+            });
         })
 
         it("navigates to the dashboard", function() {

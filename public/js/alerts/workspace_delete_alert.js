@@ -8,6 +8,17 @@
         makeModel : function(options) {
             this._super("makeModel", options);
             this.model = this.model || this.pageModel;
+        },
+
+        setup : function() {
+            this.model.bind("destroy", this.showToast, this);
+        },
+
+        showToast : function() {
+            $.jGrowl(t("workspace.delete.toast", this.model.get("name")), {
+                life : 5000,
+                sticky : false
+            });
         }
     });
 })(jQuery, chorus.alerts);
