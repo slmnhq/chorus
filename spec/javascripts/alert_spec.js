@@ -81,6 +81,21 @@ describe("ModelDelete alert", function() {
         this.alert.ok = "Delete It!"
     });
 
+    describe("render", function() {
+        beforeEach(function() {
+            spyOn($.fn, 'focus');
+            this.alert.render();
+        })
+
+        it("focuses on the cancel button", function() {
+            var self = this;
+
+            waitsFor(function() {
+                return $.fn.focus.callCount && $.fn.focus.mostRecentCall.object.is("button.cancel");
+            }, "cancel button to get focus", 250);
+        })
+    })
+
     describe("clicking delete", function() {
         beforeEach(function() {
             this.alert.render();

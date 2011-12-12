@@ -46,6 +46,10 @@
         modelDeleted : function () {
             $(document).trigger("close.facebox");
             chorus.router.navigate(this.redirectUrl || "/", true);
+        },
+
+        postRender : function() {
+            _.defer(_.bind(function() {this.$("button.cancel").focus()}, this));
         }
     })
 })(chorus)
