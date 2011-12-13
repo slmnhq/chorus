@@ -13,6 +13,7 @@
             return {
                 imageUrl : this.pageModel.imageUrl(),
                 hasImage : this.pageModel.hasImage(),
+                members : this.pageModel.members().models,
                 permission :  ((this.pageModel.get("ownerId") == chorus.user.get("id")) || chorus.user.get("admin"))
             }
         },
@@ -25,10 +26,12 @@
                 spinnerSmall: true
             });
             this.pageModel.bind("saved", this.closeModal, this);
+            this.model.members().fetch();
         },
 
         postRender : function() {
             this.$(".edit_photo").html(this.imageUpload.render().el);
+            this.$("select.owner").val(this.model.get("ownerId"));
         },
 
         updateWorkspace : function(e) {
@@ -39,6 +42,7 @@
                 name: this.$("input[name=name]").val().trim(),
                 summary: this.$("textarea[name=summary]").val().trim(),
                 isPublic : !!this.$("input[name=isPublic]").is(":checked"),
+                ownerId : this.$("select.owner").val(),
                 active: active,
                 archived: !active
             });

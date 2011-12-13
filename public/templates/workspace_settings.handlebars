@@ -23,6 +23,13 @@
         </div>
     </div>
 
+    <label>Owner</label>
+    <select name="owner" class="owner">
+        {{#each members}}
+            <option value={{id}}>{{displayNameFromPerson attributes}}</option>
+        {{/each}}
+    </select>
+
     <div class="workspace_status">
         <label>{{t "workspace.settings.status"}}</label>
         <div class="radio">

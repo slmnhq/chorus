@@ -60,6 +60,10 @@ $image-width : 230px;
         font-size: 14px;
     }
 
+    select.owner {
+        display: block;
+    }
+
     .workspace_status {
         padding-top: 10px;
         display: inline-block;

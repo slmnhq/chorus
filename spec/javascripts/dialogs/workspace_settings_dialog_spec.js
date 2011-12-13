@@ -2,9 +2,24 @@ describe("WorkspaceSettings", function() {
     beforeEach(function() {
         this.launchElement = $("<a></a>");
         this.workspace = new chorus.models.Workspace({name: "my name", summary: "my summary", id: "457"});
+        this.workspace.set({ ownerId : '12' });
+        this.members = this.workspace.members();
+        this.members.add([
+                         new chorus.models.User({ id: 11, firstName: "Mikey", lastName: "B" }),
+                         new chorus.models.User({ id: 12, firstName: "Deborah", lastName: "D" }),
+                         new chorus.models.User({ id: 13, firstName: "Richard", lastName: "G" })
+        ]);
+
         this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement : this.launchElement, pageModel : this.workspace });
         this.loadTemplate("workspace_settings");
         this.loadTemplate("image_upload");
+    });
+
+    describe("#setup", function() {
+        it("fetches the workspace's members", function() {
+            this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement : this.launchElement, pageModel : this.workspace });
+            expect(_.last(this.server.requests).url).toBe(this.workspace.members().url());
+        });
     });
 
     describe("#render", function() {
@@ -26,6 +41,29 @@ describe("WorkspaceSettings", function() {
 
         it("renders the archiving instructions", function() {
             expect(this.dialog.$(".archived_text").text().trim()).toMatchTranslation("workspace.settings.archived_description");
+        });
+
+        describe("the owner select", function() {
+            it("shows up", function() {
+                expect(this.dialog.$("select.owner")).toExist();
+            });
+
+            it("has an option for each member", function() {
+                var options = this.dialog.$("select.owner option");
+                expect(options.length).toBe(3);
+
+                expect(options.eq(0).text()).toBe("Mikey B");
+                expect(options.eq(1).text()).toBe("Deborah D");
+                expect(options.eq(2).text()).toBe("Richard G");
+
+                expect(options.eq(0).val()).toBe("11");
+                expect(options.eq(1).val()).toBe("12");
+                expect(options.eq(2).val()).toBe("13");
+            });
+
+            it("defaults to the current owner", function() {
+                expect(this.dialog.$("select.owner").val()).toBe("12");
+            });
         });
 
         context("when the workspace is public", function() {
@@ -216,6 +254,7 @@ describe("WorkspaceSettings", function() {
                 spyOn(this.dialog.pageModel, "save").andCallThrough();
                 this.dialog.$("input[name=name]").val("my modified name");
                 this.dialog.$("textarea[name=summary]").val("my modified summary");
+                this.dialog.$("select.owner").val('13');
                 this.dialog.$('form').submit();
             })
 
@@ -229,6 +268,10 @@ describe("WorkspaceSettings", function() {
 
             it("sets the name on the workspace", function() {
                 expect(this.dialog.pageModel.get("summary")).toBe("my modified summary");
+            });
+
+            it("sets the owner id on the workspace", function() {
+                expect(this.dialog.pageModel.get("ownerId")).toBe("13");
             });
 
             it("does not close the dialog before the server responds", function() {
@@ -317,6 +360,7 @@ describe("WorkspaceSettings", function() {
                 });
             });
         });
+
         context("submitting the form with invalid data", function() {
             beforeEach(function() {
                 this.validatedSpy = jasmine.createSpy("validated");
