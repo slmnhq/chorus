@@ -3,8 +3,8 @@ describe("chorus.views.ShuttleWidget", function() {
         this.loadTemplate("shuttle_widget")
         fixtures.model = "UserSet";
         this.collection = fixtures.modelFor("fetch");
-        this.selectedIDs = ["10001"];
-        this.view = new chorus.views.ShuttleWidget({ collection : this.collection, selectedIDs : this.selectedIDs });
+        this.selectedItems = new Backbone.Collection([this.collection.get("10001")]);
+        this.view = new chorus.views.ShuttleWidget({ collection : this.collection, selectionSource : this.selectedItems });
     });
 
     describe("#render", function() {
@@ -17,11 +17,11 @@ describe("chorus.views.ShuttleWidget", function() {
         });
 
         it("renders an li for each item in the selected list", function() {
-            expect(this.view.$("ul.selected li.added").length).toBe(this.selectedIDs.length);
+            expect(this.view.$("ul.selected li.added").length).toBe(this.selectedItems.length);
         });
 
         it("adds the added class to each available item that is in the selected ID list", function() {
-            expect(this.view.$("ul.available li.added").length).toBe(this.selectedIDs.length);
+            expect(this.view.$("ul.available li.added").length).toBe(this.selectedItems.length);
         });
 
         it("returns the original list of selected IDs", function() {

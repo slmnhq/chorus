@@ -9,9 +9,15 @@
             "click a.remove_all" : "removeAll"
         },
 
+        setup : function() {
+            this.selectionSource = this.options.selectionSource;
+            this.selectionSource.bind("reset", this.render);
+        },
+
         collectionModelContext : function(model) {
             var ctx = {};
-            ctx.isAdded = _.include(this.options.selectedIDs, model.get("id"));
+            var selections = this.selectionSource.map(function(item) { return item.get("id")});
+            ctx.isAdded = _.include(selections, model.get("id"));
             ctx.displayName = model.displayName();
             ctx.imageUrl = model.imageUrl();
 
