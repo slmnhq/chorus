@@ -5,7 +5,7 @@
     </div>
 
     <div class="summary">
-        {{objectName}}: {{t "shuttle.selected" length}}
+        <span class='object_name'>{{objectName}}:</span> <span class="selected_count"/>
         <a class="remove_all" href="#">{{t "shuttle.remove_all"}}</a>
     </div>
 </div>
@@ -17,7 +17,7 @@
                 <img class="profile" src="{{{imageUrl}}}"/>
                 <img class="checkmark" src="/images/checkmark.png"/>
             </div>
-            <span class="name">{{displayName}}</span>
+            <div class="name">{{displayName}}</div>
             <a class="add" href="#">{{t "shuttle.add_entry"}}</a>
             <span class="was_added">{{t "shuttle.was_added"}}</span>
         </li>
@@ -31,7 +31,7 @@
             <div class="image">
                 <img class="profile" src="{{{imageUrl}}}"/>
             </div>
-            <span class="name">{{displayName}}</span>
+            <div class="name">{{displayName}}</div>
             <a class="remove" href="#">{{t "shuttle.remove_entry"}}</a>
         </li>
     {{/each}}

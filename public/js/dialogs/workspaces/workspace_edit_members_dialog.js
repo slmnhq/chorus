@@ -19,7 +19,8 @@
         setup : function() {
             this.shuttle = new ns.views.ShuttleWidget({
                 collection : this.collection,
-                selectionSource : this.members
+                selectionSource : this.members,
+                objectName : t("workspace.members")
             });
         },
 

@@ -24,6 +24,14 @@
             return ctx;
         },
 
+        additionalContext : function() {
+            return { objectName: this.options.objectName };
+        },
+
+        postRender : function() {
+            this._updateLabels();
+        },
+
         toggleAdd : function(e) {
             e.preventDefault();
 
@@ -32,6 +40,8 @@
             var isAdding = target.closest("ul").hasClass("available");
 
             this.$("li[data-id='" + id + "']").toggleClass("added", isAdding);
+
+            this._updateLabels();
         },
 
         getSelectedIDs : function() {
@@ -44,12 +54,18 @@
         addAll : function(e) {
             e.preventDefault();
             this.$("li").addClass("added");
+            this._updateLabels();
         },
 
         removeAll : function(e) {
             e.preventDefault();
 
             this.$("li").removeClass("added");
+            this._updateLabels();
+        },
+
+        _updateLabels : function() {
+            this.$(".selected_count").text(this.$("ul.selected li.added").length);
         }
     })
 })(jQuery, chorus);
