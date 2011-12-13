@@ -1,7 +1,7 @@
 (function($, ns) {
-    ns.ActivityList = chorus.views.Base.extend({
+    ns.SidebarActivityList = chorus.views.Base.extend({
         tagName : "ul",
-        className : "activity_list",
+        className : "sidebar_activity_list",
 
         events : {
             "click .morelinks a.more,.morelinks a.less" : "toggleCommentList",

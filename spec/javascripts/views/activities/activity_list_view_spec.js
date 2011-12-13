@@ -1,13 +1,13 @@
-describe("chorus.views.ActivityList", function() {
+describe("chorus.views.SidebarActivityList", function() {
     beforeEach(function() {
-        this.loadTemplate("activity_list");
+        this.loadTemplate("sidebar_activity_list");
         fixtures.model = 'ActivitySet';
     });
 
     describe("#render", function() {
         beforeEach(function() {
             this.collection = fixtures.modelFor('fetch');
-            this.view = new chorus.views.ActivityList({collection: this.collection});
+            this.view = new chorus.views.SidebarActivityList({collection: this.collection});
         });
 
         describe("before the collection has loaded", function() {
@@ -150,7 +150,7 @@ describe("chorus.views.ActivityList", function() {
             this.collection = fixtures.modelFor('fetch');
             var comments = this.collection.at(0).get("comments");
             comments.push(comments[0]);
-            this.view = new chorus.views.ActivityList({collection: this.collection});
+            this.view = new chorus.views.SidebarActivityList({collection: this.collection});
             this.view.render();
         })
 

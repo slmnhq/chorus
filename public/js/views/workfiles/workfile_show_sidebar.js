@@ -6,7 +6,7 @@
             this.collection = this.model.activities();
             this.collection.fetch();
             this.collection.bind("changed", this.render, this);
-            this.activityList = new ns.views.ActivityList({ collection : this.collection });
+            this.activityList = new ns.views.SidebarActivityList({ collection : this.collection });
         },
 
         additionalContext : function(ctx) {

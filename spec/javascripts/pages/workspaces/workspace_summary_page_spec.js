@@ -9,6 +9,7 @@ describe("chorus.pages.WorkspaceSummaryPage", function() {
         this.loadTemplate("logged_in_layout");
         this.loadTemplate("header");
         this.loadTemplate("sub_nav");
+        this.loadTemplate("sidebar_activity_list");
     })
 
     describe("#initialize", function() {
