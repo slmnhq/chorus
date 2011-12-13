@@ -49,11 +49,20 @@ $shuttle-width: 720px;
         .selected_count {
             padding-left: 5px;
         }
+
+        a {
+            font-weight: $semibold;
+        }
+    }
+
+    a {
+        font-size: 12px;
     }
 
     .was_added {
         color: $weak-text-color;
         float: right;
+        font-size: 12px;
     }
 
     li a {
