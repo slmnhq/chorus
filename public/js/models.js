@@ -110,6 +110,19 @@
                 return prefix + Handlebars.compile(this.showUrlTemplate)(this.attributes);
             },
 
+            activities : function() {
+                if (!this._activities) {
+                    if (!this.entityType) {
+                        throw "Cannot create activities without having an entityType";
+                    }
+
+                    this._activities = new chorus.models.ActivitySet([], { entityType : this.entityType, entityId : this.get("id") });
+                    this.bind("invalidated", this._activities.fetch, this._activities)
+                }
+
+                return this._activities;
+            },
+
             parse: function(data) {
                 if (data.status == "needlogin") {
                     chorus.session.trigger("needsLogin");

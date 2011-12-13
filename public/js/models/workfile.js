@@ -3,6 +3,8 @@
     var textRegex = /^text\//;
 
     ns.Workfile = chorus.models.Base.extend({
+        entityType : "workfile",
+        
         initialize : function() {
             this.workspace = new chorus.models.Workspace({id: this.get("workspaceId")})
             this.urlTemplate = this.workspace.url(true) + "/workfile/{{id}}"
@@ -30,15 +32,6 @@
 
         declareValidations : function(newAttrs){
             this.require("fileName", newAttrs);
-        },
-
-        activities : function() {
-            if (!this._activities) {
-                this._activities = new chorus.models.ActivitySet([], { entityType : "workfile", entityId : this.get("id") });
-                this.bind("invalidated", this._activities.fetch, this._activities)
-            }
-
-            return this._activities;
         },
 
         attrToLabel : {

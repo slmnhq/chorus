@@ -44,28 +44,6 @@ describe("chorus.models.Workfile", function() {
         });
     });
 
-    describe("#activities", function() {
-        beforeEach(function() {
-            this.model.set({ id : "1074" });
-            this.activitySet = this.model.activities();
-        });
-
-        it("has the right 'entityType' and 'entityId'", function() {
-            expect(this.activitySet.attributes.entityType).toBe("workfile");
-            expect(this.activitySet.attributes.entityId).toBe("1074");
-        });
-
-        describe("when the workfile is invalidated", function() {
-            beforeEach(function() {
-                this.model.trigger("invalidated");
-            })
-
-            it("fetches the activities", function() {
-                expect(_.last(this.server.requests).url).toBe(this.activitySet.url());
-            })
-        })
-    });
-
     describe("validation", function() {
         beforeEach(function() {
             spyOn(this.model, "require").andCallThrough();
