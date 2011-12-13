@@ -46,11 +46,6 @@
                 active: active,
                 archived: !active
             });
-        },
-
-        makeModel: function(options) {
-            this._super("makeModel", options)
-            this.model = this.pageModel;
         }
     });
 })(chorus);

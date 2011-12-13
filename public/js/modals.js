@@ -19,7 +19,9 @@
         makeModel : function(options) {
             if (options && options.pageModel) {
                 this.pageModel = options.pageModel;
+                this.model = this.model || this.pageModel;
             }
+
             this.bindPageModelCallbacks();
         },
 
