@@ -8,7 +8,7 @@
         },
 
         setup : function() {
-            $("html").bind("chorus:menu:popup", _.bind(this.popupEventHandler, this))
+            $(document).bind("chorus:menu:popup", _.bind(this.popupEventHandler, this))
         },
 
         context : function(){
@@ -25,10 +25,12 @@
         },
 
         popupLinkClicked : function(ev){
+            this.poppingUp = true;
+
             var becomingVisible = this.$(".menu").hasClass("hidden");
 
             ev.preventDefault();
-            ev.stopImmediatePropagation();
+            ev.stopPropagation();
             this.togglePopup();
 
             this.triggerPopupEvent();
@@ -38,6 +40,8 @@
             } else {
                 this.releaseClicks();
             }
+
+            this.poppingUp = false;
         },
 
         togglePopup : function() {
@@ -45,7 +49,7 @@
         },
 
         captureClicks : function() {
-            $("html").bind("click.popup_menu", _.bind(this.dismissMenu, this));
+            $(document).bind("click.popup_menu", _.bind(this.dismissMenu, this));
         },
 
         dismissMenu : function(ev) {
@@ -54,15 +58,15 @@
         },
 
         releaseClicks : function () {
-            $("html").unbind("click.popup_menu");
+            $(document).unbind("click.popup_menu");
         },
 
         triggerPopupEvent : function(ev) {
-            $("html").trigger("chorus:menu:popup", this.$(".popup"));
+            $(document).trigger("chorus:menu:popup", this.$(".popup"));
         },
 
         popupEventHandler : function(ev, el) {
-            if (!$(el).is(this.$(".popup")) && !this.$(".menu").hasClass("hidden")) {
+            if (!$(el).is(this.$(".popup")) && !this.$(".menu").hasClass("hidden") && !this.poppingUp) {
                 this.togglePopup();
                 this.releaseClicks();
             }

@@ -90,11 +90,17 @@ describe("chorus.views.Header", function() {
 
         describe("when clicked", function() {
             beforeEach(function() {
+                this.popupSpy = jasmine.createSpy();
+                $(document).bind("chorus:menu:popup", this.popupSpy);
                 this.view.$(".username a").click();
             })
 
             it("shows a popup menu", function() {
                 expect(this.view.$(".menu.popup_username")).not.toHaveClass("hidden");
+            })
+
+            it("triggers chorus:menu:popup on the document", function() {
+                expect(this.popupSpy).toHaveBeenCalled();
             })
 
             describe("and when clicked again", function(){
@@ -112,16 +118,34 @@ describe("chorus.views.Header", function() {
                 expect(this.view.$(".menu.popup_username a[href='#/logout']").text()).toBe(t("header.sign_out"));
             });
         });
+
+        describe("chorus:menu:popup handling", function() {
+            beforeEach(function() {
+                this.view.$(".username a").click();
+                expect(this.view.$(".menu.popup_username")).not.toHaveClass("hidden");
+                $(document).trigger("chorus:menu:popup", $(""));
+            })
+
+            it("dismisses the popup", function() {
+                expect(this.view.$(".menu.popup_username")).toHaveClass("hidden");
+            })
+        })
     })
 
     describe("account", function(){
         describe("when clicked", function() {
             beforeEach(function() {
+                this.popupSpy = jasmine.createSpy();
+                $(document).bind("chorus:menu:popup", this.popupSpy);
                 this.view.$(".account a").click();
             })
 
             it("shows a popup menu", function() {
                 expect(this.view.$(".menu.popup_account")).not.toHaveClass("hidden");
+            })
+
+            it("triggers chorus:menu:popup on the document", function() {
+                expect(this.popupSpy).toHaveBeenCalled();
             })
 
             describe("and when clicked again", function(){
@@ -143,6 +167,18 @@ describe("chorus.views.Header", function() {
                 expect(this.view.$(".menu.popup_account a[href='#/users']").text()).toBe(t("header.users_list"));
             });
         });
+
+        describe("chorus:menu:popup handling", function() {
+            beforeEach(function() {
+                this.view.$(".account a").click();
+                expect(this.view.$(".menu.popup_account")).not.toHaveClass("hidden");
+                $(document).trigger("chorus:menu:popup", $(""));
+            })
+
+            it("dismisses the popup", function() {
+                expect(this.view.$(".menu.popup_account")).toHaveClass("hidden");
+            })
+        })
     });
 
     describe("multiple popups", function(){

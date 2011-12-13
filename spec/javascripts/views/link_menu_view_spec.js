@@ -58,12 +58,18 @@ describe("chorus.views.LinkMenu", function() {
 
             describe("clicking the popup link", function() {
                 beforeEach(function() {
+                    this.popupSpy = jasmine.createSpy();
+                    $(document).bind("chorus:menu:popup", this.popupSpy);
                     this.view.$("a.popup").click();
                 });
 
                 it("shows the popup menu", function() {
                     expect(this.view.$(".menu")).not.toHaveClass("hidden");
                 });
+
+                it("triggers chorus:menu:popup on the document", function() {
+                    expect(this.popupSpy).toHaveBeenCalled();
+                })
 
                 describe("clicking on the link again", function() {
                     beforeEach(function() {
@@ -99,6 +105,18 @@ describe("chorus.views.LinkMenu", function() {
                         expect(this.view.$(".menu li[data-type=joanne] .check")).not.toHaveClass("hidden")
                     });
                 });
+            })
+
+            describe("chorus:menu:popup handling", function() {
+                beforeEach(function() {
+                    this.view.$("a.popup").click();
+                    expect(this.view.$(".menu")).not.toHaveClass("hidden");
+                    $(document).trigger("chorus:menu:popup", $(""));
+                })
+
+                it("dismisses the popup", function() {
+                    expect(this.view.$(".menu")).toHaveClass("hidden");
+                })
             })
         })
     });
