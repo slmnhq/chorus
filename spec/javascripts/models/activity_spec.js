@@ -8,5 +8,9 @@ describe("chorus.models.Activity", function() {
         it("creates a user", function() {
             expect(this.model.author().displayName()).toBe("EDC Admin");
         });
+
+        it("returns the same instance when called multiple times", function() {
+            expect(this.model.author()).toBe(this.model.author());
+        });
     })
 });
