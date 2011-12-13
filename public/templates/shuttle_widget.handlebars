@@ -17,7 +17,7 @@
                 <img class="profile" src="{{{imageUrl}}}"/>
                 <img class="checkmark" src="/images/checkmark.png"/>
             </div>
-            <div class="name">{{displayName}}</div>
+            <div class="name" title="{{displayName}}">{{displayName}}</div>
             <a class="add" href="#">{{t "shuttle.add_entry"}}</a>
             <span class="was_added">{{t "shuttle.was_added"}}</span>
         </li>
@@ -31,9 +31,8 @@
             <div class="image">
                 <img class="profile" src="{{{imageUrl}}}"/>
             </div>
-            <div class="name">{{displayName}}</div>
+            <div class="name" title="{{displayName}}">{{displayName}}</div>
             <a class="remove" href="#">{{t "shuttle.remove_entry"}}</a>
         </li>
     {{/each}}
 </ul>
-

@@ -110,6 +110,10 @@ $shuttle-width: 720px;
             &:last-child {
                 border-bottom: none;
             }
+
+            &.filtered_out {
+                display: none;
+            }
         }
 
         &.available {
