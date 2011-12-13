@@ -39,6 +39,11 @@
             return this.imageUrl();
         },
 
+        savePassword : function(attrs){
+            var passwordUrl = this.url() + "/password";
+            this.save(attrs, { url : passwordUrl });
+        },
+
         displayName : function() {
             return [this.get("firstName"), this.get("lastName")].join(' ');
         },

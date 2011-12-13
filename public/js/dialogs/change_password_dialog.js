@@ -10,9 +10,8 @@
         save: function(e) {
             e.preventDefault();
 
-            var user = this.pageModel;
-            user.bind("saved", this.saved, this);
-            user.save({
+            this.model.bind("saved", this.saved, this);
+            this.model.savePassword({
                 password : this.$("input[name=password]").val(),
                 passwordConfirmation: this.$("input[name=passwordConfirmation]").val()
             })

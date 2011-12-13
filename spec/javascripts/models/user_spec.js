@@ -57,6 +57,17 @@ describe("chorus.models.User", function() {
         });
     });
 
+    describe("#savePassword", function() {
+        it("PUTs to the right URL", function() {
+            this.model = fixtures.modelFor('fetch')
+            this.model.savePassword({
+                password: "w1zZz4rd",
+                passwordConfirmation: "w1zZz4rd"
+            });
+            expect(_.last(this.server.requests).url).toBe("/edc/user/42/password");
+        });
+    });
+
     describe("#destroy", function() {
         it("should make a delete request", function() {
             //testing that the idAttribute is set properly
