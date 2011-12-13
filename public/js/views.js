@@ -13,21 +13,37 @@
         postRender: $.noop,
         bindCallbacks: $.noop,
         preRender: $.noop,
+        setupSubviews : $.noop,
 
-        context : function() {
-            return {}
-        },
+        context : {},
+        subviews : {},
 
         render: function render() {
             this.preRender($(this.el));
 
-            var evaluatedContext = typeof(this.context) === 'function' ? this.context() : this.context;
+            var evaluatedContext = _.isFunction(this.context) ? this.context() : this.context;
             $(this.el).html(this.template(evaluatedContext))
                 .addClass(this.className)
                 .attr("title", this.options.title || this.title || "")
                 .addClass(this.additionalClass || "");
+            this.renderSubviews();
             this.postRender($(this.el));
             return this;
+        },
+
+        renderSubviews: function() {
+            var self = this;
+            this.setupSubviews();
+            _.each(this.subviews, function(property, selector){
+                var view = _.isFunction(self[property]) ? self[property]() : self[property];
+                if (view) {
+                    var element = self.$(selector);
+                    var id = element.attr("id"), klass = element.attr("class");
+                    element.replaceWith(view.render().el);
+                    $(view.el).attr({id: id, class: klass});
+                    view.delegateEvents();
+                }
+            });
         },
 
         template: function template(content) {
