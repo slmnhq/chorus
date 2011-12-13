@@ -39,7 +39,7 @@ describe("chorus.views.ShuttleWidget", function() {
                 expect(this.view.$("ul.available li[data-id='10002']")).toHaveClass("added");
             });
 
-            it("adds the 'added' class to the corresponding li in the selected ul", function(){
+            it("adds the 'added' class to the corresponding li in the selected ul", function() {
                 expect(this.view.$("ul.selected li[data-id='10002']")).toHaveClass("added");
             });
 
@@ -60,13 +60,35 @@ describe("chorus.views.ShuttleWidget", function() {
                 expect(this.view.$("ul.selected li[data-id='10001']")).not.toHaveClass("added");
             });
 
-            it("removes the 'added' class from the corresponding li in the 'available' ul", function(){
+            it("removes the 'added' class from the corresponding li in the 'available' ul", function() {
                 expect(this.view.$("ul.available li[data-id='10001']")).not.toHaveClass("added");
             });
 
             it("returns the new list of selected IDs", function() {
                 var selected = this.view.getSelectedIDs();
                 expect(selected.length).toBe(0);
+            });
+        });
+
+        describe("clicking the Add all link", function() {
+            beforeEach(function() {
+                this.view.$('a.add_all').click();
+            });
+
+            it("adds all the members", function() {
+                expect(this.view.$('ul.selected li.added').length).toBe(3);
+                expect(this.view.$('ul.available li.added').length).toBe(3);
+            });
+        });
+
+        describe("clicking the remove all link", function() {
+            beforeEach(function() {
+                this.view.$('a.remove_all').click();
+            });
+
+            it("removes all the members", function() {
+                expect(this.view.$('ul.selected li.added').length).toBe(0);
+                expect(this.view.$('ul.available li.added').length).toBe(0);
             });
         });
     });

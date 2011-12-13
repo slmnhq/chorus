@@ -4,7 +4,9 @@
 
         events : {
             "click a.add" : "toggleAdd",
-            "click a.remove" : "toggleAdd"
+            "click a.remove" : "toggleAdd",
+            "click a.add_all" : "addAll",
+            "click a.remove_all" : "removeAll"
         },
 
         collectionModelContext : function(model) {
@@ -31,6 +33,17 @@
             return _.map(selectedItems, function(item) {
                 return $(item).data("id").toString();
             });
+        },
+
+        addAll : function(e) {
+            e.preventDefault();
+            this.$("li").addClass("added");
+        },
+
+        removeAll : function(e) {
+            e.preventDefault();
+
+            this.$("li").removeClass("added");
         }
     })
 })(jQuery, chorus);

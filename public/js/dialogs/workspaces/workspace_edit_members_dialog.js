@@ -4,6 +4,10 @@
         className : "workspace_edit_members",
         title: t("workspace.edit_members.title"),
 
+        events : {
+            "click button.submit" : "updateMembers"
+        },
+
         makeModel : function () {
             this.collection = new chorus.models.UserSet();
             this.collection.fetchAll();
@@ -21,6 +25,10 @@
         postRender : function() {
             this.$(".shuttle").html(this.shuttle.render().el);
             this.shuttle.delegateEvents();
+        },
+
+        updateMembers : function() {
+
         }
     });
 })(chorus)

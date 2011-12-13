@@ -50,7 +50,11 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
 
             it("has a link to delete the workspace", function() {
                 expect(this.view.$("a.alert[data-alert=WorkspaceDelete]").text().trim()).toMatchTranslation("actions.delete_workspace");
-            })
+            });
+
+            it("has a link to edit members of the workspace", function() {
+                expect(this.view.$("a.dialog[data-dialog=WorkspaceEditMembers]").text().trim()).toMatchTranslation("workspace.edit_members");
+            });
         });
 
         context("the current user does not have update permissions on the workspace", function() {
@@ -65,6 +69,10 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
 
             it("does not have a link to delete the workspace", function() {
                 expect(this.view.$("a[data-alert=WorkspaceDelete]").length).toBe(0);
+            })
+
+            it("does not have a link to edit the workspace members", function() {
+                expect(this.view.$("a[data-dialog=WorkspaceEditMembers]").length).toBe(0);
             })
         });
 

@@ -1,3 +1,15 @@
+<div class="shuttle_header">
+    <div class="search">
+        <input type="text"/>
+        <a class="add_all" href="#">{{t "shuttle.add_all"}}</a>
+    </div>
+
+    <div class="summary">
+        {{objectName}}: {{t "shuttle.selected" length}}
+        <a class="remove_all" href="#">{{t "shuttle.remove_all"}}</a>
+    </div>
+</div>
+
 <ul class="available">
     {{#each models}}
         <li data-id="{{id}}" {{#if isAdded}}class="added"{{/if}}>

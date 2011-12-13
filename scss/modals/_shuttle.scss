@@ -1,13 +1,5 @@
 @import "_common.scss";
 
-
-.workspace_edit_members {
-
-
-
-}
-
-
 $list-item-height: 39px;
 $list-border-width: 1px;
 $shuttle-width: 720px;
@@ -18,12 +10,45 @@ $shuttle-width: 720px;
     border-bottom: 1px solid $list-border-color;
     border-top: 1px solid $list-border-color;
 
+    .shuttle_header {
+        border-bottom: 1px solid $list-border-color;
+        .search {
+             padding: 4px 12px;
+             margin: 0;
+             height: 25px;
+             border-right: 1px solid $list-border-color;
+
+             input[type=text] {
+                 width: 70%;
+                 display: inline-block;
+                 margin: 0;
+                 @include border-radius(12px);
+                 font-size: 14px;
+                 padding: 2px 4px 0px 29px;
+                 background: url("/images/search-icon.png") no-repeat 9px 3px;
+                 outline: none;
+                 background-color: white;
+                 border-color: $subheader-border-color;
+             }
+        }
+
+         > div {
+            vertical-align: middle;
+            width: $shuttle-width / 2 - 26px;
+            display: inline-block;
+            line-height: 25px;
+            a {
+               float: right;
+            }
+        }
+    }
+
     .was_added {
         color: $weak-text-color;
         float: right;
     }
 
-    a {
+    li a {
         float: right;
     }
 
@@ -42,23 +67,6 @@ $shuttle-width: 720px;
         height: $list-item-height - 6px;
     }
 
-    .search {
-        padding: 4px 12px;
-        margin: 0;
-        height: 25px;
-        border-bottom: 1px solid $pagination-border-color;
-
-        input[type=text] {
-            margin: 0;
-            @include border-radius(12px);
-            font-size: 14px;
-            padding: 2px 4px 0px 29px;
-            background: url("/images/search-icon.png") no-repeat 9px 3px;
-            outline: none;
-            background-color: white;
-            border-color: $subheader-border-color;
-        }
-    }
 
     max-height: (($list-item-height + $list-border-width) * 8) + $list-item-height;
     overflow: auto;
