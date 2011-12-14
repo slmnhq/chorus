@@ -7,6 +7,28 @@ $text-padding-y: 4px;
 $comment-padding-x: 6px;
 
 .main_activity_list{
+    .heading {
+        padding-right: $comment-padding-x;
+        padding-bottom: 3 * $text-padding-y;
+        padding-left: 2 * $image-gutter;
+        padding-top: 2 * $text-padding-y;
+    }
+    
+    .order {
+        float: right;
+        font-size: 12px;
+        font-weight: $semibold;
+        line-height: 24px;
+        .order_by {
+            color: $dark-text-color;
+        }
+    }
+
+    h1 {
+        font-size: 24px;
+        font-weight: $semibold;
+    }
+    
     ul.activities {
         li {
             border-bottom: 1px dotted $list-border-color;

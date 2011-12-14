@@ -6,7 +6,7 @@
             this.collection = this.model.activities();
             this.collection.fetch();
             this.collection.bind("changed", this.render, this);
-            this.activityList = new ns.views.MainActivityList({ collection : this.collection });
+            this.activityList = new ns.views.MainActivityList({ collection : this.collection , activityType: t("workspace.activity")});
         },
 
         postRender : function() {
