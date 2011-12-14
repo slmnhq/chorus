@@ -162,11 +162,8 @@
                 options.success = function(resp) {
                     if (!model.set(model.parse(resp), options)) return false;
 
-                    if (resp.status == "ok") {
-                        model.trigger('destroy', model, model.collection, options);
-                    } else {
-                        model.trigger('destroyFailed', model, model.collection, options);
-                    }
+                    var event = (resp.status === "ok") ? "destroy" : "destroyFailed";
+                    model.trigger(event, model, model.collection, options);
 
                     if (success) success(model, resp);
                 };
