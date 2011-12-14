@@ -1,15 +1,20 @@
 <div class="shuttle_header">
     <div class="search">
-        <input type="text"/>
-        <a class="add_all" href="#">{{t "shuttle.add_all"}}</a>
+        <div>
+            <input type="text"/>
+            <a class="add_all" href="#">{{t "shuttle.add_all"}}</a>
+        </div>
     </div>
 
     <div class="summary">
-        <span class='object_name'>{{objectName}}:</span> <span class="selected_count"/>
-        <a class="remove_all" href="#">{{t "shuttle.remove_all"}}</a>
+        <div>
+            <span class='object_name'>{{objectName}}:</span> <span class="selected_count"/>
+            <a class="remove_all" href="#">{{t "shuttle.remove_all"}}</a>
+        </div>
     </div>
 </div>
 
+<div class="shuttle_body">
 <ul class="available">
     {{#each models}}
         <li data-id="{{id}}" {{#if isAdded}}class="added"{{/if}}>
@@ -36,3 +41,4 @@
         </li>
     {{/each}}
 </ul>
+</div>
