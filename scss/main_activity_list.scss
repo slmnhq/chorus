@@ -8,18 +8,37 @@ $comment-padding-x: 6px;
 
 .main_activity_list{
     ul.activities {
+        li {
+            border-bottom: 1px dotted $list-border-color;
+            padding-bottom: $text-padding-y;
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+
         li > div{
             padding-top: 8px;
 
             > div {
-                display: inline-block;
                 vertical-align: top;
+            }
+
+            div.icon {
+                float: left;
+                width: $image-width + (3 * $image-gutter);
+            }
+
+            div.activity_content {
+                margin-left: $image-width + (3 * $image-gutter);
+                padding-right: $comment-padding-x;
             }
 
             img {
                 width: $image-width;
                 height: $image-height;
                 margin-right: $image-gutter;
+                margin-left: 2 * $image-gutter;
                 display: inline-block;
             }
 
