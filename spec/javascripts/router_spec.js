@@ -79,5 +79,12 @@ describe("chorus.router", function() {
             this.chorus.router.navigate("/", true);
             expect(routeSpy).toHaveBeenCalled();
         })
+
+        it("closes the current modal", function() {
+            this.chorus.modal = new chorus.dialogs.ChangePassword();
+            spyOn(this.chorus.modal, "closeModal");
+            this.chorus.router.navigate("/", true);
+            expect(this.chorus.modal.closeModal).toHaveBeenCalled();
+        });
     })
 })

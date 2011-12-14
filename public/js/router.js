@@ -44,6 +44,7 @@
                     }
                     self.app.page = construct();
                     $("#page").html(self.app.page.render().el).attr("data-page", className);
+                    if (self.app.modal) self.app.modal.closeModal();
                 }
             }
         },
