@@ -14,7 +14,8 @@
         },
 
         headerHtml : function() {
-            return generateHeader[this.get("type")](this);
+            var type = this.get("type");
+            if (generateHeader[type]) return generateHeader[type](this);
         },
 
         _objectName : function() {
