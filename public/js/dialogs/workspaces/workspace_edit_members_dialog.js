@@ -16,17 +16,16 @@
             this.members.loaded || this.members.fetch();
         },
 
+        subviews: {
+            ".shuttle": "shuttle"
+        },
+
         setup : function() {
             this.shuttle = new ns.views.ShuttleWidget({
                 collection : this.collection,
                 selectionSource : this.members,
                 objectName : t("workspace.members")
             });
-        },
-
-        postRender : function() {
-            this.$(".shuttle").html(this.shuttle.render().el);
-            this.shuttle.delegateEvents();
         },
 
         updateMembers : function() {

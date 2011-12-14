@@ -8,6 +8,10 @@
             "click button.cancel" : "goBack"
         },
 
+        subviews: {
+            '.edit_photo': "imageUpload"
+        },
+
         additionalContext: function() {
             return {
                 permission : ((this.model.get("userName") == chorus.user.get("userName")) || chorus.user.get("admin"))
@@ -35,10 +39,6 @@
 
         goBack : function() {
             window.history.back();
-        },
-
-        postRender : function() {
-            this.$(".edit_photo").html(this.imageUpload.render().el);
         }
     });
 

@@ -29,8 +29,11 @@
             this.model.members().fetch();
         },
 
+        subviews: {
+            '.edit_photo': "imageUpload"
+        },
+
         postRender : function() {
-            this.$(".edit_photo").html(this.imageUpload.render().el);
             this.$("select.owner").val(this.model.get("ownerId"));
         },
 
