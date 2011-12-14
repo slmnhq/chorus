@@ -560,8 +560,31 @@
                     },
                     "version" : "0.1"
                 }
-            }
+            },
 
+            activity: function() {
+                return new chorus.models.Activity({
+                    author: fixtures.authorJson(),
+                    type: "NOTE",
+                    text: "How about that.",
+                    timestamp: "2011-12-01 00:00:00",
+                    comments: [
+                        {
+                            text: "sub-comment 1",
+                            author : fixtures.authorJson(),
+                            timestamp : "2011-12-15 12:34:56"
+                        }
+                    ]
+                });
+            },
+
+            authorJson: function() {
+                return {
+                    id : "1234",
+                    lastName : "Smith",
+                    firstName : "Bob"
+                }
+            }
         });
     });
 })(jQuery);

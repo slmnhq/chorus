@@ -23,9 +23,11 @@
         lastComment : function() {
             return this.get("commenterId") && new ns.Comment({
                 body : this.get("commentBody"),
-                creatorId : this.get("commenterId"),
-                creatorFirstName : this.get("commenterFirstName"),
-                creatorLastName : this.get("commenterLastName"),
+                author : {
+                    id : this.get("commenterId"),
+                    firstName : this.get("commenterFirstName"),
+                    lastName : this.get("commenterLastName")
+                },
                 commentCreatedStamp : this.get("commentCreatedStamp")
             });
         },

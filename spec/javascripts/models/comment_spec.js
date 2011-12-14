@@ -2,9 +2,11 @@ describe("chorus.models.Comment", function() {
     beforeEach(function() {
         this.model = new chorus.models.Comment({
             body : "oh yes this is a party!",
-            creatorFirstName : "LeBron",
-            creatorLastName : "James",
-            creatorId : "45"
+            author : {
+                id : "45",
+                firstName : "LeBron",
+                lastName : "James"
+            }
         });
     });
 

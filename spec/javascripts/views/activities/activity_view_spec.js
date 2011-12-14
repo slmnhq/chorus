@@ -5,17 +5,7 @@ describe("chorus.views.Activity", function() {
 
     describe("type: NOTE", function() {
         beforeEach(function() {
-            var author = {
-                id : "1234",
-                lastName : "Smith",
-                firstName : "Bob"
-            }
-            this.activity = new chorus.models.Activity({
-                author: author,
-                type: "NOTE",
-                text: "How about that.",
-                timestamp: "2011-12-01 00:00:00"
-            });
+            this.activity = fixtures.activity();
 
             this.view = new chorus.views.Activity({model: this.activity});
         });
@@ -30,7 +20,7 @@ describe("chorus.views.Activity", function() {
             });
 
             it("displays the name of the author", function() {
-               expect(this.view.$(".author").text().trim()).toBe(this.view.model.author().displayName());
+               expect(this.view.$(".author").eq(0).text().trim()).toBe(this.view.model.author().displayName());
             });
 
             it("links the author's name to the author's show page", function() {
@@ -58,11 +48,16 @@ describe("chorus.views.Activity", function() {
             });
 
             it("displays the comment body", function() {
-               expect(this.view.$(".body").text().trim()).toBe(this.view.model.get("text"));
+               expect(this.view.$(".body").eq(0).text().trim()).toBe(this.view.model.get("text"));
             });
 
             it("displays the timestamp", function() {
                 expect(this.view.$(".timestamp").text()).not.toBeEmpty();
+            });
+
+            it("renders items for the sub-comments", function() {
+                expect(this.activity.get("comments").length).toBe(1);
+                expect(this.view.$(".more_comments li").length).toBe(1);
             });
         });
     });

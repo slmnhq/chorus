@@ -46,6 +46,10 @@ $comment-padding-x: 6px;
             .workspace {
                 display: none;
             }
+
+            .more_comments {
+                background : $shaded-background-color;
+            }
         }
     }
 }
