@@ -40,7 +40,7 @@
                     var element = self.$(selector);
                     var id = element.attr("id"), klass = element.attr("class");
                     element.replaceWith(view.render().el);
-                    $(view.el).attr({id: id, class: klass});
+                    $(view.el).attr({'id': id, 'class': klass});
                     view.delegateEvents();
                 }
             });
