@@ -60,6 +60,23 @@ describe("chorus.models", function() {
             });
         });
 
+        describe("#isValid", function() {
+            it("returns true when the errors hash is empty", function() {
+                this.model.errors = {'foo': "your foo is dumb"};
+                expect(this.model.isValid()).toBeFalsy();
+            });
+
+            it("returns true when the errors hash is not empty", function() {
+                this.model.errors = {};
+                expect(this.model.isValid()).toBeTruthy();
+            });
+
+            it("returns true when the errors hash is falsy", function() {
+                this.model.errors = undefined;
+                expect(this.model.isValid()).toBeTruthy();
+            });
+        });
+
         describe("#save", function() {
             describe("with valid model data", function () {
                 beforeEach(function() {

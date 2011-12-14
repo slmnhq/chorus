@@ -173,6 +173,10 @@
 
             declareValidations: $.noop,
 
+            isValid: function() {
+                return _.isEmpty(this.errors);
+            },
+
             performValidation: function(newAttrs) {
                 this.errors = {};
                 this.declareValidations(newAttrs);
