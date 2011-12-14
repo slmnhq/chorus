@@ -2,7 +2,7 @@ describe("chorus.views.WorkspaceDetail", function() {
     beforeEach(function() {
         fixtures.model = "Workspace";
         this.loadTemplate("workspace_detail");
-        this.loadTemplate("sidebar_activity_list");
+        this.loadTemplate("main_activity_list");
         this.model = new chorus.models.Workspace({ id : 4 });
         this.view = new chorus.views.WorkspaceDetail({ model : this.model });
         this.view.render();
@@ -22,7 +22,7 @@ describe("chorus.views.WorkspaceDetail", function() {
             })
 
             it("renders the activity list", function() {
-                expect(this.view.$(".activities.sidebar_activity_list").length).toBe(1);
+                expect(this.view.$(".activities.main_activity_list").length).toBe(1);
             })
         })
     })

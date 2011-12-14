@@ -10,6 +10,7 @@ describe("chorus.pages.WorkspaceSummaryPage", function() {
         this.loadTemplate("header");
         this.loadTemplate("sub_nav");
         this.loadTemplate("sidebar_activity_list");
+        this.loadTemplate("main_activity_list");
     })
 
     describe("#initialize", function() {

@@ -6,12 +6,12 @@
             this.collection = this.model.activities();
             this.collection.fetch();
             this.collection.bind("changed", this.render, this);
-            this.activityList = new ns.views.SidebarActivityList({ collection : this.collection });
+            this.activityList = new ns.views.MainActivityList({ collection : this.collection });
         },
 
         postRender : function() {
-            this.activityList.el = this.$(".activities")
-            this.activityList.delegateEvents()
+            this.activityList.el = this.$(".activities");
+            this.activityList.delegateEvents();
             this.activityList.render();
         }
     });

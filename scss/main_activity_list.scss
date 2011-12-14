@@ -1,0 +1,51 @@
+@import "_common.scss";
+
+$image-width: 36px;
+$image-height: 36px;
+$image-gutter: 8px;
+$text-padding-y: 4px;
+$comment-padding-x: 6px;
+
+.main_activity_list{
+    ul.activities {
+        li > div{
+            padding-top: 8px;
+
+            > div {
+                display: inline-block;
+                vertical-align: top;
+            }
+
+            img {
+                width: $image-width;
+                height: $image-height;
+                margin-right: $image-gutter;
+                display: inline-block;
+            }
+
+            .activity_header {
+                @include ellipsis;
+                font-size: 14px;
+                padding-bottom: $text-padding-y;
+                color: $weak-text-color;
+                .author {
+                    font-weight: $semibold;
+                }
+            }
+
+            .body {
+                font-size: 13px;
+                padding-bottom: $text-padding-y;
+            }
+
+            .timestamp {
+                font-size: 12px;
+                color: $weak-text-color;
+            }
+
+            .workspace {
+                display: none;
+            }
+        }
+    }
+}
