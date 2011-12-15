@@ -1,7 +1,5 @@
 @import "_common.scss";
 
-$image-width: 36px;
-$image-height: 36px;
 $image-gutter: 8px;
 $text-padding-y: 4px;
 $comment-padding-x: 6px;
@@ -48,17 +46,17 @@ $comment-padding-x: 6px;
 
             div.icon {
                 float: left;
-                width: $image-width + (3 * $image-gutter);
+                width: $icon-image-width + (3 * $image-gutter);
             }
 
             div.activity_content {
-                margin-left: $image-width + (3 * $image-gutter);
+                margin-left: $icon-image-width + (3 * $image-gutter);
                 padding-right: $comment-padding-x;
             }
 
             img {
-                width: $image-width;
-                height: $image-height;
+                width: $icon-image-width;
+                height: $icon-image-height;
                 margin-right: $image-gutter;
                 margin-left: 2 * $image-gutter;
                 display: inline-block;

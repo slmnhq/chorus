@@ -3,6 +3,18 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
         this.loadTemplate("workspace_summary_sidebar");
     });
 
+    describe("#setup", function() {
+        beforeEach(function() {
+            this.model = new chorus.models.Workspace({name: "A Cool Workspace", id: '123'});
+            spyOn(this.model.members(), 'fetch');
+            this.view = new chorus.views.WorkspaceSummarySidebar({model: this.model});
+        });
+
+        it("fetches the workspace's members", function() {
+            expect(this.model.members().fetch).toHaveBeenCalled();
+        });
+    });
+
     describe("#render", function() {
         beforeEach(function() {
             this.model = new chorus.models.Workspace({name: "A Cool Workspace", id: '123'});
@@ -86,6 +98,33 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
             expect(this.view.$("a[data-dialog=NotesNew]").text().trim()).toMatchTranslation("actions.add_note");
             expect(this.view.$("a[data-dialog=NotesNew]").attr("data-entity-type")).toBe("workspace");
             expect(this.view.$("a[data-dialog=NotesNew]").attr("data-entity-id")).toBe(this.model.get("id"))
+        });
+
+        describe("the members list", function() {
+            beforeEach(function() {
+                this.members = this.model.members();
+                this.user1 = new chorus.models.User({ id: '21', userName: "bob" });
+                this.user2 = new chorus.models.User({ id: '22', userName: "rob" });
+                this.user3 = new chorus.models.User({ id: '23', userName: "job" });
+                this.members.add([ this.user1, this.user2, this.user3 ]);
+                this.view.render();
+            });
+
+            it("includes an image for each member", function() {
+                var images = this.view.$(".members img");
+                expect(images.length).toBe(3);
+                expect(images.eq(0).attr("src")).toBe(this.user1.imageUrl({ size: 'icon' }));
+                expect(images.eq(1).attr("src")).toBe(this.user2.imageUrl({ size: 'icon' }));
+                expect(images.eq(2).attr("src")).toBe(this.user3.imageUrl({ size: 'icon' }));
+            });
+
+            it("includes a link to each member's page", function() {
+                var links = this.view.$(".members a");
+                expect(links.length).toBe(3);
+                expect(links.eq(0).attr("href")).toBe(this.user1.showUrl());
+                expect(links.eq(1).attr("href")).toBe(this.user2.showUrl());
+                expect(links.eq(2).attr("href")).toBe(this.user3.showUrl());
+            });
         });
     });
 });

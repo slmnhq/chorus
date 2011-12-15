@@ -5,14 +5,20 @@
 
         setup : function() {
             this.model.bind("image:change", this.render);
+            this.model.members().fetch();
         },
 
         additionalContext : function() {
             return {
                 canUpdate : this.model.canUpdate(),
                 imageUrl : this.model.imageUrl()+"&buster="+(new Date().getTime()),
-                hasImage : this.model.hasImage()
-
+                hasImage : this.model.hasImage(),
+                members : this.model.members().map(function(member){
+                     return {
+                         imageUrl : member.imageUrl && member.imageUrl({size : 'icon'}),
+                         showUrl : member.showUrl && member.showUrl()
+                     };
+                })
             };
         },
 

@@ -35,4 +35,20 @@
     img {
         max-width: $sidebar-width - 20px;
     }
+
+    .members{
+
+        li {
+            display: inline-block;
+            vertical-align: middle;
+            height: $icon-image-height + 6px;
+            padding-bottom: 3px;
+        }
+
+        img{
+            width: $icon-image-width;
+            height: $icon-image-height;
+        }
+    }
+
 }

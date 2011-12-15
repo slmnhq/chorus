@@ -30,6 +30,7 @@ src_files:
   - js/views/workfiles/workfile_content_details_view.js
   - js/views/workfiles/workfile_content_view.js
   - js/views/**/*.js
+  - js/models/**/*.js
   - js/**/*.js
 
 non_spec_src_files:
