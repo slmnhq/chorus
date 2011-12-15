@@ -45,75 +45,92 @@
         'workspace_edit_members',
         'workspace_index_content_header',
         'workspace_list',
+        'workspace_members_more',
         'workspace_settings',
         'workspace_summary_sidebar',
         'workspaces_new'
     ];
 
-    var loadAllTemplates = _.once(function() {
-        var templateContainer = $("<div id='chorus_templates'/>");
-        _.each(templates, function(templateName) {
-            $.ajax({
-                async: false, // must be synchronous to guarantee that no tests are run before fixture is loaded
-                cache: false,
-                dataType: 'html',
-                url: '/templates/' + templateName + '.handlebars',
-                success: function(data) {
-                    templateContainer.append('<script id="' + templateName + '_template" type="x-handlebars-template">' + data + '</script>');
-                }
-            });
-        });
 
-        $("body").append(templateContainer);
+    var loadTemplatesOnce = _.once(function() {
+        var allTemplatesLoaded = false;
+
+        runs(loadAllTemplates);
+        waitsFor(function() {
+            return allTemplatesLoaded;
+        }, "all templates to be loaded", 1000);
+
+        function loadAllTemplates() {
+            var templateContainer = $("<div id='chorus_templates'/>");
+            var requests = _.map(templates, function(templateName) {
+                return $.ajax({
+                    async: true,
+                    cache: false,
+                    dataType: 'html',
+                    url: '/templates/' + templateName + '.handlebars',
+                    success: function(data) {
+                        templateContainer.append('<script id="' + templateName + '_template" type="x-handlebars-template">' + data + '</script>');
+                    }
+                });
+            });
+
+            $.when.apply($, requests).done(function() {
+                $("body").append(templateContainer);
+                allTemplatesLoaded = true;
+            });
+        };
     });
 
     beforeEach(function() {
-        loadAllTemplates();
+        loadTemplatesOnce();
 
-        this.server = sinon.fakeServer.create();
+        // loadTemplatesOnce does asynchronous ajax requests in a waitsFor
+        runs(function() {
+            this.server = sinon.fakeServer.create();
 
-        this.renderDOM = function(content) {
-            return $('#jasmine_content').html(content);
-        };
+            this.renderDOM = function(content) {
+                return $('#jasmine_content').html(content);
+            };
 
-        clearRenderedDOM();
+            clearRenderedDOM();
 
-        this.addMatchers({
-            toMatchTranslation: function(translationKey) {
-                this.message = function() {
-                    return [
-                        "Expected text '" + this.actual + "' to match the translation for '" + translationKey + "'",
-                        "Expected text '" + this.actual + "' not to match the translation for '" + translationKey + "'"
-                    ];
-                };
-                var translatedText = t.apply(this, arguments);
-                if (translatedText === '[' + translationKey + ']') {
-                    throw("No entry in messages.properties for " + translationKey);
-                }
+            this.addMatchers({
+                toMatchTranslation: function(translationKey) {
+                    this.message = function() {
+                        return [
+                            "Expected text '" + this.actual + "' to match the translation for '" + translationKey + "'",
+                            "Expected text '" + this.actual + "' not to match the translation for '" + translationKey + "'"
+                        ];
+                    };
+                    var translatedText = t.apply(this, arguments);
+                    if (translatedText === '[' + translationKey + ']') {
+                        throw("No entry in messages.properties for " + translationKey);
+                    }
 
-                return this.actual === translatedText;
-            }
-        })
-
-        var fakeSpinner = {
-            spin : jasmine.createSpy('MockSpinner.spin').andCallFake(function(parentEl) {
-                this.el = $('<div aria-role="progressbar"/>')[0];
-                parentEl && parentEl.appendChild(this.el);
-                return this;
-            }),
-
-            stop : jasmine.createSpy('MockSpinner.stop').andCallFake(function() {
-                if (this.el) {
-                    $(this.el).detach();
+                    return this.actual === translatedText;
                 }
             })
-        };
 
-        window.Spinner = jasmine.createSpy('MockSpinner').andCallFake(function() {
-            return fakeSpinner
+            var fakeSpinner = {
+                spin : jasmine.createSpy('MockSpinner.spin').andCallFake(function(parentEl) {
+                    this.el = $('<div aria-role="progressbar"/>')[0];
+                    parentEl && parentEl.appendChild(this.el);
+                    return this;
+                }),
+
+                stop : jasmine.createSpy('MockSpinner.stop').andCallFake(function() {
+                    if (this.el) {
+                        $(this.el).detach();
+                    }
+                })
+            };
+
+            window.Spinner = jasmine.createSpy('MockSpinner').andCallFake(function() {
+                return fakeSpinner
+            });
+
+            setLoggedInUser();
         });
-
-        setLoggedInUser();
     });
 
     afterEach(function() {

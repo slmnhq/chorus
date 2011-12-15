@@ -1,7 +1,6 @@
 describe("WorkspaceMembersMore", function() {
     var workspace, dialog, members;
     beforeEach(function() {
-        this.loadTemplate("workspace_members_more");
         workspace = fixtures.workspace();
         dialog = new chorus.dialogs.WorkspaceMembersMore({ pageModel: workspace });
         members = workspace.members();
