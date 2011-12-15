@@ -12,6 +12,7 @@
         setup : function() {
             this.selectionSource = this.options.selectionSource;
             this.selectionSource.bind("reset", this.render);
+            this.nonRemovableModels = this.options.nonRemovable;
         },
 
         collectionModelContext : function(model) {
@@ -20,6 +21,9 @@
             ctx.isAdded = _.include(selections, model.get("id"));
             ctx.displayName = model.displayName();
             ctx.imageUrl = model.imageUrl();
+
+            ctx.isNonRemovable = _.include(this.nonRemovableModels, model);
+            ctx.nonRemovableText = this.options.nonRemovableText;
 
             return ctx;
         },

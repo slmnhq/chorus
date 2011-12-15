@@ -1,6 +1,10 @@
 describe("WorkspaceEditMembers", function() {
     beforeEach(function() {
-        this.workspace = new chorus.models.Workspace({id : "17"});
+        this.workspace = new chorus.models.Workspace({
+            id : "17",
+            "ownerId": "34",
+            "ownerFullName": "President Henderson"
+        });
         this.dialog = new chorus.dialogs.WorkspaceEditMembers({ pageModel: this.workspace });
     });
 
@@ -21,9 +25,18 @@ describe("WorkspaceEditMembers", function() {
             this.loadTemplate("shuttle_widget");
             this.dialog.render();
         });
+
         it("renders a shuttle", function() {
             expect(this.dialog.shuttle instanceof chorus.views.ShuttleWidget).toBeTruthy();
             expect(this.dialog.$(".shuttle .shuttle_header")).toExist();
+        });
+
+        it("passes the workspace owner as an un-removable item in the shuttle widget", function() {
+            expect(this.dialog.shuttle.nonRemovableModels).toContain(this.workspace.owner());
+        });
+
+        it("passes the right text for the non-removable owner to the shuttle widget", function() {
+            expect(this.dialog.shuttle.options.nonRemovableText).toMatchTranslation("workspace.owner");
         });
 
         describe("when the submit button is clicked", function() {

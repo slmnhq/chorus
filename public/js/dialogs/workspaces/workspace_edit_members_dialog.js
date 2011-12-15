@@ -24,6 +24,8 @@
             this.shuttle = new ns.views.ShuttleWidget({
                 collection : this.collection,
                 selectionSource : this.members,
+                nonRemovable : [this.options.pageModel.owner()],
+                nonRemovableText : t("workspace.owner"),
                 objectName : t("workspace.members")
             });
         },
