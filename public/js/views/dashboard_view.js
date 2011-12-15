@@ -11,9 +11,14 @@
                 contentFooter : new ns.views.StaticTemplate("dashboard_workspace_list_footer")
             });
 
+            var activities = chorus.user.user().activities();
+            activities.fetch();
+            activities.bind("changed", this.render, this);
+            this.activityList = new ns.views.MainActivityList({ collection : activities, activityType: t("dashboard.activity")});
+
             this.dashboardMain = new ns.views.MainContentView({
                 contentHeader : ns.views.StaticTemplate("default_content_header", {title : "Dashboard"}),
-                content : ns.views.StaticTemplate("plain_text", {text : ""})
+                content : this.activityList
             });
         },
 
