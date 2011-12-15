@@ -1,6 +1,6 @@
 ;
 (function($, ns) {
-    ns.ImageUpload = chorus.views.Base.extend({
+     ns.ImageUpload = chorus.views.Base.extend({
         className: "image_upload",
 
         additionalContext: function() {
@@ -74,7 +74,7 @@
                 if (json.status == "ok") {
                     self.resource.serverErrors = [];
                     self.resource.trigger("validated");
-                    self.model.change();
+                    self.model.trigger("image:change");
                     self.$("img").attr('src', originalUrl + "&buster=" + (new Date().getTime()));
                 } else {
                     self.resource.serverErrors = json.message;

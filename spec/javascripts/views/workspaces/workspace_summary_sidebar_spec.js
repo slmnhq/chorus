@@ -17,12 +17,18 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
         context("the workspace has an image", function() {
             beforeEach(function() {
                 spyOn(this.view.model, 'hasImage').andReturn(true);
-                spyOn(this.view.model, 'imageUrl').andReturn("http://partytime.com/party.gif")
+                this.spyImg = spyOn(this.view.model, 'imageUrl').andReturn("http://partytime.com/party.gif")
                 this.view.render();
             });
 
             it("renders the workspace image", function() {
                 expect(this.view.$("img.workspace_image").attr("src")).toContain('http://partytime.com/party.gif');
+            });
+
+            it("renders the sidebar when image is changed", function() {
+                this.spyImg.andReturn("http://partytime.com/partyAgain.gif")
+                this.view.model.trigger("image:change");
+                expect(this.view.$("img.workspace_image").attr("src")).toContain('http://partytime.com/partyAgain.gif');
             });
         });
 

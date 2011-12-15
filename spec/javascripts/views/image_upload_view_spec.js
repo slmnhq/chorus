@@ -77,7 +77,10 @@ describe("chorus.views.ImageUpload", function() {
             context("when the upload has finished successfully", function() {
                 beforeEach(function() {
                     this.validatedSpy = jasmine.createSpy("validated");
+                    this.imageChangedSpy = jasmine.createSpy("imageChange");
+                    spyOn(this.user, "change");
                     this.user.bind("validated", this.validatedSpy);
+                    this.user.bind("image:change", this.imageChangedSpy)
                     this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"status": "ok"}']);
                     this.server.respond();
                 });
@@ -100,6 +103,14 @@ describe("chorus.views.ImageUpload", function() {
 
                 it("triggers 'validated' on the model", function() {
                     expect(this.validatedSpy).toHaveBeenCalled();
+                });
+
+                it("triggers 'image:change' on the model", function() {
+                    expect(this.imageChangedSpy).toHaveBeenCalled();
+                });
+
+                it("doesn't trigger model change", function() {
+                    expect(this.user.change).not.toHaveBeenCalled();
                 });
 
                 it("re-enables the upload button", function() {
