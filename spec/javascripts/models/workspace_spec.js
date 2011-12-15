@@ -71,6 +71,18 @@ describe("chorus.models.Workspace", function() {
         it("memoizes", function() {
             expect(this.members).toBe(this.model.members());
         });
+
+        context("when the 'reset' event is triggered on the members", function() {
+            beforeEach(function() {
+                this.changeSpy = jasmine.createSpy("changeSpy");
+                this.model.bind("change", this.changeSpy);
+            });
+
+            it("triggers 'change' on the workspace", function() {
+                this.members.trigger("reset");
+                expect(this.changeSpy).toHaveBeenCalled();
+            });
+        });
     });
 
     describe("#hasImage", function() {
