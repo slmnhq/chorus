@@ -47,6 +47,7 @@
                 name: this.$("input[name=name]").val().trim(),
                 summary: this.$("textarea[name=summary]").val().trim(),
                 isPublic : !!this.$("input[name=isPublic]").is(":checked"),
+                ownerId : ownerId,
                 owner : ownerName,
                 active: active,
                 archived: !active
