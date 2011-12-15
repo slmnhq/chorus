@@ -66,7 +66,7 @@ $comment-padding-x: 6px;
                 @include ellipsis;
                 font-size: 14px;
                 padding-bottom: $text-padding-y;
-                color: $weak-text-color;
+                color: $secondary-text-color;
                 .author {
                     font-weight: $semibold;
                 }
@@ -79,7 +79,7 @@ $comment-padding-x: 6px;
 
             .timestamp {
                 font-size: 12px;
-                color: $weak-text-color;
+                color: $secondary-text-color;
             }
 
             .workspace {
