@@ -16,9 +16,9 @@ describe("chorus.models.Activity", function() {
 
     describe("#headerHtml", function() {
         context("when the activity type is unknown", function() {
-            it("returns undefined", function() {
+            it("returns a default header", function() {
                 this.model.set({ type: "GEN MAI CHA" });
-                expect(this.model.headerHtml()).toBeFalsy();
+                expect(this.model.headerHtml()).toBeDefined();
             });
         });
 

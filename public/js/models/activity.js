@@ -7,6 +7,11 @@
         }
     };
 
+    function defaultHeader (activity) {
+        var author = activity.author();
+        return t("activity_stream.header.html.DEFAULT", author.showUrl(), author.displayName(), activity.get("type"));
+    };
+
     ns.Activity = chorus.models.Base.extend({
         author : function() {
             this._author = this._author || new chorus.models.User(this.get("author"));
@@ -15,7 +20,10 @@
 
         headerHtml : function() {
             var type = this.get("type");
-            if (generateHeader[type]) return generateHeader[type](this);
+            if (generateHeader[type])
+                return generateHeader[type](this);
+            else
+                return defaultHeader(this);
         },
 
         _objectName : function() {
