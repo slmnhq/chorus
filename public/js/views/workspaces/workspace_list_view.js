@@ -17,8 +17,7 @@
                 archiverUrl: model.archiver().showUrl(),
                 archiverFullName : model.archiver().get("fullName"),
                 truncatedSummary : model.truncatedSummary(100),
-                isTruncated: model.isTruncated(),
-                timeAgo : date && date.toRelativeTime()
+                isTruncated: model.isTruncated()
             };
         },
 

@@ -72,7 +72,7 @@
 
         relativeTimestamp: function(timestamp) {
             var date = Date.parseFromApi(timestamp);
-            return date ? date.toRelativeTime() : "WHENEVER"
+            return date ? date.toRelativeTime(60000) : "WHENEVER"
         },
 
         moreLink: function(collection, max, more_key, less_key) {
