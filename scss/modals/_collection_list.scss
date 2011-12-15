@@ -1,0 +1,31 @@
+.collection_list {
+    max-height: (($list-item-height + $list-border-width) * 8) + $list-item-height;
+    overflow: auto;
+
+    ul {
+        li {
+            height: $list-item-height;
+            border-bottom: $list-border-width dotted $list-border-color;
+            padding: 0 8px;
+            line-height: $list-item-height;
+            @include ellipsis;
+
+            img {
+                width: $icon-image-width;
+                height: $icon-image-height;
+                vertical-align: middle;
+                padding-right: 4px;
+            }
+
+            .name {
+                vertical-align: middle;
+                color: $dark-text-color;
+                font-size: 14px;
+            }
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+    }
+}
