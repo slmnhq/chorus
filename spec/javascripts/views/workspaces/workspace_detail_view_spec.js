@@ -20,7 +20,7 @@ describe("chorus.views.WorkspaceDetail", function() {
             })
 
             it("renders the activity list", function() {
-                expect(this.view.$(".activities.main_activity_list").length).toBe(1);
+                expect(this.view.$(".activities.activity_list").length).toBe(1);
             })
         })
     })

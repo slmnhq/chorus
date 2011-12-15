@@ -53,7 +53,7 @@ describe("chorus.views.Activity", function() {
 
             it("renders items for the sub-comments", function() {
                 expect(this.activity.get("comments").length).toBe(1);
-                expect(this.view.$(".more_comments li").length).toBe(1);
+                expect(this.view.$(".comments li").length).toBe(1);
             });
         });
     });

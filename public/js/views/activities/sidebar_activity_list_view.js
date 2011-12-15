@@ -1,6 +1,5 @@
 (function($, ns) {
     ns.SidebarActivityList = chorus.views.Base.extend({
-        tagName : "ul",
         className : "sidebar_activity_list",
 
         events : {
@@ -19,10 +18,6 @@
                 var total = parseInt(this.collection.pagination.total);
                 return { showMoreLink : total > page };
             }
-        },
-
-        collectionModelContext: function(model) {
-            return { authorUrl : model.author().showUrl() };
         },
 
         fetchMoreActivities : function(ev) {

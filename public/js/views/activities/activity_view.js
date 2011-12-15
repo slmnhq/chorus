@@ -9,13 +9,19 @@
             var subComments = _.map(comments, function(comment) {
                 comment = new chorus.models.Comment(comment)
                 var user = comment.creator();
-                return {
-                    imageUrl : user.imageUrl(),
+                var ctx = {
+                    imageUrl : user.imageUrl({ size : "icon" }),
                     authorShowUrl : user.showUrl(),
                     displayName : user.displayName(),
                     timestamp : comment.get("timestamp"),
-                    body : comment.get("text")
+                    id : comment.get("id")
                 };
+
+                if (comment.get("text")) {
+                    ctx.body = comment.get("text")
+                }
+
+                return ctx;
             });
 
             return {

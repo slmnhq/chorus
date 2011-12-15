@@ -7,20 +7,29 @@
     </div>
     <div class="body">{{body}}</div>
     <div class="timestamp">{{relativeTimestamp timestamp}}</div>
-    <div class="more_comments">
-        <ul>
-            {{#each subComments}}
-                <li>
-                    <div class="icon"><img src="{{{imageUrl}}}"/></div>
-                    <div class="activity_content">
-                        <div class="activity_header">
+    <div class="links">
+        <a class="comment" href="javascript:void(0)">{{t "activity_stream.comment"}}</a>
+    </div>
+    {{#if subComments.length}}
+        <ul class="comments">
+            {{#eachWithMoreLink subComments 2 "activity_stream.comments.more" "activity_stream.comments.less"}}
+                <li data-comment-id="{{id}}" class="{{moreClass}}">
+                    <div class="icon">
+                        <a href="{{authorShowUrl}}">
+                            <img title="{{displayName}}" src="{{imageUrl}}"/>
+                        </a>
+                    </div>
+                    <div class="comment_content">
+                        <div class="comment_header">
                             <a href="{{{authorShowUrl}}}" class="author">{{displayName}}</a>
                         </div>
-                        <div class="body">{{body}}</div>
+                        {{#if body}}
+                            <div class="body">{{body}}</div>
+                        {{/if}}
                         <div class="timestamp">{{relativeTimestamp timestamp}}</div>
                     </div>
                 </li>
-            {{/each}}
+            {{/eachWithMoreLink}}
         </ul>
-    </div>
+    {{/if}}
 </div>

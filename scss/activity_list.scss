@@ -4,7 +4,7 @@ $image-gutter: 8px;
 $text-padding-y: 4px;
 $comment-padding-x: 6px;
 
-.main_activity_list{
+.activity_list{
     .heading {
         padding-right: $comment-padding-x;
         padding-bottom: 3 * $text-padding-y;
@@ -28,16 +28,12 @@ $comment-padding-x: 6px;
     }
     
     ul.activities {
-        li {
+        > li {
             border-bottom: 1px dotted $list-border-color;
             padding-bottom: $text-padding-y;
-
-            &:last-child {
-                border-bottom: none;
-            }
         }
 
-        li > div{
+        li > div {
             padding-top: 8px;
 
             > div {
@@ -82,13 +78,64 @@ $comment-padding-x: 6px;
                 color: $secondary-text-color;
             }
 
+            .links {
+                padding: 4px 0;
+                font-size: 12px;
+                padding-bottom: $text-padding-y;
+            }
+
             .workspace {
                 display: none;
             }
 
-            .more_comments {
+            .comments {
                 background : $shaded-background-color;
+                padding: $text-padding-y $comment-padding-x;
+
+                li {
+                    padding-bottom: $text-padding-y;
+                    .info {
+                        .name {
+                            font-size: 14px;
+                        }
+                    }
+                }
+
+                li.more {
+                    display: none;
+                }
+
+                .morelinks {
+                    a {
+                        font-size: 12px;
+
+                        &.less {
+                            display: none;
+                        }
+                    }
+                }
+
+                &.more {
+                    li.more {
+                        display: block;
+                    }
+
+                    .morelinks {
+                        a.less {
+                            display: inline;
+                        }
+                    }
+
+                    a.more {
+                        display: none;
+                    }
+                }
             }
         }
+    }
+
+    .more_activities {
+        font-size: 12px;
+        padding: (2 * $text-padding-y) (2 * $image-gutter);
     }
 }

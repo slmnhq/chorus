@@ -457,7 +457,7 @@
                             timestamp : "2011-11-23 15:42:02.321",
                             type : "NOT_IMPLEMENTED",
                             author : {
-                                username : "edcadmin",
+                                userName : "edcadmin",
                                 firstName : "EDC",
                                 lastName : "Admin"
                             },
@@ -467,7 +467,7 @@
                                     id : 10023,
                                     timestamp : "2011-11-23 15:42:02.321",
                                     author : {
-                                        username : "msofaer",
+                                        userName : "msofaer",
                                         firstName : "Michael",
                                         lastName : "Sofaer"
                                     },
@@ -477,7 +477,7 @@
                                     id : 10024,
                                     timestamp : "2011-11-23 15:42:02.321",
                                     author : {
-                                        username : "mrushakoff",
+                                        userName : "mrushakoff",
                                         firstName : "Mark",
                                         lastName : "Rushakoff"
                                     },
@@ -503,10 +503,10 @@
                         {
                             id : 10000,
                             timestamp : "2011-11-23 15:42:02.321",
-                            type : "NOT_IMPLEMENTED",
+                            type : "NOTE",
                             author : {
                                 id : "11",
-                                username : "edcadmin",
+                                userName : "edcadmin",
                                 firstName : "EDC",
                                 lastName : "Admin"
                             },
@@ -517,7 +517,7 @@
                                     timestamp : "2011-11-23 15:42:02.321",
                                     author : {
                                         id : "12",
-                                        username : "msofaer",
+                                        userName : "msofaer",
                                         firstName : "Michael",
                                         lastName : "Sofaer"
                                     },
@@ -528,7 +528,7 @@
                                     timestamp : "2011-05-23 15:42:02.321",
                                     author : {
                                         id : "13",
-                                        username : "mrushakoff",
+                                        userName : "mrushakoff",
                                         firstName : "Mark",
                                         lastName : "Rushakoff"
                                     },
@@ -539,10 +539,10 @@
                         {
                             id : 10001,
                             timestamp : "2011-04-23 15:42:02.321",
-                            type : "NOT_IMPLEMENTED",
+                            type : "NOTE",
                             author : {
                                 id : "14",
-                                username : "dburkes",
+                                userName : "dburkes",
                                 firstName : "Danny",
                                 lastName : "Burkes"
                             },
