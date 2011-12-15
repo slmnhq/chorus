@@ -17,14 +17,14 @@
 <div class="shuttle_body">
 <ul class="available">
     {{#each models}}
-        <li data-id="{{id}}" {{#if isAdded}}class="added"{{/if}}>
+        <li data-id="{{id}}" class="{{#if isAdded}}added{{/if}} {{#if isNonRemovable}}non_removable{{/if}}">
             <div class="image">
                 <img class="profile" src="{{{imageUrl}}}"/>
                 <img class="checkmark" src="/images/checkmark.png"/>
             </div>
             <div class="name" title="{{displayName}}">{{displayName}}</div>
             <a class="add" href="#">{{t "shuttle.add_entry"}}</a>
-            <span class="was_added">{{t "shuttle.was_added"}}</span>
+            <span class="was_added">{{#if isNonRemovable}}{{nonRemovableText}}{{else}}{{t "shuttle.was_added"}}{{/if}}</span>
         </li>
     {{/each}}
 </ul>
@@ -32,12 +32,16 @@
 
 <ul class="selected">
     {{#each models}}
-        <li data-id="{{id}}" {{#if isAdded}}class="added"{{/if}}>
+    <li data-id="{{id}}" class="{{#if isAdded}}added{{/if}} {{#if isNonRemovable}}non_removable{{/if}}">
             <div class="image">
                 <img class="profile" src="{{{imageUrl}}}"/>
             </div>
             <div class="name" title="{{displayName}}">{{displayName}}</div>
-            <a class="remove" href="#">{{t "shuttle.remove_entry"}}</a>
+            {{#if isNonRemovable}}
+                <span >{{nonRemovableText}}</span>
+            {{else}}
+                <a class="remove" href="#">{{t "shuttle.remove_entry"}}</a>
+            {{/if}}
         </li>
     {{/each}}
 </ul>

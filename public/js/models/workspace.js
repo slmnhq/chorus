@@ -18,15 +18,19 @@
         },
 
         owner: function() {
-            return new ns.User({
+            this._owner = this._owner || new ns.User({
                 fullName: this.get("ownerFullName"),
                 id: this.get("ownerId")
             });
+            return this._owner;
         },
 
         members: function(){
-            this._members = this._members || new chorus.models.MemberSet([], {workspaceId : this.get("id")})
-            return this._members
+            if (!this._members) {
+                this._members = new chorus.models.MemberSet([], {workspaceId : this.get("id")})
+                this._members.bind("reset", function() { this.trigger("change") }, this);
+            }
+            return this._members;
         },
 
         declareValidations : function(newAttrs) {

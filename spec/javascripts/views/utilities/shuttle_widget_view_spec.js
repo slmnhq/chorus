@@ -4,7 +4,14 @@ describe("chorus.views.ShuttleWidget", function() {
         fixtures.model = "UserSet";
         this.collection = fixtures.modelFor("fetch");
         this.selectedItems = new Backbone.Collection([this.collection.get("10001")]);
-        this.view = new chorus.views.ShuttleWidget({ collection : this.collection, selectionSource : this.selectedItems });
+        this.nonRemovableItems = [this.collection.get("10000")];
+        this.nonRemovableText = "RockSteady"
+        this.view = new chorus.views.ShuttleWidget(
+            { collection : this.collection,
+              selectionSource : this.selectedItems,
+              nonRemovable: this.nonRemovableItems,
+              nonRemovableText: this.nonRemovableText
+            });
     });
 
     describe("#render", function() {
@@ -20,9 +27,17 @@ describe("chorus.views.ShuttleWidget", function() {
             expect(this.view.$("ul.selected li.added").length).toBe(this.selectedItems.length);
         });
 
+        it("renders an li for each nonRemovable item", function() {
+            expect(this.view.$("ul.selected li.non_removable").length).toBe(this.nonRemovableItems.length);
+        });
+
         it("adds the added class to each available item that is in the selected ID list", function() {
             expect(this.view.$("ul.available li.added").length).toBe(this.selectedItems.length);
         });
+
+        it("adds the non_removable class to the appropriate available items", function() {
+            expect(this.view.$("ul.available li.non_removable").length).toBe(this.nonRemovableItems.length);
+        })
 
         it("renders the model image in an li", function() {
            expect(this.view.$("ul.available li:eq(0) .profile").attr("src")).toBe(this.collection.get("10000").imageUrl());
@@ -47,6 +62,15 @@ describe("chorus.views.ShuttleWidget", function() {
 
         it("does not add the filtered_out class to anything when first rendered", function() {
             expect(this.view.$("ul.available li.filtered_out").length).toBe(0);
+        });
+
+        it("does not have a remove link for non-removable items", function() {
+            expect(this.view.$("ul.selected li.non_removable a").length).toBe(0);
+        });
+
+        it("renders the non-removable text in the appropriate place", function() {
+            expect(this.view.$("ul.selected li.non_removable span").text()).toBe(this.nonRemovableText);
+            expect(this.view.$("ul.available li.non_removable span").text()).toBe(this.nonRemovableText);
         });
 
         describe("clicking the add link", function() {
