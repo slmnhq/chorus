@@ -29,25 +29,25 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
         context("the workspace has an image", function() {
             beforeEach(function() {
                 spyOn(this.view.model, 'hasImage').andReturn(true);
-                this.spyImg = spyOn(this.view.model, 'imageUrl').andReturn("http://partytime.com/party.gif")
+                this.spyImg = spyOn(this.view.model, 'imageUrl').andReturn("/party.gif")
                 this.view.render();
             });
 
             it("renders the workspace image", function() {
-                expect(this.view.$("img.workspace_image").attr("src")).toContain('http://partytime.com/party.gif');
+                expect(this.view.$("img.workspace_image").attr("src")).toContain('/party.gif');
             });
 
             it("renders the sidebar when image is changed", function() {
-                this.spyImg.andReturn("http://partytime.com/partyAgain.gif")
+                this.spyImg.andReturn("/partyAgain.gif")
                 this.view.model.trigger("image:change");
-                expect(this.view.$("img.workspace_image").attr("src")).toContain('http://partytime.com/partyAgain.gif');
+                expect(this.view.$("img.workspace_image").attr("src")).toContain('/partyAgain.gif');
             });
         });
 
         context("the workspace does not have an image", function() {
             beforeEach(function() {
                 spyOn(this.view.model, 'hasImage').andReturn(false);
-                spyOn(this.view.model, 'imageUrl').andReturn("http://partytime.com/party.gif")
+                spyOn(this.view.model, 'imageUrl').andReturn("/party.gif")
                 this.view.render();
             });
 
