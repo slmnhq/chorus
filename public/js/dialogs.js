@@ -1,7 +1,5 @@
 ;
 (function(ns) {
-
-
     ns.dialogs.Base = ns.Modal.extend({
         id : "dialog",
         header : $("<div id='dialog_header'/>"),
@@ -23,6 +21,7 @@
                 addClass(this.className).
                 attr("title", this.options.title || this.title);
             this.delegateEvents()
+            this.renderSubviews();
             this.postRender($(this.el));
 
             return this;
@@ -31,6 +30,5 @@
         revealed : function () {
             $("#facebox").removeClass().addClass("dialog_facebox");
         }
-
     })
 })(chorus)

@@ -3,12 +3,12 @@ describe("WorkfileShowSidebar", function() {
         fixtures.model = 'Workfile';
         this.workfile = fixtures.modelFor("fetch");
         this.loadTemplate("workfile_show_sidebar");
-        this.loadTemplate("activity_list");
+        this.loadTemplate("sidebar_activity_list");
         this.view = new chorus.views.WorkfileShowSidebar({ model : this.workfile });
     });
 
     describe("initialization", function() {
-        it("has an ActivityListView", function() {
+        it("has a SidebarActivityListView", function() {
             expect(this.view.activityList).toBeDefined();
         })
 
@@ -52,7 +52,7 @@ describe("WorkfileShowSidebar", function() {
         });
 
         it("displays the activity list", function() {
-            expect(this.view.$(".activity_list")).toExist();
+            expect(this.view.$(".sidebar_activity_list")).toExist();
         })
     })
 

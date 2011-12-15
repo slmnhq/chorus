@@ -1,7 +1,6 @@
 describe("chorus.views.userNew", function() {
     beforeEach(function() {
         this.loadTemplate("user_new");
-        this.loadTemplate("errors")
     })
 
 

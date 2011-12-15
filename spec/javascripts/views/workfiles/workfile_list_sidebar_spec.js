@@ -2,7 +2,7 @@ describe("WorkfileListSidebar", function() {
     beforeEach(function() {
         fixtures.model = 'Workspace';
         this.loadTemplate("workfile_list_sidebar");
-        this.loadTemplate("activity_list")
+        this.loadTemplate("sidebar_activity_list")
         this.workspace = fixtures.modelFor("fetch");
         this.view = new chorus.views.WorkfileListSidebar({ model : this.workspace });
     });
@@ -144,7 +144,7 @@ describe("WorkfileListSidebar", function() {
         });
 
         it("displays the activity list", function() {
-            expect(this.view.$(".activity_list")).toExist();
+            expect(this.view.$(".sidebar_activity_list")).toExist();
         })
 
         it("sets the collection to the activities of the selected workfile", function() {

@@ -14,7 +14,7 @@
             ["/workspaces", "WorkspaceIndex"],
             ["/workspaces/:id", "WorkspaceSummary"],
             ["/workspaces/:workspaceId/workfiles", "WorkfileIndex"],
-            ["/workspaces/:workspaceId/workfiles/:workspaceId", "WorkfileShow"],
+            ["/workspaces/:workspaceId/workfiles/:workfileId", "WorkfileShow"],
             ["/styleguide", "StyleGuide"]
         ],
 
@@ -23,29 +23,13 @@
             self.app = app;
 
             _.each(this.maps, function(map){
-                self.route(map[0], map[1], generateRouteCallback(map[1]))
+                var pattern       = map[0],
+                    pageClassName = map[1],
+                    callback      = self.generateRouteCallback(pageClassName);
+                self.route(pattern, pageClassName, callback);
             });
+
             self.route("/logout", "Logout", self.app.session.logout);
-
-            function generateRouteCallback(className) {
-                return function() {
-                    self.trigger("route", className, arguments);
-                    // apply arbitrary number of arguments to constructor (for routes with parameters)
-                    // code taken from http://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible/1608546#1608546
-                    var args = arguments;
-                    function construct() {
-                        var cls = ns.pages[className + "Page"];
-                        function F() {
-                            return cls.apply(this, args);
-                        }
-
-                        F.prototype = cls.prototype;
-                        return new F();
-                    }
-                    self.app.page = construct();
-                    $("#page").html(self.app.page.render().el).attr("data-page", className);
-                }
-            }
         },
 
         navigate : function(fragment, triggerRoute) {
@@ -55,6 +39,39 @@
             } else {
                 Backbone.Router.prototype.navigate(fragment, triggerRoute);
             }
+        },
+
+        generateRouteCallback : function(className) {
+            var self = this;
+            return function() {
+                var args = arguments;
+                var navFunction = function() {
+                    var pageClass = ns.pages[className + "Page"];
+                    var page = applyConstructor(pageClass, args);
+                    self.trigger("route", className, args);
+                    self.app.page = page;
+
+                    $("#page").html(page.render().el).attr("data-page", className);
+
+                    if (self.app.modal) self.app.modal.closeModal();
+                };
+
+                if (className == 'Login' || self.app.user.loggedIn()) {
+                    navFunction();
+                } else {
+                    self.app.user.fetch({success: navFunction});
+                }
+            };
+
         }
     });
+
+
+    // apply arbitrary number of arguments to constructor (for routes with parameters)
+    // code taken from http://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible/1608546#1608546
+    function applyConstructor(constructor, args) {
+        function F() { return constructor.apply(this, args); };
+        F.prototype = constructor.prototype;
+        return new F;
+    };
 })(jQuery, chorus);

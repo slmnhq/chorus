@@ -11,7 +11,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         this.loadTemplate("link_menu");
         this.loadTemplate("default_content_header");
         this.loadTemplate("list_content_details");
-        this.loadTemplate("activity_list")
+        this.loadTemplate("sidebar_activity_list")
     })
 
     describe("#initialize", function() {

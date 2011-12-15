@@ -19,10 +19,18 @@
             this.require('firstName', newAttrs);
             this.require('lastName', newAttrs);
             this.require('userName', newAttrs);
-            this.requirePattern('emailAddress', /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/, newAttrs);
-            if(this.isNew() || (newAttrs && newAttrs.hasOwnProperty("password"))) {
-                this.require("password", newAttrs);
-                this.requireConfirmation('password', newAttrs);
+            this.requireValidEmailAddress('emailAddress', newAttrs);
+            this.requireConfirmationForChange('password', newAttrs);
+        },
+
+        requireValidEmailAddress: function(name, newAttrs) {
+            this.requirePattern(name, /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/, newAttrs);
+        },
+
+        requireConfirmationForChange: function(name, newAttrs) {
+            if(this.isNew() || (newAttrs && newAttrs.hasOwnProperty(name))) {
+                this.require(name, newAttrs);
+                this.requireConfirmation(name, newAttrs);
             }
         },
 
@@ -37,6 +45,11 @@
 
         picklistImageUrl : function(){
             return this.imageUrl();
+        },
+
+        savePassword : function(attrs){
+            var passwordUrl = this.url() + "/password";
+            this.save(attrs, { url : passwordUrl });
         },
 
         displayName : function() {

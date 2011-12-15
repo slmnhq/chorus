@@ -1,0 +1,26 @@
+<div class="icon">
+    <img src="{{{imageUrl}}}"/>
+</div>
+<div class="activity_content">
+    <div class="activity_header">
+        {{{headerHtml}}}
+    </div>
+    <div class="body">{{body}}</div>
+    <div class="timestamp">{{relativeTimestamp timestamp}}</div>
+    <div class="more_comments">
+        <ul>
+            {{#each subComments}}
+                <li>
+                    <div class="icon"><img src="{{{imageUrl}}}"/></div>
+                    <div class="activity_content">
+                        <div class="activity_header">
+                            <a href="{{{authorShowUrl}}}" class="author">{{displayName}}</a>
+                        </div>
+                        <div class="body">{{body}}</div>
+                        <div class="timestamp">{{relativeTimestamp timestamp}}</div>
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>

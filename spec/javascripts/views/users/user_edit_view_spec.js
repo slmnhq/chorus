@@ -2,7 +2,6 @@ describe("chorus.views.userEdit", function() {
     beforeEach(function() {
         this.loadTemplate("user_edit");
         this.loadTemplate("image_upload");
-        this.loadTemplate("errors")
 
         chorus.session = new chorus.models.Session();
         setLoggedInUser({'userName': 'edcadmin'})

@@ -12,6 +12,7 @@
         setup : function() {
             this.selectionSource = this.options.selectionSource;
             this.selectionSource.bind("reset", this.render);
+            this.nonRemovableModels = this.options.nonRemovable;
         },
 
         collectionModelContext : function(model) {
@@ -20,6 +21,9 @@
             ctx.isAdded = _.include(selections, model.get("id"));
             ctx.displayName = model.displayName();
             ctx.imageUrl = model.imageUrl();
+
+            ctx.isNonRemovable = _.include(this.nonRemovableModels, model);
+            ctx.nonRemovableText = this.options.nonRemovableText;
 
             return ctx;
         },
@@ -30,6 +34,7 @@
 
         postRender : function() {
             this._updateLabels();
+            this.$("input").unbind("textchange").bind("textchange", _.bind(this.searchItems, this));
         },
 
         toggleAdd : function(e) {
@@ -62,6 +67,14 @@
 
             this.$("li").removeClass("added");
             this._updateLabels();
+        },
+
+        searchItems : function(e) {
+            var compare = this.$("input").val().toLowerCase();
+            this.$("ul.available li").each(function() {
+                var matches = ($(this).find(".name").text().toLowerCase().indexOf(compare) >= 0);
+                $(this).toggleClass("filtered_out", !matches);
+            });
         },
 
         _updateLabels : function() {

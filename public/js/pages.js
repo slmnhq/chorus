@@ -15,28 +15,19 @@
             "click a.alert" : "createAlert"
         },
 
-        postRender : function() {
+        subviews : {
+            "#header": "header",
+            "#main_content": "mainContent",
+            "#breadcrumbs" : "breadcrumbs",
+            "#sidebar" : "sidebar",
+            "#sub_nav" : "subNav"
+        },
+
+        setupSubviews : function() {
             this.header = this.header || new chorus.views.Header();
-            this.$("#header").replaceWith($(this.header.render().el).attr("id", "header"));
-            this.header.delegateEvents();
-
-            this.$("#main_content").replaceWith($(this.mainContent.render().el).attr("id", "main_content"));
-            this.mainContent.delegateEvents();
-
-
-            this.breadcrumbs = this.breadcrumbs || new chorus.views.BreadcrumbsView({breadcrumbs: _.isFunction(this.crumbs) ? this.crumbs() : this.crumbs });
-            this.$("#breadcrumbs").replaceWith($(this.breadcrumbs.render().el).attr("id", "breadcrumbs"));
-            this.breadcrumbs.delegateEvents();
-
-            if (this.sidebar) {
-                this.$("#sidebar").replaceWith($(this.sidebar.render().el).attr("id", "sidebar"));
-                this.sidebar.delegateEvents();
-            }
-
-            if (this.subNav) {
-                this.$("#sub_nav").replaceWith($(this.subNav.render().el).attr("id", "sub_nav"));
-                this.subNav.delegateEvents();
-            }
+            this.breadcrumbs = this.breadcrumbs || new chorus.views.BreadcrumbsView({
+                breadcrumbs: _.isFunction(this.crumbs) ? this.crumbs() : this.crumbs
+            });
         },
 
         createDialog : function(e) {

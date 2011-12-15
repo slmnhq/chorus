@@ -1,0 +1,96 @@
+@import "_common.scss";
+
+$image-width: 36px;
+$image-height: 36px;
+$image-gutter: 8px;
+$text-padding-y: 4px;
+$comment-padding-x: 6px;
+
+.main_activity_list{
+    .heading {
+        padding-right: $comment-padding-x;
+        padding-bottom: 3 * $text-padding-y;
+        padding-left: 2 * $image-gutter;
+        padding-top: 2 * $text-padding-y;
+    }
+    
+    .order {
+        float: right;
+        font-size: 12px;
+        font-weight: $semibold;
+        line-height: 24px;
+        .order_by {
+            color: $dark-text-color;
+        }
+    }
+
+    h1 {
+        font-size: 24px;
+        font-weight: $semibold;
+    }
+    
+    ul.activities {
+        li {
+            border-bottom: 1px dotted $list-border-color;
+            padding-bottom: $text-padding-y;
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+
+        li > div{
+            padding-top: 8px;
+
+            > div {
+                vertical-align: top;
+            }
+
+            div.icon {
+                float: left;
+                width: $image-width + (3 * $image-gutter);
+            }
+
+            div.activity_content {
+                margin-left: $image-width + (3 * $image-gutter);
+                padding-right: $comment-padding-x;
+            }
+
+            img {
+                width: $image-width;
+                height: $image-height;
+                margin-right: $image-gutter;
+                margin-left: 2 * $image-gutter;
+                display: inline-block;
+            }
+
+            .activity_header {
+                @include ellipsis;
+                font-size: 14px;
+                padding-bottom: $text-padding-y;
+                color: $weak-text-color;
+                .author {
+                    font-weight: $semibold;
+                }
+            }
+
+            .body {
+                font-size: 13px;
+                padding-bottom: $text-padding-y;
+            }
+
+            .timestamp {
+                font-size: 12px;
+                color: $weak-text-color;
+            }
+
+            .workspace {
+                display: none;
+            }
+
+            .more_comments {
+                background : $shaded-background-color;
+            }
+        }
+    }
+}

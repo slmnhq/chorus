@@ -22,6 +22,61 @@ describe("chorus.models", function() {
             });
         });
 
+        describe("activities", function() {
+            it("throws when the model does not have an entityType", function() {
+                try {
+                    this.models.activities();
+                    expect('never').toBe('here');
+                } catch (e) {
+                    // test passed
+                }
+            });
+
+            context("with an entityType", function() {
+                beforeEach(function() {
+                    this.model.entityType = "some_entity";
+                    this.model.set({id: "1"});
+                    this.activitySet = this.model.activities();
+                });
+
+                it("has the right 'entityType' and 'entityId'", function() {
+                    expect(this.activitySet.attributes.entityType).toBe("some_entity");
+                    expect(this.activitySet.attributes.entityId).toBe("1");
+                });
+
+                it("returns the same activities object over each call", function() {
+                    expect(this.model.activities()).toBe(this.activitySet);
+                });
+
+                describe("when the model is invalidated", function() {
+                    beforeEach(function() {
+                        this.model.trigger("invalidated");
+                    });
+
+                    it("fetches the activities", function() {
+                        expect(_.last(this.server.requests).url).toBe(this.activitySet.url());
+                    });
+                });
+            });
+        });
+
+        describe("#isValid", function() {
+            it("returns true when the errors hash is empty", function() {
+                this.model.errors = {'foo': "your foo is dumb"};
+                expect(this.model.isValid()).toBeFalsy();
+            });
+
+            it("returns true when the errors hash is not empty", function() {
+                this.model.errors = {};
+                expect(this.model.isValid()).toBeTruthy();
+            });
+
+            it("returns true when the errors hash is falsy", function() {
+                this.model.errors = undefined;
+                expect(this.model.isValid()).toBeTruthy();
+            });
+        });
+
         describe("#save", function() {
             describe("with valid model data", function () {
                 beforeEach(function() {

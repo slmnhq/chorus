@@ -4,7 +4,14 @@ describe("chorus.views.ShuttleWidget", function() {
         fixtures.model = "UserSet";
         this.collection = fixtures.modelFor("fetch");
         this.selectedItems = new Backbone.Collection([this.collection.get("10001")]);
-        this.view = new chorus.views.ShuttleWidget({ collection : this.collection, selectionSource : this.selectedItems });
+        this.nonRemovableItems = [this.collection.get("10000")];
+        this.nonRemovableText = "RockSteady"
+        this.view = new chorus.views.ShuttleWidget(
+            { collection : this.collection,
+              selectionSource : this.selectedItems,
+              nonRemovable: this.nonRemovableItems,
+              nonRemovableText: this.nonRemovableText
+            });
     });
 
     describe("#render", function() {
@@ -20,14 +27,50 @@ describe("chorus.views.ShuttleWidget", function() {
             expect(this.view.$("ul.selected li.added").length).toBe(this.selectedItems.length);
         });
 
+        it("renders an li for each nonRemovable item", function() {
+            expect(this.view.$("ul.selected li.non_removable").length).toBe(this.nonRemovableItems.length);
+        });
+
         it("adds the added class to each available item that is in the selected ID list", function() {
             expect(this.view.$("ul.available li.added").length).toBe(this.selectedItems.length);
+        });
+
+        it("adds the non_removable class to the appropriate available items", function() {
+            expect(this.view.$("ul.available li.non_removable").length).toBe(this.nonRemovableItems.length);
+        })
+
+        it("renders the model image in an li", function() {
+           expect(this.view.$("ul.available li:eq(0) .profile").attr("src")).toBe(this.collection.get("10000").imageUrl());
+           expect(this.view.$("ul.selected li.added:eq(0) .profile").attr("src")).toBe(this.collection.get("10001").imageUrl());
+        });
+
+        it("renders the model displayName in an li", function() {
+            expect(this.view.$("ul.available li:eq(0) .name").text().trim()).toBe(this.collection.get("10000").displayName());
+            expect(this.view.$("ul.selected li.added:eq(0) .name").text().trim()).toBe(this.collection.get("10001").displayName());
+        });
+
+        it("also puts the displayName in the title", function() {
+            expect(this.view.$("ul.available li:eq(0) .name").attr('title')).toBe(this.collection.get("10000").displayName());
+            expect(this.view.$("ul.selected li.added:eq(0) .name").attr('title')).toBe(this.collection.get("10001").displayName());
         });
 
         it("returns the original list of selected IDs", function() {
             var selected = this.view.getSelectedIDs();
             expect(selected.length).toBe(1);
             expect(selected[0]).toBe("10001");
+        });
+
+        it("does not add the filtered_out class to anything when first rendered", function() {
+            expect(this.view.$("ul.available li.filtered_out").length).toBe(0);
+        });
+
+        it("does not have a remove link for non-removable items", function() {
+            expect(this.view.$("ul.selected li.non_removable a").length).toBe(0);
+        });
+
+        it("renders the non-removable text in the appropriate place", function() {
+            expect(this.view.$("ul.selected li.non_removable span").text()).toBe(this.nonRemovableText);
+            expect(this.view.$("ul.available li.non_removable span").text()).toBe(this.nonRemovableText);
         });
 
         describe("clicking the add link", function() {
@@ -91,7 +134,65 @@ describe("chorus.views.ShuttleWidget", function() {
                 expect(this.view.$('ul.available li.added').length).toBe(0);
             });
         });
+
+        describe("search", function() {
+            context("when typing something that matches one name", function() {
+                beforeEach(function() {
+                    this.view.$(".search input").val("admin");
+                    this.view.$(".search input").trigger("textchange");
+                });
+
+                it("should add the filtered_out class to the non-matching items", function() {
+                    expect(this.view.$("ul.available li:eq(0)")).toHaveClass("filtered_out");
+                    expect(this.view.$("ul.available li:eq(2)")).toHaveClass("filtered_out");
+                });
+
+                it("should not add the filtered_out class to the matching item", function() {
+                    expect(this.view.$("ul.available li:eq(1)")).not.toHaveClass("filtered_out");
+                });
+            });
+
+            context("when typing something that matches more than one name", function() {
+                beforeEach(function() {
+                    this.view.$(".search input").val("ma");
+                    this.view.$(".search input").trigger("textchange");
+                });
+
+                it("should add the filtered_out class to the non-matching item", function() {
+                    expect(this.view.$("ul.available li:eq(1)")).toHaveClass("filtered_out");
+                });
+
+                it("should not add the filtered_out class to the matching items", function() {
+                    expect(this.view.$("ul.available li:eq(0)")).not.toHaveClass("filtered_out");
+                    expect(this.view.$("ul.available li:eq(2)")).not.toHaveClass("filtered_out");
+                });
+            });
+
+            context("when typing something that matches nothing", function() {
+                beforeEach(function() {
+                    this.view.$(".search input").val("xx");
+                    this.view.$(".search input").trigger("textchange");
+                });
+
+                it("should add the filtered_out class to the non-matching item", function() {
+                    expect(this.view.$("ul.available li:eq(0)")).toHaveClass("filtered_out");
+                    expect(this.view.$("ul.available li:eq(1)")).toHaveClass("filtered_out");
+                    expect(this.view.$("ul.available li:eq(2)")).toHaveClass("filtered_out");
+                });
+            });
+
+            context("when the search bar is empty", function() {
+                beforeEach(function() {
+                    this.view.$(".search input").val("");
+                    this.view.$(".search input").trigger("textchange");
+                });
+
+                it("should not add the filtered_out class to anything", function() {
+                    expect(this.view.$("ul.available li:eq(0)")).not.toHaveClass("filtered_out");
+                    expect(this.view.$("ul.available li:eq(1)")).not.toHaveClass("filtered_out");
+                    expect(this.view.$("ul.available li:eq(2)")).not.toHaveClass("filtered_out");
+                });
+            });
+        });
     });
 });
-
-

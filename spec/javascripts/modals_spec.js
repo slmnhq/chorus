@@ -6,7 +6,25 @@ describe("chorus.Modal", function() {
         stubModals();
     });
 
-    describe("#setup", function() {
+    describe("intialization", function() {
+        context("when a model option is provided", function() {
+            it("sets the model on the view", function() {
+                var otherModel = new chorus.models.User({ id: 1 });
+                this.modal = new chorus.Modal({ pageModel : this.model, model : otherModel });
+                expect(this.modal.model).toBe(otherModel);
+            });
+        });
+
+        context("when no model is passed", function() {
+            it("sets the model to the pageModel", function() {
+                expect(this.modal.model).toBe(this.model);
+            });
+        });
+
+        it("sets the pageModel", function() {
+            expect(this.modal.pageModel).toBe(this.model);
+        });
+
         it("calls bindPageModelCallbacks", function() {
             expect(this.modal.bindPageModelCallbacks).toHaveBeenCalled();
         });

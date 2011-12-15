@@ -110,6 +110,19 @@
                 return prefix + Handlebars.compile(this.showUrlTemplate)(this.attributes);
             },
 
+            activities : function() {
+                if (!this._activities) {
+                    if (!this.entityType) {
+                        throw "Cannot create activities without having an entityType";
+                    }
+
+                    this._activities = new chorus.models.ActivitySet([], { entityType : this.entityType, entityId : this.get("id") });
+                    this.bind("invalidated", this._activities.fetch, this._activities)
+                }
+
+                return this._activities;
+            },
+
             parse: function(data) {
                 if (data.status == "needlogin") {
                     chorus.session.trigger("needsLogin");
@@ -149,11 +162,8 @@
                 options.success = function(resp) {
                     if (!model.set(model.parse(resp), options)) return false;
 
-                    if (resp.status == "ok") {
-                        model.trigger('destroy', model, model.collection, options);
-                    } else {
-                        model.trigger('destroyFailed', model, model.collection, options);
-                    }
+                    var event = (resp.status === "ok") ? "destroy" : "destroyFailed";
+                    model.trigger(event, model, model.collection, options);
 
                     if (success) success(model, resp);
                 };
@@ -162,6 +172,10 @@
             },
 
             declareValidations: $.noop,
+
+            isValid: function() {
+                return _.isEmpty(this.errors);
+            },
 
             performValidation: function(newAttrs) {
                 this.errors = {};

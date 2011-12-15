@@ -89,13 +89,13 @@ describe("chorus.views.WorkspaceList", function() {
         });
 
         it("displays the truncated summary when it's not empty", function() {
-            expect($(".summary", this.archivedEl).text()).toContain(this.archivedWorkspace.get("summary"));
+            expect($(".summary", this.archivedEl).text().trim()).toContain(this.archivedWorkspace.get("summary").trim())
         });
 
         describe("when the summary is less than 100", function() {
 
             it("displays the truncated summary without option 'More' ", function() {
-                expect($(".summary", this.archivedEl).text()).toContain(this.archivedWorkspace.get("summary"));
+                expect($(".summary", this.archivedEl).text().trim()).toContain(this.archivedWorkspace.get("summary").trim());
                 expect($(".summary a", this.archivedEl)).not.toHaveClass("moreLink");
             });
         });
@@ -103,7 +103,7 @@ describe("chorus.views.WorkspaceList", function() {
         describe("when the summary is more than 100", function() {
             it("displays the truncated summary with option 'More' ", function() {
                 expect($(this.archivedBigSummaryEl)).not.toHaveClass("more");
-                expect($(".summary", this.archivedBigSummaryEl).text()).toContain(this.archivedBigSummaryWorkspace.get("summary").substring(0, 100));
+                expect($(".summary", this.archivedBigSummaryEl).text().trim()).toContain(this.archivedBigSummaryWorkspace.get("summary").substring(0, 100).trim());
             });
 
             it("displays the full summary with option 'Less' when clicked on More ", function() {
