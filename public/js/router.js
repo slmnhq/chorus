@@ -14,7 +14,7 @@
             ["/workspaces", "WorkspaceIndex"],
             ["/workspaces/:id", "WorkspaceSummary"],
             ["/workspaces/:workspaceId/workfiles", "WorkfileIndex"],
-            ["/workspaces/:workspaceId/workfiles/:workspaceId", "WorkfileShow"],
+            ["/workspaces/:workspaceId/workfiles/:workfileId", "WorkfileShow"],
             ["/styleguide", "StyleGuide"]
         ],
 
@@ -25,7 +25,7 @@
             _.each(this.maps, function(map){
                 var pattern       = map[0],
                     pageClassName = map[1],
-                    callback      = generateRouteCallback.call(self, pageClassName);
+                    callback      = self.generateRouteCallback(pageClassName);
                 self.route(pattern, pageClassName, callback);
             });
 
@@ -39,23 +39,33 @@
             } else {
                 Backbone.Router.prototype.navigate(fragment, triggerRoute);
             }
+        },
+
+        generateRouteCallback : function(className) {
+            var self = this;
+            return function() {
+                var args = arguments;
+                var navFunction = function() {
+                    var pageClass = ns.pages[className + "Page"];
+                    var page = applyConstructor(pageClass, args);
+                    self.trigger("route", className, args);
+                    self.app.page = page;
+
+                    $("#page").html(page.render().el).attr("data-page", className);
+
+                    if (self.app.modal) self.app.modal.closeModal();
+                };
+
+                if (className == 'Login' || self.app.user.loggedIn()) {
+                    navFunction();
+                } else {
+                    self.app.user.fetch({success: navFunction});
+                }
+            };
+
         }
     });
 
-    function generateRouteCallback(className) {
-        var self = this;
-
-        return function() {
-            var pageClass = ns.pages[className + "Page"];
-            var page = applyConstructor(pageClass, arguments);
-            self.trigger("route", className, arguments);
-            self.app.page = page;
-
-            $("#page").html(page.render().el).attr("data-page", className);
-
-            if (self.app.modal) self.app.modal.closeModal();
-        }
-    };
 
     // apply arbitrary number of arguments to constructor (for routes with parameters)
     // code taken from http://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible/1608546#1608546

@@ -27,36 +27,6 @@ describe("chorus.models.Session", function() {
 
     });
 
-    describe("saved", function() {
-        beforeEach(function() {
-            $.cookie("userId", null)
-            this.model = new models.Session({ id : 96, userName : "ponyParty", password : "partytime"});
-            this.user = this.model.user()
-            spyOn(this.user, "fetch")
-        });
-
-        it("sets the authUser cookie", function() {
-            this.model.trigger("saved");
-            expect($.cookie("userId")).toBe('96')
-        })
-
-        it("sets the user id", function(){
-            expect(this.user.get("id")).toBe(96)
-            this.model.set({id : 39})
-            expect(this.user.get("id")).toBe(96) //not really an important assertion, but describes the way the system is working
-
-            this.model.trigger("saved");
-            expect(this.user.get("id")).toBe(39)
-        })
-
-        //this is debatable so it is currently xit'ed
-        xit("fetches the user", function(){
-            this.model.trigger("saved");
-            expect(this.user.fetch).toHaveBeenCalled()
-        })
-    });
-
-
     describe("#logout", function() {
         beforeEach(function() {
             this.model = new models.Session();
@@ -114,6 +84,22 @@ describe("chorus.models.Session", function() {
                 })
             })
         })
+    });
+
+    describe("loggedIn", function() {
+        beforeEach(function() {
+            this.model = new models.Session();
+        });
+
+        it("returns false when there is no _user", function() {
+            expect(this.model.loggedIn()).toBeFalsy();
+        });
+
+        it("returns true when the user has been fetched", function() {
+            this.model._user = fixtures.user();
+            expect(this.model._user.get('id')).toBeTruthy();
+            expect(this.model.loggedIn()).toBeTruthy();
+        });
     });
 
     describe("#fetch", function() {
@@ -238,35 +224,24 @@ describe("chorus.models.Session", function() {
             this.session = new models.Session()
         });
 
-       it("returns a User", function(){
-            expect(this.session.user() instanceof(chorus.models.User)).toBeTruthy();
-       })
+        context("when a user has been fetched", function() {
+            beforeEach(function() {
+                this.session._user = fixtures.user();
+            })
 
-        it("returns the same user object", function(){
-            expect(this.session.user()).toBe(this.session.user())
-        })
+            it("returns a User", function() {
+                expect(this.session.user() instanceof(chorus.models.User)).toBeTruthy();
+            });
 
-       context("when there is a userId Cookie", function(){
-           beforeEach(function(){
-                $.cookie("userId", 973)
-           })
+            it("returns the same user object", function() {
+                expect(this.session.user()).toBe(this.session.user())
+            });
+        });
 
-           it("sets the user's user ID from the cookie", function() {
-                expect(this.session.user().get("id")).toBe("973");
-           });
-           
+        it("returns false when the user has not been fetched", function() {
+           expect(this.session.user()).toBeFalsy();
+        });
 
-           context("when the session is fetched and has differnt attributes", function(){
-               beforeEach(function(){
-                   this.session.set({id: 489})
-               })
-
-               it("sets the user's user ID from the session", function() {
-                    expect(this.session.user().get("id")).toBe(489);
-               });
-           })
-
-       })
     });
 
 

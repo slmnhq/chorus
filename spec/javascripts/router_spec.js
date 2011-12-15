@@ -44,6 +44,7 @@ describe("chorus.router", function() {
             this.chorus.router.showDevLinks = false
 
 
+            this.loadTemplate("dashboard");
             this.loadTemplate("header");
             this.loadTemplate("breadcrumbs");
             this.loadTemplate("main_content");
@@ -53,10 +54,12 @@ describe("chorus.router", function() {
             this.loadTemplate("logged_in_layout");
             this.loadTemplate("plain_text")
             this.loadTemplate("truncated_text")
+            this.loadTemplate("dashboard_workspace_list");
             this.loadTemplate("dashboard_workspace_list_footer");
             this.loadTemplate("sidebar_activity_list");
             this.loadTemplate("main_activity_list");
 
+            spyOn(this.chorus.user, 'loggedIn').andReturn(true);
 
             this.savedLocation = window.location.hash;
         })
@@ -86,5 +89,58 @@ describe("chorus.router", function() {
             this.chorus.router.navigate("/", true);
             expect(this.chorus.modal.closeModal).toHaveBeenCalled();
         });
-    })
+    });
+
+    describe("generateRouteCallback", function() {
+        beforeEach(function() {
+            this.chorus = new Chorus();
+            this.backboneSpy = spyOn(Backbone.history, "start")
+            this.chorus.initialize();
+            spyOn(this.chorus.user, 'fetch');
+        });
+
+        context("when logged in", function() {
+            beforeEach(function() {
+                spyOn(this.chorus.user, 'loggedIn').andReturn(true);
+            });
+
+            it("does not fetch the user", function() {
+                expect(this.chorus.user.fetch).not.toHaveBeenCalled();
+            });
+        });
+
+        context("when not logged in", function() {
+            beforeEach(function() {
+                spyOn(this.chorus.user, 'loggedIn').andReturn(false);
+                this.routeSpy = jasmine.createSpy("route");
+                this.loadTemplate("breadcrumbs");
+                this.loadTemplate("default_content_header");
+                this.loadTemplate("header");
+                this.loadTemplate("login");
+                this.loadTemplate("logged_in_layout");
+                this.loadTemplate("plain_text");
+                this.loadTemplate("main_content");
+                this.loadTemplate("user_new");
+                this.chorus.router.bind("route", this.routeSpy);
+            });
+
+            it("fetches the user", function() {
+                this.chorus.router.navigate("/users/new", true);
+                expect(this.chorus.user.fetch).toHaveBeenCalled();
+            });
+
+            it("does not fetch the user if navigating to the Login page", function() {
+                this.chorus.router.navigate("/login", true);
+                expect(this.chorus.user.fetch).not.toHaveBeenCalled();
+            });
+
+            it("calls trigger after the user has been fetched", function() {
+                this.chorus.router.navigate("/users/new", true);
+                expect(this.chorus.user.fetch).toHaveBeenCalled();
+                expect(this.routeSpy).not.toHaveBeenCalled();
+                this.chorus.user.fetch.mostRecentCall.args[0].success();
+                expect(this.routeSpy).toHaveBeenCalled();
+            });
+        });
+    });
 })

@@ -584,6 +584,18 @@
                     lastName : "Smith",
                     firstName : "Bob"
                 }
+            },
+
+            user: function() {
+                return new chorus.models.User({
+                    id : "InitialUser",
+                    userName : "edcadmin",
+                    admin : true,
+                    firstName : "EDC",
+                    lastName : "Admin",
+                    fullName : "EDC Admin",
+                    use_external_ldap : false
+                });
             }
         });
     });

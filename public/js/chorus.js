@@ -9,8 +9,8 @@
 
         self.initialize = function() {
             self.session = new chorus.models.Session();
-            self.router = new chorus.Router(self);
             self.user = self.session;
+            self.router = new chorus.Router(self);
 
             //bind global state events here
             self.session.bind("needsLogin", self.requireLogin);
