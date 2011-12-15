@@ -60,12 +60,6 @@ describe("chorus.router", function() {
             this.loadTemplate("main_activity_list");
 
             spyOn(this.chorus.session, 'loggedIn').andReturn(true);
-
-            this.savedLocation = window.location.hash;
-        })
-
-        afterEach(function() {
-            window.location.hash = this.savedLocation;
         })
 
         it("renders the page with parameters", function() {
