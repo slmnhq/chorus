@@ -23,8 +23,7 @@
                         "Expected text '" + this.actual + "' not to match the translation for '" + translationKey + "'"
                     ];
                 };
-
-                var translatedText = t(translationKey);
+                var translatedText = t.apply(this, arguments);
                 if (translatedText === '[' + translationKey + ']') {
                     throw("No entry in messages.properties for " + translationKey);
                 }

@@ -49,6 +49,12 @@
             width: $icon-image-width;
             height: $icon-image-height;
         }
+
+        .dialog {
+            font-size: 12px;
+            font-weight: $semibold;
+            margin-left: 10px;
+        }
     }
 
 }

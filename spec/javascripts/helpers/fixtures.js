@@ -562,6 +562,11 @@
                 }
             },
 
+            currentId: 1,
+            nextId: function() {
+                return this.currentId++;
+            },
+
             activity: function() {
                 return new chorus.models.Activity({
                     author: fixtures.authorJson(),
@@ -587,14 +592,22 @@
             },
 
             user: function() {
+                var id = this.nextId().toString();
                 return new chorus.models.User({
-                    id : "InitialUser",
-                    userName : "edcadmin",
+                    id : id,
+                    userName : "user" + id,
                     admin : true,
                     firstName : "EDC",
                     lastName : "Admin",
                     fullName : "EDC Admin",
                     use_external_ldap : false
+                });
+            },
+
+            workspace: function() {
+                return new chorus.models.Workspace({
+                    id : this.nextId().toString(),
+                    _owner: this.user()
                 });
             }
         });

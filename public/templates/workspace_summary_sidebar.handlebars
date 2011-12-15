@@ -15,10 +15,15 @@
 </ul>
 </div>
 
-<ul class='members'>
+<div class="members">
+<ul>
     {{#each members}}
         <li>
             <a href="{{{showUrl}}}"><img class="profile" src="{{{imageUrl}}}"/></a>
         </li>
     {{/each}}
 </ul>
+    {{#if extra_members}}
+    <a class="dialog" href="#" data-dialog="WorkspaceMembersMore">{{t "workspace.members.more" extra_members}}</a>
+    {{/if}}
+</div>

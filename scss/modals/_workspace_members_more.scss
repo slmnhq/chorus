@@ -1,0 +1,54 @@
+@import "../_common.scss";
+
+.workspace_members_more {
+    width: 315px;
+
+
+    .sub_header {
+        padding: 10px 15px;
+        .member_count {
+            color: $secondary-text-color;
+            font-weight: $semibold;
+        }
+    }
+
+    ul {
+        max-height: (($list-item-height + $list-border-width) * 8) + $list-item-height;
+        overflow: auto;
+        border-top: 1px solid $subheader-border-color-dark;
+        border-bottom: 1px solid $subheader-border-color-dark;
+
+        li {
+            border-bottom: $list-border-width dotted $list-border-color;
+            padding: 0 8px;
+            line-height: $list-item-height;
+            @include ellipsis;
+            vertical-align: middle;
+            .name {
+                padding-left: 5px;
+                vertical-align: middle;
+                color: $dark-text-color;
+                font-size: 14px;
+            }
+        }
+    }
+
+    img {
+        width: $icon-image-width;
+        height: $icon-image-height;
+        vertical-align: middle;
+    }
+
+    button {
+        float: right;
+        margin: 0 10px 15px;
+    }
+}
+
+#dialog.workspace_members_more {
+
+    #dialog_content {
+        padding: 0;
+    }
+    
+}

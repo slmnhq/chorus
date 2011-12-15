@@ -101,29 +101,52 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
         });
 
         describe("the members list", function() {
+            var members;
             beforeEach(function() {
-                this.members = this.model.members();
-                this.user1 = new chorus.models.User({ id: '21', userName: "bob" });
-                this.user2 = new chorus.models.User({ id: '22', userName: "rob" });
-                this.user3 = new chorus.models.User({ id: '23', userName: "job" });
-                this.members.add([ this.user1, this.user2, this.user3 ]);
+                members = this.model.members();
+                _.times(3, function() {
+                   members.add(fixtures.user());
+                });
                 this.view.render();
             });
 
             it("includes an image for each member", function() {
                 var images = this.view.$(".members img");
                 expect(images.length).toBe(3);
-                expect(images.eq(0).attr("src")).toBe(this.user1.imageUrl({ size: 'icon' }));
-                expect(images.eq(1).attr("src")).toBe(this.user2.imageUrl({ size: 'icon' }));
-                expect(images.eq(2).attr("src")).toBe(this.user3.imageUrl({ size: 'icon' }));
+                expect(images.eq(0).attr("src")).toBe(members.models[0].imageUrl({ size: 'icon' }));
+                expect(images.eq(1).attr("src")).toBe(members.models[1].imageUrl({ size: 'icon' }));
+                expect(images.eq(2).attr("src")).toBe(members.models[2].imageUrl({ size: 'icon' }));
             });
 
             it("includes a link to each member's page", function() {
-                var links = this.view.$(".members a");
+                var links = this.view.$(".members li a");
                 expect(links.length).toBe(3);
-                expect(links.eq(0).attr("href")).toBe(this.user1.showUrl());
-                expect(links.eq(1).attr("href")).toBe(this.user2.showUrl());
-                expect(links.eq(2).attr("href")).toBe(this.user3.showUrl());
+                expect(links.eq(0).attr("href")).toBe(members.models[0].showUrl());
+                expect(links.eq(1).attr("href")).toBe(members.models[1].showUrl());
+                expect(links.eq(2).attr("href")).toBe(members.models[2].showUrl());
+            });
+
+            it("does not have the more workspace members link", function() {
+                expect(this.view.$(".members a.dialog[data-dialog=WorkspaceMembersMore]").length).toBe(0)
+            })
+
+            context("when there are more than 24 members", function() {
+                beforeEach(function() {
+                    _.times(25, function() {
+                        members.add(fixtures.user());
+                    });
+                    this.view.render();
+                });
+
+                it("only shows the first 24 images", function() {
+                   expect(this.view.$(".members img").length).toBe(24);
+                });
+
+                it("has a X more workspace members link", function() {
+                    expect(this.view.$(".members a.dialog[data-dialog=WorkspaceMembersMore]").length).toBe(1)
+                });
+
+
             });
         });
     });
