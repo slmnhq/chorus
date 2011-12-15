@@ -11,6 +11,10 @@ div[data-page="Dashboard"] {
         @include after-clearfix();
     }
 
+    .main_activity_list .heading {
+        display: none;
+    }
+
     .main_content.workspace_list {
         float: right;
         width: $workspace-list-width;
@@ -19,7 +23,7 @@ div[data-page="Dashboard"] {
         .dashboard_workspace_list {
             li {
                 padding-bottom : 4px;
-                
+
                 .comment {
                     line-height : 16px;
                     padding-top : 3px;

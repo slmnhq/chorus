@@ -13,18 +13,17 @@
 
             var activities = chorus.session.user().activities();
             activities.fetch();
-            activities.bind("changed", this.render, this);
-            this.activityList = new ns.views.MainActivityList({ collection : activities, activityType: t("dashboard.activity")});
+            this.activityList = new ns.views.MainActivityList({ collection : activities });
 
             this.dashboardMain = new ns.views.MainContentView({
-                contentHeader : ns.views.StaticTemplate("default_content_header", {title : "Dashboard"}),
+                contentHeader : ns.views.StaticTemplate("default_content_header", {title : t("dashboard.activity")}),
                 content : this.activityList
             });
         },
 
-        postRender : function(){
-            $(this.el).append($(this.workspaceList.render().el).addClass("workspace_list"));
-            $(this.el).append($(this.dashboardMain.render().el).addClass("dashboard_main"));
+        subviews: {
+            '.dashboard_main': "dashboardMain",
+            '.workspace_list': "workspaceList"
         }
     });
 })(jQuery, chorus);
