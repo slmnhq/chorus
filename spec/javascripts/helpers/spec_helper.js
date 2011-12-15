@@ -71,7 +71,6 @@
         loadAllTemplates();
 
         this.server = sinon.fakeServer.create();
-        this.spies = sinon.sandbox.create();
 
         this.renderDOM = function(content) {
             return $('#jasmine_content').html(content);
@@ -119,7 +118,6 @@
 
     afterEach(function() {
         this.server.restore();
-        this.spies.restore();
         $.cookie("userId", null)
     });
 
