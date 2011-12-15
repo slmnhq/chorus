@@ -51,6 +51,11 @@ describe("chorus.models.Workspace", function() {
             this.model.owner();
             expect(this.server.requests.length).toBe(numberOfServerRequests);
         });
+
+        it("memoizes", function() {
+            var owner = this.model.owner();
+            expect(owner).toBe(this.model.owner());
+        });
     });
 
     describe("#members", function() {
