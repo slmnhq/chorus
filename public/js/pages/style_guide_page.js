@@ -54,16 +54,17 @@
 
                 "Sub Nav" : new chorus.views.SubNav({model : this.workspace, tab : "summary"}),
 
+                "Link Menu" : new chorus.views.LinkMenu({title : "Link Menu", options : [
+                                                        {data : "first", text : "Text of first option"},
+                                                        {data : "second", text : "Text of second option"}
+                ]}),
+
                 "Basic Main Content View" : new chorus.views.MainContentView({
                     contentHeader : new chorus.views.StaticTemplate("default_content_header", {title: 'Content Header'}),
                     contentDetails : new chorus.views.StaticTemplate("plain_text", {text: 'Content Details'}),
                     content : new chorus.views.StaticTemplate("ipsum")
                 }),
 
-                "Link Menu" : new chorus.views.LinkMenu({title : "Link Menu", options : [
-                                                        {data : "first", text : "Text of first option"},
-                                                        {data : "second", text : "Text of second option"}
-                ]}),
 
                 "List Page (loading)" : new chorus.views.MainContentList({modelClass : "User", collection : this.loadingCollection}),
 
