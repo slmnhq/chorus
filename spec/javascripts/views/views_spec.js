@@ -224,10 +224,6 @@ describe("chorus.views", function() {
     })
 
     describe("MainContentView", function() {
-        beforeEach(function() {
-            this.loadTemplate("main_content");
-        });
-
         describe("#render", function() {
             beforeEach(function() {
                 this.view = new chorus.views.MainContentView();
@@ -299,8 +295,6 @@ describe("chorus.views", function() {
 
     describe("ListHeaderView", function() {
         beforeEach(function() {
-            this.loadTemplate("default_content_header");
-            this.loadTemplate("link_menu");
             this.view = new chorus.views.ListHeaderView({
                 title : "Hi there",
                 linkMenus : {

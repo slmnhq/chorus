@@ -1,8 +1,6 @@
 describe("WorkfileListSidebar", function() {
     beforeEach(function() {
         fixtures.model = 'Workspace';
-        this.loadTemplate("workfile_list_sidebar");
-        this.loadTemplate("sidebar_activity_list")
         this.workspace = fixtures.modelFor("fetch");
         this.view = new chorus.views.WorkfileListSidebar({ model : this.workspace });
     });

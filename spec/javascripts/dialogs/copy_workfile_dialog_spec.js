@@ -1,7 +1,5 @@
 describe("chorus.dialogs.CopyWorkfile", function() {
     beforeEach(function() {
-        this.loadTemplate("copy_workfile");
-        this.loadTemplate("collection_picklist");
         this.launchElement = $("<a data-workspace-id='4' data-workfile-id='10'></a>")
     });
 

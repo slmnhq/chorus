@@ -1,7 +1,5 @@
 describe("chorus.views.WorkspaceList", function() {
     beforeEach(function() {
-        this.loadTemplate("workspace_list");
-
         this.activeWorkspace = new chorus.models.Workspace({id: 1, active: true, name: "my active workspace"});
         this.archivedWorkspace = new chorus.models.Workspace({
             id: 2,

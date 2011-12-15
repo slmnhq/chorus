@@ -1,8 +1,4 @@
 describe("chorus.views.BreadcrumbView", function() {
-    beforeEach(function() {
-        this.loadTemplate("breadcrumbs");
-    });
-
     describe("#render", function() {
         beforeEach(function() {
             this.view = new chorus.views.BreadcrumbsView({ breadcrumbs : [
@@ -35,10 +31,6 @@ describe("chorus.views.BreadcrumbView", function() {
 });
 
 describe("chorus.views.WorkspaceBreadcrumbView", function() {
-    beforeEach(function() {
-        this.loadTemplate("breadcrumbs");
-    });
-
     describe("#render", function(){
         context("while the model is loading", function(){
             beforeEach(function(){

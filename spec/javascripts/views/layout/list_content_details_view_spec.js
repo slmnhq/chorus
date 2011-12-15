@@ -1,6 +1,5 @@
 describe("ListContentDetails", function() {
     beforeEach(function() {
-        this.loadTemplate("list_content_details")
         fixtures.model = "UserSet";
         this.collection = fixtures.modelFor("fetch");
         this.view = new chorus.views.ListContentDetails({ collection : this.collection, modelClass : "User" });

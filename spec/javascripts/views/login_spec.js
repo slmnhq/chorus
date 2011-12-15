@@ -1,6 +1,5 @@
 describe("chorus.views.Login", function() {
     beforeEach(function() {
-        this.loadTemplate("login");
         this.view = new chorus.views.Login({model : chorus.session});
         this.view.render();
     });

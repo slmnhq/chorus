@@ -34,7 +34,6 @@ describe("chorus.Modal", function() {
         beforeEach(function() {
             //Modal is abstract, so we need to give it a template to render
             //this is the responsibility of subclasses
-            this.loadTemplate("plain_text")
             this.modal.className = "plain_text"
 
             this.modal.launchModal();

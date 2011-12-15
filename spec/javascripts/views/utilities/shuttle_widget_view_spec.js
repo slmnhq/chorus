@@ -1,6 +1,5 @@
 describe("chorus.views.ShuttleWidget", function() {
     beforeEach(function() {
-        this.loadTemplate("shuttle_widget")
         fixtures.model = "UserSet";
         this.collection = fixtures.modelFor("fetch");
         this.selectedItems = new Backbone.Collection([this.collection.get("10001")]);

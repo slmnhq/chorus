@@ -2,7 +2,6 @@ describe("chorus.views.Alert", function() {
     beforeEach(function() {
         this.model = new chorus.models.Base({ id: "foo"});
         this.alert = new chorus.alerts.Base({ model : this.model });
-        this.loadTemplate("alert");
         this.alert.title = "OH HAI";
         this.alert.text = "How are you?"
         this.alert.ok = "Do it!"
@@ -72,7 +71,6 @@ describe("chorus.views.Alert", function() {
 
 describe("ModelDelete alert", function() {
     beforeEach(function() {
-        this.loadTemplate("alert")
         this.model = new chorus.models.User();
         this.alert = new chorus.alerts.ModelDelete({  model: this.model });
         stubModals();

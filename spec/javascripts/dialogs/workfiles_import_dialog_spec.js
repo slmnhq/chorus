@@ -2,7 +2,6 @@ describe("WorkfilesImportDialog", function() {
     beforeEach(function() {
         this.launchElement = $("<a data-workspace-id='4'></a>")
         this.dialog = new chorus.dialogs.WorkfilesImport({launchElement : this.launchElement});
-        this.loadTemplate("workfiles_import");
     });
 
     it("does not re-render when the model changes", function() {

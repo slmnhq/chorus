@@ -1,6 +1,5 @@
 describe("chorus.views.DashboardWorkspaceList", function() {
     beforeEach(function(){
-        this.loadTemplate("dashboard_workspace_list");
         fixtures.model = "Workspace"
         this.workspace = fixtures.modelFor("fetchWithLatestComments")
         this.workspace.get("latestCommentList")[0].timestamp = (50).hours().ago().toString("yyyy-MM-dd hh:mm:ss");

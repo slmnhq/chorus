@@ -1,16 +1,5 @@
 describe("chorus.pages.DashboardPage", function() {
     beforeEach(function() {
-        this.loadTemplate("dashboard");
-        this.loadTemplate("header");
-        this.loadTemplate("breadcrumbs");
-        this.loadTemplate("dashboard_sidebar");
-        this.loadTemplate("logged_in_layout");
-        this.loadTemplate("main_content")
-        this.loadTemplate("dashboard_workspace_list")
-        this.loadTemplate("default_content_header")
-        this.loadTemplate("plain_text")
-        this.loadTemplate("dashboard_workspace_list_footer")
-        this.loadTemplate("main_activity_list");
         this.page = new chorus.pages.DashboardPage();
     });
 

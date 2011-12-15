@@ -1,8 +1,4 @@
 describe("chorus.views.UserShow", function() {
-    beforeEach(function() {
-        this.loadTemplate("user_show");
-    });
-
     describe("#render", function() {
         beforeEach(function() {
             this.model = new chorus.models.User({

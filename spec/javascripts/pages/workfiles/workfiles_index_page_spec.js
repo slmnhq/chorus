@@ -1,17 +1,6 @@
 describe("chorus.pages.WorkfileIndexPage", function() {
     beforeEach(function() {
         fixtures.model = "Workfile";
-        this.loadTemplate("workfile_list")
-        this.loadTemplate("workfile_list_sidebar")
-        this.loadTemplate("breadcrumbs");
-        this.loadTemplate("sub_nav");
-        this.loadTemplate("logged_in_layout");
-        this.loadTemplate("main_content");
-        this.loadTemplate("header");
-        this.loadTemplate("link_menu");
-        this.loadTemplate("default_content_header");
-        this.loadTemplate("list_content_details");
-        this.loadTemplate("sidebar_activity_list")
     })
 
     describe("#initialize", function() {

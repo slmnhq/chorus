@@ -1,17 +1,4 @@
 describe("user_show_page", function(){
-    beforeEach(function(){
-        this.loadTemplate("logged_in_layout");
-        this.loadTemplate("header");
-        this.loadTemplate("plain_text");
-        this.loadTemplate("breadcrumbs");
-        this.loadTemplate("default_content_header");
-        this.loadTemplate("main_content");
-        this.loadTemplate("user_show");
-        this.loadTemplate("user_show_sidebar");
-        this.loadTemplate("alert");
-        this.loadTemplate("change_password")
-    });
-
     describe("#setup", function(){
         beforeEach(function(){
             this.view = new chorus.pages.UserShowPage("44");

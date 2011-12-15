@@ -1,7 +1,6 @@
 describe("WorkspacesNewDialog", function() {
     beforeEach(function() {
         this.dialog = new chorus.dialogs.WorkspacesNew();
-        this.loadTemplate("workspaces_new")
     });
 
     it("does not re-render when the model changes", function() {

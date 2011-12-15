@@ -1,8 +1,5 @@
 describe("chorus.views.userEdit", function() {
     beforeEach(function() {
-        this.loadTemplate("user_edit");
-        this.loadTemplate("image_upload");
-
         setLoggedInUser({'userName': 'edcadmin'})
         fixtures.model = 'User';
         this.user = new chorus.models.User()

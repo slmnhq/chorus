@@ -1,6 +1,5 @@
 describe("chorus.views.DisplayNameHeader", function() {
     beforeEach(function() {
-        this.loadTemplate("default_content_header")
         fixtures.model = "User";
         this.model = fixtures.modelFor("fetch");
         this.view = new chorus.views.DisplayNameHeader({ model : this.model })

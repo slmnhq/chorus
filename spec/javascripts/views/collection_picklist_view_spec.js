@@ -1,6 +1,5 @@
 describe("chorus.views.CollectionPicklist", function() {
     beforeEach(function() {
-        this.loadTemplate("collection_picklist")
         fixtures.model = "UserSet";
         this.collection = fixtures.modelFor("fetch");
         this.view = new chorus.views.CollectionPicklist({ collection : this.collection })

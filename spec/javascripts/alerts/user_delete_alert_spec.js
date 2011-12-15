@@ -2,7 +2,6 @@ describe("UserDelete", function() {
     beforeEach(function() {
         this.launchElement = $("<a data-id='42'></a>")
         this.alert = new chorus.alerts.UserDelete({ launchElement : this.launchElement });
-        this.loadTemplate("alert")
     });
 
     it("finds the user from the data attributes on the link", function(){

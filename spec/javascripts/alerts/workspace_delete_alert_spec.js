@@ -3,7 +3,6 @@ describe("WorkspaceDelete", function() {
         this.launchElement = $("<a></a>")
         this.model = new chorus.models.Workspace({ name: "Friends' Writings", id: '34' });
         this.alert = new chorus.alerts.WorkspaceDelete({ launchElement : this.launchElement, pageModel : this.model });
-        this.loadTemplate("alert")
         stubModals();
         this.alert.launchModal();
     });

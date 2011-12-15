@@ -5,7 +5,6 @@ describe("NotesNewDialog", function() {
             launchElement : this.launchElement,
             pageModel : new chorus.models.Workfile()
         });
-        this.loadTemplate("notes_new");
     });
 
     describe("#setup", function() {

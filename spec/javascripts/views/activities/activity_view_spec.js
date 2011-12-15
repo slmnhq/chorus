@@ -1,8 +1,4 @@
 describe("chorus.views.Activity", function() {
-    beforeEach(function() {
-        this.loadTemplate("activity");
-    });
-
     describe("type: NOTE", function() {
         beforeEach(function() {
             this.activity = fixtures.activity();

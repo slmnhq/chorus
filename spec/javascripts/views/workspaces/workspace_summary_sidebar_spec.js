@@ -1,8 +1,4 @@
 describe("chorus.views.WorkspaceSummarySidebar", function() {
-    beforeEach(function() {
-        this.loadTemplate("workspace_summary_sidebar");
-    });
-
     describe("#setup", function() {
         beforeEach(function() {
             this.model = new chorus.models.Workspace({name: "A Cool Workspace", id: '123'});

@@ -1,8 +1,5 @@
 describe("chorus.pages.Base", function() {
     beforeEach(function() {
-        this.loadTemplate("logged_in_layout");
-        this.loadTemplate("header");
-        this.loadTemplate("breadcrumbs");
         chorus.user = new chorus.models.User({
             "firstName" : "Daniel",
             "lastName" : "Burkes",

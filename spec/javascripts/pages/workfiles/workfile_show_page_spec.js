@@ -1,19 +1,7 @@
 describe("chorus.pages.WorkfileShowPage", function() {
     beforeEach(function() {
-        this.loadTemplate("main_content");
-        this.loadTemplate("sub_nav");
-        this.loadTemplate("logged_in_layout");
-        this.loadTemplate("breadcrumbs");
-        this.loadTemplate("workfile_header");
-        this.loadTemplate("workfile_content_details");
-        this.loadTemplate("header");
-        this.loadTemplate("text_workfile_content");
-        this.loadTemplate("workfile_show_sidebar")
-        this.loadTemplate("sidebar_activity_list")
-
         this.workspaceId = 4;
         this.workfileId = 5;
-
     });
 
     describe("#setup", function() {

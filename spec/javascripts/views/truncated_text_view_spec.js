@@ -1,7 +1,6 @@
 
 describe("chorus.views.TruncatedText", function() {
     beforeEach(function() {
-        this.loadTemplate("truncated_text");
         fixtures.model = "Workspace"
         this.model = fixtures.modelFor("fetch");
     });

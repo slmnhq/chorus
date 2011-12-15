@@ -1,7 +1,5 @@
 describe("chorus.views.ImageUpload", function() {
     beforeEach(function() {
-        this.loadTemplate("image_upload");
-
         this.user = new chorus.models.User({ userName: "franklin", id : 13 });
         this.view = new chorus.views.ImageUpload({model : this.user});
         this.view.model.loaded = true;

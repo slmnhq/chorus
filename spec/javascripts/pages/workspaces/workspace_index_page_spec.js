@@ -1,16 +1,5 @@
 describe("chorus.pages.WorkspaceIndexPage", function() {
     beforeEach(function() {
-        this.loadTemplate("header");
-        this.loadTemplate("breadcrumbs");
-        this.loadTemplate("main_content");
-        this.loadTemplate("default_content_header");
-        this.loadTemplate("list_content_details");
-        this.loadTemplate("workspace_list");
-        this.loadTemplate("logged_in_layout");
-        this.loadTemplate("dashboard_sidebar");
-        this.loadTemplate("workspace_index_content_header");
-        this.loadTemplate("link_menu");
-
         chorus.user = new chorus.models.User({
             "firstName" : "Daniel",
             "lastName" : "Burkes",

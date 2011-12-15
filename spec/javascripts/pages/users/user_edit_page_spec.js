@@ -1,18 +1,4 @@
 describe("chorus.pages.UserEditPage", function() {
-    beforeEach(function() {
-        this.loadTemplate("user_new");
-        this.loadTemplate("breadcrumbs");
-        this.loadTemplate("header");
-        this.loadTemplate("main_content")
-        this.loadTemplate("default_content_header")
-        this.loadTemplate("plain_text")
-        this.loadTemplate("validating");
-        this.loadTemplate("logged_in_layout");
-        this.loadTemplate("user_edit")
-        this.loadTemplate("user_show_sidebar")
-        this.loadTemplate("image_upload");
-    });
-
     describe("#setup", function() {
         beforeEach(function() {
             this.view = new chorus.pages.UserEditPage("42");

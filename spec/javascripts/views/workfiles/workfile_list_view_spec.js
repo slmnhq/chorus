@@ -1,7 +1,4 @@
 describe("WorkfileListView", function() {
-    beforeEach(function() {
-        this.loadTemplate("workfile_list");
-    });
     describe("#render", function() {
         context("with no workfiles in the collection", function() {
             beforeEach(function() {

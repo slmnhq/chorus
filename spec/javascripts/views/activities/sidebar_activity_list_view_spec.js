@@ -1,6 +1,5 @@
 describe("chorus.views.SidebarActivityList", function() {
     beforeEach(function() {
-        this.loadTemplate("sidebar_activity_list");
         fixtures.model = 'ActivitySet';
     });
 

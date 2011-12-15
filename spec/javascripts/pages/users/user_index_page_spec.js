@@ -1,15 +1,5 @@
 describe("chorus.pages.UserIndexPage", function() {
     beforeEach(function() {
-        this.loadTemplate("header");
-        this.loadTemplate("breadcrumbs");
-        this.loadTemplate("main_content");
-        this.loadTemplate("default_content_header");
-        this.loadTemplate("list_content_details");
-        this.loadTemplate("user_list");
-        this.loadTemplate("user_index_sidebar");
-        this.loadTemplate("logged_in_layout");
-        this.loadTemplate("link_menu");
-
         chorus.user = new chorus.models.User({
             "firstName" : "Daniel",
             "lastName" : "Burkes",

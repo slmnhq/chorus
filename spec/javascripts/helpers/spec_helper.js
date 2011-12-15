@@ -1,13 +1,77 @@
 (function($) {
-    beforeEach(function() {
-        this.server = sinon.fakeServer.create();
+    var templates = [
+        'activity',
+        'alert',
+        'breadcrumbs',
+        'change_password',
+        'collection_picklist',
+        'copy_workfile',
+        'dashboard',
+        'dashboard_sidebar',
+        'dashboard_workspace_list',
+        'dashboard_workspace_list_footer',
+        'default_content_header',
+        'header',
+        'image_upload',
+        'image_workfile_content',
+        'link_menu',
+        'list_content_details',
+        'logged_in_layout',
+        'login',
+        'main_activity_list',
+        'main_content',
+        'notes_new',
+        'plain_text',
+        'shuttle_widget',
+        'sidebar_activity_list',
+        'sub_nav',
+        'text_workfile_content',
+        'truncated_text',
+        'user_edit',
+        'user_index_sidebar',
+        'user_list',
+        'user_new',
+        'user_show',
+        'user_show_sidebar',
+        'validating',
+        'workfile_content_details',
+        'workfile_header',
+        'workfile_list',
+        'workfile_list_sidebar',
+        'workfile_show_sidebar',
+        'workfiles_import',
+        'workfiles_sql_new',
+        'workspace_detail',
+        'workspace_edit_members',
+        'workspace_index_content_header',
+        'workspace_list',
+        'workspace_settings',
+        'workspace_summary_sidebar',
+        'workspaces_new'
+    ];
 
+    var loadAllTemplates = _.once(function() {
+        var templateContainer = $("<div id='chorus_templates'/>");
+        _.each(templates, function(templateName) {
+            $.ajax({
+                async: false, // must be synchronous to guarantee that no tests are run before fixture is loaded
+                cache: false,
+                dataType: 'html',
+                url: '/templates/' + templateName + '.handlebars',
+                success: function(data) {
+                    templateContainer.append('<script id="' + templateName + '_template" type="x-handlebars-template">' + data + '</script>');
+                }
+            });
+        });
+
+        $("body").append(templateContainer);
+    });
+
+    beforeEach(function() {
+        loadAllTemplates();
+
+        this.server = sinon.fakeServer.create();
         this.spies = sinon.sandbox.create();
-        this.loadTemplate = function(templateName) {
-            this.server.restore();
-            loadFixtures(templateName + '.handlebars');
-            this.server = sinon.fakeServer.create();
-        };
 
         this.renderDOM = function(content) {
             return $('#jasmine_content').html(content);

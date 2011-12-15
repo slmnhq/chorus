@@ -1,7 +1,5 @@
 describe("chorus.views.UserList", function() {
     beforeEach(function() {
-        this.loadTemplate("user_list");
-        this.loadTemplate("main_content");
         fixtures.model = 'UserSet';
     });
 

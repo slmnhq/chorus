@@ -1,8 +1,4 @@
 describe("chorus.views.LinkMenu", function() {
-    beforeEach(function() {
-        this.loadTemplate("link_menu");
-    });
-
     describe("#render", function() {
         describe("with options", function() {
             beforeEach(function() {

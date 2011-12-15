@@ -11,8 +11,6 @@ describe("WorkspaceSettings dialog", function() {
         ]);
 
         this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement : this.launchElement, pageModel : this.workspace });
-        this.loadTemplate("workspace_settings");
-        this.loadTemplate("image_upload");
     });
 
     describe("#setup", function() {

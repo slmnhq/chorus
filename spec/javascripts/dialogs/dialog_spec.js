@@ -1,7 +1,6 @@
 describe("chorus.views.Dialog", function() {
     beforeEach(function() {
         this.dialog = new chorus.dialogs.Base();
-        this.loadTemplate("plain_text");
         this.dialog.title = "OH HAI";
         this.dialog.className = "plain_text";
         this.dialog.additionalContext = function() {

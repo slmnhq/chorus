@@ -1,15 +1,5 @@
 describe("chorus.views.UserShowSidebar", function() {
     beforeEach(function() {
-        this.loadTemplate("user_show_sidebar");
-        this.loadTemplate("logged_in_layout");
-        this.loadTemplate("header");
-        this.loadTemplate("main_content");
-        this.loadTemplate("default_content_header");
-        this.loadTemplate("plain_text");
-        this.loadTemplate("user_show");
-        this.loadTemplate("breadcrumbs");
-        this.loadTemplate("alert");
-
         this.user = new chorus.models.User({userName: "bill", id: "42"})
     });
 

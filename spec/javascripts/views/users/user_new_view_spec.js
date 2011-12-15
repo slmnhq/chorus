@@ -1,9 +1,4 @@
 describe("chorus.views.userNew", function() {
-    beforeEach(function() {
-        this.loadTemplate("user_new");
-    })
-
-
     describe("#render", function() {
         context("as an admin", function() {
             beforeEach(function() {

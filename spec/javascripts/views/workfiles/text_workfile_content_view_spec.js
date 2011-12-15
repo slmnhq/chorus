@@ -1,7 +1,6 @@
 describe("chorus.views.TextWorkfileContentView", function() {
     beforeEach(function() {
         fixtures.model = "Workfile";
-        this.loadTemplate("text_workfile_content");
         this.textfile = fixtures.modelFor("fetchText");
 
         this.view = new chorus.views.TextWorkfileContent({model: this.textfile});

@@ -43,29 +43,10 @@ describe("chorus.router", function() {
 
             this.chorus.router.showDevLinks = false
 
-
-            this.loadTemplate("dashboard");
-            this.loadTemplate("header");
-            this.loadTemplate("breadcrumbs");
-            this.loadTemplate("main_content");
-            this.loadTemplate("default_content_header");
-            this.loadTemplate("user_list");
-            this.loadTemplate("dashboard_sidebar");
-            this.loadTemplate("logged_in_layout");
-            this.loadTemplate("plain_text")
-            this.loadTemplate("truncated_text")
-            this.loadTemplate("dashboard_workspace_list");
-            this.loadTemplate("dashboard_workspace_list_footer");
-            this.loadTemplate("sidebar_activity_list");
-            this.loadTemplate("main_activity_list");
-
             spyOn(this.chorus.session, 'loggedIn').andReturn(true);
         })
 
         it("renders the page with parameters", function() {
-            this.loadTemplate("workspace_detail");
-            this.loadTemplate("sub_nav");
-            this.loadTemplate("workspace_summary_sidebar");
             this.chorus.router.navigate("/workspaces/5", true);
             expect(this.chorus.page.model.get("id")).toBe("5");
         });
@@ -107,14 +88,6 @@ describe("chorus.router", function() {
             beforeEach(function() {
                 spyOn(this.chorus.session, 'loggedIn').andReturn(false);
                 this.routeSpy = jasmine.createSpy("route");
-                this.loadTemplate("breadcrumbs");
-                this.loadTemplate("default_content_header");
-                this.loadTemplate("header");
-                this.loadTemplate("login");
-                this.loadTemplate("logged_in_layout");
-                this.loadTemplate("plain_text");
-                this.loadTemplate("main_content");
-                this.loadTemplate("user_new");
                 this.chorus.router.bind("route", this.routeSpy);
             });
 

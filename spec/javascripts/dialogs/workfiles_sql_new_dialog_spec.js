@@ -2,7 +2,6 @@ describe("WorkfilesSqlNewDialog", function() {
     beforeEach(function() {
         this.launchElement = $("<a data-workspace-id='4'></a>")
         this.dialog = new chorus.dialogs.WorkfilesSqlNew({launchElement : this.launchElement})
-        this.loadTemplate("workfiles_sql_new")
     });
 
     it("does not re-render when the model changes", function() {

@@ -1,6 +1,5 @@
 describe("chorus.views.Header", function() {
     beforeEach(function() {
-        this.loadTemplate("header");
         chorus.session = new chorus.models.Session({
             "firstName" : "Daniel",
             "lastName" : "Burke",

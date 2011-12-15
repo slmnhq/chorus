@@ -1,16 +1,6 @@
 describe("chorus.pages.WorkspaceSummaryPage", function() {
     beforeEach(function() {
         fixtures.model = "Workspace";
-        this.loadTemplate("workspace_detail");
-        this.loadTemplate("workspace_summary_sidebar");
-        this.loadTemplate("truncated_text");
-        this.loadTemplate("breadcrumbs");
-        this.loadTemplate("main_content");
-        this.loadTemplate("logged_in_layout");
-        this.loadTemplate("header");
-        this.loadTemplate("sub_nav");
-        this.loadTemplate("sidebar_activity_list");
-        this.loadTemplate("main_activity_list");
     })
 
     describe("#initialize", function() {

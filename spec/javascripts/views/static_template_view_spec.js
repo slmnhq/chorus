@@ -1,9 +1,5 @@
 describe("static_template_view", function(){
     describe("#render", function() {
-        beforeEach(function() {
-            this.loadTemplate("plain_text")
-        })
-
         it("renders the template it is passed as an argument", function(){
             var staticView = new chorus.views.StaticTemplate("foobar");
             expect(staticView.className).toBe("foobar");

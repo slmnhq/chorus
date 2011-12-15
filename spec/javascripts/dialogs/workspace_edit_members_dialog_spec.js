@@ -21,8 +21,6 @@ describe("WorkspaceEditMembers", function() {
 
     describe("render", function() {
         beforeEach(function() {
-            this.loadTemplate("workspace_edit_members");
-            this.loadTemplate("shuttle_widget");
             this.dialog.render();
         });
 

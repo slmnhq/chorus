@@ -32,7 +32,6 @@ describe("WorkfileContentDetails", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.loadTemplate("workfile_content_details")
             this.view = new chorus.views.WorkfileContentDetails(this.model);
             this.view.render();
         });
