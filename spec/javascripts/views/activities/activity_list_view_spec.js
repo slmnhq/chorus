@@ -1,7 +1,5 @@
 describe("chorus.views.ActivityList", function() {
     beforeEach(function() {
-        this.loadTemplate("activity_list");
-        this.loadTemplate("activity");
         fixtures.model = 'ActivitySet';
         this.collection = fixtures.modelFor('fetch');
         this.view = new chorus.views.ActivityList({collection: this.collection, additionalClass : "foo_class"});
