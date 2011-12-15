@@ -142,7 +142,7 @@ describe("WorkfileListSidebar", function() {
         });
 
         it("displays the activity list", function() {
-            expect(this.view.$(".sidebar_activity_list")).toExist();
+            expect(this.view.$(".activity_list")).toExist();
         })
 
         it("sets the collection to the activities of the selected workfile", function() {

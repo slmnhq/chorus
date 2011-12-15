@@ -13,7 +13,7 @@
 
             var activities = chorus.session.user().activities();
             activities.fetch();
-            this.activityList = new ns.views.ActivityList({ collection : activities, activityType: t("dashboard.activity")});
+            this.activityList = new ns.views.ActivityList({ collection : activities, activityType: t("dashboard.activity"), additionalClass : "dashboard"});
 
             this.dashboardMain = new ns.views.MainContentView({
                 contentHeader : ns.views.StaticTemplate("default_content_header", {title : t("dashboard.activity")}),

@@ -26,6 +26,7 @@
 
             return {
                 imageUrl : author.imageUrl(),
+                showUrl : author.showUrl(),
                 headerHtml : this.model.headerHtml(),
                 body : this.model.get("text"),
                 timestamp : this.model.get("timestamp"),

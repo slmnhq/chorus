@@ -1,12 +1,6 @@
 @import "../_common.scss";
 
 .workfile_list_sidebar, .workfile_show_sidebar {
-    h2 {
-        font-size: 16px;
-        color: $dark-text-color;
-        padding-top: 12px;
-    }
-    
     .info {
         .fileName {
             @include ellipsis;

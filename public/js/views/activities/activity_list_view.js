@@ -33,11 +33,12 @@
         },
 
         postRender : function() {
+            $(this.el).addClass(this.options.additionalClass);
             var el = this.$("ul");
             this.collection.each(function(model) {
                 var view = new ns.views.Activity({model: model});
                 view.render();
-                el.append($("<li data-activity-id='" + model.get("id") + "'></li>").append(view.el));
+                el.append($("<li data-activity-id='" + model.get("id") + "' class='activity_list_item'></li>").append(view.el));
                 view.delegateEvents();
             });
         }

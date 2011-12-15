@@ -4,13 +4,17 @@ describe("chorus.views.ActivityList", function() {
         this.loadTemplate("activity");
         fixtures.model = 'ActivitySet';
         this.collection = fixtures.modelFor('fetch');
-        this.view = new chorus.views.ActivityList({collection: this.collection});
+        this.view = new chorus.views.ActivityList({collection: this.collection, additionalClass : "foo_class"});
     });
 
     describe("#render", function() {
         beforeEach(function() {
             this.view.render();
         });
+
+        it("adds additionalClass to the top-level element", function() {
+            expect($(this.view.el)).toHaveClass("foo_class");
+        })
 
         it("renders an li for each item in the collection", function() {
             expect(this.view.$("li[data-activity-id]").length).toBe(this.collection.length);

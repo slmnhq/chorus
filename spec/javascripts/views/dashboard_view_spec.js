@@ -20,7 +20,7 @@ describe("chorus.views.Dashboard", function(){
         });
 
         it("has an activity list", function() {
-            expect(this.view.$(".main_activity_list")).toExist();
+            expect(this.view.$(".activity_list")).toExist();
         });
     });
 });

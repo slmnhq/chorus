@@ -50,7 +50,7 @@ describe("WorkfileShowSidebar", function() {
         });
 
         it("displays the activity list", function() {
-            expect(this.view.$(".sidebar_activity_list")).toExist();
+            expect(this.view.$(".activity_list")).toExist();
         })
     })
 
