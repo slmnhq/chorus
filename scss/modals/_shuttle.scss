@@ -68,7 +68,7 @@ $shuttle-width: 720px;
 
     .shuttle_body {
         position: relative;
-        height: (($list-item-height + $list-border-width) * 8) + $list-item-height;
+        height: (($list-item-height + $list-border-width) * 8);
     }
 
     a {
@@ -121,10 +121,6 @@ $shuttle-width: 720px;
                 padding-left: 10px;
                 display: inline-block;
                 max-width: 60%;
-            }
-
-            &:last-child {
-                border-bottom: none;
             }
 
             &.filtered_out {
