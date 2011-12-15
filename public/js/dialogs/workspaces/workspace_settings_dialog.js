@@ -14,7 +14,7 @@
                 imageUrl : this.pageModel.imageUrl(),
                 hasImage : this.pageModel.hasImage(),
                 members : this.pageModel.members().models,
-                permission :  ((this.pageModel.get("ownerId") == chorus.user.get("id")) || chorus.user.get("admin"))
+                permission :  ((this.pageModel.get("ownerId") == chorus.session.user().get("id")) || chorus.session.user().get("admin"))
             }
         },
 

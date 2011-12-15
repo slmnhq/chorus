@@ -12,7 +12,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
 
     describe("#setup", function() {
         beforeEach(function() {
-            chorus.session.set({id: 4003});
+            setLoggedInUser({id: 4003});
             chorus.session.trigger("saved")
             this.dialog = new chorus.dialogs.CopyWorkfile({launchElement : this.launchElement });
         })

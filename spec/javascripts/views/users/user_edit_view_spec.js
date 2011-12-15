@@ -3,7 +3,6 @@ describe("chorus.views.userEdit", function() {
         this.loadTemplate("user_edit");
         this.loadTemplate("image_upload");
 
-        chorus.session = new chorus.models.Session();
         setLoggedInUser({'userName': 'edcadmin'})
         fixtures.model = 'User';
         this.user = new chorus.models.User()

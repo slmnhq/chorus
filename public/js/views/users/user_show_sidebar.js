@@ -4,11 +4,11 @@
 
         additionalContext: function() {
             return {
-               permission :  ((this.model.get("userName") == chorus.user.get("userName"))|| chorus.user.get("admin"))
+               permission :  ((this.model.get("userName") == chorus.session.user().get("userName"))|| chorus.session.user().get("admin"))
             }
         }
     })
-    
+
     ns.alerts.UserDelete = ns.alerts.Base.extend({
     })
 })(chorus);

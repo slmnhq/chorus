@@ -10,6 +10,7 @@ describe("chorus.pages.DashboardPage", function() {
         this.loadTemplate("default_content_header")
         this.loadTemplate("plain_text")
         this.loadTemplate("dashboard_workspace_list_footer")
+        this.loadTemplate("main_activity_list");
         this.page = new chorus.pages.DashboardPage();
     });
 

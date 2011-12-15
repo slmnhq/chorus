@@ -62,7 +62,7 @@ describe("user_show_page", function(){
 
         context("sidebar", function(){
             beforeEach(function(){
-                setLoggedInUser({admin: true})
+                setLoggedInUser({admin: true});
                 this.view.model.set({id : "42"})
                 this.view.render();
             });

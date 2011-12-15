@@ -21,21 +21,16 @@ describe("handlebars", function() {
 
         describe("ifAdmin", function() {
             beforeEach(function() {
-                this.originalUser = chorus.user;
                 this.ifAdminSpy = jasmine.createSpy();
                 this.ifAdminSpy.inverse = jasmine.createSpy();
             });
 
-            afterEach(function() {
-                chorus.user = this.originalUser;
-            });
-
             describe("when the user is an admin", function() {
                 beforeEach(function() {
-                    chorus.user.set({ admin: true });
+                    setLoggedInUser({ admin: true });
                 });
 
-                it("returns executes the block", function() {
+                it("executes the block", function() {
                     Handlebars.helpers.ifAdmin(this.ifAdminSpy);
                     expect(this.ifAdminSpy).toHaveBeenCalled();
                     expect(this.ifAdminSpy.inverse).not.toHaveBeenCalled();
@@ -44,7 +39,7 @@ describe("handlebars", function() {
 
             describe("when the user is not an admin", function() {
                 beforeEach(function() {
-                    chorus.user.set({ admin: false });
+                    setLoggedInUser({ admin: false });
                 });
 
                 it("does not execute the block", function() {
@@ -56,7 +51,7 @@ describe("handlebars", function() {
 
             describe("when chorus.user is undefined", function() {
                 beforeEach(function() {
-                    chorus.user = undefined;
+                    unsetLoggedInUser();
                 });
 
                 it("does not execute the block", function() {
@@ -69,9 +64,7 @@ describe("handlebars", function() {
 
         describe("ifCurrentUserNameIs", function() {
             beforeEach(function() {
-                this.originalUser = chorus.user;
-                this.currentUser = chorus.user;
-                this.currentUser.set({ userName : "benjamin" });
+                setLoggedInUser({ userName : "benjamin" });
                 this.spy = jasmine.createSpy("ifCurrentUserNameIs");
                 this.spy.inverse = jasmine.createSpy("ifCurrentUserNameIs inverse");
             });
@@ -94,11 +87,7 @@ describe("handlebars", function() {
 
             describe("when chorus.user is undefined", function() {
                 beforeEach(function() {
-                    chorus.user = undefined;
-                });
-
-                afterEach(function() {
-                    chorus.user = this.originalUser;
+                    unsetLoggedInUser();
                 });
 
                 it("executes the inverse block", function() {

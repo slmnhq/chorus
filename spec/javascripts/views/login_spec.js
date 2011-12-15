@@ -1,14 +1,9 @@
 describe("chorus.views.Login", function() {
     beforeEach(function() {
         this.loadTemplate("login");
-        chorus.session = new chorus.models.Session();
         this.view = new chorus.views.Login({model : chorus.session});
         this.view.render();
     });
-
-    afterEach(function() {
-        chorus.session = undefined;
-    })
 
     it("should have a login form", function() {
         expect(this.view.$("form.login")).toExist();

@@ -56,10 +56,10 @@
                     if (self.app.modal) self.app.modal.closeModal();
                 };
 
-                if (className == 'Login' || self.app.user.loggedIn()) {
+                if (className == 'Login' || self.app.session.loggedIn()) {
                     navFunction();
                 } else {
-                    self.app.user.fetch({success: navFunction});
+                    self.app.session.fetch({success: navFunction});
                 }
             };
 

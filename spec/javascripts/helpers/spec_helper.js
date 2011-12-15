@@ -50,6 +50,8 @@
         window.Spinner = jasmine.createSpy('MockSpinner').andCallFake(function() {
             return fakeSpinner
         });
+
+        setLoggedInUser();
     });
 
     afterEach(function() {
@@ -61,8 +63,15 @@
     //global helpers
     window.context = window.describe;
 
+    window.unsetLoggedInUser = function() {
+        chorus.session.unset("id");
+        delete chorus.session._user;
+    };
+
     window.setLoggedInUser = function(options) {
-        chorus.user = new chorus.models.User({
+        options || (options = {});
+        chorus.session.set({ id: options.id || "10000" });
+        chorus.session._user = new chorus.models.User({
             "firstName" : "Luther",
             "lastName" : "Blissett",
             "fullName": "Luther Blissett",
@@ -70,7 +79,7 @@
             "userName" : options['userName'] || "edcadmin",
             "id" : options['id'] || "10000"
         });
-    }
+    };
 
     window.stubView = function(html) {
         var stubClass = Backbone.View.extend({
@@ -88,7 +97,7 @@
     }
 
     window.stubModals = function(){
-        return spyOn($, "facebox") 
+        return spyOn($, "facebox")
     };
 
     if ( $.browser.msie && !window.console ) {

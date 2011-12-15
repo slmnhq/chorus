@@ -1,4 +1,4 @@
-describe("WorkspaceSettings", function() {
+describe("WorkspaceSettings dialog", function() {
     beforeEach(function() {
         this.launchElement = $("<a></a>");
         this.workspace = new chorus.models.Workspace({name: "my name", summary: "my summary", id: "457"});
@@ -329,7 +329,7 @@ describe("WorkspaceSettings", function() {
                     expect(this.dialog.pageModel.get("archived")).toBe(true);
                 })
             })
-            
+
             context("the server responds with success", function() {
                 beforeEach(function() {
                     this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"resource":[{"id":"9"}], "status": "ok"}']);

@@ -59,7 +59,7 @@ describe("chorus.router", function() {
             this.loadTemplate("sidebar_activity_list");
             this.loadTemplate("main_activity_list");
 
-            spyOn(this.chorus.user, 'loggedIn').andReturn(true);
+            spyOn(this.chorus.session, 'loggedIn').andReturn(true);
 
             this.savedLocation = window.location.hash;
         })
@@ -96,22 +96,22 @@ describe("chorus.router", function() {
             this.chorus = new Chorus();
             this.backboneSpy = spyOn(Backbone.history, "start")
             this.chorus.initialize();
-            spyOn(this.chorus.user, 'fetch');
+            spyOn(this.chorus.session, 'fetch');
         });
 
         context("when logged in", function() {
             beforeEach(function() {
-                spyOn(this.chorus.user, 'loggedIn').andReturn(true);
+                spyOn(this.chorus.session, 'loggedIn').andReturn(true);
             });
 
-            it("does not fetch the user", function() {
-                expect(this.chorus.user.fetch).not.toHaveBeenCalled();
+            it("does not check login", function() {
+                expect(this.chorus.session.fetch).not.toHaveBeenCalled();
             });
         });
 
         context("when not logged in", function() {
             beforeEach(function() {
-                spyOn(this.chorus.user, 'loggedIn').andReturn(false);
+                spyOn(this.chorus.session, 'loggedIn').andReturn(false);
                 this.routeSpy = jasmine.createSpy("route");
                 this.loadTemplate("breadcrumbs");
                 this.loadTemplate("default_content_header");
@@ -124,21 +124,21 @@ describe("chorus.router", function() {
                 this.chorus.router.bind("route", this.routeSpy);
             });
 
-            it("fetches the user", function() {
+            it("checks login", function() {
                 this.chorus.router.navigate("/users/new", true);
-                expect(this.chorus.user.fetch).toHaveBeenCalled();
+                expect(this.chorus.session.fetch).toHaveBeenCalled();
             });
 
             it("does not fetch the user if navigating to the Login page", function() {
                 this.chorus.router.navigate("/login", true);
-                expect(this.chorus.user.fetch).not.toHaveBeenCalled();
+                expect(this.chorus.session.fetch).not.toHaveBeenCalled();
             });
 
             it("calls trigger after the user has been fetched", function() {
                 this.chorus.router.navigate("/users/new", true);
-                expect(this.chorus.user.fetch).toHaveBeenCalled();
+                expect(this.chorus.session.fetch).toHaveBeenCalled();
                 expect(this.routeSpy).not.toHaveBeenCalled();
-                this.chorus.user.fetch.mostRecentCall.args[0].success();
+                this.chorus.session.fetch.mostRecentCall.args[0].success();
                 expect(this.routeSpy).toHaveBeenCalled();
             });
         });

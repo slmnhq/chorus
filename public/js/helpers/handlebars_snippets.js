@@ -10,7 +10,8 @@
         },
 
         ifAdmin: function(block) {
-            if (chorus && chorus.user && chorus.user.get("admin")) {
+            var user = chorus && chorus.session && chorus.session.user();
+            if (user && user.get("admin")) {
                 return block(this);
             } else {
                 return block.inverse(this);
@@ -18,7 +19,8 @@
         },
 
         ifCurrentUserNameIs: function(userName, block) {
-            if (chorus && chorus.user && (chorus.user.get("userName") == userName)) {
+            var user = chorus && chorus.session && chorus.session.user();
+            if (user && user.get("userName") == userName) {
                 return block(this);
             } else if (block.inverse) {
                 return block.inverse(this);

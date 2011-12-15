@@ -11,7 +11,7 @@
                 contentFooter : new ns.views.StaticTemplate("dashboard_workspace_list_footer")
             });
 
-            var activities = chorus.user.user().activities();
+            var activities = chorus.session.user().activities();
             activities.fetch();
             activities.bind("changed", this.render, this);
             this.activityList = new ns.views.MainActivityList({ collection : activities, activityType: t("dashboard.activity")});
