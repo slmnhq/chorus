@@ -69,6 +69,9 @@
                     url: '/templates/' + templateName + '.handlebars',
                     success: function(data) {
                         templateContainer.append('<script id="' + templateName + '_template" type="x-handlebars-template">' + data + '</script>');
+                    },
+                    error: function(data) {
+                        alert("The template '" + templateName + "' does not exist. You need to add it to the spec helper, bro.");
                     }
                 });
             });
