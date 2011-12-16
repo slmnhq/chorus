@@ -3,6 +3,44 @@ describe("chorus.views.UserShowSidebar", function() {
         this.user = new chorus.models.User({userName: "bill", id: "42"})
     });
 
+    describe("activityList", function() {
+        beforeEach(function() {
+            this.view = new chorus.views.UserShowSidebar({model: this.user});
+            this.view.render();
+        });
+        it("has sideBarActivityListView", function() {
+            expect(this.view.activityList).toBeDefined();
+        });
+
+        it("fetches the activitySet for users", function() {
+            expect(this.server.requests[0].url).toBe("/edc/activitystream/user/42?page=1&rows=50");
+            expect(this.server.requests[0].method).toBe("GET");
+        });
+
+        describe("when the model is changed", function() {
+            beforeEach(function() {
+                spyOn(this.view.activityList, "render");
+                this.view.model.trigger("change")
+            });
+
+            it("re-renders the activity list", function() {
+                expect(this.view.activityList.render).toHaveBeenCalled();
+            });
+        });
+
+        describe("when the activity list collection is changed", function() {
+            beforeEach(function() {
+                spyOn(this.view, "postRender"); // check for #postRender because #render is bound
+                this.view.collection.trigger("changed")
+            })
+
+            it("re-renders", function() {
+                expect(this.view.postRender).toHaveBeenCalled();
+            })
+        });
+    });
+
+
     describe("#render", function() {
         context("when logged in as an admin", function() {
             beforeEach(function() {
@@ -79,7 +117,7 @@ describe("chorus.views.UserShowSidebar", function() {
             setLoggedInUser({userName: "inspectorHenderson"});
 
             this.view = new chorus.views.UserShowSidebar({model: this.user});
-                this.view.model.set({userName : "edcadmin"});
+            this.view.model.set({userName : "edcadmin"});
         });
 
         it("should not show change password option", function() {
