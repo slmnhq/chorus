@@ -4,6 +4,7 @@
         self.models = {};
         self.views = {};
         self.pages = {};
+        self.presenters = {};
         self.dialogs = {};
         self.alerts = {};
 

@@ -8,6 +8,7 @@ describe("chorus.views.Activity", function() {
         context("type: MEMBERS_ADDED", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activity.MEMBERS_ADDED();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
 
@@ -20,6 +21,7 @@ describe("chorus.views.Activity", function() {
         context("type: WORKSPACE_CREATED", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activity.WORKSPACE_CREATED();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
 
@@ -31,6 +33,7 @@ describe("chorus.views.Activity", function() {
         context("type: WORKSPACE_DELETED", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activity.WORKSPACE_DELETED();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
 
@@ -42,6 +45,7 @@ describe("chorus.views.Activity", function() {
         context("type: NOTE", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activity.NOTE();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
 
@@ -67,12 +71,13 @@ describe("chorus.views.Activity", function() {
         context("when the type is unknown", function() {
             beforeEach(function() {
                 this.view.model.set({type: "DINNER_TIME"});
+                this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
 
             it("returns a default header", function() {
                 this.model.set({ type: "GEN MAI CHA" });
-                expect(this.view.headerHtml()).toBeDefined();
+                expect(this.view.render().$(".activity_header .author")).toExist();
             });
         });
     });
@@ -95,12 +100,12 @@ describe("chorus.views.Activity", function() {
         options || (options = {});
 
         it("contains the object's name", function() {
-            expect(this.view.$(".object").text()).toContain(this.view.model.objectName());
+            expect(this.view.$(".object").text()).toContain(this.presenter.objectName);
         });
 
         if (options.checkLink) {
             it("contains the object's url", function() {
-                expect(this.view.$('.object a').attr('href')).toBe(this.view.model.objectUrl());
+                expect(this.view.$('.object a').attr('href')).toBe(this.presenter.objectUrl);
             });
         }
     };
@@ -109,12 +114,12 @@ describe("chorus.views.Activity", function() {
         options || (options = {});
 
         it("contains the workspace's name", function() {
-            expect(this.view.$(".workspace").text()).toContain(this.view.model.workspaceName());
+            expect(this.view.$(".workspace").text()).toContain(this.presenter.workspaceName);
         });
 
         if (options.checkLink) {
             it("contains the workspace's url", function() {
-                expect(this.view.$('.workspace a').attr('href')).toBe(this.view.model.workspaceUrl());
+                expect(this.view.$('.workspace a').attr('href')).toBe(this.presenter.workspaceUrl);
             });
         }
     };
