@@ -16,6 +16,32 @@ describe("chorus.views.Activity", function() {
             itShouldRenderWorkspaceDetails({checkLink : true});
         });
 
+        describe("entityType mapping", function() {
+            context("type: NOTE", function() {
+                beforeEach(function() {
+                    this.view.model.set({ type : "NOTE" })
+                })
+
+                it("sets entityType to 'comment'", function() {
+                    this.view.render();
+                    expect(this.view.$("a.comment").data("entity-type")).toBe('comment')
+                })
+            })
+        })
+
+        describe("entityTitle mapping", function() {
+            context("type: NOTE", function() {
+                beforeEach(function() {
+                    this.view.model.set({ type : "NOTE" })
+                })
+
+                it("sets entityTitle to 'note'", function() {
+                    this.view.render();
+                    expect(this.view.$("a.comment").data("entity-title")).toBe(t("comments.title.NOTE"))
+                })
+            })
+        })
+
         context("type: WORKSPACE_CREATED", function() {
             beforeEach(function() {
                 this.model = fixtures.activity.WORKSPACE_CREATED();

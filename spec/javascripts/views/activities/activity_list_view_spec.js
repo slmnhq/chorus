@@ -19,8 +19,15 @@ describe("chorus.views.ActivityList", function() {
         });
 
         it("displays a Comment link for each activity", function() {
-            expect(this.view.$("li[data-activity-id=10000] .links a.comment")).toExist();
-            expect(this.view.$("li[data-activity-id=10001] .links a.comment")).toExist();
+            var link = this.view.$("li[data-activity-id=10000] .links a.comment.dialog");
+            expect(link.data("dialog")).toBe("Comment");
+            expect(link.data("entity-type")).toBe("comment");
+            expect(link.data("entity-id")).toBe(10000);
+
+            link = this.view.$("li[data-activity-id=10001] .links a.comment.dialog");
+            expect(link.data("dialog")).toBe("Comment");
+            expect(link.data("entity-type")).toBe("comment");
+            expect(link.data("entity-id")).toBe(10001);
         })
 
         describe("comment rendering", function() {

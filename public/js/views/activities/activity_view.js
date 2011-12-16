@@ -12,6 +12,14 @@
         compiledTemplates[type] = Handlebars.compile(t("activity_stream.header.html." + type));
     });
 
+    var entityTypes = {
+        "NOTE" : "comment"
+    }
+
+    var entityTitles = {
+        "NOTE" : t("comments.title.NOTE")
+    }
+
     ns.views.Activity = chorus.views.Base.extend({
         className : "activity",
 
@@ -37,12 +45,16 @@
                 return ctx;
             });
 
+            var type = this.model.get("type");
+
             return {
                 imageUrl : author.imageUrl(),
                 showUrl : author.showUrl(),
                 headerHtml : this.headerHtml(),
                 body : this.model.get("text"),
                 timestamp : this.model.get("timestamp"),
+                entityType : entityTypes[type],
+                entityTitle : entityTitles[type],
                 subComments : subComments
             }
         },

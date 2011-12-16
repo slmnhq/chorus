@@ -10,6 +10,10 @@ describe("chorus.models.Comment", function() {
         });
     });
 
+    it("has the correct urlTemplate", function() {
+        expect(this.model.urlTemplate).toBe("comment/{{entityType}}/{{entityId}}");
+    });
+
     describe("#creator", function() {
         beforeEach(function() {
             this.creator = this.model.creator();

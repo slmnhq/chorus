@@ -5,6 +5,7 @@
         'breadcrumbs',
         'change_password',
         'collection_picklist',
+        'comment',
         'copy_workfile',
         'dashboard',
         'dashboard_sidebar',
