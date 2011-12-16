@@ -14,33 +14,8 @@ describe("chorus.views.Activity", function() {
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink : true});
             itShouldRenderWorkspaceDetails({checkLink : true});
+            //itShouldRenderACommentLink(..,..)
         });
-
-        describe("entityType mapping", function() {
-            context("type: NOTE", function() {
-                beforeEach(function() {
-                    this.view.model.set({ type : "NOTE" })
-                })
-
-                it("sets entityType to 'comment'", function() {
-                    this.view.render();
-                    expect(this.view.$("a.comment").data("entity-type")).toBe('comment')
-                })
-            })
-        })
-
-        describe("entityTitle mapping", function() {
-            context("type: NOTE", function() {
-                beforeEach(function() {
-                    this.view.model.set({ type : "NOTE" })
-                })
-
-                it("sets entityTitle to 'note'", function() {
-                    this.view.render();
-                    expect(this.view.$("a.comment").data("entity-title")).toBe(t("comments.title.NOTE"))
-                })
-            })
-        })
 
         context("type: WORKSPACE_CREATED", function() {
             beforeEach(function() {
@@ -50,6 +25,7 @@ describe("chorus.views.Activity", function() {
 
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink : true});
+            //itShouldRenderACommentLink(..,..)
         });
 
         context("type: WORKSPACE_DELETED", function() {
@@ -60,6 +36,7 @@ describe("chorus.views.Activity", function() {
 
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink : false});
+            //itShouldRenderACommentLink(..,..)
         });
 
         context("type: NOTE", function() {
@@ -71,6 +48,7 @@ describe("chorus.views.Activity", function() {
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink : true});
             itShouldRenderWorkspaceDetails({checkLink : true});
+            itShouldRenderACommentLink("comment", t("comments.title.NOTE"))
 
             it("displays the comment body", function() {
                expect(this.view.$(".body").eq(0).text().trim()).toBe(this.view.model.get("text"));
@@ -140,4 +118,14 @@ describe("chorus.views.Activity", function() {
             });
         }
     };
+
+    function itShouldRenderACommentLink(entityType, entityTitle) {
+        it("sets the correct entityType on the comment dialog link", function() {
+            expect(this.view.$("a.comment").data("entity-type")).toBe(entityType);
+        })
+
+        it("sets the correct entityTitle on the comment dialog link", function() {
+            expect(this.view.$("a.comment").data("entity-title")).toBe(entityTitle)
+        })
+    }
 });
