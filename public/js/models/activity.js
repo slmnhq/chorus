@@ -6,19 +6,50 @@
         },
 
         objectName : function() {
-            return "NEED_OBJECT_FROM_API";
+            return "don't know object name for activity type: " + this.get("type");
         },
 
         objectUrl : function() {
-            return "/NEED/OBJECT/FROM/API"
+            return "/NEED/OBJECT/URL/FOR/TYPE/" + this.get("type");
         },
 
         workspaceName : function() {
-            return "NEED_WORKSPACE_FROM_API";
+            var workspace = this.get("workspace");
+            if (workspace) {
+                return workspace.name;
+            } else {
+                return "no workspace name for activity type: " + this.get("type");
+            }
         },
 
         workspaceUrl : function() {
-            return "/NEED/WORKSPACE/FROM/API"
+            var workspace = this.get("workspace");
+            if (workspace) {
+                return new chorus.models.Workspace({id: workspace.id}).showUrl();
+            } else {
+                return "no workspace URL for activity type: " + this.get("type");
+            }
+        }
+    }, {
+        build: function(attrs) {
+            var subclass = ns.Activity[attrs.type] || ns.Activity;
+            return new subclass(attrs)
         }
     });
+
+    ns.Activity.NOTE = ns.Activity.extend({
+        objectUrl : function() {
+            return 'foo'
+        }
+    });
+
+    ns.Activity.WORKSPACE_DELETED = ns.Activity.extend({
+    });
+
+    ns.Activity.WORKSPACE_CREATED = ns.Activity.extend({
+        objectName : function() {
+            return this.get("workspace").name;
+        }
+    });
+
 })(chorus.models);

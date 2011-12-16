@@ -567,20 +567,89 @@
                 return this.currentId++;
             },
 
-            activity: function() {
-                return new chorus.models.Activity({
-                    author: fixtures.authorJson(),
-                    type: "NOTE",
-                    text: "How about that.",
-                    timestamp: "2011-12-01 00:00:00",
-                    comments: [
-                        {
-                            text: "sub-comment 1",
-                            author : fixtures.authorJson(),
-                            timestamp : "2011-12-15 12:34:56"
+            activity: {
+                "MEMBERS_ADDED" : function() {
+                    return chorus.models.Activity.build({
+                        author: fixtures.authorJson(),
+                        type: "MEMBERS_ADDED",
+                        timestamp: "2011-12-01 00:00:00",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ],
+                        user: [
+                            {
+                                id: 101,
+                                name: "Rhino Hunter"
+                            },
+                            {
+                                id: 102,
+                                name: "Method Man"
+                            }
+                        ],
+                        workspace: {
+                            id: '10840',
+                            name: "Catsup"
                         }
-                    ]
-                });
+                    });
+                },
+
+                "WORKSPACE_DELETED" : function() {
+                    return chorus.models.Activity.build({
+                        author: fixtures.authorJson(),
+                        type: "WORKSPACE_DELETED",
+                        timestamp: "2011-12-01 00:00:00",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ],
+                        workspace: {
+                            id: '10840',
+                            name: "Cheese"
+                        }
+                    });
+                },
+
+                "WORKSPACE_CREATED" : function() {
+                    return chorus.models.Activity.build({
+                        author: fixtures.authorJson(),
+                        type: "WORKSPACE_CREATED",
+                        timestamp: "2011-12-01 00:00:00",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ],
+                        workspace: {
+                            id: '10840',
+                            name: "Bar Fight"
+                        }
+                    });
+                },
+
+                "NOTE" : function() {
+                    return chorus.models.Activity.build({
+                        author: fixtures.authorJson(),
+                        type: "NOTE",
+                        text: "How about that.",
+                        timestamp: "2011-12-01 00:00:00",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ]
+                    });
+                },
             },
 
             authorJson: function() {

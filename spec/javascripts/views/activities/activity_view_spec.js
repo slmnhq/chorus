@@ -1,6 +1,6 @@
 describe("chorus.views.Activity", function() {
     beforeEach(function() {
-        this.model = fixtures.activity();
+        this.model = fixtures.activity.NOTE();
         this.view = new chorus.views.Activity({ model: this.model });
     });
 
@@ -18,7 +18,7 @@ describe("chorus.views.Activity", function() {
 
         context("type: WORKSPACE_CREATED", function() {
             beforeEach(function() {
-                this.model.set({type: "WORKSPACE_CREATED"});
+                this.model = fixtures.activity.WORKSPACE_CREATED();
                 this.view.render();
             });
 
@@ -28,7 +28,7 @@ describe("chorus.views.Activity", function() {
 
         context("type: WORKSPACE_DELETED", function() {
             beforeEach(function() {
-                this.model.set({type: "WORKSPACE_DELETED"});
+                this.model = fixtures.activity.WORKSPACE_DELETED();
                 this.view.render();
             });
 
@@ -38,7 +38,7 @@ describe("chorus.views.Activity", function() {
 
         context("type: NOTE", function() {
             beforeEach(function() {
-                this.model.set({type: "NOTE"});
+                this.model = fixtures.activity.NOTE();
                 this.view.render();
             });
 

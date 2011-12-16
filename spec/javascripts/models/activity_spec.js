@@ -12,6 +12,19 @@ describe("chorus.models.Activity", function() {
         it("returns the same instance when called multiple times", function() {
             expect(this.model.author()).toBe(this.model.author());
         });
-    })
+    });
 
+    context("type: WORKSPACE_CREATED", function() {
+        beforeEach(function() {
+            this.model = fixtures.activity.WORKSPACE_CREATED();
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.model.objectName()).toBe(this.model.get("workspace").name);
+        });
+
+        describe("#objectUrl", function() {
+
+        });
+    });
 });
