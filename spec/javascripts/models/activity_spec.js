@@ -14,19 +14,4 @@ describe("chorus.models.Activity", function() {
         });
     })
 
-    describe("#headerHtml", function() {
-        context("when the activity type is unknown", function() {
-            it("returns a default header", function() {
-                this.model.set({ type: "GEN MAI CHA" });
-                expect(this.model.headerHtml()).toBeDefined();
-            });
-        });
-
-        context("when the activity type is known", function() {
-            it("returns an appropriate translated message", function() {
-                this.model.set({ type: "NOTE" });
-                expect(this.model.headerHtml()).toContain(this.model.author().displayName());
-            });
-        });
-    });
 });

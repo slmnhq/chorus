@@ -1,11 +1,34 @@
 describe("chorus.views.Activity", function() {
-    describe("type: NOTE", function() {
-        beforeEach(function() {
-            this.activity = fixtures.activity();
+    beforeEach(function() {
+        this.model = fixtures.activity();
+        this.view = new chorus.views.Activity({ model: this.model });
+    });
 
-            this.view = new chorus.views.Activity({model: this.activity});
+    describe("#headerHtml", function() {
+        context("when the activity type is unknown", function() {
+            it("returns a default header", function() {
+                this.model.set({ type: "GEN MAI CHA" });
+                expect(this.view.headerHtml()).toBeDefined();
+            });
         });
 
+        context("when the activity type is known", function() {
+            beforeEach(function() {
+                this.model.set({ type: "NOTE" });
+                this.html = this.view.headerHtml();
+            });
+
+            it("contains the author's name", function() {
+                expect(this.html).toContain(this.model.author().displayName());
+            });
+
+            it("contains the author's url", function() {
+                expect(this.html).toContain(this.model.author().showUrl());
+            });
+        });
+    });
+
+    describe("type: NOTE", function() {
         describe("#render", function() {
             beforeEach(function() {
                 this.view.render();
@@ -23,24 +46,20 @@ describe("chorus.views.Activity", function() {
                 expect(this.view.$("a.author").attr("href")).toBe(this.view.model.author().showUrl());
             });
 
-            it("displays the type of action being taken", function() {
-                expect(this.view.$(".verb").text().trim()).not.toBeEmpty();
-            });
-
             it("displays the object of the action", function() {
-               expect(this.view.$(".object").text()).toContain(this.view.model._objectName());
+               expect(this.view.$(".object").text()).toContain(this.view.model.objectName());
             });
 
             it("links the object to the object's URL", function() {
-                expect(this.view.$(".object a").attr("href")).toBe(this.view.model._objectUrl());
+                expect(this.view.$(".object a").attr("href")).toBe(this.view.model.objectUrl());
             });
 
             it("displays the name of the workspace", function() {
-               expect(this.view.$(".workspace").text()).toContain(this.view.model._workspaceName());
+               expect(this.view.$(".workspace").text()).toContain(this.view.model.workspaceName());
             });
 
-            it("links the object to the object's URL", function() {
-                expect(this.view.$(".workspace a").attr("href")).toBe(this.view.model._workspaceUrl());
+            it("links the workspace to the workspace's URL", function() {
+                expect(this.view.$(".workspace a").attr("href")).toBe(this.view.model.workspaceUrl());
             });
 
             it("displays the comment body", function() {
@@ -52,7 +71,7 @@ describe("chorus.views.Activity", function() {
             });
 
             it("renders items for the sub-comments", function() {
-                expect(this.activity.get("comments").length).toBe(1);
+                expect(this.model.get("comments").length).toBe(1);
                 expect(this.view.$(".comments li").length).toBe(1);
             });
         });
