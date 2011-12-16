@@ -9,6 +9,12 @@
         .member_count {
             color: $secondary-text-color;
             font-weight: $semibold;
+            display: inline-block;
+            font-size: 14px;
+        }
+        .sort_menu {
+            display: inline-block;
+            float: right;
         }
     }
 

@@ -597,9 +597,9 @@
                     id : id,
                     userName : "user" + id,
                     admin : true,
-                    firstName : "EDC",
-                    lastName : "Admin",
-                    fullName : "EDC Admin",
+                    firstName : "EDC"+id,
+                    lastName : "Admin"+id,
+                    fullName : "EDC Admin"+id,
                     use_external_ldap : false
                 });
             },

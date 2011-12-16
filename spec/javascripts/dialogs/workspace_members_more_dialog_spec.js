@@ -7,33 +7,51 @@ describe("WorkspaceMembersMore", function() {
         _.times(25, function() {
             members.add(fixtures.user());
         });
+        var self = this
+        self.choice = "lastName"
+        sortedMembers = _.sortBy(members.models, function(member) {
+            return member.get(self.choice);
+        });
     });
 
     describe("render", function() {
         beforeEach(function() {
-           dialog.render();
+            dialog.render();
         });
 
         it("includes an image for each member", function() {
-            var images = dialog.$("img");
-            expect(images.length).toBe(members.length);
-            expect(images.eq(0).attr("src")).toBe(members.models[0].imageUrl({ size: 'icon' }));
-            expect(images.eq(1).attr("src")).toBe(members.models[1].imageUrl({ size: 'icon' }));
+            var images = dialog.$(".collection_list img");
+            expect(images.length).toBe(sortedMembers.length);
+            expect(images.eq(0).attr("src")).toBe(sortedMembers[0].imageUrl({ size: 'icon' }));
+            expect(images.eq(1).attr("src")).toBe(sortedMembers[1].imageUrl({ size: 'icon' }));
         });
 
         it("includes a name for each member", function() {
             var names = dialog.$('.name');
-            expect(names.length).toBe(members.length);
-            expect(names.eq(0).text().trim()).toBe(members.models[0].displayName());
-            expect(names.eq(23).text().trim()).toBe(members.models[23].displayName());
+            expect(names.length).toBe(sortedMembers.length);
+            expect(names.eq(0).text().trim()).toBe(sortedMembers[0].displayName());
+            expect(names.eq(23).text().trim()).toBe(sortedMembers[23].displayName());
         })
 
         it("shows the member count", function() {
-           expect(dialog.$('.member_count').text().trim()).toMatchTranslation('workspace.members.count', members.length);
+            expect(dialog.$('.member_count').text().trim()).toMatchTranslation('workspace.members.count', sortedMembers.length);
         });
 
         it("has a close window button that cancels the dialog", function() {
             expect(dialog.$("button.cancel").length).toBe(1);
+        })
+
+        describe("sorting", function() {
+            it("has a sort by menu", function() {
+                expect(dialog.$(".sort_menu .menus").length).toBe(1)
+            })
+
+            it("sorts", function() {
+                members.models[20].set({firstName : "AAAAA"});
+                expect(dialog.$('.name').eq(0).text()).not.toContain("AAAAA")
+                dialog.$(".menu li[data-type=firstName] a").click()
+                expect(dialog.$('.name').eq(0).text()).toContain("AAAAA")
+            })
         })
     });
 });

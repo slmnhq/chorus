@@ -75,9 +75,9 @@
         choose : function(e) {
             e.preventDefault();
             var ul = $(e.target).closest("ul");
-            this.trigger("choice", ul.data("event"), $(e.target).closest('li').data("type"));
             this.options.chosen = $(e.target).text();
             this.dismissMenu();
+            this.trigger("choice", ul.data("event"), $(e.target).closest('li').data("type"));
             this.render();
         }
     })
