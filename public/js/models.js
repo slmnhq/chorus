@@ -24,7 +24,7 @@
                 })
 
                 // this ensures that IE doesn't cache 'needs_login' responses
-                params.push("iebuster=" + new Date().getTime());
+                if (!window.jasmine) params.push("iebuster=" + new Date().getTime());
 
                 params.push("page=" + options.page);
                 params.push("rows=" + options.rows);
