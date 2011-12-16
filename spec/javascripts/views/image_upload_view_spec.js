@@ -3,6 +3,8 @@ describe("chorus.views.ImageUpload", function() {
         this.user = new chorus.models.User({ userName: "franklin", id : 13 });
         this.view = new chorus.views.ImageUpload({model : this.user});
         this.view.model.loaded = true;
+        this.successfulResponse = {"result": '{"status": "ok"}'};
+        this.errorResponse = {"result": '{"status": "fail", "message" :[{"message":"Fake error message."}]}'};
     })
 
     describe("#render", function() {
@@ -46,16 +48,17 @@ describe("chorus.views.ImageUpload", function() {
 
         context("when a photo to upload has been chosen", function() {
             beforeEach(function() {
+                spyOn($.fn, 'fileupload');
+                this.view.render();
                 this.fileList = [
-                    {fileName: 'foo.png'}
+                    {name: 'foo.png'}
                 ];
 
-                this.view.$("input[type=file]").fileupload('add', {files: this.fileList});
-            });
+                expect($.fn.fileupload).toHaveBeenCalled();
 
-            it("starts the upload", function() {
-                expect(_.last(this.server.requests).method).toBe("POST");
-                expect(_.last(this.server.requests).url).toContain(this.user.imageUrl({ size : 'original' }));
+                this.fileUploadOptions = $.fn.fileupload.mostRecentCall.args[0];
+                this.request = jasmine.createSpyObj('request', ['abort']);
+                this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
             });
 
             it("displays a spinner", function() {
@@ -78,8 +81,7 @@ describe("chorus.views.ImageUpload", function() {
                     spyOn(this.user, "change");
                     this.user.bind("validated", this.validatedSpy);
                     this.user.bind("image:change", this.imageChangedSpy)
-                    this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"status": "ok"}']);
-                    this.server.respond();
+                    this.fileUploadOptions.done(null, this.successfulResponse);
                 });
 
                 it("removes the spinner", function() {
@@ -120,8 +122,7 @@ describe("chorus.views.ImageUpload", function() {
                 beforeEach(function() {
                     this.saveFailedSpy = jasmine.createSpy("saveFailed");
                     this.user.bind("saveFailed", this.saveFailedSpy);
-                    this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"status": "fail", "message" :[{"message":"Fake error message."}]}']);
-                    this.server.respond();
+                    this.fileUploadOptions.done(null, this.errorResponse);
                 });
 
                 it("sets the server errors on the model", function() {
@@ -147,13 +148,13 @@ describe("chorus.views.ImageUpload", function() {
 
                 context("when the user submits a good image after a bad image", function() {
                     beforeEach(function() {
-                        this.originalUrl = this.view.$("img").attr("src");
+                        this.originalUrl = 'foo.png';
+                        this.view.$("img").attr("src", this.originalUrl);
                         this.fileList = [
                             {fileName: 'foo.png'}
                         ];
-                        this.view.$("input[type=file]").fileupload('add', {files: this.fileList});
-                        this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"status": "ok", "message" :[]}']);
-                        this.server.respond();
+                        this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
+                        this.fileUploadOptions.done(null, this.successfulResponse);
                     });
 
                     it("clears the errors", function() {

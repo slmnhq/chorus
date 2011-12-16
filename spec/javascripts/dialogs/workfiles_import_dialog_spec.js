@@ -2,6 +2,8 @@ describe("WorkfilesImportDialog", function() {
     beforeEach(function() {
         this.launchElement = $("<a data-workspace-id='4'></a>")
         this.dialog = new chorus.dialogs.WorkfilesImport({launchElement : this.launchElement});
+        this.successfulResponse = {"result": '{"resource":[{"id":"9"}], "status": "ok"}'};
+        this.errorResponse = {"result": '{"status": "fail", "message" :[{"message":"Workspace already has a workfile with this name. Specify a different name."}]}'};
     });
 
     it("does not re-render when the model changes", function() {
@@ -33,17 +35,18 @@ describe("WorkfilesImportDialog", function() {
     context("when a text file has been chosen", function() {
         context("when the upload completes", function() {
             beforeEach(function() {
+                spyOn($.fn, 'fileupload');
                 this.dialog.render();
                 this.fileList = [
-                    {fileName: 'foo.txt'}
+                    {name: 'foo.txt'}
                 ];
-                this.dialog.$("input[type=file]").fileupload('add', {files: this.fileList});
-                this.dialog.$("button.submit").click();
+                expect($.fn.fileupload).toHaveBeenCalled();
+                var fileUploadArgs = $.fn.fileupload.mostRecentCall.args[0];
+
+                fileUploadArgs.add(null, {files: this.fileList});
 
                 spyOn(chorus.router, "navigate");
-                // calls any 'done' callbacks
-                this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"resource":[{"id":"9"}], "status": "ok"}']);
-                this.server.respond();
+                fileUploadArgs.done(null, this.successfulResponse);
             });
 
             it("navigates to the workfile index", function() {
@@ -54,12 +57,18 @@ describe("WorkfilesImportDialog", function() {
 
     context("when a file has been chosen", function() {
         beforeEach(function() {
+            spyOn($.fn, 'fileupload');
             spyOn(this.dialog, "closeModal");
             this.dialog.render();
             this.fileList = [
-                {fileName: 'foo.bar'}
+                {
+                    name: 'foo.bar'
+                }
             ];
-            this.dialog.$("input[type=file]").fileupload('add', {files: this.fileList});
+            expect($.fn.fileupload).toHaveBeenCalled();
+            this.fileUploadOptions = $.fn.fileupload.mostRecentCall.args[0];
+            this.request = jasmine.createSpyObj('request', ['abort']);
+            this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
         });
 
         it("disables the upload button", function() {
@@ -80,14 +89,11 @@ describe("WorkfilesImportDialog", function() {
 
         context("#upload", function() {
             beforeEach(function() {
-                spyOn(this.dialog.uploadObj, "submit").andCallThrough();
                 this.dialog.upload();
             });
 
             it("uploads the specified file", function() {
                 expect(this.dialog.uploadObj.submit).toHaveBeenCalled();
-                expect(_.last(this.server.requests).method).toBe("POST");
-                expect(_.last(this.server.requests).url).toMatch(/\/edc\/workspace\/4\/workfile$/);
             });
 
             it("displays a spinner on the upload button", function() {
@@ -108,7 +114,6 @@ describe("WorkfilesImportDialog", function() {
 
             context("when cancel is clicked before the upload completes", function() {
                 beforeEach(function() {
-                    spyOn(this.dialog.request, "abort");
                     this.dialog.$("button.cancel").click();
                 });
 
@@ -123,7 +128,6 @@ describe("WorkfilesImportDialog", function() {
 
             context("when the close 'X' is clicked", function() {
                 beforeEach(function() {
-                    spyOn(this.dialog.request, "abort");
                     $(document).trigger("close.facebox");
                 });
 
@@ -135,10 +139,7 @@ describe("WorkfilesImportDialog", function() {
             context("when the upload completes", function() {
                 beforeEach(function() {
                     spyOn(chorus.router, "navigate");
-                    // calls any 'done' callbacks
-                    this.server.respondWith("OK");
-                    this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"resource":[{"id":"9"}],"status": "ok"}']);
-                    this.server.respond();
+                    this.fileUploadOptions.done(null, this.successfulResponse);
                 });
 
                 it("closes the dialog", function() {
@@ -152,12 +153,10 @@ describe("WorkfilesImportDialog", function() {
 
             context("when the upload gives a server error", function() {
                 beforeEach(function() {
-                    spyOn(this.dialog.request, "abort");
                     this.saveFailedSpy = jasmine.createSpy();
+                    this.eventSpy = jasmine.createSpyObj("event", ['preventDefault']);
                     this.dialog.resource.bind("saveFailed", this.saveFailedSpy);
-                    // calls any 'done' callbacks
-                    this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"status": "fail", "message" :[{"message":"Workspace already has a workfile with this name. Specify a different name."}]}']);
-                    this.server.respond();
+                    this.fileUploadOptions.done(this.eventSpy, this.errorResponse);
                 });
 
                 it("triggers saveFailed on the model", function(){
@@ -187,7 +186,6 @@ describe("WorkfilesImportDialog", function() {
         });
         context("when the Enter key is pressed" , function() {
             beforeEach(function() {
-                spyOn(this.dialog.uploadObj, "submit").andCallThrough();
                 this.dialog.$("form").submit();
             });
 
@@ -198,7 +196,6 @@ describe("WorkfilesImportDialog", function() {
 
         context("when the upload button is clicked" , function() {
             beforeEach(function() {
-                spyOn(this.dialog.uploadObj, "submit").andCallThrough();
                 this.dialog.$("button.submit").click();
             });
 
