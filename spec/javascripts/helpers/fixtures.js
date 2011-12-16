@@ -571,7 +571,7 @@
 
             activity: {
                 "MEMBERS_ADDED" : function() {
-                    return chorus.models.Activity.build({
+                    return new chorus.models.Activity({
                         author: fixtures.authorJson(),
                         type: "MEMBERS_ADDED",
                         timestamp: "2011-12-01 00:00:00",
@@ -601,7 +601,7 @@
                 },
 
                 "WORKSPACE_DELETED" : function() {
-                    return chorus.models.Activity.build({
+                    return new chorus.models.Activity({
                         author: fixtures.authorJson(),
                         type: "WORKSPACE_DELETED",
                         timestamp: "2011-12-01 00:00:00",
@@ -621,7 +621,7 @@
                 },
 
                 "WORKSPACE_CREATED" : function() {
-                    return chorus.models.Activity.build({
+                    return new chorus.models.Activity({
                         author: fixtures.authorJson(),
                         type: "WORKSPACE_CREATED",
                         timestamp: "2011-12-01 00:00:00",
@@ -641,7 +641,7 @@
                 },
 
                 "NOTE" : function() {
-                    return chorus.models.Activity.build({
+                    return new chorus.models.Activity({
                         author: fixtures.authorJson(),
                         type: "NOTE",
                         text: "How about that.",

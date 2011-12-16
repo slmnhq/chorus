@@ -1,10 +1,27 @@
 ;(function(ns) {
     ns.Activity = chorus.models.Base.extend({
+        initialize : function(attrs) {
+            var type = attrs.type;
+
+            var methodSource = ns.ActivityProxies[type] || ns.ActivityProxies.DEFAULT;
+
+            this.objectName = methodSource.objectName;
+            this.objectUrl = methodSource.objectUrl;
+            this.workspaceName = methodSource.workspaceName;
+            this.workspaceUrl = methodSource.workspaceUrl;
+
+            _.bindAll(this, 'objectName', 'objectUrl', 'workspaceName', 'workspaceUrl');
+        },
+
         author : function() {
             this._author = this._author || new chorus.models.User(this.get("author"));
             return this._author;
-        },
+        }
+    });
 
+    ns.ActivityProxies || (ns.ActivityProxies = {});
+
+    ns.ActivityProxies.DEFAULT = {
         objectName : function() {
             return "don't know object name for activity type: " + this.get("type");
         },
@@ -30,26 +47,29 @@
                 return "no workspace URL for activity type: " + this.get("type");
             }
         }
-    }, {
-        build: function(attrs) {
-            var subclass = ns.Activity[attrs.type] || ns.Activity;
-            return new subclass(attrs)
-        }
-    });
+    }
 
-    ns.Activity.NOTE = ns.Activity.extend({
+    ns.ActivityProxies.NOTE = _.extend({}, ns.ActivityProxies.DEFAULT, {
         objectUrl : function() {
             return 'foo'
         }
     });
 
-    ns.Activity.WORKSPACE_DELETED = ns.Activity.extend({
+    ns.ActivityProxies.WORKSPACE_DELETED = _.extend({}, ns.ActivityProxies.DEFAULT, {
+        objectName : getWorkspaceName
     });
 
-    ns.Activity.WORKSPACE_CREATED = ns.Activity.extend({
-        objectName : function() {
-            return this.get("workspace").name;
-        }
+    ns.ActivityProxies.WORKSPACE_CREATED = _.extend({}, ns.ActivityProxies.DEFAULT, {
+        objectName : getWorkspaceName,
+        objectUrl : getWorkspaceUrl
     });
+
+    function getWorkspaceName() {
+        return this.get("workspace").name;
+    }
+
+    function getWorkspaceUrl() {
+        return new chorus.models.Workspace({id: this.get("workspace").id}).showUrl();
+    }
 
 })(chorus.models);

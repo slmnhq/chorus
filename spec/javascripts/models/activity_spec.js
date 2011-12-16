@@ -17,14 +17,27 @@ describe("chorus.models.Activity", function() {
     context("type: WORKSPACE_CREATED", function() {
         beforeEach(function() {
             this.model = fixtures.activity.WORKSPACE_CREATED();
+            this.workspace = this.model.get("workspace");
         });
 
         it("should have the right objectName", function() {
-            expect(this.model.objectName()).toBe(this.model.get("workspace").name);
+            expect(this.model.objectName()).toBe(this.workspace.name);
         });
 
-        describe("#objectUrl", function() {
+        it("should have the right objectUrl", function() {
+            var url = new chorus.models.Workspace({id: this.workspace.id}).showUrl();
+            expect(this.model.objectUrl()).toBe(url);
+        });
+    });
 
+    context("type: WORKSPACE_DELETED", function() {
+        beforeEach(function() {
+            this.model = fixtures.activity.WORKSPACE_DELETED();
+            this.workspace = this.model.get("workspace");
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.model.objectName()).toBe(this.workspace.name);
         });
     });
 });
