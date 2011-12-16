@@ -15,6 +15,17 @@
         .sort_menu {
             display: inline-block;
             float: right;
+
+            .link_menu {
+                font-weight: $semibold;
+                font-size: 14px;
+                a {
+                    font-size: 14px;
+                }
+                .title {
+                    font-size: 14px;
+                }
+            }
         }
     }
 
