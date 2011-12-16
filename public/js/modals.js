@@ -13,6 +13,8 @@
             $(document).one('close.facebox', function() {
                 self.unbindPageModelCallbacks();
                 self.close();
+                $("#facebox").remove();
+                $.facebox.settings.inited = false;
                 delete ns.modal;
             });
         },

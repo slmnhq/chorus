@@ -178,7 +178,9 @@
     }
 
     window.stubModals = function(){
-        return spyOn($, "facebox")
+        var spy = spyOn($, "facebox");
+        spy.settings = {}
+        return spy;
     };
 
     if ( $.browser.msie && !window.console ) {
