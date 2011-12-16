@@ -11,7 +11,7 @@
         // in an odd format, wrapped in an extra hash.
         parse: function(data) {
             var normalParse = this._super("parse", data);
-            return normalParse[0].members;
+            return normalParse[0] ? normalParse[0].members : []
         },
 
         toUrlParams: function() {
