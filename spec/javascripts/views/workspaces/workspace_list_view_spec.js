@@ -29,7 +29,7 @@ describe("chorus.views.WorkspaceList", function() {
             archiverFirstName: "John",
             archiverLastName: "Henry",
             summary: "this is an archived big summary workspace this is an big summary archived workspace this is an archived workspace this is an archived workspace " +
-                "this is an archived workspace this is an archived workspace this is an archived workspace this is an archived workspace  this is an archived workspace"
+                "this is an archived workspace this is an archived workspace this is an archived workspace this is an archived workspace this is an archived workspace"
         });
 
         this.collection = new chorus.models.WorkspaceSet([
@@ -98,7 +98,7 @@ describe("chorus.views.WorkspaceList", function() {
             });
         });
 
-        describe("when the summary is more than 100", function() {
+        describe("when the summary is more than 100 characters long", function() {
             it("displays the truncated summary with option 'More' ", function() {
                 expect($(this.archivedBigSummaryEl)).not.toHaveClass("more");
                 expect($(".summary", this.archivedBigSummaryEl).text().trim()).toContain(this.archivedBigSummaryWorkspace.get("summary").substring(0, 100).trim());

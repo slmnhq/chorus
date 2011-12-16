@@ -38,7 +38,7 @@
                 return member.get(self.choice);
             });
             return {
-                members : sortedMembers.map(function(member) {
+                members : _.map(sortedMembers, function(member) {
                     return {
                         displayName : member.displayName(),
                         imageUrl : member.imageUrl({size : 'icon'}),
