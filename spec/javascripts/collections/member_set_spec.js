@@ -10,12 +10,6 @@ describe("MemberSet", function() {
         })
     })
 
-    describe("#parse", function() {
-        it("tolerates no members", function() {
-            expect(this.memberSet.parse({ foo: "bar", resource: []})).toBeTruthy();
-        })
-    })
-
     describe("#save", function() {
         beforeEach(function() {
             this.user1 = new chorus.models.User({ userName: "niels" });
