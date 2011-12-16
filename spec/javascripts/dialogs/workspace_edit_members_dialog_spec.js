@@ -59,11 +59,22 @@ describe("WorkspaceEditMembers", function() {
                 expect(this.dialog.members.save).toHaveBeenCalled();
             });
 
-            it("closes the dialog", function() {
-                spyOn(this.dialog, 'closeModal');
-                this.dialog.$("button.submit").click();
-                expect(this.dialog.closeModal).toHaveBeenCalled();
-            });
+            context("when the save succeeds", function() {
+                beforeEach(function() {
+                    this.invalidatedSpy = jasmine.createSpy("invalidated");
+                    this.dialog.pageModel.bind("invalidated", this.invalidatedSpy);
+                    spyOn(this.dialog, 'closeModal');
+                    this.dialog.members.trigger("saved");
+                })
+
+                it("closes the dialog", function() {
+                    expect(this.dialog.closeModal).toHaveBeenCalled();
+                });
+
+                it("triggers the 'invalidated' event on the model", function() {
+                    expect(this.invalidatedSpy).toHaveBeenCalled();
+                })
+            })
 
             context("when some of the selected users are already members", function() {
                 beforeEach(function() {

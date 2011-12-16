@@ -9,11 +9,13 @@
             "click button.submit" : "updateMembers"
         },
 
-        makeModel : function () {
+        makeModel : function (options) {
+            this._super("makeModel", options);
             this.collection = new chorus.models.UserSet();
             this.collection.fetchAll();
             this.members = this.options.pageModel.members();
             this.members.fetch();
+            this.members.bind("saved", this.saved, this);
         },
 
         subviews: {
@@ -38,7 +40,11 @@
             });
             self.members.reset(users);
             self.members.save();
-            self.closeModal();
+        },
+
+        saved : function() {
+            this.pageModel.trigger("invalidated");
+            this.closeModal();
         }
     });
 })(chorus)

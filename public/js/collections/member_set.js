@@ -4,7 +4,15 @@
         urlTemplate : "workspace/{{workspaceId}}/member",
 
         save: function() {
-            Backbone.sync('update', this, { data: this.toUrlParams() });
+            var self = this;
+
+            Backbone.sync('update', this, {
+                data: this.toUrlParams(),
+                success : function(resp, status, xhr) {
+                    var savedEvent = (resp.status == "ok") ? "saved" : "saveFailed"
+                    self.trigger(savedEvent);
+                }
+            });
         },
 
         toUrlParams: function() {
