@@ -18,7 +18,6 @@ describe("CommentDialog", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.dialog.render();
-            console.log(this.dialog.el);
         });
 
         it("has the right title", function() {
