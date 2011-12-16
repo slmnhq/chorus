@@ -504,6 +504,7 @@
                             id : 10000,
                             timestamp : "2011-11-23 15:42:02.321",
                             type : "NOTE",
+                            entityType: "comment",
                             author : {
                                 id : "11",
                                 userName : "edcadmin",
@@ -540,6 +541,7 @@
                             id : 10001,
                             timestamp : "2011-04-23 15:42:02.321",
                             type : "NOTE",
+                            entityType: "comment",
                             author : {
                                 id : "14",
                                 userName : "dburkes",
@@ -573,6 +575,7 @@
                         author: fixtures.authorJson(),
                         type: "MEMBERS_ADDED",
                         timestamp: "2011-12-01 00:00:00",
+                        entityType: "workspace",
                         comments: [
                             {
                                 text: "sub-comment 1",
@@ -602,6 +605,7 @@
                         author: fixtures.authorJson(),
                         type: "WORKSPACE_DELETED",
                         timestamp: "2011-12-01 00:00:00",
+                        entityType: "workspace",
                         comments: [
                             {
                                 text: "sub-comment 1",
@@ -621,6 +625,7 @@
                         author: fixtures.authorJson(),
                         type: "WORKSPACE_CREATED",
                         timestamp: "2011-12-01 00:00:00",
+                        entityType: "workspace",
                         comments: [
                             {
                                 text: "sub-comment 1",
@@ -641,6 +646,7 @@
                         type: "NOTE",
                         text: "How about that.",
                         timestamp: "2011-12-01 00:00:00",
+                        entityType: "comment",
                         comments: [
                             {
                                 text: "sub-comment 1",

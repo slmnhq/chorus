@@ -12,11 +12,8 @@
         compiledTemplates[type] = Handlebars.compile(t("activity_stream.header.html." + type));
     });
 
-    var entityTypes = {
-        "NOTE" : "comment"
-    }
-
     var entityTitles = {
+        "DEFAULT" : t("comments.title.ACTIVITY"),
         "NOTE" : t("comments.title.NOTE")
     }
 
@@ -53,8 +50,8 @@
                 headerHtml : this.headerHtml(),
                 body : this.model.get("text"),
                 timestamp : this.model.get("timestamp"),
-                entityType : entityTypes[type],
-                entityTitle : entityTitles[type],
+                entityType : this.model.get("entityType"),
+                entityTitle : entityTitles[type] || entityTitles["DEFAULT"],
                 subComments : subComments
             }
         },

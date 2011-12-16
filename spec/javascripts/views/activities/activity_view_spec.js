@@ -7,41 +7,41 @@ describe("chorus.views.Activity", function() {
     describe("#render", function() {
         context("type: MEMBERS_ADDED", function() {
             beforeEach(function() {
-                this.model.set({type: "MEMBERS_ADDED"});
+                this.view.model = fixtures.activity.MEMBERS_ADDED();
                 this.view.render();
             });
 
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink : true});
             itShouldRenderWorkspaceDetails({checkLink : true});
-            //itShouldRenderACommentLink(..,..)
+            itShouldRenderACommentLink("workspace", t("comments.title.ACTIVITY"))
         });
 
         context("type: WORKSPACE_CREATED", function() {
             beforeEach(function() {
-                this.model = fixtures.activity.WORKSPACE_CREATED();
+                this.view.model = fixtures.activity.WORKSPACE_CREATED();
                 this.view.render();
             });
 
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink : true});
-            //itShouldRenderACommentLink(..,..)
+            itShouldRenderACommentLink("workspace", t("comments.title.ACTIVITY"))
         });
 
         context("type: WORKSPACE_DELETED", function() {
             beforeEach(function() {
-                this.model = fixtures.activity.WORKSPACE_DELETED();
+                this.view.model = fixtures.activity.WORKSPACE_DELETED();
                 this.view.render();
             });
 
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink : false});
-            //itShouldRenderACommentLink(..,..)
+            itShouldRenderACommentLink("workspace", t("comments.title.ACTIVITY"))
         });
 
         context("type: NOTE", function() {
             beforeEach(function() {
-                this.model = fixtures.activity.NOTE();
+                this.view.model = fixtures.activity.NOTE();
                 this.view.render();
             });
 
@@ -66,7 +66,7 @@ describe("chorus.views.Activity", function() {
 
         context("when the type is unknown", function() {
             beforeEach(function() {
-                this.model.set({type: "DINNER_TIME"});
+                this.view.model.set({type: "DINNER_TIME"});
                 this.view.render();
             });
 
