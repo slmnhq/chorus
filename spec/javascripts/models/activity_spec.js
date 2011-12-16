@@ -41,6 +41,21 @@ describe("chorus.models.Activity", function() {
         });
     });
 
+    context("type: USER_ADDED", function() {
+        beforeEach(function() {
+            this.model = fixtures.activity.USER_ADDED();
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.model.objectName()).toBe(this.model.get("user").name);
+        });
+
+        it("should have the right objectUrl", function() {
+            var url = new chorus.models.User({id: this.model.get("user").id}).showUrl();
+            expect(this.model.objectUrl()).toBe(url);
+        });
+    });
+
     context("type: WORKFILE_CREATED", function() {
         beforeEach(function() {
             this.model = fixtures.activity.WORKFILE_CREATED();

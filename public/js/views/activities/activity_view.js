@@ -5,7 +5,8 @@
         "WORKSPACE_CREATED",
         "WORKSPACE_DELETED",
         "MEMBERS_ADDED",
-        "WORKFILE_CREATED"
+        "WORKFILE_CREATED",
+        "USER_ADDED"
     ];
 
     var compiledTemplates = {};

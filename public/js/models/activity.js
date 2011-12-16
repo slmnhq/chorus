@@ -70,6 +70,16 @@
         workspaceUrl : getWorkspaceUrl
     });
 
+    ns.ActivityProxies.USER_ADDED = makeProxy({
+        objectName : function() {
+            return this.get("user").name;
+        },
+
+        objectUrl : function() {
+            return new chorus.models.User({id: this.get("user").id}).showUrl();
+        }
+    });
+
     function makeProxy(newMethods) {
         return _.extend({}, ns.ActivityProxies.DEFAULT, newMethods);
     }
