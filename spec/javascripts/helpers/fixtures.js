@@ -576,6 +576,7 @@
                         type: "MEMBERS_ADDED",
                         timestamp: "2011-12-01 00:00:00",
                         entityType: "workspace",
+                        id : "10101",
                         comments: [
                             {
                                 text: "sub-comment 1",
@@ -606,6 +607,7 @@
                         type: "WORKSPACE_DELETED",
                         timestamp: "2011-12-01 00:00:00",
                         entityType: "workspace",
+                        id : "10101",
                         comments: [
                             {
                                 text: "sub-comment 1",
@@ -626,6 +628,7 @@
                         type: "WORKSPACE_CREATED",
                         timestamp: "2011-12-01 00:00:00",
                         entityType: "workspace",
+                        id : "10101",
                         comments: [
                             {
                                 text: "sub-comment 1",
@@ -647,6 +650,7 @@
                         text: "How about that.",
                         timestamp: "2011-12-01 00:00:00",
                         entityType: "comment",
+                        id : "10101",
                         comments: [
                             {
                                 text: "sub-comment 1",
