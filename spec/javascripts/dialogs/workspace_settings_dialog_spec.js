@@ -5,9 +5,9 @@ describe("WorkspaceSettings dialog", function() {
         this.workspace.set({ ownerId : '12' });
         this.members = this.workspace.members();
         this.members.add([
-                         new chorus.models.User({ id: 11, firstName: "Mikey", lastName: "B" }),
-                         new chorus.models.User({ id: 12, firstName: "Deborah", lastName: "D" }),
-                         new chorus.models.User({ id: 13, firstName: "Richard", lastName: "G" })
+            new chorus.models.User({ id: 11, firstName: "Mikey", lastName: "B" }),
+            new chorus.models.User({ id: 12, firstName: "Deborah", lastName: "D" }),
+            new chorus.models.User({ id: 13, firstName: "Richard", lastName: "G" })
         ]);
 
         this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement : this.launchElement, pageModel : this.workspace });
@@ -330,6 +330,8 @@ describe("WorkspaceSettings dialog", function() {
 
             context("the server responds with success", function() {
                 beforeEach(function() {
+                    this.invalidatedSpy = jasmine.createSpy("invalidated");
+                    this.dialog.pageModel.bind("invalidated", this.invalidatedSpy);
                     this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"resource":[{"id":"9"}], "status": "ok"}']);
                     this.server.respond();
                 });
@@ -337,6 +339,10 @@ describe("WorkspaceSettings dialog", function() {
                 it("closes the dialog", function() {
                     expect("close.facebox").toHaveBeenTriggeredOn($(document));
                 });
+
+                it("triggers the 'invalidated' event on the model", function() {
+                    expect(this.invalidatedSpy).toHaveBeenCalled();
+                })
             });
 
             context("the server responds with failure", function() {

@@ -25,7 +25,7 @@
                 changeImageKey: "workspace.settings.image.change",
                 spinnerSmall: true
             });
-            this.pageModel.bind("saved", this.closeModal, this);
+            this.pageModel.bind("saved", this.saved, this);
             this.model.members().fetch();
         },
 
@@ -52,6 +52,13 @@
                 active: active,
                 archived: !active
             });
+        },
+
+        saved : function() {
+            this.pageModel.trigger("invalidated");
+            this.closeModal();
         }
+
+
     });
 })(chorus);
