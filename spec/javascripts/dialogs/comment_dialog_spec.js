@@ -7,6 +7,10 @@ describe("CommentDialog", function() {
         });
     });
 
+    it("does not re-render when the model changes", function() {
+        expect(this.dialog.persistent).toBeTruthy()
+    })
+
     describe("#setup", function() {
         it("configures the entity", function() {
             expect(this.dialog.model.get("entityType")).toBe("note")

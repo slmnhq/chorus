@@ -2,6 +2,7 @@
     ns.Comment = chorus.dialogs.Base.extend({
         className : "comment",
         title : t("comments.new_dialog.title"),
+        persistent : true,
         events: {
             "submit form": "save"
         },

@@ -1,6 +1,7 @@
 describe("chorus.Modal", function() {
     beforeEach(function() {
         spyOn(chorus.Modal.prototype, 'bindPageModelCallbacks');
+        spyOn(chorus.Modal.prototype, 'unbindPageModelCallbacks');
         this.model = new chorus.models.Base();
         this.modal = new chorus.Modal({ pageModel : this.model });
         stubModals();
@@ -56,6 +57,10 @@ describe("chorus.Modal", function() {
             it("deletes the chorus.modal object", function() {
                 expect(chorus.modal).toBeUndefined()
             });
+
+            it("calls unbindPageModelCallbacks", function() {
+                expect(this.modal.unbindPageModelCallbacks).toHaveBeenCalled();
+            })
         });
     });
 });

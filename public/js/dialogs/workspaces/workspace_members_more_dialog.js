@@ -3,6 +3,7 @@
     ns.dialogs.WorkspaceMembersMore = ns.dialogs.Base.extend({
         className : "workspace_members_more",
         title : t("workspace.members"),
+        persistent : true,
 
         setup : function() {
             this.members = this.pageModel.members();

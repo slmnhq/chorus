@@ -11,6 +11,7 @@
             ns.modal = this;
 
             $(document).one('close.facebox', function() {
+                self.unbindPageModelCallbacks();
                 self.close();
                 delete ns.modal;
             });
@@ -31,7 +32,8 @@
 
         close : $.noop,
         revealed : $.noop,
-        bindPageModelCallbacks : $.noop
+        bindPageModelCallbacks : $.noop,
+        unbindPageModelCallbacks : $.noop
     })
 
     $.facebox.settings.closeImage = '/images/facebox/closelabel.png'

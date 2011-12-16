@@ -3,6 +3,7 @@
     ns.dialogs.WorkspaceSettings = ns.dialogs.Base.extend({
         className : "workspace_settings",
         title : t("workspace.settings.title"),
+        persistent : true,
 
         events : {
             "submit form" : "updateWorkspace",
@@ -58,7 +59,5 @@
             this.pageModel.trigger("invalidated");
             this.closeModal();
         }
-
-
     });
 })(chorus);

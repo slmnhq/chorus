@@ -14,6 +14,10 @@ describe("WorkspaceMembersMore", function() {
         });
     });
 
+    it("does not re-render when the model changes", function() {
+        expect(dialog.persistent).toBeTruthy()
+    })
+
     describe("render", function() {
         beforeEach(function() {
             dialog.render();
