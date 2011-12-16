@@ -39,11 +39,11 @@ describe("chorus.views.ActivityList", function() {
 
             it("displays information for each comment", function() {
                 expect(this.view.$("li[data-comment-id=10023] .icon a")).toHaveAttr("href", "#/users/12")
-                expect(this.view.$("li[data-comment-id=10023] .icon a img")).toHaveAttr("src", "/edc/userimage/msofaer?size=icon")
+                expect(this.view.$("li[data-comment-id=10023] .icon a img")).toHaveAttr("src", "/edc/userimage/12?size=icon")
                 expect(this.view.$("li[data-comment-id=10023] .comment_header a")).toHaveText("Michael Sofaer");
                 expect(this.view.$("li[data-comment-id=10023] .comment_content .timestamp")).toExist();
                 expect(this.view.$("li[data-comment-id=10024] .icon a")).toHaveAttr("href", "#/users/13")
-                expect(this.view.$("li[data-comment-id=10024] .icon a img")).toHaveAttr("src", "/edc/userimage/mrushakoff?size=icon")
+                expect(this.view.$("li[data-comment-id=10024] .icon a img")).toHaveAttr("src", "/edc/userimage/13?size=icon")
                 expect(this.view.$("li[data-comment-id=10024] .comment_header a")).toHaveText("Mark Rushakoff");
                 expect(this.view.$("li[data-comment-id=10024] .comment_content .timestamp")).toExist();
             })

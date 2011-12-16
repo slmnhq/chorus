@@ -41,7 +41,7 @@
 
         imageUrl : function(options){
             options = (options || {});
-            return "/edc/userimage/" + this.get("userName") + "?size=" + (options.size || "original");
+            return "/edc/userimage/" + this.get("id") + "?size=" + (options.size || "original");
         },
 
         picklistImageUrl : function(){
