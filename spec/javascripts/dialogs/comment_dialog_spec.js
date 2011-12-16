@@ -27,12 +27,26 @@ describe("CommentDialog", function() {
         it("renders the body", function(){
             this.dialog.model.set({body : "cats"})
             this.dialog.render();
-            expect(this.dialog.$("input[name=body]").val()).toBe("cats")
+            expect(this.dialog.$("textarea[name=body]").val()).toBe("cats")
         });
 
         it("has the right placeholder", function() {
-            expect(this.dialog.$("input[name=body]").attr("placeholder")).toBe(t("comments.placeholder", "note"));
+            expect(this.dialog.$("textarea[name=body]").attr("placeholder")).toBe(t("comments.placeholder", "note"));
         });
+
+        it("calls elastic on the textarea after the view is attached to the dom", function() {
+            spyOn($.fn, 'elastic');
+            this.dialog.render();
+            expect($.fn.elastic).not.toHaveBeenCalled();
+
+            waitsFor(function() {
+                return $.fn.elastic.callCount > 0;
+            }, "elastic to be called", 500);
+
+            runs(function() {
+                expect($.fn.elastic.mostRecentCall.object).toBe("textarea");
+            })
+        })
     });
 //
 //    describe("submit", function() {
