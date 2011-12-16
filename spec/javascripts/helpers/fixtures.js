@@ -643,6 +643,31 @@
                     });
                 },
 
+                "WORKFILE_CREATED" : function() {
+                    return new chorus.models.Activity({
+                        author: fixtures.authorJson(),
+                        type: "WORKFILE_CREATED",
+                        timestamp: "2011-12-12 12:12:12",
+                        entityType: "workspace",
+                        id: "10860",
+                        workfile : {
+                            id: "10120",
+                            name: "my.sql"
+                        },
+                        workspace : {
+                            id: "10356",
+                            name: "Some workspace"
+                        },
+                        comments: [
+                            {
+                                text: "OBAMA!!!!",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ]
+                    });
+                },
+
                 "NOTE" : function() {
                     return new chorus.models.Activity({
                         author: fixtures.authorJson(),

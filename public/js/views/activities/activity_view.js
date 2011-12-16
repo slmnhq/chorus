@@ -4,7 +4,8 @@
         "DEFAULT",
         "WORKSPACE_CREATED",
         "WORKSPACE_DELETED",
-        "MEMBERS_ADDED"
+        "MEMBERS_ADDED",
+        "WORKFILE_CREATED"
     ];
 
     var compiledTemplates = {};

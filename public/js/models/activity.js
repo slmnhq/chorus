@@ -3,14 +3,9 @@
         initialize : function(attrs) {
             var type = attrs.type;
 
-            var methodSource = ns.ActivityProxies[type] || ns.ActivityProxies.DEFAULT;
+            var activityProxy = ns.ActivityProxies[type] || ns.ActivityProxies.DEFAULT;
 
-            this.objectName = methodSource.objectName;
-            this.objectUrl = methodSource.objectUrl;
-            this.workspaceName = methodSource.workspaceName;
-            this.workspaceUrl = methodSource.workspaceUrl;
-
-            _.bindAll(this, 'objectName', 'objectUrl', 'workspaceName', 'workspaceUrl');
+            delegate(this, activityProxy, ['objectName', 'objectUrl', 'workspaceName', 'workspaceUrl'])
         },
 
         author : function() {
@@ -49,20 +44,35 @@
         }
     }
 
-    ns.ActivityProxies.NOTE = _.extend({}, ns.ActivityProxies.DEFAULT, {
+    ns.ActivityProxies.NOTE = makeProxy({
         objectUrl : function() {
             return 'foo'
         }
     });
 
-    ns.ActivityProxies.WORKSPACE_DELETED = _.extend({}, ns.ActivityProxies.DEFAULT, {
+    ns.ActivityProxies.WORKSPACE_DELETED = makeProxy({
         objectName : getWorkspaceName
     });
 
-    ns.ActivityProxies.WORKSPACE_CREATED = _.extend({}, ns.ActivityProxies.DEFAULT, {
+    ns.ActivityProxies.WORKSPACE_CREATED = makeProxy({
         objectName : getWorkspaceName,
         objectUrl : getWorkspaceUrl
     });
+
+    ns.ActivityProxies.WORKFILE_CREATED = makeProxy({
+        objectName : function() {
+            return this.get("workfile").name;
+        },
+        objectUrl : function() {
+            return new chorus.models.Workfile({id: this.get("workfile").id, workspaceId : this.get("workspace").id}).showUrl();
+        },
+        workspaceName : getWorkspaceName,
+        workspaceUrl : getWorkspaceUrl
+    });
+
+    function makeProxy(newMethods) {
+        return _.extend({}, ns.ActivityProxies.DEFAULT, newMethods);
+    }
 
     function getWorkspaceName() {
         return this.get("workspace").name;
@@ -72,4 +82,11 @@
         return new chorus.models.Workspace({id: this.get("workspace").id}).showUrl();
     }
 
+    function delegate(context, proxy, methods){
+        _.each(methods, function(method){
+            context[method] =  proxy[method]
+        })
+
+        _.bindAll.call(context, methods);
+    }
 })(chorus.models);
