@@ -403,4 +403,12 @@ describe("WorkspaceSettings dialog", function() {
             })
         })
     })
+
+    describe("select styling", function() {
+        it("uses chosen", function() {
+            spyOn($.fn, "chosen")
+            $(document).trigger("reveal.facebox");
+            expect($.fn.chosen).toHaveBeenCalled();
+        })
+    })
 })

@@ -1,4 +1,5 @@
 @import "_common.scss";
+@import "compass/css3/gradient";
 
 $dialog-width : 550px;
 $image-width : 230px;
@@ -60,8 +61,40 @@ $image-width : 230px;
         font-size: 14px;
     }
 
-    select.owner {
+    select.owner, .chzn-container {
         display: block;
+        background: #dff1fd;
+        min-width: 215px;
+
+        a {
+            @include linear-gradient(color-stops(#eef8fd, #dff1fd));
+            @include border-radius(0px);
+            border: 1px solid #8fb9d0;
+
+            > div {
+                background: inherit;
+                border: none;
+            }
+        }
+
+        .chzn-single {
+            color: #005596;
+        }
+        
+        .chzn-drop {
+            background: #dff1fd;
+            @include border-radius(0px);
+            border: 1px solid #8fb9d0;
+
+            .chzn-search {
+                display: none;
+            }
+
+            .chzn-results {
+                background: #dff1fd;
+                color: #005596;
+            }
+        }
     }
 
     .workspace_status {
