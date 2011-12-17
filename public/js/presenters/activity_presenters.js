@@ -5,17 +5,17 @@
         "NOTE" : t("comments.title.NOTE")
     };
 
-    ns.presenters.Activity = function(model) {
-        var constructor = ns.presenters.Activity[model.get("type")] || ns.presenters.Activity.Base;
-        this.model = model
-        this.presenter = constructor.make(model)
-        this.presenter.header = this.header()
-        this.presenter.subComments = this.subComments();
+    ns.presenters.Activity = ns.presenters.Base.extend({
+        present : function(model) {
+            var constructor = ns.presenters.Activity[model.get("type")] || ns.presenters.Activity.Base;
+            this.model = model
+            this.presenter = constructor.make(model)
+            this.presenter.header = this.header()
+            this.presenter.subComments = this.subComments();
 
-        return this.presenter
-    };
+            return this.presenter
+        },
 
-    _.extend(ns.presenters.Activity.prototype, {
         header : function() {
             return {
                 type: this.model.get("type"),
@@ -51,7 +51,7 @@
             var author = model.author();
             var workspace = model.get("workspace") && new ns.models.Workspace(model.get("workspace"));
 
-            return _.extend({}, model.attributes, {
+            return _.extend({}, {
                 body : model.get("text"),
                 entityTitle : entityTitles[type] || entityTitles["DEFAULT"],
                 objectName : "don't know object name for activity type: " + type,
@@ -59,7 +59,7 @@
                 workspaceName : workspace ? workspace.get("name") : "no workspace name for activity type: " + type,
                 workspaceUrl : workspace ? workspace.showUrl() : "no workspace URL for activity type: " + type,
                 iconSrc : author.imageUrl(),
-                iconHref : author.showUrl(),
+                iconHref : author.showUrl()
             });
         }
     };
