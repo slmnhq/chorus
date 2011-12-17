@@ -18,7 +18,7 @@
         className : "activity",
 
         context : function() {
-            var presenter = chorus.presenters.Activity(this.model)
+            var presenter = new chorus.presenters.Activity(this.model)
             return _.extend({}, presenter, { headerHtml : this.headerHtml(presenter) })
         },
 

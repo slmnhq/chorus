@@ -49,7 +49,7 @@ describe("chorus.presenters.Activity", function(){
         });
 
         it("should have the new user's icon", function() {
-            expect(this.presenter.iconSource).toBe(this.user.imageUrl());
+            expect(this.presenter.iconSrc).toBe(this.user.imageUrl());
         });
 
         it("should link the new user's icon to the new user's show page", function() {
