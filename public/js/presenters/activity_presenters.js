@@ -80,7 +80,7 @@
         }
     };
 
-    ns.presenters.Activity.WORKSPACE_CREATED = {
+    var workspaceIsObject = {
         make : function(model) {
             var original = extendBase(model);
             return extendBase(model, {
@@ -90,15 +90,9 @@
         }
     };
 
-    ns.presenters.Activity.WORKSPACE_MAKE_PRIVATE = {
-        make : function(model) {
-            var original = extendBase(model);
-            return extendBase(model, {
-                objectName : original.workspaceName,
-                objectUrl : original.workspaceUrl
-            })
-        }
-    };
+    ns.presenters.Activity.WORKSPACE_CREATED = workspaceIsObject;
+    ns.presenters.Activity.WORKSPACE_MAKE_PRIVATE = workspaceIsObject;
+    ns.presenters.Activity.WORKSPACE_MAKE_PUBLIC = workspaceIsObject;
 
     ns.presenters.Activity.WORKFILE_CREATED = {
         make : function(model) {

@@ -5,6 +5,7 @@
         "WORKSPACE_CREATED",
         "WORKSPACE_DELETED",
         "WORKSPACE_MAKE_PRIVATE",
+        "WORKSPACE_MAKE_PUBLIC",
         "MEMBERS_ADDED",
         "WORKFILE_CREATED",
         "USER_ADDED"
