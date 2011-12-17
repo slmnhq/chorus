@@ -42,6 +42,18 @@ describe("chorus.views.Activity", function() {
             itShouldRenderACommentLink("workspace", t("comments.title.ACTIVITY"))
         });
 
+        context("type: WORKSPACE_MAKE_PRIVATE", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activity.WORKSPACE_MAKE_PRIVATE();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderAuthorDetails();
+            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderACommentLink("workspace", t("comments.title.ACTIVITY"))
+        });
+
         context("type: NOTE", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activity.NOTE();

@@ -4,6 +4,7 @@
         "DEFAULT",
         "WORKSPACE_CREATED",
         "WORKSPACE_DELETED",
+        "WORKSPACE_MAKE_PRIVATE",
         "MEMBERS_ADDED",
         "WORKFILE_CREATED",
         "USER_ADDED"

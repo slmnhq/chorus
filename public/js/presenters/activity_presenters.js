@@ -90,6 +90,16 @@
         }
     };
 
+    ns.presenters.Activity.WORKSPACE_MAKE_PRIVATE = {
+        make : function(model) {
+            var original = extendBase(model);
+            return extendBase(model, {
+                objectName : original.workspaceName,
+                objectUrl : original.workspaceUrl
+            })
+        }
+    };
+
     ns.presenters.Activity.WORKFILE_CREATED = {
         make : function(model) {
             return extendBase(model, {
