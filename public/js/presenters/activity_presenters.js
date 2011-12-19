@@ -54,6 +54,7 @@
             return _.extend({}, {
                 body : model.get("text"),
                 entityTitle : entityTitles[type] || entityTitles["DEFAULT"],
+                entityType : type == "NOTE" ? "comment" : "activitystream",
                 objectName : "don't know object name for activity type: " + type,
                 objectUrl : "/NEED/OBJECT/URL/FOR/TYPE/" + type,
                 workspaceName : workspace ? workspace.get("name") : "no workspace name for activity type: " + type,

@@ -15,7 +15,7 @@ describe("chorus.views.Activity", function() {
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink : true});
             itShouldRenderWorkspaceDetails({checkLink : true});
-            itShouldRenderACommentLink("workspace", t("comments.title.ACTIVITY"))
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
         context("type: WORKSPACE_CREATED", function() {
@@ -27,7 +27,7 @@ describe("chorus.views.Activity", function() {
 
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink : true});
-            itShouldRenderACommentLink("workspace", t("comments.title.ACTIVITY"))
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
         context("type: WORKSPACE_DELETED", function() {
@@ -39,7 +39,7 @@ describe("chorus.views.Activity", function() {
 
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink : false});
-            itShouldRenderACommentLink("workspace", t("comments.title.ACTIVITY"))
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
         context("type: WORKSPACE_MAKE_PRIVATE", function() {
@@ -51,7 +51,7 @@ describe("chorus.views.Activity", function() {
 
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink : true});
-            itShouldRenderACommentLink("workspace", t("comments.title.ACTIVITY"))
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
         context("type: WORKSPACE_MAKE_PUBLIC", function() {
@@ -63,7 +63,7 @@ describe("chorus.views.Activity", function() {
 
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink : true});
-            itShouldRenderACommentLink("workspace", t("comments.title.ACTIVITY"))
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
         context("type: NOTE", function() {

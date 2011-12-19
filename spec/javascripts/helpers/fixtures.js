@@ -504,7 +504,6 @@
                             id : 10000,
                             timestamp : "2011-11-23 15:42:02.321",
                             type : "NOTE",
-                            entityType: "comment",
                             author : {
                                 id : "11",
                                 userName : "edcadmin",
@@ -541,7 +540,6 @@
                             id : 10001,
                             timestamp : "2011-04-23 15:42:02.321",
                             type : "NOTE",
-                            entityType: "comment",
                             author : {
                                 id : "14",
                                 userName : "dburkes",
@@ -575,7 +573,6 @@
                         author: fixtures.authorJson(),
                         type: "MEMBERS_ADDED",
                         timestamp: "2011-12-01 00:00:00",
-                        entityType: "workspace",
                         id : "10101",
                         comments: [
                             {
@@ -606,7 +603,6 @@
                         author: fixtures.authorJson(),
                         type: "WORKSPACE_DELETED",
                         timestamp: "2011-12-01 00:00:00",
-                        entityType: "workspace",
                         id : "10101",
                         comments: [
                             {
@@ -627,7 +623,6 @@
                         author: fixtures.authorJson(),
                         type: "WORKSPACE_CREATED",
                         timestamp: "2011-12-01 00:00:00",
-                        entityType: "workspace",
                         id : "10101",
                         comments: [
                             {
@@ -648,7 +643,6 @@
                         author: fixtures.authorJson(),
                         type: "WORKSPACE_MAKE_PRIVATE",
                         timestamp: "2011-12-01 00:00:00",
-                        entityType: "workspace",
                         id : "10101",
                         comments: [
                             {
@@ -669,7 +663,6 @@
                         author: fixtures.authorJson(),
                         type: "WORKSPACE_MAKE_PUBLIC",
                         timestamp: "2011-12-01 00:00:00",
-                        entityType: "workspace",
                         id : "10101",
                         comments: [
                             {
@@ -690,7 +683,6 @@
                         author: fixtures.authorJson(),
                         type: "WORKFILE_CREATED",
                         timestamp: "2011-12-12 12:12:12",
-                        entityType: "workspace",
                         id: "10860",
                         workfile : {
                             id: "10120",
@@ -716,7 +708,6 @@
                         type: "NOTE",
                         text: "How about that.",
                         timestamp: "2011-12-01 00:00:00",
-                        entityType: "comment",
                         id : "10101",
                         comments: [
                             {
@@ -733,7 +724,6 @@
                         author: fixtures.authorJson(),
                         type: "USER_ADDED",
                         timestamp: "2011-12-01 00:00:00",
-                        entityType: "user",
                         id : "10101",
                         comments: [
                             {
