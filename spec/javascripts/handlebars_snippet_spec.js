@@ -330,6 +330,25 @@ describe("handlebars", function() {
                 })
             })
         })
-    });
 
+        describe("pluralize", function() {
+            it("uses the singular string if there is only one element", function() {
+                expect(Handlebars.helpers.pluralize([1], "breadcrumbs.home")).toBe(t("breadcrumbs.home"))
+            })
+
+            context("when there is more than one element", function() {
+                context("and no plural string is present", function() {
+                    it("adds an 's' to the singular string", function() {
+                        expect(Handlebars.helpers.pluralize([1, 2], "breadcrumbs.home")).toBe(t("breadcrumbs.home") + "s")
+                    })
+                })
+
+                context("and a plural string is present", function() {
+                    it("uses the plural string", function() {
+                        expect(Handlebars.helpers.pluralize([1, 2], "test.deer")).toBe(t("test.deer.plural"))
+                    })
+                })
+            })
+        })
+    });
 });
