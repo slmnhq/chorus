@@ -35,7 +35,7 @@
         className : "workfile_header",
         additionalContext : function() {
             return {
-                iconUrl : this.model.get("fileName") && chorus.urlHelpers.fileIconUrl(_.last(this.model.get("fileName").split('.')))
+                iconUrl : this.model.get("fileType") && chorus.urlHelpers.fileIconUrl(this.model.get("fileType"))
             };
         }
     })

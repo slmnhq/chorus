@@ -26,17 +26,29 @@ describe("chorus", function() {
 
         it("maps known fileTypes to URLs correctly", function(){
             verifyUrl("C", "c");
-            verifyUrl("C++", "cplusplus");
-            verifyUrl("Java", "java");
+            verifyUrl("c++", "cpp");
+            verifyUrl("cc", "cpp");
+            verifyUrl("cxx", "cpp");
+            verifyUrl("cpp", "cpp");
+            verifyUrl("csv", "csv");
+            verifyUrl("doc", "doc");
+            verifyUrl("excel", "xls");
+            verifyUrl("h", "c");
+            verifyUrl("hpp", "cpp");
+            verifyUrl("hxx", "cpp");
+            verifyUrl("jar", "jar");
+            verifyUrl("java", "java");
+            verifyUrl("pdf", "pdf");
+            verifyUrl("ppt", "ppt");
+            verifyUrl("r", "r");
+            verifyUrl("rtf", "rtf");
             verifyUrl("sql", "sql");
             verifyUrl("txt", "text");
-            verifyUrl("xml", "xml");
-            verifyUrl("html", "html");
         });
 
         it("maps unknown fileTypes to binary.png", function(){
-            verifyUrl("foobar", "binary");
-            verifyUrl("N/A", "binary");
+            verifyUrl("foobar", "plain");
+            verifyUrl("N/A", "plain");
         });
     });
 });
