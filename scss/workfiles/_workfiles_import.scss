@@ -46,26 +46,6 @@ $image-width: 48px;
         line-height: $image-height;
     }
 
-    .file-wrapper {
-        overflow: hidden;
-        cursor: pointer;
-        display: inline-block;
-        vertical-align: middle;
-    }
-
-    .file-wrapper button {
-        float: left;
-        z-index: 99;
-    }
-
-    .file-wrapper input {
-        width: 1px;
-        position: relative;
-        top: 0px;
-        left: -130px;
-        @include opacity(0);
-        z-index: -1;
-     }
 
     .expanded {
         padding-right: 35px;

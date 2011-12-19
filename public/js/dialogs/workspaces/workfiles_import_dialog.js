@@ -7,7 +7,6 @@
 
         events : {
             "click button.submit" : "upload",
-            "click button.choose" : "chooseFile",
             "submit form": "upload",
             "click button.cancel" : "cancelUploadAndClose"
         },
