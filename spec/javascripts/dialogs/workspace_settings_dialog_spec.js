@@ -26,6 +26,8 @@ describe("WorkspaceSettings dialog", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            setLoggedInUser({ id : 11 });
+            this.workspace.set({ ownerId : 11})
             this.dialog.render();
         });
 
@@ -43,29 +45,6 @@ describe("WorkspaceSettings dialog", function() {
 
         it("renders the archiving instructions", function() {
             expect(this.dialog.$(".archived_text").text().trim()).toMatchTranslation("workspace.settings.archived_description");
-        });
-
-        describe("the owner select", function() {
-            it("shows up", function() {
-                expect(this.dialog.$("select.owner")).toExist();
-            });
-
-            it("has an option for each member", function() {
-                var options = this.dialog.$("select.owner option");
-                expect(options.length).toBe(3);
-
-                expect(options.eq(0).text()).toBe("Mikey B");
-                expect(options.eq(1).text()).toBe("Deborah D");
-                expect(options.eq(2).text()).toBe("Richard G");
-
-                expect(options.eq(0).val()).toBe("11");
-                expect(options.eq(1).val()).toBe("12");
-                expect(options.eq(2).val()).toBe("13");
-            });
-
-            it("defaults to the current owner", function() {
-                expect(this.dialog.$("select.owner").val()).toBe("12");
-            });
         });
 
         context("when the workspace is public", function() {
@@ -92,13 +71,36 @@ describe("WorkspaceSettings dialog", function() {
 
         context("when the user is the owner of the workspace", function() {
             beforeEach(function() {
-                setLoggedInUser({ id : 10101 });
-                this.workspace.set({ ownerId : 10101 })
+                setLoggedInUser({ id : 11 });
+                this.workspace.set({ ownerId : 11})
                 this.dialog.render();
             })
 
             it("does not disable the 'Publicly available' checkbox", function() {
                 expect(this.dialog.$("input[name=isPublic]")).not.toBeDisabled();
+            })
+
+            describe("the owner select", function() {
+                it("shows up", function() {
+                    expect(this.dialog.$("select.owner")).toExist();
+                });
+
+                it("has an option for each member", function() {
+                    var options = this.dialog.$("select.owner option");
+                    expect(options.length).toBe(3);
+
+                    expect(options.eq(0).text()).toBe("Mikey B");
+                    expect(options.eq(1).text()).toBe("Deborah D");
+                    expect(options.eq(2).text()).toBe("Richard G");
+
+                    expect(options.eq(0).val()).toBe("11");
+                    expect(options.eq(1).val()).toBe("12");
+                    expect(options.eq(2).val()).toBe("13");
+                });
+
+                it("defaults to the current owner", function() {
+                    expect(this.dialog.$("select.owner").val()).toBe("11");
+                });
             })
 
             context("and the workspace is not archived", function() {
@@ -136,19 +138,23 @@ describe("WorkspaceSettings dialog", function() {
 
         context("when the user is not the owner of the workspace", function() {
             beforeEach(function() {
-                this.workspace.set({ ownerId : 10101 }, { silent : true })
-                this.dialog.render();
+                this.workspace.set({ ownerId : 12})
             })
 
             context("and the user is not an admin", function() {
                 beforeEach(function() {
-                    setLoggedInUser({ id : 10102 });
+                    setLoggedInUser({ id : 11, admin : false});
                     this.dialog.render();
                 })
 
                 it("disables the 'Publicly available' checkbox", function() {
                     expect(this.dialog.$("input[name=isPublic]")).toBeDisabled();
                 })
+
+                it("renders the owner as plain text", function() {
+                    expect(this.dialog.$("select.owner")).not.toExist();
+                    expect(this.dialog.$("div.owner")).toHaveText("Deborah D");
+                });
 
                 context("and the workspace is not archived", function() {
                     beforeEach(function() {
@@ -185,12 +191,35 @@ describe("WorkspaceSettings dialog", function() {
 
             context("and the user is an admin", function() {
                 beforeEach(function() {
-                    setLoggedInUser({ id : 10102, admin : true });
+                    setLoggedInUser({ id : 11, admin : true });
                     this.dialog.render();
                 })
 
                 it("does not disable the 'Publicly available' checkbox", function() {
                     expect(this.dialog.$("input[name=isPublic]")).not.toBeDisabled();
+                })
+
+                describe("the owner select", function() {
+                    it("shows up", function() {
+                        expect(this.dialog.$("select.owner")).toExist();
+                    });
+
+                    it("has an option for each member", function() {
+                        var options = this.dialog.$("select.owner option");
+                        expect(options.length).toBe(3);
+
+                        expect(options.eq(0).text()).toBe("Mikey B");
+                        expect(options.eq(1).text()).toBe("Deborah D");
+                        expect(options.eq(2).text()).toBe("Richard G");
+
+                        expect(options.eq(0).val()).toBe("11");
+                        expect(options.eq(1).val()).toBe("12");
+                        expect(options.eq(2).val()).toBe("13");
+                    });
+
+                    it("defaults to the current owner", function() {
+                        expect(this.dialog.$("select.owner").val()).toBe("12");
+                    });
                 })
 
                 context("and the workspace is not archived", function() {
@@ -377,6 +406,24 @@ describe("WorkspaceSettings dialog", function() {
                     expect(this.dialog.$("input[name=name]").val()).toBe("my modified name");
                 });
             });
+
+            context("when the owner select box is not present", function() {
+                beforeEach(function() {
+                    setLoggedInUser({ id : 11, admin : false});
+                    this.dialog.render();
+                    this.dialog.$("input[name=name]").val("my modified name");
+                    this.dialog.$("textarea[name=summary]").val("my modified summary");
+                    this.dialog.$('form').submit();
+                })
+
+                it("saves the workspace", function() {
+                    expect(this.dialog.pageModel.save).toHaveBeenCalled();
+                });
+
+                it("does not provide ownerId in the API call", function() {
+                    expect(this.dialog.pageModel.save.calls[1].args.hasOwnProperty("ownerId")).toBeFalsy();
+                })
+            })
         });
 
         context("submitting the form with invalid data", function() {

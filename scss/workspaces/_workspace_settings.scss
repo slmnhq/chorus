@@ -61,6 +61,11 @@ $image-width : 230px;
         font-size: 14px;
     }
 
+    div.owner {
+        font-size: 13px;
+        padding-left: 12px;
+    }
+    
     select.owner, .chzn-container {
         display: block;
         background: #dff1fd;
@@ -79,6 +84,12 @@ $image-width : 230px;
 
         .chzn-single {
             color: #005596;
+
+            div {
+                b {
+                    background: url(/images/select_icon.png) no-repeat 2px 8px;
+                }
+            }
         }
         
         .chzn-drop {

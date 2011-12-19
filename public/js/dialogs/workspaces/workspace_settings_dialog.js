@@ -11,11 +11,18 @@
         },
 
         additionalContext : function() {
+            var ownerId = this.pageModel.get("ownerId")
+
+            var owner = this.pageModel.members().find(function(member) {
+                return member.get("id") == ownerId;
+            })
+
             return {
                 imageUrl : this.pageModel.imageUrl(),
                 hasImage : this.pageModel.hasImage(),
                 members : this.pageModel.members().models,
-                permission :  ((this.pageModel.get("ownerId") == chorus.session.user().get("id")) || chorus.session.user().get("admin"))
+                permission :  ((this.pageModel.get("ownerId") == chorus.session.user().get("id")) || chorus.session.user().get("admin")),
+                ownerName : owner && owner.displayName()
             }
         },
 
@@ -47,18 +54,21 @@
         updateWorkspace : function(e) {
             e.preventDefault();
             var active = !!this.$("input#workspace_active").is(":checked");
-            var ownerId = this.$("select.owner").val();
-            var ownerName = this.model.members().get(ownerId).get("userName");
 
-            this.pageModel.save({
+            var attrs = {
                 name: this.$("input[name=name]").val().trim(),
                 summary: this.$("textarea[name=summary]").val().trim(),
                 isPublic : !!this.$("input[name=isPublic]").is(":checked"),
-                ownerId : ownerId,
-                owner : ownerName,
                 active: active,
                 archived: !active
-            });
+            };
+
+            if (this.$("select.owner").length > 0) {
+                attrs.ownerId = this.$("select.owner").val();
+                attrs.ownerName = this.model.members().get(attrs.ownerId).get("userName");
+            }
+
+            this.pageModel.save(attrs);
         },
 
         saved : function() {
