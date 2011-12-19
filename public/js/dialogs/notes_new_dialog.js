@@ -2,6 +2,7 @@
     ns.NotesNew = chorus.dialogs.Base.extend({
         className : "notes_new",
         title : t("notes.new_dialog.title"),
+        persistent : true,
         events: {
             "submit form": "save"
         },

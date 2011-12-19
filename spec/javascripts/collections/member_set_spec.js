@@ -1,42 +1,78 @@
 describe("MemberSet", function() {
     beforeEach(function() {
         this.workspace = new chorus.models.Workspace({id: 17})
-        this.memberSet  = new chorus.models.MemberSet([], {workspaceId: 17})
+        this.memberSet = new chorus.models.MemberSet([], {workspaceId: 17})
     });
 
-    describe("#url", function(){
-        it("has the workspace id in the url", function(){
+    describe("#url", function() {
+        it("has the workspace id in the url", function() {
             expect(this.memberSet.url()).toContain("/edc/workspace/17/member")
-        })
-    })
-
-    describe("#parse", function() {
-        it("tolerates no members", function() {
-            expect(this.memberSet.parse({ foo: "bar", resource: []})).toBeTruthy();
         })
     })
 
     describe("#save", function() {
         beforeEach(function() {
+            this.savedSpy = jasmine.createSpy("saved");
+            this.saveFailedSpy = jasmine.createSpy("saveFailed");
+            this.memberSet.bind("saved", this.savedSpy);
+            this.memberSet.bind("saveFailed", this.saveFailedSpy);
             this.user1 = new chorus.models.User({ userName: "niels" });
             this.user2 = new chorus.models.User({ userName: "ludwig" });
             this.user3 = new chorus.models.User({ userName: "isaac" });
             this.memberSet.add([this.user1, this.user2, this.user3]);
+            this.memberSet.save();
         });
 
         it("does a PUT", function() {
-            this.memberSet.save()
             expect(this.server.requests[0].method).toBe("PUT");
         });
 
         it("hits the url for the members api", function() {
-            this.memberSet.save()
             expect(this.server.requests[0].url).toBe(this.memberSet.url());
         });
 
         it("passes a list of user names as data", function() {
-            this.memberSet.save()
             expect(this.server.requests[0].requestBody).toBe("members=niels&members=ludwig&members=isaac");
         });
+
+        context("when the request succeeds", function() {
+            beforeEach(function() {
+                this.response = { status: "ok", resource : [
+                    { foo : "hi" }
+                ] };
+
+                this.server.respondWith(
+                    'PUT',
+                    this.memberSet.url(),
+                    this.prepareResponse(this.response));
+
+
+                this.server.respond();
+            });
+
+            it("triggers the 'saved' event on the member set", function() {
+                expect(this.savedSpy).toHaveBeenCalled();
+            })
+        })
+
+        context("when the request fails", function() {
+            beforeEach(function() {
+                this.response = { status: "fail", resource : [
+                    { foo : "hi" }
+                ] };
+
+                this.server.respondWith(
+                    'PUT',
+                    this.memberSet.url(),
+                    this.prepareResponse(this.response));
+
+
+                this.server.respond();
+            });
+
+            it("triggers the 'saveFailed' event on the member set", function() {
+                expect(this.saveFailedSpy).toHaveBeenCalled();
+            })
+        })
     });
 });

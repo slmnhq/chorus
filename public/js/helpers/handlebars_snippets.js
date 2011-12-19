@@ -112,6 +112,18 @@
         userProfileLink : function(user) {
             templates.userLinkTemplate = templates.userLinkTemplate || Handlebars.compile("<a class='user' href='{{url}}'>{{name}}</a>");
             return templates.userLinkTemplate({ url : user.showUrl(), name : user.displayName() });
+        },
+
+        pluralize : function(collection, key) {
+            if (collection.length == 1) {
+                return t(key);
+            } else {
+                if ($.i18n.map[key + ".plural"]) {
+                    return t(key + ".plural");
+                } else {
+                    return t(key) + "s";
+                }
+            }
         }
     }
 

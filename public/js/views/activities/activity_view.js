@@ -1,76 +1,30 @@
 ;(function($, ns) {
-    var types = [
-        "NOTE",
-        "DEFAULT",
-        "WORKSPACE_CREATED",
-        "WORKSPACE_DELETED",
-        "MEMBERS_ADDED"
-    ];
-
     var compiledTemplates = {};
-    _.each(types, function(type) {
-        compiledTemplates[type] = Handlebars.compile(t("activity_stream.header.html." + type));
+    var activityTemplateRegex = /^activity_stream\.header\.html\.(\w+)$/;
+
+    // $.i18n.map isn't populated until the first call to t(), so let's call it here in case we run a scoped spec.
+    t("");
+
+    _.each($.i18n.map, function(value, key) {
+        var match = key.match(activityTemplateRegex);
+        if (match) {
+            compiledTemplates[match[1]] = Handlebars.compile(t(match[0]));
+        }
     });
-
-    var entityTypes = {
-        "NOTE" : "comment"
-    }
-
-    var entityTitles = {
-        "NOTE" : t("comments.title.NOTE")
-    }
 
     ns.views.Activity = chorus.views.Base.extend({
         className : "activity",
 
-        additionalContext : function() {
-            var author = this.model.author();
-
-            var comments = this.model.get("comments");
-            var subComments = _.map(comments, function(comment) {
-                comment = new chorus.models.Comment(comment)
-                var user = comment.creator();
-                var ctx = {
-                    imageUrl : user.imageUrl({ size : "icon" }),
-                    authorShowUrl : user.showUrl(),
-                    displayName : user.displayName(),
-                    timestamp : comment.get("timestamp"),
-                    id : comment.get("id")
-                };
-
-                if (comment.get("text")) {
-                    ctx.body = comment.get("text")
-                }
-
-                return ctx;
-            });
-
-            var type = this.model.get("type");
-
-            return {
-                imageUrl : author.imageUrl(),
-                showUrl : author.showUrl(),
-                headerHtml : this.headerHtml(),
-                body : this.model.get("text"),
-                timestamp : this.model.get("timestamp"),
-                entityType : entityTypes[type],
-                entityTitle : entityTitles[type],
-                subComments : subComments
-            }
+        context : function() {
+            var presenter = new chorus.presenters.Activity(this.model)
+            return _.extend({}, presenter, { headerHtml : this.headerHtml(presenter) })
         },
 
-        headerHtml : function() {
+        headerHtml : function(presenter) {
             var type = this.model.get("type");
             var template = compiledTemplates[type] || compiledTemplates['DEFAULT'];
-            return template({
-                type: type,
-                authorUrl: this.model.author().showUrl(),
-                authorName: this.model.author().displayName(),
-                objectUrl: this.model.objectUrl(),
-                objectName: this.model.objectName(),
-                workspaceUrl: this.model.workspaceUrl(),
-                workspaceName: this.model.workspaceName()
-            });
+
+            return template(presenter.header);
         }
     });
 })(jQuery, chorus);

@@ -3,6 +3,7 @@
     ns.dialogs.WorkspaceSettings = ns.dialogs.Base.extend({
         className : "workspace_settings",
         title : t("workspace.settings.title"),
+        persistent : true,
 
         events : {
             "submit form" : "updateWorkspace",
@@ -25,8 +26,14 @@
                 changeImageKey: "workspace.settings.image.change",
                 spinnerSmall: true
             });
-            this.pageModel.bind("saved", this.closeModal, this);
+            this.pageModel.bind("saved", this.saved, this);
             this.model.members().fetch();
+
+            $(document).one('reveal.facebox', _.bind(this.setupSelects, this));
+        },
+
+        setupSelects : function() {
+            this.$("select.owner").chosen({ disable_search_threshold : 1000 });
         },
 
         subviews: {
@@ -52,6 +59,11 @@
                 active: active,
                 archived: !active
             });
+        },
+
+        saved : function() {
+            this.pageModel.trigger("invalidated");
+            this.closeModal();
         }
     });
 })(chorus);

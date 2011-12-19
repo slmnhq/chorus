@@ -72,14 +72,14 @@ describe("chorus.models.Workspace", function() {
             expect(this.members).toBe(this.model.members());
         });
 
-        context("when the 'reset' event is triggered on the members", function() {
+        context("when the 'saved' event is triggered on the members", function() {
             beforeEach(function() {
                 this.changeSpy = jasmine.createSpy("changeSpy");
                 this.model.bind("change", this.changeSpy);
             });
 
             it("triggers 'change' on the workspace", function() {
-                this.members.trigger("reset");
+                this.members.trigger("saved");
                 expect(this.changeSpy).toHaveBeenCalled();
             });
         });

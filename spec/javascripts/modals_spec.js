@@ -1,6 +1,7 @@
 describe("chorus.Modal", function() {
     beforeEach(function() {
         spyOn(chorus.Modal.prototype, 'bindPageModelCallbacks');
+        spyOn(chorus.Modal.prototype, 'unbindPageModelCallbacks');
         this.model = new chorus.models.Base();
         this.modal = new chorus.Modal({ pageModel : this.model });
         stubModals();
@@ -46,6 +47,8 @@ describe("chorus.Modal", function() {
         describe("when the facebox closes", function() {
             beforeEach(function() {
                 spyOn(this.modal, 'close');
+                $("#jasmine_content").append("<div id='facebox'/>")
+                $.facebox.settings.inited = true;
                 $(document).trigger("close.facebox");
             });
 
@@ -56,6 +59,18 @@ describe("chorus.Modal", function() {
             it("deletes the chorus.modal object", function() {
                 expect(chorus.modal).toBeUndefined()
             });
+
+            it("calls unbindPageModelCallbacks", function() {
+                expect(this.modal.unbindPageModelCallbacks).toHaveBeenCalled();
+            })
+
+            it("resets facebox", function() {
+                expect($.facebox.settings.inited).toBeFalsy();
+            })
+
+            it("removes the #facebox element from the DOM", function() {
+                expect($("#facebox")).not.toExist();
+            })
         });
     });
 });

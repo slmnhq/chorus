@@ -28,7 +28,7 @@
         members: function(){
             if (!this._members) {
                 this._members = new chorus.models.MemberSet([], {workspaceId : this.get("id")})
-                this._members.bind("reset", function() { this.trigger("change") }, this);
+                this._members.bind("saved", function() { this.trigger("change") }, this);
             }
             return this._members;
         },

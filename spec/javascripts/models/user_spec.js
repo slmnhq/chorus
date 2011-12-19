@@ -161,20 +161,20 @@ describe("chorus.models.User", function() {
 
     describe("#imageUrl", function() {
         it("uses the right URL", function(){
-            var user = new models.User({userName: 'foo'});
-            expect(user.imageUrl()).toBe("/edc/userimage/foo?size=original");
+            var user = new models.User({userName: 'foo', id : "bar"});
+            expect(user.imageUrl()).toBe("/edc/userimage/bar?size=original");
         });
 
         it("accepts the size argument", function(){
-            var user = new models.User({userName: 'foo'});
-            expect(user.imageUrl({size: "icon"})).toBe("/edc/userimage/foo?size=icon");
+            var user = new models.User({userName: 'foo', id: "bar"});
+            expect(user.imageUrl({size: "icon"})).toBe("/edc/userimage/bar?size=icon");
         });
     });
 
     describe("#picklistImageUrl", function() {
         it("uses the right URL", function(){
-            var user = new models.User({userName: 'foo'});
-            expect(user.picklistImageUrl()).toBe("/edc/userimage/foo?size=original");
+            var user = new models.User({userName: 'foo', id: "bar"});
+            expect(user.picklistImageUrl()).toBe(user.imageUrl({ size: "original" }));
         });
     })
 

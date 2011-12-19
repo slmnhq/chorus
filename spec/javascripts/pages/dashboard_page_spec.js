@@ -1,7 +1,14 @@
 describe("chorus.pages.DashboardPage", function() {
     beforeEach(function() {
+        chorus.session = new chorus.models.Session({ id : "foo" })
         this.page = new chorus.pages.DashboardPage();
     });
+
+    describe("#setup", function() {
+        it("sets chorus.session.user as the model", function() {
+            expect(this.page.model).toBe(chorus.session.user())
+        })
+    })
 
     describe("#render", function() {
         beforeEach(function() {

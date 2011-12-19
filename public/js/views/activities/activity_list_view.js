@@ -38,7 +38,8 @@
             this.collection.each(function(model) {
                 var view = new ns.views.Activity({model: model});
                 view.render();
-                el.append($("<li data-activity-id='" + model.get("id") + "' class='activity_list_item'></li>").append(view.el));
+                var li = $("<li/>").attr("data-activity-id", model.get("id")).attr("data-activity-type", model.get("type")).addClass("activity_list_item").append(view.el);
+                el.append(li);
                 view.delegateEvents();
             });
         }

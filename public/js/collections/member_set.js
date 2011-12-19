@@ -4,14 +4,15 @@
         urlTemplate : "workspace/{{workspaceId}}/member",
 
         save: function() {
-            Backbone.sync('update', this, { data: this.toUrlParams() });
-        },
+            var self = this;
 
-        // this is a temporary hack because the api returns members
-        // in an odd format, wrapped in an extra hash.
-        parse: function(data) {
-            var normalParse = this._super("parse", data);
-            return normalParse[0] ? normalParse[0].members : []
+            Backbone.sync('update', this, {
+                data: this.toUrlParams(),
+                success : function(resp, status, xhr) {
+                    var savedEvent = (resp.status == "ok") ? "saved" : "saveFailed"
+                    self.trigger(savedEvent);
+                }
+            });
         },
 
         toUrlParams: function() {

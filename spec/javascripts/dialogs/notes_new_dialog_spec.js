@@ -7,6 +7,10 @@ describe("NotesNewDialog", function() {
         });
     });
 
+    it("does not re-render when the model changes", function() {
+        expect(this.dialog.persistent).toBeTruthy()
+    })
+
     describe("#setup", function() {
         it("creates the correct Note", function() {
             expect(this.dialog.model.get("entityType")).toBe("workfile")

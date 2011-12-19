@@ -1,19 +1,21 @@
 <div class="activity_item">
     <div class="icon">
-        <a href="{{showUrl}}"><img src="{{imageUrl}}"/></a>
+        <a href="{{iconHref}}"><img src="{{iconSrc}}"/></a>
     </div>
     <div class="activity_content">
         <div class="activity_header">
             {{{headerHtml}}}
         </div>
-        <div class="body">{{body}}</div>
+        {{#if body}}
+            <div class="body">{{body}}</div>
+        {{/if}}
         <div class="timestamp">{{relativeTimestamp timestamp}}</div>
         <div class="links">
             <a class="comment dialog" data-dialog="Comment" data-entity-type="{{entityType}}" data-entity-id="{{id}}" data-entity-title="{{entityTitle}}" href="#">{{t "activity_stream.comment"}}</a>
         </div>
     </div>
 </div>
-        
+
 {{#if subComments.length}}
     <ul class="comments">
         {{#eachWithMoreLink subComments 2 "activity_stream.comments.more" "activity_stream.comments.less"}}

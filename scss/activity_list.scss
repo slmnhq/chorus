@@ -5,6 +5,7 @@ $text-padding-y: 4px;
 $comment-padding-x: 6px;
 $activity-gutter: 8px;
 $comment-gutter: 10px;
+$system-action-color: #7C7D7D;
 
 
 .activity_list{
@@ -58,12 +59,14 @@ $comment-gutter: 10px;
             }
 
             .activity_header {
-                @include ellipsis;
                 font-size: 14px;
                 padding-bottom: $text-padding-y;
                 color: $secondary-text-color;
                 .author {
                     font-weight: $semibold;
+                }
+                .object {
+                    color: $system-action-color;
                 }
             }
 
@@ -81,10 +84,6 @@ $comment-gutter: 10px;
                 padding: 4px 0;
                 font-size: 12px;
                 padding-bottom: $text-padding-y;
-            }
-
-            .workspace {
-                display: none;
             }
         }
 
@@ -194,3 +193,34 @@ $comment-gutter: 10px;
         display: none;
     }
 }
+
+#sidebar .activity_list  {
+    li[data-activity-type=WORKSPACE_CREATED],
+    li[data-activity-type=WORKSPACE_DELETED],
+    li[data-activity-type=WORKFILE_CREATED],
+    li[data-activity-type=WORKSPACE_MAKE_PRIVATE],
+    li[data-activity-type=WORKSPACE_MAKE_PUBLIC],
+    li[data-activity-type=WORKSPACE_ARCHIVED],
+    li[data-activity-type=WORKSPACE_UNARCHIVED],
+    li[data-activity-type=USER_ADDED],
+    li[data-activity-type=USER_DELETED] {
+        .object, .order {
+            display: inline;
+        }
+    }
+
+    li[data-activity-type=MEMBERS_ADDED] {
+        .object, .order, .workspace {
+            display: inline;
+        }
+    }
+}
+
+#sidebar.user_show_sidebar {
+    li[data-activity-type=WORKFILE_CREATED] {
+        .workspace {
+            display: inline;
+        }
+    }
+}
+

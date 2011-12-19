@@ -7,41 +7,123 @@ describe("chorus.views.Activity", function() {
     describe("#render", function() {
         context("type: MEMBERS_ADDED", function() {
             beforeEach(function() {
-                this.model.set({type: "MEMBERS_ADDED"});
+                this.view.model = fixtures.activity.MEMBERS_ADDED();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
 
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink : true});
             itShouldRenderWorkspaceDetails({checkLink : true});
-            //itShouldRenderACommentLink(..,..)
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+
+            context("when only one member was added", function() {
+                beforeEach(function() {
+                    this.view.model.set({ user : [this.view.model.get("user")[0]] });
+                    this.presenter = new chorus.presenters.Activity(this.view.model)
+                    this.view.render();
+                })
+
+                it("calls out the user", function() {
+                    expect(this.view.$(".object a")).toHaveText(this.view.model.get("user")[0].name)
+                })
+            })
+
+            context("when more than one member was added", function() {
+                it("calls out the first user", function() {
+                    expect(this.view.$(".object a")).toHaveText(this.view.model.get("user")[0].name)
+                })
+            })
         });
 
         context("type: WORKSPACE_CREATED", function() {
             beforeEach(function() {
-                this.model = fixtures.activity.WORKSPACE_CREATED();
+                this.view.model = fixtures.activity.WORKSPACE_CREATED();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
 
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink : true});
-            //itShouldRenderACommentLink(..,..)
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
-        context("type: WORKSPACE_DELETED", function() {
+        context("type: USER_DELETED", function() {
             beforeEach(function() {
-                this.model = fixtures.activity.WORKSPACE_DELETED();
+                this.view.model = fixtures.activity.USER_DELETED();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
 
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink : false});
-            //itShouldRenderACommentLink(..,..)
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+        });
+
+        context("type: WORKSPACE_DELETED", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activity.WORKSPACE_DELETED();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderAuthorDetails();
+            itShouldRenderObjectDetails({checkLink : false});
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+        });
+
+        context("type: WORKSPACE_MAKE_PRIVATE", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activity.WORKSPACE_MAKE_PRIVATE();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderAuthorDetails();
+            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+        });
+
+        context("type: WORKSPACE_MAKE_PUBLIC", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activity.WORKSPACE_MAKE_PUBLIC();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderAuthorDetails();
+            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+        });
+
+        context("type: WORKSPACE_ARCHIVED", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activity.WORKSPACE_ARCHIVED();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderAuthorDetails();
+            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+        });
+
+        context("type: WORKSPACE_UNARCHIVED", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activity.WORKSPACE_UNARCHIVED();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderAuthorDetails();
+            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
         context("type: NOTE", function() {
             beforeEach(function() {
-                this.model = fixtures.activity.NOTE();
+                this.view.model = fixtures.activity.NOTE();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
 
@@ -66,13 +148,14 @@ describe("chorus.views.Activity", function() {
 
         context("when the type is unknown", function() {
             beforeEach(function() {
-                this.model.set({type: "DINNER_TIME"});
+                this.view.model.set({type: "DINNER_TIME"});
+                this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
 
             it("returns a default header", function() {
                 this.model.set({ type: "GEN MAI CHA" });
-                expect(this.view.headerHtml()).toBeDefined();
+                expect(this.view.render().$(".activity_header .author")).toExist();
             });
         });
     });
@@ -95,12 +178,12 @@ describe("chorus.views.Activity", function() {
         options || (options = {});
 
         it("contains the object's name", function() {
-            expect(this.view.$(".object").text()).toContain(this.view.model.objectName());
+            expect(this.view.$(".object").text()).toContain(this.presenter.objectName);
         });
 
         if (options.checkLink) {
             it("contains the object's url", function() {
-                expect(this.view.$('.object a').attr('href')).toBe(this.view.model.objectUrl());
+                expect(this.view.$('.object a').attr('href')).toBe(this.presenter.objectUrl);
             });
         }
     };
@@ -109,12 +192,12 @@ describe("chorus.views.Activity", function() {
         options || (options = {});
 
         it("contains the workspace's name", function() {
-            expect(this.view.$(".workspace").text()).toContain(this.view.model.workspaceName());
+            expect(this.view.$(".workspace").text()).toContain(this.presenter.workspaceName);
         });
 
         if (options.checkLink) {
             it("contains the workspace's url", function() {
-                expect(this.view.$('.workspace a').attr('href')).toBe(this.view.model.workspaceUrl());
+                expect(this.view.$('.workspace a').attr('href')).toBe(this.presenter.workspaceUrl);
             });
         }
     };

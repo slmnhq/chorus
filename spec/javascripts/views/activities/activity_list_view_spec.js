@@ -18,6 +18,11 @@ describe("chorus.views.ActivityList", function() {
             expect(this.view.$("li[data-activity-id]").length).toBe(this.collection.length);
         });
 
+        it("renders activity metadata on the li", function() {
+            expect(this.view.$("li[data-activity-id=10000]")).toHaveData("activity-type", "NOTE");
+            expect(this.view.$("li[data-activity-id=10001]")).toHaveData("activity-type", "NOTE");
+        })
+
         it("displays a Comment link for each activity", function() {
             var link = this.view.$("li[data-activity-id=10000] .links a.comment.dialog");
             expect(link.data("dialog")).toBe("Comment");
@@ -39,11 +44,11 @@ describe("chorus.views.ActivityList", function() {
 
             it("displays information for each comment", function() {
                 expect(this.view.$("li[data-comment-id=10023] .icon a")).toHaveAttr("href", "#/users/12")
-                expect(this.view.$("li[data-comment-id=10023] .icon a img")).toHaveAttr("src", "/edc/userimage/msofaer?size=icon")
+                expect(this.view.$("li[data-comment-id=10023] .icon a img")).toHaveAttr("src", "/edc/userimage/12?size=icon")
                 expect(this.view.$("li[data-comment-id=10023] .comment_header a")).toHaveText("Michael Sofaer");
                 expect(this.view.$("li[data-comment-id=10023] .comment_content .timestamp")).toExist();
                 expect(this.view.$("li[data-comment-id=10024] .icon a")).toHaveAttr("href", "#/users/13")
-                expect(this.view.$("li[data-comment-id=10024] .icon a img")).toHaveAttr("src", "/edc/userimage/mrushakoff?size=icon")
+                expect(this.view.$("li[data-comment-id=10024] .icon a img")).toHaveAttr("src", "/edc/userimage/13?size=icon")
                 expect(this.view.$("li[data-comment-id=10024] .comment_header a")).toHaveText("Mark Rushakoff");
                 expect(this.view.$("li[data-comment-id=10024] .comment_content .timestamp")).toExist();
             })

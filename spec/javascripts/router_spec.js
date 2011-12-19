@@ -79,9 +79,27 @@ describe("chorus.router", function() {
                 spyOn(this.chorus.session, 'loggedIn').andReturn(true);
             });
 
-            it("does not check login", function() {
-                expect(this.chorus.session.fetch).not.toHaveBeenCalled();
+            context("and navigating to any page other than the login page", function() {
+                beforeEach(function () {
+                    this.chorus.router.navigate("/users/new", true);
+                })
+
+                it("does not check login", function() {
+                    expect(this.chorus.session.fetch.callCount).toBe(1);
+                });
             });
+
+            context("and attempting to navigate to the login page", function() {
+                beforeEach(function () {
+                    this.routeSpy = jasmine.createSpy("routeSpy");
+                    this.chorus.router.bind("route", this.routeSpy);
+                    this.chorus.router.navigate("/login", true);
+                })
+
+                it("redirects to the dashboard", function() {
+                    expect(this.routeSpy).toHaveBeenCalledWith("Dashboard", {})
+                })
+            })
         });
 
         context("when not logged in", function() {

@@ -40,7 +40,8 @@
                     var element = self.$(selector);
                     var id = element.attr("id"), klass = element.attr("class");
                     element.replaceWith(view.render().el);
-                    $(view.el).attr({'id': id, 'class': klass});
+                    $(view.el).attr("id", id);
+                    $(view.el).addClass(klass);
                     view.delegateEvents();
                 }
             });
@@ -81,7 +82,7 @@
             }
         },
 
-        context: function context() {
+        context: function context() { //phase me out for presenters, yo!
             var ctx = {};
             var self = this;
 

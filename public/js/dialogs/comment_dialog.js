@@ -2,6 +2,7 @@
     ns.Comment = chorus.dialogs.Base.extend({
         className : "comment",
         title : t("comments.new_dialog.title"),
+        persistent : true,
         events: {
             "submit form": "save"
         },
@@ -18,13 +19,18 @@
             this.entityTitle = this.options.launchElement.data("entity-title")
         },
 
+        postRender: function() {
+            var self = this;
+            _.defer(function() { self.$("textarea").elastic() });
+        },
+
         additionalContext : function() {
           return { entityTitle : this.entityTitle }
         },
 
         save: function(e) {
             e.preventDefault();
-            this.model.save({body : this.$("input[name=body]").val().trim()})
+            this.model.save({body : this.$("textarea[name=body]").val().trim()})
         },
 
         saved : function() {

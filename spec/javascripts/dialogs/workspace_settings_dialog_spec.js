@@ -5,13 +5,17 @@ describe("WorkspaceSettings dialog", function() {
         this.workspace.set({ ownerId : '12' });
         this.members = this.workspace.members();
         this.members.add([
-                         new chorus.models.User({ id: 11, firstName: "Mikey", lastName: "B" }),
-                         new chorus.models.User({ id: 12, firstName: "Deborah", lastName: "D" }),
-                         new chorus.models.User({ id: 13, firstName: "Richard", lastName: "G" })
+            new chorus.models.User({ id: 11, firstName: "Mikey", lastName: "B" }),
+            new chorus.models.User({ id: 12, firstName: "Deborah", lastName: "D" }),
+            new chorus.models.User({ id: 13, firstName: "Richard", lastName: "G" })
         ]);
 
         this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement : this.launchElement, pageModel : this.workspace });
     });
+
+    it("does not re-render when the model changes", function() {
+        expect(this.dialog.persistent).toBeTruthy()
+    })
 
     describe("#setup", function() {
         it("fetches the workspace's members", function() {
@@ -67,6 +71,7 @@ describe("WorkspaceSettings dialog", function() {
         context("when the workspace is public", function() {
             beforeEach(function() {
                 this.workspace.set({ isPublic : true })
+                this.dialog.render();
             })
 
             it("checks the 'Publicly available' checkbox", function() {
@@ -77,6 +82,7 @@ describe("WorkspaceSettings dialog", function() {
         context("when the workspace is not public", function() {
             beforeEach(function() {
                 this.workspace.set({ isPublic : false })
+                this.dialog.render();
             })
 
             it("does not check the 'Publicly available' checkbox", function() {
@@ -88,6 +94,7 @@ describe("WorkspaceSettings dialog", function() {
             beforeEach(function() {
                 setLoggedInUser({ id : 10101 });
                 this.workspace.set({ ownerId : 10101 })
+                this.dialog.render();
             })
 
             it("does not disable the 'Publicly available' checkbox", function() {
@@ -97,6 +104,7 @@ describe("WorkspaceSettings dialog", function() {
             context("and the workspace is not archived", function() {
                 beforeEach(function() {
                     this.workspace.set({ active : true })
+                    this.dialog.render();
                 })
 
                 it("displays enabled radio buttons with 'active' selected", function() {
@@ -112,6 +120,7 @@ describe("WorkspaceSettings dialog", function() {
             context("and the workspace is archived", function() {
                 beforeEach(function() {
                     this.workspace.set({ active : false })
+                    this.dialog.render();
                 })
 
                 it("displays enabled radio buttons with 'archived' selected", function() {
@@ -128,6 +137,7 @@ describe("WorkspaceSettings dialog", function() {
         context("when the user is not the owner of the workspace", function() {
             beforeEach(function() {
                 this.workspace.set({ ownerId : 10101 }, { silent : true })
+                this.dialog.render();
             })
 
             context("and the user is not an admin", function() {
@@ -143,6 +153,7 @@ describe("WorkspaceSettings dialog", function() {
                 context("and the workspace is not archived", function() {
                     beforeEach(function() {
                         this.workspace.set({ active : true })
+                        this.dialog.render();
                     })
 
                     it("displays disabled radio buttons with 'active' selected", function() {
@@ -158,6 +169,7 @@ describe("WorkspaceSettings dialog", function() {
                 context("and the workspace is archived", function() {
                     beforeEach(function() {
                         this.workspace.set({ active : false })
+                        this.dialog.render();
                     })
 
                     it("displays disabled radio buttons with 'archived' selected", function() {
@@ -184,6 +196,7 @@ describe("WorkspaceSettings dialog", function() {
                 context("and the workspace is not archived", function() {
                     beforeEach(function() {
                         this.workspace.set({ active : true })
+                        this.dialog.render();
                     })
 
                     it("displays enabled radio buttons with 'active' selected", function() {
@@ -199,6 +212,7 @@ describe("WorkspaceSettings dialog", function() {
                 context("and the workspace is archived", function() {
                     beforeEach(function() {
                         this.workspace.set({ active : false })
+                        this.dialog.render();
                     })
 
                     it("displays enabled radio buttons with 'archived' selected", function() {
@@ -330,6 +344,8 @@ describe("WorkspaceSettings dialog", function() {
 
             context("the server responds with success", function() {
                 beforeEach(function() {
+                    this.invalidatedSpy = jasmine.createSpy("invalidated");
+                    this.dialog.pageModel.bind("invalidated", this.invalidatedSpy);
                     this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"resource":[{"id":"9"}], "status": "ok"}']);
                     this.server.respond();
                 });
@@ -337,6 +353,10 @@ describe("WorkspaceSettings dialog", function() {
                 it("closes the dialog", function() {
                     expect("close.facebox").toHaveBeenTriggeredOn($(document));
                 });
+
+                it("triggers the 'invalidated' event on the model", function() {
+                    expect(this.invalidatedSpy).toHaveBeenCalled();
+                })
             });
 
             context("the server responds with failure", function() {
@@ -381,6 +401,14 @@ describe("WorkspaceSettings dialog", function() {
             it("does not set the name on the workspace", function() {
                 expect(this.dialog.pageModel.get("summary")).toBe("my summary");
             })
+        })
+    })
+
+    describe("select styling", function() {
+        it("uses chosen", function() {
+            spyOn($.fn, "chosen")
+            $(document).trigger("reveal.facebox");
+            expect($.fn.chosen).toHaveBeenCalled();
         })
     })
 })

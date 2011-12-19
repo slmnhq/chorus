@@ -569,10 +569,11 @@
 
             activity: {
                 "MEMBERS_ADDED" : function() {
-                    return chorus.models.Activity.build({
+                    return new chorus.models.Activity({
                         author: fixtures.authorJson(),
                         type: "MEMBERS_ADDED",
                         timestamp: "2011-12-01 00:00:00",
+                        id : "10101",
                         comments: [
                             {
                                 text: "sub-comment 1",
@@ -598,10 +599,11 @@
                 },
 
                 "WORKSPACE_DELETED" : function() {
-                    return chorus.models.Activity.build({
+                    return new chorus.models.Activity({
                         author: fixtures.authorJson(),
                         type: "WORKSPACE_DELETED",
                         timestamp: "2011-12-01 00:00:00",
+                        id : "10101",
                         comments: [
                             {
                                 text: "sub-comment 1",
@@ -617,10 +619,11 @@
                 },
 
                 "WORKSPACE_CREATED" : function() {
-                    return chorus.models.Activity.build({
+                    return new chorus.models.Activity({
                         author: fixtures.authorJson(),
                         type: "WORKSPACE_CREATED",
                         timestamp: "2011-12-01 00:00:00",
+                        id : "10101",
                         comments: [
                             {
                                 text: "sub-comment 1",
@@ -635,12 +638,77 @@
                     });
                 },
 
+                "WORKSPACE_MAKE_PRIVATE" : function() {
+                    return new chorus.models.Activity({
+                        author: fixtures.authorJson(),
+                        type: "WORKSPACE_MAKE_PRIVATE",
+                        timestamp: "2011-12-01 00:00:00",
+                        id : "10101",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ],
+                        workspace: {
+                            id: '10840',
+                            name: "Bar Fight"
+                        }
+                    });
+                },
+
+                "WORKSPACE_MAKE_PUBLIC" : function() {
+                    return new chorus.models.Activity({
+                        author: fixtures.authorJson(),
+                        type: "WORKSPACE_MAKE_PUBLIC",
+                        timestamp: "2011-12-01 00:00:00",
+                        id : "10101",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ],
+                        workspace: {
+                            id: '10840',
+                            name: "Bar Fight"
+                        }
+                    });
+                },
+
+                "WORKFILE_CREATED" : function() {
+                    return new chorus.models.Activity({
+                        author: fixtures.authorJson(),
+                        type: "WORKFILE_CREATED",
+                        timestamp: "2011-12-12 12:12:12",
+                        id: "10860",
+                        workfile : {
+                            id: "10120",
+                            name: "my.sql"
+                        },
+                        workspace : {
+                            id: "10356",
+                            name: "Some workspace"
+                        },
+                        comments: [
+                            {
+                                text: "OBAMA!!!!",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ]
+                    });
+                },
+
                 "NOTE" : function() {
-                    return chorus.models.Activity.build({
+                    return new chorus.models.Activity({
                         author: fixtures.authorJson(),
                         type: "NOTE",
                         text: "How about that.",
                         timestamp: "2011-12-01 00:00:00",
+                        id : "10101",
                         comments: [
                             {
                                 text: "sub-comment 1",
@@ -648,6 +716,86 @@
                                 timestamp : "2011-12-15 12:34:56"
                             }
                         ]
+                    });
+                },
+
+                "USER_ADDED" : function() {
+                    return new chorus.models.Activity({
+                        author: fixtures.authorJson(),
+                        type: "USER_ADDED",
+                        timestamp: "2011-12-01 00:00:00",
+                        id : "10101",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ],
+                        user : {
+                            id : "12345",
+                            name: "Bill Smith"
+                        }
+                    });
+                },
+
+                "USER_DELETED" : function() {
+                    return new chorus.models.Activity({
+                        author: fixtures.authorJson(),
+                        type: "USER_DELETED",
+                        timestamp: "2011-12-01 00:00:00",
+                        id : "10101",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ],
+                        user : {
+                            id : "12345",
+                            name: "Bill Smith"
+                        }
+                    });
+                },
+
+                "WORKSPACE_ARCHIVED" : function() {
+                    return new chorus.models.Activity({
+                        author: fixtures.authorJson(),
+                        type: "WORKSPACE_ARCHIVED",
+                        timestamp: "2011-12-01 00:00:00",
+                        id : "10101",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ],
+                        workspace: {
+                            id: '10840',
+                            name: "Bar Fight"
+                        }
+                    });
+                },
+
+                "WORKSPACE_UNARCHIVED" : function() {
+                    return new chorus.models.Activity({
+                        author: fixtures.authorJson(),
+                        type: "WORKSPACE_UNARCHIVED",
+                        timestamp: "2011-12-01 00:00:00",
+                        id : "10101",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ],
+                        workspace: {
+                            id: '10840',
+                            name: "Bar Fight"
+                        }
                     });
                 },
             },

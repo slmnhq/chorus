@@ -46,14 +46,18 @@
             return function() {
                 var args = arguments;
                 var navFunction = function() {
-                    var pageClass = ns.pages[className + "Page"];
-                    var page = applyConstructor(pageClass, args);
-                    self.trigger("route", className, args);
-                    self.app.page = page;
+                    if(className == "Login" && self.app.session.loggedIn()) {
+                        self.navigate("/", true);
+                    } else {
+                        var pageClass = ns.pages[className + "Page"];
+                        var page = applyConstructor(pageClass, args);
+                        self.trigger("route", className, args);
+                        self.app.page = page;
 
-                    $("#page").html(page.render().el).attr("data-page", className);
+                        $("#page").html(page.render().el).attr("data-page", className);
 
-                    if (self.app.modal) self.app.modal.closeModal();
+                        if (self.app.modal) self.app.modal.closeModal();
+                    }
                 };
 
                 if (className == 'Login' || self.app.session.loggedIn()) {
