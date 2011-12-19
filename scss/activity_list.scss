@@ -198,7 +198,8 @@ $system-action-color: #7C7D7D;
     li[data-activity-type=WORKSPACE_CREATED],
     li[data-activity-type=WORKSPACE_DELETED],
     li[data-activity-type=WORKFILE_CREATED],
-    li[data-activity-type=WORKSPACE_MAKE_PRIVATE] {
+    li[data-activity-type=WORKSPACE_MAKE_PRIVATE],
+    li[data-activity-type=WORKSPACE_MAKE_PUBLIC] {
         .object, .order {
             display: inline;
         }
