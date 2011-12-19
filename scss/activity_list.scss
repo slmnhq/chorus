@@ -193,7 +193,8 @@ $comment-gutter: 10px;
 #sidebar .activity_list  {
     li[data-activity-type=WORKSPACE_CREATED],
     li[data-activity-type=WORKSPACE_DELETED],
-    li[data-activity-type=WORKFILE_CREATED] {
+    li[data-activity-type=WORKFILE_CREATED],
+    li[data-activity-type=WORKSPACE_MAKE_PRIVATE] {
         .object, .order {
             display: inline;
         }
