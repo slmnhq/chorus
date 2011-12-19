@@ -15,6 +15,12 @@ div[data-page="Dashboard"] {
         display: none;
     }
 
+    .content_header {
+        h1 {
+            font-size: 24px;
+        }
+    }
+
     .main_content.workspace_list {
         float: right;
         width: $workspace-list-width;
@@ -72,5 +78,4 @@ div[data-page="Dashboard"] {
     .main_content.dashboard_main {
         margin-right:  $workspace-list-width;
     }
-
 }
