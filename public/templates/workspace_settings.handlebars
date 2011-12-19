@@ -23,12 +23,17 @@
         </div>
     </div>
 
-    <label>Owner</label>
-    <select name="owner" class="owner">
-        {{#each members}}
-            <option value={{id}}>{{displayNameFromPerson attributes}}</option>
-        {{/each}}
-    </select>
+    {{#if permission}}
+        <label>{{ t "workspace.settings.change_owner"}}</label>
+        <select name="owner" class="owner">
+            {{#each members}}
+                <option value={{id}}>{{displayNameFromPerson attributes}}</option>
+            {{/each}}
+        </select>
+    {{else}}
+        <label>{{ t "workspace.settings.workspace_owner"}}</label>
+        <div class="owner">{{ownerName}}</div>
+    {{/if}}
 
     <div class="workspace_status">
         <label>{{t "workspace.settings.status"}}</label>

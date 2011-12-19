@@ -73,6 +73,7 @@ $system-action-color: #7C7D7D;
             .body {
                 font-size: 13px;
                 padding-bottom: $text-padding-y;
+                word-wrap: break-word;
             }
 
             .timestamp {
