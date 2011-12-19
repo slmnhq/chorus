@@ -48,6 +48,18 @@ describe("chorus.views.Activity", function() {
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
+        context("type: USER_DELETED", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activity.USER_DELETED();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderAuthorDetails();
+            itShouldRenderObjectDetails({checkLink : false});
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+        });
+
         context("type: WORKSPACE_DELETED", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activity.WORKSPACE_DELETED();

@@ -738,6 +738,26 @@
                         }
                     });
                 },
+
+                "USER_DELETED" : function() {
+                    return new chorus.models.Activity({
+                        author: fixtures.authorJson(),
+                        type: "USER_DELETED",
+                        timestamp: "2011-12-01 00:00:00",
+                        id : "10101",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ],
+                        user : {
+                            id : "12345",
+                            name: "Bill Smith"
+                        }
+                    });
+                },
             },
 
             authorJson: function() {

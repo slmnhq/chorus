@@ -116,6 +116,14 @@
         }
     };
 
+    ns.presenters.Activity.USER_DELETED = {
+        make : function(model) {
+            return extendBase(model, {
+                objectName : model.get("user").name
+            })
+        }
+    };
+
     ns.presenters.Activity.MEMBERS_ADDED = {
         make : function(model) {
             var user = new ns.models.User(model.get("user")[0]);

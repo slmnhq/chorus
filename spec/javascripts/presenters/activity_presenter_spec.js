@@ -19,6 +19,8 @@ describe("chorus.presenters.Activity", function(){
             var url = new chorus.models.Workspace({id: this.workspace.id}).showUrl();
             expect(this.presenter.objectUrl).toBe(url);
         });
+
+        itShouldHaveTheAuthorsIconAndUrl();
     });
 
     context(".MEMBERS_ADDED", function() {
@@ -41,6 +43,8 @@ describe("chorus.presenters.Activity", function(){
             var url = new chorus.models.User({id: this.model.get("user")[0].id}).showUrl();
             expect(this.presenter.objectUrl).toBe(url);
         });
+
+        itShouldHaveTheAuthorsIconAndUrl();
     });
 
 
@@ -54,6 +58,8 @@ describe("chorus.presenters.Activity", function(){
         it("should have the right objectName", function() {
             expect(this.presenter.objectName).toBe(this.workspace.name);
         });
+
+        itShouldHaveTheAuthorsIconAndUrl();
     });
 
     context(".USER_ADDED", function() {
@@ -78,6 +84,20 @@ describe("chorus.presenters.Activity", function(){
         it("should link the new user's icon to the new user's show page", function() {
             expect(this.presenter.iconHref).toBe(this.user.showUrl());
         });
+    });
+
+    context(".USER_DELETED", function() {
+        beforeEach(function() {
+            this.model = fixtures.activity.USER_DELETED();
+            this.user = new chorus.models.User(this.model.get("user"))
+            this.presenter = new chorus.presenters.Activity(this.model)
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.user.get("name"));
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
     });
 
     context(".WORKFILE_CREATED", function() {
@@ -105,5 +125,17 @@ describe("chorus.presenters.Activity", function(){
             var url = new chorus.models.Workspace({id: this.workspace.id}).showUrl();
             expect(this.presenter.workspaceUrl).toBe(url);
         });
+
+        itShouldHaveTheAuthorsIconAndUrl();
     });
+
+    function itShouldHaveTheAuthorsIconAndUrl() {
+        it("should have the author's icon", function() {
+            expect(this.presenter.iconSrc).toBe(this.model.author().imageUrl());
+        });
+
+        it("should link the new user's icon to the new user's show page", function() {
+            expect(this.presenter.iconHref).toBe(this.model.author().showUrl());
+        });
+    }
 });

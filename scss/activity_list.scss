@@ -200,7 +200,8 @@ $system-action-color: #7C7D7D;
     li[data-activity-type=WORKFILE_CREATED],
     li[data-activity-type=WORKSPACE_MAKE_PRIVATE],
     li[data-activity-type=WORKSPACE_MAKE_PUBLIC],
-    li[data-activity-type=USER_ADDED] {
+    li[data-activity-type=USER_ADDED],
+    li[data-activity-type=USER_DELETED] {
         .object, .order {
             display: inline;
         }
