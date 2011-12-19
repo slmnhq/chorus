@@ -194,7 +194,8 @@ $comment-gutter: 10px;
     }
 }
 
-#sidebar .activity_list li[data-activity-type=WORKSPACE_DELETED] {
+#sidebar .activity_list li[data-activity-type=WORKSPACE_DELETED],
+#sidebar .activity_list li[data-activity-type=WORKSPACE_CREATED] {
     .object, .workspace, .order {
         display: inline;
     }
