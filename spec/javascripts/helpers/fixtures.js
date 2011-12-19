@@ -851,11 +851,13 @@
                 });
             },
 
-            workspace: function() {
-                return new chorus.models.Workspace({
+            workspace: function(overrides) {
+                overrides = overrides || {};
+                var attributes = _.extend({
                     id : this.nextId().toString(),
                     _owner: this.user()
-                });
+                }, overrides);
+                return new chorus.models.Workspace(attributes);
             }
         });
     });

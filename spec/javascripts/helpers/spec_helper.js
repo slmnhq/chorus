@@ -111,8 +111,12 @@
                     }
 
                     return this.actual === translatedText;
+                },
+
+                toHaveBeenCalledOnSelector: function(selector) {
+                    return this.actual.mostRecentCall.object.selector === selector;
                 }
-            })
+            });
 
             var fakeSpinner = {
                 spin : jasmine.createSpy('MockSpinner.spin').andCallFake(function(parentEl) {

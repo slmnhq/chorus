@@ -3,11 +3,16 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
         beforeEach(function() {
             this.model = new chorus.models.Workspace({name: "A Cool Workspace", id: '123'});
             spyOn(this.model.members(), 'fetch');
+            spyOn(this.model.members(), 'bind').andCallThrough();
             this.view = new chorus.views.WorkspaceSummarySidebar({model: this.model});
         });
 
         it("fetches the workspace's members", function() {
             expect(this.model.members().fetch).toHaveBeenCalled();
+        });
+
+        it("binds render to the reset of the collection", function() {
+            expect(this.model.members().bind).toHaveBeenCalledWith('reset', this.view.render);
         });
     });
 
@@ -145,5 +150,19 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
 
             });
         });
+    });
+
+    describe("#post_render", function() {
+        it("unhides the .after_image area after the .workspace_image loads", function() {
+            this.model = fixtures.workspace({iconId: '123'});
+            this.view = new chorus.views.WorkspaceSummarySidebar({model: this.model});
+            spyOn($.fn, 'removeClass');
+            $('#jasmine_content').append(this.view.el);
+            this.view.render();
+            expect($.fn.removeClass).not.toHaveBeenCalledWith('hidden');
+            $(".workspace_image").trigger('load');
+            expect($.fn.removeClass).toHaveBeenCalledWith('hidden');
+            expect($.fn.removeClass).toHaveBeenCalledOnSelector('.after_image');
+       });
     });
 });

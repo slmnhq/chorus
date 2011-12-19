@@ -6,6 +6,7 @@
         setup : function() {
             this.model.bind("image:change", this.render);
             this.model.members().fetch();
+            this.model.members().bind("reset", this.render);
         },
 
         additionalContext : function() {
@@ -25,8 +26,8 @@
 
         postRender : function() {
             var self = this;
-            this.$("img").load(function() {
-                self.$(".actions").removeClass("hidden");
+            this.$(".workspace_image").load(function() {
+                self.$(".after_image").removeClass("hidden");
             });
         }
     });
