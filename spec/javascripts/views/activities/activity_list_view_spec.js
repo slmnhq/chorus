@@ -18,6 +18,11 @@ describe("chorus.views.ActivityList", function() {
             expect(this.view.$("li[data-activity-id]").length).toBe(this.collection.length);
         });
 
+        it("renders activity metadata on the li", function() {
+            expect(this.view.$("li[data-activity-id=10000]")).toHaveData("activity-type", "NOTE");
+            expect(this.view.$("li[data-activity-id=10001]")).toHaveData("activity-type", "NOTE");
+        })
+
         it("displays a Comment link for each activity", function() {
             var link = this.view.$("li[data-activity-id=10000] .links a.comment.dialog");
             expect(link.data("dialog")).toBe("Comment");
