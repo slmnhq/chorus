@@ -81,10 +81,6 @@ $comment-gutter: 10px;
                 font-size: 12px;
                 padding-bottom: $text-padding-y;
             }
-
-            .workspace {
-                display: none;
-            }
         }
 
         .comments {
@@ -194,9 +190,21 @@ $comment-gutter: 10px;
     }
 }
 
-#sidebar .activity_list li[data-activity-type=WORKSPACE_DELETED],
-#sidebar .activity_list li[data-activity-type=WORKSPACE_CREATED] {
-    .object, .workspace, .order {
-        display: inline;
+#sidebar .activity_list  {
+    li[data-activity-type=WORKSPACE_CREATED],
+    li[data-activity-type=WORKSPACE_DELETED],
+    li[data-activity-type=WORKFILE_CREATED] {
+        .object, .order {
+            display: inline;
+        }
     }
 }
+
+#sidebar.user_show_sidebar {
+    li[data-activity-type=WORKFILE_CREATED] {
+        .workspace {
+            display: inline;
+        }
+    }
+}
+
