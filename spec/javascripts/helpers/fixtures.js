@@ -758,6 +758,46 @@
                         }
                     });
                 },
+
+                "WORKSPACE_ARCHIVED" : function() {
+                    return new chorus.models.Activity({
+                        author: fixtures.authorJson(),
+                        type: "WORKSPACE_ARCHIVED",
+                        timestamp: "2011-12-01 00:00:00",
+                        id : "10101",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ],
+                        workspace: {
+                            id: '10840',
+                            name: "Bar Fight"
+                        }
+                    });
+                },
+
+                "WORKSPACE_UNARCHIVED" : function() {
+                    return new chorus.models.Activity({
+                        author: fixtures.authorJson(),
+                        type: "WORKSPACE_UNARCHIVED",
+                        timestamp: "2011-12-01 00:00:00",
+                        id : "10101",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ],
+                        workspace: {
+                            id: '10840',
+                            name: "Bar Fight"
+                        }
+                    });
+                },
             },
 
             authorJson: function() {

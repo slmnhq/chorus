@@ -94,6 +94,8 @@
     ns.presenters.Activity.WORKSPACE_CREATED = workspaceIsObject;
     ns.presenters.Activity.WORKSPACE_MAKE_PRIVATE = workspaceIsObject;
     ns.presenters.Activity.WORKSPACE_MAKE_PUBLIC = workspaceIsObject;
+    ns.presenters.Activity.WORKSPACE_ARCHIVED = workspaceIsObject;
+    ns.presenters.Activity.WORKSPACE_UNARCHIVED = workspaceIsObject;
 
     ns.presenters.Activity.WORKFILE_CREATED = {
         make : function(model) {

@@ -96,6 +96,30 @@ describe("chorus.views.Activity", function() {
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
+        context("type: WORKSPACE_ARCHIVED", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activity.WORKSPACE_ARCHIVED();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderAuthorDetails();
+            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+        });
+
+        context("type: WORKSPACE_UNARCHIVED", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activity.WORKSPACE_UNARCHIVED();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderAuthorDetails();
+            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+        });
+
         context("type: NOTE", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activity.NOTE();

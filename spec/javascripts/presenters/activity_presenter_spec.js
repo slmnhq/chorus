@@ -23,6 +23,44 @@ describe("chorus.presenters.Activity", function(){
         itShouldHaveTheAuthorsIconAndUrl();
     });
 
+    context(".WORKSPACE_ARCHIVED", function() {
+        beforeEach(function() {
+            this.model = fixtures.activity.WORKSPACE_ARCHIVED();
+            this.workspace = this.model.get("workspace");
+            this.presenter = new chorus.presenters.Activity(this.model)
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.workspace.name);
+        });
+
+        it("should have the right objectUrl", function() {
+            var url = new chorus.models.Workspace({id: this.workspace.id}).showUrl();
+            expect(this.presenter.objectUrl).toBe(url);
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
+
+    context(".WORKSPACE_UNARCHIVED", function() {
+        beforeEach(function() {
+            this.model = fixtures.activity.WORKSPACE_UNARCHIVED();
+            this.workspace = this.model.get("workspace");
+            this.presenter = new chorus.presenters.Activity(this.model)
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.workspace.name);
+        });
+
+        it("should have the right objectUrl", function() {
+            var url = new chorus.models.Workspace({id: this.workspace.id}).showUrl();
+            expect(this.presenter.objectUrl).toBe(url);
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
+
     context(".MEMBERS_ADDED", function() {
         beforeEach(function() {
             this.model = fixtures.activity.MEMBERS_ADDED();
