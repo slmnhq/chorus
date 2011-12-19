@@ -209,7 +209,8 @@ $system-action-color: #7C7D7D;
         }
     }
 
-    li[data-activity-type=MEMBERS_ADDED] {
+    li[data-activity-type=MEMBERS_ADDED],
+    li[data-activity-type=MEMBERS_DELETED] {
         .object, .order, .workspace {
             display: inline;
         }

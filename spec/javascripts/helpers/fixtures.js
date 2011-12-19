@@ -598,6 +598,36 @@
                     });
                 },
 
+                "MEMBERS_DELETED" : function() {
+                    return new chorus.models.Activity({
+                        author: fixtures.authorJson(),
+                        type: "MEMBERS_DELETED",
+                        timestamp: "2011-12-01 00:00:00",
+                        id : "10101",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ],
+                        user: [
+                            {
+                                id: 101,
+                                name: "Rhino Hunter"
+                            },
+                            {
+                                id: 102,
+                                name: "Method Man"
+                            }
+                        ],
+                        workspace: {
+                            id: '10840',
+                            name: "Catsup"
+                        }
+                    });
+                },
+
                 "WORKSPACE_DELETED" : function() {
                     return new chorus.models.Activity({
                         author: fixtures.authorJson(),

@@ -85,6 +85,29 @@ describe("chorus.presenters.Activity", function(){
         itShouldHaveTheAuthorsIconAndUrl();
     });
 
+    context(".MEMBERS_DELETED", function() {
+        beforeEach(function() {
+            this.model = fixtures.activity.MEMBERS_DELETED();
+            this.workspace = this.model.get("workspace");
+            this.presenter = new chorus.presenters.Activity(this.model)
+        });
+
+        it("should populate 'others' to not include the first user", function() {
+            expect(this.presenter.header.others.length).toBe(this.model.get("user").length - 1);
+            expect(this.presenter.header.others[0].name).not.toBe(this.model.get("user")[0].name);
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.model.get("user")[0].name);
+        });
+
+        it("should have the right objectUrl", function() {
+            var url = new chorus.models.User({id: this.model.get("user")[0].id}).showUrl();
+            expect(this.presenter.objectUrl).toBe(url);
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
 
     context(".WORKSPACE_DELETED", function() {
         beforeEach(function() {

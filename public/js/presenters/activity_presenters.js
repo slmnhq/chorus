@@ -126,7 +126,7 @@
         }
     };
 
-    ns.presenters.Activity.MEMBERS_ADDED = {
+    ns.presenters.Activity.MEMBERS_ADDED = ns.presenters.Activity.MEMBERS_DELETED = {
         make : function(model) {
             var user = new ns.models.User(model.get("user")[0]);
             return extendBase(model, {

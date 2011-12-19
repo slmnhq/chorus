@@ -36,6 +36,37 @@ describe("chorus.views.Activity", function() {
             })
         });
 
+        context("type: MEMBERS_DELETED", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activity.MEMBERS_DELETED();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderAuthorDetails();
+            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderWorkspaceDetails({checkLink : true});
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+
+            context("when only one member was added", function() {
+                beforeEach(function() {
+                    this.view.model.set({ user : [this.view.model.get("user")[0]] });
+                    this.presenter = new chorus.presenters.Activity(this.view.model)
+                    this.view.render();
+                })
+
+                it("calls out the user", function() {
+                    expect(this.view.$(".object a")).toHaveText(this.view.model.get("user")[0].name)
+                })
+            })
+
+            context("when more than one member was added", function() {
+                it("calls out the first user", function() {
+                    expect(this.view.$(".object a")).toHaveText(this.view.model.get("user")[0].name)
+                })
+            })
+        });
+
         context("type: WORKSPACE_CREATED", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activity.WORKSPACE_CREATED();
