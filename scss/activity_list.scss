@@ -5,6 +5,7 @@ $text-padding-y: 4px;
 $comment-padding-x: 6px;
 $activity-gutter: 8px;
 $comment-gutter: 10px;
+$system-action-color: #7C7D7D;
 
 
 .activity_list{
@@ -63,6 +64,9 @@ $comment-gutter: 10px;
                 color: $secondary-text-color;
                 .author {
                     font-weight: $semibold;
+                }
+                .object {
+                    color: $system-action-color;
                 }
             }
 
