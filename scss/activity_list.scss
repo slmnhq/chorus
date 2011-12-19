@@ -199,6 +199,12 @@ $comment-gutter: 10px;
             display: inline;
         }
     }
+
+    li[data-activity-type=MEMBERS_ADDED] {
+        .object, .order, .workspace {
+            display: inline;
+        }
+    }
 }
 
 #sidebar.user_show_sidebar {

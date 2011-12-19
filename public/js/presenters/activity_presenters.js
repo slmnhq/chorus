@@ -10,7 +10,7 @@
             var constructor = ns.presenters.Activity[model.get("type")] || ns.presenters.Activity.Base;
             this.model = model
             this.presenter = constructor.make(model)
-            this.presenter.header = this.header()
+            this.presenter.header = _.extend(this.header(), this.presenter.header);
             this.presenter.subComments = this.subComments();
 
             return this.presenter
@@ -51,7 +51,7 @@
             var author = model.author();
             var workspace = model.get("workspace") && new ns.models.Workspace(model.get("workspace"));
 
-            return _.extend({}, {
+            return {
                 body : model.get("text"),
                 entityTitle : entityTitles[type] || entityTitles["DEFAULT"],
                 entityType : type == "NOTE" ? "comment" : "activitystream",
@@ -61,7 +61,7 @@
                 workspaceUrl : workspace ? workspace.showUrl() : "no workspace URL for activity type: " + type,
                 iconSrc : author.imageUrl(),
                 iconHref : author.showUrl()
-            });
+            };
         }
     };
 
@@ -115,6 +115,19 @@
             })
         }
     };
+
+    ns.presenters.Activity.MEMBERS_ADDED = {
+        make : function(model) {
+            var user = new ns.models.User(model.get("user")[0]);
+            return extendBase(model, {
+                objectName : user.get("name"),
+                objectUrl : user.showUrl(),
+                header : {
+                    others : _.rest(model.get("user"))
+                }
+            });
+        }
+    }
 
     function extendBase(model, overrides) {
         return _.extend(ns.presenters.Activity.Base.make(model), overrides)

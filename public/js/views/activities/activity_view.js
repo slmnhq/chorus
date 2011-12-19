@@ -8,7 +8,8 @@
         "WORKSPACE_MAKE_PUBLIC",
         "MEMBERS_ADDED",
         "WORKFILE_CREATED",
-        "USER_ADDED"
+        "USER_ADDED",
+        "MEMBERS_ADDED"
     ];
 
     var compiledTemplates = {};
