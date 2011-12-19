@@ -128,9 +128,14 @@ describe("chorus.views.ShuttleWidget", function() {
                 this.view.$('a.remove_all').click();
             });
 
-            it("removes all the members", function() {
-                expect(this.view.$('ul.selected li.added').length).toBe(0);
-                expect(this.view.$('ul.available li.added').length).toBe(0);
+            it("does not remove the owner", function() {
+               expect(this.view.$('ul.selected li.non_removable.added').length).toBe(1)
+               expect(this.view.$('ul.available li.non_removable.added').length).toBe(1)
+            });
+
+            it("removes all the other members", function() {
+                expect(this.view.$('ul.selected li.added').length).toBe(1);
+                expect(this.view.$('ul.available li.added').length).toBe(1);
             });
         });
 

@@ -15,7 +15,56 @@ describe("chorus.views.Activity", function() {
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink : true});
             itShouldRenderWorkspaceDetails({checkLink : true});
-            itShouldRenderACommentLink("workspace", t("comments.title.ACTIVITY"))
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+
+            context("when only one member was added", function() {
+                beforeEach(function() {
+                    this.view.model.set({ user : [this.view.model.get("user")[0]] });
+                    this.presenter = new chorus.presenters.Activity(this.view.model)
+                    this.view.render();
+                })
+
+                it("calls out the user", function() {
+                    expect(this.view.$(".object a")).toHaveText(this.view.model.get("user")[0].name)
+                })
+            })
+
+            context("when more than one member was added", function() {
+                it("calls out the first user", function() {
+                    expect(this.view.$(".object a")).toHaveText(this.view.model.get("user")[0].name)
+                })
+            })
+        });
+
+        context("type: MEMBERS_DELETED", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activity.MEMBERS_DELETED();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderAuthorDetails();
+            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderWorkspaceDetails({checkLink : true});
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+
+            context("when only one member was added", function() {
+                beforeEach(function() {
+                    this.view.model.set({ user : [this.view.model.get("user")[0]] });
+                    this.presenter = new chorus.presenters.Activity(this.view.model)
+                    this.view.render();
+                })
+
+                it("calls out the user", function() {
+                    expect(this.view.$(".object a")).toHaveText(this.view.model.get("user")[0].name)
+                })
+            })
+
+            context("when more than one member was added", function() {
+                it("calls out the first user", function() {
+                    expect(this.view.$(".object a")).toHaveText(this.view.model.get("user")[0].name)
+                })
+            })
         });
 
         context("type: WORKSPACE_CREATED", function() {
@@ -27,7 +76,19 @@ describe("chorus.views.Activity", function() {
 
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink : true});
-            itShouldRenderACommentLink("workspace", t("comments.title.ACTIVITY"))
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+        });
+
+        context("type: USER_DELETED", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activity.USER_DELETED();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderAuthorDetails();
+            itShouldRenderObjectDetails({checkLink : false});
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
         context("type: WORKSPACE_DELETED", function() {
@@ -39,7 +100,55 @@ describe("chorus.views.Activity", function() {
 
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink : false});
-            itShouldRenderACommentLink("workspace", t("comments.title.ACTIVITY"))
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+        });
+
+        context("type: WORKSPACE_MAKE_PRIVATE", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activity.WORKSPACE_MAKE_PRIVATE();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderAuthorDetails();
+            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+        });
+
+        context("type: WORKSPACE_MAKE_PUBLIC", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activity.WORKSPACE_MAKE_PUBLIC();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderAuthorDetails();
+            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+        });
+
+        context("type: WORKSPACE_ARCHIVED", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activity.WORKSPACE_ARCHIVED();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderAuthorDetails();
+            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+        });
+
+        context("type: WORKSPACE_UNARCHIVED", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activity.WORKSPACE_UNARCHIVED();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderAuthorDetails();
+            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
         context("type: NOTE", function() {

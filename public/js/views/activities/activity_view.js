@@ -1,24 +1,22 @@
 ;(function($, ns) {
-    var types = [
-        "NOTE",
-        "DEFAULT",
-        "WORKSPACE_CREATED",
-        "WORKSPACE_DELETED",
-        "MEMBERS_ADDED",
-        "WORKFILE_CREATED",
-        "USER_ADDED"
-    ];
-
     var compiledTemplates = {};
-    _.each(types, function(type) {
-        compiledTemplates[type] = Handlebars.compile(t("activity_stream.header.html." + type));
+    var activityTemplateRegex = /^activity_stream\.header\.html\.(\w+)$/;
+
+    // $.i18n.map isn't populated until the first call to t(), so let's call it here in case we run a scoped spec.
+    t("");
+
+    _.each($.i18n.map, function(value, key) {
+        var match = key.match(activityTemplateRegex);
+        if (match) {
+            compiledTemplates[match[1]] = Handlebars.compile(t(match[0]));
+        }
     });
 
     ns.views.Activity = chorus.views.Base.extend({
         className : "activity",
 
         context : function() {
-            var presenter = chorus.presenters.Activity(this.model)
+            var presenter = new chorus.presenters.Activity(this.model)
             return _.extend({}, presenter, { headerHtml : this.headerHtml(presenter) })
         },
 

@@ -22,7 +22,8 @@
             ctx.displayName = model.displayName();
             ctx.imageUrl = model.imageUrl();
 
-            ctx.isNonRemovable = _.include(this.nonRemovableModels, model);
+            var nonRemovableModelIds = _.map(this.nonRemovableModels, function(model) { return model.get("id") });
+            ctx.isNonRemovable = _.include(nonRemovableModelIds, model.get("id"));
             ctx.nonRemovableText = this.options.nonRemovableText;
 
             return ctx;
@@ -66,6 +67,7 @@
             e.preventDefault();
 
             this.$("li").removeClass("added");
+            this.$("li.non_removable").addClass('added');
             this._updateLabels();
         },
 

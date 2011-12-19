@@ -1,55 +1,35 @@
 ;
 (function(ns) {
-    ns.presenters.Activity = function(model){
-        var constructor = ns.presenters.Activity[model.get("type")] || ns.presenters.Activity.Base;
-        var presenter = constructor.make(model)
-        presenter.header = {
-            type: model.get("type"),
-            authorUrl: model.author().showUrl(),
-            authorName: model.author().displayName(),
-            objectUrl: presenter.objectUrl,
-            objectName: presenter.objectName,
-            workspaceUrl: presenter.workspaceUrl,
-            workspaceName: presenter.workspaceName
-        }
-
-        return presenter
+    var entityTitles = {
+        "DEFAULT" : t("comments.title.ACTIVITY"),
+        "NOTE" : t("comments.title.NOTE")
     };
 
-    ns.presenters.Activity.Base = {
-        make : function(model) {
-            var type = model.get("type");
-            var author = model.author();
-            var workspace = model.get("workspace") && new ns.models.Workspace(model.get("workspace"));
+    ns.presenters.Activity = ns.presenters.Base.extend({
+        present : function(model) {
+            var constructor = ns.presenters.Activity[model.get("type")] || ns.presenters.Activity.Base;
+            this.model = model
+            this.presenter = constructor.make(model)
+            this.presenter.header = _.extend(this.header(), this.presenter.header);
+            this.presenter.subComments = this.subComments();
 
-            var entityTitles = {
-                "DEFAULT" : t("comments.title.ACTIVITY"),
-                "NOTE" : t("comments.title.NOTE")
-            }
-
-            var presenter = _.extend({}, model.attributes, {
-                imageUrl : author.imageUrl(),
-                showUrl : author.showUrl(),
-                body : model.get("text") || "",
-                timestamp : model.get("timestamp"),
-                entityType : model.get("entityType"),
-                entityTitle : entityTitles[type] || entityTitles["DEFAULT"],
-                objectName : "don't know object name for activity type: " + type,
-                objectUrl : "/NEED/OBJECT/URL/FOR/TYPE/" + type,
-                workspaceName : workspace ? workspace.get("name") : "no workspace name for activity type: " + type,
-                workspaceUrl : workspace ? workspace.showUrl() : "no workspace URL for activity type: " + type,
-                iconSource : author.imageUrl(),
-                iconHref : author.showUrl()
-            });
-
-            presenter.subComments = this.subComments(model) || []
-
-            return presenter
+            return this.presenter
         },
 
-        subComments : function(model){
-            var comments = model.get("comments");
-            return _.map(comments, function(comment) {
+        header : function() {
+            return {
+                type: this.model.get("type"),
+                authorUrl: this.model.author().showUrl(),
+                authorName: this.model.author().displayName(),
+                objectUrl: this.presenter.objectUrl,
+                objectName: this.presenter.objectName,
+                workspaceUrl: this.presenter.workspaceUrl,
+                workspaceName: this.presenter.workspaceName
+            }
+        },
+
+        subComments : function() {
+            return _.map(this.model.get("comments"), function(comment) {
                 comment = new chorus.models.Comment(comment);
                 var user = comment.creator();
                 return  {
@@ -63,8 +43,27 @@
 
             });
         }
-    };
+    });
 
+    ns.presenters.Activity.Base = {
+        make : function(model) {
+            var type = model.get("type");
+            var author = model.author();
+            var workspace = model.get("workspace") && new ns.models.Workspace(model.get("workspace"));
+
+            return {
+                body : model.get("text"),
+                entityTitle : entityTitles[type] || entityTitles["DEFAULT"],
+                entityType : type == "NOTE" ? "comment" : "activitystream",
+                objectName : "don't know object name for activity type: " + type,
+                objectUrl : "/NEED/OBJECT/URL/FOR/TYPE/" + type,
+                workspaceName : workspace ? workspace.get("name") : "no workspace name for activity type: " + type,
+                workspaceUrl : workspace ? workspace.showUrl() : "no workspace URL for activity type: " + type,
+                iconSrc : author.imageUrl(),
+                iconHref : author.showUrl()
+            };
+        }
+    };
 
 
     ns.presenters.Activity.NOTE = {
@@ -74,7 +73,7 @@
     };
 
     ns.presenters.Activity.WORKSPACE_DELETED = {
-        make : function(model){
+        make : function(model) {
             var original = extendBase(model);
             return extendBase(model, {
                 objectName : original.workspaceName
@@ -82,8 +81,8 @@
         }
     };
 
-    ns.presenters.Activity.WORKSPACE_CREATED = {
-        make : function(model){
+    var workspaceIsObject = {
+        make : function(model) {
             var original = extendBase(model);
             return extendBase(model, {
                 objectName : original.workspaceName,
@@ -91,6 +90,12 @@
             })
         }
     };
+
+    ns.presenters.Activity.WORKSPACE_CREATED = workspaceIsObject;
+    ns.presenters.Activity.WORKSPACE_MAKE_PRIVATE = workspaceIsObject;
+    ns.presenters.Activity.WORKSPACE_MAKE_PUBLIC = workspaceIsObject;
+    ns.presenters.Activity.WORKSPACE_ARCHIVED = workspaceIsObject;
+    ns.presenters.Activity.WORKSPACE_UNARCHIVED = workspaceIsObject;
 
     ns.presenters.Activity.WORKFILE_CREATED = {
         make : function(model) {
@@ -107,13 +112,34 @@
             return extendBase(model, {
                 objectName : model.get("user").name,
                 objectUrl : user.showUrl(),
-                iconSource : user.imageUrl(),
+                iconSrc : user.imageUrl(),
                 iconHref : user.showUrl()
             })
         }
     };
 
+    ns.presenters.Activity.USER_DELETED = {
+        make : function(model) {
+            return extendBase(model, {
+                objectName : model.get("user").name
+            })
+        }
+    };
+
+    ns.presenters.Activity.MEMBERS_ADDED = ns.presenters.Activity.MEMBERS_DELETED = {
+        make : function(model) {
+            var user = new ns.models.User(model.get("user")[0]);
+            return extendBase(model, {
+                objectName : user.get("name"),
+                objectUrl : user.showUrl(),
+                header : {
+                    others : _.rest(model.get("user"))
+                }
+            });
+        }
+    }
+
     function extendBase(model, overrides) {
-        return _.extend(ns.presenters.Activity.Base.make(model) , overrides)
+        return _.extend(ns.presenters.Activity.Base.make(model), overrides)
     }
 })(chorus);

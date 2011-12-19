@@ -11,6 +11,8 @@
             this.workspaceSet.sortAsc("name");
             this.workspaceSet.fetch();
 
+            this.model = chorus.session.user();
+
             this.mainContent = new ns.views.Dashboard({collection : this.workspaceSet})
         }
     });
