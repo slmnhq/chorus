@@ -58,7 +58,6 @@ $comment-gutter: 10px;
             }
 
             .activity_header {
-                @include ellipsis;
                 font-size: 14px;
                 padding-bottom: $text-padding-y;
                 color: $secondary-text-color;
@@ -192,5 +191,11 @@ $comment-gutter: 10px;
     
     .heading {
         display: none;
+    }
+}
+
+#sidebar .activity_list li[data-activity-type=WORKSPACE_DELETED] {
+    .object, .workspace, .order {
+        display: inline;
     }
 }
