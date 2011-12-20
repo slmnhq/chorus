@@ -30,6 +30,10 @@ describe("WorkfilesImportDialog", function() {
                 expect(this.dialog.closeModal).toHaveBeenCalled();
             });
         });
+
+        it("does not have the 'chosen' class on the form", function() {
+            expect(this.dialog.$("form")).not.toHaveClass("chosen")
+        })
     });
 
     context("when a text file has been chosen", function() {
@@ -80,12 +84,16 @@ describe("WorkfilesImportDialog", function() {
         });
 
         it("displays the chosen filename", function() {
-            expect(this.dialog.$("span.fileName").text()).toBe("foo.bar");
+            expect(this.dialog.$(".fileName").text()).toBe("foo.bar");
         });
 
         it("displays the appropriate file icon", function() {
             expect(this.dialog.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("bar", "medium"));
         });
+
+        it("adds the 'chosen' class to the form", function() {
+            expect(this.dialog.$("form")).toHaveClass("chosen")
+        })
 
         context("#upload", function() {
             beforeEach(function() {

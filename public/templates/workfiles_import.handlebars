@@ -1,12 +1,13 @@
 <form action="/edc/workspace/{{workspaceId}}/workfile" enctype="multipart/form-data" method="post">
     <div class="details">
         <img src="/images/workfiles/medium/plain.png"/>
-        <span class="fileName"/>
-
-        <span class="file-wrapper">
-            <button type="button" class="choose">{{t "workfiles.import_choosefile"}}</button>
-            <input type="file" name="importFile"/>
-        </span>
+        <div class="file">
+            <div class="fileName"/>
+            <span class="file-wrapper">
+                <a class="choose">{{t "workfiles.import_select_file"}}</a>
+                <input type="file" name="importFile"/>
+            </span>
+        </div>
     </div>
     <div class="comment">
         <input type="text" name="description" placeholder='{{t "workfiles.import_placeholder"}}' tabindex="1" maxlength="256"></input>

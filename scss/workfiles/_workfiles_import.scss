@@ -1,53 +1,82 @@
 @import "_common.scss";
 
-$image-height : 48px;
-$image-width: 48px;
+$image-height : 35px;
+$image-width: 35px;
 
 .workfiles_import {
-    .details {
-        img, span, label, input[type=file] {
-            display: inline-block;
+    width: 440px;
+
+    form {
+        .details {
+            padding-top: 5px;
+            
+            span, label, input[type=file] {
+                display: inline-block;
+            }
+
+            img {
+                float: left;
+                vertical-align: middle;
+                visibility: hidden;
+            }
+
+            .file {
+                padding-left: $image-width + 4px;
+                .choose {
+                    font-size: 12px;
+                    font-weight: $semibold;
+                }
+            }
         }
 
-        img {
+        div.comment {
+            padding: 3px 0 5px 0;
+            margin-left: $image-width;
+            visibility: hidden;
+        }
+
+        .errors {
+            width: 100%;
+        }
+
+        div[aria-role=progressbar] {
+            top: 7px;
+            left: 17px;
+            display: inline;
+        }
+
+        label {
+            text-align: right;
+        }
+
+        label, input[type=file] {
+            color: $link-color;
+            &:hover {
+                cursor : pointer;
+            }
+        }
+
+        .fileName {
+            color: $secondary-text-color;
+            font-size: 14px;
             vertical-align: middle;
+            line-height: 26px;
+            min-height: 26px;
         }
-    }
 
-    div.comment {
-        margin-left: $image-width;
-    }
 
-    .errors {
-        width: 100%;
-    }
-
-    div[aria-role=progressbar] {
-        top: 7px;
-        left: 17px;
-        display: inline;
-    }
-
-    label {
-        text-align: right;
-    }
-
-    label, input[type=file] {
-        color: $link-color;
-        &:hover {
-            cursor : pointer;
+        .expanded {
+            padding-right: 35px;
         }
-    }
 
-    .fileName {
-        color: $secondary-text-color;
-        font-size: 15px;
-        vertical-align: middle;
-        line-height: $image-height;
-    }
+        &.chosen {
+            img {
+                visibility: visible;
+            }
 
-
-    .expanded {
-        padding-right: 35px;
+            .comment {
+                visibility: visible;
+            }
+        }
     }
 }
