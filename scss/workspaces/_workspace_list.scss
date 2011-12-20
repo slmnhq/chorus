@@ -15,12 +15,12 @@
     }
 
     .private {
-        color: $dark-text-color;
-        font-size: 13px;
+        @include dialog-label;
         border-left: 2px solid $border-color;
         margin-left: 5px;
         padding: 3px $padding-x 1px;
     }
+
     li {
         .full {
             display: none;

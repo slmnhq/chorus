@@ -61,7 +61,7 @@ $image-width : 230px;
     }
 
     div.owner {
-        font-size: 13px;
+        @include font-normal-beta;
         padding-left: 12px;
     }
 

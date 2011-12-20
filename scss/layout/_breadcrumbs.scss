@@ -11,7 +11,7 @@
 
     li {
         display: inline-block;
-        font-size: 13px;
+        @include font-normal-beta;
     }
 
     a {
