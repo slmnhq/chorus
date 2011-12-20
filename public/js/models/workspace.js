@@ -87,6 +87,10 @@
             return this._hasPermission(['admin', 'update']);
         },
 
+        workspaceAdmin : function() {
+            return this._hasPermission(['admin']);
+        },
+
         _hasPermission : function(validPermissions) {
             return _.intersection(this.get("permission"), validPermissions).length > 0;
         }

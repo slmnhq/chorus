@@ -11,7 +11,7 @@
 
         additionalContext : function() {
             return {
-                canUpdate : this.model.canUpdate(),
+                workspaceAdmin : this.model.workspaceAdmin(),
                 imageUrl : this.model.imageUrl()+"&buster="+(new Date().getTime()),
                 hasImage : this.model.hasImage(),
                 members : this.model.members().chain().first(24).map(function(member){

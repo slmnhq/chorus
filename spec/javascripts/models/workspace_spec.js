@@ -235,6 +235,18 @@ describe("chorus.models.Workspace", function() {
                 expect(this.model.canUpdate()).toBeFalsy();
             });
         });
+        
+        describe("workspaceAdmin", function() {
+            it("is true when permission contains 'admin'", function() {
+                this.model.set({permission: ['admin']});
+                expect(this.model.workspaceAdmin()).toBeTruthy();
+            });
+
+            it("is false when it does not contain 'admin'", function() {
+                this.model.set({permission: ['update']});
+                expect(this.model.workspaceAdmin()).toBeFalsy();
+            });
+        });
     });
 })
     ;

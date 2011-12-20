@@ -57,9 +57,9 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
             });
         });
 
-        context("the current user has update permissions on the workspace", function() {
+        context("the current user has workspace admin permissions on the workspace", function() {
             beforeEach(function() {
-                spyOn(this.model, "canUpdate").andReturn(true);
+                spyOn(this.model, "workspaceAdmin").andReturn(true);
                 this.view.render();
             });
 
@@ -76,9 +76,9 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
             });
         });
 
-        context("the current user does not have update permissions on the workspace", function() {
+        context("the current user does not have workspace admin permissions on the workspace", function() {
             beforeEach(function() {
-                spyOn(this.model, "canUpdate").andReturn(false);
+                spyOn(this.model, "workspaceAdmin").andReturn(false);
                 this.view.render();
             });
 
