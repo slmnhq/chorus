@@ -96,17 +96,14 @@ describe("chorus.models.Workspace", function() {
             expect(this.comments instanceof chorus.models.CommentSet).toBeTruthy();
         });
 
-        it("has the right url", function() {
-            expect(this.comments.url()).toContain("/edc/comment/workspace/5");
-        });
-
         it("memoizes", function() {
             expect(this.comments).toBe(this.model.comments());
         });
 
         it("initially contains the workspace's latestCommentList", function() {
             var serializedComments = this.model.get("latestCommentList");
-            expect(this.comments.models.length).toBe(serializedComments.length);
+            expect(_.first(serializedComments).text).toBeTruthy() //assert it exists first
+            expect(_.first(this.comments.models).attributes).toEqual(_.first(serializedComments));
         });
     });
 

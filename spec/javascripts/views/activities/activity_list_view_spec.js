@@ -51,16 +51,7 @@ describe("chorus.views.ActivityList", function() {
                 expect(this.view.$("li[data-comment-id=10024] .icon a img")).toHaveAttr("src", "/edc/userimage/13?size=icon")
                 expect(this.view.$("li[data-comment-id=10024] .comment_header a")).toHaveText("Mark Rushakoff");
                 expect(this.view.$("li[data-comment-id=10024] .comment_content .timestamp")).toExist();
-            })
-
-            it("displays the text of each comment", function() {
-                expect(this.view.$("li[data-comment-id=10023] .comment_content .body")).toHaveText("hi there");
-                expect(this.view.$("li[data-comment-id=10024] .comment_content .body")).toHaveText("hello");
-            })
-
-            it("does not initially add the 'more' class to any comment list", function() {
-                expect(this.view.$("ul.comments")).not.toHaveClass("more");
-            })
+            });
 
             context("when there are less than three comments", function() {
                 it("does not render a 'more comments' link", function() {
@@ -70,11 +61,12 @@ describe("chorus.views.ActivityList", function() {
                 it("does not apply the 'more' class to any comments", function() {
                     expect(this.view.$(".comments li.more")).not.toExist();
                 })
-            })
+            });
+
             context("when there are three or more comments", function() {
                 beforeEach(function() {
-                    var comments = this.collection.at(0).get("comments");
-                    comments.push(comments[0]);
+                    var comments = this.collection.at(0).comments();
+                    comments.add(new chorus.models.Comment({ text: 'I love you all' }));
                     this.view.render();
                 })
 
