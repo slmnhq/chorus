@@ -27,4 +27,12 @@
     .dialog_label {
         @include dialog-label;
     }
+
+    .font_normal_alpha {
+        @include font-normal-alpha;
+    }
+
+    .font_normal_beta {
+        @include font-normal-beta;
+    }
 }

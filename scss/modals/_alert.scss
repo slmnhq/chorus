@@ -20,8 +20,7 @@
                 }
 
                 p {
-                    color: $dark-text-color;
-                    font-size: 14px;
+                    @include font-normal-alpha;
                 }
             }
 

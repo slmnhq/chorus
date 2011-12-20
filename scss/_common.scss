@@ -95,6 +95,18 @@ $medium-font: 14px;
     color: $dark-text-color;
 }
 
+@mixin font-normal-alpha {
+    font-size: 14px;
+    font-weight: normal;
+    color: $dark-text-color;
+}
+
+@mixin font-normal-beta {
+    font-size: 13px;
+    font-weight: normal;
+    color: black;
+}
+
 @mixin after-clearfix($which: both) {
     &:after {
             content: ".";
