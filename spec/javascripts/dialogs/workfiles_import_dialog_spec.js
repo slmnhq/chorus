@@ -84,7 +84,7 @@ describe("WorkfilesImportDialog", function() {
         });
 
         it("displays the appropriate file icon", function() {
-            expect(this.dialog.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("bar"));
+            expect(this.dialog.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("bar", "medium"));
         });
 
         context("#upload", function() {

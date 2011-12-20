@@ -82,7 +82,7 @@
                     self.uploadObj = data;
                     var filename = data.files[0].name;
                     self.uploadExtension = _.last(filename.split('.'));
-                    var iconSrc = chorus.urlHelpers.fileIconUrl(self.uploadExtension);
+                    var iconSrc = chorus.urlHelpers.fileIconUrl(self.uploadExtension, "medium");
                     self.$('img').attr('src', iconSrc);
                     self.$('span.fileName').text(filename);
                 }

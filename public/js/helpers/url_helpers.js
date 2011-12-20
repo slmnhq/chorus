@@ -25,7 +25,7 @@
         "image" : "plain"
     }
 
-    ns.urlHelpers.fileIconUrl = function fileIconUrl(key) {
-         return "/images/workfileIcons/" + (map[key.toLowerCase()] || "plain") + ".png";
+    ns.urlHelpers.fileIconUrl = function fileIconUrl(key, size) {
+         return "/images/workfiles/" + (size || "large") + "/" + (map[key.toLowerCase()] || "plain") + ".png";
     }
 })(jQuery, chorus);
