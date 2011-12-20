@@ -26,7 +26,7 @@
         },
 
         comments: function(){
-            this._comments = this._comments || new chorus.models.CommentSet(this.get("latestCommentList"), {workspaceId : this.get("id")})
+            this._comments || (this._comments = new chorus.models.CommentSet(this.get("latestCommentList")));
             return this._comments;
         },
 
