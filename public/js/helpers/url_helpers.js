@@ -20,7 +20,7 @@
         "ppt" : "ppt",
         "r" : "r",
         "rtf" : "rtf",
-        "txt" : "text",
+        "txt" : "txt",
         "sql" : "sql",
         "image" : "plain"
     }
