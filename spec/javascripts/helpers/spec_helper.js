@@ -6,6 +6,7 @@
         'change_password',
         'collection_picklist',
         'comment',
+        'comment_list',
         'copy_workfile',
         'dashboard',
         'dashboard_sidebar',
