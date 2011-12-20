@@ -77,6 +77,24 @@ $medium-font: 14px;
 
 // Mixins
 
+@mixin heading-normal {
+    font-size: 24px;
+    font-weight: $semibold;
+    color: black;
+}
+
+@mixin heading-sidebar {
+    font-size: 19px;
+    font-weight: $semibold;
+    color: $dark-text-color;
+}
+
+@mixin dialog-label {
+    font-size: 13px;
+    font-weight: normal;
+    color: $dark-text-color;
+}
+
 @mixin after-clearfix($which: both) {
     &:after {
             content: ".";

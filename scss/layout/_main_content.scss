@@ -13,9 +13,8 @@
     @include border-top-radius(3px);
 
     h1 {
-        padding-top: 18px;
-        font-size: 22px;
-        font-weight: 600;
+        padding-top: 16px;
+        @include heading-normal;
     }
 
     .icon {

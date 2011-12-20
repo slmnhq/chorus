@@ -15,12 +15,6 @@ div[data-page="Dashboard"] {
         display: none;
     }
 
-    .content_header {
-        h1 {
-            font-size: 24px;
-        }
-    }
-
     .main_content.workspace_list {
         float: right;
         width: $workspace-list-width;

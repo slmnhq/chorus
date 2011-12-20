@@ -10,16 +10,14 @@
         padding-bottom: 16px;
         text-align: center;
     }
-    
+
     .actions {
         h1 {
-            font-size: 19px;
             @include ellipsis;
-            color: $dark-text-color;
-            font-weight: $semibold;
+            @include heading-sidebar;
             margin-bottom: 10px;
         }
-        
+
         a {
             font-size: 12px;
             font-weight: $semibold;

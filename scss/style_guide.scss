@@ -15,4 +15,16 @@
             }
         }
     }
+
+    .heading_normal {
+        @include heading-normal;
+    }
+
+    .heading_sidebar {
+        @include heading-sidebar;
+    }
+
+    .dialog_label {
+        @include dialog-label;
+    }
 }

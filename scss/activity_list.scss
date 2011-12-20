@@ -28,8 +28,7 @@ $system-action-color: #7C7D7D;
     }
 
     h1 {
-        font-size: 24px;
-        font-weight: $semibold;
+        @include heading-normal;
     }
 
     ul.activities {
