@@ -124,6 +124,10 @@
                     return t(key) + "s";
                 }
             }
+        },
+
+        autoWrap : function(string) {
+            return string.replace(/([\S]{10})(?=[\S])/g, '$1&shy;')
         }
     }
 
