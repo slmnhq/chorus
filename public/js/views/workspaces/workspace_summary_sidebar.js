@@ -19,7 +19,8 @@
                 members : this.model.members().chain().first(this.numMembers).map(function(member){
                      return {
                          imageUrl : member.imageUrl({size : 'icon'}),
-                         showUrl : member.showUrl()
+                         showUrl : member.showUrl(),
+                         displayName : member.displayName()
                      };
                 }).value(),
                 extra_members : Math.max(this.model.members().length - this.numMembers, 0)

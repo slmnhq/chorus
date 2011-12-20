@@ -119,6 +119,13 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
                 expect(images.eq(2).attr("src")).toBe(members.models[2].imageUrl({ size: 'icon' }));
             });
 
+            it("has a title for each member that is their display Name", function() {
+                var links = this.view.$(".members li a");
+                expect(links.eq(0).attr("title")).toBe(members.models[0].displayName());
+                expect(links.eq(1).attr("title")).toBe(members.models[1].displayName());
+                expect(links.eq(2).attr("title")).toBe(members.models[2].displayName());
+            })
+
             it("includes a link to each member's page", function() {
                 var links = this.view.$(".members li a");
                 expect(links.length).toBe(3);
