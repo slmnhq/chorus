@@ -80,9 +80,9 @@ describe("WorkfileListView", function() {
             });
 
             it("includes the correct workspace file icon", function() {
-                expect($(this.view.$("li img")[0]).attr("src")).toBe("/images/workfileIcons/sql.png");
-                expect($(this.view.$("li img")[1]).attr("src")).toBe("/images/workfileIcons/text.png");
-                expect($(this.view.$("li img")[2]).attr("src")).toBe("/images/workfileIcons/plain.png");
+                expect($(this.view.$("li img")[0]).attr("src")).toBe("/images/workfiles/large/sql.png");
+                expect($(this.view.$("li img")[1]).attr("src")).toBe("/images/workfiles/large/text.png");
+                expect($(this.view.$("li img")[2]).attr("src")).toBe("/images/workfiles/large/plain.png");
             });
 
             it("includes the most recent comment body", function() {

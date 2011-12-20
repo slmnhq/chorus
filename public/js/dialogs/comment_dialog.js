@@ -35,7 +35,6 @@
         },
 
         save: function(e) {
-            console.log("save!")
             e.preventDefault();
             this.model.save({body : this.$("textarea[name=body]").val().trim()})
         },

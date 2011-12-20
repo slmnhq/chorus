@@ -21,7 +21,7 @@ describe("chorus", function() {
 
     describe("fileIconUrl", function(){
         function verifyUrl(fileType, fileName) {
-            expect(chorus.urlHelpers.fileIconUrl(fileType)).toBe("/images/workfileIcons/" + fileName + ".png");
+            expect(chorus.urlHelpers.fileIconUrl(fileType)).toBe("/images/workfiles/large/" + fileName + ".png");
         }
 
         it("maps known fileTypes to URLs correctly", function(){
@@ -46,9 +46,17 @@ describe("chorus", function() {
             verifyUrl("txt", "text");
         });
 
-        it("maps unknown fileTypes to binary.png", function(){
+        it("maps unknown fileTypes to plain.png", function(){
             verifyUrl("foobar", "plain");
             verifyUrl("N/A", "plain");
         });
+
+        it("defaults to large size", function() {
+            expect(chorus.urlHelpers.fileIconUrl("C")).toBe("/images/workfiles/large/c.png");
+        })
+
+        it("takes an optional size override", function() {
+            expect(chorus.urlHelpers.fileIconUrl("C", "medium")).toBe("/images/workfiles/medium/c.png");
+        })
     });
 });
