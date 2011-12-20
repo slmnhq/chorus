@@ -21,7 +21,13 @@
 
         postRender: function() {
             var self = this;
-            _.defer(function() { self.$("textarea").elastic() });
+            _.defer(function() {
+                self.$("textarea").elastic();
+
+                // Workaround elastic's blur making the form not submit (sometimes!!!)
+                //
+                self.$("textarea").unbind("blur");
+            });
         },
 
         additionalContext : function() {
@@ -29,6 +35,7 @@
         },
 
         save: function(e) {
+            console.log("save!")
             e.preventDefault();
             this.model.save({body : this.$("textarea[name=body]").val().trim()})
         },
