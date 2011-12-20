@@ -851,6 +851,20 @@
                 });
             },
 
+            comment: function(overrides) {
+                overrides = overrides || {};
+                var id = this.nextId().toString();
+                var attributes = _.extend({
+                    id : id,
+                    text : "this is comment text" + id,
+                    attachments : [],
+                    type: "NOTE",
+                    comments: [],
+                    author: this.user().attributes
+                }, overrides);
+                return new chorus.models.Comment(attributes);
+            },
+
             workspace: function(overrides) {
                 overrides = overrides || {};
                 var attributes = _.extend({
