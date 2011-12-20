@@ -165,6 +165,10 @@ describe("chorus.views.Header", function() {
             it("has a link to 'Users'", function(){
                 expect(this.view.$(".menu.popup_account a[href='#/users']").text()).toBe(t("header.users_list"));
             });
+
+            it("has a link to instances", function() {
+                expect(this.view.$(".menu.popup_account a[href='#/instances']").text()).toMatchTranslation("header.instances");
+            });
         });
 
         describe("chorus:menu:popup handling", function() {

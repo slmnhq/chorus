@@ -15,6 +15,7 @@
             ["/workspaces/:id", "WorkspaceSummary"],
             ["/workspaces/:workspaceId/workfiles", "WorkfileIndex"],
             ["/workspaces/:workspaceId/workfiles/:workfileId", "WorkfileShow"],
+            ["/instances", "InstanceIndex"],
             ["/styleguide", "StyleGuide"]
         ],
 
