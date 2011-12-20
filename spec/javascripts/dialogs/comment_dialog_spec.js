@@ -21,6 +21,7 @@ describe("CommentDialog", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            spyOn($.fn, "limitMaxlength");
             this.dialog.render();
         });
 
@@ -50,6 +51,10 @@ describe("CommentDialog", function() {
             runs(function() {
                 expect($.fn.elastic.mostRecentCall.object).toBe("textarea");
             })
+        })
+
+        it("limits the length of the text area", function() {
+            expect($.fn.limitMaxlength).toHaveBeenCalled();
         })
     });
 

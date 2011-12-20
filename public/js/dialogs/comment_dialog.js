@@ -20,6 +20,7 @@
         },
 
         postRender: function() {
+            this.$("textarea").limitMaxlength();
             var self = this;
             _.defer(function() {
                 self.$("textarea").elastic();
