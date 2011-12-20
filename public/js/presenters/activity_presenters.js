@@ -22,9 +22,9 @@
                 authorUrl: this.model.author().showUrl(),
                 authorName: this.model.author().displayName(),
                 objectUrl: this.presenter.objectUrl,
-                objectName: chorus.helpers.autoWrap(this.presenter.objectName),
+                objectName: this.presenter.objectName,
                 workspaceUrl: this.presenter.workspaceUrl,
-                workspaceName: chorus.helpers.autoWrap(this.presenter.workspaceName)
+                workspaceName: this.presenter.workspaceName
             }
         },
 

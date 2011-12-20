@@ -350,29 +350,5 @@ describe("handlebars", function() {
                 })
             })
         })
-
-        describe("autoWrap", function() {
-            it("wraps after the 10th character", function() {
-                expect(Handlebars.helpers.autoWrap('12345678901')).toBe('1234567890&shy;1');
-            });
-
-            it("doesn't wrap if there are more than 10 characters, but spaces", function() {
-                expect(Handlebars.helpers.autoWrap('1 2 3 4 5 6 7 890')).toBe('1 2 3 4 5 6 7 890');
-            })
-
-            it("does not wrap at exactly 10th characters", function() {
-                expect(Handlebars.helpers.autoWrap('1234567890')).toBe('1234567890');
-            });
-
-            it("does wraps really long words multiple times", function() {
-                expect(Handlebars.helpers.autoWrap('123456789012345678901')).toBe('1234567890&shy;1234567890&shy;1');
-            });
-
-            it("wraps multiple long words in the same string", function() {
-                expect(Handlebars.helpers.autoWrap('12345678901 12345678901')).toBe('1234567890&shy;1 1234567890&shy;1');
-            });
-
-
-        });
     });
 });
