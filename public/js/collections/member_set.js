@@ -17,7 +17,7 @@
 
         toUrlParams: function() {
             return this.reduce(function(memo, model) {
-                var param = "members=" + model.get("userName");
+                var param = "members=" + model.get("id");
                 return (memo.length === 0) ? param : (memo + "&" + param)
             }, "");
         }

@@ -16,9 +16,9 @@ describe("MemberSet", function() {
             this.saveFailedSpy = jasmine.createSpy("saveFailed");
             this.memberSet.bind("saved", this.savedSpy);
             this.memberSet.bind("saveFailed", this.saveFailedSpy);
-            this.user1 = new chorus.models.User({ userName: "niels" });
-            this.user2 = new chorus.models.User({ userName: "ludwig" });
-            this.user3 = new chorus.models.User({ userName: "isaac" });
+            this.user1 = new chorus.models.User({ userName: "niels", id: "1" });
+            this.user2 = new chorus.models.User({ userName: "ludwig", id: "2" });
+            this.user3 = new chorus.models.User({ userName: "isaac", id: "4" });
             this.memberSet.add([this.user1, this.user2, this.user3]);
             this.memberSet.save();
         });
@@ -32,7 +32,7 @@ describe("MemberSet", function() {
         });
 
         it("passes a list of user names as data", function() {
-            expect(this.server.requests[0].requestBody).toBe("members=niels&members=ludwig&members=isaac");
+            expect(this.server.requests[0].requestBody).toBe("members=1&members=2&members=4");
         });
 
         context("when the request succeeds", function() {
