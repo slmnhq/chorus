@@ -43,7 +43,7 @@ describe("chorus", function() {
             verifyUrl("r", "r");
             verifyUrl("rtf", "rtf");
             verifyUrl("sql", "sql");
-            verifyUrl("txt", "text");
+            verifyUrl("txt", "txt");
         });
 
         it("maps unknown fileTypes to plain.png", function(){
