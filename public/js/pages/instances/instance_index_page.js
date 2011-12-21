@@ -14,6 +14,10 @@
                 contentDetails : new ns.views.InstanceIndexContentDetails({collection : this.collection}),
                 content : new ns.views.InstanceList({collection : this.collection})
             });
+
+            this.sidebar = new ns.views.InstanceListSidebar();
+
+            this.mainContent.content.forwardEvent("instance:selected", this.sidebar);
         }
     });
 })

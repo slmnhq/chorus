@@ -1,0 +1,14 @@
+@import "_common.scss";
+
+.instance_list_sidebar {
+    .instance_name {
+        @include ellipsis;
+        @include heading-sidebar;
+    }
+
+    .instance_type {
+        font-size: 12px;
+        font-weight: normal;
+        color: $secondary-text-color;
+    }
+}
