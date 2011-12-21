@@ -33,7 +33,7 @@
     height: 32px;
     line-height: 32px;
     vertical-align: middle;
-    font-size: 13px;
+    @include font-content-details;
     border-bottom: 1px solid $pagination-border-color;
     padding: 0 $padding-x;
 

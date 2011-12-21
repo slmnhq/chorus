@@ -107,6 +107,12 @@ $medium-font: 14px;
     color: black;
 }
 
+@mixin font-content-details {
+    font-size: 12px;
+    font-weight: $semibold;
+    color: $dark-text-color;
+}
+
 @mixin after-clearfix($which: both) {
     &:after {
             content: ".";

@@ -35,4 +35,9 @@
     .font_normal_beta {
         @include font-normal-beta;
     }
+
+    .font_content_details {
+        @include font-content-details;
+    }
+
 }
