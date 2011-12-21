@@ -3,8 +3,6 @@
         className : "comment_list",
 
         setup : function() {
-            this.collection.fetch();
-            this.collection.bind("changed", this.render, this);
         },
 
         additionalContext: function() {
