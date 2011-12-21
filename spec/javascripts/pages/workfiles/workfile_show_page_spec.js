@@ -56,6 +56,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
     describe("#render", function(){
         beforeEach(function() {
             this.page = new chorus.pages.WorkfileShowPage(this.workspaceId, this.workfileId);
+            this.page.workspace.set({name: "Cool Workspace"});
             fixtures.model = "Workfile";
             this.server.respondWith(
                 'GET',
@@ -99,6 +100,23 @@ describe("chorus.pages.WorkfileShowPage", function() {
             it("relays the event to the workfile content", function() {
                 expect(this.saveSpy).toHaveBeenCalled();
             });
+        });
+
+        describe("breadcrumbs", function() {
+
+        it("renders home > {workspace name} > All work files > {workfile name}", function() {
+            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
+            expect(this.page.$(".breadcrumb:eq(0) a").text()).toMatchTranslation("breadcrumbs.home");
+
+            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/workspaces/4");
+            expect(this.page.$(".breadcrumb:eq(1) a").text()).toBe("Cool Workspace");
+
+            expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toMatchTranslation("breadcrumbs.workfiles.all");
+            expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/4/workfiles");
+
+            expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toBe("who.sql");
+
+        });
         });
     })
 });

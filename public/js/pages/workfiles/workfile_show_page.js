@@ -1,4 +1,15 @@
 ;(function($, ns) {
+    var breadcrumbsView = ns.views.ModelBoundBreadcrumbsView.extend({
+        getLoadedCrumbs : function(){
+            return [
+                    {label: t("breadcrumbs.home"), url: "#/"},
+                    {label: this.options.workspace.get("name"), url: this.options.workspace.showUrl()},
+                    {label: t("breadcrumbs.workfiles.all"), url: this.options.workspace.showUrl() + "/workfiles"},
+                    {label: this.model.get("fileName") }
+                ];
+        }
+    });
+
     ns.pages.WorkfileShowPage = ns.pages.Base.extend({
         setup : function(workspaceId, workfileId) {
             this.workspace = new ns.models.Workspace({id: workspaceId});
@@ -7,10 +18,10 @@
             this.model.bind("change", this.modelChanged, this);
             this.model.fetch();
 
-            this.breadcrumbs = new ns.views.WorkspaceBreadcrumbsView({model: this.workspace});
+            this.breadcrumbs = new breadcrumbsView({workspace: this.workspace, model: this.model});
 
             this.sidebar = new chorus.views.WorkfileShowSidebar({model : this.model });
-            
+
             this.subNav = new ns.views.SubNav({workspace: this.workspace, tab: "workfiles"});
 
             this.mainContent = new ns.views.MainContentView({
@@ -38,6 +49,5 @@
                 iconUrl : this.model.get("fileType") && chorus.urlHelpers.fileIconUrl(this.model.get("fileType"))
             };
         }
-    })
-
+    });
 })(jQuery, chorus);

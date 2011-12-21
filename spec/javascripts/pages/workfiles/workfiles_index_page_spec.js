@@ -3,6 +3,25 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         fixtures.model = "Workfile";
     })
 
+    describe("breadcrumbs", function() {
+        beforeEach(function() {
+            this.page = new chorus.pages.WorkfileIndexPage(4);
+            this.page.mainContent.model.set({name: "Cool Workspace"});
+            this.page.mainContent.model.loaded = true;
+            this.page.render();
+        });
+
+        it("renders home > {workspace name} > All work files", function() {
+            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
+            expect(this.page.$(".breadcrumb:eq(0) a").text()).toMatchTranslation("breadcrumbs.home");
+
+            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/workspaces/4");
+            expect(this.page.$(".breadcrumb:eq(1) a").text()).toBe("Cool Workspace");
+
+            expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toMatchTranslation("breadcrumbs.workfiles.all");
+        });
+    });
+
     describe("#initialize", function() {
         beforeEach(function() {
             this.page = new chorus.pages.WorkfileIndexPage(4);

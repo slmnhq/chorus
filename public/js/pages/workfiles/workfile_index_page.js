@@ -1,12 +1,22 @@
 ;
 (function($, ns) {
+    var breadcrumbsView = chorus.views.ModelBoundBreadcrumbsView.extend({
+        getLoadedCrumbs : function(){
+            return [
+                    {label: t("breadcrumbs.home"), url: "#/"},
+                    {label: this.model.get("name"), url: this.model.showUrl()},
+                    {label: t("breadcrumbs.workfiles.all")}
+                ];
+        }
+    });
+
     ns.WorkfileIndexPage = chorus.pages.Base.extend({
         setup : function(workspaceId) {
             // chorus.router supplies arguments to setup
 
             var workspace = new chorus.models.Workspace({id: workspaceId});
             workspace.fetch();
-            this.breadcrumbs = new chorus.views.WorkspaceBreadcrumbsView({model: workspace});
+            this.breadcrumbs = new breadcrumbsView({model: workspace});
 
             this.collection = new chorus.models.WorkfileSet([], {workspaceId: workspaceId});
             this.collection.fileType = "";
