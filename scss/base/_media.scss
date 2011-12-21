@@ -1,0 +1,12 @@
+@import "../_common.scss";
+
+.media, .media > .bd {
+    overflow:hidden;
+}
+.media > .icon {
+    float:left;
+    margin-right: $activity-gutter;
+}
+.media > .icon img{
+    display:block;
+}
