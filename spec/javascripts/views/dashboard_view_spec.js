@@ -1,6 +1,6 @@
 describe("chorus.views.Dashboard", function(){
     beforeEach(function(){
-        this.view = new chorus.views.Dashboard();
+        this.view = new chorus.views.Dashboard({ collection: new chorus.models.WorkspaceSet() });
         this.view.render();
     });
 
