@@ -13,7 +13,7 @@
             var elMap = {
                 "Greenplum Database" : greenplumEl,
                 "Hadoop" : hadoopEl
-            };
+            }
             this.collection.each(function(model) {
                 var view = new ns.views.Instance({model: model});
                 view.render();
@@ -22,10 +22,18 @@
                 (elMap[model.get("instanceProvider")] || otherEl).append(li);
                 view.delegateEvents();
             });
+            this.$('.instance_provider li:first').click();
         },
 
         selectItem : function(e){
-            var instance = $(e.currentTarget).data('model');
+            var target = $(e.currentTarget);
+            if (target.hasClass("selected")) {
+                return;
+            }
+
+            this.$("li").removeClass("selected");
+            target.addClass("selected");
+            var instance = target.data('model');
             this.trigger("instance:selected", instance);
         }
     });

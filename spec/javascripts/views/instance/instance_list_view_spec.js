@@ -15,7 +15,7 @@ describe("chorus.views.InstanceList", function() {
             this.view.render();
         });
 
-        it("renders an item for each instance", function(){
+        it("renders an item for each instance", function() {
             expect(this.view.$("li.instance").length).toBe(this.collection.length);
         });
 
@@ -35,15 +35,46 @@ describe("chorus.views.InstanceList", function() {
             expect(this.view.$(".hadoop_instance li.instance").length).toBe(2);
         });
 
+        it("pre-selects the first instance", function() {
+            expect(this.view.$("li:first-child")).toHaveClass("selected");
+            expect(this.view.$("li.selected").length).toBe(1);
+        })
+
         describe("clicking on an instance", function() {
             beforeEach(function() {
                 this.eventSpy = jasmine.createSpy();
                 this.view.bind("instance:selected", this.eventSpy);
-                this.view.$('li:eq(1)').click();
+                this.li2 = this.view.$('li:eq(1)');
+                this.li3 = this.view.$('li:eq(2)');
+                this.li2.click();
             });
 
             it("triggers the instance:selected event", function() {
                 expect(this.eventSpy).toHaveBeenCalledWith(this.collection.models[1]);
+            });
+
+            it("adds the selected class to that item", function() {
+                expect(this.li2).toHaveClass("selected");
+            });
+
+            context("clicking on the same instance again", function() {
+                beforeEach(function() {
+                    this.li2.click();
+                });
+
+                it("does not raise the event again", function() {
+                    expect(this.eventSpy.calls.length).toBe(1);
+                });
+            });
+
+            context("and then clicking on another instance", function() {
+                beforeEach(function() {
+                    this.li3.click();
+                });
+
+                it("removes the selected class from the first li", function() {
+                    expect(this.li2).not.toHaveClass("selected");
+                });
             });
         });
     });

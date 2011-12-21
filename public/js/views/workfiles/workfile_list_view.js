@@ -52,9 +52,7 @@
         },
 
         postRender : function() {
-            if (this.$("li.selected").length == 0) {
-                this.$("li:first-child").click();
-            }
+            this.$("li:first-child").click();
         }
     });
 })(jQuery, chorus.views);

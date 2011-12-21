@@ -65,6 +65,7 @@ describe("WorkfileListView", function() {
                 this.collection = new chorus.models.WorkfileSet([this.model1, this.model2, this.model3], {workspaceId: 1234});
                 this.view = new chorus.views.WorkfileList({collection: this.collection});
                 this.view.render();
+                this.li2 = this.view.$("li")[1];
             });
 
             it("renders an li for each item in the collection", function() {
@@ -123,13 +124,12 @@ describe("WorkfileListView", function() {
 
             it("pre-selects the first item in the list", function() {
                 expect(this.view.$("li:first-child")).toHaveClass("selected");
-            })
+            });
 
             context("clicking on another item", function() {
                 beforeEach(function() {
                     this.eventSpy = jasmine.createSpy();
                     this.view.bind("workfile:selected", this.eventSpy);
-                    this.li2 = this.view.$("li")[1];
                     $(this.li2).click();
                 });
 
