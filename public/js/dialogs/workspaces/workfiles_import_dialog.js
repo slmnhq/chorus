@@ -62,8 +62,6 @@
 
         postRender : function() {
             var self = this;
-            // FF3.6 fails tests with multipart true, but it will only upload in the real world with multipart true
-            var multipart = !window.jasmine;
 
             // dataType: 'text' is necessary for FF3.6
             // see https://github.com/blueimp/jQuery-File-Upload/issues/422
@@ -72,7 +70,6 @@
                 change : fileChosen,
                 add : fileChosen,
                 done : uploadFinished,
-                multipart : multipart,
                 dataType : "text"
             });
 

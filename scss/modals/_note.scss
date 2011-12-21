@@ -1,5 +1,51 @@
-.notes_new textarea {
-    min-width : 350px;
-    min-height: 75px;
-    resize: none;
+.notes_new{
+    textarea {
+        min-width : 350px;
+        min-height: 75px;
+        resize: none;
+    }
+
+    .options_area {
+        display: none;
+
+        .label {
+            color: $dark-text-color;
+            width: 72px;
+            display: inline-block;
+        }
+    }
+
+    .file_details {
+        vertical-align: middle;
+        line-height: 32px;
+        display: none;
+        img {
+            vertical-align: middle;
+        }
+        .remove {
+            float: right;
+        }
+    }
+
+    .file_name {
+        color: $dark-text-color;
+        font-weight: $semibold;
+    }
+
+    .options_text, .options_area {
+        font-size: 12px;
+        margin: 8px 8px;
+    }
+
+    .options_text {
+        color: $secondary-text-color;
+    }
+
+    .show_options:hover {
+        border-bottom: 1px dotted;
+    }
+
+    .row {
+        margin-bottom: 10px;
+    }
 }

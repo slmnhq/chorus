@@ -5,6 +5,9 @@ describe("NotesNewDialog", function() {
             launchElement : this.launchElement,
             pageModel : new chorus.models.Workfile()
         });
+        spyOn($.fn, 'fileupload');
+        this.dialog.render();
+        $('#jasmine_content').append(this.dialog.el);
     });
 
     it("does not re-render when the model changes", function() {
@@ -19,13 +22,11 @@ describe("NotesNewDialog", function() {
     });
 
     describe("#render", function() {
-        beforeEach(function() {
-            this.dialog.render();
-        });
+
         it("has the right title", function() {
             expect($(this.dialog.el).attr("title")).toBe(t("notes.new_dialog.title"));
         });
-        it("renders the body", function(){
+        it("renders the body", function() {
             this.dialog.model.set({body : "cats"})
             this.dialog.render();
             expect(this.dialog.$("textarea[name=body]").val()).toBe("cats")
@@ -34,18 +35,146 @@ describe("NotesNewDialog", function() {
         it("has the right placeholder", function() {
             expect(this.dialog.$("textarea[name=body]").attr("placeholder")).toBe(t("notes.placeholder", "workfile"));
         });
+
+        it("has the 'Show options' link", function() {
+            expect(this.dialog.$('a.show_options').length).toBe(1);
+            expect(this.dialog.$('a.show_options').text()).toMatchTranslation('notes.new_dialog.show_options');
+        });
+    });
+
+    describe("show_options", function() {
+        it("shows the options area and hides the options_text when clicked", function() {
+            expect(this.dialog.$('.options_area')).toBeHidden();
+            expect(this.dialog.$('.options_text')).toBeVisible();
+            this.dialog.$("a.show_options").click();
+            expect(this.dialog.$('.options_text')).toBeHidden();
+            expect(this.dialog.$('.options_area')).toBeVisible();
+        });
+
+        it("prevents default on click", function() {
+            var eventSpy = jasmine.createSpyObj("event", ['preventDefault']);
+            this.dialog.showOptions(eventSpy);
+            expect(eventSpy.preventDefault).toHaveBeenCalled();
+        });
+
+        it("has the file_details hidden", function() {
+            expect(this.dialog.$('.file_details')).toBeHidden();
+        });
+
+
+        context("when a file has been chosen", function() {
+            beforeEach(function() {
+                this.dialog.$("a.show_options").click();
+                this.fileList = [
+                    {
+                        name: 'foo.bar'
+                    }
+                ];
+                expect($.fn.fileupload).toHaveBeenCalled();
+                expect($.fn.fileupload).toHaveBeenCalledOnSelector('input[type=file]');
+                this.fileUploadOptions = $.fn.fileupload.mostRecentCall.args[0];
+                this.request = jasmine.createSpyObj('request', ['abort']);
+                this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
+            });
+
+            it("has a dataType of 'text' for FF3.6 support", function() {
+                expect(this.fileUploadOptions.dataType).toBe('text');
+            });
+
+            it("unhides the file_details area", function() {
+                expect(this.dialog.$('.file_details')).toBeVisible();
+            });
+
+            it("displays the chosen filename", function() {
+                expect(this.dialog.$(".file_details .file_name").text()).toBe("foo.bar");
+            });
+
+            it("displays the appropriate file icon", function() {
+                expect(this.dialog.$(".file_details img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("bar", "medium"));
+            });
+
+            it("sets uploadObj on the model", function() {
+                expect(this.dialog.model.uploadObj).toBeDefined();
+            });
+
+            context("when a selected file is removed", function() {
+                beforeEach(function() {
+                    this.dialog.$(".file_details .remove").click();
+                });
+
+                it("hides the file_details area", function() {
+                    expect(this.dialog.$(".file_details")).toBeHidden();
+                });
+
+                it("removes the uploadObj from the model", function() {
+                    expect(this.dialog.model.uploadObj).toBeUndefined();
+                });
+
+                it("prevents default on the click event", function() {
+                    var eventSpy = jasmine.createSpyObj("event", ['preventDefault']);
+                    this.dialog.removeFile(eventSpy);
+                    expect(eventSpy.preventDefault).toHaveBeenCalled();
+                });
+            });
+
+            describe("submit", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog.model, "save").andCallThrough();
+                    spyOn(this.dialog, "closeModal");
+                    this.dialog.$("textarea[name=body]").val("The body of a note");
+                    this.invalidatedSpy = jasmine.createSpy("invalidated");
+                    this.dialog.pageModel.bind("invalidated", this.invalidatedSpy);
+                    this.saveFailedSpy = jasmine.createSpy("saveFailed");
+                    this.dialog.model.bind("saveFailed", this.saveFailedSpy);
+                });
+
+
+                describe("when the upload succeeds", function() {
+                    beforeEach(function() {
+                        this.successfulResponse = {"result": '{"resource":[{"id":"9"}], "status": "ok"}'};
+                        this.fileUploadOptions.done(null, this.successfulResponse);
+                    })
+
+                    it("closes the dialog box", function() {
+                        expect(this.dialog.closeModal).toHaveBeenCalled();
+                    });
+
+                    it("triggers the 'invalidated' event on the model", function() {
+                        expect(this.invalidatedSpy).toHaveBeenCalled();
+                    });
+                });
+
+                describe("when the upload fails", function() {
+                    beforeEach(function() {
+                        this.errorResponse = {"result": '{"status": "fail", "message" :[{"message":"Something bad happened."}]}'};
+                        this.fileUploadOptions.done(null, this.errorResponse);
+                    })
+
+                    it("does not close the dialog box", function() {
+                        expect(this.dialog.closeModal).not.toHaveBeenCalled();
+                    })
+
+                    it("does not trigger the 'invalidated' event on the model", function() {
+                        expect(this.invalidatedSpy).not.toHaveBeenCalled();
+                    });
+
+                    it("triggers 'saveFailed' on the model", function() {
+                        expect(this.saveFailedSpy).toHaveBeenCalled();
+                    })
+                });
+            });
+        });
     });
 
     describe("submit", function() {
         beforeEach(function() {
-            this.dialog.render();
             spyOn(this.dialog.model, "save").andCallThrough();
             spyOn(this.dialog, "closeModal");
             this.dialog.$("textarea[name=body]").val("The body of a note");
             this.dialog.$("form").trigger("submit");
         });
 
-        it("saves the data", function(){
+        it("saves the data", function() {
             expect(this.dialog.model.get("body")).toBe("The body of a note")
             expect(this.dialog.model.save).toHaveBeenCalled();
         });
@@ -60,7 +189,7 @@ describe("NotesNewDialog", function() {
             expect(this.dialog.closeModal).not.toHaveBeenCalled();
         });
 
-        it("trims the note", function(){
+        it("trims the note", function() {
             this.dialog.$("textarea[name=body]").val("  trim me  ");
             this.dialog.$("form").trigger("submit");
             expect(this.dialog.model.get("body")).toBe("trim me")
@@ -72,5 +201,5 @@ describe("NotesNewDialog", function() {
             this.dialog.model.trigger("saved");
             expect(invalidatedSpy).toHaveBeenCalled();
         })
-    }); 
+    });
 });
