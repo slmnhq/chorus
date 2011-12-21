@@ -1,0 +1,13 @@
+@import "_common.scss";
+
+.instance_index_content_details {
+    > div {
+        display: inline-block;
+    }
+
+    button {
+        margin-left: 20px;
+        @include font-content-details;
+        @include content-details-button($border-color);
+    }
+}

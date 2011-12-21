@@ -20,6 +20,7 @@
         'instance_list',
         'instance_list_sidebar',
         'instance',
+        'instances_new',
         'link_menu',
         'list_content_details',
         'logged_in_layout',

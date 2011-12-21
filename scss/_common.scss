@@ -17,6 +17,7 @@ $user-detail-image-width: 150px;
 $header-height : 49px;
 $icon-image-width : 32px;
 $icon-image-height : 32px;
+$activity-gutter: 8px;
 
 // Colors
 //
@@ -152,4 +153,14 @@ $medium-font: 14px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+@mixin content-details-button($border-color) {
+    border: 1px solid $border-color;
+    @include border-radius(30px);
+    background: none;
+
+    &[disabled=disabled] {
+        @include opacity(0.25);
+    }
 }

@@ -1,6 +1,6 @@
 describe("chorus.views.Activity", function() {
     beforeEach(function() {
-        this.model = fixtures.activity.NOTE();
+        this.model = fixtures.activity.NOTE_ON_WORKSPACE();
         this.view = new chorus.views.Activity({ model: this.model });
     });
 
@@ -153,7 +153,7 @@ describe("chorus.views.Activity", function() {
 
         context("type: NOTE", function() {
             beforeEach(function() {
-                this.view.model = fixtures.activity.NOTE();
+                this.view.model = fixtures.activity.NOTE_ON_WORKSPACE();
                 this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });

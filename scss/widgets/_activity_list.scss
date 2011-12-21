@@ -1,0 +1,167 @@
+@import "../_common.scss";
+
+$text-padding-y: 4px;
+$big-gutter : (2 * $activity-gutter);
+$media-gutter: 10px;
+
+$system-action-color: #7C7D7D;
+
+.media, .media > .bd {
+    overflow:hidden;
+}
+.media > .icon {
+    float:left;
+    margin-right: $activity-gutter;
+}
+.media > .icon img{
+    display:block;
+}
+
+
+.activity_list{
+    .heading {
+        padding: $big-gutter;
+        padding-bottom: $activity-gutter;
+    }
+
+    .order {
+        float: right;
+        font-size: 12px;
+        font-weight: $semibold;
+        line-height: 24px;
+        .order_by {
+            color: $dark-text-color;
+        }
+    }
+
+    h1 {
+        @include heading-normal;
+    }
+
+    .more_activities {
+        font-size: 12px;
+        padding: $activity-gutter $big-gutter;
+    }
+
+    .workspace_detail .workspace {
+        display: none;
+    }
+}
+
+
+.activity_item {
+    padding: $activity-gutter;
+
+    img {
+        width: $icon-image-width;
+        height: $icon-image-height;
+    }
+}
+
+.comment_list {
+    .comments {
+        background : $shaded-background-color;
+    }
+}
+
+
+.activity_content, .comment_content {
+    .body {
+        @include font-normal-beta;
+        padding-bottom: $text-padding-y;
+        word-wrap: break-word;
+    }
+
+    .activity_header {
+        word-wrap: break-word;
+        font-size: 14px;
+        padding-bottom: $text-padding-y;
+        color: $secondary-text-color;
+        .author {
+            font-weight: $semibold;
+        }
+        .object {
+            color: $system-action-color;
+        }
+    }
+
+    .timestamp {
+        font-size: 12px;
+        color: $secondary-text-color;
+    }
+
+    .links {
+        padding: 4px 0;
+        font-size: 12px;
+        padding-bottom: $text-padding-y;
+    }
+}
+
+#sidebar .activity_list {
+    .heading {
+        padding-left: 0;
+
+        h1 {
+            font-size: 16px;
+            color: $dark-text-color;
+            padding-top: 12px;
+        }
+    }
+
+    .object, .workspace, .order {
+        display: none;
+    }
+}
+
+.activity_list.workspace_detail, .activity_list.dashboard {
+    .comments {
+        margin-left: ($icon-image-width + (2 * $activity-gutter));
+    }
+
+    ul.activities {
+        > li {
+            border-bottom: 1px dotted $list-border-color;
+            padding: 0 $activity-gutter;
+        }
+    }
+}
+
+.activity_list.dashboard {
+    padding-top: $activity-gutter;
+
+    .heading {
+        display: none;
+    }
+}
+
+#sidebar .activity_list  {
+    li[data-activity-type=WORKSPACE_CREATED],
+    li[data-activity-type=WORKSPACE_DELETED],
+    li[data-activity-type=WORKFILE_CREATED],
+    li[data-activity-type=WORKSPACE_MAKE_PRIVATE],
+    li[data-activity-type=WORKSPACE_MAKE_PUBLIC],
+    li[data-activity-type=WORKSPACE_ARCHIVED],
+    li[data-activity-type=WORKSPACE_UNARCHIVED],
+    li[data-activity-type=USER_ADDED],
+    li[data-activity-type=USER_DELETED] {
+        .object, .order {
+            display: inline;
+        }
+    }
+
+    li[data-activity-type=MEMBERS_ADDED],
+    li[data-activity-type=MEMBERS_DELETED] {
+        .object, .order, .workspace {
+            display: inline;
+        }
+    }
+}
+
+#sidebar.user_show_sidebar {
+    li[data-activity-type=WORKFILE_CREATED] {
+        .workspace {
+            display: inline;
+        }
+    }
+}
+

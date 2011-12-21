@@ -172,6 +172,13 @@ $system-action-color: #7C7D7D;
     }
 }
 
+.activity_list.workspace_detail {
+    .workspace {
+        display: none;
+    }
+}
+
+
 #sidebar .activity_list  {
     li[data-activity-type=WORKSPACE_CREATED],
     li[data-activity-type=WORKSPACE_DELETED],
