@@ -562,6 +562,37 @@
                 }
             },
 
+            Instance : {
+                fetch : {
+                    "message" : [],
+                    "status" : "ok",
+                    "requestId" : 260,
+                    "resource" :
+                            [
+                                {
+                                    "name" : "instance1",
+                                    "description" : "11",
+                                    "owner" : "edcadmin",
+                                    "host" : "10.32.88.200",
+                                    "port" : 5432,
+                                    "state" : "online",
+                                    "provisionType" : "register",
+                                    "instanceProvider" : "Greenplum Database and Hadoop",
+                                    "isDeleted" : false,
+                                    "id" : "10000",
+                                    "lastUpdatedTxStamp" : "2011-09-29 09:22:03.562",
+                                    "createdTxStamp" : "2011-09-29 09:22:03.562",
+                                    "lastUpdatedStamp" : "2011-09-29 09:22:03.836",
+                                    "createdStamp" : "2011-09-29 09:22:03.836"
+                                }
+                            ],
+                    "method" : "GET",
+                    "resourcelink" : "/edc/instance/",
+                    "pagination" : null,
+                    "version" : "0.1"
+                }
+            },
+
             currentId: 1,
             nextId: function() {
                 return this.currentId++;
@@ -827,7 +858,7 @@
                             name: "Bar Fight"
                         }
                     });
-                },
+                }
             },
 
             authorJson: function() {
