@@ -1,7 +1,7 @@
 (function($, ns) {
     ns.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         className : "instances_new",
-        title : "Create a New Instance",
+        title : t("instances.new_dialog.title"),
 
         persistent: true
     });

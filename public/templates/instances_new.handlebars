@@ -1,0 +1,28 @@
+<fieldset>
+    <legend>{{t "instances.new_dialog.register_existing_greenplum"}}</legend>
+    <label class="required">{{t "instances.dialog.instance_name"}}</label>
+    <input type="text" name="name"/>
+
+    <label class="required">{{t "instances.dialog.description"}}</label>
+    <textarea rows="3" name="description"/>
+
+    <label class="required">{{t "instances.dialog.host"}}</label>
+    <input type="text" name="host"/>
+
+    <label class="required">{{t "instances.dialog.port"}}</label>
+    <input type="text" name="port"/>
+
+    <label class="required">{{t "instances.dialog.database_account"}}</label>
+    <input type="text" name="database_account"/>
+
+    <label class="required">{{t "instances.dialog.database_password"}}</label>
+    <input type="text" name="database_password"/>
+
+    <input type="checkbox" name="is_community_account" id="is_community_account"/>
+    <label for="is_community_account">{{t "instances.dialog.is_community_account"}}</label>
+</fieldset>
+
+<div class="controls">
+    <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
+    <button type="submit" class="submit" tabindex="99">{{t "instances.new_dialog.save"}}</button>
+</div>
