@@ -21,14 +21,11 @@
         },
 
         lastComment : function() {
-            return this.get("commenterId") && new ns.Comment({
-                body : this.get("commentBody"),
-                author : {
-                    id : this.get("commenterId"),
-                    firstName : this.get("commenterFirstName"),
-                    lastName : this.get("commenterLastName")
-                },
-                commentCreatedStamp : this.get("commentCreatedStamp")
+            var comments = this.get("recentComments");
+            return comments && comments.length > 0 &&  new ns.Comment({
+                body : comments[0].text,
+                author : comments[0].author,
+                commentCreatedStamp : comments[0].timestamp
             });
         },
 

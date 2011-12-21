@@ -21,12 +21,18 @@ describe("WorkfileListView", function() {
                     description: "describe 1",
                     workspaceId: 1,
                     mimeType: "text/x-sql",
-                    commentBody: "Comment 1",
-                    commenterId: "21",
-                    commenterFirstName: "Wayne",
-                    commenterLastName: "Wayneson",
-                    commentCount: "1",
-                    commentCreatedStamp: "2011-12-08 17:16:47.308-08"
+                    recentComments : [
+                        {
+                            text: "Comment 1",
+                            author : {
+                                id: "21",
+                                firstName: "Wayne",
+                                lastName: "Wayneson"
+                            },
+                            timestamp: "2011-12-08 17:16:47.308-08"
+                        }
+                    ],
+                    commentCount: "1"
                 });
                 this.model2 = new chorus.models.Workfile({
                     id: 34,
@@ -35,10 +41,17 @@ describe("WorkfileListView", function() {
                     description: "describe 2",
                     workspaceId: 1,
                     mimeType: "text/plain",
-                    commentBody: "Comment 2",
-                    commenterId: "22",
-                    commenterFirstName: "Garth",
-                    commenterLastName: "Garthson",
+                    recentComments : [
+                        {
+                            text: "Comment 2",
+                            author : {
+                                id: "22",
+                                firstName: "Garth",
+                                lastName: "Garthson"
+                            },
+                            timestamp: "2011-12-08 17:16:47.308-08"
+                        }
+                    ],
                     commentCount: "2"
                 });
                 this.model3 = new chorus.models.Workfile({

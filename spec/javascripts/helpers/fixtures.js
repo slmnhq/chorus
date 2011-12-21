@@ -313,10 +313,20 @@
                             "modifiedByLastName":"Admin",
                             "modifiedById":"10010",
                             "commentCount":2,
-                            "commentBody":"I am loving commenting",
-                            "commenterId":"InitialUser",
-                            "commenterFirstName":"EDC",
-                            "commenterLastName":"Admin"
+                            "recentComments" : [
+                                {
+                                    "author" : {
+                                        id : "InitialUser",
+                                        lastName : "Admin",
+                                        firstName : "EDC"
+                                    },
+                                    "comments" : [],
+                                    "id" : 10303,
+                                    "text" : "I am loving commenting",
+                                    "timestamp" : "2011-11-22 14:40:42",
+                                    "type" : "NOTE"
+                                }
+                            ]
                         }
                     ],
                     "method":"GET",
