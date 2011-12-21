@@ -34,12 +34,14 @@
 
         postRender : function() {
             $(this.el).addClass(this.options.additionalClass);
-            var el = this.$("ul");
+            var ul = this.$("ul");
             this.collection.each(function(model) {
                 var view = new ns.views.Activity({model: model});
-                view.render();
-                var li = $("<li/>").attr("data-activity-id", model.get("id")).attr("data-activity-type", model.get("type")).addClass("activity_list_item").append(view.el);
-                el.append(li);
+                $("<li/>").
+                    attr("data-activity-id", model.get("id")).
+                    attr("data-activity-type", model.get("type")).
+                    append(view.render().el).
+                    appendTo(ul);
                 view.delegateEvents();
             });
         }
