@@ -521,6 +521,11 @@
                                 lastName : "Admin"
                             },
 
+                            workspace : {
+                                id : "10203",
+                                name : "my workspace"
+                            },
+
                             comments : [
                                 {
                                     id : 10023,
@@ -555,6 +560,11 @@
                                 userName : "dburkes",
                                 firstName : "Danny",
                                 lastName : "Burkes"
+                            },
+
+                            workspace : {
+                                id : "10203",
+                                name : "my workspace"
                             },
 
                             comments : []
@@ -773,7 +783,7 @@
                     });
                 },
 
-                "NOTE" : function() {
+                "NOTE_ON_WORKSPACE" : function() {
                     return new chorus.models.Activity({
                         author: fixtures.authorJson(),
                         type: "NOTE",
@@ -786,7 +796,36 @@
                                 author : fixtures.authorJson(),
                                 timestamp : "2011-12-15 12:34:56"
                             }
-                        ]
+                        ],
+                        workspace : {
+                            id : "10222",
+                            name : "the greatest"
+                        }
+                    });
+                },
+
+                "NOTE_ON_WORKFILE" : function() {
+                    return new chorus.models.Activity({
+                        author: fixtures.authorJson(),
+                        type: "NOTE",
+                        text: "How about that.",
+                        timestamp: "2011-12-01 00:00:00",
+                        id : "10101",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ],
+                        workfile : {
+                            id : "10223",
+                            name : "the best"
+                        },
+                        workspace : {
+                            id : "10222",
+                            name : "the greatest"
+                        }
                     });
                 },
 

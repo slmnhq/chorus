@@ -52,7 +52,23 @@
 
     ns.presenters.Activity.NOTE = {
         make : function(model) {
-            return extendBase(model, { objectUrl : 'foo' })
+            var workspace = model.get("workspace") && new ns.models.Workspace(model.get("workspace"));
+            var workfile = model.get("workfile") && new ns.models.Workfile(_.extend(model.get("workfile"), {
+                workspaceId : workspace.get("id")
+            }));
+            var attrs = {};
+
+            if (workfile) {
+                attrs.objectName = workfile.get("name");
+                attrs.objectUrl = workfile.showUrl();
+                attrs.workspaceName = workspace.get("name");
+                attrs.workspaceUrl = workspace.showUrl();
+            } else if (workspace) {
+                attrs.objectName = workspace.get("name");
+                attrs.objectUrl = workspace.showUrl();
+            }
+
+            return extendBase(model, attrs);
         }
     };
 
