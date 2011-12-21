@@ -4,7 +4,7 @@
     .content_header {
         a.workfile_list {
            display: block;
-           font-size: 13px; 
+           font-size: 13px;
         }
 
         h1 {
@@ -20,19 +20,13 @@
         color: $workfiles-action-details-link-color;
 
         button {
-            background: none;
             margin-left: 4px;
             color: $workfiles-action-details-link-color;
             font-weight: $semibold;
             font-size: 13px;
-            @include border-radius(30px);
-            border: 1px solid $workfiles-action-details-link-border-color;
-
-            &[disabled=disabled] {
-                @include opacity(0.25);
-            }
+            @include content-details-button($workfiles-action-details-link-border-color);
         }
-        
+
         span.view {
             float: right;
             margin-right: 9px;

@@ -17,5 +17,11 @@ describe("chorus.pages.InstanceIndexPage", function() {
 
             expect(spy).toHaveBeenCalled();
         });
+
+        it("launches a new instance dialog", function(){
+            stubModals();
+            this.page.mainContent.contentDetails.$("button").click();
+            expect(chorus.modal instanceof chorus.dialogs.InstancesNew).toBeTruthy();
+        })
     })
 })
