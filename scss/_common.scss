@@ -77,6 +77,42 @@ $medium-font: 14px;
 
 // Mixins
 
+@mixin heading-normal {
+    font-size: 24px;
+    font-weight: $semibold;
+    color: black;
+}
+
+@mixin heading-sidebar {
+    font-size: 19px;
+    font-weight: $semibold;
+    color: $dark-text-color;
+}
+
+@mixin dialog-label {
+    font-size: 13px;
+    font-weight: normal;
+    color: $dark-text-color;
+}
+
+@mixin font-normal-alpha {
+    font-size: 14px;
+    font-weight: normal;
+    color: $dark-text-color;
+}
+
+@mixin font-normal-beta {
+    font-size: 13px;
+    font-weight: normal;
+    color: black;
+}
+
+@mixin font-content-details {
+    font-size: 12px;
+    font-weight: $semibold;
+    color: $dark-text-color;
+}
+
 @mixin after-clearfix($which: both) {
     &:after {
             content: ".";

@@ -5,10 +5,8 @@ ul.workfile_list {
         color: $weak-text-color;
     }
     .comment {
-        font-size: 14px;
-
         .body {
-            color: $dark-text-color;
+            @include font-normal-alpha;
         }
 
         .user {

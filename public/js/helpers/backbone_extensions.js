@@ -65,7 +65,11 @@ Backbone.sync = function(method, model, options) {
     }
 
     // Make the request.
-    return $.ajax(params);
+    if(this.uploadObj && method == "create") {
+        this.uploadObj.submit();
+    } else {
+        return $.ajax(params);
+    }
 };
 
 // super function, taken from here:

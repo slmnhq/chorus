@@ -18,7 +18,6 @@ $image-width : 230px;
         display: block;
         margin-top: 15px;
         margin-bottom: $padding-y;
-        color: $dark-text-color;
 
         &:first-child {
             margin-top: 0;
@@ -62,10 +61,10 @@ $image-width : 230px;
     }
 
     div.owner {
-        font-size: 13px;
+        @include font-normal-beta;
         padding-left: 12px;
     }
-    
+
     select.owner, .chzn-container {
         display: block;
         background: #dff1fd;
@@ -91,7 +90,7 @@ $image-width : 230px;
                 }
             }
         }
-        
+
         .chzn-drop {
             background: #dff1fd;
             @include border-radius(0px);
@@ -117,7 +116,7 @@ $image-width : 230px;
             margin-bottom: 0;
             display: block;
         }
-        
+
         label {
             display: inline;
 

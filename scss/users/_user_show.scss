@@ -39,7 +39,7 @@ $column-padding-y : $padding-x;
     padding-left:  $column-padding-x;
     padding-right: $column-padding-x;
     h2 {
-        font-size: 13px;
+        @include font-normal-beta;
         padding-left: 2px;
         padding-bottom: 5px;
     }

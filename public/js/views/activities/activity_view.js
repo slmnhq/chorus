@@ -15,6 +15,10 @@
     ns.views.Activity = chorus.views.Base.extend({
         className : "activity",
 
+        subviews: {
+            ".comment_list": "commentList"
+        },
+
         context : function() {
             var presenter = new chorus.presenters.Activity(this.model)
             return _.extend({}, presenter, { headerHtml : this.headerHtml(presenter) })
@@ -25,6 +29,10 @@
             var template = compiledTemplates[type] || compiledTemplates['DEFAULT'];
 
             return template(presenter.header);
+        },
+
+        setupSubviews: function() {
+            this.commentList = new ns.views.CommentList({ collection: this.model.comments() });
         }
     });
 })(jQuery, chorus);

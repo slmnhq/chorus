@@ -4,7 +4,18 @@
         title : t("notes.new_dialog.title"),
         persistent : true,
         events: {
-            "submit form": "save"
+            "submit form": "save",
+            "click .show_options": "showOptions",
+            "click .remove": "removeFile"
+        },
+
+        postRender : function() {
+            this.$("input[type=file]").fileupload({
+                add : _.bind(this.fileChosen, this),
+                done : _.bind(this.uploadDone, this),
+                dataType : "text"
+            });
+            window.foo = this
         },
 
         makeModel : function(options){
@@ -28,7 +39,41 @@
         },
 
         additionalContext : function() {
-            return {entityType: this.model.get("entityType") };
+            return {
+                entityType: this.model.get("entityType"),
+                formUrl : this.model.url()
+            };
+        },
+
+        showOptions : function(e) {
+            e.preventDefault();
+            this.$(".options_text").hide();
+            this.$(".options_area").show();
+        },
+
+        fileChosen : function(e, data) {
+            this.model.uploadObj = data;
+            var filename = data.files[0].name;
+            this.uploadExtension = _.last(filename.split('.'));
+            var iconSrc = chorus.urlHelpers.fileIconUrl(this.uploadExtension, "medium");
+            this.$('img').attr('src', iconSrc);
+            this.$('span.file_name').text(filename);
+            this.$(".file_details").show();
+        },
+
+        uploadDone: function(e, data) {
+            var json = $.parseJSON(data.result)
+            if (json.status == "ok") {
+                this.saved();
+            } else {
+                this.model.trigger('saveFailed', this.model);
+            }
+        },
+
+        removeFile : function(e){
+            e.preventDefault();
+            delete this.model.uploadObj;
+            this.$(".file_details").hide();
         }
     });
 })(jQuery, chorus.dialogs);

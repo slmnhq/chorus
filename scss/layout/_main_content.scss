@@ -13,9 +13,8 @@
     @include border-top-radius(3px);
 
     h1 {
-        padding-top: 18px;
-        font-size: 22px;
-        font-weight: 600;
+        padding-top: 16px;
+        @include heading-normal;
     }
 
     .icon {
@@ -34,7 +33,7 @@
     height: 32px;
     line-height: 32px;
     vertical-align: middle;
-    font-size: 13px;
+    @include font-content-details;
     border-bottom: 1px solid $pagination-border-color;
     padding: 0 $padding-x;
 

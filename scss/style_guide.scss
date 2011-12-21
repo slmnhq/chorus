@@ -15,4 +15,29 @@
             }
         }
     }
+
+    .heading_normal {
+        @include heading-normal;
+    }
+
+    .heading_sidebar {
+        @include heading-sidebar;
+    }
+
+    .dialog_label {
+        @include dialog-label;
+    }
+
+    .font_normal_alpha {
+        @include font-normal-alpha;
+    }
+
+    .font_normal_beta {
+        @include font-normal-beta;
+    }
+
+    .font_content_details {
+        @include font-content-details;
+    }
+
 }

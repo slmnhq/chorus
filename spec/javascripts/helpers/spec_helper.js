@@ -6,6 +6,7 @@
         'change_password',
         'collection_picklist',
         'comment',
+        'comment_list',
         'copy_workfile',
         'dashboard',
         'dashboard_sidebar',
@@ -17,6 +18,7 @@
         'image_workfile_content',
         'instance_list',
         'instance_list_sidebar',
+        'instance',
         'link_menu',
         'list_content_details',
         'logged_in_layout',
@@ -74,7 +76,7 @@
                         templateContainer.append('<script id="' + templateName + '_template" type="x-handlebars-template">' + data + '</script>');
                     },
                     error: function(data) {
-                        alert("The template '" + templateName + "' does not exist. You need to add it to the spec helper, bro.");
+                        alert("The template '" + templateName + "' does not exist. You need to remove it from the spec helper, bro.");
                     }
                 });
             });

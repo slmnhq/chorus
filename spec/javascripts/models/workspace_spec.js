@@ -85,6 +85,28 @@ describe("chorus.models.Workspace", function() {
         });
     });
 
+    describe("#comments", function() {
+        beforeEach(function() {
+            this.model.set(fixtures.modelFor('fetchWithLatestComments'));
+            this.model.set({id: 5});
+            this.comments = this.model.comments();
+        });
+
+        it("returns a CommentSet", function() {
+            expect(this.comments instanceof chorus.models.CommentSet).toBeTruthy();
+        });
+
+        it("memoizes", function() {
+            expect(this.comments).toBe(this.model.comments());
+        });
+
+        it("initially contains the workspace's latestCommentList", function() {
+            var serializedComments = this.model.get("latestCommentList");
+            expect(_.first(serializedComments).text).toBeTruthy() //assert it exists first
+            expect(_.first(this.comments.models).attributes).toEqual(_.first(serializedComments));
+        });
+    });
+
     describe("#hasImage", function() {
         it("returns false when the workspace's 'imageId' field is null", function() {
             this.model.set({ iconId: null });
@@ -106,7 +128,6 @@ describe("chorus.models.Workspace", function() {
         it("creates a truncated summary text", function() {
             expect(this.model.truncatedSummary(5)).toBe("this ");
         });
-
     });
 
     describe("#isTruncate", function() {
@@ -248,5 +269,4 @@ describe("chorus.models.Workspace", function() {
             });
         });
     });
-})
-    ;
+});

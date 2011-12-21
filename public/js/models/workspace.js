@@ -25,6 +25,11 @@
             return this._owner;
         },
 
+        comments: function(){
+            this._comments || (this._comments = new chorus.models.CommentSet(this.get("latestCommentList")));
+            return this._comments;
+        },
+
         members: function(){
             if (!this._members) {
                 this._members = new chorus.models.MemberSet([], {workspaceId : this.get("id")})

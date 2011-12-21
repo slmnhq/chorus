@@ -114,9 +114,8 @@ $shuttle-width: 720px;
             line-height: $list-item-height - 3px;
 
             .name {
+                @include font-normal-alpha;
                 vertical-align: middle;
-                color: $dark-text-color;
-                font-size: 14px;
                 @include ellipsis;
                 padding-left: 10px;
                 display: inline-block;

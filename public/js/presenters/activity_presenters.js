@@ -11,7 +11,6 @@
             this.model = model
             this.presenter = constructor.make(model)
             this.presenter.header = _.extend(this.header(), this.presenter.header);
-            this.presenter.subComments = this.subComments();
 
             return this.presenter
         },
@@ -28,21 +27,6 @@
             }
         },
 
-        subComments : function() {
-            return _.map(this.model.get("comments"), function(comment) {
-                comment = new chorus.models.Comment(comment);
-                var user = comment.creator();
-                return  {
-                    imageUrl : user.imageUrl({ size : "icon" }),
-                    authorShowUrl : user.showUrl(),
-                    displayName : user.displayName(),
-                    timestamp : comment.get("timestamp"),
-                    id : comment.get("id"),
-                    body : comment.get("text")
-                };
-
-            });
-        }
     });
 
     ns.presenters.Activity.Base = {
