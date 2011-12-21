@@ -4,17 +4,27 @@ $image-gutter: 8px;
 $text-padding-y: 4px;
 $comment-padding-x: 6px;
 $activity-gutter: 8px;
-$comment-gutter: 10px;
+$media-gutter: 10px;
 $system-action-color: #7C7D7D;
 
+.media, .media > .bd {
+    overflow:hidden;
+}
+.media > .icon {
+    float:left;
+    margin-right: $image-gutter;
+}
+.media > .icon img{
+    display:block;
+}
+
+.activity_item {
+    padding: $image-gutter;
+}
 
 .activity_list{
-    padding-top: 4 * $text-padding-y;
-
     .heading {
-        padding-right: $comment-padding-x;
-        padding-bottom: $text-padding-y;
-        padding-left: 2 * $image-gutter;
+        padding:  (2 * $image-gutter)  $comment-padding-x $text-padding-y (2 * $image-gutter)
     }
 
     .order {
@@ -32,20 +42,7 @@ $system-action-color: #7C7D7D;
     }
 
     ul.activities {
-        .activity_list_item {
-            padding: $activity-gutter 0 0 0;
-        }
-
         .activity_item {
-            position: relative;
-            padding-left: 2 * $image-gutter;
-
-            div.icon {
-                position: absolute;
-                top: 0;
-                bottom: 0;
-            }
-
             div.activity_content {
                 padding-right: $comment-padding-x;
             }
@@ -53,8 +50,6 @@ $system-action-color: #7C7D7D;
             img {
                 width: $icon-image-width;
                 height: $icon-image-height;
-                margin-right: $image-gutter;
-                display: inline-block;
             }
 
             .activity_header {
@@ -90,14 +85,8 @@ $system-action-color: #7C7D7D;
 
         .comments {
             background : $shaded-background-color;
-            padding: $activity-gutter $image-gutter $activity-gutter $image-gutter;
-
 
             > li {
-                position: relative;
-                padding-bottom: (2 * $activity-gutter);
-                padding-left: 0;
-
                 .author{
                     font-size: 14px;
                     font-weight: $semibold;
@@ -109,7 +98,8 @@ $system-action-color: #7C7D7D;
             }
 
             .morelinks {
-                margin-top: -$activity-gutter;
+                padding: $activity-gutter;
+                padding-top: 0;
                 a {
                     font-size: 12px;
 
@@ -138,12 +128,6 @@ $system-action-color: #7C7D7D;
 
     }
 
-
-    .activity_content, .comment_content {
-        margin-left: $icon-image-width + $image-gutter;
-    }
-
-
     .more_activities {
         font-size: 12px;
         padding: (2 * $text-padding-y) (2 * $image-gutter);
@@ -161,34 +145,28 @@ $system-action-color: #7C7D7D;
         }
     }
 
-    .comments {
-        margin: $comment-gutter 0;
-    }
-
     .object, .workspace, .order {
         display: none;
     }
 
-    .activity > .activity_item {
-        padding-left: $image-gutter;
-    }
 }
 
 .activity_list.workfile_detail, .activity_list.dashboard {
     .comments {
-        margin: $text-padding-y $comment-gutter $text-padding-y ($icon-image-width + (3 * $image-gutter));
+        margin: $text-padding-y $media-gutter $text-padding-y ($icon-image-width + (2 * $image-gutter));
     }
 
     ul.activities {
         > li {
             border-bottom: 1px dotted $list-border-color;
             padding-bottom: $text-padding-y;
+            padding-left: $image-gutter
         }
     }
 }
 
 .activity_list.dashboard {
-    padding-top: 0;
+    padding-top: $image-gutter;
 
     .heading {
         display: none;

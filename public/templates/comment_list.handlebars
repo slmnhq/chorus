@@ -1,13 +1,13 @@
 {{#if models.length}}
     <ul class="comments">
         {{#eachWithMoreLink models initialLimit "activity_stream.comments.more" "activity_stream.comments.less"}}
-            <li data-comment-id="{{id}}" class="{{moreClass}} activity_item comment">
+            <li data-comment-id="{{id}}" class="{{moreClass}} activity_item comment media">
                 <div class="icon">
                     <a href="{{authorShowUrl}}">
                         <img title="{{displayName}}" src="{{imageUrl}}"/>
                     </a>
                 </div>
-                <div class="comment_content">
+                <div class="comment_content bd">
                     <div class="comment_header">
                         <a href="{{{authorShowUrl}}}" class="author">{{displayName}}</a>
                     </div>
