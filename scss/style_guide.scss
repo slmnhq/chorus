@@ -40,4 +40,16 @@
         @include font-content-details;
     }
 
+    .list_section_heading {
+        @include list-section-heading;
+    }
+
+    .secondary_text_normal {
+        @include secondary-text-normal;
+    }
+
+    .secondary_text_small {
+        @include secondary-text-small;
+    }
+
 }

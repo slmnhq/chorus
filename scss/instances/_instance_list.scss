@@ -1,0 +1,36 @@
+@import "_common.scss";
+
+.instance_list {
+    .instance_provider .details{
+        @include list-section-heading;
+        padding: 5px 10px;
+        @include linear-gradient(color-stops(#ebeef2, #d7dfe9));
+        border-top: 1px solid #cbcbcb;
+        border-bottom: 1px solid #a4a4a4;
+    }
+
+    .no_instances {
+        @include secondary-text-small;
+        margin: 10px;
+    }
+
+    .name {
+        color: $dark-text-color;
+        margin-bottom: 7px;
+    }
+
+    .images {
+        float: left;
+    }
+    img.state, img.provider {
+        vertical-align: middle;
+    }
+
+    .instance_details {
+        margin-left: 60px;
+    }
+
+    .description {
+        @include secondary-text-normal;
+    }
+}

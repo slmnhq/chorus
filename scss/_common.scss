@@ -113,6 +113,24 @@ $medium-font: 14px;
     color: $dark-text-color;
 }
 
+@mixin list-section-heading {
+    font-size: 14px;
+    font-weight: $semibold;
+    color: $dark-text-color;
+}
+
+@mixin secondary-text-normal {
+    font-size: 14px;
+    font-weight: normal;
+    color: $secondary-text-color;
+}
+
+@mixin secondary-text-small {
+    font-size: 12px;
+    font-weight: normal;
+    color: $secondary-text-color;
+}
+
 @mixin after-clearfix($which: both) {
     &:after {
             content: ".";

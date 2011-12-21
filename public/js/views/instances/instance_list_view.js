@@ -17,13 +17,13 @@
             this.collection.each(function(model) {
                 var view = new ns.views.Instance({model: model});
                 view.render();
-                var li = $("<li class='instance'/>").append(view.el);
+                var li = $("<li />").append(view.el);
                 li.data('model', model);
                 (elMap[model.get("instanceProvider")] || otherEl).append(li);
                 view.delegateEvents();
             });
 
-            this.$('.instance_provider ul:empty').replaceWith(Handlebars.compile('<span class="no_instances">{{t "instances.none"}}</span>'))
+            this.$('.instance_provider ul:empty').replaceWith(Handlebars.compile('<div class="no_instances">{{t "instances.none"}}</div>'))
             this.$('.instance_provider li:first').click();
         },
 
