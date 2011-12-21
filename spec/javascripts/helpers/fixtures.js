@@ -872,6 +872,30 @@
                     _owner: this.user()
                 }, overrides);
                 return new chorus.models.Workspace(attributes);
+            },
+
+            instance : function(overrides) {
+                var attributes = _.extend({
+                    id : this.nextId().toString(),
+                    description: "description for jasmine",
+                    expire: null,
+                    freeSpace: null,
+                    host: "localhost",
+                    instanceProvider: "Hadoop",
+                    instanceVersion: null,
+                    isDeleted: false,
+                    lastCheck: null,
+                    name: "datastoreInstanceUnittest1321402903516",
+                    owner: "edcadmin",
+                    ownerFullName: "EDC Admin",
+                    port: 8020,
+                    provisionName: null,
+                    provisionType: null,
+                    size: null,
+                    state: "online",
+                    totalObject: null
+                }, overrides);
+                return new chorus.models.Instance(attributes);
             }
         });
     });

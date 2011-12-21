@@ -17,6 +17,7 @@
         'image_upload',
         'image_workfile_content',
         'instance_list',
+        'instance',
         'link_menu',
         'list_content_details',
         'logged_in_layout',
