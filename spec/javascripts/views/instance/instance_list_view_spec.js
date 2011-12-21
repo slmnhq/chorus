@@ -30,8 +30,23 @@ describe("chorus.views.InstanceList", function() {
         it("renders the greenplum instances in the correct instance div", function() {
             expect(this.view.$(".greenplum_instance li.instance").length).toBe(3);
         });
+
         it("renders the hadoop instances in the correct instance div", function() {
             expect(this.view.$(".hadoop_instance li.instance").length).toBe(2);
         });
+
+        describe("clicking on an instance", function() {
+            beforeEach(function() {
+                this.eventSpy = jasmine.createSpy();
+                this.view.bind("instance:selected", this.eventSpy);
+                this.view.$('li:eq(1)').click();
+            });
+
+            it("triggers the instance:selected event", function() {
+                expect(this.eventSpy).toHaveBeenCalledWith(this.collection.models[1]);
+            });
+        });
     });
+
+
 });
