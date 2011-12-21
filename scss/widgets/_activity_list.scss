@@ -113,7 +113,7 @@ $system-action-color: #7C7D7D;
     }
 }
 
-.activity_list.workfile_detail, .activity_list.dashboard {
+.activity_list.workspace_detail, .activity_list.dashboard {
     .comments {
         margin-left: ($icon-image-width + (2 * $activity-gutter));
     }
