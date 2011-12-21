@@ -1,83 +1,104 @@
 describe("chorus.views.InstanceList", function() {
-    beforeEach(function() {
-        this.collection = new chorus.models.InstanceSet();
-        this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database"}));
-        this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database"}));
-        this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database"}));
-        this.collection.add(fixtures.instance({instanceProvider : "Hadoop"}));
-        this.collection.add(fixtures.instance({instanceProvider : "Hadoop"}));
+    context("without instances", function() {
+        beforeEach(function() {
+            this.collection = new chorus.models.InstanceSet();
+            this.view = new chorus.views.InstanceList({collection: this.collection});
+        });
 
-        this.view = new chorus.views.InstanceList({collection: this.collection});
+        describe("#render", function() {
+            beforeEach(function() {
+                this.view.render();
+            });
+
+            it("renders empty text for each instance type", function() {
+                expect(this.view.$(".greenplum_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
+                expect(this.view.$(".hadoop_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
+                expect(this.view.$(".other_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
+            });
+
+        });
     });
 
-    describe("#render", function() {
+    context("with instances", function() {
         beforeEach(function() {
-            this.view.render();
+            this.collection = new chorus.models.InstanceSet();
+            this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Hadoop"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Hadoop"}));
+
+            this.view = new chorus.views.InstanceList({collection: this.collection});
         });
 
-        it("renders an item for each instance", function() {
-            expect(this.view.$("li.instance").length).toBe(this.collection.length);
-        });
-
-        it("renders the three instance provider sections", function() {
-            expect(this.view.$("div.instance_provider").length).toBe(3);
-        });
-
-        it("renders the details section in each instance provider section", function() {
-            expect(this.view.$("div.instance_provider .details").length).toBe(3);
-        });
-
-        it("renders the greenplum instances in the correct instance div", function() {
-            expect(this.view.$(".greenplum_instance li.instance").length).toBe(3);
-        });
-
-        it("renders the hadoop instances in the correct instance div", function() {
-            expect(this.view.$(".hadoop_instance li.instance").length).toBe(2);
-        });
-
-        it("pre-selects the first instance", function() {
-            expect(this.view.$("li:first-child")).toHaveClass("selected");
-            expect(this.view.$("li.selected").length).toBe(1);
-        })
-
-        describe("clicking on an instance", function() {
+        describe("#render", function() {
             beforeEach(function() {
-                this.eventSpy = jasmine.createSpy();
-                this.view.bind("instance:selected", this.eventSpy);
-                this.li2 = this.view.$('li:eq(1)');
-                this.li3 = this.view.$('li:eq(2)');
-                this.li2.click();
+                this.view.render();
             });
 
-            it("triggers the instance:selected event", function() {
-                expect(this.eventSpy).toHaveBeenCalledWith(this.collection.models[1]);
+            it("renders an item for each instance", function() {
+                expect(this.view.$("li.instance").length).toBe(this.collection.length);
             });
 
-            it("adds the selected class to that item", function() {
-                expect(this.li2).toHaveClass("selected");
+            it("renders the three instance provider sections", function() {
+                expect(this.view.$("div.instance_provider").length).toBe(3);
             });
 
-            context("clicking on the same instance again", function() {
+            it("renders the details section in each instance provider section", function() {
+                expect(this.view.$("div.instance_provider .details").length).toBe(3);
+            });
+
+            it("renders the greenplum instances in the correct instance div", function() {
+                expect(this.view.$(".greenplum_instance li.instance").length).toBe(3);
+            });
+
+            it("renders the hadoop instances in the correct instance div", function() {
+                expect(this.view.$(".hadoop_instance li.instance").length).toBe(2);
+            });
+
+            it("pre-selects the first instance", function() {
+                expect(this.view.$("li:first-child")).toHaveClass("selected");
+                expect(this.view.$("li.selected").length).toBe(1);
+            })
+
+            describe("clicking on an instance", function() {
                 beforeEach(function() {
+                    this.eventSpy = jasmine.createSpy();
+                    this.view.bind("instance:selected", this.eventSpy);
+                    this.li2 = this.view.$('li:eq(1)');
+                    this.li3 = this.view.$('li:eq(2)');
                     this.li2.click();
                 });
 
-                it("does not raise the event again", function() {
-                    expect(this.eventSpy.calls.length).toBe(1);
-                });
-            });
-
-            context("and then clicking on another instance", function() {
-                beforeEach(function() {
-                    this.li3.click();
+                it("triggers the instance:selected event", function() {
+                    expect(this.eventSpy).toHaveBeenCalledWith(this.collection.models[1]);
                 });
 
-                it("removes the selected class from the first li", function() {
-                    expect(this.li2).not.toHaveClass("selected");
+                it("adds the selected class to that item", function() {
+                    expect(this.li2).toHaveClass("selected");
+                });
+
+                context("clicking on the same instance again", function() {
+                    beforeEach(function() {
+                        this.li2.click();
+                    });
+
+                    it("does not raise the event again", function() {
+                        expect(this.eventSpy.calls.length).toBe(1);
+                    });
+                });
+
+                context("and then clicking on another instance", function() {
+                    beforeEach(function() {
+                        this.li3.click();
+                    });
+
+                    it("removes the selected class from the first li", function() {
+                        expect(this.li2).not.toHaveClass("selected");
+                    });
                 });
             });
         });
     });
-
 
 });
