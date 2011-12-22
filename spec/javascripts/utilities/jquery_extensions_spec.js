@@ -38,7 +38,7 @@ describe("jquery extensions", function() {
             });
 
             it("adds the expanded class to the button", function() {
-                expect(this.button).toHaveClass("expanded");
+                expect(this.button).toHaveClass("loading");
             });
 
             it("returns true when #isLoading is called", function() {
@@ -82,7 +82,7 @@ describe("jquery extensions", function() {
                 });
 
                 it("removes the expanded class to the button", function() {
-                    expect(this.button).not.toHaveClass("expanded");
+                    expect(this.button).not.toHaveClass("loading");
                 });
 
                 it("returns false when #isLoading is called", function() {

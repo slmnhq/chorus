@@ -18,14 +18,14 @@ jQuery.fn.extend({
             append(spinner.el).
             attr("disabled", "disabled").
             data("loading-original-text", originalText).
-            addClass("expanded");
+            addClass("loading");
     },
 
     stopLoading : function() {
         if (!this.isLoading()) return;
         // $.text(val) clears the selected element, so .text here kills the spinner inside the button.
         var originalText = this.data("loading-original-text");
-        this.removeData("loading-original-text").removeClass("expanded").removeAttr("disabled").text(originalText);
+        this.removeData("loading-original-text").removeClass("loading").removeAttr("disabled").text(originalText);
     },
 
     isLoading : function() {
