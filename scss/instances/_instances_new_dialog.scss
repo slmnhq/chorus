@@ -1,0 +1,15 @@
+@import "common.scss";
+
+.instances_new {
+    fieldset.collapsed {
+        >div {
+            display: none;
+        }
+
+        border: none;
+    }
+
+    fieldset {
+        border: 1px solid $border-color;
+    }
+}

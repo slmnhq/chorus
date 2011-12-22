@@ -1,26 +1,88 @@
-<fieldset>
-    <legend>{{t "instances.new_dialog.register_existing_greenplum"}}</legend>
-    <label class="required">{{t "instances.dialog.instance_name"}}</label>
-    <input type="text" name="name"/>
+<fieldset class="collapsed register_existing_greenplum">
+    <legend>
+        <input type="radio" name="instance_type">{{t "instances.new_dialog.register_existing_greenplum"}} <img src="/images/more-info.png"/> </input>
+    </legend>
+    <div>
+        <input type="hidden" name="provisionType" value="register" />
+        <label class="required">{{t "instances.dialog.instance_name"}}</label>
+        <input type="text" name="name"/>
 
-    <label class="required">{{t "instances.dialog.description"}}</label>
-    <textarea rows="3" name="description"/>
+        <label>{{t "instances.dialog.description"}}</label>
+        <textarea rows="3" name="description"/>
 
-    <label class="required">{{t "instances.dialog.host"}}</label>
-    <input type="text" name="host"/>
+        <label class="required">{{t "instances.dialog.host"}}</label>
+        <input type="text" name="host"/>
 
-    <label class="required">{{t "instances.dialog.port"}}</label>
-    <input type="text" name="port"/>
+        <label class="required">{{t "instances.dialog.port"}}</label>
+        <input type="text" name="port"/>
 
-    <label class="required">{{t "instances.dialog.database_account"}}</label>
-    <input type="text" name="database_account"/>
+        <label class="required">{{t "instances.dialog.database_account"}}</label>
+        <input type="text" name="dbUserName"/>
 
-    <label class="required">{{t "instances.dialog.database_password"}}</label>
-    <input type="text" name="database_password"/>
+        <label class="required">{{t "instances.dialog.database_password"}}</label>
+        <input type="text" name="dbPassword"/>
 
-    <input type="checkbox" name="is_community_account" id="is_community_account"/>
-    <label for="is_community_account">{{t "instances.dialog.is_community_account"}}</label>
+        <input type="checkbox" name="shared" id="register_greenplum_shared"/>
+        <label for="register_greenplum_shared">{{t "instances.dialog.is_community_account"}} <img src="/images/more-info.png"/></label>
+    </div>
 </fieldset>
+
+<fieldset class="collapsed create_new_greenplum">
+    <legend>
+        <input type="radio" name="instance_type">{{t "instances.new_dialog.create_new_greenplum"}} <img src="/images/more-info.png"/> </input>
+    </legend>
+    <div>
+        <label class="required">{{t "instances.dialog.instance_name"}}</label>
+        <input type="text" name="name"/>
+
+        <label>{{t "instances.dialog.description"}}</label>
+        <textarea rows="3" name="description"/>
+
+        <label class="required">{{t "instances.dialog.host"}}</label>
+        <input type="text" name="host"/>
+
+        <label class="required">{{t "instances.dialog.port"}}</label>
+        <input type="text" name="port"/>
+
+        <label class="required">{{t "instances.dialog.database_account"}}</label>
+        <input type="text" name="database_account"/>
+
+        <label class="required">{{t "instances.dialog.database_password"}}</label>
+        <input type="text" name="database_password"/>
+
+        <input type="checkbox" name="is_community_account" id="is_community_account"/>
+        <label for="is_community_account">{{t "instances.dialog.is_community_account"}}</label>
+    </div>
+</fieldset>
+
+<fieldset class="collapsed register_existing_hadoop">
+    <legend>
+        <input type="radio" name="instance_type">{{t "instances.new_dialog.register_existing_hadoop"}} <img src="/images/more-info.png"/> </input>
+    </legend>
+    <div>
+        <label class="required">{{t "instances.dialog.instance_name"}}</label>
+        <input type="text" name="name"/>
+
+        <label class="required">{{t "instances.dialog.description"}}</label>
+        <textarea rows="3" name="description"/>
+
+        <label class="required">{{t "instances.dialog.host"}}</label>
+        <input type="text" name="host"/>
+
+        <label class="required">{{t "instances.dialog.port"}}</label>
+        <input type="text" name="port"/>
+
+        <label class="required">{{t "instances.dialog.database_account"}}</label>
+        <input type="text" name="database_account"/>
+
+        <label class="required">{{t "instances.dialog.database_password"}}</label>
+        <input type="text" name="database_password"/>
+
+        <input type="checkbox" name="is_community_account" id="is_community_account"/>
+        <label for="is_community_account">{{t "instances.dialog.is_community_account"}}</label>
+    </div>
+</fieldset>
+
 
 <div class="controls">
     <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
