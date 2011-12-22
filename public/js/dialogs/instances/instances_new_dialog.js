@@ -1,5 +1,5 @@
 (function($, ns) {
-    ns.dialogs.InstancesNew = chorus.dialogs.Base.extend(_.extend({}, chorus.Mixins.ViewUtils, {
+    ns.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         className : "instances_new",
         title : t("instances.new_dialog.title"),
 
@@ -53,5 +53,5 @@
             this.$("button.submit").stopLoading();
             this.$("button.cancel").removeAttr("disabled");
         }
-    }));
+    });
 })(jQuery, chorus);
