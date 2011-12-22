@@ -22,9 +22,10 @@ jQuery.fn.extend({
     },
 
     stopLoading : function() {
+        if (!this.isLoading()) return;
         // $.text(val) clears the selected element, so .text here kills the spinner inside the button.
         var originalText = this.data("loading-original-text");
-        this.removeData("loading-original-text").text(originalText).removeClass("expanded").removeAttr("disabled");
+        this.removeData("loading-original-text").removeClass("expanded").removeAttr("disabled").text(originalText);
     },
 
     isLoading : function() {

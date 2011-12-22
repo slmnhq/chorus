@@ -4,9 +4,21 @@ describe("jquery extensions", function() {
             this.button = $("<button>Original Text</button>");
         });
 
-        it("returns false when #isLoading is called", function() {
-            expect(this.button.isLoading()).toBeFalsy();
+        context("when #startLoading has not yet been called", function() {
+            describe("#isLoading", function() {
+                it("returns false", function() {
+                    expect(this.button.isLoading()).toBeFalsy();
+                });
+            });
+
+            describe("#stopLoading", function() {
+                it("doesn't modify the text", function() {
+                    this.button.stopLoading();
+                    expect(this.button.text()).toBe("Original Text");
+                });
+            })
         });
+
 
         describe("startLoading", function() {
             beforeEach(function() {
