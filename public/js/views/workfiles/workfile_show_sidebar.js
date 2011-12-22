@@ -6,7 +6,7 @@
             this.collection = this.model.activities();
             this.collection.fetch();
             this.collection.bind("changed", this.render, this);
-            this.activityList = new ns.views.ActivityList({ collection : this.collection, activityType : t("workfile.content_details.activity"), additionalClass : "sidebar" });
+            this.activityList = new ns.views.ActivityList({ collection : this.collection, headingText : t("workfile.content_details.activity"), additionalClass : "sidebar" });
         },
 
         additionalContext : function(ctx) {

@@ -14,7 +14,7 @@
             this.collection.bind("changed", this.render, this);
             this.workfile.bind("changed", this.render, this);
 
-            this.activityList = new ns.views.ActivityList({ collection : this.collection, activityType : t("workfiles.sidebar.activity"), additionalClass : "sidebar" });
+            this.activityList = new ns.views.ActivityList({ collection : this.collection, headingText : t("workfiles.sidebar.activity"), additionalClass : "sidebar" });
             this.render();
         },
 

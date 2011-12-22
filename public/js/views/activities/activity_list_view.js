@@ -20,7 +20,7 @@
 
         additionalContext : function() {
             var ctx =  {
-                activityType: this.options.activityType
+                headingText: this.options.headingText
             };
 
             if (this.collection.loaded) {
