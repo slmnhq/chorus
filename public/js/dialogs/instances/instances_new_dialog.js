@@ -39,9 +39,9 @@
 
             updates.shared = inputSource.find("input[name=shared]").prop("checked") ? "yes" : "no";
 
-            this.model.save(updates);
-            this.disableButtonWithSpinner("button.submit", "instances.new_dialog.saving");
+            this.$("button.submit").startLoading("instances.new_dialog.saving");
             this.$("button.cancel").attr("disabled", "disabled");
+            this.model.save(updates);
         },
 
         saveSuccess : function() {
@@ -50,7 +50,7 @@
         },
 
         saveFailed : function() {
-            this.restoreDisabledButton("button.submit", "instances.new_dialog.save");
+            this.$("button.submit").stopLoading();
             this.$("button.cancel").removeAttr("disabled");
         }
     }));

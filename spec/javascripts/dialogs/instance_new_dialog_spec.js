@@ -92,16 +92,8 @@ describe("InstanceNewDialog", function() {
                         this.dialog.$("button.submit").click();
                     });
 
-                    it("displays a spinner on the upload button", function() {
-                        expect(this.dialog.$("button.submit div[aria-role=progressbar]").length).toBe(1);
-                    });
-
-                    it("disables the upload button", function() {
-                        expect(this.dialog.$("button.submit").attr("disabled")).toBe("disabled");
-                    });
-
-                    it("adds the expanded class to the upload button", function() {
-                        expect(this.dialog.$("button.submit")).toHaveClass("expanded");
+                    it("puts the button in 'loading' mode", function() {
+                        expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
                     });
 
                     it("changes the text on the upload button to 'saving'", function() {
@@ -154,20 +146,12 @@ describe("InstanceNewDialog", function() {
                     });
 
                     function itRecoversFromError() {
-                        it("enables the upload button", function() {
-                            expect(this.dialog.$("button.submit").attr("disabled")).not.toBe("disabled");
-                        });
-
-                        it("does not display a spinner on the upload button", function() {
-                            expect(this.dialog.$("button.submit div[aria-role=progressbar]").length).toBe(0);
+                        it("takes the button out of 'loading' mode", function() {
+                            expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
                         });
 
                         it("sets the button text back to 'Uploading'", function() {
                             expect(this.dialog.$("button.submit").text()).toMatchTranslation("instances.new_dialog.save");
-                        });
-
-                        it("removes the expanded class from the button", function() {
-                            expect(this.dialog.$("button.submit")).not.toHaveClass("expanded");
                         });
                     }
                 });
