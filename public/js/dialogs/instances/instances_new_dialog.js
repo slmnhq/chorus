@@ -24,6 +24,7 @@
             this.$("fieldset").addClass("collapsed");
 
             $(e.currentTarget).closest("fieldset").removeClass("collapsed");
+            this.$("button.submit").removeAttr("disabled");
         },
 
         createInstance : function(e) {

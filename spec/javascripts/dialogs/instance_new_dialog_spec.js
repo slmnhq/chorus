@@ -17,6 +17,10 @@ describe("InstanceNewDialog", function() {
             expect(this.dialog.$("fieldset").not(".collapsed").length).toBe(0);
         });
 
+        it("starts with the submit button disabled", function() {
+            expect(this.dialog.$("button.submit").attr("disabled")).toBe("disabled");
+        });
+
         describe("selecting a radio button", function() {
             beforeEach(function() {
                 // Only setting attr("checked", true) doesn't raise change event.
@@ -26,6 +30,10 @@ describe("InstanceNewDialog", function() {
             it("removes the collapsed class from only that radio button", function() {
                 expect(this.dialog.$("fieldset").not(".collapsed").length).toBe(1);
                 expect(this.dialog.$("input[type=radio]:checked").closest("fieldset")).not.toHaveClass("collapsed");
+            });
+
+            it("enables the submit button", function() {
+                expect(this.dialog.$("button.submit")).not.toHaveAttr("disabled");
             });
 
             context("clicking another radio", function() {
