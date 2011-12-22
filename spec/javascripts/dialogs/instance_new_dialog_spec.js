@@ -38,5 +38,28 @@ describe("InstanceNewDialog", function() {
                 });
             });
         });
+
+        describe("submitting the form", function() {
+            context("using register existing greenplum", function() {
+                beforeEach(function() {
+                    this.dialog.$(".register_existing_greenplum input[type=radio]").attr('checked', true).change();
+
+                    this.dialog.$(".register_existing_greenplum input[name=name]").val("Instance Name");
+                    this.dialog.$(".register_existing_greenplum textarea[name=description]").val("Instance Description");
+                    this.dialog.$(".register_existing_greenplum input[name=host]").val("foo.bar");
+                    this.dialog.$(".register_existing_greenplum input[name=port]").val("1234");
+                    this.dialog.$(".register_existing_greenplum input[name=dbUserName]").val("user");
+                    this.dialog.$(".register_existing_greenplum input[name=dbPassword]").val("my_password");
+
+                    spyOn(this.dialog.model, "save").andCallThrough();
+
+                    this.dialog.$("button.submit").click();
+                });
+
+                it("calls save on the dialog's model", function() {
+                    expect(this.dialog.model.save).toHaveBeenCalled();
+                });
+            });
+        });
     });
 });
