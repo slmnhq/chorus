@@ -6,6 +6,16 @@
     button {
         float: right;
         margin-left: 14px;
+
+        div[aria-role=progressbar] {
+            top: 7px;
+            left: 17px;
+            display: inline;
+        }
+
+        &.loading {
+            padding-right: 35px;
+        }
     }
 
     @include after-clearfix;

@@ -75,12 +75,12 @@ describe("WorkfilesImportDialog", function() {
             this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
         });
 
-        it("disables the upload button", function() {
-            expect(this.dialog.$("button.submit").attr("disabled")).toBeUndefined();
+        it("enables the upload button", function() {
+            expect(this.dialog.$("button.submit")).not.toHaveAttr("disabled");
         });
 
-        it("does not display a spinner on the upload button", function() {
-            expect(this.dialog.$("button.submit div[aria-role=progressbar]").length).toBe(0);
+        it("does not put the button in loading mode", function() {
+            expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
         });
 
         it("displays the chosen filename", function() {
@@ -104,16 +104,12 @@ describe("WorkfilesImportDialog", function() {
                 expect(this.dialog.uploadObj.submit).toHaveBeenCalled();
             });
 
-            it("displays a spinner on the upload button", function() {
-                expect(this.dialog.$("button.submit div[aria-role=progressbar]").length).toBe(1);
+            it("puts the upload button in the loading state", function() {
+                expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
             });
 
             it("disables the upload button", function() {
                 expect(this.dialog.$("button.submit").attr("disabled")).toBe("disabled");
-            });
-
-            it("adds the expanded class to the upload button", function() {
-                expect(this.dialog.$("button.submit")).toHaveClass("expanded");
             });
 
             it("changes the text on the upload button to 'uploading'", function() {
@@ -175,8 +171,8 @@ describe("WorkfilesImportDialog", function() {
                     expect(this.dialog.$("button.submit").attr("disabled")).toBe("disabled");
                 });
 
-                it("does not display a spinner on the upload button", function() {
-                    expect(this.dialog.$("button.submit div[aria-role=progressbar]").length).toBe(0);
+                it("takes the upload button out of the loading state", function() {
+                    expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
                 });
 
                 it("display the correct error" ,function(){
@@ -185,10 +181,6 @@ describe("WorkfilesImportDialog", function() {
 
                 it("sets the button text back to 'Uploading'", function(){
                     expect(this.dialog.$("button.submit").text()).toMatchTranslation("workfiles.button.import");
-                });
-
-                it("removes the expanded class from the button", function(){
-                    expect(this.dialog.$("button.submit")).not.toHaveClass("expanded");
                 });
             });
         });

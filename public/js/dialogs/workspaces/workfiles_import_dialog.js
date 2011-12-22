@@ -28,21 +28,7 @@
             if(e) {e.preventDefault();}
             if (this.uploadObj) {
                 this.request = this.uploadObj.submit();
-                var spinner = new Spinner({
-                    lines: 12,
-                    length: 3,
-                    width: 2,
-                    radius: 3,
-                    color: '#000',
-                    speed: 1,
-                    trail: 75,
-                    shadow: false
-                }).spin();
-                this.$("button.submit").
-                    text(t("workfiles.import_dialog.uploading")).
-                    append(spinner.el).
-                    attr("disabled", "disabled").
-                    addClass("expanded");
+                this.$("button.submit").startLoading("workfiles.import_dialog.uploading");
             }
         },
 
@@ -103,9 +89,8 @@
                 else {
                     e.preventDefault();
                     self.resource.serverErrors = json.message;
-                    self.$("button.submit").
-                        text(t("workfiles.button.import")).
-                        removeClass("expanded");
+                    self.$("button.submit").stopLoading();
+                    self.$("button.submit").attr("disabled", "disabled");
 
                     // $.text(val) clears the selected element, so .text here kills the spinner inside the button.
 

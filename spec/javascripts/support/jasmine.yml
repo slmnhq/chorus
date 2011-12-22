@@ -19,6 +19,7 @@ src_files:
   - js/vendor/**/*.js
   - js/bootstrap.js
   - js/chorus.js
+  - js/utilities/**/*.js
   - js/mixins.js
   - js/router.js
   - js/models.js

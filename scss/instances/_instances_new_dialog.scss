@@ -1,12 +1,19 @@
 @import "common.scss";
 
 #dialog.instances_new {
+    $dialog-width : 500px;
+    $dialog-padding: 15px;
+
+    width: $dialog-width;
+
     fieldset.collapsed {
         >div {
             display: none;
         }
 
         border: none;
+        padding: 0 $dialog-padding;
+        margin-left: 1px;
     }
 
     fieldset {
@@ -16,6 +23,41 @@
             font-size: 14px;
             font-weight: normal;
             color: black;
+        }
+
+        padding: 0 $dialog-padding $dialog-padding;
+    }
+
+    fieldset {
+        $fieldset-width : $dialog-width - 4 * $dialog-padding - 2px;
+        $hostname_width : 320px;
+        $account_width : 210px;
+        $input-spacing : 12px;
+
+        > div label {
+            margin-top: 8px;
+        }
+
+        > div label, input {
+             display: inline-block;
+        }
+
+        label[name=host], input[name=host] {
+            width: $hostname-width;
+        }
+
+        label[name=port], input[name=port] {
+            width: $fieldset-width - $hostname_width - $dialog-padding - 4px;
+            margin-left: $input-spacing;
+        }
+
+        label[name=dbUserName], input[name=dbUserName] {
+            width: $account-width;
+        }
+
+        label[name=dbPassword], input[name=dbPassword] {
+            width: $fieldset-width - $account_width - $dialog-padding - 4px;
+            margin-left: $input-spacing;
         }
     }
 }
