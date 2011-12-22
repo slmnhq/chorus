@@ -40,7 +40,7 @@
                 }
 
                 ctx.otherCommentCount = parseInt(model.get("commentCount")) - 1;
-            };
+            }
 
             return ctx;
         },

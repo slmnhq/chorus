@@ -17,7 +17,14 @@
 
             this.sidebar = new ns.views.InstanceListSidebar();
 
+
+            //copypasta'd from workfile, next time make into a mixin
             this.mainContent.content.forwardEvent("instance:selected", this.sidebar);
+            this.mainContent.content.bind("instance:selected", this.setModel, this);
+        },
+
+        setModel: function(instance) {
+            this.model = instance;
         }
     });
 })

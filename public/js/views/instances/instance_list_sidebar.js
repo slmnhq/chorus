@@ -1,25 +1,28 @@
-;(function($, ns) {
+;
+(function($, ns) {
     ns.views.InstanceListSidebar = chorus.views.Base.extend({
 
-         className : "instance_list_sidebar",
+        className : "instance_list_sidebar",
 
-         setup : function() {
+        subviews : {
+            '.activity_list' : 'activityList'
+        },
+
+        setup : function() {
             this.bind("instance:selected", this.setInstance, this);
-         },
+        },
 
-         setInstance : function(instance) {
-             this.instance = instance;
-             this.render();
-         },
+        activityList : function() {
+            if(this.instance) {
+                return new chorus.views.ActivityList({collection: this.model.activities()});
+            }
+        },
 
-         additionalContext : function() {
-             var ctx = {};
+        setInstance : function(instance) {
+            this.resource = this.instance = this.model = instance;
+            this.instance.activities().fetch()
+            this.render();
+        }
 
-             if(this.instance) {
-                ctx.instance = _.extend({}, this.instance.attributes);
-             }
-
-             return ctx;
-         }
     });
 })(jQuery, chorus);

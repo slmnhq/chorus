@@ -990,7 +990,6 @@
             },
 
             comment: function(overrides) {
-                overrides = overrides || {};
                 var id = this.nextId().toString();
                 var attributes = _.extend({
                     id : id,
@@ -1004,7 +1003,6 @@
             },
 
             workspace: function(overrides) {
-                overrides = overrides || {};
                 var attributes = _.extend({
                     id : this.nextId().toString(),
                     _owner: this.user()

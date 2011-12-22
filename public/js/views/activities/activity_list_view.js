@@ -37,12 +37,7 @@
             var ul = this.$("ul");
             this.collection.each(function(model) {
                 var view = new ns.views.Activity({model: model});
-                $("<li/>").
-                    attr("data-activity-id", model.get("id")).
-                    attr("data-activity-type", model.get("type")).
-                    append(view.render().el).
-                    appendTo(ul);
-                view.delegateEvents();
+                ul.append(view.render().el);
             });
         }
     });

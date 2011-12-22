@@ -22,6 +22,13 @@ describe("chorus.pages.InstanceIndexPage", function() {
             stubModals();
             this.page.mainContent.contentDetails.$("button").click();
             expect(chorus.modal instanceof chorus.dialogs.InstancesNew).toBeTruthy();
-        })
+        });
+
+        it("sets the page model when a 'instance:selected' event is triggered on the InstanceList", function() {
+            var instance = fixtures.instance()
+            expect(this.page.model).not.toBe(instance);
+            this.page.mainContent.content.trigger('instance:selected', instance);
+            expect(this.page.model).toBe(instance);
+        });
     })
 })
