@@ -1,6 +1,6 @@
 @import "common.scss";
 
-.instances_new {
+#dialog.instances_new {
     fieldset.collapsed {
         >div {
             display: none;
@@ -11,5 +11,11 @@
 
     fieldset {
         border: 1px solid $border-color;
+
+        legend label {
+            font-size: 14px;
+            font-weight: normal;
+            color: black;
+        }
     }
 }

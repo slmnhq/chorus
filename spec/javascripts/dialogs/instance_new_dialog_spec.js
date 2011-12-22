@@ -52,12 +52,116 @@ describe("InstanceNewDialog", function() {
                     this.dialog.$(".register_existing_greenplum input[name=dbPassword]").val("my_password");
 
                     spyOn(this.dialog.model, "save").andCallThrough();
-
-                    this.dialog.$("button.submit").click();
                 });
 
                 it("calls save on the dialog's model", function() {
+                    this.dialog.$("button.submit").click();
                     expect(this.dialog.model.save).toHaveBeenCalled();
+
+                    var attrs = this.dialog.model.save.calls[0].args[0];
+
+                    expect(attrs.dbPassword).toBe("my_password");
+                    expect(attrs.name).toBe("Instance Name");
+                    expect(attrs.provisionType).toBe("register");
+                    expect(attrs.description).toBe("Instance Description");
+                });
+
+                context("when the form is not valid", function() {
+                    beforeEach(function() {
+                        spyOn(Backbone.Model.prototype, 'save');
+
+                        this.dialog.$(".register_existing_greenplum input[name=port]").val("not a port");
+                        this.dialog.$("button.submit").click();
+                    });
+
+                    it("doesn't complete a save", function() {
+                        expect(Backbone.Model.prototype.save).not.toHaveBeenCalled();
+                    });
+                });
+
+                context("#upload", function() {
+                    beforeEach(function() {
+                        this.dialog.$("button.submit").click();
+                    });
+
+                    it("displays a spinner on the upload button", function() {
+                        expect(this.dialog.$("button.submit div[aria-role=progressbar]").length).toBe(1);
+                    });
+
+                    it("disables the upload button", function() {
+                        expect(this.dialog.$("button.submit").attr("disabled")).toBe("disabled");
+                    });
+
+                    it("adds the expanded class to the upload button", function() {
+                        expect(this.dialog.$("button.submit")).toHaveClass("expanded");
+                    });
+
+                    it("changes the text on the upload button to 'saving'", function() {
+                        expect(this.dialog.$("button.submit").text()).toMatchTranslation("instances.new_dialog.saving");
+                    });
+
+                    it("disables the cancel button", function() {
+                        expect(this.dialog.$("button.cancel").attr("disabled")).toBe("disabled");
+                    });
+
+                    context("when save completes", function() {
+                        beforeEach(function() {
+                            this.doneSpy = jasmine.createSpy("save done");
+                            this.dialog.bind("instance:added", this.doneSpy);
+                            spyOn(this.dialog, "closeModal");
+
+                            this.dialog.model.trigger("saved");
+                        });
+
+                        it("closes the dialog", function() {
+                            expect(this.dialog.closeModal).toHaveBeenCalled();
+                        });
+
+                        it("raises the instance:added event", function() {
+                            expect(this.doneSpy).toHaveBeenCalled();
+                        });
+                    });
+
+                    context("when the upload gives a server error", function() {
+                        beforeEach(function() {
+                            this.dialog.model.set({serverErrors : [
+                                { message: "foo" }
+                            ]});
+                            this.dialog.model.trigger("saveFailed");
+                        });
+
+                        it("display the correct error", function() {
+                            expect(this.dialog.$(".errors").text()).toContain("foo");
+                        });
+
+                        itRecoversFromError();
+                    });
+
+                    context("when the validation fails", function() {
+                        beforeEach(function() {
+                            this.dialog.model.trigger("validationFailed");
+                        });
+
+                        itRecoversFromError();
+                    });
+
+                    function itRecoversFromError() {
+                        it("enables the upload button", function() {
+                            expect(this.dialog.$("button.submit").attr("disabled")).not.toBe("disabled");
+                        });
+
+                        it("does not display a spinner on the upload button", function() {
+                            expect(this.dialog.$("button.submit div[aria-role=progressbar]").length).toBe(0);
+                        });
+
+                        it("sets the button text back to 'Uploading'", function() {
+                            expect(this.dialog.$("button.submit").text()).toMatchTranslation("instances.new_dialog.save");
+                        });
+
+                        it("removes the expanded class from the button", function() {
+                            expect(this.dialog.$("button.submit")).not.toHaveClass("expanded");
+                        });
+                    }
                 });
             });
         });

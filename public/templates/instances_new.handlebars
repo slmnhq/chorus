@@ -1,8 +1,10 @@
 <fieldset class="collapsed register_existing_greenplum">
     <legend>
-        <input type="radio" name="instance_type">{{t "instances.new_dialog.register_existing_greenplum"}} <img src="/images/more-info.png"/> </input>
+        <input type="radio" name="instance_type" id="register_existing_greenplum"/>
+        <label for="register_existing_greenplum">{{t "instances.new_dialog.register_existing_greenplum"}}</label>
+        <img src="/images/more-info.png"/>
     </legend>
-    <div>
+    <div><form>
         <input type="hidden" name="provisionType" value="register" />
         <label class="required">{{t "instances.dialog.instance_name"}}</label>
         <input type="text" name="name"/>
@@ -17,19 +19,21 @@
         <input type="text" name="port"/>
 
         <label class="required">{{t "instances.dialog.database_account"}}</label>
-        <input type="text" name="dbUserName"/>
+        <input type="text" name="dbUserName" maxlength="256"/>
 
         <label class="required">{{t "instances.dialog.database_password"}}</label>
-        <input type="text" name="dbPassword"/>
+        <input type="password" name="dbPassword" maxlength="256"/>
 
         <input type="checkbox" name="shared" id="register_greenplum_shared"/>
         <label for="register_greenplum_shared">{{t "instances.dialog.is_community_account"}} <img src="/images/more-info.png"/></label>
-    </div>
+    </form></div>
 </fieldset>
 
 <fieldset class="collapsed create_new_greenplum">
     <legend>
-        <input type="radio" name="instance_type">{{t "instances.new_dialog.create_new_greenplum"}} <img src="/images/more-info.png"/> </input>
+        <input type="radio" name="instance_type" id="create_new_greenplum"/>
+        <label for="create_new_greenplum">{{t "instances.new_dialog.create_new_greenplum"}}</label>
+        <img src="/images/more-info.png"/>
     </legend>
     <div>
         <label class="required">{{t "instances.dialog.instance_name"}}</label>
@@ -48,7 +52,7 @@
         <input type="text" name="database_account"/>
 
         <label class="required">{{t "instances.dialog.database_password"}}</label>
-        <input type="text" name="database_password"/>
+        <input type="password" name="database_password"/>
 
         <input type="checkbox" name="is_community_account" id="is_community_account"/>
         <label for="is_community_account">{{t "instances.dialog.is_community_account"}}</label>
@@ -57,7 +61,9 @@
 
 <fieldset class="collapsed register_existing_hadoop">
     <legend>
-        <input type="radio" name="instance_type">{{t "instances.new_dialog.register_existing_hadoop"}} <img src="/images/more-info.png"/> </input>
+        <input type="radio" name="instance_type" id="register_existing_hadoop"/>
+        <label for="register_existing_hadoop">{{t "instances.new_dialog.register_existing_hadoop"}}</label>
+        <img src="/images/more-info.png"/>
     </legend>
     <div>
         <label class="required">{{t "instances.dialog.instance_name"}}</label>
