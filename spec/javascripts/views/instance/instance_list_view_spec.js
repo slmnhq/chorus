@@ -61,6 +61,26 @@ describe("chorus.views.InstanceList", function() {
                 expect(this.view.$("li.selected").length).toBe(1);
             });
 
+            describe("instance:added event", function() {
+                beforeEach(function() {
+                    this.newInstance = fixtures.instance({id: "1234567"});
+                    spyOn(this.view.collection, "fetch");
+                    this.view.trigger("instance:added", "1234567");
+                });
+
+                it("fetches the collection again", function() {
+                    expect(this.view.collection.fetch).toHaveBeenCalled();
+                });
+
+                it("selects the li with a matching id when fetch completes", function() {
+                    this.collection.add(this.newInstance);
+                    this.view.render(); // re-renders when fetch completes
+
+                    expect(this.view.$("li[data-instance-id=1234567]")).toHaveClass("selected");
+                    expect(this.view.$("li.selected").length).toBe(1);
+                });
+            });
+
             describe("clicking on an instance", function() {
                 beforeEach(function() {
                     this.eventSpy = jasmine.createSpy();
@@ -76,6 +96,17 @@ describe("chorus.views.InstanceList", function() {
 
                 it("adds the selected class to that item", function() {
                     expect(this.li2).toHaveClass("selected");
+                });
+
+                describe("when the view re-renders", function() {
+                    beforeEach(function() {
+                        this.view.render();
+                    });
+
+                    it("selects the li that was previously clicked", function() {
+                        this.li2 = this.view.$('li:eq(1)');
+                        expect(this.li2).toHaveClass("selected");
+                    });
                 });
 
                 context("clicking on the same instance again", function() {

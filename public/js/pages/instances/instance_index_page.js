@@ -17,6 +17,7 @@
 
             this.sidebar = new ns.views.InstanceListSidebar();
 
+            this.forwardEvent("instance:added", this.mainContent.content);
 
             //copypasta'd from workfile, next time make into a mixin
             this.mainContent.content.forwardEvent("instance:selected", this.sidebar);
