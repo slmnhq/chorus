@@ -456,6 +456,86 @@
 		                }
             },
 
+            WorkfileSet : {
+                fetch : {
+                    "message" : [ ],
+                    "status" : "ok",
+                    "requestId" : 256,
+                    "resource" : [
+                        {
+                            "createdStamp":"2011-11-22",
+                            "lastUpdatedStamp":"2011-11-22 14:40:42.11",
+                            "modifiedBy":"edcadmin",
+                            "ownerFullName":"EDC Admin",
+                            "imageId":null,
+                            "id":"10020",
+                            "fileName":"who.sql",
+                            "mimeType":"text/x-sql",
+                            "fileType":"sql",
+                            "isBinary":false,
+                            "workspaceId":"10000",
+                            "source":"empty",
+                            "owner":"edcadmin",
+                            "description":null,
+                            "latestVersionNum":1,
+                            "versionFileId":"1111_1111",
+                            "isDeleted":false,
+                            "modifiedByFirstName":"EDC",
+                            "modifiedByLastName":"Admin",
+                            "modifiedById":"10010",
+                            "commentCount":2,
+                            "recentComments" : [
+                                {
+                                    "author" : {
+                                        id : "InitialUser",
+                                        lastName : "Admin",
+                                        firstName : "EDC"
+                                    },
+                                    "comments" : [],
+                                    "id" : 10303,
+                                    "text" : "I am loving commenting",
+                                    "timestamp" : "2011-11-22 14:40:42",
+                                    "type" : "NOTE"
+                                }
+                            ]
+                        },
+                        {
+                            "createdStamp":"2011-11-22",
+                            "lastUpdatedStamp":"2011-11-22 14:40:42.11",
+                            "modifiedBy":"edcadmin",
+                            "ownerFullName":"Joe Blow",
+                            "imageId":null,
+                            "id":"10021",
+                            "fileName":"what.sql",
+                            "mimeType":"text/plain",
+                            "fileType":"txt",
+                            "isBinary":false,
+                            "workspaceId":"10000",
+                            "source":"empty",
+                            "owner":"joeblow",
+                            "description":null,
+                            "latestVersionNum":1,
+                            "versionFileId":"1111_1111",
+                            "isDeleted":false,
+                            "modifiedByFirstName":"Joe",
+                            "modifiedByLastName":"Blow",
+                            "modifiedById":"10011",
+                            "commentCount":0,
+                            "recentComments" : []
+                        }
+                    ],
+                    "method" : "GET",
+                    "resourcelink" : "/edc/activitystream/workspace/10000",
+                    "pagination" :
+                    {
+                        "total" : "1",
+                        "page" : "1",
+                        "records" : "8"
+                    },
+                    "version" : "0.1"
+                }
+            },
+
             Activity : {
                 fetch : {
                     "message" : [ ],

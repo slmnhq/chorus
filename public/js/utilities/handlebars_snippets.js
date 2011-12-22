@@ -124,6 +124,10 @@
                     return t(key) + "s";
                 }
             }
+        },
+
+        fileIconUrl : function(key, size) {
+            return chorus.urlHelpers.fileIconUrl(key, size);
         }
     }
 

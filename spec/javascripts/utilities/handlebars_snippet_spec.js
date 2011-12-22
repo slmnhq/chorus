@@ -350,5 +350,11 @@ describe("handlebars", function() {
                 })
             })
         })
+
+        describe("fileIconUrl", function() {
+            it("returns the icon url for the file", function() {
+                expect(Handlebars.helpers.fileIconUrl("SQL", "medium")).toBe(chorus.urlHelpers.fileIconUrl("SQL", "medium"))
+            })
+        })
     });
 });

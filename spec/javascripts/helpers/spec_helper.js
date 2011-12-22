@@ -48,6 +48,7 @@
         'workfile_show_sidebar',
         'workfiles_import',
         'workfiles_sql_new',
+        'workfiles_attach',
         'workspace_detail',
         'workspace_edit_members',
         'workspace_index_content_header',
