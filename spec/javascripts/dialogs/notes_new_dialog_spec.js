@@ -119,20 +119,16 @@ describe("NotesNewDialog", function() {
 
             describe("submit", function() {
                 beforeEach(function() {
-                    spyOn(this.dialog.model, "save").andCallThrough();
                     spyOn(this.dialog, "closeModal");
                     this.dialog.$("textarea[name=body]").val("The body of a note");
                     this.invalidatedSpy = jasmine.createSpy("invalidated");
                     this.dialog.pageModel.bind("invalidated", this.invalidatedSpy);
-                    this.saveFailedSpy = jasmine.createSpy("saveFailed");
-                    this.dialog.model.bind("saveFailed", this.saveFailedSpy);
                 });
 
 
                 describe("when the upload succeeds", function() {
                     beforeEach(function() {
-                        this.successfulResponse = {"result": '{"resource":[{"id":"9"}], "status": "ok"}'};
-                        this.fileUploadOptions.done(null, this.successfulResponse);
+                        this.dialog.model.trigger("saved");
                     })
 
                     it("closes the dialog box", function() {
@@ -146,8 +142,7 @@ describe("NotesNewDialog", function() {
 
                 describe("when the upload fails", function() {
                     beforeEach(function() {
-                        this.errorResponse = {"result": '{"status": "fail", "message" :[{"message":"Something bad happened."}]}'};
-                        this.fileUploadOptions.done(null, this.errorResponse);
+                        this.dialog.model.trigger("saveFailed");
                     })
 
                     it("does not close the dialog box", function() {
@@ -157,10 +152,6 @@ describe("NotesNewDialog", function() {
                     it("does not trigger the 'invalidated' event on the model", function() {
                         expect(this.invalidatedSpy).not.toHaveBeenCalled();
                     });
-
-                    it("triggers 'saveFailed' on the model", function() {
-                        expect(this.saveFailedSpy).toHaveBeenCalled();
-                    })
                 });
             });
         });

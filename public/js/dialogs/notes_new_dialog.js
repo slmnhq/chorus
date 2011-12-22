@@ -12,10 +12,8 @@
         postRender : function() {
             this.$("input[type=file]").fileupload({
                 add : _.bind(this.fileChosen, this),
-                done : _.bind(this.uploadDone, this),
                 dataType : "text"
             });
-            window.foo = this
         },
 
         makeModel : function(options){
@@ -30,7 +28,9 @@
 
         save: function(e) {
             e.preventDefault();
-            this.model.save({body : this.$("textarea[name=body]").val().trim()})
+            //form attrs need to be named the same as the model attrs, for the fileUpload plugin to magically work.
+            //when there is a fileUploadObj, the values set here, are not respected, with the form taking precedence.
+            this.model.save({ body : this.$("textarea[name=body]").val().trim() });
         },
 
         saved : function() {
@@ -59,15 +59,6 @@
             this.$('img').attr('src', iconSrc);
             this.$('span.file_name').text(filename).attr('title',filename);
             this.$(".file_details").show();
-        },
-
-        uploadDone: function(e, data) {
-            var json = $.parseJSON(data.result)
-            if (json.status == "ok") {
-                this.saved();
-            } else {
-                this.model.trigger('saveFailed', this.model);
-            }
         },
 
         removeFile : function(e){
