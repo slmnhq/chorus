@@ -5,18 +5,18 @@
         title : t("workfiles.attach"),
 
         events : {
-            "click li" : "toggleSelection",
+            "click li a" : "toggleSelection",
             "click .submit" : "submit"
         },
 
         makeModel : function() {
-            this.collection = new ns.models.WorkfileSet([], {workspaceId: this.options.workspaceId});
+            this.collection = new ns.models.WorkfileSet([], {workspaceId: this.options.workspaceId || this.options.launchElement.data("workspace-id")});
             this.collection.fetchAll();
         },
 
         toggleSelection: function(event) {
             event.preventDefault();
-            $(event.target).toggleClass("selected");
+            $(event.target).closest("li").toggleClass("selected");
         },
 
         submit : function() {
@@ -26,6 +26,14 @@
 
             this.selectedFiles = new ns.models.WorkfileSet(workfiles, { workspaceId : this.collection.get("workspaceId") });
             this.closeModal();
+        },
+
+        additionalContext: function(ctx) {
+            return {
+                models : _.sortBy(ctx.models, function(model) {
+                    return -(Date.parseFromApi(model.lastUpdatedStamp).getTime())
+                })
+            }
         }
         
 //        setup : function() {

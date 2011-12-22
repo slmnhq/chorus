@@ -463,8 +463,8 @@
                     "requestId" : 256,
                     "resource" : [
                         {
-                            "createdStamp":"2011-11-22",
-                            "lastUpdatedStamp":"2011-11-22 14:40:42.11",
+                            "createdStamp":"2011-10-22",
+                            "lastUpdatedStamp":"2011-10-22 14:40:42.11",
                             "modifiedBy":"edcadmin",
                             "ownerFullName":"EDC Admin",
                             "imageId":null,
