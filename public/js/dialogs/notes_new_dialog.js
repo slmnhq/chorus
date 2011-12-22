@@ -57,7 +57,7 @@
             this.uploadExtension = _.last(filename.split('.'));
             var iconSrc = chorus.urlHelpers.fileIconUrl(this.uploadExtension, "medium");
             this.$('img').attr('src', iconSrc);
-            this.$('span.file_name').text(filename);
+            this.$('span.file_name').text(filename).attr('title',filename);
             this.$(".file_details").show();
         },
 

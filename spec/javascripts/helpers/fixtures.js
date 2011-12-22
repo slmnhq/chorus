@@ -549,6 +549,22 @@
                                     },
                                     text : "hello"
                                 }
+                            ],
+                            artifacts : [
+                                {
+                                    entityId: "10101",
+                                    entityType: "file",
+                                    id: "10101",
+                                    name: "something.sql",
+                                    type: "SQL"
+                                },
+                                {
+                                    entityId: "10102",
+                                    entityType: "file",
+                                    id: "10102",
+                                    name: "something.txt",
+                                    type: "TXT"
+                                }
                             ]
                         },
                         {
@@ -567,7 +583,8 @@
                                 name : "my workspace"
                             },
 
-                            comments : []
+                            comments : [],
+                            artifacts : []
                         }
                     ],
                     "method" : "GET",
@@ -779,6 +796,15 @@
                                 author : fixtures.authorJson(),
                                 timestamp : "2011-12-15 12:34:56"
                             }
+                        ],
+                        artifacts : [
+                            {
+                                entityId: "10101",
+                                entityType: "file",
+                                id: "10101",
+                                name: "something.sql",
+                                type: "SQL"
+                            }
                         ]
                     });
                 },
@@ -800,7 +826,23 @@
                         workspace : {
                             id : "10222",
                             name : "the greatest"
-                        }
+                        },
+                        artifacts : [
+                            {
+                                entityId: "10101",
+                                entityType: "file",
+                                id: "10101",
+                                name: "something.sql",
+                                type: "SQL"
+                            },
+                            {
+                                entityId: "10102",
+                                entityType: "file",
+                                id: "10102",
+                                name: "something.txt",
+                                type: "TXT"
+                            }
+                        ]
                     });
                 },
 
@@ -825,7 +867,23 @@
                         workspace : {
                             id : "10222",
                             name : "the greatest"
-                        }
+                        },
+                        artifacts : [
+                            {
+                                entityId: "10101",
+                                entityType: "file",
+                                id: "10101",
+                                name: "something.sql",
+                                type: "SQL"
+                            },
+                            {
+                                entityId: "10102",
+                                entityType: "file",
+                                id: "10102",
+                                name: "something.txt",
+                                type: "TXT"
+                            }
+                        ]
                     });
                 },
 

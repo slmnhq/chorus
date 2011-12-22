@@ -1,4 +1,7 @@
 .notes_new{
+
+    width: 380px;
+    
     textarea {
         min-width : 350px;
         min-height: 75px;
@@ -16,6 +19,7 @@
     }
 
     .file_details {
+        @include ellipsis;
         vertical-align: middle;
         line-height: 32px;
         display: none;

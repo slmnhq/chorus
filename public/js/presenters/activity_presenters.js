@@ -25,8 +25,7 @@
                 workspaceUrl: this.presenter.workspaceUrl,
                 workspaceName: this.presenter.workspaceName
             }
-        },
-
+        }
     });
 
     ns.presenters.Activity.Base = {
@@ -56,7 +55,15 @@
             var workfile = model.get("workfile") && new ns.models.Workfile(_.extend(model.get("workfile"), {
                 workspaceId : workspace.get("id")
             }));
-            var attrs = {};
+            var attrs = {
+                attachments: _.map(model.get('artifacts'), function(artifact) {
+                    return {
+                        iconSrc: chorus.urlHelpers.fileIconUrl(artifact.type, 'medium'),
+                        fileName: artifact.name,
+                        downloadUrl : "/edc/file/" + artifact.entityId
+                    }
+                })
+            };
 
             if (workfile) {
                 attrs.objectName = workfile.get("name");

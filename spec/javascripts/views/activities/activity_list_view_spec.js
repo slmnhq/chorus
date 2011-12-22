@@ -82,6 +82,20 @@ describe("chorus.views.ActivityList", function() {
             })
         })
 
+        describe("attachment rendering", function() {
+            it("displays info for each attached file", function() {
+                expect(this.view.$('li[data-activity-id=10000] ul.attachments li').length).toBe(2);
+
+                expect(this.view.$('li[data-activity-id=10000] ul.attachments li:eq(0) a')).toHaveAttr('href', '/edc/file/10101')
+                expect(this.view.$('li[data-activity-id=10000] ul.attachments li:eq(0) img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl("SQL", "medium"))
+                expect(this.view.$('li[data-activity-id=10000] ul.attachments li:eq(0) .name').text().trim()).toBe("something.sql")
+
+                expect(this.view.$('li[data-activity-id=10000] ul.attachments li:eq(1) a')).toHaveAttr('href', '/edc/file/10102')
+                expect(this.view.$('li[data-activity-id=10000] ul.attachments li:eq(1) img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl("TXT", "medium"))
+                expect(this.view.$('li[data-activity-id=10000] ul.attachments li:eq(1) .name').text().trim()).toBe("something.txt")
+            })
+        })
+
         describe("pagination", function() {
             context("when there is no next page", function() {
                 it("does not render a 'more' link", function() {

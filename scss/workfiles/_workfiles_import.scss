@@ -57,6 +57,7 @@ $image-width: 35px;
         }
 
         .fileName {
+            @include ellipsis;
             color: $secondary-text-color;
             font-size: 14px;
             vertical-align: middle;

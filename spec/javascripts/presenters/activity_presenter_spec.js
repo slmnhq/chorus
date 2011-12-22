@@ -1,4 +1,4 @@
-describe("chorus.presenters.Activity", function(){
+describe("chorus.presenters.Activity", function() {
     beforeEach(function() {
         fixtures.model = 'Activity';
         this.model = fixtures.modelFor("fetch")
@@ -20,6 +20,7 @@ describe("chorus.presenters.Activity", function(){
             expect(this.presenter.objectUrl).toBe(url);
         });
 
+        itShouldHaveFileAttachments();
         itShouldHaveTheAuthorsIconAndUrl();
     })
 
@@ -48,7 +49,8 @@ describe("chorus.presenters.Activity", function(){
             var url = new chorus.models.Workspace({id: this.workspace.id}).showUrl();
             expect(this.presenter.workspaceUrl).toBe(url);
         });
-        
+
+        itShouldHaveFileAttachments();
         itShouldHaveTheAuthorsIconAndUrl();
     })
 
@@ -246,5 +248,34 @@ describe("chorus.presenters.Activity", function(){
         it("should link the new user's icon to the new user's show page", function() {
             expect(this.presenter.iconHref).toBe(this.model.author().showUrl());
         });
+    }
+
+    function itShouldHaveFileAttachments() {
+        it("should have the file icon urls", function() {
+            var artifacts = this.model.get("artifacts");
+            var self = this;
+            expect(artifacts.length).not.toBe(0);
+            _.each(artifacts, function(artifact, index) {
+                expect(self.presenter.attachments[index].iconSrc).toBe(chorus.urlHelpers.fileIconUrl(artifact.type, "medium"));
+            });
+        })
+
+        it("should have the file name", function() {
+            var artifacts = this.model.get("artifacts");
+            var self = this;
+            expect(artifacts.length).not.toBe(0);
+            _.each(artifacts, function(artifact, index) {
+                expect(self.presenter.attachments[index].fileName).toBe(artifact.name);
+            });
+        })
+
+        it("should have the download URLs", function() {
+            var artifacts = this.model.get("artifacts");
+            var self = this;
+            expect(artifacts.length).not.toBe(0);
+            _.each(artifacts, function(artifact, index) {
+                expect(self.presenter.attachments[index].downloadUrl).toBe('/edc/file/' + artifact.entityId);
+            });
+        })
     }
 });

@@ -66,6 +66,21 @@ $system-action-color: #7C7D7D;
 
 
 .activity_content, .comment_content {
+    ul.attachments {
+        img {
+            vertical-align: middle;
+        }
+
+        li {
+            @include ellipsis;
+        }
+    }
+
+    .name {
+        font-size: 12px;
+        font-weight: $semibold;
+    }
+    
     .body {
         @include font-normal-beta;
         padding-bottom: $text-padding-y;

@@ -81,7 +81,7 @@
                     self.uploadExtension = _.last(filename.split('.'));
                     var iconSrc = chorus.urlHelpers.fileIconUrl(self.uploadExtension, "medium");
                     self.$('img').attr('src', iconSrc);
-                    self.$('.fileName').text(filename);
+                    self.$('.fileName').text(filename).attr('title',filename);
                     self.$("form").addClass("chosen");
                 }
             }

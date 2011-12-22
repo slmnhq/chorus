@@ -9,6 +9,16 @@
         {{#if body}}
             <div class="body">{{body}}</div>
         {{/if}}
+        <ul class='attachments'>
+        {{#each attachments}}
+            <li>
+                <a href="{{downloadUrl}}">
+                    <img src="{{iconSrc}}" />
+                    <span class="name" title="{{fileName}}">{{fileName}}</span>
+                </a>
+            </li>
+        {{/each}}
+        </ul>
         <div class="timestamp">{{relativeTimestamp timestamp}}</div>
         <div class="links">
             <a class="comment dialog" data-dialog="Comment" data-entity-type="{{entityType}}" data-entity-id="{{id}}" data-entity-title="{{entityTitle}}" href="#">{{t "activity_stream.comment"}}</a>
