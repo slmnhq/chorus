@@ -20,7 +20,11 @@ describe("backbone_extensions", function() {
                 this.uploadDeferred = new $.Deferred();
                 this.uploadPromise = this.uploadDeferred.promise();
 
-                this.uploadSpy = { submit: jasmine.createSpy("submit").andReturn(this.uploadPromise) };
+                var input = $("<input/>").attr("type", "file").data("fileupload", { options: {}});
+                this.uploadSpy = {
+                    submit: jasmine.createSpy("submit").andReturn(this.uploadPromise),
+                    form: $("<form></form>").append(input)[0]
+                };
                 this.model.uploadObj = this.uploadSpy;
             });
 
@@ -39,30 +43,6 @@ describe("backbone_extensions", function() {
 
                 it("submits the upload object", function() {
                     expect(this.uploadSpy.submit).toHaveBeenCalled();
-                });
-
-                context("when the save is successful", function() {
-                    beforeEach(function() {
-                        this.savedSpy = jasmine.createSpy('saved');
-                        this.model.bind("saved", this.savedSpy);
-                    });
-
-                    it("triggers the 'saved' event on the model", function() {
-                        this.uploadDeferred.resolve({ status: "ok", resource: [] });
-                        expect(this.savedSpy).toHaveBeenCalled();
-                    });
-                });
-
-                context("when the save fails", function() {
-                    beforeEach(function() {
-                        this.saveFailedSpy = jasmine.createSpy('saveFailed');
-                        this.model.bind("saveFailed", this.saveFailedSpy);
-                    });
-
-                    it("triggers the 'saveFailed' event on the model", function() {
-                        this.uploadDeferred.resolve({status: "iDislikeWorking", message: ["I don't feel like functioning"], resource: []}, 200, {});
-                        expect(this.saveFailedSpy).toHaveBeenCalled();
-                    });
                 });
             });
 

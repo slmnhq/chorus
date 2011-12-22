@@ -28,8 +28,6 @@
 
         save: function(e) {
             e.preventDefault();
-            //form attrs need to be named the same as the model attrs, for the fileUpload plugin to magically work.
-            //when there is a fileUploadObj, the values set here, are not respected, with the form taking precedence.
             this.model.save({ body : this.$("textarea[name=body]").val().trim() });
         },
 

@@ -66,9 +66,10 @@ Backbone.sync = function(method, model, options) {
 
     // Make the request.
     if (this.uploadObj && method == "create") {
-        return this.uploadObj.submit(). //jqueryFileUpload submit takes no arguments, but returns an ajax pinkey-swear(promise)
-            done(params.success).
-            fail(params.error);
+        var uploadOptions = $(this.uploadObj.form).find("input[type=file]").data("fileupload").options;
+        _.extend(uploadOptions, params);
+
+        return this.uploadObj.submit();
     } else {
         return $.ajax(params);
     }
