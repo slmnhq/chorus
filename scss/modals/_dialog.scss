@@ -1,7 +1,7 @@
 @import "../_common.scss";
 
-#dialog {
-    #dialog_header {
+.dialog {
+    .dialog_header {
         height: 54px;
         border-bottom: 1px solid $border-color;
 
@@ -14,7 +14,7 @@
         }
     }
 
-    #dialog_content {
+    .dialog_content {
         background-color: $body-background-color;
         padding: 10px 15px;
     }

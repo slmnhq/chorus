@@ -15,12 +15,12 @@ describe("chorus.views.Dialog", function() {
             this.dialog.render()
         })
 
-        it("displays the title in the #dialog_header", function() {
-            expect(this.dialog.$("#dialog_header h1").text()).toBe("OH HAI")
+        it("displays the title in the .dialog_header", function() {
+            expect(this.dialog.$(".dialog_header h1").text()).toBe("OH HAI")
         })
 
-        it("renders the view in the #dialog_content", function() {
-            expect(this.dialog.$("#dialog_content").text()).toBe("OMG IM IN A DIALOG WHOA")
+        it("renders the view in the .dialog_content", function() {
+            expect(this.dialog.$(".dialog_content").text()).toBe("OMG IM IN A DIALOG WHOA")
         })
     })
 
@@ -45,7 +45,7 @@ describe("chorus.views.Dialog", function() {
     describe("Clicking the cancel button", function(){
         beforeEach(function() {
             this.dialog.render();
-            this.dialog.$("#dialog_content").append("<button class='cancel'>no</button>")
+            this.dialog.$(".dialog_content").append("<button class='cancel'>no</button>")
             spyOnEvent($(document), "close.facebox");
             this.dialog.$("button.cancel").click();
         })

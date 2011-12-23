@@ -29,7 +29,7 @@
 
         postRender : function() {
             this.picklistView.render();
-            this.$("#dialog_content .picklist").append(this.picklistView.el);
+            this.$(".dialog_content .picklist").append(this.picklistView.el);
             this.picklistView.delegateEvents();
         },
 

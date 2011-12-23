@@ -1,24 +1,24 @@
 ;
 (function(ns) {
     ns.dialogs.Base = ns.Modal.extend({
-        id : "dialog",
-        header : $("<div id='dialog_header'/>"),
-        content : $("<div id='dialog_content'/>"),
-        errors : $("<div class='errors'/>"),
-
         render: function render() {
+            var header = $("<div class='dialog_header'/>");
+            var content = $("<div class='dialog_content'/>");
+            var errors = $("<div class='errors'/>")
+
             this.events = this.events || {};
             this.events["click button.cancel"] = this.events["click button.cancel"] || "closeModal";
 
-            this.header.html($("<h1/>").text(this.title))
-            this.content.html(this.template(this.context()));
+            header.html($("<h1/>").text(this.title))
+            content.html(this.template(this.context()));
 
             $(this.el).
                 empty().
-                append(this.header).
-                append(this.errors).
-                append(this.content).
+                append(header).
+                append(errors).
+                append(content).
                 addClass(this.className).
+                addClass("dialog").
                 attr("title", this.options.title || this.title);
             this.delegateEvents()
             this.renderSubviews();
