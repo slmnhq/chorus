@@ -5,11 +5,15 @@
         className : "instance_list_sidebar",
 
         subviews : {
-            '.activity_list' : 'activityList'
+            '.activity_list' : 'activityList',
+            '.tab_control' : 'tabControl'
         },
 
         setup : function() {
             this.bind("instance:selected", this.setInstance, this);
+            this.tabControl = new chorus.views.TabControl(['activity', 'configuration']);
+            this.tabControl.bind("activity:selected", this.showActivityList, this)
+            this.tabControl.bind("configuration:selected", this.showConfiguration, this)
         },
 
         activityList : function() {
@@ -22,7 +26,26 @@
             this.resource = this.instance = this.model = instance;
             this.instance.activities().fetch()
             this.render();
-        }
+        },
 
-    });
+        postRender: function() {
+            toggleElement('.activity_list');
+        },
+
+        showActivityList : function(){
+            toggleElement(".activity_list");
+        },
+
+        showConfiguration : function(){
+            toggleElement(".configuration_detail");
+        }
+    })
+
+
+
+    function toggleElement(selector) {
+        var element = this.$(selector)
+        element.siblings().hide();
+        element.show()
+    }
 })(jQuery, chorus);

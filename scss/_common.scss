@@ -49,6 +49,7 @@ $header-border-color: #8A97A2;
 $list-border-color: #B9BBBD;
 $workfiles-action-details-link-border-color: #98B675;
 $dotted-list-item-border: 1px dotted $subheader-border-color;
+$tab-gradient-color : #D5E0EB;
 
 
 $administrator-background-color: #B1DBAF;
@@ -163,4 +164,9 @@ $medium-font: 14px;
     &[disabled=disabled] {
         @include opacity(0.25);
     }
+}
+
+@mixin tab-gradient {
+ @include linear-gradient(color-stops($body-background-color, $tab-gradient-color));
+
 }

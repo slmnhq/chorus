@@ -180,3 +180,7 @@ $system-action-color: #7C7D7D;
     }
 }
 
+#sidebar.instance_list_sidebar {
+    .activity_list .heading { display: none}
+}
+

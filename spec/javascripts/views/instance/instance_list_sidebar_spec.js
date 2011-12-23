@@ -45,5 +45,31 @@ describe("InstanceListSidebar", function() {
         it("fetches the activities", function() {
             expect(this.instance.activities().fetch).toHaveBeenCalled();
         });
+
+        context("when activity is clicked", function() {
+            beforeEach(function() {
+                this.view.$(".tab_control li.configuration").click();
+                expect(this.view.$(".activity_list")).not.toBeVisible();
+                this.view.$(".tab_control li.activity").click();
+            })
+
+            it("shows activity", function() {
+                expect(this.view.$(".activity_list")).toBeVisible();
+                expect(this.view.$(".configuration_detail")).not.toBeVisible();
+            })
+        })
+
+        context("when configureation is clicked", function() {
+            beforeEach(function() {
+                expect(this.view.$(".configuration_detail")).not.toBeVisible();
+                this.view.$(".tab_control li.configuration").click();
+            })
+
+            it("shows activity", function() {
+                expect(this.view.$(".configuration_detail")).toBeVisible();
+                expect(this.view.$(".activity_list")).not.toBeVisible();
+            })
+        })
     });
+
 });
