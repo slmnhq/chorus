@@ -67,7 +67,11 @@ Backbone.sync = function(method, model, options) {
     // Make the request.
     if (this.uploadObj && method == "create") {
         var uploadOptions = $(this.uploadObj.form).find("input[type=file]").data("fileupload").options;
-        _.extend(uploadOptions, params);
+        uploadOptions.success = params.success;
+        uploadOptions.error = params.error;
+        uploadOptions.url = params.url;
+        uploadOptions.type = params.type;
+        uploadOptions.formData = json;
 
         return this.uploadObj.submit();
     } else {

@@ -26,7 +26,12 @@ describe "creating a note on a workspace" do
           end
 
           it "shows the note in the workspace's activity stream" do
-              wait_until { page.find("ul.activities").has_content?("Blood.") }
+              wait_until do
+                  @note_li = page.find("ul.activities li.activity")
+              end
+              @note_li.should have_content("Blood.")
+              file_link = @note_li.find("ul.attachments a")
+              file_link["href"].should include("edc/file")
           end
       end
   end
