@@ -51,12 +51,8 @@ input, textarea {
     width: 100%;
     font-size: 14px;
     padding: 3px;
-    font-family: Myriad Pro;
-}
-
-input:not([type="image"]), textarea {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
+    font-family: Myriad Pro, Verdana;
+    @include box-sizing(border-box);
 }
 
 textarea {
