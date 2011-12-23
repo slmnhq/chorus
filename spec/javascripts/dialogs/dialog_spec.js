@@ -53,5 +53,4 @@ describe("chorus.views.Dialog", function() {
             expect("close.facebox").toHaveBeenTriggeredOn($(document))
         });
     });
-
 })

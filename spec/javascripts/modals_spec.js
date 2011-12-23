@@ -73,4 +73,43 @@ describe("chorus.Modal", function() {
             })
         });
     });
+
+    describe("launching a sub modal", function() {
+        beforeEach(function() {
+            this.modal.className = "plain_text"
+            this.modal.launchModal();
+            this.faceboxProxy = $("<div id='facebox'/>");
+            this.faceboxOverlayProxy = $("<div id='facebox_overlay'/>");
+            $("#jasmine_content").append(this.faceboxProxy).append(this.faceboxOverlayProxy);
+            this.subModal = new chorus.Modal({ pageModel : this.model });
+            this.subModal.className = "plain_text"
+            spyOn(this.subModal, "launchModal");
+            $.facebox.settings.inited = true;
+            this.modal.launchSubModal(this.subModal)
+        })
+
+        it("changes the id on the existing dialog to something other than #facebox", function() {
+            expect(this.faceboxProxy.attr("id")).not.toBe("facebox");
+            expect(this.faceboxOverlayProxy.attr("id")).not.toBe("facebox_overlay");
+        })
+
+        it("resets facebox", function() {
+            expect($.facebox.settings.inited).toBeFalsy();
+        })
+
+        it("launches the sub modal", function() {
+            expect(this.subModal.launchModal).toHaveBeenCalled();
+        })
+
+        describe("when the sub modal is closed", function() {
+            beforeEach(function() {
+                $(document).trigger("close.facebox");
+            });
+
+            it("restores the ids on the preceeding dialog", function() {
+                expect(this.faceboxProxy.attr("id")).toBe("facebox");
+                expect(this.faceboxOverlayProxy.attr("id")).toBe("facebox_overlay");
+            })
+        })
+    })
 });

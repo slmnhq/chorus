@@ -45,6 +45,7 @@
 
         showOptions : function(e) {
             e.preventDefault();
+//            this.launchSubModal(new ns.WorkfilesAttach({ workspaceId : this.model.get("entityId") }));
             this.$(".options_text").hide();
             this.$(".options_area").show();
         },

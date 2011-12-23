@@ -1,22 +1,15 @@
 ;(function(ns, $) {
     ns.Modal = ns.views.Base.extend({
         launchModal : function() {
-            var self = this;
-
             this.render();
             _.bind(this.revealed, this);
-            $(document).one('reveal.facebox', this.revealed);
+            $(document).on('reveal.facebox', this.revealed);
             $.facebox(this.el)
 
+            this.previousModal = ns.modal;
             ns.modal = this;
 
-            $(document).one('close.facebox', function() {
-                self.unbindPageModelCallbacks();
-                self.close();
-                $("#facebox").remove();
-                $.facebox.settings.inited = false;
-                delete ns.modal;
-            });
+            $(document).one('close.facebox', _.bind(this.modalClosed, this));
         },
 
         makeModel : function(options) {
@@ -30,6 +23,36 @@
 
         closeModal : function() {
             $(document).trigger("close.facebox");
+        },
+
+        launchSubModal : function(subModal) {
+            this.subModalId = "" + (new Date().getTime());
+            $("#facebox").attr("id", "facebox-" + this.subModalId);
+            $("#facebox_overlay").attr("id", "facebox_overlay-" + this.subModalId);
+            $.facebox.settings.inited = false;
+            subModal.isSubModal = true;
+            subModal.subModalId = this.subModalId;
+            subModal.launchModal();
+        },
+
+        modalClosed : function() {
+            if (this == ns.modal) {
+                this.unbindPageModelCallbacks();
+                this.close();
+                $("#facebox").remove();
+                $.facebox.settings.inited = false;
+                delete ns.modal;
+
+                if(this.isSubModal) {
+                    this.subModalClosed();
+                }
+            }
+        },
+
+        subModalClosed : function() {
+            $("#facebox-" + this.subModalId).attr("id", "facebox");
+            $("#facebox_overlay-" + this.subModalId).attr("id", "facebox_overlay");
+            ns.modal = this.previousModal;
         },
 
         close : $.noop,
