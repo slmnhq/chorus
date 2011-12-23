@@ -26,6 +26,8 @@
     }
 
     ns.urlHelpers.fileIconUrl = function fileIconUrl(key, size) {
-         return "/images/workfiles/" + (size || "large") + "/" + (map[key.toLowerCase()] || "plain") + ".png";
+        var fileType = key && key.toLowerCase();
+        var imageName = (map[fileType] || "plain") + ".png";
+        return "/images/workfiles/" + (size || "large") + "/" + imageName;
     }
 })(jQuery, chorus);
