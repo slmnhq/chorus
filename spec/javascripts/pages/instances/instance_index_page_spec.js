@@ -18,6 +18,14 @@ describe("chorus.pages.InstanceIndexPage", function() {
             expect(spy).toHaveBeenCalled();
         });
 
+        it("forwards the instance:added event from the page to the content", function() {
+            var spy = jasmine.createSpy('instance added');
+            this.page.mainContent.content.bind("instance:added", spy);
+            this.page.trigger("instance:added", "123");
+
+            expect(spy).toHaveBeenCalledWith("123");
+        });
+
         it("launches a new instance dialog", function(){
             stubModals();
             this.page.mainContent.contentDetails.$("button").click();

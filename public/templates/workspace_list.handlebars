@@ -1,6 +1,6 @@
 {{#each models}}
     <li data-id="{{id}}" {{#unless active}}class="archived"{{/unless}}>
-        <span class="spacer"/>
+        <span class="spacer left"/>
         <a class="image" href="{{showUrl}}">
             <img src="{{imageUrl}}"/>
         </a>
@@ -39,6 +39,6 @@
                 {{/unless}}
             </div>
         </div>
-        <span class="spacer"/>
+        <span class="spacer right"/>
     </li>
 {{/each}}

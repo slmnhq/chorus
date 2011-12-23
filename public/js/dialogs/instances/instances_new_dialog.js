@@ -45,7 +45,7 @@
         },
 
         saveSuccess : function() {
-            this.trigger("instance:added");
+            chorus.page.trigger("instance:added", this.model.get("id"));
             this.closeModal();
         },
 

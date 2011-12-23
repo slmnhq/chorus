@@ -28,13 +28,8 @@
             bottom: 0;
             width: $padding-x;
 
-            &:first-child {
-                left: -$padding-x;
-            }
-            
-            &:last-child {
-                right: -$padding-x;
-            }
+            &.left  { left: -$padding-x; }
+            &.right { right: -$padding-x; }
         }
 
         a.image {

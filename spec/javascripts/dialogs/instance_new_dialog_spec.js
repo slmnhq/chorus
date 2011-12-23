@@ -107,9 +107,11 @@ describe("InstanceNewDialog", function() {
                     context("when save completes", function() {
                         beforeEach(function() {
                             this.doneSpy = jasmine.createSpy("save done");
-                            this.dialog.bind("instance:added", this.doneSpy);
+                            chorus.page = new chorus.pages.Base();
+                            chorus.page.bind("instance:added", this.doneSpy);
                             spyOn(this.dialog, "closeModal");
 
+                            this.dialog.model.set({id: "123"});
                             this.dialog.model.trigger("saved");
                         });
 
@@ -118,7 +120,7 @@ describe("InstanceNewDialog", function() {
                         });
 
                         it("raises the instance:added event", function() {
-                            expect(this.doneSpy).toHaveBeenCalled();
+                            expect(this.doneSpy).toHaveBeenCalledWith("123");
                         });
                     });
 
