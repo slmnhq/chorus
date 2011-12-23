@@ -19,7 +19,6 @@
     }
 
     .file_details {
-        @include ellipsis;
         vertical-align: middle;
         line-height: 32px;
         display: none;
@@ -32,6 +31,9 @@
     }
 
     .file_name {
+        display: inline-block;
+        width: 170px;
+        @include ellipsis;
         color: $dark-text-color;
         font-weight: $semibold;
     }
