@@ -6,7 +6,8 @@
         events: {
             "submit form": "save",
             "click .show_options": "showOptions",
-            "click .remove": "removeFile"
+            "click .remove": "removeFile",
+            "click .workfile": "launchWorkfileDialog"
         },
 
         postRender : function() {
@@ -45,16 +46,35 @@
 
         showOptions : function(e) {
             e.preventDefault();
-//            this.launchSubModal(new ns.WorkfilesAttach({ workspaceId : this.model.get("entityId") }));
             this.$(".options_text").hide();
             this.$(".options_area").show();
+        },
+
+        launchWorkfileDialog: function(e) {
+            e.preventDefault();
+            var workfileDialog = new ns.WorkfilesAttach({ workspaceId : this.model.get("entityId") });
+            workfileDialog.bind("files:selected", this.workfileChosen, this);
+            this.launchSubModal(workfileDialog);
         },
 
         fileChosen : function(e, data) {
             this.model.uploadObj = data;
             var filename = data.files[0].name;
-            this.uploadExtension = _.last(filename.split('.'));
-            var iconSrc = chorus.urlHelpers.fileIconUrl(this.uploadExtension, "medium");
+            var extension = _.last(filename.split('.'));
+
+            this.showFile(filename, extension);
+        },
+
+        workfileChosen : function(workfileSet) {
+            var workfile = workfileSet.first();
+            var filename = workfile.get("fileName");
+            var extension = workfile.get("fileType");
+
+            this.showFile(filename, extension);
+        },
+
+        showFile: function(filename, extension) {
+            var iconSrc = chorus.urlHelpers.fileIconUrl(extension, "medium");
             this.$('img').attr('src', iconSrc);
             this.$('span.file_name').text(filename).attr('title',filename);
             this.$(".file_details").show();

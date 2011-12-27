@@ -70,17 +70,29 @@ describe("WorkfilesAttach", function() {
             this.dialog.collection = this.workfiles;
             this.dialog.render();
             this.dialog.$("li a").eq(1).click();
-            spyOnEvent($(document), "close.facebox");
-            this.dialog.$("button.submit").click();
         });
 
         it("populates the selectedFiles attribute", function() {
+            this.dialog.$("button.submit").click();
             expect(this.dialog.selectedFiles.length).toBe(1);
-            expect(this.dialog.selectedFiles.models[0].get("id")).toBe("10020")
+            expect(this.dialog.selectedFiles.models[0]).toBe(this.workfiles.get("10020"));
         })
 
         it("dismisses the dialog", function() {
+            spyOnEvent($(document), "close.facebox");
+
+            this.dialog.$("button.submit").click();
+
             expect("close.facebox").toHaveBeenTriggeredOn($(document))
+        });
+
+        it("triggers the 'files:seleted' event on itself, passing in the selected files", function() {
+            this.filesSelectedSpy = jasmine.createSpy("filesSelected");
+            this.dialog.bind("files:selected", this.filesSelectedSpy);
+
+            this.dialog.$("button.submit").click();
+
+            expect(this.filesSelectedSpy).toHaveBeenCalledWith(this.dialog.selectedFiles);
         });
     });
 

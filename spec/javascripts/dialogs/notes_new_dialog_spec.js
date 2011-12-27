@@ -61,6 +61,40 @@ describe("NotesNewDialog", function() {
             expect(this.dialog.$('.file_details')).toBeHidden();
         });
 
+        describe("when the 'attach workfile' link is clicked", function() {
+            beforeEach(function() {
+                this.fakeModal = stubModals();
+                spyOn(chorus.dialogs.WorkfilesAttach.prototype, 'render').andCallThrough();
+                this.dialog.$("a.workfile").click();
+            });
+
+            it("launches the workfile picker dialog", function() {
+                expect(this.fakeModal).toHaveBeenCalled();
+                expect(chorus.dialogs.WorkfilesAttach.prototype.render).toHaveBeenCalled();
+
+                var modalElement = this.fakeModal.mostRecentCall.args[0];
+                var view = chorus.dialogs.WorkfilesAttach.prototype.render.mostRecentCall.object;
+
+                expect(modalElement).toBe(view.el);
+            });
+
+            describe("when workfiles are selected", function() {
+                beforeEach(function() {
+                    this.workfile = new chorus.models.Workfile({ id: 2, fileName: "greed.sql", fileType: "sql" });
+                    this.workfileSet = new chorus.models.WorkfileSet([ this.workfile ]);
+                    this.workfilesDialog = chorus.dialogs.WorkfilesAttach.prototype.render.mostRecentCall.object;
+                    this.workfilesDialog.trigger("files:selected", this.workfileSet);
+                });
+
+                it("displays the names of the workfiles", function() {
+                    expect(this.dialog.$(".file_details .file_name").text()).toBe("greed.sql");
+                });
+
+                it("displays the appropriate file icon", function() {
+                    expect(this.dialog.$(".file_details img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "medium"));
+                });
+            });
+        });
 
         context("when a file has been chosen", function() {
             beforeEach(function() {

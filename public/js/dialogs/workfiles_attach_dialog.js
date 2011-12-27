@@ -21,10 +21,12 @@
 
         submit : function() {
             var workfiles = _.map(this.$("li.selected"), function(li) {
-                return new ns.models.Workfile({ id : $(li).attr("data-id")});
-            })
+                var id = $(li).attr("data-id");
+                return this.collection.get(id);
+            }, this);
 
             this.selectedFiles = new ns.models.WorkfileSet(workfiles, { workspaceId : this.collection.get("workspaceId") });
+            this.trigger("files:selected", this.selectedFiles);
             this.closeModal();
         },
 

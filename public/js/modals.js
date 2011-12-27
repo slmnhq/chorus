@@ -9,7 +9,7 @@
             this.previousModal = ns.modal;
             ns.modal = this;
 
-            $(document).one('close.facebox', _.bind(this.modalClosed, this));
+            $(document).bind('close.facebox', _.bind(this.modalClosed, this));
         },
 
         makeModel : function(options) {
