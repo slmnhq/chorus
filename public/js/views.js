@@ -48,7 +48,7 @@
         },
 
         template: function template(context) {
-            return Handlebars.renderTemplate(this.className, context);
+            return Handlebars.helpers.renderTemplate(this.className, context);
         }
     }));
 
