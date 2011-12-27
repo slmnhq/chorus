@@ -7,6 +7,7 @@
         self.presenters = {};
         self.dialogs = {};
         self.alerts = {};
+        self.templates = {};
 
         self.initialize = function() {
             self.session = new chorus.models.Session();

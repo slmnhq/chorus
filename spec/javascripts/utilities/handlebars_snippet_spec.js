@@ -356,5 +356,11 @@ describe("handlebars", function() {
                 expect(Handlebars.helpers.fileIconUrl("SQL", "medium")).toBe(chorus.urlHelpers.fileIconUrl("SQL", "medium"))
             })
         })
+
+        describe("renderTemplate", function() {
+            it("renders the template", function() {
+                expect(Handlebars.helpers.renderTemplate('plain_text', {text: 'foo'})).toBe('foo');
+            });
+        });
     });
 });

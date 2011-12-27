@@ -47,14 +47,8 @@
             });
         },
 
-        template: function template(content) {
-            if (!this.cachedTemplate) {
-                var tag = $('#' + this.className + "_template");
-                if (!tag.length) throw "No template for " + this.className;
-                this.cachedTemplate = Handlebars.compile(tag.html());
-            }
-
-            return this.cachedTemplate(content);
+        template: function template(context) {
+            return Handlebars.renderTemplate(this.className, context);
         }
     }));
 

@@ -1,4 +1,4 @@
-(function(ns, Handlebars){
+(function(ns, Handlebars) {
 
     Handlebars.registerPartial("errorDiv", "<div class='errors'><ul>{{#each serverErrors}}<li>{{message}}</li>{{/each}}</ul></div>");
 
@@ -36,7 +36,9 @@
             if (args.length == 0) {
                 throw "ifAll expects arguments";
             }
-            if (_.all(args, function(arg) { return !!arg })) {
+            if (_.all(args, function(arg) {
+                return !!arg
+            })) {
                 return block(this);
             } else {
                 return elseBlock(this);
@@ -50,7 +52,9 @@
             if (args.length == 0) {
                 throw "ifAny expects arguments";
             }
-            if (_.any(args, function(arg) { return !!arg })) {
+            if (_.any(args, function(arg) {
+                return !!arg
+            })) {
                 return block(this);
             } else {
                 return elseBlock(this);
@@ -128,6 +132,15 @@
 
         fileIconUrl : function(key, size) {
             return chorus.urlHelpers.fileIconUrl(key, size);
+        },
+
+        renderTemplate : function(templateName, context) {
+            if (!chorus.templates[templateName]) {
+                var tag = $('#' + templateName + "_template");
+                if (!tag.length) throw "No template for " + templateName;
+                chorus.templates[templateName] = Handlebars.compile(tag.html());
+            }
+            return chorus.templates[templateName](context);
         }
     }
 
