@@ -19,4 +19,18 @@ describe("chorus.models.Note", function() {
             expect(this.model.performValidation()).toBeTruthy();
         });
     });
+
+    describe("saving the workfile attachments", function() {
+        it("assigns the 'workfileIds' field as a comma-separated list of workfile ids", function() {
+            this.model.workfiles = new chorus.models.WorkfileSet([
+                new chorus.models.Workfile({ id: 44 }),
+                new chorus.models.Workfile({ id: 45 }),
+                new chorus.models.Workfile({ id: 46 })
+            ]);
+
+            this.model.save();
+
+            expect(this.model.get("workfileIds")).toBe("44,45,46");
+        });
+    });
 });

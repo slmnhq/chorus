@@ -139,6 +139,7 @@
             },
 
             save : function(attrs, options) {
+                this.beforeSave();
                 options || (options = {});
                 var success = options.success;
                 options.success = function(model, resp, xhr) {
@@ -175,6 +176,7 @@
             },
 
             declareValidations: $.noop,
+            beforeSave: $.noop,
 
             isValid: function() {
                 return _.isEmpty(this.errors);
