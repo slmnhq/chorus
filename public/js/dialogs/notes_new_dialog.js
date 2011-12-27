@@ -12,7 +12,7 @@
 
         postRender : function() {
             this.$("input[type=file]").fileupload({
-                add : _.bind(this.fileChosen, this),
+                add : _.bind(this.desktopFileChosen, this),
                 dataType : "text"
             });
         },
@@ -57,37 +57,47 @@
             this.launchSubModal(workfileDialog);
         },
 
-        fileChosen : function(e, data) {
+        desktopFileChosen : function(e, data) {
             this.model.uploadObj = data;
             var filename = data.files[0].name;
             var extension = _.last(filename.split('.'));
+            var file = new chorus.models.Base({ fileName: filename, fileType: extension });
+            file.isUpload = true;
 
-            this.showFile(filename, extension);
+            this.showFile(file);
         },
 
         workfileChosen : function(workfileSet) {
-            workfileSet.each(function(workfile) {
-                var filename = workfile.get("fileName");
-                var extension = workfile.get("fileType");
-                this.showFile(filename, extension);
+            this.workfiles = workfileSet;
+            this.workfiles.each(function(workfile) {
+                this.showFile(workfile);
             }, this);
         },
 
-        showFile: function(filename, extension) {
+        showFile: function(file) {
             var fileDetailsRow = this.$(".file_details").eq(0).
                 clone().
                 appendTo(this.$(".options_area"));
 
-            var iconSrc = chorus.urlHelpers.fileIconUrl(extension, "medium");
+            var filename = file.get("fileName");
+            var iconSrc = chorus.urlHelpers.fileIconUrl(file.get("fileType"), "medium");
             fileDetailsRow.find('img').attr('src', iconSrc);
-            fileDetailsRow.find('span.file_name').text(filename).attr('title',filename);
+            fileDetailsRow.find('span.file_name').text(filename).attr('title', filename);
+            fileDetailsRow.data("file", file);
             fileDetailsRow.removeClass("hidden");
         },
 
-        removeFile : function(e){
+        removeFile : function(e) {
             e.preventDefault();
-            delete this.model.uploadObj;
-            this.$(".file_details").hide();
+            var row = $(e.target).closest(".file_details");
+            var file = row.data("file");
+            row.remove();
+
+            if (file.isUpload) {
+                delete this.model.uploadObj;
+            } else {
+                this.workfiles.remove(file);
+            }
         }
     });
 })(jQuery, chorus.dialogs);

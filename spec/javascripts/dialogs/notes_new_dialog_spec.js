@@ -80,12 +80,12 @@ describe("NotesNewDialog", function() {
 
             describe("when workfiles are selected", function() {
                 beforeEach(function() {
-                    var workfileSet = new chorus.models.WorkfileSet([
+                    this.workfileSet = new chorus.models.WorkfileSet([
                         new chorus.models.Workfile({ id: 1, fileName: "greed.sql", fileType: "sql" }),
                         new chorus.models.Workfile({ id: 2, fileName: "generosity.cpp", fileType: "cpp" })
                     ]);
                     this.workfilesDialog = chorus.dialogs.WorkfilesAttach.prototype.render.mostRecentCall.object;
-                    this.workfilesDialog.trigger("files:selected", workfileSet);
+                    this.workfilesDialog.trigger("files:selected", this.workfileSet);
                 });
 
                 it("displays the names of the workfiles", function() {
@@ -98,6 +98,48 @@ describe("NotesNewDialog", function() {
                     var fileIcons = this.dialog.$(".file_details:not('.hidden') img");
                     expect(fileIcons.eq(0).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "medium"));
                     expect(fileIcons.eq(1).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("cpp", "medium"));
+                });
+
+                it("stores the collection", function() {
+                    expect(this.dialog.workfiles).toBe(this.workfileSet);
+                });
+
+                describe("when a workfile remove link is clicked", function() {
+                    it("removes only that workfile", function() {
+                        var sqlRow = this.dialog.$(".file_details:not('.hidden'):contains('sql')")
+                        var cppRow = this.dialog.$(".file_details:not('.hidden'):contains('cpp')")
+
+                        expect(sqlRow).toExist();
+                        expect(cppRow).toExist();
+
+                        sqlRow.find("a.remove").click();
+
+                        sqlRow = this.dialog.$(".file_details:not('.hidden'):contains('sql')")
+                        cppRow = this.dialog.$(".file_details:not('.hidden'):contains('cpp')")
+                        expect(sqlRow).not.toExist();
+                        expect(cppRow).toExist();
+                    });
+
+                    it("removes only that workfile from the collection", function() {
+                        var sqlRow = this.dialog.$(".file_details:not('.hidden'):contains('sql')")
+                        sqlRow.find("a.remove").click();
+                        expect(this.dialog.workfiles.get("1")).toBeUndefined();
+                        expect(this.dialog.workfiles.get("2")).not.toBeUndefined();
+                    });
+
+                    context("when a desktop file has already been chosen", function() {
+                        beforeEach(function() {
+                            this.uploadObj = jasmine.createSpyObj("uploadObj", ["submit"]);
+                            this.dialog.model.uploadObj = this.uploadObj;
+                        });
+
+                        it("does not remove the desktop file", function() {
+                            var sqlRow = this.dialog.$(".file_details:not('.hidden'):contains('sql')")
+                            sqlRow.find("a.remove").click();
+
+                            expect(this.dialog.model.uploadObj).toBe(this.uploadObj);
+                        });
+                    });
                 });
             });
         });
@@ -141,7 +183,7 @@ describe("NotesNewDialog", function() {
 
             context("when a selected file is removed", function() {
                 beforeEach(function() {
-                    this.dialog.$(".file_details .remove").click();
+                    this.dialog.$(".file_details:not('.hidden') .remove").click();
                 });
 
                 it("hides the file_details area", function() {
@@ -150,12 +192,6 @@ describe("NotesNewDialog", function() {
 
                 it("removes the uploadObj from the model", function() {
                     expect(this.dialog.model.uploadObj).toBeUndefined();
-                });
-
-                it("prevents default on the click event", function() {
-                    var eventSpy = jasmine.createSpyObj("event", ['preventDefault']);
-                    this.dialog.removeFile(eventSpy);
-                    expect(eventSpy.preventDefault).toHaveBeenCalled();
                 });
             });
 
