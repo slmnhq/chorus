@@ -22,11 +22,14 @@
             tab.siblings().removeClass("selected")
             tab.addClass("selected")
             this.trigger(tab.data("name") + ":selected")
+
+            this.selectedTabName = tab.data('name');
         },
 
         postRender: function() {
-            this.$('li:first').addClass('selected');
-
+            var tab = this.selectedTabName ? this.$("li." + this.selectedTabName) : this.$('li:first');
+            tab.addClass('selected');
+            this.trigger(tab.data("name") + ":selected");
         }
     });
 })(jQuery, chorus.views);

@@ -6,6 +6,17 @@
 <div class="tab_control"></div>
 <div class="tabbed_area">
     <div class="activity_list"></div>
-    <div class="configuration_detail"></div>
+    <div class="configuration_detail">
+        <dl>
+            <dt>{{t "instances.sidebar.host"}}</dt>
+            <dd title="{{{host}}}">{{{host}}}</dd>
+            <br />
+            <dt>{{t "instances.sidebar.port"}}</dt>
+            <dd title="{{{port}}}">{{{port}}}</dd>
+            <br />
+            <dt>{{t "instances.sidebar.shared_account"}}</dt>
+            <dd title="{{{dbUserName}}}">{{{dbUserName}}}</dd>
+        </dl>
+    </div>
 </div>
 {{/if}}

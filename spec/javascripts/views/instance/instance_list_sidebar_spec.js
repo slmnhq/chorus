@@ -21,6 +21,7 @@ describe("InstanceListSidebar", function() {
             spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub)
 
             this.instance = fixtures.instance({instanceProvider: "Greenplum", name : "Harry's House of Glamour"})
+            spyOn(this.instance, 'fetch');
             spyOn(this.instance.activities(), 'fetch');
             this.view.trigger("instance:selected", this.instance);
         });
@@ -44,6 +45,10 @@ describe("InstanceListSidebar", function() {
 
         it("fetches the activities", function() {
             expect(this.instance.activities().fetch).toHaveBeenCalled();
+        });
+
+        it("fetches the details for the instance", function() {
+            expect(this.instance.fetch).toHaveBeenCalled();
         });
 
         context("when activity is clicked", function() {

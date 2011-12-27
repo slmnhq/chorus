@@ -16,6 +16,15 @@
             this.tabControl.bind("configuration:selected", this.showConfiguration, this)
         },
 
+        additionalContext : function() {
+            if(!this.model) {
+                return {};
+            }
+            return {
+                dbUserName : this.model.get('sharedAccount') ? this.model.get('sharedAccount').dbUserName : ''
+            };
+        },
+
         activityList : function() {
             if(this.instance) {
                 return new chorus.views.ActivityList({collection: this.model.activities()});
@@ -24,12 +33,11 @@
 
         setInstance : function(instance) {
             this.resource = this.instance = this.model = instance;
-            this.instance.activities().fetch()
+            this.instance.activities().fetch();
+            if(!this.instance.loaded) {
+                this.instance.fetch();
+            }
             this.render();
-        },
-
-        postRender: function() {
-            toggleElement('.activity_list');
         },
 
         showActivityList : function(){

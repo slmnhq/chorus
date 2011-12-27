@@ -12,8 +12,21 @@
         color: $secondary-text-color;
     }
 
-    .configuration_detail, .activity_list {
+    .configuration_detail {
         display: none;
+        dt {
+            @include font-normal-alpha;
+            float: left;
+            clear: left;
+        }
+
+        dd {
+            font-size: 14px;
+            float: right;
+            width: 145px;
+            text-align: right;
+            @include ellipsis;
+        }
     }
 
     .tabbed_area .selected {
