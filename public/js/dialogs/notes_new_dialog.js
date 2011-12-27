@@ -68,8 +68,8 @@
         },
 
         workfileChosen : function(workfileSet) {
-            this.workfiles = workfileSet;
-            this.workfiles.each(function(workfile) {
+            this.model.workfiles = workfileSet;
+            this.model.workfiles.each(function(workfile) {
                 this.showFile(workfile);
             }, this);
         },
@@ -96,7 +96,7 @@
             if (file.isUpload) {
                 delete this.model.uploadObj;
             } else {
-                this.workfiles.remove(file);
+                this.model.workfiles.remove(file);
             }
         }
     });

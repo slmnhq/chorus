@@ -101,7 +101,7 @@ describe("NotesNewDialog", function() {
                 });
 
                 it("stores the collection", function() {
-                    expect(this.dialog.workfiles).toBe(this.workfileSet);
+                    expect(this.dialog.model.workfiles).toBe(this.workfileSet);
                 });
 
                 describe("when a workfile remove link is clicked", function() {
@@ -123,8 +123,8 @@ describe("NotesNewDialog", function() {
                     it("removes only that workfile from the collection", function() {
                         var sqlRow = this.dialog.$(".file_details:not('.hidden'):contains('sql')")
                         sqlRow.find("a.remove").click();
-                        expect(this.dialog.workfiles.get("1")).toBeUndefined();
-                        expect(this.dialog.workfiles.get("2")).not.toBeUndefined();
+                        expect(this.dialog.model.workfiles.get("1")).toBeUndefined();
+                        expect(this.dialog.model.workfiles.get("2")).not.toBeUndefined();
                     });
 
                     context("when a desktop file has already been chosen", function() {
