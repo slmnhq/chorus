@@ -269,6 +269,12 @@ describe("chorus.models", function() {
                     })
                 });
             });
+
+            it("calls the 'beforeSave' hook", function() {
+                spyOn(this.model, 'beforeSave');
+                this.model.save();
+                expect(this.model.beforeSave).toHaveBeenCalled();
+            });
         });
 
         describe("#destroy", function () {
