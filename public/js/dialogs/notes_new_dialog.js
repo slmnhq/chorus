@@ -20,7 +20,7 @@
         makeModel : function(options){
             this._super("makeModel", options);
 
-            this.model = new chorus.models.Note({
+            this.model = new chorus.models.Comment({
                 entityType : this.options.launchElement.data("entity-type"),
                 entityId : this.options.launchElement.data("entity-id")
             });
