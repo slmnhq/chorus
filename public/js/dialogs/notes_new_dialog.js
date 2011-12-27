@@ -66,18 +66,22 @@
         },
 
         workfileChosen : function(workfileSet) {
-            var workfile = workfileSet.first();
-            var filename = workfile.get("fileName");
-            var extension = workfile.get("fileType");
-
-            this.showFile(filename, extension);
+            workfileSet.each(function(workfile) {
+                var filename = workfile.get("fileName");
+                var extension = workfile.get("fileType");
+                this.showFile(filename, extension);
+            }, this);
         },
 
         showFile: function(filename, extension) {
+            var fileDetailsRow = this.$(".file_details").eq(0).
+                clone().
+                appendTo(this.$(".options_area"));
+
             var iconSrc = chorus.urlHelpers.fileIconUrl(extension, "medium");
-            this.$('img').attr('src', iconSrc);
-            this.$('span.file_name').text(filename).attr('title',filename);
-            this.$(".file_details").show();
+            fileDetailsRow.find('img').attr('src', iconSrc);
+            fileDetailsRow.find('span.file_name').text(filename).attr('title',filename);
+            fileDetailsRow.removeClass("hidden");
         },
 
         removeFile : function(e){

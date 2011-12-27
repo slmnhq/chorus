@@ -80,23 +80,29 @@ describe("NotesNewDialog", function() {
 
             describe("when workfiles are selected", function() {
                 beforeEach(function() {
-                    this.workfile = new chorus.models.Workfile({ id: 2, fileName: "greed.sql", fileType: "sql" });
-                    this.workfileSet = new chorus.models.WorkfileSet([ this.workfile ]);
+                    var workfileSet = new chorus.models.WorkfileSet([
+                        new chorus.models.Workfile({ id: 1, fileName: "greed.sql", fileType: "sql" }),
+                        new chorus.models.Workfile({ id: 2, fileName: "generosity.cpp", fileType: "cpp" })
+                    ]);
                     this.workfilesDialog = chorus.dialogs.WorkfilesAttach.prototype.render.mostRecentCall.object;
-                    this.workfilesDialog.trigger("files:selected", this.workfileSet);
+                    this.workfilesDialog.trigger("files:selected", workfileSet);
                 });
 
                 it("displays the names of the workfiles", function() {
-                    expect(this.dialog.$(".file_details .file_name").text()).toBe("greed.sql");
+                    var fileNames = this.dialog.$(".file_details:not('.hidden') .file_name");
+                    expect(fileNames.eq(0).text()).toBe("greed.sql");
+                    expect(fileNames.eq(1).text()).toBe("generosity.cpp");
                 });
 
-                it("displays the appropriate file icon", function() {
-                    expect(this.dialog.$(".file_details img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "medium"));
+                it("displays the appropriate file icons", function() {
+                    var fileIcons = this.dialog.$(".file_details:not('.hidden') img");
+                    expect(fileIcons.eq(0).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "medium"));
+                    expect(fileIcons.eq(1).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("cpp", "medium"));
                 });
             });
         });
 
-        context("when a file has been chosen", function() {
+        context("when a desktop file has been chosen", function() {
             beforeEach(function() {
                 this.dialog.$("a.show_options").click();
                 this.fileList = [
@@ -120,11 +126,13 @@ describe("NotesNewDialog", function() {
             });
 
             it("displays the chosen filename", function() {
-                expect(this.dialog.$(".file_details .file_name").text()).toBe("foo.bar");
+                var fileName = this.dialog.$(".file_details:not('.hidden') .file_name");
+                expect(fileName.text()).toBe("foo.bar");
             });
 
             it("displays the appropriate file icon", function() {
-                expect(this.dialog.$(".file_details img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("bar", "medium"));
+                var fileIcon = this.dialog.$(".file_details:not('.hidden') img");
+                expect(fileIcon.attr("src")).toBe(chorus.urlHelpers.fileIconUrl("bar", "medium"));
             });
 
             it("sets uploadObj on the model", function() {
