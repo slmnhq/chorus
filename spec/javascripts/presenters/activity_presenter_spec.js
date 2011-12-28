@@ -265,7 +265,7 @@ describe("chorus.presenters.Activity", function() {
             var self = this;
             expect(artifacts.length).not.toBe(0);
             _.each(artifacts, function(artifact, index) {
-                expect(self.presenter.attachments[index].fileName).toBe(artifact.name);
+                expect(self.presenter.attachments[index].name).toBe(artifact.name);
             });
         })
 

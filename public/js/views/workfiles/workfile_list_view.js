@@ -22,12 +22,7 @@
         },
 
         collectionModelContext : function(model) {
-            var isOther = !(model.isImage() || model.isText());
-
-            var ctx = {
-                iconUrl : chorus.urlHelpers.fileIconUrl(model.get('fileType')),
-                showUrl : isOther ? model.downloadUrl() : model.showUrl()
-            }
+            var ctx = new chorus.presenters.Artifact(model, {iconSize : 'large'});
 
             var lastComment = model.lastComment();
             if (lastComment) {

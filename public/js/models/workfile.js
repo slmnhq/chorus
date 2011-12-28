@@ -4,7 +4,7 @@
 
     ns.Workfile = chorus.models.Base.extend({
         entityType : "workfile",
-        
+
         initialize : function() {
             this.workspace = new chorus.models.Workspace({id: this.get("workspaceId")})
             this.urlTemplate = this.workspace.url(true) + "/workfile/{{id}}"
