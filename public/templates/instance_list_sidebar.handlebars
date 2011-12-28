@@ -14,8 +14,10 @@
             <dt>{{t "instances.sidebar.port"}}</dt>
             <dd title="{{{port}}}">{{{port}}}</dd>
             <br />
-            <dt>{{t "instances.sidebar.shared_account"}}</dt>
-            <dd title="{{{dbUserName}}}">{{{dbUserName}}}</dd>
+            {{#if dbUserName}}
+                <dt>{{t "instances.sidebar.shared_account"}}</dt>
+                <dd title="{{{dbUserName}}}">{{{dbUserName}}}</dd>
+            {{/if}}
         </dl>
     </div>
 </div>

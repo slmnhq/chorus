@@ -1,6 +1,7 @@
 describe("InstanceListSidebar", function() {
     beforeEach(function() {
         this.view = new chorus.views.InstanceListSidebar();
+        fixtures.model = "Instance";
     });
 
     describe("render", function() {
@@ -64,15 +65,37 @@ describe("InstanceListSidebar", function() {
             })
         })
 
-        context("when configureation is clicked", function() {
+        context("when configuration is clicked", function() {
             beforeEach(function() {
                 expect(this.view.$(".configuration_detail")).not.toBeVisible();
                 this.view.$(".tab_control li.configuration").click();
             })
 
-            it("shows activity", function() {
+            it("shows configuration", function() {
                 expect(this.view.$(".configuration_detail")).toBeVisible();
                 expect(this.view.$(".activity_list")).not.toBeVisible();
+            })
+
+            context("and the instance has a shared account", function() {
+                beforeEach(function() {
+                    this.view.model = fixtures.modelFor("fetchWithSharedAccount");
+                    this.view.render();
+                })
+
+                it("includes the shared account information", function() {
+                    expect(this.view.$(".configuration_detail").text().indexOf(t("instances.sidebar.shared_account"))).not.toBe(-1);
+                })
+            })
+
+            context("and the instance does not have a shared account", function() {
+                beforeEach(function() {
+                    this.view.model = fixtures.modelFor("fetch");
+                    this.view.render();
+                })
+
+                it("does not include the shared account information", function() {
+                    expect(this.view.$(".configuration_detail").text().indexOf(t("instances.sidebar.shared_account"))).toBe(-1);
+                })
             })
         })
     });
