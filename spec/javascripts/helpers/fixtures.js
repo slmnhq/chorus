@@ -1123,6 +1123,23 @@
                 return new chorus.models.Workspace(attributes);
             },
 
+            workfile: function(overrides) {
+                var attributes = _.extend({
+                    id: this.nextId().toString(),
+                    workspaceId: this.nextId().toString()
+                }, overrides);
+                return new chorus.models.Workfile(attributes);
+            },
+
+            artifact: function(overrides) {
+                var attributes = _.extend({
+                    id: this.nextId().toString(),
+                    entityId: this.nextId().toString(),
+                    entityType: "file"
+                }, overrides);
+                return new chorus.models.Artifact(attributes);
+            },
+
             instance : function(overrides) {
                 var attributes = _.extend({
                     id : this.nextId().toString(),
