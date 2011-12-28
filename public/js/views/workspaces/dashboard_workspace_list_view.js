@@ -21,9 +21,11 @@
             this.collection.each(function(workspace) {
                 var li = this.$("li[data-id=" + workspace.get("id") + "]");
                 var commentList = new chorus.views.CommentList({ collection: workspace.comments(), initialLimit: 5 });
+                var el = $(commentList.render().el);
+                el.find("ul").addClass("tooltip");
 
                 li.find(".comment .count").qtip({
-                    content: $(commentList.render().el).html(),
+                    content: el.html(),
                     show: 'mouseover',
                     hide: 'mouseout',
                     style: {

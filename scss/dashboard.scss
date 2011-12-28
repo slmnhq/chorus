@@ -73,3 +73,11 @@ div[data-page="Dashboard"] {
         margin-right:  $workspace-list-width;
     }
 }
+
+.tooltip {
+    li.comment {
+        .object {
+            display: inline;
+        }
+    }
+}
