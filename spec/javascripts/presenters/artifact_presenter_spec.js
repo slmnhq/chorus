@@ -3,7 +3,7 @@ describe("chorus.presenters.Artifact", function() {
         it("includes the workfile's show url", function() {
             var model = fixtures.workfile({ mimeType: "text/plain" });
             var presenter = new chorus.presenters.Artifact(model);
-            expect(presenter.showUrl).toBe(model.showUrl());
+            expect(presenter.url).toBe(model.showUrl());
         });
     });
 
@@ -11,7 +11,7 @@ describe("chorus.presenters.Artifact", function() {
         it("includes the workfile's download url", function() {
             var model = fixtures.workfile({ mimeType: "application/octet-stream" });
             var presenter = new chorus.presenters.Artifact(model);
-            expect(presenter.showUrl).toBe(model.downloadUrl());
+            expect(presenter.url).toBe(model.downloadUrl());
         })
     });
 
@@ -19,7 +19,7 @@ describe("chorus.presenters.Artifact", function() {
         it("includes a download url for the artifact", function() {
             var model = fixtures.artifact();
             var presenter = new chorus.presenters.Artifact(model);
-            expect(presenter.showUrl).toBe(model.downloadUrl());
+            expect(presenter.url).toBe(model.downloadUrl());
         });
     });
 });

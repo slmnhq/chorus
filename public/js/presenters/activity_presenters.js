@@ -52,12 +52,8 @@
             }));
 
             var attrs = {
-                attachments: _.map(model.get('artifacts'), function(artifact) {
-                    return {
-                        iconSrc: chorus.urlHelpers.fileIconUrl(artifact.type, 'medium'),
-                        fileName: artifact.name,
-                        downloadUrl : "/edc/file/" + artifact.entityId
-                    }
+                attachments: _.map(model.attachments(), function(artifact) {
+                    return new ns.presenters.Artifact(artifact);
                 })
             };
 

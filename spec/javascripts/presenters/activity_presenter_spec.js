@@ -274,7 +274,9 @@ describe("chorus.presenters.Activity", function() {
             var self = this;
             expect(artifacts.length).not.toBe(0);
             _.each(artifacts, function(artifact, index) {
-                expect(self.presenter.attachments[index].downloadUrl).toBe('/edc/file/' + artifact.entityId);
+                var model = new chorus.models.Artifact(artifact);
+                var artifactPresenter = new chorus.presenters.Artifact(model);
+                expect(self.presenter.attachments[index].url).toBe(artifactPresenter.url);
             });
         })
     }
