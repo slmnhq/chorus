@@ -57,10 +57,6 @@ describe("NotesNewDialog", function() {
             expect(eventSpy.preventDefault).toHaveBeenCalled();
         });
 
-        it("has the file_details hidden", function() {
-            expect(this.dialog.$('.file_details')).toBeHidden();
-        });
-
         describe("when the 'attach workfile' link is clicked", function() {
             beforeEach(function() {
                 this.fakeModal = stubModals();
@@ -89,7 +85,7 @@ describe("NotesNewDialog", function() {
                 });
 
                 it("displays the names of the workfiles", function() {
-                    var fileNames = this.dialog.$(".file_details:not('.hidden') .file_name");
+                    var fileNames = this.dialog.$(".file_details .file_name");
                     expect(fileNames.eq(0).text()).toBe("greed.sql");
                     expect(fileNames.eq(1).text()).toBe("generosity.cpp");
                 });
@@ -107,21 +103,21 @@ describe("NotesNewDialog", function() {
                 describe("when a workfile remove link is clicked", function() {
                     it("removes only that workfile", function() {
                         var sqlRow = this.dialog.$(".file_details:not('.hidden'):contains('sql')")
-                        var cppRow = this.dialog.$(".file_details:not('.hidden'):contains('cpp')")
+                        var cppRow = this.dialog.$(".file_details:contains('cpp')")
 
                         expect(sqlRow).toExist();
                         expect(cppRow).toExist();
 
                         sqlRow.find("a.remove").click();
 
-                        sqlRow = this.dialog.$(".file_details:not('.hidden'):contains('sql')")
-                        cppRow = this.dialog.$(".file_details:not('.hidden'):contains('cpp')")
+                        sqlRow = this.dialog.$(".file_details:contains('sql')")
+                        cppRow = this.dialog.$(".file_details:contains('cpp')")
                         expect(sqlRow).not.toExist();
                         expect(cppRow).toExist();
                     });
 
                     it("removes only that workfile from the collection", function() {
-                        var sqlRow = this.dialog.$(".file_details:not('.hidden'):contains('sql')")
+                        var sqlRow = this.dialog.$(".file_details:contains('sql')")
                         sqlRow.find("a.remove").click();
                         expect(this.dialog.model.workfiles.get("1")).toBeUndefined();
                         expect(this.dialog.model.workfiles.get("2")).not.toBeUndefined();
@@ -134,7 +130,7 @@ describe("NotesNewDialog", function() {
                         });
 
                         it("does not remove the desktop file", function() {
-                            var sqlRow = this.dialog.$(".file_details:not('.hidden'):contains('sql')")
+                            var sqlRow = this.dialog.$(".file_details:contains('sql')")
                             sqlRow.find("a.remove").click();
 
                             expect(this.dialog.model.uploadObj).toBe(this.uploadObj);
@@ -144,12 +140,15 @@ describe("NotesNewDialog", function() {
             });
         });
 
-        context("when a desktop file has been chosen", function() {
+        context("when a desktop files have been chosen", function() {
             beforeEach(function() {
                 this.dialog.$("a.show_options").click();
                 this.fileList = [
                     {
                         name: 'foo.bar'
+                    },
+                    {
+                        name: 'baz.sql'
                     }
                 ];
                 expect($.fn.fileupload).toHaveBeenCalled();
@@ -167,14 +166,14 @@ describe("NotesNewDialog", function() {
                 expect(this.dialog.$('.file_details')).toBeVisible();
             });
 
-            it("displays the chosen filename", function() {
-                var fileName = this.dialog.$(".file_details:not('.hidden') .file_name");
-                expect(fileName.text()).toBe("foo.bar");
+            it("displays the chosen filenames", function() {
+                expect(this.dialog.$(".file_details .file_name:eq(0)").text()).toBe("foo.bar");
+                expect(this.dialog.$(".file_details .file_name:eq(1)").text()).toBe("baz.sql");
             });
 
-            it("displays the appropriate file icon", function() {
-                var fileIcon = this.dialog.$(".file_details:not('.hidden') img");
-                expect(fileIcon.attr("src")).toBe(chorus.urlHelpers.fileIconUrl("bar", "medium"));
+            it("displays the appropriate file icons", function() {
+                expect(this.dialog.$(".file_details img:eq(0)").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("bar", "medium"));
+                expect(this.dialog.$(".file_details img:eq(1)").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "medium"));
             });
 
             it("sets uploadObj on the model", function() {
@@ -183,14 +182,16 @@ describe("NotesNewDialog", function() {
 
             context("when a selected file is removed", function() {
                 beforeEach(function() {
-                    this.dialog.$(".file_details:not('.hidden') .remove").click();
+                    this.dialog.$(".file_details .remove:eq(1)").click();
                 });
 
-                it("hides the file_details area", function() {
-                    expect(this.dialog.$(".file_details")).toBeHidden();
+                it("removes the file details", function() {
+                    expect(this.dialog.$('.file_details').length).toBe(1);
                 });
 
-                it("removes the uploadObj from the model", function() {
+                it("removes the uploadObj from the model only if all uploads have been removed", function() {
+                    expect(this.dialog.model.uploadObj).toBeDefined();
+                    this.dialog.$(".file_details .remove:eq(0)").click();
                     expect(this.dialog.model.uploadObj).toBeUndefined();
                 });
             });

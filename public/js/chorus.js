@@ -8,10 +8,12 @@
         self.dialogs = {};
         self.alerts = {};
         self.templates = {};
+        self.features = {};
 
         self.initialize = function() {
             self.session = new chorus.models.Session();
             self.router = new chorus.Router(self);
+            self.detectFeatures();
 
             //bind global state events here
             self.session.bind("needsLogin", self.requireLogin);
@@ -27,6 +29,10 @@
         self.requireLogin = function requireLogin() {
             self.router.navigate("/login", true);
         };
+
+        self.detectFeatures = function() {
+            self.features.multipleFileUpload = !$.browser.mozilla || (parseInt($.browser.version) >= 2);
+        }
     }
 
     window.chorus = window.chorus || new Chorus();

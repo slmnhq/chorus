@@ -28,6 +28,7 @@
         'activity_list',
         'main_content',
         'notes_new',
+        'notes_new_file_attachment',
         'plain_text',
         'shuttle_widget',
         'sub_nav',

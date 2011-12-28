@@ -12,6 +12,7 @@
 
         postRender : function() {
             this.$("input[type=file]").fileupload({
+                singleFileUploads : false,
                 add : _.bind(this.desktopFileChosen, this),
                 dataType : "text"
             });
@@ -40,7 +41,8 @@
         additionalContext : function() {
             return {
                 entityType: this.model.get("entityType"),
-                formUrl : this.model.url()
+                formUrl : this.model.url(),
+                multipleFileUpload: chorus.features.multipleFileUpload
             };
         },
 
@@ -59,28 +61,26 @@
 
         desktopFileChosen : function(e, data) {
             this.model.uploadObj = data;
-            var filename = data.files[0].name;
-            var extension = _.last(filename.split('.'));
-            var file = new chorus.models.Base({ fileName: filename, fileType: extension });
-            file.isUpload = true;
-
-            this.showFile(file);
+            var self = this;
+            _.each(data.files, function(file) {
+                var extension = _.last(file.name.split('.'));
+                file.isUpload = true
+                self.showFile(file, file.name, extension);
+            });
         },
 
         workfileChosen : function(workfileSet) {
             this.model.workfiles = workfileSet;
             this.model.workfiles.each(function(workfile) {
-                this.showFile(workfile);
+                this.showFile(workfile, workfile.get("fileName"), workfile.get("fileType"));
             }, this);
         },
 
-        showFile: function(file) {
-            var fileDetailsRow = this.$(".file_details").eq(0).
-                clone().
-                appendTo(this.$(".options_area"));
+        showFile: function(file, filename, filetype) {
+            var fileDetailsRow = $(Handlebars.helpers.renderTemplate("notes_new_file_attachment"));
+            this.$(".options_area").append(fileDetailsRow);
 
-            var filename = file.get("fileName");
-            var iconSrc = chorus.urlHelpers.fileIconUrl(file.get("fileType"), "medium");
+            var iconSrc = chorus.urlHelpers.fileIconUrl(filetype, "medium");
             fileDetailsRow.find('img').attr('src', iconSrc);
             fileDetailsRow.find('span.file_name').text(filename).attr('title', filename);
             fileDetailsRow.data("file", file);
@@ -91,10 +91,14 @@
             e.preventDefault();
             var row = $(e.target).closest(".file_details");
             var file = row.data("file");
-            row.remove();
+            row.detach();
 
             if (file.isUpload) {
-                delete this.model.uploadObj;
+                var fileIndex = _.indexOf(this.model.uploadObj.files, file);
+                this.model.uploadObj.files.splice(fileIndex, 1);
+                if(this.model.uploadObj.files.length == 0) {
+                    delete this.model.uploadObj;
+                }
             } else {
                 this.model.workfiles.remove(file);
             }
