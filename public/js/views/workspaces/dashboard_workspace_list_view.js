@@ -26,20 +26,19 @@
                     content: $(commentList.render().el).html(),
                     show: 'mouseover',
                     hide: 'mouseout',
-                    // hide: 'click',
                     style: {
                         width: 300
                     },
                     position : {
                         corner : {
-                            target: "rightMiddle",
-                            tooltip: "leftMiddle"
+                            target: "leftMiddle",
+                            tooltip: "rightMiddle"
                         },
                         adjust : {
-                            screen : true
-                        },
-                        type : 'fixed',
-                        container: this.el
+                            screen : true,
+                            scroll : false,
+                            mouse: false
+                        }
                     },
                 });
             }, this);
