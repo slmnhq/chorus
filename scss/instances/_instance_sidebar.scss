@@ -4,6 +4,7 @@
     .instance_name {
         @include ellipsis;
         @include heading-sidebar;
+        font-size: 24px;
     }
 
     .instance_type {
