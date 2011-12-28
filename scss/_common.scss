@@ -160,6 +160,7 @@ $medium-font: 14px;
     border: 1px solid $border-color;
     @include border-radius(30px);
     background: none;
+    margin-bottom: 2px;
 
     &[disabled=disabled] {
         @include opacity(0.25);

@@ -42,6 +42,12 @@
         height: 0;
         border: none;
     }
+
+    button {
+        margin-left: 20px;
+        @include font-content-details;
+        @include content-details-button($border-color);
+    }
 }
 
 .content_footer {
