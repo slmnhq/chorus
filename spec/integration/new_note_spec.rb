@@ -13,7 +13,7 @@ describe "creating a note on a workspace" do
         fill_in "body", :with => "Blood."
         click_link "Show options"
         @file = Tempfile.new("my_desktop_file_name")
-        attach_file "fileToUpload", @file.path
+        attach_file "fileToUpload[]", @file.path
       end
 
       it "displays the file's name" do
