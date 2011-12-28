@@ -1,60 +1,56 @@
 ;
 (function(ns) {
-    var entityTitles = {
-        "DEFAULT" : t("comments.title.ACTIVITY"),
-        "NOTE" : t("comments.title.NOTE")
-    };
-
     ns.presenters.Activity = ns.presenters.Base.extend({
         present : function(model) {
-            var constructor = ns.presenters.Activity[model.get("type")] || ns.presenters.Activity.Base;
             this.model = model
-            this.presenter = constructor.make(model)
-            this.presenter.header = _.extend(this.header(), this.presenter.header);
+            this.author = model.author();
+            this.workspace = model.get("workspace") && new ns.models.Workspace(model.get("workspace"));
+            this.activityType = model.get("type")
 
+
+            this.presenter = this.defaultPresenter(this.model)
+            this.extensions = this[this.activityType] && this[this.activityType](model)
+            _.extend(this.presenter, this.extensions)
+            this.presenter.header = _.extend(this.defaultHeader(), this.presenter.header) //presenter.header includes extensions.header
             return this.presenter
         },
 
-        header : function() {
+        defaultPresenter : function(model) {
+            var entityTitles = {
+                "DEFAULT" : t("comments.title.ACTIVITY"),
+                "NOTE" : t("comments.title.NOTE")
+            };
+
+            return {
+                body : model.get("text"),
+                entityTitle : entityTitles[this.activityType] || entityTitles["DEFAULT"],
+                entityType : this.activityType == "NOTE" ? "comment" : "activitystream",
+                objectName : "don't know object name for activity type: " + this.activityType,
+                objectUrl : "/NEED/OBJECT/URL/FOR/TYPE/" + this.activityType,
+                workspaceName : this.workspace ? this.workspace.get("name") : "no workspace name for activity type: " + this.activityType,
+                workspaceUrl : this.workspace ? this.workspace.showUrl() : "no workspace URL for activity type: " + this.activityType,
+                iconSrc : this.author.imageUrl(),
+                iconHref : this.author.showUrl()
+            };
+        },
+
+        defaultHeader : function() {
             return {
                 type: this.model.get("type"),
-                authorUrl: this.model.author().showUrl(),
-                authorName: this.model.author().displayName(),
+                authorUrl: this.author.showUrl(),
+                authorName: this.author.displayName(),
                 objectUrl: this.presenter.objectUrl,
                 objectName: this.presenter.objectName,
                 workspaceUrl: this.presenter.workspaceUrl,
                 workspaceName: this.presenter.workspaceName
             }
-        }
-    });
+        },
 
-    ns.presenters.Activity.Base = {
-        make : function(model) {
-            var type = model.get("type");
-            var author = model.author();
-            var workspace = model.get("workspace") && new ns.models.Workspace(model.get("workspace"));
-
-            return {
-                body : model.get("text"),
-                entityTitle : entityTitles[type] || entityTitles["DEFAULT"],
-                entityType : type == "NOTE" ? "comment" : "activitystream",
-                objectName : "don't know object name for activity type: " + type,
-                objectUrl : "/NEED/OBJECT/URL/FOR/TYPE/" + type,
-                workspaceName : workspace ? workspace.get("name") : "no workspace name for activity type: " + type,
-                workspaceUrl : workspace ? workspace.showUrl() : "no workspace URL for activity type: " + type,
-                iconSrc : author.imageUrl(),
-                iconHref : author.showUrl()
-            };
-        }
-    };
-
-
-    ns.presenters.Activity.NOTE = {
-        make : function(model) {
-            var workspace = model.get("workspace") && new ns.models.Workspace(model.get("workspace"));
+        NOTE : function(model) {
             var workfile = model.get("workfile") && new ns.models.Workfile(_.extend(model.get("workfile"), {
-                workspaceId : workspace.get("id")
+                workspaceId : this.workspace.get("id")
             }));
+
             var attrs = {
                 attachments: _.map(model.get('artifacts'), function(artifact) {
                     return {
@@ -68,85 +64,70 @@
             if (workfile) {
                 attrs.objectName = workfile.get("name");
                 attrs.objectUrl = workfile.showUrl();
-                attrs.workspaceName = workspace.get("name");
-                attrs.workspaceUrl = workspace.showUrl();
-            } else if (workspace) {
-                attrs.objectName = workspace.get("name");
-                attrs.objectUrl = workspace.showUrl();
+            } else if (this.workspace) {
+                attrs.objectName = this.workspace.get("name");
+                attrs.objectUrl = this.workspace.showUrl();
             }
 
-            return extendBase(model, attrs);
-        }
-    };
+            return attrs
+        },
 
-    ns.presenters.Activity.WORKSPACE_DELETED = {
-        make : function(model) {
-            var original = extendBase(model);
-            return extendBase(model, {
-                objectName : original.workspaceName
-            })
-        }
-    };
 
-    var workspaceIsObject = {
-        make : function(model) {
-            var original = extendBase(model);
-            return extendBase(model, {
-                objectName : original.workspaceName,
-                objectUrl : original.workspaceUrl
-            })
-        }
-    };
+        WORKSPACE_CREATED : workspaceIsObject,
+        WORKSPACE_MAKE_PRIVATE : workspaceIsObject,
+        WORKSPACE_MAKE_PUBLIC : workspaceIsObject,
+        WORKSPACE_ARCHIVED : workspaceIsObject,
+        WORKSPACE_UNARCHIVED : workspaceIsObject,
 
-    ns.presenters.Activity.WORKSPACE_CREATED = workspaceIsObject;
-    ns.presenters.Activity.WORKSPACE_MAKE_PRIVATE = workspaceIsObject;
-    ns.presenters.Activity.WORKSPACE_MAKE_PUBLIC = workspaceIsObject;
-    ns.presenters.Activity.WORKSPACE_ARCHIVED = workspaceIsObject;
-    ns.presenters.Activity.WORKSPACE_UNARCHIVED = workspaceIsObject;
-
-    ns.presenters.Activity.WORKFILE_CREATED = {
-        make : function(model) {
-            return extendBase(model, {
+        WORKFILE_CREATED : function(model) {
+            return {
                 objectName : model.get("workfile").name,
-                objectUrl : new ns.models.Workfile({id: model.get("workfile").id, workspaceId : model.get("workspace").id}).showUrl()
-            })
-        }
-    };
+                objectUrl : new ns.models.Workfile({id: model.get("workfile").id, workspaceId : this.workspace.id}).showUrl()
+            }
+        },
 
-    ns.presenters.Activity.USER_ADDED = {
-        make : function(model) {
+        USER_ADDED : function(model) {
             var user = new ns.models.User({id: model.get("user").id});
-            return extendBase(model, {
+            return {
                 objectName : model.get("user").name,
                 objectUrl : user.showUrl(),
                 iconSrc : user.imageUrl(),
                 iconHref : user.showUrl()
-            })
-        }
-    };
+            }
+        },
 
-    ns.presenters.Activity.USER_DELETED = {
-        make : function(model) {
-            return extendBase(model, {
+        USER_DELETED : function(model) {
+            return  {
                 objectName : model.get("user").name
-            })
-        }
-    };
+            }
+        },
 
-    ns.presenters.Activity.MEMBERS_ADDED = ns.presenters.Activity.MEMBERS_DELETED = {
-        make : function(model) {
-            var user = new ns.models.User(model.get("user")[0]);
-            return extendBase(model, {
-                objectName : user.get("name"),
-                objectUrl : user.showUrl(),
-                header : {
-                    others : _.rest(model.get("user"))
-                }
-            });
+        MEMBERS_ADDED : memberExtension,
+        MEMBERS_DELETED : memberExtension,
+
+
+        WORKSPACE_DELETED : function(model) {
+            return {
+                objectName : this.presenter.workspaceName
+            }
+        }
+    });
+
+    function workspaceIsObject(model) {
+        return {
+            objectName : this.presenter.workspaceName,
+            objectUrl : this.presenter.workspaceUrl
         }
     }
 
-    function extendBase(model, overrides) {
-        return _.extend(ns.presenters.Activity.Base.make(model), overrides)
+    function memberExtension(model) {
+        var user = new ns.models.User(model.get("user")[0]);
+        return {
+            objectName : user.get("name"),
+            objectUrl : user.showUrl(),
+            header : {
+                others : _.rest(model.get("user"))
+            }
+        }
     }
 })(chorus);
