@@ -1077,8 +1077,8 @@
                     attachments : [],
                     type: "NOTE",
                     comments: [],
-                    author: this.user().attributes
                 }, overrides);
+                attributes.author = _.extend(this.user().attributes, overrides.author);
                 return new chorus.models.Comment(attributes);
             },
 

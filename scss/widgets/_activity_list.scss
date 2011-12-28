@@ -87,7 +87,7 @@ $system-action-color: #7C7D7D;
         word-wrap: break-word;
     }
 
-    .activity_header {
+    .activity_header, .comment_header {
         word-wrap: break-word;
         font-size: 14px;
         padding-bottom: $text-padding-y;

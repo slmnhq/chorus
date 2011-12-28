@@ -4,6 +4,10 @@ $activity-gutter: 8px;
     margin-bottom: $activity-gutter;
 
     > li {
+        .object {
+            display: none;
+        }
+
         .author{
             font-size: 14px;
             font-weight: $semibold;
