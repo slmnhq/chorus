@@ -14,10 +14,10 @@
             {{#if latestComment}}
                 <div class="comment">
                     <div class="count">
-                        {{t "dashboard.workspaces.recent_comments" latestCommentList.length}}
+                        {{t "dashboard.workspaces.recent_comments" numComments}}
                     </div>
                     <div class="recent">
-                        {{t "dashboard.workspaces.most_recent"}} <span class="date">{{relativeTimestamp latestComment.timestamp}}</span> by <span class="author">{{displayNameFromPerson latestComment.author}}</span>
+                        {{t "dashboard.workspaces.most_recent"}} <span class="date">{{relativeTimestamp latestComment.timestamp}}</span> by <span class="author">{{latestComment.author}}</span>
                     </div>
                 </div>
             {{/if}}

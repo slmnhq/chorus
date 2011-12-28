@@ -5,27 +5,28 @@
         additionalClass : "list",
 
         collectionModelContext: function(model) {
+            var comments = model.comments().models;
             return {
                 imageUrl : model.defaultIconUrl(),
                 showUrl : model.showUrl(),
-                latestComment : model.get("latestCommentList")[0]
+                numComments : comments.length,
+                latestComment : comments[0] && {
+                    timestamp: comments[0].get("timestamp"),
+                    author : comments[0].creator().displayName()
+                }
             }
         },
 
-        setupSubviews: function() {
-            this.commentLists = this.collection.map(function(workspace) {
-                return new chorus.views.CommentList({ collection: workspace.comments() });
-            });
-        },
-
         postRender: function() {
-            var self = this;
-            this.$(".comment .count").each(function(i, el) {
-                $(el).qtip({
-                    content: $(self.commentLists[i].render().el).html(),
+            this.collection.each(function(workspace) {
+                var li = this.$("li[data-id=" + workspace.get("id") + "]");
+                var commentList = new chorus.views.CommentList({ collection: workspace.comments(), initialLimit: 5 });
+
+                li.find(".comment .count").qtip({
+                    content: $(commentList.render().el).html(),
                     show: 'mouseover',
-                    // hide: 'mouseout',
-                    hide: 'click',
+                    hide: 'mouseout',
+                    // hide: 'click',
                     style: {
                         width: 300
                     },
@@ -38,10 +39,10 @@
                             screen : true
                         },
                         type : 'fixed',
-                        container: self.el
+                        container: this.el
                     },
                 });
-            });
+            }, this);
         }
     });
 })(jQuery, chorus.views);
