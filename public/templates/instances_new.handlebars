@@ -34,24 +34,15 @@
         <img src="/images/more-info.png"/>
     </legend>
     <div>
+        <input type="hidden" name="provisionType" value="create" />
         <label class="required">{{t "instances.dialog.instance_name"}}</label>
         <input type="text" name="name"/>
 
         <label>{{t "instances.dialog.description"}}</label>
         <textarea rows="3" name="description"/>
 
-        <label class="required" name="host">{{t "instances.dialog.host"}} </label>
-        <label class="required" name="port">{{t "instances.dialog.port"}}</label>
-        <input type="text" name="host"/>
-        <input type="text" name="port"/>
-
-        <label class="required" name="dbUserName">{{t "instances.dialog.database_account"}}</label>
-        <label class="required" name="dbPassword">{{t "instances.dialog.database_password"}}</label>
-        <input type="text" name="dbUserName" maxlength="256"/>
-        <input type="password" name="dbPassword" maxlength="256"/>
-
-        <input type="checkbox" name="is_community_account" id="is_community_account"/>
-        <label for="is_community_account">{{t "instances.dialog.is_community_account"}}</label>
+        <label class="required" name="size">{{t "instances.dialog.size"}} </label>
+        <input type="text" name="size"/>
     </div>
 </fieldset>
 
