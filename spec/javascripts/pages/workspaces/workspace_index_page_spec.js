@@ -30,6 +30,11 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
         it("displays an 'add workspace' button", function() {
             expect(this.page.$("button:contains('Create a Workspace')")).toExist();
         });
+        it("open dialogs when user click on 'add workspace' button ", function() {
+                stubModals();
+                this.page.$('button[data-dialog="WorkspacesNew"]').click();
+                expect(chorus.modal instanceof chorus.dialogs.WorkspacesNew).toBeTruthy();
+            });
     });
 
     describe("events", function() {

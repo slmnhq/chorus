@@ -19,6 +19,10 @@
                             ],
                             event : "filter"
                         }
+                    },
+                    addButton : {
+                        addButtonView : "WorkspacesNew",
+                        addButtonText : t("actions.create_workspace")
                     }
                 }
             );

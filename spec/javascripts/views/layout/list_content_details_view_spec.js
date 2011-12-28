@@ -6,6 +6,25 @@ describe("ListContentDetails", function() {
     })
 
     describe("#render", function() {
+        describe("add Button", function() {
+            beforeEach(function() {
+                this.view.options.addButton = {
+                    addButtonView : "WorkspacesNew",
+                    addButtonText : "Create a Workspace"
+                };
+                this.view.render();
+            });
+
+            it("shows the add button when showAddButton is truthy", function() {
+                expect(this.view.$('button[data-dialog="WorkspacesNew"]')).toExist();
+            });
+
+            it("shows the add button text", function() {
+                expect(this.view.$('button[data-dialog="WorkspacesNew"]').text()).toBe("Create a Workspace");
+            });
+        });
+
+
         context("when the collection is loaded", function() {
             context("and the hideCounts option is falsy", function() {
                 beforeEach(function() {

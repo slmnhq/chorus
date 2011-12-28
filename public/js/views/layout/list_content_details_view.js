@@ -36,7 +36,8 @@
                 modelClass : this.options.modelClass,
                 pagination : this.collection.length > 0 ? this.collection.pagination : undefined,
                 records : this.collection.pagination ? this.collection.pagination.records : this.collection.length,
-                hideCounts : this.options.hideCounts
+                hideCounts : this.options.hideCounts,
+                addButton : this.options.addButton
             }
 
             if (this.collection.loaded && this.collection.pagination) {
