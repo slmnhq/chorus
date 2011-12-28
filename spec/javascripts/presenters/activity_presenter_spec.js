@@ -54,6 +54,25 @@ describe("chorus.presenters.Activity", function() {
         itShouldHaveTheAuthorsIconAndUrl();
     })
 
+    context(".INSTANCE_CREATED", function() {
+        beforeEach(function() {
+            this.model = fixtures.activity.INSTANCE_CREATED();
+            this.instance = this.model.get("instance");
+            this.presenter = new chorus.presenters.Activity(this.model)
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.instance.name);
+        });
+
+        it("should have the right objectUrl", function() {
+            var url = new chorus.models.Instance({id: this.instance.id}).showUrl();
+            expect(this.presenter.objectUrl).toBe(url);
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
+
     context(".WORKSPACE_CREATED", function() {
         beforeEach(function() {
             this.model = fixtures.activity.WORKSPACE_CREATED();
