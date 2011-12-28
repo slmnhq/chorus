@@ -1078,7 +1078,7 @@
                     type: "NOTE",
                     comments: [],
                 }, overrides);
-                attributes.author = _.extend(this.user().attributes, overrides.author);
+                attributes.author = _.extend(this.user().attributes, overrides && overrides.author);
                 return new chorus.models.Comment(attributes);
             },
 
