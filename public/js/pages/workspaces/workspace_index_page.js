@@ -1,4 +1,5 @@
-;(function($, ns) {
+;
+(function($, ns) {
     ns.pages.WorkspaceIndexPage = chorus.pages.Base.extend({
         crumbs : [
             { label: t("breadcrumbs.home"), url: "#/" },
@@ -20,10 +21,12 @@
                             event : "filter"
                         }
                     },
-                    addButton : {
-                        addButtonView : "WorkspacesNew",
-                        addButtonText : t("actions.create_workspace")
-                    }
+                    buttons: [
+                        {
+                            view : "WorkspacesNew",
+                            text : t("actions.create_workspace")
+                        }
+                    ]
                 }
             );
 

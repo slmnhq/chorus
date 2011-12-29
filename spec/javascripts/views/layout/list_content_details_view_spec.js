@@ -6,45 +6,31 @@ describe("ListContentDetails", function() {
     })
 
     describe("#render", function() {
-        describe("add Button", function() {
+        describe("buttons", function() {
             context("with a view", function() {
                 beforeEach(function() {
-                    this.view.options.addButton = {
-                        addButtonView : "WorkspacesNew",
-                        addButtonText : "Create a Workspace"
-                    };
+                    this.view.options.buttons = [
+                        {
+                            view : "WorkspacesNew",
+                            text : "Create a Workspace"
+                        },
+                        {
+                            url : "#/foo",
+                            text : "Create a Foo"
+                        }
+                    ];
+
                     this.view.render();
                 });
 
-                it("shows the add button when showAddButton is truthy", function() {
+                it("shows the buttons", function() {
                     expect(this.view.$('button[data-dialog="WorkspacesNew"]')).toExist();
-                });
-
-                it("shows the add button text", function() {
                     expect(this.view.$('button[data-dialog="WorkspacesNew"]').text()).toBe("Create a Workspace");
+
+                    expect(this.view.$("a[href=#/foo] button")).toExist();
+                    expect(this.view.$("a[href=#/foo] button").text()).toBe("Create a Foo");
                 });
             });
-
-            context("with an url", function() {
-                beforeEach(function() {
-                    this.view.options.addButton = {
-                        addButtonUrl : "#/foo",
-                        addButtonText : "Create a Foo"
-                    };
-                    this.view.render();
-                });
-
-                it("shows the add button when showAddButton is truthy", function() {
-                    var link = this.view.$("a button");
-                    expect(link).toExist();
-                    expect(link.closest("a")).toHaveAttr("href", "#/foo")
-                });
-
-                it("shows the add button text", function() {
-                    expect(this.view.$("a button").text()).toBe("Create a Foo");
-                });
-
-            })
         });
 
 

@@ -24,10 +24,12 @@
                     }
 
                 },
-                addButton : {
-                    addButtonUrl : "#/users/new",
-                    addButtonText : t("actions.add_user")
-                }
+                buttons : [
+                    {
+                        url : "#/users/new",
+                        text : t("actions.add_user")
+                    }
+                ]
             })
 
             this.mainContent.contentHeader.bind("choice:sort", function(choice) {
