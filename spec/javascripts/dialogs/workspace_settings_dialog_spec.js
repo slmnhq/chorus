@@ -18,9 +18,17 @@ describe("WorkspaceSettings dialog", function() {
     })
 
     describe("#setup", function() {
-        it("fetches the workspace's members", function() {
+        beforeEach(function() {
             this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement : this.launchElement, pageModel : this.workspace });
+        });
+
+        it("fetches the workspace's members", function() {
             expect(_.last(this.server.requests).url).toBe(this.workspace.members().url());
+        });
+
+        it("sorts the members by last name", function() {
+            expect(_.last(this.server.requests).url).toContain("sidx=lastName");
+            expect(_.last(this.server.requests).url).toContain("sord=asc");
         });
     });
 

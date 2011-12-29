@@ -34,6 +34,7 @@
                 spinnerSmall: true
             });
             this.pageModel.bind("saved", this.saved, this);
+            this.model.members().sortAsc("lastName");
             this.model.members().fetch();
 
             $(document).one('reveal.facebox', _.bind(this.setupSelects, this));
