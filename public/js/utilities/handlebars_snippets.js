@@ -122,8 +122,8 @@
             if (collection.length == 1) {
                 return t(key);
             } else {
-                if ($.i18n.map[key + ".plural"]) {
-                    return t(key + ".plural");
+                if (I18n.lookup(key + "_plural")) {
+                    return t(key + "_plural");
                 } else {
                     return t(key) + "s";
                 }

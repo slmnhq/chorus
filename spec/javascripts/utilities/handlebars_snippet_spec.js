@@ -255,7 +255,7 @@ describe("handlebars", function() {
             });
             describe("when the collection has less than max + 1 elements", function() {
                 it("returns no markup", function() {
-                    var el = $("<div>" + Handlebars.helpers.moreLink([1,2,3,4], 3, "thing") + "</div>");
+                    var el = $("<div>" + Handlebars.helpers.moreLink([1,2,3,4], 3, "thing", "less") + "</div>");
                     expect(el.find(".links")).not.toExist();
                 })
             });
@@ -345,7 +345,7 @@ describe("handlebars", function() {
 
                 context("and a plural string is present", function() {
                     it("uses the plural string", function() {
-                        expect(Handlebars.helpers.pluralize([1, 2], "test.deer")).toBe(t("test.deer.plural"))
+                        expect(Handlebars.helpers.pluralize([1, 2], "test.deer")).toBe(t("test.deer_plural"))
                     })
                 })
             })

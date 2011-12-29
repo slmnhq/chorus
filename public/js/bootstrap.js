@@ -1,14 +1,10 @@
 ;(function($) {
-    window.t = function(key) {
-        if (_.isEmpty($.i18n.map)) {
-            jQuery.i18n.properties({
-                name:'Messages',
-                path:'messages/',
-                mode:'map',
-                language: "en_US"});
+    window.t = function(key, options) {
+        if (_.isObject(options)) {
+            return I18n.t(key, options);
+        } else {
+            return I18n.t(key, _.rest(arguments));
         }
-
-        return $.i18n.prop.apply(this, arguments);
     }
 
     // set up default qTip style

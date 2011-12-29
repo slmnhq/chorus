@@ -9,6 +9,7 @@
         self.alerts = {};
         self.templates = {};
         self.features = {};
+        self.locale = 'en';
 
         self.initialize = function() {
             self.session = new chorus.models.Session();
