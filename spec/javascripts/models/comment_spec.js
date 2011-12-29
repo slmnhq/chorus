@@ -25,18 +25,18 @@ describe("chorus.models.Comment", function() {
         });
     });
 
-    describe("#creator", function() {
+    describe("#author", function() {
         beforeEach(function() {
-            this.creator = this.model.creator();
+            this.author = this.model.author();
         });
 
         it("returns a user with the right name", function() {
-            expect(this.creator.get("firstName")).toBe("LeBron");
-            expect(this.creator.get("lastName")).toBe("James");
+            expect(this.author.get("firstName")).toBe("LeBron");
+            expect(this.author.get("lastName")).toBe("James");
         });
 
         it("memoizes", function() {
-            expect(this.creator).toBe(this.model.creator());
+            expect(this.author).toBe(this.model.author());
         });
     });
 

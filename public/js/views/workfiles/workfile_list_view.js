@@ -30,7 +30,7 @@
 
                 ctx.lastComment = {
                     body : lastComment.get("body"),
-                    creator : lastComment.creator(),
+                    creator : lastComment.author(),
                     on : date && date.toString("MMM d")
                 }
 

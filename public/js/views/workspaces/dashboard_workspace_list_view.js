@@ -12,7 +12,7 @@
                 numComments : comments.length,
                 latestComment : comments[0] && {
                     timestamp: comments[0].get("timestamp"),
-                    author : comments[0].creator().displayName()
+                    author : comments[0].author().displayName()
                 }
             }
         },

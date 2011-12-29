@@ -40,7 +40,7 @@ describe("CommentList", function() {
         });
 
         it("displays the profile image of each comment's author", function() {
-            expect(this.listItems.eq(0).find("img").attr('src')).toBe(this.comment1.creator().imageUrl({ size: "icon" }));
+            expect(this.listItems.eq(0).find("img").attr('src')).toBe(this.comment1.author().imageUrl({ size: "icon" }));
         });
 
         context("when there are more comments than the specified 'initial limit'", function() {

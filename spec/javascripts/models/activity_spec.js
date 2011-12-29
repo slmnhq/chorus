@@ -39,7 +39,7 @@ describe("chorus.models.Activity", function() {
             var commentsJson = this.model.get("comments");
             expect(this.comments.models[0].get("text")).toBe(commentsJson[0].text);
             expect(this.comments.models[0].get("timestamp")).toBe(commentsJson[0].timestamp);
-            expect(this.comments.models[0].creator().get("firstName")).toBe(commentsJson[0].author.firstName);
+            expect(this.comments.models[0].author().get("firstName")).toBe(commentsJson[0].author.firstName);
         });
     });
 

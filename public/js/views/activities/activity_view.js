@@ -8,6 +8,7 @@
     _.each($.i18n.map, function(value, key) {
         var match = key.match(activityTemplateRegex);
         if (match) {
+             //get handlebars template from i!8n (not kidding, I'm serious)
             compiledTemplates[match[1]] = Handlebars.compile(t(match[0]));
         }
     });

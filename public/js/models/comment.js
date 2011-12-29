@@ -1,10 +1,6 @@
 ;(function(ns) {
-    ns.models.Comment = ns.models.Base.extend({
+    ns.models.Comment = ns.models.Activity.extend({
         urlTemplate : "comment/{{entityType}}/{{entityId}}",
-
-        creator: function() {
-            return this._creator || (this._creator = new ns.models.User(this.get("author")));
-        },
 
         declareValidations: function(newAttrs) {
             this.require('body', newAttrs);
@@ -21,6 +17,10 @@
                 }).join(",");
                 this.set({ workfileIds: workfileIds }, { silent: true });
             }
+        },
+
+        note: function() {
+            return !!this.get('type');
         }
     });
 })(chorus);

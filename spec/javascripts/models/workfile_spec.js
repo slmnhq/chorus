@@ -24,7 +24,7 @@ describe("chorus.models.Workfile", function() {
         });
 
         it("has the right creator", function() {
-            var creator = this.comment.creator()
+            var creator = this.comment.author()
             expect(creator.get("id")).toBe("InitialUser");
             expect(creator.get("firstName")).toBe("EDC");
             expect(creator.get("lastName")).toBe("Admin");

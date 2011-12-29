@@ -10,7 +10,7 @@
         },
 
         collectionModelContext : function(comment) {
-            var user = comment.creator();
+            var user = comment.author();
             return  {
                 imageUrl : user.imageUrl({ size : "icon" }),
                 authorShowUrl : user.showUrl(),

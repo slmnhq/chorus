@@ -105,8 +105,8 @@ describe("WorkfileListView", function() {
             });
 
             it("includes the full name of the most recent commenter", function() {
-                expect($(this.view.$("li .comment .user")[0]).text().trim()).toBe(this.model1.lastComment().creator().displayName());
-                expect($(this.view.$("li .comment .user")[1]).text().trim()).toBe(this.model2.lastComment().creator().displayName());
+                expect($(this.view.$("li .comment .user")[0]).text().trim()).toBe(this.model1.lastComment().author().displayName());
+                expect($(this.view.$("li .comment .user")[1]).text().trim()).toBe(this.model2.lastComment().author().displayName());
             });
 
             it("does not display 'other comments' on the workfile with only 1 comment", function() {
