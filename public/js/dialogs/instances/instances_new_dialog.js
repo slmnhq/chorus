@@ -59,8 +59,6 @@
         postRender : function() {
             var helpElements = this.$("legend .help");
             _.each(helpElements, function(element) {
-                console.log(helpElements, element);
-
                 $(element).qtip({
                     content: $(element).data("text"),
                     show: 'mouseover',
