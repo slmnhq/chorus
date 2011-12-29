@@ -16,7 +16,7 @@ a {
 body {
     color: $text-color;
     background-color: $body-background-color;
-    font-family: Myriad Pro;
+    font-family: Myriad Pro, Verdana;
 }
 
 a.button, button, input[type=submit] {
@@ -33,7 +33,7 @@ a.button, button, input[type=submit] {
     vertical-align: middle;
     cursor : pointer;
     outline-color: $border-color;
-    font-family: Myriad Pro;
+    font-family: Myriad Pro, Verdana;
     &:disabled {
         color : $weak-text-color;
         cursor : initial;
