@@ -28,7 +28,7 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
         });
 
         it("displays an 'add workspace' button", function() {
-            expect(this.page.$("button:contains('Create a Workspace')")).toExist();
+            expect(this.page.$("button:contains('Create Workspace')")).toExist();
         });
         it("open dialogs when user click on 'add workspace' button ", function() {
                 stubModals();
