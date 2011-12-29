@@ -9,6 +9,16 @@
             this.collection = new chorus.models.UserSet();
             this.collection.sortAsc("lastName");
             this.collection.fetch();
+
+            var buttons = [];
+            if (chorus.session.user().get("admin")) {
+                buttons.push({
+                        url : "#/users/new",
+                        text : t("actions.add_user")
+                    }
+                )
+            }
+
             this.mainContent = new chorus.views.MainContentList({
                 modelClass : "User",
                 collection : this.collection,
@@ -24,12 +34,7 @@
                     }
 
                 },
-                buttons : [
-                    {
-                        url : "#/users/new",
-                        text : t("actions.add_user")
-                    }
-                ]
+                buttons : buttons
             })
 
             this.mainContent.contentHeader.bind("choice:sort", function(choice) {

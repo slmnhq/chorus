@@ -50,6 +50,7 @@ describe("chorus.pages.UserIndexPage", function() {
         describe("when the authenticated user is an admin", function() {
             beforeEach(function() {
                 setLoggedInUser({ admin: true});
+                this.view = new chorus.pages.UserIndexPage();
                 this.view.render();
             })
 
@@ -58,14 +59,15 @@ describe("chorus.pages.UserIndexPage", function() {
             })
         });
 
-        describe("when the authenticated user is an admin", function() {
+        describe("when the authenticated user is not an admin", function() {
             beforeEach(function() {
                 chorus.user.set({ admin: false });
+                this.view = new chorus.pages.UserIndexPage();
                 this.view.render();
             })
 
             it("does not display an 'add user' button", function() {
-                expect(this.view.$("a.button.add_user")).not.toExist();
+                expect(this.view.$("a[href=#/users/new] button")).not.toExist();
             })
         });
     })
