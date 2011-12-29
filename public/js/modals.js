@@ -27,7 +27,7 @@
 
         launchSubModal : function(subModal) {
             this.subModalId = "" + (new Date().getTime());
-            $("#facebox").attr("id", "facebox-" + this.subModalId);
+            $("#facebox").attr("id", "facebox-" + this.subModalId).addClass("hidden");
             $("#facebox_overlay").attr("id", "facebox_overlay-" + this.subModalId);
             $.facebox.settings.inited = false;
             subModal.isSubModal = true;
@@ -50,7 +50,7 @@
         },
 
         subModalClosed : function() {
-            $("#facebox-" + this.subModalId).attr("id", "facebox");
+            $("#facebox-" + this.subModalId).attr("id", "facebox").removeClass("hidden");
             $("#facebox_overlay-" + this.subModalId).attr("id", "facebox_overlay");
             ns.modal = this.previousModal;
         },
