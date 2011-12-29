@@ -111,7 +111,6 @@ describe("InstanceListSidebar", function() {
                 beforeEach(function() {
                     this.view.model = this.view.model.set({ size: "1", port: null, host: null, sharedAccount: {} });
                     this.view.render();
-                    console.log(this.view.model)
                 });
 
                 it("includes greenplum db size information", function() {
