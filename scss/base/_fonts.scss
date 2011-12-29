@@ -5,7 +5,7 @@
 @font-face {
 	font-family: 'Myriad Pro';
 	src: url('/fonts/MyriadPro-Regular.eot');
-	src: local('☺'), url('/fonts/MyriadPro-Regular.ttf') format('truetype');
+	src: local('☺'), url('/fonts/MyriadPro-Regular.woff') format('woff'), url('/fonts/MyriadPro-Regular.ttf') format('truetype');
 	font-weight: 400;
 	font-style: normal;
 }
@@ -13,7 +13,7 @@
 @font-face {
 	font-family: 'Myriad Pro';
 	src: url('/fonts/MyriadPro-Semibold.eot');
-	src: local('☺'), url('/fonts/MyriadPro-Semibold.ttf') format('truetype');
+	src: local('☺'), url('fonts/MyriadPro-Semibold.woff') format('woff'), url('/fonts/MyriadPro-Semibold.ttf') format('truetype');
 	font-weight: 600;
 	font-style: normal;
 }
@@ -21,7 +21,7 @@
 @font-face {
 	font-family: 'Myriad Pro';
 	src: url('/fonts/MyriadPro-Bold.eot');
-	src: local('☺'), url('/fonts/MyriadPro-Bold.ttf') format('truetype');
+	src: local('☺'), url('fonts/MyriadPro-Bold.woff') format('woff'), url('/fonts/MyriadPro-Bold.ttf') format('truetype');
 	font-weight: 800;
 	font-style: normal;
 }
