@@ -44,7 +44,8 @@
             return {
                 entityType: this.model.get("entityType"),
                 formUrl : this.model.url(),
-                multipleFileUpload: chorus.features.multipleFileUpload
+                multipleFileUpload: chorus.features.multipleFileUpload,
+                allowWorkfileAttachments : this.options.launchElement.data("allowWorkfileAttachments")
             };
         },
 

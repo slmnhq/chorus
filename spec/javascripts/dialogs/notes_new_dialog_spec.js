@@ -1,6 +1,6 @@
 describe("NotesNewDialog", function() {
     beforeEach(function() {
-        this.launchElement = $("<a data-entity-type='workfile' data-entity-id='1' data-workspace-id='22'></a>")
+        this.launchElement = $("<a data-entity-type='workfile' data-allow-workfile-attachments='true' data-entity-id='1' data-workspace-id='22'></a>")
         this.dialog = new chorus.dialogs.NotesNew({
             launchElement : this.launchElement,
             pageModel : new chorus.models.Workfile()
@@ -49,6 +49,16 @@ describe("NotesNewDialog", function() {
             this.dialog.$("a.show_options").click();
             expect(this.dialog.$('.options_text')).toBeHidden();
             expect(this.dialog.$('.options_area')).toBeVisible();
+        });
+
+        it("renders the workfiles attachment link when the workfilesAttachment data is truthy", function() {
+            expect(this.dialog.$("a.workfile")).toExist();
+        });
+
+        it("doesn't render the workfiles attachment link when the workfilesAttachment data is falsy", function() {
+            this.launchElement.data("allowWorkfileAttachments", false);
+            this.dialog.render();
+            expect(this.dialog.$("a.workfile")).not.toExist();
         });
 
         it("prevents default on click", function() {
