@@ -54,7 +54,7 @@ describe("chorus.pages.UserIndexPage", function() {
             })
 
             it("displays an 'add user' button", function() {
-                expect(this.view.$("a.button.add_user")).toExist();
+                expect(this.view.$("a[href=#/users/new] button")).toExist();
             })
         });
 

@@ -26,7 +26,6 @@
                     }
                 }
             );
-            this.sidebar = new chorus.views.StaticTemplate("dashboard_sidebar");
 
             this.mainContent.contentHeader.bind("choice:filter", this.choose, this)
             this.choose("active");

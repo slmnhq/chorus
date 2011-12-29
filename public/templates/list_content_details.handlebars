@@ -31,5 +31,11 @@
     <div class="loading">{{t "loading"}}</div>
 {{/if}}
 {{#if addButton }}
-    <button type="button" class="dialog" data-dialog="{{addButton.addButtonView}}">{{addButton.addButtonText}}</button>
+    {{#if addButton.addButtonView}}
+        <button type="button" class="dialog" data-dialog="{{addButton.addButtonView}}">{{addButton.addButtonText}}</button>
+    {{else}}
+        {{#if addButton.addButtonUrl}}
+            <a href="{{addButton.addButtonUrl}}"><button type="button">{{addButton.addButtonText}}</button></a>
+        {{/if}}
+    {{/if}}
 {{/if}}

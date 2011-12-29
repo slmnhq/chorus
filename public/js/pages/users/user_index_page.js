@@ -23,9 +23,12 @@
                         chosen : t("users.header.menu.sort.last_name")
                     }
 
+                },
+                addButton : {
+                    addButtonUrl : "#/users/new",
+                    addButtonText : t("actions.add_user")
                 }
             })
-            this.sidebar = new chorus.views.StaticTemplate("user_index_sidebar");
 
             this.mainContent.contentHeader.bind("choice:sort", function(choice) {
                 this.collection.sortAsc(choice)
