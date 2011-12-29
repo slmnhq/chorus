@@ -149,4 +149,45 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         })
 
     })
+
+    describe("buttons", function() {
+        beforeEach(function() {
+            this.page = new chorus.pages.WorkfileIndexPage(4);
+        })
+
+        context("before the workspace is fetched", function() {
+            beforeEach(function() {
+                this.page.render();
+            })
+
+            it("does not render any buttons", function() {
+                expect(this.page.mainContent.contentDetails.$("button").length).toBe(0);
+            })
+        })
+
+        context("after the workspace is fetched", function() {
+            context("and the user can update the workspace", function() {
+                beforeEach(function() {
+                    spyOn(this.page.mainContent.model, 'canUpdate').andReturn(true);
+                    this.page.mainContent.model.trigger("change")
+                })
+
+                it("renders buttons", function() {
+                    expect(this.page.mainContent.contentDetails.$("button[data-dialog=WorkfilesImport]")).toExist();
+                    expect(this.page.mainContent.contentDetails.$("button[data-dialog=WorkfilesSqlNew]")).toExist();
+                })
+            })
+
+            context("and the user cannot update the workspace", function() {
+                beforeEach(function() {
+                    spyOn(this.page.mainContent.model, 'canUpdate').andReturn(false);
+                    this.page.mainContent.model.trigger("change")
+                })
+
+                it("does not render buttons", function() {
+                    expect(this.page.mainContent.contentDetails.$("button").length).toBe(0);
+                })
+            })
+        })
+    })
 });

@@ -10,40 +10,6 @@ describe("WorkfileListSidebar", function() {
             this.view.render();
         })
 
-        context("when the user has update permissions", function() {
-            beforeEach(function() {
-                spyOn(this.view.model, "canUpdate").andReturn(true);
-                this.view.render();
-            });
-
-            it("has a Create SQL button", function() {
-                var button = this.view.$("button[data-dialog=WorkfilesSqlNew]");
-                expect(button).toExist();
-                expect(button.data("workspaceId")).toBe(10013);
-            });
-
-            it("has an Import File button", function() {
-                var button = this.view.$("button[data-dialog=WorkfilesImport]");
-                expect(button).toExist();
-                expect(button.data("workspaceId")).toBe(10013);
-            });
-        });
-
-        context("when the user does not have update permissions", function() {
-            beforeEach(function() {
-                spyOn(this.view.model, "canUpdate").andReturn(false);
-                this.view.render();
-            });
-
-            it("does not have a Create SQL button", function() {
-                expect(this.view.$("button[data-dialog=WorkfilesSqlNew]").length).toBe(0);
-            });
-
-            it("does not have an Import File button", function() {
-                expect(this.view.$("button[data-dialog=WorkfilesImport]").length).toBe(0);
-            });
-        });
-
         context("when no workfile is selected", function () {
             it("does not render the info section", function() {
                 expect(this.view.$(".info")).not.toExist();
@@ -51,40 +17,6 @@ describe("WorkfileListSidebar", function() {
 
             it("does not render the activity stream", function() {
                 expect(this.view.$(".info")).not.toExist();
-            });
-
-            context("when the user has update permissions", function() {
-                beforeEach(function() {
-                    spyOn(this.view.model, "canUpdate").andReturn(true);
-                    this.view.render();
-                });
-
-                it("has a Create SQL button", function() {
-                    var button = this.view.$("button[data-dialog=WorkfilesSqlNew]");
-                    expect(button).toExist();
-                    expect(button.data("workspaceId")).toBe(10013);
-                });
-
-                it("has an Import File button", function() {
-                    var button = this.view.$("button[data-dialog=WorkfilesImport]");
-                    expect(button).toExist();
-                    expect(button.data("workspaceId")).toBe(10013);
-                });
-            });
-
-            context("when the user does not have update permissions", function() {
-                beforeEach(function() {
-                    spyOn(this.view.model, "canUpdate").andReturn(false);
-                    this.view.render();
-                });
-
-                it("does not have a Create SQL button", function() {
-                    expect(this.view.$("button[data-dialog=WorkfilesSqlNew]").length).toBe(0);
-                });
-
-                it("does not have an Import File button", function() {
-                    expect(this.view.$("button[data-dialog=WorkfilesImport]").length).toBe(0);
-                });
             });
         })
     })

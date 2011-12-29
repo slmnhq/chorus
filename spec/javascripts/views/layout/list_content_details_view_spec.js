@@ -12,7 +12,13 @@ describe("ListContentDetails", function() {
                     this.view.options.buttons = [
                         {
                             view : "WorkspacesNew",
-                            text : "Create a Workspace"
+                            text : "Create a Workspace",
+                            dataAttributes : [
+                                {
+                                    name : "foo",
+                                    value : "bar"
+                                }
+                            ]
                         },
                         {
                             url : "#/foo",
@@ -26,6 +32,7 @@ describe("ListContentDetails", function() {
                 it("shows the buttons", function() {
                     expect(this.view.$('button[data-dialog="WorkspacesNew"]')).toExist();
                     expect(this.view.$('button[data-dialog="WorkspacesNew"]').text()).toBe("Create a Workspace");
+                    expect(this.view.$('button[data-dialog="WorkspacesNew"]')).toHaveData("foo", "bar");
 
                     expect(this.view.$("a[href=#/foo] button")).toExist();
                     expect(this.view.$("a[href=#/foo] button").text()).toBe("Create a Foo");

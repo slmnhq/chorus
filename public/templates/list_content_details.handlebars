@@ -32,7 +32,11 @@
 {{/if}}
 {{#each buttons}}
     {{#if view}}
-        <button type="button" class="dialog" data-dialog="{{view}}">{{text}}</button>
+        <button type="button" class="dialog" data-dialog="{{view}}"
+        {{#each dataAttributes}}
+            data-{{name}}="{{value}}"
+        {{/each}}
+        >{{text}}</button>
     {{else}}
         {{#if url}}
             <a href="{{url}}"><button type="button">{{text}}</button></a>

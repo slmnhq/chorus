@@ -66,10 +66,41 @@
                 this.collection.sortAsc(field)
                 this.collection.fetch();
             }, this)
+
+            workspace.bind("change", this.updateButtons, this);
         },
 
         setModel: function(workfile) {
             this.model = workfile;
+        },
+
+        updateButtons : function() {
+            if (this.mainContent.model.canUpdate()) {
+                this.mainContent.contentDetails.options.buttons = [
+                    {
+                        view : "WorkfilesImport",
+                        text : t("actions.import_workfile"),
+                        dataAttributes : [
+                            {
+                                name : "workspace-id",
+                                value : this.mainContent.model.get("id")
+                            }
+                        ]
+                    },
+                    {
+                        view : "WorkfilesSqlNew",
+                        text : t("actions.create_sql_workfile"),
+                        dataAttributes : [
+                            {
+                                name : "workspace-id",
+                                value : this.mainContent.model.get("id")
+                            }
+                        ]
+                    }
+                ];
+
+                this.mainContent.contentDetails.render();
+            }
         }
     });
 })(jQuery, chorus.pages);

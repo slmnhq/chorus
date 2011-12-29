@@ -1,21 +1,3 @@
-{{#if canUpdate}}
-<button
-  type="button"
-  class="dialog"
-  data-dialog="WorkfilesImport"
-  data-workspace-id="{{id}}"
-  >
-  {{t "actions.import_workfile"}}
-</button>
-<button
-  type="button"
-  class="dialog"
-  data-dialog="WorkfilesSqlNew"
-  data-workspace-id="{{id}}"
-  >
-  {{t "actions.create_sql_workfile"}}
-</button>
-{{/if}}
 {{#if workfile}}
     <div class="info">
         <div title="{{workfile.fileName}}" class="fileName">{{workfile.fileName}}</div>
