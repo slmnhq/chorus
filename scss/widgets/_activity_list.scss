@@ -80,7 +80,7 @@ $system-action-color: #7C7D7D;
         font-size: 12px;
         font-weight: $semibold;
     }
-    
+
     .body {
         @include font-normal-beta;
         padding-bottom: $text-padding-y;
@@ -157,6 +157,7 @@ $system-action-color: #7C7D7D;
     li[data-activity-type=WORKSPACE_MAKE_PUBLIC],
     li[data-activity-type=WORKSPACE_ARCHIVED],
     li[data-activity-type=WORKSPACE_UNARCHIVED],
+    li[data-activity-type=INSTANCE_CREATED],
     li[data-activity-type=USER_ADDED],
     li[data-activity-type=USER_DELETED] {
         .object, .order {

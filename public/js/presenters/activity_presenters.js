@@ -52,12 +52,8 @@
             }));
 
             var attrs = {
-                attachments: _.map(model.get('artifacts'), function(artifact) {
-                    return {
-                        iconSrc: chorus.urlHelpers.fileIconUrl(artifact.type, 'medium'),
-                        fileName: artifact.name,
-                        downloadUrl : "/edc/file/" + artifact.entityId
-                    }
+                attachments: _.map(model.attachments(), function(artifact) {
+                    return new ns.presenters.Artifact(artifact);
                 })
             };
 
@@ -72,7 +68,6 @@
             return attrs
         },
 
-
         WORKSPACE_CREATED : workspaceIsObject,
         WORKSPACE_MAKE_PRIVATE : workspaceIsObject,
         WORKSPACE_MAKE_PUBLIC : workspaceIsObject,
@@ -83,6 +78,14 @@
             return {
                 objectName : model.get("workfile").name,
                 objectUrl : new ns.models.Workfile({id: model.get("workfile").id, workspaceId : this.workspace.id}).showUrl()
+            }
+        },
+
+        INSTANCE_CREATED : function(model) {
+            var instance = model.get("instance");
+            return {
+                objectName : instance.name,
+                objectUrl : new ns.models.Instance({id : instance.id}).showUrl()
             }
         },
 

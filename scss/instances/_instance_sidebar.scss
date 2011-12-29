@@ -1,6 +1,10 @@
 @import "_common.scss";
 
 .instance_list_sidebar {
+    .info {
+        margin-bottom: 20px;
+    }
+
     .instance_name {
         @include ellipsis;
         @include heading-sidebar;

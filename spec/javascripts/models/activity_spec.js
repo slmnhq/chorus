@@ -42,4 +42,22 @@ describe("chorus.models.Activity", function() {
             expect(this.comments.models[0].creator().get("firstName")).toBe(commentsJson[0].author.firstName);
         });
     });
+
+    describe("#attachments", function() {
+        beforeEach(function() {
+            this.model.set({
+                artifacts: [fixtures.workfile({ entityType: "workfile" }).attributes, fixtures.artifact().attributes]
+            });
+            this.attachments = this.model.attachments();
+        });
+
+        it("returns an array of file models (Workfiles and Artifacts)", function() {
+            expect(this.attachments[0] instanceof chorus.models.Workfile).toBeTruthy();
+            expect(this.attachments[1] instanceof chorus.models.Artifact).toBeTruthy();
+        });
+
+        it("memoizes", function() {
+            expect(this.attachments).toBe(this.model.attachments());
+        });
+    });
 });

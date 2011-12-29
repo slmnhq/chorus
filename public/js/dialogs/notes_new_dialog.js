@@ -26,6 +26,8 @@
                 entityId : this.options.launchElement.data("entity-id")
             });
             this.model.bind("saved", this.saved, this);
+
+            this.workspaceId = this.options.launchElement.data("workspace-id");
         },
 
         save: function(e) {
@@ -42,7 +44,8 @@
             return {
                 entityType: this.model.get("entityType"),
                 formUrl : this.model.url(),
-                multipleFileUpload: chorus.features.multipleFileUpload
+                multipleFileUpload: chorus.features.multipleFileUpload,
+                allowWorkfileAttachments : this.options.launchElement.data("allowWorkfileAttachments")
             };
         },
 
@@ -54,7 +57,7 @@
 
         launchWorkfileDialog: function(e) {
             e.preventDefault();
-            var workfileDialog = new ns.WorkfilesAttach({ workspaceId : this.model.get("entityId") });
+            var workfileDialog = new ns.WorkfilesAttach({ workspaceId : this.workspaceId });
             workfileDialog.bind("files:selected", this.workfileChosen, this);
             this.launchSubModal(workfileDialog);
         },

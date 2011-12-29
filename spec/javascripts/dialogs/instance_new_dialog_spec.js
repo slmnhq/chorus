@@ -74,19 +74,80 @@ describe("InstanceNewDialog", function() {
                     expect(attrs.description).toBe("Instance Description");
                 });
 
-                context("when the form is not valid", function() {
+                testUpload();
+            });
+
+            context("using a new Greenplum database instance", function() {
+                beforeEach(function() {
+                    this.dialog.$(".create_new_greenplum input[type=radio]").attr('checked', true).change();
+
+                    this.dialog.$(".create_new_greenplum input[name=name]").val("new greenplum instance");
+                    this.dialog.$(".create_new_greenplum textarea[name=description]").val("Instance Description");
+                    this.dialog.$(".create_new_greenplum input[name=size]").val("1");
+
+                });
+
+
+                context("saving", function() {
+                    beforeEach(function() {
+                        spyOn(this.dialog.model, "save").andCallThrough();
+                        this.dialog.$("button.submit").click();
+                    });
+
+                    it("calls save on the dialog's model", function() {
+                        expect(this.dialog.model.save).toHaveBeenCalled();
+
+                        var attrs = this.dialog.model.save.calls[0].args[0];
+
+                        expect(attrs.size).toBe("1");
+                        expect(attrs.name).toBe("new greenplum instance");
+                        expect(attrs.provisionType).toBe("create");
+                        expect(attrs.description).toBe("Instance Description");
+                    });
+
+                    context("when other forms fields from registering an existing greenplum are filled", function() {
+                        beforeEach(function() {
+                            this.dialog.$(".register_existing_greenplum input[name=name]").val("existing");
+                            this.dialog.$(".register_existing_greenplum textarea[name=description]").val("existing description");
+                            this.dialog.$(".register_existing_greenplum input[name=host]").val("foo.bar");
+                        });
+                        it("sets only the fields for create new greenplum instance and calls save", function() {
+                            expect(this.dialog.model.save).toHaveBeenCalled();
+
+                            var attrs = this.dialog.model.save.calls[0].args[0];
+
+                            expect(attrs.size).toBe("1");
+                            expect(attrs.name).toBe("new greenplum instance");
+                            expect(attrs.provisionType).toBe("create");
+                            expect(attrs.description).toBe("Instance Description");
+                            expect(attrs.host).toBeUndefined();
+                        });
+                    });
+                });
+
+                testUpload();
+            });
+
+            context("when the form is not valid", function() {
                     beforeEach(function() {
                         spyOn(Backbone.Model.prototype, 'save');
-
-                        this.dialog.$(".register_existing_greenplum input[name=port]").val("not a port");
+                        this.dialog.$(".create_new_greenplum input[name=name]").val("");
+                        this.dialog.$(".create_new_greenplum input[name=size]").val("a");
                         this.dialog.$("button.submit").click();
                     });
 
                     it("doesn't complete a save", function() {
                         expect(Backbone.Model.prototype.save).not.toHaveBeenCalled();
                     });
+                    it("clears the error when clicking on another radio", function() {
+                        this.dialog.$(".register_existing_greenplum input[type=radio]").attr('checked', true).change();
+
+                        expect(this.dialog.$(".has_error").length).toBe(0);
+
+                    });
                 });
 
+            function testUpload() {
                 context("#upload", function() {
                     beforeEach(function() {
                         this.dialog.$("button.submit").click();
@@ -157,7 +218,24 @@ describe("InstanceNewDialog", function() {
                         });
                     }
                 });
-            });
+            }
+        });
+    });
+
+    describe("the help text tooltip", function() {
+        beforeEach(function() {
+            spyOn($.fn, 'qtip');
+            this.dialog.render();
+            this.qtipCall = $.fn.qtip.calls[0];
+        });
+
+        it("makes a tooltip for each help", function() {
+            expect($.fn.qtip).toHaveBeenCalled();
+            expect(this.qtipCall.object).toBe("legend .help");
+        });
+
+        it("renders a help text", function() {
+            expect(this.qtipCall.args[0].content).toMatchTranslation("instances.new_dialog.register_existing_greenplum.help_text");
         });
     });
 });

@@ -36,7 +36,6 @@
         'text_workfile_content',
         'truncated_text',
         'user_edit',
-        'user_index_sidebar',
         'user_list',
         'user_new',
         'user_show',

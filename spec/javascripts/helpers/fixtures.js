@@ -1040,6 +1040,26 @@
                     });
                 },
 
+                "INSTANCE_CREATED" : function() {
+                    return new chorus.models.Activity({
+                        "timestamp":"2011-12-22 12:09:59",
+                        "id":10910,
+                        "author": fixtures.authorJson(),
+                        "instance":{
+                            "id":"10095",
+                            "name":"some database instance"
+                        },
+                        "type":"INSTANCE_CREATED",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ]
+                    });
+                },
+
                 "WORKSPACE_ARCHIVED" : function() {
                     return new chorus.models.Activity({
                         author: fixtures.authorJson(),
@@ -1121,6 +1141,23 @@
                     _owner: this.user()
                 }, overrides);
                 return new chorus.models.Workspace(attributes);
+            },
+
+            workfile: function(overrides) {
+                var attributes = _.extend({
+                    id: this.nextId().toString(),
+                    workspaceId: this.nextId().toString()
+                }, overrides);
+                return new chorus.models.Workfile(attributes);
+            },
+
+            artifact: function(overrides) {
+                var attributes = _.extend({
+                    id: this.nextId().toString(),
+                    entityId: this.nextId().toString(),
+                    entityType: "file"
+                }, overrides);
+                return new chorus.models.Artifact(attributes);
             },
 
             instance : function(overrides) {

@@ -93,6 +93,10 @@ describe("chorus.Modal", function() {
             expect(this.faceboxOverlayProxy.attr("id")).not.toBe("facebox_overlay");
         })
 
+        it("adds the 'hidden' class to the existing dialog", function() {
+            expect(this.faceboxProxy).toHaveClass("hidden")
+        })
+
         it("resets facebox", function() {
             expect($.facebox.settings.inited).toBeFalsy();
         })
@@ -109,6 +113,10 @@ describe("chorus.Modal", function() {
             it("restores the ids on the preceeding dialog", function() {
                 expect(this.faceboxProxy.attr("id")).toBe("facebox");
                 expect(this.faceboxOverlayProxy.attr("id")).toBe("facebox_overlay");
+            })
+
+            it("removes the 'hidden' class from the preceeding dialog", function() {
+                expect(this.faceboxProxy).not.toHaveClass("hidden");
             })
         })
     })

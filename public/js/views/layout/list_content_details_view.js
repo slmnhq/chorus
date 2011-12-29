@@ -37,7 +37,7 @@
                 pagination : this.collection.length > 0 ? this.collection.pagination : undefined,
                 records : this.collection.pagination ? this.collection.pagination.records : this.collection.length,
                 hideCounts : this.options.hideCounts,
-                addButton : this.options.addButton
+                buttons: this.options.buttons
             }
 
             if (this.collection.loaded && this.collection.pagination) {

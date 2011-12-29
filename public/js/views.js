@@ -197,7 +197,7 @@
             var collection = this.collection;
             this.content = new chorus.views[modelClass + "List"]({collection: collection })
             this.contentHeader = new chorus.views.ListHeaderView({title: modelClass + "s", linkMenus : options.linkMenus})
-            this.contentDetails = new chorus.views.ListContentDetails({collection : collection, modelClass : modelClass, addButton: options.addButton});
+            this.contentDetails = new chorus.views.ListContentDetails({collection : collection, modelClass : modelClass, buttons: options.buttons});
             this.contentFooter = new chorus.views.ListContentDetails({collection : collection, modelClass : modelClass, hideCounts : true, hideIfNoPagination : true})
         },
         additionalClass : "main_content_list"

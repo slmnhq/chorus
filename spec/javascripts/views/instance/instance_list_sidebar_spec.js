@@ -8,6 +8,7 @@ describe("InstanceListSidebar", function() {
         beforeEach(function() {
             this.view.render();
         });
+
         describe("when no instance is selected", function() {
             it("should not display instance information", function() {
                 expect(this.view.$(".info")).not.toExist();
@@ -15,7 +16,7 @@ describe("InstanceListSidebar", function() {
         });
     });
 
-    describe("instance:selected event handling", function() {
+    context("when an instance is selected", function() {
         beforeEach(function() {
             $('#jasmine_content').append(this.view.el);
             this.activityViewStub = stubView("OMG I'm the activity list")
@@ -50,6 +51,12 @@ describe("InstanceListSidebar", function() {
 
         it("fetches the details for the instance", function() {
             expect(this.instance.fetch).toHaveBeenCalled();
+        });
+
+        it("has a 'add a note' link", function() {
+            expect(this.view.$("a[data-dialog=NotesNew]")).toExist();
+            expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
+            expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
         });
 
         context("when activity is clicked", function() {

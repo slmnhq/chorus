@@ -91,6 +91,19 @@ describe("chorus.views.Activity", function() {
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
+        context("type: INSTANCE_CREATED", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activity.INSTANCE_CREATED();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderAuthorDetails();
+            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+        });
+
+
         context("type: WORKSPACE_DELETED", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activity.WORKSPACE_DELETED();

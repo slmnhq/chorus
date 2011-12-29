@@ -6,21 +6,30 @@ describe("ListContentDetails", function() {
     })
 
     describe("#render", function() {
-        describe("add Button", function() {
-            beforeEach(function() {
-                this.view.options.addButton = {
-                    addButtonView : "WorkspacesNew",
-                    addButtonText : "Create a Workspace"
-                };
-                this.view.render();
-            });
+        describe("buttons", function() {
+            context("with a view", function() {
+                beforeEach(function() {
+                    this.view.options.buttons = [
+                        {
+                            view : "WorkspacesNew",
+                            text : "Create a Workspace"
+                        },
+                        {
+                            url : "#/foo",
+                            text : "Create a Foo"
+                        }
+                    ];
 
-            it("shows the add button when showAddButton is truthy", function() {
-                expect(this.view.$('button[data-dialog="WorkspacesNew"]')).toExist();
-            });
+                    this.view.render();
+                });
 
-            it("shows the add button text", function() {
-                expect(this.view.$('button[data-dialog="WorkspacesNew"]').text()).toBe("Create a Workspace");
+                it("shows the buttons", function() {
+                    expect(this.view.$('button[data-dialog="WorkspacesNew"]')).toExist();
+                    expect(this.view.$('button[data-dialog="WorkspacesNew"]').text()).toBe("Create a Workspace");
+
+                    expect(this.view.$("a[href=#/foo] button")).toExist();
+                    expect(this.view.$("a[href=#/foo] button").text()).toBe("Create a Foo");
+                });
             });
         });
 

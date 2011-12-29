@@ -12,8 +12,10 @@
                     <a>{{t "notes.new_dialog.desktop_file"}}</a>
                     <input type="file" name="fileToUpload[]" {{#if multipleFileUpload}}multiple="" {{/if}}/>
                 </span>
+                {{#if allowWorkfileAttachments}}
                 |
                 <a href="#" class="workfile">{{t "notes.new_dialog.work_file"}}</a>
+                {{/if}}
             </span>
         </div>
     </div>

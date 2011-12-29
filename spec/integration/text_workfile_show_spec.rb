@@ -5,9 +5,11 @@ describe "workfile show page" do
     login('edcadmin', 'secret')
     visit("#/workspaces")
 
-    click_button "Create a Workspace"
-    fill_in 'name', :with => "partyman#{Time.now.to_i}"
     click_button "Create Workspace"
+    within("#facebox") do
+        fill_in 'name', :with => "partyman#{Time.now.to_i}"
+        click_button "Create Workspace"
+    end
     wait_until { current_route =~ /workspaces\/\d+/ }
 
     click_link "Work Files"

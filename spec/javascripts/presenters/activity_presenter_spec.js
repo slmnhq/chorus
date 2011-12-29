@@ -54,6 +54,25 @@ describe("chorus.presenters.Activity", function() {
         itShouldHaveTheAuthorsIconAndUrl();
     })
 
+    context(".INSTANCE_CREATED", function() {
+        beforeEach(function() {
+            this.model = fixtures.activity.INSTANCE_CREATED();
+            this.instance = this.model.get("instance");
+            this.presenter = new chorus.presenters.Activity(this.model)
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.instance.name);
+        });
+
+        it("should have the right objectUrl", function() {
+            var url = new chorus.models.Instance({id: this.instance.id}).showUrl();
+            expect(this.presenter.objectUrl).toBe(url);
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
+
     context(".WORKSPACE_CREATED", function() {
         beforeEach(function() {
             this.model = fixtures.activity.WORKSPACE_CREATED();
@@ -265,7 +284,7 @@ describe("chorus.presenters.Activity", function() {
             var self = this;
             expect(artifacts.length).not.toBe(0);
             _.each(artifacts, function(artifact, index) {
-                expect(self.presenter.attachments[index].fileName).toBe(artifact.name);
+                expect(self.presenter.attachments[index].name).toBe(artifact.name);
             });
         })
 
@@ -274,7 +293,9 @@ describe("chorus.presenters.Activity", function() {
             var self = this;
             expect(artifacts.length).not.toBe(0);
             _.each(artifacts, function(artifact, index) {
-                expect(self.presenter.attachments[index].downloadUrl).toBe('/edc/file/' + artifact.entityId);
+                var model = new chorus.models.Artifact(artifact);
+                var artifactPresenter = new chorus.presenters.Artifact(model);
+                expect(self.presenter.attachments[index].url).toBe(artifactPresenter.url);
             });
         })
     }

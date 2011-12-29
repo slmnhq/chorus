@@ -1,6 +1,6 @@
 describe("NotesNewDialog", function() {
     beforeEach(function() {
-        this.launchElement = $("<a data-entity-type='workfile' data-entity-id='1'></a>")
+        this.launchElement = $("<a data-entity-type='workfile' data-allow-workfile-attachments='true' data-entity-id='1' data-workspace-id='22'></a>")
         this.dialog = new chorus.dialogs.NotesNew({
             launchElement : this.launchElement,
             pageModel : new chorus.models.Workfile()
@@ -51,6 +51,16 @@ describe("NotesNewDialog", function() {
             expect(this.dialog.$('.options_area')).toBeVisible();
         });
 
+        it("renders the workfiles attachment link when the workfilesAttachment data is truthy", function() {
+            expect(this.dialog.$("a.workfile")).toExist();
+        });
+
+        it("doesn't render the workfiles attachment link when the workfilesAttachment data is falsy", function() {
+            this.launchElement.data("allowWorkfileAttachments", false);
+            this.dialog.render();
+            expect(this.dialog.$("a.workfile")).not.toExist();
+        });
+
         it("prevents default on click", function() {
             var eventSpy = jasmine.createSpyObj("event", ['preventDefault']);
             this.dialog.showOptions(eventSpy);
@@ -72,6 +82,7 @@ describe("NotesNewDialog", function() {
                 var view = chorus.dialogs.WorkfilesAttach.prototype.render.mostRecentCall.object;
 
                 expect(modalElement).toBe(view.el);
+                expect(view.options.workspaceId).toBe(22);
             });
 
             describe("when workfiles are selected", function() {
