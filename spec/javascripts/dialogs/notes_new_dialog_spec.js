@@ -1,6 +1,6 @@
 describe("NotesNewDialog", function() {
     beforeEach(function() {
-        this.launchElement = $("<a data-entity-type='workfile' data-entity-id='1'></a>")
+        this.launchElement = $("<a data-entity-type='workfile' data-entity-id='1' data-workspace-id='22'></a>")
         this.dialog = new chorus.dialogs.NotesNew({
             launchElement : this.launchElement,
             pageModel : new chorus.models.Workfile()
@@ -72,6 +72,7 @@ describe("NotesNewDialog", function() {
                 var view = chorus.dialogs.WorkfilesAttach.prototype.render.mostRecentCall.object;
 
                 expect(modalElement).toBe(view.el);
+                expect(view.options.workspaceId).toBe(22);
             });
 
             describe("when workfiles are selected", function() {
