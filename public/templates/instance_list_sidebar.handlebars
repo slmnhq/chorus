@@ -3,6 +3,15 @@
     <div class="instance_name" title="{{name}}">{{name}}</div>
     <div class="instance_type" title="{{instanceProvider}}">{{instanceProvider}}</div>
 </div>
+<div class="account_info">
+    {{#if dbUserName}}
+        <img src="/images/instances/shared_icon.png"/>
+        {{t "instances.sidebar.is_shared_account"}}
+        <a href="#" class="dialog" data-dialog="InstancePermissions">Edit</a>
+    {{else}}
+        (This doesn't look like a shared account)
+    {{/if}}
+</div>
 <div class="actions">
     <ul>
         <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="instance" data-allow-workfile-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>

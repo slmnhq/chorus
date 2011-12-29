@@ -21,7 +21,7 @@
                 return {};
             }
             return {
-                dbUserName : this.model.get('sharedAccount') ? this.model.get('sharedAccount').dbUserName : ''
+                dbUserName : this.model.get('sharedAccount') && this.model.get('sharedAccount').dbUserName
             };
         },
 
