@@ -1154,7 +1154,6 @@
             artifact: function(overrides) {
                 var attributes = _.extend({
                     id: this.nextId().toString(),
-                    entityId: this.nextId().toString(),
                     entityType: "file"
                 }, overrides);
                 return new chorus.models.Artifact(attributes);

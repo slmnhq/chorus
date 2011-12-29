@@ -1,6 +1,6 @@
 describe("chorus.models.Artifact", function() {
     beforeEach(function() {
-        this.model = fixtures.artifact({ entityId: "97" });
+        this.model = fixtures.artifact({ id: "97" });
     });
 
     it("has the appropriate #downloadUrl", function() {
