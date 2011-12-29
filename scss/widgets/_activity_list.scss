@@ -141,6 +141,12 @@ $system-action-color: #7C7D7D;
     }
 }
 
+.activity_list.workspace_detail {
+    .workspace {
+        display : none;
+    }
+}
+
 .activity_list.dashboard {
     padding-top: $activity-gutter;
 
