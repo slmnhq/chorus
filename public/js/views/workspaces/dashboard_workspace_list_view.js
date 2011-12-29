@@ -41,7 +41,7 @@
                             scroll : false,
                             mouse: false
                         }
-                    },
+                    }
                 });
             }, this);
         }

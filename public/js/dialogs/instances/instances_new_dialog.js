@@ -59,16 +59,25 @@
         postRender : function() {
             var helpElements = this.$("legend .help");
             _.each(helpElements, function(element) {
+                var backgroundColor = '#282828';
                 $(element).qtip({
                     content: $(element).data("text"),
                     show: 'mouseover',
                     hide: 'mouseout',
                     style: {
-                        width: 300,
-                        background: "#000",
+                        width: 320,
+                        background: backgroundColor,
                         color: "#FFF",
                         'font-size': 13,
-                        border: { color: '#000' }
+                        border: { color: backgroundColor },
+                        tip: {
+                            corner: 'bottomMiddle',
+                            color: backgroundColor,
+                            size: {
+                                x: 19,
+                                y : 11
+                            }
+                        }
                     },
                     position : {
                         corner : {
