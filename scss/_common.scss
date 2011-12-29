@@ -67,6 +67,16 @@ $picklist-selected-background-color: #3795DD;
 
 $activity-stream-comment-background-color: #DFE5EB;
 
+// z-indices
+$guts-z-index: 0;
+$editor-top-z-index: 10;
+$header-z-index: 99;
+$menu-z-index: $header-z-index + 1;
+$dialog-overlay-z-index: $menu-z-index + 1;
+$dialog-z-index: $dialog-overlay-z-index + 1;
+$toast-closing-z-index: $dialog-z-index;
+$toast-z-index: $toast-closing-z-index + 1;
+$hidden-z-index: -100;
 
 //ie colors
 $ie-header-color: #c7c7c7;

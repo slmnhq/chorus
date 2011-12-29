@@ -17,7 +17,9 @@
   -moz-box-shadow   : 0 4px 5px rgba(0,0,0,.15);
   -o-box-shadow     : 0 4px 5px rgba(0,0,0,.15);
   box-shadow        : 0 4px 5px rgba(0,0,0,.15);
-  z-index: 999;
+
+  /* until we find out otherwise, let the chzn-container have an auto z-index */
+  /*z-index: 999;*/
 }
 /* @end */
 
@@ -104,7 +106,8 @@
   position: relative;
   margin: 0;
   white-space: nowrap;
-  z-index: 1010;
+  /* Use auto z-index until we need something else. */
+  /*z-index: 1010;*/
 }
 .chzn-container-single .chzn-search input {
   background: #fff url('chosen-sprite.png') no-repeat 100% -22px;

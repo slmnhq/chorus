@@ -1,3 +1,5 @@
+@import "_common.scss";
+
 .CodeMirror {
   line-height: 1em;
   font-family: monospace;
@@ -13,7 +15,7 @@
 
 .CodeMirror-gutter {
   position: absolute; left: 0; top: 0;
-  z-index: 10;
+  z-index: $editor-top-z-index;
   background-color: #f7f7f7;
   border-right: 1px solid #eee;
   min-width: 2em;
@@ -47,7 +49,7 @@
 }
 
 .CodeMirror-cursor {
-  z-index: 10;
+  z-index: $editor-top-z-index;
   position: absolute;
   visibility: hidden;
   border-left: 1px solid black !important;

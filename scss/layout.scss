@@ -15,9 +15,22 @@
     padding: $guts-padding;
     padding-top: 0;
     @include after-clearfix;
-    z-index: 0;
+    z-index: $guts-z-index;
 }
 
 #left {
     margin-right: $sidebar-width + (2 * $sidebar-padding-x);
+}
+
+//hax for position fixed header
+.logged_in_layout {
+    > .header {
+        position: fixed;
+        width: 100%;
+        z-index: $header-z-index;
+    }
+
+    > .breadcrumbs {
+        padding-top: 50px;
+    }
 }

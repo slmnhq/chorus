@@ -7,7 +7,7 @@
     padding: 9px 20px;
     border: 1px solid $menu-border-color;
     text-align: left;
-    z-index: 100;
+    z-index: $menu-z-index;
 
     .pointer {
         width: 21px;
@@ -37,7 +37,7 @@
 
 .link_menu {
     position: relative;
-    z-index : 100;
+    z-index : $menu-z-index;
     display:inline;
     padding-left: 12px;
     .title {
@@ -66,8 +66,7 @@
         right: -2px;
         top: 28px;
         padding: 9px 7px 9px 2px;
-        z-index : 100;
-
+        z-index : $menu-z-index;
 
         .pointer {
             left: 100px;

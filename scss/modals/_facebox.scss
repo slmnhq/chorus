@@ -4,7 +4,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 100;
+    z-index: $dialog-z-index;
     text-align: left;
 
     .popup {
@@ -63,10 +63,10 @@
 }
 
 .facebox_hide {
-    z-index: -100;
+    z-index: $hidden-z-index;
 }
 
 .facebox_overlayBG {
     background-color: #000;
-    z-index: 99;
+    z-index: $dialog-overlay-z-index;
 }
