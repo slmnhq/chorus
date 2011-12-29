@@ -58,4 +58,77 @@ describe("backbone_extensions", function() {
             });
         });
     });
+    describe("super", function() {
+        var child, parent, grandParent;
+        var childClass, parentClass, grandParentClass;
+        beforeEach(function() {
+            grandParentClass = Backbone.Model.extend({
+                testFunction: function() {
+                    return 'grandParent';
+                }
+            });
+            parentClass = grandParentClass.extend({
+                testFunction: function() {
+                    return 'parent';
+                }
+            });
+            childClass = parentClass.extend({
+                testFunction: function(arg1, arg2) {
+                    return this._super('testFunction', arg1, arg2);
+                }
+            });
+            spyOn(grandParentClass.prototype, 'testFunction').andCallThrough();
+            spyOn(parentClass.prototype, 'testFunction').andCallThrough();
+            spyOn(childClass.prototype, 'testFunction').andCallThrough();
+            child = new childClass({name: 'child'});
+            parent = new parentClass({name: 'parent'});
+            grandParent = new grandParentClass({name: 'grandparent'});
+        });
+
+        describe("when the child calls super parent", function() {
+            it("the parent should get called", function() {
+                expect(child.testFunction()).toEqual('parent');
+                expect(parentClass.prototype.testFunction.callCount).toEqual(1);
+                expect(grandParentClass.prototype.testFunction.callCount).toEqual(0);
+            });
+
+            it("works if the method is called more than once", function() {
+                expect(child.testFunction()).toEqual('parent');
+                expect(child.testFunction()).toEqual('parent');
+                expect(parentClass.prototype.testFunction.callCount).toEqual(2);
+            });
+
+            describe("when it calls through to the grandParent", function() {
+                beforeEach(function() {
+                    parentClass.prototype.testFunction = function(arg1, arg2) {
+                        return this._super('testFunction', arg1, arg2);
+                    };
+                    spyOn(parentClass.prototype, 'testFunction').andCallThrough();
+                });
+
+                it("the grandParent should get called", function() {
+                    expect(child.testFunction()).toEqual('grandParent');
+                    expect(parentClass.prototype.testFunction.callCount).toEqual(1);
+                    expect(grandParentClass.prototype.testFunction.callCount).toEqual(1);
+                });
+
+                it("passes arguments", function() {
+                    child.testFunction('foo', 'bar');
+                    expect(parentClass.prototype.testFunction).toHaveBeenCalledWith('foo', 'bar');
+                    expect(grandParentClass.prototype.testFunction).toHaveBeenCalledWith('foo', 'bar');
+                });
+            });
+
+            describe("when the parent has no method defined", function() {
+                beforeEach(function() {
+                    delete parentClass.prototype.testFunction;
+                });
+
+                it("calls through to the grandParent", function() {
+                    expect(child.testFunction()).toEqual('grandParent');
+                    expect(grandParentClass.prototype.testFunction.callCount).toEqual(1);
+                });
+            })
+        });
+    });
 });

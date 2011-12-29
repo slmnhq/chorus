@@ -38,7 +38,9 @@ Backbone.sync = function(method, model, options) {
         // Let the model specify its own params
         var string = JSON.stringify(model.toJSON());
         var json = $.parseJSON(string);
-        _.each(json, function(property, key) { if (property === null) delete json[key] })
+        _.each(json, function(property, key) {
+            if (property === null) delete json[key]
+        })
         params.data = $.param(json);
 //      params.data = JSON.stringify(model.toJSON());
     }
@@ -81,6 +83,15 @@ Backbone.sync = function(method, model, options) {
 
 // super function, taken from here:
 // -- http://forrst.com/posts/Backbone_js_super_function-4co
-Backbone.Collection.prototype._super = Backbone.Model.prototype._super = Backbone.View.prototype._super = function(funcName) {
-    return this.constructor.__super__[funcName].apply(this, _.rest(arguments));
+Backbone.Collection.prototype._super = Backbone.Model.prototype._super = Backbone.View.prototype._super = function(methodName) {
+    var superPrototype = this;
+    while (superPrototype._superCalled) {
+        superPrototype = superPrototype.constructor.__super__;
+    }
+    superPrototype._superCalled = true;
+
+    var result = superPrototype[methodName].apply(this, Array.prototype.slice.call(arguments, 1));
+
+    delete superPrototype._superCalled;
+    return result;
 }
