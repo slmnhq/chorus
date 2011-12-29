@@ -40,12 +40,11 @@ describe "creating a note on a workspace" do
           context "when the file is too large" do
               let(:file) do
                   file = Tempfile.new("my_desktop_file_name")
-                  file.write("a" * 10_000_000)
+                  file.write("a" * 11_000_000)
                   file
               end
 
               it "shows a server error" do
-                  pending "waiting on backend to return text/plain as the content type"
                   wait_until do
                       page.find(".dialog .errors").has_css?("li")
                   end
