@@ -83,27 +83,47 @@ describe("InstanceListSidebar", function() {
                 expect(this.view.$(".activity_list")).not.toBeVisible();
             })
 
-            context("and the instance has a shared account", function() {
-                beforeEach(function() {
-                    this.view.model = fixtures.modelFor("fetchWithSharedAccount");
-                    this.view.render();
-                })
-
-                it("includes the shared account information", function() {
-                    expect(this.view.$(".configuration_detail").text().indexOf(t("instances.sidebar.shared_account"))).not.toBe(-1);
-                })
-            })
-
-            context("and the instance does not have a shared account", function() {
+            describe("for existing greenplum instance", function() {
                 beforeEach(function() {
                     this.view.model = fixtures.modelFor("fetch");
                     this.view.render();
-                })
+                });
 
-                it("does not include the shared account information", function() {
+                context("and the instance has a shared account", function() {
+                    beforeEach(function() {
+                        this.view.model = this.view.model.set({ sharedAccount : { dbUserName : "the_dude" } })
+                        this.view.render();
+                    });
+
+                    it("includes the shared account information", function() {
+                        expect(this.view.$(".configuration_detail").text().indexOf(t("instances.sidebar.shared_account"))).not.toBe(-1);
+                    });
+                });
+
+                context("and the instance does not have a shared account", function() {
+                    it("does not include the shared account information", function() {
+                        expect(this.view.$(".configuration_detail").text().indexOf(t("instances.sidebar.shared_account"))).toBe(-1);
+                    });
+                });
+            });
+
+            describe("for a new greenplum instance", function() {
+                beforeEach(function() {
+                    this.view.model = this.view.model.set({ size: "1", port: null, host: null, sharedAccount: {} });
+                    this.view.render();
+                    console.log(this.view.model)
+                });
+
+                it("includes greenplum db size information", function() {
+                    expect(this.view.$(".configuration_detail").text().indexOf(t("instances.sidebar.size"))).not.toBe(-1);
+                });
+
+                it("does not include the port, host, or shared account information", function() {
+                    expect(this.view.$(".configuration_detail").text().indexOf(t("instances.sidebar.host"))).toBe(-1);
+                    expect(this.view.$(".configuration_detail").text().indexOf(t("instances.sidebar.port"))).toBe(-1);
                     expect(this.view.$(".configuration_detail").text().indexOf(t("instances.sidebar.shared_account"))).toBe(-1);
-                })
-            })
+                });
+            });
         })
     });
 

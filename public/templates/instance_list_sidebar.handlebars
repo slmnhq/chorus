@@ -13,12 +13,21 @@
     <div class="activity_list"></div>
     <div class="configuration_detail">
         <dl>
-            <dt>{{t "instances.sidebar.host"}}</dt>
-            <dd title="{{{host}}}">{{{host}}}</dd>
-            <br />
-            <dt>{{t "instances.sidebar.port"}}</dt>
-            <dd title="{{{port}}}">{{{port}}}</dd>
-            <br />
+            {{#if host}}
+                <dt>{{t "instances.sidebar.host"}}</dt>
+                <dd title="{{{host}}}">{{{host}}}</dd>
+                <br />
+            {{/if}}
+            {{#if port}}
+                <dt>{{t "instances.sidebar.port"}}</dt>
+                <dd title="{{{port}}}">{{{port}}}</dd>
+                <br />
+            {{/if}}
+            {{#if size}}
+                <dt>{{t "instances.sidebar.size"}}</dt>
+                <dd title="{{{size}}}">{{{size}}}GB</dd>
+                <br />
+            {{/if}}
             {{#if dbUserName}}
                 <dt>{{t "instances.sidebar.shared_account"}}</dt>
                 <dd title="{{{dbUserName}}}">{{{dbUserName}}}</dd>
