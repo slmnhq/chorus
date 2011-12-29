@@ -221,4 +221,21 @@ describe("InstanceNewDialog", function() {
             }
         });
     });
+
+    describe("the help text tooltip", function() {
+        beforeEach(function() {
+            spyOn($.fn, 'qtip');
+            this.dialog.render();
+            this.qtipCall = $.fn.qtip.calls[0];
+        });
+
+        it("makes a tooltip for each help", function() {
+            expect($.fn.qtip).toHaveBeenCalled();
+            expect(this.qtipCall.object).toBe("legend .help");
+        });
+
+        it("renders a help text", function() {
+            expect(this.qtipCall.args[0].content).toMatchTranslation("instances.new_dialog.register_existing_greenplum.help_text");
+        });
+    });
 });

@@ -54,6 +54,37 @@
         saveFailed : function() {
             this.$("button.submit").stopLoading();
             this.$("button.cancel").removeAttr("disabled");
+        },
+
+        postRender : function() {
+            var helpElements = this.$("legend .help");
+            _.each(helpElements, function(element) {
+                console.log(helpElements, element);
+
+                $(element).qtip({
+                    content: $(element).data("text"),
+                    show: 'mouseover',
+                    hide: 'mouseout',
+                    style: {
+                        width: 300,
+                        background: "#000",
+                        color: "#FFF",
+                        'font-size': 13,
+                        border: { color: '#000' }
+                    },
+                    position : {
+                        corner : {
+                            target: "topMiddle",
+                            tooltip: "bottomMiddle"
+                        },
+                        adjust : {
+                            screen : true,
+                            scroll : false,
+                            mouse: false
+                        }
+                    }
+                });
+            });
         }
     });
 })(jQuery, chorus);

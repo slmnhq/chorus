@@ -2,12 +2,12 @@
     <legend>
         <input type="radio" name="instance_type" id="register_existing_greenplum"/>
         <label for="register_existing_greenplum">{{t "instances.new_dialog.register_existing_greenplum"}}</label>
-        <img src="/images/more-info.png"/>
+        <img src="/images/more-info.png" class="help" data-text='{{t "instances.new_dialog.register_existing_greenplum.help_text"}}'/>
     </legend>
     <div><form>
         <input type="hidden" name="provisionType" value="register" />
         <label class="required">{{t "instances.dialog.instance_name"}}</label>
-        <input type="text" name="name"/>
+        <input type="text" name="name" maxlength="44"/>
 
         <label>{{t "instances.dialog.description"}}</label>
         <textarea rows="3" name="description"/>
@@ -31,18 +31,18 @@
     <legend>
         <input type="radio" name="instance_type" id="create_new_greenplum"/>
         <label for="create_new_greenplum">{{t "instances.new_dialog.create_new_greenplum"}}</label>
-        <img src="/images/more-info.png"/>
+        <img src="/images/more-info.png" class="help" data-text='{{t "instances.new_dialog.create_new_greenplum.help_text"}}'/>
     </legend>
     <div><form>
         <input type="hidden" name="provisionType" value="create" />
         <label class="required">{{t "instances.dialog.instance_name"}}</label>
-        <input type="text" name="name"/>
+        <input type="text" name="name" maxlength="44"/>
 
         <label>{{t "instances.dialog.description"}}</label>
         <textarea rows="3" name="description"/>
 
         <label class="required" name="size">{{t "instances.dialog.size"}} </label>
-        <input type="text" name="size"/>
+        <input type="text" name="size" maxlength="2000"/>
     </form></div>
 </fieldset>
 
@@ -50,7 +50,7 @@
     <legend>
         <input type="radio" name="instance_type" id="register_existing_hadoop"/>
         <label for="register_existing_hadoop">{{t "instances.new_dialog.register_existing_hadoop"}}</label>
-        <img src="/images/more-info.png"/>
+        <img src="/images/more-info.png" class="help" data-text='{{t "instances.new_dialog.register_existing_hadoop.help_text"}}'/>
     </legend>
     <div>
         <label class="required">{{t "instances.dialog.instance_name"}}</label>
