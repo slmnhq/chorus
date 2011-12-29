@@ -57,7 +57,7 @@
         },
 
         postRender : function() {
-            var helpElements = this.$("legend .help");
+            var helpElements = this.$(".help");
             _.each(helpElements, function(element) {
                 var backgroundColor = '#282828';
                 $(element).qtip({

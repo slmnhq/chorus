@@ -1129,7 +1129,7 @@
                     text : "this is comment text" + id,
                     attachments : [],
                     type: "NOTE",
-                    comments: [],
+                    comments: []
                 }, overrides);
                 attributes.author = _.extend(this.user().attributes, overrides && overrides.author);
                 return new chorus.models.Comment(attributes);

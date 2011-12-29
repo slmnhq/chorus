@@ -231,7 +231,7 @@ describe("InstanceNewDialog", function() {
 
         it("makes a tooltip for each help", function() {
             expect($.fn.qtip).toHaveBeenCalled();
-            expect(this.qtipCall.object).toBe("legend .help");
+            expect(this.qtipCall.object).toBe(".help");
         });
 
         it("renders a help text", function() {
