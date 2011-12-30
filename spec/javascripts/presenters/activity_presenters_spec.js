@@ -137,9 +137,8 @@ describe("chorus.presenters.Activity", function() {
             this.presenter = new chorus.presenters.Activity(this.model)
         });
 
-        it("should populate 'others' to not include the first user", function() {
-            expect(this.presenter.header.others.length).toBe(this.model.get("user").length - 1);
-            expect(this.presenter.header.others[0].name).not.toBe(this.model.get("user")[0].name);
+        it("should have the right count", function() {
+            expect(this.presenter.header.count).toBe(this.model.get("user").length - 1);
         });
 
         it("should have the right objectName", function() {
@@ -162,8 +161,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should populate 'others' to not include the first user", function() {
-            expect(this.presenter.header.others.length).toBe(this.model.get("user").length - 1);
-            expect(this.presenter.header.others[0].name).not.toBe(this.model.get("user")[0].name);
+            expect(this.presenter.header.count).toBe(this.model.get("user").length - 1);
         });
 
         it("should have the right objectName", function() {

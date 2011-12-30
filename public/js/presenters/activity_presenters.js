@@ -128,7 +128,7 @@
             objectName : user.get("name"),
             objectUrl : user.showUrl(),
             header : {
-                others : _.rest(model.get("user"))
+                count : model.get("user").length - 1
             }
         }
     }
