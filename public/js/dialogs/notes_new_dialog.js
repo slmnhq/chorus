@@ -27,6 +27,7 @@
                 entityId : this.options.launchElement.data("entity-id")
             });
             this.model.bind("saved", this.saved, this);
+            this.model.bind("saveFailed", this.saveFailed, this);
 
             this.workspaceId = this.options.launchElement.data("workspace-id");
         },
@@ -34,11 +35,17 @@
         save: function(e) {
             e.preventDefault();
             this.model.save({ body : this.$("textarea[name=body]").val().trim() });
+            this.$("button.submit").startLoading("notes.button.uploading");
         },
 
         saved : function() {
             this.pageModel.trigger("invalidated");
+            this.$("button.submit").stopLoading();
             this.closeModal();
+        },
+
+        saveFailed : function() {
+            this.$("button.submit").stopLoading();
         },
 
         additionalContext : function() {
