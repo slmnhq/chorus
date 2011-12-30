@@ -36,7 +36,7 @@ describe("CommentDialog", function() {
         });
 
         it("has the right placeholder", function() {
-            expect(this.dialog.$("textarea[name=body]").attr("placeholder")).toBe(t("comments.placeholder", "note"));
+            expect(this.dialog.$("textarea[name=body]").attr("placeholder")).toBe(t("comments.placeholder", {commentSubject: "note"}));
         });
 
         it("calls elastic on the textarea after the view is attached to the dom", function() {

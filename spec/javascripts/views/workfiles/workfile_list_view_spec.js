@@ -110,12 +110,12 @@ describe("WorkfileListView", function() {
             });
 
             it("does not display 'other comments' on the workfile with only 1 comment", function() {
-                expect(this.view.$("li .comment").eq(0).text()).not.toContain(t("workfiles.other_comments", 0));
-                expect(this.view.$("li .comment").eq(0).text()).not.toContain(t("workfiles.other_comments", 1));
+                expect(this.view.$("li .comment").eq(0).text()).not.toContain(t("workfiles.other_comments", {count: 0}));
+                expect(this.view.$("li .comment").eq(0).text()).not.toContain(t("workfiles.other_comments", {count: 1}));
             });
 
             it("displays 'other comments' on the workfile with more than 1 comment", function() {
-                expect(this.view.$("li .comment").eq(1).text()).toContain(t("workfiles.other_comments", 1))
+                expect(this.view.$("li .comment").eq(1).text()).toContain(t("workfiles.other_comments", {count: 1}))
             });
 
             it("displays the abbreviated date of the most recent comment", function() {

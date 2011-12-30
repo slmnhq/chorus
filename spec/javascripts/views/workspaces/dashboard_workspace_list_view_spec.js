@@ -40,7 +40,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
             });
 
             it("displays the number of recent comments", function() {
-                expect(this.view.$("li:first-child .comment .count").text().trim()).toBe(t("dashboard.workspaces.recent_comments", 1))
+                expect(this.view.$("li:first-child .comment .count").text().trim()).toBe(t("dashboard.workspaces.recent_comments", {count: 1}))
             })
 
             it("displays the relative time of the most recent comment", function() {

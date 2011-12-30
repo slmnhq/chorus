@@ -33,7 +33,7 @@ describe("NotesNewDialog", function() {
         });
 
         it("has the right placeholder", function() {
-            expect(this.dialog.$("textarea[name=body]").attr("placeholder")).toBe(t("notes.placeholder", "workfile"));
+            expect(this.dialog.$("textarea[name=body]").attr("placeholder")).toBe(t("notes.placeholder", {noteSubject: "workfile"}));
         });
 
         it("has the 'Show options' link", function() {

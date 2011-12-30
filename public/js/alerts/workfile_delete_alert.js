@@ -13,7 +13,7 @@
         },
 
         setup : function(){
-            this.title = t("workfile.delete.title", this.model.get("fileName"));
+            this.title = t("workfile.delete.title", {workfileTitle: this.model.get("fileName")});
             this.redirectUrl = "/workspaces/" + this.model.get("workspaceId") + "/workfiles";
         }
     });

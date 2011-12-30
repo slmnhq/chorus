@@ -235,7 +235,7 @@ describe("InstanceNewDialog", function() {
         });
 
         it("renders a help text", function() {
-            expect(this.qtipCall.args[0].content).toMatchTranslation("instances.new_dialog.register_existing_greenplum.help_text");
+            expect(this.qtipCall.args[0].content).toMatchTranslation("instances.new_dialog.register_existing_greenplum_help_text");
         });
     });
 });

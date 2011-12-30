@@ -9,7 +9,7 @@ describe("WorkfileDelete", function() {
     })
 
     it("has the correct title", function() {
-        expect(this.alert.title).toBe(t("workfile.delete.title", "foo.sql"))
+        expect(this.alert.title).toBe(t("workfile.delete.title", {workfileTitle: "foo.sql"}))
     })
 
     it("has the correct text", function() {

@@ -38,5 +38,29 @@ describe("translation", function() {
             expect(this.result.multiline).toMatch('line3');
             expect(this.result.multiline).not.toMatch(/\\/);
         });
+
+        context("overriding an existing key", function() {
+            it("raises an alert when base key is defined first", function() {
+                spyOn(window, 'alert');
+
+                this.translationString =
+                    "quux=Non-nested\n" +
+                    "quux.foo=Bar\n";
+                chorus.translation.parseProperties(this.translationString);
+
+                expect(window.alert).toHaveBeenCalled();
+            });
+
+            it("raises an alert when nested key is defined first", function() {
+                spyOn(window, 'alert');
+
+                this.translationString =
+                    "quux.foo=Bar\n" +
+                    "quux=Non-nested\n";
+                chorus.translation.parseProperties(this.translationString);
+
+                expect(window.alert).toHaveBeenCalled();
+            });
+        });
     });
 });

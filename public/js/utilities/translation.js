@@ -14,6 +14,9 @@
                 var innerHash = _.reduce(_.initial(keys), function(hash, key) {
                     return hash[key] || (hash[key] = {});
                 }, result)
+                if (innerHash[_.last(keys)] != undefined || !_.isObject(innerHash)) {
+                    alert("Translation: " + line + " is a collision with an existing translation");
+                }
                 innerHash[_.last(keys)] = val;
             });
 

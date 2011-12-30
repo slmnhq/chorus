@@ -16,7 +16,7 @@
         },
 
         showToast : function() {
-            $.jGrowl(t("workspace.delete.toast", this.model.get("name")), {
+            $.jGrowl(t("workspace.delete.toast", {workspaceName: this.model.get("name")}), {
                 life : 5000,
                 sticky : false
             });

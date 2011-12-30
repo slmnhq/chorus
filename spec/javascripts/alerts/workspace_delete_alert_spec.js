@@ -43,7 +43,7 @@ describe("WorkspaceDelete", function() {
         });
 
         it("displays a toast message", function() {
-            expect($.jGrowl).toHaveBeenCalledWith(t("workspace.delete.toast", this.model.get("name")), {
+            expect($.jGrowl).toHaveBeenCalledWith(t("workspace.delete.toast", {workspaceName: this.model.get("name")}), {
                 sticky : false,
                 life : 5000
             });

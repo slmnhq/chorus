@@ -189,7 +189,7 @@
             },
 
             setValidationError : function(attr, message_key) {
-                this.errors[attr] = this.errors[attr] || t(message_key, this._textForAttr(attr));
+                this.errors[attr] = this.errors[attr] || t(message_key, {fieldName: this._textForAttr(attr)});
             },
 
             require : function(attr, newAttrs) {

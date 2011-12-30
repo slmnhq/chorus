@@ -38,7 +38,7 @@ describe("WorkspaceMembersMore", function() {
         })
 
         it("shows the member count", function() {
-            expect(dialog.$('.member_count').text().trim()).toMatchTranslation('workspace.members.count', sortedMembers.length);
+            expect(dialog.$('.member_count').text().trim()).toMatchTranslation('workspace.members_count', {count: sortedMembers.length});
         });
 
         it("has a close window button that cancels the dialog", function() {
