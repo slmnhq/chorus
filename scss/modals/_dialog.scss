@@ -20,7 +20,16 @@
     }
 
     .sub_header {
+        padding : 0;
+        width: 100%;
+        display: inline-block;
+        line-height: 34px;
+        vertical-align: middle;
         @include font-content-details;
+
+        .sort_menu {
+            float: right;
+        }
     }
 
     label {

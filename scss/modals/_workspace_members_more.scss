@@ -3,31 +3,9 @@
 .workspace_members_more {
     width: 315px;
 
-
     .sub_header {
-        padding: 10px 15px;
-        .member_count {
-            color: $secondary-text-color;
-            font-weight: $semibold;
-            display: inline-block;
-            font-size: 14px;
-        }
-        .sort_menu {
-            height: 16px;
-            display: inline-block;
-            float: right;
-
-            .link_menu {
-                font-weight: $semibold;
-                font-size: 14px;
-                a {
-                    font-size: 14px;
-                }
-                .title {
-                    font-size: 14px;
-                }
-            }
-        }
+        padding: 0 15px;
+        @include borderbox;
     }
 
     .collection_list {
@@ -47,5 +25,5 @@
     .dialog_content {
         padding: 0;
     }
-    
+
 }
