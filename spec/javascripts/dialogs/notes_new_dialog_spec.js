@@ -217,8 +217,8 @@ describe("NotesNewDialog", function() {
                     this.dialog.$("textarea[name=body]").val("The body of a note");
                     this.invalidatedSpy = jasmine.createSpy("invalidated");
                     this.dialog.pageModel.bind("invalidated", this.invalidatedSpy);
+                    spyOn($.fn, "stopLoading")
                 });
-
 
                 describe("when the upload succeeds", function() {
                     beforeEach(function() {
@@ -232,6 +232,10 @@ describe("NotesNewDialog", function() {
                     it("triggers the 'invalidated' event on the model", function() {
                         expect(this.invalidatedSpy).toHaveBeenCalled();
                     });
+
+                    it("removes the spinner from the button", function() {
+                        expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit")
+                    })
                 });
 
                 describe("when the upload fails", function() {
@@ -246,6 +250,10 @@ describe("NotesNewDialog", function() {
                     it("does not trigger the 'invalidated' event on the model", function() {
                         expect(this.invalidatedSpy).not.toHaveBeenCalled();
                     });
+
+                    it("removes the spinner from the button", function() {
+                        expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit")
+                    })
                 });
             });
         });
@@ -263,6 +271,10 @@ describe("NotesNewDialog", function() {
             expect(this.dialog.model.get("body")).toBe("The body of a note")
             expect(this.dialog.model.save).toHaveBeenCalled();
         });
+
+        it("starts a spinner", function() {
+            expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+        })
 
         it("closes the dialog box if saved successfully", function() {
             this.dialog.model.trigger("saved");

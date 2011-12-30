@@ -1,0 +1,19 @@
+.instance_permissions {
+    .dialog_content {
+        padding: 0 15px !important;
+        width: 350px;
+        margin: 0;
+    }
+
+    .sub_header {
+        .details_text {
+            background : url("/images/instances/shared_icon.png") no-repeat left 6px;
+            display: inline-block;
+            padding-left: 23px;
+        }
+
+        a {
+            float: right;
+        }
+    }
+}

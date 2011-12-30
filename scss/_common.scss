@@ -72,6 +72,7 @@ $guts-z-index: 0;
 $editor-top-z-index: 10;
 $header-z-index: 99;
 $menu-z-index: $header-z-index + 1;
+$link-menu-z-index: $guts-z-index + 1;
 $dialog-overlay-z-index: $menu-z-index + 1;
 $dialog-z-index: $dialog-overlay-z-index + 1;
 $toast-closing-z-index: $dialog-z-index;

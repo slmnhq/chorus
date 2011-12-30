@@ -59,6 +59,8 @@
 
                         if (self.app.modal) self.app.modal.closeModal();
                     }
+
+                    window.scroll(0, 0);
                 };
 
                 if (className == 'Login' || self.app.session.loggedIn()) {

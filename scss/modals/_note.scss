@@ -44,10 +44,11 @@
 
     .options_text {
         color: $secondary-text-color;
-    }
 
-    .show_options:hover {
-        border-bottom: 1px dotted;
+        .show_options {
+            font-weight: $semibold;
+            border-bottom: 1px dotted;
+        }
     }
 
     .row {

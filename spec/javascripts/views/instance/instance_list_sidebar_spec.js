@@ -91,12 +91,16 @@ describe("InstanceListSidebar", function() {
 
                 context("and the instance has a shared account", function() {
                     beforeEach(function() {
-                        this.view.model = this.view.model.set({ sharedAccount : { dbUserName : "the_dude" } })
+                        this.view.model = fixtures.modelFor("fetchWithSharedAccount");
                         this.view.render();
                     });
 
                     it("includes the shared account information", function() {
-                        expect(this.view.$(".configuration_detail").text().indexOf(t("instances.sidebar.shared_account"))).not.toBe(-1);
+                        expect(this.view.$(".configuration_detail").text().indexOf(t("instances.shared_account"))).not.toBe(-1);
+                    });
+
+                    it("has a link to edit the instance permissions", function() {
+                        expect(this.view.$("a.dialog[data-dialog=InstancePermissions]")).toExist();
                     });
                 });
 
