@@ -37,12 +37,9 @@
         defaultHeader : function() {
             return {
                 type: this.model.get("type"),
-                authorUrl: this.author.showUrl(),
-                authorName: this.author.displayName(),
-                objectUrl: this.presenter.objectUrl,
-                objectName: this.presenter.objectName,
-                workspaceUrl: this.presenter.workspaceUrl,
-                workspaceName: this.presenter.workspaceName
+                authorLink: ns.helpers.linkTo(this.author.showUrl(), this.author.displayName(), { 'class': "author" }),
+                objectLink: ns.helpers.linkTo(this.presenter.objectUrl, this.presenter.objectName),
+                workspaceLink: ns.helpers.linkTo(this.presenter.workspaceUrl, this.presenter.workspaceName)
             }
         },
 
@@ -101,7 +98,8 @@
 
         USER_DELETED : function(model) {
             return  {
-                objectName : model.get("user").name
+                objectName : model.get("user").name,
+                header: { objectName : model.get("user").name }
             }
         },
 
@@ -111,7 +109,8 @@
 
         WORKSPACE_DELETED : function(model) {
             return {
-                objectName : this.presenter.workspaceName
+                objectName: this.presenter.workspaceName,
+                header : { objectName : this.presenter.workspaceName }
             }
         }
     });
