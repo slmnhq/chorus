@@ -68,7 +68,31 @@
 
                 "List Page (loading)" : new chorus.views.MainContentList({modelClass : "User", collection : this.loadingCollection}),
 
-                "List Page" : new chorus.views.MainContentList({modelClass : "User", collection : this.userCollection})
+                "List Page" : new chorus.views.MainContentList({
+                    modelClass : "User",
+                    collection : this.userCollection,
+                    linkMenus : {
+                        sort : {
+                            title : t("users.header.menu.sort.title"),
+                            options : [
+                                {data : "firstName", text : t("users.header.menu.sort.first_name")},
+                                {data : "lastName", text : t("users.header.menu.sort.last_name")}
+                            ],
+                            event : "sort",
+                            chosen : t("users.header.menu.sort.last_name")
+                        }
+                    },
+                    buttons : [
+                        {
+                            url : "#/users/new",
+                            text : "Create Thing"
+                        },
+                        {
+                            url : "#/users/new",
+                            text : "Create Other Thing"
+                        }
+                    ]
+                })
             }
         },
 
