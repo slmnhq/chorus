@@ -72,12 +72,18 @@ describe("chorus.router", function() {
             this.backboneSpy = spyOn(Backbone.history, "start")
             this.chorus.initialize();
             spyOn(this.chorus.session, 'fetch');
+            spyOn(window, "scroll");
         });
 
         context("when logged in", function() {
             beforeEach(function() {
                 spyOn(this.chorus.session, 'loggedIn').andReturn(true);
             });
+
+            it("sets the scroll position to (0,0)", function() {
+                this.chorus.router.navigate("/users/new", true);
+                expect(window.scroll).toHaveBeenCalledWith(0, 0);
+            })
 
             context("and navigating to any page other than the login page", function() {
                 beforeEach(function () {
