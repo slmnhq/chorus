@@ -14,7 +14,8 @@
             this.$("input[type=file]").fileupload({
                 singleFileUploads : false,
                 add : _.bind(this.desktopFileChosen, this),
-                dataType : "text"
+                dataType : "text",
+                dropZone : this.$("input[type=file]")
             });
         },
 

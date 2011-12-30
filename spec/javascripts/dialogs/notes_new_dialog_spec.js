@@ -173,6 +173,10 @@ describe("NotesNewDialog", function() {
                 expect(this.fileUploadOptions.dataType).toBe('text');
             });
 
+            it("points the dropzone to the file input to avoid insanity", function() {
+                expect(this.fileUploadOptions.dropZone).toBe(this.dialog.$("input[type=file]"))
+            })
+
             it("unhides the file_details area", function() {
                 expect(this.dialog.$('.file_details')).toBeVisible();
             });
