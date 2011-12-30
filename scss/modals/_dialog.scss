@@ -19,6 +19,10 @@
         padding: 10px 15px;
     }
 
+    .sub_header {
+        @include font-content-details;
+    }
+
     label {
         @include dialog-label;
     }
