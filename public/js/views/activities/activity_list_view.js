@@ -36,9 +36,9 @@
             $(this.el).addClass(this.options.additionalClass);
             var ul = this.$("ul");
             this.collection.each(function(model) {
-                var view = new ns.views.Activity({model: model});
+                var view = new ns.views.Activity({model: model, displayStyle: this.options.displayStyle});
                 ul.append(view.render().el);
-            });
+            }, this);
         }
     });
 })(jQuery, chorus);

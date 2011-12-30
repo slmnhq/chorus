@@ -1,4 +1,5 @@
-;(function($, ns) {
+;
+(function($, ns) {
     ns.views.Activity = chorus.views.Base.extend({
 
         className : "activity",
@@ -15,9 +16,21 @@
         },
 
         headerHtml : function(presenter) {
+            return t(this.headerTranslationKey(), presenter.header)
+        },
+
+        headerTranslationKey : function() {
+            var prefix = 'activity_stream.header.html.';
             var type = this.model.get("type");
-            if (!I18n.lookup('activity_stream.header.html.' + type)) type = "DEFAULT";
-            return t('activity_stream.header.html.' + type, presenter.header)
+            if (!I18n.lookup(prefix + type)) {
+                type = 'DEFAULT';
+            }
+            var styles = _.flatten([this.options.displayStyle, 'default']);
+
+            prefix = prefix + type + '.';
+            return prefix +  _.find(styles, function(style) {
+                return I18n.lookup(prefix + style);
+            });
         },
 
         setupSubviews: function() {
@@ -25,7 +38,7 @@
         },
 
 
-        postRender : function(){
+        postRender : function() {
             $(this.el).
                 attr("data-activity-type", this.model.get("type")).
                 attr("data-activity-id", this.model.get("id"))

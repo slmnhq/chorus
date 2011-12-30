@@ -4,6 +4,77 @@ describe("chorus.views.Activity", function() {
         this.view = new chorus.views.Activity({ model: this.model });
     });
 
+    describe("#headerTranslationKey", function() {
+        beforeEach(function() {
+            this.keyPrefix = 'activity_stream.header.html.';
+        });
+
+        context("when displayStyle is not set", function() {
+            beforeEach(function() {
+                delete this.view.options.displayStyle;
+            });
+
+            it("uses the default displayStyle", function() {
+                var expectedKey = this.keyPrefix + this.model.get('type') + '.default';
+                expect(I18n.lookup(expectedKey)).toBeTruthy();
+                expect(this.view.headerTranslationKey()).toBe(expectedKey);
+            });
+        });
+
+        context("when displayStyle is a string", function() {
+            beforeEach(function() {
+                this.view.options.displayStyle = 'without_object';
+            });
+
+            it("returns the displayStyle when it exists", function() {
+                var expectedKey = this.keyPrefix + this.model.get('type') + '.without_object';
+                expect(I18n.lookup(expectedKey)).toBeTruthy();
+                expect(this.view.headerTranslationKey()).toBe(expectedKey);
+            });
+
+            it("returns the default when it does not exists", function() {
+                this.model.set({type: 'WORKSPACE_CREATED'});
+                var missingKey = this.keyPrefix + this.model.get('type') + '.without_object';
+                var expectedKey = this.keyPrefix + this.model.get('type') + '.default';
+                expect(I18n.lookup(missingKey)).toBeFalsy();
+                expect(I18n.lookup(expectedKey)).toBeTruthy();
+                expect(this.view.headerTranslationKey()).toBe(expectedKey);
+            });
+
+            it("uses type of DEFAULT when the model's type does not have a translation", function() {
+                this.model.set({type: 'BANNANA'});
+                var expectedKey = this.keyPrefix + 'DEFAULT.default';
+                expect(this.view.headerTranslationKey()).toBe(expectedKey);
+            });
+        });
+
+        context("when displayStyle is an array", function() {
+            beforeEach(function() {
+                this.view.options.displayStyle = ['without_object', 'without_workspace'];
+            });
+
+            it("returns the first key when it exists", function() {
+                var expectedKey = this.keyPrefix + this.model.get('type') + '.without_object';
+                expect(I18n.lookup(expectedKey)).toBeTruthy();
+                expect(this.view.headerTranslationKey()).toBe(expectedKey);
+            });
+
+            it("falls back to the next match when the first key doesn't exist", function() {
+                this.view.options.displayStyle.unshift("banana");
+                var expectedKey = this.keyPrefix + this.model.get('type') + '.without_object';
+                expect(I18n.lookup(expectedKey)).toBeTruthy();
+                expect(this.view.headerTranslationKey()).toBe(expectedKey);
+            });
+
+            it("falls back on default when none of them exist", function() {
+                this.view.options.displayStyle = ["banana", 'apple'];
+                var expectedKey = this.keyPrefix + this.model.get('type') + '.default';
+                expect(I18n.lookup(expectedKey)).toBeTruthy();
+                expect(this.view.headerTranslationKey()).toBe(expectedKey);
+            });
+        });
+    });
+
     describe("#render", function() {
         context("type: MEMBERS_ADDED", function() {
             beforeEach(function() {
@@ -25,13 +96,13 @@ describe("chorus.views.Activity", function() {
                 })
 
                 it("calls out the user", function() {
-                    expect(this.view.$(".object a")).toHaveText(this.view.model.get("user")[0].name)
+                    expect(this.view.$(".activity_header a")).toContainText(this.view.model.get("user")[0].name)
                 })
             })
 
             context("when more than one member was added", function() {
                 it("calls out the first user", function() {
-                    expect(this.view.$(".object a")).toHaveText(this.view.model.get("user")[0].name)
+                    expect(this.view.$(".activity_header a")).toContainText(this.view.model.get("user")[0].name)
                 })
             })
         });
@@ -56,13 +127,13 @@ describe("chorus.views.Activity", function() {
                 })
 
                 it("calls out the user", function() {
-                    expect(this.view.$(".object a")).toHaveText(this.view.model.get("user")[0].name)
+                    expect(this.view.$(".activity_header a")).toContainText(this.view.model.get("user")[0].name)
                 })
             })
 
             context("when more than one member was added", function() {
                 it("calls out the first user", function() {
-                    expect(this.view.$(".object a")).toHaveText(this.view.model.get("user")[0].name)
+                    expect(this.view.$(".activity_header a")).toContainText(this.view.model.get("user")[0].name)
                 })
             })
         });
@@ -177,7 +248,7 @@ describe("chorus.views.Activity", function() {
             itShouldRenderACommentLink("comment", t("comments.title.NOTE"))
 
             it("displays the comment body", function() {
-               expect(this.view.$(".body").eq(0).text().trim()).toBe(this.view.model.get("text"));
+                expect(this.view.$(".body").eq(0).text().trim()).toBe(this.view.model.get("text"));
             });
 
             it("displays the timestamp", function() {
@@ -216,35 +287,41 @@ describe("chorus.views.Activity", function() {
         it("contains the author's url", function() {
             expect(this.view.$('a.author').attr('href')).toBe(this.view.model.author().showUrl());
         });
-    };
+    }
+
+    ;
 
     function itShouldRenderObjectDetails(options) {
         options || (options = {});
 
         it("contains the object's name", function() {
-            expect(this.view.$(".object").text()).toContain(this.presenter.objectName);
+            expect(this.view.$(".activity_header")).toContainText(this.presenter.objectName);
         });
 
         if (options.checkLink) {
             it("contains the object's url", function() {
-                expect(this.view.$('.object a').attr('href')).toBe(this.presenter.objectUrl);
+                expect(this.view.$('.activity_header a[href="' + this.presenter.objectUrl + '"]')).toExist();
             });
         }
-    };
+    }
+
+    ;
 
     function itShouldRenderWorkspaceDetails(options) {
         options || (options = {});
 
         it("contains the workspace's name", function() {
-            expect(this.view.$(".workspace").text()).toContain(this.presenter.workspaceName);
+            expect(this.view.$(".activity_header")).toContainText(this.presenter.workspaceName);
         });
 
         if (options.checkLink) {
             it("contains the workspace's url", function() {
-                expect(this.view.$('.workspace a').attr('href')).toBe(this.presenter.workspaceUrl);
+                expect(this.view.$('.activity_header a[href="' + this.presenter.workspaceUrl + '"]')).toExist();
             });
         }
-    };
+    }
+
+    ;
 
     function itShouldRenderACommentLink(entityType, entityTitle) {
         it("sets the correct entityType on the comment dialog link", function() {

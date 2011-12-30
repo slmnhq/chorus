@@ -42,10 +42,6 @@ $system-action-color: #7C7D7D;
         font-size: 12px;
         padding: $activity-gutter $big-gutter;
     }
-
-    .workspace_detail .workspace {
-        display: none;
-    }
 }
 
 
@@ -95,9 +91,6 @@ $system-action-color: #7C7D7D;
         .author {
             font-weight: $semibold;
         }
-        .object {
-            color: $system-action-color;
-        }
     }
 
     .timestamp {
@@ -123,7 +116,7 @@ $system-action-color: #7C7D7D;
         }
     }
 
-    .object, .workspace, .order {
+    .order {
         display: none;
     }
 }
@@ -138,12 +131,6 @@ $system-action-color: #7C7D7D;
             border-bottom: 1px dotted $list-border-color;
             padding: 0 $activity-gutter;
         }
-    }
-}
-
-.activity_list.workspace_detail {
-    .workspace {
-        display : none;
     }
 }
 
@@ -166,25 +153,11 @@ $system-action-color: #7C7D7D;
     li[data-activity-type=INSTANCE_CREATED],
     li[data-activity-type=USER_ADDED],
     li[data-activity-type=USER_DELETED] {
-        .object, .order {
+        .order {
             display: inline;
         }
     }
 
-    li[data-activity-type=MEMBERS_ADDED],
-    li[data-activity-type=MEMBERS_DELETED] {
-        .object, .order, .workspace {
-            display: inline;
-        }
-    }
-}
-
-#sidebar.user_show_sidebar {
-    li[data-activity-type=WORKFILE_CREATED] {
-        .workspace {
-            display: inline;
-        }
-    }
 }
 
 #sidebar.instance_list_sidebar {

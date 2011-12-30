@@ -123,6 +123,10 @@
 
                 toHaveBeenCalledOnSelector: function(selector) {
                     return this.actual.mostRecentCall.object.selector === selector;
+                },
+
+                toContainText: function(text) {
+                    return this.env.contains_(this.actual.text(), text);
                 }
             });
 
@@ -189,7 +193,7 @@
         return new stubClass
     }
 
-    window.stubModals = function(){
+    window.stubModals = function() {
         var spy = spyOn($, "facebox");
         spy.settings = {}
         return spy;
