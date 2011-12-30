@@ -30,5 +30,10 @@ jQuery.fn.extend({
 
     isLoading : function() {
         return !!this.data("loading-original-text");
+    },
+
+    outerHtml: function() {
+        var div = $("<div></div>");
+        return div.append(this.clone()).html();
     }
 });

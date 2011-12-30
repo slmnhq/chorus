@@ -134,4 +134,11 @@ describe("jquery extensions", function() {
             expect($('span', doc).hasQtip()).toBeFalsy();
         });
     });
+
+    describe("#outerHtml", function() {
+        it("converts the first element to html", function() {
+            var el = $("<a></a>").addClass("author");
+            expect(el.outerHtml()).toBe('<a class="author"></a>');
+        });
+    });
 });

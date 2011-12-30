@@ -362,5 +362,22 @@ describe("handlebars", function() {
                 expect(Handlebars.helpers.renderTemplate('plain_text', {text: 'foo'})).toBe('foo');
             });
         });
+
+        describe("linkTo", function() {
+            it("returns an html string with the right text and href", function() {
+                var link = Handlebars.helpers.linkTo("/users/1", "Charlie");
+                expect(link).toBe('<a href="/users/1">Charlie</a>');
+            });
+
+            it("applies the given attributes", function() {
+                var link = Handlebars.helpers.linkTo("/users/1", "Charlie", { 'class': "dude" });
+                expect($(link).hasClass("dude")).toBeTruthy();
+            });
+
+            it("html escapes the text", function() {
+                var link = Handlebars.helpers.linkTo("/", "<script>");
+                expect(link).toMatch('&lt;script&gt;');
+            });
+        });
     });
 });

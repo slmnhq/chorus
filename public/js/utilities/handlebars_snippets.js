@@ -134,6 +134,10 @@
             return chorus.urlHelpers.fileIconUrl(key, size);
         },
 
+        linkTo: function(url, text, attributes) {
+            return $("<a></a>").attr("href", url).text(text).attr(attributes || {}).outerHtml();
+        },
+
         renderTemplate : function(templateName, context) {
             if (!chorus.templates[templateName]) {
                 var tag = $('#' + templateName + "_template");
