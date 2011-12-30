@@ -10,7 +10,7 @@
             this.collection.fetchAll();
 
             this.mainContent = new ns.views.MainContentView({
-                contentHeader : new ns.views.StaticTemplate("default_content_header", {title: t("instance.plural")}),
+                contentHeader : new ns.views.StaticTemplate("default_content_header", {title: t("instances.title_plural")}),
                 contentDetails : new ns.views.InstanceIndexContentDetails({collection : this.collection}),
                 content : new ns.views.InstanceList({collection : this.collection})
             });
