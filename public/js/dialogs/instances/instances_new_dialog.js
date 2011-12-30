@@ -18,6 +18,15 @@
 
         makeModel : function() {
             this.model = this.model || new chorus.models.Instance();
+
+            this.model.aurora().fetch(); // check if aurora is installed or not
+            this.model.aurora().bind("change", this.render, this);
+        },
+
+        additionalContext : function() {
+            return {
+                auroraInstalled : this.model.aurora().get("installationStatus") == 'install_succeed' ? true : false
+            }
         },
 
         showFieldset : function(e) {

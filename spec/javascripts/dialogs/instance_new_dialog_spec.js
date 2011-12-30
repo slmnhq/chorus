@@ -21,6 +21,44 @@ describe("InstanceNewDialog", function() {
             expect(this.dialog.$("button.submit").attr("disabled")).toBe("disabled");
         });
 
+        context("when aurora is installed", function() {
+            beforeEach(function() {
+                this.dialog.model.aurora().set({ installationStatus : "install_succeed"});
+                this.dialog.render();
+            });
+
+            it("enables create a new Greenplum database instance", function() {
+                expect(this.dialog.$(".create_new_greenplum input[type=radio]")).not.toBeDisabled();
+            });
+
+            it("shows the correct text", function() {
+                expect(this.dialog.$("label[for=create_new_greenplum]").text()).toMatchTranslation("instances.new_dialog.create_new_greenplum")
+            });
+
+            it("doesn't have class disabled", function() {
+                expect(this.dialog.$("label[for=create_new_greenplum]")).not.toHaveClass("disabled");
+            });
+        });
+
+        context("when aurora is not installed", function() {
+            beforeEach(function() {
+                this.dialog.model.aurora().set({ installationStatus : "not_installed"});
+                this.dialog.render();
+            });
+
+            it("enables create a new Greenplum database instance", function() {
+                expect(this.dialog.$(".create_new_greenplum input[type=radio]")).toBeDisabled();
+            });
+
+            it("shows the correct text", function() {
+                expect(this.dialog.$("label[for=create_new_greenplum]").text()).toMatchTranslation("instances.new_dialog.create_new_greenplum.disabled");
+            });
+
+            it("have class disabled", function() {
+                expect(this.dialog.$("label[for=create_new_greenplum]")).toHaveClass("disabled");
+            });
+        });
+
         describe("selecting a radio button", function() {
             beforeEach(function() {
                 // Only setting attr("checked", true) doesn't raise change event.
@@ -39,7 +77,7 @@ describe("InstanceNewDialog", function() {
             context("clicking another radio", function() {
                 it("has only one that is not collapsed", function() {
                     this.dialog.$("input[type=radio]").eq(0).attr('checked', false).change();
-                    this.dialog.$("input[type=radio]").eq(1).attr('checked', true).change();
+                    this.dialog.$("input[type=radio]").eq(2).attr('checked', true).change();
 
                     expect(this.dialog.$("fieldset").not(".collapsed").length).toBe(1);
                     expect(this.dialog.$("input[type=radio]:checked").closest("fieldset")).not.toHaveClass("collapsed");
@@ -48,6 +86,10 @@ describe("InstanceNewDialog", function() {
         });
 
         describe("submitting the form", function() {
+            beforeEach(function() {
+                this.dialog.model.aurora().set({ installationStatus : "install_succeed"});
+                this.dialog.render();
+            });
             context("using register existing greenplum", function() {
                 beforeEach(function() {
                     this.dialog.$(".register_existing_greenplum input[type=radio]").attr('checked', true).change();
@@ -80,7 +122,6 @@ describe("InstanceNewDialog", function() {
             context("using a new Greenplum database instance", function() {
                 beforeEach(function() {
                     this.dialog.$(".create_new_greenplum input[type=radio]").attr('checked', true).change();
-
                     this.dialog.$(".create_new_greenplum input[name=name]").val("new greenplum instance");
                     this.dialog.$(".create_new_greenplum textarea[name=description]").val("Instance Description");
                     this.dialog.$(".create_new_greenplum input[name=size]").val("1");
@@ -91,10 +132,10 @@ describe("InstanceNewDialog", function() {
                 context("saving", function() {
                     beforeEach(function() {
                         spyOn(this.dialog.model, "save").andCallThrough();
-                        this.dialog.$("button.submit").click();
                     });
 
                     it("calls save on the dialog's model", function() {
+                        this.dialog.$("button.submit").click();
                         expect(this.dialog.model.save).toHaveBeenCalled();
 
                         var attrs = this.dialog.model.save.calls[0].args[0];
@@ -107,6 +148,8 @@ describe("InstanceNewDialog", function() {
 
                     context("when other forms fields from registering an existing greenplum are filled", function() {
                         beforeEach(function() {
+                            this.dialog.$("button.submit").click();
+
                             this.dialog.$(".register_existing_greenplum input[name=name]").val("existing");
                             this.dialog.$(".register_existing_greenplum textarea[name=description]").val("existing description");
                             this.dialog.$(".register_existing_greenplum input[name=host]").val("foo.bar");
