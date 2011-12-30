@@ -10,16 +10,20 @@
         },
 
         collectionModelContext : function(comment) {
-            var user = comment.author();
-            return  {
-                imageUrl : user.imageUrl({ size : "icon" }),
-                authorShowUrl : user.showUrl(),
-                displayName : user.displayName(),
-                timestamp : comment.get("timestamp"),
-                id : comment.get("id"),
-                body : comment.get("text")
-            };
+            if (comment.note()) {
+                return new ns.presenters.Activity(comment, {displayStyle: this.options.displayStyle})
+            } else {
+                var user = comment.author();
+                return  {
+                    iconSrc : user.imageUrl({ size : "icon" }),
+                    iconHref : user.showUrl(),
+                    displayName : user.displayName(),
+                    timestamp : comment.get("timestamp"),
+                    id : comment.get("id"),
+                    body : comment.get("text"),
+                    headerHtml: t('activity_stream.comments.commented_on_note', {authorLink: ns.helpers.linkTo(user.showUrl(), user.displayName(), {'class': 'author'})})
+                };
+            }
         }
     });
 })(jQuery, chorus);
-

@@ -1,6 +1,6 @@
 describe("CommentList", function() {
     beforeEach(function() {
-        this.comment1 = fixtures.comment({
+        this.comment1 = fixtures.noteComment({
             text : "Yes we can",
             author : {
                 firstName : "Barack",
@@ -8,7 +8,7 @@ describe("CommentList", function() {
                 id : "45"
             }
         });
-        this.comment2 = fixtures.comment({
+        this.comment2 = fixtures.noteComment({
             text : "No hate plz"
         });
         this.comment3 = fixtures.comment();
@@ -40,14 +40,29 @@ describe("CommentList", function() {
         });
 
         it("displays the profile image of each comment's author", function() {
-            expect(this.listItems.eq(0).find("img").attr('src')).toBe(this.comment1.author().imageUrl({ size: "icon" }));
+            expect(this.listItems.eq(0).find("img").attr('src')).toBe(this.comment1.author().imageUrl({ size: "original" }));
         });
 
-        context("when there are more comments than the specified 'initial limit'", function() {
+        describe("header rendering", function() {
             beforeEach(function() {
+                this.view.options.displayStyle = 'without_workspace';
                 this.view.render();
             });
 
+            it("is correct for notes", function() {
+                expect(this.view.$('.comment_header:eq(0)').text()).toMatch(this.comment1.get('workspace').get('name'));
+            });
+
+            it("sets a displayStyle of without_workspace on the presenter", function() {
+                expect(this.view.collectionModelContext(this.comment1)._impl.options.displayStyle).toBe('without_workspace');
+            });
+
+            it("is correct for comments", function() {
+                expect(this.view.$('.comment_header:eq(2)').text()).toMatch('commented on a note');
+            });
+        });
+
+        context("when there are more comments than the specified 'initial limit'", function() {
             it("displays a 'more' link", function() {
                 expect(this.view.$("a.more")).toExist();
             });

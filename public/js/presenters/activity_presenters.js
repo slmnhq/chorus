@@ -1,17 +1,23 @@
 ;
 (function(ns) {
     ns.presenters.Activity = ns.presenters.Base.extend({
-        present : function(model) {
+        present : function(model, options) {
+            this.options = options;
+            
             this.model = model
             this.author = model.author();
             this.workspace = model.get("workspace") && new ns.models.Workspace(model.get("workspace"));
             this.activityType = model.get("type")
 
-
             this.presenter = this.defaultPresenter(this.model)
             this.extensions = this[this.activityType] && this[this.activityType](model)
             _.extend(this.presenter, this.extensions)
             this.presenter.header = _.extend(this.defaultHeader(), this.presenter.header) //presenter.header includes extensions.header
+            this.presenter.headerHtml = this.headerHtml();
+
+
+            this.presenter._impl = this;
+
             return this.presenter
         },
 
@@ -41,6 +47,24 @@
                 objectLink: ns.helpers.linkTo(this.presenter.objectUrl, this.presenter.objectName),
                 workspaceLink: ns.helpers.linkTo(this.presenter.workspaceUrl, this.presenter.workspaceName)
             }
+        },
+
+        headerHtml : function() {
+            return t(this.headerTranslationKey(), this.presenter.header)
+        },
+
+        headerTranslationKey : function() {
+            var prefix = 'activity_stream.header.html.';
+            var type = this.model.get("type");
+            if (!I18n.lookup(prefix + type)) {
+                type = 'DEFAULT';
+            }
+            var styles = _.flatten([this.options.displayStyle, 'default']);
+
+            prefix = prefix + type + '.';
+            return prefix +  _.find(styles, function(style) {
+                return I18n.lookup(prefix + style);
+            });
         },
 
         NOTE : function(model) {

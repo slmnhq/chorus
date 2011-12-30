@@ -1127,17 +1127,28 @@
                 var attributes = _.extend({
                     id : id,
                     text : "this is comment text" + id,
-                    attachments : [],
-                    type: "NOTE",
-                    comments: []
+                    artifacts : [],
+                    timestamp : '2011-01-01 12:00:00'
                 }, overrides);
                 attributes.author = _.extend(this.user().attributes, overrides && overrides.author);
                 return new chorus.models.Comment(attributes);
             },
 
+            noteComment: function(overrides) {
+                commentOverrides = _.extend({
+                    comments: [],
+                    attachments : [],
+                    type: "NOTE",
+                    workspace: fixtures.workspace()
+                }, overrides)
+                return fixtures.comment(commentOverrides);
+            },
+
             workspace: function(overrides) {
+                var id = this.nextId().toString()
                 var attributes = _.extend({
-                    id : this.nextId().toString(),
+                    id : id,
+                    name : 'Workspace ' + id,
                     _owner: this.user()
                 }, overrides);
                 return new chorus.models.Workspace(attributes);

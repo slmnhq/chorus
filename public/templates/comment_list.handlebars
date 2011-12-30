@@ -1,23 +1,22 @@
 {{#if models.length}}
     <ul class="comments">
         {{#eachWithMoreLink models initialLimit "activity_stream.comments.more" "activity_stream.comments.less"}}
-            <li data-comment-id="{{id}}" class="{{moreClass}} activity_item comment media">
-                <div class="icon">
-                    <a href="{{authorShowUrl}}">
-                        <img title="{{displayName}}" src="{{imageUrl}}"/>
-                    </a>
+        <li data-comment-id="{{id}}" class="{{moreClass}} activity_item comment media">
+            <div class="icon">
+                <a href="{{iconHref}}">
+                    <img title="{{displayName}}" src="{{iconSrc}}"/>
+                </a>
+            </div>
+            <div class="comment_content bd">
+                <div class="comment_header">
+                    {{{headerHtml}}}
                 </div>
-                <div class="comment_content bd">
-                    <div class="comment_header">
-                        <a href="{{{authorShowUrl}}}" class="author">{{displayName}}</a>
-                        <span class="object">commented on a note</span>
-                    </div>
-                    {{#if body}}
-                        <div class="body">{{body}}</div>
-                    {{/if}}
-                    <div class="timestamp">{{relativeTimestamp timestamp}}</div>
-                </div>
-            </li>
+                {{#if body}}
+                <div class="body">{{body}}</div>
+                {{/if}}
+                <div class="timestamp">{{relativeTimestamp timestamp}}</div>
+            </div>
+        </li>
         {{/eachWithMoreLink}}
     </ul>
 {{/if}}

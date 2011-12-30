@@ -11,26 +11,7 @@
         },
 
         context : function() {
-            var presenter = new chorus.presenters.Activity(this.model)
-            return _.extend({}, presenter, { headerHtml : this.headerHtml(presenter) })
-        },
-
-        headerHtml : function(presenter) {
-            return t(this.headerTranslationKey(), presenter.header)
-        },
-
-        headerTranslationKey : function() {
-            var prefix = 'activity_stream.header.html.';
-            var type = this.model.get("type");
-            if (!I18n.lookup(prefix + type)) {
-                type = 'DEFAULT';
-            }
-            var styles = _.flatten([this.options.displayStyle, 'default']);
-
-            prefix = prefix + type + '.';
-            return prefix +  _.find(styles, function(style) {
-                return I18n.lookup(prefix + style);
-            });
+            return new chorus.presenters.Activity(this.model, this.options)
         },
 
         setupSubviews: function() {

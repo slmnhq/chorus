@@ -20,7 +20,11 @@
         postRender: function() {
             this.collection.each(function(workspace) {
                 var li = this.$("li[data-id=" + workspace.get("id") + "]");
-                var commentList = new chorus.views.CommentList({ collection: workspace.comments(), initialLimit: 5 });
+                var commentList = new chorus.views.CommentList({
+                    collection: workspace.comments(),
+                    initialLimit: 5,
+                    displayStyle : 'without_workspace'
+                });
                 var el = $(commentList.render().el);
                 el.find("ul").addClass("tooltip");
 

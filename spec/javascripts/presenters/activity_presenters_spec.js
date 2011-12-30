@@ -8,7 +8,7 @@ describe("chorus.presenters.Activity", function() {
         beforeEach(function() {
             this.model = fixtures.activity.NOTE_ON_WORKSPACE();
             this.workspace = this.model.get("workspace");
-            this.presenter = new chorus.presenters.Activity(this.model)
+            this.presenter = new chorus.presenters.Activity(this.model);
         });
 
         it("should have the right objectName", function() {
@@ -255,6 +255,78 @@ describe("chorus.presenters.Activity", function() {
         });
 
         itShouldHaveTheAuthorsIconAndUrl();
+    });
+
+    context("headerHtml", function() {
+        describe("#headerTranslationKey", function() {
+            beforeEach(function() {
+                this.keyPrefix = 'activity_stream.header.html.';
+                this.model = fixtures.activity.NOTE_ON_WORKSPACE();
+                this.workspace = this.model.get("workspace");
+            });
+
+            context("when displayStyle is not set", function() {
+                beforeEach(function() {
+                    this.presenter = new chorus.presenters.Activity(this.model);
+                });
+
+                it("uses the default displayStyle", function() {
+                    var expectedKey = this.keyPrefix + this.model.get('type') + '.default';
+                    expect(I18n.lookup(expectedKey)).toBeTruthy();
+                    expect(this.presenter._impl.headerTranslationKey()).toBe(expectedKey);
+                });
+            });
+
+            context("when displayStyle is a string", function() {
+                beforeEach(function() {
+                    this.presenter = new chorus.presenters.Activity(this.model, {displayStyle : 'without_object'});
+                });
+
+                it("returns the displayStyle when it exists", function() {
+                    var expectedKey = this.keyPrefix + this.model.get('type') + '.without_object';
+                    expect(I18n.lookup(expectedKey)).toBeTruthy();
+                    expect(this.presenter._impl.headerTranslationKey()).toBe(expectedKey);
+                });
+
+                it("returns the default when it does not exists", function() {
+                    this.model.set({type: 'WORKSPACE_CREATED'});
+                    var missingKey = this.keyPrefix + this.model.get('type') + '.without_object';
+                    var expectedKey = this.keyPrefix + this.model.get('type') + '.default';
+                    expect(I18n.lookup(missingKey)).toBeFalsy();
+                    expect(I18n.lookup(expectedKey)).toBeTruthy();
+                    expect(this.presenter._impl.headerTranslationKey()).toBe(expectedKey);
+                });
+
+                it("uses type of DEFAULT when the model's type does not have a translation", function() {
+                    this.model.set({type: 'BANNANA'});
+                    var expectedKey = this.keyPrefix + 'DEFAULT.default';
+                    expect(this.presenter._impl.headerTranslationKey()).toBe(expectedKey);
+                });
+            });
+
+            context("when displayStyle is an array", function() {
+                it("returns the first key when it exists", function() {
+                    this.presenter = new chorus.presenters.Activity(this.model, {displayStyle : ['without_object', 'without_workspace']});
+                    var expectedKey = this.keyPrefix + this.model.get('type') + '.without_object';
+                    expect(I18n.lookup(expectedKey)).toBeTruthy();
+                    expect(this.presenter._impl.headerTranslationKey()).toBe(expectedKey);
+                });
+
+                it("falls back to the next match when the first key doesn't exist", function() {
+                    this.presenter = new chorus.presenters.Activity(this.model, {displayStyle : ['banana', 'without_object', 'without_workspace']});
+                    var expectedKey = this.keyPrefix + this.model.get('type') + '.without_object';
+                    expect(I18n.lookup(expectedKey)).toBeTruthy();
+                    expect(this.presenter._impl.headerTranslationKey()).toBe(expectedKey);
+                });
+
+                it("falls back on default when none of them exist", function() {
+                    this.presenter = new chorus.presenters.Activity(this.model, {displayStyle : ['banana', 'apple']});
+                    var expectedKey = this.keyPrefix + this.model.get('type') + '.default';
+                    expect(I18n.lookup(expectedKey)).toBeTruthy();
+                    expect(this.presenter._impl.headerTranslationKey()).toBe(expectedKey);
+                });
+            });
+        });
     });
 
     function itShouldHaveTheAuthorsIconAndUrl() {
