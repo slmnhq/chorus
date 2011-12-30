@@ -51,7 +51,7 @@ describe("InstanceNewDialog", function() {
             });
 
             it("shows the correct text", function() {
-                expect(this.dialog.$("label[for=create_new_greenplum]").text()).toMatchTranslation("instances.new_dialog.create_new_greenplum.disabled");
+                expect(this.dialog.$("label[for=create_new_greenplum]").text()).toMatchTranslation("instances.new_dialog.create_new_greenplum_disabled");
             });
 
             it("have class disabled", function() {
