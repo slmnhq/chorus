@@ -83,8 +83,8 @@
             if (collection && collection.length > max) {
                 templates.moreLinks = templates.moreLinks || Handlebars.compile(
                     "<ul class='morelinks'>\
-                    <li><a class='more' href='#'>{{t more_key more_count}}</a></li>\
-                    <li><a class='less' href='#'>{{t less_key more_count}}</a></li>\
+                    <li><a class='more' href='#'>{{t more_key count=more_count}}</a></li>\
+                    <li><a class='less' href='#'>{{t less_key count=more_count}}</a></li>\
                     </ul>"
                 );
 

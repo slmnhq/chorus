@@ -249,7 +249,7 @@ describe("handlebars", function() {
                     var el = $("<div>" + Handlebars.helpers.moreLink([1,2,3,4], 3, "activity_stream.comments.more", "activity_stream.comments.less") + "</div>");
                     expect(el.find(".morelinks a.more")).toExist();
                     expect(el.find(".morelinks a.less")).toExist();
-                    expect(el.find(".morelinks a.more")).toHaveText(t("activity_stream.comments.more", 1));
+                    expect(el.find(".morelinks a.more")).toHaveText(t("activity_stream.comments.more", {count: 1}));
                     expect(el.find(".morelinks a.less")).toHaveText(t("activity_stream.comments.less"));
                 })
             });

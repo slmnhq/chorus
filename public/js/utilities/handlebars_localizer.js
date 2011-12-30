@@ -1,3 +1,5 @@
 Handlebars.registerHelper("t", function(key) {
-    return t.apply(this, arguments);
+    var args = arguments;
+    args[args.length - 1] = args[args.length - 1].hash;
+    return t.apply(this, args);
 });
