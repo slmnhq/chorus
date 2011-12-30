@@ -35,6 +35,13 @@
             "port" : "instances.dialog.port",
             "description" : "instances.dialog.description",
             "size" : "instances.dialog.size"
+        },
+
+        aurora : function() {
+            if(!this._aurora) {
+                this._aurora = new chorus.models.Provisioning({provisionerPluginName : "A4CProvisioner", type : "install"});
+            }
+            return this._aurora;
         }
     });
 })(chorus);

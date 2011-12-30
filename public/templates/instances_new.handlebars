@@ -29,11 +29,15 @@
     </form></div>
 </fieldset>
 
-<fieldset class="collapsed create_new_greenplum">
+<fieldset class="collapsed create_new_greenplum" >
     <legend>
-        <input type="radio" name="instance_type" id="create_new_greenplum"/>
-        <label for="create_new_greenplum">{{t "instances.new_dialog.create_new_greenplum"}}</label>
-        <img src="/images/more-info.png" class="help" data-text='{{t "instances.new_dialog.create_new_greenplum_help_text"}}'/>
+        <input type="radio" name="instance_type" id="create_new_greenplum" {{#unless auroraInstalled}}disabled="disabled"{{/unless}}/>
+        {{#if auroraInstalled}}
+            <label for="create_new_greenplum">{{t "instances.new_dialog.create_new_greenplum"}}</label>
+        {{else}}
+            <label for="create_new_greenplum" class="disabled">{{t "instances.new_dialog.create_new_greenplum_disabled"}}</label>
+        {{/if}}
+        <img src="/images/more-info.png" class="help" data-text='{{t "instances.new_dialog.create_new_greenplum.help_text"}}'/>
     </legend>
     <div><form>
         <input type="hidden" name="provisionType" value="create" />
