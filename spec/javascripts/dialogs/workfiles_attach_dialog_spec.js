@@ -9,7 +9,7 @@ describe("WorkfilesAttach", function() {
     describe("#setup", function() {
         it("fetches all workfiles for the specified workspace", function() {
             expect(this.dialog.collection.fetchAll).toHaveBeenCalled();
-        })
+        });
     })
 
     describe("render", function() {
@@ -44,6 +44,10 @@ describe("WorkfilesAttach", function() {
         it("has a close window button that cancels the dialog", function() {
             expect(this.dialog.$("button.cancel").length).toBe(1);
         });
+
+        it("has the 'Attach File' button disabled by default", function() {
+            expect(this.dialog.$('button.submit')).toBeDisabled();
+        });
     });
 
     describe("selecting files", function() {
@@ -59,10 +63,28 @@ describe("WorkfilesAttach", function() {
             expect(this.dialog.$("li").eq(1)).toHaveClass("selected");
         });
 
-        it("removes class selected when user click previously selected workfile", function() {
-            this.dialog.$("li a").eq(0).click();
-            expect(this.dialog.$("li").eq(0)).not.toHaveClass("selected");
+        it("enables the submit button", function() {
+            expect(this.dialog.$('button.submit')).not.toBeDisabled();
         });
+
+        context("clicking a previously selected workfile", function() {
+            beforeEach(function() {
+                this.dialog.$("li a").eq(0).click();
+            });
+
+            it("removes class selected when user click previously selected workfile", function() {
+                expect(this.dialog.$("li").eq(0)).not.toHaveClass("selected");
+            });
+
+            it("disable the submit button if it was the last selected item", function() {
+                expect(this.dialog.$('li.selected').length).toBeGreaterThan(0);
+                expect(this.dialog.$('button.submit')).not.toBeDisabled();
+                this.dialog.$("li.selected a").click();
+                expect(this.dialog.$('li.selected').length).toBe(0);
+                expect(this.dialog.$('button.submit')).toBeDisabled();
+            });
+        });
+
     });
 
     describe("submit", function() {
