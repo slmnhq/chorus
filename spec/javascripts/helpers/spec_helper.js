@@ -21,6 +21,7 @@
         'instance_list_sidebar',
         'instance',
         'instances_new',
+        'instance_permissions',
         'link_menu',
         'list_content_details',
         'logged_in_layout',

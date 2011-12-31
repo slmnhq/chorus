@@ -690,6 +690,8 @@
                                     "name" : "instance1",
                                     "description" : "11",
                                     "owner" : "edcadmin",
+                                    "ownerFullName" : "EDC Admin",
+                                    "ownerId" : "10111",
                                     "host" : "10.32.88.200",
                                     "port" : 5432,
                                     "state" : "online",
@@ -719,6 +721,8 @@
                                     "name" : "instance1",
                                     "description" : "11",
                                     "owner" : "edcadmin",
+                                    "ownerFullName" : "EDC Admin",
+                                    "ownerId" : "10111",
                                     "host" : "10.32.88.200",
                                     "port" : 5432,
                                     "state" : "online",
@@ -740,7 +744,6 @@
                     "pagination" : null,
                     "version" : "0.1"
                 }
-
             },
 
             currentId: 1,
@@ -1192,6 +1195,18 @@
                     totalObject: null
                 }, overrides);
                 return new chorus.models.Instance(attributes);
+            },
+
+            accountmap : function(overrides) {
+                var attributes = _.extend({
+                    id : this.nextId().toString(),
+                    shared : "yes",
+                    expiration : null,
+                    instanceId : "10101",
+                    userName : "edcadmin",
+                    dbUserName : "gpadmin"
+                }, overrides);
+                return new chorus.models.Accountmap(attributes);
             }
         });
     });

@@ -8,6 +8,7 @@
             border-bottom: $list-border-width dotted $list-border-color;
             padding: 0 8px;
             line-height: $list-item-height;
+            vertical-align: middle;
             @include ellipsis;
 
             img {
@@ -20,10 +21,6 @@
             .name {
                 vertical-align: middle;
                 @include font-normal-alpha;
-            }
-
-            &:last-child {
-                border-bottom: none;
             }
         }
     }

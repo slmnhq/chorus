@@ -27,6 +27,14 @@
             }
         },
 
+        owner : function() {
+            return new ns.models.User({
+                id : this.get("ownerId"),
+                userName : this.get("owner"),
+                fullName : this.get("ownerFullName")
+            })
+        },
+
         attrToLabel : {
             "dbUserName" : "instances.dialog.database_account",
             "dbPassword" : "instances.dialog.database_password",

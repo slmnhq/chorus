@@ -1,11 +1,19 @@
+@import "_common.scss";
+
+$list-item-height: 39px;
+$list-border-width: 1px;
+$link-padding: 4px;
+
 .instance_permissions {
     .dialog_content {
-        padding: 0 15px !important;
-        width: 350px;
+        padding: 0 !important;
+        width: 460px;
         margin: 0;
     }
 
     .sub_header {
+        padding: 0 15px !important;
+
         .details_text {
             background : url("/images/instances/shared_icon.png") no-repeat left 6px;
             display: inline-block;
@@ -15,5 +23,76 @@
         a {
             float: right;
         }
+    }
+
+    .collection_list {
+        border-top: 1px solid $subheader-border-color-dark;
+        
+        ul {
+            li {
+                height: auto;
+                min-height: $list-item-height;
+                padding-right: 15px;
+                
+                div {
+                    display: inline-block;
+
+                    &.image {
+                        position: relative;
+                        display: inline-block;
+
+                        img {
+                            padding: 2px;
+                        }
+                    }
+
+                    &.name {
+                        @include ellipsis;
+                        padding-left: 10px;
+                    }
+
+                    &.links {
+                        float: right;
+                        font-size: 12px;
+
+                        .owner {
+                            color: $weak-text-color;
+                            padding-right: $link-padding;
+                        }
+
+                        .edit {
+                            padding-left: $link-padding;
+                        }
+                    }
+
+                    &.credentials {
+                        display: none;
+
+                        a {
+                            font-size: 12px;
+                        }
+
+                        .actions {
+                            display: block;
+                        }
+                    }
+                }
+
+                &.editing {
+                    .links {
+                        display: none;
+                    }
+
+                    .credentials {
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+
+    .controls {
+        margin: 0;
+        padding: 14px;
     }
 }
