@@ -2,12 +2,13 @@
 
 $list-item-height: 39px;
 $list-border-width: 1px;
-$link-padding: 4px;
+$link-padding: 6px;
 
 .instance_permissions {
+    width: 460px;
+    
     .dialog_content {
         padding: 0 !important;
-        width: 460px;
         margin: 0;
     }
 
@@ -61,19 +62,42 @@ $link-padding: 4px;
                         }
 
                         .edit {
+                            border-left: 1px solid $link-color;
                             padding-left: $link-padding;
                         }
                     }
 
                     &.credentials {
                         display: none;
+                        margin-left: 52px;
+                        line-height: 12px;
 
                         a {
                             font-size: 12px;
                         }
 
+                        .field_wrapper {
+                            width: 48%;
+                            padding-right: 4px;
+                            
+                            label {
+                                padding-bottom: 4px;
+                                display: block;
+                            }
+                        }
+
                         .actions {
+                            padding: 8px 0;
                             display: block;
+                            color: $link-color;
+
+                            a {
+                                padding: 0 ($link-padding + 2);
+
+                                &.cancel {
+                                    border-left: 1px solid $link-color;
+                                }
+                            }
                         }
                     }
                 }
