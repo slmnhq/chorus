@@ -28,14 +28,15 @@
             });
             this.model.bind("saved", this.saved, this);
             this.model.bind("saveFailed", this.saveFailed, this);
+            this.model.bind("validationFailed", this.saveFailed, this);
 
             this.workspaceId = this.options.launchElement.data("workspace-id");
         },
 
         save: function(e) {
             e.preventDefault();
-            this.model.save({ body : this.$("textarea[name=body]").val().trim() });
             this.$("button.submit").startLoading("notes.button.uploading");
+            this.model.save({ body : this.$("textarea[name=body]").val().trim() });
         },
 
         saved : function() {

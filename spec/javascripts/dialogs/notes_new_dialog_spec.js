@@ -217,7 +217,7 @@ describe("NotesNewDialog", function() {
                     this.dialog.$("textarea[name=body]").val("The body of a note");
                     this.invalidatedSpy = jasmine.createSpy("invalidated");
                     this.dialog.pageModel.bind("invalidated", this.invalidatedSpy);
-                    spyOn($.fn, "stopLoading")
+                    spyOn($.fn, "stopLoading").andCallThrough();
                 });
 
                 describe("when the upload succeeds", function() {
@@ -253,6 +253,18 @@ describe("NotesNewDialog", function() {
 
                     it("removes the spinner from the button", function() {
                         expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit")
+                    })
+                });
+
+                describe("when the validation fails", function() {
+                    beforeEach(function() {
+                        this.dialog.$("textarea[name=body]").val("");
+                        this.dialog.$('button.submit').click();
+                        $('#jasmine_content').append(this.dialog.el);
+                    })
+
+                    it("removes the spinner from the button", function() {
+                        expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
                     })
                 });
             });
