@@ -94,6 +94,16 @@ $link-padding: 6px;
                             a {
                                 padding: 0 ($link-padding + 2);
 
+                                &:first-child {
+                                    padding-left: 0;
+                                }
+
+                                div[aria-role=progressbar] {
+                                    left: -98px;
+                                    top: 5px;
+                                    display: inline;
+                                }
+
                                 &.cancel {
                                     border-left: 1px solid $link-color;
                                 }

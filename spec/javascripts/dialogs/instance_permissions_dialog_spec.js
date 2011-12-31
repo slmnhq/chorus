@@ -77,6 +77,10 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     expect(this.dialog.model.save).toHaveBeenCalled();
                 })
 
+                it("shows a spinner", function() {
+                    expect(this.dialog.$("a.save").isLoading()).toBeTruthy();
+                })
+
                 context("when the save succeeds", function() {
                     beforeEach(function() {
                         this.dialog.model.trigger('saved');
@@ -84,6 +88,10 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                     it("removes the 'editing' class from the parent li", function() {
                         expect(this.dialog.$("li")).not.toHaveClass("editing");
+                    })
+
+                    it("stops the spinner", function() {
+                        expect(this.dialog.$("a.save").isLoading()).toBeFalsy();
                     })
                 })
 
@@ -104,6 +112,10 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                     it("displays error messages", function() {
                         expect(this.dialog.$(".errors li:first-child").text().trim()).toBe("You can't do that, dude");
+                    })
+
+                    it("stops the spinner", function() {
+                        expect(this.dialog.$("a.save").isLoading()).toBeFalsy();
                     })
                 })
             })

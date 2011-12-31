@@ -13,6 +13,7 @@
         makeModel : function() {
             this.model = ns.models.Accountmap.findByInstanceId(this.options.pageModel.get("id"))
             this.model.bind("saved", this.saved, this);
+            this.model.bind("saveFailed", this.saveFailed, this);
 
             this._super("makeModel")
 
@@ -33,6 +34,8 @@
 
         save : function(event) {
             event.preventDefault();
+            this.$("a.save").startLoading("instances.permissions.saving")
+            
             this.accountMap.save({
                 dbUserName : this.$("input[name=dbUserName]").val(),
                 dbPassword : this.$("input[name=dbPassword]").val()
@@ -45,7 +48,12 @@
         },
 
         saved : function() {
+            this.$("a.save").stopLoading();
             this.$("li").removeClass("editing")
+        },
+
+        saveFailed : function() {
+            this.$("a.save").stopLoading();
         }
     });
 })(chorus);
