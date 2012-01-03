@@ -50,6 +50,11 @@ $image-width: 35px;
             }
         }
 
+        .defaultText {
+            @include font-normal-alpha;
+            padding-left: 12px;
+        }
+
         .fileName {
             @include ellipsis;
             color: $secondary-text-color;

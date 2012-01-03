@@ -36,7 +36,7 @@ describe("WorkfilesImportDialog", function() {
         });
 
         it("shows no file selected text", function() {
-
+            expect(this.dialog.$(".file .defaultText")).not.toHaveClass("hidden")
         });
     });
 
@@ -99,6 +99,10 @@ describe("WorkfilesImportDialog", function() {
         it("adds the 'chosen' class to the form", function() {
             expect(this.dialog.$("form")).toHaveClass("chosen")
         })
+
+        it("hides the 'no file selected' text", function() {
+            expect(this.dialog.$(".file .defaultText")).toHaveClass("hidden")
+        });
 
         context("#upload", function() {
             beforeEach(function() {
