@@ -33,7 +33,11 @@ describe("WorkfilesImportDialog", function() {
 
         it("does not have the 'chosen' class on the form", function() {
             expect(this.dialog.$("form")).not.toHaveClass("chosen")
-        })
+        });
+
+        it("shows no file selected text", function() {
+
+        });
     });
 
     context("when a text file has been chosen", function() {
@@ -78,6 +82,7 @@ describe("WorkfilesImportDialog", function() {
         it("enables the upload button", function() {
             expect(this.dialog.$("button.submit")).not.toHaveAttr("disabled");
         });
+
 
         it("does not put the button in loading mode", function() {
             expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();

@@ -61,6 +61,7 @@
 
             function fileChosen(e, data) {
                 if (data.files.length > 0) {
+                    self.$(".defaultText").addClass("hidden");
                     self.$("button.submit").removeAttr("disabled");
                     self.uploadObj = data;
                     var filename = data.files[0].name;

@@ -23,8 +23,8 @@ $image-width: 35px;
             .file {
                 padding-left: $image-width + 4px;
                 .choose {
-                    font-size: 12px;
-                    font-weight: $semibold;
+                    @include font-content-details;
+                    @include content-details-button($border-color);
                 }
             }
         }
