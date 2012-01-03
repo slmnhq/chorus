@@ -118,6 +118,18 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         expect(this.dialog.$("a.save").isLoading()).toBeFalsy();
                     })
                 })
+
+                context("when the form is invalid", function() {
+                    beforeEach(function() {
+                        this.dialog.$("li[data-id=10111] input[name=dbUserName]").val("");
+                        this.dialog.$("input[name=dbPassword]").val("");
+                        this.dialog.$("a.save").click();
+                    });
+
+                    it("removes the spinner from the link", function() {
+                        expect(this.dialog.$("a.save").isLoading()).toBeFalsy();
+                    });
+                });
             })
 
             describe("cancelling the credential editing", function() {
@@ -130,7 +142,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     expect(this.dialog.model.get("dbUserName")).not.toBe("jughead");
                     expect(this.dialog.model.get("dbPassword")).not.toBe("gogogo");
                 })
-                
+
                 it("does not save the account map", function() {
                     expect(this.dialog.model.save).not.toHaveBeenCalled();
                 })
