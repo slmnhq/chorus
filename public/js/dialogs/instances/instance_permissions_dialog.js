@@ -50,7 +50,8 @@
 
         saved : function() {
             this.$("a.save").stopLoading();
-            this.$("li").removeClass("editing")
+            this.$("li").removeClass("editing");
+            this.instance.fetch();
         },
 
         saveFailed : function() {

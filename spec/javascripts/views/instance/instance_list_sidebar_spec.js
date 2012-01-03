@@ -1,6 +1,7 @@
 describe("InstanceListSidebar", function() {
     beforeEach(function() {
         this.view = new chorus.views.InstanceListSidebar();
+        spyOn(this.view, "render").andCallThrough();
         fixtures.model = "Instance";
     });
 
@@ -58,6 +59,19 @@ describe("InstanceListSidebar", function() {
             expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
             expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
         });
+
+
+        context("and the selected instance triggers a 'change' event", function() {
+            beforeEach(function() {
+                this.view.render.reset();
+                this.view.resource.trigger("change")
+            })
+
+            it("re-renders", function() {
+                expect(this.view.render).toHaveBeenCalled();
+            })
+        })
+
 
         context("when activity is clicked", function() {
             beforeEach(function() {
@@ -129,5 +143,4 @@ describe("InstanceListSidebar", function() {
             });
         })
     });
-
 });

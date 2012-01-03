@@ -13,7 +13,7 @@
             this.bind("instance:selected", this.setInstance, this);
             this.tabControl = new chorus.views.TabControl(['activity', 'configuration']);
             this.tabControl.bind("activity:selected", this.showActivityList, this)
-            this.tabControl.bind("configuration:selected", this.showConfiguration, this)
+            this.tabControl.bind("configuration:selected", this.showConfiguration, this);
         },
 
         additionalContext : function() {
@@ -37,6 +37,7 @@
             if(!this.instance.loaded) {
                 this.instance.fetch();
             }
+            this.resource.bind("change", this.render, this);
             this.render();
         },
 

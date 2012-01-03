@@ -83,6 +83,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 context("when the save succeeds", function() {
                     beforeEach(function() {
+                        spyOn(this.dialog.instance, "fetch");
                         this.dialog.model.trigger('saved');
                     })
 
@@ -92,6 +93,10 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                     it("stops the spinner", function() {
                         expect(this.dialog.$("a.save").isLoading()).toBeFalsy();
+                    })
+
+                    it("re-fetches the instance", function() {
+                        expect(this.dialog.instance.fetch).toHaveBeenCalled();
                     })
                 })
 
