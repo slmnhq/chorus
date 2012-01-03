@@ -165,6 +165,16 @@
                 }
             },
 
+            fetch: function(options) {
+                options || (options = {});
+                var success = options.success;
+                options.success = function(model, resp, xhr) {
+                    if (model.serverErrors) model.trigger('fetchFailed', model, resp, xhr);
+                    if (success) success(model, resp, xhr);
+                };
+                return Backbone.Model.prototype.fetch.call(this, options);
+            },
+
             destroy : function(options) {
                 options || (options = {});
                 if (this.isNew()) return this.trigger('destroy', this, this.collection, options);

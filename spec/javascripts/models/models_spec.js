@@ -308,6 +308,23 @@ describe("chorus.models", function() {
             });
         });
 
+        describe("#fetch", function() {
+            context("when there is a server error", function() {
+                beforeEach(function() {
+                    this.fetchFailedSpy = jasmine.createSpy("fetchFailed");
+                    this.model.bind("fetchFailed", this.fetchFailedSpy);
+                });
+
+                it("triggers the 'fetchFailed' event on the model", function() {
+                    this.model.fetch();
+                    this.server.respondWith([200, {'Content-Type': 'application/json'}, '{"resource":[], "status": "fail", "message" : "this is an error message" }']);
+                    this.server.respond();
+                    expect(this.fetchFailedSpy).toHaveBeenCalled();
+                    expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.model);
+                });
+            });
+        });
+
         describe("#destroy", function () {
             beforeEach(function() {
                 this.destroySpy = jasmine.createSpy();
