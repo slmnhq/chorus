@@ -8,7 +8,9 @@ describe("chorus", function() {
         it("should start the Backbone history after the session has been set", function() {
             var self = this;
             expect(this.chorus.session).toBeUndefined();
-            this.backboneSpy.andCallFake(function(){expect(self.chorus.session).toBeDefined();});
+            this.backboneSpy.andCallFake(function() {
+                expect(self.chorus.session).toBeDefined();
+            });
             this.chorus.initialize()
             expect(Backbone.history.start).toHaveBeenCalled();
         });
@@ -19,12 +21,12 @@ describe("chorus", function() {
         });
     });
 
-    describe("fileIconUrl", function(){
+    describe("fileIconUrl", function() {
         function verifyUrl(fileType, fileName) {
             expect(chorus.urlHelpers.fileIconUrl(fileType)).toBe("/images/workfiles/large/" + fileName + ".png");
         }
 
-        it("maps known fileTypes to URLs correctly", function(){
+        it("maps known fileTypes to URLs correctly", function() {
             verifyUrl("C", "c");
             verifyUrl("c++", "cpp");
             verifyUrl("cc", "cpp");
@@ -44,9 +46,12 @@ describe("chorus", function() {
             verifyUrl("rtf", "rtf");
             verifyUrl("sql", "sql");
             verifyUrl("txt", "txt");
+            verifyUrl("docx", "doc");
+            verifyUrl("xls", "xls");
+            verifyUrl("xlsx", "xls");
         });
 
-        it("maps unknown fileTypes to plain.png", function(){
+        it("maps unknown fileTypes to plain.png", function() {
             verifyUrl("foobar", "plain");
             verifyUrl("N/A", "plain");
         });
