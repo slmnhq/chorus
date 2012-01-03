@@ -9,6 +9,26 @@ describe("chorus.models", function() {
             it("compiles the urlTemplate and renders it with model attributes", function() {
                 expect(this.model.url()).toBe("/edc/my_items/foo");
             });
+
+            context("when the model has additional url params", function() {
+                beforeEach(function() {
+                    this.model.urlParams = { dance: "the thizzle" }
+                });
+
+                it("url-encodes the params and appends them to the url", function() {
+                    expect(this.model.url()).toBe("/edc/my_items/foo?dance=the+thizzle");
+                });
+
+                context("when the base url template includes a query string", function() {
+                    beforeEach(function() {
+                        this.model.urlTemplate = "my_items/{{id}}?size=medium";
+                    });
+
+                    it("merges the query strings properly", function() {
+                        expect(this.model.url()).toBe("/edc/my_items/foo?size=medium&dance=the+thizzle");
+                    });
+                });
+            });
         });
 
         describe("#showUrl", function() {

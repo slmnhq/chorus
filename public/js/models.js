@@ -101,7 +101,13 @@
         Base: Backbone.Model.extend(_.extend({}, chorus.Mixins.Events, {
             url: function(hidePrefix) {
                 var prefix = (hidePrefix ? '' : "/edc/")
-                return prefix + Handlebars.compile(this.urlTemplate)(this.attributes);
+                var url = prefix + Handlebars.compile(this.urlTemplate)(this.attributes);
+                var params = this.urlParams;
+                if (params) {
+                    var paramsJoiner = (_.include(url, '?')) ? '&' : '?';
+                    url += paramsJoiner + $.param(params || {});
+                }
+                return url;
             },
 
             showUrl: function(hidePrefix) {
