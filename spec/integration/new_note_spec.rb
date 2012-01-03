@@ -8,6 +8,21 @@ describe "creating a note on a workspace" do
     click_link "Add a note"
   end
 
+  describe "launching the submodal dialog" do
+    before do
+      click_link "Show options"
+      click_link "Work File"
+      wait_until { page.find("#facebox .dialog h1").text == "Attach Work File" }
+    end
+
+    it "dismisses each modal with each press of escape" do
+      page.find("body").native.send_keys :escape
+      wait_until { page.find("#facebox .dialog h1").text == "Add a Note" }
+      page.find("body").native.send_keys :escape
+      wait_until { !page.has_css?("#facebox") }
+    end
+  end
+
   describe "choosing a 'desktop file'" do
       let(:file) { Tempfile.new("my_desktop_file_name") }
 

@@ -84,8 +84,8 @@
     settings: {
       opacity      : 0.2,
       overlay      : true,
-      loadingImage : '/facebox/loading.gif',
-      closeImage   : '/facebox/closelabel.png',
+      loadingImage : '/images/facebox/loading.gif',
+      closeImage   : '/images/facebox/closelabel.png',
       imageTypes   : [ 'png', 'jpg', 'jpeg', 'gif' ],
       faceboxHtml  : '\
     <div id="facebox" style="display:none;"> \
@@ -111,10 +111,6 @@
         left:	$(window).width() / 2 - 205
       }).show()
 
-      $(document).bind('keydown.facebox', function(e) {
-        if (e.keyCode == 27) $.facebox.close()
-        return true
-      })
       $(document).trigger('loading.facebox')
     },
 
@@ -295,7 +291,6 @@
    */
 
   $(document).bind('close.facebox', function() {
-    $(document).unbind('keydown.facebox')
     $('#facebox').fadeOut(100, function() {
       $('#facebox .content').removeClass().addClass('content')
       hideOverlay()

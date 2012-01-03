@@ -9,7 +9,8 @@
             this.previousModal = ns.modal;
             ns.modal = this;
 
-            $(document).bind('close.facebox', _.bind(this.modalClosed, this));
+            _.bindAll(this, 'modalClosed', 'escape');
+            pushModalBindings(this);
         },
 
         makeModel : function(options) {
@@ -26,6 +27,8 @@
         },
 
         launchSubModal : function(subModal) {
+            popModalBindings(this);
+
             this.subModalId = "" + (new Date().getTime());
             $("#facebox").attr("id", "facebox-" + this.subModalId).addClass("hidden");
             $("#facebox_overlay").attr("id", "facebox_overlay-" + this.subModalId);
@@ -33,6 +36,12 @@
             subModal.isSubModal = true;
             subModal.subModalId = this.subModalId;
             subModal.launchModal();
+        },
+
+        escape : function(e) {
+            if (e.keyCode == 27) {
+                $(document).trigger("close.facebox");
+            }
         },
 
         modalClosed : function() {
@@ -46,6 +55,8 @@
                 if(this.isSubModal) {
                     this.subModalClosed();
                 }
+
+                popModalBindings(this);
             }
         },
 
@@ -53,14 +64,23 @@
             $("#facebox-" + this.subModalId).attr("id", "facebox").removeClass("hidden");
             $("#facebox_overlay-" + this.subModalId).attr("id", "facebox_overlay");
             ns.modal = this.previousModal;
+
+            pushModalBindings(this.previousModal);
         },
 
         close : $.noop,
         revealed : $.noop,
         bindPageModelCallbacks : $.noop,
         unbindPageModelCallbacks : $.noop
-    })
+    });
 
-    $.facebox.settings.closeImage = '/images/facebox/closelabel.png'
-    $.facebox.settings.loadingImage = '/images/facebox/loading.gif'
+    function pushModalBindings(modal) {
+        $(document).one("close.facebox", modal.modalClosed);
+        $(document).bind("keydown.facebox", modal.escape);
+    }
+
+    function popModalBindings(modal) {
+        $(document).unbind("close.facebox", modal.modalClosed);
+        $(document).unbind("keydown.facebox", modal.escape);
+    }
 })(chorus, jQuery);
