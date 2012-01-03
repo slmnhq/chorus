@@ -6,6 +6,17 @@ describe("chorus.models", function() {
         });
 
         describe("#url", function() {
+
+            context("when the model's urlTemplate is a function", function() {
+                beforeEach(function() {
+                    this.model.urlTemplate = function() { return "my_other_items/{{id}}" };
+                });
+
+                it("uses the function's return value", function() {
+                    expect(this.model.url()).toBe("/edc/my_other_items/foo");
+                });
+            });
+
             it("compiles the urlTemplate and renders it with model attributes", function() {
                 expect(this.model.url()).toBe("/edc/my_items/foo");
             });

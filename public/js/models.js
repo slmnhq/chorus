@@ -101,7 +101,8 @@
         Base: Backbone.Model.extend(_.extend({}, chorus.Mixins.Events, {
             url: function(hidePrefix) {
                 var prefix = (hidePrefix ? '' : "/edc/")
-                var url = prefix + Handlebars.compile(this.urlTemplate)(this.attributes);
+                var template = _.isFunction(this.urlTemplate) ? this.urlTemplate() : this.urlTemplate;
+                var url = prefix + Handlebars.compile(template)(this.attributes);
                 var params = this.urlParams;
                 if (params) {
                     var paramsJoiner = (_.include(url, '?')) ? '&' : '?';
