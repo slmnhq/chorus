@@ -42,6 +42,8 @@
             this.render();
 
             this.account = this.instance.accountForCurrentUser();
+            this.account.bind("change", this.render, this);
+            this.account.bind("fetchFailed", this.render, this);
             this.account.fetch();
         },
 
