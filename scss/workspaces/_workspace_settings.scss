@@ -67,42 +67,54 @@ $image-width : 230px;
 
     select.owner, .chzn-container {
         display: block;
-        background: #dff1fd;
+        background: white;
         min-width: 215px;
 
         a {
-            @include linear-gradient(color-stops(#eef8fd, #dff1fd));
-            @include border-radius(0px);
-            border: 1px solid #8fb9d0;
-
-            > div {
-                background: inherit;
-                border: none;
-            }
+            @include linear-gradient(color-stops(#eeeeee, #ffffff));
+            @include border-radius(4px);
+            border: 1px solid #AAA;
         }
 
         .chzn-single {
-            color: #005596;
+            color: $dark-text-color;
 
             div {
                 b {
-                    background: url(/images/select_icon.png) no-repeat 2px 8px;
+                    background: url(/images/chosen-sprite.png) no-repeat 0 1px;
+                }
+            }
+
+            &.chzn-single-with-drop {
+                border-bottom: none;
+                @include border-bottom-left-radius(0);
+                @include border-bottom-right-radius(0);
+
+                div b {
+                    background-position: -18px 1px;
                 }
             }
         }
 
         .chzn-drop {
-            background: #dff1fd;
+            background: white;
             @include border-radius(0px);
-            border: 1px solid #8fb9d0;
-
-            .chzn-search {
-                display: none;
-            }
 
             .chzn-results {
-                background: #dff1fd;
-                color: #005596;
+                background: white;
+                color: black;
+
+                .highlighted {
+                    background: #1C93DF;
+                }
+            }
+
+
+            .chzn-search {
+                input {
+                    width: 100% !important;
+                    background: white url(/images/chosen-sprite.png) no-repeat 100% -22px;
+                }
             }
         }
     }

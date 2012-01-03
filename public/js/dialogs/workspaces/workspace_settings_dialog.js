@@ -41,7 +41,7 @@
         },
 
         setupSelects : function() {
-            this.$("select.owner").chosen({ disable_search_threshold : 1000 });
+            this.$("select.owner").chosen();
         },
 
         subviews: {
