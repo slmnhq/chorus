@@ -1,10 +1,24 @@
 describe("chorus.models.Accountmap", function() {
     beforeEach(function() {
-        this.model = fixtures.accountmap();
+        this.model = fixtures.accountmap({ id: '72' });
     });
 
-    it("has the correct urlTemplate", function() {
-        expect(this.model.urlTemplate).toBe("instance/accountmap/{{id}}");
+    describe("urlTemplate", function() {
+        context("when an instanceId url param is set", function() {
+            beforeEach(function() {
+                this.model.urlParams = { instanceId: '45' };
+            });
+
+            it("has the right url", function() {
+                expect(this.model.url()).toBe("/edc/instance/accountmap?instanceId=45");
+            });
+        });
+
+        context("when NO instanceId url param is set", function() {
+            it("has the right url", function() {
+                expect(this.model.url()).toBe("/edc/instance/accountmap/72");
+            });
+        });
     });
 
     describe("#fetchByInstanceId", function() {
