@@ -35,6 +35,16 @@
             })
         },
 
+        accountForUser: function(user) {
+            var account = new ns.models.Accountmap;
+            account.urlParams = { instanceId: this.get("id"), userName: user.get("userName") };
+            return account;
+        },
+
+        accountForCurrentUser: function() {
+            return this.accountForUser(ns.session.user());
+        },
+
         attrToLabel : {
             "dbUserName" : "instances.dialog.database_account",
             "dbPassword" : "instances.dialog.database_password",
