@@ -107,6 +107,10 @@
             clearRenderedDOM();
 
             this.addMatchers({
+                toBeA: function(klass) {
+                    return this.actual instanceof klass;
+                },
+
                 toMatchTranslation: function(translationKey) {
                     this.message = function() {
                         return [

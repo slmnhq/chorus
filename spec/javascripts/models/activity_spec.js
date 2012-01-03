@@ -4,6 +4,42 @@ describe("chorus.models.Activity", function() {
         this.model = fixtures.modelFor("fetch")
     });
 
+    describe("#initialize", function() {
+        context("with an instance", function() {
+            it("creates an instance object", function() {
+                var json = fixtures.activityJson({instance: fixtures.instanceJson()});
+                var activity = new chorus.models.Activity(json);
+                expect(activity.get('instance')).toBeDefined();
+                expect(activity.get('instance')).toBeA(chorus.models.Instance);
+            });
+        });
+
+        context("with a workspace", function() {
+            it("creates an workspace object", function() {
+                var json = fixtures.activityJson({workspace: fixtures.workspaceJson()});
+                var activity = new chorus.models.Activity(json);
+                expect(activity.get('workspace')).toBeDefined();
+                expect(activity.get('workspace')).toBeA(chorus.models.Workspace);
+            });
+        });
+
+        context("with a workfile and a workspace", function() {
+            beforeEach(function() {
+                var json = fixtures.activityJson({workfile: fixtures.workfileJson(), workspace: fixtures.workspaceJson()});
+                this.activity = new chorus.models.Activity(json);
+            });
+
+            it("creates an workfile object", function() {
+                expect(this.activity.get('workfile')).toBeDefined();
+                expect(this.activity.get('workfile')).toBeA(chorus.models.Workfile);
+            });
+
+            it("puts the workspaceId into the workfile", function() {
+                expect(this.activity.get('workfile').get('workspaceId')).toBe(this.activity.get('workspace').get('id'));
+            });
+        });
+    });
+
     describe("#author", function() {
         it("creates a user", function() {
             expect(this.model.author().displayName()).toBe("EDC Admin");
@@ -17,11 +53,13 @@ describe("chorus.models.Activity", function() {
     describe("#comments", function() {
         beforeEach(function() {
             this.model.set({
-                comments: [{
-                    text: "I'm cold.'",
-                    author : fixtures.authorJson(),
-                    timestamp : "2011-12-15 12:34:56"
-                }],
+                comments: [
+                    {
+                        text: "I'm cold.'",
+                        author : fixtures.authorJson(),
+                        timestamp : "2011-12-15 12:34:56"
+                    }
+                ],
             });
             this.model.set({id: 5});
             this.comments = this.model.comments();

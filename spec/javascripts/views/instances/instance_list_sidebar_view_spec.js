@@ -1,4 +1,4 @@
-describe("InstanceListSidebar", function() {
+describe("chorus.views.InstanceListSidebar", function() {
     beforeEach(function() {
         this.view = new chorus.views.InstanceListSidebar();
         spyOn(this.view, "render").andCallThrough();
@@ -44,6 +44,10 @@ describe("InstanceListSidebar", function() {
 
         it("populates the ActivityList with the activities", function() {
             expect(chorus.views.ActivityList.mostRecentCall.args[0].collection).toBe(this.instance.activities());
+        });
+
+        it("sets the ActivityList displayStyle to without_object", function() {
+            expect(chorus.views.ActivityList.mostRecentCall.args[0].displayStyle).toBe('without_object');
         });
 
         it("fetches the activities", function() {

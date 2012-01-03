@@ -6,7 +6,9 @@
             
             this.model = model
             this.author = model.author();
-            this.workspace = model.get("workspace") && new ns.models.Workspace(model.get("workspace"));
+            this.workspace = model.get("workspace");
+            this.workfile = model.get("workfile");
+            this.noteObject = model.get("instance") || this.workfile || this.workspace;
             this.activityType = model.get("type")
 
             this.presenter = this.defaultPresenter(this.model)
@@ -68,23 +70,14 @@
         },
 
         NOTE : function(model) {
-            var workfile = model.get("workfile") && new ns.models.Workfile(_.extend(model.get("workfile"), {
-                workspaceId : this.workspace.get("id")
-            }));
-
             var attrs = {
                 attachments: _.map(model.attachments(), function(artifact) {
                     return new ns.presenters.Artifact(artifact);
                 })
             };
 
-            if (workfile) {
-                attrs.objectName = workfile.get("name");
-                attrs.objectUrl = workfile.showUrl();
-            } else if (this.workspace) {
-                attrs.objectName = this.workspace.get("name");
-                attrs.objectUrl = this.workspace.showUrl();
-            }
+            attrs.objectName = this.noteObject.get("name");
+            attrs.objectUrl = this.noteObject.showUrl();
 
             return attrs
         },
@@ -97,16 +90,16 @@
 
         WORKFILE_CREATED : function(model) {
             return {
-                objectName : model.get("workfile").name,
-                objectUrl : new ns.models.Workfile({id: model.get("workfile").id, workspaceId : this.workspace.id}).showUrl()
+                objectName : model.get("workfile").get("name"),
+                objectUrl : new ns.models.Workfile({id: model.get("workfile").get("id"), workspaceId : this.workspace.get("id")}).showUrl()
             }
         },
 
         INSTANCE_CREATED : function(model) {
             var instance = model.get("instance");
             return {
-                objectName : instance.name,
-                objectUrl : new ns.models.Instance({id : instance.id}).showUrl()
+                objectName : instance.get("name"),
+                objectUrl : new ns.models.Instance({id : instance.get("id")}).showUrl()
             }
         },
 

@@ -1,5 +1,20 @@
 ;(function(ns) {
     ns.Activity = chorus.models.Base.extend({
+
+        initialize: function(attributes, options) {
+            this._super('initialize', attributes, options);
+            if(attributes.instance) {
+                this.set({instance : new chorus.models.Instance(attributes.instance)});
+            }
+            if(attributes.workspace) {
+                this.set({workspace : new chorus.models.Workspace(attributes.workspace)});
+            }
+            if(attributes.workfile) {
+                attributes.workfile.workspaceId = this.get('workspace').get('id');
+                this.set({workfile : new chorus.models.Workfile(attributes.workfile)});
+            }
+        },
+
         author : function() {
             this._author = this._author || new chorus.models.User(this.get("author"));
             return this._author;

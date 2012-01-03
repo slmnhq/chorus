@@ -775,10 +775,7 @@
                                 name: "Method Man"
                             }
                         ],
-                        workspace: {
-                            id: '10840',
-                            name: "Catsup"
-                        }
+                        workspace: fixtures.workspaceJson()
                     });
                 },
 
@@ -805,10 +802,7 @@
                                 name: "Method Man"
                             }
                         ],
-                        workspace: {
-                            id: '10840',
-                            name: "Catsup"
-                        }
+                        workspace: fixtures.workspaceJson()
                     });
                 },
 
@@ -825,10 +819,7 @@
                                 timestamp : "2011-12-15 12:34:56"
                             }
                         ],
-                        workspace: {
-                            id: '10840',
-                            name: "Cheese"
-                        }
+                        workspace: fixtures.workspaceJson()
                     });
                 },
 
@@ -845,10 +836,7 @@
                                 timestamp : "2011-12-15 12:34:56"
                             }
                         ],
-                        workspace: {
-                            id: '10840',
-                            name: "Bar Fight"
-                        }
+                        workspace: fixtures.workspaceJson()
                     });
                 },
 
@@ -865,10 +853,7 @@
                                 timestamp : "2011-12-15 12:34:56"
                             }
                         ],
-                        workspace: {
-                            id: '10840',
-                            name: "Bar Fight"
-                        }
+                        workspace: fixtures.workspaceJson()
                     });
                 },
 
@@ -885,10 +870,7 @@
                                 timestamp : "2011-12-15 12:34:56"
                             }
                         ],
-                        workspace: {
-                            id: '10840',
-                            name: "Bar Fight"
-                        }
+                        workspace: fixtures.workspaceJson()
                     });
                 },
 
@@ -898,14 +880,8 @@
                         type: "WORKFILE_CREATED",
                         timestamp: "2011-12-12 12:12:12",
                         id: "10860",
-                        workfile : {
-                            id: "10120",
-                            name: "my.sql"
-                        },
-                        workspace : {
-                            id: "10356",
-                            name: "Some workspace"
-                        },
+                        workfile : fixtures.workfileJson(),
+                        workspace : fixtures.workspaceJson(),
                         comments: [
                             {
                                 text: "OBAMA!!!!",
@@ -925,6 +901,40 @@
                     });
                 },
 
+                "NOTE_ON_INSTANCE" : function() {
+                    return new chorus.models.Activity({
+                        author: fixtures.authorJson(),
+                        type: "NOTE",
+                        text: "How about that.",
+                        timestamp: "2011-12-01 00:00:00",
+                        id : "10101",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ],
+                        instance : fixtures.instanceJson(),
+                        artifacts : [
+                            {
+                                entityId: "10101",
+                                entityType: "file",
+                                id: "10101",
+                                name: "something.sql",
+                                type: "SQL"
+                            },
+                            {
+                                entityId: "10102",
+                                entityType: "file",
+                                id: "10102",
+                                name: "something.txt",
+                                type: "TXT"
+                            }
+                        ]
+                    });
+                },
+
                 "NOTE_ON_WORKSPACE" : function() {
                     return new chorus.models.Activity({
                         author: fixtures.authorJson(),
@@ -939,10 +949,7 @@
                                 timestamp : "2011-12-15 12:34:56"
                             }
                         ],
-                        workspace : {
-                            id : "10222",
-                            name : "the greatest"
-                        },
+                        workspace : fixtures.workspaceJson(),
                         artifacts : [
                             {
                                 entityId: "10101",
@@ -976,14 +983,8 @@
                                 timestamp : "2011-12-15 12:34:56"
                             }
                         ],
-                        workfile : {
-                            id : "10223",
-                            name : "the best"
-                        },
-                        workspace : {
-                            id : "10222",
-                            name : "the greatest"
-                        },
+                        workfile : fixtures.workfileJson(),
+                        workspace : fixtures.workspaceJson(),
                         artifacts : [
                             {
                                 entityId: "10101",
@@ -1048,10 +1049,7 @@
                         "timestamp":"2011-12-22 12:09:59",
                         "id":10910,
                         "author": fixtures.authorJson(),
-                        "instance":{
-                            "id":"10095",
-                            "name":"some database instance"
-                        },
+                        "instance":fixtures.instanceJson(),
                         "type":"INSTANCE_CREATED",
                         comments: [
                             {
@@ -1076,10 +1074,7 @@
                                 timestamp : "2011-12-15 12:34:56"
                             }
                         ],
-                        workspace: {
-                            id: '10840',
-                            name: "Bar Fight"
-                        }
+                        workspace: fixtures.workspaceJson()
                     });
                 },
 
@@ -1096,11 +1091,36 @@
                                 timestamp : "2011-12-15 12:34:56"
                             }
                         ],
-                        workspace: {
-                            id: '10840',
-                            name: "Bar Fight"
-                        }
+                        workspace: fixtures.workspaceJson()
                     });
+                }
+            },
+
+            activityJson: function(overrides) {
+                var id = fixtures.nextId();
+                return _.extend({
+                    author: fixtures.authorJson(),
+                    type: "NOTE",
+                    text: "How about that.",
+                    timestamp: "2011-12-01 00:00:00",
+                    id : id,
+                    comments: [
+                        fixtures.commentJson()
+                    ],
+                    artifacts : [
+                        fixtures.artifactJson()
+                    ]
+                }, overrides);
+            },
+
+            artifactJson: function() {
+                var id = fixtures.nextId().toString();
+                return {
+                    entityId: fixtures.nextId().toString(),
+                    entityType: "file",
+                    id: id,
+                    name: "something"+id+".sql",
+                    type: "SQL"
                 }
             },
 
@@ -1109,6 +1129,38 @@
                     id : "1234",
                     lastName : "Smith",
                     firstName : "Bob"
+                }
+            },
+
+            commentJson: function() {
+                return {
+                    text: "sub-comment 1",
+                    author : fixtures.authorJson(),
+                    timestamp : "2011-12-15 12:34:56"
+                }
+            },
+
+            instanceJson: function() {
+                var id = this.nextId();
+                return {
+                    id : id.toString(),
+                    name : 'Instance ' + id
+                }
+            },
+
+            workfileJson: function() {
+                var id = this.nextId();
+                return {
+                    id : id.toString(),
+                    name : 'Workfile ' + id
+                }
+            },
+
+            workspaceJson: function() {
+                var id = this.nextId();
+                return {
+                    id : id.toString(),
+                    name : 'Workspace ' + id
                 }
             },
 
@@ -1149,17 +1201,14 @@
 
             workspace: function(overrides) {
                 var id = this.nextId().toString()
-                var attributes = _.extend({
-                    id : id,
-                    name : 'Workspace ' + id,
+                var attributes = _.extend(this.workspaceJson(), {
                     _owner: this.user()
                 }, overrides);
                 return new chorus.models.Workspace(attributes);
             },
 
             workfile: function(overrides) {
-                var attributes = _.extend({
-                    id: this.nextId().toString(),
+                var attributes = _.extend(this.workfileJson(), {
                     workspaceId: this.nextId().toString()
                 }, overrides);
                 return new chorus.models.Workfile(attributes);
@@ -1174,8 +1223,7 @@
             },
 
             instance : function(overrides) {
-                var attributes = _.extend({
-                    id : this.nextId().toString(),
+                var attributes = _.extend(this.instanceJson(), {
                     description: "description for jasmine",
                     expire: null,
                     freeSpace: null,
@@ -1184,7 +1232,6 @@
                     instanceVersion: null,
                     isDeleted: false,
                     lastCheck: null,
-                    name: "datastoreInstanceUnittest1321402903516",
                     owner: "edcadmin",
                     ownerFullName: "EDC Admin",
                     port: 8020,

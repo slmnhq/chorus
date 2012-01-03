@@ -12,11 +12,11 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectName", function() {
-            expect(this.presenter.objectName).toBe(this.workspace.name);
+            expect(this.presenter.objectName).toBe(this.workspace.get("name"));
         });
 
         it("should have the right objectUrl", function() {
-            var url = new chorus.models.Workspace({id: this.workspace.id}).showUrl();
+            var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
             expect(this.presenter.objectUrl).toBe(url);
         });
 
@@ -33,21 +33,41 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectName", function() {
-            expect(this.presenter.objectName).toBe(this.workfile.name);
+            expect(this.presenter.objectName).toBe(this.workfile.get("name"));
         });
 
         it("should have the right objectUrl", function() {
-            var url = new chorus.models.Workfile({id: this.workfile.id, workspaceId : this.workspace.id}).showUrl();
+            var url = new chorus.models.Workfile({id: this.workfile.get("id"), workspaceId : this.workspace.get("id")}).showUrl();
             expect(this.presenter.objectUrl).toBe(url);
         });
 
         it('should have the right workspaceName', function() {
-            expect(this.presenter.workspaceName).toBe(this.workspace.name);
+            expect(this.presenter.workspaceName).toBe(this.workspace.get("name"));
         })
 
         it("should have the right workspaceUrl", function() {
-            var url = new chorus.models.Workspace({id: this.workspace.id}).showUrl();
+            var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
             expect(this.presenter.workspaceUrl).toBe(url);
+        });
+
+        itShouldHaveFileAttachments();
+        itShouldHaveTheAuthorsIconAndUrl();
+    })
+
+    context(".NOTE_ON_INSTANCE", function() {
+        beforeEach(function() {
+            this.model = fixtures.activity.NOTE_ON_INSTANCE();
+            this.instance = this.model.get("instance");
+            this.presenter = new chorus.presenters.Activity(this.model)
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.instance.get("name"));
+        });
+
+        it("should have the right objectUrl", function() {
+            var url = new chorus.models.Instance({id: this.instance.get("id")}).showUrl();
+            expect(this.presenter.objectUrl).toBe(url);
         });
 
         itShouldHaveFileAttachments();
@@ -62,7 +82,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectName", function() {
-            expect(this.presenter.objectName).toBe(this.instance.name);
+            expect(this.presenter.objectName).toBe(this.instance.get('name'));
         });
 
         it("should have the right objectUrl", function() {
@@ -81,11 +101,11 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectName", function() {
-            expect(this.presenter.objectName).toBe(this.workspace.name);
+            expect(this.presenter.objectName).toBe(this.workspace.get("name"));
         });
 
         it("should have the right objectUrl", function() {
-            var url = new chorus.models.Workspace({id: this.workspace.id}).showUrl();
+            var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
             expect(this.presenter.objectUrl).toBe(url);
         });
 
@@ -100,11 +120,11 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectName", function() {
-            expect(this.presenter.objectName).toBe(this.workspace.name);
+            expect(this.presenter.objectName).toBe(this.workspace.get("name"));
         });
 
         it("should have the right objectUrl", function() {
-            var url = new chorus.models.Workspace({id: this.workspace.id}).showUrl();
+            var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
             expect(this.presenter.objectUrl).toBe(url);
         });
 
@@ -119,11 +139,11 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectName", function() {
-            expect(this.presenter.objectName).toBe(this.workspace.name);
+            expect(this.presenter.objectName).toBe(this.workspace.get("name"));
         });
 
         it("should have the right objectUrl", function() {
-            var url = new chorus.models.Workspace({id: this.workspace.id}).showUrl();
+            var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
             expect(this.presenter.objectUrl).toBe(url);
         });
 
@@ -184,7 +204,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectName", function() {
-            expect(this.presenter.objectName).toBe(this.workspace.name);
+            expect(this.presenter.objectName).toBe(this.workspace.get("name"));
         });
 
         itShouldHaveTheAuthorsIconAndUrl();
@@ -237,20 +257,20 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectName", function() {
-            expect(this.presenter.objectName).toBe(this.workfile.name);
+            expect(this.presenter.objectName).toBe(this.workfile.get("name"));
         });
 
         it("should have the right objectUrl", function() {
-            var url = new chorus.models.Workfile({id: this.workfile.id, workspaceId : this.workspace.id}).showUrl();
+            var url = new chorus.models.Workfile({id: this.workfile.get("id"), workspaceId : this.workspace.get("id")}).showUrl();
             expect(this.presenter.objectUrl).toBe(url);
         });
 
         it("should have the right workspaceName", function() {
-            expect(this.presenter.workspaceName).toBe(this.workspace.name);
+            expect(this.presenter.workspaceName).toBe(this.workspace.get("name"));
         });
 
         it("should have the right workspaceUrl", function() {
-            var url = new chorus.models.Workspace({id: this.workspace.id}).showUrl();
+            var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
             expect(this.presenter.workspaceUrl).toBe(url);
         });
 
