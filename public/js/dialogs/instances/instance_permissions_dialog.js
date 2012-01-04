@@ -7,7 +7,9 @@
         events : {
             "click a.edit" : "editCredentials",
             "click a.save" : "save",
-            "click a.cancel" : "cancel"
+            "click a.cancel" : "cancel",
+
+            "click a.alert" : "removeSharedAccountAlert"
         },
 
         makeModel : function() {
@@ -26,7 +28,6 @@
             var ctx = new chorus.presenters.Base(this.account)
             return _.extend(ctx, this.instance.attributes, { ownerImageUrl : this.options.pageModel.owner().imageUrl() })
         },
-
 
         editCredentials : function(event) {
             event.preventDefault();
@@ -56,6 +57,33 @@
 
         saveFailed : function() {
             this.$("a.save").stopLoading();
+        },
+
+        removeSharedAccountAlert : function(e) {
+            e.preventDefault();
+            var alert = new ns.alerts.RemoveSharedAccount();
+            alert.bind("removeSharedAccount", _.bind(this.confirmRemoveSharedAccount, this));
+            this.launchSubModal(alert);
+        },
+
+        confirmRemoveSharedAccount : function() {
+            var map = this.accountMap;
+            this.accountMap.bind("saved", displaySuccessToast);
+            this.accountMap.bind("saveFailed", displayFailureToast);
+
+            this.accountMap.save({shared : "no"});
+
+            function displaySuccessToast() {
+                $.jGrowl(t("instances.shared_account_removed"), {sticky: false, life: 5000});
+                map.unbind("saved", displaySuccessToast);
+                map.unbind("saveFailed", displayFailureToast);
+            }
+
+            function displayFailureToast() {
+                $.jGrowl(t("instances.shared_account_remove_failed"), {sticky: false, life: 5000});
+                map.unbind("saved", displaySuccessToast);
+                map.unbind("saveFailed", displayFailureToast);
+            }
         }
     });
 })(chorus);

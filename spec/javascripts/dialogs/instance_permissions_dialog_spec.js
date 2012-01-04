@@ -48,6 +48,90 @@ describe("chorus.dialogs.InstancePermissions", function() {
             it("populates the dbUserName text field from the account map", function() {
                 expect(this.dialog.$("input[name=dbUserName]").val()).toBe("the_dude")
             })
+
+            it("displays a 'switch to individual account' link", function() {
+                expect(this.dialog.$("a.alert[data-alert=RemoveSharedAccount]").text().trim()).toMatchTranslation("instances.permissions_dialog.switch_to_individual");
+            });
+
+            context("clicking the switch account link", function() {
+                beforeEach(function() {
+                    stubModals();
+                    spyOn(this.dialog, "launchSubModal").andCallThrough();
+                    this.dialog.$("a.alert").click();
+                });
+
+                it("launches the Remove Shared Account dialog", function() {
+                    expect(this.dialog.launchSubModal).toHaveBeenCalled();
+                    expect(this.dialog.launchSubModal.calls[0].args[0] instanceof chorus.alerts.RemoveSharedAccount).toBeTruthy();
+                });
+
+                context("when the alert is confirmed", function() {
+                    beforeEach(function() {
+                        spyOn(this.dialog.accountMap, "save");
+                        this.dialog.launchSubModal.calls[0].args[0].confirmAlert();
+                    });
+
+                    it("calls save on the accountMap with shared:no", function() {
+                        expect(this.dialog.accountMap.save.calls[0].args[0].shared).toBe("no");
+                    });
+
+                    context("when the save succeeds", function() {
+                        beforeEach(function() {
+                            spyOn($, 'jGrowl');
+                            this.otherSavedSpy = jasmine.createSpy();
+                            this.dialog.accountMap.bind("saved", this.otherSavedSpy);
+                            this.dialog.accountMap.trigger("saved");
+                        });
+
+                        it("displays a toast message", function() {
+                            expect($.jGrowl).toHaveBeenCalledWith(t("instances.shared_account_removed"), {
+                                sticky : false,
+                                life : 5000
+                            });
+                            expect(this.otherSavedSpy).toHaveBeenCalled();
+                        });
+
+                        context("and the same model saves again", function() {
+                            it("doesn't display a toast message", function() {
+                                $.jGrowl.reset();
+                                this.otherSavedSpy.reset();
+                                this.dialog.accountMap.trigger("saved");
+
+                                expect($.jGrowl).not.toHaveBeenCalled();
+                                expect(this.otherSavedSpy).toHaveBeenCalled();
+                            });
+                        });
+                    });
+
+                    context("when the save fails", function() {
+                        beforeEach(function() {
+                            spyOn($, 'jGrowl');
+                            this.dialog.accountMap.trigger("saveFailed");
+                        });
+
+                        it("displays a save failed toast message", function() {
+                            expect($.jGrowl).toHaveBeenCalledWith(t("instances.shared_account_remove_failed"), {
+                                sticky : false,
+                                life : 5000
+                            });
+                        });
+
+                        context("and then a save succeeds", function() {
+                            beforeEach(function() {
+                                $.jGrowl.reset();
+                                this.dialog.accountMap.trigger("saved");
+                            });
+
+                            it("doesn't display the saved toast message", function() {
+                                expect($.jGrowl).not.toHaveBeenCalledWith(t("instances.shared_account_removed"), {
+                                    sticky : false,
+                                    life : 5000
+                                });
+                            });
+                        })
+                    })
+                });
+            });
         })
 
         describe("editing the shared account credentials", function() {
