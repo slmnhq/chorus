@@ -1,6 +1,6 @@
 (function($) {
     chorus.models = {
-        Collection: Backbone.Collection.extend(_.extend({}, chorus.Mixins.Events, {
+        Collection: Backbone.Collection.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, {
             initialize: function(models, options) {
                 this.attributes = options || {};
                 this.setup(arguments);
@@ -98,7 +98,7 @@
             }
         })),
 
-        Base: Backbone.Model.extend(_.extend({}, chorus.Mixins.Events, {
+        Base: Backbone.Model.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, {
             url: function(hidePrefix) {
                 var prefix = (hidePrefix ? '' : "/edc/")
                 var template = _.isFunction(this.urlTemplate) ? this.urlTemplate() : this.urlTemplate;
@@ -109,15 +109,6 @@
                     url += paramsJoiner + $.param(params || {});
                 }
                 return url;
-            },
-
-            showUrl: function(hidePrefix) {
-                if (!this.showUrlTemplate) {
-                    throw "No showUrlTemplate defined";
-                }
-
-                var prefix = hidePrefix ? '' : "#/"
-                return prefix + Handlebars.compile(this.showUrlTemplate)(this.attributes);
             },
 
             activities : function() {
@@ -256,5 +247,6 @@
                 return (this.attrToLabel && this.attrToLabel[attr]) ? t(this.attrToLabel[attr]) : attr;
             }
         }))
-    }
+    };
+
 })(jQuery);

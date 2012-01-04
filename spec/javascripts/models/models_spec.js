@@ -42,16 +42,6 @@ describe("chorus.models", function() {
             });
         });
 
-        describe("#showUrl", function() {
-            it("returns #/{{showUrlTemplate}}", function() {
-                this.model.showUrlTemplate = "my_items/show/{{id}}";
-                expect(this.model.showUrl()).toBe("#/my_items/show/foo")
-            });
-
-            it("throws when showUrlTemplate is not set", function() {
-                expect(this.model.showUrl).toThrow("No showUrlTemplate defined");
-            });
-        });
 
         describe("activities", function() {
             it("throws when the model does not have an entityType", function() {

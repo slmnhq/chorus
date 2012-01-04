@@ -10,5 +10,16 @@
                 target.trigger.apply(target, args);
             });
         }
+    };
+
+    ns.Mixins.Urls = {
+        showUrl: function(hidePrefix) {
+            if (!this.showUrlTemplate) {
+                throw "No showUrlTemplate defined";
+            }
+
+            var prefix = hidePrefix ? '' : "#/"
+            return prefix + Handlebars.compile(this.showUrlTemplate)(this.attributes);
+        }
     }
 })(chorus);
