@@ -24,17 +24,19 @@ describe("chorus.models.Instance", function() {
     describe("#accountForUser", function() {
         beforeEach(function() {
             this.user = fixtures.user();
+            this.account = this.instance.accountForUser(this.user);
         });
 
         it("returns an account map", function() {
-            var account = this.instance.accountForUser(this.user);
-            expect(account instanceof chorus.models.InstanceAccount).toBeTruthy();
+            expect(this.account instanceof chorus.models.InstanceAccount).toBeTruthy();
         });
 
-        it("has the right urlParams", function() {
-            var account = this.instance.accountForUser(this.user);
-            expect(account.urlParams.userName).toBe(this.user.get("userName"));
-            expect(account.urlParams.instanceId).toBe(this.instance.get("id"));
+        it("sets the instance id", function() {
+            expect(this.account.get("instanceId")).toBe(this.instance.get("id"));
+        });
+
+        it("sets the user name based on the current user", function() {
+            expect(this.account.get("userName")).toBe(this.user.get("userName"));
         });
     });
 
@@ -42,17 +44,6 @@ describe("chorus.models.Instance", function() {
         beforeEach(function() {
             this.currentUser = fixtures.user();
             setLoggedInUser(this.currentUser.attributes);
-        });
-
-        it("returns an account map", function() {
-            var account = this.instance.accountForCurrentUser();
-            expect(account instanceof chorus.models.InstanceAccount).toBeTruthy();
-        });
-
-        it("sets the 'userName' url parameter based on the current user", function() {
-            var account = this.instance.accountForCurrentUser();
-            expect(account.urlParams.userName).toBe(this.currentUser.get("userName"));
-            expect(account.urlParams.instanceId).toBe(this.instance.get("id"));
         });
 
         it("memoizes", function() {
