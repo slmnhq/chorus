@@ -66,7 +66,7 @@
 
         launchWorkfileDialog: function(e) {
             e.preventDefault();
-            var workfileDialog = new ns.WorkfilesAttach({ workspaceId : this.workspaceId });
+            var workfileDialog = new ns.WorkfilesAttach({ workspaceId : this.workspaceId, selectedFiles: this.model.workfiles });
             workfileDialog.bind("files:selected", this.workfileChosen, this);
             this.launchSubModal(workfileDialog);
         },
@@ -82,6 +82,7 @@
         },
 
         workfileChosen : function(workfileSet) {
+            this.$(".file_details").remove();
             this.model.workfiles = workfileSet;
             this.model.workfiles.each(function(workfile) {
                 this.showFile(workfile, workfile.get("fileName"), workfile.get("fileType"));

@@ -1,44 +1,53 @@
 describe("WorkfilesAttach", function() {
     beforeEach(function() {
-        fixtures.model = "WorkfileSet"
-        this.workfiles = fixtures.modelFor("fetch");
         spyOn(chorus.models.WorkfileSet.prototype, 'fetchAll');
+        this.workfiles = fixtures.workfileSet();
         this.dialog = new chorus.dialogs.WorkfilesAttach({ workspaceId : "33" });
+        this.dialog.collection = this.workfiles;
     });
 
     describe("#setup", function() {
         it("fetches all workfiles for the specified workspace", function() {
             expect(this.dialog.collection.fetchAll).toHaveBeenCalled();
         });
-    })
+    });
 
-    describe("render", function() {
+    context("when selectedFiles have been passed", function() {
         beforeEach(function() {
+            this.dialog = new chorus.dialogs.WorkfilesAttach({ workspaceId : '33', selectedFiles: this.workfiles});
             this.dialog.collection = this.workfiles;
             this.dialog.render();
         });
 
+        it("renders them as selected", function() {
+            expect(this.dialog.$("li").eq(0)).toHaveClass("selected");
+            expect(this.dialog.$("li").eq(1)).toHaveClass("selected");
+        });
+    })
+
+    describe("render", function() {
+        beforeEach(function() {
+            this.dialog.render();
+        });
+
         it("renders an item for each workfile", function() {
-            expect(this.dialog.$("li").length).toBe(2);
+            expect(this.dialog.$("li").length).toBe(this.workfiles.models.length);
         })
 
         it("sorts workfiles by last modified date", function() {
-            expect(this.dialog.$("li:eq(0)")).toHaveAttr("data-id", "10021");
-            expect(this.dialog.$("li:eq(1)")).toHaveAttr("data-id", "10020");
+            expect(this.dialog.$("li:eq(0)")).toHaveAttr("data-id", this.workfiles.models[0].get('id'));
         })
 
-        it("includes an image for each workfile", function() {
+        it("includes an image for workfiles", function() {
             var images = this.dialog.$(".collection_list img");
             expect(images.length).toBe(this.workfiles.length);
-            expect(images.eq(0)).toHaveAttr("src", chorus.urlHelpers.fileIconUrl(this.workfiles.models[1].get("fileType"), 'medium'));
-            expect(images.eq(1)).toHaveAttr("src", chorus.urlHelpers.fileIconUrl(this.workfiles.models[0].get("fileType"), 'medium'));
+            expect(images.eq(0)).toHaveAttr("src", chorus.urlHelpers.fileIconUrl(this.workfiles.models[0].get("fileType"), 'medium'));
         });
 
-        it("includes a name for each workfile", function() {
+        it("includes a name for workfiles", function() {
             var names = this.dialog.$('.name');
             expect(names.length).toBe(this.workfiles.length);
-            expect(names.eq(0).text().trim()).toBe(this.workfiles.models[1].get("fileName"));
-            expect(names.eq(1).text().trim()).toBe(this.workfiles.models[0].get("fileName"));
+            expect(names.eq(0).text().trim()).toBe(this.workfiles.models[0].get("fileName"));
         })
 
         it("has a close window button that cancels the dialog", function() {
@@ -52,7 +61,6 @@ describe("WorkfilesAttach", function() {
 
     describe("selecting files", function() {
         beforeEach(function() {
-            this.dialog.collection = this.workfiles;
             this.dialog.render();
             this.dialog.$("li a").eq(0).click();
             this.dialog.$("li a").eq(1).click();
@@ -97,7 +105,8 @@ describe("WorkfilesAttach", function() {
         it("populates the selectedFiles attribute", function() {
             this.dialog.$("button.submit").click();
             expect(this.dialog.selectedFiles.length).toBe(1);
-            expect(this.dialog.selectedFiles.models[0]).toBe(this.workfiles.get("10020"));
+            var model = this.dialog.selectedFiles.models[0];
+            expect(model).toBe(this.workfiles.get(model.id));
         })
 
         it("dismisses the dialog", function() {

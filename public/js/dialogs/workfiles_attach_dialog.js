@@ -27,13 +27,24 @@
 
         submit : function() {
             var workfiles = _.map(this.$("li.selected"), function(li) {
-                var id = $(li).attr("data-id");
+                var id = $(li).data("id");
                 return this.collection.get(id);
             }, this);
 
             this.selectedFiles = new ns.models.WorkfileSet(workfiles, { workspaceId : this.collection.get("workspaceId") });
             this.trigger("files:selected", this.selectedFiles);
             this.closeModal();
+        },
+
+        postRender: function() {
+            if(!this.options.selectedFiles) {
+                return;
+            }
+            _.each(this.$('li'), function(li) {
+                if(this.options.selectedFiles.get($(li).data('id'))) {
+                    $(li).addClass('selected');
+                }
+            }, this);
         },
 
         additionalContext: function(ctx) {

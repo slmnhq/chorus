@@ -111,6 +111,30 @@ describe("NotesNewDialog", function() {
                     expect(this.dialog.model.workfiles).toBe(this.workfileSet);
                 });
 
+                context("when the 'attach workfile' link is clicked again", function() {
+                    beforeEach(function() {
+                        spyOn(chorus.dialogs.WorkfilesAttach.prototype, 'initialize').andCallThrough();
+                        this.dialog.$("a.workfile").click();
+                    });
+
+                    it("is populated with the previously selected workfiles", function() {
+                        expect(chorus.dialogs.WorkfilesAttach.prototype.initialize).toHaveBeenCalled();
+                        var options = chorus.dialogs.WorkfilesAttach.prototype.initialize.mostRecentCall.args[0];
+                        expect(options.selectedFiles.models[0].get('fileName')).toBe('greed.sql');
+                        expect(options.selectedFiles.models[1].get('fileName')).toBe('generosity.cpp');
+                    });
+                    context("when new files are selected", function() {
+                        beforeEach(function() {
+                            this.workfilesDialog = chorus.dialogs.WorkfilesAttach.prototype.render.mostRecentCall.object;
+                            this.workfilesDialog.trigger("files:selected", this.workfileSet);
+                        });
+
+                        it("clears any existing workfiles", function() {
+                            expect(this.dialog.$(".file_details").length).toBe(2);
+                        });
+                    })
+                })
+
                 describe("when a workfile remove link is clicked", function() {
                     it("removes only that workfile", function() {
                         var sqlRow = this.dialog.$(".file_details:not('.hidden'):contains('sql')")

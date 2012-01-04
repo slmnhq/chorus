@@ -1150,9 +1150,12 @@
 
             workfileJson: function() {
                 var id = this.nextId();
+                var name = 'Workfile ' + id;
                 return {
                     id : id.toString(),
-                    name : 'Workfile ' + id
+                    lastUpdatedStamp : '2011-10-22 14:40:42.11',
+                    name : name,
+                    fileName: name
                 }
             },
 
@@ -1212,6 +1215,11 @@
                     workspaceId: this.nextId().toString()
                 }, overrides);
                 return new chorus.models.Workfile(attributes);
+            },
+
+            workfileSet: function(models) {
+                models = models || [this.workfile(), this.workfile()];
+                return new chorus.models.WorkfileSet(models);
             },
 
             artifact: function(overrides) {
