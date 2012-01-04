@@ -1,0 +1,9 @@
+@import "_common.scss";
+
+.instances_edit {
+    input[type=text][disabled=disabled] {
+        border: 0;
+        background: none;
+    }
+}
+

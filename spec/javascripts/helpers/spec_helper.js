@@ -21,6 +21,7 @@
         'instance_list',
         'instance_list_sidebar',
         'instance',
+        'instances_edit',
         'instances_new',
         'instance_permissions',
         'link_menu',
