@@ -11,6 +11,12 @@
             top: 7px;
             left: 17px;
             display: inline;
+            > group {
+                /* Position fixes for IE8 VML fallback */
+                position: absolute;
+                bottom: 7px;
+                left: 0px;
+            }
         }
 
         &.loading {
