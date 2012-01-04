@@ -1,7 +1,9 @@
 describe("WorkfilesImportDialog", function() {
     beforeEach(function() {
         this.launchElement = $("<a data-workspace-id='4'></a>")
-        this.dialog = new chorus.dialogs.WorkfilesImport({launchElement : this.launchElement});
+        this.model = fixtures.workfile({ workspaceId: 4 });
+        var workfileSet = new chorus.models.WorkfileSet([this.model], { workspaceId: 4 });
+        this.dialog = new chorus.dialogs.WorkfilesImport({ launchElement : this.launchElement, pageModel: this.model, pageCollection: workfileSet });
         this.successfulResponse = {"result": '{"resource":[{"id":"9"}], "status": "ok"}'};
         this.errorResponse = {"result": '{"status": "fail", "message" :[{"message":"Workspace already has a workfile with this name. Specify a different name."}]}'};
     });
