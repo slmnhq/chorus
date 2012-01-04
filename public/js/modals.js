@@ -2,8 +2,7 @@
     ns.Modal = ns.views.Base.extend({
         launchModal : function() {
             this.render();
-            _.bind(this.revealed, this);
-            $(document).on('reveal.facebox', this.revealed);
+            $(document).one('reveal.facebox', _.bind(this.revealed, this));
             $.facebox(this.el)
 
             this.previousModal = ns.modal;

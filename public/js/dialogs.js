@@ -7,7 +7,8 @@
             var errors = $("<div class='errors'/>")
 
             this.events = this.events || {};
-            this.events["click button.cancel"] = this.events["click button.cancel"] || "closeModal";
+
+            this.events["click button.cancel"] = "closeModal";
 
             header.html($("<h1/>").text(this.title))
             content.html(this.template(this.context()));

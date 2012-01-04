@@ -18,14 +18,9 @@
             }
         },
 
-        postRender : function () {
-            this.events = this.events || {};
-            this.events["click button.cancel"] = this.events["click button.cancel"] || "closeModal";
-            this.delegateEvents();
-        },
         revealed : function () {
             $("#facebox").removeClass().addClass("alert_facebox");
-            var cancelButton = $("#facebox button.cancel")[0];
+            var cancelButton = this.$("button.cancel");
             if (cancelButton) {
                 cancelButton.focus();
             }
@@ -57,10 +52,7 @@
         modelDeleted : function () {
             $(document).trigger("close.facebox");
             chorus.router.navigate(this.redirectUrl || "/", true);
-        },
-
-        postRender : function() {
-            _.defer(_.bind(function() {this.$("button.cancel").focus()}, this));
         }
+
     })
 })(chorus)

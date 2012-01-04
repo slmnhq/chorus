@@ -7,8 +7,7 @@
 
         events : {
             "click button.submit" : "upload",
-            "submit form": "upload",
-            "click button.cancel" : "cancelUploadAndClose"
+            "submit form": "upload"
         },
 
         makeModel : function() {
@@ -32,13 +31,10 @@
             }
         },
 
-        cancelUploadAndClose : function(e) {
-            e.preventDefault();
-            if (this.request) {
-                this.request.abort();
-            }
-
-            this.closeModal();
+        closeModal: function(e) {
+            if (e) { e.preventDefault(); }
+            if (this.request) { this.request.abort(); }
+            this._super("closeModal");
         },
 
         chooseFile : function(e) {

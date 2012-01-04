@@ -68,7 +68,7 @@ describe("WorkfilesImportDialog", function() {
     context("when a file has been chosen", function() {
         beforeEach(function() {
             spyOn($.fn, 'fileupload');
-            spyOn(this.dialog, "closeModal");
+            spyOn(this.dialog, "closeModal").andCallThrough();
             this.dialog.render();
             this.fileList = [
                 {

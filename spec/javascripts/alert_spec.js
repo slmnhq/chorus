@@ -1,4 +1,4 @@
-describe("chorus.views.Alert", function() {
+describe("chorus.alerts", function() {
     beforeEach(function() {
         this.model = new chorus.models.Base({ id: "foo"});
         this.alert = new chorus.alerts.Base({ model : this.model });
@@ -81,18 +81,16 @@ describe("ModelDelete alert", function() {
         this.alert.ok = "Delete It!"
     });
 
-    describe("render", function() {
+    describe("#revealed", function() {
         beforeEach(function() {
             spyOn($.fn, 'focus');
             this.alert.render();
         })
 
         it("focuses on the cancel button", function() {
-            var self = this;
-
-            waitsFor(function() {
-                return $.fn.focus.callCount && $.fn.focus.mostRecentCall.object.is("button.cancel");
-            }, "cancel button to get focus", 250);
+            this.alert.revealed();
+            expect($.fn.focus).toHaveBeenCalled();
+            expect($.fn.focus.mostRecentCall.object).toBe("button.cancel");
         })
     })
 
