@@ -21,6 +21,27 @@ describe("chorus", function() {
         });
     });
 
+    describe("#toast", function() {
+        beforeEach(function() {
+            spyOn($, 'jGrowl');
+        });
+
+        it("accepts a translation string", function() {
+            chorus.toast("test.deer");
+            expect($.jGrowl).toHaveBeenCalledWith("Deer", {life: 5000, sticky: false});
+        });
+
+        it("accepts a translation string with arguments", function() {
+            chorus.toast("test.with_param", {param : "Dennis"});
+            expect($.jGrowl).toHaveBeenCalledWith("Dennis says hi", {life: 5000, sticky: false});
+        });
+
+        it("accepts toastOpts in the options hash", function() {
+            chorus.toast("test.with_param", { param: "Nobody", toastOpts : {sticky : true, foo: "bar"}});
+            expect($.jGrowl).toHaveBeenCalledWith("Nobody says hi", {life: 5000, sticky: true, foo: "bar"});
+        });
+    });
+
     describe("fileIconUrl", function() {
         function verifyUrl(fileType, fileName) {
             expect(chorus.urlHelpers.fileIconUrl(fileType)).toBe("/images/workfiles/large/" + fileName + ".png");

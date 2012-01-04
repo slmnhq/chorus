@@ -34,6 +34,13 @@
         self.detectFeatures = function() {
             self.features.multipleFileUpload = !$.browser.mozilla || (parseInt($.browser.version) >= 2);
         }
+
+        self.toast = function(message, options) {
+            options = options || {};
+            var defaultOpts = {sticky: false, life: 5000};
+            var toastOpts = _.extend(defaultOpts, options.toastOpts);
+            $.jGrowl(t(message, options), toastOpts);
+        }
     }
 
     window.chorus = window.chorus || new Chorus();
