@@ -154,6 +154,8 @@
                 return fakeSpinner
             });
 
+            spyOn($.fn, 'jGrowl');
+
             setLoggedInUser();
         });
     });

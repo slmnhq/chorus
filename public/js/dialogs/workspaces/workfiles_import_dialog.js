@@ -77,6 +77,7 @@
                 var json = $.parseJSON(data.result)
                 if (json.status == "ok") {
                     self.model.set({id: json.resource[0].id});
+                    chorus.toast('workfiles.uploaded', {fileName: json.resource[0].fileName});
                     self.closeModal();
                     var url;
                     if (self.uploadExtension.toLowerCase() == "txt" || self.uploadExtension.toLowerCase() == "sql") {

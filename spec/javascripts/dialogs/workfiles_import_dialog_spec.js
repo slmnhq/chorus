@@ -4,7 +4,7 @@ describe("WorkfilesImportDialog", function() {
         this.model = fixtures.workfile({ workspaceId: 4 });
         var workfileSet = new chorus.models.WorkfileSet([this.model], { workspaceId: 4 });
         this.dialog = new chorus.dialogs.WorkfilesImport({ launchElement : this.launchElement, pageModel: this.model, pageCollection: workfileSet });
-        this.successfulResponse = {"result": '{"resource":[{"id":"9"}], "status": "ok"}'};
+        this.successfulResponse = {"result": '{"resource":[{"id":"9", "fileName" : "new_file.txt"}], "status": "ok"}'};
         this.errorResponse = {"result": '{"status": "fail", "message" :[{"message":"Workspace already has a workfile with this name. Specify a different name."}]}'};
     });
 
@@ -154,6 +154,7 @@ describe("WorkfilesImportDialog", function() {
             context("when the upload completes", function() {
                 beforeEach(function() {
                     spyOn(chorus.router, "navigate");
+                    spyOn(chorus, 'toast');
                     this.fileUploadOptions.done(null, this.successfulResponse);
                 });
 
@@ -163,6 +164,10 @@ describe("WorkfilesImportDialog", function() {
 
                 it("navigates to the workfile index", function() {
                     expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/4/workfiles", true);
+                });
+
+                it("displays a toast message with the name of the new file", function() {
+                    expect(chorus.toast).toHaveBeenCalledWith("workfiles.uploaded", {fileName: "new_file.txt"});
                 });
             });
 
