@@ -6,8 +6,39 @@ describe("chorus.models", function() {
         });
 
         describe("#url", function() {
+
+            context("when the model's urlTemplate is a function", function() {
+                beforeEach(function() {
+                    this.model.urlTemplate = function() { return "my_other_items/{{id}}" };
+                });
+
+                it("uses the function's return value", function() {
+                    expect(this.model.url()).toBe("/edc/my_other_items/foo");
+                });
+            });
+
             it("compiles the urlTemplate and renders it with model attributes", function() {
                 expect(this.model.url()).toBe("/edc/my_items/foo");
+            });
+
+            context("when the model has additional url params", function() {
+                beforeEach(function() {
+                    this.model.urlParams = { dance: "the thizzle" }
+                });
+
+                it("url-encodes the params and appends them to the url", function() {
+                    expect(this.model.url()).toBe("/edc/my_items/foo?dance=the+thizzle");
+                });
+
+                context("when the base url template includes a query string", function() {
+                    beforeEach(function() {
+                        this.model.urlTemplate = "my_items/{{id}}?size=medium";
+                    });
+
+                    it("merges the query strings properly", function() {
+                        expect(this.model.url()).toBe("/edc/my_items/foo?size=medium&dance=the+thizzle");
+                    });
+                });
             });
         });
 
@@ -274,6 +305,23 @@ describe("chorus.models", function() {
                 spyOn(this.model, 'beforeSave');
                 this.model.save();
                 expect(this.model.beforeSave).toHaveBeenCalled();
+            });
+        });
+
+        describe("#fetch", function() {
+            context("when there is a server error", function() {
+                beforeEach(function() {
+                    this.fetchFailedSpy = jasmine.createSpy("fetchFailed");
+                    this.model.bind("fetchFailed", this.fetchFailedSpy);
+                });
+
+                it("triggers the 'fetchFailed' event on the model", function() {
+                    this.model.fetch();
+                    this.server.respondWith([200, {'Content-Type': 'application/json'}, '{"resource":[], "status": "fail", "message" : "this is an error message" }']);
+                    this.server.respond();
+                    expect(this.fetchFailedSpy).toHaveBeenCalled();
+                    expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.model);
+                });
             });
         });
 

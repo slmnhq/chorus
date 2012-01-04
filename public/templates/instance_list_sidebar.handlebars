@@ -9,11 +9,25 @@
         {{t "instances.sidebar.is_shared_account"}}
         <a href="#" class="dialog" data-dialog="InstancePermissions">Edit</a>
     {{else}}
-        (This doesn't look like a shared account)
+        {{#if userHasAccount}}
+            <img src="/images/instances/access.png"/>
+            {{t "instances.sidebar.access"}}
+        {{else}}
+            <img src="/images/instances/no_access.png"/>
+            {{t "instances.sidebar.no_access"}}
+        {{/if}}
     {{/if}}
 </div>
 <div class="actions">
     <ul>
+        {{#unless dbUserName}}
+            {{#if userHasAccount}}
+                <li><a class="dialog edit_credentials" href="#" data-dialog="InstanceCredentialsEdit">{{t "instances.sidebar.edit_credentials"}}</a></li>
+            {{else}}
+                <li><a class="dialog add_credentials" href="#" data-dialog="InstanceCredentialsAdd">{{t "instances.sidebar.add_credentials"}}</a></li>
+            {{/if}}
+        {{/unless}}
+
         <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="instance" data-allow-workfile-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
     </ul>
 </div>

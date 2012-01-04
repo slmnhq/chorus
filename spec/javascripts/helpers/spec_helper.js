@@ -112,13 +112,13 @@
                 },
 
                 toMatchTranslation: function(translationKey) {
+                    var translatedText = t.apply(this, arguments);
                     this.message = function() {
                         return [
-                            "Expected text '" + this.actual + "' to match the translation for '" + translationKey + "'",
-                            "Expected text '" + this.actual + "' not to match the translation for '" + translationKey + "'"
+                        "Expected text '" + this.actual + "' to match the translation for '" + translationKey + "' (" + translatedText + ")",
+                        "Expected text '" + this.actual + "' not to match the translation for '" + translationKey + "' (" + translatedText +")"
                         ];
                     };
-                    var translatedText = t.apply(this, arguments);
                     if (translatedText === '[' + translationKey + ']') {
                         throw("No entry in messages.properties for " + translationKey);
                     }
@@ -204,7 +204,7 @@
         return spy;
     };
 
-    if ( $.browser.msie && !window.console ) {
+    if ( $.browser.msie && !window['con' + 'sole'] ) {
       (function(F,i,r,e,b,u,g,L,I,T,E){if(F.getElementById(b))return;E=F[i+'NS']&&F.documentElement.namespaceURI;E=E?F[i+'NS'](E,'script'):F[i]('script');E[r]('id',b);E[r]('src',I+g+T);E[r](b,u);(F[e]('head')[0]||F[e]('body')[0]).appendChild(E);E=new Image;E[r]('src',I+L);})(document,'createElement','setAttribute','getElementsByTagName','FirebugLite','4','firebug-lite.js','releases/lite/latest/skin/xp/sprite.png','/firebug-lite/build/','#startOpened');
     }
 

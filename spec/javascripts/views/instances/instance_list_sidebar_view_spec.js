@@ -146,5 +146,71 @@ describe("chorus.views.InstanceListSidebar", function() {
                 });
             });
         })
+
+        context("when the instance has a shared account", function() {
+            beforeEach(function() {
+                this.instance.set({
+                    sharedAccount: { dbUserName: "polenta" }
+                });
+                this.view.render();
+            });
+
+            it("does not show the 'edit credentials' link", function() {
+                expect(this.view.$(".actions .edit_credentials")).not.toExist();
+            });
+
+            it("does not show the 'add credentials' link", function() {
+                expect(this.view.$(".actions .add_credentials")).not.toExist();
+            });
+        });
+
+        context("when the instance does not have a shared account", function() {
+            context("when the current user is NOT an admin or owner of the instance", function() {
+                context("when the user does not have an account for the instance", function() {
+                    it("shows the 'no access' text and image", function() {
+                        expect(this.view.$(".account_info img").attr("src")).toBe("/images/instances/no_access.png");
+                        expect(this.view.$(".account_info").text().trim()).toMatchTranslation("instances.sidebar.no_access");
+                    });
+
+                    it("shows the add credentials link", function() {
+                        expect(this.view.$(".actions .add_credentials")).toExist();
+                        expect(this.view.$(".actions .add_credentials").data("dialog")).toBe("InstanceCredentialsAdd");
+                        expect(this.view.$(".actions .add_credentials").text()).toMatchTranslation("instances.sidebar.add_credentials");
+                    });
+
+                    it("does not show the 'edit credentials' link", function() {
+                        expect(this.view.$(".actions .edit_credentials")).not.toExist();
+                    });
+                });
+
+                context("when the user has set up an account for the instance", function() {
+                    beforeEach(function() {
+                        var account = fixtures.accountmap({ id: 45 });
+                        spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
+                        this.view.trigger("instance:selected", this.instance);
+                        this.view.render();
+                    });
+
+                    it("shows the 'access' text and image", function() {
+                        expect(this.view.$(".account_info img").attr("src")).toBe("/images/instances/access.png");
+                        expect(this.view.$(".account_info").text().trim()).toMatchTranslation("instances.sidebar.access");
+                    });
+
+                    it("shows the 'edit credentials' link", function() {
+                        expect(this.view.$(".actions .edit_credentials")).toExist();
+                        expect(this.view.$(".actions .edit_credentials").data("dialog")).toBe("InstanceCredentialsEdit");
+                        expect(this.view.$(".actions .edit_credentials").text()).toMatchTranslation("instances.sidebar.edit_credentials");
+                    });
+
+                    it("does not show the 'add credentials' link", function() {
+                        expect(this.view.$(".actions .add_credentials")).not.toExist();
+                    });
+                });
+            });
+
+            context("when the current user is an admin", function() {
+                
+            });
+        });
     });
 });

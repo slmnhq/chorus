@@ -10,6 +10,11 @@ describe("NotesNewDialog", function() {
         $('#jasmine_content').append(this.dialog.el);
     });
 
+    afterEach(function() {
+        //prevent submodal test pollution
+        $(document).unbind("close.facebox");
+    })
+
     it("does not re-render when the model changes", function() {
         expect(this.dialog.persistent).toBeTruthy()
     })

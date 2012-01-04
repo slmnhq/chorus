@@ -101,7 +101,14 @@
         Base: Backbone.Model.extend(_.extend({}, chorus.Mixins.Events, {
             url: function(hidePrefix) {
                 var prefix = (hidePrefix ? '' : "/edc/")
-                return prefix + Handlebars.compile(this.urlTemplate)(this.attributes);
+                var template = _.isFunction(this.urlTemplate) ? this.urlTemplate() : this.urlTemplate;
+                var url = prefix + Handlebars.compile(template)(this.attributes);
+                var params = this.urlParams;
+                if (params) {
+                    var paramsJoiner = (_.include(url, '?')) ? '&' : '?';
+                    url += paramsJoiner + $.param(params || {});
+                }
+                return url;
             },
 
             showUrl: function(hidePrefix) {
@@ -156,6 +163,16 @@
                     this.trigger("validationFailed");
                     return false;
                 }
+            },
+
+            fetch: function(options) {
+                options || (options = {});
+                var success = options.success;
+                options.success = function(model, resp, xhr) {
+                    if (model.serverErrors) model.trigger('fetchFailed', model, resp, xhr);
+                    if (success) success(model, resp, xhr);
+                };
+                return Backbone.Model.prototype.fetch.call(this, options);
             },
 
             destroy : function(options) {

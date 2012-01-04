@@ -19,5 +19,40 @@ describe("chorus.models.Instance", function() {
             expect(owner.get("userName")).toBe("edcadmin");
             expect(owner.get("fullName")).toBe("EDC Admin");
         })
-    })
+    });
+
+    describe("#accountForUser", function() {
+        beforeEach(function() {
+            this.user = fixtures.user();
+        });
+
+        it("returns an account map", function() {
+            var account = this.instance.accountForUser(this.user);
+            expect(account instanceof chorus.models.Accountmap).toBeTruthy();
+        });
+
+        it("has the right urlParams", function() {
+            var account = this.instance.accountForUser(this.user);
+            expect(account.urlParams.userName).toBe(this.user.get("userName"));
+            expect(account.urlParams.instanceId).toBe(this.instance.get("id"));
+        });
+    });
+
+    describe("#accountForCurrentUser", function() {
+        beforeEach(function() {
+            this.currentUser = fixtures.user();
+            setLoggedInUser(this.currentUser.attributes);
+        });
+
+        it("returns an account map", function() {
+            var account = this.instance.accountForCurrentUser();
+            expect(account instanceof chorus.models.Accountmap).toBeTruthy();
+        });
+
+        it("sets the 'userName' url parameter based on the current user", function() {
+            var account = this.instance.accountForCurrentUser();
+            expect(account.urlParams.userName).toBe(this.currentUser.get("userName"));
+            expect(account.urlParams.instanceId).toBe(this.instance.get("id"));
+        });
+    });
 });

@@ -21,7 +21,8 @@
                 return {};
             }
             return {
-                dbUserName : this.model.get('sharedAccount') && this.model.get('sharedAccount').dbUserName
+                dbUserName : this.model.get('sharedAccount') && this.model.get('sharedAccount').dbUserName,
+                userHasAccount: this.account && this.account.has("id")
             };
         },
 
@@ -39,6 +40,11 @@
             }
             this.resource.bind("change", this.render, this);
             this.render();
+
+            this.account = this.instance.accountForCurrentUser();
+            this.account.bind("change", this.render, this);
+            this.account.bind("fetchFailed", this.render, this);
+            this.account.fetch();
         },
 
         showActivityList : function(){
