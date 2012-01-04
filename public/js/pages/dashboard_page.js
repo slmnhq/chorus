@@ -14,6 +14,11 @@
             this.model = chorus.session.user();
 
             this.mainContent = new ns.views.Dashboard({collection : this.workspaceSet})
+        },
+
+        postRender : function() {
+            this._super('postRender');
+            this.$("#sidebar").remove();
         }
     });
 

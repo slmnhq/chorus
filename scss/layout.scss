@@ -22,7 +22,7 @@
     margin-right: $sidebar-width + (2 * $sidebar-padding-x);
 }
 
-//hax for position fixed header
+//hax for position fixed header and sidebar
 .logged_in_layout {
     > .header {
         position: fixed;
@@ -32,5 +32,12 @@
 
     > .breadcrumbs {
         padding-top: 50px;
+    }
+
+    #sidebar {
+        position: fixed;
+        right: $guts-padding;
+        top: $header-height + $breadcrumbs-height;
+        bottom: 0;
     }
 }
