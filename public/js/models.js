@@ -101,8 +101,8 @@
         Base: Backbone.Model.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, {
             url: function(options) {
                 var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
+                var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;
                 var url = "/edc/" + Handlebars.compile(template)(this.attributes);
-                var params = this.urlParams;
                 if (params) {
                     var paramsJoiner = (_.include(url, '?')) ? '&' : '?';
                     url += paramsJoiner + $.param(params || {});

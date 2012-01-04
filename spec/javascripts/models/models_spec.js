@@ -28,21 +28,35 @@ describe("chorus.models", function() {
             });
 
             context("when the model has additional url params", function() {
-                beforeEach(function() {
-                    this.model.urlParams = { dance: "the thizzle" }
-                });
-
-                it("url-encodes the params and appends them to the url", function() {
-                    expect(this.model.url()).toBe("/edc/my_items/foo?dance=the+thizzle");
-                });
-
-                context("when the base url template includes a query string", function() {
+                context("when the urlParams is a function", function() {
                     beforeEach(function() {
-                        this.model.urlTemplate = "my_items/{{id}}?size=medium";
+                        this.model.urlParams = function() { return { dance: "the thizzle" }; };
                     });
 
-                    it("merges the query strings properly", function() {
-                        expect(this.model.url()).toBe("/edc/my_items/foo?size=medium&dance=the+thizzle");
+                    it("passes any options to the urlParams function", function() {
+                        spyOn(this.model, 'urlParams').andReturn("foo");
+                        this.model.url({ method: 'create' });
+                        expect(this.model.urlParams).toHaveBeenCalledWith({ method: 'create' });
+                    });
+                });
+
+                context("when the url params are a property", function() {
+                    beforeEach(function() {
+                        this.model.urlParams = { dance: "the thizzle" }
+                    });
+
+                    it("url-encodes the params and appends them to the url", function() {
+                        expect(this.model.url()).toBe("/edc/my_items/foo?dance=the+thizzle");
+                    });
+
+                    context("when the base url template includes a query string", function() {
+                        beforeEach(function() {
+                            this.model.urlTemplate = "my_items/{{id}}?size=medium";
+                        });
+
+                        it("merges the query strings properly", function() {
+                            expect(this.model.url()).toBe("/edc/my_items/foo?size=medium&dance=the+thizzle");
+                        });
                     });
                 });
             });
