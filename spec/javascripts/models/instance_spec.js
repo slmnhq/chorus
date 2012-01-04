@@ -54,5 +54,10 @@ describe("chorus.models.Instance", function() {
             expect(account.urlParams.userName).toBe(this.currentUser.get("userName"));
             expect(account.urlParams.instanceId).toBe(this.instance.get("id"));
         });
+
+        it("memoizes", function() {
+            var account = this.instance.accountForCurrentUser();
+            expect(account).toBe(this.instance.accountForCurrentUser());
+        });
     });
 });

@@ -42,7 +42,8 @@
         },
 
         accountForCurrentUser: function() {
-            return this.accountForUser(ns.session.user());
+            this._accountForCurrentUser || (this._accountForCurrentUser = this.accountForUser(ns.session.user()));
+            return this._accountForCurrentUser;
         },
 
         attrToLabel : {
