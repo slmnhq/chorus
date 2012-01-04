@@ -11,6 +11,10 @@
             "click button.cancel" : "cancelUploadAndClose"
         },
 
+        makeModel : function() {
+            this.model = this.model || new chorus.models.Workfile({workspaceId : this.options.launchElement.data("workspace-id")})
+        },
+
         setup : function() {
             var self = this;
             $(document).one('close.facebox', function() {
@@ -78,7 +82,7 @@
                     if (self.uploadExtension.toLowerCase() == "txt" || self.uploadExtension.toLowerCase() == "sql") {
                         url = self.model.showUrl();
                     } else {
-                        url = self.model.collection.showUrl();
+                        url = self.model.workfilesUrl();
                     }
 
                     chorus.router.navigate(url, true);

@@ -46,6 +46,10 @@
 
         downloadUrl : function() {
             return this.url() + "/file/" + this.get("versionFileId") + "?download=true";
+        },
+
+        workfilesUrl : function() {
+            return "#/workspaces/"+ this.get("workspaceId") +"/workfiles";
         }
     });
 })(chorus.models);
