@@ -11,7 +11,7 @@
         },
 
         makeModel : function() {
-            this.model = ns.models.Accountmap.findByInstanceId(this.options.pageModel.get("id"))
+            this.model = ns.models.InstanceAccount.findByInstanceId(this.options.pageModel.get("id"))
             this.model.bind("saved", this.saved, this);
             this.model.bind("saveFailed", this.saveFailed, this);
             this.model.bind("validationFailed", this.saveFailed, this);
@@ -19,11 +19,11 @@
             this._super("makeModel")
 
             this.instance = this.options.pageModel;
-            this.accountMap = this.model;
+            this.account = this.model;
         },
 
         context : function() {
-            var ctx = new chorus.presenters.Base(this.accountMap)
+            var ctx = new chorus.presenters.Base(this.account)
             return _.extend(ctx, this.instance.attributes, { ownerImageUrl : this.options.pageModel.owner().imageUrl() })
         },
 
@@ -37,7 +37,7 @@
             event.preventDefault();
             this.$("a.save").startLoading("instances.permissions.saving")
 
-            this.accountMap.save({
+            this.account.save({
                 dbUserName : this.$("input[name=dbUserName]").val(),
                 dbPassword : this.$("input[name=dbPassword]").val()
             });

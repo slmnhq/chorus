@@ -28,7 +28,7 @@ describe("chorus.models.Instance", function() {
 
         it("returns an account map", function() {
             var account = this.instance.accountForUser(this.user);
-            expect(account instanceof chorus.models.Accountmap).toBeTruthy();
+            expect(account instanceof chorus.models.InstanceAccount).toBeTruthy();
         });
 
         it("has the right urlParams", function() {
@@ -46,7 +46,7 @@ describe("chorus.models.Instance", function() {
 
         it("returns an account map", function() {
             var account = this.instance.accountForCurrentUser();
-            expect(account instanceof chorus.models.Accountmap).toBeTruthy();
+            expect(account instanceof chorus.models.InstanceAccount).toBeTruthy();
         });
 
         it("sets the 'userName' url parameter based on the current user", function() {

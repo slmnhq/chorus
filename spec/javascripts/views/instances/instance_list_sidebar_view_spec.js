@@ -185,7 +185,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 context("when the user has set up an account for the instance", function() {
                     beforeEach(function() {
-                        var account = fixtures.accountmap({ id: 45 });
+                        var account = fixtures.instanceAccount({ id: 45 });
                         spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
                         this.view.trigger("instance:selected", this.instance);
                         this.view.render();

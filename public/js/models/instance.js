@@ -36,7 +36,7 @@
         },
 
         accountForUser: function(user) {
-            var account = new ns.models.Accountmap;
+            var account = new ns.models.InstanceAccount;
             account.urlParams = { instanceId: this.get("id"), userName: user.get("userName") };
             return account;
         },

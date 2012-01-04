@@ -1,6 +1,6 @@
 ;
 (function(ns) {
-    ns.models.Accountmap = chorus.models.Base.extend({
+    ns.models.InstanceAccount = chorus.models.Base.extend({
         urlTemplate: function() {
             if (this.urlParams && this.urlParams.instanceId) {
                 return "instance/accountmap";
@@ -19,10 +19,10 @@
     },
     {
         findByInstanceId : function(instanceId) {
-            var accountMap = new chorus.models.Accountmap();
-            accountMap.urlParams = { instanceId: instanceId };
-            accountMap.fetch();
-            return accountMap;
+            var account = new chorus.models.InstanceAccount();
+            account.urlParams = { instanceId: instanceId };
+            account.fetch();
+            return account;
         }
     });
 })(chorus);

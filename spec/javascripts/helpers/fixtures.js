@@ -1252,7 +1252,7 @@
                 return new chorus.models.Instance(attributes);
             },
 
-            accountmap : function(overrides) {
+            instanceAccount : function(overrides) {
                 var attributes = _.extend({
                     id : this.nextId().toString(),
                     shared : "yes",
@@ -1261,7 +1261,7 @@
                     userName : "edcadmin",
                     dbUserName : "gpadmin"
                 }, overrides);
-                return new chorus.models.Accountmap(attributes);
+                return new chorus.models.InstanceAccount(attributes);
             }
         });
     });

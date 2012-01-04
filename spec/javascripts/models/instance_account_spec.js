@@ -1,6 +1,6 @@
-describe("chorus.models.Accountmap", function() {
+describe("chorus.models.InstanceAccount", function() {
     beforeEach(function() {
-        this.model = fixtures.accountmap({ id: '72' });
+        this.model = fixtures.instanceAccount({ id: '72' });
     });
 
     describe("urlTemplate", function() {
@@ -23,13 +23,13 @@ describe("chorus.models.Accountmap", function() {
 
     describe("#fetchByInstanceId", function() {
         it("hits the correct url", function() {
-            chorus.models.Accountmap.findByInstanceId("4");
+            chorus.models.InstanceAccount.findByInstanceId("4");
             expect(this.server.requests[0].url).toBe("/edc/instance/accountmap?instanceId=4")
         })
 
-        it("returns an Accountmap", function() {
-            var model = chorus.models.Accountmap.findByInstanceId("4");
-            expect(model instanceof chorus.models.Accountmap).toBeTruthy()
+        it("returns an InstanceAccount", function() {
+            var model = chorus.models.InstanceAccount.findByInstanceId("4");
+            expect(model instanceof chorus.models.InstanceAccount).toBeTruthy()
         })
     })
 
