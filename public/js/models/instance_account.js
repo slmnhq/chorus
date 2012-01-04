@@ -11,7 +11,9 @@
 
         urlParams: function(options) {
             if (options && options.method === "read") {
-                return { instanceId: this.get("instanceId"), userName: this.get("userName") };
+                var params = { instanceId: this.get("instanceId") };
+                if (this.get("userName")) { params["userName"] = this.get("userName") };
+                return params;
             }
         },
 
@@ -26,8 +28,7 @@
     },
     {
         findByInstanceId : function(instanceId) {
-            var account = new chorus.models.InstanceAccount();
-            account.urlParams = { instanceId: instanceId };
+            var account = new chorus.models.InstanceAccount({ instanceId: instanceId });
             account.fetch();
             return account;
         }
