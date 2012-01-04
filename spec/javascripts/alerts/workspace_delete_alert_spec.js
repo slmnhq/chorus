@@ -24,13 +24,13 @@ describe("WorkspaceDelete", function() {
             this.alert.render();
             this.alert.$("button.cancel").click();
             spyOn(chorus.router, "navigate");
-            spyOn($, 'jGrowl');
+            spyOn(chorus, 'toast');
         });
 
         it("unbinds event handlers on the model", function() {
             this.model.trigger("destroy");
 
-            expect($.jGrowl).not.toHaveBeenCalled();
+            expect(chorus.toast).not.toHaveBeenCalled();
             expect(chorus.router.navigate).not.toHaveBeenCalled();
         });
     });
@@ -38,15 +38,12 @@ describe("WorkspaceDelete", function() {
     describe("when the workspace deletion is successful", function() {
         beforeEach(function() {
             spyOn(chorus.router, "navigate");
-            spyOn($, 'jGrowl');
+            spyOn(chorus, 'toast');
             this.alert.model.trigger("destroy", this.alert.model);
         });
 
         it("displays a toast message", function() {
-            expect($.jGrowl).toHaveBeenCalledWith(t("workspace.delete.toast", {workspaceName: this.model.get("name")}), {
-                sticky : false,
-                life : 5000
-            });
+            expect(chorus.toast).toHaveBeenCalledWith("workspace.delete.toast", {workspaceName: this.model.get("name")});
         });
 
         it("navigates to the dashboard", function() {

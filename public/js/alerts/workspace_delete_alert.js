@@ -1,5 +1,5 @@
 (function($, ns) {
-    ns.WorkspaceDelete = chorus.alerts.ModelDelete.extend({
+    ns.alerts.WorkspaceDelete = ns.alerts.ModelDelete.extend({
         text : t("workspace.delete.text"),
         title : t("workspace.delete.title"),
         ok : t("workspace.delete.button"),
@@ -11,15 +11,8 @@
         },
 
         modelDeleted : function() {
-            this.showToast();
+            ns.toast("workspace.delete.toast", {workspaceName: this.model.get("name")});
             this._super("modelDeleted");
-        },
-
-        showToast : function() {
-            $.jGrowl(t("workspace.delete.toast", {workspaceName: this.model.get("name")}), {
-                life : 5000,
-                sticky : false
-            });
         }
     });
-})(jQuery, chorus.alerts);
+})(jQuery, chorus);
