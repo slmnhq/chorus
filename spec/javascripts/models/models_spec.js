@@ -15,6 +15,12 @@ describe("chorus.models", function() {
                 it("uses the function's return value", function() {
                     expect(this.model.url()).toBe("/edc/my_other_items/foo");
                 });
+
+                it("passes any options to the urlTemplate function", function() {
+                    spyOn(this.model, 'urlTemplate').andReturn("foo");
+                    this.model.url({ method: 'create' });
+                    expect(this.model.urlTemplate).toHaveBeenCalledWith({ method: 'create' });
+                });
             });
 
             it("compiles the urlTemplate and renders it with model attributes", function() {

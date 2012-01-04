@@ -99,8 +99,8 @@
         })),
 
         Base: Backbone.Model.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, {
-            url: function() {
-                var template = _.isFunction(this.urlTemplate) ? this.urlTemplate() : this.urlTemplate;
+            url: function(options) {
+                var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
                 var url = "/edc/" + Handlebars.compile(template)(this.attributes);
                 var params = this.urlParams;
                 if (params) {
