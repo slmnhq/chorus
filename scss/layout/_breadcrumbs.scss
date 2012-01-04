@@ -1,9 +1,11 @@
 @import "../_common";
 
+$breadcrumbs-height: 32px;
+
 .breadcrumbs {
     @include linear-gradient(color-stops($body-glow-color, $body-background-color));
     @include ellipsis;
-    height: 32px;
+    height: $breadcrumbs-height;
 
     ol {
         padding: $padding-y ($padding-x + $guts-padding + 1px);

@@ -28,6 +28,10 @@
                 .addClass(this.additionalClass || "");
             this.renderSubviews();
             this.postRender($(this.el));
+
+            if ($(this.el).attr("id") === "sidebar") {
+                chorus.page.trigger("sidebarRendered");
+            }
             return this;
         },
 

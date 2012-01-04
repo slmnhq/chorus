@@ -39,12 +39,12 @@
                 this.instance.fetch();
             }
             this.resource.bind("change", this.render, this);
-            this.render();
 
             this.account = this.instance.accountForCurrentUser();
             this.account.bind("change", this.render, this);
             this.account.bind("fetchFailed", this.render, this);
             this.account.fetch();
+            this.render();
         },
 
         showActivityList : function(){
