@@ -4,9 +4,11 @@
         className : "alert",
 
         events : {
-            "click button.cancel" : "closeModal"
+            "click button.cancel" : "closeModal",
+            "click button.submit" : "confirmAlert"
         },
 
+        confirmAlert : $.noop,
 
         additionalContext : function (ctx) {
             return {
@@ -23,6 +25,7 @@
         },
         revealed : function () {
             $("#facebox").removeClass().addClass("alert_facebox");
+            $("#facebox button.cancel")[0].focus();
         }
     })
 
