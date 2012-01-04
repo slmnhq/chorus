@@ -16,6 +16,7 @@
         'header',
         'image_upload',
         'image_workfile_content',
+        'instance_account',
         'instance_index_content_details',
         'instance_list',
         'instance_list_sidebar',

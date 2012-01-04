@@ -174,7 +174,8 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                     it("shows the add credentials link", function() {
                         expect(this.view.$(".actions .add_credentials")).toExist();
-                        expect(this.view.$(".actions .add_credentials").data("dialog")).toBe("InstanceCredentialsAdd");
+                        expect(this.view.$(".actions .add_credentials").data("dialog")).toBe("InstanceAccount");
+                        expect(this.view.$(".actions .add_credentials").data("title")).toMatchTranslation("instances.account.add.title");
                         expect(this.view.$(".actions .add_credentials").text()).toMatchTranslation("instances.sidebar.add_credentials");
                     });
 
@@ -198,7 +199,8 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                     it("shows the 'edit credentials' link", function() {
                         expect(this.view.$(".actions .edit_credentials")).toExist();
-                        expect(this.view.$(".actions .edit_credentials").data("dialog")).toBe("InstanceCredentialsEdit");
+                        expect(this.view.$(".actions .edit_credentials").data("dialog")).toBe("InstanceAccount");
+                        expect(this.view.$(".actions .edit_credentials").data("title")).toMatchTranslation("instances.account.edit.title");
                         expect(this.view.$(".actions .edit_credentials").text()).toMatchTranslation("instances.sidebar.edit_credentials");
                     });
 
