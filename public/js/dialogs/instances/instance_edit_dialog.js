@@ -12,6 +12,8 @@
 
         setup: function() {
             this.model.bind("saved", this.saveSuccess, this);
+            this.model.bind("saveFailed", this.saveFailed, this);
+            this.model.bind("validationFailed", this.saveFailed, this);
         },
 
         additionalContext : function() {
@@ -31,14 +33,21 @@
                 port : this.$("input[name=port]").val(),
                 size : this.$("input[name=size]").val()
             };
-
+            this.$("button.submit").startLoading("instances.edit_dialog.saving");
+            this.$("button.cancel").attr("disabled", "disabled");
             this.model.save(attrs);
 
         },
 
         saveSuccess : function() {
             this.closeModal();
-        }
+            chorus.toast("instances.edit_dialog.saved_message");
+        },
+
+        saveFailed : function() {
+            this.$("button.submit").stopLoading();
+            this.$("button.cancel").removeAttr("disabled");
+        }        
 
     });
 })(jQuery, chorus);

@@ -67,25 +67,76 @@ describe("InstanceEditDialog", function() {
     });
 
     describe("saving", function() {
-        describe("when the instance is a registered instance", function() {
+        beforeEach(function() {
+            this.dialog.model.set({ provisionType : "register"});
+            spyOn(this.dialog.model, "save");
+            spyOn(this.dialog, "closeModal");
+            spyOn(chorus, "toast");
+            this.dialog.render();
+            this.dialog.$("button[type=submit]").submit();
+        });
+
+        it("should call the save method", function() {
+            expect(this.dialog.model.save).toHaveBeenCalled();
+        });
+
+        it("puts the button in 'loading' mode", function() {
+            expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+        });
+
+        it("changes the text on the upload button to 'saving'", function() {
+            expect(this.dialog.$("button.submit").text()).toMatchTranslation("instances.new_dialog.saving");
+        });
+
+        it("disables the cancel button", function() {
+            expect(this.dialog.$("button.cancel").attr("disabled")).toBe("disabled");
+        });
+
+        context("when save completes", function() {
             beforeEach(function() {
-                this.dialog.model.set({ provisionType : "register"});
-                spyOn(this.dialog.model, "save");
-                spyOn(this.dialog, "closeModal");
-                this.dialog.render();
-                this.dialog.$("button[type=submit]").submit();
-            });
-
-            it("should call the save method", function() {
-                expect(this.dialog.model.save).toHaveBeenCalled();
-            });
-
-            it("should close the dialog box", function() {
                 this.dialog.model.trigger("saved");
+            });
+
+            it("displays toast message", function() {
+                expect(chorus.toast).toHaveBeenCalled();
+            });
+
+            it("closes the dialog", function() {
                 expect(this.dialog.closeModal).toHaveBeenCalled();
             });
         });
+
+        context("when the upload gives a server error", function() {
+            beforeEach(function() {
+                this.dialog.model.set({serverErrors : [
+                    { message: "foo" }
+                ]});
+                this.dialog.model.trigger("saveFailed");
+            });
+
+            it("display the correct error", function() {
+                expect(this.dialog.$(".errors").text()).toContain("foo");
+            });
+
+            itRecoversFromError();
+        });
+
+        context("when the validation fails", function() {
+            beforeEach(function() {
+                this.dialog.model.trigger("validationFailed");
+            });
+
+            itRecoversFromError();
+        });
+
+        function itRecoversFromError() {
+            it("takes the button out of 'loading' mode", function() {
+                expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+            });
+
+            it("sets the button text back to 'Uploading'", function() {
+                expect(this.dialog.$("button.submit").text()).toMatchTranslation("instances.edit_dialog.save");
+            });
+        }
     });
-
-
 });
