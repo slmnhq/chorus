@@ -67,20 +67,20 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 context("when the alert is confirmed", function() {
                     beforeEach(function() {
-                        spyOn(this.dialog.accountMap, "save");
+                        spyOn(this.dialog.account, "save");
                         this.dialog.launchSubModal.calls[0].args[0].confirmAlert();
                     });
 
-                    it("calls save on the accountMap with shared:no", function() {
-                        expect(this.dialog.accountMap.save.calls[0].args[0].shared).toBe("no");
+                    it("calls save on the account with shared:no", function() {
+                        expect(this.dialog.account.save.calls[0].args[0].shared).toBe("no");
                     });
 
                     context("when the save succeeds", function() {
                         beforeEach(function() {
                             spyOn($, 'jGrowl');
                             this.otherSavedSpy = jasmine.createSpy();
-                            this.dialog.accountMap.bind("saved", this.otherSavedSpy);
-                            this.dialog.accountMap.trigger("saved");
+                            this.dialog.account.bind("saved", this.otherSavedSpy);
+                            this.dialog.account.trigger("saved");
                         });
 
                         it("displays a toast message", function() {
@@ -95,7 +95,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                             it("doesn't display a toast message", function() {
                                 $.jGrowl.reset();
                                 this.otherSavedSpy.reset();
-                                this.dialog.accountMap.trigger("saved");
+                                this.dialog.account.trigger("saved");
 
                                 expect($.jGrowl).not.toHaveBeenCalled();
                                 expect(this.otherSavedSpy).toHaveBeenCalled();
@@ -106,7 +106,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     context("when the save fails", function() {
                         beforeEach(function() {
                             spyOn($, 'jGrowl');
-                            this.dialog.accountMap.trigger("saveFailed");
+                            this.dialog.account.trigger("saveFailed");
                         });
 
                         it("displays a save failed toast message", function() {
@@ -119,7 +119,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         context("and then a save succeeds", function() {
                             beforeEach(function() {
                                 $.jGrowl.reset();
-                                this.dialog.accountMap.trigger("saved");
+                                this.dialog.account.trigger("saved");
                             });
 
                             it("doesn't display the saved toast message", function() {

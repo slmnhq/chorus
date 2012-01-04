@@ -67,11 +67,11 @@
         },
 
         confirmRemoveSharedAccount : function() {
-            var map = this.accountMap;
-            this.accountMap.bind("saved", displaySuccessToast);
-            this.accountMap.bind("saveFailed", displayFailureToast);
+            var map = this.account;
+            this.account.bind("saved", displaySuccessToast);
+            this.account.bind("saveFailed", displayFailureToast);
 
-            this.accountMap.save({shared : "no"});
+            this.account.save({shared : "no"});
 
             function displaySuccessToast() {
                 $.jGrowl(t("instances.shared_account_removed"), {sticky: false, life: 5000});
