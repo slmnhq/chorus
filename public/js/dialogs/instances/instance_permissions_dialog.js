@@ -74,13 +74,13 @@
             this.account.save({shared : "no"});
 
             function displaySuccessToast() {
-                $.jGrowl(t("instances.shared_account_removed"), {sticky: false, life: 5000});
+                ns.toast("instances.shared_account_removed");
                 map.unbind("saved", displaySuccessToast);
                 map.unbind("saveFailed", displayFailureToast);
             }
 
             function displayFailureToast() {
-                $.jGrowl(t("instances.shared_account_remove_failed"), {sticky: false, life: 5000});
+                ns.toast("instances.shared_account_remove_failed");
                 map.unbind("saved", displaySuccessToast);
                 map.unbind("saveFailed", displayFailureToast);
             }

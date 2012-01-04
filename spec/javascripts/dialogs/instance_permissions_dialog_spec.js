@@ -77,27 +77,24 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                     context("when the save succeeds", function() {
                         beforeEach(function() {
-                            spyOn($, 'jGrowl');
+                            spyOn(chorus, 'toast');
                             this.otherSavedSpy = jasmine.createSpy();
                             this.dialog.account.bind("saved", this.otherSavedSpy);
                             this.dialog.account.trigger("saved");
                         });
 
                         it("displays a toast message", function() {
-                            expect($.jGrowl).toHaveBeenCalledWith(t("instances.shared_account_removed"), {
-                                sticky : false,
-                                life : 5000
-                            });
+                            expect(chorus.toast).toHaveBeenCalledWith("instances.shared_account_removed");
                             expect(this.otherSavedSpy).toHaveBeenCalled();
                         });
 
                         context("and the same model saves again", function() {
                             it("doesn't display a toast message", function() {
-                                $.jGrowl.reset();
+                                chorus.toast.reset();
                                 this.otherSavedSpy.reset();
                                 this.dialog.account.trigger("saved");
 
-                                expect($.jGrowl).not.toHaveBeenCalled();
+                                expect(chorus.toast).not.toHaveBeenCalled();
                                 expect(this.otherSavedSpy).toHaveBeenCalled();
                             });
                         });
@@ -105,28 +102,23 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                     context("when the save fails", function() {
                         beforeEach(function() {
-                            spyOn($, 'jGrowl');
+                            spyOn(chorus, 'toast');
                             this.dialog.account.trigger("saveFailed");
                         });
 
                         it("displays a save failed toast message", function() {
-                            expect($.jGrowl).toHaveBeenCalledWith(t("instances.shared_account_remove_failed"), {
-                                sticky : false,
-                                life : 5000
-                            });
+                            expect(chorus.toast).toHaveBeenCalledWith("instances.shared_account_remove_failed");
                         });
 
                         context("and then a save succeeds", function() {
                             beforeEach(function() {
-                                $.jGrowl.reset();
+                                chorus.toast.reset();
                                 this.dialog.account.trigger("saved");
                             });
 
                             it("doesn't display the saved toast message", function() {
-                                expect($.jGrowl).not.toHaveBeenCalledWith(t("instances.shared_account_removed"), {
-                                    sticky : false,
-                                    life : 5000
-                                });
+                                expect(chorus.toast).not.toHaveBeenCalledWith("instances.shared_account_removed");
+
                             });
                         })
                     })
@@ -242,4 +234,5 @@ describe("chorus.dialogs.InstancePermissions", function() {
             })
         })
     });
-});
+})
+    ;
