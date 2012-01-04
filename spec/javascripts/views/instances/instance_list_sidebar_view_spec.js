@@ -152,7 +152,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 this.instance.set({
                     sharedAccount: { dbUserName: "polenta" }
                 });
-                this.view.render();
+                this.view.trigger("instance:selected", this.instance);
             });
 
             it("does not show the 'edit credentials' link", function() {
@@ -189,7 +189,6 @@ describe("chorus.views.InstanceListSidebar", function() {
                         var account = fixtures.instanceAccount({ id: 45 });
                         spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
                         this.view.trigger("instance:selected", this.instance);
-                        this.view.render();
                     });
 
                     it("shows the 'access' text and image", function() {
