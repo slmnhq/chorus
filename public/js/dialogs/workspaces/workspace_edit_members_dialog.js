@@ -9,8 +9,8 @@
             "click button.submit" : "updateMembers"
         },
 
-        makeModel : function (options) {
-            this._super("makeModel", options);
+        makeModel : function() {
+            this._super("makeModel", arguments);
             this.collection = new chorus.models.UserSet();
             this.collection.fetchAll();
             this.members = this.options.pageModel.members();

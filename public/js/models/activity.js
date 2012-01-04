@@ -1,8 +1,8 @@
 ;(function(ns) {
     ns.Activity = chorus.models.Base.extend({
 
-        initialize: function(attributes, options) {
-            this._super('initialize', attributes, options);
+        initialize: function(attributes) {
+            this._super('initialize', arguments);
             if(attributes.instance) {
                 this.set({instance : new chorus.models.Instance(attributes.instance)});
             }

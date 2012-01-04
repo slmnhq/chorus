@@ -7,8 +7,8 @@
             "submit form": "save"
         },
 
-        makeModel : function(options){
-            this._super("makeModel", options);
+        makeModel : function() {
+            this._super("makeModel", arguments);
 
             this.model = new chorus.models.Comment({
                 entityType : this.options.launchElement.data("entity-type"),

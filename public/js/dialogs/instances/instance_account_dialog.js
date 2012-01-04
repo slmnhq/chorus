@@ -10,8 +10,8 @@
             this.title = this.options.launchElement.data("title");
         },
 
-        makeModel: function(options) {
-            this._super("makeModel", options);
+        makeModel: function() {
+            this._super("makeModel", arguments);
             this.model = this.pageModel.accountForCurrentUser();
             this.model.bind("saved", this.saved, this);
         },
