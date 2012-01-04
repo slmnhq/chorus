@@ -28,7 +28,7 @@ Backbone.sync = function(method, model, options) {
 
     // Ensure that we have a URL.
     if (!params.url) {
-        params.url = model.url() || urlError();
+        params.url = model.url({ method: method }) || urlError();
     }
 
     // Ensure that we have the appropriate request data.

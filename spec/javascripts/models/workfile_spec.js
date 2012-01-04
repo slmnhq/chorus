@@ -52,29 +52,22 @@ describe("chorus.models.Workfile", function() {
         });
     });
 
-    describe("#initialize", function() {
+    describe("#urls", function() {
         beforeEach(function() {
             this.model = new chorus.models.Workfile({id: 5, workspaceId: 10})
+            this.model.set({versionFileId: "12345"});
         });
 
-        it("constructs the right backend URL", function() {
+        it("has the right backend URL", function() {
             expect(this.model.url()).toBe("/edc/workspace/10/workfile/5");
-            expect(this.model.url(true)).toBe("workspace/10/workfile/5");
         });
 
-        it("constructs the right frontend show URL", function() {
+        it("has the right frontend show URL", function() {
             expect(this.model.showUrl()).toBe("#/workspaces/10/workfiles/5");
-            expect(this.model.showUrl(true)).toBe("workspaces/10/workfiles/5");
         });
 
-        describe("#downloadUrl", function() {
-            beforeEach(function(){
-                this.model.set({versionFileId: "12345"});
-            });
-
-            it("returns the correct URL", function() {
-                expect(this.model.downloadUrl()).toBe("/edc/workspace/10/workfile/5/file/12345?download=true");
-            });
+        it("has the right download URL", function() {
+            expect(this.model.downloadUrl()).toBe("/edc/workspace/10/workfile/5/file/12345?download=true");
         });
     });
 

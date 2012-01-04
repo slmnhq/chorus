@@ -6,6 +6,21 @@ describe("backbone_extensions", function() {
             this.model.urlTemplate = "my_items/{{id}}";
         })
 
+        it("passes the method to the model's url method", function() {
+            spyOn(this.model, 'url').andReturn("foo");
+            this.model.save();
+            expect(this.model.url).toHaveBeenCalledWith({ method: 'create' });
+
+            this.model.url.reset();
+            this.model.fetch();
+            expect(this.model.url).toHaveBeenCalledWith({ method: 'read' });
+
+            this.model.url.reset();
+            this.model.id = '24';
+            this.model.save();
+            expect(this.model.url).toHaveBeenCalledWith({ method: 'update' });
+        });
+
         context("with a non-file upload model", function() {
             describe("#save", function() {
                 it("uses AJAX", function() {

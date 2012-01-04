@@ -99,10 +99,9 @@
         })),
 
         Base: Backbone.Model.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, {
-            url: function(hidePrefix) {
-                var prefix = (hidePrefix ? '' : "/edc/")
+            url: function() {
                 var template = _.isFunction(this.urlTemplate) ? this.urlTemplate() : this.urlTemplate;
-                var url = prefix + Handlebars.compile(template)(this.attributes);
+                var url = "/edc/" + Handlebars.compile(template)(this.attributes);
                 var params = this.urlParams;
                 if (params) {
                     var paramsJoiner = (_.include(url, '?')) ? '&' : '?';
