@@ -22,7 +22,8 @@
             }
             return {
                 dbUserName : this.model.get('sharedAccount') && this.model.get('sharedAccount').dbUserName,
-                userHasAccount: this.account && this.account.has("id")
+                userHasAccount: this.account && this.account.has("id"),
+                userCanEditInstance : this.canEditInstance()
             };
         },
 
@@ -53,6 +54,10 @@
 
         showConfiguration : function(){
             toggleElement(".configuration_detail");
+        },
+
+        canEditInstance : function() {
+            return (this.resource.owner().get("id") == chorus.session.user().get("id") ) || chorus.session.user().get("admin");
         }
     })
 

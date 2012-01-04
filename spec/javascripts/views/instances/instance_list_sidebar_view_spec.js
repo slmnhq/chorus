@@ -64,7 +64,32 @@ describe("chorus.views.InstanceListSidebar", function() {
             expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
         });
 
+        context("when user is an admin or owner of the instance", function(){
 
+            it("displays edit instance link when user is admin", function() {
+                setLoggedInUser({ userName : "benjamin", admin: true});
+                this.view.render();
+                expect(this.view.$(".actions .edit_instance")).toExist();
+            });
+
+            it("displays edit instance link when user is owner", function() {
+                setLoggedInUser({ userName : "benjamin", admin: false});
+                this.instance.set({ownerId : "10000"});
+                this.view.render();
+                expect(this.view.$(".actions .edit_instance")).toExist();
+            });
+        });
+
+        context("when user is not an admin or owner of the instance", function() {
+
+            it("does not display edit instance link when user is neither admin nor owner", function() {
+                setLoggedInUser({ userName : "benjamin", admin: false});
+                this.instance.set({owner : "harry"});
+                this.view.render();
+                expect(this.view.$(".actions .edit_instance")).not.toExist();
+            });
+
+        });
         context("and the selected instance triggers a 'change' event", function() {
             beforeEach(function() {
                 this.view.render.reset();
