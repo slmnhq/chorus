@@ -185,7 +185,7 @@ describe("WorkfilesImportDialog", function() {
                 });
 
                 it("display the correct error" ,function(){
-                    expect(this.dialog.$(".errors").text()).toBe("Workspace already has a workfile with this name. Specify a different name.")
+                    expect(this.dialog.$(".errors ul").text()).toBe("Workspace already has a workfile with this name. Specify a different name.")
                 });
 
                 it("sets the button text back to 'Uploading'", function(){

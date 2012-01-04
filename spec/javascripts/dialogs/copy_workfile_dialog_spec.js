@@ -153,7 +153,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
             })
 
             it("displays the server error message", function() {
-                expect(this.dialog.$(".errors").text().trim()).toBe("Workspace already has a workfile with this name. Specify a different name.")
+                expect(this.dialog.$(".errors ul").text().trim()).toBe("Workspace already has a workfile with this name. Specify a different name.")
             })
         })
     });
