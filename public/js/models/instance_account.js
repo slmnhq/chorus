@@ -1,8 +1,9 @@
-;
-(function(ns) {
+;(function(ns) {
     ns.models.InstanceAccount = chorus.models.Base.extend({
-        urlTemplate: function() {
-            if (this.urlParams && this.urlParams.instanceId) {
+        urlTemplate: function(options) {
+            var method = options && options.method,
+                instanceId = this.urlParams && this.urlParams.instanceId;
+            if (method === "read" && instanceId) {
                 return "instance/accountmap";
             } else {
                 return "instance/accountmap/{{id}}";
