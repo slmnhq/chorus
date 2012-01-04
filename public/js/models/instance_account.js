@@ -19,6 +19,7 @@
 
         declareValidations : function(newAttrs) {
             this.require('dbUserName', newAttrs);
+            if (this.isNew() || (newAttrs && newAttrs.hasOwnProperty('dbPassword'))) { this.require('dbPassword', newAttrs); }
         },
 
         attrToLabel : {
