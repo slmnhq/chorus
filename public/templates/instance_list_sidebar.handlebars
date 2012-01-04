@@ -23,6 +23,7 @@
         {{#unless dbUserName}}
             {{#if userHasAccount}}
                 <li><a class="dialog edit_credentials" href="#" data-dialog="InstanceAccount" data-title='{{t "instances.account.edit.title"}}'>{{t "instances.sidebar.edit_credentials"}}</a></li>
+                <li><a class="alert remove_credentials" href="#" data-alert="InstanceAccountDelete">{{t "instances.sidebar.remove_credentials"}}</a></li>
             {{else}}
                 <li><a class="dialog add_credentials" href="#" data-dialog="InstanceAccount" data-title='{{t "instances.account.add.title"}}'>{{t "instances.sidebar.add_credentials"}}</a></li>
             {{/if}}
