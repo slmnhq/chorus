@@ -32,6 +32,7 @@
         'notes_new',
         'notes_new_file_attachment',
         'plain_text',
+        'sandbox_new',
         'shuttle_widget',
         'sub_nav',
         'tab_control',

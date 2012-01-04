@@ -1140,6 +1140,17 @@
                 }
             },
 
+            databaseJson: function(overrides) {
+                var id = this.nextId().toString();
+
+                return _.extend({
+                    id : id,
+					connectable : true,
+					name : "Database " + id,
+					creatable : true
+                }, overrides);
+            },
+
             instanceJson: function() {
                 var id = this.nextId();
                 return {
@@ -1192,6 +1203,10 @@
                 return new chorus.models.Comment(attributes);
             },
 
+            database: function(overrides) {
+                return new chorus.models.Database(this.databaseJson(overrides));
+            },
+
             noteComment: function(overrides) {
                 commentOverrides = _.extend({
                     comments: [],
@@ -1200,6 +1215,20 @@
                     workspace: fixtures.workspace()
                 }, overrides)
                 return fixtures.comment(commentOverrides);
+            },
+
+            schema: function(overrides) {
+                var id = this.nextId().toString();
+
+                var attributes = _.extend({
+                    id : id,
+                    name : "Schema " + id,
+                    lastUpdatedStamp : "2012-01-04 14:42:15.318",
+                    lastUpdatedTxStamp : "2012-01-04 14:42:15.309",
+                    createdStamp : "2012-01-04 14:42:15.318",
+                    createdTxStamp : "2012-01-04 14:42:15.309"
+                }, overrides);
+                return new chorus.models.Schema(attributes);
             },
 
             workspace: function(overrides) {

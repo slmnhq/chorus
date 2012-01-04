@@ -35,9 +35,12 @@
             })
         },
 
+        databases : function() {
+            return new ns.models.DatabaseSet([], {instanceId : this.get("id")});
+        },
+
         accountForUser: function(user) {
-            var account = new ns.models.InstanceAccount({ instanceId: this.get("id"), userName: user.get("userName") });
-            return account;
+            return new ns.models.InstanceAccount({ instanceId: this.get("id"), userName: user.get("userName") });
         },
 
         accountForCurrentUser: function() {
