@@ -10,7 +10,7 @@
         },
 
         urlParams: function(options) {
-            if (options && options.method === "fetch") {
+            if (options && options.method === "read") {
                 return { instanceId: this.get("instanceId"), userName: this.get("userName") };
             }
         },
