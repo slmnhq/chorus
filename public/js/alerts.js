@@ -25,7 +25,10 @@
         },
         revealed : function () {
             $("#facebox").removeClass().addClass("alert_facebox");
-            $("#facebox button.cancel")[0].focus();
+            var cancelButton = $("#facebox button.cancel")[0];
+            if (cancelButton) {
+                cancelButton.focus();
+            }
         }
     })
 
