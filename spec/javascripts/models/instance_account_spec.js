@@ -50,10 +50,27 @@ describe("chorus.models.InstanceAccount", function() {
             expect(this.model.require).toHaveBeenCalledWith("dbUserName", undefined);
         });
 
-        it("does not require dbPassword", function() {
-            this.model.unset("dbPassword");
-            this.model.performValidation();
-            expect(this.model.require).not.toHaveBeenCalledWith("dbPassword", undefined);
+        context("when the account already exists and the password is NOT being changed", function() {
+            it("does not require a dbPassword", function() {
+                this.model.unset("dbPassword");
+                this.model.performValidation();
+                expect(this.model.isValid()).toBeTruthy();
+            });
+        });
+
+        context("when the account is being created", function() {
+            it("requires a dbPassword", function() {
+                this.model = new chorus.models.InstanceAccount({ dbUserName: "ilikecoffee" });
+                this.model.performValidation();
+                expect(this.model.isValid()).toBeFalsy();
+            });
+        });
+
+        context("when the account already exists and the password is being changed", function() {
+            it("requires a dbPassword", function() {
+                this.model.performValidation({ dbPassword: "" });
+                expect(this.model.isValid()).toBeFalsy();
+            });
         });
     })
 });
