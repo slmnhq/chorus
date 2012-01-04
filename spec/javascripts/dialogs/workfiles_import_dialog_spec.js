@@ -14,6 +14,7 @@ describe("WorkfilesImportDialog", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            spyOn(this.dialog, "closeModal");
             this.dialog.render()
         });
 
@@ -27,7 +28,6 @@ describe("WorkfilesImportDialog", function() {
 
         context("clicking on the cancel button", function() {
             it("closes the dialog", function() {
-                spyOn(this.dialog, "closeModal");
                 this.dialog.$("button.cancel").click();
                 expect(this.dialog.closeModal).toHaveBeenCalled();
             });
