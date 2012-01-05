@@ -17,6 +17,10 @@
     .dialog_content {
         background-color: $body-background-color;
         padding: 10px 15px;
+
+        .menus {
+            height: 30px;
+        }
     }
 
     .sub_header {
