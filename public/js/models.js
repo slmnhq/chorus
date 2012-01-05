@@ -136,8 +136,8 @@
             },
 
             save : function(attrs, options) {
-                this.beforeSave();
                 options || (options = {});
+                this.beforeSave(attrs, options);
                 var success = options.success;
                 options.success = function(model, resp, xhr) {
                     var savedEvent = model.serverErrors ? "saveFailed" : "saved"

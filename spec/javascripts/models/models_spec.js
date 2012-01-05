@@ -313,8 +313,14 @@ describe("chorus.models", function() {
 
             it("calls the 'beforeSave' hook", function() {
                 spyOn(this.model, 'beforeSave');
-                this.model.save();
+                this.model.save({ foo: 'bar' }, { silent: true });
+
                 expect(this.model.beforeSave).toHaveBeenCalled();
+                var beforeSaveArgs = this.model.beforeSave.calls[0].args;
+                expect(beforeSaveArgs[0]).toEqual({ foo: 'bar' });
+
+                // the options hash gets mutated later in #save
+                expect(beforeSaveArgs[1].silent).toBeTruthy();
             });
         });
 
