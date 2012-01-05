@@ -135,6 +135,25 @@
 
                 toContainText: function(text) {
                     return this.env.contains_(this.actual.text(), text);
+                },
+
+                toHaveBeenTriggeredOn: function(target) {
+                    var eventName = this.actual;
+                    this.message = function() {
+                        return [
+                            "Expected event " + eventName + " to have been triggered on " + target,
+                            "Expected event " + eventName + " not to have been triggered on " + target
+                        ];
+                    };
+                    if (_.isString(target) || target instanceof jQuery) {
+                        return jasmine.JQuery.events.wasTriggered(target, eventName);
+                    } else {
+                        if (target._chorusEventSpies && target._chorusEventSpies[eventName]) {
+                            return target._chorusEventSpies[eventName].calls.length > 0;
+                        } else {
+                            throw "The event '" + eventName + "' has not been spied on, for the object " + target;
+                        }
+                    }
                 }
             });
 
@@ -173,6 +192,14 @@
     window.unsetLoggedInUser = function() {
         chorus.session.unset("id");
         delete chorus.session._user;
+    };
+
+    window.spyOnBackboneEvent = function(object, name) {
+        var eventSpy = jasmine.createSpy(name + "Spy");
+        object.bind(name, eventSpy);
+        object._chorusEventSpies || (object._chorusEventSpies = {});
+        object._chorusEventSpies[name] = eventSpy;
+        return eventSpy;
     };
 
     window.setLoggedInUser = function(options) {
