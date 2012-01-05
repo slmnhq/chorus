@@ -11,7 +11,7 @@
                 <li><a class="dialog" href="#" data-dialog="WorkspaceSettings">{{t "actions.edit_workspace"}}</a></li>
                 <li><a class="alert" href="#" data-alert="WorkspaceDelete">{{t "actions.delete_workspace"}}</a></li>
                 <li><a class="dialog" href="#" data-dialog="WorkspaceEditMembers">{{t "workspace.edit_members"}}</a></li>
-                <li><a class="dialog" href="#" data-dialog="SandboxNew">{{t "sandbox.create_a_sandbox"}}</a></li>
+                <li><a class="dialog" href="#" data-dialog="SandboxNew" data-workspace-id="{{id}}">{{t "sandbox.create_a_sandbox"}}</a></li>
             {{/if}}
             <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workspace" data-workspace-id="{{id}}" data-allow-workfile-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
         </ul>

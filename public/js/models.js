@@ -136,6 +136,7 @@
             },
 
             save : function(attrs, options) {
+                attrs || (attrs = {});
                 options || (options = {});
                 this.beforeSave(attrs, options);
                 var success = options.success;

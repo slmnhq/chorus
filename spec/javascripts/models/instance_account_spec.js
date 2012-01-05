@@ -19,10 +19,10 @@ describe("chorus.models.InstanceAccount", function() {
 
         context("when fetching", function() {
             it("has the right url for fetching an account by user name and instance id", function() {
-                var url = $.url(this.model.url({ method: 'read' }));
+                var uri = new URI(this.model.url({ method: 'read' }));
 
-                expect(url.attr("path")).toBe("/edc/instance/accountmap");
-                expect(url.param()).toEqual({ instanceId: "1045", userName: "iceCream" });
+                expect(uri.path()).toBe("/edc/instance/accountmap");
+                expect(uri.query(true)).toEqual({ instanceId: "1045", userName: "iceCream" });
             });
         });
     });

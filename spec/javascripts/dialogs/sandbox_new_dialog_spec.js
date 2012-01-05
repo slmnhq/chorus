@@ -6,7 +6,8 @@ describe("chorus.dialogs.SandboxNew", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            window.dialog = this.dialog = new chorus.dialogs.SandboxNew({ workspace : this.workspace });
+            var launchElement = $("<a data-workspace-id='45'></a>");
+            window.dialog = this.dialog = new chorus.dialogs.SandboxNew({ launchElement: launchElement });
             this.dialog.render();
             $('#jasmine_content').append(this.dialog.el);
         });
@@ -118,6 +119,42 @@ describe("chorus.dialogs.SandboxNew", function() {
                                     expect(this.dialog.$("button.submit")).not.toBeDisabled();
                                 });
 
+                                context("un-choosing a schema", function() {
+                                    it("disables the button", function(){
+                                        var select = this.dialog.$(".schema select");
+                                        select.prop("selectedIndex", 0);
+                                        select.change();
+
+                                        expect(this.dialog.$("button.submit")).toBeDisabled();
+                                    });
+                                });
+
+                                context("clicking the submit button", function() {
+                                    beforeEach(function() {
+                                        this.sandbox = this.dialog.model;
+                                        spyOn(this.sandbox, 'save').andCallThrough();
+                                        this.dialog.$("button.submit").click();
+                                    });
+
+                                    it("changes the button text to 'Adding...'", function() {
+                                        expect(this.dialog.$("button.submit").text()).toMatchTranslation("sandbox.adding_sandbox");
+                                    });
+
+                                    it("sets the button to a loading state", function() {
+                                        expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+                                    });
+
+                                    it("sets the instanceId, schemaId and databaseId on the sandbox", function() {
+                                        expect(this.sandbox.get("instance")).toBe(this.selectedInstance.get('id'));
+                                        expect(this.sandbox.get("database")).toBe(this.selectedDatabase.get('id'));
+                                        expect(this.sandbox.get("schema")).toBe(this.selectedSchema.get('id'));
+                                    });
+
+                                    it("saves the sandbox", function() {
+                                        expect(this.sandbox.save).toHaveBeenCalled();
+                                    });
+                                });
+
                                 context("changing the database", function() {
                                     beforeEach(function() {
                                         var select = this.dialog.$(".database select");
@@ -185,6 +222,10 @@ describe("chorus.dialogs.SandboxNew", function() {
         it("should reset " + type + " select", function() {
             expect(this.dialog.$('.' + type + ' select option:selected').val()).toBeFalsy();
             expect(this.dialog.$('.' + type + ' select option').length).toBe(1);
+        });
+
+        it("disables the submit button", function() {
+            expect(this.dialog.$("button.submit")).toBeDisabled();
         });
     }
 

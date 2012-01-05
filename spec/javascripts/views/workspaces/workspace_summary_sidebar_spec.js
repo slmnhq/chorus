@@ -74,6 +74,11 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
             it("has a link to edit members of the workspace", function() {
                 expect(this.view.$("a.dialog[data-dialog=WorkspaceEditMembers]").text().trim()).toMatchTranslation("workspace.edit_members");
             });
+
+            it("has a link to add a new sandbox", function() {
+                expect(this.view.$("a.dialog[data-dialog=SandboxNew]").text().trim()).toMatchTranslation("sandbox.create_a_sandbox");
+                expect(this.view.$("a.dialog[data-dialog=SandboxNew]").data("workspaceId").toString()).toBe(this.model.get("id"));
+            });
         });
 
         context("the current user does not have workspace admin permissions on the workspace", function() {
