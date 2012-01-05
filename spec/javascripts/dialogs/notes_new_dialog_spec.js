@@ -57,13 +57,13 @@ describe("NotesNewDialog", function() {
         });
 
         it("renders the workfiles attachment link when the workfilesAttachment data is truthy", function() {
-            expect(this.dialog.$("a.workfile")).toExist();
+            expect(this.dialog.$("a.add_workfile")).toExist();
         });
 
         it("doesn't render the workfiles attachment link when the workfilesAttachment data is falsy", function() {
             this.launchElement.data("allowWorkfileAttachments", false);
             this.dialog.render();
-            expect(this.dialog.$("a.workfile")).not.toExist();
+            expect(this.dialog.$("a.add_workfile")).not.toExist();
         });
 
         it("prevents default on click", function() {
@@ -76,7 +76,7 @@ describe("NotesNewDialog", function() {
             beforeEach(function() {
                 this.fakeModal = stubModals();
                 spyOn(chorus.dialogs.WorkfilesAttach.prototype, 'render').andCallThrough();
-                this.dialog.$("a.workfile").click();
+                this.dialog.$("a.add_workfile").click();
             });
 
             it("launches the workfile picker dialog", function() {
@@ -119,7 +119,7 @@ describe("NotesNewDialog", function() {
                 context("when the 'attach workfile' link is clicked again", function() {
                     beforeEach(function() {
                         spyOn(chorus.dialogs.WorkfilesAttach.prototype, 'initialize').andCallThrough();
-                        this.dialog.$("a.workfile").click();
+                        this.dialog.$("a.add_workfile").click();
                     });
 
                     it("is populated with the previously selected workfiles", function() {
@@ -237,6 +237,21 @@ describe("NotesNewDialog", function() {
                     expect(this.dialog.model.uploadObj).toBeDefined();
                     this.dialog.$(".file_details .remove:eq(0)").click();
                     expect(this.dialog.model.uploadObj).toBeUndefined();
+                });
+            });
+
+            describe("when a workfile is selected later", function() {
+                beforeEach(function() {
+                    this.workfileSet = new chorus.models.WorkfileSet([
+                        new chorus.models.Workfile({ id: 1, fileName: "greed.sql", fileType: "sql" }),
+                        new chorus.models.Workfile({ id: 2, fileName: "generosity.cpp", fileType: "cpp" })
+                    ]);
+                    this.dialog.workfileChosen(this.workfileSet);
+                });
+
+                it("does not remove the desktop files from the view", function() {
+                    expect(this.dialog.$(".file_details .file_name:eq(0)").text()).toBe("foo.bar");
+                    expect(this.dialog.$(".file_details .file_name:eq(1)").text()).toBe("baz.sql");
                 });
             });
 

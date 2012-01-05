@@ -7,7 +7,7 @@
             "submit form": "save",
             "click .show_options": "showOptions",
             "click .remove": "removeFile",
-            "click .workfile": "launchWorkfileDialog"
+            "click .add_workfile": "launchWorkfileDialog"
         },
 
         postRender : function() {
@@ -82,7 +82,7 @@
         },
 
         workfileChosen : function(workfileSet) {
-            this.$(".file_details").remove();
+            this.$(".file_details.workfile").remove();
             this.model.workfiles = workfileSet;
             this.model.workfiles.each(function(workfile) {
                 this.showFile(workfile, workfile.get("fileName"), workfile.get("fileType"));
@@ -98,6 +98,9 @@
             fileDetailsRow.find('span.file_name').text(filename).attr('title', filename);
             fileDetailsRow.data("file", file);
             fileDetailsRow.removeClass("hidden");
+            if (!file.isUpload){
+                fileDetailsRow.addClass("workfile");
+            }
         },
 
         removeFile : function(e) {
