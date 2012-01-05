@@ -182,6 +182,10 @@ describe("chorus.views.InstanceListSidebar", function() {
                     it("does not show the 'edit credentials' link", function() {
                         expect(this.view.$(".actions .edit_credentials")).not.toExist();
                     });
+
+                    it("does not show the 'remove credentials' link", function() {
+                        expect(this.view.$(".actions .remove_credentials")).not.toExist();
+                    });
                 });
 
                 context("when the user has set up an account for the instance", function() {
@@ -194,6 +198,11 @@ describe("chorus.views.InstanceListSidebar", function() {
                     it("shows the 'access' text and image", function() {
                         expect(this.view.$(".account_info img").attr("src")).toBe("/images/instances/access.png");
                         expect(this.view.$(".account_info").text().trim()).toMatchTranslation("instances.sidebar.access");
+                    });
+
+                    it("shows the 'remove credentials' link", function() {
+                        expect(this.view.$(".actions .remove_credentials").text()).toMatchTranslation("instances.sidebar.remove_credentials");
+                        expect(this.view.$(".actions .remove_credentials").data("alert")).toBe("InstanceAccountDelete");
                     });
 
                     it("shows the 'edit credentials' link", function() {

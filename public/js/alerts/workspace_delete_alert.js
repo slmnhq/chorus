@@ -5,8 +5,8 @@
         ok : t("workspace.delete.button"),
         redirectUrl : "/",
 
-        makeModel : function(options) {
-            this._super("makeModel", options);
+        makeModel : function() {
+            this._super("makeModel", arguments);
             this.model = this.model || this.pageModel;
         },
 

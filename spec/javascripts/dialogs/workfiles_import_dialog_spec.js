@@ -14,6 +14,7 @@ describe("WorkfilesImportDialog", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            spyOn(this.dialog, "closeModal");
             this.dialog.render()
         });
 
@@ -27,7 +28,6 @@ describe("WorkfilesImportDialog", function() {
 
         context("clicking on the cancel button", function() {
             it("closes the dialog", function() {
-                spyOn(this.dialog, "closeModal");
                 this.dialog.$("button.cancel").click();
                 expect(this.dialog.closeModal).toHaveBeenCalled();
             });
@@ -68,7 +68,7 @@ describe("WorkfilesImportDialog", function() {
     context("when a file has been chosen", function() {
         beforeEach(function() {
             spyOn($.fn, 'fileupload');
-            spyOn(this.dialog, "closeModal");
+            spyOn(this.dialog, "closeModal").andCallThrough();
             this.dialog.render();
             this.fileList = [
                 {

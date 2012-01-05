@@ -80,16 +80,39 @@ Backbone.sync = function(method, model, options) {
 };
 
 // super function, taken from here:
-// -- http://forrst.com/posts/Backbone_js_super_function-4co
-Backbone.Collection.prototype._super = Backbone.Model.prototype._super = Backbone.View.prototype._super = function(methodName) {
-    var superPrototype = this;
-    while (superPrototype._superCalled) {
-        superPrototype = superPrototype.constructor.__super__;
-    }
-    superPrototype._superCalled = true;
+// -- https://gist.github.com/1542120
+;(function(Backbone) {
 
-    var result = superPrototype[methodName].apply(this, Array.prototype.slice.call(arguments, 1));
+  // The super method takes two parameters: a method name
+  // and an array of arguments to pass to the overridden method.
+  // This is to optimize for the common case of passing 'arguments'.
+  function _super(methodName, args) {
 
-    delete superPrototype._superCalled;
+    // Keep track of how far up the prototype chain we have traversed,
+    // in order to handle nested calls to _super.
+    this._superCallObjects || (this._superCallObjects = {});
+    var currentObject = this._superCallObjects[methodName] || this,
+        parentObject  = findSuper(methodName, currentObject);
+    this._superCallObjects[methodName] = parentObject;
+
+    var result = parentObject[methodName].apply(this, args);
+    delete this._superCallObjects[methodName];
     return result;
-}
+  }
+
+  // Find the next object up the prototype chain that has a
+  // different implementation of the method.
+  function findSuper(methodName, childObject) {
+    var object = childObject;
+    while (object[methodName] === childObject[methodName]) {
+      object = object.constructor.__super__;
+    }
+    return object;
+  }
+
+  _.each(["Model", "Collection", "View", "Router"], function(klass) {
+    Backbone[klass].prototype._super = _super;
+  });
+
+})(Backbone);
+
