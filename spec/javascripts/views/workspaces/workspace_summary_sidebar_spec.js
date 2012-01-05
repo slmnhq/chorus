@@ -43,6 +43,19 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
                 this.view.model.trigger("image:change");
                 expect(this.view.$("img.workspace_image").attr("src")).toContain('/partyAgain.gif');
             });
+
+            context("and the image is loaded", function() {
+                beforeEach(function() {
+                    spyOn(this.view, 'setupSidebarScrolling').andCallThrough();
+                    this.view.render();
+                    this.view.setupSidebarScrolling.reset();
+                    this.view.$('.workspace_image').trigger('load');
+                });
+                
+                it("calls setupSidebarScrolling", function() {
+                    expect(this.view.setupSidebarScrolling).toHaveBeenCalled();
+                });
+            });
         });
 
         context("the workspace does not have an image", function() {
@@ -111,7 +124,7 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
             beforeEach(function() {
                 members = this.model.members();
                 _.times(3, function() {
-                   members.add(fixtures.user());
+                    members.add(fixtures.user());
                 });
                 this.view.render();
             });
@@ -152,7 +165,7 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
                 });
 
                 it("only shows the first 24 images", function() {
-                   expect(this.view.$(".members img").length).toBe(24);
+                    expect(this.view.$(".members img").length).toBe(24);
                 });
 
                 it("has a X more workspace members link", function() {
@@ -175,6 +188,6 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
             $(".workspace_image").trigger('load');
             expect($.fn.removeClass).toHaveBeenCalledWith('hidden');
             expect($.fn.removeClass).toHaveBeenCalledOnSelector('.after_image');
-       });
+        });
     });
 });

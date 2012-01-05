@@ -50,7 +50,7 @@
 					unwrap(target);					
 				}
 				resetVars();
-				
+
 				if (needScrollbars(elements[i]) && !$(elements[i]).hasClass('nolionbars')) {
 					// add the element to the main array
 					

@@ -1,6 +1,6 @@
 ;
 (function(ns) {
-    ns.views.WorkspaceSummarySidebar = ns.views.Base.extend({
+    ns.views.WorkspaceSummarySidebar = ns.views.Sidebar.extend({
         className: "workspace_summary_sidebar",
 
         setup : function() {
@@ -32,6 +32,8 @@
             this.$(".workspace_image").load(function() {
                 self.$(".after_image").removeClass("hidden");
             });
+            this.$('.workspace_image').load(_.bind(this.setupSidebarScrolling, this));
+            this._super('postRender');
         }
     });
 })(chorus);

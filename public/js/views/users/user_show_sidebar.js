@@ -1,6 +1,6 @@
 ;
 (function(ns) {
-    ns.views.UserShowSidebar = ns.views.Base.extend({
+    ns.views.UserShowSidebar = ns.views.Sidebar.extend({
         className : "user_show_sidebar",
         entityType : "user",
 
@@ -21,6 +21,7 @@
             this.activityList.el = this.$(".activities");
             this.activityList.delegateEvents();
             this.activityList.render();
+            this._super('postRender');
         }
     });
 

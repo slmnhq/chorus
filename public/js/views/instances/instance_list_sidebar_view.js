@@ -1,6 +1,6 @@
 ;
 (function($, ns) {
-    ns.views.InstanceListSidebar = chorus.views.Base.extend({
+    ns.views.InstanceListSidebar = chorus.views.Sidebar.extend({
 
         className : "instance_list_sidebar",
 

@@ -1,5 +1,5 @@
 (function($, ns) {
-    ns.views.WorkfileShowSidebar = ns.views.Base.extend({
+    ns.views.WorkfileShowSidebar = ns.views.Sidebar.extend({
         className : "workfile_show_sidebar",
 
         setup : function() {
@@ -25,6 +25,7 @@
             this.activityList.el = this.$(".activities")
             this.activityList.delegateEvents()
             this.activityList.render();
+            this._super('postRender');
         }
     });
 })(jQuery, chorus);

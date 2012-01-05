@@ -1,5 +1,5 @@
 (function($, ns) {
-    ns.views.WorkfileListSidebar = chorus.views.Base.extend({
+    ns.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
         className : "workfile_list_sidebar",
 
         setup: function() {
@@ -29,6 +29,7 @@
                 this.activityList.delegateEvents()
                 this.activityList.render();
             }
+            this._super('postRender');
         },
 
         additionalContext : function() {
