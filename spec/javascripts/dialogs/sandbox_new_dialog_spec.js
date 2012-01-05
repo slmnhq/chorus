@@ -7,7 +7,7 @@ describe("chorus.dialogs.SandboxNew", function() {
     describe("#render", function() {
         beforeEach(function() {
             var launchElement = $("<a data-workspace-id='45'></a>");
-            window.dialog = this.dialog = new chorus.dialogs.SandboxNew({ launchElement: launchElement });
+            window.dialog = this.dialog = new chorus.dialogs.SandboxNew({ launchElement: launchElement, pageModel: this.workspace });
             this.dialog.render();
             $('#jasmine_content').append(this.dialog.el);
         });
@@ -152,6 +152,33 @@ describe("chorus.dialogs.SandboxNew", function() {
 
                                     it("saves the sandbox", function() {
                                         expect(this.sandbox.save).toHaveBeenCalled();
+                                    });
+
+                                    describe("when save fails", function() {
+                                        beforeEach(function() {
+                                            spyOn(this.dialog, 'closeModal');
+                                            this.sandbox.trigger("saveFailed");
+                                        });
+
+                                        it("takes the button out of the loading state", function() {
+                                            expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                                        });
+                                    });
+
+                                    describe("when the model is saved successfully", function() {
+                                        beforeEach(function() {
+                                            spyOn(this.dialog, 'closeModal');
+                                            spyOnBackboneEvent(this.workspace, 'invalidated');
+                                            this.sandbox.trigger("saved");
+                                        });
+
+                                        it("triggers the 'invalidated' event on the page model (a workspace)", function() {
+                                            expect('invalidated').toHaveBeenTriggeredOn(this.workspace);
+                                        });
+
+                                        it("closes the dialog", function() {
+                                            expect(this.dialog.closeModal).toHaveBeenCalled();
+                                        });
                                     });
                                 });
 

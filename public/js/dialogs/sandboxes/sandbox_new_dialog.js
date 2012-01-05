@@ -13,8 +13,11 @@
         },
 
         makeModel: function() {
+            this._super("makeModel", arguments);
             var workspaceId = this.options.launchElement.data("workspaceId");
             this.model = new ns.models.Sandbox({ workspaceId: workspaceId });
+            this.model.bind("saved", this.saved, this);
+            this.model.bind("saveFailed", this.saveFailed, this);
         },
 
         setup: function() {
@@ -89,6 +92,15 @@
                 database: this.selectedDatabase.get("id"),
                 schema: this.selectedSchema.get("id")
             });
+        },
+
+        saved: function() {
+            this.pageModel.trigger("invalidated");
+            this.closeModal();
+        },
+
+        saveFailed: function() {
+            this.$("button.submit").stopLoading();
         }
     });
 
