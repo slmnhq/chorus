@@ -1,4 +1,3 @@
-
 (function($, ns) {
     ns.dialogs.InstancesEdit = chorus.dialogs.Base.extend({
         className : "instances_edit",
@@ -21,9 +20,9 @@
 
         additionalContext : function() {
             return {
-               registeredInstance: this.options.pageModel.get("provisionType") =="register" ,
-               provisionedInstance: this.options.pageModel.get("provisionType") == "create",
-               users : this.userSet.models
+                registeredInstance: this.options.pageModel.get("provisionType") == "register" ,
+                provisionedInstance: this.options.pageModel.get("provisionType") == "create",
+                users : this.userSet.models
             }
         },
 
@@ -35,23 +34,32 @@
                 description: this.$("textarea[name=description]").val().trim(),
                 host : this.$("input[name=host]").val(),
                 port : this.$("input[name=port]").val(),
-                size : this.$("input[name=size]").val()
-            };
+                size : this.$("input[name=size]").val(),
+                ownerId: this.$("select.owner").val()
+            }
+
             this.$("button.submit").startLoading("instances.edit_dialog.saving");
             this.$("button.cancel").attr("disabled", "disabled");
             this.model.save(attrs);
 
         },
 
+        postRender : function() {
+            this.$("select.owner").val(this.model.get("ownerId"));
+        },
+
         saveSuccess : function() {
             this.closeModal();
             chorus.toast("instances.edit_dialog.saved_message");
-        },
+        }
+        ,
 
         saveFailed : function() {
             this.$("button.submit").stopLoading();
             this.$("button.cancel").removeAttr("disabled");
-        }        
+        }
 
-    });
-})(jQuery, chorus);
+    })
+        ;
+})
+    (jQuery, chorus);

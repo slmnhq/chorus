@@ -1,7 +1,7 @@
 describe("InstanceEditDialog", function() {
     beforeEach(function() {
         this.launchElement = $("<button/>");
-        this.instance = fixtures.instance({name : "pasta", host : "greenplum", port : "8555", description : "it is a food name"});
+        this.instance = fixtures.instance({name : "pasta", host : "greenplum", port : "8555", description : "it is a food name", ownerId: "3"});
         this.dialog = new chorus.dialogs.InstancesEdit({launchElement : this.launchElement, pageModel : this.instance });
     });
 
@@ -75,6 +75,10 @@ describe("InstanceEditDialog", function() {
                 this.dialog.render();
             });
 
+            it("should have owner as default option", function() {
+                expect(this.dialog.$("select[name=owner] option:selected").text()).toBe("is ac");
+            });
+
             it("shows the change owner dropdown", function() {
                 expect(this.dialog.$("select[name=owner] option").length).toBe(3);
             });
@@ -89,19 +93,36 @@ describe("InstanceEditDialog", function() {
     describe("saving", function() {
         beforeEach(function() {
             this.dialog.model.set({ provisionType : "register"});
+            this.user1 = new chorus.models.User({ id: '1', userName: "niels", firstName: "ni", lastName: "slew"});
+            this.user2 = new chorus.models.User({ id: '2', userName: "ludwig", firstName: "lu", lastName: "wig" });
+            this.user3 = new chorus.models.User({ id: '3', userName: "isaac", firstName: "is", lastName: "ac" });
+            this.dialog.userSet.add([ this.user1, this.user2, this.user3 ]);
+            this.dialog.render();
+
             spyOn(this.dialog.model, "save");
             spyOn(this.dialog, "closeModal");
             spyOn(chorus, "toast");
-            this.dialog.render();
+
+//            this.dialog.$("input[name=name]").val("test1");
+//            this.dialog.$("input[name=port]").val("8555");
+//            this.dialog.$("input[name=host]").val("testhost");
+//            this.dialog.$("select.owner").val("2");
             this.dialog.$("button[type=submit]").submit();
+        });
+
+//        it("should update the model", function() {
+//            expect(this.dialog.model.get("name")).toBe("test1");
+//            expect(this.dialog.model.get("port")).toBe("8555");
+//            expect(this.dialog.model.get("host")).toBe("testhost");
+//            expect(this.dialog.model.get("ownerId")).toBe("2");
+//        });
+
+        it("puts the button in 'loading' mode", function() {
+            expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
         });
 
         it("should call the save method", function() {
             expect(this.dialog.model.save).toHaveBeenCalled();
-        });
-
-        it("puts the button in 'loading' mode", function() {
-            expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
         });
 
         it("changes the text on the upload button to 'saving'", function() {
