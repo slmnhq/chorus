@@ -21,6 +21,8 @@ describe("chorus.dialogs.SandboxNew", function() {
 
         itDisplaysLoadingPlaceholderFor('instance');
 
+        itShowsUnavailableTextWhenResponseIsEmptyFor('instance');
+
         context("when the instance list fetch completes", function() {
             beforeEach(function() {
                 this.dialog.instances.loaded = true;
@@ -52,6 +54,8 @@ describe("chorus.dialogs.SandboxNew", function() {
                     expect(this.server.requests[1].url).toMatch("/edc/instance/" + this.selectedInstance.get('id') + "/database");
                 });
 
+                itShowsUnavailableTextWhenResponseIsEmptyFor('database');
+
                 context("when the database list fetch completes", function() {
                     beforeEach(function() {
                         this.dialog.databases.loaded = true;
@@ -82,6 +86,8 @@ describe("chorus.dialogs.SandboxNew", function() {
                         it("fetches the list of databases", function() {
                             expect(this.server.requests[2].url).toMatch("/edc/instance/" + this.selectedInstance.get('id') + "/database/" + this.selectedDatabase.get("id") + "/schema");
                         });
+
+                        itShowsUnavailableTextWhenResponseIsEmptyFor('schema');
 
                         context("when the schema list fetch completes", function() {
                             beforeEach(function() {
@@ -170,8 +176,8 @@ describe("chorus.dialogs.SandboxNew", function() {
     }
 
     function itDisplaysDefaultOptionFor(type) {
-        it("displays the default option for '"+type+"'", function() {
-            expect(this.dialog.$("."+type+" select option:eq(0)").text()).toMatchTranslation("sandbox.select_one");
+        it("displays the default option for '" + type + "'", function() {
+            expect(this.dialog.$("." + type + " select option:eq(0)").text()).toMatchTranslation("sandbox.select_one");
         });
     }
 
@@ -187,6 +193,15 @@ describe("chorus.dialogs.SandboxNew", function() {
             expect(this.dialog.$('.' + type + ' select ').val()).toBeFalsy();
             expect(this.dialog.$('.' + type + ' select option').length).toBe(1);
             expect(this.dialog.$('.' + type + ' select')).toBeHidden();
+        });
+    }
+
+    function itShowsUnavailableTextWhenResponseIsEmptyFor(type) {
+        it("shows unavailable text when response is empty for " + type, function() {
+            this.dialog[type + 's'].loaded = true;
+            this.dialog[type + 's'].reset([]);
+            expect(this.dialog.$('.' + type + ' .unavailable')).toBeVisible();
+            expect(this.dialog.$('.' + type + ' .select_container')).not.toBeVisible();
         });
     }
 

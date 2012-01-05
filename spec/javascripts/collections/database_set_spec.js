@@ -36,7 +36,7 @@ describe("DatabaseSet", function() {
             expect(this.collection._super).toHaveBeenCalled();
             var params = this.collection._super.mostRecentCall.args;
             expect(params[0]).toBe('parse');
-            expect(params[1].resource[0]).toBe(database);
+            expect(params[1][0].resource[0]).toBe(database);
         });
 
         it("should not modify the response when there is an error without databaseList", function() {
@@ -48,7 +48,7 @@ describe("DatabaseSet", function() {
             expect(this.collection._super).toHaveBeenCalled();
             var params = this.collection._super.mostRecentCall.args;
             expect(params[0]).toBe('parse');
-            expect(params[1]).toBe(response);
+            expect(params[1][0]).toBe(response);
         });
 
     });

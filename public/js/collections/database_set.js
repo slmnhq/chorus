@@ -18,7 +18,7 @@
                 data.resource = data.resource[0].databaseList;
             }
 
-            return this._super('parse', data);
+            return this._super('parse', [data]);
         }
     });
 })(chorus);

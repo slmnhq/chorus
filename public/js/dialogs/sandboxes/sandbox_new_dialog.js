@@ -72,15 +72,19 @@
         return function() {
             this.$("."+type+" .loading_text").addClass('hidden');
             var select = this.resetSelect(type);
-            this[type + "s"].each(function(model) {
-                select.append(
-                    $("<option/>", {value : model.get("id")}).text(model.get("name"))
-                );
-            });
-
-            this.$("."+type+" .select_container").show();
-            select.chosen();
-            select.trigger("liszt:updated");
+            var models = this[type + "s"];
+            if (models.length) {
+                models.each(function(model) {
+                    select.append(
+                        $("<option/>", {value : model.get("id")}).text(model.get("name"))
+                    );
+                });
+                this.$("."+type+" .select_container").show();
+                select.chosen();
+                select.trigger("liszt:updated");
+            } else {
+                this.$("." + type + " .unavailable").show();
+            }
         }
     }
 })(chorus);
