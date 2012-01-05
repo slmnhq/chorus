@@ -6,7 +6,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.dialog = new chorus.dialogs.SandboxNew({ workspace : this.workspace });
+            window.dialog = this.dialog = new chorus.dialogs.SandboxNew({ workspace : this.workspace });
             this.dialog.render();
             $('#jasmine_content').append(this.dialog.el);
         });
@@ -19,21 +19,15 @@ describe("chorus.dialogs.SandboxNew", function() {
             expect(this.server.requests[0].url).toMatch("/edc/instance/");
         });
 
-        it("displays the loading placeholder for instances", function() {
-            expect(this.dialog.$(".instance .loading").text()).toMatch(t("loading"));
-            expect(this.dialog.$(".instance .loading")).toBeVisible();
-            expect(this.dialog.$(".instance select")).not.toBeVisible();
-        });
+        itDisplaysLoadingPlaceholderFor('instance');
 
         context("when the instance list fetch completes", function() {
             beforeEach(function() {
                 this.dialog.instances.loaded = true;
-                this.dialog.instances.reset(fixtures.instance());
+                this.dialog.instances.reset([fixtures.instance(), fixtures.instance()]);
             });
 
-            it("displays the 'select instance' placeholder", function() {
-                expect(this.dialog.$(".instance select option:eq(0)").text()).toMatchTranslation("sandbox.select_instance");
-            });
+            itDisplaysDefaultOptionFor('instance')
 
             it("renders the dropdown for instances", function() {
                 expect(this.dialog.$(".instance select")).toBeVisible();
@@ -41,7 +35,7 @@ describe("chorus.dialogs.SandboxNew", function() {
             });
 
             it("hides the loading placeholder", function() {
-                expect(this.dialog.$(".instance .loading")).not.toBeVisible();
+                expect(this.dialog.$(".instance .loading_text")).not.toBeVisible();
             })
 
             context("choosing an instance", function() {
@@ -52,11 +46,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                     this.selectedInstance = this.dialog.instances.get(this.dialog.$('.instance select option:selected').val());
                 });
 
-                it("displays the loading placeholder for databases", function() {
-                    expect(this.dialog.$(".database .loading").text()).toMatch(t("loading"));
-                    expect(this.dialog.$(".database .loading")).toBeVisible();
-                    expect(this.dialog.$(".database select")).not.toBeVisible();
-                });
+                itDisplaysLoadingPlaceholderFor('database');
 
                 it("fetches the list of databases", function() {
                     expect(this.server.requests[1].url).toMatch("/edc/instance/" + this.selectedInstance.get('id') + "/database");
@@ -65,12 +55,10 @@ describe("chorus.dialogs.SandboxNew", function() {
                 context("when the database list fetch completes", function() {
                     beforeEach(function() {
                         this.dialog.databases.loaded = true;
-                        this.dialog.databases.reset(fixtures.database());
+                        this.dialog.databases.reset([fixtures.database(), fixtures.database()]);
                     });
 
-                    it("displays the 'select database' placeholder", function() {
-                        expect(this.dialog.$(".database select option:eq(0)").text()).toMatchTranslation("sandbox.select_database");
-                    });
+                    itDisplaysDefaultOptionFor('database');
 
                     it("renders the dropdown for databases", function() {
                         expect(this.dialog.$(".database select")).toBeVisible();
@@ -78,7 +66,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                     });
 
                     it("hides the loading placeholder", function() {
-                        expect(this.dialog.$(".database .loading")).not.toBeVisible();
+                        expect(this.dialog.$(".database .loading_text")).not.toBeVisible();
                     });
 
                     context("choosing a database", function() {
@@ -89,11 +77,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                             this.selectedDatabase = this.dialog.databases.get(this.dialog.$('.database select option:selected').val());
                         });
 
-                        it("displays the loading placeholder for schemas", function() {
-                            expect(this.dialog.$(".schema .loading").text()).toMatch(t("loading"));
-                            expect(this.dialog.$(".schema .loading")).toBeVisible();
-                            expect(this.dialog.$(".schema select")).not.toBeVisible();
-                        });
+                        itDisplaysLoadingPlaceholderFor('schema');
 
                         it("fetches the list of databases", function() {
                             expect(this.server.requests[2].url).toMatch("/edc/instance/" + this.selectedInstance.get('id') + "/database/" + this.selectedDatabase.get("id") + "/schema");
@@ -105,9 +89,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                                 this.dialog.schemas.reset(fixtures.schema());
                             });
 
-                            it("displays the 'select schema' placeholder", function() {
-                                expect(this.dialog.$(".schema select option:eq(0)").text()).toMatchTranslation("sandbox.select_schema");
-                            });
+                            itDisplaysDefaultOptionFor('schema')
 
                             it("renders the dropdown for schemas", function() {
                                 expect(this.dialog.$(".schema select")).toBeVisible();
@@ -115,7 +97,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                             });
 
                             it("hides the loading placeholder", function() {
-                                expect(this.dialog.$(".schema .loading")).not.toBeVisible();
+                                expect(this.dialog.$(".schema .loading_text")).not.toBeVisible();
                             });
 
                             context("choosing a schema", function() {
@@ -129,11 +111,83 @@ describe("chorus.dialogs.SandboxNew", function() {
                                 it("enables the submit button", function() {
                                     expect(this.dialog.$("button.submit")).not.toBeDisabled();
                                 });
+
+                                context("changing the database", function() {
+                                    beforeEach(function() {
+                                        var select = this.dialog.$(".database select");
+                                        select.prop("selectedIndex", 2);
+                                        select.change();
+                                    });
+
+                                    itShouldResetSelect('schema');
+
+                                    context("changing the instance", function() {
+                                        beforeEach(function() {
+                                            var select = this.dialog.$(".instance select");
+                                            select.prop("selectedIndex", 2);
+                                            select.change();
+                                        });
+
+                                        itShouldResetSelect('database');
+                                        itShouldResetSelect('schema');
+                                    });
+                                });
+
+                                context("unselecting the database", function() {
+                                    beforeEach(function() {
+                                        var select = this.dialog.$(".database select");
+                                        select.prop("selectedIndex", 0);
+                                        select.change();
+                                    });
+
+                                    itShouldHideSelect('schema');
+
+                                    context("unselecting the instance", function() {
+                                        beforeEach(function() {
+                                            var select = this.dialog.$(".instance select");
+                                            select.prop("selectedIndex", 0);
+                                            select.change();
+                                        });
+
+                                        itShouldHideSelect('database');
+                                        itShouldHideSelect('schema');
+                                    });
+                                });
                             });
                         });
                     });
                 });
             });
         });
-    })
-})
+    });
+
+    function itDisplaysLoadingPlaceholderFor(type) {
+        it("displays the loading placeholder for " + type, function() {
+            expect(this.dialog.$("." + type + " .loading_text").text()).toMatch(t("loading"));
+            expect(this.dialog.$("." + type + " .loading_text")).toBeVisible();
+            expect(this.dialog.$("." + type + " select")).not.toBeVisible();
+        });
+    }
+
+    function itDisplaysDefaultOptionFor(type) {
+        it("displays the default option for '"+type+"'", function() {
+            expect(this.dialog.$("."+type+" select option:eq(0)").text()).toMatchTranslation("sandbox.select_one");
+        });
+    }
+
+    function itShouldResetSelect(type) {
+        it("should reset " + type + " select", function() {
+            expect(this.dialog.$('.' + type + ' select option:selected').val()).toBeFalsy();
+            expect(this.dialog.$('.' + type + ' select option').length).toBe(1);
+        });
+    }
+
+    function itShouldHideSelect(type) {
+        it("should hide " + type + " select", function() {
+            expect(this.dialog.$('.' + type + ' select ').val()).toBeFalsy();
+            expect(this.dialog.$('.' + type + ' select option').length).toBe(1);
+            expect(this.dialog.$('.' + type + ' select')).toBeHidden();
+        });
+    }
+
+});

@@ -12,64 +12,75 @@
         setup: function() {
             this.instances = new ns.models.InstanceSet();
             this.instances.bind("reset", this.updateInstances, this);
+            this.$('.instance .loading_text').removeClass('hidden');
             this.instances.fetchAll();
         },
 
-        updateInstances: function() {
-            this.$(".instance .loading").hide();
-            var select = this.$(".instance select");
-            select.append($("<option/>").text(t("sandbox.select_instance")));
-            this.instances.each(function(instance) {
-                select.append(
-                    $("<option/>", {value : instance.get("id")}).text(instance.get("name"))
-                );
-            });
-
-            select.show().chosen();
+        postRender: function() {
+            this.$('.loading_spinner').startLoading();
         },
+
+        updateInstances: updateFor('instance'),
 
         instanceSelected : function() {
+            this.resetSelect('database');
+            this.resetSelect('schema');
             var selectedInstance = this.instances.get(this.$('.instance select option:selected').val());
-            this.databases = selectedInstance.databases();
-            this.databases.bind("reset", this.updateDatabases, this);
-            this.databases.fetch();
+            if(selectedInstance) {
+                this.databases = selectedInstance.databases();
+                this.databases.bind("reset", this.updateDatabases, this);
+                this.$('.database .loading_text').removeClass('hidden');
+                this.databases.fetch();
+            }
         },
 
-        updateDatabases : function() {
-            this.$(".database .loading").hide();
-            var select = this.$(".database select");
-            select.append($("<option/>").text(t("sandbox.select_database")));
-            this.databases.each(function(database) {
-                select.append(
-                    $("<option/>", {value : database.get("id")}).text(database.get("name"))
-                );
-            });
-
-            select.show().chosen();
-        },
+        updateDatabases : updateFor('database'),
 
         databaseSelected : function() {
+            this.resetSelect('schema');
             var selectedDatabase = this.databases.get(this.$('.database select option:selected').val());
-            this.schemas = selectedDatabase.schemas();
-            this.schemas.bind("reset", this.updateSchemas, this);
-            this.schemas.fetch();
+            if(selectedDatabase) {
+                this.schemas = selectedDatabase.schemas();
+                this.schemas.bind("reset", this.updateSchemas, this);
+                this.$('.schema .loading_text').removeClass('hidden');
+                this.schemas.fetch();
+            }
         },
 
-        updateSchemas : function() {
-            this.$(".schema .loading").hide();
-            var select = this.$(".schema select");
-            select.append($("<option/>").text(t("sandbox.select_schema")));
-            this.schemas.each(function(schema) {
-                select.append(
-                    $("<option/>", {value : schema.get("id")}).text(schema.get("name"))
-                );
-            });
-
-            select.show().chosen();
-        },
+        updateSchemas : updateFor('schema'),
 
         schemaSelected: function() {
             this.$('button.submit').prop('disabled', false);
+        },
+
+        showSelect : function(type) {
+            this.$("." + type + " .select_container").show();
+            select.chosen();
+            select.trigger("liszt:updated");
+        },
+
+        resetSelect: function(type) {
+            var select = this.$("." + type + " select");
+            select.empty();
+            select.closest('.select_container').hide();
+            select.append($("<option/>").prop('value', '').text(t("sandbox.select_one")));
+            return select;
         }
     });
+
+    function updateFor(type) {
+        return function() {
+            this.$("."+type+" .loading_text").addClass('hidden');
+            var select = this.resetSelect(type);
+            this[type + "s"].each(function(model) {
+                select.append(
+                    $("<option/>", {value : model.get("id")}).text(model.get("name"))
+                );
+            });
+
+            this.$("."+type+" .select_container").show();
+            select.chosen();
+            select.trigger("liszt:updated");
+        }
+    }
 })(chorus);

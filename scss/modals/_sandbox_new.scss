@@ -1,7 +1,20 @@
 .sandbox_new {
-    .instance, .database, .schema {
-        select {
-            display: none;
+
+    .select_container {
+        display: none;
+    }
+
+    .loading_text {
+        position: relative;
+        display: inline-block;
+    }
+
+    .loading_spinner {
+        position: absolute;
+        right: -10px;
+        top: 7px;
+        div[aria-role=progressbar] {
+            right: 0;
         }
     }
 };

@@ -1,26 +1,33 @@
 <div class="instance">
-    <div class="loading">
+    <div class="loading_text">
         {{t "loading"}}
+        <span class="loading_spinner"></span>
     </div>
-    <select name="instance">
+    <div class="select_container">
+        <select name="instance"></select>
+    </div>
 
-    </select>
 </div>
 <div class="database">
-    <div class="loading">
+    <div class="loading_text hidden">
         {{t "loading"}}
+        <span class="loading_spinner"></span>
     </div>
-    <select name="database">
+    <div class="select_container">
+        <select name="database"></select>
+    </div>
 
-    </select>
 </div>
 <div class="schema">
-    <div class="loading">
+    <div class="loading_text hidden">
         {{t "loading"}}
+        <span class="loading_spinner"></span>
     </div>
-    <select name="schema">
 
-    </select>
+    <div class="select_container">
+        <select name="schema"></select>
+    </div>
+
 </div>
 <div class="controls">
     <button type="button" class="cancel" tabindex=2>{{t "actions.cancel"}}</button>

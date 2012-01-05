@@ -18,8 +18,11 @@
   -o-box-shadow     : 0 4px 5px rgba(0,0,0,.15);
   box-shadow        : 0 4px 5px rgba(0,0,0,.15);
 
-  /* until we find out otherwise, let the chzn-container have an auto z-index */
-  /*z-index: 999;*/
+  z-index: $chosen-drop-z-index;
+}
+
+.dialog .chzn-container .chzn-drop {
+    z-index: $dialog-chosen-drop-z-index;
 }
 /* @end */
 
@@ -107,8 +110,13 @@
   margin: 0;
   white-space: nowrap;
   /* Use auto z-index until we need something else. */
-  /*z-index: 1010;*/
+  z-index: $chosen-search-z-index;
 }
+
+.dialog .chzn-container-single .chzn-search {
+    z-index: $dialog-chosen-search-z-index;
+}
+
 .chzn-container-single .chzn-search input {
   background: #fff url('chosen-sprite.png') no-repeat 100% -22px;
   background: url('chosen-sprite.png') no-repeat 100% -22px, -webkit-gradient(linear, left bottom, left top, color-stop(0.85, white), color-stop(0.99, #eeeeee));

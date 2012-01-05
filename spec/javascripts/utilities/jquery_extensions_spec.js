@@ -37,8 +37,8 @@ describe("jquery extensions", function() {
                 expect(this.button.attr("disabled")).toBe("disabled");
             });
 
-            it("adds the expanded class to the button", function() {
-                expect(this.button).toHaveClass("loading");
+            it("adds the is_loading class to the button", function() {
+                expect(this.button).toHaveClass("is_loading");
             });
 
             it("returns true when #isLoading is called", function() {

@@ -14,18 +14,19 @@ jQuery.fn.extend({
             }).spin();
 
         var originalText = this.text();
-        this.text(t(translationKey)).
+        var text = translationKey ? t(translationKey) : '';
+        this.text(text).
             append(spinner.el).
             attr("disabled", "disabled").
             data("loading-original-text", originalText).
-            addClass("loading");
+            addClass("is_loading");
     },
 
     stopLoading : function() {
         if (!this.isLoading()) return;
         // $.text(val) clears the selected element, so .text here kills the spinner inside the button.
         var originalText = this.data("loading-original-text");
-        this.removeData("loading-original-text").removeClass("loading").removeAttr("disabled").text(originalText);
+        this.removeData("loading-original-text").removeClass("is_loading").removeAttr("disabled").text(originalText);
     },
 
     isLoading : function() {

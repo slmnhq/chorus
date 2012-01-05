@@ -69,13 +69,21 @@ $activity-stream-comment-background-color: #DFE5EB;
 
 // z-indices
 $guts-z-index: 0;
+$link-menu-z-index: $guts-z-index + 1;
 $editor-top-z-index: 10;
 $header-z-index: 99;
 $menu-z-index: $header-z-index + 1;
-$link-menu-z-index: $guts-z-index + 1;
-$dialog-overlay-z-index: $menu-z-index + 1;
+
+$chosen-drop-z-index: $menu-z-index + 1;
+$chosen-search-z-index: $chosen-drop-z-index + 1;
+
+$dialog-overlay-z-index: $chosen-search-z-index + 1;
 $dialog-z-index: $dialog-overlay-z-index + 1;
-$toast-closing-z-index: $dialog-z-index;
+
+$dialog-chosen-drop-z-index: $dialog-z-index + 1;
+$dialog-chosen-search-z-index: $dialog-chosen-drop-z-index + 1;
+
+$toast-closing-z-index: $dialog-chosen-search-z-index + 1;
 $toast-z-index: $toast-closing-z-index + 1;
 $hidden-z-index: -100;
 
