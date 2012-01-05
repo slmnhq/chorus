@@ -169,6 +169,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                                         beforeEach(function() {
                                             spyOn(this.dialog, 'closeModal');
                                             spyOnBackboneEvent(this.workspace, 'invalidated');
+                                            spyOn(chorus, 'toast');
                                             this.sandbox.trigger("saved");
                                         });
 
@@ -178,6 +179,10 @@ describe("chorus.dialogs.SandboxNew", function() {
 
                                         it("closes the dialog", function() {
                                             expect(this.dialog.closeModal).toHaveBeenCalled();
+                                        });
+
+                                        it("shows a toast message", function() {
+                                            expect(chorus.toast).toHaveBeenCalledWith("sandbox.create.toast");
                                         });
                                     });
                                 });

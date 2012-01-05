@@ -95,6 +95,7 @@
         },
 
         saved: function() {
+            ns.toast("sandbox.create.toast");
             this.pageModel.trigger("invalidated");
             this.closeModal();
         },
