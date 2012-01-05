@@ -8,6 +8,9 @@
         },
         makeModel : function() {
             this.model = this.options.pageModel;
+            this.userSet = this.model.userSet();
+            this.userSet.bind("reset", this.render, this);
+            this.userSet.fetchAll();
         },
 
         setup: function() {
@@ -19,7 +22,8 @@
         additionalContext : function() {
             return {
                registeredInstance: this.options.pageModel.get("provisionType") =="register" ,
-               provisionedInstance: this.options.pageModel.get("provisionType") == "create"
+               provisionedInstance: this.options.pageModel.get("provisionType") == "create",
+               users : this.userSet.models
             }
         },
 

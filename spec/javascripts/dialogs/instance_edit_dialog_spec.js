@@ -12,25 +12,25 @@ describe("InstanceEditDialog", function() {
                 this.dialog.render();
             });
 
-            it("Field called 'Names' should be editable and pre populated" ,function(){
+            it("Field called 'Names' should be editable and pre populated", function() {
                 expect(this.dialog.$("input[name=name]").val()).toBe("pasta");
                 expect(this.dialog.$("input[name=name]").attr("disabled")).toBeFalsy();
             })
 
-            it("Field called 'description' should be editable and pre populated" ,function(){
+            it("Field called 'description' should be editable and pre populated", function() {
                 expect(this.dialog.$("textarea[name=description]").val()).toBe("it is a food name");
                 expect(this.dialog.$("textarea[name=description]").attr("disabled")).toBeFalsy();
             })
 
-            it("Field called 'host' should be editable and pre populated" ,function(){
+            it("Field called 'host' should be editable and pre populated", function() {
                 expect(this.dialog.$("input[name=host]").val()).toBe("greenplum");
                 expect(this.dialog.$("input[name=host]").attr("disabled")).toBeFalsy();
             })
 
-            it("Field called 'port' should be editable and pre populated" ,function(){
+            it("Field called 'port' should be editable and pre populated", function() {
                 expect(this.dialog.$("input[name=port]").val()).toBe("8555");
                 expect(this.dialog.$("input[name=port]").attr("disabled")).toBeFalsy();
-            })
+            });
         });
 
         describe("when the instance is a provisioned instance", function() {
@@ -39,31 +39,51 @@ describe("InstanceEditDialog", function() {
                 this.dialog.render();
             });
 
-            it("Field called 'Names' should be editable and pre populated" ,function(){
+            it("Field called 'Names' should be editable and pre populated", function() {
                 expect(this.dialog.$("input[name=name]").val()).toBe("pasta");
                 expect(this.dialog.$("input[name=name]").attr("disabled")).toBeFalsy();
             })
 
-            it("Field called 'description' should be editable and pre populated" ,function(){
+            it("Field called 'description' should be editable and pre populated", function() {
                 expect(this.dialog.$("textarea[name=description]").val()).toBe("it is a food name");
                 expect(this.dialog.$("textarea[name=description]").attr("disabled")).toBeFalsy();
             })
 
-            it("Field called 'host' should not be editable and pre populated" ,function(){
+            it("Field called 'host' should not be editable and pre populated", function() {
                 expect(this.dialog.$("input[name=host]").val()).toBe("greenplum");
                 expect(this.dialog.$("input[name=host]").attr("disabled")).toBeTruthy();
             })
 
-            it("Field called 'port' should not be editable and pre populated" ,function(){
+            it("Field called 'port' should not be editable and pre populated", function() {
                 expect(this.dialog.$("input[name=port]").val()).toBe("8555");
                 expect(this.dialog.$("input[name=port]").attr("disabled")).toBeTruthy();
             })
 
-            it("Field called 'size' should not be editable and pre populated" ,function(){
+            it("Field called 'size' should not be editable and pre populated", function() {
                 expect(this.dialog.$("input[name=size]").val()).toBe("10");
                 expect(this.dialog.$("input[name=size]").attr("disabled")).toBeTruthy();
             })
         });
+
+        describe("change owner dropdown", function() {
+            beforeEach(function() {
+                this.dialog.model.set({ provisionType : "register"});
+                this.user1 = new chorus.models.User({ id: '1', userName: "niels", firstName: "ni", lastName: "slew"});
+                this.user2 = new chorus.models.User({ id: '2', userName: "ludwig", firstName: "lu", lastName: "wig" });
+                this.user3 = new chorus.models.User({ id: '3', userName: "isaac", firstName: "is", lastName: "ac" });
+                this.dialog.userSet.add([ this.user1, this.user2, this.user3 ]);
+                this.dialog.render();
+            });
+
+            it("shows the change owner dropdown", function() {
+                expect(this.dialog.$("select[name=owner] option").length).toBe(3);
+            });
+
+            it("shows the change owner name in the dropdown", function() {
+                expect(this.dialog.$("select[name=owner] option").eq(0).text()).toBe("ni slew");
+            });
+        });
+
     });
 
     describe("saving", function() {

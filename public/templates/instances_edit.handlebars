@@ -6,29 +6,35 @@
     <textarea name="description" maxlength="4095" rows="6" tabindex="2">{{description}}</textarea>
     <input type="hidden" name="provisionType" value="{{provisionType}}"/>
     {{#if registeredInstance}}
-        <label class="required">{{t "instances.dialog.host"}}</label>
-        <input type="text" name="host" value="{{host}}" tabindex="1"/>
+    <label class="required">{{t "instances.dialog.host"}}</label>
+    <input type="text" name="host" value="{{host}}" tabindex="1"/>
 
-        <label class="required">{{t "instances.dialog.port"}}</label>
-        <input type="text" name="port" value="{{port}}" tabindex="1"/>
+    <label class="required">{{t "instances.dialog.port"}}</label>
+    <input type="text" name="port" value="{{port}}" tabindex="1"/>
     {{/if}}
 
     {{#if provisionedInstance}}
-        <label >{{t "instances.dialog.host"}}</label>
-        <input type="text" disabled="disabled" name="host" value="{{host}}" tabindex="1"/>
+    <label>{{t "instances.dialog.host"}}</label>
+    <input type="text" disabled="disabled" name="host" value="{{host}}" tabindex="1"/>
 
-        <label >{{t "instances.dialog.port"}}</label>
-        <input type="text" disabled="disabled" name="port" value="{{port}}" tabindex="1"/>
+    <label>{{t "instances.dialog.port"}}</label>
+    <input type="text" disabled="disabled" name="port" value="{{port}}" tabindex="1"/>
 
-        <label >{{t "instances.dialog.size"}}</label>
-        <input type="text" disabled="disabled" name="size" value="{{size}}" tabindex="1"/>
+    <label>{{t "instances.dialog.size"}}</label>
+    <input type="text" disabled="disabled" name="size" value="{{size}}" tabindex="1"/>
     {{/if}}
 
+    <label>{{ t "instances.dialog.edit_owner"}}</label>
+    <select name="owner" class="owner">
+        {{#each users}}
+        <option value={{id}}>{{displayNameFromPerson attributes}}</option>
+    {{/each}}
+</select>
 
-    <div class="controls">
-        <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
-        <button type="submit" class="submit" tabindex="99">{{t "instances.edit_dialog.save"}}</button>
-    </div>
+<div class="controls">
+<button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
+<button type="submit" class="submit" tabindex="99">{{t "instances.edit_dialog.save"}}</button>
+</div>
 </form>
 
 

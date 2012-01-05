@@ -63,6 +63,13 @@
                 this._aurora = new chorus.models.Provisioning({provisionerPluginName : "A4CProvisioner", type : "install"});
             }
             return this._aurora;
+        },
+
+        userSet : function() {
+            if(!this._userSet) {
+                this._userSet = new chorus.models.UserSet();
+            }
+            return this._userSet;
         }
     });
 })(chorus);
