@@ -1,7 +1,11 @@
-.sandbox_new {
+.dialog.sandbox_new {
 
     .select_container {
         display: none;
+    }
+
+    form label {
+        display: block;
     }
 
     .loading_text {

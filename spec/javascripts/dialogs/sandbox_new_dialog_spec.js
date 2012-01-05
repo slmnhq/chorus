@@ -30,12 +30,14 @@ describe("chorus.dialogs.SandboxNew", function() {
                 this.dialog.instances.reset([fixtures.instance(), fixtures.instance()]);
             });
 
+            itShowsSelect('instance');
+            itPopulatesSelect('instance');
+            itHidesSection('database');
+            itHidesSection('schema');
+
             itDisplaysDefaultOptionFor('instance')
 
-            it("renders the dropdown for instances", function() {
-                expect(this.dialog.$(".instance select")).toBeVisible();
-                expect(this.dialog.$(".instance select option:eq(1)").text()).toBe(this.dialog.instances.models[0].get('name'));
-            });
+
 
             it("hides the loading placeholder", function() {
                 expect(this.dialog.$(".instance .loading_text")).not.toBeVisible();
@@ -50,12 +52,14 @@ describe("chorus.dialogs.SandboxNew", function() {
                 });
 
                 itDisplaysLoadingPlaceholderFor('database');
+                itHidesSection('schema');
+
+                itShowsUnavailableTextWhenResponseIsEmptyFor('database');
 
                 it("fetches the list of databases", function() {
                     expect(this.server.requests[1].url).toMatch("/edc/instance/" + this.selectedInstance.get('id') + "/database");
                 });
 
-                itShowsUnavailableTextWhenResponseIsEmptyFor('database');
 
                 context("when the database list fetch completes", function() {
                     beforeEach(function() {
@@ -63,12 +67,9 @@ describe("chorus.dialogs.SandboxNew", function() {
                         this.dialog.databases.reset([fixtures.database(), fixtures.database()]);
                     });
 
+                    itShowsSelect('database');
+                    itPopulatesSelect('database');
                     itDisplaysDefaultOptionFor('database');
-
-                    it("renders the dropdown for databases", function() {
-                        expect(this.dialog.$(".database select")).toBeVisible();
-                        expect(this.dialog.$(".database select option:eq(1)").text()).toBe(this.dialog.databases.models[0].get('name'));
-                    });
 
                     it("hides the loading placeholder", function() {
                         expect(this.dialog.$(".database .loading_text")).not.toBeVisible();
@@ -96,12 +97,9 @@ describe("chorus.dialogs.SandboxNew", function() {
                                 this.dialog.schemas.reset(fixtures.schema());
                             });
 
+                            itShowsSelect("schema");
+                            itPopulatesSelect("schema");
                             itDisplaysDefaultOptionFor('schema')
-
-                            it("renders the dropdown for schemas", function() {
-                                expect(this.dialog.$(".schema select")).toBeVisible();
-                                expect(this.dialog.$(".schema select option:eq(1)").text()).toBe(this.dialog.schemas.models[0].get('name'));
-                            });
 
                             it("hides the loading placeholder", function() {
                                 expect(this.dialog.$(".schema .loading_text")).not.toBeVisible();
@@ -215,7 +213,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                                         select.change();
                                     });
 
-                                    itShouldHideSelect('schema');
+                                    itHidesSection('schema');
 
                                     context("unselecting the instance", function() {
                                         beforeEach(function() {
@@ -224,8 +222,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                                             select.change();
                                         });
 
-                                        itShouldHideSelect('database');
-                                        itShouldHideSelect('schema');
+                                        itHidesSection('database');
                                     });
                                 });
                             });
@@ -241,6 +238,7 @@ describe("chorus.dialogs.SandboxNew", function() {
             expect(this.dialog.$("." + type + " .loading_text").text()).toMatch(t("loading"));
             expect(this.dialog.$("." + type + " .loading_text")).toBeVisible();
             expect(this.dialog.$("." + type + " select")).not.toBeVisible();
+            expect(this.dialog.$('.' + type + ' label ')).toBeVisible();
         });
     }
 
@@ -261,20 +259,43 @@ describe("chorus.dialogs.SandboxNew", function() {
         });
     }
 
-    function itShouldHideSelect(type) {
-        it("should hide " + type + " select", function() {
+    function itHidesSection(type) {
+        it("should hide the " + type + " section", function() {
+            expect(this.dialog.$('.' + type + ' label ')).toHaveClass("hidden");
             expect(this.dialog.$('.' + type + ' select ').val()).toBeFalsy();
-            expect(this.dialog.$('.' + type + ' select option').length).toBe(1);
             expect(this.dialog.$('.' + type + ' select')).toBeHidden();
         });
     }
 
-    function itShowsUnavailableTextWhenResponseIsEmptyFor(type) {
-        it("shows unavailable text when response is empty for " + type, function() {
-            this.dialog[type + 's'].loaded = true;
-            this.dialog[type + 's'].reset([]);
+    function itPopulatesSelect(type) {
+        it("populates the select for for " + type + "s", function() {
+            expect(this.dialog.$("." + type + " select option:eq(1)").text()).toBe(this.dialog[type + "s"].models[0].get('name'));
+        });
+    }
+
+    function itShowsSelect(type) {
+        it("should show the " + type + " select and hide the 'unavailable' message", function() {
+            expect(this.dialog.$('.' + type + ' label ')).not.toHaveClass("hidden");
+            expect(this.dialog.$('.' + type + ' select option').length).toBeGreaterThan(1);
+            expect(this.dialog.$('.' + type + ' select')).toBeVisible();
+        });
+    }
+
+    function itShowsUnavailable(type) {
+        it("should show the 'unavailable' text for the " + type + " section and hide the select", function() {
             expect(this.dialog.$('.' + type + ' .unavailable')).toBeVisible();
             expect(this.dialog.$('.' + type + ' .select_container')).not.toBeVisible();
+        });
+    }
+
+    function itShowsUnavailableTextWhenResponseIsEmptyFor(type) {
+        context("when the response is empty for " + type, function() {
+            beforeEach(function() {
+                this.dialog[type + 's'].loaded = true;
+                this.dialog[type + 's'].reset([]);
+            });
+
+            itShowsUnavailable(type);
         });
     }
 
