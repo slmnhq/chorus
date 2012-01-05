@@ -22,7 +22,7 @@
 
         setup: function() {
             this.instances = new ns.models.InstanceSet();
-            // this.instances.bind("reset", this.updateInstances, this);
+            this.instances.bind("reset", this.updateInstances, this);
             this.$('.instance .loading_text').removeClass('hidden');
             this.instances.fetchAll();
         },
