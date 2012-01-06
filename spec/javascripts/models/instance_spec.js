@@ -98,11 +98,10 @@ describe("chorus.models.Instance", function() {
                 expect(sharedAccount.get('instanceId')).toBe(this.instance.get('id'));
             });
 
-            it("has the right user data", function() {
-                var accountUser = this.instance.sharedAccount().user();
-                expect(accountUser.get("fullName")).toBe(this.instance.get('ownerFullName'));
-                expect(accountUser.get("userName")).toBe(this.instance.get('owner'));
-                expect(accountUser.get('id')).toBe(this.instance.get('ownerId'));
+            it("is a model in the same instance's #accounts collection'", function() {
+                var account = this.instance.sharedAccount();
+                expect(account.collection).toBe(this.instance.accounts());
+                expect(this.instance.accounts().first()).toBe(account);
             });
 
             it("memoizes", function() {
