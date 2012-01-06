@@ -1,6 +1,9 @@
 <div class="sub_header">
     <span class="details_text">{{t "instances.shared_account"}}</span>
-    <a href="#" class="alert" data-alert="RemoveSharedAccount">{{t "instances.permissions_dialog.switch_to_individual"}}</a>
+    {{#if sharedAccount}}
+        <a href="#" class="alert" data-alert="RemoveSharedAccount">{{t "instances.permissions_dialog.switch_to_individual"}}</a>
+    {{/if}}
+    <!--<a href="#" class="alert" data-alert="RemoveSharedAccount">{{t "instances.permissions_dialog.switch_to_individual"}}</a>-->
 </div>
 <div class="collection_list">
     <ul>

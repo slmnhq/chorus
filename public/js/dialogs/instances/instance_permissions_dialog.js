@@ -13,23 +13,26 @@
         },
 
         makeModel : function() {
-            this.model = this.options.pageModel.sharedAccount();
-            this.model.fetch();
-            this.model.bind("saved", this.saved, this);
-            this.model.bind("saveFailed", this.saveFailed, this);
-            this.model.bind("validationFailed", this.saveFailed, this);
+            this.instance = this.options.pageModel;
+            this.model = this.instance.sharedAccount();
+            this.collection = this.instance.accounts();
+
+            this.collection.bind("saved", this.saved, this);
+            this.collection.bind("saveFailed", this.saveFailed, this);
+            this.collection.bind("validationFailed", this.saveFailed, this);
 
             this._super("makeModel")
+        },
 
-            this.instance = this.options.pageModel;
-            this.collection = new ns.models.InstanceAccountSet([this.model]);
+        additionalContext: function() {
+            return { sharedAccount: !!this.instance.sharedAccount() };
         },
 
         collectionModelContext: function(account) {
             var user = account.user()
             if(user) {
                 return {
-                    fullName: user.get("fullName"),
+                    fullName: user.displayName(),
                     imageUrl: user.imageUrl()
                 }
             } else {
@@ -39,16 +42,20 @@
 
         editCredentials : function(event) {
             event.preventDefault();
-            $(event.target).closest("li").addClass("editing");
+            var li = $(event.target).closest("li");
+            var accountId = li.data("id");
+            li.addClass("editing");
+            this.account = this.resource = this.collection.get(accountId);
         },
 
         save : function(event) {
             event.preventDefault();
-            this.$("a.save").startLoading("instances.permissions.saving")
+            var li = $(event.target).closest("li");
+            li.find("a.save").startLoading("instances.permissions.saving")
 
-            this.model.save({
-                dbUserName : this.$("input[name=dbUserName]").val(),
-                dbPassword : this.$("input[name=dbPassword]").val()
+            this.account.save({
+                dbUserName : li.find("input[name=dbUserName]").val(),
+                dbPassword : li.find("input[name=dbPassword]").val()
             });
         },
 

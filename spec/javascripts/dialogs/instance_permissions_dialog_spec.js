@@ -1,16 +1,8 @@
 describe("chorus.dialogs.InstancePermissions", function() {
-    beforeEach(function() {
-        fixtures.model = "Instance";
-    })
-
     describe("#setup", function() {
         beforeEach(function() {
-            this.model = fixtures.modelFor("fetchWithSharedAccount");
+            this.model = fixtures.instanceWithSharedAccount();
             this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.model })
-        })
-
-        it("fetches the account map for the instance", function() {
-            expect(this.server.requests[0].url).toBe("/edc/instance/accountmap?instanceId=10000")
         })
 
         it("does not re-render on model changes", function() {
@@ -20,7 +12,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
     context("when the instance is a shared account", function() {
         beforeEach(function() {
-            this.model = fixtures.modelFor("fetchWithSharedAccount");
+            this.model = fixtures.instanceWithSharedAccount();
+            this.model.accounts().reset(fixtures.instanceAccount(this.model))
             this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.model })
         })
 
@@ -32,14 +25,14 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
             it("displays the shared account subheader", function() {
                 expect(this.dialog.$(".sub_header .details_text").text()).toMatchTranslation("instances.shared_account")
-                expect(this.dialog.$(".sub_header a").text()).toMatchTranslation("instances.permissions_dialog.switch_to_individual")
             })
 
             it("displays the account owner information", function() {
                 var li = this.dialog.$("li");
+                var sharedAccountUser = this.model.sharedAccount().user();
                 expect(li).toExist();
-                expect(li.find("img.profile")).toHaveAttr("src", this.model.owner().imageUrl());
-                expect(li.find(".name").text()).toBe(this.model.owner().get("fullName"))
+                expect(li.find("img.profile")).toHaveAttr("src", sharedAccountUser.imageUrl());
+                expect(li.find(".name").text()).toBe(sharedAccountUser.displayName());
             })
 
             it("displays an edit link", function() {
@@ -47,7 +40,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
             })
 
             it("populates the dbUserName text field from the account map", function() {
-                expect(this.dialog.$("input[name=dbUserName]").val()).toBe("the_dude")
+                expect(this.dialog.$("input[name=dbUserName]").val()).toBe(this.model.sharedAccount().get('dbUserName'));
             })
 
             it("displays a 'switch to individual account' link", function() {
@@ -77,8 +70,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     });
 
                     it("only sends the shared parameter", function() {
-                        expect(this.server.requests[1].url).toBe("/edc/instance/accountmap/999")
-                        expect(this.server.requests[1].requestBody).toBe("id=999&shared=no");
+                        expect(this.server.requests[0].url).toBe("/edc/instance/accountmap/999")
+                        expect(this.server.requests[0].requestBody).toBe("id=999&shared=no");
                     })
 
                     context("when the save succeeds", function() {
@@ -132,49 +125,84 @@ describe("chorus.dialogs.InstancePermissions", function() {
             });
         })
 
-        describe("editing the shared account credentials", function() {
+    });
+
+    context("when the instance has individual accounts", function() {
+        beforeEach(function() {
+            this.model = fixtures.instance();
+            this.accounts = this.model.accounts();
+            this.accounts.add([
+                fixtures.instanceAccount({ id: '1', user: { firstName: "bob", lastName: "zzap" } }),
+                fixtures.instanceAccount({ id: '2', user: { firstName: "jim", lastName: "aardvark" } })
+            ]);
+            this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.model })
+            this.dialog.render();
+        });
+
+        it("does not display the 'switch to individual accounts' link", function() {
+            expect(this.dialog.$("a.alert[data-alert=RemoveSharedAccount]")).not.toExist();
+        });
+
+        it("displays the name of each account's user", function() {
+            expect(this.dialog.$("li[data-id=1] .name")).toHaveText("bob zzap");
+            expect(this.dialog.$("li[data-id=2] .name")).toHaveText("jim aardvark");
+        });
+
+        xit("sorts the users by last name", function() {
+            expect(this.dialog.$("li").eq(0)).toHaveText("jim aardvark");
+            expect(this.dialog.$("li").eq(1)).toHaveText("bob zzap");
+        });
+
+        describe("editing a user's account credentials", function() {
             beforeEach(function() {
-                this.dialog.render();
-                this.dialog.$("a.edit").click();
-                this.dialog.$("li input[name=dbUserName]").val("jughead");
-                this.dialog.$("input[name=dbPassword]").val("gogogo");
-            })
+                this.accountBeingEdited = this.accounts.get(2);
+                this.otherAccount = this.accounts.get(1);
+                this.liBeingEdited = this.dialog.$("li[data-id=2]");
+                this.otherLi = this.dialog.$("li[data-id=1]");
+                this.liBeingEdited.find("a.edit").click();
+                this.liBeingEdited.find("input[name=dbUserName]").val("jughead");
+                this.liBeingEdited.find("input[name=dbPassword]").val("gogogo");
+            });
 
             it("adds the 'editing' class to the parent li", function() {
-                expect(this.dialog.$("li")).toHaveClass("editing");
+                expect(this.liBeingEdited).toHaveClass("editing");
+                expect(this.dialog.$('li.editing').length).toBe(1);
             })
 
-            describe("saving the credentials", function() {
+            describe("saving the credentials with valid data", function() {
                 beforeEach(function() {
-                    spyOn(this.dialog.model, "save").andCallThrough();
-                    this.dialog.$("a.save").click();
+                    spyOn(this.otherAccount, "save");
+                    spyOn(this.accountBeingEdited, "save").andCallThrough();
+                    this.liBeingEdited.find("a.save").click();
                 })
 
                 it("populates the account map from the form", function() {
-                    expect(this.dialog.model.get("dbUserName")).toBe("jughead");
-                    expect(this.dialog.model.get("dbPassword")).toBe("gogogo");
+                    expect(this.accountBeingEdited.get("dbUserName")).toBe("jughead");
+                    expect(this.accountBeingEdited.get("dbPassword")).toBe("gogogo");
                 })
 
                 it("saves the acccount map", function() {
-                    expect(this.dialog.model.save).toHaveBeenCalled();
+                    expect(this.accountBeingEdited.save).toHaveBeenCalled();
+                    expect(this.otherAccount.save).not.toHaveBeenCalled();
                 })
 
                 it("shows a spinner", function() {
-                    expect(this.dialog.$("a.save").isLoading()).toBeTruthy();
+                    expect(this.liBeingEdited.find("a.save").isLoading()).toBeTruthy();
+                    expect(this.otherLi.find("a.save").isLoading()).toBeFalsy();
                 })
 
-                context("when the save succeeds", function() {
+                describe("when the save succeeds", function() {
                     beforeEach(function() {
                         spyOn(this.dialog.instance, "fetch");
-                        this.dialog.model.trigger('saved');
+                        this.accountBeingEdited.trigger('saved');
                     })
 
                     it("removes the 'editing' class from the parent li", function() {
-                        expect(this.dialog.$("li")).not.toHaveClass("editing");
+                        expect(this.liBeingEdited).not.toHaveClass("editing");
                     })
 
                     it("stops the spinner", function() {
-                        expect(this.dialog.$("a.save").isLoading()).toBeFalsy();
+                        expect(this.liBeingEdited.find("a.save").isLoading()).toBeFalsy();
                     })
 
                     it("re-fetches the instance", function() {
@@ -182,19 +210,19 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     })
                 })
 
-                context("when the save fails", function() {
+                describe("when the save fails", function() {
                     beforeEach(function() {
-                        this.dialog.model.set({ serverErrors : [
+                        this.accountBeingEdited.set({ serverErrors : [
                             {
                                 "message": "You can't do that, dude"
                             }
                         ]})
 
-                        this.dialog.model.trigger('saveFailed');
+                        this.accountBeingEdited.trigger('saveFailed');
                     })
 
                     it("does not remove the 'editing' class from the parent li", function() {
-                        expect(this.dialog.$("li")).toHaveClass("editing");
+                        expect(this.liBeingEdited).toHaveClass("editing");
                     })
 
                     it("displays error messages", function() {
@@ -202,43 +230,40 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     })
 
                     it("stops the spinner", function() {
-                        expect(this.dialog.$("a.save").isLoading()).toBeFalsy();
+                        expect(this.liBeingEdited.find("a.save").isLoading()).toBeFalsy();
                     })
                 })
 
-                context("when the form is invalid", function() {
+                describe("when validation fails", function() {
                     beforeEach(function() {
-                        this.dialog.$("li[data-id=10111] input[name=dbUserName]").val("");
-                        this.dialog.$("input[name=dbPassword]").val("");
-                        this.dialog.$("a.save").click();
+                        this.accountBeingEdited.trigger("validationFailed");
                     });
 
                     it("removes the spinner from the link", function() {
-                        expect(this.dialog.$("a.save").isLoading()).toBeFalsy();
+                        expect(this.liBeingEdited.find("a.save").isLoading()).toBeFalsy();
                     });
                 });
-            })
+            });
 
             describe("cancelling the credential editing", function() {
                 beforeEach(function() {
-                    spyOn(this.dialog.model, "save");
-                    this.dialog.$("a.cancel").click();
+                    spyOn(this.accountBeingEdited, "save");
+                    this.liBeingEdited.find("a.cancel").click();
                 })
 
-                it("does not populate the account map from the form", function() {
-                    expect(this.dialog.model.get("dbUserName")).not.toBe("jughead");
-                    expect(this.dialog.model.get("dbPassword")).not.toBe("gogogo");
+                it("does not populate the account from the form", function() {
+                    expect(this.accountBeingEdited.get("dbUserName")).not.toBe("jughead");
+                    expect(this.accountBeingEdited.get("dbPassword")).not.toBe("gogogo");
                 })
 
-                it("does not save the account map", function() {
-                    expect(this.dialog.model.save).not.toHaveBeenCalled();
+                it("does not save the account", function() {
+                    expect(this.accountBeingEdited.save).not.toHaveBeenCalled();
                 })
 
                 it("removes the 'editing' class from the parent li", function() {
-                    expect(this.dialog.$("li")).not.toHaveClass("editing");
+                    expect(this.liBeingEdited).not.toHaveClass("editing");
                 })
             })
         })
     });
-})
-    ;
+});

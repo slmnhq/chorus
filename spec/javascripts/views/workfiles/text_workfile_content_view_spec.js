@@ -1,4 +1,4 @@
-describe("chorus.views.TextWorkfileContentView", function() {
+    describe("chorus.views.TextWorkfileContentView", function() {
     beforeEach(function() {
         fixtures.model = "Workfile";
         this.textfile = fixtures.modelFor("fetchText");

@@ -322,7 +322,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 it("shows the edit_individual_accounts area", function() {
                     expect(this.view.$(".edit_individual_accounts")).toBeVisible();
-                    expect(this.view.$(".edit_individual_accounts a[data-dialog=AdminInstancePermissions]")).toBeVisible();
+                    expect(this.view.$(".edit_individual_accounts a[data-dialog=InstancePermissions]")).toBeVisible();
                     expect(this.view.$(".individual_accounts_count").text()).toMatchTranslation('instances.sidebar.there_are_x_individual_accounts', {count: 2});
                 });
             });

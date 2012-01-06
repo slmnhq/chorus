@@ -1188,12 +1188,12 @@
                 }
             },
 
-            user: function() {
+            user: function(overrides) {
                 var id = this.nextId().toString();
-                return new chorus.models.User(this.userJson({
+                return new chorus.models.User(this.userJson(_.extend({
                     admin : true,
                     use_external_ldap : false
-                }));
+                }, overrides)));
             },
 
             comment: function(overrides) {
@@ -1289,20 +1289,30 @@
             },
 
             instanceWithSharedAccount: function(overrides) {
-                return this.instance(_.extend({
+                var instance = this.instance(_.extend({
                     sharedAccount : {
                         dbUserName : "gpadmin"
                     }
                 }, overrides));
+                return instance;
             },
 
-            instanceAccount : function(overrides) {
+            instanceAccount : function(overridesOrInstance) {
+                var overrides;
+                if (overridesOrInstance instanceof chorus.models.Instance) {
+                    overrides = {
+                        instanceId: overridesOrInstance.get("id"),
+                        dbUserName: overridesOrInstance.get("sharedAccount").dbUserName
+                    };
+                } else {
+                    overrides = overridesOrInstance || {};
+                }
                 var attributes = _.extend({
                     id : this.nextId().toString(),
                     shared : "yes",
                     expiration : null,
                     instanceId : this.nextId().toString(),
-                    user : this.userJson(),
+                    user : _.extend(this.userJson(), overrides.user),
                     dbUserName : "gpadmin"
                 }, overrides);
                 return new chorus.models.InstanceAccount(attributes);
