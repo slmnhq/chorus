@@ -34,6 +34,7 @@
             if (!this.mainContent.contentDetails) {
                 this.mainContent.contentDetails = ns.views.WorkfileContentDetails.buildFor(this.model);
                 this.mainContent.content = ns.views.WorkfileContent.buildFor(this.model);
+                this.mainContent.content.forwardEvent("autosaved", this.mainContent.contentDetails);
                 this.mainContent.contentDetails.forwardEvent("file:save", this.mainContent.content);
                 this.mainContent.contentDetails.forwardEvent("file:edit", this.mainContent.content);
             }

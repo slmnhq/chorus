@@ -44,6 +44,10 @@ describe("WorkfileContentDetails", function() {
             expect(this.view.$(".save_as")).toHaveAttr("disabled");
         });
 
+        it("should not display the autosave text", function() {
+            expect(this.view.$("span.auto_save")).toHaveClass("hidden");
+        });
+        
         context("when user click on the edit file button", function() {
             beforeEach(function() {
                 this.fileSpy = jasmine.createSpy("file:edit");
@@ -61,6 +65,26 @@ describe("WorkfileContentDetails", function() {
 
             it("should remove the disabled class from the save as button", function() {
                 expect(this.view.$(".save_as")).not.toHaveAttr("disabled");
+            });
+
+            context("and the autosave event is fired", function() {
+                beforeEach(function() {
+                    this.view.trigger("autosaved");
+                });
+
+                it("should display the autosave text", function() {
+                    expect(this.view.$("span.auto_save")).not.toHaveClass("hidden");
+                });
+
+                context("and the save file button is clicked", function() {
+                    beforeEach(function() {
+                        this.view.$(".save_as").click();
+                    });
+
+                    it("should not display the autosave text", function() {
+                        expect(this.view.$("span.auto_save")).toHaveClass("hidden");
+                    });
+                });
             });
 
             context("when user click on the save file button", function() {
@@ -82,6 +106,30 @@ describe("WorkfileContentDetails", function() {
                     expect(this.view.$(".save_as")).toHaveAttr("disabled");
                 });
             });
+        });
+    });
+
+    describe("#formatTime", function() {
+        beforeEach(function() {
+            this.view = new chorus.views.WorkfileContentDetails(this.model);
+        });
+
+        it("should format the time in the AM", function() {
+            var date = new Date(1325876400 * 1000);
+            expect(this.view.formatTime(date)).toBe("11:00 AM");
+        });
+
+        it("should format the time in the PM", function() {
+            var date = new Date(1325908800 * 1000);
+            expect(this.view.formatTime(date)).toBe("8:00 PM");
+        });
+
+        it("should format the time if it is Noon/Midnight", function() {
+            var date = new Date(1325880000 * 1000);
+            expect(this.view.formatTime(date)).toBe("12:00 PM");
+
+            var date = new Date(1325836800 * 1000);
+            expect(this.view.formatTime(date)).toBe("12:00 AM");
         });
     });
 });

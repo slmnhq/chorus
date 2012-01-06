@@ -26,6 +26,10 @@
             });
         },
 
+        createDraft : function() {
+            return new ns.Draft({workfileId: this.get("id") , workspaceId : this.get("workspaceId")})
+        },
+
         declareValidations : function(newAttrs){
             this.require("fileName", newAttrs);
         },
