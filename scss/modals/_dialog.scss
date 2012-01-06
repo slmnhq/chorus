@@ -9,17 +9,37 @@
             @include heading-normal;
             line-height: 54px;
             vertical-align: middle;
-            margin: 0 15px;
+            margin: 0 $dialog-padding;
             padding-right: 25px;
         }
     }
 
     .dialog_content {
         background-color: $body-background-color;
-        padding: 10px 15px;
+        padding: 10px $dialog-padding;
 
         .menus {
             height: 30px;
+        }
+
+    }
+
+    fieldset {
+        border: 1px solid $border-color;
+        padding: 0 $dialog-padding $dialog-padding;
+
+        legend label {
+            font-size: 14px;
+            font-weight: normal;
+            color: $text-color;
+        }
+
+        form label {
+            margin-top: 8px;
+        }
+
+        form label, input {
+            display: inline-block;
         }
     }
 

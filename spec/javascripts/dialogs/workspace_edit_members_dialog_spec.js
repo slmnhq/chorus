@@ -61,8 +61,7 @@ describe("WorkspaceEditMembers", function() {
 
             context("when the save succeeds", function() {
                 beforeEach(function() {
-                    this.invalidatedSpy = jasmine.createSpy("invalidated");
-                    this.dialog.pageModel.bind("invalidated", this.invalidatedSpy);
+                    spyOnEvent(this.dialog.pageModel, "invalidated");
                     spyOn(this.dialog, 'closeModal');
                     this.dialog.members.trigger("saved");
                 })
@@ -72,7 +71,7 @@ describe("WorkspaceEditMembers", function() {
                 });
 
                 it("triggers the 'invalidated' event on the model", function() {
-                    expect(this.invalidatedSpy).toHaveBeenCalled();
+                    expect("invalidated").toHaveBeenTriggeredOn(this.dialog.pageModel);
                 })
             })
 

@@ -381,8 +381,7 @@ describe("WorkspaceSettings dialog", function() {
 
             context("the server responds with success", function() {
                 beforeEach(function() {
-                    this.invalidatedSpy = jasmine.createSpy("invalidated");
-                    this.dialog.pageModel.bind("invalidated", this.invalidatedSpy);
+                    spyOnEvent(this.dialog.pageModel, "invalidated");
                     this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"resource":[{"id":"9"}], "status": "ok"}']);
                     this.server.respond();
                 });
@@ -392,7 +391,7 @@ describe("WorkspaceSettings dialog", function() {
                 });
 
                 it("triggers the 'invalidated' event on the model", function() {
-                    expect(this.invalidatedSpy).toHaveBeenCalled();
+                    expect("invalidated").toHaveBeenTriggeredOn(this.dialog.pageModel);
                 })
             });
 
@@ -436,17 +435,14 @@ describe("WorkspaceSettings dialog", function() {
 
         context("submitting the form with invalid data", function() {
             beforeEach(function() {
-                this.validatedSpy = jasmine.createSpy("validated");
-                this.dialog.pageModel.bind("validated", this.validatedSpy);
-                this.validationFailedSpy = jasmine.createSpy("validationFailed");
-                this.dialog.pageModel.bind("validationFailed", this.validationFailedSpy);
+                spyOnEvent(this.dialog.pageModel, "validationFailed");
                 this.dialog.$("input[name=name]").val("");
                 this.dialog.$("textarea[name=summary]").val("my modified summary");
                 this.dialog.$('form').submit();
             });
 
             it("triggers validation Failed", function() {
-                expect(this.validationFailedSpy).toHaveBeenCalled();
+                expect("validationFailed").toHaveBeenTriggeredOn(this.dialog.pageModel);
             })
 
             it("does not set the name on the workspace", function() {

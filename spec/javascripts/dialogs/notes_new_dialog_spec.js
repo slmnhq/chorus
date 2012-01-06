@@ -259,8 +259,7 @@ describe("NotesNewDialog", function() {
                 beforeEach(function() {
                     spyOn(this.dialog, "closeModal");
                     this.dialog.$("textarea[name=body]").val("The body of a note");
-                    this.invalidatedSpy = jasmine.createSpy("invalidated");
-                    this.dialog.pageModel.bind("invalidated", this.invalidatedSpy);
+                    spyOnEvent(this.dialog.pageModel, "invalidated");
                     spyOn($.fn, "stopLoading").andCallThrough();
                 });
 
@@ -274,7 +273,7 @@ describe("NotesNewDialog", function() {
                     });
 
                     it("triggers the 'invalidated' event on the model", function() {
-                        expect(this.invalidatedSpy).toHaveBeenCalled();
+                        expect("invalidated").toHaveBeenTriggeredOn(this.dialog.pageModel);
                     });
 
                     it("removes the spinner from the button", function() {
@@ -292,7 +291,7 @@ describe("NotesNewDialog", function() {
                     })
 
                     it("does not trigger the 'invalidated' event on the model", function() {
-                        expect(this.invalidatedSpy).not.toHaveBeenCalled();
+                        expect("invalidated").not.toHaveBeenTriggeredOn(this.dialog.pageModel);
                     });
 
                     it("removes the spinner from the button", function() {
@@ -349,10 +348,9 @@ describe("NotesNewDialog", function() {
         });
 
         it("triggers the 'invalidated' event on the model", function() {
-            var invalidatedSpy = jasmine.createSpy("invalidated");
-            this.dialog.pageModel.bind("invalidated", invalidatedSpy);
+            spyOnEvent(this.dialog.pageModel, "invalidated");
             this.dialog.model.trigger("saved");
-            expect(invalidatedSpy).toHaveBeenCalled();
+            expect("invalidated").toHaveBeenTriggeredOn(this.dialog.pageModel);
         })
     });
 });

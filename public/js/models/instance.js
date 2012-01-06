@@ -49,7 +49,13 @@
         },
 
         accountForCurrentUser: function() {
-            this._accountForCurrentUser || (this._accountForCurrentUser = this.accountForUser(ns.session.user()));
+            if (!this._accountForCurrentUser) {
+                this._accountForCurrentUser = this.accountForUser(ns.session.user());
+                this._accountForCurrentUser.bind("destroy", function() {
+                    delete this._accountForCurrentUser;
+                    this.trigger("change");
+                }, this);
+            }
             return this._accountForCurrentUser;
         },
 
@@ -70,11 +76,10 @@
             return this._aurora;
         },
 
-        userSet : function() {
-            if(!this._userSet) {
-                this._userSet = new chorus.models.UserSet();
-            }
-            return this._userSet;
+        isShared : function() {
+            return !(_.isEmpty(this.get('sharedAccount')));
         }
+
+
     });
 })(chorus);

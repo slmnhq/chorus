@@ -2,7 +2,6 @@
 
 .dialog.instances_new {
     $dialog-width : 515px;
-    $dialog-padding: 15px;
 
     width: $dialog-width;
 
@@ -17,43 +16,11 @@
     }
 
     fieldset {
-        border: 1px solid $border-color;
-
-        legend {
-            label {
-                font-size: 14px;
-                font-weight: normal;
-                color: black;
-            }
-        }
-
-        img.help {
-                display: inline-block;
-                margin-top: -3px;
-                vertical-align: middle;
-        }
-
-        .disabled {
-            color : $weak-text-color;
-        }
-
-        padding: 0 $dialog-padding $dialog-padding;
-    }
-
-    fieldset {
         $fieldset-width : $dialog-width - 4 * $dialog-padding - 2px;
         $hostname_width : 320px;
         $account_width : 210px;
         $input-spacing : 12px;
         $size_width : 75px;
-
-        > div label {
-            margin-top: 8px;
-        }
-
-        > div label, input {
-             display: inline-block;
-        }
 
         label[name=host], input[name=host] {
             width: $hostname-width;
@@ -79,6 +46,16 @@
         label[name=dbPassword], input[name=dbPassword] {
             width: $fieldset-width - $account_width - $dialog-padding - 4px;
             margin-left: $input-spacing;
+        }
+
+        img.help {
+                display: inline-block;
+                margin-top: -3px;
+                vertical-align: middle;
+        }
+
+        .disabled {
+            color : $weak-text-color;
         }
     }
 }

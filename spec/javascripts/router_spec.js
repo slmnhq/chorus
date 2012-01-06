@@ -52,10 +52,9 @@ describe("chorus.router", function() {
         });
 
         it("triggers a route event on the router", function() {
-            var routeSpy = jasmine.createSpy("routeSpy");
-            this.chorus.router.bind("route", routeSpy);
+            spyOnEvent(this.chorus.router, 'route');
             this.chorus.router.navigate("/", true);
-            expect(routeSpy).toHaveBeenCalled();
+            expect('route').toHaveBeenTriggeredOn(this.chorus.router);
         })
 
         it("closes the current modal", function() {
@@ -110,9 +109,8 @@ describe("chorus.router", function() {
 
         context("when not logged in", function() {
             beforeEach(function() {
+                spyOnEvent(this.chorus.router, "route");
                 spyOn(this.chorus.session, 'loggedIn').andReturn(false);
-                this.routeSpy = jasmine.createSpy("route");
-                this.chorus.router.bind("route", this.routeSpy);
             });
 
             it("checks login", function() {
@@ -128,9 +126,9 @@ describe("chorus.router", function() {
             it("calls trigger after the user has been fetched", function() {
                 this.chorus.router.navigate("/users/new", true);
                 expect(this.chorus.session.fetch).toHaveBeenCalled();
-                expect(this.routeSpy).not.toHaveBeenCalled();
+                expect("route").not.toHaveBeenTriggeredOn(this.chorus.router);
                 this.chorus.session.fetch.mostRecentCall.args[0].success();
-                expect(this.routeSpy).toHaveBeenCalled();
+                expect("route").toHaveBeenTriggeredOn(this.chorus.router);
             });
         });
     });

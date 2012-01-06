@@ -6,18 +6,16 @@
     <textarea name="description" maxlength="4095" rows="6" tabindex="2">{{description}}</textarea>
     <input type="hidden" name="provisionType" value="{{provisionType}}"/>
     {{#if registeredInstance}}
-    <label class="required">{{t "instances.dialog.host"}}</label>
+    <label class="required" name="host">{{t "instances.dialog.host"}}</label>
+    <label class="required" name="port">{{t "instances.dialog.port"}}</label>
     <input type="text" name="host" value="{{host}}" tabindex="1"/>
-
-    <label class="required">{{t "instances.dialog.port"}}</label>
     <input type="text" name="port" value="{{port}}" tabindex="1"/>
     {{/if}}
 
     {{#if provisionedInstance}}
-    <label>{{t "instances.dialog.host"}}</label>
+    <label name="host">{{t "instances.dialog.host"}}</label>
+    <label name="port">{{t "instances.dialog.port"}}</label>
     <input type="text" disabled="disabled" name="host" value="{{host}}" tabindex="1"/>
-
-    <label>{{t "instances.dialog.port"}}</label>
     <input type="text" disabled="disabled" name="port" value="{{port}}" tabindex="1"/>
 
     <label>{{t "instances.dialog.size"}}</label>

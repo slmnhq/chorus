@@ -89,10 +89,9 @@ describe("CommentDialog", function() {
         });
 
         it("triggers the 'invalidated' event on the model", function() {
-            var invalidatedSpy = jasmine.createSpy("invalidated");
-            this.dialog.pageModel.bind("invalidated", invalidatedSpy);
+            spyOnEvent(this.dialog.pageModel, 'invalidated');
             this.dialog.model.trigger("saved");
-            expect(invalidatedSpy).toHaveBeenCalled();
+            expect("invalidated").toHaveBeenTriggeredOn(this.dialog.pageModel);
         })
     });
 });

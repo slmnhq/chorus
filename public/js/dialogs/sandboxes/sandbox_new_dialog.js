@@ -2,6 +2,7 @@
 (function(ns) {
     ns.dialogs.SandboxNew = ns.dialogs.Base.extend({
         className : "sandbox_new",
+        title: t("sandbox.new_dialog.title"),
 
         persistent: true,
 
@@ -40,6 +41,7 @@
             if (this.selectedInstance) {
                 this.databases = this.selectedInstance.databases();
                 this.databases.bind("reset", this.updateDatabases, this);
+                this.$(".database label").removeClass("hidden");
                 this.$('.database .loading_text').removeClass('hidden');
                 this.databases.fetch();
             }
@@ -53,6 +55,7 @@
             if (this.selectedDatabase) {
                 this.schemas = this.selectedDatabase.schemas();
                 this.schemas.bind("reset", this.updateSchemas, this);
+                this.$(".schema label").removeClass("hidden");
                 this.$('.schema .loading_text').removeClass('hidden');
                 this.schemas.fetch();
             }
@@ -71,12 +74,14 @@
 
         showSelect : function(type) {
             this.$("." + type + " .select_container").show();
+            var select = this.$("." + type + " select");
             select.chosen();
             select.trigger("liszt:updated");
         },
 
         resetSelect: function(type) {
             this.$("button.submit").prop("disabled", "disabled");
+            this.$("."+type+" label").addClass("hidden");
 
             var select = this.$("." + type + " select");
             select.empty();
@@ -107,8 +112,9 @@
 
     function updateFor(type) {
         return function() {
-            this.$("."+type+" .loading_text").addClass('hidden');
             var select = this.resetSelect(type);
+            this.$("."+type+" .loading_text").addClass('hidden');
+            this.$("."+type+" label").removeClass("hidden");
             var models = this[type + "s"];
             if (models.length) {
                 models.each(function(model) {
@@ -116,9 +122,7 @@
                         $("<option/>", {value : model.get("id")}).text(model.get("name"))
                     );
                 });
-                this.$("."+type+" .select_container").show();
-                select.chosen();
-                select.trigger("liszt:updated");
+                this.showSelect(type);
             } else {
                 this.$("." + type + " .unavailable").show();
             }

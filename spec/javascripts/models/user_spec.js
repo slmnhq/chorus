@@ -29,10 +29,9 @@ describe("chorus.models.User", function() {
 
         context("when the workspaces instance raises its reset event", function() {
             it("raises the changed event on the user instance", function() {
-                var spy = jasmine.createSpy("changeHandler");
-                this.user.bind("change", spy);
+                spyOnEvent(this.user, "change");
                 this.workspaces.trigger("reset");
-                expect(spy).toHaveBeenCalled();
+                expect("change").toHaveBeenTriggeredOn(this.user);
             });
 
             it("only fires the change event once, even if the method was called multiple times", function() {

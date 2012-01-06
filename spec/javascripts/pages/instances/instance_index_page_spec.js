@@ -11,11 +11,10 @@ describe("chorus.pages.InstanceIndexPage", function() {
         })
 
         it("forwards the instance:selected event from the instance list view to the instance list sidebar", function() {
-            var spy = jasmine.createSpy('instance selected');
-            this.page.sidebar.bind("instance:selected", spy);
+            spyOnEvent(this.page.sidebar, "instance:selected");
             this.page.$("li .instance").eq(1).click();
 
-            expect(spy).toHaveBeenCalled();
+            expect("instance:selected").toHaveBeenTriggeredOn(this.page.sidebar);
         });
 
         it("forwards the instance:added event from the page to the content", function() {

@@ -49,6 +49,22 @@ describe("chorus.models.Instance", function() {
             var account = this.instance.accountForCurrentUser();
             expect(account).toBe(this.instance.accountForCurrentUser());
         });
+
+        context("when the account is destroyed", function() {
+            it("un-memoizes the account", function() {
+                var previousAccount = this.instance.accountForCurrentUser();
+                previousAccount.trigger("destroy");
+
+                var account = this.instance.accountForCurrentUser();
+                expect(account).not.toBe(previousAccount);
+            });
+
+            it("triggers 'change' on the instance", function() {
+                spyOnEvent(this.instance, 'change');
+                this.instance.accountForCurrentUser().trigger("destroy");
+                expect("change").toHaveBeenTriggeredOn(this.instance);
+            });
+        });
     });
 
     describe("#accounts", function() {

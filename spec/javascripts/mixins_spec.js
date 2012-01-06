@@ -13,11 +13,10 @@ describe("chorus.Mixins", function(){
             });
 
             it("triggers the event on the target, when the source is triggered", function(){
-                var spy = jasmine.createSpy("relay spy");
-                this.target.bind("my_event", spy);
+                spyOnEvent(this.target, "my_event");
                 this.source.trigger("my_event");
 
-                expect(spy).toHaveBeenCalled();
+                expect("my_event").toHaveBeenTriggeredOn(this.target);
             });
 
             it("triggers the event on the target, when the source is triggered, retaining arguments", function(){

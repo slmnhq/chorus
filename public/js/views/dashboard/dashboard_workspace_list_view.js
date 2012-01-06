@@ -31,7 +31,11 @@
                 li.find(".comment .count").qtip({
                     content: el.html(),
                     show: 'mouseover',
-                    hide: 'mouseout',
+                    hide: {
+                        delay: 500,
+                        fixed: true,
+                        when: { event: 'mouseout' }
+                    },
                     style: {
                         width: 300
                     },

@@ -194,13 +194,22 @@
         delete chorus.session._user;
     };
 
-    window.spyOnBackboneEvent = function(object, name) {
+    var jquerySpyOnEvent = window.spyOnEvent;
+    var backboneSpyOnEvent = function(object, name) {
         var eventSpy = jasmine.createSpy(name + "Spy");
         object.bind(name, eventSpy);
         object._chorusEventSpies || (object._chorusEventSpies = {});
         object._chorusEventSpies[name] = eventSpy;
         return eventSpy;
     };
+
+    window.spyOnEvent = function(object) {
+        if (object.bind === Backbone.Events.bind) {
+            return backboneSpyOnEvent.apply(this, arguments);
+        } else {
+            return jquerySpyOnEvent.apply(this, arguments);
+        }
+    }
 
     window.setLoggedInUser = function(options) {
         options || (options = {});
