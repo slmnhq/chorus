@@ -50,8 +50,8 @@
         <label class="required" name="size">{{t "instances.dialog.size"}} </label>
         <input type="text" name="size" maxlength="2000"/><br/>
 
-        <label class="required" name="databaseName">{{t "instances.dialog.database_name"}} </label>
-        <label class="required" name="schemaName">{{t "instances.dialog.schema_name"}} </label>
+        <label name="databaseName">{{t "instances.dialog.database_name"}} </label>
+        <label name="schemaName">{{t "instances.dialog.schema_name"}} </label>
 
         <input type="text" name="databaseName" maxlength="256"/>
         <input type="text" name="schemaName" maxlength="256"/>
@@ -88,6 +88,7 @@
 
 
 <div class="controls">
+    <label class="required"/><label>{{t "validation.required_field"}}</label>
     <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
     <button type="submit" class="submit" tabindex="99" disabled="disabled">{{t "instances.new_dialog.save"}}</button>
 </div>
