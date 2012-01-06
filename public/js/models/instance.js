@@ -59,6 +59,16 @@
             return this._accountForCurrentUser;
         },
 
+        sharedAccount: function() {
+           if (this.get("sharedAccount") && this.get("sharedAccount").dbUserName) {
+               this._sharedAccount || (this._sharedAccount = new ns.models.InstanceAccount({
+                   instanceId: this.get("id"),
+                   dbUserName: this.get("sharedAccount").dbUserName
+               }));
+               return this._sharedAccount;
+           }
+        },
+
         attrToLabel : {
             "dbUserName" : "instances.dialog.database_account",
             "dbPassword" : "instances.dialog.database_password",
