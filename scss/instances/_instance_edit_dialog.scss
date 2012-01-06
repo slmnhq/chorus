@@ -1,9 +1,32 @@
 @import "_common.scss";
 
 .instances_edit {
+    $dialog-width : 475px;
+    $host-width : 320px;
+
+    width: $dialog-width;
+
     input[type=text][disabled=disabled] {
         border: 0;
         background: none;
     }
+
+    label {
+        margin-top: 15px;
+        margin-bottom: $padding-y;
+        display: inline-block;
+    }
+
+    label[name=host], input[name=host] {
+        width: $host-width;
+        display: inline-block;
+    }
+
+    label[name=port], input[name=port] {
+        width: $dialog-width - $host-width - 40px;
+        margin-left: 4px;
+        display: inline-block;
+    }
+
 }
 
