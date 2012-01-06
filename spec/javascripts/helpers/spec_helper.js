@@ -154,6 +154,17 @@
                             throw "The event '" + eventName + "' has not been spied on, for the object " + target;
                         }
                     }
+                },
+
+                toMatchUrl : function(target) {
+                    this.message = function() {
+                        return [
+                            "Expected url " + this.actual + " to be equivalent to url " + target,
+                            "Expected url " + this.actual + " not to be equivalent to url " + target
+                        ];
+                    }
+
+                    return (new URI(this.actual)).equals(target);
                 }
             });
 

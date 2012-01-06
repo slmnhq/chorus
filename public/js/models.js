@@ -7,7 +7,6 @@
             },
 
             setup: $.noop,
-            additionalParams: $.noop,
 
             url: function(options) {
                 options = _.extend({
@@ -15,29 +14,31 @@
                     page : 1
                 }, options);
 
-                var url = "/edc/" + Handlebars.compile(this.urlTemplate)(this.attributes);
+                var uri = new URI("/edc/" + Handlebars.compile(this.urlTemplate)(this.attributes));
 
-                var params = [];
-
-                 _.each(this.additionalParams(), function(param){
-                    params.push(param)
-                })
-
-                // this ensures that IE doesn't cache 'needs_login' responses
-                if (!window.jasmine) params.push("iebuster=" + new Date().getTime());
-
-                params.push("page=" + options.page);
-                params.push("rows=" + options.rows);
-
-                if (this.sortIndex && this.sortOrder) {
-                    params.push("sidx=" + this.sortIndex);
-                    params.push("sord=" + this.sortOrder);
+                if (this.urlParams) {
+                    var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;
+                    uri.addSearch(params);
                 }
 
-                var paramsJoiner = (url.indexOf('?') != -1) ? '&' : '?'
-                url = url + paramsJoiner + params.join("&")
+                uri.addSearch({
+                    page: options.page,
+                    rows: options.rows
+                });
 
-                return url;
+                if (this.sortIndex && this.sortOrder) {
+                    uri.addSearch({
+                        sidx: this.sortIndex,
+                        sord: this.sortOrder
+                    });
+                }
+
+                // this ensures that IE doesn't cache 'needs_login' responses
+                if (!window.jasmine) {
+                    uri.addSearch({iebuster: new Date().getTime()});
+                }
+
+                return uri.normalizeSearch().toString();
             },
 
             fetchPage: function(page, options) {
@@ -90,7 +91,7 @@
 
             sortAsc : function(idx) {
                 this._sort(idx, "asc")
-            }, 
+            },
 
             _sort : function(idx, order) {
                 this.sortIndex = idx
@@ -101,13 +102,12 @@
         Base: Backbone.Model.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, {
             url: function(options) {
                 var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
-                var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;
-                var url = "/edc/" + Handlebars.compile(template)(this.attributes);
-                if (params) {
-                    var paramsJoiner = (_.include(url, '?')) ? '&' : '?';
-                    url += paramsJoiner + $.param(params || {});
+                var uri = new URI("/edc/" + Handlebars.compile(template)(this.attributes));
+                if (this.urlParams) {
+                    var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;
+                    uri.addSearch(params);
                 }
-                return url;
+                return uri.normalizeSearch().toString();
             },
 
             activities : function() {

@@ -13,7 +13,7 @@ describe("chorus.models", function() {
                 });
 
                 it("uses the function's return value", function() {
-                    expect(this.model.url()).toBe("/edc/my_other_items/foo");
+                    expect(this.model.url()).toMatchUrl("/edc/my_other_items/foo");
                 });
 
                 it("passes any options to the urlTemplate function", function() {
@@ -24,7 +24,7 @@ describe("chorus.models", function() {
             });
 
             it("compiles the urlTemplate and renders it with model attributes", function() {
-                expect(this.model.url()).toBe("/edc/my_items/foo");
+                expect(this.model.url()).toMatchUrl("/edc/my_items/foo");
             });
 
             context("when the model has additional url params", function() {
@@ -34,7 +34,7 @@ describe("chorus.models", function() {
                     });
 
                     it("passes any options to the urlParams function", function() {
-                        spyOn(this.model, 'urlParams').andReturn("foo");
+                        spyOn(this.model, 'urlParams').andCallThrough();
                         this.model.url({ method: 'create' });
                         expect(this.model.urlParams).toHaveBeenCalledWith({ method: 'create' });
                     });
@@ -46,7 +46,7 @@ describe("chorus.models", function() {
                     });
 
                     it("url-encodes the params and appends them to the url", function() {
-                        expect(this.model.url()).toBe("/edc/my_items/foo?dance=the+thizzle");
+                        expect(this.model.url()).toMatchUrl("/edc/my_items/foo?dance=the+thizzle");
                     });
 
                     context("when the base url template includes a query string", function() {
@@ -55,7 +55,7 @@ describe("chorus.models", function() {
                         });
 
                         it("merges the query strings properly", function() {
-                            expect(this.model.url()).toBe("/edc/my_items/foo?size=medium&dance=the+thizzle");
+                            expect(this.model.url()).toMatchUrl("/edc/my_items/foo?dance=the+thizzle&size=medium");
                         });
                     });
                 });

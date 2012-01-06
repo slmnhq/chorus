@@ -14,6 +14,8 @@
                 var params = { instanceId: this.get("instanceId") };
                 if (this.get("userName")) { params["userName"] = this.get("userName") };
                 return params;
+            } else {
+                return {};
             }
         },
 

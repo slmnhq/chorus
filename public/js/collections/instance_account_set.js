@@ -7,9 +7,10 @@
             return this.map(function(model) { return model.user(); });
         },
 
-        additionalParams : function(){
-            return ['instanceId=' + this.attributes.instanceId];
+        urlParams : function(){
+            return {
+                instanceId : this.attributes.instanceId
+            }
         }
-
     });
 })(chorus);
