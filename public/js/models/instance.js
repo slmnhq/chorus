@@ -65,11 +65,10 @@
             return this._aurora;
         },
 
-        userSet : function() {
-            if(!this._userSet) {
-                this._userSet = new chorus.models.UserSet();
-            }
-            return this._userSet;
+        isShared : function() {
+            return !(_.isEmpty(this.get('sharedAccount')));
         }
+
+
     });
 })(chorus);
