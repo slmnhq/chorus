@@ -51,7 +51,7 @@
 
         modelDeleted : function () {
             $(document).trigger("close.facebox");
-            chorus.router.navigate(this.redirectUrl || "/", true);
+            if (this.redirectUrl) { chorus.router.navigate(this.redirectUrl, true); }
         }
 
     })

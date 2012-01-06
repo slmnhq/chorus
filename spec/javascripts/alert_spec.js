@@ -109,15 +109,24 @@ describe("ModelDelete alert", function() {
             beforeEach(function() {
                 spyOn(chorus.router, "navigate");
                 spyOnEvent($(document), "close.facebox");
-                this.alert.model.trigger("destroy", this.alert.model);
             });
 
             it("dismisses the alert", function () {
+                this.alert.model.trigger("destroy", this.alert.model);
                 expect("close.facebox").toHaveBeenTriggeredOn($(document))
             });
 
             it("navigates to the redirectUrl", function() {
+                this.alert.model.trigger("destroy", this.alert.model);
                 expect(chorus.router.navigate).toHaveBeenCalledWith("/partyTime", true);
+            });
+
+            context("when the alert does NOT have a redirect url", function() {
+                it("does not navigate", function() {
+                    delete this.alert.redirectUrl;
+                    this.alert.model.trigger("destroy", this.alert.model);
+                    expect(chorus.router.navigate).not.toHaveBeenCalled();
+                });
             });
         })
 
