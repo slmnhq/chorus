@@ -1,21 +1,20 @@
 describe("chorus.models.Instance", function() {
     beforeEach(function() {
-        fixtures.model = "Instance";
-        this.instance = fixtures.modelFor("fetch");
+        this.instance = fixtures.instance();
     });
 
     it("has a valid showUrl", function() {
-        expect(this.instance.showUrl()).toBe("#/instances/10000");
+        expect(this.instance.showUrl()).toBe("#/instances/" + this.instance.get('id'));
     });
 
     it("has a valid url", function() {
-        expect(this.instance.url()).toBe("/edc/instance/10000");
+        expect(this.instance.url()).toBe("/edc/instance/" + this.instance.get('id'));
     });
 
     describe("#owner", function() {
         it("returns a user", function() {
             var owner = this.instance.owner();
-            expect(owner.get("id")).toBe("10111");
+            expect(owner.get("id")).toBe(this.instance.get("ownerId"));
             expect(owner.get("userName")).toBe("edcadmin");
             expect(owner.get("fullName")).toBe("EDC Admin");
         })
@@ -27,8 +26,8 @@ describe("chorus.models.Instance", function() {
             this.account = this.instance.accountForUser(this.user);
         });
 
-        it("returns an account map", function() {
-            expect(this.account instanceof chorus.models.InstanceAccount).toBeTruthy();
+        it("returns an InstanceAccount", function() {
+            expect(this.account).toBeA(chorus.models.InstanceAccount);
         });
 
         it("sets the instance id", function() {
@@ -51,4 +50,22 @@ describe("chorus.models.Instance", function() {
             expect(account).toBe(this.instance.accountForCurrentUser());
         });
     });
+
+    describe("#accounts", function() {
+        beforeEach(function() {
+            this.instanceAccounts = this.instance.accounts();
+        })
+
+        it("returns an InstanceAccountSet", function(){
+            expect(this.instanceAccounts).toBeA(chorus.models.InstanceAccountSet)
+        });
+
+        it("sets the instance id", function() {
+            expect(this.instanceAccounts.attributes.instanceId).toBe(this.instance.get('id'));
+        });
+
+        it("memoizes", function() {
+            expect(this.instanceAccounts).toBe(this.instance.accounts());
+        });
+    })
 });

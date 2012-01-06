@@ -39,6 +39,11 @@
             return new ns.models.DatabaseSet([], {instanceId : this.get("id")});
         },
 
+        accounts: function() {
+            this._accounts || (this._accounts = new ns.models.InstanceAccountSet([], {instanceId : this.get("id")}));
+            return this._accounts;
+        },
+
         accountForUser: function(user) {
             return new ns.models.InstanceAccount({ instanceId: this.get("id"), userName: user.get("userName") });
         },

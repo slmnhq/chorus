@@ -7,27 +7,38 @@
     {{#if dbUserName}}
         <img src="/images/instances/shared_icon.png"/>
         {{t "instances.sidebar.is_shared_account"}}
-        <a href="#" class="dialog" data-dialog="InstancePermissions">Edit</a>
+        <a href="#" class="dialog" data-dialog="InstancePermissions">{{t "instances.sidebar.edit"}}</a>
     {{else}}
-        {{#if userHasAccount}}
-            <img src="/images/instances/access.png"/>
-            {{t "instances.sidebar.access"}}
+        {{#if userCanEditInstance}}
+            <div class="edit_individual_accounts">
+                <img src="/images/instances/individual.png"/>
+                <span class="individual_accounts_count">{{t "instances.sidebar.there_are_x_individual_accounts" count=instanceAccountsCount}}</span>
+                 <a href="#" class="dialog" data-dialog="AdminInstancePermissions">{{t "instances.sidebar.edit"}}</a>
+            </div>
         {{else}}
-            <img src="/images/instances/no_access.png"/>
-            {{t "instances.sidebar.no_access"}}
+            <div class="individual_account">
+                {{#if userHasAccount}}
+                    <img src="/images/instances/access.png"/>
+                    {{t "instances.sidebar.access"}}
+                {{else}}
+                    <img src="/images/instances/no_access.png"/>
+                    {{t "instances.sidebar.no_access"}}
+                {{/if}}
+            </div>
         {{/if}}
     {{/if}}
 </div>
 <div class="actions">
     <ul>
-        {{#unless dbUserName}}
+        {{#ifAny dbUserName userCanEditInstance }}
+        {{else}}
             {{#if userHasAccount}}
                 <li><a class="dialog edit_credentials" href="#" data-dialog="InstanceAccount" data-title='{{t "instances.account.edit.title"}}'>{{t "instances.sidebar.edit_credentials"}}</a></li>
                 <li><a class="alert remove_credentials" href="#" data-alert="InstanceAccountDelete">{{t "instances.sidebar.remove_credentials"}}</a></li>
             {{else}}
                 <li><a class="dialog add_credentials" href="#" data-dialog="InstanceAccount" data-title='{{t "instances.account.add.title"}}'>{{t "instances.sidebar.add_credentials"}}</a></li>
             {{/if}}
-        {{/unless}}
+        {{/ifAny}}
          {{#if userCanEditInstance}}
              <li><a class="dialog edit_instance" href="#" data-dialog="InstancesEdit">{{t "instances.sidebar.edit_instance"}}</a></li>
          {{/if}}

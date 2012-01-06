@@ -1270,6 +1270,7 @@
                     isDeleted: false,
                     lastCheck: null,
                     owner: "edcadmin",
+                    ownerId: this.nextId().toString(),
                     ownerFullName: "EDC Admin",
                     port: 8020,
                     provisionName: null,

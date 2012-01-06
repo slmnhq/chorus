@@ -25,6 +25,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
             this.instance = fixtures.instance({instanceProvider: "Greenplum", name : "Harry's House of Glamour"})
             spyOn(this.instance, 'fetch');
+            spyOn(this.instance.accounts(), 'fetch');
             spyOn(this.instance.activities(), 'fetch');
             this.view.trigger("instance:selected", this.instance);
         });
@@ -54,6 +55,11 @@ describe("chorus.views.InstanceListSidebar", function() {
             expect(this.instance.activities().fetch).toHaveBeenCalled();
         });
 
+
+        it("fetches the accounts for the instance", function() {
+            expect(this.instance.accounts().fetch).toHaveBeenCalled();
+        });
+
         it("fetches the details for the instance", function() {
             expect(this.instance.fetch).toHaveBeenCalled();
         });
@@ -64,7 +70,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
         });
 
-        context("when user is an admin or owner of the instance", function(){
+        context("when user is an admin or owner of the instance", function() {
 
             it("displays edit instance link when user is admin", function() {
                 setLoggedInUser({ userName : "benjamin", admin: true});
@@ -99,8 +105,18 @@ describe("chorus.views.InstanceListSidebar", function() {
             it("re-renders", function() {
                 expect(this.view.render).toHaveBeenCalled();
             })
-        })
+        });
 
+        context("when the fetched accounts triggers a 'reset' event", function() {
+            beforeEach(function() {
+                this.view.render.reset();
+                this.instance.accounts().trigger('reset');
+            });
+
+            it("re-renders", function() {
+                expect(this.view.render).toHaveBeenCalled();
+            })
+        });
 
         context("when activity is clicked", function() {
             beforeEach(function() {
@@ -215,7 +231,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 context("when the user has set up an account for the instance", function() {
                     beforeEach(function() {
-                        var account = fixtures.instanceAccount({ id: 45 });
+                        var account = fixtures.instanceAccount();
                         spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
                         this.view.trigger("instance:selected", this.instance);
                     });
@@ -244,7 +260,35 @@ describe("chorus.views.InstanceListSidebar", function() {
             });
 
             context("when the current user is an admin", function() {
-                
+                beforeEach(function() {
+                    var account = fixtures.instanceAccount();
+                    spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
+                    this.instance.accounts().add([fixtures.instanceAccount(), fixtures.instanceAccount()]);
+                    setLoggedInUser({ userName : "benjamin", admin: true});
+                    this.view.trigger("instance:selected", this.instance);
+                });
+
+                it("does not show the individual_account area", function() {
+                    expect(this.view.$('.individual_account')).not.toBeVisible();
+                });
+
+                it("does not show the add/edit/remove credentials links", function() {
+                    expect(this.view.$(".actions .remove_credentials")).not.toBeVisible();
+                    expect(this.view.$(".actions .edit_credentials")).not.toBeVisible();
+                    expect(this.view.$(".actions .add_credentials")).not.toBeVisible();
+                });
+
+                it("shows the edit_individual_accounts area", function() {
+                    expect(this.view.$(".edit_individual_accounts")).toBeVisible();
+                    expect(this.view.$(".edit_individual_accounts a[data-dialog=AdminInstancePermissions]")).toBeVisible();
+                    expect(this.view.$(".individual_accounts_count").text()).toMatchTranslation('instances.sidebar.there_are_x_individual_accounts', {count: 2});
+                });
+            });
+
+            context("when the current user is the owner", function() {
+                beforeEach(function() {
+                    setLoggedInUser({ userName : "benjamin", admin: true});
+                });
             });
         });
     });
