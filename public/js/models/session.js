@@ -16,7 +16,7 @@
         },
 
         loggedIn : function() {
-            return this._user && this._user.get("id");
+            return $.cookie("authid") && this._user && this._user.get("id");
         },
 
         fetch : function(options) {

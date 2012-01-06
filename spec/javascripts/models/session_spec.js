@@ -93,15 +93,35 @@ describe("chorus.models.Session", function() {
             this.model = new models.Session();
         });
 
-        it("returns false when there is no _user", function() {
-            expect(this.model.loggedIn()).toBeFalsy();
+        context("when there is an authid cookie", function() {
+            beforeEach(function() {
+                $.cookie("authid", "1234");
+            })
+
+            afterEach(function() {
+                $.cookie("authid", null);
+            })
+
+            it("returns false when there is no _user", function() {
+                expect(this.model.loggedIn()).toBeFalsy();
+            });
+
+            it("returns true when the user has been fetched", function() {
+                this.model._user = fixtures.user();
+                expect(this.model._user.get('id')).toBeTruthy();
+                expect(this.model.loggedIn()).toBeTruthy();
+            });
         });
 
-        it("returns true when the user has been fetched", function() {
-            this.model._user = fixtures.user();
-            expect(this.model._user.get('id')).toBeTruthy();
-            expect(this.model.loggedIn()).toBeTruthy();
-        });
+        context("when there is no authid cookie", function() {
+            beforeEach(function() {
+                this.model._user = fixtures.user();
+            })
+
+            it("returns false", function() {
+                expect(this.model.loggedIn()).toBeFalsy();
+            })
+        })
     });
 
     describe("#fetch", function() {
@@ -222,7 +242,7 @@ describe("chorus.models.Session", function() {
     });
 
     describe("#user", function() {
-        beforeEach(function(){
+        beforeEach(function() {
             this.session = new models.Session()
         });
 
@@ -241,7 +261,7 @@ describe("chorus.models.Session", function() {
         });
 
         it("returns false when the user has not been fetched", function() {
-           expect(this.session.user()).toBeFalsy();
+            expect(this.session.user()).toBeFalsy();
         });
 
     });

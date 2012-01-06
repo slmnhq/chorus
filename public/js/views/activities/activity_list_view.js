@@ -23,7 +23,7 @@
                 headingText: this.options.headingText
             };
 
-            if (this.collection.loaded) {
+            if (this.collection.loaded && this.collection.pagination) {
                 var page = parseInt(this.collection.pagination.page);
                 var total = parseInt(this.collection.pagination.total);
                 ctx.showMoreLink = total > page;
