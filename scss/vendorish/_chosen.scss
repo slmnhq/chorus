@@ -1,3 +1,58 @@
+// body is included here to make these styles override the ones below,
+// provided by the library. we wanted to put these at the top.
+body .chzn-container {
+    background: white;
+    width: 100%;
+
+    a {
+        @include linear-gradient(color-stops(#eeeeee, #ffffff));
+        @include border-radius(4px);
+        border: 1px solid #AAA;
+    }
+
+    .chzn-single {
+        color: $dark-text-color;
+
+        div {
+            b {
+                background: url(/images/chosen-sprite.png) no-repeat 0 1px;
+            }
+        }
+
+        &.chzn-single-with-drop {
+            border-bottom: none;
+            @include border-bottom-left-radius(0);
+            @include border-bottom-right-radius(0);
+
+            div b {
+                background-position: -18px 1px;
+            }
+        }
+    }
+
+    .chzn-drop {
+        background: white;
+        @include border-radius(0px);
+
+        .chzn-results {
+            background: white;
+            color: black;
+
+            .highlighted {
+                background: #1C93DF;
+            }
+        }
+
+
+        .chzn-search {
+            input {
+                width: 100% !important;
+                background: white url(/images/chosen-sprite.png) no-repeat 100% -22px;
+            }
+        }
+    }
+}
+
 /* @group Base */
 .chzn-container {
   font-size: 13px;

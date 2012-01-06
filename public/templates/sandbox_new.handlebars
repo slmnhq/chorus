@@ -1,13 +1,17 @@
 <fieldset>
     <legend>
-        <input type="radio" name="sandbox_type" id="create_sandbox_within_instance"/>
-        <label for="create_sandbox_within_instance">{{t "sandbox.create.within_instance"}}</label>
-        <input type="radio" name="sandbox_type" id="create_sandbox_as_standalone"/>
-        <label for="create_sandbox_as_standalone">{{t "sandbox.create.within_instance"}}</label>
+        <div>
+            <input type="radio" name="sandbox_type" id="create_sandbox_within_instance" checked="checked"/>
+            <label for="create_sandbox_within_instance">{{t "sandbox.create.within_instance"}}</label>
+        </div>
+        <div>
+            <input type="radio" name="sandbox_type" id="create_sandbox_as_standalone"/>
+            <label for="create_sandbox_as_standalone">{{t "sandbox.create.as_standalone"}}</label>
+        </div>
     </legend>
     <form>
         <div class="instance">
-            <label>{{t "sandbox.select.instance"}}</label>
+            <label class="required">{{t "sandbox.select.instance"}}</label>
             <div class="loading_text">
                 {{t "loading"}}
                 <span class="loading_spinner"></span>
@@ -19,7 +23,7 @@
             </div>
         </div>
         <div class="database">
-            <label class="hidden">{{t "sandbox.select.database"}}</label>
+            <label class="required hidden">{{t "sandbox.select.database"}}</label>
             <div class="loading_text hidden">
                 {{t "loading"}}
                 <span class="loading_spinner"></span>
@@ -31,7 +35,7 @@
             </div>
         </div>
         <div class="schema">
-            <label class="hidden">{{t "sandbox.select.schema"}}</label>
+            <label class="required hidden">{{t "sandbox.select.schema"}}</label>
             <div class="loading_text hidden">
                 {{t "loading"}}
                 <span class="loading_spinner"></span>
@@ -45,6 +49,7 @@
     </form>
 </fieldset>
 <div class="controls">
+    <label class="required"/><label>{{t "validation.required_field"}}</label>
     <button type="button" class="cancel" tabindex=2>{{t "actions.cancel"}}</button>
     <button type="submit" class="submit" disabled="disabled" tabindex=1>{{t "sandbox.add_sandbox"}}</button>
 </div>

@@ -1,7 +1,18 @@
 .dialog.sandbox_new {
+    width: 440px;
 
     .select_container {
         display: none;
+    }
+
+    legend div {
+        display: inline-block;
+        margin: 0 8px;
+    }
+
+    select {
+        display: block;
+        width: 320px;
     }
 
     form label {

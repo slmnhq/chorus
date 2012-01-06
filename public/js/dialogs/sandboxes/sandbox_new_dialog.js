@@ -2,6 +2,7 @@
 (function(ns) {
     ns.dialogs.SandboxNew = ns.dialogs.Base.extend({
         className : "sandbox_new",
+        title: t("sandbox.new_dialog.title"),
 
         persistent: true,
 
