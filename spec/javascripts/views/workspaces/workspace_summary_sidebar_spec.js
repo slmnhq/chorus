@@ -51,7 +51,7 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
                     this.view.setupSidebarScrolling.reset();
                     this.view.$('.workspace_image').trigger('load');
                 });
-                
+
                 it("calls setupSidebarScrolling", function() {
                     expect(this.view.setupSidebarScrolling).toHaveBeenCalled();
                 });
@@ -88,9 +88,27 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
                 expect(this.view.$("a.dialog[data-dialog=WorkspaceEditMembers]").text().trim()).toMatchTranslation("workspace.edit_members");
             });
 
-            it("has a link to add a new sandbox", function() {
-                expect(this.view.$("a.dialog[data-dialog=SandboxNew]").text().trim()).toMatchTranslation("sandbox.create_a_sandbox");
-                expect(this.view.$("a.dialog[data-dialog=SandboxNew]").data("workspaceId").toString()).toBe(this.model.get("id"));
+            context("the sandboxId is null", function() {
+                beforeEach(function() {
+                    this.model.set({sandboxId: null});
+                    this.view.render();
+                });
+
+                it("has a link to add a new sandbox", function() {
+                    expect(this.view.$("a.dialog[data-dialog=SandboxNew]").text().trim()).toMatchTranslation("sandbox.create_a_sandbox");
+                    expect(this.view.$("a.dialog[data-dialog=SandboxNew]").data("workspaceId").toString()).toBe(this.model.get("id"));
+                });
+            });
+
+            context("there is a sandboxId", function() {
+                beforeEach(function() {
+                    this.model.set({sandboxId: "1234"});
+                    this.view.render();
+                });
+
+                it("does not have a link to add a new sandbox", function() {
+                    expect(this.view.$("a.dialog[data-dialog=SandboxNew]")).not.toExist();
+                });
             });
         });
 
