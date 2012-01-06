@@ -125,7 +125,8 @@ describe("InstanceNewDialog", function() {
                     this.dialog.$(".create_new_greenplum input[name=name]").val("new greenplum instance");
                     this.dialog.$(".create_new_greenplum textarea[name=description]").val("Instance Description");
                     this.dialog.$(".create_new_greenplum input[name=size]").val("1");
-
+                    this.dialog.$(".create_new_greenplum input[name=databaseName]").val("dbTest");
+                    this.dialog.$(".create_new_greenplum input[name=schemaName]").val("schemaTest");
                 });
 
 
@@ -144,6 +145,8 @@ describe("InstanceNewDialog", function() {
                         expect(attrs.name).toBe("new greenplum instance");
                         expect(attrs.provisionType).toBe("create");
                         expect(attrs.description).toBe("Instance Description");
+                        expect(attrs.databaseName).toBe("dbTest");
+                        expect(attrs.schemaName).toBe("schemaTest");
                     });
 
                     context("when other forms fields from registering an existing greenplum are filled", function() {

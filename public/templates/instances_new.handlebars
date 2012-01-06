@@ -48,7 +48,13 @@
         <textarea rows="3" name="description"/>
 
         <label class="required" name="size">{{t "instances.dialog.size"}} </label>
-        <input type="text" name="size" maxlength="2000"/>
+        <input type="text" name="size" maxlength="2000"/><br/>
+
+        <label class="required" name="databaseName">{{t "instances.dialog.database_name"}} </label>
+        <label class="required" name="schemaName">{{t "instances.dialog.schema_name"}} </label>
+
+        <input type="text" name="databaseName" maxlength="256"/>
+        <input type="text" name="schemaName" maxlength="256"/>
     </form></div>
 </fieldset>
 

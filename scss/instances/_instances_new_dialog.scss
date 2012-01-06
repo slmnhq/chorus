@@ -31,7 +31,8 @@
             margin-left: $input-spacing;
         }
 
-        label[name=dbUserName], input[name=dbUserName] {
+        label[name=dbUserName], input[name=dbUserName],
+        label[name=databaseName], input[name=databaseName] {
             width: $account-width;
         }
 
@@ -43,7 +44,8 @@
             width: $size_width;
         }
 
-        label[name=dbPassword], input[name=dbPassword] {
+        label[name=dbPassword], input[name=dbPassword],
+        label[name=schemaName], input[name=schemaName] {
             width: $fieldset-width - $account_width - $dialog-padding - 4px;
             margin-left: $input-spacing;
         }
