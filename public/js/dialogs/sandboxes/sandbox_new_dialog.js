@@ -115,9 +115,15 @@
             var select = this.resetSelect(type);
             this.$("."+type+" .loading_text").addClass('hidden');
             this.$("."+type+" label").removeClass("hidden");
-            var models = this[type + "s"];
-            if (models.length) {
-                models.each(function(model) {
+            var collection = this[type + "s"];
+            if (collection.length) {
+                // don't modify the original collection array object
+                var models = _.clone(collection.models);
+                models.sort(function(a, b) {
+                    return naturalSort(a.get("name").toLowerCase(), b.get("name").toLowerCase());
+                });
+
+                _.each(models, function(model) {
                     select.append(
                         $("<option/>", {value : model.get("id")}).text(model.get("name"))
                     );

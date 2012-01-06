@@ -37,7 +37,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
             itDisplaysDefaultOptionFor('instance')
 
-
+            itSortsTheSelectOptionsAlphabetically('instance');
 
             it("hides the loading placeholder", function() {
                 expect(this.dialog.$(".instance .loading_text")).not.toBeVisible();
@@ -71,6 +71,8 @@ describe("chorus.dialogs.SandboxNew", function() {
                     itPopulatesSelect('database');
                     itDisplaysDefaultOptionFor('database');
 
+                    itSortsTheSelectOptionsAlphabetically('database')
+
                     it("hides the loading placeholder", function() {
                         expect(this.dialog.$(".database .loading_text")).not.toBeVisible();
                     });
@@ -100,6 +102,8 @@ describe("chorus.dialogs.SandboxNew", function() {
                             itShowsSelect("schema");
                             itPopulatesSelect("schema");
                             itDisplaysDefaultOptionFor('schema')
+
+                            itSortsTheSelectOptionsAlphabetically('schema');
 
                             it("hides the loading placeholder", function() {
                                 expect(this.dialog.$(".schema .loading_text")).not.toBeVisible();
@@ -296,6 +300,17 @@ describe("chorus.dialogs.SandboxNew", function() {
             });
 
             itShowsUnavailable(type);
+        });
+    }
+
+    function itSortsTheSelectOptionsAlphabetically(type) {
+        it("sorts the select options alphabetically for " + type, function() {
+            this.dialog[type + "s"].loaded = true;
+            this.dialog[type + "s"].reset([fixtures[type]({name : "Zoo"}), fixtures[type]({name: "Aardvark"}), fixtures[type]({name: "bear"})]);
+
+            expect(this.dialog.$("." + type  + " select option:eq(1)").text()).toBe("Aardvark");
+            expect(this.dialog.$("." + type  + " select option:eq(2)").text()).toBe("bear");
+            expect(this.dialog.$("." + type  + " select option:eq(3)").text()).toBe("Zoo");
         });
     }
 
