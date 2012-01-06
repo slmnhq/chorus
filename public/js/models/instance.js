@@ -44,7 +44,13 @@
         },
 
         accountForCurrentUser: function() {
-            this._accountForCurrentUser || (this._accountForCurrentUser = this.accountForUser(ns.session.user()));
+            if (!this._accountForCurrentUser) {
+                this._accountForCurrentUser = this.accountForUser(ns.session.user());
+                this._accountForCurrentUser.bind("destroy", function() {
+                    delete this._accountForCurrentUser;
+                    this.trigger("change");
+                }, this);
+            }
             return this._accountForCurrentUser;
         },
 

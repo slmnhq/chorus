@@ -20,9 +20,10 @@
             if(!this.model) {
                 return {};
             }
+            var account = this.model.accountForCurrentUser();
             return {
                 dbUserName : this.model.get('sharedAccount') && this.model.get('sharedAccount').dbUserName,
-                userHasAccount: this.account && this.account.has("id"),
+                userHasAccount: account && account.has("id"),
                 userCanEditInstance : this.canEditInstance()
             };
         },
@@ -41,10 +42,11 @@
             }
             this.resource.bind("change", this.render, this);
 
-            this.account = this.instance.accountForCurrentUser();
-            this.account.bind("change", this.render, this);
-            this.account.bind("fetchFailed", this.render, this);
-            this.account.fetch();
+            var account = this.instance.accountForCurrentUser();
+            account.bind("change", this.render, this);
+            account.bind("fetchFailed", this.render, this);
+            account.fetch();
+
             this.render();
         },
 

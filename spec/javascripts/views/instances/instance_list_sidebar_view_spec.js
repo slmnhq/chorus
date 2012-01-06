@@ -240,6 +240,20 @@ describe("chorus.views.InstanceListSidebar", function() {
                     it("does not show the 'add credentials' link", function() {
                         expect(this.view.$(".actions .add_credentials")).not.toExist();
                     });
+
+                    describe("when the user removes their credentials", function() {
+                        beforeEach(function() {
+                            this.instance.accountForCurrentUser = this.instance.accountForCurrentUser.originalValue;
+                            this.instance.accountForCurrentUser().trigger("destroy");
+                        });
+
+                        it("shows the add credentials link", function() {
+                            expect(this.view.$(".actions .add_credentials")).toExist();
+                            expect(this.view.$(".actions .add_credentials").data("dialog")).toBe("InstanceAccount");
+                            expect(this.view.$(".actions .add_credentials").data("title")).toMatchTranslation("instances.account.add.title");
+                            expect(this.view.$(".actions .add_credentials").text()).toMatchTranslation("instances.sidebar.add_credentials");
+                        });
+                    });
                 });
             });
 
