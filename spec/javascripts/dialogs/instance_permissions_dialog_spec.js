@@ -67,20 +67,20 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 context("when the alert is confirmed", function() {
                     beforeEach(function() {
-                        spyOn(this.dialog.account, "save");
+                        spyOn(this.dialog.model, "save");
                         this.dialog.launchSubModal.calls[0].args[0].confirmAlert();
                     });
 
                     it("calls save on the account with shared:no", function() {
-                        expect(this.dialog.account.save.calls[0].args[0].shared).toBe("no");
+                        expect(this.dialog.model.save.calls[0].args[0].shared).toBe("no");
                     });
 
                     context("when the save succeeds", function() {
                         beforeEach(function() {
                             spyOn(chorus, 'toast');
                             this.otherSavedSpy = jasmine.createSpy();
-                            this.dialog.account.bind("saved", this.otherSavedSpy);
-                            this.dialog.account.trigger("saved");
+                            this.dialog.model.bind("saved", this.otherSavedSpy);
+                            this.dialog.model.trigger("saved");
                         });
 
                         it("displays a toast message", function() {
@@ -92,7 +92,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                             it("doesn't display a toast message", function() {
                                 chorus.toast.reset();
                                 this.otherSavedSpy.reset();
-                                this.dialog.account.trigger("saved");
+                                this.dialog.model.trigger("saved");
 
                                 expect(chorus.toast).not.toHaveBeenCalled();
                                 expect(this.otherSavedSpy).toHaveBeenCalled();
@@ -103,7 +103,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     context("when the save fails", function() {
                         beforeEach(function() {
                             spyOn(chorus, 'toast');
-                            this.dialog.account.trigger("saveFailed");
+                            this.dialog.model.trigger("saveFailed");
                         });
 
                         it("displays a save failed toast message", function() {
@@ -113,7 +113,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         context("and then a save succeeds", function() {
                             beforeEach(function() {
                                 chorus.toast.reset();
-                                this.dialog.account.trigger("saved");
+                                this.dialog.model.trigger("saved");
                             });
 
                             it("doesn't display the saved toast message", function() {
@@ -130,7 +130,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
             beforeEach(function() {
                 this.dialog.render();
                 this.dialog.$("a.edit").click();
-                this.dialog.$("li[data-id=10111] input[name=dbUserName]").val("jughead");
+                this.dialog.$("li input[name=dbUserName]").val("jughead");
                 this.dialog.$("input[name=dbPassword]").val("gogogo");
             })
 

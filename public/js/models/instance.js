@@ -63,7 +63,12 @@
            if (this.get("sharedAccount") && this.get("sharedAccount").dbUserName) {
                this._sharedAccount || (this._sharedAccount = new ns.models.InstanceAccount({
                    instanceId: this.get("id"),
-                   dbUserName: this.get("sharedAccount").dbUserName
+                   dbUserName: this.get("sharedAccount").dbUserName,
+                   user: {
+                       id: this.get("ownerId"),
+                       userName: this.get("owner"),
+                       fullName: this.get("ownerFullName")
+                   }
                }));
                return this._sharedAccount;
            }

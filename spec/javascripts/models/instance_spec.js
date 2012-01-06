@@ -98,6 +98,13 @@ describe("chorus.models.Instance", function() {
                 expect(sharedAccount.get('instanceId')).toBe(this.instance.get('id'));
             });
 
+            it("has the right user data", function() {
+                var accountUser = this.instance.sharedAccount().user();
+                expect(accountUser.get("fullName")).toBe(this.instance.get('ownerFullName'));
+                expect(accountUser.get("userName")).toBe(this.instance.get('owner'));
+                expect(accountUser.get('id')).toBe(this.instance.get('ownerId'));
+            });
+
             it("memoizes", function() {
                 var sharedAccount = this.instance.sharedAccount();
                 expect(sharedAccount).toBe(this.instance.sharedAccount());

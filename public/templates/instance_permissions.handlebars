@@ -4,29 +4,31 @@
 </div>
 <div class="collection_list">
     <ul>
-        <li data-id={{ownerId}}>
-            <div class="image">
-                <img class="profile" src="{{ownerImageUrl}}"/>
-            </div>
-            <div class="name" title="{{ownerFullName}}">{{ownerFullName}}</div>
-            <div class="links">
-                <span class="owner">{{t "instances.permissions.owner"}}</span>
-                <a href="#" class="edit">{{t "instances.permissions.edit"}}</a>
-            </div>
-            <div class="credentials">
-                <div class="field_wrapper">
-                    <label>{{t "instances.permissions.username"}}</label>
-                    <input type="text" name="dbUserName" maxlength="256" value="{{sharedAccount.dbUserName}}"/>
+        {{#each models}}
+            <li data-id={{id}}>
+                <div class="image">
+                    <img class="profile" src="{{imageUrl}}"/>
                 </div>
-                <div class="field_wrapper">
-                    <label>{{t "instances.permissions.password"}}</label>
-                    <input type="password" maxlength="256" name="dbPassword"/>
+                <div class="name" title="{{ownerFullName}}">{{fullName}}</div>
+                <div class="links">
+                    <span class="owner">{{t "instances.permissions.owner"}}</span>
+                    <a href="#" class="edit">{{t "instances.permissions.edit"}}</a>
                 </div>
-                <div class="actions">
-                    <a href="#" class="save">{{t "actions.save_changes"}}</a><a href="#" class="cancel">{{t "actions.cancel"}}</a>
+                <div class="credentials">
+                    <div class="field_wrapper">
+                        <label>{{t "instances.permissions.username"}}</label>
+                        <input type="text" name="dbUserName" maxlength="256" value="{{dbUserName}}"/>
+                    </div>
+                    <div class="field_wrapper">
+                        <label>{{t "instances.permissions.password"}}</label>
+                        <input type="password" maxlength="256" name="dbPassword"/>
+                    </div>
+                    <div class="actions">
+                        <a href="#" class="save">{{t "actions.save_changes"}}</a><a href="#" class="cancel">{{t "actions.cancel"}}</a>
+                    </div>
                 </div>
-            </div>
-        </li>
+            </li>
+        {{/each}}
     </ul>
 </div>
 <div class="controls">

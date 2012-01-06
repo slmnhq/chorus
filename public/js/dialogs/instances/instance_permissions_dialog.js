@@ -13,7 +13,8 @@
         },
 
         makeModel : function() {
-            this.model = ns.models.InstanceAccount.findByInstanceId(this.options.pageModel.get("id"))
+            this.model = this.options.pageModel.sharedAccount();
+            this.model.fetch();
             this.model.bind("saved", this.saved, this);
             this.model.bind("saveFailed", this.saveFailed, this);
             this.model.bind("validationFailed", this.saveFailed, this);
@@ -21,12 +22,19 @@
             this._super("makeModel")
 
             this.instance = this.options.pageModel;
-            this.account = this.model;
+            this.collection = new ns.models.InstanceAccountSet([this.model]);
         },
 
-        context : function() {
-            var ctx = new chorus.presenters.Base(this.account)
-            return _.extend(ctx, this.instance.attributes, { ownerImageUrl : this.options.pageModel.owner().imageUrl() })
+        collectionModelContext: function(account) {
+            var user = account.user()
+            if(user) {
+                return {
+                    fullName: user.get("fullName"),
+                    imageUrl: user.imageUrl()
+                }
+            } else {
+                return {};
+            }
         },
 
         editCredentials : function(event) {
@@ -38,7 +46,7 @@
             event.preventDefault();
             this.$("a.save").startLoading("instances.permissions.saving")
 
-            this.account.save({
+            this.model.save({
                 dbUserName : this.$("input[name=dbUserName]").val(),
                 dbPassword : this.$("input[name=dbPassword]").val()
             });
@@ -67,11 +75,11 @@
         },
 
         confirmRemoveSharedAccount : function() {
-            var map = this.account;
-            this.account.bind("saved", displaySuccessToast);
-            this.account.bind("saveFailed", displayFailureToast);
+            var map = this.model;
+            this.model.bind("saved", displaySuccessToast);
+            this.model.bind("saveFailed", displayFailureToast);
 
-            this.account.save({shared : "no"});
+            this.model.save({shared : "no"});
 
             function displaySuccessToast() {
                 ns.toast("instances.shared_account_removed");
