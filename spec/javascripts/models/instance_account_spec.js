@@ -104,5 +104,22 @@ describe("chorus.models.InstanceAccount", function() {
                 expect(this.model.isValid()).toBeFalsy();
             });
         });
+
+        context("when the instance account is a shared account", function() {
+            beforeEach(function() {
+                this.model = fixtures.instanceAccount({ shared : "yes" })
+            });
+
+            describe("and it is changed to an individual account", function() {
+                beforeEach(function() {
+                    this.model.unset("dbUserName");
+                })
+
+                it("does not require dbUserName", function() {
+                    this.model.performValidation({ shared : "no" })
+                    expect(this.model.isValid()).toBeTruthy();
+                })
+            })
+        })
     })
 });

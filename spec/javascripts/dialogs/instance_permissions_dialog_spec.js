@@ -26,7 +26,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
         describe("#render", function() {
             beforeEach(function() {
-                this.dialog.render();
+                stubModals();
+                this.dialog.launchModal();
             })
 
             it("displays the shared account subheader", function() {
@@ -53,10 +54,10 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 expect(this.dialog.$("a.alert[data-alert=RemoveSharedAccount]").text().trim()).toMatchTranslation("instances.permissions_dialog.switch_to_individual");
             });
 
-            context("clicking the switch account link", function() {
+            context("clicking the switch to individual account link", function() {
                 beforeEach(function() {
-                    stubModals();
                     spyOn(this.dialog, "launchSubModal").andCallThrough();
+                    this.dialog.account = fixtures.instanceAccount({ shared : "yes", dbUserName : "foo", id : "999" });
                     this.dialog.$("a.alert").click();
                 });
 
@@ -67,13 +68,18 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 context("when the alert is confirmed", function() {
                     beforeEach(function() {
-                        spyOn(this.dialog.model, "save");
+                        spyOn(this.dialog.account, "save").andCallThrough();
                         this.dialog.launchSubModal.calls[0].args[0].confirmAlert();
                     });
 
                     it("calls save on the account with shared:no", function() {
-                        expect(this.dialog.model.save.calls[0].args[0].shared).toBe("no");
+                        expect(this.dialog.account.save.calls[0].args[0].shared).toBe("no");
                     });
+
+                    it("only sends the shared parameter", function() {
+                        expect(this.server.requests[1].url).toBe("/edc/instance/accountmap/999")
+                        expect(this.server.requests[1].requestBody).toBe("id=999&shared=no");
+                    })
 
                     context("when the save succeeds", function() {
                         beforeEach(function() {

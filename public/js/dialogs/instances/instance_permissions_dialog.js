@@ -79,7 +79,9 @@
             this.model.bind("saved", displaySuccessToast);
             this.model.bind("saveFailed", displayFailureToast);
 
-            this.model.save({shared : "no"});
+            var id = this.account.get("id")
+            this.account.clear({silent: true});
+            this.account.save({id: id, shared: "no"});
 
             function displaySuccessToast() {
                 ns.toast("instances.shared_account_removed");

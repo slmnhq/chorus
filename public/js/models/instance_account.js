@@ -24,7 +24,12 @@
         },
 
         declareValidations : function(newAttrs) {
-            this.require('dbUserName', newAttrs);
+            var shared = newAttrs && newAttrs.hasOwnProperty("shared") ? newAttrs["shared"] : this.get("shared");
+
+            if (shared === this.previous("shared")) {
+                this.require('dbUserName', newAttrs);
+            }
+
             if (this.isNew() || (newAttrs && newAttrs.hasOwnProperty('dbPassword'))) { this.require('dbPassword', newAttrs); }
         },
 
