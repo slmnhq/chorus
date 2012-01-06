@@ -14,8 +14,8 @@ describe("MemberSet", function() {
         beforeEach(function() {
             this.savedSpy = jasmine.createSpy("saved");
             this.saveFailedSpy = jasmine.createSpy("saveFailed");
-            this.memberSet.bind("saved", this.savedSpy);
-            this.memberSet.bind("saveFailed", this.saveFailedSpy);
+            spyOnEvent(this.memberSet, 'saved');
+            spyOnEvent(this.memberSet, 'saveFailed');
             this.user1 = new chorus.models.User({ userName: "niels", id: "1" });
             this.user2 = new chorus.models.User({ userName: "ludwig", id: "2" });
             this.user3 = new chorus.models.User({ userName: "isaac", id: "4" });
@@ -51,7 +51,7 @@ describe("MemberSet", function() {
             });
 
             it("triggers the 'saved' event on the member set", function() {
-                expect(this.savedSpy).toHaveBeenCalled();
+                expect("saved").toHaveBeenTriggeredOn(this.memberSet);
             })
         })
 
@@ -71,7 +71,7 @@ describe("MemberSet", function() {
             });
 
             it("triggers the 'saveFailed' event on the member set", function() {
-                expect(this.saveFailedSpy).toHaveBeenCalled();
+                expect("saveFailed").toHaveBeenTriggeredOn(this.memberSet);
             })
         })
     });

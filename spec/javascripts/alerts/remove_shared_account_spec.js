@@ -11,10 +11,9 @@ describe("RemoveSharedAccount", function() {
     });
 
     it("raises the 'removeSharedAccount' event when the submit button is clicked", function() {
-        var spy = jasmine.createSpy("removeSharedAccount");
-        this.alert.bind("removeSharedAccount", spy);
+        spyOnEvent(this.alert, 'removeSharedAccount');
         this.alert.$("button.submit").click();
-        expect(spy).toHaveBeenCalled();
+        expect('removeSharedAccount').toHaveBeenTriggeredOn(this.alert);
     });
 
     it("closes when the submit button is clicked", function() {

@@ -61,7 +61,7 @@ describe("chorus.models.Instance", function() {
             });
 
             it("triggers 'change' on the instance", function() {
-                spyOnBackboneEvent(this.instance, 'change');
+                spyOnEvent(this.instance, 'change');
                 this.instance.accountForCurrentUser().trigger("destroy");
                 expect("change").toHaveBeenTriggeredOn(this.instance);
             });

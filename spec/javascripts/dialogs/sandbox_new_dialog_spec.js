@@ -166,7 +166,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                                     describe("when the model is saved successfully", function() {
                                         beforeEach(function() {
                                             spyOn(this.dialog, 'closeModal');
-                                            spyOnBackboneEvent(this.workspace, 'invalidated');
+                                            spyOnEvent(this.workspace, 'invalidated');
                                             spyOn(chorus, 'toast');
                                             this.sandbox.trigger("saved");
                                         });
