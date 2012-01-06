@@ -17,6 +17,10 @@
             }
         },
 
+        user: function() {
+            return this.get("user") && new ns.models.User(this.get('user'));
+        },
+
         declareValidations : function(newAttrs) {
             this.require('dbUserName', newAttrs);
             if (this.isNew() || (newAttrs && newAttrs.hasOwnProperty('dbPassword'))) { this.require('dbPassword', newAttrs); }

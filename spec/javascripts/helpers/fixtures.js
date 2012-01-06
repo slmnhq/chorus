@@ -1159,6 +1159,16 @@
                 }
             },
 
+            userJson: function(overrides) {
+                var id = this.nextId().toString();
+                return _.extend({
+                    id : id,
+                    userName : "user" + id,
+                    firstName : "EDC"+id,
+                    lastName : "Admin"+id
+                }, overrides)
+            },
+
             workfileJson: function() {
                 var id = this.nextId();
                 var name = 'Workfile ' + id;
@@ -1180,15 +1190,10 @@
 
             user: function() {
                 var id = this.nextId().toString();
-                return new chorus.models.User({
-                    id : id,
-                    userName : "user" + id,
+                return new chorus.models.User(this.userJson({
                     admin : true,
-                    firstName : "EDC"+id,
-                    lastName : "Admin"+id,
-                    fullName : "EDC Admin"+id,
                     use_external_ldap : false
-                });
+                }));
             },
 
             comment: function(overrides) {
@@ -1275,6 +1280,7 @@
                     port: 8020,
                     provisionName: null,
                     provisionType: null,
+                    sharedAccount: {},
                     size: null,
                     state: "online",
                     totalObject: null
@@ -1282,13 +1288,21 @@
                 return new chorus.models.Instance(attributes);
             },
 
+            instanceWithSharedAccount: function(overrides) {
+                return this.instance(_.extend({
+                    sharedAccount : {
+                        dbUserName : "gpadmin"
+                    }
+                }, overrides));
+            },
+
             instanceAccount : function(overrides) {
                 var attributes = _.extend({
                     id : this.nextId().toString(),
                     shared : "yes",
                     expiration : null,
-                    instanceId : "10101",
-                    userName : "edcadmin",
+                    instanceId : this.nextId().toString(),
+                    user : this.userJson(),
                     dbUserName : "gpadmin"
                 }, overrides);
                 return new chorus.models.InstanceAccount(attributes);

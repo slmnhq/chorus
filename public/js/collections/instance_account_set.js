@@ -4,10 +4,7 @@
         urlTemplate : "instance/accountmap",
 
         users : function() {
-            return this.map(function(model){
-                var user = model.get("user");
-                return user && new ns.models.User(user);
-            });
+            return this.map(function(model) { return model.user(); });
         },
 
         additionalParams : function(){

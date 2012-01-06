@@ -27,6 +27,38 @@ describe("chorus.models.InstanceAccount", function() {
         });
     });
 
+    describe("#user", function() {
+        beforeEach(function() {
+            this.model.set({"user": {
+                firstName: "Ricardo",
+                lastName: "Henderson",
+                id: "45",
+                userName: "rickyH"
+            }})
+        });
+
+        it("returns a user", function() {
+            expect(this.model.user()).toBeA(chorus.models.User);
+        });
+
+        it("sets the name and id fields based on the account's information", function() {
+            expect(this.model.user().get("firstName")).toBe("Ricardo");
+            expect(this.model.user().get("lastName")).toBe("Henderson");
+            expect(this.model.user().get("id")).toBe("45");
+            expect(this.model.user().get("userName")).toBe("rickyH");
+        });
+
+        context("when the account doesn't have a user", function() {
+            beforeEach(function() {
+                this.model.unset("user");
+            });
+
+            it("returns undefined", function() {
+                expect(this.model.user()).toBeUndefined();
+            });
+        });
+    });
+
     describe("#fetchByInstanceId", function() {
         it("hits the correct url", function() {
             chorus.models.InstanceAccount.findByInstanceId("4");
