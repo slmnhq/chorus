@@ -79,6 +79,7 @@ describe("ModelDelete alert", function() {
         this.alert.text = "Are you really really sure?"
         this.alert.title = "A standard delete alert"
         this.alert.ok = "Delete It!"
+        this.alert.deleteMessage = "It has been deleted"
     });
 
     describe("#revealed", function() {
@@ -109,6 +110,9 @@ describe("ModelDelete alert", function() {
             beforeEach(function() {
                 spyOn(chorus.router, "navigate");
                 spyOnEvent($(document), "close.facebox");
+                spyOn(chorus, "toast");
+                this.deleteParams = {foo: "bar"};
+                spyOn(this.alert, "deleteMessageParams").andReturn(this.deleteParams);
             });
 
             it("dismisses the alert", function () {
@@ -119,6 +123,12 @@ describe("ModelDelete alert", function() {
             it("navigates to the redirectUrl", function() {
                 this.alert.model.trigger("destroy", this.alert.model);
                 expect(chorus.router.navigate).toHaveBeenCalledWith("/partyTime", true);
+            });
+
+            it("displays the delete success toast message", function() {
+                this.alert.model.trigger("destroy", this.alert.model);
+                expect(this.alert.deleteMessageParams).toHaveBeenCalled();
+                expect(chorus.toast).toHaveBeenCalledWith(this.alert.deleteMessage, this.deleteParams);
             });
 
             context("when the alert does NOT have a redirect url", function() {

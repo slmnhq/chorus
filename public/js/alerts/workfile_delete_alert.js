@@ -2,6 +2,7 @@
     ns.WorkfileDelete = chorus.alerts.ModelDelete.extend({
         text : t("workfile.delete.text"),
         ok : t("workfile.delete.button"),
+        deleteMessage: "workfile.delete.toast",
 
 
         makeModel : function() {

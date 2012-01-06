@@ -4,9 +4,9 @@
         className: "workspace_summary_sidebar",
 
         setup : function() {
-            this.model.bind("image:change", this.render);
+            this.model.bind("image:change", this.render, this);
             this.model.members().fetch();
-            this.model.members().bind("reset", this.render);
+            this.model.members().bind("reset", this.render, this);
         },
 
         numMembers: 24,

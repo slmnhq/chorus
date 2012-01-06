@@ -1,4 +1,21 @@
 describe("chorus.views", function() {
+    describe("event bindings", function() {
+        beforeEach(function() {
+            this.model = new chorus.models.Base();
+            this.view = new chorus.views.Base({model : this.model});
+            this.view.template = function() { return "";}
+            // render is bound on the view object before we can spy on it.
+            spyOn(this.view, "preRender");
+        });
+
+        _.each(["reset", "add", "remove", "change"], function(evt) {
+            it("re-renders on the " + evt + " event", function() {
+                this.view.resource.trigger(evt);
+                expect(this.view.preRender).toHaveBeenCalled();
+            });
+        });
+    });
+
     describe("#context", function() {
 
         describe("for a view with a model", function() {

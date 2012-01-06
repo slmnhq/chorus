@@ -12,7 +12,7 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
         });
 
         it("binds render to the reset of the collection", function() {
-            expect(this.model.members().bind).toHaveBeenCalledWith('reset', this.view.render);
+            expect(this.model.members().bind).toHaveBeenCalledWith('reset', this.view.render, this.view);
         });
     });
 

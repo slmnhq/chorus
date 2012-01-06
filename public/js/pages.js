@@ -1,7 +1,7 @@
 (function(ns) {
     ns.Bare = chorus.views.Bare.extend({
         bindCallbacks: function() {
-            if (chorus.user) chorus.user.bind("change", this.render);
+            if (chorus.user) chorus.user.bind("change", this.render, this);
         }
     });
 

@@ -49,8 +49,11 @@
             this.model.destroy();
         },
 
+        deleteMessageParams : $.noop,
+
         modelDeleted : function () {
             $(document).trigger("close.facebox");
+            chorus.toast(this.deleteMessage, this.deleteMessageParams());
             if (this.redirectUrl) { chorus.router.navigate(this.redirectUrl, true); }
         }
 

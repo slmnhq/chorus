@@ -16,7 +16,7 @@ describe("chorus.pages.Base", function() {
         });
 
         it("binds to change on chorus.user", function() {
-            expect(chorus.user.bind).toHaveBeenCalledWith("change", this.view.render);
+            expect(chorus.user.bind).toHaveBeenCalledWith("change", this.view.render, this.view);
         })
     })
 

@@ -11,7 +11,7 @@
 
         setup : function() {
             this.selectionSource = this.options.selectionSource;
-            this.selectionSource.bind("reset", this.render);
+            this.selectionSource.bind("reset", this.render, this);
             this.nonRemovableModels = this.options.nonRemovable;
         },
 

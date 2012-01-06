@@ -25,7 +25,8 @@
                 dbUserName : this.model.get('sharedAccount') && this.model.get('sharedAccount').dbUserName,
                 userHasAccount: account && account.has("id"),
                 userCanEditInstance : this.canEditInstance(),
-                instanceAccountsCount : this.instance.accounts().length
+                instanceAccountsCount : this.instance.accounts().length,
+                deleteable : this.instance.get("state") == "fault" && this.instance.get("provisionType") == "create"
             };
         },
 
@@ -44,7 +45,7 @@
 
             this.instance.accounts().fetch();
             this.instance.accounts().bind("reset", this.render, this);
-            
+
             this.resource.bind("change", this.render, this);
 
             var account = this.instance.accountForCurrentUser();

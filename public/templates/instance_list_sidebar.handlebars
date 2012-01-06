@@ -41,7 +41,10 @@
         {{/ifAny}}
          {{#if userCanEditInstance}}
              <li><a class="dialog edit_instance" href="#" data-dialog="InstancesEdit">{{t "instances.sidebar.edit_instance"}}</a></li>
-         {{/if}}
+            {{#if deleteable}}
+                <li><a class="alert delete_instance" href="#" data-alert="InstanceDelete">{{t "instances.sidebar.delete_instance"}}</a></li>
+            {{/if}}
+        {{/if}}
         <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="instance" data-allow-workfile-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
     </ul>
 </div>

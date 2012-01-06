@@ -3,7 +3,6 @@
     ns.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
         initialize: function initialize() {
             this.preInitialize.apply(this, arguments);
-            _.bindAll(this, 'render');
             this.bindCallbacks()
             this.setup.apply(this, arguments);
         },
@@ -72,9 +71,10 @@
 
         bindCallbacks : function() {
             if (this.resource) {
-                if (!this.persistent) this.resource.bind("change", this.render);
-                this.resource.bind("reset", this.render);
-                this.resource.bind("add", this.render);
+                if (!this.persistent) this.resource.bind("change", this.render, this);
+                this.resource.bind("reset", this.render, this);
+                this.resource.bind("add", this.render, this);
+                this.resource.bind("remove", this.render, this);
                 this.resource.bind("validationFailed", this.showErrors, this);
                 this.resource.bind("validated", this.clearErrors, this);
                 this.resource.bind("saveFailed", this.showErrors, this);

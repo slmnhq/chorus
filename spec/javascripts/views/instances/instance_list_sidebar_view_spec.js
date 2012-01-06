@@ -71,7 +71,6 @@ describe("chorus.views.InstanceListSidebar", function() {
         });
 
         context("when user is an admin or owner of the instance", function() {
-
             it("displays edit instance link when user is admin", function() {
                 setLoggedInUser({ userName : "benjamin", admin: true});
                 this.view.render();
@@ -84,15 +83,44 @@ describe("chorus.views.InstanceListSidebar", function() {
                 this.view.render();
                 expect(this.view.$(".actions .edit_instance")).toExist();
             });
+
+            it("does not display the delete instance link", function() {
+                expect(this.view.$(".actions .delete_instance")).not.toExist();
+            });
+
+            context("when the instance failed to provision", function() {
+                beforeEach(function() {
+                    setLoggedInUser({ userName : "benjamin", admin: true});
+                    this.instance.set({
+                        state: "fault",
+                        provisionType: "create"
+                    });
+                    this.view.render();
+                });
+
+                it("sets the deleteable flag on the context", function() {
+                    expect(this.view.additionalContext().deleteable).toBeTruthy();
+                });
+
+                it("displays the delete instance link", function() {
+                    expect(this.view.$(".actions .delete_instance")).toExist();
+                });
+            });
         });
 
         context("when user is not an admin or owner of the instance", function() {
-
-            it("does not display edit instance link when user is neither admin nor owner", function() {
+            beforeEach(function() {
                 setLoggedInUser({ userName : "benjamin", admin: false});
                 this.instance.set({owner : "harry"});
                 this.view.render();
+            });
+
+            it("does not display edit instance link when user is neither admin nor owner", function() {
                 expect(this.view.$(".actions .edit_instance")).not.toExist();
+            });
+
+            it("does not display the delete instance link", function() {
+                expect(this.view.$(".actions .delete_instance")).not.toExist();
             });
 
         });
