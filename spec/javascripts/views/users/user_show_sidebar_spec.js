@@ -19,7 +19,7 @@ describe("chorus.views.UserShowSidebar", function() {
 
         describe("when the model is changed", function() {
             beforeEach(function() {
-                spyOn(this.view.activityList, "render");
+                spyOn(this.view.activityList, "render").andCallThrough();
                 this.view.model.trigger("change")
             });
 

@@ -2,6 +2,10 @@
     ns.views.WorkfileShowSidebar = ns.views.Sidebar.extend({
         className : "workfile_show_sidebar",
 
+        subviews : {
+            '.activities' : 'activityList'
+        },
+
         setup : function() {
             this.collection = this.model.activities();
             this.collection.fetch();
@@ -19,13 +23,6 @@
                 updatedBy : [this.model.get("modifiedByFirstName"), this.model.get("modifiedByLastName")].join(' '),
                 modifierUrl : this.model.modifier().showUrl()
             }
-        },
-
-        postRender : function() {
-            this.activityList.el = this.$(".activities")
-            this.activityList.delegateEvents()
-            this.activityList.render();
-            this._super('postRender');
         }
     });
 })(jQuery, chorus);

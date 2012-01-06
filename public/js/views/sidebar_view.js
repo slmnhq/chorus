@@ -6,7 +6,7 @@
 
             var sidebar = $(this.el).closest("#sidebar")
             sidebar.removeAttr("style")
-            setTimeout(_.bind(this.setupSidebarScrolling, this), 1);
+            this.setupSidebarScrolling();
 
             var resizeTimer;
 

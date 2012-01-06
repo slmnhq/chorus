@@ -1,6 +1,9 @@
 (function($, ns) {
     ns.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
         className : "workfile_list_sidebar",
+        subviews : {
+            '.activities' : 'activityList'
+        },
 
         setup: function() {
             this.bind("workfile:selected", this.setWorkfile, this);
@@ -9,6 +12,7 @@
         setWorkfile: function(workfile) {
             this.workfile = workfile;
             this.collection = this.workfile.activities();
+            this.collection.bind("reset", this.render, this)
             this.collection.fetch();
 
             this.collection.bind("changed", this.render, this);
@@ -21,15 +25,6 @@
                 displayStyle : ['without_object', 'without_workspace']
             });
             this.render();
-        },
-
-        postRender : function() {
-            if (this.activityList) {
-                this.activityList.el = this.$(".activities")
-                this.activityList.delegateEvents()
-                this.activityList.render();
-            }
-            this._super('postRender');
         },
 
         additionalContext : function() {

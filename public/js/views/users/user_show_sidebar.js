@@ -3,6 +3,9 @@
     ns.views.UserShowSidebar = ns.views.Sidebar.extend({
         className : "user_show_sidebar",
         entityType : "user",
+        subviews : {
+            '.activities' : 'activityList'
+        },
 
         setup : function() {
             this.collection = this.model.activities();
@@ -15,13 +18,6 @@
             return {
                 permission :  ((this.model.get("userName") == chorus.session.user().get("userName")) || chorus.session.user().get("admin"))
             }
-        },
-
-        postRender : function() {
-            this.activityList.el = this.$(".activities");
-            this.activityList.delegateEvents();
-            this.activityList.render();
-            this._super('postRender');
         }
     });
 
