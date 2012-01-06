@@ -35,8 +35,8 @@
         renderSubviews: function() {
             var self = this;
             this.setupSubviews();
-            _.each(this.subviews, function(property, selector){
-                var view = _.isFunction(self[property]) ? self[property]() : self[property];
+            _.each(this.subviews, _.bind(function(property, selector){
+                var view = this.getSubview(property);
                 if (view) {
                     var element = self.$(selector);
                     var id = element.attr("id"), klass = element.attr("class");
@@ -45,7 +45,11 @@
                     $(view.el).addClass(klass);
                     view.delegateEvents();
                 }
-            });
+            }, this));
+        },
+
+        getSubview : function(property) {
+            return _.isFunction(this[property]) ? this[property]() : this[property];
         },
 
         template: function template(context) {

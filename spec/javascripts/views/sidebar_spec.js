@@ -7,6 +7,11 @@ describe("chorus.views.Sidebar", function() {
         this.page = new chorus.pages.Base();
         this.page.sidebar = new chorus.views.Sidebar();
         this.page.sidebar.className = "user_show_sidebar"
+        this.page.sidebar.subviews = {
+            '.foo' : 'fooView'
+        }
+        this.page.sidebar.fooView = new chorus.views.Base();
+        this.page.sidebar.fooView.className = "plain_text";
     })
 
     afterEach(function() {
@@ -31,7 +36,6 @@ describe("chorus.views.Sidebar", function() {
             
             it("resets the lionbars", function() {
                 expect($.fn.lionbars).toHaveBeenCalled()
-
             })
         })
 
@@ -44,6 +48,17 @@ describe("chorus.views.Sidebar", function() {
             it("should clear the styles on #sidebar", function() {
                 expect(this.page.$('#sidebar').attr('style')).toBeFalsy();
             });
+        })
+
+        context("when a subview is re-rendered", function(){
+            beforeEach(function() {
+                $.fn.lionbars.reset();
+                this.page.sidebar.fooView.render()
+            });
+
+            it("resets the lionbars", function() {
+                expect($.fn.lionbars).toHaveBeenCalled()
+            })
         })
     })
 })

@@ -1,6 +1,20 @@
 ;
 (function(ns) {
     ns.views.Sidebar = ns.views.Base.extend({
+        preRender : function() {
+            this._super("preRender", arguments);
+            
+            if (this.subviews && !this.subviewsBound) {
+                _.each(this.subviews, _.bind(function(property, selector) {
+                    var view = this.getSubview(property);
+                    if (view) {
+                        view.bind("rendered", this.setupSidebarScrolling, this)
+                    }
+                }, this));
+                this.subviewsBound = true;
+            }
+        },
+
         postRender: function() {
             this._super('postRender');
 
