@@ -48,7 +48,8 @@
 
             this.$("button.submit").startLoading("instances.edit_dialog.saving");
             this.$("button.cancel").attr("disabled", "disabled");
-            this.model.save(attrs);
+            this.model.set(attrs, { silent: true })
+            this.model.save();
         },
 
         postRender : function() {
