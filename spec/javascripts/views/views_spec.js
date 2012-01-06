@@ -69,6 +69,18 @@ describe("chorus.views", function() {
                 })
             })
 
+            describe("#render", function() {
+                beforeEach(function() {
+                    this.view.className = "plain_text"
+                    spyOnEvent(this.view, "rendered");
+                    this.view.render();
+                })
+
+                it("triggers a 'rendered' event on itself", function() {
+                    expect("rendered").toHaveBeenTriggeredOn(this.view);
+                })
+            })
+
         });
 
         describe("when an additionalContext is defined", function() {

@@ -28,7 +28,7 @@
                 .addClass(this.additionalClass || "");
             this.renderSubviews();
             this.postRender($(this.el));
-
+            this.trigger("rendered");
             return this;
         },
 
