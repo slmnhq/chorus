@@ -1,7 +1,12 @@
 describe("jquery extensions", function() {
     describe("button extensions", function() {
         beforeEach(function() {
-            this.button = $("<button>Original Text</button>");
+            var container = $("<div/>");
+            _.times(5, function(i) {
+                container.append("<button>Original Text " + i + "</button>");
+            });
+            this.buttons = container.find("button");
+            this.button = this.buttons.eq(0);
         });
 
         context("when #startLoading has not yet been called", function() {
@@ -14,7 +19,7 @@ describe("jquery extensions", function() {
             describe("#stopLoading", function() {
                 it("doesn't modify the text", function() {
                     this.button.stopLoading();
-                    expect(this.button.text()).toBe("Original Text");
+                    expect(this.button.text()).toBe("Original Text 0");
                 });
             })
         });
@@ -22,7 +27,7 @@ describe("jquery extensions", function() {
 
         describe("startLoading", function() {
             beforeEach(function() {
-                this.button.startLoading("test.deer");
+                this.buttons.startLoading("test.deer");
             });
 
             it("sets the button's text to the supplied translation key", function() {
@@ -41,10 +46,6 @@ describe("jquery extensions", function() {
                 expect(this.button).toHaveClass("is_loading");
             });
 
-            it("returns true when #isLoading is called", function() {
-                expect(this.button.isLoading()).toBeTruthy();
-            });
-
             context("calling startLoading again", function() {
                 beforeEach(function() {
                     this.button.startLoading("breadcrumbs.home");
@@ -60,34 +61,46 @@ describe("jquery extensions", function() {
 
                 it("still restores to the original text when stopLoading is called", function() {
                     this.button.stopLoading();
-                    expect(this.button.text()).toBe("Original Text");
+                    expect(this.button.text()).toBe("Original Text 0");
                 });
             });
 
             describe("stopLoading", function() {
                 beforeEach(function() {
-                    this.button.stopLoading();
+                    this.buttons.stopLoading();
                 });
 
-                it("sets the button's text to the original value", function() {
-                    expect(this.button.text()).toBe("Original Text");
+                it("sets each button's text to the original value", function() {
+                    expect(this.buttons.eq(0).text()).toBe("Original Text 0");
+                    expect(this.buttons.eq(1).text()).toBe("Original Text 1");
                 });
 
-                it("removes the spinner from the button", function() {
-                    expect(this.button.find("div[aria-role=progressbar]").length).toBe(0);
+                it("removes the spinner from each button", function() {
+                    expect(this.buttons.find("div[aria-role=progressbar]").length).toBe(0);
                 });
 
-                it("enables the button", function() {
-                    expect(this.button).not.toHaveAttr("disabled")
+                it("enables the buttons", function() {
+                    expect(this.buttons.eq(0)).not.toHaveAttr("disabled")
+                    expect(this.buttons.eq(1)).not.toHaveAttr("disabled")
                 });
 
-                it("removes the expanded class to the button", function() {
-                    expect(this.button).not.toHaveClass("loading");
+                it("removes the loading class from the buttons", function() {
+                    expect(this.buttons.eq(0)).not.toHaveClass("loading");
+                    expect(this.buttons.eq(1)).not.toHaveClass("loading");
                 });
+            });
+        });
 
-                it("returns false when #isLoading is called", function() {
-                    expect(this.button.isLoading()).toBeFalsy();
-                });
+        describe("#isLoading", function() {
+            it("returns true when the first element in the collection is loading", function() {
+                this.buttons.eq(0).startLoading();
+                expect(this.buttons.isLoading()).toBeTruthy();
+            });
+
+            it("returns false when the first element in the collection is not loading", function() {
+                this.buttons.startLoading();
+                this.buttons.eq(0).stopLoading();
+                expect(this.buttons.isLoading()).toBeFalsy();
             });
         });
     });
