@@ -54,6 +54,9 @@
         },
 
         displayName : function() {
+            if(!this.get('firstName') && !this.get('lastName') && this.get('fullName')) {
+                return this.get('fullName');
+            }
             return [this.get("firstName"), this.get("lastName")].join(' ');
         },
 

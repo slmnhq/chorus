@@ -159,19 +159,19 @@ describe("chorus.models.User", function() {
     });
 
     describe("#imageUrl", function() {
-        it("uses the right URL", function(){
+        it("uses the right URL", function() {
             var user = new models.User({userName: 'foo', id : "bar"});
             expect(user.imageUrl()).toBe("/edc/userimage/bar?size=original");
         });
 
-        it("accepts the size argument", function(){
+        it("accepts the size argument", function() {
             var user = new models.User({userName: 'foo', id: "bar"});
             expect(user.imageUrl({size: "icon"})).toBe("/edc/userimage/bar?size=icon");
         });
     });
 
     describe("#picklistImageUrl", function() {
-        it("uses the right URL", function(){
+        it("uses the right URL", function() {
             var user = new models.User({userName: 'foo', id: "bar"});
             expect(user.picklistImageUrl()).toBe(user.imageUrl({ size: "original" }));
         });
@@ -184,6 +184,17 @@ describe("chorus.models.User", function() {
 
         it("returns the full name", function() {
             expect(this.model.displayName()).toBe("Danny Burkes");
+        })
+
+        context("when firstName and lastName are blank, but fullName exists", function() {
+            it("uses fullName", function() {
+                var user = fixtures.user({
+                    firstName: '',
+                    lastName: '',
+                    fullName: 'SomeGuy'
+                });
+                expect(user.displayName()).toBe('SomeGuy');
+            });
         })
     })
 });
