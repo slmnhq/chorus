@@ -268,7 +268,7 @@ describe("chorus.models", function() {
                 })
             })
 
-            context("passing attrs to the save method", function() {
+            context("when attributes are passed to the save method", function() {
                 beforeEach(function() {
                     this.model.declareValidations = function(newAttrs) {
                         this.require('requiredAttr', newAttrs);
@@ -294,6 +294,31 @@ describe("chorus.models", function() {
                     it("triggers validated", function() {
                         expect(this.validatedSpy).toHaveBeenCalled();
                     });
+
+                    describe("and beforeSave makes a change to the attrs", function() {
+                        beforeEach(function() {
+                            spyOn(this.model, "beforeSave").andCallFake(function(attrs, options) {
+                                attrs.otherAttr = "foo"
+                            })
+
+                            Backbone.Model.prototype.save.reset();
+                            this.model.save({ requiredAttr : "bar" })
+                        })
+
+                        it("saves the changed attrs", function() {
+                            expect(Backbone.Model.prototype.save).toHaveBeenCalledWith({
+                                requiredAttr : "bar",
+                                otherAttr : "foo"
+                            }, jasmine.any(Object));
+                        })
+                    })
+
+                    describe("and beforeSave does not make any changes to the attrs", function() {
+                        it("saves the unchanged attrs", function() {
+                            expect(Backbone.Model.prototype.save).toHaveBeenCalledWith(
+                                { requiredAttr : "bar" }, jasmine.any(Object));
+                        })
+                    })
                 });
 
                 context("when the attrs are invalid", function() {
@@ -311,13 +336,47 @@ describe("chorus.models", function() {
                 });
             });
 
+            context("when no attributes are passed to the save method", function() {
+                beforeEach(function() {
+                    this.model.set({requiredAttr : 'foo'});
+                    spyOn(Backbone.Model.prototype, "save");
+                });
+
+                describe("and beforeSave makes a change to the attrs", function() {
+                    beforeEach(function() {
+                        spyOn(this.model, "beforeSave").andCallFake(function(attrs, options) {
+                            attrs.otherAttr = "foo"
+                        })
+
+                        this.model.save()
+                    })
+
+                    it("saves the changed attrs", function() {
+                        expect(Backbone.Model.prototype.save).toHaveBeenCalledWith({
+                            otherAttr : "foo"
+                        }, jasmine.any(Object));
+                    })
+                })
+
+                describe("and beforeSave does not make any changes to the attrs", function() {
+                    beforeEach(function() {
+                        this.model.save();
+                    })
+
+                    it("saves the unchanged attrs", function() {
+                        expect(Backbone.Model.prototype.save).toHaveBeenCalledWith(undefined, jasmine.any(Object));
+                    })
+                })
+            })
+
             it("calls the 'beforeSave' hook", function() {
-                spyOn(this.model, 'beforeSave');
-                this.model.save({ foo: 'bar' }, { silent: true });
+                spyOn(this.model, 'beforeSave')
+                var attrs = {foo: 'bar'}
+                this.model.save(attrs, { silent: true });
 
                 expect(this.model.beforeSave).toHaveBeenCalled();
                 var beforeSaveArgs = this.model.beforeSave.calls[0].args;
-                expect(beforeSaveArgs[0]).toEqual({ foo: 'bar' });
+                expect(beforeSaveArgs[0]).toEqual(attrs);
 
                 // the options hash gets mutated later in #save
                 expect(beforeSaveArgs[1].silent).toBeTruthy();

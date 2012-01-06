@@ -136,9 +136,9 @@
             },
 
             save : function(attrs, options) {
-                attrs || (attrs = {});
                 options || (options = {});
-                this.beforeSave(attrs, options);
+                var effectiveAttrs = attrs || {};
+                this.beforeSave(effectiveAttrs, options);
                 var success = options.success;
                 options.success = function(model, resp, xhr) {
                     var savedEvent = model.serverErrors ? "saveFailed" : "saved"
@@ -147,9 +147,10 @@
                 };
                 this.serverErrors = undefined;
 
-                if (this.performValidation(attrs)) {
+                if (this.performValidation(effectiveAttrs)) {
                     this.trigger("validated");
-                    return Backbone.Model.prototype.save.call(this, attrs, options);
+                    var attrsToSave = _.isEmpty(effectiveAttrs) ? undefined : effectiveAttrs;
+                    return Backbone.Model.prototype.save.call(this, attrsToSave, options);
                 } else {
                     this.trigger("validationFailed");
                     return false;
