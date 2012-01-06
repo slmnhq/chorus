@@ -35,7 +35,12 @@
         },
 
         setupSidebarScrolling : function() {
-            var sidebar = $(this.el).closest("#sidebar")
+            var sidebar = $(this.el).closest("#sidebar");
+
+            if (this.oldSidebarPadding) {
+                sidebar.find(".lb-wrap").css("padding-right", this.oldSidebarPadding);
+            }
+
             sidebar.lionbars();
 
             sidebar.unbind('hover').hover(function() {
@@ -53,6 +58,12 @@
                     event.preventDefault();
                 }
             })
+
+            this.oldSidebarPadding = sidebar.find('.lb-wrap').css("padding-right");
+
+            if (!$.browser.msie) {
+                sidebar.find('.lb-wrap').css("padding-right", "32px");
+            }
         }
     });
 })(chorus);
