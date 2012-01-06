@@ -84,10 +84,10 @@ describe("chorus.pages.WorkfileIndexPage", function() {
 
             it("has options for filtering", function() {
                 expect(this.page.$("ul[data-event=filter] li[data-type=]")).toExist();
-                expect(this.page.$("ul[data-event=filter] li[data-type=sql]")).toExist();
-                expect(this.page.$("ul[data-event=filter] li[data-type=code]")).toExist();
-                expect(this.page.$("ul[data-event=filter] li[data-type=text]")).toExist();
-                expect(this.page.$("ul[data-event=filter] li[data-type=other]")).toExist();
+                expect(this.page.$("ul[data-event=filter] li[data-type=SQL]")).toExist();
+                expect(this.page.$("ul[data-event=filter] li[data-type=CODE]")).toExist();
+                expect(this.page.$("ul[data-event=filter] li[data-type=TEXT]")).toExist();
+                expect(this.page.$("ul[data-event=filter] li[data-type=OTHER]")).toExist();
             })
 
             it("can filter the list by 'all'", function() {
@@ -96,27 +96,27 @@ describe("chorus.pages.WorkfileIndexPage", function() {
                 expect(this.page.collection.fetch).toHaveBeenCalled();
             })
 
-            it("has can filter the list by 'sql'" ,function(){
-                this.page.$("li[data-type=sql] a").click();
-                expect(this.page.collection.attributes.fileType).toBe("sql");
+            it("has can filter the list by 'SQL'" ,function(){
+                this.page.$("li[data-type=SQL] a").click();
+                expect(this.page.collection.attributes.fileType).toBe("SQL");
                 expect(this.page.collection.fetch).toHaveBeenCalled();
             })
 
-            it("has can filter the list by 'code'" ,function(){
-                this.page.$("li[data-type=code] a").click();
-                expect(this.page.collection.attributes.fileType).toBe("code");
+            it("has can filter the list by 'CODE'" ,function(){
+                this.page.$("li[data-type=CODE] a").click();
+                expect(this.page.collection.attributes.fileType).toBe("CODE");
                 expect(this.page.collection.fetch).toHaveBeenCalled();
             })
 
-            it("has can filter the list by 'text'" ,function(){
-                this.page.$("li[data-type=text] a").click();
-                expect(this.page.collection.attributes.fileType).toBe("text");
+            it("has can filter the list by 'TEXT'" ,function(){
+                this.page.$("li[data-type=TEXT] a").click();
+                expect(this.page.collection.attributes.fileType).toBe("TEXT");
                 expect(this.page.collection.fetch).toHaveBeenCalled();
             })
 
-            it("has can filter the list by 'other'" ,function(){
-                this.page.$("li[data-type=other] a").click();
-                expect(this.page.collection.attributes.fileType).toBe("other");
+            it("has can filter the list by 'OTHER'" ,function(){
+                this.page.$("li[data-type=OTHER] a").click();
+                expect(this.page.collection.attributes.fileType).toBe("OTHER");
                 expect(this.page.collection.fetch).toHaveBeenCalled();
             })
 
