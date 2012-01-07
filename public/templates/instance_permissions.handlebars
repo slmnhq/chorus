@@ -1,9 +1,12 @@
 <div class="sub_header">
-    <span class="details_text">{{t "instances.shared_account"}}</span>
     {{#if sharedAccount}}
+        <span class="details_text">{{t "instances.shared_account"}}</span>
         <a href="#" class="alert" data-alert="RemoveSharedAccount">{{t "instances.permissions_dialog.switch_to_individual"}}</a>
+    {{else}}
+        <span class="individual_accounts_count">{{t "instances.sidebar.x_individual_accounts" count=models.length}}</span>
+        <a href="#" class="alert" data-alert="AddSharedAccount">{{t "instances.permissions_dialog.switch_to_shared"}}</a>
+        <button class='add_account'>{{t "instances.permissions_dialog.add_account"}}</button>
     {{/if}}
-    <!--<a href="#" class="alert" data-alert="RemoveSharedAccount">{{t "instances.permissions_dialog.switch_to_individual"}}</a>-->
 </div>
 <div class="collection_list">
     <ul>
@@ -12,7 +15,11 @@
                 <div class="image">
                     <img class="profile" src="{{imageUrl}}"/>
                 </div>
-                <div class="name" title="{{ownerFullName}}">{{fullName}}</div>
+                {{#if isNew}}
+                    <select class="name"></select>
+                {{else}}
+                    <div class="name" title="{{ownerFullName}}">{{fullName}}</div>
+                {{/if}}
                 <div class="links">
                     <span class="owner">{{t "instances.permissions.owner"}}</span>
                     <a href="#" class="edit">{{t "instances.permissions.edit"}}</a>

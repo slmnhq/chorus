@@ -1,4 +1,5 @@
-;(function(ns){
+;
+(function(ns) {
     ns.dialogs.InstancePermissions = ns.dialogs.Base.extend({
         className : "instance_permissions",
         title : t("instances.permissions_dialog.title"),
@@ -8,13 +9,18 @@
             "click a.edit" : "editCredentials",
             "click a.save" : "save",
             "click a.cancel" : "cancel",
-
+            "click button.add_account" : "newAccount",
             "click a.alert" : "removeSharedAccountAlert"
         },
 
         makeModel : function() {
             this.instance = this.options.pageModel;
             this.model = this.instance.sharedAccount();
+            if (!this.model) {
+                this.users = new ns.models.UserSet();
+                this.users.bind("reset", this.populateSelect, this);
+                this.users.fetchAll();
+            }
             this.collection = this.instance.accounts();
 
             this.collection.bind("saved", this.saved, this);
@@ -29,15 +35,19 @@
         },
 
         collectionModelContext: function(account) {
+            var context = {};
             var user = account.user()
-            if(user) {
-                return {
+            if (user) {
+                _.extend(context, {
                     fullName: user.displayName(),
                     imageUrl: user.imageUrl()
-                }
-            } else {
-                return {};
+                });
             }
+            if (account.isNew()) {
+                context.id = 'new';
+                context.isNew = true;
+            }
+            return context;
         },
 
         editCredentials : function(event) {
@@ -46,6 +56,27 @@
             var accountId = li.data("id");
             li.addClass("editing");
             this.account = this.resource = this.collection.get(accountId);
+        },
+
+        newAccount: function(e) {
+            var button = this.$("button.add_account");
+            if (button.is(":disabled")) return;
+            this.account = new ns.models.InstanceAccount();
+            this.collection.add(this.account);
+            this.render();
+            this.$("button.add_account").attr("disabled", "disabled");
+            this.$("li[data-id=new]").addClass('editing new');
+            this.populateSelect();
+        },
+
+        populateSelect: function() {
+            var options = this.users.map(function(user) {
+                return $("<option/>").text(user.displayName()).val(user.get("userName")).outerHtml();
+            });
+            var select = this.$("li.new select.name");
+            if (select) {
+                select.append(options.join(""));
+            }
         },
 
         save : function(event) {

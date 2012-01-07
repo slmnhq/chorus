@@ -1,4 +1,8 @@
 describe("chorus.dialogs.InstancePermissions", function() {
+    beforeEach(function() {
+        spyOn($.fn, 'chosen');
+    });
+
     describe("#setup", function() {
         beforeEach(function() {
             this.model = fixtures.instanceWithSharedAccount();
@@ -129,6 +133,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
     context("when the instance has individual accounts", function() {
         beforeEach(function() {
+            spyOn(chorus.models.UserSet.prototype, 'fetchAll').andCallThrough();
             this.model = fixtures.instance();
             this.accounts = this.model.accounts();
             this.accounts.add([
@@ -143,9 +148,25 @@ describe("chorus.dialogs.InstancePermissions", function() {
             expect(this.dialog.$("a.alert[data-alert=RemoveSharedAccount]")).not.toExist();
         });
 
+        it("displays the 'switch to shared account' link", function() {
+            expect(this.dialog.$("a.alert[data-alert=AddSharedAccount]").text()).toMatchTranslation("instances.permissions_dialog.switch_to_shared");
+        });
+
+        it("shows the number of individual accounts", function() {
+            expect(this.dialog.$(".sub_header .individual_accounts_count").text()).toMatchTranslation('instances.sidebar.x_individual_accounts', {count: 2});
+        });
+
+        it("shows the 'add an account' button", function() {
+            expect(this.dialog.$(".sub_header button.add_account")).toExist();
+        });
+
         it("displays the name of each account's user", function() {
             expect(this.dialog.$("li[data-id=1] .name")).toHaveText("bob zzap");
             expect(this.dialog.$("li[data-id=2] .name")).toHaveText("jim aardvark");
+        });
+
+        it("fetches the list of chorus users", function() {
+            expect(chorus.models.UserSet.prototype.fetchAll).toHaveBeenCalled();
         });
 
         xit("sorts the users by last name", function() {
@@ -265,5 +286,64 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 })
             })
         })
+
+        describe("when the 'add account' button is clicked after the chorus users are fetched", function() {
+            beforeEach(function() {
+                this.dialog.users.reset([
+                    fixtures.user({ firstName: "ben", lastName: "maulden" }),
+                    fixtures.user({ firstName: "anna", lastName: "cannon" })
+                ]);
+                this.dialog.$("button.add_account").click();
+            });
+
+            it("adds an option in the user select for each chorus user", function() {
+                expect(this.dialog.$("select.name option").eq(0)).toHaveText("ben maulden");
+                expect(this.dialog.$("select.name option").eq(1)).toHaveText("anna cannon");
+            });
+        });
+
+        describe("when the 'add account' button is clicked", function() {
+            beforeEach(function() {
+                expect(this.dialog.$("li").length).toBe(2);
+                this.dialog.$("button.add_account").click();
+            });
+
+            it("adds a new item to the accounts list", function() {
+                expect(this.dialog.$("li").length).toBe(3);
+            });
+
+            it("puts the new item into edit mode", function() {
+                expect(this.dialog.$("li:last")).toHaveClass("editing");
+            });
+
+            it("adds the 'new' class to the new li", function() {
+                expect(this.dialog.$("li:last")).toHaveClass("new");
+            });
+
+            describe("when the fetch for all chorus users completes", function() {
+                beforeEach(function() {
+                    this.dialog.users.reset([
+                        fixtures.user({ firstName: "ben", lastName: "maulden" }),
+                        fixtures.user({ firstName: "anna", lastName: "cannon" })
+                    ]);
+                });
+
+                it("adds an option in the user select for each chorus user", function() {
+                    expect(this.dialog.$("select.name option").eq(0)).toHaveText("ben maulden");
+                    expect(this.dialog.$("select.name option").eq(1)).toHaveText("anna cannon");
+                });
+
+                xit("styles the select all cool", function() {
+                    expect($.fn.chosen).toHaveBeenCalledOnSelector("li.new select.name")
+                });
+            });
+
+            it("disables the 'add account' button", function() {
+                expect(this.dialog.$("button.add_account")).toHaveAttr("disabled");
+                this.dialog.$("button.add_account").click();
+                expect(this.dialog.$("li").length).toBe(3);
+            });
+
+        });
     });
 });

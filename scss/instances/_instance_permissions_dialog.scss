@@ -15,6 +15,12 @@ $link-padding: 6px;
     .sub_header {
         padding: 0 15px !important;
 
+        .individual_accounts_count {
+            background : url("/images/instances/individual.png") no-repeat left 8px;
+            display: inline-block;
+            padding-left: 23px;
+        }
+
         .details_text {
             background : url("/images/instances/shared_icon.png") no-repeat left 6px;
             display: inline-block;
@@ -34,7 +40,11 @@ $link-padding: 6px;
                 height: auto;
                 min-height: $list-item-height;
                 padding-right: 15px;
-                
+
+                select.name {
+                    display: none;
+                }
+
                 div {
                     display: inline-block;
 
@@ -119,6 +129,12 @@ $link-padding: 6px;
 
                     .credentials {
                         display: block;
+                    }
+                }
+
+                &.new {
+                    select.name {
+                        display: inline-block;
                     }
                 }
             }
