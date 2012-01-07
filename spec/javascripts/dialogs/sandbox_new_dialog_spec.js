@@ -170,13 +170,13 @@ describe("chorus.dialogs.SandboxNew", function() {
                                     describe("when the model is saved successfully", function() {
                                         beforeEach(function() {
                                             spyOn(this.dialog, 'closeModal');
-                                            spyOnEvent(this.workspace, 'invalidated');
+                                            spyOn(this.workspace, 'fetch');
                                             spyOn(chorus, 'toast');
                                             this.sandbox.trigger("saved");
                                         });
 
-                                        it("triggers the 'invalidated' event on the page model (a workspace)", function() {
-                                            expect('invalidated').toHaveBeenTriggeredOn(this.workspace);
+                                        it("fetches the page model (a workspace)", function() {
+                                            expect(this.workspace.fetch).toHaveBeenCalled();
                                         });
 
                                         it("closes the dialog", function() {
