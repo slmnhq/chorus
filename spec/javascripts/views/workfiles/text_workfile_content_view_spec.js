@@ -98,79 +98,30 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
         context("with a timeout" ,function() {
             beforeEach(function(){
-                spyOn(this.view, "saveDraft").andCallThrough();
-                this.view.saveInterval = 50;
-
-                runs(function () {
-                    expect(this.view.saveDraft).not.toHaveBeenCalled();
-                });
+                spyOn(window, "setTimeout");
+                spyOn(window, "clearTimeout");
             });
 
             it("saves the file once after a change is detected", function() {
-                runs(function() {
-                    this.view.editor.setValue("Foo, Bar, Baz");
-                });
+                this.view.editor.setValue("Foo, Bar, Baz");
+                expect(window.setTimeout).toHaveBeenCalled();
 
-                waits(this.view.saveInterval + 10);
-
-                runs(function () {
-                    expect(this.view.saveDraft).toHaveBeenCalled();
-                    expect(this.view.saveDraft.callCount).toBe(1);
-                    this.view.saveDraft.reset();
-                });
-
-                waits(this.view.saveInterval + 10);
-
-                runs(function () {
-                    expect(this.view.saveDraft).not.toHaveBeenCalled();
-                });
+                this.view.saveDraft(this.view);
+                expect(window.clearTimeout).toHaveBeenCalled();
             });
 
             it("saves the file once after two changes are detected", function() {
-                runs(function(){
-                    this.view.editor.setValue("Foo");
-                });
-
-                waits(this.view.saveInterval / 2);
-
-                runs(function() {
-                    this.view.editor.setValue("Bar");
-                });
-
-                waits((this.view.saveInterval / 2) + 10);
-
-                runs(function () {
-                    expect(this.view.saveDraft).toHaveBeenCalled();
-                    expect(this.view.saveDraft.callCount).toBe(1);
-                    this.view.saveDraft.reset();
-                });
-
-                waits(this.view.saveInterval + 10);
-
-                runs(function () {
-                    expect(this.view.saveDraft).not.toHaveBeenCalled();
-                });
+                this.view.editor.setValue("Foo");
+                this.view.editor.setValue("Bar");
+                expect(window.setTimeout).toHaveBeenCalled();
             });
 
             it("saves the file twice after two changes are detected", function() {
-                runs(function() {
-                    this.view.editor.setValue("Foo");
-                });
+                this.view.editor.setValue("Foo");
+                expect(window.setTimeout).toHaveBeenCalled();
 
-                waits(this.view.saveInterval + 10);
-
-                runs(function () {
-                    expect(this.view.saveDraft).toHaveBeenCalled();
-                    expect(this.view.saveDraft.callCount).toBe(1);
-
-                    this.view.editor.setValue("Bar");
-                });
-
-                waits(this.view.saveInterval + 10);
-
-                runs(function () {
-                    expect(this.view.saveDraft.callCount).toBe(2);
-                });
+                this.view.editor.setValue("Bar");
+                expect(window.setTimeout).toHaveBeenCalled();
             });
         });
     });
