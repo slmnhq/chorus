@@ -98,10 +98,6 @@ describe("chorus.models.Session", function() {
                 $.cookie("authid", "1234");
             })
 
-            afterEach(function() {
-                $.cookie("authid", null);
-            })
-
             it("returns false when there is no _user", function() {
                 expect(this.model.loggedIn()).toBeFalsy();
             });
@@ -115,6 +111,7 @@ describe("chorus.models.Session", function() {
 
         context("when there is no authid cookie", function() {
             beforeEach(function() {
+                $.cookie("authid", null);
                 this.model._user = fixtures.user();
             })
 
