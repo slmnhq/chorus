@@ -61,6 +61,25 @@ describe("chorus.views.InstanceList", function() {
                 expect(this.view.$("li.selected").length).toBe(1);
             });
 
+            context("when the selected instance is destroyed", function() {
+                beforeEach(function() {
+                    this.oldLength = this.collection.length;
+                    // simplify destroy working right under test
+                    this.collection.at(0).isNew = function() { return true; }
+                    this.collection.at(0).destroy();
+                });
+
+                it("selects the next available instance", function() {
+                    expect(this.view.$("li:first-child")).toHaveClass("selected");
+                    expect(this.view.$("li.selected").length).toBe(1);
+                });
+
+                it("renders only the existing items", function() {
+                    expect(this.collection.models.length).toBe(this.oldLength - 1);
+                    expect(this.view.$("li .instance").length).toBe(this.oldLength - 1);
+                });
+            });
+
             describe("instance:added event", function() {
                 beforeEach(function() {
                     this.newInstance = fixtures.instance({id: "1234567"});

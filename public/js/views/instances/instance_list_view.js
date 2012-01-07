@@ -12,6 +12,7 @@
                 this.collection.fetch();
                 this.selectedInstanceId = id;
             }, this);
+            this.collection.bind("remove", function() { this.$('.instance_provider li:first').click(); }, this);
         },
 
         postRender : function() {
