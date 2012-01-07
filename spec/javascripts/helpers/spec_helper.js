@@ -199,6 +199,7 @@
 
     //global helpers
     window.context = window.describe;
+    window.xcontext = window.xdescribe;
 
     window.unsetLoggedInUser = function() {
         chorus.session.unset("id");
