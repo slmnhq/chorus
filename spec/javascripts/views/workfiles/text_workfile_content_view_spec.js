@@ -129,10 +129,15 @@ describe("chorus.views.TextWorkfileContentView", function() {
             it("saves the file once after two changes are detected", function() {
                 runs(function(){
                     this.view.editor.setValue("Foo");
+                });
+
+                waits(this.view.saveInterval / 2);
+
+                runs(function() {
                     this.view.editor.setValue("Bar");
                 });
 
-                waits(this.view.saveInterval + 10);
+                waits((this.view.saveInterval / 2) + 10);
 
                 runs(function () {
                     expect(this.view.saveDraft).toHaveBeenCalled();
