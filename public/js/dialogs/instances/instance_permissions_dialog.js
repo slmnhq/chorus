@@ -114,15 +114,17 @@
 
         confirmRemoveSharedAccount : function() {
             var map = this.model;
-            this.model.bind("saved", displaySuccessToast);
+            this.model.bind("saved", displaySuccessToast, this);
             this.model.bind("saveFailed", displayFailureToast);
 
-            var id = this.account.get("id")
-            this.account.clear({silent: true});
-            this.account.save({id: id, shared: "no"});
+            var id = this.model.get("id")
+            this.model.clear({silent: true});
+            this.model.save({id: id, shared: "no"});
 
             function displaySuccessToast() {
                 ns.toast("instances.shared_account_removed");
+                this.instance.unset("sharedAccount");
+                this.render();
                 map.unbind("saved", displaySuccessToast);
                 map.unbind("saveFailed", displayFailureToast);
             }

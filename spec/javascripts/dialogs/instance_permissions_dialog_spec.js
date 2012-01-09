@@ -54,7 +54,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
             context("clicking the switch to individual account link", function() {
                 beforeEach(function() {
                     spyOn(this.dialog, "launchSubModal").andCallThrough();
-                    this.dialog.account = fixtures.instanceAccount({ shared : "yes", dbUserName : "foo", id : "999" });
+                    this.dialog.model = fixtures.instanceAccount({ shared : "yes", dbUserName : "foo", id : "999" });
                     this.dialog.$("a.alert").click();
                 });
 
@@ -65,12 +65,12 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 context("when the alert is confirmed", function() {
                     beforeEach(function() {
-                        spyOn(this.dialog.account, "save").andCallThrough();
+                        spyOn(this.dialog.model, "save").andCallThrough();
                         this.dialog.launchSubModal.calls[0].args[0].confirmAlert();
                     });
 
                     it("calls save on the account with shared:no", function() {
-                        expect(this.dialog.account.save.calls[0].args[0].shared).toBe("no");
+                        expect(this.dialog.model.save.calls[0].args[0].shared).toBe("no");
                     });
 
                     it("only sends the shared parameter", function() {
@@ -82,7 +82,9 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         beforeEach(function() {
                             spyOn(chorus, 'toast');
                             this.otherSavedSpy = jasmine.createSpy();
+                            spyOn(this.dialog, "postRender").andCallThrough();
                             this.dialog.model.bind("saved", this.otherSavedSpy);
+                            expect(this.dialog.instance.has("sharedAccount")).toBeTruthy();
                             this.dialog.model.trigger("saved");
                         });
 
@@ -90,6 +92,14 @@ describe("chorus.dialogs.InstancePermissions", function() {
                             expect(chorus.toast).toHaveBeenCalledWith("instances.shared_account_removed");
                             expect(this.otherSavedSpy).toHaveBeenCalled();
                         });
+
+                        it("clears shared account information from the instance model in the dialog", function() {
+                            expect(this.dialog.instance.has("sharedAccount")).toBeFalsy();
+                        })
+
+                        it("re-renders the dialog in the new individual account state", function() {
+                            expect(this.dialog.postRender).toHaveBeenCalled();
+                        })
 
                         context("and the same model saves again", function() {
                             it("doesn't display a toast message", function() {
