@@ -11,7 +11,9 @@
     </legend>
     <form>
         <div class="instance">
-            <label class="required">{{t "sandbox.select.instance"}}</label>
+            <div class="header_container">
+                <label class="required">{{t "sandbox.select.instance"}}</label>
+            </div>
             <div class="loading_text">
                 {{t "loading"}}
                 <span class="loading_spinner"></span>
@@ -23,7 +25,10 @@
             </div>
         </div>
         <div class="database">
-            <label class="required hidden">{{t "sandbox.select.database"}}</label>
+            <div class="header_container">
+                <a class="new_database hidden" href="">{{t "sandbox.new.database"}}</a>
+                <label class="required hidden">{{t "sandbox.select.database"}}</label>
+            </div>
             <div class="loading_text hidden">
                 {{t "loading"}}
                 <span class="loading_spinner"></span>
@@ -33,9 +38,19 @@
             <div class="select_container">
                 <select name="database"></select>
             </div>
+            <div class="create_container hidden">
+                <input class="name" name="name" placeholder="{{t "sandbox.database.name.placeholder"}}"></input>
+                <div class="row controls">
+                    <button type="submit" class="submit">{{t "actions.save"}}</button>
+                    <button class="cancel">{{t "actions.cancel"}}</button>
+                </div>
+            </div>
         </div>
         <div class="schema">
-            <label class="required hidden">{{t "sandbox.select.schema"}}</label>
+            <div class="header_container">
+                <a class="new_schema hidden" href="">{{t "sandbox.new.schema"}}</a>
+                <label class="required hidden">{{t "sandbox.select.schema"}}</label>
+            </div>
             <div class="loading_text hidden">
                 {{t "loading"}}
                 <span class="loading_spinner"></span>
@@ -44,6 +59,13 @@
             <div class="unavailable">{{t "sandbox.unavailable.schema"}}</div>
             <div class="select_container">
                 <select name="schema"></select>
+            </div>
+            <div class="create_container hidden">
+                <input class="name" name="name" value="public" placeholder="{{t "sandbox.schema.name.placeholder"}}" ></input>
+                <div class="row controls hidden">
+                    <button type="submit" class="submit" tabindex=1>{{t "actions.save"}}</button>
+                    <button class="cancel" tabindex=2>{{t "actions.cancel"}}</button>
+                </div>
             </div>
         </div>
     </form>

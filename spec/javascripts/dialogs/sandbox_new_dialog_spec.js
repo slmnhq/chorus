@@ -77,6 +77,70 @@ describe("chorus.dialogs.SandboxNew", function() {
                         expect(this.dialog.$(".database .loading_text")).not.toBeVisible();
                     });
 
+                    context("creating a database", function() {
+                        beforeEach(function() {
+                            this.dialog.$("a.new_database").click();
+                        });
+
+                        it("hides the database selector", function() {
+                            expect(this.dialog.$(".database select")).toBeHidden();
+                        });
+
+                        it("shows the database name, save, and cancel fields", function() {
+                            expect(this.dialog.$(".database .create_container")).toBeVisible();
+                            expect(this.dialog.$(".database .create_container .controls")).toBeVisible();
+
+                        });
+
+                        it("shows the schema label", function() {
+                            expect(this.dialog.$(".schema label")).toBeVisible();
+                        });
+
+                        it("shows the schema name field, submit, and cancel buttons", function() {
+                            expect(this.dialog.$(".schema .create_container")).toBeVisible();
+                            expect(this.dialog.$(".schema .create_container .controls")).toBeHidden();
+                        });
+
+                        context("clicking the cancel button", function() {
+                            beforeEach(function() {
+                                this.dialog.$(".database .cancel").click();
+                            });
+
+                            it("hides the name, save, and cancel fields", function() {
+                                expect(this.dialog.$(".database .create_container")).toBeHidden();
+                                expect(this.dialog.$(".database .create_container .controls")).toBeHidden();
+
+                            });
+
+                            it("hides the schema label", function() {
+                                expect(this.dialog.$(".schema label")).toBeHidden();
+                            });
+
+                            it("hides the 'new schema' link", function() {
+                                expect(this.dialog.$("a.new_schema")).toBeHidden();
+                            });
+
+                            it("hides the schema name field, submit, and cancel fields", function() {
+                                expect(this.dialog.$(".schema .create_container")).toBeHidden();
+                                expect(this.dialog.$(".schema .create_container .controls")).toBeHidden();
+                            });
+
+                            describe("choosing a database and then creating a schema", function() {
+                                beforeEach(function() {
+                                    var select = this.dialog.$(".database select");
+                                    select.prop("selectedIndex", 1);
+                                    select.change();
+                                    this.dialog.$("a.new_schema").click();
+                                });
+
+                                it("shows the submit and cancel buttons", function() {
+                                    expect(this.dialog.$(".schema button.submit")).toBeVisible();
+                                    expect(this.dialog.$(".schema button.cancel")).toBeVisible();
+                                });
+                            });
+                        });
+                    });
+
                     context("choosing a database", function() {
                         beforeEach(function() {
                             var select = this.dialog.$(".database select");
@@ -109,6 +173,46 @@ describe("chorus.dialogs.SandboxNew", function() {
                                 expect(this.dialog.$(".schema .loading_text")).not.toBeVisible();
                             });
 
+                            context("creating a schema", function() {
+                                beforeEach(function() {
+                                    this.dialog.$("a.new_schema").click();
+                                });
+
+                                it("hides the schema selector", function() {
+                                    expect(this.dialog.$(".schema .unavailable")).toBeHidden();
+                                    expect(this.dialog.$(".schema .select_container")).toBeHidden();
+                                });
+
+                                it("hides the 'new schema' link", function() {
+                                    expect(this.dialog.$("a.new_schema")).toBeHidden();
+                                });
+
+                                it("shows the schema name, save, and cancel buttons", function() {
+                                    expect(this.dialog.$(".schema .create_container")).toBeVisible();
+                                    expect(this.dialog.$(".schema .create_container button.submit")).toBeVisible();
+                                    expect(this.dialog.$(".schema .create_container button.cancel")).toBeVisible();
+                                });
+
+                                context("clicking the cancel button", function() {
+                                    beforeEach(function() {
+                                        this.dialog.$(".schema .cancel").click();
+                                    });
+
+                                    it("shows the schema selector", function() {
+                                        expect(this.dialog.$(".schema .select_container")).toBeVisible();
+                                    });
+
+                                    it("shows the 'new schema' link", function() {
+                                        expect(this.dialog.$("a.new_schema")).toBeVisible();
+                                    });
+
+                                    it("hides the schema name, save, and cancel buttons", function() {
+                                        expect(this.dialog.$(".schema .create_container")).toBeHidden();
+                                        expect(this.dialog.$(".schema .create_container .controls")).toBeHidden();
+                                    });
+                                });
+                            });
+
                             context("choosing a schema", function() {
                                 beforeEach(function() {
                                     var select = this.dialog.$(".schema select");
@@ -135,15 +239,15 @@ describe("chorus.dialogs.SandboxNew", function() {
                                     beforeEach(function() {
                                         this.sandbox = this.dialog.model;
                                         spyOn(this.sandbox, 'save').andCallThrough();
-                                        this.dialog.$("button.submit").click();
+                                        this.dialog.$(".modal_controls button.submit").click();
                                     });
 
                                     it("changes the button text to 'Adding...'", function() {
-                                        expect(this.dialog.$("button.submit").text()).toMatchTranslation("sandbox.adding_sandbox");
+                                        expect(this.dialog.$(".modal_controls button.submit").text()).toMatchTranslation("sandbox.adding_sandbox");
                                     });
 
                                     it("sets the button to a loading state", function() {
-                                        expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+                                        expect(this.dialog.$(".modal_controls button.submit").isLoading()).toBeTruthy();
                                     });
 
                                     it("sets the instanceId, schemaId and databaseId on the sandbox", function() {
@@ -163,7 +267,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                                         });
 
                                         it("takes the button out of the loading state", function() {
-                                            expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                                            expect(this.dialog.$(".modal_controls button.submit").isLoading()).toBeFalsy();
                                         });
                                     });
 
@@ -243,6 +347,11 @@ describe("chorus.dialogs.SandboxNew", function() {
             expect(this.dialog.$("." + type + " .loading_text")).toBeVisible();
             expect(this.dialog.$("." + type + " select")).not.toBeVisible();
             expect(this.dialog.$('.' + type + ' label ')).toBeVisible();
+
+            // Remove when adding "register a new instance" story
+            if (type != "instance") {
+                expect(this.dialog.$('.' + type + ' a')).toBeVisible();
+            }
         });
     }
 
@@ -259,7 +368,7 @@ describe("chorus.dialogs.SandboxNew", function() {
         });
 
         it("disables the submit button", function() {
-            expect(this.dialog.$("button.submit")).toBeDisabled();
+            expect(this.dialog.$(".modal_controls button.submit")).toBeDisabled();
         });
     }
 
@@ -268,6 +377,7 @@ describe("chorus.dialogs.SandboxNew", function() {
             expect(this.dialog.$('.' + type + ' label ')).toHaveClass("hidden");
             expect(this.dialog.$('.' + type + ' select ').val()).toBeFalsy();
             expect(this.dialog.$('.' + type + ' select')).toBeHidden();
+            expect(this.dialog.$('.' + type + ' a')).toBeHidden();
         });
     }
 

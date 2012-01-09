@@ -1,12 +1,26 @@
 @import "../_common.scss";
 
-.controls, .modal_controls {
+.modal_controls {
     margin-top: 25px;
 
     button {
         float: right;
         margin-left: 14px;
+    }
 
+    label {
+        line-height: $button-height;
+
+        &.required:after {
+          margin-right: 4px;
+        }
+    }
+
+    @include after-clearfix;
+}
+
+.controls, .modal_controls {
+    button {
         div[aria-role=progressbar] {
             top: 7px;
             left: 17px;
@@ -23,15 +37,5 @@
             padding-right: 35px;
         }
     }
-
-    label {
-        line-height: $button-height;
-
-        &.required:after {
-          margin-right: 4px;
-        }
-    }
-
-    @include after-clearfix;
 }
 

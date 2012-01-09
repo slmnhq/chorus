@@ -9,8 +9,12 @@
         events : {
             "change .instance select" : "instanceSelected",
             "change .database select" : "databaseSelected",
-            "change .schema select" : "schemaSelected",
-            "click button.submit" : "save"
+            "change .schema select"   : "schemaSelected",
+            "click button.submit"     : "save",
+            "click a.new_database"    : "createNewDatabase",
+            "click a.new_schema"      : "createNewSchema",
+            "click .database .cancel" : "cancelNewDatabase",
+            "click .schema .cancel"   : "cancelNewSchema"
         },
 
         makeModel: function() {
@@ -32,6 +36,45 @@
             this.$('.loading_spinner').startLoading();
         },
 
+        createNewDatabase: function (e) {
+            e.preventDefault();
+
+            this.hideSelect("database");
+            this.hideSelect("schema");
+
+            this.showFormControls("database", { showButtons: true });
+            this.showFormControls("schema", { showButtons: false });
+
+            this.$(".modal_controls button.submit").prop("disabled", "disabled");
+        },
+
+        cancelNewDatabase: function(e) {
+            e.preventDefault();
+            this.instanceSelected();
+
+            this.showSelect("database");
+            this.hideFormControls("database");
+            this.hideFormControls("schema");
+
+            this.$("a.new_schema").addClass("hidden");
+        },
+
+        createNewSchema: function (e) {
+            e.preventDefault();
+
+            this.hideSelect("schema");
+            this.showFormControls("schema", { showButtons: true });
+
+            this.$(".modal_controls button.submit").prop("disabled", "disabled");
+        },
+
+        cancelNewSchema: function(e) {
+            e.preventDefault();
+            this.databaseSelected();
+            this.showSelect("schema");
+            this.hideFormControls("schema");
+        },
+
         updateInstances: updateFor('instance'),
 
         instanceSelected : function() {
@@ -43,6 +86,7 @@
                 this.databases.bind("reset", this.updateDatabases, this);
                 this.$(".database label").removeClass("hidden");
                 this.$('.database .loading_text').removeClass('hidden');
+                this.$('a.new_database').removeClass('hidden');
                 this.databases.fetch();
             }
         },
@@ -57,6 +101,7 @@
                 this.schemas.bind("reset", this.updateSchemas, this);
                 this.$(".schema label").removeClass("hidden");
                 this.$('.schema .loading_text').removeClass('hidden');
+                this.$('a.new_schema').removeClass('hidden');
                 this.schemas.fetch();
             }
         },
@@ -66,22 +111,27 @@
         schemaSelected: function() {
             this.selectedSchema = this.schemas.get(this.$('.schema select option:selected').val());
             if (this.selectedSchema) {
-                this.$('button.submit').prop('disabled', false);
+                this.$('.modal_controls button.submit').prop('disabled', false);
             } else {
-                this.$('button.submit').prop('disabled', "disabled");
+                this.$('.modal_controls button.submit').prop('disabled', "disabled");
             }
         },
 
-        showSelect : function(type) {
+        showSelect: function(type) {
             this.$("." + type + " .select_container").show();
             var select = this.$("." + type + " select");
             select.chosen();
             select.trigger("liszt:updated");
         },
 
+        hideSelect: function(type) {
+            this.$("." + type + " .select_container").hide();
+        },
+
         resetSelect: function(type) {
-            this.$("button.submit").prop("disabled", "disabled");
-            this.$("."+type+" label").addClass("hidden");
+            this.$("." + type + " label").addClass("hidden");
+            this.$("." + type + " .new_" + type).addClass("hidden");
+            this.$(".modal_controls button.submit").prop("disabled", "disabled");
 
             var select = this.$("." + type + " select");
             select.empty();
@@ -107,14 +157,36 @@
 
         saveFailed: function() {
             this.$("button.submit").stopLoading();
+        },
+
+        hideFormControls: function(type) {
+            this.$("." + type + " label").addClass("hidden");
+            this.$("." + type + " .new_" + type).removeClass("hidden");
+            this.$("." + type + " .controls").addClass("hidden");
+            this.$("." + type + " .create_container").addClass("hidden");
+        },
+
+        showFormControls: function(type, options) {
+            var createContainer = this.$("." + type + " .create_container");
+            createContainer.removeClass("hidden");
+            this.$("." + type + " label").removeClass("hidden");
+            this.$("." + type + " .new_" + type).addClass("hidden");
+            this.$("." + type + " .controls").removeClass("hidden");
+
+            if (options && options.showButtons) {
+                createContainer.addClass("show_buttons");
+            } else {
+                createContainer.removeClass("show_buttons");
+            }
         }
     });
 
     function updateFor(type) {
         return function() {
             var select = this.resetSelect(type);
-            this.$("."+type+" .loading_text").addClass('hidden');
-            this.$("."+type+" label").removeClass("hidden");
+            this.$("." + type + " .loading_text").addClass('hidden');
+            this.$("." + type + " label").removeClass("hidden");
+            this.$("." + type + " a").removeClass("hidden");
             var collection = this[type + "s"];
             if (collection.length) {
                 // don't modify the original collection array object

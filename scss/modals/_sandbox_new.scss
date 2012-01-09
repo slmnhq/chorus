@@ -1,5 +1,13 @@
 .dialog.sandbox_new {
+    $inner-width: 350px;
+
     width: 440px;
+
+    form > div {
+        width: $inner-width;
+        margin-left: auto;
+        margin-right: auto;
+    }
 
     .select_container {
         display: none;
@@ -12,11 +20,22 @@
 
     select {
         display: block;
-        width: 320px;
+        width: $inner-width;
     }
 
-    form label {
-        display: block;
+    .instance .header_container {
+        margin-top: 10px;
+    }
+
+    .header_container {
+        margin-top: 15px;
+        margin-bottom: 3px;
+
+        a {
+            float: right;
+            font-size: 13px;
+            margin-top: 8px;
+        }
     }
 
     .loading_text {
@@ -35,5 +54,33 @@
 
     .unavailable {
         display: none;
+    }
+
+    .create_container {
+        input {
+            margin: 0;
+            width: $inner-width;
+        }
+
+        .controls {
+            display: none;
+        }
+
+        &.show_buttons {
+            input {
+                width: 205px;
+            }
+
+            .controls {
+                display: inline;
+                float: right;
+
+                button.cancel {
+                    border: none;
+                    background: none;
+                    padding-right: 0;
+                }
+            }
+        }
     }
 };
