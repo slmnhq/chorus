@@ -3,7 +3,11 @@
     ns.views.Sidebar = ns.views.Base.extend({
         preRender : function() {
             this._super("preRender", arguments);
-            
+
+            // We don't want to deal with having multiple declarations of `events`,
+            // so we unbind click in preRender and bind it in postRender.
+            $("#sidebar_wrapper").find(".jump_to_top").unbind("click");
+
             if (this.subviews && !this.subviewsBound) {
                 _.each(this.subviews, _.bind(function(property, selector) {
                     var view = this.getSubview(property);
@@ -32,6 +36,11 @@
                     this.setupSidebarScrolling();
                 }, this), 100);
             }, this));
+
+            $("#sidebar_wrapper").find(".jump_to_top").bind("click", function(e) {
+                $("#sidebar").find(".lb-wrap").scrollTop(0);
+                $(this).removeClass("clickable");
+            });
         },
 
         setupSidebarScrolling : function() {
@@ -51,19 +60,28 @@
 
             sidebar.find('.lb-v-scrollbar, .lb-h-scrollbar').hide();
 
-            sidebar.find('.lb-wrap').unbind('mousewheel').bind('mousewheel', function(event, d) {
-                if ((this.scrollTop === 0 && d > 0)) {
-                    event.preventDefault();
-                } else if ((this.clientHeight + this.scrollTop >= this.scrollHeight) && d < 0) {
-                    event.preventDefault();
-                }
-            })
+            sidebar.find('.lb-wrap').unbind('mousewheel').bind('mousewheel', this.onMouseWheel)
+            sidebar.siblings('.jump_to_top').unbind('mousewheel').bind('mousewheel', this.onJumpMouseWheel)
 
             this.oldSidebarPadding = sidebar.find('.lb-wrap').css("padding-right");
 
             if (!$.browser.msie) {
                 sidebar.find('.lb-wrap').css("padding-right", "32px");
             }
+        },
+
+        onMouseWheel : function(event, d) {
+            if ((this.scrollTop === 0 && d > 0)) {
+                event.preventDefault();
+            } else if ((this.clientHeight + this.scrollTop >= this.scrollHeight) && d < 0) {
+                event.preventDefault();
+            }
+
+            $("#sidebar_wrapper").find(".jump_to_top").toggleClass("clickable", this.scrollTop > 10);
+        },
+
+        onJumpMouseWheel : function(event) {
+            event.preventDefault();
         }
     });
 })(chorus);

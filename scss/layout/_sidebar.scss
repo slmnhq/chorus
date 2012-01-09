@@ -6,6 +6,10 @@
     overflow: hidden;
     height: 100%;
 
+    &:first-child {
+        padding-top: $breadcrumbs-height;
+    }
+
     .image {
         padding-bottom: 16px;
         text-align: center;

@@ -33,7 +33,7 @@ describe("chorus.views.Sidebar", function() {
                 $.fn.lionbars.reset();
                 $(window).trigger('resize');
             })
-            
+
             it("resets the lionbars", function() {
                 expect($.fn.lionbars).toHaveBeenCalled()
             })
