@@ -47,7 +47,12 @@
         },
 
         postRender : function() {
-            this.$("li:first-child").click();
+            var li = this.$("li:first-child");
+            if (li.length) {
+                li.click();
+            } else {
+                this.trigger("workfile:selected");
+            }
         }
     });
 })(jQuery, chorus.views);

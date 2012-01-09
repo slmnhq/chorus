@@ -4,12 +4,18 @@ describe("WorkfileListView", function() {
             beforeEach(function() {
                 this.collection = new chorus.models.WorkfileSet([], {workspaceId : 1234});
                 this.view = new chorus.views.WorkfileList({collection: this.collection});
+                this.workfileSelectedSpy = jasmine.createSpy("workfile:selected");
+                this.view.bind("workfile:selected", this.workfileSelectedSpy);
                 this.view.render();
             });
 
             it("doesn't render any items", function() {
                 expect(this.view.$("li").length).toBe(0);
             });
+
+            it("triggers workfile:selected with an undefined argument", function() {
+                expect(this.workfileSelectedSpy.calls[0].args[0]).toBeFalsy();
+            })
         });
 
         context("with some workfiles in the collection", function() {

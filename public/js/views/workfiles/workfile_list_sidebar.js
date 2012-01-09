@@ -11,19 +11,25 @@
 
         setWorkfile: function(workfile) {
             this.workfile = workfile;
-            this.collection = this.workfile.activities();
-            this.collection.bind("reset", this.render, this)
-            this.collection.fetch();
+            if (this.workfile) {
+                this.collection = this.workfile.activities();
+                this.collection.bind("reset", this.render, this)
+                this.collection.fetch();
 
-            this.collection.bind("changed", this.render, this);
-            this.workfile.bind("changed", this.render, this);
+                this.collection.bind("changed", this.render, this);
+                this.workfile.bind("changed", this.render, this);
 
-            this.activityList = new ns.views.ActivityList({
-                collection : this.collection,
-                headingText : t("workfiles.sidebar.activity"),
-                additionalClass : "sidebar",
-                displayStyle : ['without_object', 'without_workspace']
-            });
+                this.activityList = new ns.views.ActivityList({
+                    collection : this.collection,
+                    headingText : t("workfiles.sidebar.activity"),
+                    additionalClass : "sidebar",
+                    displayStyle : ['without_object', 'without_workspace']
+                });
+            } else {
+                delete this.collection;
+                delete this.activityList;
+            }
+
             this.render();
         },
 
