@@ -33,7 +33,8 @@
             self.route("/logout", "Logout", self.app.session.logout);
         },
 
-        navigate : function(fragment, triggerRoute) {
+        navigate : function(fragment, triggerRoute, pageOptions) {
+            this.app.pageOptions = pageOptions;
             fragment = fragment.match(/#?(.+)/)[1];
             if (Backbone.history.fragment == fragment) {
                 Backbone.history.loadUrl(fragment);
@@ -52,6 +53,8 @@
                     } else {
                         var pageClass = ns.pages[className + "Page"];
                         var page = applyConstructor(pageClass, args);
+                        page.pageOptions = self.app.pageOptions;
+                        delete self.app.pageOptions;
                         self.trigger("route", className, args);
                         self.app.page = page;
 

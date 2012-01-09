@@ -1,12 +1,21 @@
 describe("chorus.router", function() {
     describe("#navigate", function() {
-        describe("when triggerRoute is true", function() {
-            describe("and the target fragment is not the current fragment", function() {
-                beforeEach(function() {
-                    spyOn(Backbone.history, "navigate");
-                    Backbone.history.fragment = "/foo";
-                })
+        beforeEach(function() {
+            spyOn(Backbone.history, "loadUrl");
+            spyOn(Backbone.history, "navigate")
+        })
 
+        it("sets chorus.pageOptions to the third argument", function() {
+            chorus.router.navigate("/foo", true, {foo: "bar"});
+            expect(chorus.pageOptions).toEqual({foo: "bar"});
+        });
+
+        describe("when triggerRoute is true", function() {
+            beforeEach(function() {
+                Backbone.history.fragment = "/foo";
+            })
+
+            describe("and the target fragment is not the current fragment", function() {
                 it("delegates to the Backbone.router implementation", function() {
                     chorus.router.navigate("/bar", true);
                     expect(Backbone.history.navigate).toHaveBeenCalledWith("/bar", true);
@@ -14,12 +23,6 @@ describe("chorus.router", function() {
             })
 
             describe("and the target fragment is the current fragment", function() {
-                beforeEach(function() {
-                    spyOn(Backbone.history, "loadUrl");
-                    spyOn(Backbone.history, "navigate")
-                    Backbone.history.fragment = "/foo";
-                })
-
                 it("calls loadUrl on the fragment", function() {
                     chorus.router.navigate("/foo", true);
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo");
@@ -82,6 +85,12 @@ describe("chorus.router", function() {
             it("sets the scroll position to (0,0)", function() {
                 this.chorus.router.navigate("/users/new", true);
                 expect(window.scroll).toHaveBeenCalledWith(0, 0);
+            })
+
+            it("sets chorus.page.pageOptions to chorus.pageOptions", function() {
+                this.chorus.router.navigate("/users/new", true, { foo : "bar" });
+                expect(this.chorus.page.pageOptions).toEqual({ foo : "bar" })
+                expect(this.chorus.pageOptions).toBeUndefined();
             })
 
             context("and navigating to any page other than the login page", function() {
