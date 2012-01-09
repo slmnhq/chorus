@@ -437,6 +437,10 @@ I18n.missingTranslation = function() {
 
   message += '" translation]';
 
+  if (!window.jasmine && window.console) {
+      console.error(message);
+  }
+
   return message;
 };
 
