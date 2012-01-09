@@ -19,8 +19,8 @@
             expect(CodeMirror.fromTextArea).toHaveBeenCalled();
         });
 
-        it("set readonly to true", function() {
-            expect(this.view.editor.getOption("readOnly")).toBe("nocursor");
+        it("set the file to be editable", function() {
+            expect(this.view.editor.getOption("readOnly")).toBe(false);
         });
 
         it("displays line numbers", function() {
@@ -133,15 +133,21 @@
             spyOn(this.view.model, "save");
 
             this.view.editText();
+            this.view.editor.setCursor(0, 19);
             this.view.saveChanges();
         });
 
-        it("removes the editable class from the CodeMirror div", function(){
-            expect(this.view.$(".CodeMirror")).not.toHaveClass("editable");
+        it("should still be in edit mode", function(){
+            expect(this.view.$(".CodeMirror")).toHaveClass("editable");
         });
 
         it("sets readonly to nocursor", function() {
-            expect(this.view.editor.getOption("readOnly")).toBe("nocursor");
+            expect(this.view.editor.getOption("readOnly")).toBe(false);
+        });
+
+        it("sets cursor at the correct position", function() {
+            expect(this.view.editor.getCursor().ch).toBe(19);
+            expect(this.view.editor.getCursor().line).toBe(0);
         });
 
         it("saves the model", function(){

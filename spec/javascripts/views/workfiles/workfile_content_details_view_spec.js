@@ -37,33 +37,20 @@ describe("WorkfileContentDetails", function() {
         });
 
         it("has the three action links in the details bar", function() {
-            expect(this.view.$("button").length).toBe(3);
+            expect(this.view.$("button").length).toBe(2);
         });
 
-        it("should disabled class from the save as link", function() {
-            expect(this.view.$(".save_as")).toHaveAttr("disabled");
+        it("should not have disabled class from the save as link", function() {
+            expect(this.view.$(".save_as")).not.toHaveAttr("disabled");
         });
 
         it("should not display the autosave text", function() {
             expect(this.view.$("span.auto_save")).toHaveClass("hidden");
         });
         
-        context("when user click on the edit file button", function() {
-            beforeEach(function() {
-                this.fileSpy = jasmine.createSpy("file:edit");
-                this.view.bind("file:edit", this.fileSpy);
-                this.view.$(".edit_file").click();
-            });
+        context("when user is editing the file", function() {
 
-            it("should trigger file edit", function() {
-                expect(this.fileSpy).toHaveBeenCalled();
-            });
-
-            it("should apply the disabled class to the edit button", function() {
-                expect(this.view.$(".edit_file")).toHaveAttr("disabled");
-            });
-
-            it("should remove the disabled class from the save as button", function() {
+            it("should display the save button", function() {
                 expect(this.view.$(".save_as")).not.toHaveAttr("disabled");
             });
 
@@ -98,12 +85,8 @@ describe("WorkfileContentDetails", function() {
                     expect(this.fileSpy).toHaveBeenCalled();
                 });
 
-                it("should apply the disabled class to the save button", function() {
-                    expect(this.view.$(".save_as")).toHaveAttr("disabled");
-                });
-
-                it("should apply the disabled class from the edit button", function() {
-                    expect(this.view.$(".save_as")).toHaveAttr("disabled");
+                it("should not apply the disabled class to the save button", function() {
+                    expect(this.view.$(".save_as")).not.toHaveAttr("disabled");
                 });
             });
         });

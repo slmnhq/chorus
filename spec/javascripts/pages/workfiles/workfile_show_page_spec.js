@@ -73,22 +73,6 @@ describe("chorus.pages.WorkfileShowPage", function() {
             expect(this.page.mainContent.contentHeader.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl('sql'));
         });
 
-        describe("the workfile detail view raises file:edit event", function() {
-            beforeEach(function() {
-                this.editSpy = jasmine.createSpy("file:edit");
-                this.page.mainContent.content.bind("file:edit", this.editSpy);
-
-                // In Jasmine with IE8, editor.focus causes a silent-ish failure
-                spyOn(this.page.mainContent.content.editor, 'focus');
-
-                this.page.mainContent.contentDetails.trigger("file:edit");
-            });
-
-            it("relays the event to the workfile content", function() {
-                expect(this.editSpy).toHaveBeenCalled();
-            });
-        });
-
         describe("the workfile detail view raises file:save event", function() {
             beforeEach(function() {
                 this.saveSpy = jasmine.createSpy("file:save");

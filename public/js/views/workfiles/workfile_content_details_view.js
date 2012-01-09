@@ -2,7 +2,6 @@
     ns.WorkfileContentDetails = ns.Base.extend({
             className : "workfile_content_details",
             events : {
-                "click .edit_file" : "startEdit",
                 "click .save_as"   : "saveChanges"
             },
 
@@ -16,18 +15,10 @@
                 this.$("span.auto_save").text(t("workfile.content_details.auto_save", {time: time}))
             },
 
-            startEdit: function(e) {
-                e.preventDefault();
-                this.trigger("file:edit");
-                this.$(".save_as").removeAttr("disabled");
-                this.$(".edit_file").attr("disabled", "disabled");
-            },
 
             saveChanges: function(e) {
                 e.preventDefault();
                 this.trigger("file:save");
-                this.$(".save_as").attr("disabled", "disabled");
-                this.$(".edit_file").attr("disabled", "disabled");
                 this.$("span.auto_save").addClass("hidden");
             },
 
