@@ -45,7 +45,7 @@ describe("chorus.views.Dialog", function() {
     describe("Clicking the cancel button", function(){
         beforeEach(function() {
             this.dialog.render();
-            this.dialog.$(".dialog_content").append("<button class='cancel'>no</button>")
+            this.dialog.$(".dialog_content").append("<div class='modal_controls'><button class='cancel'>no</button></div>")
             spyOnEvent($(document), "close.facebox");
             this.dialog.$("button.cancel").click();
         })

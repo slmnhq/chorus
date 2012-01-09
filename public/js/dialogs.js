@@ -8,7 +8,7 @@
 
             this.events = this.events || {};
 
-            this.events["click button.cancel"] = "closeModal";
+            this.events["click .modal_controls button.cancel"] = "closeModal";
 
             header.html($("<h1/>").text(this.title))
             content.html(this.template(this.context()));
