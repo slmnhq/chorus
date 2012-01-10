@@ -7,7 +7,7 @@ describe("chorus.dialogs.SandboxNew", function() {
     describe("#render", function() {
         beforeEach(function() {
             var launchElement = $("<a data-workspace-id='45'></a>");
-            window.dialog = this.dialog = new chorus.dialogs.SandboxNew({ launchElement: launchElement, pageModel: this.workspace });
+            this.dialog = new chorus.dialogs.SandboxNew({ launchElement: launchElement, pageModel: this.workspace });
             this.dialog.render();
             $('#jasmine_content').append(this.dialog.el);
         });
