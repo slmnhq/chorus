@@ -11,16 +11,17 @@ describe("WorkspaceEditMembers", function() {
     describe("initialization", function() {
         beforeEach(function() {
             spyOn(chorus.models.UserSet.prototype, 'fetchAll');
+            this.dialog = new chorus.dialogs.WorkspaceEditMembers({ pageModel: this.workspace });
         });
 
         it("fetches all users", function() {
-            this.dialog = new chorus.dialogs.WorkspaceEditMembers({ pageModel: this.workspace });
             expect(this.dialog.collection.fetchAll).toHaveBeenCalled();
         });
     });
 
     describe("render", function() {
         beforeEach(function() {
+            spyOn(this.dialog, 'preRender').andCallThrough();
             this.dialog.render();
         });
 
@@ -35,6 +36,12 @@ describe("WorkspaceEditMembers", function() {
 
         it("passes the right text for the non-removable owner to the shuttle widget", function() {
             expect(this.dialog.shuttle.options.nonRemovableText).toMatchTranslation("workspace.owner");
+        });
+
+        it("renders when user fetch completes", function() {
+            this.dialog.preRender.reset();
+            this.dialog.collection.trigger('reset');
+            expect(this.dialog.preRender).toHaveBeenCalled();
         });
 
         describe("when the submit button is clicked", function() {

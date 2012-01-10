@@ -12,6 +12,7 @@
         makeModel : function() {
             this._super("makeModel", arguments);
             this.collection = new chorus.models.UserSet();
+            this.collection.bind("reset", this.render, this);
             this.collection.fetchAll();
             this.members = this.options.pageModel.members();
             this.members.fetch();

@@ -23,6 +23,8 @@
             }
             this.collection = this.instance.accounts();
 
+            this.collection.bind("reset", this.render, this);
+            this.collection.bind("add", this.render, this);
             this.collection.bind("saved", this.saved, this);
             this.collection.bind("saveFailed", this.saveFailed, this);
             this.collection.bind("validationFailed", this.saveFailed, this);

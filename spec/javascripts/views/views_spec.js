@@ -2,16 +2,41 @@ describe("chorus.views", function() {
     describe("event bindings", function() {
         beforeEach(function() {
             this.model = new chorus.models.Base();
-            this.view = new chorus.views.Base({model : this.model});
-            this.view.template = function() { return "";}
-            // render is bound on the view object before we can spy on it.
-            spyOn(this.view, "preRender");
         });
 
-        _.each(["reset", "add", "remove", "change"], function(evt) {
-            it("re-renders on the " + evt + " event", function() {
-                this.view.resource.trigger(evt);
-                expect(this.view.preRender).toHaveBeenCalled();
+        describe("with persistent falsy", function() {
+            beforeEach(function() {
+                this.view = new chorus.views.Base({model : this.model});
+                spyOn(this.view, 'template').andReturn("");
+                // render is bound on the view object before we can spy on it.
+                spyOn(this.view, "preRender");
+            })
+
+            _.each(["reset", "add", "remove", "change"], function(evt) {
+                it("re-renders on the " + evt + " event", function() {
+                    this.view.resource.trigger(evt);
+                    expect(this.view.preRender).toHaveBeenCalled();
+                });
+            });
+        })
+
+        describe("with persistent:true", function() {
+            beforeEach(function() {
+                chorus.views.Base.prototype.persistent = true
+                this.view = new chorus.views.Base({model : this.model});
+                spyOn(this.view, 'template').andReturn("");
+                // render is bound on the view object before we can spy on it.
+                spyOn(this.view, "preRender");
+            });
+            afterEach(function() {
+                delete chorus.views.Base.prototype.persistent;
+            });
+
+            _.each(["reset", "add", "remove", "change"], function(evt) {
+                it("re-renders on the " + evt + " event", function() {
+                    this.view.resource.trigger(evt);
+                    expect(this.view.preRender).not.toHaveBeenCalled();
+                });
             });
         });
     });
@@ -226,7 +251,7 @@ describe("chorus.views", function() {
                 expect(this.view.$(".has_error").hasQtip()).toBeTruthy();
             });
 
-            it("does not add tooltips to the other input fields", function(){
+            it("does not add tooltips to the other input fields", function() {
                 expect(this.view.$("input[name=bar]").hasQtip()).toBeFalsy();
             });
 

@@ -42,6 +42,12 @@ describe("chorus.dialogs.CopyWorkfile", function() {
         it("renders the picklist view", function() {
             expect(this.dialog.picklistView.render).toHaveBeenCalled();
         })
+
+        it("re-renders when the collection has been fetched", function() {
+            this.dialog.picklistView.render.reset();
+            this.dialog.collection.trigger("reset")
+            expect(this.dialog.picklistView.render).toHaveBeenCalled();
+        })
     })
 
     describe("copy file button", function() {

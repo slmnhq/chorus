@@ -71,10 +71,12 @@
 
         bindCallbacks : function() {
             if (this.resource) {
-                if (!this.persistent) this.resource.bind("change", this.render, this);
-                this.resource.bind("reset", this.render, this);
-                this.resource.bind("add", this.render, this);
-                this.resource.bind("remove", this.render, this);
+                if (!this.persistent) {
+                    this.resource.bind("change", this.render, this);
+                    this.resource.bind("reset", this.render, this);
+                    this.resource.bind("add", this.render, this);
+                    this.resource.bind("remove", this.render, this);
+                }
                 this.resource.bind("validationFailed", this.showErrors, this);
                 this.resource.bind("validated", this.clearErrors, this);
                 this.resource.bind("saveFailed", this.showErrors, this);
