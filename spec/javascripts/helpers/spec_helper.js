@@ -114,6 +114,10 @@
                     return this.actual instanceof klass;
                 },
 
+                toBeEnabled: function() {
+                    return this.actual.is(':not(:disabled)');
+                },
+
                 toMatchTranslation: function(translationKey) {
                     var translatedText = t.apply(this, arguments);
                     this.message = function() {

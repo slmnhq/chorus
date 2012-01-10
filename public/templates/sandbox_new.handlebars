@@ -26,7 +26,7 @@
         </div>
         <div class="database">
             <div class="header_container">
-                <a class="new_database hidden" href="">{{t "sandbox.new.database"}}</a>
+                <a class="new hidden" href="">{{t "sandbox.new.database"}}</a>
                 <label class="required hidden">{{t "sandbox.select.database"}}</label>
             </div>
             <div class="loading_text hidden">
@@ -39,16 +39,13 @@
                 <select name="database"></select>
             </div>
             <div class="create_container hidden">
-                <input class="name" name="name" placeholder="{{t "sandbox.database.name.placeholder"}}"></input>
-                <div class="row controls">
-                    <button type="submit" class="submit">{{t "actions.save"}}</button>
-                    <button class="cancel">{{t "actions.cancel"}}</button>
-                </div>
+                <input class="name" name="databaseName" maxlength="63" placeholder="{{t "sandbox.database.name.placeholder"}}"></input>
+                <a class="cancel">{{t "actions.cancel"}}</a>
             </div>
         </div>
         <div class="schema">
             <div class="header_container">
-                <a class="new_schema hidden" href="">{{t "sandbox.new.schema"}}</a>
+                <a class="new hidden" href="">{{t "sandbox.new.schema"}}</a>
                 <label class="required hidden">{{t "sandbox.select.schema"}}</label>
             </div>
             <div class="loading_text hidden">
@@ -61,11 +58,8 @@
                 <select name="schema"></select>
             </div>
             <div class="create_container hidden">
-                <input class="name" name="name" value="public" placeholder="{{t "sandbox.schema.name.placeholder"}}" ></input>
-                <div class="row controls hidden">
-                    <button type="submit" class="submit" tabindex=1>{{t "actions.save"}}</button>
-                    <button class="cancel" tabindex=2>{{t "actions.cancel"}}</button>
-                </div>
+                <input class="name" name="schemaName" maxlength="63" value="public" placeholder="{{t "sandbox.schema.name.placeholder"}}" ></input>
+                <a class="cancel" tabindex=2>{{t "actions.cancel"}}</a>
             </div>
         </div>
     </form>

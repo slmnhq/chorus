@@ -62,24 +62,19 @@
             width: $inner-width;
         }
 
-        .controls {
+        a.cancel {
             display: none;
         }
 
-        &.show_buttons {
+        &.show_cancel_link {
             input {
-                width: 205px;
+                width: 285px;
             }
 
-            .controls {
+            a.cancel {
                 display: inline;
                 float: right;
-
-                button.cancel {
-                    border: none;
-                    background: none;
-                    padding-right: 0;
-                }
+                line-height: 28px;
             }
         }
     }

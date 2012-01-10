@@ -197,11 +197,11 @@
                 return _(this.errors).isEmpty();
             },
 
-            setValidationError : function(attr, message_key) {
-                this.errors[attr] = this.errors[attr] || t(message_key, {fieldName: this._textForAttr(attr)});
+            setValidationError : function(attr, message_key, custom_key) {
+                this.errors[attr] = this.errors[attr] || t((custom_key || message_key), {fieldName: this._textForAttr(attr)});
             },
 
-            require : function(attr, newAttrs) {
+            require : function(attr, newAttrs, messageKey) {
                 var value = newAttrs && newAttrs.hasOwnProperty(attr) ? newAttrs[attr] : this.get(attr);
 
                 var present = value;
@@ -211,19 +211,19 @@
                 }
 
                 if (!present) {
-                    this.setValidationError(attr, "validation.required");
+                    this.setValidationError(attr, "validation.required", messageKey);
                 }
             },
 
-            requirePattern : function(attr, regex, newAttrs) {
+            requirePattern : function(attr, regex, newAttrs, messageKey) {
                 var value = newAttrs && newAttrs.hasOwnProperty(attr) ? newAttrs[attr] : this.get(attr);
 
                 if (!value || !value.match(regex)) {
-                    this.setValidationError(attr, "validation.required_pattern");
+                    this.setValidationError(attr, "validation.required_pattern", messageKey);
                 }
             },
 
-            requireConfirmation : function(attr, newAttrs) {
+            requireConfirmation : function(attr, newAttrs, messageKey) {
                 var confAttrName = attr + "Confirmation";
                 var value, conf;
 
@@ -240,7 +240,7 @@
                 }
 
                 if (!value || !conf || value != conf) {
-                    this.setValidationError(attr, "validation.confirmation");
+                    this.setValidationError(attr, "validation.confirmation", messageKey);
                 }
             },
 

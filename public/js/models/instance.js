@@ -7,7 +7,7 @@
 
         declareValidations : function(newAttrs) {
             this.require("name", newAttrs);
-            this.requirePattern("name", /^[a-zA-Z][a-zA-Z0-9_]*/, newAttrs);
+            this.requirePattern("name", /^[a-zA-Z][a-zA-Z0-9_]*$/, newAttrs, "instance.validation.name_pattern");
 
             switch(newAttrs.provisionType) {
                 case "register" :
@@ -16,12 +16,12 @@
                     this.require("dbUserName", newAttrs);
                     this.require("dbPassword", newAttrs);
                     this.require("port", newAttrs);
-                    this.requirePattern("port", /\d+/, newAttrs);
+                    this.requirePattern("port", /^\d+$/, newAttrs);
                     break;
                 case "create" :
                     // validating create a new Greenplum instance
                     this.require("size", newAttrs);
-                    this.requirePattern("size", /\d+/, newAttrs);
+                    this.requirePattern("size", /^\d+$/, newAttrs);
                     break;
                 default :
             }

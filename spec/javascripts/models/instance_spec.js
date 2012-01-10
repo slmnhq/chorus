@@ -133,4 +133,66 @@ describe("chorus.models.Instance", function() {
             })
         });
     });
+
+    describe("validations", function() {
+        context("when registering an existing instance", function() {
+            beforeEach(function() {
+                this.attrs = {
+                    name : "foo",
+                    provisionType : "register",
+                    host : "gillette",
+                    dbUserName : "dude",
+                    dbPassword : "whatever",
+                    port : "1234"
+                }
+            })
+
+            it("returns true when the model is valid", function() {
+                expect(this.instance.performValidation(this.attrs)).toBeTruthy();
+            })
+
+            _.each(["name", "host", "dbUserName", "dbPassword", "port"], function(attr) {
+                it("requires " + attr, function() {
+                    this.attrs[attr] = "";
+                    expect(this.instance.performValidation(this.attrs)).toBeFalsy();
+                    expect(this.instance.errors[attr]).toBeTruthy();
+
+                })
+            });
+
+            it("requires valid name", function(){
+                this.attrs.name = "foo bar"
+                expect(this.instance.performValidation(this.attrs)).toBeFalsy();
+                expect(this.instance.errors.name).toMatchTranslation("instance.validation.name_pattern")
+            })
+
+            it("requires valid port", function(){
+                this.attrs.port = "z123"
+                expect(this.instance.performValidation(this.attrs)).toBeFalsy();
+                expect(this.instance.errors.port).toBeTruthy();
+            })
+        })
+
+        context("when creating a new instance", function() {
+            beforeEach(function() {
+                this.attrs = {
+                    name : "foo",
+                    provisionType : "create",
+                    size : "100000"
+                }
+            })
+
+            it("requires size", function() {
+                this.attrs.size = "";
+                expect(this.instance.performValidation(this.attrs)).toBeFalsy();
+                expect(this.instance.errors.size).toBeTruthy();
+            })
+
+            it("requires valid size", function(){
+                this.attrs.size = "1234z"
+                expect(this.instance.performValidation(this.attrs)).toBeFalsy();
+                expect(this.instance.errors.size).toBeTruthy();
+            })
+        })
+    })
 });

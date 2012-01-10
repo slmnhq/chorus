@@ -1112,6 +1112,23 @@
                         ],
                         workspace: fixtures.workspaceJson()
                     });
+                },
+
+                "WORKSPACE_ADD_SANDBOX" : function() {
+                    return new chorus.models.Activity({
+                        author: fixtures.authorJson(),
+                        type: "WORKSPACE_ADD_SANDBOX",
+                        timestamp: "2011-12-01 00:00:00",
+                        id : "10101",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ],
+                        workspace: fixtures.workspaceJson()
+                    });
                 }
             },
 
