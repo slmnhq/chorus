@@ -4,8 +4,23 @@
             return [200, {
                 'Content-Type': 'application/json'
             },
-            JSON.stringify(responseJSON)];
+                JSON.stringify(responseJSON)];
         };
+
+        this.completeSaveFor = function(model) {
+            var response = {
+                status: "ok",
+                resource : [
+                    model.attributes
+                ]
+            };
+            var method = model.isNew() ? 'POST' : 'PUT'
+            this.server.respondWith(
+                method,
+                model.url(),
+                this.prepareResponse(response));
+            this.server.respond();
+        }
 
         window.fixtures = function(model) {
             var self = this;
@@ -13,9 +28,9 @@
             return {
                 jsonFor: function jsonFor(key, options) {
                     return self.fixtures.jsonFor(key, $.extend({
-                        model: model
-                    },
-                    options));
+                            model: model
+                        },
+                        options));
                 },
 
                 modelFor: function modelFor(key, options) {
@@ -37,10 +52,10 @@
         $.extend(window.fixtures, {
             jsonFor: function jsonFor(key, options) {
                 var config = $.extend({
-                    model: this.model,
-                    overrides: {}
-                },
-                options || {});
+                        model: this.model,
+                        overrides: {}
+                    },
+                    options || {});
 
                 var source = this[config.model];
 
@@ -262,19 +277,21 @@
                             "sandboxId":null,
                             "active":true,
                             "permission":["admin"],
-                            "latestCommentList": [{
-                                "timestamp": "2011-12-08 17:16:47",
-                                "id": 10050,
-                                "author": {
-                                    "id": "InitialUser",
-                                    "lastName": "Admin",
-                                    "firstName": "EDC"
-                                },
-                                "text": "This rocks, man",
-                                "attachments": [],
-                                "type": "NOTE",
-                                "comments": []
-                            }]
+                            "latestCommentList": [
+                                {
+                                    "timestamp": "2011-12-08 17:16:47",
+                                    "id": 10050,
+                                    "author": {
+                                        "id": "InitialUser",
+                                        "lastName": "Admin",
+                                        "firstName": "EDC"
+                                    },
+                                    "text": "This rocks, man",
+                                    "attachments": [],
+                                    "type": "NOTE",
+                                    "comments": []
+                                }
+                            ]
                         }
                     ],
                     "method":"GET",
@@ -388,29 +405,31 @@
                     "message": [],
                     "status": "ok",
                     "requestId": 1913,
-                    "resource": [{
-                        "id": "10035",
-                        "fileName": "avatar.jpg",
-                        "mimeType": "image/jpeg",
-                        "fileType": "N/A",
-                        "isBinary": true,
-                        "workspaceId": "10000",
-                        "source": "fs",
-                        "owner": "edcadmin",
-                        "description": null,
-                        "latestVersionNum": 1,
-                        "isDeleted": false,
-                        "modifiedBy": "edcadmin",
-                        "lastUpdatedStamp": "2011-11-29 10:31:15.153",
-                        "lastUpdatedTxStamp": "2011-11-29 10:31:15.143",
-                        "createdStamp": "2011-11-29 10:31:15.153",
-                        "createdTxStamp": "2011-11-29 10:31:15.143",
-                        "versionFileId": "1322591475139_3804",
-                        "versionNum": "1",
-                        "versionOwner": "edcadmin",
-                        "hasDraft": false,
-                        "sandboxId": null
-                    }],
+                    "resource": [
+                        {
+                            "id": "10035",
+                            "fileName": "avatar.jpg",
+                            "mimeType": "image/jpeg",
+                            "fileType": "N/A",
+                            "isBinary": true,
+                            "workspaceId": "10000",
+                            "source": "fs",
+                            "owner": "edcadmin",
+                            "description": null,
+                            "latestVersionNum": 1,
+                            "isDeleted": false,
+                            "modifiedBy": "edcadmin",
+                            "lastUpdatedStamp": "2011-11-29 10:31:15.153",
+                            "lastUpdatedTxStamp": "2011-11-29 10:31:15.143",
+                            "createdStamp": "2011-11-29 10:31:15.153",
+                            "createdTxStamp": "2011-11-29 10:31:15.143",
+                            "versionFileId": "1322591475139_3804",
+                            "versionNum": "1",
+                            "versionOwner": "edcadmin",
+                            "hasDraft": false,
+                            "sandboxId": null
+                        }
+                    ],
                     "method": "GET",
                     "resourcelink": "/edc/workspace/10000/workfile/10035",
                     "pagination": null,
@@ -418,42 +437,42 @@
                 },
 
                 fetchText : {
-	                    "message":[],
-	                    "status":"ok",
-	                    "requestId":449,
-	                    "resource":[
+                    "message":[],
+                    "status":"ok",
+                    "requestId":449,
+                    "resource":[
 
-	                        {
-	                            "id":"10004",
-	                            "fileName":"editabletextfile.txt",
-	                            "mimeType":"text/plain",
-	                            "fileType":"txt",
-	                            "isBinary":false,
-	                            "workspaceId":"10001",
-	                            "source":"fs",
-	                            "owner":"edcadmin",
-	                            "description":null,
-	                            "latestVersionNum":1,
-	                            "isDeleted":false,
-	                            "modifiedBy":"edcadmin",
-	                            "lastUpdatedStamp":"2011-11-29 10:46:03.152",
-	                            "lastUpdatedTxStamp":"2011-11-29 10:46:03.145",
-	                            "createdStamp":"2011-11-29 10:46:03.152",
-	                            "createdTxStamp":"2011-11-29 10:46:03.145",
-	                            "versionFileId":"1322592363143_7126",
-	                            "versionNum":"1",
-	                            "versionOwner":"edcadmin",
-	                            "content":"This is a text file.\n\nThis is the 3rd line.\n\nReally really long line.  Really really long line.  Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.",
-	                            "editable":true,
-	                            "hasDraft":false,
-	                            "sandboxId":null
-	                        }
-	                    ],
-	                    "method":"GET",
-	                    "resourcelink":"/edc/workspace/10001/workfile/10004",
-	                    "pagination":null,
-	                    "version":"0.1"
-		                }
+                        {
+                            "id":"10004",
+                            "fileName":"editabletextfile.txt",
+                            "mimeType":"text/plain",
+                            "fileType":"txt",
+                            "isBinary":false,
+                            "workspaceId":"10001",
+                            "source":"fs",
+                            "owner":"edcadmin",
+                            "description":null,
+                            "latestVersionNum":1,
+                            "isDeleted":false,
+                            "modifiedBy":"edcadmin",
+                            "lastUpdatedStamp":"2011-11-29 10:46:03.152",
+                            "lastUpdatedTxStamp":"2011-11-29 10:46:03.145",
+                            "createdStamp":"2011-11-29 10:46:03.152",
+                            "createdTxStamp":"2011-11-29 10:46:03.145",
+                            "versionFileId":"1322592363143_7126",
+                            "versionNum":"1",
+                            "versionOwner":"edcadmin",
+                            "content":"This is a text file.\n\nThis is the 3rd line.\n\nReally really long line.  Really really long line.  Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.",
+                            "editable":true,
+                            "hasDraft":false,
+                            "sandboxId":null
+                        }
+                    ],
+                    "method":"GET",
+                    "resourcelink":"/edc/workspace/10001/workfile/10004",
+                    "pagination":null,
+                    "version":"0.1"
+                }
             },
 
             WorkfileSet : {
@@ -685,26 +704,26 @@
                     "status" : "ok",
                     "requestId" : 260,
                     "resource" :
-                            [
-                                {
-                                    "name" : "instance1",
-                                    "description" : "11",
-                                    "owner" : "edcadmin",
-                                    "ownerFullName" : "EDC Admin",
-                                    "ownerId" : "10111",
-                                    "host" : "10.32.88.200",
-                                    "port" : 5432,
-                                    "state" : "online",
-                                    "provisionType" : "register",
-                                    "instanceProvider" : "Greenplum Database and Hadoop",
-                                    "isDeleted" : false,
-                                    "id" : "10000",
-                                    "lastUpdatedTxStamp" : "2011-09-29 09:22:03.562",
-                                    "createdTxStamp" : "2011-09-29 09:22:03.562",
-                                    "lastUpdatedStamp" : "2011-09-29 09:22:03.836",
-                                    "createdStamp" : "2011-09-29 09:22:03.836"
-                                }
-                            ],
+                        [
+                            {
+                                "name" : "instance1",
+                                "description" : "11",
+                                "owner" : "edcadmin",
+                                "ownerFullName" : "EDC Admin",
+                                "ownerId" : "10111",
+                                "host" : "10.32.88.200",
+                                "port" : 5432,
+                                "state" : "online",
+                                "provisionType" : "register",
+                                "instanceProvider" : "Greenplum Database and Hadoop",
+                                "isDeleted" : false,
+                                "id" : "10000",
+                                "lastUpdatedTxStamp" : "2011-09-29 09:22:03.562",
+                                "createdTxStamp" : "2011-09-29 09:22:03.562",
+                                "lastUpdatedStamp" : "2011-09-29 09:22:03.836",
+                                "createdStamp" : "2011-09-29 09:22:03.836"
+                            }
+                        ],
                     "method" : "GET",
                     "resourcelink" : "/edc/instance/",
                     "pagination" : null,
@@ -716,29 +735,29 @@
                     "status" : "ok",
                     "requestId" : 260,
                     "resource" :
-                            [
-                                {
-                                    "name" : "instance1",
-                                    "description" : "11",
-                                    "owner" : "edcadmin",
-                                    "ownerFullName" : "EDC Admin",
-                                    "ownerId" : "10111",
-                                    "host" : "10.32.88.200",
-                                    "port" : 5432,
-                                    "state" : "online",
-                                    "provisionType" : "register",
-                                    "instanceProvider" : "Greenplum Database and Hadoop",
-                                    "isDeleted" : false,
-                                    "id" : "10000",
-                                    "lastUpdatedTxStamp" : "2011-09-29 09:22:03.562",
-                                    "createdTxStamp" : "2011-09-29 09:22:03.562",
-                                    "lastUpdatedStamp" : "2011-09-29 09:22:03.836",
-                                    "createdStamp" : "2011-09-29 09:22:03.836",
-                                    "sharedAccount" : {
-                                        "dbUserName" : "the_dude"
-                                    }
+                        [
+                            {
+                                "name" : "instance1",
+                                "description" : "11",
+                                "owner" : "edcadmin",
+                                "ownerFullName" : "EDC Admin",
+                                "ownerId" : "10111",
+                                "host" : "10.32.88.200",
+                                "port" : 5432,
+                                "state" : "online",
+                                "provisionType" : "register",
+                                "instanceProvider" : "Greenplum Database and Hadoop",
+                                "isDeleted" : false,
+                                "id" : "10000",
+                                "lastUpdatedTxStamp" : "2011-09-29 09:22:03.562",
+                                "createdTxStamp" : "2011-09-29 09:22:03.562",
+                                "lastUpdatedStamp" : "2011-09-29 09:22:03.836",
+                                "createdStamp" : "2011-09-29 09:22:03.836",
+                                "sharedAccount" : {
+                                    "dbUserName" : "the_dude"
                                 }
-                            ],
+                            }
+                        ],
                     "method" : "GET",
                     "resourcelink" : "/edc/instance/",
                     "pagination" : null,
@@ -1119,7 +1138,7 @@
                     entityId: fixtures.nextId().toString(),
                     entityType: "file",
                     id: id,
-                    name: "something"+id+".sql",
+                    name: "something" + id + ".sql",
                     type: "SQL"
                 }
             },
@@ -1145,9 +1164,9 @@
 
                 return _.extend({
                     id : id,
-					connectable : true,
-					name : "Database " + id,
-					creatable : true
+                    connectable : true,
+                    name : "Database " + id,
+                    creatable : true
                 }, overrides);
             },
 
@@ -1164,8 +1183,8 @@
                 return _.extend({
                     id : id,
                     userName : "user" + id,
-                    firstName : "EDC"+id,
-                    lastName : "Admin"+id
+                    firstName : "EDC" + id,
+                    lastName : "Admin" + id
                 }, overrides)
             },
 

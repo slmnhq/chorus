@@ -21,7 +21,9 @@
                     <div class="name" title="{{ownerFullName}}">{{fullName}}</div>
                 {{/if}}
                 <div class="links">
-                    <span class="owner">{{t "instances.permissions.owner"}}</span>
+                    {{#if isOwner}}
+                        <span class="owner">{{t "instances.permissions.owner"}}</span>
+                    {{/if}}
                     <a href="#" class="edit">{{t "instances.permissions.edit"}}</a>
                 </div>
                 <div class="credentials">

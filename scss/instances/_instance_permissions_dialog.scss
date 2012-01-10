@@ -75,10 +75,10 @@ $link-padding: 6px;
                         .owner {
                             color: $weak-text-color;
                             padding-right: $link-padding;
+                            border-right: 1px solid $link-color;
                         }
 
                         .edit {
-                            border-left: 1px solid $link-color;
                             padding-left: $link-padding;
                         }
                     }

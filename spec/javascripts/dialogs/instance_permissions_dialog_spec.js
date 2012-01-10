@@ -5,8 +5,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
     describe("#setup", function() {
         beforeEach(function() {
-            this.model = fixtures.instanceWithSharedAccount();
-            this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.model })
+            this.instance = fixtures.instanceWithSharedAccount();
+            this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.instance })
         })
 
         it("does not re-render on model changes", function() {
@@ -16,9 +16,9 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
     context("when the instance is a shared account", function() {
         beforeEach(function() {
-            this.model = fixtures.instanceWithSharedAccount();
-            this.model.accounts().reset(fixtures.instanceAccount(this.model))
-            this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.model })
+            this.instance = fixtures.instanceWithSharedAccount();
+            this.instance.accounts().reset(fixtures.instanceAccount(this.instance))
+            this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.instance })
         })
 
         describe("#render", function() {
@@ -33,7 +33,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
             it("displays the account owner information", function() {
                 var li = this.dialog.$("li");
-                var sharedAccountUser = this.model.sharedAccount().user();
+                var sharedAccountUser = this.instance.sharedAccount().user();
                 expect(li).toExist();
                 expect(li.find("img.profile")).toHaveAttr("src", sharedAccountUser.imageUrl());
                 expect(li.find(".name").text()).toBe(sharedAccountUser.displayName());
@@ -44,7 +44,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
             })
 
             it("populates the dbUserName text field from the account map", function() {
-                expect(this.dialog.$("input[name=dbUserName]").val()).toBe(this.model.sharedAccount().get('dbUserName'));
+                expect(this.dialog.$("input[name=dbUserName]").val()).toBe(this.instance.sharedAccount().get('dbUserName'));
             })
 
             it("displays a 'switch to individual account' link", function() {
@@ -144,14 +144,22 @@ describe("chorus.dialogs.InstancePermissions", function() {
     context("when the instance has individual accounts", function() {
         beforeEach(function() {
             spyOn(chorus.models.UserSet.prototype, 'fetchAll').andCallThrough();
-            this.model = fixtures.instance();
-            this.accounts = this.model.accounts();
+            this.instance = fixtures.instance();
+            this.accounts = this.instance.accounts();
             this.accounts.add([
-                fixtures.instanceAccount({ id: '1', user: { firstName: "bob", lastName: "zzap" } }),
-                fixtures.instanceAccount({ id: '2', user: { firstName: "jim", lastName: "aardvark" } })
+                fixtures.instanceAccount({ id: '1', user: { firstName: "bob", lastName: "zzap", id: '111' } }),
+                fixtures.instanceAccount({ id: '2', user: { firstName: "jim", lastName: "aardvark", id: '222' } }),
+                fixtures.instanceAccount({ id: '3', user: this.instance.owner() })
             ]);
-            this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.model })
+            this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.instance })
             this.dialog.render();
+            $('#jasmine_content').append(this.dialog.el);
+        });
+
+        it("only shows 'owner' in the row corresponding to the owner", function() {
+            var ownerId = this.instance.owner().get('id');
+            expect(this.dialog.$("li[data-id=3]")).toContainTranslation("instances.permissions.owner");
+            expect(this.dialog.$("li[data-id!=3]")).not.toContainTranslation("instances.permissions.owner");
         });
 
         it("does not display the 'switch to individual accounts' link", function() {
@@ -163,7 +171,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
         });
 
         it("shows the number of individual accounts", function() {
-            expect(this.dialog.$(".sub_header .individual_accounts_count").text()).toMatchTranslation('instances.sidebar.x_individual_accounts', {count: 2});
+            expect(this.dialog.$(".sub_header .individual_accounts_count").text()).toMatchTranslation('instances.sidebar.x_individual_accounts', {count: 3});
         });
 
         it("shows the 'add an account' button", function() {
@@ -229,7 +237,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     })
 
                     it("removes the 'editing' class from the parent li", function() {
-                        expect(this.liBeingEdited).not.toHaveClass("editing");
+                        expect(this.dialog.$('li[data-id=2]')).not.toHaveClass("editing");
                     })
 
                     it("stops the spinner", function() {
@@ -300,26 +308,21 @@ describe("chorus.dialogs.InstancePermissions", function() {
         describe("when the 'add account' button is clicked after the chorus users are fetched", function() {
             beforeEach(function() {
                 this.dialog.users.reset([
-                    fixtures.user({ firstName: "ben", lastName: "maulden" }),
-                    fixtures.user({ firstName: "anna", lastName: "cannon" })
+                    fixtures.user({ firstName: "bob", lastName: "zzap", id: '111' }),
+                    fixtures.user({ firstName: "jim", lastName: "aardvark", id: '222' }),
+                    fixtures.user({ firstName: "suzie", lastName: "three", id: '333' }),
+                    this.instance.owner()
                 ]);
                 this.dialog.$("button.add_account").click();
             });
 
-            it("adds an option in the user select for each chorus user", function() {
-                expect(this.dialog.$("select.name option").eq(0)).toHaveText("ben maulden");
-                expect(this.dialog.$("select.name option").eq(1)).toHaveText("anna cannon");
-            });
-        });
-
-        describe("when the 'add account' button is clicked", function() {
-            beforeEach(function() {
-                expect(this.dialog.$("li").length).toBe(2);
-                this.dialog.$("button.add_account").click();
+            it("adds an option in the user select for each chorus user who does not already have permissions", function() {
+                expect(this.dialog.$("select.name option").eq(0)).toHaveText(this.dialog.users.get('333').displayName());
+                expect(this.dialog.$("select.name option").length).toBe(1);
             });
 
             it("adds a new item to the accounts list", function() {
-                expect(this.dialog.$("li").length).toBe(3);
+                expect(this.dialog.$("li").length).toBe(4);
             });
 
             it("puts the new item into edit mode", function() {
@@ -331,7 +334,90 @@ describe("chorus.dialogs.InstancePermissions", function() {
             });
 
             it("does not reflect the user in the count at the top", function() {
-                expect(this.dialog.$('.individual_accounts_count')).toContainText(2);
+                expect(this.dialog.$('.individual_accounts_count')).toContainText(3);
+            });
+
+            it("disables the 'add account' button", function() {
+                expect(this.dialog.$("button.add_account")).toBeDisabled();
+                this.dialog.$("button.add_account").click();
+                expect(this.dialog.$("li").length).toBe(4);
+            });
+
+            describe("cancelling the new account", function() {
+                beforeEach(function() {
+                    this.dialog.$("li.new a.cancel:visible").click();
+                });
+
+                it("enables the 'add account' button", function() {
+                    expect(this.dialog.$("button.add_account")).not.toBeDisabled();
+                });
+
+                it("removes the new row", function() {
+                    expect(this.dialog.$('li').length).toBe(3);
+                });
+
+                it("removes the model from the collection", function() {
+                    expect(this.dialog.collection.length).toBe(3);
+                });
+            });
+
+            describe("saving the new account", function() {
+                context("with errors", function() {
+                    beforeEach(function() {
+                        this.dialog.$('a.save:visible').click();
+                    });
+
+                    it("shows errors", function() {
+                        expect(this.dialog.$('input[name=dbUserName]:visible')).toHaveClass('has_error');
+                        expect(this.dialog.$('input[name=dbPassword]:visible')).toHaveClass('has_error');
+                    });
+                });
+
+                context("with valid form data", function() {
+                    beforeEach(function() {
+                        spyOn(this.dialog, "render").andCallThrough();
+                        spyOn(this.dialog.account, "save").andCallThrough();
+                        this.dialog.$('input[name=dbUserName]').val('badUser!');
+                        this.dialog.$('input[name=dbPassword]').val('badPassword!');
+                        this.dialog.$('li[data-id=new] input[name=dbUserName]').val('user!');
+                        this.dialog.$('li[data-id=new] input[name=dbPassword]').val('password!');
+                        this.dialog.$('li select').val('111');
+                        this.dialog.$('a.save:visible').click();
+                    });
+
+                    it("saves the correct fields", function() {
+                        expect(this.dialog.account.save).toHaveBeenCalledWith({
+                            userId : '333',
+                            dbUserName : 'user!',
+                            dbPassword : 'password!'
+                        });
+                    });
+
+                    it("has the correct instanceId", function() {
+                        expect(this.dialog.account.get('instanceId')).toBe(this.dialog.instance.get('id'));
+                    });
+
+                    it("has the selected userId", function() {
+                        expect(this.dialog.account.get('userId')).toBe('333');
+                    });
+
+                    context("after the save returns successfully", function() {
+                        beforeEach(function() {
+                            this.completeSaveFor(this.dialog.account);
+                        });
+
+                        it("re-renders the dialog", function() {
+                            expect(this.dialog.render).toHaveBeenCalled();
+                        });
+                    })
+                });
+            });
+        });
+
+        describe("when the 'add account' button is clicked", function() {
+            beforeEach(function() {
+                expect(this.dialog.$("li").length).toBe(3);
+                this.dialog.$("button.add_account").click();
             });
 
             describe("when the fetch for all chorus users completes", function() {
@@ -346,35 +432,9 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     expect(this.dialog.$("select.name option").eq(0)).toHaveText("ben maulden");
                     expect(this.dialog.$("select.name option").eq(1)).toHaveText("anna cannon");
                 });
-
-                xit("styles the select all cool", function() {
-                    expect(chorus.styleSelect).toHaveBeenCalledOnSelector("li.new select.name")
-                });
             });
 
-            it("disables the 'add account' button", function() {
-                expect(this.dialog.$("button.add_account")).toBeDisabled();
-                this.dialog.$("button.add_account").click();
-                expect(this.dialog.$("li").length).toBe(3);
-            });
-
-            describe("cancelling the new account", function() {
-                beforeEach(function() {
-                    this.dialog.$('li:last').find("a.cancel").click();
-                });
-
-                it("enables the 'add account' button", function() {
-                    expect(this.dialog.$("button.add_account")).not.toBeDisabled();
-                });
-
-                it("removes the new row", function() {
-                    expect(this.dialog.$('li').length).toBe(2);
-                });
-
-                it("removes the model from the collection", function() {
-                    expect(this.dialog.collection.length).toBe(2);
-                });
-            });
         });
     });
 });
+;

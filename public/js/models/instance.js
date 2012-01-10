@@ -35,6 +35,10 @@
             })
         },
 
+        isOwner : function(user) {            
+            return this.owner().get("id") == user.get('id') && user instanceof chorus.models.User
+        },
+
         databases : function() {
             return new ns.models.DatabaseSet([], {instanceId : this.get("id")});
         },

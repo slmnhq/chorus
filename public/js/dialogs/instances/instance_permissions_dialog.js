@@ -43,7 +43,8 @@
             if (user) {
                 _.extend(context, {
                     fullName: user.displayName(),
-                    imageUrl: user.imageUrl()
+                    imageUrl: user.imageUrl(),
+                    isOwner: this.instance.isOwner(account.user())
                 });
             }
             if (account.isNew()) {
@@ -64,7 +65,7 @@
         newAccount: function(e) {
             var button = this.$("button.add_account");
             if (button.is(":disabled")) return;
-            this.account = new ns.models.InstanceAccount();
+            this.account = this.resource = new ns.models.InstanceAccount({instanceId: this.instance.get("id")});
             this.collection.add(this.account);
             this.render();
             this.$("button.add_account").attr("disabled", "disabled");
@@ -73,8 +74,11 @@
         },
 
         populateSelect: function() {
+            var userSet = new chorus.models.UserSet(this.collection.users());
+
             var options = this.users.map(function(user) {
-                return $("<option/>").text(user.displayName()).val(user.get("userName")).outerHtml();
+                if(!userSet.get(user.get("id"))) {
+                return $("<option/>").text(user.displayName()).val(user.get("id")).outerHtml();}
             });
             var select = this.$("li.new select.name");
             if (select) {
@@ -89,6 +93,7 @@
             li.find("a.save").startLoading("instances.permissions.saving")
 
             this.account.save({
+                userId: li.find("select").val(),
                 dbUserName : li.find("input[name=dbUserName]").val(),
                 dbPassword : li.find("input[name=dbPassword]").val()
             });
@@ -106,9 +111,8 @@
         },
 
         saved : function() {
-            this.$("a.save").stopLoading();
-            this.$("li").removeClass("editing");
             this.instance.fetch();
+            this.render();
         },
 
         saveFailed : function() {

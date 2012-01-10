@@ -129,6 +129,22 @@
                     return this.actual === translatedText;
                 },
 
+                toContainTranslation: function(translationKey) {
+                    var actual = _.isString(this.actual) ? this.actual : this.actual.text();
+                    var translatedText = t.apply(this, arguments);
+                    this.message = function() {
+                        return [
+                        "Expected text '" + actual + "' to contain the translation for '" + translationKey + "' (" + translatedText + ")",
+                        "Expected text '" + actual + "' not to contain the translation for '" + translationKey + "' (" + translatedText +")"
+                        ];
+                    };
+                    if (translatedText === '[' + translationKey + ']') {
+                        throw("No entry in messages.properties for " + translationKey);
+                    }
+
+                    return this.env.contains_(actual, translatedText);
+                },
+
                 toHaveBeenCalledOnSelector: function(selector) {
                     return this.actual.mostRecentCall.object.selector === selector;
                 },
