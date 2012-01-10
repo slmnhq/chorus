@@ -302,7 +302,18 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 it("removes the 'editing' class from the parent li", function() {
                     expect(this.liBeingEdited).not.toHaveClass("editing");
                 })
-            })
+            });
+
+            describe("when clicking edit for another user", function() {
+                beforeEach(function() {
+                    this.otherLi.find('a.edit').click();
+                });
+
+                it("closes the first edit area while opening the new one", function() {
+                    expect(this.liBeingEdited).not.toHaveClass('editing');
+                    expect(this.otherLi).toHaveClass('editing');
+                });
+            });
         })
 
         describe("when the 'add account' button is clicked after the chorus users are fetched", function() {
@@ -412,6 +423,24 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     })
                 });
             });
+
+            describe("when clicking edit for another user", function() {
+                beforeEach(function() {
+                    this.otherLi = this.dialog.$("li[data-id=1]");
+                    this.otherLi.find('a.edit').click();
+                })
+                it("enables the 'add account' button", function() {
+                    expect(this.dialog.$("button.add_account")).not.toBeDisabled();
+                });
+
+                it("removes the new row", function() {
+                    expect(this.dialog.$('li').length).toBe(3);
+                });
+
+                it("removes the model from the collection", function() {
+                    expect(this.dialog.collection.length).toBe(3);
+                });
+            })
         });
 
         describe("when the 'add account' button is clicked", function() {

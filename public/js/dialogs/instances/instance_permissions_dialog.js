@@ -56,6 +56,8 @@
 
         editCredentials : function(event) {
             event.preventDefault();
+            this.cancel();
+            this.clearErrors();
             var li = $(event.target).closest("li");
             var accountId = li.data("id");
             li.addClass("editing");
@@ -67,7 +69,6 @@
             if (button.is(":disabled")) return;
             this.account = this.resource = new ns.models.InstanceAccount({instanceId: this.instance.get("id")});
             this.collection.add(this.account);
-            this.render();
             this.$("button.add_account").attr("disabled", "disabled");
             this.$("li[data-id=new]").addClass('editing new');
             this.populateSelect();
@@ -100,12 +101,14 @@
         },
 
         cancel : function(event) {
-            event.preventDefault();
+            if(event) {
+                event.preventDefault();
+            }
             this.$("button.add_account").removeAttr("disabled");
             this.$("li").removeClass("editing");
             this.$("li[data-id=new]").remove();
-            if(this.account.isNew()) {
-                this.collection.remove(this.account);
+            if(this.account && this.account.isNew()) {
+                this.collection.remove(this.account, {silent: true});
                 delete this.account;
             }
         },
