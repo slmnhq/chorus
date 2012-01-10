@@ -39,6 +39,15 @@ describe("chorus.dialogs.SandboxNew", function() {
 
             itSortsTheSelectOptionsAlphabetically('instance');
 
+            it("does not add Hadoop instances to the instance list", function() {
+                this.dialog.instances.reset([fixtures.instance(), fixtures.instance({instanceProvider: "Hadoop"}), fixtures.instance()]);
+                var options = this.dialog.$(".instance select option");
+                expect(options.length).toBe(3);
+                expect(options.eq(0).val()).toBeFalsy();
+                expect(options.eq(1).val()).toBe(this.dialog.instances.models[0].get("id"));
+                expect(options.eq(2).val()).toBe(this.dialog.instances.models[2].get("id"));
+            });
+
             it("hides the loading placeholder", function() {
                 expect(this.dialog.$(".instance .loading_text")).not.toBeVisible();
             })

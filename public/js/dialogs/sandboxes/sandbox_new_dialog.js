@@ -81,7 +81,7 @@
         },
 
         updateInstances : function() {
-            this.updateFor('instance');
+            this.updateFor('instance', function(instance) {return instance.get("instanceProvider") != "Hadoop"});
         },
 
         instanceSelected : function() {
@@ -218,11 +218,13 @@
             }
         },
 
-        updateFor: function(type) {
+        updateFor: function(type, filter) {
             var select = this.resetSelect(type);
             var collection = this[type + "s"];
-                // don't modify the original collection array object
-            var models = _.clone(collection.models);
+
+            filter || (filter = function(){return true;});
+            // don't modify the original collection array object
+            var models = _(collection.models).chain().clone().filter(filter).value();
             models.sort(function(a, b) {
                 return naturalSort(a.get("name").toLowerCase(), b.get("name").toLowerCase());
             });
@@ -232,7 +234,7 @@
                 );
             });
 
-            this.showSection(type, { loading: false, unavailable: (collection.length === 0) });
+            this.showSection(type, { loading: false, unavailable: (models.length === 0) });
         }
     });
 })(chorus);

@@ -1306,7 +1306,7 @@
                     expire: null,
                     freeSpace: null,
                     host: "localhost",
-                    instanceProvider: "Hadoop",
+                    instanceProvider: "Greenplum Database",
                     instanceVersion: null,
                     isDeleted: false,
                     lastCheck: null,
