@@ -53,11 +53,10 @@
 
         cancelNewDatabase: function(e) {
             e.preventDefault();
-            this.instanceSelected();
 
             this.hideCreateFields("database");
             this.hideCreateFields("schema");
-            this.showSelect("database");
+            this.showSection("database");
 
             this.$(".schema a.new").addClass("hidden");
         },
@@ -76,7 +75,7 @@
             e.preventDefault();
             this.databaseSelected();
             this.hideCreateFields("schema");
-            this.showSelect("schema");
+            this.showSection("schema");
         },
 
         updateInstances : function() {
@@ -88,11 +87,9 @@
             this.resetSelect('schema');
             this.selectedInstance = this.instances.get(this.$('.instance select option:selected').val());
             if (this.selectedInstance) {
+                this.showSection("database", { loading: true });
                 this.databases = this.selectedInstance.databases();
                 this.databases.bind("reset", this.updateDatabases, this);
-                this.$(".database label").removeClass("hidden");
-                this.$('.database .loading_text').removeClass('hidden');
-                this.$('.database a.new').removeClass('hidden');
                 this.databases.fetch();
             }
         },
@@ -105,11 +102,9 @@
             this.resetSelect('schema');
             this.selectedDatabase = this.databases.get(this.$('.database select option:selected').val());
             if (this.selectedDatabase) {
+                this.showSection("schema", { loading: true });
                 this.schemas = this.selectedDatabase.schemas();
                 this.schemas.bind("reset", this.updateSchemas, this);
-                this.$(".schema label").removeClass("hidden");
-                this.$('.schema .loading_text').removeClass('hidden');
-                this.$('.schema a.new').removeClass('hidden');
                 this.schemas.fetch();
             }
         },
@@ -123,10 +118,23 @@
             this.enableOrDisableSaveButton();
         },
 
-        showSelect: function(type) {
-            this.$("." + type + " .select_container").show();
-            var select = this.$("." + type + " select");
-            chorus.styleSelect(select);
+        showSection: function(type, options) {
+            var section = this.$("." + type);
+            section.find("a.new").removeClass("hidden");
+            section.find("label").removeClass("hidden");
+
+            if (options && options.loading) {
+                section.find(".loading_text").removeClass('hidden');
+                section.find(".select_container").hide();
+            } else {
+                section.find(".loading_text").addClass('hidden');
+                if (options && options.unavailable) {
+                    section.find(".unavailable").show();
+                } else {
+                    section.find(".select_container").show();
+                }
+            }
+            chorus.styleSelect(section.find("select"));
             this.enableOrDisableSaveButton();
         },
 
@@ -135,12 +143,13 @@
         },
 
         resetSelect: function(type) {
-            this.$("." + type + " label").addClass("hidden");
-            this.$("." + type + " a.new").addClass("hidden");
+            var section = this.$("." + type);
+            section.find("label").addClass("hidden");
+            section.find("a.new").addClass("hidden");
             delete this["selected" + _.capitalize(type)];
             this.enableOrDisableSaveButton();
 
-            var select = this.$("." + type + " select");
+            var select = section.find("select");
             select.empty();
             select.closest('.select_container').hide();
             select.append($("<option/>").prop('value', '').text(t("sandbox.select_one")));
@@ -208,26 +217,19 @@
 
         updateFor: function(type) {
             var select = this.resetSelect(type);
-            this.$("."+type+" a.new").removeClass('hidden');
-            this.$("."+type+" .loading_text").addClass('hidden');
-            this.$("."+type+" label").removeClass("hidden");
             var collection = this[type + "s"];
-            if (collection.length) {
                 // don't modify the original collection array object
-                var models = _.clone(collection.models);
-                models.sort(function(a, b) {
-                    return naturalSort(a.get("name").toLowerCase(), b.get("name").toLowerCase());
-                });
+            var models = _.clone(collection.models);
+            models.sort(function(a, b) {
+                return naturalSort(a.get("name").toLowerCase(), b.get("name").toLowerCase());
+            });
+            _.each(models, function(model) {
+                select.append(
+                    $("<option/>", {value : model.get("id")}).text(model.get("name"))
+                );
+            });
 
-                _.each(models, function(model) {
-                    select.append(
-                        $("<option/>", {value : model.get("id")}).text(model.get("name"))
-                    );
-                });
-                this.showSelect(type);
-            } else {
-                this.$("." + type + " .unavailable").show();
-            }
+            this.showSection(type, { loading: false, unavailable: (collection.length === 0) });
         }
     });
 })(chorus);

@@ -467,6 +467,7 @@ describe("chorus.dialogs.SandboxNew", function() {
     function itShowsUnavailable(type) {
         it("should show the 'unavailable' text for the " + type + " section and hide the select", function() {
             expect(this.dialog.$('.' + type + ' .unavailable')).toBeVisible();
+            expect(this.dialog.$('.' + type + ' .loading_text')).toBeHidden();
             expect(this.dialog.$('.' + type + ' .select_container')).not.toBeVisible();
         });
     }
