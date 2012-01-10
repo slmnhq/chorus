@@ -98,10 +98,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                             expect(this.dialog.$(".schema label")).toBeVisible();
                         });
 
-                        it("disables the submit button", function() {
-                            expect(this.dialog.$(".database input.name").val()).toBe("");
-                            expect(this.dialog.$("button.submit")).toBeDisabled();
-                        });
+                        itDisablesTheSubmitButton();
 
                         it("re-enables the submit button when a database name is entered", function() {
                             this.dialog.$(".database input.name").val("my_database").keyup();
@@ -130,9 +127,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                                 expect(this.dialog.$(".database .create_container a.cancel")).toBeHidden();
                             });
 
-                            it("disables the submit button", function() {
-                                expect(this.dialog.$("button.submit")).toBeDisabled();
-                            });
+                            itDisablesTheSubmitButton();
 
                             it("hides the schema label", function() {
                                 expect(this.dialog.$(".schema label")).toBeHidden();
@@ -222,9 +217,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                                     expect(this.dialog.$(".schema input.name").val()).toBe('public');
                                 });
 
-                                it("enables the submit button", function() {
-                                    expect(this.dialog.$("button.submit")).toBeEnabled()
-                                });
+                                itEnablesTheSubmitButton();
 
                                 it("disables the submit button when the schema name field is blank", function() {
                                     this.dialog.$(".schema input.name").val("").keyup();
@@ -239,9 +232,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                                         this.dialog.$(".schema .cancel").click();
                                     });
 
-                                    it("disables the submit button", function() {
-                                        expect(this.dialog.$("button.submit")).toBeDisabled();
-                                    });
+                                    itDisablesTheSubmitButton();
 
                                     it("shows the schema selector", function() {
                                         expect(this.dialog.$(".schema .select_container")).toBeVisible();
@@ -266,18 +257,14 @@ describe("chorus.dialogs.SandboxNew", function() {
                                     this.selectedSchema = this.dialog.schemas.get(this.dialog.$('.schema select option:selected').val());
                                 });
 
-                                it("enables the submit button", function() {
-                                    expect(this.dialog.$("button.submit")).not.toBeDisabled();
-                                });
+                                itEnablesTheSubmitButton();
 
                                 context("un-choosing a schema", function() {
-                                    it("disables the button", function() {
-                                        var select = this.dialog.$(".schema select");
-                                        select.prop("selectedIndex", 0);
-                                        select.change();
-
-                                        expect(this.dialog.$("button.submit")).toBeDisabled();
+                                    beforeEach(function() {
+                                        this.dialog.$(".schema select").prop("selectedIndex", 0).change();
                                     });
+
+                                    itDisablesTheSubmitButton();
                                 });
 
                                 describe("clicking the 'new database' link", function() {
@@ -285,9 +272,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                                         this.dialog.$(".database a.new").click();
                                     });
 
-                                    it("disables the submit button", function() {
-                                        expect(this.dialog.$("button.submit")).toBeDisabled();
-                                    });
+                                    itDisablesTheSubmitButton();
                                 });
 
                                 context("changing the database", function() {
@@ -453,9 +438,7 @@ describe("chorus.dialogs.SandboxNew", function() {
             expect(this.dialog.$('.' + type + ' select option').length).toBe(1);
         });
 
-        it("disables the submit button", function() {
-            expect(this.dialog.$(".modal_controls button.submit")).toBeDisabled();
-        });
+        itDisablesTheSubmitButton();
     }
 
     function itHidesSection(type) {
@@ -496,6 +479,18 @@ describe("chorus.dialogs.SandboxNew", function() {
             });
 
             itShowsUnavailable(type);
+        });
+    }
+
+    function itEnablesTheSubmitButton() {
+        it("enables the submit button", function() {
+            expect(this.dialog.$("button.submit")).toBeEnabled();
+        });
+    }
+
+    function itDisablesTheSubmitButton() {
+        it("disables the submit button", function() {
+            expect(this.dialog.$("button.submit")).toBeDisabled();
         });
     }
 
