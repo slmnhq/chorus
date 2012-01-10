@@ -97,9 +97,12 @@
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eeeeee',GradientType=0 );
         background-image: linear-gradient(top, #ffffff 0%,#eeeeee 50%);
 
-        -webkit-border-radius: 0px;
-        -moz-border-radius   : 0px;
-        border-radius        : 0px;
+        -webkit-border-bottom-left-radius: 0px;
+        -webkit-border-bottom-right-radius: 0px;
+        -moz-border-bottom-left-radius: 0px;
+        -moz-border-bottom-right-radius: 0px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
 
         .ui-icon {
             background-position: -18px 1px;

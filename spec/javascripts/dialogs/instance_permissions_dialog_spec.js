@@ -330,6 +330,10 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 expect(this.dialog.$("li:last")).toHaveClass("new");
             });
 
+            it("does not reflect the user in the count at the top", function() {
+                expect(this.dialog.$('.individual_accounts_count')).toContainText(2);
+            });
+
             describe("when the fetch for all chorus users completes", function() {
                 beforeEach(function() {
                     this.dialog.users.reset([
@@ -349,11 +353,28 @@ describe("chorus.dialogs.InstancePermissions", function() {
             });
 
             it("disables the 'add account' button", function() {
-                expect(this.dialog.$("button.add_account")).toHaveAttr("disabled");
+                expect(this.dialog.$("button.add_account")).toBeDisabled();
                 this.dialog.$("button.add_account").click();
                 expect(this.dialog.$("li").length).toBe(3);
             });
 
+            describe("cancelling the new account", function() {
+                beforeEach(function() {
+                    this.dialog.$('li:last').find("a.cancel").click();
+                });
+
+                it("enables the 'add account' button", function() {
+                    expect(this.dialog.$("button.add_account")).not.toBeDisabled();
+                });
+
+                it("removes the new row", function() {
+                    expect(this.dialog.$('li').length).toBe(2);
+                });
+
+                it("removes the model from the collection", function() {
+                    expect(this.dialog.collection.length).toBe(2);
+                });
+            });
         });
     });
 });

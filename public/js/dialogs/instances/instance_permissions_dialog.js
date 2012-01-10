@@ -31,7 +31,10 @@
         },
 
         additionalContext: function() {
-            return { sharedAccount: !!this.instance.sharedAccount() };
+            return {
+                sharedAccount: !!this.instance.sharedAccount(),
+                accountCount: this.collection.reject(function(account) {return account.isNew()}).length
+            };
         },
 
         collectionModelContext: function(account) {
@@ -93,7 +96,13 @@
 
         cancel : function(event) {
             event.preventDefault();
+            this.$("button.add_account").removeAttr("disabled");
             this.$("li").removeClass("editing");
+            this.$("li[data-id=new]").remove();
+            if(this.account.isNew()) {
+                this.collection.remove(this.account);
+                delete this.account;
+            }
         },
 
         saved : function() {

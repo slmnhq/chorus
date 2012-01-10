@@ -134,6 +134,9 @@
                 },
 
                 toContainText: function(text) {
+                    this.message = function() {
+                        return 'Expected "' + this.actual.text() + '" to contain "' + text + '"';
+                    }
                     return this.env.contains_(this.actual.text(), text);
                 },
 
