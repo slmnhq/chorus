@@ -77,6 +77,7 @@
             if (select) {
                 select.append(options.join(""));
             }
+            chorus.styleSelect(select);
         },
 
         save : function(event) {

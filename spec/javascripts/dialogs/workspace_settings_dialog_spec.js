@@ -456,10 +456,10 @@ describe("WorkspaceSettings dialog", function() {
     })
 
     describe("select styling", function() {
-        it("uses chosen", function() {
-            spyOn($.fn, "chosen")
+        it("uses custom styled select box", function() {
+            spyOn(chorus, 'styleSelect')
             $(document).trigger("reveal.facebox");
-            expect($.fn.chosen).toHaveBeenCalled();
+            expect(chorus.styleSelect).toHaveBeenCalled();
         })
     })
 })

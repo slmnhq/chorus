@@ -41,6 +41,16 @@
             var toastOpts = _.extend(defaultOpts, options.toastOpts);
             $.jGrowl(t(message, options), toastOpts);
         }
+
+        self.styleSelect = function(element, options) {
+            var $element = $(element);
+            if($element.data('selectmenu')){$element.selectmenu("destroy");}
+
+            var changeFunction = function() {
+                $(element).trigger('change');
+            }
+            $element.selectmenu({change: changeFunction, position: {offset: "0 -1"}});
+        }
     }
 
     window.chorus = window.chorus || new Chorus();

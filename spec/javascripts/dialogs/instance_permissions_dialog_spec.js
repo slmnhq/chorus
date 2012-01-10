@@ -1,6 +1,6 @@
 describe("chorus.dialogs.InstancePermissions", function() {
     beforeEach(function() {
-        spyOn($.fn, 'chosen');
+        spyOn(chorus, 'styleSelect');
     });
 
     describe("#setup", function() {
@@ -344,7 +344,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 });
 
                 xit("styles the select all cool", function() {
-                    expect($.fn.chosen).toHaveBeenCalledOnSelector("li.new select.name")
+                    expect(chorus.styleSelect).toHaveBeenCalledOnSelector("li.new select.name")
                 });
             });
 

@@ -75,7 +75,9 @@
             this.hideFormControls("schema");
         },
 
-        updateInstances: updateFor('instance'),
+        updateInstances : function() {
+            this.updateFor('instance');
+        },
 
         instanceSelected : function() {
             this.resetSelect('database');
@@ -91,7 +93,9 @@
             }
         },
 
-        updateDatabases : updateFor('database'),
+        updateDatabases : function() {
+            this.updateFor('database');
+        },
 
         databaseSelected : function() {
             this.resetSelect('schema');
@@ -106,7 +110,9 @@
             }
         },
 
-        updateSchemas : updateFor('schema'),
+        updateSchemas : function() {
+            this.updateFor('schema');
+        },
 
         schemaSelected: function() {
             this.selectedSchema = this.schemas.get(this.$('.schema select option:selected').val());
@@ -120,8 +126,7 @@
         showSelect: function(type) {
             this.$("." + type + " .select_container").show();
             var select = this.$("." + type + " select");
-            select.chosen();
-            select.trigger("liszt:updated");
+            chorus.styleSelect(select);
         },
 
         hideSelect: function(type) {
@@ -178,15 +183,12 @@
             } else {
                 createContainer.removeClass("show_buttons");
             }
-        }
-    });
+        },
 
-    function updateFor(type) {
-        return function() {
+        updateFor: function(type) {
             var select = this.resetSelect(type);
-            this.$("." + type + " .loading_text").addClass('hidden');
-            this.$("." + type + " label").removeClass("hidden");
-            this.$("." + type + " a").removeClass("hidden");
+            this.$("."+type+" .loading_text").addClass('hidden');
+            this.$("."+type+" label").removeClass("hidden");
             var collection = this[type + "s"];
             if (collection.length) {
                 // don't modify the original collection array object
@@ -205,5 +207,5 @@
                 this.$("." + type + " .unavailable").show();
             }
         }
-    }
+    });
 })(chorus);

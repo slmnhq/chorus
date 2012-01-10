@@ -41,7 +41,7 @@
         },
 
         setupSelects : function() {
-            this.$("select.owner").chosen();
+            chorus.styleSelect(this.$("select.owner"));
         },
 
         subviews: {

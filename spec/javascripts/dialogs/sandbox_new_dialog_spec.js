@@ -1,7 +1,7 @@
 describe("chorus.dialogs.SandboxNew", function() {
     beforeEach(function() {
         this.workspace = fixtures.workspace();
-        spyOn($.fn, 'chosen');
+        spyOn(chorus, 'styleSelect');
     })
 
     describe("#render", function() {
