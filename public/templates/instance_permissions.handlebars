@@ -1,10 +1,10 @@
 <div class="sub_header">
     {{#if sharedAccount}}
         <span class="details_text">{{t "instances.shared_account"}}</span>
-        <a href="#" class="alert" data-alert="RemoveSharedAccount">{{t "instances.permissions_dialog.switch_to_individual"}}</a>
+        <a href="#" class="remove_shared_account">{{t "instances.permissions_dialog.switch_to_individual"}}</a>
     {{else}}
         <span class="individual_accounts_count">{{t "instances.sidebar.x_individual_accounts" count=accountCount}}</span>
-        <a href="#" class="alert" data-alert="AddSharedAccount">{{t "instances.permissions_dialog.switch_to_shared"}}</a>
+        <a href="#" class="add_shared_account">{{t "instances.permissions_dialog.switch_to_shared"}}</a>
         <button class='add_account'>{{t "instances.permissions_dialog.add_account"}}</button>
     {{/if}}
 </div>

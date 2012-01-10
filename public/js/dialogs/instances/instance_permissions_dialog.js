@@ -10,7 +10,7 @@
             "click a.save" : "save",
             "click a.cancel" : "cancel",
             "click button.add_account" : "newAccount",
-            "click a.alert" : "removeSharedAccountAlert"
+            "click a.remove_shared_account" : "removeSharedAccountAlert"
         },
 
         makeModel : function() {

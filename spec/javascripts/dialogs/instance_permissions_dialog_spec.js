@@ -48,14 +48,14 @@ describe("chorus.dialogs.InstancePermissions", function() {
             })
 
             it("displays a 'switch to individual account' link", function() {
-                expect(this.dialog.$("a.alert[data-alert=RemoveSharedAccount]").text().trim()).toMatchTranslation("instances.permissions_dialog.switch_to_individual");
+                expect(this.dialog.$("a.remove_shared_account").text().trim()).toMatchTranslation("instances.permissions_dialog.switch_to_individual");
             });
 
             context("clicking the switch to individual account link", function() {
                 beforeEach(function() {
                     spyOn(this.dialog, "launchSubModal").andCallThrough();
                     this.dialog.model = fixtures.instanceAccount({ shared : "yes", dbUserName : "foo", id : "999" });
-                    this.dialog.$("a.alert").click();
+                    this.dialog.$("a.remove_shared_account").click();
                 });
 
                 it("launches the Remove Shared Account dialog", function() {
@@ -163,11 +163,11 @@ describe("chorus.dialogs.InstancePermissions", function() {
         });
 
         it("does not display the 'switch to individual accounts' link", function() {
-            expect(this.dialog.$("a.alert[data-alert=RemoveSharedAccount]")).not.toExist();
+            expect(this.dialog.$("a.remove_shared_account")).not.toExist();
         });
 
         it("displays the 'switch to shared account' link", function() {
-            expect(this.dialog.$("a.alert[data-alert=AddSharedAccount]").text()).toMatchTranslation("instances.permissions_dialog.switch_to_shared");
+            expect(this.dialog.$("a.add_shared_account").text()).toMatchTranslation("instances.permissions_dialog.switch_to_shared");
         });
 
         it("shows the number of individual accounts", function() {
