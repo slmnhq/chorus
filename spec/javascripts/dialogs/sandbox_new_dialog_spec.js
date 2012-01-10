@@ -7,7 +7,7 @@ describe("chorus.dialogs.SandboxNew", function() {
     describe("#render", function() {
         beforeEach(function() {
             var launchElement = $("<a data-workspace-id='45'></a>");
-            window.dialog = this.dialog = new chorus.dialogs.SandboxNew({ launchElement: launchElement, pageModel: this.workspace });
+            this.dialog = new chorus.dialogs.SandboxNew({ launchElement: launchElement, pageModel: this.workspace });
             this.dialog.render();
             $('#jasmine_content').append(this.dialog.el);
         });
@@ -98,6 +98,15 @@ describe("chorus.dialogs.SandboxNew", function() {
                             expect(this.dialog.$(".schema label")).toBeVisible();
                         });
 
+                        it("shows the schema name field and cancel link", function() {
+                            expect(this.dialog.$(".schema .create_container")).toBeVisible();
+                            expect(this.dialog.$(".schema .create_container a.cancel")).toBeHidden();
+                        });
+
+                        it("has a default schema name of 'public'", function() {
+                            expect(this.dialog.$(".schema input.name").val()).toBe('public');
+                        });
+
                         itDisablesTheSubmitButton();
 
                         it("re-enables the submit button when a database name is entered", function() {
@@ -109,11 +118,6 @@ describe("chorus.dialogs.SandboxNew", function() {
                             expect(this.dialog.$(".database input.name").val()).toBe("");
                             this.dialog.$(".schema input.name").val("my_schema").keyup();
                             expect(this.dialog.$("button.submit")).toBeDisabled();
-                        });
-
-                        it("shows the schema name field and cancel link", function() {
-                            expect(this.dialog.$(".schema .create_container")).toBeVisible();
-                            expect(this.dialog.$(".schema .create_container a.cancel")).toBeHidden();
                         });
 
                         context("clicking the cancel link", function() {
@@ -152,6 +156,10 @@ describe("chorus.dialogs.SandboxNew", function() {
 
                                 it("shows the cancel link", function() {
                                     expect(this.dialog.$(".schema a.cancel")).toBeVisible();
+                                });
+
+                                it("has no default schema name", function() {
+                                    expect(this.dialog.$(".schema input.name").val()).toBe("");
                                 });
                             });
                         });
@@ -193,7 +201,6 @@ describe("chorus.dialogs.SandboxNew", function() {
                                 expect(this.dialog.$(".schema a.new")).toBeVisible();
                             });
 
-
                             context("creating a schema", function() {
                                 beforeEach(function() {
                                     this.dialog.$(".schema a.new").click();
@@ -213,16 +220,13 @@ describe("chorus.dialogs.SandboxNew", function() {
                                     expect(this.dialog.$(".schema .create_container a.cancel")).toBeVisible();
                                 });
 
-                                it("has a default schema name of 'public'", function() {
-                                    expect(this.dialog.$(".schema input.name").val()).toBe('public');
+                                it("has no default schema name", function() {
+                                    expect(this.dialog.$(".schema input.name").val()).toBe("");
                                 });
 
-                                itEnablesTheSubmitButton();
+                                itDisablesTheSubmitButton();
 
-                                it("disables the submit button when the schema name field is blank", function() {
-                                    this.dialog.$(".schema input.name").val("").keyup();
-                                    expect(this.dialog.$("button.submit")).toBeDisabled();
-
+                                it("enables the submit button when the schema name is entered", function() {
                                     this.dialog.$(".schema input.name").val("my_schema").keyup();
                                     expect(this.dialog.$("button.submit")).toBeEnabled();
                                 });
@@ -245,6 +249,16 @@ describe("chorus.dialogs.SandboxNew", function() {
                                     it("hides the schema name, and cancel link", function() {
                                         expect(this.dialog.$(".schema .create_container")).toBeHidden();
                                         expect(this.dialog.$(".schema .create_container a.cancel")).toBeHidden();
+                                    });
+
+                                    describe("when you click new database", function() {
+                                        beforeEach(function() {
+                                            this.dialog.$(".database a.new").click();
+                                        });
+
+                                        it("should set the default schema name to 'public'", function() {
+                                            expect(this.dialog.$(".schema input.name").val()).toBe("public");
+                                        });
                                     });
                                 });
                             });
@@ -373,6 +387,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
                 describe("when the model is saved successfully", function() {
                     beforeEach(function() {
+                        spyOnEvent(this.workspace, 'invalidated');
                         spyOn(this.dialog, 'closeModal');
                         spyOn(this.workspace, 'fetch');
                         spyOn(chorus, 'toast');
@@ -389,6 +404,10 @@ describe("chorus.dialogs.SandboxNew", function() {
 
                     it("shows a toast message", function() {
                         expect(chorus.toast).toHaveBeenCalledWith("sandbox.create.toast");
+                    });
+
+                    it("triggers the 'invalidated' event on the page model (a workspace)", function() {
+                        expect("invalidated").toHaveBeenTriggeredOn(this.workspace);
                     });
                 });
             });
@@ -467,6 +486,7 @@ describe("chorus.dialogs.SandboxNew", function() {
     function itShowsUnavailable(type) {
         it("should show the 'unavailable' text for the " + type + " section and hide the select", function() {
             expect(this.dialog.$('.' + type + ' .unavailable')).toBeVisible();
+            expect(this.dialog.$('.' + type + ' .loading_text')).toBeHidden();
             expect(this.dialog.$('.' + type + ' .select_container')).not.toBeVisible();
         });
     }

@@ -82,8 +82,31 @@
 
         .tag {
             float: right;
-            padding: 2px 5px;
-            font-size: 13px;
+            line-height: 20px;
+            vertical-align: middle;
+            display: inline-block;
+
+            .name {
+                color: white;
+                font-size: 12px;
+                line-height: 12px;
+                font-weight: $semibold;
+                padding: 4px 7px 4px 2px;
+                display: inline-block;
+                @include border-right-radius(2px);
+            }
+
+            .arrow_left {
+                display: inline-block;
+                width:0px;
+                height:0px;
+                border-bottom:10px solid transparent;  /* left arrow slant */
+                border-top:10px solid transparent; /* right arrow slant */
+                border-right-width: 10px;
+                border-right-style: solid;
+                font-size:0px;
+                line-height:0px;
+            }
         }
 
         .timestamp {
