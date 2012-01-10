@@ -2,12 +2,14 @@
 
 #sidebar {
     width: $sidebar-width;
-    padding: $padding-y $sidebar-padding-x;
-    overflow: hidden;
-    height: 100%;
+    overflow: auto;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
 
-    &:first-child {
-        padding-top: $breadcrumbs-height;
+    .spacer {
+        height: $breadcrumbs-height + $padding-y;
     }
 
     .image {

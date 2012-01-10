@@ -18,7 +18,7 @@
 }
 
 #left {
-    margin-right: $sidebar-width + (2 * $sidebar-padding-x);
+    margin-right: $sidebar-width + ($sidebar-padding-x);
 }
 
 //hax for position fixed header and sidebar
@@ -38,6 +38,8 @@
         right: 0;
         top: $header-height;
         bottom: 0;
+        padding: 0;
+        width: $sidebar-width + ($sidebar-padding-x);
 
         .jump_to_top {
             div.triangle_up {

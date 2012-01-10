@@ -41,12 +41,12 @@ describe("chorus.views.Sidebar", function() {
 
         describe("re-rendering", function() {
             beforeEach(function() {
-                this.page.$('#sidebar').attr('style', 'foo');
+                this.page.$('#sidebar').css('foo', 'bar');
                 this.page.render();
             })
 
             it("should clear the styles on #sidebar", function() {
-                expect(this.page.$('#sidebar').attr('style')).toBeFalsy();
+                expect(this.page.$('#sidebar').css('foo')).toBeFalsy();
             });
         })
 

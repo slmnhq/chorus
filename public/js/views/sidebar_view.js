@@ -24,6 +24,7 @@
 
             var sidebar = $(this.el).closest("#sidebar")
             sidebar.removeAttr("style")
+            sidebar.prepend("<div class='spacer'/>")
             this.setupSidebarScrolling();
 
             var resizeTimer;
@@ -51,6 +52,8 @@
             }
 
             sidebar.lionbars();
+
+            sidebar.css("position", "absolute")
 
             sidebar.unbind('hover').hover(function() {
                 sidebar.find('.lb-v-scrollbar, .lb-h-scrollbar').fadeIn(150)
