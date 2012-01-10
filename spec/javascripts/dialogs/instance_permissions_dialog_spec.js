@@ -306,6 +306,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
             describe("when clicking edit for another user", function() {
                 beforeEach(function() {
+                    spyOn(this.dialog, 'clearErrors');
                     this.otherLi.find('a.edit').click();
                 });
 
@@ -313,6 +314,10 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     expect(this.liBeingEdited).not.toHaveClass('editing');
                     expect(this.otherLi).toHaveClass('editing');
                 });
+
+                it("clears the errors", function() {
+                    expect(this.dialog.clearErrors).toHaveBeenCalled();
+                })
             });
         })
 
