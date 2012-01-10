@@ -40,10 +40,7 @@
             </div>
             <div class="create_container hidden">
                 <input class="name" name="name" placeholder="{{t "sandbox.database.name.placeholder"}}"></input>
-                <div class="row controls">
-                    <button type="submit" class="submit">{{t "actions.save"}}</button>
-                    <button class="cancel">{{t "actions.cancel"}}</button>
-                </div>
+                <a class="cancel">{{t "actions.cancel"}}</a>
             </div>
         </div>
         <div class="schema">
@@ -62,10 +59,7 @@
             </div>
             <div class="create_container hidden">
                 <input class="name" name="name" value="public" placeholder="{{t "sandbox.schema.name.placeholder"}}" ></input>
-                <div class="row controls hidden">
-                    <button type="submit" class="submit" tabindex=1>{{t "actions.save"}}</button>
-                    <button class="cancel" tabindex=2>{{t "actions.cancel"}}</button>
-                </div>
+                <a class="cancel" tabindex=2>{{t "actions.cancel"}}</a>
             </div>
         </div>
     </form>

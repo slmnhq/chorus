@@ -42,8 +42,8 @@
             this.hideSelect("database");
             this.hideSelect("schema");
 
-            this.showFormControls("database", { showButtons: true });
-            this.showFormControls("schema", { showButtons: false });
+            this.showCreateFields("database", { showCancelLink: true });
+            this.showCreateFields("schema", { showCancelLink: false });
 
             this.$(".modal_controls button.submit").prop("disabled", "disabled");
         },
@@ -53,8 +53,8 @@
             this.instanceSelected();
 
             this.showSelect("database");
-            this.hideFormControls("database");
-            this.hideFormControls("schema");
+            this.hideCreateFields("database");
+            this.hideCreateFields("schema");
 
             this.$("a.new_schema").addClass("hidden");
         },
@@ -63,7 +63,7 @@
             e.preventDefault();
 
             this.hideSelect("schema");
-            this.showFormControls("schema", { showButtons: true });
+            this.showCreateFields("schema", { showCancelLink: true });
 
             this.$(".modal_controls button.submit").prop("disabled", "disabled");
         },
@@ -72,7 +72,7 @@
             e.preventDefault();
             this.databaseSelected();
             this.showSelect("schema");
-            this.hideFormControls("schema");
+            this.hideCreateFields("schema");
         },
 
         updateInstances : function() {
@@ -164,24 +164,22 @@
             this.$("button.submit").stopLoading();
         },
 
-        hideFormControls: function(type) {
+        hideCreateFields: function(type) {
             this.$("." + type + " label").addClass("hidden");
             this.$("." + type + " .new_" + type).removeClass("hidden");
-            this.$("." + type + " .controls").addClass("hidden");
             this.$("." + type + " .create_container").addClass("hidden");
         },
 
-        showFormControls: function(type, options) {
+        showCreateFields: function(type, options) {
             var createContainer = this.$("." + type + " .create_container");
             createContainer.removeClass("hidden");
             this.$("." + type + " label").removeClass("hidden");
             this.$("." + type + " .new_" + type).addClass("hidden");
-            this.$("." + type + " .controls").removeClass("hidden");
 
-            if (options && options.showButtons) {
-                createContainer.addClass("show_buttons");
+            if (options && options.showCancelLink) {
+                createContainer.addClass("show_cancel_link");
             } else {
-                createContainer.removeClass("show_buttons");
+                createContainer.removeClass("show_cancel_link");
             }
         },
 

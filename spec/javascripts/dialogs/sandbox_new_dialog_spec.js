@@ -60,7 +60,6 @@ describe("chorus.dialogs.SandboxNew", function() {
                     expect(this.server.requests[1].url).toMatch("/edc/instance/" + this.selectedInstance.get('id') + "/database");
                 });
 
-
                 context("when the database list fetch completes", function() {
                     beforeEach(function() {
                         this.dialog.databases.loaded = true;
@@ -86,9 +85,9 @@ describe("chorus.dialogs.SandboxNew", function() {
                             expect(this.dialog.$(".database select")).toBeHidden();
                         });
 
-                        it("shows the database name, save, and cancel fields", function() {
+                        it("shows the database name, save, and cancel link", function() {
                             expect(this.dialog.$(".database .create_container")).toBeVisible();
-                            expect(this.dialog.$(".database .create_container .controls")).toBeVisible();
+                            expect(this.dialog.$(".database .create_container a.cancel")).toBeVisible();
 
                         });
 
@@ -96,19 +95,19 @@ describe("chorus.dialogs.SandboxNew", function() {
                             expect(this.dialog.$(".schema label")).toBeVisible();
                         });
 
-                        it("shows the schema name field, submit, and cancel buttons", function() {
+                        it("shows the schema name field and cancel link", function() {
                             expect(this.dialog.$(".schema .create_container")).toBeVisible();
-                            expect(this.dialog.$(".schema .create_container .controls")).toBeHidden();
+                            expect(this.dialog.$(".schema .create_container a.cancel")).toBeHidden();
                         });
 
-                        context("clicking the cancel button", function() {
+                        context("clicking the cancel link", function() {
                             beforeEach(function() {
                                 this.dialog.$(".database .cancel").click();
                             });
 
-                            it("hides the name, save, and cancel fields", function() {
+                            it("hides the name, save, and cancel link", function() {
                                 expect(this.dialog.$(".database .create_container")).toBeHidden();
-                                expect(this.dialog.$(".database .create_container .controls")).toBeHidden();
+                                expect(this.dialog.$(".database .create_container a.cancel")).toBeHidden();
 
                             });
 
@@ -120,9 +119,9 @@ describe("chorus.dialogs.SandboxNew", function() {
                                 expect(this.dialog.$("a.new_schema")).toBeHidden();
                             });
 
-                            it("hides the schema name field, submit, and cancel fields", function() {
+                            it("hides the schema name field and cancel link", function() {
                                 expect(this.dialog.$(".schema .create_container")).toBeHidden();
-                                expect(this.dialog.$(".schema .create_container .controls")).toBeHidden();
+                                expect(this.dialog.$(".schema .create_container a.cancel")).toBeHidden();
                             });
 
                             describe("choosing a database and then creating a schema", function() {
@@ -133,9 +132,8 @@ describe("chorus.dialogs.SandboxNew", function() {
                                     this.dialog.$("a.new_schema").click();
                                 });
 
-                                it("shows the submit and cancel buttons", function() {
-                                    expect(this.dialog.$(".schema button.submit")).toBeVisible();
-                                    expect(this.dialog.$(".schema button.cancel")).toBeVisible();
+                                it("shows the cancel link", function() {
+                                    expect(this.dialog.$(".schema a.cancel")).toBeVisible();
                                 });
                             });
                         });
@@ -187,13 +185,12 @@ describe("chorus.dialogs.SandboxNew", function() {
                                     expect(this.dialog.$("a.new_schema")).toBeHidden();
                                 });
 
-                                it("shows the schema name, save, and cancel buttons", function() {
+                                it("shows the schema name and cancel link", function() {
                                     expect(this.dialog.$(".schema .create_container")).toBeVisible();
-                                    expect(this.dialog.$(".schema .create_container button.submit")).toBeVisible();
-                                    expect(this.dialog.$(".schema .create_container button.cancel")).toBeVisible();
+                                    expect(this.dialog.$(".schema .create_container a.cancel")).toBeVisible();
                                 });
 
-                                context("clicking the cancel button", function() {
+                                context("clicking the cancel link", function() {
                                     beforeEach(function() {
                                         this.dialog.$(".schema .cancel").click();
                                     });
@@ -206,9 +203,9 @@ describe("chorus.dialogs.SandboxNew", function() {
                                         expect(this.dialog.$("a.new_schema")).toBeVisible();
                                     });
 
-                                    it("hides the schema name, save, and cancel buttons", function() {
+                                    it("hides the schema name, and cancel link", function() {
                                         expect(this.dialog.$(".schema .create_container")).toBeHidden();
-                                        expect(this.dialog.$(".schema .create_container .controls")).toBeHidden();
+                                        expect(this.dialog.$(".schema .create_container a.cancel")).toBeHidden();
                                     });
                                 });
                             });
