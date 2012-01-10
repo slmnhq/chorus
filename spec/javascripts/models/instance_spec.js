@@ -146,7 +146,7 @@ describe("chorus.models.Instance", function() {
             it("requires valid name", function(){
                 this.attrs.name = "foo bar"
                 expect(this.instance.performValidation(this.attrs)).toBeFalsy();
-                expect(this.instance.errors.name).toBeTruthy();
+                expect(this.instance.errors.name).toMatchTranslation("instance.validation.name_pattern")
             })
 
             it("requires valid port", function(){

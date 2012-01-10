@@ -7,7 +7,7 @@
 
         declareValidations : function(newAttrs) {
             this.require("name", newAttrs);
-            this.requirePattern("name", /^[a-zA-Z][a-zA-Z0-9_]*$/, newAttrs);
+            this.requirePattern("name", /^[a-zA-Z][a-zA-Z0-9_]*$/, newAttrs, "instance.validation.name_pattern");
 
             switch(newAttrs.provisionType) {
                 case "register" :
