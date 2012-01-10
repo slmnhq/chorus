@@ -22,11 +22,15 @@ describe("chorus.views.InstanceList", function() {
     context("with instances", function() {
         beforeEach(function() {
             this.collection = new chorus.models.InstanceSet();
-            this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Hadoop"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Hadoop"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database", name : "GP9"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database", name : "gP1"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database", name : "GP10"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Hadoop", name : "Hadoop9"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Hadoop", name : "hadoop1"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Hadoop", name : "Hadoop10"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Whatever9", name : "Whatever9"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Whatever1", name : "whatever1"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Whatever10", name : "Whatever10"}));
 
             this.view = new chorus.views.InstanceList({collection: this.collection});
         });
@@ -53,13 +57,27 @@ describe("chorus.views.InstanceList", function() {
             });
 
             it("renders the hadoop instances in the correct instance div", function() {
-                expect(this.view.$(".hadoop_instance li .instance").length).toBe(2);
+                expect(this.view.$(".hadoop_instance li .instance").length).toBe(3);
             });
 
             it("pre-selects the first instance", function() {
                 expect(this.view.$("li:first-child")).toHaveClass("selected");
                 expect(this.view.$("li.selected").length).toBe(1);
             });
+
+            it("sorts each section in natural sort order", function() {
+                expect(this.view.$(".greenplum_instance li:eq(0) .name").text().trim()).toBe("gP1")
+                expect(this.view.$(".greenplum_instance li:eq(1) .name").text().trim()).toBe("GP9")
+                expect(this.view.$(".greenplum_instance li:eq(2) .name").text().trim()).toBe("GP10")
+
+                expect(this.view.$(".hadoop_instance li:eq(0) .name").text().trim()).toBe("hadoop1")
+                expect(this.view.$(".hadoop_instance li:eq(1) .name").text().trim()).toBe("Hadoop9")
+                expect(this.view.$(".hadoop_instance li:eq(2) .name").text().trim()).toBe("Hadoop10")
+
+                expect(this.view.$(".other_instance li:eq(0) .name").text().trim()).toBe("whatever1")
+                expect(this.view.$(".other_instance li:eq(1) .name").text().trim()).toBe("Whatever9")
+                expect(this.view.$(".other_instance li:eq(2) .name").text().trim()).toBe("Whatever10")
+            })
 
             context("when the selected instance is destroyed", function() {
                 beforeEach(function() {
@@ -83,12 +101,12 @@ describe("chorus.views.InstanceList", function() {
             describe("instance:added event", function() {
                 beforeEach(function() {
                     this.newInstance = fixtures.instance({id: "1234567"});
-                    spyOn(this.view.collection, "fetch");
+                    spyOn(this.view.collection, "fetchAll");
                     this.view.trigger("instance:added", "1234567");
                 });
 
                 it("fetches the collection again", function() {
-                    expect(this.view.collection.fetch).toHaveBeenCalled();
+                    expect(this.view.collection.fetchAll).toHaveBeenCalled();
                 });
 
                 it("selects the li with a matching id when fetch completes", function() {
@@ -110,7 +128,7 @@ describe("chorus.views.InstanceList", function() {
                 });
 
                 it("triggers the instance:selected event", function() {
-                    expect(this.eventSpy).toHaveBeenCalledWith(this.collection.models[1]);
+                    expect(this.eventSpy).toHaveBeenCalledWith(this.collection.models[0]);
                 });
 
                 it("adds the selected class to that item", function() {

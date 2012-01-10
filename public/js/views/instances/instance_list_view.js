@@ -9,7 +9,7 @@
 
         setup : function() {
             this.bind("instance:added", function(id) {
-                this.collection.fetch();
+                this.collection.fetchAll();
                 this.selectedInstanceId = id;
             }, this);
             this.collection.bind("remove", function() { this.$('.instance_provider li:first').click(); }, this);
@@ -21,7 +21,11 @@
                 "Greenplum Database" : this.$(".greenplum_instance ul"),
                 "Hadoop" : this.$(".hadoop_instance ul")
             };
-            this.collection.each(function(model) {
+            var models = _.clone(this.collection.models);
+            models.sort(function(a, b) {
+                return naturalSort(a.get("name").toLowerCase(), b.get("name").toLowerCase());
+            });
+            _.each(models, function(model) {
                 var view = new ns.views.Instance({model: model});
                 view.render();
                 var li = $("<li />").append(view.el);
