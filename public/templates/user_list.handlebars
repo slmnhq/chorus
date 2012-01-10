@@ -10,7 +10,9 @@
                     <span title="{{fullName}}">{{fullName}}</span>
                 </a>
                 {{#if admin}}
-                    <span class="administrator tag">{{t "users.administrator"}}</span>
+                    <span class="administrator tag">
+                        <span class="arrow_left"/><span class="name">{{t "users.administrator"}}</span>
+                    </span>
                 {{/if}}
             </div>
             <div class="details">
