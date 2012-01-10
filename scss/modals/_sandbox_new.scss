@@ -9,6 +9,10 @@
         margin-right: auto;
     }
 
+    a {
+        font-size: 13px;
+    }
+
     .select_container {
         display: none;
     }
@@ -33,7 +37,6 @@
 
         a {
             float: right;
-            font-size: 13px;
             margin-top: 8px;
         }
     }
