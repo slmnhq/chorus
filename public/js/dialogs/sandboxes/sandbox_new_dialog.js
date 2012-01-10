@@ -177,6 +177,7 @@
         saved: function() {
             ns.toast("sandbox.create.toast");
             this.pageModel.fetch();
+            this.pageModel.trigger("invalidated");
             this.closeModal();
         },
 

@@ -373,6 +373,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
                 describe("when the model is saved successfully", function() {
                     beforeEach(function() {
+                        spyOnEvent(this.workspace, 'invalidated');
                         spyOn(this.dialog, 'closeModal');
                         spyOn(this.workspace, 'fetch');
                         spyOn(chorus, 'toast');
@@ -389,6 +390,10 @@ describe("chorus.dialogs.SandboxNew", function() {
 
                     it("shows a toast message", function() {
                         expect(chorus.toast).toHaveBeenCalledWith("sandbox.create.toast");
+                    });
+
+                    it("triggers the 'invalidated' event on the page model (a workspace)", function() {
+                        expect("invalidated").toHaveBeenTriggeredOn(this.workspace);
                     });
                 });
             });
