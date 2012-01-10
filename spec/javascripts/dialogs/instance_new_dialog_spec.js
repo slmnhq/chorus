@@ -94,7 +94,7 @@ describe("InstanceNewDialog", function() {
                 beforeEach(function() {
                     this.dialog.$(".register_existing_greenplum input[type=radio]").attr('checked', true).change();
 
-                    this.dialog.$(".register_existing_greenplum input[name=name]").val("Instance Name");
+                    this.dialog.$(".register_existing_greenplum input[name=name]").val("Instance_Name");
                     this.dialog.$(".register_existing_greenplum textarea[name=description]").val("Instance Description");
                     this.dialog.$(".register_existing_greenplum input[name=host]").val("foo.bar");
                     this.dialog.$(".register_existing_greenplum input[name=port]").val("1234");
@@ -111,7 +111,7 @@ describe("InstanceNewDialog", function() {
                     var attrs = this.dialog.model.save.calls[0].args[0];
 
                     expect(attrs.dbPassword).toBe("my_password");
-                    expect(attrs.name).toBe("Instance Name");
+                    expect(attrs.name).toBe("Instance_Name");
                     expect(attrs.provisionType).toBe("register");
                     expect(attrs.description).toBe("Instance Description");
                 });
@@ -122,7 +122,7 @@ describe("InstanceNewDialog", function() {
             context("using a new Greenplum database instance", function() {
                 beforeEach(function() {
                     this.dialog.$(".create_new_greenplum input[type=radio]").attr('checked', true).change();
-                    this.dialog.$(".create_new_greenplum input[name=name]").val("new greenplum instance");
+                    this.dialog.$(".create_new_greenplum input[name=name]").val("new_greenplum_instance");
                     this.dialog.$(".create_new_greenplum textarea[name=description]").val("Instance Description");
                     this.dialog.$(".create_new_greenplum input[name=size]").val("1");
                     this.dialog.$(".create_new_greenplum input[name=databaseName]").val("dbTest");
@@ -142,7 +142,7 @@ describe("InstanceNewDialog", function() {
                         var attrs = this.dialog.model.save.calls[0].args[0];
 
                         expect(attrs.size).toBe("1");
-                        expect(attrs.name).toBe("new greenplum instance");
+                        expect(attrs.name).toBe("new_greenplum_instance");
                         expect(attrs.provisionType).toBe("create");
                         expect(attrs.description).toBe("Instance Description");
                         expect(attrs.databaseName).toBe("dbTest");
@@ -163,7 +163,7 @@ describe("InstanceNewDialog", function() {
                             var attrs = this.dialog.model.save.calls[0].args[0];
 
                             expect(attrs.size).toBe("1");
-                            expect(attrs.name).toBe("new greenplum instance");
+                            expect(attrs.name).toBe("new_greenplum_instance");
                             expect(attrs.provisionType).toBe("create");
                             expect(attrs.description).toBe("Instance Description");
                             expect(attrs.host).toBeUndefined();
