@@ -277,6 +277,25 @@ describe("chorus.presenters.Activity", function() {
         itShouldHaveTheAuthorsIconAndUrl();
     });
 
+    context(".WORKSPACE_ADD_SANDBOX", function() {
+        beforeEach(function() {
+            this.model = fixtures.activity.WORKSPACE_ADD_SANDBOX();
+            this.workspace = this.model.get("workspace");
+            this.presenter = new chorus.presenters.Activity(this.model)
+        });
+
+        it("should have the right workspaceName", function() {
+            expect(this.presenter.workspaceName).toBe(this.workspace.get("name"));
+        });
+
+        it("should have the right workspaceUrl", function() {
+            var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
+            expect(this.presenter.workspaceUrl).toBe(url);
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
+
     context("headerHtml", function() {
         describe("#headerTranslationKey", function() {
             beforeEach(function() {

@@ -3,7 +3,7 @@
     ns.presenters.Activity = ns.presenters.Base.extend({
         present : function(model, options) {
             this.options = options;
-            
+
             this.model = model
             this.author = model.author();
             this.workspace = model.get("workspace");

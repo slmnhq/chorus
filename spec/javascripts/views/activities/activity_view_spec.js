@@ -190,6 +190,18 @@ describe("chorus.views.Activity", function() {
             });
         });
 
+        context("type: WORKSPACE_ADD_SANDBOX", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activity.WORKSPACE_ADD_SANDBOX();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderAuthorDetails();
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+        });
+
+
         context("when the type is unknown", function() {
             beforeEach(function() {
                 this.view.model.set({type: "DINNER_TIME"});
