@@ -38,7 +38,8 @@
         right: 0;
         top: $header-height;
         bottom: 0;
-        padding: $breadcrumbs-height 0 0 $sidebar-padding-x;
+        padding: 0;
+        width: $sidebar-width + ($sidebar-padding-x);
 
         .jump_to_top {
             div.triangle_up {
