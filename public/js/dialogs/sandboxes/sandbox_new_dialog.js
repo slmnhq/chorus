@@ -48,6 +48,7 @@
             this.showCreateFields("database", { showCancelLink: true });
             this.showCreateFields("schema", { showCancelLink: false });
 
+            this.$(".schema input.name").val("public");
             this.enableOrDisableSaveButton();
         },
 
@@ -65,9 +66,10 @@
             e.preventDefault();
 
             delete this.selectedSchema;
+            this.$(".schema input.name").val("");
+
             this.hideSelect("schema");
             this.showCreateFields("schema", { showCancelLink: true });
-
             this.enableOrDisableSaveButton();
         },
 
@@ -159,7 +161,7 @@
         save: function(e) {
             this.$("button.submit").startLoading("sandbox.adding_sandbox");
             var attrs = {
-                instance: this.selectedInstance.get("id"),
+                instance: this.selectedInstance.get("id")
             };
             if (this.selectedDatabase) {
                 attrs.database = this.selectedDatabase.get("id");
