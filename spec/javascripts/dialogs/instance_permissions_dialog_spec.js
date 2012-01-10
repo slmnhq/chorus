@@ -327,6 +327,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     fixtures.user({ firstName: "bob", lastName: "zzap", id: '111' }),
                     fixtures.user({ firstName: "jim", lastName: "aardvark", id: '222' }),
                     fixtures.user({ firstName: "suzie", lastName: "three", id: '333' }),
+                    fixtures.user({ firstName: "harold", lastName: "four", id: '444' }),
                     this.instance.owner()
                 ]);
                 this.dialog.$("button.add_account").click();
@@ -334,7 +335,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
             it("adds an option in the user select for each chorus user who does not already have permissions", function() {
                 expect(this.dialog.$("select.name option").eq(0)).toHaveText(this.dialog.users.get('333').displayName());
-                expect(this.dialog.$("select.name option").length).toBe(1);
+                expect(this.dialog.$("select.name option").eq(1)).toHaveText(this.dialog.users.get('444').displayName());
+                expect(this.dialog.$("select.name option").length).toBe(2);
             });
 
             it("adds a new item to the accounts list", function() {
@@ -358,6 +360,23 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 this.dialog.$("button.add_account").click();
                 expect(this.dialog.$("li").length).toBe(4);
             });
+
+            it("displays the image for the selected user", function() {
+                var selectedUser = this.dialog.users.get(this.dialog.$('li[data-id=new] select').val());
+                expect(this.dialog.$('li[data-id=new] img.profile').attr('src')).toBe(selectedUser.imageUrl());
+            });
+
+            describe("selecting a new user", function() {
+                beforeEach(function() {
+                    this.dialog.$('select').val('444');
+                    this.dialog.$('select').trigger("change");
+                })
+
+                it("updates the image for that user", function() {
+                    var selectedUser = this.dialog.users.get(this.dialog.$('li[data-id=new] select').val());
+                    expect(this.dialog.$('li[data-id=new] img.profile').attr('src')).toBe(selectedUser.imageUrl());
+                })
+            })
 
             describe("cancelling the new account", function() {
                 beforeEach(function() {

@@ -77,17 +77,27 @@
         },
 
         populateSelect: function() {
-            var userSet = new chorus.models.UserSet(this.collection.users());
+            var collectionUserSet = new chorus.models.UserSet(this.collection.users());
+            var otherUsers = this.users.select(function(user){return !collectionUserSet.get(user.get("id"))})
 
-            var options = this.users.map(function(user) {
-                if(!userSet.get(user.get("id"))) {
-                return $("<option/>").text(user.displayName()).val(user.get("id")).outerHtml();}
+            var options = otherUsers.map(function(user) {
+                return $("<option/>").text(user.displayName()).val(user.get("id")).outerHtml();
             });
             var select = this.$("li.new select.name");
             if (select) {
                 select.append(options.join(""));
             }
+            this.updateUserSelect();
+            $('li[data-id=new] select').change(_.bind(this.updateUserSelect, this));
+
             chorus.styleSelect(select);
+        },
+
+        updateUserSelect: function() {
+            var selectedUser = this.users.get($('li[data-id=new] select').val());
+            if(selectedUser) {
+                this.$('li[data-id=new] img.profile').attr('src', selectedUser.imageUrl());
+            }
         },
 
         save : function(event) {
