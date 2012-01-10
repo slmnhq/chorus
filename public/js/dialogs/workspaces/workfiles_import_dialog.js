@@ -72,17 +72,19 @@
             function uploadFinished(e, data) {
                 var json = $.parseJSON(data.result)
                 if (json.status == "ok") {
-                    self.model.set({id: json.resource[0].id});
-                    chorus.toast('workfiles.uploaded', {fileName: json.resource[0].fileName});
+                    self.model = new chorus.models.Workfile(json.resource[0]);
+                    chorus.toast('workfiles.uploaded', {fileName: self.model.get("fileName")});
                     self.closeModal();
-                    var url;
-                    if (self.uploadExtension.toLowerCase() == "txt" || self.uploadExtension.toLowerCase() == "sql") {
+
+                    var url, options;
+                    if (self.model.isText() || self.model.isImage()) {
                         url = self.model.showUrl();
                     } else {
                         url = self.model.workfilesUrl();
+                        options = { workfileId : self.model.get("id") };
                     }
 
-                    chorus.router.navigate(url, true);
+                    chorus.router.navigate(url, true, options);
                 }
                 else {
                     e.preventDefault();

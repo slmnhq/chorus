@@ -4,7 +4,8 @@ describe("WorkfilesImportDialog", function() {
         this.model = fixtures.workfile({ workspaceId: 4 });
         var workfileSet = new chorus.models.WorkfileSet([this.model], { workspaceId: 4 });
         this.dialog = new chorus.dialogs.WorkfilesImport({ launchElement : this.launchElement, pageModel: this.model, pageCollection: workfileSet });
-        this.successfulResponse = {"result": '{"resource":[{"id":"9", "fileName" : "new_file.txt"}], "status": "ok"}'};
+        this.successfulResponseTxt = {"result": '{"resource":[{"id":"9", "fileName" : "new_file.txt", "mimeType" : "text/plain", "workspaceId" : "4"}], "status": "ok"}'};
+        this.successfulResponseOther = {"result": '{"resource":[{"id":"9", "fileName" : "new_file.sh", "mimeType" : "application/octet-stream", "workspaceId" : "4"}], "status": "ok"}'};
         this.errorResponse = {"result": '{"status": "fail", "message" :[{"message":"Workspace already has a workfile with this name. Specify a different name."}]}'};
     });
 
@@ -42,27 +43,39 @@ describe("WorkfilesImportDialog", function() {
         });
     });
 
-    context("when a text file has been chosen", function() {
-        context("when the upload completes", function() {
+    describe("when the upload completes", function() {
+        beforeEach(function() {
+            spyOn($.fn, 'fileupload');
+            this.dialog.render();
+            this.fileList = [
+                {name: 'foo.txt'}
+            ];
+            expect($.fn.fileupload).toHaveBeenCalled();
+            this.fileUploadArgs = $.fn.fileupload.mostRecentCall.args[0];
+            this.fileUploadArgs.add(null, {files: this.fileList});
+
+            spyOn(chorus.router, "navigate");
+        });
+
+        context("and the workfile has a show page", function() {
             beforeEach(function() {
-                spyOn($.fn, 'fileupload');
-                this.dialog.render();
-                this.fileList = [
-                    {name: 'foo.txt'}
-                ];
-                expect($.fn.fileupload).toHaveBeenCalled();
-                var fileUploadArgs = $.fn.fileupload.mostRecentCall.args[0];
+                this.fileUploadArgs.done(null, this.successfulResponseTxt);
+            })
 
-                fileUploadArgs.add(null, {files: this.fileList});
-
-                spyOn(chorus.router, "navigate");
-                fileUploadArgs.done(null, this.successfulResponse);
-            });
-
-            it("navigates to the workfile index", function() {
-                expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.model.showUrl(), true);
+            it("navigates to the show page of the workfile", function() {
+                expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.model.showUrl(), true, undefined);
             });
         });
+
+        context("and the workfile does not have a show page", function() {
+            beforeEach(function() {
+                this.fileUploadArgs.done(null, this.successfulResponseOther);
+            })
+
+            it("navigates to the workfile index with page options", function() {
+                expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.model.workfilesUrl(), true, { workfileId : "9" });
+            })
+        })
     });
 
     context("when a file has been chosen", function() {
@@ -151,26 +164,6 @@ describe("WorkfilesImportDialog", function() {
                 });
             });
 
-            context("when the upload completes", function() {
-                beforeEach(function() {
-                    spyOn(chorus.router, "navigate");
-                    spyOn(chorus, 'toast');
-                    this.fileUploadOptions.done(null, this.successfulResponse);
-                });
-
-                it("closes the dialog", function() {
-                    expect(this.dialog.closeModal).toHaveBeenCalled();
-                });
-
-                it("navigates to the workfile index", function() {
-                    expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/4/workfiles", true);
-                });
-
-                it("displays a toast message with the name of the new file", function() {
-                    expect(chorus.toast).toHaveBeenCalledWith("workfiles.uploaded", {fileName: "new_file.txt"});
-                });
-            });
-
             context("when the upload gives a server error", function() {
                 beforeEach(function() {
                     this.saveFailedSpy = jasmine.createSpy();
@@ -179,7 +172,7 @@ describe("WorkfilesImportDialog", function() {
                     this.fileUploadOptions.done(this.eventSpy, this.errorResponse);
                 });
 
-                it("triggers saveFailed on the model", function(){
+                it("triggers saveFailed on the model", function() {
                     expect(this.saveFailedSpy).toHaveBeenCalled();
                 });
 
@@ -191,16 +184,16 @@ describe("WorkfilesImportDialog", function() {
                     expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
                 });
 
-                it("display the correct error" ,function(){
+                it("display the correct error", function() {
                     expect(this.dialog.$(".errors ul").text()).toBe("Workspace already has a workfile with this name. Specify a different name.")
                 });
 
-                it("sets the button text back to 'Uploading'", function(){
+                it("sets the button text back to 'Uploading'", function() {
                     expect(this.dialog.$("button.submit").text()).toMatchTranslation("workfiles.button.import");
                 });
             });
         });
-        context("when the Enter key is pressed" , function() {
+        context("when the Enter key is pressed", function() {
             beforeEach(function() {
                 this.dialog.$("form").submit();
             });
@@ -210,7 +203,7 @@ describe("WorkfilesImportDialog", function() {
             });
         });
 
-        context("when the upload button is clicked" , function() {
+        context("when the upload button is clicked", function() {
             beforeEach(function() {
                 this.dialog.$("button.submit").click();
             });
