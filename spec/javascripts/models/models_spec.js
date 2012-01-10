@@ -531,6 +531,12 @@ describe("chorus.models", function() {
                 expect(this.model.errors.foo).not.toBeDefined();
             });
 
+            it("uses a custom error message, if provided", function() {
+                this.model.require("foo", {foo: ""}, "test.deer");
+                expect(this.model.errors.foo).toMatchTranslation("test.deer")
+            })
+
+
             context("model has attrToLabel set", function() {
                 beforeEach(function() {
                     this.model.attrToLabel = {
@@ -590,6 +596,11 @@ describe("chorus.models", function() {
 
                 expect(this.model.errors.foo).not.toBeDefined();
             });
+
+            it("uses a custom error message, if provided", function() {
+                this.model.requirePattern("foo", /hello/, {}, "test.deer");
+                expect(this.model.errors.foo).toMatchTranslation("test.deer")
+            })
 
             context("model has attrToLabel set", function() {
                 beforeEach(function() {
@@ -669,6 +680,12 @@ describe("chorus.models", function() {
                     // test passed
                 }
             });
+
+            it("uses a custom error message, if provided", function() {
+                this.model.set({foo: "bar", fooConfirmation: "bar"});
+                this.model.requireConfirmation("foo", {foo: "a", fooConfirmation: "b"}, "test.deer");
+                expect(this.model.errors.foo).toMatchTranslation("test.deer")
+            })
 
             context("model has attrToLabel set", function() {
                 beforeEach(function() {
