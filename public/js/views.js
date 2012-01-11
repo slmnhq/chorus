@@ -28,6 +28,7 @@
                 .addClass(this.additionalClass || "");
             this.renderSubviews();
             this.postRender($(this.el));
+            this.renderHelps();
             this.trigger("rendered");
             return this;
         },
@@ -53,6 +54,44 @@
 
         getSubview : function(property) {
             return _.isFunction(this[property]) ? this[property]() : this[property];
+        },
+
+        renderHelps: function() {
+            var helpElements = this.$(".help");
+            _.each(helpElements, function(element) {
+                var backgroundColor = '#282828';
+                $(element).qtip({
+                    content: $(element).data("text"),
+                    show: 'mouseover',
+                    hide: 'mouseout',
+                    style: {
+                        width: 320,
+                        background: backgroundColor,
+                        color: "#FFF",
+                        'font-size': 13,
+                        border: { color: backgroundColor },
+                        tip: {
+                            corner: 'bottomMiddle',
+                            color: backgroundColor,
+                            size: {
+                                x: 19,
+                                y : 11
+                            }
+                        }
+                    },
+                    position : {
+                        corner : {
+                            target: "topMiddle",
+                            tooltip: "bottomMiddle"
+                        },
+                        adjust : {
+                            screen : true,
+                            scroll : false,
+                            mouse: false
+                        }
+                    }
+                });
+            });
         },
 
         template: function template(context) {

@@ -63,44 +63,6 @@
         saveFailed : function() {
             this.$("button.submit").stopLoading();
             this.$("button.cancel").removeAttr("disabled");
-        },
-
-        postRender : function() {
-            var helpElements = this.$(".help");
-            _.each(helpElements, function(element) {
-                var backgroundColor = '#282828';
-                $(element).qtip({
-                    content: $(element).data("text"),
-                    show: 'mouseover',
-                    hide: 'mouseout',
-                    style: {
-                        width: 320,
-                        background: backgroundColor,
-                        color: "#FFF",
-                        'font-size': 13,
-                        border: { color: backgroundColor },
-                        tip: {
-                            corner: 'bottomMiddle',
-                            color: backgroundColor,
-                            size: {
-                                x: 19,
-                                y : 11
-                            }
-                        }
-                    },
-                    position : {
-                        corner : {
-                            target: "topMiddle",
-                            tooltip: "bottomMiddle"
-                        },
-                        adjust : {
-                            screen : true,
-                            scroll : false,
-                            mouse: false
-                        }
-                    }
-                });
-            });
         }
     });
 })(jQuery, chorus);

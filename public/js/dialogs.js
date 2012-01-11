@@ -25,6 +25,7 @@
                 attr("title", this.options.title || this.title);
             this.delegateEvents()
             this.renderSubviews();
+            this.renderHelps();
             this.postRender($(this.el));
 
             return this;
