@@ -9,6 +9,10 @@ describe("chorus.dialogs.SandboxNewStandaloneMode", function() {
             this.dialogContainer = $("<div class='dialog sandbox_new'></div>").append(this.view.el);
             $('#jasmine_content').append(this.dialogContainer);
         });
+        
+        it("the default value of schema name to be public",function(){
+            expect(this.view.$(".schema .name").val()).toBe("public");
+        })
     });
 
     describe("#fieldValues", function() {
