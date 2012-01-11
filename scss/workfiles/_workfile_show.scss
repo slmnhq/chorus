@@ -69,4 +69,18 @@
     .CodeMirror.editable {
         background: white;
     }
+
+
+}
+.save_menu {
+    li {
+        padding: 5px;
+
+        a {
+            @include font-menu;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
 }

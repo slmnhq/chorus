@@ -20,10 +20,7 @@
     }
 
     a {
-        font-size: 14px;
-        line-height: 14px;
-        vertical-align: middle;
-        color: $text-color;
+        @include font-menu;
 
         &:hover {
             text-decoration: underline;

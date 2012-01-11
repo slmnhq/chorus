@@ -21,9 +21,7 @@
                     show: 'click',
                     hide: 'unfocus',
                     style: {
-                        width: 160,
-                        color: "black",
-                        'font-size': 13,
+                        width: 180,
                         tip: {
                             corner: 'bottomMiddle',
                             size: {

@@ -1,3 +1,4 @@
+
 @import "compass/utilities";
 @import "compass/css3";
 @import "compass/css3/opacity";
@@ -134,6 +135,13 @@ $medium-font: 14px;
     font-size: 12px;
     font-weight: $semibold;
     color: $dark-text-color;
+}
+
+@mixin font-menu {
+    font-size: 14px;
+    line-height: 14px;
+    vertical-align: middle;
+    color: $text-color;
 }
 
 @mixin list-section-heading {
