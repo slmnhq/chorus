@@ -52,16 +52,29 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
 
             context("choosing an instance", function() {
                 beforeEach(function() {
-                    var select = this.view.$(".instance select");
-                    select.prop("selectedIndex", 1);
-                    select.change();
+                    this.view.$(".instance select").prop("selectedIndex", 1).change();
                     this.selectedInstance = this.view.instances.get(this.view.$('.instance select option:selected').val());
                 });
 
                 itDisplaysLoadingPlaceholderFor('database');
                 itHidesSection('schema');
 
-                itShowsUnavailableTextWhenResponseIsEmptyFor('database');
+                context("when the response is empty for databases", function() {
+                    beforeEach(function() {
+                        this.view.databases.loaded = true;
+                        this.view.databases.reset([]);
+                    });
+
+                    itShowsUnavailable("database");
+
+                    describe("choosing another instance", function() {
+                        beforeEach(function() {
+                            this.view.$(".instance select").prop("selectedIndex", 2).change();
+                        });
+
+                        itDisplaysLoadingPlaceholderFor('database');
+                    });
+                });
 
                 it("fetches the list of databases", function() {
                     expect(this.server.requests[1].url).toMatch("/edc/instance/" + this.selectedInstance.get('id') + "/database");
@@ -376,6 +389,7 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
             expect(this.view.$("." + type + " .loading_text")).toBeVisible();
             expect(this.view.$("." + type + " select")).not.toBeVisible();
             expect(this.view.$('.' + type + ' label ')).toBeVisible();
+            expect(this.view.$('.' + type + ' .unavailable')).toBeHidden();
 
             // Remove when adding "register a new instance" story
             if (type != "instance") {

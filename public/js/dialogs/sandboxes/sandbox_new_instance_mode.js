@@ -102,6 +102,7 @@
             if (options && options.loading) {
                 section.find(".loading_text").removeClass('hidden');
                 section.find(".select_container").hide();
+                section.find(".unavailable").hide();
             } else {
                 section.find(".loading_text").addClass('hidden');
                 if (options && options.unavailable) {
