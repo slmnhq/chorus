@@ -8,6 +8,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
     context("#render", function() {
         beforeEach(function() {
+            spyOn($.fn, 'qtip');
             this.dialog.render();
         });
 
@@ -31,6 +32,14 @@ describe("chorus.dialogs.SandboxNew", function() {
                 expect(this.dialog.$(".instance_mode")).toHaveClass("hidden");
                 expect(this.dialog.$(".standalone_mode")).not.toHaveClass("hidden");
             });
+        });
+
+        it("displays a help tooltip for standalone mode", function() {
+            expect(this.dialog.$("label[for='create_sandbox_as_standalone']")).toContain("img.help");
+            expect($.fn.qtip).toHaveBeenCalled();
+            var qtipCall = $.fn.qtip.calls[0];
+            expect(qtipCall.object).toBe("img.help");
+            expect(qtipCall.args[0].content).toMatchTranslation("sandbox.create.standalone_dialog.help_text");
         });
     });
 
