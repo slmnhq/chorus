@@ -359,14 +359,18 @@ describe("handlebars", function() {
 
         describe("renderTemplate", function() {
             it("renders the template", function() {
-                expect(Handlebars.helpers.renderTemplate('plain_text', {text: 'foo'})).toBe('foo');
+                expect(Handlebars.helpers.renderTemplate('plain_text', {text: 'foo'}).trim()).toBe('foo');
             });
         });
 
         describe("linkTo", function() {
             it("returns an html string with the right text and href", function() {
-                var link = Handlebars.helpers.linkTo("/users/1", "Charlie");
-                expect(link).toBe('<a href="/users/1">Charlie</a>');
+                var link = $(Handlebars.helpers.linkTo("/users/1", "Charlie"));
+
+                // Coding like weirdos here to make IE8 happy
+                expect(link.is("a")).toBeTruthy();
+                expect(link.text().trim()).toBe("Charlie");
+                expect(link.attr("href")).toBe("/users/1");
             });
 
             it("applies the given attributes", function() {

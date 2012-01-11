@@ -151,7 +151,13 @@ describe("jquery extensions", function() {
     describe("#outerHtml", function() {
         it("converts the first element to html", function() {
             var el = $("<a></a>").addClass("author");
-            expect(el.outerHtml()).toBe('<a class="author"></a>');
+            var html = el.outerHtml();
+            var $html = $(html);
+
+            // Coding like weirdos here to make IE8 happy
+            expect(_.isString(html)).toBeTruthy();
+            expect($html.is("a")).toBeTruthy();
+            expect($html).toHaveClass("author");
         });
     });
 });
