@@ -1,0 +1,15 @@
+.loading_section {
+    .spinner {
+        height: 130px;
+
+        div[aria-role=progressbar] {
+            top: 60px;
+            left: 60px;
+        }
+    }
+
+    .description {
+        width: 125px;
+        text-align: center;
+    }
+}

@@ -26,6 +26,7 @@
         'instance_permissions',
         'link_menu',
         'list_content_details',
+        'loading_section',
         'logged_in_layout',
         'login',
         'activity_list',
