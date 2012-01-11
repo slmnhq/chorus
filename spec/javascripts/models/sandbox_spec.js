@@ -43,8 +43,8 @@ describe("chorus.models.Sandbox", function() {
                 expectValid({}, this.model);
             });
 
-            it("requires an instance name", function() {
-                expectInvalid({ instanceName: "" }, this.model);
+            it("requires an instance name that doesn't start with a digit", function() {
+                expectInvalid({ instanceName: "_asdf" }, this.model);
             });
 
             it("requires a positive integer for the instance size", function() {

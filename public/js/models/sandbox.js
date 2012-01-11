@@ -19,7 +19,7 @@
 
         declareValidations: function(attrs) {
             if (this.isCreatingNew("instance", attrs)) {
-                this.require("instanceName", attrs);
+                this.requirePattern("instanceName", noStartingDigitRegex, attrs);
                 this.requirePositiveInteger("size", attrs);
             }
             if (this.isCreatingNew('database', attrs)) {
