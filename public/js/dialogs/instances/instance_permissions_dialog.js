@@ -20,6 +20,11 @@
                 this.users = new ns.models.UserSet();
                 this.users.bind("reset", this.populateSelect, this);
                 this.users.fetchAll();
+                this.users.comparator = function(user) {
+                    var name = user && (user.get("lastName")+user.get("firstName"));
+                    name = name ? name.toLowerCase() : '\uFFFF'
+                    return name;
+                }
             }
             this.collection = this.instance.accounts();
 

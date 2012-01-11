@@ -192,11 +192,6 @@ describe("chorus.dialogs.InstancePermissions", function() {
             expect(chorus.models.UserSet.prototype.fetchAll).toHaveBeenCalled();
         });
 
-        xit("sorts the users by last name", function() {
-            expect(this.dialog.$("li").eq(0)).toHaveText("jim aardvark");
-            expect(this.dialog.$("li").eq(1)).toHaveText("bob zzap");
-        });
-
         describe("editing a user's account credentials", function() {
             beforeEach(function() {
                 this.accountBeingEdited = this.accounts.get(2);
@@ -338,9 +333,9 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 this.dialog.$("button.add_account").click();
             });
 
-            it("adds an option in the user select for each chorus user who does not already have permissions", function() {
-                expect(this.dialog.$("select.name option").eq(0)).toHaveText(this.dialog.users.get('333').displayName());
-                expect(this.dialog.$("select.name option").eq(1)).toHaveText(this.dialog.users.get('444').displayName());
+            it("adds an option in the user select, sorted, for each chorus user who does not already have permissions", function() {
+                expect(this.dialog.$("select.name option").eq(0)).toHaveText(this.dialog.users.get('444').displayName());
+                expect(this.dialog.$("select.name option").eq(1)).toHaveText(this.dialog.users.get('333').displayName());
                 expect(this.dialog.$("select.name option").length).toBe(2);
             });
 
@@ -430,7 +425,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                         it("saves the correct fields", function() {
                             expect(this.dialog.account.save).toHaveBeenCalledWith({
-                                userId : '333',
+                                userId : '444',
                                 dbUserName : 'user!',
                                 dbPassword : 'password!'
                             });
@@ -441,7 +436,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         });
 
                         it("has the selected userId", function() {
-                            expect(this.dialog.account.get('userId')).toBe('333');
+                            expect(this.dialog.account.get('userId')).toBe('444');
                         });
 
                         context("after the save returns successfully", function() {
@@ -511,8 +506,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 });
 
                 it("adds an option in the user select for each chorus user", function() {
-                    expect(this.dialog.$("select.name option").eq(0)).toHaveText("ben maulden");
-                    expect(this.dialog.$("select.name option").eq(1)).toHaveText("anna cannon");
+                    expect(this.dialog.$("select.name option").eq(0)).toHaveText("anna cannon");
+                    expect(this.dialog.$("select.name option").eq(1)).toHaveText("ben maulden");
                 });
             });
 

@@ -44,8 +44,10 @@ $link-padding: 6px;
     }
 
     .collection_list {
+        height: 9*$list-item-height;
         border-top: 1px solid $subheader-border-color-dark;
-        
+        border-bottom: 1px solid $subheader-border-color-dark;
+
         ul {
             li {
                 height: auto;
