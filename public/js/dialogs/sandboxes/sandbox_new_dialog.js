@@ -22,8 +22,14 @@
         setup: function() {
             this.instanceMode = new ns.views.SandboxNewInstanceMode();
             this.instanceMode.bind("change", this.enableOrDisableSaveButton, this);
+            ns.models.Instance.aurora().fetch();
+            ns.models.Instance.aurora().bind("change", this.render, this);
 
             this.standaloneMode = new ns.views.SandboxNewStandaloneMode();
+        },
+
+        additionalContext: function() {
+            return { configured: ns.models.Instance.aurora().isInstalled() }
         },
 
         showInstanceMode: function() {
