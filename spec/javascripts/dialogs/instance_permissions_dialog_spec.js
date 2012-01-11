@@ -144,12 +144,13 @@ describe("chorus.dialogs.InstancePermissions", function() {
     context("when the instance has individual accounts", function() {
         beforeEach(function() {
             spyOn(chorus.models.UserSet.prototype, 'fetchAll').andCallThrough();
-            this.instance = fixtures.instance();
+            this.owner = fixtures.user({firstName: 'EDC', lastName: 'Admin'});
+            this.instance = fixtures.instance({ownerId: this.owner.get('id'), owner: this.owner.get('userName'), ownerFullName: this.owner.displayName()});
             this.accounts = this.instance.accounts();
             this.accounts.add([
                 fixtures.instanceAccount({ id: '1', user: { firstName: "bob", lastName: "zzap", id: '111' } }),
                 fixtures.instanceAccount({ id: '2', user: { firstName: "jim", lastName: "aardvark", id: '222' } }),
-                fixtures.instanceAccount({ id: '3', user: { firstName: "EDC", lastName: "Admin", id: '2'}})
+                fixtures.instanceAccount({ id: '3', user: this.owner})
             ]);
             this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.instance })
             this.dialog.render();

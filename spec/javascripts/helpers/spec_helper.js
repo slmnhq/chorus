@@ -251,16 +251,10 @@
     }
 
     window.setLoggedInUser = function(options) {
-        options || (options = {});
-        chorus.session.set({ id: options.id || "10000" });
-        chorus.session._user = new chorus.models.User({
-            "firstName" : "Luther",
-            "lastName" : "Blissett",
-            "fullName": "Luther Blissett",
-            "admin" : !!options['admin'],
-            "userName" : options['userName'] || "edcadmin",
-            "id" : options['id'] || "10000"
-        });
+        chorus.session._user = new chorus.models.User(_.extend({
+            userName: 'edcadmin'
+        }, options));
+        chorus.session.set({id: chorus.session._user.get('id')});
     };
 
     window.stubView = function(html) {
