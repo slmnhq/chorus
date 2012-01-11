@@ -35,6 +35,7 @@
         'notes_new_file_attachment',
         'plain_text',
         'sandbox_new',
+        'sandbox_new_instance_mode',
         'shuttle_widget',
         'sub_nav',
         'tab_control',
