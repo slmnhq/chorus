@@ -12,9 +12,11 @@
         },
 
         beforeSave: function(attrs) {
-            attrs.type = _.map(['instance', 'database', 'schema'], function(name) {
+            var type = _.map(['instance', 'database', 'schema'], function(name) {
                 return attrs[name] ? "0" : "1";
-            }).join("");
+            });
+            if (attrs.schemaName && attrs.schemaName === ns.models.Schema.DEFAULT_NAME) { type[2] = "0"; }
+            attrs.type = type.join("");
         },
 
         declareValidations: function(attrs) {

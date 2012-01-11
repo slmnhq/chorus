@@ -62,7 +62,7 @@
             this.showCreateFields("database", { showCancelLink: true });
             this.showCreateFields("schema", { showCancelLink: false });
 
-            this.$(".schema input.name").val("public");
+            this.$(".schema input.name").val(ns.models.Schema.DEFAULT_NAME);
             this.checkIfValid();
         },
 

@@ -25,6 +25,11 @@ describe("chorus.models.Sandbox", function() {
             this.model.save({ instance: '22', databaseName: "foobar", schemaName: "meow" });
             expect(this.model.get("type")).toBe("011");
         });
+
+        it("specifies a '0' for the schema field if the default name is given", function() {
+            this.model.save({ instance: '22', databaseName: 'secret_data', schemaName: 'public' });
+            expect(this.model.get("type")).toBe("010");
+        });
     });
 
     describe("validations", function() {
