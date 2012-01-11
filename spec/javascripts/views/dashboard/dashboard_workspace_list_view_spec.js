@@ -4,6 +4,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
         this.workspace1 = fixtures.workspace({ name: "Broccoli", latestCommentList: [] });
         this.workspace2 = fixtures.workspace({ name: "Camels", latestCommentList: [] });
         this.collection = new chorus.models.WorkspaceSet([this.workspace1, this.workspace2]);
+        this.collection.loaded = true;
         this.view = new chorus.views.DashboardWorkspaceList({collection : this.collection});
     });
 
