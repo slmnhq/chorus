@@ -1,0 +1,52 @@
+<div class="instance">
+    <div class="header_container">
+        <label class="required">{{t "sandbox.select.instance"}}</label>
+    </div>
+    <div class="loading_text">
+        {{t "loading"}}
+        <span class="loading_spinner"></span>
+    </div>
+
+    <div class="unavailable">{{t "sandbox.unavailable.instance"}}</div>
+    <div class="select_container">
+        <select name="instance"></select>
+    </div>
+</div>
+<div class="database">
+    <div class="header_container">
+        <a class="new hidden" href="">{{t "sandbox.new.database"}}</a>
+        <label class="required hidden">{{t "sandbox.select.database"}}</label>
+    </div>
+    <div class="loading_text hidden">
+        {{t "loading"}}
+        <span class="loading_spinner"></span>
+    </div>
+
+    <div class="unavailable">{{t "sandbox.unavailable.database"}}</div>
+    <div class="select_container">
+        <select name="database"></select>
+    </div>
+    <div class="create_container hidden">
+        <input class="name" name="databaseName" maxlength="63" placeholder="{{t "sandbox.database.name.placeholder"}}"></input>
+        <a class="cancel" href="#">{{t "actions.cancel"}}</a>
+    </div>
+</div>
+<div class="schema">
+    <div class="header_container">
+        <a class="new hidden" href="#">{{t "sandbox.new.schema"}}</a>
+        <label class="required hidden">{{t "sandbox.select.schema"}}</label>
+    </div>
+    <div class="loading_text hidden">
+        {{t "loading"}}
+        <span class="loading_spinner"></span>
+    </div>
+
+    <div class="unavailable">{{t "sandbox.unavailable.schema"}}</div>
+    <div class="select_container">
+        <select name="schema"></select>
+    </div>
+    <div class="create_container hidden">
+        <input class="name" name="schemaName" maxlength="63" placeholder="{{t "sandbox.schema.name.placeholder"}}" ></input>
+        <a class="cancel" href="#" tabindex=2>{{t "actions.cancel"}}</a>
+    </div>
+</div>

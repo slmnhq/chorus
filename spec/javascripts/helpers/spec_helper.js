@@ -26,6 +26,7 @@
         'instance_permissions',
         'link_menu',
         'list_content_details',
+        'loading_section',
         'logged_in_layout',
         'login',
         'activity_list',
@@ -34,6 +35,7 @@
         'notes_new_file_attachment',
         'plain_text',
         'sandbox_new',
+        'sandbox_new_instance_mode',
         'shuttle_widget',
         'sub_nav',
         'tab_control',
@@ -49,6 +51,7 @@
         'workfile_header',
         'workfile_list',
         'workfile_list_sidebar',
+        'workfile_new_version',
         'workfile_show_sidebar',
         'workfiles_import',
         'workfiles_sql_new',
@@ -126,7 +129,7 @@
                         "Expected text '" + this.actual + "' not to match the translation for '" + translationKey + "' (" + translatedText +")"
                         ];
                     };
-                    if (translatedText === '[' + translationKey + ']') {
+                    if (!I18n.lookup(translationKey)) {
                         throw("No entry in messages.properties for " + translationKey);
                     }
 

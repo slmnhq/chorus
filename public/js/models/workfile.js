@@ -30,6 +30,16 @@
             return new ns.Draft({workfileId: this.get("id") , workspaceId : this.get("workspaceId")})
         },
 
+        createNewVersion : function() {
+            return new ns.WorkfileNewVersion({
+                workspaceId : this.get("workspaceId"),
+                baseVersionNum : this.get("baseVersionNum"),
+                content : this.get("content"),
+                commitMessage: this.get("commitMessage"),
+                "workfileId" : this.get("id")
+            })
+        },
+
         declareValidations : function(newAttrs){
             this.require("fileName", newAttrs);
         },

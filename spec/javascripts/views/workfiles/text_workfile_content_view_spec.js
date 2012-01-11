@@ -138,16 +138,25 @@
         });
 
         it("should still be in edit mode", function(){
-            expect(this.view.$(".CodeMirror")).toHaveClass("editable");
+            waits(100);
+            runs(function() {
+                expect(this.view.$(".CodeMirror")).toHaveClass("editable");
+            });
         });
 
         it("sets readonly to nocursor", function() {
-            expect(this.view.editor.getOption("readOnly")).toBe(false);
+            waits(100);
+            runs(function() {
+                expect(this.view.editor.getOption("readOnly")).toBe(false);
+            });
         });
 
         it("sets cursor at the correct position", function() {
-            expect(this.view.editor.getCursor().ch).toBe(19);
-            expect(this.view.editor.getCursor().line).toBe(0);
+            waits(100);
+            runs(function() {
+                expect(this.view.editor.getCursor().ch).toBe(19);
+                expect(this.view.editor.getCursor().line).toBe(0);
+            });
         });
 
         it("saves the model", function(){
@@ -155,23 +164,7 @@
         });
     });
 
-    describe("event file:edit", function(){
-        beforeEach(function(){
-            // this.view.editor becomes set in view.render
-            this.view.render();
-
-            // Because view.editText is bound in view.setup, it is difficult/impossible to spy on the proper function...
-            // so we'll spy on the side-effect of calling that function.
-            spyOn(this.view.editor, "focus");
-            this.view.trigger("file:edit");
-        });
-
-        it("calls editText", function(){
-            expect(this.view.editor.focus).toHaveBeenCalled();
-        });
-    });
-
-    describe("event file:save", function(){
+    describe("event file:saveCurrent", function(){
         beforeEach(function(){
             // this.view.editor becomes set in view.render
             this.view.render();
@@ -179,11 +172,45 @@
             // Because view.saveChanges is bound in view.setup, it is difficult/impossible to spy on the proper function...
             // so we'll spy on the side-effect of calling that function.
             spyOn(this.view.model, "save");
-            this.view.trigger("file:save");
+            this.view.trigger("file:saveCurrent");
         });
 
         it("calls saveChanges", function(){
             expect(this.view.model.save).toHaveBeenCalled();
         });
     });
+
+        describe("event file:createWorkfileNewVersion", function(){
+            beforeEach(function() {
+                this.view.model.set({"content": "old content"});
+                this.view.model.set({"latestVersionNum": 2});
+
+                this.view.render();
+
+                this.view.editor.setValue("new content");
+
+                spyOn(this.view, "stopTimer");
+                spyOn(chorus.dialogs.WorkfileNewVersion.prototype, "launchModal");
+                this.view.trigger("file:createWorkfileNewVersion");
+            });
+
+            it("calls stops the auto save timer", function() {
+                expect(this.view.stopTimer).toHaveBeenCalled();
+            });
+
+            it("updates the model", function() {
+                expect(this.view.model.get("content")).toBe("new content");
+                expect(this.view.model.get("baseVersionNum")).toBe(2);
+            });
+
+            it("launches save workfile as new version dialog", function() {
+                expect(chorus.dialogs.WorkfileNewVersion.prototype.launchModal).toHaveBeenCalled();
+            });
+
+
+            it("launches the new dialog with the correct model", function() {
+                expect(this.view.dialog.model).toBeA(chorus.models.WorkfileNewVersion);
+
+            });
+        });
 });

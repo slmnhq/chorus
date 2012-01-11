@@ -1,0 +1,43 @@
+describe("chorus.views.LoadingSection", function() {
+    describe("#render", function() {
+        context("without options", function() {
+            beforeEach(function() {
+                this.view = new chorus.views.LoadingSection();
+                this.view.render();
+            });
+
+            it("immediately displays the 'loading' text", function() {
+                expect(this.view.$(".description").text()).toMatchTranslation("loading");
+                expect(this.view.$(".description")).not.toHaveClass("hidden");
+            });
+
+            it("immediately draws the spinner", function() {
+                expect(this.view.$(".spinner div[aria-role=progressbar]")).toExist();
+            });
+        });
+
+        context("with options", function() {
+            beforeEach(function() {
+                this.delay = 25;
+                this.view = new chorus.views.LoadingSection({delay: this.delay});
+            });
+
+            it("doesn't fill in the sections until after the delay", function() {
+                runs(function(){
+                    this.view.render();
+
+                    expect(this.view.$(".spinner").is(":empty")).toBeTruthy();
+                    expect(this.view.$(".description")).toHaveClass("hidden");
+                });
+
+                waits(this.delay + 10);
+
+                runs(function() {
+                    expect(this.view.$(".description").text()).toMatchTranslation("loading");
+                    expect(this.view.$(".description")).not.toHaveClass("hidden");
+                    expect(this.view.$(".spinner div[aria-role=progressbar]")).toExist();
+                });
+            });
+        });
+    });
+});

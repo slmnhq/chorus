@@ -7,8 +7,8 @@
         cursor : undefined,
 
         setup : function(){
-            this.bind("file:edit", this.editText);
-            this.bind("file:save", this.saveChanges);
+            this.bind("file:saveCurrent", this.saveChanges);
+            this.bind("file:createWorkfileNewVersion", this.createWorkfileNewVersion);
         },
 
         postRender : function() {
@@ -68,8 +68,21 @@
         saveChanges : function() {
             this.stopTimer();
             this.cursor = this.editor.getCursor();
-            this.model.set({"content" : this.editor.getValue()});
-            this.model.save();
+            this.model.set({"content" : this.editor.getValue()}, {silent : true});
+            this.model.save({}, {silent : true}); // Need to save silently because content details and content share the same models, and we don't want to render content details
+            this.render();
+        },
+
+        createWorkfileNewVersion : function() {
+            this.stopTimer();
+            this.cursor = this.editor.getCursor();
+            this.model.set({"content" : this.editor.getValue()}, {silent : true});
+            this.model.set({"baseVersionNum" : this.model.get("latestVersionNum")}, {silent : true}) // API will remove this baseVersionNum, for now it'll default to latestVersionNum
+
+            this.dialog = new chorus.dialogs.WorkfileNewVersion({ launchElement : this, pageModel : this.model.createNewVersion(), pageCollection : this.collection });
+            this.dialog.launchModal(); // we need to manually create the dialog instead of using data-dialog because qtip is not part of page
+            this.dialog.model.bind("change", this.render, this);
+            this.dialog.model.bind("autosaved", function() { this.trigger("autosaved", "workfile.content_details.save")}, this);
         }
     });
 

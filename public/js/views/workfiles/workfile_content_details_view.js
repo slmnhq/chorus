@@ -1,25 +1,75 @@
 (function($, ns) {
     ns.WorkfileContentDetails = ns.Base.extend({
             className : "workfile_content_details",
-            events : {
-                "click .save_as"   : "saveChanges"
-            },
 
             setup : function() {
                 this.bind("autosaved", this.updateAutosaveText);
             },
 
-            updateAutosaveText: function() {
+            updateAutosaveText: function(args) {
+                var text = args ?  args : "workfile.content_details.auto_save";
+
                 var time = this.formatTime(new Date());
                 this.$("span.auto_save").removeClass("hidden");
-                this.$("span.auto_save").text(t("workfile.content_details.auto_save", {time: time}))
+                this.$("span.auto_save").text(t(text, {time: time}))
             },
 
+            postRender: function() {
+                var self = this;
+                this.$(".save_as").qtip({
+                    content: this.$(".save_options").html(),
+                    show: 'click',
+                    hide: 'unfocus',
+                    style: {
+                        width: 160,
+                        color: "black",
+                        'font-size': 13,
+                        tip: {
+                            corner: 'bottomMiddle',
+                            size: {
+                                x: 19,
+                                y : 11
+                            }
+                        }
+                    },
+                    position : {
+                        corner : {
+                            target: "bottomMiddle",
+                            tooltip: "topRight"
+                        },
+                        adjust : {
+                            screen : true,
+                            scroll : false,
+                            mouse: false
+                        }
+                    },
+                    api: {
+                        onRender: function() {
+                            var me = this;
+                            $(this.elements.content).find(".save_as_current").bind('click', function(e) {
+                                self.saveChanges(e);
+                                me.hide();
+                            });
+                            $(this.elements.content).find(".save_as_new").bind('click', function(e) {
+                                self.workfileNewVersion(e);
+                                me.hide();
+                            });
+                        }
+
+                    }
+                });
+            },
 
             saveChanges: function(e) {
                 e.preventDefault();
-                this.trigger("file:save");
-                this.$("span.auto_save").addClass("hidden");
+                e.stopPropagation();
+                this.trigger("file:saveCurrent");
+                this.updateAutosaveText("workfile.content_details.save");
+            },
+
+            workfileNewVersion : function(e) {
+                e.preventDefault();
+                this.trigger("file:createWorkfileNewVersion");
             },
 
             formatTime: function(time) {

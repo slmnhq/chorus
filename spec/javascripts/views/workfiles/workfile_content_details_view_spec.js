@@ -32,7 +32,7 @@ describe("WorkfileContentDetails", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.view = new chorus.views.WorkfileContentDetails(this.model);
+            this.view = new chorus.views.WorkfileContentDetails({model : this.model});
             this.view.render();
         });
 
@@ -46,6 +46,10 @@ describe("WorkfileContentDetails", function() {
 
         it("should not display the autosave text", function() {
             expect(this.view.$("span.auto_save")).toHaveClass("hidden");
+        });
+
+        it("should show the save_options", function() {
+            expect(this.view.$(".save_options")).toHaveClass("hidden");
         });
         
         context("when user is editing the file", function() {
@@ -63,30 +67,34 @@ describe("WorkfileContentDetails", function() {
                     expect(this.view.$("span.auto_save")).not.toHaveClass("hidden");
                 });
 
-                context("and the save file button is clicked", function() {
+                context("and the save as current button is clicked", function() {
                     beforeEach(function() {
-                        this.view.$(".save_as").click();
+                        var event = $.Event("click");
+                        this.view.saveChanges(event);
                     });
 
-                    it("should not display the autosave text", function() {
-                        expect(this.view.$("span.auto_save")).toHaveClass("hidden");
+                    it("should display the 'Saved at' text", function() {
+                        expect(this.view.$("span.auto_save").text()).toContain("Saved at");
                     });
                 });
             });
 
-            context("when user click on the save file button", function() {
+            context("when user click on the 'save as file' button", function() {
                 beforeEach(function() {
-                    this.fileSpy = jasmine.createSpy("file:save");
-                    this.view.bind("file:save", this.fileSpy);
+                    spyOn($.fn, 'qtip');
+                    this.view.render();
                     this.view.$(".save_as").click();
+                    this.qtipCall = $.fn.qtip.calls[0];
                 });
 
-                it("should trigger file save", function() {
-                    expect(this.fileSpy).toHaveBeenCalled();
+                it("displays the tooltip", function() {
+                    expect($.fn.qtip).toHaveBeenCalled();
+                    expect(this.qtipCall.object).toBe(".save_as");
                 });
 
-                it("should not apply the disabled class to the save button", function() {
-                    expect(this.view.$(".save_as")).not.toHaveAttr("disabled");
+                it("renders the tooltip content", function() {
+                    expect(this.qtipCall.args[0].content).toContain("Save as new version");
+                    expect(this.qtipCall.args[0].content).toContain("Replace current version");
                 });
             });
         });

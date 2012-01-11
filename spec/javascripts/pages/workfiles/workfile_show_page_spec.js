@@ -75,10 +75,10 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
         describe("the workfile detail view raises file:save event", function() {
             beforeEach(function() {
-                this.saveSpy = jasmine.createSpy("file:save");
-                this.page.mainContent.content.bind("file:save", this.saveSpy);
+                this.saveSpy = jasmine.createSpy("file:saveCurrent");
+                this.page.mainContent.content.bind("file:saveCurrent", this.saveSpy);
 
-                this.page.mainContent.contentDetails.trigger("file:save");
+                this.page.mainContent.contentDetails.trigger("file:saveCurrent");
             });
 
             it("relays the event to the workfile content", function() {
