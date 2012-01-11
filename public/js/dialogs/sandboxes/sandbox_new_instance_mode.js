@@ -48,7 +48,6 @@
 
         schemaSelected: function() {
             this.selectedSchema = this.schemas.get(this.$('.schema select option:selected').val());
-            this.trigger("new:input")
             this.checkIfValid();
         },
 
@@ -56,24 +55,9 @@
             e.preventDefault();
 
             delete this.selectedDatabase;
-            this.hideSelect("database");
-            this.hideSelect("schema");
-
-            this.showCreateFields("database", { showCancelLink: true });
-            this.showCreateFields("schema", { showCancelLink: false });
-
+            this.showSection("database", { create: true, cancelLink: true });
+            this.showSection("schema", { create: true, cancelLink: false });
             this.$(".schema input.name").val(ns.models.Schema.DEFAULT_NAME);
-            this.checkIfValid();
-        },
-
-        cancelNewDatabase: function(e) {
-            e.preventDefault();
-
-            this.hideCreateFields("database");
-            this.hideCreateFields("schema");
-            this.showSection("database");
-
-            this.$(".schema a.new").addClass("hidden");
         },
 
         createNewSchema: function (e) {
@@ -82,46 +66,51 @@
             delete this.selectedSchema;
             this.$(".schema input.name").val("");
 
-            this.hideSelect("schema");
-            this.showCreateFields("schema", { showCancelLink: true });
-            this.checkIfValid();
+            this.showSection("schema", { create: true, cancelLink: true });
+        },
+
+        cancelNewDatabase: function(e) {
+            e.preventDefault();
+            this.updateDatabases();
         },
 
         cancelNewSchema: function(e) {
             e.preventDefault();
-            this.databaseSelected();
-            this.hideCreateFields("schema");
-            this.showSection("schema");
+            this.updateSchemas();
         },
 
         showSection: function(type, options) {
+            options || (options = {});
             var section = this.$("." + type);
+            section.removeClass("hidden");
             section.find("a.new").removeClass("hidden");
-            section.find("label").removeClass("hidden");
+            section.find(".loading_text").addClass('hidden');
+            section.find(".create_container").addClass('hidden');
+            section.find(".select_container").hide();
+            section.find(".unavailable").hide();
 
-            if (options && options.loading) {
-                section.find(".loading_text").removeClass('hidden');
-                section.find(".select_container").hide();
-                section.find(".unavailable").hide();
-            } else {
-                section.find(".loading_text").addClass('hidden');
-                if (options && options.unavailable) {
-                    section.find(".unavailable").show();
+            if (options.loading)          { section.find(".loading_text").removeClass('hidden'); }
+            else if (options.unavailable) { section.find(".unavailable").show(); }
+            else if (options.create) {
+                var createContainer = section.find(".create_container");
+                section.find("a.new").addClass("hidden");
+                createContainer.removeClass("hidden");
+                if (options.cancelLink) {
+                    createContainer.addClass("show_cancel_link");
                 } else {
-                    section.find(".select_container").show();
+                    createContainer.removeClass("show_cancel_link");
                 }
+            } else {
+                section.find("a.new").removeClass("hidden");
+                section.find(".select_container").show();
+                chorus.styleSelect(section.find("select"));
             }
-            chorus.styleSelect(section.find("select"));
             this.checkIfValid();
-        },
-
-        hideSelect: function(type) {
-            this.$("." + type + " .select_container").hide();
         },
 
         resetSelect: function(type) {
             var section = this.$("." + type);
-            section.find("label").addClass("hidden");
+            section.addClass("hidden");
             section.find("a.new").addClass("hidden");
             delete this["selected" + _.capitalize(type)];
             this.checkIfValid();
@@ -138,30 +127,12 @@
         },
 
         updateDatabases : function() {
+            this.resetSelect("schema");
             this.updateFor('database');
         },
 
         updateSchemas : function() {
             this.updateFor('schema');
-        },
-
-        hideCreateFields: function(type) {
-            this.$("." + type + " label").addClass("hidden");
-            this.$("." + type + " .new").removeClass("hidden");
-            this.$("." + type + " .create_container").addClass("hidden");
-        },
-
-        showCreateFields: function(type, options) {
-            var createContainer = this.$("." + type + " .create_container");
-            createContainer.removeClass("hidden");
-            this.$("." + type + " label").removeClass("hidden");
-            this.$("." + type + " a.new").addClass("hidden");
-
-            if (options && options.showCancelLink) {
-                createContainer.addClass("show_cancel_link");
-            } else {
-                createContainer.removeClass("show_cancel_link");
-            }
         },
 
         checkIfValid: function() {

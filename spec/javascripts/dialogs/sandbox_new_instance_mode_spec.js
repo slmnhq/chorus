@@ -74,6 +74,14 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
 
                         itDisplaysLoadingPlaceholderFor('database');
                     });
+
+                    describe("clicking 'new database'", function() {
+                        beforeEach(function() {
+                            this.view.$(".database a.new").click();
+                        });
+
+                        itShowsCreateFields('database');
+                    });
                 });
 
                 it("fetches the list of databases", function() {
@@ -114,8 +122,8 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
                             expect(this.view.$(".database .create_container a.cancel")).toBeVisible();
                         });
 
-                        it("shows the schema label", function() {
-                            expect(this.view.$(".schema label")).toBeVisible();
+                        it("shows the schema section", function() {
+                            expect(this.view.$(".schema")).toBeVisible();
                         });
 
                         it("shows the schema name field and cancel link", function() {
@@ -142,8 +150,8 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
 
                             itTriggersTheChangeEvent();
 
-                            it("hides the schema label", function() {
-                                expect(this.view.$(".schema label")).toBeHidden();
+                            it("hides the schema section", function() {
+                                expect(this.view.$(".schema")).toBeHidden();
                             });
 
                             it("hides the 'new schema' link", function() {
@@ -415,7 +423,7 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
 
     function itHidesSection(type) {
         it("should hide the " + type + " section", function() {
-            expect(this.view.$('.' + type + ' label ')).toHaveClass("hidden");
+            expect(this.view.$('.' + type + ' label')).toBeHidden();
             expect(this.view.$('.' + type + ' select ').val()).toBeFalsy();
             expect(this.view.$('.' + type + ' select')).toBeHidden();
             expect(this.view.$('.' + type + ' a')).toBeHidden();
@@ -452,6 +460,15 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
             });
 
             itShowsUnavailable(type);
+        });
+    }
+
+    function itShowsCreateFields(type) {
+        it("shows the fields to create a new " + type, function() {
+            expect(this.view.$(".create_container")).toBeVisible();
+            expect(this.view.$('.' + type + ' .unavailable')).toBeHidden();
+            expect(this.view.$('.' + type + ' .loading_text')).toBeHidden();
+            expect(this.view.$('.' + type + ' .select_container')).toBeHidden();
         });
     }
 
