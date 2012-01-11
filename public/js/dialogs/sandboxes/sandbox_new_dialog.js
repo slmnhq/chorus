@@ -9,16 +9,31 @@
         events : {
             "click button.submit" : "save",
             "keyup input.name"    : "enableOrDisableSaveButton",
-            "paste input.name"    : "enableOrDisableSaveButton"
+            "paste input.name"    : "enableOrDisableSaveButton",
+            "click input[value='within_instance']" : "showInstanceMode",
+            "click input[value='as_standalone']" : "showStandaloneMode",
         },
 
         subviews: {
-            "form > .instance_mode" : "instanceMode"
+            "form > .instance_mode"   : "instanceMode",
+            "form > .standalone_mode" : "standaloneMode"
         },
 
         setup: function() {
             this.instanceMode = new ns.views.SandboxNewInstanceMode();
             this.instanceMode.bind("change", this.enableOrDisableSaveButton, this);
+
+            this.standaloneMode = new ns.views.SandboxNewStandaloneMode();
+        },
+
+        showInstanceMode: function() {
+            this.$(".instance_mode").removeClass("hidden");
+            this.$(".standalone_mode").addClass("hidden");
+        },
+
+        showStandaloneMode: function() {
+            this.$(".instance_mode").addClass("hidden");
+            this.$(".standalone_mode").removeClass("hidden");
         },
 
         makeModel: function() {
@@ -31,7 +46,9 @@
 
         save: function(e) {
             this.$("button.submit").startLoading("sandbox.adding_sandbox");
-            this.model.save(this.instanceMode.fieldValues());
+            var sandboxType = this.$("input:radio[name='sandbox_type']:checked").val();
+            var currentForm = (sandboxType === 'within_instance') ? this.instanceMode : this.standaloneMode;
+            this.model.save(currentForm.fieldValues());
         },
 
         saved: function() {

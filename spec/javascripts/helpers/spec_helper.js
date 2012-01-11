@@ -36,6 +36,7 @@
         'plain_text',
         'sandbox_new',
         'sandbox_new_instance_mode',
+        'sandbox_new_standalone_mode',
         'shuttle_widget',
         'sub_nav',
         'tab_control',
