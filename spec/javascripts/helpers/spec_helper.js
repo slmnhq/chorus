@@ -51,6 +51,7 @@
         'workfile_header',
         'workfile_list',
         'workfile_list_sidebar',
+        'workfile_new_version',
         'workfile_show_sidebar',
         'workfiles_import',
         'workfiles_sql_new',

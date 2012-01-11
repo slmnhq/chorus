@@ -6,10 +6,12 @@
                 this.bind("autosaved", this.updateAutosaveText);
             },
 
-            updateAutosaveText: function() {
+            updateAutosaveText: function(args) {
+                var text = args ?  args : "workfile.content_details.auto_save";
+
                 var time = this.formatTime(new Date());
                 this.$("span.auto_save").removeClass("hidden");
-                this.$("span.auto_save").text(t("workfile.content_details.auto_save", {time: time}))
+                this.$("span.auto_save").text(t(text, {time: time}))
             },
 
             postRender: function() {
@@ -49,7 +51,7 @@
                                 me.hide();
                             });
                             $(this.elements.content).find(".save_as_new").bind('click', function(e) {
-                                self.saveAsNewVersion(e);
+                                self.workfileNewVersion(e);
                                 me.hide();
                             });
                         }
@@ -61,13 +63,13 @@
             saveChanges: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                this.trigger("file:save");
-                this.$("span.auto_save").addClass("hidden");
-                this.$(".save_options").addClass("hidden");
+                this.trigger("file:saveCurrent");
+                this.updateAutosaveText("workfile.content_details.save");
             },
 
-            saveAsNewVersion: function(e) {
+            workfileNewVersion : function(e) {
                 e.preventDefault();
+                this.trigger("file:createWorkfileNewVersion");
             },
 
             formatTime: function(time) {

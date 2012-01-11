@@ -32,7 +32,7 @@ describe("WorkfileContentDetails", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.view = new chorus.views.WorkfileContentDetails(this.model);
+            this.view = new chorus.views.WorkfileContentDetails({model : this.model});
             this.view.render();
         });
 
@@ -67,23 +67,22 @@ describe("WorkfileContentDetails", function() {
                     expect(this.view.$("span.auto_save")).not.toHaveClass("hidden");
                 });
 
-                context("and the save file button is clicked", function() {
+                context("and the save as current button is clicked", function() {
                     beforeEach(function() {
                         var event = $.Event("click");
                         this.view.saveChanges(event);
                     });
 
-                    it("should not display the autosave text", function() {
-                        expect(this.view.$("span.auto_save")).toHaveClass("hidden");
+                    it("should display the 'Saved at' text", function() {
+                        expect(this.view.$("span.auto_save").text()).toContain("Saved at");
                     });
                 });
             });
 
-            context("when user click on the save as file button", function() {
+            context("when user click on the 'save as file' button", function() {
                 beforeEach(function() {
-                    this.fileSpy = jasmine.createSpy("file:save");
-                    this.view.bind("file:save", this.fileSpy);
                     spyOn($.fn, 'qtip');
+                    this.view.render();
                     this.view.$(".save_as").click();
                     this.qtipCall = $.fn.qtip.calls[0];
                 });
@@ -97,7 +96,6 @@ describe("WorkfileContentDetails", function() {
                     expect(this.qtipCall.args[0].content).toContain("Save as new version");
                     expect(this.qtipCall.args[0].content).toContain("Replace current version");
                 });
-
             });
         });
     });

@@ -35,7 +35,8 @@
                 this.mainContent.contentDetails = ns.views.WorkfileContentDetails.buildFor(this.model);
                 this.mainContent.content = ns.views.WorkfileContent.buildFor(this.model);
                 this.mainContent.content.forwardEvent("autosaved", this.mainContent.contentDetails);
-                this.mainContent.contentDetails.forwardEvent("file:save", this.mainContent.content);
+                this.mainContent.contentDetails.forwardEvent("file:saveCurrent", this.mainContent.content);
+                this.mainContent.contentDetails.forwardEvent("file:createWorkfileNewVersion", this.mainContent.content);
             }
 
             this.render();
