@@ -1,6 +1,6 @@
 describe("chorus.models.InstanceAccountSet", function() {
     beforeEach(function() {
-        this.accountSet = new chorus.models.InstanceAccountSet([],{instanceId : '1'});
+        this.accountSet = new chorus.models.InstanceAccountSet([], {instanceId : '1'});
     });
 
     describe("#url", function() {
@@ -8,7 +8,7 @@ describe("chorus.models.InstanceAccountSet", function() {
             expect(this.accountSet.url()).toContain("/edc/instance/accountmap?instanceId=1");
         });
     });
-    
+
     describe("#users", function() {
         beforeEach(function() {
             this.accountSet.reset([
@@ -23,13 +23,13 @@ describe("chorus.models.InstanceAccountSet", function() {
         });
 
         it("builds user models with the 'user' attribute of the accounts", function() {
-            expect(this.users[0].get("id")).toBe("1");
-            expect(this.users[0].get("firstName")).toBe("barnie");
-            expect(this.users[0].get("lastName")).toBe("rubble");
+            expect(this.users[0].get("id")).toBe("2");
+            expect(this.users[0].get("firstName")).toBe("fred");
+            expect(this.users[0].get("lastName")).toBe("flinstone");
 
-            expect(this.users[1].get("id")).toBe("2");
-            expect(this.users[1].get("firstName")).toBe("fred");
-            expect(this.users[1].get("lastName")).toBe("flinstone");
+            expect(this.users[1].get("id")).toBe("1");
+            expect(this.users[1].get("firstName")).toBe("barnie");
+            expect(this.users[1].get("lastName")).toBe("rubble");
         });
 
         context("when there are no models in the collection", function() {
@@ -51,5 +51,21 @@ describe("chorus.models.InstanceAccountSet", function() {
             expect(uri.path()).toMatchUrl("/edc/instance/accountmap");
             expect(uri.search(true).instanceId).toBe("1");
         });
+    });
+
+    describe("sort", function() {
+        beforeEach(function() {
+            this.accountSet.reset([
+                fixtures.instanceAccount({ user: { firstName: 'fred', lastName: 'zzz' } }),
+                fixtures.instanceAccount({ user: { firstName: 'barnie', lastName: 'zzz' } }),
+                fixtures.instanceAccount({ user: { firstName: 'sammy', lastName: 'aaa' } })
+            ]);
+        })
+        it("sorts by last name, and first name", function() {
+            var userNames = this.accountSet.map(function(account) {
+                return account.user().get('firstName')
+            });
+            expect(userNames).toEqual(['sammy', 'barnie', 'fred']);
+        })
     });
 });

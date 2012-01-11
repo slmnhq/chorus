@@ -149,7 +149,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
             this.accounts.add([
                 fixtures.instanceAccount({ id: '1', user: { firstName: "bob", lastName: "zzap", id: '111' } }),
                 fixtures.instanceAccount({ id: '2', user: { firstName: "jim", lastName: "aardvark", id: '222' } }),
-                fixtures.instanceAccount({ id: '3', user: this.instance.owner() })
+                fixtures.instanceAccount({ id: '3', user: { firstName: "EDC", lastName: "Admin", id: '2'}})
             ]);
             this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.instance })
             this.dialog.render();
@@ -160,6 +160,11 @@ describe("chorus.dialogs.InstancePermissions", function() {
             var ownerId = this.instance.owner().get('id');
             expect(this.dialog.$("li[data-id=3]")).toContainTranslation("instances.permissions.owner");
             expect(this.dialog.$("li[data-id!=3]")).not.toContainTranslation("instances.permissions.owner");
+        });
+
+        it("sorts the list", function() {
+            expect(this.dialog.$("li .name:eq(0)")).toContainText("aardvark");
+            expect(this.dialog.$("li .name:eq(2)")).toContainText("zzap");
         });
 
         it("does not display the 'switch to individual accounts' link", function() {

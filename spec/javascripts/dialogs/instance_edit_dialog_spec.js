@@ -106,14 +106,15 @@ describe("InstanceEditDialog", function() {
                     expect(this.dialog.users.add).toHaveBeenCalled();
 
                     expect(this.dialog.users.models[0]).toBeA(chorus.models.User);
-                    expect(this.dialog.users.models[0].get("id")).toBe("1");
-                    expect(this.dialog.users.models[0].get("firstName")).toBe("barnie");
-                    expect(this.dialog.users.models[0].get("lastName")).toBe("rubble");
-
+                    expect(this.dialog.users.models[0].get("id")).toBe("2");
+                    expect(this.dialog.users.models[0].get("firstName")).toBe("fred");
+                    expect(this.dialog.users.models[0].get("lastName")).toBe("flinstone");
+                    
                     expect(this.dialog.users.models[1]).toBeA(chorus.models.User);
-                    expect(this.dialog.users.models[1].get("id")).toBe("2");
-                    expect(this.dialog.users.models[1].get("firstName")).toBe("fred");
-                    expect(this.dialog.users.models[1].get("lastName")).toBe("flinstone");
+                    expect(this.dialog.users.models[1].get("id")).toBe("1");
+                    expect(this.dialog.users.models[1].get("firstName")).toBe("barnie");
+                    expect(this.dialog.users.models[1].get("lastName")).toBe("rubble");
+
                 })
 
             });
