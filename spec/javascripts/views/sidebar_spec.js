@@ -41,12 +41,14 @@ describe("chorus.views.Sidebar", function() {
 
         describe("re-rendering", function() {
             beforeEach(function() {
-                this.page.$('#sidebar').css('foo', 'bar');
+                this.page.$('#sidebar').css('font-variant', 'small-caps');
                 this.page.render();
             })
 
             it("should clear the styles on #sidebar", function() {
-                expect(this.page.$('#sidebar').css('foo')).toBeFalsy();
+                // Chrome will return a falsy value, but Firefox will return the "actual" CSS,
+                // which in this case will be the default value of "normal".
+                expect(this.page.$('#sidebar').css('font-variant')).not.toBe('small-caps');
             });
         })
 
