@@ -13,6 +13,7 @@
         bindCallbacks: $.noop,
         preRender: $.noop,
         setupSubviews : $.noop,
+        displayLoadingSection : $.noop,
 
         context : {},
         subviews : {},
@@ -34,15 +35,18 @@
         renderSubviews: function() {
             var self = this;
             this.setupSubviews();
-            _.each(this.subviews, _.bind(function(property, selector){
+            var subviews = _.extend({".loading_section" : "makeLoadingSectionView"}, this.subviews);
+            _.each(subviews, _.bind(function(property, selector){
                 var view = this.getSubview(property);
                 if (view) {
                     var element = self.$(selector);
-                    var id = element.attr("id"), klass = element.attr("class");
-                    element.replaceWith(view.render().el);
-                    $(view.el).attr("id", id);
-                    $(view.el).addClass(klass);
-                    view.delegateEvents();
+                    if (element.length) {
+                        var id = element.attr("id"), klass = element.attr("class");
+                        element.replaceWith(view.render().el);
+                        $(view.el).attr("id", id);
+                        $(view.el).addClass(klass);
+                        view.delegateEvents();
+                    }
                 }
             }, this));
         },
@@ -52,7 +56,20 @@
         },
 
         template: function template(context) {
-            return Handlebars.helpers.renderTemplate(this.className, context);
+            if (this.displayLoadingSection()) {
+                return $('<div class="loading_section"/>');
+            } else {
+                return Handlebars.helpers.renderTemplate(this.className, context);
+            }
+        },
+
+        makeLoadingSectionView : function() {
+            var opts = _.extend({}, this.loadingSectionOptions());
+            return new ns.LoadingSection(opts);
+        },
+
+        loadingSectionOptions : function() {
+            return { delay : 125 };
         }
     }));
 

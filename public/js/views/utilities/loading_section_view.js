@@ -13,6 +13,8 @@
         showSpinner : function() {
             this.$('.loading_spinner').startLoading();
             this.$(".loading_text").removeClass("hidden");
-        }
+        },
+
+        makeLoadingSectionView : null
     })
 })(jQuery, chorus);

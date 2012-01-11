@@ -394,4 +394,75 @@ describe("chorus.views", function() {
 
     });
 
+    describe("loading section", function() {
+        beforeEach(function() {
+            this.view = new chorus.views.Bare();
+            this.view.className = "plain_text";
+            this.view.context = function() {
+                return { text : "Foo" };
+            }
+        });
+
+        describe("rendering the loading section", function() {
+            context("when displayLoadingSection returns true", function() {
+                beforeEach(function() {
+                    this.view.displayLoadingSection = function() {
+                        return true;
+                    }
+                });
+
+                it("renders the loading template", function() {
+                    this.view.render();
+                    expect(this.view.$('.loading_section').length).toBe(1)
+                    expect(this.view.$('.loading_section').text()).toMatchTranslation('loading');
+                });
+
+                context("when makeLoadingSectionView is overridden", function() {
+                    beforeEach(function() {
+                        var otherView = this.otherView = new chorus.views.Base();
+                        spyOn(this.otherView, 'render').andReturn({el: $("<div/>")});
+
+                        this.view.makeLoadingSectionView = function() {
+                            return otherView;
+                        }
+                    });
+
+                    it("renders what is returned by makeLoadingSectionView", function() {
+                        this.view.render();
+                        expect(this.otherView.render).toHaveBeenCalled();
+                    });
+                });
+
+                context("when loadingSectionOptions is overridden", function() {
+                    beforeEach(function() {
+                        this.view.loadingSectionOptions = function() {
+                            return {delay: 9000};
+                        }
+
+                        var origSection = chorus.views.LoadingSection;
+                        spyOn(chorus.views, "LoadingSection").andReturn(new origSection());
+                    });
+
+                    it("passes those options to the LoadingSection constructor", function() {
+                        this.view.render();
+                        expect(chorus.views.LoadingSection).toHaveBeenCalledWith({delay: 9000});
+                    });
+                });
+            });
+
+            context("when displayLoadingSection returns false", function() {
+                beforeEach(function() {
+                    this.view.displayLoadingSection = function() {
+                        return false;
+                    }
+                    this.view.render();
+                });
+
+                it("renders the 'normal' template", function() {
+                    expect($(this.view.el).text()).toBe("Foo");
+                    expect(this.view.$('.loading_section').length).toBe(0)
+                });
+            });
+        });
+    });
 })
