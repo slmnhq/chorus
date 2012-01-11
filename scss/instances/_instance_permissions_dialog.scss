@@ -12,6 +12,11 @@ $link-padding: 6px;
         margin: 0;
     }
 
+    input[type=submit] {
+        @include opacity(0);
+        height: 1px;
+    }
+
     button.add_account {
         @include content-details-button($border-color);
         @include font-content-details;

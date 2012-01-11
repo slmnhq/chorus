@@ -417,34 +417,48 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         this.dialog.$('li[data-id=new] input[name=dbUserName]').val('user!');
                         this.dialog.$('li[data-id=new] input[name=dbPassword]').val('password!');
                         this.dialog.$('li select').val('111');
-                        this.dialog.$('a.save:visible').click();
                     });
-
-                    it("saves the correct fields", function() {
-                        expect(this.dialog.account.save).toHaveBeenCalledWith({
-                            userId : '333',
-                            dbUserName : 'user!',
-                            dbPassword : 'password!'
-                        });
-                    });
-
-                    it("has the correct instanceId", function() {
-                        expect(this.dialog.account.get('instanceId')).toBe(this.dialog.instance.get('id'));
-                    });
-
-                    it("has the selected userId", function() {
-                        expect(this.dialog.account.get('userId')).toBe('333');
-                    });
-
-                    context("after the save returns successfully", function() {
+                    context("clicking save", function() {
                         beforeEach(function() {
-                            this.completeSaveFor(this.dialog.account);
+                            this.dialog.$('a.save:visible').click();
+                        })
+
+                        it("saves the correct fields", function() {
+                            expect(this.dialog.account.save).toHaveBeenCalledWith({
+                                userId : '333',
+                                dbUserName : 'user!',
+                                dbPassword : 'password!'
+                            });
                         });
 
-                        it("re-renders the dialog", function() {
-                            expect(this.dialog.render).toHaveBeenCalled();
+                        it("has the correct instanceId", function() {
+                            expect(this.dialog.account.get('instanceId')).toBe(this.dialog.instance.get('id'));
                         });
+
+                        it("has the selected userId", function() {
+                            expect(this.dialog.account.get('userId')).toBe('333');
+                        });
+
+                        context("after the save returns successfully", function() {
+                            beforeEach(function() {
+                                this.completeSaveFor(this.dialog.account);
+                            });
+
+                            it("re-renders the dialog", function() {
+                                expect(this.dialog.render).toHaveBeenCalled();
+                            });
+                        })
                     })
+
+                    context("pressing enter", function() {
+                        beforeEach(function() {
+                            this.dialog.$('a.save:visible').closest('form').submit();
+                        });
+
+                        it("saves the model", function() {
+                            expect(this.dialog.account.save).toHaveBeenCalled();
+                        });
+                    });
                 });
             });
 

@@ -56,6 +56,10 @@
             return context;
         },
 
+        postRender : function() {
+            this.$("form").bind("submit", _.bind(this.save, this));
+        },
+
         editCredentials : function(event) {
             event.preventDefault();
             this.cancel();
@@ -101,6 +105,7 @@
         },
 
         save : function(event) {
+            event.stopPropagation();
             event.preventDefault();
             var li = $(event.target).closest("li");
             li.find("a.save").startLoading("instances.permissions.saving")

@@ -12,6 +12,12 @@
     <ul>
         {{#each models}}
             <li data-id={{id}}>
+                <div class="links">
+                    {{#if isOwner}}
+                        <span class="owner">{{t "instances.permissions.owner"}}</span>
+                    {{/if}}
+                    <a href="#" class="edit">{{t "instances.permissions.edit"}}</a>
+                </div>
                 <div class="image">
                     <img class="profile" src="{{imageUrl}}"/>
                 </div>
@@ -20,24 +26,21 @@
                 {{else}}
                     <div class="name" title="{{ownerFullName}}">{{fullName}}</div>
                 {{/if}}
-                <div class="links">
-                    {{#if isOwner}}
-                        <span class="owner">{{t "instances.permissions.owner"}}</span>
-                    {{/if}}
-                    <a href="#" class="edit">{{t "instances.permissions.edit"}}</a>
-                </div>
                 <div class="credentials">
-                    <div class="field_wrapper">
-                        <label>{{t "instances.permissions.username"}}</label>
-                        <input type="text" name="dbUserName" maxlength="256" value="{{dbUserName}}"/>
-                    </div>
-                    <div class="field_wrapper">
-                        <label>{{t "instances.permissions.password"}}</label>
-                        <input type="password" maxlength="256" name="dbPassword"/>
-                    </div>
-                    <div class="actions">
-                        <a href="#" class="save">{{t "actions.save_changes"}}</a><a href="#" class="cancel">{{t "actions.cancel"}}</a>
-                    </div>
+                    <form action="#">
+                        <div class="field_wrapper">
+                            <label>{{t "instances.permissions.username"}}</label>
+                            <input type="text" name="dbUserName" maxlength="256" value="{{dbUserName}}"/>
+                        </div>
+                        <div class="field_wrapper">
+                            <label>{{t "instances.permissions.password"}}</label>
+                            <input type="password" maxlength="256" name="dbPassword"/>
+                        </div>
+                        <div class="actions">
+                            <a href="#" class="save">{{t "actions.save_changes"}}</a><a href="#" class="cancel">{{t "actions.cancel"}}</a>
+                            <input type="submit"></input>
+                        </div>
+                    </form>
                 </div>
             </li>
         {{/each}}
