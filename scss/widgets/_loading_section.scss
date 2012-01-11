@@ -1,15 +1,13 @@
-.loading_section {
-    .spinner {
-        height: 130px;
+.loading_text {
+    position: relative;
+    display: inline-block;
+}
 
-        div[aria-role=progressbar] {
-            top: 60px;
-            left: 60px;
-        }
-    }
-
-    .description {
-        width: 125px;
-        text-align: center;
+.loading_spinner {
+    position: absolute;
+    right: -10px;
+    top: 7px;
+    div[aria-role=progressbar] {
+        right: 0;
     }
 }

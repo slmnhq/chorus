@@ -41,20 +41,6 @@
         }
     }
 
-    .loading_text {
-        position: relative;
-        display: inline-block;
-    }
-
-    .loading_spinner {
-        position: absolute;
-        right: -10px;
-        top: 7px;
-        div[aria-role=progressbar] {
-            right: 0;
-        }
-    }
-
     .unavailable {
         display: none;
     }
