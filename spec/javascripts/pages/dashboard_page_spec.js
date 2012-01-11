@@ -32,6 +32,10 @@ describe("chorus.pages.DashboardPage", function() {
                 expect(this.page.$(".dashboard_workspace_list")).toExist();
             });
         });
+
+        it("does not have a sidebar", function() {
+            expect(this.page.$("#sidebar_wrapper")).not.toExist();
+        });
     });
 
     context("#setup", function(){
