@@ -11,6 +11,25 @@ describe("chorus.models.Instance", function() {
         expect(this.instance.url()).toBe("/edc/instance/" + this.instance.get('id'));
     });
 
+    describe(".aurora", function() {
+        beforeEach(function() {
+            this.aurora = chorus.models.Instance.aurora();
+        });
+
+        it("returns a provisioning object", function() {
+            expect(this.aurora).toBeA(chorus.models.Provisioning);
+        });
+
+        it("sets the 'provisionerPluginName' and 'type'", function() {
+            expect(this.aurora.get("provisionerPluginName")).toBe("A4CProvisioner");
+            expect(this.aurora.get("type")).toBe("install");
+        });
+
+        it("memoizes", function() {
+            expect(this.aurora).toBe(chorus.models.Instance.aurora());
+        });
+    });
+
     describe("#owner", function() {
         it("returns a user", function() {
             var owner = this.instance.owner();

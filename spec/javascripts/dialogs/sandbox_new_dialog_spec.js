@@ -23,19 +23,48 @@ describe("chorus.dialogs.SandboxNew", function() {
             });
         });
 
-        context("clicking the 'as a standalone' radio button", function() {
+        describe("when aurora is not configured", function() {
             beforeEach(function() {
-                this.dialog.$("input[value='as_standalone']").click();
+                chorus.models.Instance.aurora().set({ installationStatus: "not-installed" });
             });
 
-            it("should show the 'as a standalone' form", function() {
-                expect(this.dialog.$(".instance_mode")).toHaveClass("hidden");
-                expect(this.dialog.$(".standalone_mode")).not.toHaveClass("hidden");
+            it("disables the 'as a standalone' radio button", function() {
+                expect(this.dialog.$("input[value='as_standalone']")).toBeDisabled();
+            });
+
+            it("displays the 'requires data director' label", function() {
+                expect(this.dialog.$("label[for='as_standalone']").text().trim()).toMatchTranslation("sandbox.create.standalone.requires_data_director");
             });
         });
 
+        describe("when aurora is configured", function() {
+            beforeEach(function() {
+                chorus.models.Instance.aurora().set({ installationStatus: "install_succeed" });
+            });
+
+            it("enables the 'as a standalone' radio button", function() {
+               expect(this.dialog.$("input[value='as_standalone']")).toBeEnabled();  
+            });
+
+            it("does not display the 'requires data director' label", function() {
+                expect(this.dialog.$("label[for='as_standalone']").text().trim()).toMatchTranslation("sandbox.create.as_standalone");
+            });
+
+            context("clicking the 'as a standalone' radio button", function() {
+                beforeEach(function() {
+                    this.dialog.$("input[value='as_standalone']").click();
+                });
+
+                it("should show the 'as a standalone' form", function() {
+                    expect(this.dialog.$(".instance_mode")).toHaveClass("hidden");
+                    expect(this.dialog.$(".standalone_mode")).not.toHaveClass("hidden");
+                });
+            });
+        });
+
+
         it("displays a help tooltip for standalone mode", function() {
-            expect(this.dialog.$("label[for='create_sandbox_as_standalone']")).toContain("img.help");
+            expect(this.dialog.$("label[for='as_standalone']")).toContain("img.help");
             expect($.fn.qtip).toHaveBeenCalled();
             var qtipCall = $.fn.qtip.calls[0];
             expect(qtipCall.object).toBe("img.help");

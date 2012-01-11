@@ -23,7 +23,7 @@ describe("chorus.dialogs.InstanceNew", function() {
 
         context("when aurora is installed", function() {
             beforeEach(function() {
-                this.dialog.model.aurora().set({ installationStatus : "install_succeed"});
+                chorus.models.Instance.aurora().set({ installationStatus : "install_succeed"});
                 this.dialog.render();
             });
 
@@ -42,7 +42,7 @@ describe("chorus.dialogs.InstanceNew", function() {
 
         context("when aurora is not installed", function() {
             beforeEach(function() {
-                this.dialog.model.aurora().set({ installationStatus : "not_installed"});
+                chorus.models.Instance.aurora().set({ installationStatus : "not_installed"});
                 this.dialog.render();
             });
 
@@ -87,7 +87,7 @@ describe("chorus.dialogs.InstanceNew", function() {
 
         describe("submitting the form", function() {
             beforeEach(function() {
-                this.dialog.model.aurora().set({ installationStatus : "install_succeed"});
+                chorus.models.Instance.aurora().set({ installationStatus : "install_succeed"});
                 this.dialog.render();
             });
             context("using register existing greenplum", function() {

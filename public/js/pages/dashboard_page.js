@@ -18,7 +18,7 @@
 
         postRender : function() {
             this._super('postRender');
-            this.$("#sidebar").remove();
+            this.$("#sidebar_wrapper").remove();
         }
     });
 
