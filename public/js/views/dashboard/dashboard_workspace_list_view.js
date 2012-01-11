@@ -3,6 +3,7 @@
         className : "dashboard_workspace_list",
         tagName : "ul",
         additionalClass : "list",
+        useLoadingSection : true,
 
         collectionModelContext: function(model) {
             var comments = model.comments().models;

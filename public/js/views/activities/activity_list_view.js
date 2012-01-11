@@ -1,6 +1,7 @@
 (function($, ns) {
     ns.views.ActivityList = ns.views.Base.extend({
         className : "activity_list",
+        useLoadingSection : true,
 
         events : {
             "click .morelinks a.more,.morelinks a.less" : "toggleCommentList",
