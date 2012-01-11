@@ -75,16 +75,6 @@ input[type=checkbox], input[type=radio] {
     display: none !important;
 }
 
-.tag.administrator {
-    .name {
-        background: $administrator-background-color;
-    }
-
-    .arrow_left {
-        border-right-color: $administrator-background-color;
-    }
-}
-
 img.disabled {
     @include opacity(0.25);
 }
