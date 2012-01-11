@@ -117,6 +117,11 @@
             });
         },
 
+        modalClosed: function() {
+            this.cancel();
+            this._super('modalClosed');
+        },
+
         cancel : function(event) {
             if(event) {
                 event.preventDefault();

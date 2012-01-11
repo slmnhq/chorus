@@ -479,6 +479,16 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     expect(this.dialog.collection.length).toBe(3);
                 });
             })
+
+            describe("when the modal is closed", function() {
+                beforeEach(function() {
+                    this.dialog.modalClosed();
+                });
+
+                it("removes the new model from the collection", function() {
+                    expect(this.dialog.collection.length).toBe(3);
+                });
+            });
         });
 
         describe("when the 'add account' button is clicked", function() {
