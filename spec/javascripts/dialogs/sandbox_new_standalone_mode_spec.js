@@ -17,7 +17,7 @@ describe("chorus.dialogs.SandboxNewStandaloneMode", function() {
             this.view.$("input[name=instanceName]").val("my_instance");
             this.view.$("input[name=databaseName]").val("my_database");
             this.view.$("input[name=schemaName]").val("my_schema");
-            this.view.$("input[name=instanceSize]").val("5");
+            this.view.$("input[name=size]").val("5");
         });
 
         it("returns the entered instance name, database name, schema name and size", function() {
