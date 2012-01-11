@@ -215,6 +215,14 @@
                 }
             },
 
+            requirePositiveInteger: function(attr, newAttrs, messageKey) {
+                var value = newAttrs && newAttrs.hasOwnProperty(attr) ? newAttrs[attr] : this.get(attr);
+                var int = parseInt(value);
+                if (!int || int <= 0 || parseFloat(value) !== int) {
+                    this.setValidationError(attr, "validation.positive_integer", messageKey);
+                }
+            },
+
             requirePattern : function(attr, regex, newAttrs, messageKey) {
                 var value = newAttrs && newAttrs.hasOwnProperty(attr) ? newAttrs[attr] : this.get(attr);
 

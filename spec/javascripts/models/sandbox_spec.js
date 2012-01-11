@@ -39,12 +39,19 @@ describe("chorus.models.Sandbox", function() {
 
         context("without an instance id", function() {
             beforeEach(function() {
-                this.model.set({ instance: "" });
+                this.model.set({ instance: "", instanceName: "my_instance", size: "45" });
+                expectValid({}, this.model);
             });
 
             it("requires an instance name", function() {
-                expectInvalid({}, this.model);
-                expectValid({ instanceName: "my_instance" }, this.model);
+                expectInvalid({ instanceName: "" }, this.model);
+            });
+
+            it("requires a positive integer for the instance size", function() {
+                expectInvalid({ size: "foo" }, this.model);
+                expectInvalid({ size: "-1" }, this.model);
+                expectInvalid({ size: "0" }, this.model);
+                expectInvalid({ size: "1.7" }, this.model);
             });
         });
 
