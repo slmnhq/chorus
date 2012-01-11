@@ -170,31 +170,25 @@
                 var input = self.$("input[name=" + key + "], form textarea[name=" + key + "]");
                 input.addClass("has_error");
                 input.qtip({
-                    content: { text : val , prerender: 'true' },
-                    style: "chorus",
-                    position : {
-                        corner : {
-                            target: "rightMiddle",
-                            tooltip: "leftMiddle"
-                        },
-                        adjust : {
-                            screen : true
-                        },
-                        type : 'fixed',
-                        container: self.el
+                    content: {
+                        text: val
                     },
-                    hide: 'mouseout',
-                    show: 'focus',
-                    api: {
-                        beforeRender: function() {
-                            this.elements.target.bind('mouseover', this.show);
-                            this.elements.target.bind('blur', this.hide);
+                    show: 'mouseover focus',
+                    hide: 'click',
+                    style: {
+                        classes: "tooltip-error",
+                        tip: {
+                            width: 12,
+                            height: 12
                         }
+                    },
+                    position : {
+                        my: "left center",
+                        at: "right center",
+                        container: self.el
                     }
                 });
-
             });
-
 
             this.$(".errors").replaceWith(Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context(), Handlebars.helpers, Handlebars.partials));
         },

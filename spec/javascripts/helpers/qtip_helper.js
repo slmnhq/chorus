@@ -3,11 +3,8 @@
         var sawItem = false;
         var allHaveQtip = true;
         this.each(function(index, item){
-            try {
-                sawItem = true;
-                $(item).qtip('api');
-            }
-            catch (e) {
+            sawItem = true;
+            if (!$(item).qtip("api")) {
                 allHaveQtip = false;
             }
         });

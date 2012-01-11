@@ -35,20 +35,17 @@
                     hide: {
                         delay: 500,
                         fixed: true,
-                        when: { event: 'mouseout' }
+                        event: 'mouseout'
+                    },
+                    position: {
+                        my: "right center",
+                        at: "left center"
                     },
                     style: {
-                        width: 300
-                    },
-                    position : {
-                        corner : {
-                            target: "leftMiddle",
-                            tooltip: "rightMiddle"
-                        },
-                        adjust : {
-                            screen : true,
-                            scroll : false,
-                            mouse: false
+                        classes: "tooltip-white",
+                        tip: {
+                            width: 15,
+                            height: 20
                         }
                     }
                 });

@@ -12,6 +12,7 @@
 @import "vendorish/_jquery.jgrowl";
 @import "vendorish/_lionbars.scss";
 @import "vendorish/_jquery.ui.selectmenu.scss";
+@import "vendorish/_jquery.qtip2.scss";
 
 // vendorish/_facebox is loaded first in modals for clarity
 
@@ -23,5 +24,6 @@
 @import "base/_menu.scss";
 @import "base/_tags.scss";
 @import "base/_truncated_text.scss";
+@import "base/_tooltips.scss";
 
 @import "base/_media";

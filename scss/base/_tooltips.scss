@@ -1,0 +1,45 @@
+@import "common.scss";
+
+@mixin tooltip($text, $bg, $border) {
+    .ui-tooltip-content {
+	    color: $text;
+        background-color: $bg;
+	    border-color: $border;
+    }
+    .ui-tooltip-titlebar {
+        background-color: $bg;
+        .ui-state-hover {
+            border-color: $border;
+        }
+    }
+    .ui-state-default {
+        .ui-tooltip-icon {
+            background-position: -102px 0;
+        }
+    }
+    .ui-tooltip-icon {
+        border-color: $border;
+    }
+}
+
+.tooltip-white {
+    @include tooltip($text-color, #FFFFFF, #CCC)
+}
+
+.tooltip-error {
+    @include tooltip($error-text-color, #B61B1D, #B61B1D);
+
+    .ui-tooltip-content {
+        font-size: 16px;
+    }
+}
+.tooltip-help {
+    @include tooltip($error-text-color, #282828, #282828);
+
+    .ui-tooltip-content {
+        min-width: 300px;
+        max-width: 300px;
+        font-size: 13px;
+    }
+}
+

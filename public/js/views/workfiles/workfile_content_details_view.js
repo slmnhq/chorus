@@ -20,40 +20,30 @@
                     content: this.$(".save_options").html(),
                     show: 'click',
                     hide: 'unfocus',
+                    position: {
+                        my: "top center",
+                        at: "bottom center"
+                    },
                     style: {
-                        width: 180,
+                        classes: "tooltip-white",
                         tip: {
-                            corner: 'bottomMiddle',
-                            size: {
-                                x: 19,
-                                y : 11
-                            }
+                            width: 20,
+                            height: 15,
+                            offset: 40
                         }
                     },
-                    position : {
-                        corner : {
-                            target: "bottomMiddle",
-                            tooltip: "topRight"
-                        },
-                        adjust : {
-                            screen : true,
-                            scroll : false,
-                            mouse: false
-                        }
-                    },
-                    api: {
-                        onRender: function() {
+                    events: {
+                        render: function(event, api) {
                             var me = this;
-                            $(this.elements.content).find(".save_as_current").bind('click', function(e) {
+                            $(api.elements.content).find(".save_as_current").bind('click', function(e) {
                                 self.saveChanges(e);
-                                me.hide();
+                                api.hide();
                             });
-                            $(this.elements.content).find(".save_as_new").bind('click', function(e) {
+                            $(api.elements.content).find(".save_as_new").bind('click', function(e) {
                                 self.workfileNewVersion(e);
-                                me.hide();
+                                api.hide();
                             });
                         }
-
                     }
                 });
             },
