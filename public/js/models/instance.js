@@ -85,17 +85,15 @@
             "size" : "instances.dialog.size"
         },
 
+        isShared : function() {
+            return !(_.isEmpty(this.get('sharedAccount')));
+        }
+    }, {
         aurora : function() {
             if(!this._aurora) {
                 this._aurora = new chorus.models.Provisioning({provisionerPluginName : "A4CProvisioner", type : "install"});
             }
             return this._aurora;
-        },
-
-        isShared : function() {
-            return !(_.isEmpty(this.get('sharedAccount')));
         }
-
-
     });
 })(chorus);
