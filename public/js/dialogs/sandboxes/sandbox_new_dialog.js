@@ -42,6 +42,7 @@
             this.model = new ns.models.Sandbox({ workspaceId: workspaceId });
             this.model.bind("saved", this.saved, this);
             this.model.bind("saveFailed", this.saveFailed, this);
+            this.model.bind("validationFailed", this.saveFailed, this);
         },
 
         save: function(e) {

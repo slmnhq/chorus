@@ -139,7 +139,8 @@ describe("chorus.dialogs.SandboxNew", function() {
                 spyOn(this.dialog.standaloneMode, 'fieldValues').andReturn({
                     instanceName: "My_Instance",
                     databaseName: "New_Database",
-                    schemaName:   "New_Schema"
+                    schemaName:   "New_Schema",
+                    size: '45'
                 });
 
                 this.dialog.$("button.submit").click();
