@@ -465,4 +465,36 @@ describe("chorus.views", function() {
             });
         });
     });
+
+    describe("chorus.views.Base", function() {
+        describe("displayLoadingSection", function() {
+            beforeEach(function() {
+                this.model = new chorus.models.Base();
+                this.view = new chorus.views.Base({model: this.model});
+            });
+
+            it("returns false by default", function() {
+                expect(this.view.displayLoadingSection()).toBeFalsy();
+            });
+
+            context("when the view has useLoadingSection set to true", function() {
+                beforeEach(function() {
+                    this.view.useLoadingSection = true;
+                });
+
+                it("returns the opposite of view.resource.loaded", function() {
+                    this.model.loaded = false;
+                    expect(this.view.displayLoadingSection()).toBeTruthy();
+
+                    this.model.loaded = true;
+                    expect(this.view.displayLoadingSection()).toBeFalsy();
+                });
+
+                it("returns false when the view does not have a resource", function() {
+                    delete this.view.resource;
+                    expect(this.view.displayLoadingSection()).toBeFalsy();
+                });
+            });
+        });
+    });
 })

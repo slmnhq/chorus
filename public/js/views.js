@@ -83,7 +83,6 @@
         preInitialize : function() {
             this.makeModel.apply(this, arguments);
             this.resource = this.model || this.collection;
-
         },
 
         bindCallbacks : function() {
@@ -117,6 +116,10 @@
                 ctx = this.additionalContext({})
             }
             return ctx;
+        },
+
+        displayLoadingSection : function() {
+            return this.useLoadingSection && this.resource && !this.resource.loaded;
         },
 
         showErrors : function() {
