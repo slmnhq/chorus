@@ -37,8 +37,15 @@ describe("chorus.models.Sandbox", function() {
             expectValid({}, this.model);
         });
 
-        it("requires an instance id", function() {
-            expectInvalid({ instance: "" }, this.model);
+        context("without an instance id", function() {
+            beforeEach(function() {
+                this.model.set({ instance: "" });
+            });
+
+            it("requires an instance name", function() {
+                expectInvalid({}, this.model);
+                expectValid({ instanceName: "my_instance" }, this.model);
+            });
         });
 
         context("with a database id", function() {

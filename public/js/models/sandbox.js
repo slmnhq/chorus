@@ -18,7 +18,9 @@
         },
 
         declareValidations: function(attrs) {
-            this.require("instance", attrs);
+            if (this.isCreatingNew("instance", attrs)) {
+                this.require("instanceName", attrs);
+            }
             if (this.isCreatingNew('database', attrs)) {
                 this.requirePattern("databaseName", noStartingDigitRegex, attrs);
                 this.requirePattern("schemaName", noStartingDigitRegex, attrs);
