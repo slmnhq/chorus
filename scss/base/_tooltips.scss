@@ -22,6 +22,18 @@
     }
 }
 
+.tooltip-normal {
+    // qTip's author explicitly recommends !important for overriding z-index
+    // https://github.com/Craga89/qTip2/issues/274
+    /*z-index: $body-tooltip-z-index !important;*/
+}
+
+.tooltip-modal {
+    // qTip's author explicitly recommends !important for overriding z-index
+    // https://github.com/Craga89/qTip2/issues/274
+    z-index: $modal-tooltip-z-index !important;
+}
+
 .tooltip-white {
     @include tooltip($text-color, #FFFFFF, #CCC)
 }

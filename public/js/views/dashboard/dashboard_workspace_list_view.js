@@ -29,15 +29,25 @@
                 var el = $(commentList.render().el);
                 el.find("ul").addClass("tooltip");
 
+                // reassign the offset function so that when qtip calls it, qtip correctly positions the tooltips
+                // with regard to the fixed-height header.
+                var viewport = $(window);
+                var top = $("#header").height();
+                viewport.offset = function() { return { left: 0, top: top }; }
+
                 li.find(".comment .count").qtip({
                     content: el.html(),
-                    show: 'mouseover',
+                    show: {
+                        event: 'mouseover',
+                        solo : true
+                    },
                     hide: {
                         delay: 500,
                         fixed: true,
                         event: 'mouseout'
                     },
                     position: {
+                        viewport: viewport,
                         my: "right center",
                         at: "left center"
                     },

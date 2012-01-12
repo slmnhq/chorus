@@ -57,37 +57,29 @@
         },
 
         renderHelps: function() {
+            var classes;
             var helpElements = this.$(".help");
+            if (helpElements.length) {
+                if ($(this.el).closest(".dialog").length) {
+                    classes = "tooltip-help tooltip-modal";
+                } else {
+                    classes = "tooltip-help";
+                }
+            }
             _.each(helpElements, function(element) {
-                var backgroundColor = '#282828';
                 $(element).qtip({
                     content: $(element).data("text"),
                     show: 'mouseover',
                     hide: 'mouseout',
-                    style: {
-                        width: 320,
-                        background: backgroundColor,
-                        color: "#FFF",
-                        'font-size': 13,
-                        border: { color: backgroundColor },
-                        tip: {
-                            corner: 'bottomMiddle',
-                            color: backgroundColor,
-                            size: {
-                                x: 19,
-                                y : 11
-                            }
-                        }
-                    },
                     position : {
-                        corner : {
-                            target: "topMiddle",
-                            tooltip: "bottomMiddle"
-                        },
-                        adjust : {
-                            screen : true,
-                            scroll : false,
-                            mouse: false
+                        my: "bottom center",
+                        at: "top center"
+                    },
+                    style: {
+                        classes: classes,
+                        tip: {
+                            width: 20,
+                            height: 13
                         }
                     }
                 });
@@ -164,6 +156,13 @@
         showErrors : function() {
             var self = this;
 
+            var classes;
+            if ($(this.el).closest(".dialog").length) {
+                classes = "tooltip-error tooltip-modal";
+            } else {
+                classes = "tooltip-error";
+            }
+
             this.clearErrors();
 
             _.each(this.resource.errors, function(val, key) {
@@ -176,7 +175,7 @@
                     show: 'mouseover focus',
                     hide: 'click',
                     style: {
-                        classes: "tooltip-error",
+                        classes: classes,
                         tip: {
                             width: 12,
                             height: 12

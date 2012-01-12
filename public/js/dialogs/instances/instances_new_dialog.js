@@ -63,28 +63,6 @@
         saveFailed : function() {
             this.$("button.submit").stopLoading();
             this.$("button.cancel").removeAttr("disabled");
-        },
-
-        postRender : function() {
-            var helpElements = this.$(".help");
-            _.each(helpElements, function(element) {
-                $(element).qtip({
-                    content: $(element).data("text"),
-                    show: 'mouseover',
-                    hide: 'mouseout',
-                    position : {
-                        my: "bottom center",
-                        at: "top center"
-                    },
-                    style: {
-                        classes: "tooltip-help",
-                        tip: {
-                            width: 20,
-                            height: 13
-                        }
-                    }
-                });
-            });
         }
     });
 })(jQuery, chorus);

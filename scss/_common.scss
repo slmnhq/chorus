@@ -75,7 +75,11 @@ $activity-stream-comment-background-color: #DFE5EB;
 $guts-z-index: 0;
 $link-menu-z-index: $guts-z-index + 1;
 $editor-top-z-index: 10;
-$header-z-index: 99;
+
+// qTip2 assigns z-index values starting from 15000, but we want them to flow under the header.
+// It seems that when you navigate between pages, qTip's z-index resets to 15000, so this would work wrong if a single page
+// rendered 1000 qTip tooltips.  That will probably never be the case.
+$header-z-index: 16000;
 $menu-z-index: $header-z-index + 1;
 
 $chosen-drop-z-index: $menu-z-index + 1;
@@ -87,7 +91,9 @@ $dialog-z-index: $dialog-overlay-z-index + 1;
 $dialog-chosen-drop-z-index: $dialog-z-index + 1;
 $dialog-chosen-search-z-index: $dialog-chosen-drop-z-index + 1;
 
-$toast-closing-z-index: $dialog-chosen-search-z-index + 1;
+$modal-tooltip-z-index: $dialog-chosen-search-z-index + 1;
+
+$toast-closing-z-index: $modal-tooltip-z-index + 1;
 $toast-z-index: $toast-closing-z-index + 1;
 $hidden-z-index: -100;
 
