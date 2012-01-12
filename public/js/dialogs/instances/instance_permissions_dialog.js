@@ -233,6 +233,8 @@
         },
 
         confirmRemoveSharedAccount : function() {
+            this.sharedAccount || (this.sharedAccount = this.instance.sharedAccount());
+
             var map = this.sharedAccount;
             this.sharedAccount.bind("saved", displaySuccessToast, this);
             this.sharedAccount.bind("saveFailed", displayFailureToast);

@@ -739,4 +739,19 @@ describe("chorus.dialogs.InstancePermissions", function() {
             });
         });
     });
+
+    context("when switching back and forth between shared and individual", function() {
+        beforeEach(function() {
+            this.instance = fixtures.instanceWithSharedAccount();
+            this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.instance });
+        });
+
+        it("handles confirmRemoveSharedAccount when dialog.sharedAccount does not exist", function() {
+            delete this.dialog.sharedAccount;
+            this.dialog.confirmRemoveSharedAccount();
+
+            expect(this.dialog.sharedAccount).toBeDefined();
+        });
+
+    });
 });
