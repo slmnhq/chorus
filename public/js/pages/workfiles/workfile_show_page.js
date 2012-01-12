@@ -35,6 +35,7 @@
                 this.mainContent.contentDetails = ns.views.WorkfileContentDetails.buildFor(this.model);
                 this.mainContent.content = ns.views.WorkfileContent.buildFor(this.model);
                 this.mainContent.content.forwardEvent("autosaved", this.mainContent.contentDetails);
+                this.mainContent.content.bind("autosaved", function() {this.model.trigger("invalidated");}, this);
                 this.mainContent.contentDetails.forwardEvent("file:saveCurrent", this.mainContent.content);
                 this.mainContent.contentDetails.forwardEvent("file:createWorkfileNewVersion", this.mainContent.content);
             }

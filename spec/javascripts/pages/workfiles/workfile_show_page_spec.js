@@ -45,7 +45,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
             it("instantiates the content view", function() {
                 expect(chorus.views.WorkfileContent.buildFor).toHaveBeenCalledWith(this.page.model)
             });
-            
+
             it("re-renders the mainContent", function() {
                 expect(this.page.mainContent.render).toHaveBeenCalled();
             });
@@ -83,6 +83,18 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
             it("relays the event to the workfile content", function() {
                 expect(this.saveSpy).toHaveBeenCalled();
+            });
+        });
+
+        context("when the content triggers autosaved", function() {
+            beforeEach(function() {
+                this.page.render();
+                spyOnEvent(this.page.model, "invalidated");
+                this.page.mainContent.content.trigger("autosaved");
+            });
+
+            it("triggers invalidated on the model", function() {
+                expect("invalidated").toHaveBeenTriggeredOn(this.page.model);
             });
         });
 
