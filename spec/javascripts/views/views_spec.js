@@ -46,6 +46,7 @@ describe("chorus.views", function() {
         describe("for a view with a model", function() {
             beforeEach(function() {
                 this.model = new chorus.models.Base({ bar: "foo"});
+                this.model.serverErrors = [{ message: "wrong" }];
                 this.view = new chorus.views.Base({ model : this.model });
             });
 
@@ -78,6 +79,7 @@ describe("chorus.views", function() {
                     this.view.additionalContext = function() {
                         return {one: 1};
                     };
+                    spyOn(this.view, 'additionalContext').andCallThrough();
                 });
 
                 it("still contains the attributes of the model", function() {
@@ -86,6 +88,11 @@ describe("chorus.views", function() {
 
                 it("includes the additionalContext in the context", function() {
                     expect(this.view.context().one).toBe(1);
+                });
+
+                it("calls #additionalContext, passing the default context (including the server errors)", function() {
+                    var args = this.view.additionalContext.mostRecentCall.args;
+                    expect(args.serverErrors).toBe(this.model.serverErrors);
                 });
             });
 

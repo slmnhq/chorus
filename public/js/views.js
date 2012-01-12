@@ -142,7 +142,8 @@
                         return _.extend(_.clone(model.attributes), self.collectionModelContext(model));
                     });
                 }
-                $.extend(ctx, {serverErrors : this.resource.serverErrors}, this.additionalContext(ctx));
+                if (this.resource.serverErrors) ctx.serverErrors = this.resource.serverErrors;
+                $.extend(ctx, this.additionalContext(ctx));
             } else {
                 ctx = this.additionalContext({})
             }
