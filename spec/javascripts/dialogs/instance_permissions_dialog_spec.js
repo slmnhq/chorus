@@ -6,6 +6,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
     describe("#setup", function() {
         beforeEach(function() {
+            spyOn(chorus.models.UserSet.prototype, 'fetchAll');
             this.instance = fixtures.instanceWithSharedAccount();
             this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.instance })
         })
@@ -13,14 +14,23 @@ describe("chorus.dialogs.InstancePermissions", function() {
         it("does not re-render on model changes", function() {
             expect(this.dialog.persistent).toBeTruthy();
         })
+
+        it("fetches all chorus users", function() {
+            expect(this.dialog.users).toBeA(chorus.models.UserSet);
+            expect(this.dialog.users.fetchAll).toHaveBeenCalled();
+        });
     })
 
     context("when the instance is a shared account", function() {
         beforeEach(function() {
             this.instance = fixtures.instanceWithSharedAccount();
-            this.instance.accounts().reset(fixtures.instanceAccount(this.instance))
+            var account = fixtures.instanceAccount(this.instance);
+            this.instance.set({ ownerId: account.user().get("id") });
+            this.instance.accounts().reset(account);
+
             this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.instance })
         })
+
 
         describe("#render", function() {
             beforeEach(function() {
@@ -42,6 +52,94 @@ describe("chorus.dialogs.InstancePermissions", function() {
             it("displays an edit link", function() {
                 expect(this.dialog.$("a.edit")).toExist();
             })
+
+            it("displays an Change owner link", function() {
+                expect(this.dialog.$("a.change_owner")).toExist();
+            })
+
+            describe("clicking the 'change owner' link", function() {
+                beforeEach(function() {
+                    this.dialog.$("a.change_owner").click();
+                });
+
+                it("shows the user select", function() {
+                    expect(this.dialog.$("select.name")).toExist();
+                    expect(this.dialog.$("select.name")).not.toHaveClass("hidden");
+                });
+
+                it("hides the non-editable user name", function() {
+                    expect(this.dialog.$("div.name")).toHaveClass("hidden");
+                });
+
+                describe("when the user fetch completes", function() {
+                    beforeEach(function() {
+                        this.dialog.users.reset([
+                            fixtures.user({ firstName: "jim", lastName: "aardvark", id: '222' }),
+                            this.instance.owner(),
+                            fixtures.user({ firstName: "harold", lastName: "four", id: '444' }),
+                            fixtures.user({ firstName: "suzie", lastName: "three", id: '333' }),
+                            fixtures.user({ firstName: "bob", lastName: "zzap", id: '111' })
+                        ]);
+                    });
+
+                    it("includes every user's name  in the owner select", function() {
+                        expect(this.dialog.$("select.name option").length).toBe(5);
+
+                        expect(this.dialog.$("select.name option").eq(0)).toHaveText(this.dialog.users.get('222').displayName());
+                        expect(this.dialog.$("select.name option").eq(1)).toHaveText(this.instance.owner().displayName());
+                        expect(this.dialog.$("select.name option").eq(2)).toHaveText(this.dialog.users.get('444').displayName());
+                        expect(this.dialog.$("select.name option").eq(3)).toHaveText(this.dialog.users.get('333').displayName());
+                        expect(this.dialog.$("select.name option").eq(4)).toHaveText(this.dialog.users.get('111').displayName());
+                    });
+
+                    it("selects the current owner by default", function() {
+                        expect(this.dialog.$("select.name").val()).toBe(this.instance.owner().get("id"));
+                    });
+
+                    it("displays the save owner options", function() {
+                        expect(this.dialog.$("a.save_owner")).toExist();
+                        expect(this.dialog.$("a.save_owner")).not.toHaveClass("hidden");
+                    });
+
+                    it("hides the 'edit' and 'change owner' links", function() {
+                        expect(this.dialog.$("a.change_owner")).toHaveClass("hidden");
+                        expect(this.dialog.$("a.edit")).toHaveClass("hidden");
+                    });
+
+                    it("hides the 'owner' text", function() {
+                        expect(this.dialog.$("span.owner")).toHaveClass("hidden");
+                    });
+
+                    describe("clicking the cancel link", function() {
+                        beforeEach(function() {
+                            this.dialog.$("a.cancel_change_owner").click();
+                        });
+
+                        it("shows the 'edit' and 'change owner' links", function() {
+                            expect(this.dialog.$("a.change_owner")).not.toHaveClass("hidden");
+                            expect(this.dialog.$("a.edit")).not.toHaveClass("hidden");
+                        });
+
+                        it("shows the 'owner' text", function() {
+                            expect(this.dialog.$("span.owner")).not.toHaveClass("hidden");
+                        });
+                    });
+
+                    describe("choosing a new owner", function() {
+                        beforeEach(function() {
+                            spyOn(this.dialog, 'launchSubModal');
+                            this.dialog.$("select.name").val("222");
+                            this.dialog.$("a.save_owner").click();
+                        });
+
+                        xit("should launch the change owner confirmation dialog", function() {
+                            expect(this.dialog.launchSubModal).toHaveBeenCalled();
+                            var submodal = this.dialog.launchSubModal.mostRecentCall.args[0];
+                            expect(submodal).toBeA(chorus.alerts.InstanceOwnerChange);
+                        });
+                    });
+                });
+            });
 
             it("populates the dbUserName text field from the account map", function() {
                 expect(this.dialog.$("input[name=dbUserName]").val()).toBe(this.instance.sharedAccount().get('dbUserName'));
@@ -74,8 +172,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     });
 
                     it("only sends the shared parameter", function() {
-                        expect(this.server.requests[0].url).toBe("/edc/instance/accountmap/999")
-                        expect(this.server.requests[0].requestBody).toBe("id=999&shared=no");
+                        expect(_.last(this.server.requests).url).toBe("/edc/instance/accountmap/999")
+                        expect(_.last(this.server.requests).requestBody).toBe("id=999&shared=no");
                     })
 
                     context("when the save succeeds", function() {
@@ -163,8 +261,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
         });
 
         it("sorts the list", function() {
-            expect(this.dialog.$("li .name:eq(0)")).toContainText("aardvark");
-            expect(this.dialog.$("li .name:eq(2)")).toContainText("zzap");
+            expect(this.dialog.$("li div.name:eq(0)")).toContainText("aardvark");
+            expect(this.dialog.$("li div.name:eq(2)")).toContainText("zzap");
         });
 
         it("does not display the 'switch to individual accounts' link", function() {
@@ -186,10 +284,6 @@ describe("chorus.dialogs.InstancePermissions", function() {
         it("displays the name of each account's user", function() {
             expect(this.dialog.$("li[data-id=1] .name")).toHaveText("bob zzap");
             expect(this.dialog.$("li[data-id=2] .name")).toHaveText("jim aardvark");
-        });
-
-        it("fetches the list of chorus users", function() {
-            expect(chorus.models.UserSet.prototype.fetchAll).toHaveBeenCalled();
         });
 
         describe("editing a user's account credentials", function() {
@@ -324,11 +418,11 @@ describe("chorus.dialogs.InstancePermissions", function() {
         describe("when the 'add account' button is clicked after the chorus users are fetched", function() {
             beforeEach(function() {
                 this.dialog.users.reset([
-                    fixtures.user({ firstName: "bob", lastName: "zzap", id: '111' }),
                     fixtures.user({ firstName: "jim", lastName: "aardvark", id: '222' }),
-                    fixtures.user({ firstName: "suzie", lastName: "three", id: '333' }),
+                    this.instance.owner(),
                     fixtures.user({ firstName: "harold", lastName: "four", id: '444' }),
-                    this.instance.owner()
+                    fixtures.user({ firstName: "suzie", lastName: "three", id: '333' }),
+                    fixtures.user({ firstName: "bob", lastName: "zzap", id: '111' })
                 ]);
                 this.dialog.$("button.add_account").click();
             });
@@ -500,8 +594,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
             describe("when the fetch for all chorus users completes", function() {
                 beforeEach(function() {
                     this.dialog.users.reset([
-                        fixtures.user({ firstName: "ben", lastName: "maulden" }),
-                        fixtures.user({ firstName: "anna", lastName: "cannon" })
+                        fixtures.user({ firstName: "anna", lastName: "cannon" }),
+                        fixtures.user({ firstName: "ben", lastName: "maulden" })
                     ]);
                 });
 

@@ -17,15 +17,17 @@
                         <span class="owner">{{t "instances.permissions.owner"}}</span>
                     {{/if}}
                     <a href="#" class="edit">{{t "instances.permissions.edit"}}</a>
+                    {{#if isOwner}}
+                        <a href="#" class="change_owner">{{t "instances.permissions.change_owner"}}</a>
+                        <a href="#" class="save_owner hidden">{{t "instances.permissions.save_owner"}}</a>
+                        <a href="#" class="cancel_change_owner hidden">{{t "actions.cancel"}}</a>
+                    {{/if}}
                 </div>
                 <div class="image">
                     <img class="profile" src="{{imageUrl}}"/>
                 </div>
-                {{#if isNew}}
-                    <select class="name"></select>
-                {{else}}
-                    <div class="name" title="{{ownerFullName}}">{{fullName}}</div>
-                {{/if}}
+                <select class="name hidden"></select>
+                <div class="name" title="{{ownerFullName}}">{{fullName}}</div>
                 <div class="credentials">
                     <form action="#">
                         <div class="field_wrapper">

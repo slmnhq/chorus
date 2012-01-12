@@ -84,12 +84,12 @@ $link-padding: 6px;
 
                         .owner {
                             color: $weak-text-color;
-                            padding-right: $link-padding;
-                            border-right: 1px solid $link-color;
                         }
 
-                        .edit {
+                        .cancel_change_owner, .change_owner, .edit {
+                            border-left: 1px solid $link-color;
                             padding-left: $link-padding;
+                            margin-left: $link-padding;
                         }
                     }
 

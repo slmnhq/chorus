@@ -10,23 +10,20 @@
             "click a.save" : "save",
             "click a.cancel" : "cancel",
             "click button.add_account" : "newAccount",
+            "click a.add_shared_account" : "addSharedAccountAlert",
+            "click a.change_owner" : "changeOwner",
             "click a.remove_shared_account" : "removeSharedAccountAlert",
-            "click a.add_shared_account" : "addSharedAccountAlert"
+            "click a.save_owner" : "confirmSaveOwner",
+            "click a.cancel_change_owner" : "cancelChangeOwner"
         },
 
         makeModel : function() {
             this.instance = this.options.pageModel;
             this.model = this.instance.sharedAccount();
-            if (!this.model) {
-                this.users = new ns.models.UserSet();
-                this.users.bind("reset", this.populateSelect, this);
-                this.users.fetchAll();
-                this.users.comparator = function(user) {
-                    var name = user && (user.get("lastName")+user.get("firstName"));
-                    name = name ? name.toLowerCase() : '\uFFFF'
-                    return name;
-                }
-            }
+            this.users = new ns.models.UserSet();
+            this.users.bind("reset", this.populateSelect, this);
+            this.users.sortAsc("lastName");
+            this.users.fetchAll();
             this.collection = this.instance.accounts();
 
             this.collection.bind("reset", this.render, this);
@@ -76,6 +73,35 @@
             this.account = this.resource = this.collection.get(accountId);
         },
 
+        cancelChangeOwner : function(e){
+            e.preventDefault();
+            this.$("div.name").removeClass("hidden");
+            this.$("a.change_owner").removeClass("hidden");
+            this.$("a.edit").removeClass("hidden");
+            this.$("a.save_owner").addClass("hidden");
+            this.$("select.name").addClass("hidden");
+            this.$("a.cancel_change_owner").addClass("hidden");
+            this.$(".links .owner").removeClass("hidden");
+        },
+
+        changeOwner: function(e) {
+            if (e)  e.preventDefault();
+            var select = this.$("select.name");
+            select.removeClass("hidden");
+            this.$("div.name").addClass("hidden");
+            this.$("a.change_owner").addClass("hidden");
+            this.$("a.save_owner").removeClass("hidden");
+            this.$("a.cancel_change_owner").removeClass("hidden");
+            this.$("a.edit").addClass("hidden");
+            this.$(".links .owner").addClass("hidden");
+            chorus.styleSelect(select);
+        },
+
+        confirmSaveOwner: function(e) {
+            e.preventDefault();
+            this.launchSubModal("hi");
+        },
+
         newAccount: function(e) {
             var button = this.$("button.add_account");
             if (button.is(":disabled")) return;
@@ -83,14 +109,43 @@
             this.collection.add(this.account);
             this.$("button.add_account").attr("disabled", "disabled");
             this.$("li[data-id=new]").addClass('editing new');
-            this.populateSelect();
+            this.$("li[data-id=new] div.name").addClass("hidden");
+
+            this.populateNewAccountSelect();
+
+            var select = this.$("li[data-id=new] select.name");
+            select.removeClass("hidden");
+            chorus.styleSelect(select);
         },
 
         populateSelect: function() {
+            if (this.instance.sharedAccount()) {
+                this.populateOwnerSelect();
+            } else {
+                this.populateNewAccountSelect();
+            }
+        },
+
+        populateOwnerSelect: function() {
+            var options = this.users.map(function(user) {
+                return $("<option/>").text(user.displayName()).val(user.get("id")).outerHtml();
+            });
+            var select = this.$("select.name");
+            select.empty();
+            if (select) {
+                select.append(options.join(""));
+            }
+            select.val(this.instance.owner().get("id"));
+            this.updateUserSelect();
+            $('li[data-id=new] select').change(_.bind(this.updateUserSelect, this));
+        },
+
+        populateNewAccountSelect: function() {
             var collectionUserSet = new chorus.models.UserSet(this.collection.users());
             var otherUsers = this.users.select(function(user){return !collectionUserSet.get(user.get("id"))})
 
             var select = this.$("li.new select.name");
+            select.empty();
             if (select) {
                 select.append(_.map(otherUsers, function(user) {
                     return $("<option/>").text(user.displayName()).val(user.get("id")).outerHtml();
@@ -98,8 +153,6 @@
             }
             this.updateUserSelect();
             $('li[data-id=new] select').change(_.bind(this.updateUserSelect, this));
-
-            chorus.styleSelect(select);
         },
 
         updateUserSelect: function() {
