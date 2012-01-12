@@ -1,6 +1,6 @@
 (function(ns, Handlebars) {
 
-    Handlebars.registerPartial("errorDiv", '<div class="errors">{{#if serverErrors}}<ul>{{#each serverErrors}}<li>{{message}}</li>{{/each}}</ul><a class="close_errors" href="#">{{t "actions.close"}}</a>{{/if}}</div>');
+    Handlebars.registerPartial("errorDiv", '<div class="errors">{{#if serverErrors }}{{#if serverErrors.length}}<ul>{{#each serverErrors}}<li>{{message}}</li>{{/each}}</ul><a class="close_errors" href="#">{{t "actions.close"}}</a>{{/if}}{{/if}}</div>');
 
     var templates = {}; //for memoizing handlebars helpers templates
     var expectedDateFormat = /^(\d{4}-\d{1,2}-\d{1,2}\s+\d{1,2}:\d{2}:\d{2})/;

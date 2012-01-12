@@ -384,4 +384,43 @@ describe("handlebars", function() {
             });
         });
     });
+
+    describe("partials", function() {
+        describe("errorDiv", function() {
+            context("when context.serverErrors is undefined", function() {
+                beforeEach(function() {
+                    this.context = {};
+                });
+
+                it("renders an empty div", function() {
+                    var el = Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context, Handlebars.helpers, Handlebars.partials);
+                    expect(el).toBe('<div class="errors"></div>');
+                });
+            });
+
+            context("when context.serverErrors is an empty array", function() {
+                beforeEach(function() {
+                    this.context = { serverErrors: [] };
+                });
+
+                it("renders an empty div", function() {
+                    var el = Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context, Handlebars.helpers, Handlebars.partials);
+                    expect(el).toBe('<div class="errors"></div>');
+                });
+            });
+
+            context("when context.serverErrors is an array of hashes with 'message' keys", function() {
+                beforeEach(function() {
+                    this.context = { serverErrors: [{ message: "one" }, { message: "two" }] };
+                });
+
+                it("renders the messages", function() {
+                    var el = Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context, Handlebars.helpers, Handlebars.partials);
+                    expect($(el).find("li").length).toBe(2);
+                    expect(el).toContain("one");
+                    expect(el).toContain("two");
+                });
+            });
+        });
+    });
 });
