@@ -13,8 +13,8 @@ $link-padding: 6px;
     }
 
     input[type=submit] {
-        @include opacity(0);
         height: 1px;
+        visibility: hidden;
     }
 
     button.add_account {
@@ -59,6 +59,10 @@ $link-padding: 6px;
                 }
                 select.name {
                     display: none;
+                }
+
+                .select_container {
+                    margin-left: 10px;
                 }
 
                 div {

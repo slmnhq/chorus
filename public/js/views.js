@@ -175,7 +175,7 @@
                         text: val
                     },
                     show: 'mouseover focus',
-                    hide: 'click',
+                    hide: 'mouseout blur',
                     style: {
                         classes: classes,
                         tip: {
