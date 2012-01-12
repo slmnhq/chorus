@@ -1,20 +1,5 @@
 ;(function(ns) {
     ns.Activity = chorus.models.Base.extend({
-
-        initialize: function(attributes) {
-            this._super('initialize', arguments);
-            if(attributes.instance) {
-                this.set({instance : new chorus.models.Instance(attributes.instance)});
-            }
-            if(attributes.workspace) {
-                this.set({workspace : new chorus.models.Workspace(attributes.workspace)});
-            }
-            if(attributes.workfile) {
-                attributes.workfile.workspaceId = this.get("workspace") && this.get('workspace').get('id');
-                this.set({workfile : new chorus.models.Workfile(attributes.workfile)});
-            }
-        },
-
         author : function() {
             this._author = this._author || new chorus.models.User(this.get("author"));
             return this._author;
@@ -23,6 +8,35 @@
         comments: function(){
             this._comments || (this._comments = new chorus.models.CommentSet(this.get("comments")));
             return this._comments;
+        },
+
+        instance: function() {
+            if (this.get("instance")) {
+                this._instance || (this._instance = new chorus.models.Instance(this.get("instance")));
+            }
+
+            return this._instance;
+        },
+
+        workspace: function() {
+            if (this.get("workspace")) {
+                this._workspace || (this._workspace = new chorus.models.Workspace(this.get("workspace")));
+            }
+
+            return this._workspace;
+        },
+
+        workfile: function() {
+            if (this.get("workfile")) {
+                if (!this._workfile) {
+                    this._workfile = new chorus.models.Workfile(this.get("workfile"));
+                    if (this.workspace() && this.workspace().get("id")) {
+                        this._workfile.set({ workspaceId : this.workspace().get("id") });
+                    }
+                }
+            }
+
+            return this._workfile;
         },
 
         attachments: function() {

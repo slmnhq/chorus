@@ -4,42 +4,6 @@ describe("chorus.models.Activity", function() {
         this.model = fixtures.modelFor("fetch")
     });
 
-    describe("#initialize", function() {
-        context("with an instance", function() {
-            it("creates an instance object", function() {
-                var json = fixtures.activityJson({instance: fixtures.instanceJson()});
-                var activity = new chorus.models.Activity(json);
-                expect(activity.get('instance')).toBeDefined();
-                expect(activity.get('instance')).toBeA(chorus.models.Instance);
-            });
-        });
-
-        context("with a workspace", function() {
-            it("creates an workspace object", function() {
-                var json = fixtures.activityJson({workspace: fixtures.workspaceJson()});
-                var activity = new chorus.models.Activity(json);
-                expect(activity.get('workspace')).toBeDefined();
-                expect(activity.get('workspace')).toBeA(chorus.models.Workspace);
-            });
-        });
-
-        context("with a workfile and a workspace", function() {
-            beforeEach(function() {
-                var json = fixtures.activityJson({workfile: fixtures.workfileJson(), workspace: fixtures.workspaceJson()});
-                this.activity = new chorus.models.Activity(json);
-            });
-
-            it("creates an workfile object", function() {
-                expect(this.activity.get('workfile')).toBeDefined();
-                expect(this.activity.get('workfile')).toBeA(chorus.models.Workfile);
-            });
-
-            it("puts the workspaceId into the workfile", function() {
-                expect(this.activity.get('workfile').get('workspaceId')).toBe(this.activity.get('workspace').get('id'));
-            });
-        });
-    });
-
     describe("#author", function() {
         it("creates a user", function() {
             expect(this.model.author().displayName()).toBe("EDC Admin");
@@ -47,6 +11,104 @@ describe("chorus.models.Activity", function() {
 
         it("returns the same instance when called multiple times", function() {
             expect(this.model.author()).toBe(this.model.author());
+        });
+    });
+
+    describe("#instance", function() {
+        context("with an instance", function() {
+            beforeEach(function() {
+                this.model = fixtures.activity({instance: fixtures.instanceJson()})
+            })
+
+            it("creates an instance", function() {
+                expect(this.model.instance()).toBeA(chorus.models.Instance);
+            });
+
+            it("returns the same instance when called multiple times", function() {
+                expect(this.model.instance()).toBe(this.model.instance());
+            });
+        });
+
+        context("without an instance", function() {
+            beforeEach(function() {
+                this.model = fixtures.activity();
+            })
+
+            it("doesn't create an instance", function() {
+                expect(this.model.instance()).toBeFalsy();
+            });
+        });
+    });
+
+    describe("#workspace", function() {
+        context("with an workspace", function() {
+            beforeEach(function() {
+                this.model = fixtures.activity({workspace: fixtures.workspaceJson()})
+            })
+
+            it("creates a workspace", function() {
+                expect(this.model.workspace()).toBeA(chorus.models.Workspace);
+            });
+
+            it("returns the same workspace when called multiple times", function() {
+                expect(this.model.workspace()).toBe(this.model.workspace());
+            });
+        });
+
+        context("without a workspace", function() {
+            beforeEach(function() {
+                this.model = fixtures.activity();
+            })
+
+            it("doesn't create a workspace", function() {
+                expect(this.model.workspace()).toBeFalsy();
+            });
+        });
+    });
+
+    describe("#workfile", function() {
+        context("with a workfile", function() {
+            context("with a workspace", function() {
+                beforeEach(function() {
+                    this.model = fixtures.activity({workspace: fixtures.workspaceJson(), workfile: fixtures.workfileJson()})
+                })
+
+                it("creates a workfile", function() {
+                    expect(this.model.workfile()).toBeA(chorus.models.Workfile);
+                });
+
+                it("returns the same workfile when called multiple times", function() {
+                    expect(this.model.workfile()).toBe(this.model.workfile());
+                });
+
+                it("sets the workspace id in the workfile", function() {
+                    expect(this.model.workfile().get("workspaceId")).toBeDefined();
+                })
+            });
+
+            context("without a workspace", function() {
+                beforeEach(function() {
+                    this.model = fixtures.activity({workfile: fixtures.workfileJson()})
+                })
+
+                it("creates a workfile", function() {
+                    expect(this.model.workfile()).toBeA(chorus.models.Workfile);
+                });
+
+                it("returns the same workfile when called multiple times", function() {
+                    expect(this.model.workfile()).toBe(this.model.workfile());
+                });
+            });
+        });
+
+        context("without a workfile", function() {
+            beforeEach(function() {
+                this.model = fixtures.activity();
+            })
+
+            it("doesn't create a workfile", function() {
+                expect(this.model.workfile()).toBeFalsy();
+            });
         });
     });
 

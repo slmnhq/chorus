@@ -770,7 +770,7 @@
                 return this.currentId++;
             },
 
-            activity: {
+            activities: {
                 "MEMBERS_ADDED" : function() {
                     return new chorus.models.Activity({
                         author: fixtures.authorJson(),
@@ -1246,6 +1246,10 @@
 
             database: function(overrides) {
                 return new chorus.models.Database(this.databaseJson(overrides));
+            },
+
+            activity: function(overrides) {
+                return new chorus.models.Activity(this.activityJson(overrides));
             },
 
             noteComment: function(overrides) {

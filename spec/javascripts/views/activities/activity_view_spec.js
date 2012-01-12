@@ -1,13 +1,13 @@
 describe("chorus.views.Activity", function() {
     beforeEach(function() {
-        this.model = fixtures.activity.NOTE_ON_WORKSPACE();
+        this.model = fixtures.activities.NOTE_ON_WORKSPACE();
         this.view = new chorus.views.Activity({ model: this.model });
     });
 
     describe("#render", function() {
         context("type: MEMBERS_ADDED", function() {
             beforeEach(function() {
-                this.view.model = fixtures.activity.MEMBERS_ADDED();
+                this.view.model = fixtures.activities.MEMBERS_ADDED();
                 this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
@@ -38,7 +38,7 @@ describe("chorus.views.Activity", function() {
 
         context("type: MEMBERS_DELETED", function() {
             beforeEach(function() {
-                this.view.model = fixtures.activity.MEMBERS_DELETED();
+                this.view.model = fixtures.activities.MEMBERS_DELETED();
                 this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
@@ -69,7 +69,7 @@ describe("chorus.views.Activity", function() {
 
         context("type: WORKSPACE_CREATED", function() {
             beforeEach(function() {
-                this.view.model = fixtures.activity.WORKSPACE_CREATED();
+                this.view.model = fixtures.activities.WORKSPACE_CREATED();
                 this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
@@ -81,7 +81,7 @@ describe("chorus.views.Activity", function() {
 
         context("type: USER_DELETED", function() {
             beforeEach(function() {
-                this.view.model = fixtures.activity.USER_DELETED();
+                this.view.model = fixtures.activities.USER_DELETED();
                 this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
@@ -93,7 +93,7 @@ describe("chorus.views.Activity", function() {
 
         context("type: INSTANCE_CREATED", function() {
             beforeEach(function() {
-                this.view.model = fixtures.activity.INSTANCE_CREATED();
+                this.view.model = fixtures.activities.INSTANCE_CREATED();
                 this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
@@ -106,7 +106,7 @@ describe("chorus.views.Activity", function() {
 
         context("type: WORKSPACE_DELETED", function() {
             beforeEach(function() {
-                this.view.model = fixtures.activity.WORKSPACE_DELETED();
+                this.view.model = fixtures.activities.WORKSPACE_DELETED();
                 this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
@@ -118,7 +118,7 @@ describe("chorus.views.Activity", function() {
 
         context("type: WORKSPACE_MAKE_PRIVATE", function() {
             beforeEach(function() {
-                this.view.model = fixtures.activity.WORKSPACE_MAKE_PRIVATE();
+                this.view.model = fixtures.activities.WORKSPACE_MAKE_PRIVATE();
                 this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
@@ -130,7 +130,7 @@ describe("chorus.views.Activity", function() {
 
         context("type: WORKSPACE_MAKE_PUBLIC", function() {
             beforeEach(function() {
-                this.view.model = fixtures.activity.WORKSPACE_MAKE_PUBLIC();
+                this.view.model = fixtures.activities.WORKSPACE_MAKE_PUBLIC();
                 this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
@@ -142,7 +142,7 @@ describe("chorus.views.Activity", function() {
 
         context("type: WORKSPACE_ARCHIVED", function() {
             beforeEach(function() {
-                this.view.model = fixtures.activity.WORKSPACE_ARCHIVED();
+                this.view.model = fixtures.activities.WORKSPACE_ARCHIVED();
                 this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
@@ -154,7 +154,7 @@ describe("chorus.views.Activity", function() {
 
         context("type: WORKSPACE_UNARCHIVED", function() {
             beforeEach(function() {
-                this.view.model = fixtures.activity.WORKSPACE_UNARCHIVED();
+                this.view.model = fixtures.activities.WORKSPACE_UNARCHIVED();
                 this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
@@ -166,7 +166,7 @@ describe("chorus.views.Activity", function() {
 
         context("type: NOTE", function() {
             beforeEach(function() {
-                this.view.model = fixtures.activity.NOTE_ON_WORKSPACE();
+                this.view.model = fixtures.activities.NOTE_ON_WORKSPACE();
                 this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
@@ -192,7 +192,7 @@ describe("chorus.views.Activity", function() {
 
         context("type: WORKSPACE_ADD_SANDBOX", function() {
             beforeEach(function() {
-                this.view.model = fixtures.activity.WORKSPACE_ADD_SANDBOX();
+                this.view.model = fixtures.activities.WORKSPACE_ADD_SANDBOX();
                 this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });

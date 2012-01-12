@@ -10,6 +10,7 @@
         },
         
         initialize: function() {
+            this._super('initialize', arguments);
             this.files = [];
         },
 

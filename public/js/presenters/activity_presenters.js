@@ -6,9 +6,9 @@
 
             this.model = model
             this.author = model.author();
-            this.workspace = model.get("workspace");
-            this.workfile = model.get("workfile");
-            this.noteObject = model.get("instance") || this.workfile || this.workspace;
+            this.workspace = model.workspace();
+            this.workfile = model.workfile();
+            this.noteObject = model.instance() || this.workfile || this.workspace;
             this.activityType = model.get("type")
 
             this.presenter = this.defaultPresenter(this.model)
@@ -90,13 +90,13 @@
 
         WORKFILE_CREATED : function(model) {
             return {
-                objectName : model.get("workfile").get("name"),
-                objectUrl : new ns.models.Workfile({id: model.get("workfile").get("id"), workspaceId : this.workspace.get("id")}).showUrl()
+                objectName : model.workfile().get("name"),
+                objectUrl : new ns.models.Workfile({id: model.workfile().get("id"), workspaceId : this.workspace.get("id")}).showUrl()
             }
         },
 
         INSTANCE_CREATED : function(model) {
-            var instance = model.get("instance");
+            var instance = model.instance();
             return {
                 objectName : instance.get("name"),
                 objectUrl : new ns.models.Instance({id : instance.get("id")}).showUrl()
