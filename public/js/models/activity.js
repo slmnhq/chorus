@@ -10,7 +10,7 @@
                 this.set({workspace : new chorus.models.Workspace(attributes.workspace)});
             }
             if(attributes.workfile) {
-                attributes.workfile.workspaceId = this.get('workspace').get('id');
+                attributes.workfile.workspaceId = this.get("workspace") && this.get('workspace').get('id');
                 this.set({workfile : new chorus.models.Workfile(attributes.workfile)});
             }
         },
