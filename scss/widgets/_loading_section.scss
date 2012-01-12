@@ -1,7 +1,18 @@
+@import "common.scss";
+
 .loading_text {
     position: relative;
     display: inline-block;
     margin-left: $padding-x;
+    min-height: 14px;
+}
+
+.workspace_detail .activity_list {
+    padding: $activity-gutter 0;
+}
+
+.dashboard_workspace_list .loading_section {
+    padding-top: $activity-gutter;
 }
 
 .loading_spinner {

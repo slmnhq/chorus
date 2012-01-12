@@ -414,7 +414,6 @@ describe("chorus.views", function() {
                 it("renders the loading template", function() {
                     this.view.render();
                     expect(this.view.$('.loading_section').length).toBe(1)
-                    expect(this.view.$('.loading_section').text()).toMatchTranslation('loading');
                 });
 
                 context("when makeLoadingSectionView is overridden", function() {

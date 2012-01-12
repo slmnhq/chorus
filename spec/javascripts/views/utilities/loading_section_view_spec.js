@@ -6,11 +6,6 @@ describe("chorus.views.LoadingSection", function() {
                 this.view.render();
             });
 
-            it("immediately displays the 'loading' text", function() {
-                expect(this.view.$(".loading_text").text()).toMatchTranslation("loading");
-                expect(this.view.$(".loading_text")).not.toHaveClass("hidden");
-            });
-
             it("immediately draws the spinner", function() {
                 expect(this.view.$(".loading_spinner div[aria-role=progressbar]")).toExist();
             });
@@ -33,7 +28,6 @@ describe("chorus.views.LoadingSection", function() {
                 waits(this.delay + 10);
 
                 runs(function() {
-                    expect(this.view.$(".loading_text").text()).toMatchTranslation("loading");
                     expect(this.view.$(".loading_text")).not.toHaveClass("hidden");
                     expect(this.view.$(".loading_spinner div[aria-role=progressbar]")).toExist();
                 });
