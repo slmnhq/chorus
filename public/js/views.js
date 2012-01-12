@@ -154,7 +154,7 @@
             return this.useLoadingSection && this.resource && !this.resource.loaded;
         },
 
-        showErrors : function() {
+        showErrors : function(model) {
             var self = this;
 
             var classes;
@@ -166,7 +166,8 @@
 
             this.clearErrors();
 
-            _.each(this.resource.errors, function(val, key) {
+            if(!model) {model = this.resource}
+            _.each(model.errors, function(val, key) {
                 var input = self.$("input[name=" + key + "], form textarea[name=" + key + "]");
                 input.addClass("has_error");
                 input.qtip({

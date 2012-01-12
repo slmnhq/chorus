@@ -46,7 +46,6 @@ describe("chorus.views", function() {
         describe("for a view with a model", function() {
             beforeEach(function() {
                 this.model = new chorus.models.Base({ bar: "foo"});
-                this.model.serverErrors = [{ message: "wrong" }];
                 this.view = new chorus.views.Base({ model : this.model });
             });
 
@@ -91,8 +90,10 @@ describe("chorus.views", function() {
                 });
 
                 it("calls #additionalContext, passing the default context (including the server errors)", function() {
-                    var args = this.view.additionalContext.mostRecentCall.args;
-                    expect(args.serverErrors).toBe(this.model.serverErrors);
+                    this.model.serverErrors = [{ message: "wrong" }];
+                    this.view.context();
+                    var contextPassed = this.view.additionalContext.mostRecentCall.args[0];
+                    expect(contextPassed.serverErrors).toBe(this.model.serverErrors);
                 });
             });
 
@@ -218,24 +219,47 @@ describe("chorus.views", function() {
     describe("validation", function() {
         beforeEach(function() {
             this.model = new chorus.models.Base();
+            spyOn(chorus.views.Base.prototype, 'showErrors').andCallThrough();
+            spyOn(chorus.views.Base.prototype, 'clearErrors').andCallThrough();
             this.view = new chorus.views.Base({ model : this.model });
             this.view.template = function() {
                 return "<form><input name='foo'/><input name='bar'/><input name='whiz'/></form>";
             };
+            this.model.performValidation = function() {
+                this.errors = {};
+                this.require("foo");
+            };
+        });
 
-            spyOn(Backbone.Model.prototype, "save");
+        it("calls #showErrors when validation fails on the model", function() {
+           this.model.trigger("validationFailed");
+           expect(this.view.showErrors).toHaveBeenCalled();
+        });
+
+        it("calls #clearErrors when validation succeeds on the model", function() {
+            this.model.trigger("validated");
+            expect(this.view.clearErrors).toHaveBeenCalled();
+        });
+    });
+
+
+    describe("#showErrors", function() {
+        beforeEach(function() {
+            this.view = new chorus.views.Base({ model : this.model });
+            this.view.template = function() {
+                return "<form><input name='foo'/><input name='bar'/><input name='whiz'/></form>";
+            };
+            this.view.model = new chorus.models.Base();
+            this.view.model.errors = { foo: "you need a foo" };
+            this.view.resource = this.view.model;
+
             spyOn(this.view, "render").andCallThrough();
             this.view.render();
         });
 
-
-        describe("failure", function() {
+        context("with no parameters", function() {
             beforeEach(function() {
-                this.model.performValidation = function() {
-                    this.errors = {};
-                    this.require("foo");
-                };
-                this.model.save();
+                this.view.showErrors();
             });
 
             it("sets the has_error class on fields with errors", function() {
@@ -263,26 +287,41 @@ describe("chorus.views", function() {
             });
 
             it("clears error html that is not applicable", function() {
-                this.model.set({"foo": "bar"}, {silent: true});
-                this.model.save();
+                this.view.model.errors = {};
+                this.view.showErrors();
                 expect(this.view.$("input[id=foo]").hasQtip()).toBeFalsy();
                 expect($(".qtip").length).toBe(0);
             });
+        });
 
-            describe("success after failure", function() {
-                beforeEach(function() {
-                    this.model.trigger("validated");
-                })
+        context("given a different model as a parameter", function() {
+            beforeEach(function() {
+                this.otherModel = new chorus.models.Base();
+                this.otherModel.errors = { 'bar': "you need a bar" };
+                this.view.showErrors(this.otherModel);
+            });
 
-                it("clears client-side errors", function() {
-                    expect(this.view.$(".has_error").length).toBe(0);
-                    expect(this.view.$("input[name=bar]").hasQtip()).toBeFalsy();
-                    expect(this.view.$("input[name=foo]").hasQtip()).toBeFalsy();
-                    expect(this.view.$("input[name=whiz]").hasQtip()).toBeFalsy();
-                })
-            })
-        })
-    })
+            it("uses the other model's errors, instead of the view's own model", function() {
+                expect(this.view.$("input[name=foo]")).not.toHaveClass("has_error");
+                expect(this.view.$("input[name=foo]").hasQtip()).toBeFalsy();
+                expect(this.view.$("input[name=bar]")).toHaveClass("has_error");
+                expect(this.view.$("input[name=bar]").hasQtip()).toBeTruthy();
+            });
+        });
+
+        describe("calling #clearErrors afterwards", function() {
+            beforeEach(function() {
+                this.view.clearErrors();
+            });
+
+            it("clears client-side errors", function() {
+                expect(this.view.$(".has_error").length).toBe(0);
+                expect(this.view.$("input[name=bar]").hasQtip()).toBeFalsy();
+                expect(this.view.$("input[name=foo]").hasQtip()).toBeFalsy();
+                expect(this.view.$("input[name=whiz]").hasQtip()).toBeFalsy();
+            });
+        });
+    });
 
     describe("MainContentView", function() {
         describe("#render", function() {
