@@ -12,8 +12,6 @@ describe("MemberSet", function() {
 
     describe("#save", function() {
         beforeEach(function() {
-            this.savedSpy = jasmine.createSpy("saved");
-            this.saveFailedSpy = jasmine.createSpy("saveFailed");
             spyOnEvent(this.memberSet, 'saved');
             spyOnEvent(this.memberSet, 'saveFailed');
             this.user1 = new chorus.models.User({ userName: "niels", id: "1" });

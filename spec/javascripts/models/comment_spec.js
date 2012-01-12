@@ -1,13 +1,15 @@
 describe("chorus.models.Comment", function() {
     beforeEach(function() {
-        this.model = new chorus.models.Comment({
-            body : "oh yes this is a party!",
-            author : {
-                id : "45",
-                firstName : "LeBron",
-                lastName : "James"
+        this.model = fixtures.noteComment(
+            {
+                author :
+                {
+                    id : "45",
+                    firstName : "LeBron",
+                    lastName : "James"
+                }
             }
-        });
+        );
     });
 
     it("has the correct urlTemplate", function() {
@@ -53,4 +55,96 @@ describe("chorus.models.Comment", function() {
             expect(this.model.get("workfileIds")).toBe("44,45,46");
         });
     });
+
+    describe("file upload handling", function() {
+        beforeEach(function() {
+            this.submitObject1 = createSubmitSpy();
+            this.submitObject2 = createSubmitSpy();
+            this.fileUpload1 = new chorus.models.CommentFileUpload({submit: this.submitObject1});
+            this.fileUpload2 = new chorus.models.CommentFileUpload({submit: this.submitObject2});
+            this.model.addFileUpload(this.fileUpload1);
+            expect(this.model.files.length).toBe(1);
+        })
+
+        describe("removeFileUpload", function() {
+            beforeEach(function() {
+                this.fileUpload = new chorus.models.CommentFileUpload({});
+                this.model.removeFileUpload(this.fileUpload1);
+            });
+
+            it("removes the object from the list of files", function() {
+                expect(this.model.files.length).toBe(0);
+            })
+        });
+
+        describe("addFileUpload", function() {
+            beforeEach(function() {
+                this.model.addFileUpload(this.fileUpload2);
+            })
+
+            it("adds the object from the list of files", function() {
+                expect(this.model.files.length).toBe(2);
+            })
+        })
+
+        describe("saveFiles", function() {
+            beforeEach(function() {
+                this.model.addFileUpload(this.fileUpload2);
+                this.fileUploadSuccessSpy = jasmine.createSpy('fileUploadSuccess');
+                this.fileUploadFailedSpy = jasmine.createSpy('fileUploadFailed');
+                this.model.bind('fileUploadSuccess', this.fileUploadSuccessSpy);
+                this.model.bind('fileUploadFailed', this.fileUploadFailedSpy);
+                this.model.saveFiles();
+            });
+
+            it("calls submit on each file", function() {
+                expect(this.fileUpload1.data.submit).toHaveBeenCalled();
+                expect(this.fileUpload2.data.submit).toHaveBeenCalled();
+            });
+
+            it("sets the url of each upload", function() {
+                expect(this.fileUpload1.data.url).toBe(this.model.url() + '/' + this.model.get('id') + '/file');
+                expect(this.fileUpload2.data.url).toBe(this.model.url() + '/' + this.model.get('id') + '/file');
+            });
+
+            describe("when all saves succeed", function() {
+                beforeEach(function() {
+                    this.submitObject1.promise.done.mostRecentCall.args[0]();
+                    this.submitObject1.promise.done.mostRecentCall.args[0]();
+                    this.submitObject2.promise.done.mostRecentCall.args[0]();
+                })
+
+                it("triggers fileUploadSuccess", function() {
+                    expect(this.fileUploadSuccessSpy).toHaveBeenCalled();
+                    expect(this.fileUploadFailedSpy).not.toHaveBeenCalled();
+                    expect(this.fileUploadSuccessSpy.callCount).toBe(1);
+
+                })
+            })
+
+            describe("when some of the saves have failed", function() {
+                beforeEach(function() {
+                    this.submitObject1.promise.done.mostRecentCall.args[0]();
+                    this.submitObject2.promise.fail.mostRecentCall.args[0]();
+                })
+
+                it("triggers fileUploadFailed", function() {
+                    expect(this.fileUploadSuccessSpy).not.toHaveBeenCalled();
+                    expect(this.fileUploadFailedSpy).toHaveBeenCalled();
+                    expect(this.fileUploadFailedSpy.callCount).toBe(1);
+
+                })
+            })
+        });
+    })
+
+    function createSubmitSpy() {
+        var fakePromise = jasmine.createSpyObj('submitResult', ['done', 'fail']);
+        fakePromise.done.andReturn(fakePromise);
+        fakePromise.fail.andReturn(fakePromise);
+
+        var spy = jasmine.createSpy('submit').andReturn(fakePromise);
+        spy.promise = fakePromise;
+        return spy;
+    }
 });

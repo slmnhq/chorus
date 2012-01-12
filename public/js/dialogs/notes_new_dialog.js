@@ -12,7 +12,6 @@
 
         postRender : function() {
             this.$("input[type=file]").fileupload({
-                singleFileUploads : false,
                 add : _.bind(this.desktopFileChosen, this),
                 dataType : "text",
                 dropZone : this.$("input[type=file]")
@@ -26,13 +25,22 @@
                 entityType : this.options.launchElement.data("entity-type"),
                 entityId : this.options.launchElement.data("entity-id")
             });
-            this.model.bind("saved", this.saved, this);
+            this.model.bind("saved", this.modelSaved, this);
+            this.model.bind("fileUploadSuccess", this.saved, this);
+            this.model.bind("fileUploadFailed", this.saveFailed, this);
             this.model.bind("saveFailed", this.saveFailed, this);
             this.model.bind("validationFailed", this.saveFailed, this);
 
             this.workspaceId = this.options.launchElement.data("workspace-id");
         },
 
+        modelSaved: function() {
+            if(this.model.files.length) {
+                this.model.saveFiles();
+            } else {
+                this.saved();
+            }
+        },
         save: function(e) {
             e.preventDefault();
             this.$("button.submit").startLoading("notes.button.uploading");
@@ -72,13 +80,12 @@
         },
 
         desktopFileChosen : function(e, data) {
-            this.model.uploadObj = data;
-            var self = this;
-            _.each(data.files, function(file) {
-                var extension = _.last(file.name.split('.'));
-                file.isUpload = true
-                self.showFile(file, file.name, extension);
-            });
+            var uploadModel = new chorus.models.CommentFileUpload(data);
+            this.model.addFileUpload(uploadModel);
+            var file = data.files[0];
+            var extension = _.last(file.name.split('.'));
+            file.isUpload = true
+            this.showFile(file, file.name, extension, uploadModel);
         },
 
         workfileChosen : function(workfileSet) {
@@ -89,7 +96,7 @@
             }, this);
         },
 
-        showFile: function(file, filename, filetype) {
+        showFile: function(file, filename, filetype, uploadModel) {
             var fileDetailsRow = $(Handlebars.helpers.renderTemplate("notes_new_file_attachment"));
             this.$(".options_area").append(fileDetailsRow);
 
@@ -97,6 +104,7 @@
             fileDetailsRow.find('img').attr('src', iconSrc);
             fileDetailsRow.find('span.file_name').text(filename).attr('title', filename);
             fileDetailsRow.data("file", file);
+            fileDetailsRow.data("uploadModel", uploadModel);
             fileDetailsRow.removeClass("hidden");
             if (!file.isUpload){
                 fileDetailsRow.addClass("workfile");
@@ -110,11 +118,7 @@
             row.detach();
 
             if (file.isUpload) {
-                var fileIndex = _.indexOf(this.model.uploadObj.files, file);
-                this.model.uploadObj.files.splice(fileIndex, 1);
-                if(this.model.uploadObj.files.length == 0) {
-                    delete this.model.uploadObj;
-                }
+                this.model.removeFileUpload(row.data('uploadModel'));
             } else {
                 this.model.workfiles.remove(file);
             }

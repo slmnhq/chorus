@@ -1252,6 +1252,8 @@
                 commentOverrides = _.extend({
                     comments: [],
                     attachments : [],
+                    entityType: 'instance',
+                    entityId: this.nextId().toString(),
                     type: "NOTE",
                     workspace: fixtures.workspace()
                 }, overrides)

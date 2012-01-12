@@ -193,9 +193,12 @@ describe("NotesNewDialog", function() {
                 ];
                 expect($.fn.fileupload).toHaveBeenCalled();
                 expect($.fn.fileupload).toHaveBeenCalledOnSelector('input[type=file]');
+                spyOn(this.dialog.model, 'addFileUpload').andCallThrough();
                 this.fileUploadOptions = $.fn.fileupload.mostRecentCall.args[0];
                 this.request = jasmine.createSpyObj('request', ['abort']);
-                this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
+                _.each(this.fileList, _.bind(function(file) {
+                    this.fileUploadOptions.add(null, {files: [file], submit: jasmine.createSpy().andReturn(this.request)});
+                }, this));
             });
 
             it("has a dataType of 'text' for FF3.6 support", function() {
@@ -220,12 +223,14 @@ describe("NotesNewDialog", function() {
                 expect(this.dialog.$(".file_details img:eq(1)").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "medium"));
             });
 
-            it("sets uploadObj on the model", function() {
-                expect(this.dialog.model.uploadObj).toBeDefined();
+            it("creates dependent commentFileUpload object for each upload", function() {
+                expect(this.dialog.model.addFileUpload.callCount).toBe(this.fileList.length);
             });
 
             context("when a selected file is removed", function() {
                 beforeEach(function() {
+                    spyOn(this.dialog.model, 'removeFileUpload');
+                    this.uploadModelToRemove = this.dialog.model.files[1];
                     this.dialog.$(".file_details .remove:eq(1)").click();
                 });
 
@@ -233,10 +238,8 @@ describe("NotesNewDialog", function() {
                     expect(this.dialog.$('.file_details').length).toBe(1);
                 });
 
-                it("removes the uploadObj from the model only if all uploads have been removed", function() {
-                    expect(this.dialog.model.uploadObj).toBeDefined();
-                    this.dialog.$(".file_details .remove:eq(0)").click();
-                    expect(this.dialog.model.uploadObj).toBeUndefined();
+                it("removes the commentFileUpload from the model", function() {
+                    expect(this.dialog.model.removeFileUpload).toHaveBeenCalledWith(this.uploadModelToRemove);
                 });
             });
 
@@ -260,28 +263,58 @@ describe("NotesNewDialog", function() {
                     spyOn(this.dialog, "closeModal");
                     this.dialog.$("textarea[name=body]").val("The body of a note");
                     spyOnEvent(this.dialog.pageModel, "invalidated");
+                    spyOn(this.dialog.model, 'saveFiles');
                     spyOn($.fn, "stopLoading").andCallThrough();
                 });
 
-                describe("when the upload succeeds", function() {
+                describe("when the model save succeeds", function() {
                     beforeEach(function() {
                         this.dialog.model.trigger("saved");
-                    })
-
-                    it("closes the dialog box", function() {
-                        expect(this.dialog.closeModal).toHaveBeenCalled();
                     });
 
-                    it("triggers the 'invalidated' event on the model", function() {
-                        expect("invalidated").toHaveBeenTriggeredOn(this.dialog.pageModel);
+                    it("does triggers a file upload", function() {
+                        expect(this.dialog.model.saveFiles).toHaveBeenCalled();
                     });
 
-                    it("removes the spinner from the button", function() {
-                        expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit")
-                    })
+                    context("when the file upload succeeds", function() {
+                        beforeEach(function() {
+                            this.dialog.model.trigger("fileUploadSuccess");
+                        });
+
+                        it("closes the dialog box", function() {
+                            expect(this.dialog.closeModal).toHaveBeenCalled();
+                        });
+
+                        it("triggers the 'invalidated' event on the model", function() {
+                            expect("invalidated").toHaveBeenTriggeredOn(this.dialog.pageModel);
+                        });
+
+                        it("removes the spinner from the button", function() {
+                            expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit")
+                        });
+                    });
+
+                    context("when the file upload fails", function() {
+                        beforeEach(function() {
+                            this.dialog.model.trigger("fileUploadFailed");
+                        });
+
+                        it("does not close the dialog box", function() {
+                            expect(this.dialog.closeModal).not.toHaveBeenCalled();
+                        })
+
+                        it("does not trigger the 'invalidated' event on the model", function() {
+                            expect("invalidated").not.toHaveBeenTriggeredOn(this.dialog.pageModel);
+                        });
+
+                        it("removes the spinner from the button", function() {
+                            expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit")
+                        });
+                    });
+
                 });
 
-                describe("when the upload fails", function() {
+                describe("when the model save fails", function() {
                     beforeEach(function() {
                         this.dialog.model.trigger("saveFailed");
                     })
@@ -296,7 +329,11 @@ describe("NotesNewDialog", function() {
 
                     it("removes the spinner from the button", function() {
                         expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit")
-                    })
+                    });
+
+                    it("does not trigger a file upload", function() {
+                        expect(this.dialog.model.saveFiles).not.toHaveBeenCalled();
+                    });
                 });
 
                 describe("when the validation fails", function() {
