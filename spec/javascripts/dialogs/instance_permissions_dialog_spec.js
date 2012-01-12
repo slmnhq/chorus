@@ -64,7 +64,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 it("shows the user select", function() {
                     expect(this.dialog.$("select.name")).toExist();
-                    expect(this.dialog.$("select.name")).not.toHaveClass("hidden");
+                    expect(this.dialog.$(".select_container")).not.toHaveClass("hidden");
                 });
 
                 it("hides the non-editable user name", function() {
@@ -254,10 +254,15 @@ describe("chorus.dialogs.InstancePermissions", function() {
             $('#jasmine_content').append(this.dialog.el);
         });
 
-        it("only shows 'owner' in the row corresponding to the owner", function() {
-            var ownerId = this.instance.owner().get('id');
-            expect(this.dialog.$("li[data-id=3]")).toContainTranslation("instances.permissions.owner");
-            expect(this.dialog.$("li[data-id!=3]")).not.toContainTranslation("instances.permissions.owner");
+        it("only shows 'owner' and 'change owner' in the row corresponding to the owner", function() {
+            var ownerAccountId = this.instance.accountForOwner().get('id');
+            var ownerLi = this.dialog.$("li[data-id="   + ownerAccountId + "]");
+            var otherLis = this.dialog.$("li[data-id!=" + ownerAccountId + "]");
+
+            expect(ownerLi).toContainTranslation("instances.permissions.owner");
+            expect(ownerLi).toContainTranslation("instances.permissions.change_owner");
+            expect(otherLis).not.toContainTranslation("instances.permissions.owner");
+            expect(otherLis).not.toContainTranslation("instances.permissions.change_owner");
         });
 
         it("sorts the list", function() {
@@ -284,6 +289,21 @@ describe("chorus.dialogs.InstancePermissions", function() {
         it("displays the name of each account's user", function() {
             expect(this.dialog.$("li[data-id=1] .name")).toHaveText("bob zzap");
             expect(this.dialog.$("li[data-id=2] .name")).toHaveText("jim aardvark");
+        });
+
+        describe("clicking the 'change owner' link", function() {
+            beforeEach(function() {
+                var ownerAccountId = this.instance.accountForOwner().get('id');
+                this.ownerLi = this.dialog.$("li[data-id="   + ownerAccountId + "]");
+                this.otherLis = this.dialog.$("li[data-id!=" + ownerAccountId + "]");
+
+                this.ownerLi.find("a.change_owner").click();
+            });
+
+            it("only shows the owner select in the owner li", function() {
+                expect(this.ownerLi.find(".select_container")).not.toHaveClass("hidden");
+                expect(this.otherLis.find(".select_container")).toHaveClass("hidden");
+            });
         });
 
         describe("editing a user's account credentials", function() {

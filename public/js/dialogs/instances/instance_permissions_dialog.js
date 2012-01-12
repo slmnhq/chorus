@@ -75,26 +75,29 @@
 
         cancelChangeOwner : function(e){
             e.preventDefault();
-            this.$("div.name").removeClass("hidden");
-            this.$("a.change_owner").removeClass("hidden");
-            this.$("a.edit").removeClass("hidden");
-            this.$("a.save_owner").addClass("hidden");
-            this.$("select.name").addClass("hidden");
-            this.$("a.cancel_change_owner").addClass("hidden");
-            this.$(".links .owner").removeClass("hidden");
+            var ownerId = this.instance.accountForOwner().get("id");
+            var ownerLi = this.$("li[data-id=" + ownerId + "]");
+            ownerLi.find("div.name").removeClass("hidden");
+            ownerLi.find("a.change_owner").removeClass("hidden");
+            ownerLi.find("a.edit").removeClass("hidden");
+            ownerLi.find("a.save_owner").addClass("hidden");
+            ownerLi.find(".select_container").addClass("hidden");
+            ownerLi.find("a.cancel_change_owner").addClass("hidden");
+            ownerLi.find(".links .owner").removeClass("hidden");
         },
 
         changeOwner: function(e) {
-            if (e)  e.preventDefault();
-            var select = this.$("select.name");
-            select.removeClass("hidden");
-            this.$("div.name").addClass("hidden");
-            this.$("a.change_owner").addClass("hidden");
-            this.$("a.save_owner").removeClass("hidden");
-            this.$("a.cancel_change_owner").removeClass("hidden");
-            this.$("a.edit").addClass("hidden");
-            this.$(".links .owner").addClass("hidden");
-            chorus.styleSelect(select);
+            if (e) e.preventDefault();
+            var ownerId = this.instance.accountForOwner().get("id");
+            var ownerLi = this.$("li[data-id=" + ownerId + "]");
+            ownerLi.find("div.name").addClass("hidden");
+            ownerLi.find("a.change_owner").addClass("hidden");
+            ownerLi.find("a.save_owner").removeClass("hidden");
+            ownerLi.find("a.cancel_change_owner").removeClass("hidden");
+            ownerLi.find("a.edit").addClass("hidden");
+            ownerLi.find(".links .owner").addClass("hidden");
+            ownerLi.find(".select_container").removeClass("hidden");
+            chorus.styleSelect(ownerLi.find("select.name"));
         },
 
         confirmSaveOwner: function(e) {
