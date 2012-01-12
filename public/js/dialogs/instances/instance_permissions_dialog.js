@@ -90,12 +90,11 @@
             var collectionUserSet = new chorus.models.UserSet(this.collection.users());
             var otherUsers = this.users.select(function(user){return !collectionUserSet.get(user.get("id"))})
 
-            var options = _.map(otherUsers, function(user) {
-                return $("<option/>").text(user.displayName()).val(user.get("id")).outerHtml();
-            });
             var select = this.$("li.new select.name");
             if (select) {
-                select.append(options.join(""));
+                select.append(_.map(otherUsers, function(user) {
+                    return $("<option/>").text(user.displayName()).val(user.get("id")).outerHtml();
+                }).join(""));
             }
             this.updateUserSelect();
             $('li[data-id=new] select').change(_.bind(this.updateUserSelect, this));

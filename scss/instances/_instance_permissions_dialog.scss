@@ -6,7 +6,7 @@ $link-padding: 6px;
 
 .instance_permissions {
     width: 460px;
-    
+
     .dialog_content {
         padding: 0 !important;
         margin: 0;
@@ -54,6 +54,9 @@ $link-padding: 6px;
                 min-height: $list-item-height;
                 padding-right: 15px;
 
+                select {
+                    width: 215px;
+                }
                 select.name {
                     display: none;
                 }
@@ -102,7 +105,7 @@ $link-padding: 6px;
                         .field_wrapper {
                             width: 48%;
                             padding-right: 4px;
-                            
+
                             label {
                                 padding-bottom: 4px;
                                 display: block;
