@@ -236,7 +236,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
             it("displays edit instance link when user is owner", function() {
                 setLoggedInUser({ userName : "benjamin", admin: false});
-                this.instance.set({ownerId : "10000"});
+                this.instance.set({ownerId : chorus.session.user().get('id')});
                 this.view.render();
                 expect(this.view.$(".actions .edit_instance")).toExist();
             });
