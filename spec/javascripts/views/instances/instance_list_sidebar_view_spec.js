@@ -185,10 +185,6 @@ describe("chorus.views.InstanceListSidebar", function() {
                     it("includes the shared account information", function() {
                         expect(this.view.$(".configuration_detail").text().indexOf(t("instances.shared_account"))).not.toBe(-1);
                     });
-
-                    it("has a link to edit the instance permissions", function() {
-                        expect(this.view.$("a.dialog[data-dialog=InstancePermissions]")).toExist();
-                    });
                 });
 
                 context("and the instance does not have a shared account", function() {
@@ -230,6 +226,25 @@ describe("chorus.views.InstanceListSidebar", function() {
 
             it("does not show the 'add credentials' link", function() {
                 expect(this.view.$(".actions .add_credentials")).not.toExist();
+            });
+
+            it("displays edit instance link when user is admin", function() {
+                setLoggedInUser({ userName : "benjamin", admin: true});
+                this.view.render();
+                expect(this.view.$(".actions .edit_instance")).toExist();
+            });
+
+            it("displays edit instance link when user is owner", function() {
+                setLoggedInUser({ userName : "benjamin", admin: false});
+                this.instance.set({ownerId : "10000"});
+                this.view.render();
+                expect(this.view.$(".actions .edit_instance")).toExist();
+            });
+
+            it("does NOT display the edit instance link when user is not an admin or owner", function() {
+                setLoggedInUser({ userName : "benjamin", admin: false});
+                this.view.render();
+                expect(this.view.$(".actions .edit_instance")).not.toExist();
             });
         });
 
