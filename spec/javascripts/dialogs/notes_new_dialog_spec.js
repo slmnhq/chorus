@@ -394,11 +394,41 @@ describe("NotesNewDialog", function() {
     describe("saveFailed", function() {
         beforeEach(function() {
             spyOn(this.dialog, 'showErrors');
-            this.dialog.saveFailed();
+            spyOn(this.dialog.model, 'destroy');
         });
 
-        it("calls showErrors", function() {
-            expect(this.dialog.showErrors).toHaveBeenCalled();
+        context("the model was saved", function() {
+            beforeEach(function() {
+                this.dialog.model.set({'id': fixtures.nextId().toString()});
+                this.dialog.saveFailed();
+            });
+
+            it("destroys the comment", function() {
+                expect(this.dialog.model.destroy).toHaveBeenCalled();
+            });
+
+            it("clears the id", function() {
+                expect(this.dialog.model.get('id')).toBeUndefined();
+            });
+
+            it("calls showErrors", function() {
+                expect(this.dialog.showErrors).toHaveBeenCalled();
+            });
+        });
+
+        context("the model was not saved", function() {
+            beforeEach(function() {
+                expect(this.dialog.model.get('id')).not.toBeDefined();
+                this.dialog.saveFailed();
+            });
+
+            it("does not destroy the comment", function() {
+                expect(this.dialog.model.destroy).not.toHaveBeenCalled();
+            });
+
+            it("calls showErrors", function() {
+                expect(this.dialog.showErrors).toHaveBeenCalled();
+            });
         });
     });
 });

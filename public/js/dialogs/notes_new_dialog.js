@@ -56,6 +56,10 @@
         saveFailed : function() {
             this.$("button.submit").stopLoading();
             this.showErrors();
+            if(!this.model.isNew()) {
+                this.model.destroy();
+                this.model.unset('id');
+            }
         },
 
         additionalContext : function() {

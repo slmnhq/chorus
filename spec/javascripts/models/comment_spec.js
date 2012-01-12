@@ -13,7 +13,7 @@ describe("chorus.models.Comment", function() {
     });
 
     it("has the correct urlTemplate", function() {
-        expect(this.model.urlTemplate).toBe("comment/{{entityType}}/{{entityId}}");
+        expect(this.model.urlTemplate()).toBe("comment/{{entityType}}/{{entityId}}/{{id}}");
     });
 
     describe("validation", function() {
@@ -103,8 +103,8 @@ describe("chorus.models.Comment", function() {
             });
 
             it("sets the url of each upload", function() {
-                expect(this.fileUpload1.data.url).toBe(this.model.url() + '/' + this.model.get('id') + '/file');
-                expect(this.fileUpload2.data.url).toBe(this.model.url() + '/' + this.model.get('id') + '/file');
+                expect(this.fileUpload1.data.url).toBe(this.model.url() + '/file');
+                expect(this.fileUpload2.data.url).toBe(this.model.url() +  '/file');
             });
 
             describe("when all saves succeed", function() {
