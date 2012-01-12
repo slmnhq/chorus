@@ -131,10 +131,48 @@ describe("chorus.dialogs.InstancePermissions", function() {
                             this.dialog.$("a.save_owner").click();
                         });
 
-                        xit("should launch the change owner confirmation dialog", function() {
+                        it("should launch the change owner confirmation dialog", function() {
                             expect(this.dialog.launchSubModal).toHaveBeenCalled();
                             var submodal = this.dialog.launchSubModal.mostRecentCall.args[0];
-                            expect(submodal).toBeA(chorus.alerts.InstanceOwnerChange);
+                            expect(submodal).toBeA(chorus.alerts.InstanceChangeOwner);
+                        });
+
+                        describe("confirming the new owner", function() {
+                            beforeEach(function() {
+                                var submodal = this.dialog.launchSubModal.mostRecentCall.args[0];
+                                spyOn(this.instance, 'save').andCallThrough();
+                                submodal.trigger("confirmChangeOwner");
+                            });
+
+                            it("sets the owner id on the instance", function() {
+                                expect(this.instance.get("ownerId")).toBe("222");
+                            });
+
+                            it("saves the instance", function() {
+                                expect(this.instance.save).toHaveBeenCalled();
+                            });
+
+                            describe("when the save succeeds", function() {
+                                beforeEach(function() {
+                                    spyOn(chorus, 'toast');
+                                    this.instance.trigger("saved");
+                                });
+
+                                it("shows a toast message", function() {
+                                    expect(chorus.toast).toHaveBeenCalledWith("instances.confirm_change_owner.toast");
+                                });
+                            });
+
+                            describe("when the save fails", function() {
+                                beforeEach(function() {
+                                    this.instance.serverErrors = [{ message: "shut up" }];
+                                    this.instance.trigger("saveFailed");
+                                });
+
+                                it("displays the server errors in the errors div", function() {
+                                    expect(this.dialog.$(".errors")).toContainText("shut up");
+                                });
+                            });
                         });
                     });
                 });
@@ -151,7 +189,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
             context("clicking the switch to individual account link", function() {
                 beforeEach(function() {
                     spyOn(this.dialog, "launchSubModal").andCallThrough();
-                    this.dialog.model = fixtures.instanceAccount({ shared : "yes", dbUserName : "foo", id : "999" });
+                    this.dialog.sharedAccount = fixtures.instanceAccount({ shared : "yes", dbUserName : "foo", id : "999" });
                     this.dialog.$("a.remove_shared_account").click();
                 });
 
@@ -162,12 +200,12 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 context("when the alert is confirmed", function() {
                     beforeEach(function() {
-                        spyOn(this.dialog.model, "save").andCallThrough();
+                        spyOn(this.dialog.sharedAccount, "save").andCallThrough();
                         this.dialog.launchSubModal.calls[0].args[0].confirmAlert();
                     });
 
                     it("calls save on the account with shared:no", function() {
-                        expect(this.dialog.model.save.calls[0].args[0].shared).toBe("no");
+                        expect(this.dialog.sharedAccount.save.calls[0].args[0].shared).toBe("no");
                     });
 
                     it("only sends the shared parameter", function() {
@@ -180,9 +218,9 @@ describe("chorus.dialogs.InstancePermissions", function() {
                             spyOn(chorus, 'toast');
                             this.otherSavedSpy = jasmine.createSpy();
                             spyOn(this.dialog, "postRender").andCallThrough();
-                            this.dialog.model.bind("saved", this.otherSavedSpy);
+                            this.dialog.sharedAccount.bind("saved", this.otherSavedSpy);
                             expect(this.dialog.instance.has("sharedAccount")).toBeTruthy();
-                            this.dialog.model.trigger("saved");
+                            this.dialog.sharedAccount.trigger("saved");
                         });
 
                         it("displays a toast message", function() {
@@ -202,7 +240,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                             it("doesn't display a toast message", function() {
                                 chorus.toast.reset();
                                 this.otherSavedSpy.reset();
-                                this.dialog.model.trigger("saved");
+                                this.dialog.sharedAccount.trigger("saved");
 
                                 expect(chorus.toast).not.toHaveBeenCalled();
                                 expect(this.otherSavedSpy).toHaveBeenCalled();
@@ -213,7 +251,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     context("when the save fails", function() {
                         beforeEach(function() {
                             spyOn(chorus, 'toast');
-                            this.dialog.model.trigger("saveFailed");
+                            this.dialog.sharedAccount.trigger("saveFailed");
                         });
 
                         it("displays a save failed toast message", function() {
@@ -223,7 +261,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         context("and then a save succeeds", function() {
                             beforeEach(function() {
                                 chorus.toast.reset();
-                                this.dialog.model.trigger("saved");
+                                this.dialog.sharedAccount.trigger("saved");
                             });
 
                             it("doesn't display the saved toast message", function() {
@@ -353,12 +391,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 describe("when the save fails", function() {
                     beforeEach(function() {
-                        this.accountBeingEdited.set({ serverErrors : [
-                            {
-                                "message": "You can't do that, dude"
-                            }
-                        ]})
-
+                        this.accountBeingEdited.serverErrors = [{ message: "You can't do that, dude" }];
                         this.accountBeingEdited.trigger('saveFailed');
                     })
 
@@ -707,4 +740,3 @@ describe("chorus.dialogs.InstancePermissions", function() {
         });
     });
 });
-;

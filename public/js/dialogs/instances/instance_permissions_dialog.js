@@ -18,8 +18,10 @@
         },
 
         makeModel : function() {
-            this.instance = this.options.pageModel;
-            this.model = this.instance.sharedAccount();
+            this._super("makeModel", arguments);
+            this.instance = this.model;
+
+            this.sharedAccount = this.instance.sharedAccount();
             this.users = new ns.models.UserSet();
             this.users.bind("reset", this.populateSelect, this);
             this.users.sortAsc("lastName");
@@ -32,13 +34,14 @@
             this.collection.bind("saveFailed", this.saveFailed, this);
             this.collection.bind("validationFailed", this.saveFailed, this);
 
-            this._super("makeModel")
         },
 
-        additionalContext: function() {
+        additionalContext: function(context) {
+            var accountServerErrors = (this.account && this.account.serverErrors) || [];
             return {
                 sharedAccount: !!this.instance.sharedAccount(),
-                accountCount: this.collection.reject(function(account) {return account.isNew()}).length
+                accountCount: this.collection.reject(function(account) {return account.isNew()}).length,
+                serverErrors: accountServerErrors.concat(context.serverErrors || [])
             };
         },
 
@@ -70,7 +73,7 @@
             var li = $(event.target).closest("li");
             var accountId = li.data("id");
             li.addClass("editing");
-            this.account = this.resource = this.collection.get(accountId);
+            this.account = this.collection.get(accountId);
         },
 
         cancelChangeOwner : function(e){
@@ -102,7 +105,22 @@
 
         confirmSaveOwner: function(e) {
             e.preventDefault();
-            this.launchSubModal("hi");
+            var selectedUserId = this.$("select.name").val();
+            var selectedUser = this.users.get(selectedUserId);
+            var confirmAlert = new ns.alerts.InstanceChangeOwner({ displayName: selectedUser.displayName() });
+            confirmAlert.bind("confirmChangeOwner", this.saveOwner, this);
+            this.launchSubModal(confirmAlert);
+        },
+
+        saveOwner: function() {
+            var selectedUserId = this.$("select.name").val();
+            this.instance.save({ ownerId: selectedUserId });
+            this.instance.bind("saved", displaySuccessToast);
+            this.instance.bind("saveFailed", this.showErrors, this);
+
+            function displaySuccessToast() {
+                ns.toast("instances.confirm_change_owner.toast");
+            }
         },
 
         newAccount: function(e) {
@@ -171,6 +189,8 @@
             var li = $(event.target).closest("li");
             li.find("a.save").startLoading("instances.permissions.saving")
 
+            this.account.bind("validationFailed", function() { this.showErrors(this.account) }, this);
+            this.account.bind("saveFailed", function() { this.showErrors(this.account) }, this);
             this.account.save({
                 userId: li.find("select").val(),
                 dbUserName : li.find("input[name=dbUserName]").val(),
@@ -213,13 +233,13 @@
         },
 
         confirmRemoveSharedAccount : function() {
-            var map = this.model;
-            this.model.bind("saved", displaySuccessToast, this);
-            this.model.bind("saveFailed", displayFailureToast);
+            var map = this.sharedAccount;
+            this.sharedAccount.bind("saved", displaySuccessToast, this);
+            this.sharedAccount.bind("saveFailed", displayFailureToast);
 
-            var id = this.model.get("id")
-            this.model.clear({silent: true});
-            this.model.save({id: id, shared: "no"});
+            var id = this.sharedAccount.get("id")
+            this.sharedAccount.clear({silent: true});
+            this.sharedAccount.save({id: id, shared: "no"});
 
             function displaySuccessToast() {
                 ns.toast("instances.shared_account_removed");
