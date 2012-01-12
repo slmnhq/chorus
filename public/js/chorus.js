@@ -18,7 +18,6 @@
 
             //bind global state events here
             self.session.bind("needsLogin", self.requireLogin);
-            self.router.bind("route", self.session.check);
 
             self.startHistory();
         };

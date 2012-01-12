@@ -55,7 +55,6 @@
                         var page = applyConstructor(pageClass, args);
                         page.pageOptions = self.app.pageOptions;
                         delete self.app.pageOptions;
-                        self.trigger("route", className, args);
                         self.app.page = page;
 
                         $("#page").html(page.render().el).attr("data-page", className);
@@ -66,10 +65,16 @@
                     window.scroll(0, 0);
                 };
 
-                if (className == 'Login' || self.app.session.loggedIn()) {
+                if (className == 'Login') {
                     navFunction();
                 } else {
-                    self.app.session.fetch({success: navFunction});
+                    self.app.session.fetch({
+                        success: function(session, resp) {
+                            if (resp.status == "ok") {
+                                navFunction();
+                            }
+                        }
+                    });
                 }
             };
 

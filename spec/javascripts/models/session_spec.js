@@ -123,7 +123,7 @@ describe("chorus.models.Session", function() {
 
     describe("#fetch", function() {
         beforeEach(function() {
-            this.model = new models.Session();
+            this.model = new models.Session({ id : "1234", foo : "bar" });
             this.needsLoginSpy = jasmine.createSpy();
             $.cookie("authid", "1234");
             this.model.bind("needsLogin", this.needsLoginSpy);
@@ -155,10 +155,12 @@ describe("chorus.models.Session", function() {
 
         context("when the session is not valid", function() {
             beforeEach(function() {
+                expect(this.model.user()).toBeTruthy();
+                
                 this.server.respondWith(
                     'GET',
                     '/edc/auth/checkLogin/?authid=1234',
-                    this.prepareResponse({ status :"fail", message : "no way"}));
+                    this.prepareResponse({ status :"fail", message : "no way", resource : []}));
 
                 this.server.respond();
             })
@@ -167,9 +169,17 @@ describe("chorus.models.Session", function() {
                 expect(this.needsLoginSpy).toHaveBeenCalled();
             })
 
+            it("clears the session attributes", function() {
+                expect(_.keys(this.model.attributes).length).toBe(0);
+            });
+
             it("clears the session error messages", function() {
                 expect(this.model.serverErrors).toBeUndefined();
             })
+
+            it("clears the memorized user", function() {
+                expect(this.model.user()).toBeFalsy();
+            });
         })
     })
 

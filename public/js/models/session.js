@@ -30,6 +30,8 @@
             options.success = function(model, response, xhr) {
                 if (response.status !== "ok") {
                     self.serverErrors = undefined;
+                    delete self._user;
+                    self.clear();
                     self.trigger("needsLogin");
                 }
               if (success) success(model, response);
