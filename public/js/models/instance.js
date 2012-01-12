@@ -35,7 +35,7 @@
             })
         },
 
-        isOwner : function(user) {            
+        isOwner : function(user) {
             return this.owner().get("id") == user.get('id') && user instanceof chorus.models.User
         },
 
@@ -61,6 +61,11 @@
                 }, this);
             }
             return this._accountForCurrentUser;
+        },
+
+        accountForOwner : function() {
+            var ownerId = this.get("ownerId");
+            return _.find(this.accounts().models, function(account) {return account.get("user").id == ownerId});
         },
 
         sharedAccount: function() {

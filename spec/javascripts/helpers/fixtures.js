@@ -1352,6 +1352,11 @@
                     dbUserName : "gpadmin"
                 }, overrides);
                 return new chorus.models.InstanceAccount(attributes);
+            },
+
+           instanceAccountSet: function(models) {
+                models = models || [this.instanceAccount(), this.instanceAccount()];
+                return new chorus.models.InstanceAccountSet(models);
             }
         });
     });

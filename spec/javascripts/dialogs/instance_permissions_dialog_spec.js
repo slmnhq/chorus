@@ -1,6 +1,7 @@
 describe("chorus.dialogs.InstancePermissions", function() {
     beforeEach(function() {
         spyOn(chorus, 'styleSelect');
+        stubModals();
     });
 
     describe("#setup", function() {
@@ -23,7 +24,6 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
         describe("#render", function() {
             beforeEach(function() {
-                stubModals();
                 this.dialog.launchModal();
             })
 
@@ -131,7 +131,6 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                             it("doesn't display the saved toast message", function() {
                                 expect(chorus.toast).not.toHaveBeenCalledWith("instances.shared_account_removed");
-
                             });
                         })
                     })
@@ -153,7 +152,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 fixtures.instanceAccount({ id: '3', user: this.owner})
             ]);
             this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.instance })
-            this.dialog.render();
+            this.dialog.launchModal();
             $('#jasmine_content').append(this.dialog.el);
         });
 
@@ -511,7 +510,93 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     expect(this.dialog.$("select.name option").eq(1)).toHaveText("ben maulden");
                 });
             });
+        });
 
+        context("clicking the switch to shared account link", function() {
+            beforeEach(function() {
+                spyOn(this.dialog, "launchSubModal").andCallThrough();
+                this.ownerAccount = fixtures.instanceAccount({shared: 'no', dbUserName : "foo", id : "888"});
+                spyOn(this.ownerAccount, "save").andCallThrough();
+                spyOn(this.dialog.instance, 'accountForOwner').andReturn(this.ownerAccount);
+                this.dialog.$("a.add_shared_account").click();
+            });
+
+            it("launches the Add Shared Account dialog", function() {
+                expect(this.dialog.launchSubModal).toHaveBeenCalled();
+                expect(this.dialog.launchSubModal.calls[0].args[0] instanceof chorus.alerts.AddSharedAccount).toBeTruthy();
+            });
+
+            context("when the alert is confirmed", function() {
+                beforeEach(function() {
+                    this.dialog.launchSubModal.calls[0].args[0].confirmAlert();
+                });
+
+                it("calls save on the account with shared:yes", function() {
+                    expect(this.ownerAccount.save.calls[0].args[0].shared).toBe("yes");
+                });
+
+                it("only sends the shared parameter", function() {
+                    expect(_.last(this.server.requests).url).toBe("/edc/instance/accountmap/888")
+                    expect(_.last(this.server.requests).requestBody).toBe("id=888&shared=yes");
+                })
+
+                context("when the save succeeds", function() {
+                    beforeEach(function() {
+                        spyOn(chorus, 'toast');
+                        this.otherSavedSpy = jasmine.createSpy();
+                        spyOn(this.dialog, "postRender").andCallThrough();
+                        this.ownerAccount.bind("saved", this.otherSavedSpy);
+                        expect(this.dialog.instance.has("sharedAccount")).toBeTruthy();
+                        this.ownerAccount.trigger("saved");
+                    });
+
+                    it("displays a toast message", function() {
+                        expect(chorus.toast).toHaveBeenCalledWith("instances.shared_account_added");
+                        expect(this.otherSavedSpy).toHaveBeenCalled();
+                    });
+
+                    it("clears shared account information from the instance model in the dialog", function() {
+                        expect(this.dialog.instance.has("sharedAccount")).toBeFalsy();
+                    })
+
+                    it("re-renders the dialog in the new individual account state", function() {
+                        expect(this.dialog.postRender).toHaveBeenCalled();
+                    })
+
+                    context("and the same model saves again", function() {
+                        it("doesn't display a toast message", function() {
+                            chorus.toast.reset();
+                            this.otherSavedSpy.reset();
+                            this.ownerAccount.trigger("saved");
+
+                            expect(chorus.toast).not.toHaveBeenCalled();
+                            expect(this.otherSavedSpy).toHaveBeenCalled();
+                        });
+                    });
+                });
+
+                context("when the save fails", function() {
+                    beforeEach(function() {
+                        spyOn(chorus, 'toast');
+                        this.ownerAccount.trigger("saveFailed");
+                    });
+
+                    it("displays a save failed toast message", function() {
+                        expect(chorus.toast).toHaveBeenCalledWith("instances.shared_account_add_failed");
+                    });
+
+                    context("and then a save succeeds", function() {
+                        beforeEach(function() {
+                            chorus.toast.reset();
+                            this.ownerAccount.trigger("saved");
+                        });
+
+                        it("doesn't display the saved toast message", function() {
+                            expect(chorus.toast).not.toHaveBeenCalledWith("instances.shared_account_added");
+                        });
+                    })
+                })
+            });
         });
     });
 });

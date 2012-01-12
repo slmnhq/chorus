@@ -103,6 +103,23 @@ describe("chorus.models.Instance", function() {
         });
     });
 
+    describe("#accountForOwner", function() {
+        beforeEach(function() {
+            this.owner = this.instance.owner();
+            this.account1 = fixtures.instanceAccount();
+            this.account2 = fixtures.instanceAccount({
+                user : this.owner.attributes
+            })
+            this.accounts = fixtures.instanceAccountSet([this.account1, this.account2]);
+            spyOn(this.instance, "accounts").andReturn(this.accounts);
+        });
+
+        it("returns the account for the owner", function() {
+            expect(this.instance.accountForOwner()).toBeA(chorus.models.InstanceAccount);
+            expect(this.instance.accountForOwner()).toBe(this.account2);
+        });
+    });
+
     describe("#accounts", function() {
         beforeEach(function() {
             this.instanceAccounts = this.instance.accounts();
@@ -179,13 +196,13 @@ describe("chorus.models.Instance", function() {
                 })
             });
 
-            it("requires valid name", function(){
+            it("requires valid name", function() {
                 this.attrs.name = "foo bar"
                 expect(this.instance.performValidation(this.attrs)).toBeFalsy();
                 expect(this.instance.errors.name).toMatchTranslation("instance.validation.name_pattern")
             })
 
-            it("requires valid port", function(){
+            it("requires valid port", function() {
                 this.attrs.port = "z123"
                 expect(this.instance.performValidation(this.attrs)).toBeFalsy();
                 expect(this.instance.errors.port).toBeTruthy();
@@ -207,7 +224,7 @@ describe("chorus.models.Instance", function() {
                 expect(this.instance.errors.size).toBeTruthy();
             })
 
-            it("requires valid size", function(){
+            it("requires valid size", function() {
                 this.attrs.size = "1234z"
                 expect(this.instance.performValidation(this.attrs)).toBeFalsy();
                 expect(this.instance.errors.size).toBeTruthy();

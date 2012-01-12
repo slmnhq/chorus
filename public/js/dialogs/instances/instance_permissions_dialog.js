@@ -10,7 +10,8 @@
             "click a.save" : "save",
             "click a.cancel" : "cancel",
             "click button.add_account" : "newAccount",
-            "click a.remove_shared_account" : "removeSharedAccountAlert"
+            "click a.remove_shared_account" : "removeSharedAccountAlert",
+            "click a.add_shared_account" : "addSharedAccountAlert"
         },
 
         makeModel : function() {
@@ -177,6 +178,37 @@
                 ns.toast("instances.shared_account_remove_failed");
                 map.unbind("saved", displaySuccessToast);
                 map.unbind("saveFailed", displayFailureToast);
+            }
+        },
+
+        addSharedAccountAlert : function(e) {
+            e.preventDefault();
+            var alert = new ns.alerts.AddSharedAccount();
+            alert.bind("addSharedAccount", _.bind(this.confirmAddSharedAccount, this));
+            this.launchSubModal(alert);
+        },
+
+        confirmAddSharedAccount : function() {
+            var account = this.instance.accountForOwner();
+            account.bind("saved", displaySuccessToast, this);
+            account.bind("saveFailed", displayFailureToast);
+
+            var id = account.get("id")
+            account.clear({silent: true});
+            account.save({id: id, shared: "yes"});
+
+            function displaySuccessToast() {
+                ns.toast("instances.shared_account_added");
+                this.instance.unset("sharedAccount");
+                this.render();
+                account.unbind("saved", displaySuccessToast);
+                account.unbind("saveFailed", displayFailureToast);
+            }
+
+            function displayFailureToast() {
+                ns.toast("instances.shared_account_add_failed");
+                account.unbind("saved", displaySuccessToast);
+                account.unbind("saveFailed", displayFailureToast);
             }
         }
     });
