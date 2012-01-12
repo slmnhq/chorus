@@ -1182,7 +1182,7 @@
                 return _.extend({
                     id : id,
                     connectable : true,
-                    name : "Database " + id,
+                    name : "Database_" + id,
                     creatable : true
                 }, overrides);
             },
@@ -1191,7 +1191,7 @@
                 var id = this.nextId();
                 return {
                     id : id.toString(),
-                    name : 'Instance ' + id
+                    name : 'Instance_' + id
                 }
             },
 
@@ -1265,7 +1265,7 @@
 
                 var attributes = _.extend({
                     id : id,
-                    name : "Schema " + id,
+                    name : "Schema_" + id,
                     lastUpdatedStamp : "2012-01-04 14:42:15.318",
                     lastUpdatedTxStamp : "2012-01-04 14:42:15.309",
                     createdStamp : "2012-01-04 14:42:15.318",
