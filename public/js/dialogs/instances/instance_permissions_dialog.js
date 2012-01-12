@@ -111,14 +111,14 @@
             this.account = this.resource = new ns.models.InstanceAccount({instanceId: this.instance.get("id")});
             this.collection.add(this.account);
             this.$("button.add_account").attr("disabled", "disabled");
-            this.$("li[data-id=new]").addClass('editing new');
-            this.$("li[data-id=new] div.name").addClass("hidden");
+            var newLi = this.$("li[data-id=new]");
+            newLi.addClass('editing new');
+            newLi.find("div.name").addClass("hidden");
 
             this.populateNewAccountSelect();
 
-            var select = this.$("li[data-id=new] select.name");
-            select.removeClass("hidden");
-            chorus.styleSelect(select);
+            newLi.find(".select_container").removeClass("hidden");
+            chorus.styleSelect(newLi.find("select.name"));
         },
 
         populateSelect: function() {

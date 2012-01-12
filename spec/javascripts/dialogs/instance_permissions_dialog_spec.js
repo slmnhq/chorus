@@ -31,11 +31,10 @@ describe("chorus.dialogs.InstancePermissions", function() {
             this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.instance })
         })
 
-
         describe("#render", function() {
             beforeEach(function() {
                 this.dialog.launchModal();
-            })
+            });
 
             it("displays the shared account subheader", function() {
                 expect(this.dialog.$(".sub_header .details_text").text()).toMatchTranslation("instances.shared_account")
@@ -53,7 +52,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 expect(this.dialog.$("a.edit")).toExist();
             })
 
-            it("displays an Change owner link", function() {
+            it("displays the Change owner link", function() {
                 expect(this.dialog.$("a.change_owner")).toExist();
             })
 
@@ -235,7 +234,6 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 });
             });
         })
-
     });
 
     context("when the instance has individual accounts", function() {
@@ -251,18 +249,23 @@ describe("chorus.dialogs.InstancePermissions", function() {
             ]);
             this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.instance })
             this.dialog.launchModal();
+
+            var ownerAccountId = this.instance.accountForOwner().get('id');
+            this.ownerLi = this.dialog.$("li[data-id="   + ownerAccountId + "]");
+            this.otherLis = this.dialog.$("li[data-id!=" + ownerAccountId + "]");
+
             $('#jasmine_content').append(this.dialog.el);
         });
 
-        it("only shows 'owner' and 'change owner' in the row corresponding to the owner", function() {
-            var ownerAccountId = this.instance.accountForOwner().get('id');
-            var ownerLi = this.dialog.$("li[data-id="   + ownerAccountId + "]");
-            var otherLis = this.dialog.$("li[data-id!=" + ownerAccountId + "]");
+        it("only shows 'owner' in the row corresponding to the owner", function() {
+            expect(this.ownerLi).toContain("span.owner");
+            expect(this.otherLis).not.toContain("span.owner");
+            expect(this.otherLis).not.toContainTranslation("instances.permissions.change_owner");
+        });
 
-            expect(ownerLi).toContainTranslation("instances.permissions.owner");
-            expect(ownerLi).toContainTranslation("instances.permissions.change_owner");
-            expect(otherLis).not.toContainTranslation("instances.permissions.owner");
-            expect(otherLis).not.toContainTranslation("instances.permissions.change_owner");
+        it("only shows the 'make owner' links for users that aren't already the owner", function() {
+            expect(this.ownerLi).not.toContain("a.make_owner");
+            expect(_.all(this.otherLis, function(li) { return $(li).find("a.make_owner") })).toBeTruthy();
         });
 
         it("sorts the list", function() {
@@ -289,21 +292,6 @@ describe("chorus.dialogs.InstancePermissions", function() {
         it("displays the name of each account's user", function() {
             expect(this.dialog.$("li[data-id=1] .name")).toHaveText("bob zzap");
             expect(this.dialog.$("li[data-id=2] .name")).toHaveText("jim aardvark");
-        });
-
-        describe("clicking the 'change owner' link", function() {
-            beforeEach(function() {
-                var ownerAccountId = this.instance.accountForOwner().get('id');
-                this.ownerLi = this.dialog.$("li[data-id="   + ownerAccountId + "]");
-                this.otherLis = this.dialog.$("li[data-id!=" + ownerAccountId + "]");
-
-                this.ownerLi.find("a.change_owner").click();
-            });
-
-            it("only shows the owner select in the owner li", function() {
-                expect(this.ownerLi.find(".select_container")).not.toHaveClass("hidden");
-                expect(this.otherLis.find(".select_container")).toHaveClass("hidden");
-            });
         });
 
         describe("editing a user's account credentials", function() {
@@ -445,6 +433,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     fixtures.user({ firstName: "bob", lastName: "zzap", id: '111' })
                 ]);
                 this.dialog.$("button.add_account").click();
+                this.newLi = this.dialog.$("li:last");
             });
 
             it("adds an option in the user select, sorted, for each chorus user who does not already have permissions", function() {
@@ -453,12 +442,16 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 expect(this.dialog.$("select.name option").length).toBe(2);
             });
 
+            it("shows the user select", function() {
+                expect(this.newLi.find(".select_container")).not.toHaveClass("hidden");
+            });
+
             it("adds a new item to the accounts list", function() {
                 expect(this.dialog.$("li").length).toBe(4);
             });
 
             it("puts the new item into edit mode", function() {
-                expect(this.dialog.$("li:last")).toHaveClass("editing");
+                expect(this.newLi).toHaveClass("editing");
             });
 
             it("adds the 'new' class to the new li", function() {

@@ -18,9 +18,15 @@
                     {{/if}}
                     <a href="#" class="edit">{{t "instances.permissions.edit"}}</a>
                     {{#if isOwner}}
-                        <a href="#" class="change_owner">{{t "instances.permissions.change_owner"}}</a>
+                        {{#if ../../sharedAccount}}
+                            <a href="#" class="change_owner">{{t "instances.permissions.change_owner"}}</a>
+                        {{/if}}
                         <a href="#" class="save_owner hidden">{{t "instances.permissions.save_owner"}}</a>
                         <a href="#" class="cancel_change_owner hidden">{{t "actions.cancel"}}</a>
+                    {{else}}
+                        {{#unless ../../sharedAccount}}
+                            <a href="#" class="make_owner">{{t "instances.permissions.make_owner"}}</a>
+                        {{/unless}}
                     {{/if}}
                 </div>
                 <div class="image">
