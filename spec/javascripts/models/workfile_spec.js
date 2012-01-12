@@ -93,6 +93,16 @@ describe("chorus.models.Workfile", function() {
         });
     });
 
+    describe("createDraft", function() {
+        it("sets the required attributes", function() {
+            var workfile = new chorus.models.Workfile({id: "123", workspaceId: "456", content: "asdf"});
+            var draft = workfile.createDraft();
+            expect(draft.get("workfileId")).toBe("123");
+            expect(draft.get("workspaceId")).toBe("456");
+            expect(draft.get("content")).toBe("asdf");
+        });
+    });
+
     describe("isText", function() {
         context("when the workfile is a plain textfile", function() {
             beforeEach(function() {

@@ -27,7 +27,7 @@
         },
 
         createDraft : function() {
-            return new ns.Draft({workfileId: this.get("id") , workspaceId : this.get("workspaceId")})
+            return new ns.Draft({workfileId: this.get("id") , workspaceId : this.get("workspaceId"), content : this.get("content")})
         },
 
         createNewVersion : function() {
