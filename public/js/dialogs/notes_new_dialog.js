@@ -13,7 +13,7 @@
         postRender : function() {
             this.$("input[type=file]").fileupload({
                 add : _.bind(this.desktopFileChosen, this),
-                dataType : "text",
+                dataType : "json",
                 dropZone : this.$("input[type=file]")
             });
         },
@@ -55,6 +55,7 @@
 
         saveFailed : function() {
             this.$("button.submit").stopLoading();
+            this.showErrors();
         },
 
         additionalContext : function() {

@@ -201,8 +201,8 @@ describe("NotesNewDialog", function() {
                 }, this));
             });
 
-            it("has a dataType of 'text' for FF3.6 support", function() {
-                expect(this.fileUploadOptions.dataType).toBe('text');
+            it("has a dataType of 'json'", function() {
+                expect(this.fileUploadOptions.dataType).toBe('json');
             });
 
             it("points the dropzone to the file input to avoid insanity", function() {
@@ -389,5 +389,16 @@ describe("NotesNewDialog", function() {
             this.dialog.model.trigger("saved");
             expect("invalidated").toHaveBeenTriggeredOn(this.dialog.pageModel);
         })
+    });
+
+    describe("saveFailed", function() {
+        beforeEach(function() {
+            spyOn(this.dialog, 'showErrors');
+            this.dialog.saveFailed();
+        });
+
+        it("calls showErrors", function() {
+            expect(this.dialog.showErrors).toHaveBeenCalled();
+        });
     });
 });

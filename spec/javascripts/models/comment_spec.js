@@ -110,7 +110,6 @@ describe("chorus.models.Comment", function() {
             describe("when all saves succeed", function() {
                 beforeEach(function() {
                     this.submitObject1.promise.done.mostRecentCall.args[0]();
-                    this.submitObject1.promise.done.mostRecentCall.args[0]();
                     this.submitObject2.promise.done.mostRecentCall.args[0]();
                 })
 
@@ -120,7 +119,37 @@ describe("chorus.models.Comment", function() {
                     expect(this.fileUploadSuccessSpy.callCount).toBe(1);
 
                 })
-            })
+            });
+
+            describe("when some of the saves have api failure", function() {
+                beforeEach(function() {
+                    this.submitObject1.promise.done.mostRecentCall.args[0]();
+                    this.submitObject2.promise.done.mostRecentCall.args[0](
+                        {
+                            message: [
+                                {
+                                    message: "The field fileToUpload[] exceeds its maximum permitted  size of 10485760 bytes."
+                                }
+                            ],
+                            resource: [],
+                            status: "fail"
+                        }
+                    );
+                });
+                it("triggers fileUploadFailed", function() {
+                    expect(this.fileUploadSuccessSpy).not.toHaveBeenCalled();
+                    expect(this.fileUploadFailedSpy).toHaveBeenCalled();
+                    expect(this.fileUploadFailedSpy.callCount).toBe(1);
+                });
+
+                it("puts the error on the file object", function() {
+                    expect(this.fileUpload2.serverErrors).toEqual([{message:'The field fileToUpload[] exceeds its maximum permitted  size of 10485760 bytes.'}]);
+                });
+
+                it("copies the errors to the model", function() {
+                    expect(this.model.serverErrors).toEqual([{message:'The field fileToUpload[] exceeds its maximum permitted  size of 10485760 bytes.'}]);
+                });
+            });
 
             describe("when some of the saves have failed", function() {
                 beforeEach(function() {

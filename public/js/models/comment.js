@@ -37,12 +37,18 @@
             this.files.splice(this.files.indexOf(uploadModel), 1);
         },
 
-        uploadSuccess: function() {
+        uploadSuccess: function(file, response) {
+            if (response && response.status == "fail") {
+                this.fileUploadErrors++;
+                this.serverErrors || (this.serverErrors = []);
+                this.serverErrors = this.serverErrors.concat(response.message);
+                file.serverErrors = response.message;
+            }
             this.filesToBeSaved--;
             this.uploadComplete();
         },
 
-        uploadFailed: function () {
+        uploadFailed: function (file ,response) {
             this.filesToBeSaved--;
             this.fileUploadErrors++;
             this.uploadComplete();
@@ -63,8 +69,8 @@
             this.filesToBeSaved = this.files.length;
             _.each(this.files, _.bind(function(file) {
                 file.data.url = this.url() + "/" + this.get('id') + "/file";
-                file.data.submit().done(_.bind(this.uploadSuccess, this))
-                    .fail(_.bind(this.uploadFailed, this));
+                file.data.submit().done(_.bind(this.uploadSuccess, this, file))
+                    .fail(_.bind(this.uploadFailed, this, file));
             }, this));
         }
     });
