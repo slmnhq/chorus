@@ -2,7 +2,6 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "save as Menu" do
   before do
-
     login('edcadmin', 'secret')
     visit("#/workspaces")
 
@@ -20,17 +19,18 @@ describe "save as Menu" do
     fill_in 'fileName', :with => "wicked_data#{Time.now.to_i}"
     click_button "Add SQL File"
     wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
-    wait_until { evaluate_script('$(".content").css("height")').to_i > 10 }
+    wait_until {
+        !!evaluate_script('chorus.page.mainContent && chorus.page.mainContent.content && chorus.page.mainContent.content.editor && !!chorus.page.mainContent.content.editor.setValue')
+    }
   end
-  it "pops up the right menu" do
 
+  it "pops up the right menu" do
     page.find(".save_options .save_as_new").should_not be_visible
     page.find(".save_options .save_as_current").should_not be_visible
     page.find(".save .save_as").click
     wait_until { page.find(".qtip[aria-hidden=false]") }
     page.find("a.save_as_new").should be_visible
     page.find("a.save_as_current").should be_visible
-
   end
 
   it "click the save as replace version" do
