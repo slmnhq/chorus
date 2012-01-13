@@ -31,8 +31,23 @@
 
                 img {
                     float: right;
+
+                    &.info {
+                        display: none;
+                    }
                 }
             }
         }
     }
+
+    &.info {
+        img.message {
+            display: none;
+        }
+
+        img.info {
+            display: inline !important;
+        }
+    }
 }
+

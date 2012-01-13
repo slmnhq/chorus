@@ -4,11 +4,14 @@
         title : t("workfile.alert.title"),
         ok : t("workfile.alert.open_draft"),
         cancel : t("workfile.alert.latest_version"),
+        additionalClass : "info",
 
         postRender : function() {
             this.$("button.cancel").click(_.bind(function() {
                 this.deleteDraft();
             }, this))
+
+            _.delay(_.bind(function() { this.$("button.submit").focus() }, this), 250);
         },
 
         confirmAlert : function() {

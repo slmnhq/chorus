@@ -14,7 +14,8 @@
             return {
                 title : this.title,
                 text : this.text,
-                ok : this.ok
+                ok : this.ok,
+                cancel : this.cancel || t("actions.cancel")
             }
         },
 

@@ -28,6 +28,20 @@ describe("chorus.alerts", function() {
             expect(this.alert.$("button.submit").text()).toBe("Do it!");
         })
 
+        it("displays the default cancel text on the cancel button", function() {
+            expect(this.alert.$("button.cancel").text()).toMatchTranslation("actions.cancel");
+        })
+
+        context("when a custom cancel is provided", function() {
+            beforeEach(function() {
+                this.alert.cancel = "Don't do it!"
+                this.alert.render();
+            })
+
+            it("displays the 'cancel' text on the cancel button", function() {
+                expect(this.alert.$("button.cancel").text()).toBe("Don't do it!");
+            })
+        })
         it("displays server errors", function() {
             this.alert.resource.set({serverErrors : [
                 { message: "Hi there" }
