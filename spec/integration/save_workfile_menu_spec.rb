@@ -20,7 +20,7 @@ describe "save as Menu" do
     fill_in 'fileName', :with => "wicked_data#{Time.now.to_i}"
     click_button "Add SQL File"
     wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
-
+    wait_until { evaluate_script('$(".content").css("height")').to_i > 10 }
   end
   it "pops up the right menu" do
 
