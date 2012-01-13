@@ -1,5 +1,5 @@
 ;(function(ns) {
-    var sizes, weights, colors;
+    var sizes, weights, colors, combinations;
 
     sizes = [
         12,
@@ -21,22 +21,35 @@
         "dark",
         "secondary",
         "weak",
-        "link",
+        "link"
     ];
 
-    mixins = {
-        "24 semibold black" : "heading-normal",
-        "19 semibold dark" : "heading-sidebar",
-        "13 normal dark" : "dialog-label",
-        "14 normal dark" : "font-normal-alpha",
-        "13 normal black" : "font-normal-beta",
+    combinations = {
+        "12 normal secondary" : "secondary-text-small, activity timestamps,...",
+        "12 normal dark" : "comment timestamp in dashboard workspace list sidebar",
         "12 semibold black" : "font-normal-gamma",
-        "12 semibold dark"  : "font-content-details",
-        "14 normal black" : "font-menu",
-        "14 semibold dark" : "list-section-heading",
+        "12 semibold dark"  : "font-content-details (sub-header)",
+        "12 semibold link" : "sidebar actions links",
+
+        "13 normal dark" : "dialog-label",
+        "13 normal black" : "font-normal-beta",
+
+        "14 normal dark" : "font-normal-alpha, user title in list view,...",
+        "14 normal black" : "font-menu, breadcrumbs",
         "14 normal secondary" : "secondary-text-normal",
-        "12 normal secondary" : "secondary-text-small",
+        "14 normal link"    : "normal links",
+        "14 semibold dark" : "list-section-heading",
         "14 semibold link"    : "author in activity stream",
+
+        "16 normal black" : "default font, user show page",
+
+        "18 normal dark" : "instance name in instance list",
+        "18 normal link" : "user and workfile names on list pages",
+        "18 semibold link" : "workspace names on dashboard workspace list",
+
+        "19 semibold dark" : "heading-sidebar",
+
+        "24 semibold black" : "heading-normal"
     };
 
     var sizeWeightCombos = [];
@@ -57,14 +70,14 @@
             var classes, size, weight, color;
             var self = this;
 
-            _.each(mixins, function(mixinName, classesString) {
+            _.each(combinations, function(combinationDescription, classesString) {
                 classes = classesString.split(" ");
                 size = classes[0];
                 weight = classes[1];
                 color = classes[2];
 
                 var td = self.findCell(size, weight, color);
-                td.addClass("mixin").text(mixinName);
+                td.addClass("combination").text(combinationDescription);
             });
         },
 
