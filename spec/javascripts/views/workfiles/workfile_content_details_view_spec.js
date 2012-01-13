@@ -51,7 +51,7 @@ describe("WorkfileContentDetails", function() {
         it("should show the save_options", function() {
             expect(this.view.$(".save_options")).toHaveClass("hidden");
         });
-        
+
         context("when user is editing the file", function() {
 
             it("should display the save button", function() {
@@ -70,7 +70,7 @@ describe("WorkfileContentDetails", function() {
                 context("and the save as current button is clicked", function() {
                     beforeEach(function() {
                         var event = $.Event("click");
-                        this.view.saveChanges(event);
+                        this.view.replaceCurrentVersion(event);
                     });
 
                     it("should display the 'Saved at' text", function() {

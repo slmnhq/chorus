@@ -36,7 +36,7 @@
                         render: function(event, api) {
                             var me = this;
                             $(api.elements.content).find(".save_as_current").bind('click', function(e) {
-                                self.saveChanges(e);
+                                self.replaceCurrentVersion(e);
                                 api.hide();
                             });
                             $(api.elements.content).find(".save_as_new").bind('click', function(e) {
@@ -48,7 +48,7 @@
                 });
             },
 
-            saveChanges: function(e) {
+            replaceCurrentVersion: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 this.trigger("file:saveCurrent");

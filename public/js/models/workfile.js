@@ -27,7 +27,7 @@
         },
 
         createDraft : function() {
-            return new ns.Draft({workfileId: this.get("id") , workspaceId : this.get("workspaceId"), content : this.get("content")})
+            return new ns.Draft({workfileId: this._workfileId(), workspaceId : this.get("workspaceId"), content : this.get("content")})
         },
 
         createNewVersion : function() {
@@ -36,14 +36,14 @@
                 baseVersionNum : this.get("baseVersionNum"),
                 content : this.get("content"),
                 commitMessage: this.get("commitMessage"),
-                "workfileId" : this.get("id")
+                "workfileId" : this._workfileId()
             })
         },
 
         allVersions : function() {
             return new ns.WorkfileVersionSet([], {
                 workspaceId : this.get("workspaceId"),
-                workfileId : this.get("id")
+                workfileId : this._workfileId()
             });
         },
 
@@ -75,6 +75,11 @@
 
         canEdit : function() {
             return true;
+        },
+
+        _workfileId : function() {
+            return this.get("id");
         }
+
     });
 })(chorus.models);

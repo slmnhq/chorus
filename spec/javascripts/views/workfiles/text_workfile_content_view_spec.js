@@ -66,7 +66,7 @@
         });
 
         afterEach(function(){
-            this.view.saveChanges();
+            this.view.replaceCurrentVersion();
         })
 
         it("sets readonly to false", function() {
@@ -95,7 +95,7 @@
 
         it("stops the timer when 'Save As' is clicked", function() {
             this.view.editor.setValue("Foo, Bar, Baz")
-            this.view.saveChanges();
+            this.view.replaceCurrentVersion();
             expect(this.view.saveTimer).toBe(undefined);
         });
 
@@ -143,7 +143,7 @@
 
             this.view.editText();
             this.view.editor.setCursor(0, 19);
-            this.view.saveChanges();
+            this.view.replaceCurrentVersion();
         });
 
         it("should still be in edit mode", function(){

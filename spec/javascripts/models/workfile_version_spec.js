@@ -1,11 +1,16 @@
 describe("chorus.models.WorkfileVersion", function() {
+    beforeEach(function() {
+        this.model = new chorus.models.WorkfileVersion({workspaceId: 1, workfileId: 2, versionNum: 3});
+    });
     describe("canEdit", function() {
         it("returns false when its version is not the current version", function() {
-            expect(new chorus.models.WorkfileVersion({workspaceId: 1, workfileId: 2, versionId: 3}).canEdit()).toBeFalsy();
+            this.model.set({latestVersionNum: "6", versionNum: "3"});
+            expect(this.model.canEdit()).toBeFalsy();
         });
 
-        xit("returns true when its version is the current version", function() {
-
+        it("returns true when its version is the current version", function() {
+            this.model.set({latestVersionNum: "6", versionNum: "6"});
+            expect(this.model.canEdit()).toBeTruthy();
         });
     });
 });

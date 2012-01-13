@@ -11,12 +11,12 @@
     });
 
     ns.pages.WorkfileShowPage = ns.pages.Base.extend({
-        setup : function(workspaceId, workfileId, versionId) {
+        setup : function(workspaceId, workfileId, versionNum) {
             this.workspace = new ns.models.Workspace({id: workspaceId});
             this.workspace.fetch();
 
-            if (versionId) {
-                this.model = new ns.models.WorkfileVersion({workfileId: workfileId, workspaceId: workspaceId, versionId: versionId})
+            if (versionNum) {
+                this.model = new ns.models.WorkfileVersion({workfileId: workfileId, workspaceId: workspaceId, versionNum: versionNum})
                 this.isOldVersion = true;
             } else {
                 this.model = new ns.models.Workfile({id: workfileId, workspaceId: workspaceId});

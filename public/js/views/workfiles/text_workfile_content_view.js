@@ -5,7 +5,7 @@
         saveInterval : 30000,
 
         setup : function(){
-            this.bind("file:saveCurrent", this.saveChanges);
+            this.bind("file:saveCurrent", this.replaceCurrentVersion);
             this.bind("file:createWorkfileNewVersion", this.createWorkfileNewVersion);
         },
 
@@ -64,7 +64,7 @@
             this.model.createDraft().save();
         },
 
-        saveChanges : function() {
+        replaceCurrentVersion : function() {
             this.stopTimer();
             this.cursor = this.editor.getCursor();
             this.model.set({"content" : this.editor.getValue()}, {silent : true});
