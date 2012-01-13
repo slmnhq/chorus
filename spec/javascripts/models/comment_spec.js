@@ -164,6 +164,28 @@ describe("chorus.models.Comment", function() {
 
                 })
             })
+
+            describe("when the file upload is cancelled", function() {
+                beforeEach(function() {
+                    this.submitObject1.promise.done.mostRecentCall.args[0]();
+                    this.submitObject2.promise.fail.mostRecentCall.args[0]({}, 'abort');
+                })
+
+                it("sets serverErrors on the model", function() {
+                    expect(this.model.serverErrors[0].message).toMatchTranslation('notes.new_dialog.upload_cancelled');
+                })
+            })
+
+            describe("when both uploads are cancelled", function() {
+                beforeEach(function() {
+                    this.submitObject1.promise.fail.mostRecentCall.args[0]({}, 'abort');
+                    this.submitObject2.promise.fail.mostRecentCall.args[0]({}, 'abort');
+                })
+
+                it("only has the cancel message once", function() {
+                    expect(this.model.serverErrors.length).toBe(1);
+                })
+            })
         });
     })
 

@@ -55,9 +55,13 @@
             this.uploadComplete();
         },
 
-        uploadFailed: function (file ,response) {
+        uploadFailed: function (file, e, response) {
             this.filesToBeSaved--;
             this.fileUploadErrors++;
+            if (response == "abort") {
+                this.message = this.message || t('notes.new_dialog.upload_cancelled')
+                this.serverErrors = [{message: this.message}];
+            }
             this.uploadComplete();
         },
 

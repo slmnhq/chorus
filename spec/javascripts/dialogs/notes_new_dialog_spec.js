@@ -391,6 +391,21 @@ describe("NotesNewDialog", function() {
                         });
                     });
 
+                    context("when the upload is cancelled", function() {
+                        beforeEach(function() {
+                            _.each(this.dialog.model.files, function(fileModel) {
+                                spyOn(fileModel, 'cancelUpload');
+                            })
+                            this.dialog.$('.cancel_upload').click();
+                        })
+
+                        it("calls cancelUpload on the file models", function() {
+                            _.each(this.dialog.model.files, function(fileModel) {
+                                expect(fileModel.cancelUpload).toHaveBeenCalled();
+                            })
+                        })
+                    });
+
                 });
 
                 describe("when the model save fails", function() {
@@ -510,4 +525,35 @@ describe("NotesNewDialog", function() {
             });
         });
     });
+
+    describe("Cancel", function() {
+
+        context("while uploading is going on", function() {
+            beforeEach(function() {
+                spyOn(this.dialog.model, 'saveFiles');
+                this.dialog.model.files = [
+                    {}
+                ];
+                this.dialog.modelSaved();
+            });
+
+            it("cancel should be replaced by cancel upload button", function() {
+                expect(this.dialog.$('.modal_controls .cancel')).not.toBeVisible();
+                expect(this.dialog.$('.modal_controls .cancel_upload')).toBeVisible();
+            });
+            
+            context("when the upload has failed", function() {
+                beforeEach(function() {
+                    this.dialog.model.trigger('fileUploadFailed');
+                });
+
+                it("should hide the cancel upload button again", function() {
+                    expect(this.dialog.$('.modal_controls .cancel')).toBeVisible();
+                    expect(this.dialog.$('.modal_controls .cancel_upload')).not.toBeVisible();
+                })
+
+            });
+        })
+
+    })
 });

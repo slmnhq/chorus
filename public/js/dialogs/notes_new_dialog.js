@@ -1,4 +1,5 @@
-;(function($, ns) {
+;
+(function($, ns) {
     ns.NotesNew = chorus.dialogs.Base.extend({
         className : "notes_new",
         title : t("notes.new_dialog.title"),
@@ -7,7 +8,8 @@
             "submit form": "save",
             "click .show_options": "showOptions",
             "click .remove": "removeFile",
-            "click .add_workfile": "launchWorkfileDialog"
+            "click .add_workfile": "launchWorkfileDialog",
+            "click .cancel_upload": "cancelUpload"
         },
 
         postRender : function() {
@@ -35,8 +37,14 @@
             this.workspaceId = this.options.launchElement.data("workspace-id");
         },
 
+        cancelUpload: function() {
+            _.each(this.model.files, function(fileModel) {
+                fileModel.cancelUpload();
+            })
+        },
+
         modelSaved: function() {
-            if(this.model.files.length) {
+            if (this.model.files.length) {
                 this.initProgressBars();
                 this.model.saveFiles();
             } else {
@@ -48,11 +56,13 @@
             this.$(".remove").addClass("hidden");
             this.$(".desktopfile .progress_bar").removeClass("hidden");
             this.$(".workfile .upload_finished").removeClass("hidden");
+            this.$(".modal_controls .cancel_upload").removeClass("hidden");
+            this.$(".modal_controls .cancel").addClass("hidden");
         },
 
         updateProgressBar: function(e, data) {
-            if(data.total != data.loaded){
-            data.fileDetailsElement.find(".progress_bar span").css('right', parseInt((data.total - data.loaded) / data.total * 100, 10));
+            if (data.total != data.loaded) {
+                data.fileDetailsElement.find(".progress_bar span").css('right', parseInt((data.total - data.loaded) / data.total * 100, 10));
             } else {
                 data.fileDetailsElement.find(".progress_bar span").addClass("hidden")
                 data.fileDetailsElement.find(".upload_finished").removeClass("hidden")
@@ -74,13 +84,15 @@
         saveFailed : function() {
             this.$("button.submit").stopLoading();
             this.showErrors();
-            if(!this.model.isNew()) {
+            if (!this.model.isNew()) {
                 this.model.destroy();
                 this.model.unset('id');
             }
             this.$(".remove").removeClass("hidden");
             this.$(".progress_bar").addClass("hidden");
-            this.$(".upload_finished").addClass("hidden")
+            this.$(".upload_finished").addClass("hidden");
+            this.$(".modal_controls .cancel_upload").addClass("hidden");
+            this.$(".modal_controls .cancel").removeClass("hidden");
         },
 
         additionalContext : function() {
@@ -132,7 +144,7 @@
             fileDetailsRow.data("file", file);
             fileDetailsRow.data("uploadModel", uploadModel);
             fileDetailsRow.removeClass("hidden");
-            if (file.isUpload){
+            if (file.isUpload) {
                 uploadModel.data.fileDetailsElement = fileDetailsRow;
                 fileDetailsRow.addClass("desktopfile");
             } else {
