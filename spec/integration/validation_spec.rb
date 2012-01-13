@@ -9,12 +9,10 @@ describe "validation errors" do
   end
   it "should have a float on focus" do
      page.execute_script('$("#password").trigger("focus")')
-     sleep 0.5
-     page.find(".ui-tooltip-focus").should be_visible
+     wait_until { page.find(".ui-tooltip-focus[aria-hidden=false]") }
   end
   it "should have a float on mouseover" do
      page.execute_script('$("#password").trigger("mouseover")')
-     sleep 0.5
-     page.find(".ui-tooltip-focus").should be_visible
+     wait_until {page.find(".ui-tooltip-focus[aria-hidden=false]") }
   end
 end
