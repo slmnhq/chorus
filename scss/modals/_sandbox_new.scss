@@ -43,6 +43,7 @@
 
     .unavailable {
         display: none;
+        @include font-normal-beta;
     }
 
     .create_container {

@@ -2,6 +2,11 @@
     var noStartingDigitRegex = /^[a-zA-Z]\w*$/;
 
     ns.models.Sandbox = ns.models.Base.extend({
+        attrToLabel: {
+            "databaseName": "instances.dialog.database_name",
+            "schemaName": "instances.dialog.schema_name"
+        },
+
         urlTemplate: function(options) {
             var method = options && options.method;
             if (method === "update" || method === "delete") {
