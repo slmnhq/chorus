@@ -14,7 +14,8 @@
             this.$("input[type=file]").fileupload({
                 add : _.bind(this.desktopFileChosen, this),
                 dataType : "json",
-                dropZone : this.$("input[type=file]")
+                dropZone : this.$("input[type=file]"),
+                progress: this.updateProgressBar
             });
         },
 
@@ -36,11 +37,28 @@
 
         modelSaved: function() {
             if(this.model.files.length) {
+                this.initProgressBars();
                 this.model.saveFiles();
             } else {
                 this.saved();
             }
         },
+
+        initProgressBars: function() {
+            this.$(".remove").addClass("hidden");
+            this.$(".desktopfile .progress_bar").removeClass("hidden");
+            this.$(".workfile .upload_finished").removeClass("hidden");
+        },
+
+        updateProgressBar: function(e, data) {
+            if(data.total != data.loaded){
+            data.fileDetailsElement.find(".progress_bar span").css('right', parseInt((data.total - data.loaded) / data.total * 100, 10));
+            } else {
+                data.fileDetailsElement.find(".progress_bar span").addClass("hidden")
+                data.fileDetailsElement.find(".upload_finished").removeClass("hidden")
+            }
+        },
+
         save: function(e) {
             e.preventDefault();
             this.$("button.submit").startLoading("notes.button.uploading");
@@ -60,6 +78,9 @@
                 this.model.destroy();
                 this.model.unset('id');
             }
+            this.$(".remove").removeClass("hidden");
+            this.$(".progress_bar").addClass("hidden");
+            this.$(".upload_finished").addClass("hidden")
         },
 
         additionalContext : function() {
@@ -106,12 +127,15 @@
             this.$(".options_area").append(fileDetailsRow);
 
             var iconSrc = chorus.urlHelpers.fileIconUrl(filetype, "medium");
-            fileDetailsRow.find('img').attr('src', iconSrc);
+            fileDetailsRow.find('img.icon').attr('src', iconSrc);
             fileDetailsRow.find('span.file_name').text(filename).attr('title', filename);
             fileDetailsRow.data("file", file);
             fileDetailsRow.data("uploadModel", uploadModel);
             fileDetailsRow.removeClass("hidden");
-            if (!file.isUpload){
+            if (file.isUpload){
+                uploadModel.data.fileDetailsElement = fileDetailsRow;
+                fileDetailsRow.addClass("desktopfile");
+            } else {
                 fileDetailsRow.addClass("workfile");
             }
         },

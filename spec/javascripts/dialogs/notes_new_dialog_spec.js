@@ -74,6 +74,7 @@ describe("NotesNewDialog", function() {
 
         describe("when the 'attach workfile' link is clicked", function() {
             beforeEach(function() {
+                this.dialog.$('.show_options').click();
                 this.fakeModal = stubModals();
                 spyOn(chorus.dialogs.WorkfilesAttach.prototype, 'render').andCallThrough();
                 this.dialog.$("a.add_workfile").click();
@@ -107,7 +108,7 @@ describe("NotesNewDialog", function() {
                 });
 
                 it("displays the appropriate file icons", function() {
-                    var fileIcons = this.dialog.$(".file_details:not('.hidden') img");
+                    var fileIcons = this.dialog.$(".file_details:visible img.icon");
                     expect(fileIcons.eq(0).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "medium"));
                     expect(fileIcons.eq(1).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("cpp", "medium"));
                 });
@@ -182,6 +183,7 @@ describe("NotesNewDialog", function() {
 
         context("when a desktop files have been chosen", function() {
             beforeEach(function() {
+                this.dialog.$('.show_options').click();
                 this.dialog.$("a.show_options").click();
                 this.fileList = [
                     {
@@ -205,6 +207,10 @@ describe("NotesNewDialog", function() {
                 expect(this.fileUploadOptions.dataType).toBe('json');
             });
 
+            it("uses updateProgressBar as a progress function", function() {
+                expect(this.fileUploadOptions.progress).toBe(this.dialog.updateProgressBar);
+            });
+
             it("points the dropzone to the file input to avoid insanity", function() {
                 expect(this.fileUploadOptions.dropZone).toBe(this.dialog.$("input[type=file]"))
             })
@@ -219,13 +225,51 @@ describe("NotesNewDialog", function() {
             });
 
             it("displays the appropriate file icons", function() {
-                expect(this.dialog.$(".file_details img:eq(0)").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("bar", "medium"));
-                expect(this.dialog.$(".file_details img:eq(1)").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "medium"));
+                expect(this.dialog.$(".file_details img.icon:eq(0)").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("bar", "medium"));
+                expect(this.dialog.$(".file_details img.icon:eq(1)").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "medium"));
             });
 
             it("creates dependent commentFileUpload object for each upload", function() {
                 expect(this.dialog.model.addFileUpload.callCount).toBe(this.fileList.length);
             });
+
+            it("attaches the rendered file_details element to the file data element", function() {
+                expect(this.dialog.model.files[0].data.fileDetailsElement.get(0)).toEqual(this.dialog.$('.file_details:eq(0)').get(0));
+            });
+
+            describe("updateProgressBar", function() {
+                beforeEach(function() {
+                    var data = {
+                        fileDetailsElement: this.dialog.$('.file_details:eq(0)'),
+                        total: 100,
+                        loaded: 25
+                    }
+                    this.dialog.initProgressBars();
+                    this.dialog.updateProgressBar("", data);
+                });
+
+                it("adjusts the visiblity of the progress bar", function() {
+                    var loadingBar = this.dialog.$('.file_details:eq(0) .progress_bar span');
+                    expect(loadingBar.css('right')).toBe('75px');
+                });
+
+                context("when the upload has finished", function() {
+                    beforeEach(function() {
+                        var data = {
+                            fileDetailsElement: this.dialog.$('.file_details:eq(0)'),
+                            total: 100,
+                            loaded: 100
+                        }
+                        this.dialog.updateProgressBar("", data);
+                    });
+
+                    it("shows upload_finished and hides the progress bar", function() {
+                        var fileRow = this.dialog.$('.file_details:eq(0)');
+                        expect(fileRow.find('.progress_bar span')).not.toBeVisible();
+                        expect(fileRow.find('.upload_finished')).toBeVisible();
+                    })
+                });
+            })
 
             context("when a selected file is removed", function() {
                 beforeEach(function() {
@@ -256,6 +300,28 @@ describe("NotesNewDialog", function() {
                     expect(this.dialog.$(".file_details .file_name:eq(0)").text()).toBe("foo.bar");
                     expect(this.dialog.$(".file_details .file_name:eq(1)").text()).toBe("baz.sql");
                 });
+
+                describe("initProgressBars", function() {
+                    beforeEach(function() {
+                        this.dialog.initProgressBars();
+                    });
+
+                    it("shows the progress bar for desktopfiles", function() {
+                        this.dialog.$(".file_details.desktopfile").each(function() {
+                            expect($(this).find('.progress_bar')).toBeVisible();
+                            expect($(this).find('.remove')).not.toBeVisible();
+                            expect($(this).find('.upload_finished')).not.toBeVisible();
+                        })
+                    });
+
+                    it("shows the upload_finished for workfiles", function() {
+                        this.dialog.$(".file_details.workfile").each(function() {
+                            expect($(this).find('.progress_bar')).not.toBeVisible();
+                            expect($(this).find('.remove')).not.toBeVisible();
+                            expect($(this).find('.upload_finished')).toBeVisible();
+                        })
+                    });
+                })
             });
 
             describe("submit", function() {
@@ -264,6 +330,7 @@ describe("NotesNewDialog", function() {
                     this.dialog.$("textarea[name=body]").val("The body of a note");
                     spyOnEvent(this.dialog.pageModel, "invalidated");
                     spyOn(this.dialog.model, 'saveFiles');
+                    spyOn(this.dialog, 'initProgressBars').andCallThrough();
                     spyOn($.fn, "stopLoading").andCallThrough();
                 });
 
@@ -275,6 +342,10 @@ describe("NotesNewDialog", function() {
                     it("does triggers a file upload", function() {
                         expect(this.dialog.model.saveFiles).toHaveBeenCalled();
                     });
+
+                    it("does trigger the progress bar initialization", function() {
+                        expect(this.dialog.initProgressBars).toHaveBeenCalled();
+                    })
 
                     context("when the file upload succeeds", function() {
                         beforeEach(function() {
@@ -309,6 +380,14 @@ describe("NotesNewDialog", function() {
 
                         it("removes the spinner from the button", function() {
                             expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit")
+                        });
+
+                        it("displays the remove button and hides progress bar", function() {
+                            this.dialog.$(".file_details").each(function() {
+                                expect($(this).find('.progress_bar')).not.toBeVisible();
+                                expect($(this).find('.upload_finished')).not.toBeVisible();
+                                expect($(this).find('.remove')).toBeVisible();
+                            })
                         });
                     });
 

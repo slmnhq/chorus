@@ -27,11 +27,32 @@
         .remove {
             float: right;
         }
+        .progress_bar {
+            display: inline-block;
+            background-color: $progress-bar-background-color;
+            width: 100px;
+            height: 15px;
+            float: right;
+            margin-top: 7px;
+            position: relative;
+            span {
+                background-image: url(/images/loading_animation.gif);
+                position: absolute;
+                display: inline-block;
+                left: 0;
+                top: 0;
+                bottom: 0;
+            }
+        }
+        .upload_finished {
+            float : right;
+            color: $weak-text-color
+        }
     }
 
     .file_name {
         display: inline-block;
-        width: 170px;
+        width: 115px;
         @include ellipsis;
         color: $dark-text-color;
         font-weight: $semibold;
