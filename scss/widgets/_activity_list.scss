@@ -26,11 +26,12 @@ $system-action-color: #7C7D7D;
 
     .order {
         float: right;
-        font-size: 12px;
-        font-weight: $semibold;
         line-height: 24px;
+        .most_recent {
+            @include font-normal-gamma;
+        }
         .order_by {
-            color: $dark-text-color;
+            @include font-content-details;
         }
     }
 

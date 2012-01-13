@@ -36,6 +36,10 @@
         @include font-normal-beta;
     }
 
+    .font_normal_gamma {
+        @include font-normal-gamma;
+    }
+
     .font_content_details {
         @include font-content-details;
     }
@@ -50,6 +54,50 @@
 
     .secondary_text_small {
         @include secondary-text-small;
+    }
+
+    table {
+        td, th, tr { @include debugging-mixin; }
+        margin-left: 20px;
+        text-shadow: none !important;
+        border-spacing: 0px;
+        border-collapse: separate;
+
+        th {
+            border: 2px solid $dark-text-color;
+            border-top: none;
+            border-left: none;
+        }
+
+        th, td { padding: 10px; }
+
+        tr {
+            &.size12 { font-size: 12px; }
+            &.size13 { font-size: 13px; }
+            &.size14 { font-size: 14px; }
+            &.size18 { font-size: 18px; }
+            &.size19 { font-size: 19px; }
+            &.size24 { font-size: 24px; }
+
+            &.normal   td { font-weight: normal; }
+            &.semibold td { font-weight: $semibold !important; }
+        }
+
+        td, th {
+            &.black { color: black; }
+            &.dark { color: $dark-text-color; }
+            &.secondary { color: $secondary-text-color; }
+            &.weak { color: $weak-text-color; }
+            &.link { color: $link-color; }
+        }
+
+        td {
+            background: transparentize(black, .9);
+        }
+
+        td.mixin {
+            background: none;
+        }
     }
 
 }

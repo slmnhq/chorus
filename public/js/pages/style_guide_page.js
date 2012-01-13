@@ -44,7 +44,7 @@
             this.views = {
                 "Header" : new chorus.views.Header(),
 
-                "Bredcrumbs" : new chorus.views.BreadcrumbsView({
+                "Breadcrumbs" : new chorus.views.BreadcrumbsView({
                     breadcrumbs: [
                         { label: t("breadcrumbs.home"), url: "#/" },
                         { label: t("breadcrumbs.users"), url: "#/users" },
@@ -65,6 +65,7 @@
                     content : new chorus.views.StaticTemplate("ipsum")
                 }),
 
+                "Font Styles" : new chorus.views.StyleGuideFonts(),
 
                 "List Page (loading)" : new chorus.views.MainContentList({modelClass : "User", collection : this.loadingCollection}),
 

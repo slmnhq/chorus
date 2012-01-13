@@ -108,65 +108,90 @@ $medium-font: 14px;
 
 // Mixins
 
+// Un-comment these lines to find text that isn't styled with a mixin
+// * { text-shadow: red 0 0 2px !important; }
+@mixin debugging-mixin {
+    // text-shadow: none !important; 
+}
+
 @mixin heading-normal {
+    @include debugging-mixin;
     font-size: 24px;
     font-weight: $semibold;
     color: black;
 }
 
 @mixin heading-sidebar {
+    @include debugging-mixin;
     font-size: 19px;
     font-weight: $semibold;
     color: $dark-text-color;
 }
 
 @mixin dialog-label {
+    @include debugging-mixin;
     font-size: 13px;
     font-weight: normal;
     color: $dark-text-color;
 }
 
 @mixin font-normal-alpha {
+    @include debugging-mixin;
     font-size: 14px;
     font-weight: normal;
     color: $dark-text-color;
 }
 
 @mixin font-normal-beta {
+    @include debugging-mixin;
     font-size: 13px;
     font-weight: normal;
     color: black;
 }
 
+@mixin font-normal-gamma {
+    @include debugging-mixin;
+    font-size: 12px;
+    font-weight: $semibold;
+    color: black;
+}
+
 @mixin font-content-details {
+    @include debugging-mixin;
     font-size: 12px;
     font-weight: $semibold;
     color: $dark-text-color;
 }
 
 @mixin font-menu {
+    @include debugging-mixin;
     font-size: 14px;
+    font-weight: normal;
     line-height: 14px;
     vertical-align: middle;
     color: $text-color;
 }
 
 @mixin list-section-heading {
+    @include debugging-mixin;
     font-size: 14px;
     font-weight: $semibold;
     color: $dark-text-color;
 }
 
 @mixin secondary-text-normal {
+    @include debugging-mixin;
     font-size: 14px;
     font-weight: normal;
     color: $secondary-text-color;
 }
 
 @mixin secondary-text-small {
+    @include debugging-mixin;
     font-size: 12px;
     font-weight: normal;
     color: $secondary-text-color;
+
 }
 
 @mixin after-clearfix($which: both) {
@@ -201,6 +226,7 @@ $medium-font: 14px;
     &[disabled=disabled] {
         @include opacity(0.25);
     }
+    @include debugging-mixin;
 }
 
 @mixin tab-gradient {
