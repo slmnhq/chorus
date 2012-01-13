@@ -23,6 +23,10 @@ _.extend(sinon.fakeServer, {
         });
     },
 
+    lastRequest: function() {
+        return _.last(this.requests);
+    },
+
     lastCreate: function() {
         return _.last(this.creates());
     },
