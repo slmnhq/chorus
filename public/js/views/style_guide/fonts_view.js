@@ -42,6 +42,7 @@
         "14 semibold link"    : "author in activity stream",
 
         "16 normal black" : "default font, user show page",
+        "16 normal weak" : "disabled buttons",
 
         "18 normal dark" : "instance name in instance list",
         "18 normal link" : "user and workfile names on list pages",
