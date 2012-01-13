@@ -115,12 +115,12 @@
         saveOwner: function() {
             var selectedUserId = this.$("select.name").val();
             this.instance.save({ ownerId: selectedUserId });
-            this.instance.bind("saved", displaySuccessToast);
             this.instance.bind("saveFailed", this.showErrors, this);
-
-            function displaySuccessToast() {
+            this.instance.bind("saved", function() {
                 ns.toast("instances.confirm_change_owner.toast");
-            }
+                this.instance.trigger("invalidated");
+                this.closeModal();
+            }, this);
         },
 
         newAccount: function(e) {

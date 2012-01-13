@@ -155,11 +155,21 @@ describe("chorus.dialogs.InstancePermissions", function() {
                             describe("when the save succeeds", function() {
                                 beforeEach(function() {
                                     spyOn(chorus, 'toast');
+                                    spyOn(this.dialog, 'closeModal').andCallThrough();
+                                    spyOnEvent(this.instance, 'invalidated');
                                     this.instance.trigger("saved");
                                 });
 
                                 it("shows a toast message", function() {
                                     expect(chorus.toast).toHaveBeenCalledWith("instances.confirm_change_owner.toast");
+                                });
+
+                                it("closes the dialog", function() {
+                                    expect(this.dialog.closeModal).toHaveBeenCalled();
+                                });
+
+                                it("triggers the 'invalidated' event on the instance", function() {
+                                    expect('invalidated').toHaveBeenTriggeredOn(this.instance);
                                 });
                             });
 
