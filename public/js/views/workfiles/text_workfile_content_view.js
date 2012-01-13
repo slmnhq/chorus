@@ -2,9 +2,7 @@
 (function($, ns) {
     ns.views.TextWorkfileContent = ns.views.Base.extend({
         className : "text_workfile_content",
-        saveTimer : undefined,
         saveInterval : 30000,
-        cursor : undefined,
 
         setup : function(){
             this.bind("file:saveCurrent", this.saveChanges);
@@ -35,38 +33,35 @@
         },
 
         editText : function() {
-            var x=0 , y=0;
-            if(this.cursor != undefined) {
-                x =this.cursor.line;
-                y = this.cursor.ch;
+            if (this.cursor) {
+                this.editor.setCursor(this.cursor.line, this.cursor.ch);
+            } else {
+                this.editor.setCursor(0, 0);
             }
-            this.editor.setCursor(x, y);
+
             this.editor.setOption("readOnly", false);
             this.$(".CodeMirror").addClass("editable");
             this.editor.focus();
         },
 
         startTimer : function() {
-            if (this.saveTimer == undefined) {
-                var self = this;
-                this.saveTimer = setTimeout(function() {
-                   self.saveDraft(self);
-                }, this.saveInterval);
+            if (!this.saveTimer) {
+                this.saveTimer = setTimeout(_.bind(this.saveDraft, this), this.saveInterval);
             }
         },
 
         stopTimer : function() {
             if (this.saveTimer) {
                 clearTimeout(this.saveTimer);
-                this.saveTimer = undefined;
+                delete this.saveTimer;
             }
         },
 
-        saveDraft : function(self) {
+        saveDraft : function() {
             this.stopTimer();
-            self.trigger("autosaved");
-            self.model.set({"content" : self.editor.getValue()}, {silent: true});
-            self.model.createDraft().save();
+            this.trigger("autosaved");
+            this.model.set({"content" : this.editor.getValue()}, {silent: true});
+            this.model.createDraft().save();
         },
 
         saveChanges : function() {
