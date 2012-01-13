@@ -54,7 +54,7 @@
     }
 
     .ui-button-text-icon-primary {
-        color: $dark-text-color;
+        color: $color-text2;
         background-color: #fff;
         background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #eeeeee), color-stop(0.5, white));
         background-image: -webkit-linear-gradient(center bottom, #eeeeee 0%, white 50%);
@@ -87,7 +87,7 @@
 
 //Really, we're not bad people, just good people using a bad library...
     .ui-corner-top {
-        color: $dark-text-color;
+        color: $color-text2;
         background-color: #eee;
         background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, white), color-stop(0.5, #eeeeee));
         background-image: -webkit-linear-gradient(center bottom, white 0%, #eeeeee 50%);

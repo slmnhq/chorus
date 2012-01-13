@@ -12,7 +12,7 @@
         display: none;
 
         .label {
-            color: $dark-text-color;
+            color: $color-text2;
             width: 72px;
             display: inline-block;
         }
@@ -46,7 +46,7 @@
         }
         .upload_finished {
             float : right;
-            color: $weak-text-color
+            color: $color-text4
         }
     }
 
@@ -54,7 +54,7 @@
         display: inline-block;
         width: 115px;
         @include ellipsis;
-        color: $dark-text-color;
+        color: $color-text2;
         font-weight: $semibold;
     }
 
@@ -64,7 +64,7 @@
     }
 
     .options_text {
-        color: $secondary-text-color;
+        color: $color-text3;
 
         .show_options {
             font-weight: $semibold;

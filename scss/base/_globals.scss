@@ -15,7 +15,7 @@ a {
 }
 
 body {
-    color: $text-color;
+    color: $color-text1;
     background-color: $body-background-color;
     font-family: Myriad Pro, Verdana;
 }
@@ -36,7 +36,7 @@ a.button, button, input[type=submit] {
     outline-color: $border-color;
     font-family: Myriad Pro, Verdana;
     &:disabled {
-        color : $weak-text-color;
+        color : $color-text4;
         cursor : initial;
     }
 }
@@ -44,7 +44,7 @@ a.button, button, input[type=submit] {
 label {
     text-align: left;
     font-size: 13px;
-    color: $secondary-text-color;
+    color: $color-text3;
 }
 
 input, textarea {

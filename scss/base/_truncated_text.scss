@@ -7,7 +7,7 @@
         overflow: hidden;
 
         .text_content {
-            color: $weak-text-color;
+            color: $color-text4;
             .truncated {
                 display: none;
             }
@@ -15,7 +15,7 @@
             .entire_text {
                 @include after-clearfix;
                 white-space: pre-wrap;
-                color: $weak-text-color;
+                color: $color-text4;
 
                 .text {
                     white-space: pre-wrap;
