@@ -127,63 +127,12 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     describe("choosing a new owner", function() {
                         beforeEach(function() {
                             spyOn(this.dialog, 'launchSubModal');
+                            this.newOwner = this.dialog.users.get("222");
                             this.dialog.$("select.name").val("222");
                             this.dialog.$("a.save_owner").click();
                         });
 
-                        it("should launch the change owner confirmation dialog", function() {
-                            expect(this.dialog.launchSubModal).toHaveBeenCalled();
-                            var submodal = this.dialog.launchSubModal.mostRecentCall.args[0];
-                            expect(submodal).toBeA(chorus.alerts.InstanceChangeOwner);
-                        });
-
-                        describe("confirming the new owner", function() {
-                            beforeEach(function() {
-                                var submodal = this.dialog.launchSubModal.mostRecentCall.args[0];
-                                spyOn(this.instance, 'save').andCallThrough();
-                                submodal.trigger("confirmChangeOwner");
-                            });
-
-                            it("sets the owner id on the instance", function() {
-                                expect(this.instance.get("ownerId")).toBe("222");
-                            });
-
-                            it("saves the instance", function() {
-                                expect(this.instance.save).toHaveBeenCalled();
-                            });
-
-                            describe("when the save succeeds", function() {
-                                beforeEach(function() {
-                                    spyOn(chorus, 'toast');
-                                    spyOn(this.dialog, 'closeModal').andCallThrough();
-                                    spyOnEvent(this.instance, 'invalidated');
-                                    this.instance.trigger("saved");
-                                });
-
-                                it("shows a toast message", function() {
-                                    expect(chorus.toast).toHaveBeenCalledWith("instances.confirm_change_owner.toast");
-                                });
-
-                                it("closes the dialog", function() {
-                                    expect(this.dialog.closeModal).toHaveBeenCalled();
-                                });
-
-                                it("triggers the 'invalidated' event on the instance", function() {
-                                    expect('invalidated').toHaveBeenTriggeredOn(this.instance);
-                                });
-                            });
-
-                            describe("when the save fails", function() {
-                                beforeEach(function() {
-                                    this.instance.serverErrors = [{ message: "shut up" }];
-                                    this.instance.trigger("saveFailed");
-                                });
-
-                                it("displays the server errors in the errors div", function() {
-                                    expect(this.dialog.$(".errors")).toContainText("shut up");
-                                });
-                            });
-                        });
+                        itLaunchesTheConfirmChangeOwnerDialog();
                     });
                 });
             });
@@ -314,11 +263,6 @@ describe("chorus.dialogs.InstancePermissions", function() {
         it("only shows the 'make owner' links for users that aren't already the owner", function() {
             expect(this.ownerLi).not.toContain("a.make_owner");
             expect(_.all(this.otherLis, function(li) { return $(li).find("a.make_owner") })).toBeTruthy();
-        });
-
-        it("sorts the list", function() {
-            expect(this.dialog.$("li div.name:eq(0)")).toContainText("aardvark");
-            expect(this.dialog.$("li div.name:eq(2)")).toContainText("zzap");
         });
 
         it("does not display the 'switch to individual accounts' link", function() {
@@ -464,9 +408,9 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     expect(this.dialog.clearErrors).toHaveBeenCalled();
                 })
             });
-        })
+        });
 
-        describe("when the 'add account' button is clicked after the chorus users are fetched", function() {
+        describe("when the chorus users are fetched", function() {
             beforeEach(function() {
                 this.dialog.users.reset([
                     fixtures.user({ firstName: "jim", lastName: "aardvark", id: '222' }),
@@ -475,173 +419,189 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     fixtures.user({ firstName: "suzie", lastName: "three", id: '333' }),
                     fixtures.user({ firstName: "bob", lastName: "zzap", id: '111' })
                 ]);
-                this.dialog.$("button.add_account").click();
-                this.newLi = this.dialog.$("li:last");
             });
 
-            it("adds an option in the user select, sorted, for each chorus user who does not already have permissions", function() {
-                expect(this.dialog.$("select.name option").eq(0)).toHaveText(this.dialog.users.get('444').displayName());
-                expect(this.dialog.$("select.name option").eq(1)).toHaveText(this.dialog.users.get('333').displayName());
-                expect(this.dialog.$("select.name option").length).toBe(2);
-            });
-
-            it("shows the user select", function() {
-                expect(this.newLi.find(".select_container")).not.toHaveClass("hidden");
-            });
-
-            it("adds a new item to the accounts list", function() {
-                expect(this.dialog.$("li").length).toBe(4);
-            });
-
-            it("puts the new item into edit mode", function() {
-                expect(this.newLi).toHaveClass("editing");
-            });
-
-            it("adds the 'new' class to the new li", function() {
-                expect(this.dialog.$("li:last")).toHaveClass("new");
-            });
-
-            it("does not reflect the user in the count at the top", function() {
-                expect(this.dialog.$('.individual_accounts_count')).toContainText(3);
-            });
-
-            it("disables the 'add account' button", function() {
-                expect(this.dialog.$("button.add_account")).toBeDisabled();
-                this.dialog.$("button.add_account").click();
-                expect(this.dialog.$("li").length).toBe(4);
-            });
-
-            it("displays the image for the selected user", function() {
-                var selectedUser = this.dialog.users.get(this.dialog.$('li[data-id=new] select').val());
-                expect(this.dialog.$('li[data-id=new] img.profile').attr('src')).toBe(selectedUser.imageUrl());
-            });
-
-            describe("selecting a new user", function() {
+            describe("when a 'make owner' link is clicked", function() {
                 beforeEach(function() {
-                    this.dialog.$('select').val('444');
-                    this.dialog.$('select').trigger("change");
-                })
+                    spyOn(this.dialog, 'launchSubModal');
+                    this.newOwner = this.dialog.users.get("222");
+                    this.liForNewOwner = this.dialog.$("li[data-id=2]"); // account for user with id 222
+                    this.liForNewOwner.find("a.make_owner").click();
+                });
 
-                it("updates the image for that user", function() {
+                itLaunchesTheConfirmChangeOwnerDialog();
+            });
+
+            describe("when the 'add account' button is clicked", function() {
+                beforeEach(function() {
+                    this.dialog.$("button.add_account").click();
+                    this.newLi = this.dialog.$("li:last");
+                });
+
+                it("adds an option in the user select, sorted, for each chorus user who does not already have permissions", function() {
+                    expect(this.dialog.$("select.name option").eq(0)).toHaveText(this.dialog.users.get('444').displayName());
+                    expect(this.dialog.$("select.name option").eq(1)).toHaveText(this.dialog.users.get('333').displayName());
+                    expect(this.dialog.$("select.name option").length).toBe(2);
+                });
+
+                it("shows the user select", function() {
+                    expect(this.newLi.find(".select_container")).not.toHaveClass("hidden");
+                });
+
+                it("adds a new item to the accounts list", function() {
+                    expect(this.dialog.$("li").length).toBe(4);
+                });
+
+                it("puts the new item into edit mode", function() {
+                    expect(this.newLi).toHaveClass("editing");
+                });
+
+                it("adds the 'new' class to the new li", function() {
+                    expect(this.dialog.$("li:last")).toHaveClass("new");
+                });
+
+                it("does not reflect the user in the count at the top", function() {
+                    expect(this.dialog.$('.individual_accounts_count')).toContainText(3);
+                });
+
+                it("disables the 'add account' button", function() {
+                    expect(this.dialog.$("button.add_account")).toBeDisabled();
+                    this.dialog.$("button.add_account").click();
+                    expect(this.dialog.$("li").length).toBe(4);
+                });
+
+                it("displays the image for the selected user", function() {
                     var selectedUser = this.dialog.users.get(this.dialog.$('li[data-id=new] select').val());
                     expect(this.dialog.$('li[data-id=new] img.profile').attr('src')).toBe(selectedUser.imageUrl());
-                })
-            })
-
-            describe("cancelling the new account", function() {
-                beforeEach(function() {
-                    this.dialog.$("li.new a.cancel:visible").click();
                 });
 
-                it("enables the 'add account' button", function() {
-                    expect(this.dialog.$("button.add_account")).not.toBeDisabled();
-                });
-
-                it("removes the new row", function() {
-                    expect(this.dialog.$('li').length).toBe(3);
-                });
-
-                it("removes the model from the collection", function() {
-                    expect(this.dialog.collection.length).toBe(3);
-                });
-            });
-
-            describe("saving the new account", function() {
-                context("with errors", function() {
+                describe("selecting a new user", function() {
                     beforeEach(function() {
-                        this.dialog.$('a.save:visible').click();
-                    });
-
-                    it("shows errors", function() {
-                        expect(this.dialog.$('input[name=dbUserName]:visible')).toHaveClass('has_error');
-                        expect(this.dialog.$('input[name=dbPassword]:visible')).toHaveClass('has_error');
-                    });
-                });
-
-                context("with valid form data", function() {
-                    beforeEach(function() {
-                        spyOn(this.dialog, "render").andCallThrough();
-                        spyOn(this.dialog.account, "save").andCallThrough();
-                        this.dialog.$('input[name=dbUserName]').val('badUser!');
-                        this.dialog.$('input[name=dbPassword]').val('badPassword!');
-                        this.dialog.$('li[data-id=new] input[name=dbUserName]').val('user!');
-                        this.dialog.$('li[data-id=new] input[name=dbPassword]').val('password!');
-                        this.dialog.$('li select').val('111');
-                    });
-                    context("clicking save", function() {
-                        beforeEach(function() {
-                            this.dialog.$('a.save:visible').click();
-                        })
-
-                        it("saves the correct fields", function() {
-                            expect(this.dialog.account.save).toHaveBeenCalledWith({
-                                userId : '444',
-                                dbUserName : 'user!',
-                                dbPassword : 'password!'
-                            });
-                        });
-
-                        it("has the correct instanceId", function() {
-                            expect(this.dialog.account.get('instanceId')).toBe(this.dialog.instance.get('id'));
-                        });
-
-                        it("has the selected userId", function() {
-                            expect(this.dialog.account.get('userId')).toBe('444');
-                        });
-
-                        context("after the save returns successfully", function() {
-                            beforeEach(function() {
-                                this.completeSaveFor(this.dialog.account);
-                            });
-
-                            it("re-renders the dialog", function() {
-                                expect(this.dialog.render).toHaveBeenCalled();
-                            });
-                        })
+                        this.dialog.$('select').val('444');
+                        this.dialog.$('select').trigger("change");
                     })
 
-                    context("pressing enter", function() {
+                    it("updates the image for that user", function() {
+                        var selectedUser = this.dialog.users.get(this.dialog.$('li[data-id=new] select').val());
+                        expect(this.dialog.$('li[data-id=new] img.profile').attr('src')).toBe(selectedUser.imageUrl());
+                    })
+                })
+
+                describe("cancelling the new account", function() {
+                    beforeEach(function() {
+                        this.dialog.$("li.new a.cancel:visible").click();
+                    });
+
+                    it("enables the 'add account' button", function() {
+                        expect(this.dialog.$("button.add_account")).not.toBeDisabled();
+                    });
+
+                    it("removes the new row", function() {
+                        expect(this.dialog.$('li').length).toBe(3);
+                    });
+
+                    it("removes the model from the collection", function() {
+                        expect(this.dialog.collection.length).toBe(3);
+                    });
+                });
+
+                describe("saving the new account", function() {
+                    context("with errors", function() {
                         beforeEach(function() {
-                            this.dialog.$('a.save:visible').closest('form').submit();
+                            this.dialog.$('a.save:visible').click();
                         });
 
-                        it("saves the model", function() {
-                            expect(this.dialog.account.save).toHaveBeenCalled();
+                        it("shows errors", function() {
+                            expect(this.dialog.$('input[name=dbUserName]:visible')).toHaveClass('has_error');
+                            expect(this.dialog.$('input[name=dbPassword]:visible')).toHaveClass('has_error');
+                        });
+                    });
+
+                    context("with valid form data", function() {
+                        beforeEach(function() {
+                            spyOn(this.dialog, "render").andCallThrough();
+                            spyOn(this.dialog.account, "save").andCallThrough();
+                            this.dialog.$('input[name=dbUserName]').val('badUser!');
+                            this.dialog.$('input[name=dbPassword]').val('badPassword!');
+                            this.dialog.$('li[data-id=new] input[name=dbUserName]').val('user!');
+                            this.dialog.$('li[data-id=new] input[name=dbPassword]').val('password!');
+                            this.dialog.$('li select').val('111');
+                        });
+                        context("clicking save", function() {
+                            beforeEach(function() {
+                                this.dialog.$('a.save:visible').click();
+                            })
+
+                            it("saves the correct fields", function() {
+                                expect(this.dialog.account.save).toHaveBeenCalledWith({
+                                    userId : '444',
+                                    dbUserName : 'user!',
+                                    dbPassword : 'password!'
+                                });
+                            });
+
+                            it("has the correct instanceId", function() {
+                                expect(this.dialog.account.get('instanceId')).toBe(this.dialog.instance.get('id'));
+                            });
+
+                            it("has the selected userId", function() {
+                                expect(this.dialog.account.get('userId')).toBe('444');
+                            });
+
+                            context("after the save returns successfully", function() {
+                                beforeEach(function() {
+                                    this.completeSaveFor(this.dialog.account);
+                                });
+
+                                it("re-renders the dialog", function() {
+                                    expect(this.dialog.render).toHaveBeenCalled();
+                                });
+                            })
+                        })
+
+                        context("pressing enter", function() {
+                            beforeEach(function() {
+                                this.dialog.$('a.save:visible').closest('form').submit();
+                            });
+
+                            it("saves the model", function() {
+                                expect(this.dialog.account.save).toHaveBeenCalled();
+                            });
                         });
                     });
                 });
-            });
 
-            describe("when clicking edit for another user", function() {
-                beforeEach(function() {
-                    this.otherLi = this.dialog.$("li[data-id=1]");
-                    this.otherLi.find('a.edit').click();
+                describe("when clicking edit for another user", function() {
+                    beforeEach(function() {
+                        this.otherLi = this.dialog.$("li[data-id=1]");
+                        this.otherLi.find('a.edit').click();
+                    })
+                    it("enables the 'add account' button", function() {
+                        expect(this.dialog.$("button.add_account")).not.toBeDisabled();
+                    });
+
+                    it("removes the new row", function() {
+                        expect(this.dialog.$('li').length).toBe(3);
+                    });
+
+                    it("removes the model from the collection", function() {
+                        expect(this.dialog.collection.length).toBe(3);
+                    });
                 })
-                it("enables the 'add account' button", function() {
-                    expect(this.dialog.$("button.add_account")).not.toBeDisabled();
-                });
 
-                it("removes the new row", function() {
-                    expect(this.dialog.$('li').length).toBe(3);
-                });
+                describe("when the modal is closed", function() {
+                    beforeEach(function() {
+                        this.dialog.modalClosed();
+                    });
 
-                it("removes the model from the collection", function() {
-                    expect(this.dialog.collection.length).toBe(3);
-                });
-            })
-
-            describe("when the modal is closed", function() {
-                beforeEach(function() {
-                    this.dialog.modalClosed();
-                });
-
-                it("removes the new model from the collection", function() {
-                    expect(this.dialog.collection.length).toBe(3);
+                    it("removes the new model from the collection", function() {
+                        expect(this.dialog.collection.length).toBe(3);
+                    });
                 });
             });
         });
 
-        describe("when the 'add account' button is clicked", function() {
+        describe("when the 'add account' button is clicked (before the users are fetched)", function() {
             beforeEach(function() {
                 expect(this.dialog.$("li").length).toBe(3);
                 this.dialog.$("button.add_account").click();
@@ -764,4 +724,72 @@ describe("chorus.dialogs.InstancePermissions", function() {
         });
 
     });
+
+    // this shared example assumes that
+    // - #launchSubModal is spied on
+    // - this.newOwner is set
+    function itLaunchesTheConfirmChangeOwnerDialog(options) {
+        beforeEach(function() {
+            expect(this.dialog.launchSubModal).toHaveBeenCalled();
+            this.submodal = this.dialog.launchSubModal.mostRecentCall.args[0];
+        });
+
+        it("launches the change owner confirmation dialog", function() {
+            expect(this.submodal).toBeA(chorus.alerts.InstanceChangeOwner);
+        });
+
+        it("passes the selected user to the confirmation dialog, as the model", function() {
+            expect(this.submodal.model.get("id")).toBe(this.newOwner.get("id"));
+            expect(this.submodal.model.displayName()).toBe(this.newOwner.displayName());
+        });
+
+        describe("confirming the new owner", function() {
+            beforeEach(function() {
+                expect(this.dialog.launchSubModal).toHaveBeenCalled();
+                var submodal = this.dialog.launchSubModal.mostRecentCall.args[0];
+                spyOn(this.instance, 'save').andCallThrough();
+                submodal.trigger("confirmChangeOwner", this.newOwner);
+            });
+
+            it("sets the owner id on the instance", function() {
+                expect(this.instance.get("ownerId")).toBe(this.newOwner.get("id"));
+            });
+
+            it("saves the instance", function() {
+                expect(this.instance.save).toHaveBeenCalled();
+            });
+
+            describe("when the save succeeds", function() {
+                beforeEach(function() {
+                    spyOn(chorus, 'toast');
+                    spyOn(this.dialog, 'closeModal').andCallThrough();
+                    spyOnEvent(this.instance, 'invalidated');
+                    this.instance.trigger("saved");
+                });
+
+                it("shows a toast message", function() {
+                    expect(chorus.toast).toHaveBeenCalledWith("instances.confirm_change_owner.toast");
+                });
+
+                it("closes the dialog", function() {
+                    expect(this.dialog.closeModal).toHaveBeenCalled();
+                });
+
+                it("triggers the 'invalidated' event on the instance", function() {
+                    expect('invalidated').toHaveBeenTriggeredOn(this.instance);
+                });
+            });
+
+            describe("when the save fails", function() {
+                beforeEach(function() {
+                    this.instance.serverErrors = [{ message: "shut up" }];
+                    this.instance.trigger("saveFailed");
+                });
+
+                it("displays the server errors in the errors div", function() {
+                    expect(this.dialog.$(".errors")).toContainText("shut up");
+                });
+            });
+        });
+    }
 });

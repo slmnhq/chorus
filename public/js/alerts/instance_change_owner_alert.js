@@ -4,12 +4,11 @@
         ok : t("instances.confirm_change_owner.change_owner"),
 
         setup: function() {
-            var displayName = this.options.displayName;
-            this.title = t("instances.confirm_change_owner.title", { displayName: displayName});
+            this.title = t("instances.confirm_change_owner.title", { displayName: this.model.displayName() });
         },
 
         confirmAlert : function() {
-            this.trigger("confirmChangeOwner");
+            this.trigger("confirmChangeOwner", this.model);
             $(document).trigger("close.facebox");
         }
     });

@@ -1,6 +1,7 @@
 describe("chorus.alerts.InstanceChangeOwner", function() {
     beforeEach(function() {
-        this.alert = new chorus.alerts.InstanceChangeOwner({ displayName: "Boxiong Ding" });
+        this.user = fixtures.user({ firstName: "Boxiong", lastName: "Ding" });
+        this.alert = new chorus.alerts.InstanceChangeOwner({ model: this.user });
         this.alert.render();
     })
 
@@ -11,10 +12,13 @@ describe("chorus.alerts.InstanceChangeOwner", function() {
         expect(this.alert.$("button.submit").text().trim()).toMatchTranslation("instances.confirm_change_owner.change_owner");
     });
 
-    it("raises the 'confirmChangeOwner' event when the submit button is clicked", function() {
-        spyOnEvent(this.alert, 'confirmChangeOwner');
+    it("raises the 'confirmChangeOwner' event when the submit button is clicked, passing the user as a parameter", function() {
+        var confirmSpy = jasmine.createSpy("confirmChangeOwner");
+        this.alert.bind("confirmChangeOwner", confirmSpy);
+
         this.alert.$("button.submit").click();
-        expect('confirmChangeOwner').toHaveBeenTriggeredOn(this.alert);
+
+        expect(confirmSpy).toHaveBeenCalledWith(this.user);
     });
 
     it("closes when the submit button is clicked", function() {

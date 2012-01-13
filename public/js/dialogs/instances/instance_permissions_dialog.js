@@ -13,7 +13,8 @@
             "click a.add_shared_account" : "addSharedAccountAlert",
             "click a.change_owner" : "changeOwner",
             "click a.remove_shared_account" : "removeSharedAccountAlert",
-            "click a.save_owner" : "confirmSaveOwner",
+            "click a.make_owner" : "confirmChangeOwnerFromIndividualAccount",
+            "click a.save_owner" : "confirmChangeOwnerFromSharedAccount",
             "click a.cancel_change_owner" : "cancelChangeOwner"
         },
 
@@ -103,18 +104,28 @@
             chorus.styleSelect(ownerLi.find("select.name"));
         },
 
-        confirmSaveOwner: function(e) {
+        confirmChangeOwnerFromIndividualAccount: function(e) {
+            e.preventDefault();
+            var accountId = $(e.target).closest("li").data("id");
+            var selectedUser = this.collection.get(accountId).user();
+            this.confirmChangeOwner(selectedUser);
+        },
+
+        confirmChangeOwnerFromSharedAccount: function(e) {
             e.preventDefault();
             var selectedUserId = this.$("select.name").val();
             var selectedUser = this.users.get(selectedUserId);
-            var confirmAlert = new ns.alerts.InstanceChangeOwner({ displayName: selectedUser.displayName() });
+            this.confirmChangeOwner(selectedUser);
+        },
+
+        confirmChangeOwner: function(newOwner) {
+            var confirmAlert = new ns.alerts.InstanceChangeOwner({ model: newOwner });
             confirmAlert.bind("confirmChangeOwner", this.saveOwner, this);
             this.launchSubModal(confirmAlert);
         },
 
-        saveOwner: function() {
-            var selectedUserId = this.$("select.name").val();
-            this.instance.save({ ownerId: selectedUserId });
+        saveOwner: function(user) {
+            this.instance.save({ ownerId: user.get("id") });
             this.instance.bind("saveFailed", this.showErrors, this);
             this.instance.bind("saved", function() {
                 ns.toast("instances.confirm_change_owner.toast");
