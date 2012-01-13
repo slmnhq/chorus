@@ -24,7 +24,7 @@
             this.sharedAccount = this.instance.sharedAccount();
             this.users = new ns.models.UserSet();
             this.users.bind("reset", this.populateSelect, this);
-            this.users.sortAsc("lastName");
+            this.users.sortAsc("firstName");
             this.users.fetchAll();
             this.collection = this.instance.accounts();
 
@@ -204,9 +204,7 @@
         },
 
         cancel : function(event) {
-            if(event) {
-                event.preventDefault();
-            }
+            if (event) { event.preventDefault(); }
             this.$("button.add_account").removeAttr("disabled");
             this.$("li").removeClass("editing");
             this.$("li[data-id=new]").remove();
