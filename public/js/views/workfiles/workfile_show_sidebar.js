@@ -2,6 +2,9 @@
     ns.views.WorkfileShowSidebar = ns.views.Sidebar.extend({
         className : "workfile_show_sidebar",
 
+        events : {
+            "click a.version_list" : "displayVersionList"
+        },
         subviews : {
             '.activities' : 'activityList'
         },
@@ -16,6 +19,38 @@
                 additionalClass : "sidebar",
                 displayStyle : ['without_object', 'without_workspace']
             });
+
+            this.allVersions = this.model.allVersions();
+            this.versionList = new ns.views.WorkfileVersionList({collection : this.allVersions});
+            this.allVersions.fetch();
+        },
+
+        postRender : function() {
+            var versionList = this.versionList;
+            this.$("a.version_list").qtip({
+                    content: {
+                        text : function() {
+                            return $(versionList.render().el);
+                        }
+                    },
+                    show: 'click',
+                    hide: 'unfocus',
+                    position: {
+                        my: "top center",
+                        at: "bottom center"
+                    },
+                    style: {
+                        classes: "tooltip-white",
+                        tip: {
+                            width: 20,
+                            height: 15
+                        }
+                    }
+            });
+        },
+
+        displayVersionList : function(e) {
+            e.preventDefault();
         },
 
         additionalContext : function(ctx) {

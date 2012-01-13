@@ -6,6 +6,11 @@
 
         initialize : function() {
             this.entityId = this.get("workfileId");
+
+            if (this.collection) {
+                // we were initialized through a collection fetch and we don't have a workspace id of our own (yet)
+                this.set({workspaceId: this.collection.attributes.workspaceId}, {silent : true});
+            }
         },
 
         createDraft : function() {
