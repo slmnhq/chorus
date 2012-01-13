@@ -1,0 +1,11 @@
+<table>
+    <thead><tr>
+        <th>Size   /   Color</th >{{#each colors}} <th class="{{this}}">{{this}}</th> {{/each}}
+    </tr></thead>
+    {{#each sizes}}
+        <tr class="{{this}}">
+            <th>{{this}}</th>
+            {{#each ../colors}}<td class="{{this}}" >example text</td>{{/each}}
+        </tr>
+    {{/each}}
+</table>
