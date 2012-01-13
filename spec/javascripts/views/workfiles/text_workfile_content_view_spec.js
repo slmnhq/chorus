@@ -19,8 +19,17 @@
             expect(CodeMirror.fromTextArea).toHaveBeenCalled();
         });
 
-        it("set the file to be editable", function() {
-            expect(this.view.editor.getOption("readOnly")).toBe(false);
+        describe("#editable", function() {
+            it("set the file to be editable", function() {
+                this.view.model.canEdit = function() { return true; }
+                this.view.render();
+                expect(this.view.editor.getOption("readOnly")).toBe(false);
+            });
+            it("set the file to be not editable", function() {
+                this.view.model.canEdit = function() { return false; }
+                this.view.render();
+                expect(this.view.editor.getOption("readOnly")).toBe("nocursor");
+            });
         });
 
         it("displays line numbers", function() {

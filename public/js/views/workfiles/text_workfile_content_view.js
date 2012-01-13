@@ -12,9 +12,10 @@
         },
 
         postRender : function() {
+            var readOnlyMode = this.model.canEdit() ? false : "nocursor";
             var self = this;
             var opts = {
-               readOnly : false,
+               readOnly : readOnlyMode,
                lineNumbers: true,
                mode: this.model.get("mimeType"),
                fixedGutter: true,
@@ -26,7 +27,10 @@
 
             this.editor = CodeMirror.fromTextArea(this.$(".text_editor")[0], opts);
 
-            setTimeout( function(){ self.editText(); }, 100);
+            if (this.model.canEdit()) {
+                setTimeout( function(){ self.editText(); }, 100);
+            }
+
             _.defer(_.bind(this.editor.refresh, this.editor));
         },
 

@@ -17,6 +17,10 @@
 
         save : function() {
             // for now, no-op, but later, enable save when latestVersion == thisVersion
+        },
+
+        canEdit : function() {
+            return false;
         }
     });
 })(chorus);

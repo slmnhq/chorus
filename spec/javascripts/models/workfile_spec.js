@@ -112,6 +112,12 @@ describe("chorus.models.Workfile", function() {
         });
     });
 
+    describe("canEdit", function() {
+        it("always returns true", function() {
+            expect(this.model.canEdit()).toBeTruthy();
+        });
+    });
+
     describe("isText", function() {
         context("when the workfile is a plain textfile", function() {
             beforeEach(function() {

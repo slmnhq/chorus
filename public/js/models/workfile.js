@@ -71,6 +71,10 @@
 
         workfilesUrl : function() {
             return "#/workspaces/"+ this.get("workspaceId") +"/workfiles";
+        },
+
+        canEdit : function() {
+            return true;
         }
     });
 })(chorus.models);
