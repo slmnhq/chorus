@@ -58,6 +58,7 @@
 
     table {
         td, th, tr { @include debugging-mixin; }
+        width: 90%;
         margin-left: 20px;
         text-shadow: none !important;
         border-spacing: 0px;
@@ -79,8 +80,8 @@
             &.size19 { font-size: 19px; }
             &.size24 { font-size: 24px; }
 
-            &.normal   td { font-weight: normal; }
-            &.semibold td { font-weight: $semibold !important; }
+            &.normal   { td, th { font-weight: normal; }}
+            &.semibold { td, th { font-weight: $semibold !important; }}
         }
 
         td, th {

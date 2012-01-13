@@ -5,6 +5,7 @@
         12,
         13,
         14,
+        16,
         18,
         19,
         24
@@ -35,6 +36,7 @@
         "14 semibold dark" : "list-section-heading",
         "14 normal secondary" : "secondary-text-normal",
         "12 normal secondary" : "secondary-text-small",
+        "14 semibold link"    : "author in activity stream",
     };
 
     var sizeWeightCombos = [];
