@@ -1,7 +1,7 @@
 describe("InstanceEditDialog", function() {
     beforeEach(function() {
         this.launchElement = $("<button/>");
-        this.instance = fixtures.instance({name : "pasta", host : "greenplum", port : "8555", description : "it is a food name", ownerId: "3"});
+        this.instance = fixtures.instance({name : "pasta", host : "greenplum", port : "8555", description : "it is a food name" });
         this.dialog = new chorus.dialogs.InstancesEdit({launchElement : this.launchElement, pageModel : this.instance });
     });
 
@@ -87,10 +87,12 @@ describe("InstanceEditDialog", function() {
                     spyOn(this.dialog.accounts, "fetchAll")
                     this.dialog.fetchUserSet();
                 });
+
                 it("fetches the accounts", function() {
                     expect(this.dialog.users.fetchAll).not.toHaveBeenCalled();
                     expect(this.dialog.accounts.fetchAll).toHaveBeenCalled();
-                })
+                });
+
                 it("fills in the users on a successful accounts fetch", function() {
                     spyOn(this.dialog.users, "add").andCallThrough();
 
@@ -109,40 +111,14 @@ describe("InstanceEditDialog", function() {
                     expect(this.dialog.users.models[0].get("id")).toBe("2");
                     expect(this.dialog.users.models[0].get("firstName")).toBe("fred");
                     expect(this.dialog.users.models[0].get("lastName")).toBe("flinstone");
-                    
+
                     expect(this.dialog.users.models[1]).toBeA(chorus.models.User);
                     expect(this.dialog.users.models[1].get("id")).toBe("1");
                     expect(this.dialog.users.models[1].get("firstName")).toBe("barnie");
                     expect(this.dialog.users.models[1].get("lastName")).toBe("rubble");
-
-                })
-
+                });
             });
         });
-
-        describe("change owner dropdown", function() {
-            beforeEach(function() {
-                this.dialog.model.set({ provisionType : "register"});
-                this.user1 = new chorus.models.User({ id: '1', userName: "niels", firstName: "ni", lastName: "slew"});
-                this.user2 = new chorus.models.User({ id: '2', userName: "ludwig", firstName: "lu", lastName: "wig" });
-                this.user3 = new chorus.models.User({ id: '3', userName: "isaac", firstName: "is", lastName: "ac" });
-                this.dialog.users.add([ this.user1, this.user2, this.user3 ]);
-                this.dialog.render();
-            });
-
-            it("should have owner as default option", function() {
-                expect(this.dialog.$("select[name=owner] option:selected").text()).toBe("is ac");
-            });
-
-            it("shows the change owner dropdown", function() {
-                expect(this.dialog.$("select[name=owner] option").length).toBe(3);
-            });
-
-            it("shows the change owner name in the dropdown", function() {
-                expect(this.dialog.$("select[name=owner] option").eq(0).text()).toBe("ni slew");
-            });
-        });
-
     });
 
     describe("saving", function() {
@@ -160,7 +136,6 @@ describe("InstanceEditDialog", function() {
             this.dialog.$("input[name=name]").val("test1");
             this.dialog.$("input[name=port]").val("8555");
             this.dialog.$("input[name=host]").val("testhost");
-            this.dialog.$("select.owner").val("2");
         });
 
         it("should update the model", function() {
@@ -170,7 +145,6 @@ describe("InstanceEditDialog", function() {
             expect(this.dialog.model.get("name")).toBe("test1");
             expect(this.dialog.model.get("port")).toBe("8555");
             expect(this.dialog.model.get("host")).toBe("testhost");
-            expect(this.dialog.model.get("ownerId")).toBe("2");
         });
 
         it("puts the button in 'loading' mode", function() {

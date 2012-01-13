@@ -43,17 +43,12 @@
             host : this.$("input[name=host]").val(),
             port : this.$("input[name=port]").val(),
             size : this.$("input[name=size]").val(),
-            ownerId: this.$("select.owner").val()
         }
 
             this.$("button.submit").startLoading("instances.edit_dialog.saving");
             this.$("button.cancel").attr("disabled", "disabled");
             this.model.set(attrs, { silent: true })
             this.model.save();
-        },
-
-        postRender : function() {
-            this.$("select.owner").val(this.model.get("ownerId"));
         },
 
         saveSuccess : function() {
