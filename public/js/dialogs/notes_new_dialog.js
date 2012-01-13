@@ -33,6 +33,7 @@
             this.model.bind("fileUploadFailed", this.saveFailed, this);
             this.model.bind("saveFailed", this.saveFailed, this);
             this.model.bind("validationFailed", this.saveFailed, this);
+            this.model.bind("fileUploadDone", this.uploadDone, this);
 
             this.workspaceId = this.options.launchElement.data("workspace-id");
         },
@@ -52,21 +53,34 @@
             }
         },
 
+        escapePressed:function() {
+            if(this.uploadingFiles) {
+                this.cancelUpload();
+            } else {
+                this._super("escapePressed");
+            }
+        },
+
         initProgressBars: function() {
             this.$(".remove").addClass("hidden");
             this.$(".desktopfile .progress_bar").removeClass("hidden");
             this.$(".workfile .upload_finished").removeClass("hidden");
             this.$(".modal_controls .cancel_upload").removeClass("hidden");
             this.$(".modal_controls .cancel").addClass("hidden");
+            this.uploadingFiles = true;
         },
 
         updateProgressBar: function(e, data) {
             if (data.total != data.loaded) {
                 data.fileDetailsElement.find(".progress_bar span").css('right', parseInt((data.total - data.loaded) / data.total * 100, 10));
             } else {
-                data.fileDetailsElement.find(".progress_bar span").addClass("hidden")
+                data.fileDetailsElement.find(".progress_bar").addClass("hidden")
                 data.fileDetailsElement.find(".upload_finished").removeClass("hidden")
             }
+        },
+
+        uploadDone: function() {
+            this.uploadingFiles = false;
         },
 
         save: function(e) {

@@ -391,7 +391,7 @@ describe("NotesNewDialog", function() {
                         });
                     });
 
-                    context("when the upload is cancelled", function() {
+                    context("when the upload is cancelled by clicking 'cancel upload button'", function() {
                         beforeEach(function() {
                             _.each(this.dialog.model.files, function(fileModel) {
                                 spyOn(fileModel, 'cancelUpload');
@@ -406,8 +406,17 @@ describe("NotesNewDialog", function() {
                         })
                     });
 
-                });
+                    context("when the upload is cancelled by pressing escape key", function() {
+                        beforeEach(function() {
+                            spyOn(this.dialog, 'cancelUpload');
+                            this.dialog.escapePressed();
+                        })
 
+                        it("calls cancelUpload on the file models", function() {
+                            expect(this.dialog.cancelUpload).toHaveBeenCalled();
+                        })
+                    });
+                });
                 describe("when the model save fails", function() {
                     beforeEach(function() {
                         this.dialog.model.trigger("saveFailed");

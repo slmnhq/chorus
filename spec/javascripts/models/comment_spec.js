@@ -92,8 +92,10 @@ describe("chorus.models.Comment", function() {
                 this.model.addFileUpload(this.fileUpload2);
                 this.fileUploadSuccessSpy = jasmine.createSpy('fileUploadSuccess');
                 this.fileUploadFailedSpy = jasmine.createSpy('fileUploadFailed');
+                this.fileUploadDoneSpy = jasmine.createSpy('fileUploadDone');
                 this.model.bind('fileUploadSuccess', this.fileUploadSuccessSpy);
                 this.model.bind('fileUploadFailed', this.fileUploadFailedSpy);
+                this.model.bind('fileUploadDone', this.fileUploadDoneSpy);
                 this.model.saveFiles();
             });
 
@@ -117,7 +119,10 @@ describe("chorus.models.Comment", function() {
                     expect(this.fileUploadSuccessSpy).toHaveBeenCalled();
                     expect(this.fileUploadFailedSpy).not.toHaveBeenCalled();
                     expect(this.fileUploadSuccessSpy.callCount).toBe(1);
+                })
 
+                it("triggers fileUploadDone", function() {
+                    expect(this.fileUploadDoneSpy).toHaveBeenCalled();
                 })
             });
 
@@ -141,6 +146,10 @@ describe("chorus.models.Comment", function() {
                     expect(this.fileUploadFailedSpy).toHaveBeenCalled();
                     expect(this.fileUploadFailedSpy.callCount).toBe(1);
                 });
+
+                it("triggers fileUploadDone", function() {
+                    expect(this.fileUploadDoneSpy).toHaveBeenCalled();
+                })
 
                 it("puts the error on the file object", function() {
                     expect(this.fileUpload2.serverErrors).toEqual([{message:'The field fileToUpload[] exceeds its maximum permitted  size of 10485760 bytes.'}]);

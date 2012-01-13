@@ -7,14 +7,27 @@
         min-height: 75px;
         resize: none;
     }
+    
+    a {
+        font-size: 12px;
+    }
 
     .options_area {
         display: none;
+
+        .file-wrapper {
+            margin-bottom: 2px;
+        }
 
         .label {
             color: $color-text2;
             width: 72px;
             display: inline-block;
+        }
+
+        .separator {
+            color: $link-color;
+            margin: 0 2px;
         }
     }
 

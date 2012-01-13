@@ -8,7 +8,7 @@
             this.previousModal = ns.modal;
             ns.modal = this;
 
-            _.bindAll(this, 'modalClosed', 'escape');
+            _.bindAll(this, 'modalClosed', 'keydownHandler');
             pushModalBindings(this);
         },
 
@@ -37,10 +37,14 @@
             subModal.launchModal();
         },
 
-        escape : function(e) {
+        keydownHandler : function(e) {
             if (e.keyCode == 27) {
-                $(document).trigger("close.facebox");
+                this.escapePressed();
             }
+        },
+
+        escapePressed: function() {
+            $(document).trigger("close.facebox");
         },
 
         modalClosed : function() {
@@ -75,11 +79,11 @@
 
     function pushModalBindings(modal) {
         $(document).one("close.facebox", modal.modalClosed);
-        $(document).bind("keydown.facebox", modal.escape);
+        $(document).bind("keydown.facebox", modal.keydownHandler);
     }
 
     function popModalBindings(modal) {
         $(document).unbind("close.facebox", modal.modalClosed);
-        $(document).unbind("keydown.facebox", modal.escape);
+        $(document).unbind("keydown.facebox", modal.keydownHandler);
     }
 })(chorus, jQuery);

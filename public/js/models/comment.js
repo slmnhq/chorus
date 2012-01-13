@@ -72,6 +72,7 @@
                 } else {
                     this.trigger('fileUploadSuccess');
                 }
+                this.trigger('fileUploadDone');
             }
         },
 
