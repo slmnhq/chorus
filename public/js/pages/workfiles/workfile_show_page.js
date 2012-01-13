@@ -39,6 +39,11 @@
         },
 
         modelChanged : function() {
+            if (this.model.get("hasDraft") && !this.model.isDraft) {
+                alert = new chorus.alerts.WorkfileDraft({model : this.model});
+                alert.launchModal();
+            }
+
             if (!this.mainContent.contentDetails) {
                 this.mainContent.contentDetails = ns.views.WorkfileContentDetails.buildFor(this.model);
                 this.mainContent.content = ns.views.WorkfileContent.buildFor(this.model);

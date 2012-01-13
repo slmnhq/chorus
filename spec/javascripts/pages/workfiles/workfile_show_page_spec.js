@@ -31,25 +31,58 @@ describe("chorus.pages.WorkfileShowPage", function() {
             beforeEach(function() {
                 spyOn(this.page.mainContent, "render");
                 fixtures.model = "Workfile";
-                this.server.respondWith(
-                    'GET',
-                    this.page.model.url(),
-                    this.prepareResponse(fixtures.jsonFor("fetch")));
-                this.server.respond();
             });
 
-            it("instantiates the content details view", function() {
-                expect(chorus.views.WorkfileContentDetails.buildFor).toHaveBeenCalledWith(this.page.model)
-            });
+            context("and the workfile does not have a draft", function() {
+                beforeEach(function() {
+                    this.server.respondWith(
+                        'GET',
+                        this.page.model.url(),
+                        this.prepareResponse(fixtures.jsonFor("fetch")));
+                    this.server.respond();
+                })
 
-            it("instantiates the content view", function() {
-                expect(chorus.views.WorkfileContent.buildFor).toHaveBeenCalledWith(this.page.model)
-            });
+                it("instantiates the content details view", function() {
+                    expect(chorus.views.WorkfileContentDetails.buildFor).toHaveBeenCalledWith(this.page.model)
+                });
 
-            it("re-renders the mainContent", function() {
-                expect(this.page.mainContent.render).toHaveBeenCalled();
-            });
+                it("instantiates the content view", function() {
+                    expect(chorus.views.WorkfileContent.buildFor).toHaveBeenCalledWith(this.page.model)
+                });
 
+                it("re-renders the mainContent", function() {
+                    expect(this.page.mainContent.render).toHaveBeenCalled();
+                });
+            })
+
+            context('and the workfile has a draft', function() {
+                beforeEach(function() {
+                    stubModals();
+                    spyOn(chorus.Modal.prototype, 'launchModal').andCallThrough();
+                    this.server.respondWith(
+                        'GET',
+                        this.page.model.url(),
+                        this.prepareResponse(fixtures.jsonFor("fetchWithDraft")));
+                    this.server.respond();
+                })
+
+                it("shows an alert", function() {
+                    expect(chorus.Modal.prototype.launchModal).toHaveBeenCalled();
+                })
+
+                context("and the user chooses the draft", function() {
+                    beforeEach(function() {
+                        spyOn(this.page, "render");
+                        chorus.Modal.prototype.launchModal.reset();
+                        this.page.model.isDraft = true;
+                        this.page.model.trigger('change');
+                    })
+
+                    it("does not show an alert", function() {
+                        expect(chorus.Modal.prototype.launchModal).not.toHaveBeenCalled();
+                    })
+                })
+            })
         });
     });
 
