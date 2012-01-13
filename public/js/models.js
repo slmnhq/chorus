@@ -217,8 +217,8 @@
 
             requirePositiveInteger: function(attr, newAttrs, messageKey) {
                 var value = newAttrs && newAttrs.hasOwnProperty(attr) ? newAttrs[attr] : this.get(attr);
-                var int = parseInt(value);
-                if (!int || int <= 0 || parseFloat(value) !== int) {
+                var intValue = parseInt(value);
+                if (!intValue || intValue <= 0 || parseFloat(value) !== intValue) {
                     this.setValidationError(attr, "validation.positive_integer", messageKey);
                 }
             },
