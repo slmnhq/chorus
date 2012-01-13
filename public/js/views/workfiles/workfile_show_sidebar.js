@@ -21,7 +21,8 @@
         additionalContext : function(ctx) {
             return {
                 updatedBy : [this.model.get("modifiedByFirstName"), this.model.get("modifiedByLastName")].join(' '),
-                modifierUrl : this.model.modifier().showUrl()
+                modifierUrl : this.model.modifier().showUrl(),
+                downloadUrl : this.model.downloadUrl()
             }
         }
     });

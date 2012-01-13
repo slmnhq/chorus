@@ -40,6 +40,13 @@
             })
         },
 
+        allVersions : function() {
+            return new ns.WorkfileVersionSet([], {
+                workspaceId : this.get("workspaceId"),
+                workfileId : this.get("id")
+            });
+        },
+
         declareValidations : function(newAttrs){
             this.require("fileName", newAttrs);
         },

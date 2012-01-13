@@ -103,6 +103,15 @@ describe("chorus.models.Workfile", function() {
         });
     });
 
+    describe("#allVersions", function() {
+        it("sets the required attributes", function() {
+            var workfileVersionSet = this.model.allVersions();
+            expect(workfileVersionSet).toBeA(chorus.models.WorkfileVersionSet);
+            expect(workfileVersionSet.attributes.workspaceId).toBe(this.model.get("workspaceId"));
+            expect(workfileVersionSet.attributes.workfileId).toBe(this.model.get("id"));
+        });
+    });
+
     describe("isText", function() {
         context("when the workfile is a plain textfile", function() {
             beforeEach(function() {

@@ -89,6 +89,24 @@ describe("chorus.models", function() {
                     expect(this.model.activities()).toBe(this.activitySet);
                 });
 
+                context("when a model specifies an entityId", function() {
+                    beforeEach(function() {
+                        delete this.model._activities;
+                        this.model.entityId = "100";
+                        this.activitySet = this.model.activities();
+                    });
+
+                    it("has the right 'entityType' and 'entityId'", function() {
+                        expect(this.activitySet.attributes.entityType).toBe("some_entity");
+                        expect(this.activitySet.attributes.entityId).toBe("100");
+                    });
+
+                    it("returns the same activities object over each call", function() {
+                        expect(this.model.activities()).toBe(this.activitySet);
+                    });
+
+                });
+
                 describe("when the model is invalidated", function() {
                     beforeEach(function() {
                         this.model.trigger("invalidated");
@@ -98,6 +116,7 @@ describe("chorus.models", function() {
                         expect(_.last(this.server.requests).url).toBe(this.activitySet.url());
                     });
                 });
+
             });
         });
 

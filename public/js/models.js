@@ -116,7 +116,7 @@
                         throw "Cannot create activities without having an entityType";
                     }
 
-                    this._activities = new chorus.models.ActivitySet([], { entityType : this.entityType, entityId : this.get("id") });
+                    this._activities = new chorus.models.ActivitySet([], { entityType : this.entityType, entityId : this.entityId || this.get("id") });
                     this.bind("invalidated", this._activities.fetch, this._activities)
                 }
 

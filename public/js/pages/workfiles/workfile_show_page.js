@@ -11,16 +11,24 @@
     });
 
     ns.pages.WorkfileShowPage = ns.pages.Base.extend({
-        setup : function(workspaceId, workfileId) {
+        setup : function(workspaceId, workfileId, versionId) {
             this.workspace = new ns.models.Workspace({id: workspaceId});
             this.workspace.fetch();
-            this.model = new ns.models.Workfile({id: workfileId, workspaceId: workspaceId});
+
+            if (versionId) {
+                this.model = new ns.models.WorkfileVersion({workfileId: workfileId, workspaceId: workspaceId, versionId: versionId})
+                this.isOldVersion = true;
+            } else {
+                this.model = new ns.models.Workfile({id: workfileId, workspaceId: workspaceId});
+                this.isOldVersion = false;
+            }
+
             this.model.bind("change", this.modelChanged, this);
             this.model.fetch();
 
             this.breadcrumbs = new breadcrumbsView({workspace: this.workspace, model: this.model});
 
-            this.sidebar = new chorus.views.WorkfileShowSidebar({model : this.model });
+            this.sidebar = new chorus.views.WorkfileShowSidebar({model : this.model});
 
             this.subNav = new ns.views.SubNav({workspace: this.workspace, tab: "workfiles"});
 
