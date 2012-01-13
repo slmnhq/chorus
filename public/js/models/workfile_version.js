@@ -4,11 +4,7 @@
         urlTemplate : "workspace/{{workspaceId}}/workfile/{{workfileId}}/version/{{versionId}}",
 
         initialize : function() {
-            this.set({
-                fileName : "NeedFileNameFromApi.txt",
-                mimeType : "text/plain",
-                fileType : "txt"
-            });
+            this.entityId = this.get("workfileId");
         },
 
         downloadUrl : function() {
