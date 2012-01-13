@@ -1,3 +1,45 @@
+_.extend(sinon.fakeServer, {
+    creates: function() {
+        return _.filter(this.requests, function(request) {
+            return request.method === "POST";
+        });
+    },
+
+    fetches: function() {
+        return _.filter(this.requests, function(request) {
+            return request.method === "GET";
+        });
+    },
+
+    updates: function() {
+        return _.filter(this.requests, function(request) {
+            return request.method === "PUT"
+        });
+    },
+
+    destroys: function() {
+        return _.filter(this.requests, function(request) {
+            return request.method === "DELETE";
+        });
+    },
+
+    lastCreate: function() {
+        return _.last(this.creates());
+    },
+
+    lastFetch: function() {
+        return _.last(this.fetches());
+    },
+
+    lastUpdate: function() {
+        return _.last(this.updates());
+    },
+
+    lastDestroy: function() {
+        return _.last(this.destroys());
+    }
+});
+
 _.extend(sinon.FakeXMLHttpRequest.prototype, {
     succeed: function(resource) {
         return this.respond(
