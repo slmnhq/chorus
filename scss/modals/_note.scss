@@ -29,6 +29,18 @@
             color: $link-color;
             margin: 0 2px;
         }
+
+        .attachment_links {
+            &.disabled {
+                input {
+                    display: none;
+                }
+
+                a {
+                    color: $color-text4;
+                }
+            }
+        }
     }
 
     .file_details {

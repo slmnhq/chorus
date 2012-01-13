@@ -85,7 +85,9 @@
 
         save: function(e) {
             e.preventDefault();
+            this.$(".attachment_links").addClass("disabled");
             this.$("button.submit").startLoading("notes.button.uploading");
+            this.saving = true;
             this.model.save({ body : this.$("textarea[name=body]").val().trim() });
         },
 
@@ -107,6 +109,8 @@
             this.$(".upload_finished").addClass("hidden");
             this.$(".modal_controls .cancel_upload").addClass("hidden");
             this.$(".modal_controls .cancel").removeClass("hidden");
+            this.$(".attachment_links").removeClass("disabled");
+            this.saving = false;
         },
 
         additionalContext : function() {
@@ -126,9 +130,11 @@
 
         launchWorkfileDialog: function(e) {
             e.preventDefault();
-            var workfileDialog = new ns.WorkfilesAttach({ workspaceId : this.workspaceId, selectedFiles: this.model.workfiles });
-            workfileDialog.bind("files:selected", this.workfileChosen, this);
-            this.launchSubModal(workfileDialog);
+            if(!this.saving) {
+                var workfileDialog = new ns.WorkfilesAttach({ workspaceId : this.workspaceId, selectedFiles: this.model.workfiles });
+                workfileDialog.bind("files:selected", this.workfileChosen, this);
+                this.launchSubModal(workfileDialog);
+            }
         },
 
         desktopFileChosen : function(e, data) {

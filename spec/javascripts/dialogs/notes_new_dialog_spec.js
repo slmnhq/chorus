@@ -6,6 +6,7 @@ describe("NotesNewDialog", function() {
             pageModel : new chorus.models.Workfile()
         });
         spyOn($.fn, 'fileupload');
+        spyOn(this.dialog, "launchSubModal")
         this.dialog.render();
         $('#jasmine_content').append(this.dialog.el);
     });
@@ -76,6 +77,7 @@ describe("NotesNewDialog", function() {
             beforeEach(function() {
                 this.dialog.$('.show_options').click();
                 this.fakeModal = stubModals();
+                this.dialog.launchSubModal.andCallThrough();
                 spyOn(chorus.dialogs.WorkfilesAttach.prototype, 'render').andCallThrough();
                 this.dialog.$("a.add_workfile").click();
             });
@@ -332,6 +334,7 @@ describe("NotesNewDialog", function() {
                     spyOn(this.dialog.model, 'saveFiles');
                     spyOn(this.dialog, 'initProgressBars').andCallThrough();
                     spyOn($.fn, "stopLoading").andCallThrough();
+                    this.dialog.saving = true;
                 });
 
                 describe("when the model save succeeds", function() {
@@ -389,6 +392,15 @@ describe("NotesNewDialog", function() {
                                 expect($(this).find('.remove')).toBeVisible();
                             })
                         });
+
+                        it("enables the attachment_links", function() {
+                            expect(this.dialog.$('.attachment_links')).not.toHaveClass('disabled');
+                        })
+
+                        it("enables the workfile attachment", function() {
+                            this.dialog.$(".add_workfile").click();
+                            expect(this.dialog.launchSubModal).toHaveBeenCalled();
+                        })
                     });
 
                     context("when the upload is cancelled by clicking 'cancel upload button'", function() {
@@ -492,6 +504,15 @@ describe("NotesNewDialog", function() {
             this.dialog.model.trigger("saved");
             expect("invalidated").toHaveBeenTriggeredOn(this.dialog.pageModel);
         })
+
+        it("disables the attachment_links", function() {
+            expect(this.dialog.$('.attachment_links')).toHaveClass('disabled');
+        })
+
+        it("prevents workfiles from being selected", function() {
+            this.dialog.$(".add_workfile").click();
+            expect(this.dialog.launchSubModal).not.toHaveBeenCalled();
+        })
     });
 
     describe("saveFailed", function() {
@@ -550,7 +571,7 @@ describe("NotesNewDialog", function() {
                 expect(this.dialog.$('.modal_controls .cancel')).not.toBeVisible();
                 expect(this.dialog.$('.modal_controls .cancel_upload')).toBeVisible();
             });
-            
+
             context("when the upload has failed", function() {
                 beforeEach(function() {
                     this.dialog.model.trigger('fileUploadFailed');
