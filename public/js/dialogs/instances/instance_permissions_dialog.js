@@ -137,7 +137,7 @@
         newAccount: function(e) {
             var button = this.$("button.add_account");
             if (button.is(":disabled")) return;
-            this.account = this.resource = new ns.models.InstanceAccount({instanceId: this.instance.get("id")});
+            this.account = new ns.models.InstanceAccount({instanceId: this.instance.get("id")});
             this.collection.add(this.account);
             this.$("button.add_account").attr("disabled", "disabled");
             var newLi = this.$("li[data-id=new]");

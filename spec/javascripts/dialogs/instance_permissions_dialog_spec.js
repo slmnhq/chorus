@@ -484,7 +484,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     it("updates the image for that user", function() {
                         var selectedUser = this.dialog.users.get(this.dialog.$('li[data-id=new] select').val());
                         expect(this.dialog.$('li[data-id=new] img.profile').attr('src')).toBe(selectedUser.imageUrl());
-                    })
+                    });
                 })
 
                 describe("cancelling the new account", function() {
@@ -557,6 +557,21 @@ describe("chorus.dialogs.InstancePermissions", function() {
                                     expect(this.dialog.render).toHaveBeenCalled();
                                 });
                             })
+
+                            describe("when the save fails", function() {
+                                beforeEach(function() {
+                                    this.dialog.account.serverErrors = [{ message: "couldn't create account..'" }];
+                                    this.dialog.account.trigger("saveFailed");
+                                });
+
+                                it("shows the server errors", function() {
+                                    expect(this.dialog.$(".errors")).toContainText("couldn't create account");
+                                });
+
+                                it("only shows one copy of the server error", function() {
+                                    expect(this.dialog.$(".errors li").length).toBe(1);
+                                });
+                            });
                         })
 
                         context("pressing enter", function() {
