@@ -33,3 +33,41 @@
         margin: 5px 0 20px 0;
     }
 }
+
+.workfile_version_list {
+    li {
+        a {
+            padding-top: 10px;
+            display: inline-block;
+        }
+
+        &:first-child a {
+            /* qtip has some top padding already */
+            padding-top: 6px;
+        }
+
+        &:last-child .spacer {
+            border-bottom: none;
+        }
+
+        &:hover {
+            .version_title {
+                text-decoration: underline;
+            }
+        }
+
+        .version_title {
+            @include font-menu;
+        }
+
+        .version_details {
+            margin-top: 2px;
+            @include secondary-text-small;
+            padding-bottom: 10px;
+        }
+
+        .spacer {
+            border-bottom: $dotted-list-item-border;
+        }
+    }
+}
