@@ -17,10 +17,8 @@
 
             if (versionNum) {
                 this.model = new ns.models.WorkfileVersion({workfileId: workfileId, workspaceId: workspaceId, versionNum: versionNum})
-                this.isOldVersion = true;
             } else {
                 this.model = new ns.models.Workfile({id: workfileId, workspaceId: workspaceId});
-                this.isOldVersion = false;
             }
 
             this.model.bind("change", this.modelChanged, this);
@@ -39,8 +37,10 @@
         },
 
         modelChanged : function() {
-            if (this.model.get("hasDraft") && !this.model.isDraft) {
-                alert = new chorus.alerts.WorkfileDraft({model : this.model});
+            var isOldVersion = (this.model.get("versionNum") != this.model.get("latestVersionNum"));
+
+            if (!isOldVersion && this.model.get("hasDraft") && !this.model.isDraft) {
+                var alert = new chorus.alerts.WorkfileDraft({model : this.model});
                 alert.launchModal();
             }
 

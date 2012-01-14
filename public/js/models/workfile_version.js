@@ -15,7 +15,7 @@
 
         createDraft : function() {
             if (this.canEdit()) {
-                this._super("createDraft", arguments);
+                return this._super("createDraft", arguments);
             }
         },
 

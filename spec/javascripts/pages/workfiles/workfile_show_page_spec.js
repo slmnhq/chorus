@@ -149,14 +149,4 @@ describe("chorus.pages.WorkfileShowPage", function() {
         });
     })
 
-    describe("oldVersion", function() {
-        it("sets oldVersion true", function() {
-            this.page = new chorus.pages.WorkfileShowPage("1", "100", "1000");
-            expect(this.page.isOldVersion).toBe(true);
-        });
-        it("sets oldVersion true", function() {
-            this.page = new chorus.pages.WorkfileShowPage("1", "100");
-            expect(this.page.isOldVersion).toBe(false);
-        })
-    });
 });
