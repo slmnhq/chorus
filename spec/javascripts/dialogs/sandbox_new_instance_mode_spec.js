@@ -393,7 +393,6 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
 
     function itDisplaysLoadingPlaceholderFor(type) {
         it("displays the loading placeholder for " + type, function() {
-            expect(this.view.$("." + type + " .loading_text").text()).toMatch(t("loading"));
             expect(this.view.$("." + type + " .loading_text")).toBeVisible();
             expect(this.view.$("." + type + " select")).not.toBeVisible();
             expect(this.view.$('.' + type + ' label ')).toBeVisible();
