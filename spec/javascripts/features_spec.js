@@ -1,34 +1,23 @@
 describe("chorus.features", function() {
     beforeEach(function() {
-        this.browserMozilla = $.browser.mozilla;
-        this.browserVersion = $.browser.version;
+        this.browserMsie = $.browser.msie;
     });
 
     afterEach(function() {
-        $.browser.mozilla = this.browserMozilla;
-        $.browser.version = this.browserVersion;
+        $.browser.msie = this.browserMsie;
     });
 
-    describe("multipleFileUpload", function() {
-        it("should return false if mozilla and less than version 2.0", function() {
-            $.browser.version = '1.9';
-            $.browser.mozilla = true;
+    describe("fileProgress", function() {
+        it("should return false if msie", function() {
+            $.browser.msie = true;
             chorus.detectFeatures();
-            expect(chorus.features.multipleFileUpload).toBeFalsy();
+            expect(chorus.features.fileProgress).toBeFalsy();
         });
 
-        it("should return true if mozilla and greater than version 1.9", function() {
-            $.browser.version = '2.0';
-            $.browser.mozilla = true;
+        it("should return true if not msie", function() {
+            $.browser.msie = false;
             chorus.detectFeatures();
-            expect(chorus.features.multipleFileUpload).toBeTruthy();
-        });
-
-        it("should return true if not mozilla and less than version 2.0", function() {
-            $.browser.version = '1.9';
-            $.browser.mozilla = false;
-            chorus.detectFeatures();
-            expect(chorus.features.multipleFileUpload).toBeTruthy();
+            expect(chorus.features.fileProgress).toBeTruthy();
         });
     });
 });

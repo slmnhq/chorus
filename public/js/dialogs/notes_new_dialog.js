@@ -63,7 +63,12 @@
 
         initProgressBars: function() {
             this.$(".remove").addClass("hidden");
-            this.$(".desktopfile .progress_bar").removeClass("hidden");
+            if(chorus.features.fileProgress) {
+                this.$(".desktopfile .progress_bar").removeClass("hidden");
+            } else {
+                this.$(".desktopfile .progress_text").removeClass("hidden");
+            }
+
             this.$(".workfile .upload_finished").removeClass("hidden");
             this.$(".modal_controls .cancel_upload").removeClass("hidden");
             this.$(".modal_controls .cancel").addClass("hidden");
@@ -75,6 +80,7 @@
                 data.fileDetailsElement.find(".progress_bar span").css('right', parseInt((data.total - data.loaded) / data.total * 100, 10));
             } else {
                 data.fileDetailsElement.find(".progress_bar").addClass("hidden")
+                data.fileDetailsElement.find(".progress_text").addClass("hidden")
                 data.fileDetailsElement.find(".upload_finished").removeClass("hidden")
             }
         },
@@ -106,6 +112,7 @@
             }
             this.$(".remove").removeClass("hidden");
             this.$(".progress_bar").addClass("hidden");
+            this.$(".progress_text").addClass("hidden");
             this.$(".upload_finished").addClass("hidden");
             this.$(".modal_controls .cancel_upload").addClass("hidden");
             this.$(".modal_controls .cancel").removeClass("hidden");
@@ -117,7 +124,6 @@
             return {
                 entityType: this.model.get("entityType"),
                 formUrl : this.model.url(),
-                multipleFileUpload: chorus.features.multipleFileUpload,
                 allowWorkfileAttachments : this.options.launchElement.data("allowWorkfileAttachments")
             };
         },

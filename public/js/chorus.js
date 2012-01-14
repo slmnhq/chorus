@@ -31,7 +31,7 @@
         };
 
         self.detectFeatures = function() {
-            self.features.multipleFileUpload = !$.browser.mozilla || (parseInt($.browser.version) >= 2);
+            self.features.fileProgress = !$.browser.msie;
         }
 
         self.toast = function(message, options) {

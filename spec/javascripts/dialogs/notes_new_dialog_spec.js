@@ -304,25 +304,46 @@ describe("NotesNewDialog", function() {
                 });
 
                 describe("initProgressBars", function() {
-                    beforeEach(function() {
-                        this.dialog.initProgressBars();
-                    });
+                    context("with fileProgress support", function() {
+                        beforeEach(function() {
+                            chorus.features.fileProgress = true;
+                            this.dialog.initProgressBars();
+                        });
+                        it("shows the progress bar for desktopfiles", function() {
+                            this.dialog.$(".file_details.desktopfile").each(function() {
+                                expect($(this).find('.progress_bar')).toBeVisible();
+                                expect($(this).find('.progress_text')).not.toBeVisible();
+                                expect($(this).find('.remove')).not.toBeVisible();
+                                expect($(this).find('.upload_finished')).not.toBeVisible();
+                            })
+                        });
 
-                    it("shows the progress bar for desktopfiles", function() {
-                        this.dialog.$(".file_details.desktopfile").each(function() {
-                            expect($(this).find('.progress_bar')).toBeVisible();
-                            expect($(this).find('.remove')).not.toBeVisible();
-                            expect($(this).find('.upload_finished')).not.toBeVisible();
+                        it("shows the upload_finished for workfiles", function() {
+                            this.dialog.$(".file_details.workfile").each(function() {
+                                expect($(this).find('.progress_bar')).not.toBeVisible();
+                                expect($(this).find('.remove')).not.toBeVisible();
+                                expect($(this).find('.upload_finished')).toBeVisible();
+                            })
+                        });
+                    })
+                    context("without fileProgress support", function() {
+                        beforeEach(function() {
+                            chorus.features.fileProgress = false;
+                            this.dialog.initProgressBars();
+                        });
+                        afterEach(function() {
+                            chorus.features.fileProgress = true;
                         })
-                    });
+                        it("shows the progress text for desktopfiles", function() {
+                            this.dialog.$(".file_details.desktopfile").each(function() {
+                                expect($(this).find('.progress_text')).toBeVisible();
+                                expect($(this).find('.progress_bar')).not.toBeVisible();
+                                expect($(this).find('.remove')).not.toBeVisible();
+                                expect($(this).find('.upload_finished')).not.toBeVisible();
+                            })
+                        });
+                    })
 
-                    it("shows the upload_finished for workfiles", function() {
-                        this.dialog.$(".file_details.workfile").each(function() {
-                            expect($(this).find('.progress_bar')).not.toBeVisible();
-                            expect($(this).find('.remove')).not.toBeVisible();
-                            expect($(this).find('.upload_finished')).toBeVisible();
-                        })
-                    });
                 })
             });
 
