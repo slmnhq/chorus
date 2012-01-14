@@ -60,6 +60,13 @@
             return [this.get("firstName"), this.get("lastName")].join(' ');
         },
 
+        displayShortName: function(length) {
+            length = length || 20;
+
+            var name = this.displayName();
+            return (name.length < length) ? name : this.get("firstName") + " " + this.get("lastName")[0] + ".";
+        },
+
         attrToLabel : {
             "emailAddress" : "users.email",
             "firstName" : "users.first_name",

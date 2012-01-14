@@ -197,4 +197,24 @@ describe("chorus.models.User", function() {
             });
         })
     })
+
+    describe("displayShortName", function() {
+        context("with a short user name", function() {
+            beforeEach(function() {
+                this.model.set({firstName: "Party", lastName: "Man"});
+            })
+            it("displays the normal display name", function() {
+                expect(this.model.displayShortName(20)).toBe(this.model.displayName());
+            });
+        });
+
+        context("where the full name is longer than the allowed length", function() {
+            beforeEach(function() {
+                this.model.set({firstName: "Party", lastName: "ManiManiManiManiManiManiMani"});
+            })
+            it("displays the normal display name", function() {
+                expect(this.model.displayShortName(20)).toBe("Party M.");
+            });
+        });
+    })
 });

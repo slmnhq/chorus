@@ -1,12 +1,5 @@
 ;(function($, ns) {
     ns.WorkspaceSummaryPage = chorus.pages.Base.extend({
-        crumbs : function() {
-            return [
-                { label: t("breadcrumbs.home"), url: "#/" },
-                { label: this.model.get("name") }
-            ]
-        },
-
         setup : function(workspaceId) {
             // chorus.router supplies arguments to setup
             this.model = new chorus.models.Workspace({id : workspaceId});

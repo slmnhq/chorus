@@ -22,8 +22,20 @@
         getLoadedCrumbs : function(){
             return [
                     {label: t("breadcrumbs.home"), url: "#/"},
+                    {label: t("breadcrumbs.workspaces"), url: "#/workspaces"},
                     {label: this.model.get("name")}
                 ];
         }
     });
+
+    ns.UserShowBreadcrumbView = ns.ModelBoundBreadcrumbsView.extend({
+        getLoadedCrumbs : function() {
+            return [
+                { label: t("breadcrumbs.home"), url: "#/" },
+                { label: t("breadcrumbs.users"), url: "#/users" },
+                { label: this.model.displayShortName(20) }
+            ];
+        }
+    });
+
 })(jQuery, chorus.views);

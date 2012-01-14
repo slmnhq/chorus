@@ -57,7 +57,11 @@ describe("chorus.views.WorkspaceBreadcrumbView", function() {
             it("displays the breadcrumbs", function(){
                 expect(this.view.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
                 expect(this.view.$(".breadcrumb:eq(0)").text().trim()).toBe(t("breadcrumbs.home"));
-                expect(this.view.$(".breadcrumb:eq(1)").text().trim()).toBe("foo");
+
+                expect(this.view.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/workspaces");
+                expect(this.view.$(".breadcrumb:eq(1)").text().trim()).toBe(t("breadcrumbs.workspaces"));
+
+                expect(this.view.$(".breadcrumb:eq(2)").text().trim()).toBe("foo");
             });
 
             context("when the model changes", function(){
@@ -66,7 +70,7 @@ describe("chorus.views.WorkspaceBreadcrumbView", function() {
                 });
 
                 it("displays the new breadcrumb automatically", function(){
-                    expect(this.view.$(".breadcrumb:eq(1)").text().trim()).toBe("bar");
+                    expect(this.view.$(".breadcrumb:eq(2)").text().trim()).toBe("bar");
                 });
             });
         });

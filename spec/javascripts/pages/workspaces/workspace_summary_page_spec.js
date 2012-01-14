@@ -37,7 +37,10 @@ describe("chorus.pages.WorkspaceSummaryPage", function() {
             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
             expect(this.page.$(".breadcrumb:eq(0) a").text()).toMatchTranslation("breadcrumbs.home");
 
-            expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toBe("Cool Workspace");
+            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/workspaces");
+            expect(this.page.$(".breadcrumb:eq(1) a").text()).toMatchTranslation("breadcrumbs.workspaces");
+
+            expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("Cool Workspace");
         });
     })
 });

@@ -15,8 +15,7 @@ describe("user_show_page", function(){
 
     describe("#render", function(){
         beforeEach(function(){
-            fixtures.model = 'User';
-            this.user = fixtures.modelFor("fetch")
+            this.user = fixtures.user({userName: "edcadmin", id: "42", firstName: "EDC", lastName: "Admin"});
             this.view = new chorus.pages.UserShowPage(this.user.get("id"));
             this.view.model.set(this.user.attributes);
             this.view.model.loaded = true;
@@ -42,8 +41,8 @@ describe("user_show_page", function(){
                 expect(this.view.$("#breadcrumbs .breadcrumb a").eq(1).text()).toBe(t("breadcrumbs.users"));
             });
 
-            it("links to home for the first crumb", function(){
-                expect(this.view.$("#breadcrumbs .breadcrumb .slug").text()).toBe(t("breadcrumbs.user_profile"));
+            it("displays the user name for the last crumb", function(){
+                expect(this.view.$("#breadcrumbs .breadcrumb .slug").text()).toBe("EDC Admin");
             });
         });
 
