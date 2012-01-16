@@ -2,8 +2,11 @@
     {{#each models}}
         <li>
             <a href="{{showUrl}}">
-                <div class="version_title">{{t "workfile.version_title" versionNum=versionNum}}</div>
-                <div class="version_details">{{t "workfile.version_saved_by" authorName=authorName formattedDate=formattedDate}}</div>
+                <img src="/images/version.png" />
+                <div class="version_info">
+                    <div class="version_title">{{t "workfile.version_title" versionNum=versionNum}}</div>
+                    <div class="version_details">{{t "workfile.version_saved_by" authorName=authorName formattedDate=formattedDate}}</div>
+                </div>
                 <div class="spacer"></div>
             </a>
         </li>

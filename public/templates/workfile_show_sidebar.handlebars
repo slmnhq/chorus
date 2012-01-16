@@ -1,11 +1,12 @@
+<div class="spacer"/>
 <div class="info">
     <div title="{{fileName}}" class="fileName">{{fileName}}</div>
-    <div class="updated">Updated by <a class="updated_by" href="{{modifierUrl}}">{{updatedBy}}</a> on <span class="updated_on">{{displayTimestamp lastUpdatedStamp}}</span></div>
-    <span class="title">{{t "actions.display"}}</span>
+    <span class="display_title">{{t "actions.display"}}</span>
     <a class="version_list" href="#">
         <span class="chosen">{{t "workfile.version_title" versionNum=versionNum}}</span>
         <img src="/images/blue-menu-triangle.png"/>
     </a>
+    <div class="updated">{{t "workfiles.updated_by"}} <a class="updated_by" href="{{modifierUrl}}">{{updatedBy}}</a> on <span class="updated_on">{{displayTimestamp lastUpdatedStamp}}</span></div>
 </div>
 <div class="actions">
     <ul>
