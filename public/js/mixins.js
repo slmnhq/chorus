@@ -9,6 +9,17 @@
                 args.unshift(eventName);
                 target.trigger.apply(target, args);
             });
+        },
+
+        bindOnce: function(eventName, callback, context) {
+            var self = this;
+
+            this.bind(eventName, once);
+
+            function once() {
+                callback.apply(context, arguments);
+                this.unbind(eventName, once);
+            }
         }
     };
 
