@@ -27,7 +27,14 @@
         },
 
         createDraft : function() {
-            return new ns.Draft({workfileId: this._workfileId(), workspaceId : this.get("workspaceId"), content : this.get("content")})
+            var draft = new ns.Draft({workfileId: this._workfileId(), workspaceId : this.get("workspaceId"), content : this.get("content")})
+            if (this.get("hasDraft")) {
+                draft.id = "ForceBackboneToUsePut"
+            }
+            draft.bind("saved", function() {
+                this.set({ hasDraft: true });
+            }, this);
+            return draft;
         },
 
         createNewVersion : function() {
