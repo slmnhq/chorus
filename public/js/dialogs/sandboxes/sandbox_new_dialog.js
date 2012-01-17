@@ -25,7 +25,15 @@
             ns.models.Instance.aurora().fetch();
             ns.models.Instance.aurora().bind("change", this.render, this);
 
+            this.config = new ns.models.Config();
+            this.config.fetch();
+            this.config.bind("change", this.displayMaxSize, this);
+
             this.standaloneMode = new ns.views.SandboxNewStandaloneMode();
+        },
+
+        postRender : function() {
+            this.displayMaxSize();
         },
 
         additionalContext: function() {
@@ -67,6 +75,12 @@
 
         saveFailed: function() {
             this.$("button.submit").stopLoading();
+        },
+
+        displayMaxSize : function() {
+            if (this.config.get("provisionMaxSizeInGB")) {
+                this.$(".max_size").text(t("sandbox.create_standalone_dialog.max_size", { size : this.config.get("provisionMaxSizeInGB")}));
+            }
         },
 
         enableOrDisableSaveButton: function() {

@@ -6,6 +6,14 @@ describe("chorus.dialogs.SandboxNew", function() {
         this.dialog = new chorus.dialogs.SandboxNew({launchElement: launchElement, pageModel: this.workspace});
     })
 
+    describe("#setup", function() {
+        it("fetches the chorus config", function() {
+            expect(_.find(this.server.fetches(), function(request) {
+                return request.url == "/edc/config/";
+            })).toBeTruthy();
+        })
+    })
+
     context("#render", function() {
         beforeEach(function() {
             spyOn($.fn, 'qtip');
@@ -62,6 +70,30 @@ describe("chorus.dialogs.SandboxNew", function() {
             });
         });
 
+        describe("before the configuration fetch has returned", function() {
+            it("does not render any maximum size information", function(){
+                expect(this.dialog.$(".max_size").text()).toBe("");
+            })
+        })
+
+        describe("when the configuration fetch has returned", function() {
+            beforeEach(function() {
+                var request = _.find(this.server.fetches(), function(request) {
+                return request.url == "/edc/config/";
+                })
+
+                request.succeed([ {
+                    "provisionMaxSizeInGB" : 2000,
+                    "provisionMaxSize" : "2000 GB",
+                    "sandboxRecommendSizeInBytes" : 5368709120,
+                    "sandboxRecommendSize":"5 GB"
+                }])
+            });
+
+            it("renders maximum size information", function(){
+                expect(this.dialog.$(".max_size").text()).toMatchTranslation("sandbox.create_standalone_dialog.max_size", { size : 2000 })
+            })
+        })
 
         it("displays a help tooltip for standalone mode", function() {
             expect(this.dialog.$("label[for='as_standalone']")).toContain("img.help");
