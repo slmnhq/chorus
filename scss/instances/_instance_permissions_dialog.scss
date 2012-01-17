@@ -91,6 +91,10 @@ $link-padding: 6px;
                             color: $color-text4;
                         }
 
+                        a {
+                            font-size: 12px;
+                        }
+
                         .cancel_change_owner, .change_owner, .make_owner, .edit {
                             border-left: 1px solid $link-color;
                             padding-left: $link-padding;
