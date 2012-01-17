@@ -1,5 +1,5 @@
 (function($, ns) {
-    ns.Router = Backbone.Router.extend({
+    ns.Router = Backbone.Router.extend(_.extend({}, chorus.Mixins.Events, {
         maps : [
             // routes are evaluated in LIFO format, so adding a match-all route first will act as a fallback properly
             // (as long as `maps` is evaluated in order)
@@ -81,7 +81,7 @@
             };
 
         }
-    });
+    }));
 
 
     // apply arbitrary number of arguments to constructor (for routes with parameters)

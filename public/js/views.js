@@ -117,6 +117,7 @@
         },
 
         bindCallbacks : function() {
+            this.beforeNavigateAway && chorus.router.bindOnce("leaving", this.beforeNavigateAway, this);
             if (this.resource) {
                 if (!this.persistent) {
                     this.resource.bind("change", this.render, this);
@@ -130,7 +131,7 @@
             }
         },
 
-        context: function context() { //phase me out for presenters, yo!
+        context: function context() {
             var ctx = {};
             var self = this;
 
