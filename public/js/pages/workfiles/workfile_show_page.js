@@ -3,7 +3,8 @@
         getLoadedCrumbs : function(){
             return [
                     {label: t("breadcrumbs.home"), url: "#/"},
-                    {label: this.options.workspace.get("name"), url: this.options.workspace.showUrl()},
+                    {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
+                    {label: this.options.workspace.displayShortName(20), url: this.options.workspace.showUrl()},
                     {label: t("breadcrumbs.workfiles.all"), url: this.options.workspace.showUrl() + "/workfiles"},
                     {label: this.model.get("fileName") }
                 ];

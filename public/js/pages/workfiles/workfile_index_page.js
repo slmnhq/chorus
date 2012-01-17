@@ -4,7 +4,8 @@
         getLoadedCrumbs : function(){
             return [
                     {label: t("breadcrumbs.home"), url: "#/"},
-                    {label: this.model.get("name"), url: this.model.showUrl()},
+                    {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
+                    {label: this.model.displayShortName(), url: this.model.showUrl()},
                     {label: t("breadcrumbs.workfiles.all")}
                 ];
         }

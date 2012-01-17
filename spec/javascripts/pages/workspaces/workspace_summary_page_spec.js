@@ -20,27 +20,53 @@ describe("chorus.pages.WorkspaceSummaryPage", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.page = new chorus.pages.WorkspaceSummaryPage(4);
-            this.page.model.set({summary: "this is a summary", name : "Cool Workspace"});
-            this.page.model.loaded = true;
-            this.page.render();
         })
 
-        it("uses a TruncatedText view for the header", function() {
-            expect(this.page.mainContent.contentHeader instanceof chorus.views.TruncatedText).toBeTruthy();
+        context("while the model is loading", function(){
+            beforeEach(function(){
+                this.page.model.loaded = false;
+                this.page.render();
+            });
+
+            it("does not display any text", function(){
+                expect(this.page.$(".breadcrumb").text().trim()).toBe("");
+            });
         });
 
-        it("uses the workspace's summary for the text of the header", function() {
-            expect(this.page.mainContent.contentHeader.$(".entire_text").text()).toBe(this.page.model.get("summary"));
-        });
+        context("when the model has loaded", function(){
+            beforeEach(function(){
+                this.page.model.loaded = true;
+                this.page.model.set({summary: "this is a summary", name : "Cool Workspace"});
+                this.page.render();
+            });
 
-        it("renders breadcrumbs as home > {workspace name}", function() {
-            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
-            expect(this.page.$(".breadcrumb:eq(0) a").text()).toMatchTranslation("breadcrumbs.home");
+            it("uses a TruncatedText view for the header", function() {
+                expect(this.page.mainContent.contentHeader instanceof chorus.views.TruncatedText).toBeTruthy();
+            });
 
-            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/workspaces");
-            expect(this.page.$(".breadcrumb:eq(1) a").text()).toMatchTranslation("breadcrumbs.workspaces");
+            it("uses the workspace's summary for the text of the header", function() {
+                expect(this.page.mainContent.contentHeader.$(".entire_text").text()).toBe(this.page.model.get("summary"));
+            });
 
-            expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("Cool Workspace");
+            it("displays the breadcrumbs", function(){
+                expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
+                expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toBe(t("breadcrumbs.home"));
+
+                expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/workspaces");
+                expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toBe(t("breadcrumbs.workspaces"));
+
+                expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("Cool Workspace");
+            });
+
+            context("when the model changes", function(){
+                beforeEach(function(){
+                    this.page.model.set({name: "bar"})
+                });
+
+                it("displays the new breadcrumb automatically", function(){
+                    expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("bar");
+                });
+            });
         });
     })
 });

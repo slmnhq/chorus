@@ -11,14 +11,29 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             this.page.render();
         });
 
-        it("renders home > {workspace name} > All work files", function() {
+        it("renders home > Workspaces > {workspace name} > All work files", function() {
             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
             expect(this.page.$(".breadcrumb:eq(0) a").text()).toMatchTranslation("breadcrumbs.home");
 
-            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/workspaces/4");
-            expect(this.page.$(".breadcrumb:eq(1) a").text()).toBe("Cool Workspace");
+            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/workspaces");
+            expect(this.page.$(".breadcrumb:eq(1) a").text()).toMatchTranslation("breadcrumbs.workspaces");
 
-            expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toMatchTranslation("breadcrumbs.workfiles.all");
+            expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/4");
+            expect(this.page.$(".breadcrumb:eq(2) a").text()).toBe("Cool Workspace");
+
+            expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toMatchTranslation("breadcrumbs.workfiles.all");
+        });
+
+        context("with a long workspace name", function() {
+            beforeEach(function() {
+                this.page.mainContent.model.set({name: "LongLongLongLongLongWorkspaceName"});
+                this.page.render();
+            });
+
+            it("ellipsizes the workspace name in the breadcrumb view", function() {
+                expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/4");
+                expect(this.page.$(".breadcrumb:eq(2) a").text()).toBe("LongLongLongLongLong...");
+            });
         });
     });
 

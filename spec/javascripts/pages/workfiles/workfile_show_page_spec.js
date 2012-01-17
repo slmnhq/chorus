@@ -16,7 +16,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
             expect(this.server.requests[0].url).toBe(workspace.url());
         });
 
-        it("instantiates and fetches a workfile with ehe given id", function() {
+        it("instantiates and fetches a workfile with the given id", function() {
             var workfile = this.page.model;
             expect(workfile.get("id")).toBe(this.workfileId);
             expect(this.server.requests[1].url).toBe(workfile.url());
@@ -132,21 +132,33 @@ describe("chorus.pages.WorkfileShowPage", function() {
         });
 
         describe("breadcrumbs", function() {
+            it("renders home > Workspaces > {workspace name} > All work files > {workfile name}", function() {
+                expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
+                expect(this.page.$(".breadcrumb:eq(0) a").text()).toMatchTranslation("breadcrumbs.home");
 
-        it("renders home > {workspace name} > All work files > {workfile name}", function() {
-            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
-            expect(this.page.$(".breadcrumb:eq(0) a").text()).toMatchTranslation("breadcrumbs.home");
+                expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/workspaces");
+                expect(this.page.$(".breadcrumb:eq(1) a").text()).toMatchTranslation("breadcrumbs.workspaces");
 
-            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/workspaces/4");
-            expect(this.page.$(".breadcrumb:eq(1) a").text()).toBe("Cool Workspace");
+                expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/4");
+                expect(this.page.$(".breadcrumb:eq(2) a").text()).toBe("Cool Workspace");
 
-            expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toMatchTranslation("breadcrumbs.workfiles.all");
-            expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/4/workfiles");
+                expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toMatchTranslation("breadcrumbs.workfiles.all");
+                expect(this.page.$(".breadcrumb:eq(3) a").attr("href")).toBe("#/workspaces/4/workfiles");
 
-            expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toBe("who.sql");
-
-        });
+                expect(this.page.$(".breadcrumb:eq(4)").text().trim()).toBe("who.sql");
+            });
+            
+            context("with a long workspace name", function() {
+                beforeEach(function() {
+                    this.page.workspace.set({name: "LongLongLongLongLongWorkspaceName"});
+                    this.page.render();
+                });
+                
+                it("ellipsizes the workspace name in the breadcrumb view", function() {
+                    expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/4");
+                    expect(this.page.$(".breadcrumb:eq(2) a").text()).toBe("LongLongLongLongLong...");
+                });
+            })
         });
     })
-
 });

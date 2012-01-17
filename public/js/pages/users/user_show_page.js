@@ -1,9 +1,19 @@
 (function($, ns) {
+
+    var breadcrumbsView = chorus.views.ModelBoundBreadcrumbsView.extend({
+        getLoadedCrumbs : function() {
+                return [
+                    { label: t("breadcrumbs.home"), url: "#/" },
+                    { label: t("breadcrumbs.users"), url: "#/users" },
+                    { label: this.model.displayShortName(20) }
+                ];
+        }
+    })
     ns.UserShowPage = chorus.pages.Base.extend({
         setup : function(userId){
             this.model = new chorus.models.User({id: userId});
             this.model.fetch();
-            this.breadcrumbs = new chorus.views.UserShowBreadcrumbView({model: this.model});
+            this.breadcrumbs = new breadcrumbsView({model: this.model});
 
             this.mainContent = new chorus.views.MainContentView({
                 model : this.model,
