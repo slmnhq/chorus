@@ -197,8 +197,10 @@
                 return _(this.errors).isEmpty();
             },
 
-            setValidationError : function(attr, message_key, custom_key) {
-                this.errors[attr] = this.errors[attr] || t((custom_key || message_key), {fieldName: this._textForAttr(attr)});
+            setValidationError : function(attr, message_key, custom_key, vars) {
+                vars = vars || {};
+                vars["fieldName"] = this._textForAttr(attr);
+                this.errors[attr] = this.errors[attr] || t((custom_key || message_key), vars);
             },
 
             require : function(attr, newAttrs, messageKey) {
@@ -249,6 +251,14 @@
 
                 if (!value || !conf || value != conf) {
                     this.setValidationError(attr, "validation.confirmation", messageKey);
+                }
+            },
+
+            requireIntegerRange : function(attr, min, max, newAttrs, messageKey) {
+                var value = newAttrs && newAttrs.hasOwnProperty(attr) ? newAttrs[attr] : this.get(attr);
+                var intValue = parseInt(value);
+                if (!intValue || intValue < min || intValue > max || parseFloat(value) !== intValue) {
+                    this.setValidationError(attr, "validation.integer_range", messageKey, { min : min, max : max });
                 }
             },
 

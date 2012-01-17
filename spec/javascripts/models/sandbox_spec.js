@@ -71,6 +71,18 @@ describe("chorus.models.Sandbox", function() {
                 expectInvalid({ size: "0" }, this.model, [ "size" ]);
                 expectInvalid({ size: "1.7" }, this.model, [ "size" ]);
             });
+
+            describe("when the maximum size has been configured", function() {
+                beforeEach(function() {
+                    this.model.maximumSize = 2000;
+                })
+
+                it("requires a size less than or equal to the maximum size", function() {
+                    expectInvalid({ size: "3000" }, this.model, [ "size" ]);
+                    expectValid({ size: "2000" }, this.model);
+                    expectValid({ size: "200" }, this.model);
+                })
+            })
         });
 
         context("with a database id", function() {

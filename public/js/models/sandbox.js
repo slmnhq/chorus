@@ -31,7 +31,12 @@
                 this.require("instanceName", attrs);
                 this.requirePattern("instanceName", noStartingDigitRegex, attrs);
                 this.require("size", attrs);
-                this.requirePositiveInteger("size", attrs);
+
+                if (this.maximumSize) {
+                    this.requireIntegerRange("size", 1, this.maximumSize, attrs);
+                } else {
+                    this.requirePositiveInteger("size", attrs);
+                }
             }
             if (this.isCreatingNew('database', attrs)) {
                 this.require("databaseName", attrs);
