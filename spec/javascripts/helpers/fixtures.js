@@ -1160,6 +1160,26 @@
                     });
                 },
 
+                "WORKFILE_UPGRADED_VERSION" : function() {
+                    return new chorus.models.Activity({
+                        author: fixtures.authorJson(),
+                        type: "WORKFILE_UPGRADED_VERSION",
+                        timestamp: "2011-12-12 12:12:12",
+                        id: "10860",
+                        commitMessage: "make file better",
+                        version: "3",
+                        workfile : fixtures.workfileJson(),
+                        workspace : fixtures.workspaceJson(),
+                        comments: [
+                            {
+                                text: "OBAMA!!!!",
+                                author : fixtures.authorJson(),
+                                timestamp : "2011-12-15 12:34:56"
+                            }
+                        ]
+                    });
+                },
+
                 "NOTE_ON_INSTANCE" : function() {
                     return new chorus.models.Activity({
                         author: fixtures.authorJson(),

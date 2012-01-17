@@ -88,12 +88,8 @@
         WORKSPACE_ARCHIVED : workspaceIsObject,
         WORKSPACE_UNARCHIVED : workspaceIsObject,
 
-        WORKFILE_CREATED : function(model) {
-            return {
-                objectName : model.workfile().get("name"),
-                objectUrl : new ns.models.Workfile({id: model.workfile().get("id"), workspaceId : this.workspace.get("id")}).showUrl()
-            }
-        },
+        WORKFILE_CREATED : workfileIsObject,
+        WORKFILE_UPGRADED_VERSION : workfileIsObject,
 
         INSTANCE_CREATED : function(model) {
             var instance = model.instance();
@@ -136,6 +132,13 @@
         return {
             objectName : this.presenter.workspaceName,
             objectUrl : this.presenter.workspaceUrl
+        }
+    }
+
+    function workfileIsObject(model) {
+        return {
+            objectName : model.workfile().get("name"),
+            objectUrl : new ns.models.Workfile({id: model.workfile().get("id"), workspaceId : this.workspace.get("id")}).showUrl()
         }
     }
 
