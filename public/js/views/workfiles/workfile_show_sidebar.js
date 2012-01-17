@@ -23,6 +23,8 @@
             this.allVersions = this.model.allVersions();
             this.versionList = new ns.views.WorkfileVersionList({collection : this.allVersions});
             this.allVersions.fetch();
+            this.model.bind("invalidated", this.allVersions.fetch, this.allVersions);
+            this.allVersions.bind("changed", this.render, this);
         },
 
         postRender : function() {

@@ -13,6 +13,11 @@
             this.model.bind("saved", this.saved, this);
         },
 
+        makeModel : function() {
+            this._super("makeModel", arguments);
+            this.model = this.pageModel.createNewVersion();
+        },
+
         saveWorkfileNewVersion : function(e) {
             e.preventDefault();
             this.model.set({"commitMessage" : this.$("[name=commitMessage]").val()}, {silent : true});
@@ -21,8 +26,10 @@
         },
 
         saved : function() {
-            this.closeModal();
+            this.pageModel.set({"versionNum" : this.model.get("versionNum"),
+                                "versionFileId" : this.model.get("versionFileId")});
             this.model.trigger("autosaved");
+            this.closeModal();
         }
     });
 })(jQuery, chorus.dialogs);
