@@ -27,7 +27,7 @@
 
             this.config = new ns.models.Config();
             this.config.fetch();
-            this.config.bind("change", this.displayMaxSize, this);
+            this.config.bind("change", this.setMaxSize, this);
 
             this.standaloneMode = new ns.views.SandboxNewStandaloneMode();
         },
@@ -75,6 +75,11 @@
 
         saveFailed: function() {
             this.$("button.submit").stopLoading();
+        },
+
+        setMaxSize : function() {
+            this.model.maximumSize = this.config.get("provisionMaxSizeInGB");
+            this.displayMaxSize();
         },
 
         displayMaxSize : function() {

@@ -12,6 +12,25 @@ describe("chorus.dialogs.SandboxNew", function() {
                 return request.url == "/edc/config/";
             })).toBeTruthy();
         })
+
+        describe("when the config fetch returns", function() {
+            beforeEach(function() {
+                var request = _.find(this.server.fetches(), function(request) {
+                return request.url == "/edc/config/";
+                })
+
+                request.succeed([ {
+                    "provisionMaxSizeInGB" : 2000,
+                    "provisionMaxSize" : "2000 GB",
+                    "sandboxRecommendSizeInBytes" : 5368709120,
+                    "sandboxRecommendSize":"5 GB"
+                }])
+            });
+
+            it("configures the maximum size in the sandbox", function() {
+                expect(this.dialog.model.maximumSize).toBe(2000);
+            })
+        })
     })
 
     context("#render", function() {
