@@ -52,6 +52,7 @@
                     if(className == "Login" && self.app.session.loggedIn()) {
                         self.navigate("/", true);
                     } else {
+                        self.trigger("leaving");
                         var pageClass = ns.pages[className + "Page"];
                         var page = applyConstructor(pageClass, args);
                         page.pageOptions = self.app.pageOptions;
