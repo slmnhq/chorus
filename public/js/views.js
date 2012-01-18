@@ -117,17 +117,19 @@
 
         bindCallbacks : function() {
             this.beforeNavigateAway && ns.router.bindOnce("leaving", this.beforeNavigateAway, this);
+            this.bindings = new ns.BindingGroup(this);
+
             if (this.resource) {
+                this.bindings.add(this.resource, "saveFailed validationFailed", this.showErrors);
+                this.bindings.add(this.resource, "validated", this.clearErrors);
                 if (!this.persistent) {
-                    this.resource.bind("change", this.render, this);
-                    this.resource.bind("reset", this.render, this);
-                    this.resource.bind("add", this.render, this);
-                    this.resource.bind("remove", this.render, this);
+                    this.bindings.add(this.resource, "change reset add remove", this.render);
                 }
-                this.resource.bind("validationFailed", this.showErrors, this);
-                this.resource.bind("validated", this.clearErrors, this);
-                this.resource.bind("saveFailed", this.showErrors, this);
             }
+        },
+
+        beforeNavigateAway: function() {
+            this.bindings.removeAll();
         },
 
         context: function context() {
