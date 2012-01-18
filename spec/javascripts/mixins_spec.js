@@ -35,20 +35,15 @@ describe("chorus.Mixins", function() {
         });
 
         describe("bindOnce", function() {
+            beforeEach(function() {
+                this.source = {};
+                _.extend(this.source, Backbone.Events, chorus.Mixins.Events);
+                this.callback = jasmine.createSpy("callbackBoundOnce");
+            });
+
             describe("with no bind context", function() {
                 beforeEach(function() {
-                    this.source = {};
-
-                    _.extend(this.source, Backbone.Events, chorus.Mixins.Events);
-
-                    this.counter = 0;
-
-                    var self = this;
-                    var inc = function(value) {
-                        self.counter += value;
-                    }
-
-                    this.source.bindOnce("increment", inc);
+                    this.source.bindOnce("increment", this.callback);
                 });
 
                 itPassesArgumentsCorrectly();
@@ -59,17 +54,20 @@ describe("chorus.Mixins", function() {
 
             describe("with a bind context", function() {
                 beforeEach(function() {
-                    this.source = {};
+                    this.source.bindOnce("increment", this.callback, this);
+                });
 
-                    _.extend(this.source, Backbone.Events, chorus.Mixins.Events);
+                itPassesArgumentsCorrectly();
+                itCallsTheBoundFunctionOnlyOnce();
+                itTriggersOnlyOnMatchingEventName();
+                itUnbindsCorrectly();
+            });
 
-                    this.counter = 0;
-
-                    var inc = function(value) {
-                        this.counter += value;
-                    }
-
-                    this.source.bindOnce("increment", inc, this);
+            describe("when #bindOnce is called more than once", function() {
+                beforeEach(function() {
+                    this.source.bindOnce("increment", this.callback, this);
+                    this.source.bindOnce("increment", this.callback, this);
+                    this.source.bindOnce("increment", this.callback, this);
                 });
 
                 itPassesArgumentsCorrectly();
@@ -80,50 +78,37 @@ describe("chorus.Mixins", function() {
 
             function itPassesArgumentsCorrectly() {
                 it("passes arguments correctly", function() {
-                    this.source.trigger("increment", 5);
-
-                    expect(this.counter).toBe(5);
+                    this.source.trigger("increment", 'foo');
+                    expect(this.callback).toHaveBeenCalledWith('foo');
                 });
             };
 
             function itCallsTheBoundFunctionOnlyOnce() {
                 it("calls the bound function only once over multiple triggers", function() {
-                    this.source.trigger("increment", 1);
+                    this.source.trigger("increment", 'foo');
+                    this.source.trigger("increment", 'bar');
+                    this.source.trigger("increment", 'baz');
 
-                    expect(this.counter).toBe(1);
-
-                    this.source.trigger("increment", 2);
-
-                    expect(this.counter).toBe(1);
+                    expect(this.callback.callCount).toBe(1);
                 });
             };
 
             function itTriggersOnlyOnMatchingEventName() {
                 it("does not call the function when a different trigger occurs", function() {
                     this.source.trigger("foobar");
-
-                    expect(this.counter).toBe(0);
+                    expect(this.callback).not.toHaveBeenCalled();
                 });
             };
 
             function itUnbindsCorrectly() {
                 describe("unbinding", function() {
-                    beforeEach(function() {
-                        var source = this.source;
-                        spyOn(this.source, "unbind");
-                        this.boundFunc = function() {
-                        };
-
-                        this.source.bindOnce("foo", this.boundFunc);
-                    });
-
                     it("unbinds after the first call", function() {
-                        expect(this.source.unbind).not.toHaveBeenCalled();
+                        this.source.trigger("increment", 'baz');
+                        expect(this.callback.callCount).toBe(1);
 
-                        // We can't assert that the specific function has been provided to unbind
-                        // because it will have been modified already.
-                        this.source.trigger("foo");
-                        expect(this.source.unbind).toHaveBeenCalled();
+                        this.source.trigger("increment", 'baz');
+                        this.source.trigger("increment", 'baz');
+                        expect(this.callback.callCount).toBe(1);
                     });
                 });
             }

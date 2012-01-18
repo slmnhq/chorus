@@ -12,13 +12,19 @@
         },
 
         bindOnce: function(eventName, callback, context) {
-            var self = this;
+            var callbacksForThisEvent = this._callbacks && this._callbacks[eventName];
+            var callbackAlreadyBound = _.any(callbacksForThisEvent, function(pair) {
+                var boundCallback = pair && pair[0];
+                return boundCallback === callback;
+            });
+            if (callbackAlreadyBound) return;
 
-            this.bind(eventName, once);
+            this.bind(eventName, callback, context);
+            this.bind(eventName, unbinder, this);
 
-            function once() {
-                callback.apply(context, arguments);
-                this.unbind(eventName, once);
+            function unbinder() {
+                this.unbind(eventName, callback);
+                this.unbind(eventName, unbinder);
             }
         }
     };
