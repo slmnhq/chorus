@@ -209,6 +209,33 @@
         });
     });
 
+    describe("when navigating away", function() {
+        beforeEach(function() {
+            this.view.render();
+        });
+
+        context("when the file has been changed", function() {
+            beforeEach(function() {
+                this.view.editor.setValue("Foo, Bar, Baz, Quux");
+                chorus.router.trigger("leaving");
+            });
+
+            it("saves a draft", function() {
+                expect(this.server.creates().length).toBe(1);
+            });
+        });
+
+        context("when the file has not been changed", function() {
+            beforeEach(function() {
+                chorus.router.trigger("leaving");
+            });
+
+            it("does not save the draft", function() {
+                expect(this.server.requests.length).toBe(0);
+            });
+        });
+    });
+
         describe("event file:createWorkfileNewVersion", function(){
             beforeEach(function() {
                 this.view.model.set({"content": "old content"});

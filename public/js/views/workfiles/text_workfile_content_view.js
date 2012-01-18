@@ -18,15 +18,13 @@
                mode: this.model.get("mimeType"),
                fixedGutter: true,
                theme: "default",
-               onChange: function() {
-                   self.startTimer();
-               }
+               onChange: _.bind(this.startTimer, this)
             };
 
             this.editor = CodeMirror.fromTextArea(this.$(".text_editor")[0], opts);
 
             if (this.model.canEdit()) {
-                setTimeout( function(){ self.editText(); }, 100);
+                setTimeout(_.bind(this.editText, this), 100);
             }
 
             _.defer(_.bind(this.editor.refresh, this.editor));
@@ -62,6 +60,11 @@
             this.trigger("autosaved");
             this.model.set({"content" : this.editor.getValue()}, {silent: true});
             this.model.createDraft().save();
+        },
+
+        beforeNavigateAway : function() {
+            this._super("beforeNavigateAway");
+            if (this.saveTimer) this.saveDraft();
         },
 
         replaceCurrentVersion : function() {

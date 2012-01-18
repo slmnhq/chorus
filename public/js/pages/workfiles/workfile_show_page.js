@@ -22,7 +22,7 @@
                 this.model = new ns.models.Workfile({id: workfileId, workspaceId: workspaceId});
             }
 
-            this.model.bind("change", this.modelChanged, this);
+            this.bindings.add(this.model, "change", this.modelChanged);
             this.model.fetch();
 
             this.breadcrumbs = new breadcrumbsView({workspace: this.workspace, model: this.model});
