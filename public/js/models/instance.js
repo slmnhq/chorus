@@ -1,6 +1,5 @@
-;
-(function(ns) {
-    ns.models.Instance = chorus.models.Base.extend({
+;(function(ns) {
+    ns.models.Instance = ns.models.Base.extend({
         urlTemplate : "instance/{{id}}",
         showUrlTemplate : "instances/{{id}}",
         entityType: "instance",
@@ -36,7 +35,7 @@
         },
 
         isOwner : function(user) {
-            return this.owner().get("id") == user.get('id') && user instanceof chorus.models.User
+            return this.owner().get("id") == user.get('id') && user instanceof ns.models.User
         },
 
         databases : function() {
@@ -73,7 +72,7 @@
             if (dbUserName) {
                 var sharedAccount = this.accounts().first();
                 if (!sharedAccount) {
-                    sharedAccount = new chorus.models.InstanceAccount({ dbUserName: dbUserName, instanceId: this.get("id") });
+                    sharedAccount = new ns.models.InstanceAccount({ dbUserName: dbUserName, instanceId: this.get("id") });
                     this.accounts().add(sharedAccount);
                 }
                 return sharedAccount;
@@ -96,7 +95,7 @@
     }, {
         aurora : function() {
             if(!this._aurora) {
-                this._aurora = new chorus.models.Provisioning({provisionerPluginName : "A4CProvisioner", type : "install"});
+                this._aurora = new ns.models.Provisioning({provisionerPluginName : "A4CProvisioner", type : "install"});
             }
             return this._aurora;
         }

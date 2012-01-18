@@ -1,5 +1,5 @@
 ;(function(ns) {
-    ns.Draft = chorus.models.Base.extend({
+    ns.models.Draft = ns.models.Base.extend({
         urlTemplate : "workspace/{{workspaceId}}/workfile/{{workfileId}}/draft"
     });
-})(chorus.models);
+})(chorus);

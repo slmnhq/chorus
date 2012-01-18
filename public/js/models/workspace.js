@@ -1,5 +1,5 @@
 (function(ns) {
-    ns.Workspace = chorus.models.Base.extend({
+    ns.models.Workspace = chorus.models.Base.extend({
         urlTemplate : "workspace/{{id}}",
         showUrlTemplate : "workspaces/{{id}}",
         entityType : "workspace",
@@ -18,7 +18,7 @@
         },
 
         owner: function() {
-            this._owner = this._owner || new ns.User({
+            this._owner = this._owner || new ns.models.User({
                 fullName: this.get("ownerFullName"),
                 id: this.get("ownerId")
             });
@@ -43,7 +43,7 @@
         },
 
         archiver: function() {
-            return new ns.User({
+            return new ns.models.User({
                 fullName: (this.get("archiverFirstName") + ' ' + this.get("archiverLastName")),
                 userName: this.get("archiver")
             });
@@ -107,4 +107,4 @@
             return _.intersection(this.get("permission"), validPermissions).length > 0;
         }
     });
-})(chorus.models);
+})(chorus);

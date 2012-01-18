@@ -1,5 +1,5 @@
 ;(function(ns) {
-    ns.models.InstanceAccount = chorus.models.Base.extend({
+    ns.models.InstanceAccount = ns.models.Base.extend({
         urlTemplate: function(options) {
             var method = options && options.method;
             if (method === "update" || method === "delete") {
@@ -40,7 +40,7 @@
     },
     {
         findByInstanceId : function(instanceId) {
-            var account = new chorus.models.InstanceAccount({ instanceId: instanceId });
+            var account = new ns.models.InstanceAccount({ instanceId: instanceId });
             account.fetch();
             return account;
         }

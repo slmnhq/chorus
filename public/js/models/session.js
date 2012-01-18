@@ -1,6 +1,6 @@
 ;
 (function(ns) {
-    ns.Session = chorus.models.Base.extend({
+    ns.models.Session = ns.models.Base.extend({
         urlTemplate : "auth/login/",
 
         initialize : function() {
@@ -9,7 +9,7 @@
 
         user : function() {
             if(!this._user && this.get("id")) {
-                this._user = new ns.User(this.attributes);
+                this._user = new ns.models.User(this.attributes);
             }
 
             return this._user
@@ -38,7 +38,7 @@
 
             };
 
-            return chorus.models.Base.prototype.fetch.call(this, options);
+            return ns.models.Base.prototype.fetch.call(this, options);
         },
 
         check : function(destinationRoute) {
@@ -71,5 +71,5 @@
             "password" : "login.password"
         }
     });
-})(chorus.models);
+})(chorus);
 

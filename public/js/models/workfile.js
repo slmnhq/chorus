@@ -2,7 +2,7 @@
     var imageRegex = /^image\//;
     var textRegex = /^text\//;
 
-    ns.Workfile = chorus.models.Base.extend({
+    ns.models.Workfile = chorus.models.Base.extend({
         entityType : "workfile",
         showUrlTemplate: "workspaces/{{workspaceId}}/workfiles/{{id}}",
 
@@ -21,7 +21,7 @@
         },
 
         modifier : function() {
-            return new ns.User({
+            return new ns.models.User({
                 userName : this.get("modifiedBy"),
                 firstName : this.get("modifiedByFirstName"),
                 lastName : this.get("modifiedByLastName"),
@@ -30,12 +30,12 @@
         },
 
         sandbox: function() {
-            return new ns.Sandbox({ id: this.get("sandboxId"), workspaceId: this.get("workspaceId") });
+            return new ns.models.Sandbox({ id: this.get("sandboxId"), workspaceId: this.get("workspaceId") });
         },
 
         lastComment : function() {
             var comments = this.get("recentComments");
-            return comments && comments.length > 0 &&  new ns.Comment({
+            return comments && comments.length > 0 &&  new ns.models.Comment({
                 body : comments[0].text,
                 author : comments[0].author,
                 commentCreatedStamp : comments[0].timestamp
@@ -43,7 +43,7 @@
         },
 
         createDraft : function() {
-            var draft = new ns.Draft({workfileId: this._workfileId(), workspaceId : this.get("workspaceId"), content : this.get("content")})
+            var draft = new ns.models.Draft({workfileId: this._workfileId(), workspaceId : this.get("workspaceId"), content : this.get("content")})
             if (this.get("hasDraft")) {
                 draft.id = "ForceBackboneToUsePut"
             }
@@ -54,7 +54,7 @@
         },
 
         createNewVersion : function() {
-            return new ns.WorkfileNewVersion({
+            return new ns.models.WorkfileNewVersion({
                 workspaceId : this.get("workspaceId"),
                 content : this.get("content"),
                 commitMessage: this.get("commitMessage"),
@@ -63,7 +63,7 @@
         },
 
         allVersions : function() {
-            return new ns.WorkfileVersionSet([], {
+            return new ns.models.WorkfileVersionSet([], {
                 workspaceId : this.get("workspaceId"),
                 workfileId : this._workfileId()
             });
@@ -137,4 +137,4 @@
             return ret;
         }
     });
-})(chorus.models);
+})(chorus);

@@ -1,5 +1,4 @@
-;
-(function(ns) {
+;(function(ns) {
     ns.models.Comment = ns.models.Activity.extend({
         urlTemplate: function() {
             if (this.isNew()) {
