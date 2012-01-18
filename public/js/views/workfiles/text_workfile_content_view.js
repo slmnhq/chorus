@@ -26,6 +26,7 @@
                mode: this.model.get("mimeType"),
                fixedGutter: true,
                theme: "default",
+               lineWrapping: true,
                onChange: _.bind(this.startTimer, this)
             };
 
@@ -35,7 +36,8 @@
                 setTimeout(_.bind(this.editText, this), 100);
             }
 
-            _.defer(_.bind(this.editor.refresh, this.editor));
+            var ed = this.editor;
+            _.defer(function() {ed.refresh(); ed.refresh();});
         },
 
         editText : function() {
