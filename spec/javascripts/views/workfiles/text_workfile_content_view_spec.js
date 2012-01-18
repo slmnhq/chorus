@@ -200,15 +200,31 @@
 
             // Because view.saveChanges is bound in view.setup, it is difficult/impossible to spy on the proper function...
             // so we'll spy on the side-effect of calling that function.
-            spyOn(this.view.model, "save");
+            spyOn(this.view.model, "save").andCallThrough();
             this.view.trigger("file:saveCurrent");
         });
 
         it("calls saveChanges", function(){
             expect(this.view.model.save).toHaveBeenCalled();
         });
-    });
 
+        context("when there is a version conflict", function() {
+            beforeEach(function() {
+                stubModals();
+                spyOn(chorus.Modal.prototype, 'launchModal').andCallThrough();
+                message = {
+                    "message" : "Bad version, bro",
+                    "msgkey" : "WORKFILE.VERSION_TIMESTAMP_NOT_MATCH"
+                }
+                this.failSaveFor(this.view.model, message);
+            });
+    
+            it("should show the version conflict dialog", function() {
+                expect(chorus.Modal.prototype.launchModal).toHaveBeenCalled();
+            });
+        });
+    });
+        
     describe("when navigating away", function() {
         beforeEach(function() {
             this.view.render();
@@ -236,37 +252,37 @@
         });
     });
 
-        describe("event file:createWorkfileNewVersion", function(){
-            beforeEach(function() {
-                this.view.model.set({"content": "old content"});
-                this.view.model.set({"latestVersionNum": 2});
+    describe("event file:createWorkfileNewVersion", function(){
+        beforeEach(function() {
+            this.view.model.set({"content": "old content"});
+            this.view.model.set({"latestVersionNum": 2});
 
-                this.view.render();
+            this.view.render();
 
-                this.view.editor.setValue("new content");
+            this.view.editor.setValue("new content");
 
-                spyOn(this.view, "stopTimer");
-                spyOn(chorus.dialogs.WorkfileNewVersion.prototype, "launchModal");
-                this.view.trigger("file:createWorkfileNewVersion");
-            });
-
-            it("calls stops the auto save timer", function() {
-                expect(this.view.stopTimer).toHaveBeenCalled();
-            });
-
-            it("updates the model", function() {
-                expect(this.view.model.get("content")).toBe("new content");
-                expect(this.view.model.get("baseVersionNum")).toBe(2);
-            });
-
-            it("launches save workfile as new version dialog", function() {
-                expect(chorus.dialogs.WorkfileNewVersion.prototype.launchModal).toHaveBeenCalled();
-            });
-
-
-            it("launches the new dialog with the correct model", function() {
-                expect(this.view.dialog.model).toBeA(chorus.models.WorkfileNewVersion);
-
-            });
+            spyOn(this.view, "stopTimer");
+            spyOn(chorus.dialogs.WorkfileNewVersion.prototype, "launchModal");
+            this.view.trigger("file:createWorkfileNewVersion");
         });
+
+        it("calls stops the auto save timer", function() {
+            expect(this.view.stopTimer).toHaveBeenCalled();
+        });
+
+        it("updates the model", function() {
+            expect(this.view.model.get("content")).toBe("new content");
+            expect(this.view.model.get("baseVersionNum")).toBe(2);
+        });
+
+        it("launches save workfile as new version dialog", function() {
+            expect(chorus.dialogs.WorkfileNewVersion.prototype.launchModal).toHaveBeenCalled();
+        });
+
+
+        it("launches the new dialog with the correct model", function() {
+            expect(this.view.dialog.model).toBeA(chorus.models.WorkfileNewVersion);
+
+        });
+    });
 });
