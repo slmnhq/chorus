@@ -44,72 +44,103 @@ describe("chorus.models.Sandbox", function() {
 
         context("without an instance id", function() {
             beforeEach(function() {
-                this.model.set({ instance: "", instanceName: "my_instance", size: "45" });
+                this.model.set({ instanceName: "my_instance", size: "45" });
+                this.model.unset("instance")
                 expectValid({}, this.model);
             });
 
-            it("requires an instance name that doesn't start with a digit", function() {
-                expectInvalid({ instanceName: "_asdf" }, this.model);
+            it("requires an instance name", function() {
+                this.model.unset("instanceName")
+                expectInvalid({}, this.model, [ "instanceName" ]);
+                expect(this.model.errors["instanceName"]).toMatchTranslation("validation.required", { fieldName : this.model._textForAttr("instanceName") })
+            })
+
+            it("requires an instance name that starts with an alphabetic character", function() {
+                expectInvalid({ instanceName: "_asdf" }, this.model, [ "instanceName" ]);
             });
 
+            it("requires size", function() {
+                this.model.unset("size")
+                expectInvalid({ }, this.model, [ "size" ]);
+                expect(this.model.errors["size"]).toMatchTranslation("validation.required", { fieldName : this.model._textForAttr("size") })
+            })
+
             it("requires a positive integer for the instance size", function() {
-                expectInvalid({ size: "foo" }, this.model);
-                expectInvalid({ size: "-1" }, this.model);
-                expectInvalid({ size: "0" }, this.model);
-                expectInvalid({ size: "1.7" }, this.model);
+                expectInvalid({ size: "foo" }, this.model, [ "size" ]);
+                expectInvalid({ size: "-1" }, this.model, [ "size" ]);
+                expectInvalid({ size: "0" }, this.model, [ "size" ]);
+                expectInvalid({ size: "1.7" }, this.model, [ "size" ]);
             });
+
+            describe("when the maximum size has been configured", function() {
+                beforeEach(function() {
+                    this.model.maximumSize = 2000;
+                })
+
+                it("requires a size less than or equal to the maximum size", function() {
+                    expectInvalid({ size: "3000" }, this.model, [ "size" ]);
+                    expectValid({ size: "2000" }, this.model);
+                    expectValid({ size: "200" }, this.model);
+                })
+            })
         });
 
         context("with a database id", function() {
             context("without a schema id", function() {
                 beforeEach(function() {
-                    this.model.set({ schema: "" });
+                    this.model.unset("schema");
                 });
 
                 it("requires a schema name", function() {
-                    expectInvalid({ schemaName: "" }, this.model);
+                    expectInvalid({ }, this.model, [ "schemaName" ]);
+                    expect(this.model.errors["schemaName"]).toMatchTranslation("validation.required", { fieldName : this.model._textForAttr("schemaName") })
                 });
 
                 it("requires that the schema name not start with a number", function() {
-                    expectInvalid({ schemaName: "3friends_of_the_forest" }, this.model);
+                    expectInvalid({ schemaName: "3friends_of_the_forest" }, this.model, [ "schemaName" ]);
                     expectValid({ schemaName: "friends_of_the_forest" }, this.model);
                 });
 
                 it("requires that the schema name does NOT contain whitespace", function() {
-                    expectInvalid({ schemaName: "friends of the forest" }, this.model);
+                    expectInvalid({ schemaName: "friends of the forest" }, this.model, [ "schemaName" ]);
                 });
             });
         });
 
         context("without a database id", function() {
             beforeEach(function() {
-                this.model.set({ database: "", databaseName: "bernards_db", schemaName: "cool_schema" });
+                this.model.set({ databaseName: "bernards_db", schemaName: "cool_schema" });
+                this.model.unset("database");
                 expectValid({}, this.model);
             });
 
             it("requires a database name", function() {
-                expectInvalid({ databaseName: "" }, this.model);
+                this.model.unset("databaseName")
+                expectInvalid({ }, this.model, [ "databaseName" ]);
+                expect(this.model.errors["databaseName"]).toMatchTranslation("validation.required", { fieldName : this.model._textForAttr("databaseName") })
             });
 
             it("requires that the database name not start with a number", function() {
-                expectInvalid({ databaseName: "3friends_of_the_forest" }, this.model);
+                expectInvalid({ databaseName: "3friends_of_the_forest" }, this.model, [ "databaseName" ]);
             });
 
             it("requires that the database name does NOT contain whitespace", function() {
-                expectInvalid({ databaseName: "friends of the forest" }, this.model);
+                expectInvalid({ databaseName: "friends of the forest" }, this.model, [ "databaseName" ]);
             });
 
             it("requires a schema name", function() {
-                expectInvalid({ schemaName: "" }, this.model);
+                this.model.unset("schemaName")
+                expectInvalid({ }, this.model, [ "schemaName" ]);
+                expect(this.model.errors["schemaName"]).toMatchTranslation("validation.required", { fieldName : this.model._textForAttr("schemaName") })
             });
 
             context("when a schema name is specified", function() {
                 it("requires that the name not start with a number", function() {
-                    expectInvalid({ schemaName: "3friends_of_the_forest" }, this.model);
+                    expectInvalid({ schemaName: "3friends_of_the_forest" }, this.model, [ "schemaName" ]);
                 });
 
                 it("requires that the name does NOT contain whitespace", function() {
-                    expectInvalid({ schemaName: "friends of the forest" }, this.model);
+                    expectInvalid({ schemaName: "friends of the forest" }, this.model, [ "schemaName" ]);
                 });
             });
         });
@@ -120,8 +151,12 @@ describe("chorus.models.Sandbox", function() {
         expect(model.isValid()).toBeTruthy();
     }
 
-    function expectInvalid(attrs, model) {
+    function expectInvalid(attrs, model, invalid_attrs) {
+        invalid_attrs || (invalid_attrs = [])
         model.performValidation(attrs);
         expect(model.isValid()).toBeFalsy();
+        _.each(invalid_attrs, function(invalid_attr) {
+            expect(model.errors)
+        })
     }
 });

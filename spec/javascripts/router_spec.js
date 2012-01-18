@@ -117,6 +117,12 @@ describe("chorus.router", function() {
                     expect(window.scroll).toHaveBeenCalledWith(0, 0);
                 })
 
+                it("triggers the 'leaving' event on itself", function() {
+                    spyOnEvent(this.chorus.router, "leaving");
+                    this.chorus.router.navigate("/users/new", true);
+                    expect("leaving").toHaveBeenTriggeredOn(this.chorus.router);
+                });
+
                 it("sets chorus.page.pageOptions to chorus.pageOptions", function() {
                     this.chorus.router.navigate("/users/new", true, { foo : "bar" });
                     expect(this.chorus.page.pageOptions).toEqual({ foo : "bar" })

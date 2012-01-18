@@ -53,6 +53,13 @@
             return this.get("name");
         },
 
+        displayShortName: function(length) {
+            length = length || 20;
+
+            var name = this.displayName() || "";
+            return (name.length < length) ? name : name.slice(0,length) + "...";
+        },
+
         imageUrl : function(options) {
             options = (options || {});
             return "/edc/workspace/" + this.get("id") + "/image?size=" + (options.size || "original");

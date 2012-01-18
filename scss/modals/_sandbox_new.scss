@@ -68,4 +68,19 @@
             }
         }
     }
+
+    .size_and_max {
+        line-height: 32px;
+        vertical-align: middle;
+        
+        input[name=size] {
+            width: 100px;
+            margin-right: 10px;
+        }
+
+        .max_size {
+            display: inline-block;
+            @include secondary-text-normal;
+        }
+    }
 };

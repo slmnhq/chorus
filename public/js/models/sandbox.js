@@ -3,8 +3,10 @@
 
     ns.models.Sandbox = ns.models.Base.extend({
         attrToLabel: {
+            "instanceName" : "instances.dialog.instance_name",
             "databaseName": "instances.dialog.database_name",
-            "schemaName": "instances.dialog.schema_name"
+            "schemaName": "instances.dialog.schema_name",
+            "size": "instances.dialog.size"
         },
 
         urlTemplate: function(options) {
@@ -26,14 +28,24 @@
 
         declareValidations: function(attrs) {
             if (this.isCreatingNew("instance", attrs)) {
+                this.require("instanceName", attrs);
                 this.requirePattern("instanceName", noStartingDigitRegex, attrs);
-                this.requirePositiveInteger("size", attrs);
+                this.require("size", attrs);
+
+                if (this.maximumSize) {
+                    this.requireIntegerRange("size", 1, this.maximumSize, attrs);
+                } else {
+                    this.requirePositiveInteger("size", attrs);
+                }
             }
             if (this.isCreatingNew('database', attrs)) {
+                this.require("databaseName", attrs);
                 this.requirePattern("databaseName", noStartingDigitRegex, attrs);
+                this.require("schemaName", attrs);
                 this.requirePattern("schemaName", noStartingDigitRegex, attrs);
             }
             if (this.isCreatingNew('schema', attrs)) {
+                this.require("schemaName", attrs);
                 this.requirePattern("schemaName", noStartingDigitRegex, attrs);
             }
         },

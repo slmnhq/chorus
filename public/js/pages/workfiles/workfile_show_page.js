@@ -3,7 +3,8 @@
         getLoadedCrumbs : function(){
             return [
                     {label: t("breadcrumbs.home"), url: "#/"},
-                    {label: this.options.workspace.get("name"), url: this.options.workspace.showUrl()},
+                    {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
+                    {label: this.options.workspace.displayShortName(20), url: this.options.workspace.showUrl()},
                     {label: t("breadcrumbs.workfiles.all"), url: this.options.workspace.showUrl() + "/workfiles"},
                     {label: this.model.get("fileName") }
                 ];
@@ -21,7 +22,7 @@
                 this.model = new ns.models.Workfile({id: workfileId, workspaceId: workspaceId});
             }
 
-            this.model.bind("change", this.modelChanged, this);
+            this.bindings.add(this.model, "change", this.modelChanged);
             this.model.fetch();
 
             this.breadcrumbs = new breadcrumbsView({workspace: this.workspace, model: this.model});

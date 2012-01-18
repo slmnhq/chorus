@@ -29,8 +29,13 @@
         workfile: function() {
             if (this.get("workfile")) {
                 if (!this._workfile) {
-                    this._workfile = new chorus.models.Workfile(this.get("workfile"));
-                    if (this.workspace() && this.workspace().get("id")) {
+                    if(!this.get("version")) {
+                        this._workfile = new chorus.models.Workfile(this.get("workfile"));
+                    } else {
+                        this._workfile = new chorus.models.WorkfileVersion(this.get("workfile"));
+                        this._workfile.set({versionNum: this.get("version"), workfileId : this._workfile.get("id")})
+                    }
+                        if (this.workspace() && this.workspace().get("id")) {
                         this._workfile.set({ workspaceId : this.workspace().get("id") });
                     }
                 }

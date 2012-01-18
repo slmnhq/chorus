@@ -43,12 +43,18 @@
         },
 
         defaultHeader : function() {
-            return {
+            var header = {
                 type: this.model.get("type"),
                 authorLink: ns.helpers.linkTo(this.author.showUrl(), this.author.displayName(), { 'class': "author" }),
                 objectLink: ns.helpers.linkTo(this.presenter.objectUrl, this.presenter.objectName),
                 workspaceLink: ns.helpers.linkTo(this.presenter.workspaceUrl, this.presenter.workspaceName)
             }
+
+            if (this.presenter.versionName && this.presenter.versionUrl) {
+                header.versionLink = ns.helpers.linkTo(this.presenter.versionUrl, this.presenter.versionName)
+            }
+
+            return header;
         },
 
         headerHtml : function() {
@@ -89,7 +95,18 @@
         WORKSPACE_UNARCHIVED : workspaceIsObject,
 
         WORKFILE_CREATED : workfileIsObject,
-        WORKFILE_UPGRADED_VERSION : workfileIsObject,
+
+        WORKFILE_UPGRADED_VERSION : function(model) {
+            return {
+                objectName : model.workfile().get("name"),
+                objectUrl : model.workfile().showUrl(),
+                iconSrc : "/images/version_large.png",
+                iconHref : model.workfile().showUrl(),
+                versionName : t("workfile.version_title", { versionNum: model.workfile().get("versionNum")}),
+                versionUrl : model.workfile().showUrl(),
+                body : model.get("commitMessage")
+            }
+        },
 
         INSTANCE_CREATED : function(model) {
             var instance = model.instance();

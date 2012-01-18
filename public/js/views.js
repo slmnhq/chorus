@@ -1,9 +1,12 @@
-;
-(function(ns) {
-    ns.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
+;(function(ns) {
+    ns.views.Bare = Backbone.View.extend(_.extend({}, ns.Mixins.Events, {
         initialize: function initialize() {
             this.preInitialize.apply(this, arguments);
+
+            this.bindings = new ns.BindingGroup(this);
+            ns.router.bindOnce("leaving", this.beforeNavigateAway, this);
             this.bindCallbacks()
+
             this.setup.apply(this, arguments);
         },
 
@@ -14,6 +17,10 @@
         preRender: $.noop,
         setupSubviews : $.noop,
         displayLoadingSection : $.noop,
+
+        beforeNavigateAway: function() {
+            this.bindings.removeAll();
+        },
 
         context : {},
         subviews : {},
@@ -96,7 +103,7 @@
 
         makeLoadingSectionView : function() {
             var opts = _.extend({}, this.loadingSectionOptions());
-            return new ns.LoadingSection(opts);
+            return new ns.views.LoadingSection(opts);
         },
 
         loadingSectionOptions : function() {
@@ -104,7 +111,7 @@
         }
     }));
 
-    ns.Base = ns.Bare.extend({
+    ns.views.Base = ns.views.Bare.extend({
         makeModel : $.noop,
         collectionModelContext: $.noop,
         additionalContext: function() {
@@ -118,19 +125,15 @@
 
         bindCallbacks : function() {
             if (this.resource) {
+                this.bindings.add(this.resource, "saveFailed validationFailed", this.showErrors);
+                this.bindings.add(this.resource, "validated", this.clearErrors);
                 if (!this.persistent) {
-                    this.resource.bind("change", this.render, this);
-                    this.resource.bind("reset", this.render, this);
-                    this.resource.bind("add", this.render, this);
-                    this.resource.bind("remove", this.render, this);
+                    this.bindings.add(this.resource, "change reset add remove", this.render);
                 }
-                this.resource.bind("validationFailed", this.showErrors, this);
-                this.resource.bind("validated", this.clearErrors, this);
-                this.resource.bind("saveFailed", this.showErrors, this);
             }
         },
 
-        context: function context() { //phase me out for presenters, yo!
+        context: function context() {
             var ctx = {};
             var self = this;
 
@@ -205,7 +208,7 @@
         }
     });
 
-    ns.MainContentView = ns.Base.extend({
+    ns.views.MainContentView = ns.views.Base.extend({
         className : "main_content",
 
         setup : function(options) {
@@ -231,7 +234,7 @@
         }
     });
 
-    ns.ListHeaderView = ns.Base.extend({
+    ns.views.ListHeaderView = ns.views.Base.extend({
         className : "default_content_header",
         context : function() {
             return this.options
@@ -240,7 +243,7 @@
             var self = this;
             if (this.options.linkMenus) {
                 _.each(_.keys(this.options.linkMenus), function(key) {
-                    var menu = new chorus.views.LinkMenu(self.options.linkMenus[key]);
+                    var menu = new ns.views.LinkMenu(self.options.linkMenus[key]);
                     self.$(".menus").append(
                         menu.render().el
                     )
@@ -252,15 +255,15 @@
         }
     })
 
-    ns.MainContentList = ns.MainContentView.extend({
+    ns.views.MainContentList = ns.views.MainContentView.extend({
         setup : function(options) {
             var modelClass = options.modelClass
             var collection = this.collection;
-            this.content = new chorus.views[modelClass + "List"]({collection: collection })
-            this.contentHeader = new chorus.views.ListHeaderView({title: modelClass + "s", linkMenus : options.linkMenus})
-            this.contentDetails = new chorus.views.ListContentDetails({collection : collection, modelClass : modelClass, buttons: options.buttons});
-            this.contentFooter = new chorus.views.ListContentDetails({collection : collection, modelClass : modelClass, hideCounts : true, hideIfNoPagination : true})
+            this.content = new ns.views[modelClass + "List"]({collection: collection })
+            this.contentHeader = new ns.views.ListHeaderView({title: modelClass + "s", linkMenus : options.linkMenus})
+            this.contentDetails = new ns.views.ListContentDetails({collection : collection, modelClass : modelClass, buttons: options.buttons});
+            this.contentFooter = new ns.views.ListContentDetails({collection : collection, modelClass : modelClass, hideCounts : true, hideIfNoPagination : true})
         },
         additionalClass : "main_content_list"
     });
-})(chorus.views);
+})(chorus);

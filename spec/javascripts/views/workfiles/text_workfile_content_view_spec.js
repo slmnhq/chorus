@@ -4,6 +4,7 @@
         this.textfile = fixtures.modelFor("fetchText");
 
         this.view = new chorus.views.TextWorkfileContent({model: this.textfile});
+        this.saveInterval = this.view.saveInterval;
 
         // in IE8, we can't 'select' a textrange whose textarea is not on the DOM
         if ($.browser.msie) { spyOn(window.TextRange.prototype, 'select'); }
@@ -91,46 +92,65 @@
     describe("#autosave", function() {
         beforeEach(function(){
             this.view.render();
+            this.clock = sinon.useFakeTimers();
         });
 
-        it("stops the timer when 'Save As' is clicked", function() {
-            this.view.editor.setValue("Foo, Bar, Baz")
-            this.view.replaceCurrentVersion();
-            expect(this.view.saveTimer).toBe(undefined);
-        });
-
-        it("starts a timer when a change is detected", function() {
-            spyOn(this.view, "startTimer");
-            this.view.editor.setValue("Foo, Bar, Baz")
-            expect(this.view.startTimer).toHaveBeenCalled();
-        });
-
-        context("with a timeout" ,function() {
-            beforeEach(function(){
-                spyOn(window, "setTimeout");
-                spyOn(window, "clearTimeout");
+        describe("when the file is changed", function() {
+            beforeEach(function() {
+                this.view.editor.setValue("Foo, Bar");
             });
 
-            it("saves the file once after a change is detected", function() {
-                this.view.editor.setValue("Foo, Bar, Baz");
-                expect(window.setTimeout).toHaveBeenCalled();
+            describe("when the file is changed again", function() {
+                beforeEach(function() {
+                    this.clock.tick(10);
+                    this.view.editor.setValue("Foo, Bar, Baz");
+                });
 
-                this.view.saveDraft(this.view);
-                expect(window.clearTimeout).toHaveBeenCalled();
+                describe("when the timeout elapses", function() {
+                    beforeEach(function() {
+                        this.clock.tick(this.saveInterval);
+                    });
+
+                    it("only saves the file once", function() {
+                        expect(this.server.creates().length).toBe(1);
+                        expect(this.server.updates().length).toBe(0);
+                    });
+                });
             });
 
-            it("saves the file once after two changes are detected", function() {
-                this.view.editor.setValue("Foo");
-                this.view.editor.setValue("Bar");
-                expect(window.setTimeout).toHaveBeenCalled();
-            });
+            describe("when the timeout elapses", function() {
+                beforeEach(function() {
+                    this.clock.tick(this.saveInterval);
+                });
 
-            it("saves the file twice after two changes are detected", function() {
-                this.view.editor.setValue("Foo");
-                expect(window.setTimeout).toHaveBeenCalled();
+                it("creates a draft", function() {
+                    expect(this.server.creates().length).toBe(1);
+                    expect(this.server.updates().length).toBe(0);
+                });
 
-                this.view.editor.setValue("Bar");
-                expect(window.setTimeout).toHaveBeenCalled();
+                describe("when the timeout elapses again, with no changes", function() {
+                    beforeEach(function() {
+                        this.clock.tick(this.saveInterval);
+                    });
+
+                    it("does not save the draft again", function() {
+                        expect(this.server.creates().length).toBe(1);
+                        expect(this.server.updates().length).toBe(0);
+                    });
+                });
+
+                describe("when the timeout elapses again after the file is changed again", function() {
+                    beforeEach(function() {
+                        this.server.lastCreate().succeed([]);
+                        this.view.editor.setValue("Foo, Bar, Baz, Quux");
+                        this.clock.tick(this.saveInterval);
+                    });
+
+                    it("updates the draft", function() {
+                        expect(this.server.creates().length).toBe(1);
+                        expect(this.server.updates().length).toBe(1);
+                    });
+                });
             });
         });
     });
@@ -186,6 +206,33 @@
 
         it("calls saveChanges", function(){
             expect(this.view.model.save).toHaveBeenCalled();
+        });
+    });
+
+    describe("when navigating away", function() {
+        beforeEach(function() {
+            this.view.render();
+        });
+
+        context("when the file has been changed", function() {
+            beforeEach(function() {
+                this.view.editor.setValue("Foo, Bar, Baz, Quux");
+                chorus.router.trigger("leaving");
+            });
+
+            it("saves a draft", function() {
+                expect(this.server.creates().length).toBe(1);
+            });
+        });
+
+        context("when the file has not been changed", function() {
+            beforeEach(function() {
+                chorus.router.trigger("leaving");
+            });
+
+            it("does not save the draft", function() {
+                expect(this.server.requests.length).toBe(0);
+            });
         });
     });
 

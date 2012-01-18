@@ -285,14 +285,29 @@ describe("chorus.presenters.Activity", function() {
             this.presenter = new chorus.presenters.Activity(this.model)
         });
 
+        it("should have the right iconUrl", function() {
+            expect(this.presenter.iconSrc).toBe("/images/version_large.png");
+        });
+
+        it("should have the right iconHref", function() {
+            expect(this.presenter.iconHref).toBe(this.workfile.showUrl());
+        });
+
         it("should have the right objectName", function() {
             expect(this.presenter.objectName).toBe(this.workfile.get("name"));
         });
 
         it("should have the right objectUrl", function() {
-            var url = new chorus.models.Workfile({id: this.workfile.get("id"), workspaceId : this.workspace.get("id")}).showUrl();
-            expect(this.presenter.objectUrl).toBe(url);
+            expect(this.presenter.objectUrl).toBe(this.workfile.showUrl());
         });
+
+        it("has the right versionName", function() {
+            expect(this.presenter.versionName).toMatchTranslation("workfile.version_title", { versionNum : "3" });
+        })
+
+        it("has the right versionUrl", function() {
+            expect(this.presenter.versionUrl).toBe(this.workfile.showUrl());
+        })
 
         it("should have the right workspaceName", function() {
             expect(this.presenter.workspaceName).toBe(this.workspace.get("name"));
@@ -303,7 +318,9 @@ describe("chorus.presenters.Activity", function() {
             expect(this.presenter.workspaceUrl).toBe(url);
         });
 
-        itShouldHaveTheAuthorsIconAndUrl();
+        it("has the right body", function() {
+            expect(this.presenter.body).toBe("make file better")
+        })
     });
 
     context(".WORKSPACE_ADD_SANDBOX", function() {

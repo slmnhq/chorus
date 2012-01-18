@@ -110,6 +110,18 @@ describe("chorus.models.Activity", function() {
                 expect(this.model.workfile()).toBeFalsy();
             });
         });
+
+        context("with a workfile version", function() {
+            beforeEach(function() {
+                this.model = fixtures.activity({type: "WORKFILE_UPGRADED_VERSION", version: "2", workfile: fixtures.workfileJson()})
+            })
+
+            it('creates a workfile version', function() {
+                expect(this.model.workfile()).toBeA(chorus.models.WorkfileVersion);
+                expect(this.model.workfile().get("versionNum")).toBe("2");
+                expect(this.model.workfile().get("workfileId")).toBe(this.model.workfile().get("id"));
+            })
+        })
     });
 
     describe("#comments", function() {

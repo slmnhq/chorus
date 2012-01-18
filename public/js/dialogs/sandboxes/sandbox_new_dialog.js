@@ -25,7 +25,15 @@
             ns.models.Instance.aurora().fetch();
             ns.models.Instance.aurora().bind("change", this.render, this);
 
+            this.config = new ns.models.Config();
+            this.config.fetch();
+            this.config.bind("change", this.setMaxSize, this);
+
             this.standaloneMode = new ns.views.SandboxNewStandaloneMode();
+        },
+
+        postRender : function() {
+            this.displayMaxSize();
         },
 
         additionalContext: function() {
@@ -53,13 +61,17 @@
 
         save: function(e) {
             this.$("button.submit").startLoading("sandbox.adding_sandbox");
-            var sandboxType = this.$("input:radio[name='sandbox_type']:checked").val();
-            var currentForm = (sandboxType === 'within_instance') ? this.instanceMode : this.standaloneMode;
+            this.sandboxType = this.$("input:radio[name='sandbox_type']:checked").val();
+            var currentForm = (this.sandboxType === 'within_instance') ? this.instanceMode : this.standaloneMode;
             this.model.save(currentForm.fieldValues());
         },
 
         saved: function() {
-            ns.toast("sandbox.create.toast");
+            if(this.sandboxType === 'within_instance') {
+                ns.toast("sandbox.create.toast");
+            } else {
+                ns.toast("sandbox.create.standalone.toast");
+            }
             this.pageModel.fetch();
             this.pageModel.trigger("invalidated");
             this.closeModal();
@@ -67,6 +79,17 @@
 
         saveFailed: function() {
             this.$("button.submit").stopLoading();
+        },
+
+        setMaxSize : function() {
+            this.model.maximumSize = this.config.get("provisionMaxSizeInGB");
+            this.displayMaxSize();
+        },
+
+        displayMaxSize : function() {
+            if (this.config.get("provisionMaxSizeInGB")) {
+                this.$(".max_size").text(t("sandbox.create_standalone_dialog.max_size", { size : this.config.get("provisionMaxSizeInGB")}));
+            }
         },
 
         enableOrDisableSaveButton: function() {

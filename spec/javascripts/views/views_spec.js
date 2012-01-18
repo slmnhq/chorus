@@ -242,6 +242,30 @@ describe("chorus.views", function() {
         });
     });
 
+    describe("before navigating away", function() {
+        beforeEach(function() {
+            var navSpy = jasmine.createSpy("beforeNavigateAway")
+            var klass = chorus.views.Base.extend({
+                beforeNavigateAway : navSpy
+            });
+            this.view = new klass();
+            chorus.router.trigger("leaving");
+        });
+
+        it("calls the 'beforeNavigateAway' hook", function() {
+            expect(this.view.beforeNavigateAway).toHaveBeenCalled();
+        });
+
+        describe("when another navigation occurs (after this view is long gone)", function() {
+            beforeEach(function() {
+                chorus.router.trigger("leaving");
+            });
+
+            it("does not call the hook again", function() {
+                expect(this.view.beforeNavigateAway.callCount).toBe(1);
+            });
+        });
+    });
 
     describe("#showErrors", function() {
         beforeEach(function() {

@@ -720,6 +720,55 @@ describe("chorus.models", function() {
                 });
             });
         });
+
+        describe("requireIntegerRange", function() {
+            beforeEach(function() {
+                this.model.errors = {};
+            });
+
+            it("sets an error if the attribute isn't present", function () {
+                this.model.requireIntegerRange("foo", 5, 10);
+                expect(this.model.errors.foo).toBeDefined();
+            });
+
+            it("does not clobber a previously-existing error", function() {
+                this.model.errors["foo"] = "nope";
+                this.model.requireIntegerRange("foo", 5, 10);
+                expect(this.model.errors.foo).toBe("nope");
+            })
+
+            it("sets an error if the attribute is present but less than the range minimum", function () {
+                this.model.set({ foo :  1});
+                this.model.requireIntegerRange("foo", 5, 10);
+                expect(this.model.errors.foo).toBeDefined();
+            });
+
+            it("sets an error if the attribute is present but greater than the range maximum", function () {
+                this.model.set({ foo :  11});
+                this.model.requireIntegerRange("foo", 5, 10);
+                expect(this.model.errors.foo).toBeDefined();
+            });
+
+            it("sets an error if newAttrs is invalid but the existing value is valid", function() {
+                this.model.set({foo: 6});
+                this.model.requireIntegerRange("foo", 5, 10, {foo: "12"});
+
+                expect(this.model.errors.foo).toBeDefined();
+            });
+
+            it("does not set an error if the newAttrs is valid", function() {
+                this.model.set({foo: "bar"});
+                this.model.requireIntegerRange("foo", 5, 10, {foo: 8});
+                expect(this.model.errors.foo).not.toBeDefined();
+            });
+
+            it("uses a custom error message, if provided", function() {
+                this.model.set({ foo :  11});
+                this.model.requireIntegerRange("foo", 5, 10, {}, "test.deer");
+                expect(this.model.errors.foo).toMatchTranslation("test.deer")
+            })
+        });
+
     });
 
     describe("Collection", function() {

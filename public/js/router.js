@@ -1,5 +1,5 @@
 (function($, ns) {
-    ns.Router = Backbone.Router.extend({
+    ns.Router = Backbone.Router.extend(_.extend({}, chorus.Mixins.Events, {
         maps : [
             // routes are evaluated in LIFO format, so adding a match-all route first will act as a fallback properly
             // (as long as `maps` is evaluated in order)
@@ -52,6 +52,7 @@
                     if(className == "Login" && self.app.session.loggedIn()) {
                         self.navigate("/", true);
                     } else {
+                        self.trigger("leaving");
                         var pageClass = ns.pages[className + "Page"];
                         var page = applyConstructor(pageClass, args);
                         page.pageOptions = self.app.pageOptions;
@@ -80,7 +81,7 @@
             };
 
         }
-    });
+    }));
 
 
     // apply arbitrary number of arguments to constructor (for routes with parameters)

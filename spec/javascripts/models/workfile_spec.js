@@ -106,12 +106,35 @@ describe("chorus.models.Workfile", function() {
     });
 
     describe("createDraft", function() {
+        beforeEach(function() {
+            this.workfile = new chorus.models.Workfile({id: "123", workspaceId: "456", content: "asdf"});
+        });
         it("sets the required attributes", function() {
-            var workfile = new chorus.models.Workfile({id: "123", workspaceId: "456", content: "asdf"});
-            var draft = workfile.createDraft();
+            var draft = this.workfile.createDraft();
             expect(draft.get("workfileId")).toBe("123");
             expect(draft.get("workspaceId")).toBe("456");
             expect(draft.get("content")).toBe("asdf");
+        });
+
+        context("when the workfile has a draft", function() {
+            beforeEach(function() {
+                this.workfile.set({ hasDraft: true });
+            });
+
+            it("is not considered 'new'", function() {
+                expect(this.workfile.createDraft().isNew()).toBeFalsy();
+            });
+        });
+
+        describe("when the draft is saved", function() {
+            beforeEach(function() {
+                var draft = this.workfile.createDraft();
+                draft.trigger("saved");
+            });
+
+            it("sets the workfile's 'hasDraft' field to true", function() {
+                expect(this.workfile.get("hasDraft")).toBeTruthy();
+            });
         });
     });
 
