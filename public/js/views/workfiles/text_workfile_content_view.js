@@ -4,9 +4,17 @@
         className : "text_workfile_content",
         saveInterval : 30000,
 
-        setup : function(){
+        setup : function() {
             this.bind("file:saveCurrent", this.replaceCurrentVersion);
             this.bind("file:createWorkfileNewVersion", this.createWorkfileNewVersion);
+            this.model.bind("saveFailed", this.versionConflict, this)
+        },
+
+        versionConflict : function() {
+            if (this.model.serverErrors[0].msgkey == "WORKFILE.VERSION_TIMESTAMP_NOT_MATCH") {
+                this.alert = new chorus.alerts.WorkfileConflict({ launchElement : this, model : this.model });
+                this.alert.launchModal();
+            }
         },
 
         postRender : function() {

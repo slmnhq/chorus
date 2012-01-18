@@ -22,6 +22,21 @@
             this.server.respond();
         }
 
+        this.failSaveFor = function(model, message){
+            var response = {
+                status: "fail",
+                message: [message],
+                resource: []
+            }
+            var method = model.isNew() ? 'POST' : 'PUT'
+            this.server.respondWith(
+                method,
+                model.url(),
+                this.prepareResponse(response)
+            );
+            this.server.respond();
+        }
+
         window.fixtures = function(model) {
             var self = this;
 
@@ -1476,6 +1491,22 @@
                 }
             },
 
+            draftJson: function() {
+                return {
+                    baseVersionNum: 1,
+                    content: "Some Content",
+                    createdStamp: "2012-01-17 16:17:26.439",
+                    createdTxStamp: "2012-01-17 16:17:26.411",
+                    draftFileId: "1326845846420_8660",
+                    draftOwner: "edcadmin",
+                    id: this.nextId().toString(),
+                    isDeleted: false,
+                    lastUpdatedStamp: "2012-01-17 16:17:26.439",
+                    lastUpdatedTxStamp: "2012-01-17 16:17:26.411",
+                    workfileId: this.nextId().toString()
+                }
+            },
+
             workspaceJson: function() {
                 var id = this.nextId();
                 return {
@@ -1551,6 +1582,12 @@
                     workspaceId: this.nextId().toString()
                 }, overrides);
                 return new chorus.models.Workfile(attributes);
+            },
+
+            draft: function(overrides) {
+               var attributes = _.extend(this.draftJson(), {
+                }, overrides);
+                return new chorus.models.Draft(attributes);
             },
 
             workfileSet: function(models) {

@@ -35,6 +35,9 @@
                     &.info {
                         display: none;
                     }
+                    &.error {
+                        display: none;
+                    }
                 }
             }
         }
@@ -44,8 +47,22 @@
         img.message {
             display: none;
         }
-
+        img.error {
+            display: none;
+        }
         img.info {
+            display: inline !important;
+        }
+    }
+
+    &.error {
+        img.message {
+            display: none;
+        }
+        img.info {
+            display:none;
+        }
+        img.error {
             display: inline !important;
         }
     }
