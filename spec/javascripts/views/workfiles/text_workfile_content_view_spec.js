@@ -272,7 +272,6 @@
 
         it("updates the model", function() {
             expect(this.view.model.get("content")).toBe("new content");
-            expect(this.view.model.get("baseVersionNum")).toBe(2);
         });
 
         it("launches save workfile as new version dialog", function() {

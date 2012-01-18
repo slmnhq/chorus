@@ -15,7 +15,6 @@ describe("chorus.dialogs.WorkfileNewVersion", function() {
     describe("when the form is submitted", function() {
         beforeEach(function() {
             spyOn(this.dialog.model, "save").andCallThrough();
-            this.workfile.set({"baseVersionNum": 1});
             this.workfile.set({"content": "new blood"});
             this.dialog.$("[name=commitMessage]").val("new commit")
             this.dialog.$("form").submit();

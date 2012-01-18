@@ -1493,7 +1493,6 @@
 
             draftJson: function() {
                 return {
-                    baseVersionNum: 1,
                     content: "Some Content",
                     createdStamp: "2012-01-17 16:17:26.439",
                     createdTxStamp: "2012-01-17 16:17:26.411",

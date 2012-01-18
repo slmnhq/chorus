@@ -87,7 +87,6 @@
             this.stopTimer();
             this.cursor = this.editor.getCursor();
             this.model.set({"content" : this.editor.getValue()}, {silent : true});
-            this.model.set({"baseVersionNum" : this.model.get("latestVersionNum")}, {silent : true}) // API will remove this baseVersionNum, for now it'll default to latestVersionNum
 
             this.dialog = new chorus.dialogs.WorkfileNewVersion({ launchElement : this, pageModel : this.model, pageCollection : this.collection });
             this.dialog.launchModal(); // we need to manually create the dialog instead of using data-dialog because qtip is not part of page
