@@ -107,6 +107,7 @@
         // loadTemplatesOnce does asynchronous ajax requests in a waitsFor
         runs(function() {
             this.server = sinon.fakeServer.create();
+            chorus.router.unbind();
 
             this.renderDOM = function(content) {
                 return $('#jasmine_content').html(content);
