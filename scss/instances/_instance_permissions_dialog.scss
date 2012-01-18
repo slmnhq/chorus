@@ -64,6 +64,10 @@ $link-padding: 6px;
 
                 .select_container {
                     margin-left: 10px;
+
+                    span.ui-selectmenu-button {
+                        vertical-align: middle;
+                    }
                 }
 
                 div {
