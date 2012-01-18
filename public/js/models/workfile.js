@@ -4,9 +4,15 @@
 
     ns.Workfile = chorus.models.Base.extend({
         entityType : "workfile",
+        showUrlTemplate: "workspaces/{{workspaceId}}/workfiles/{{id}}",
 
-        urlTemplate : "workspace/{{workspaceId}}/workfile/{{id}}",
-        showUrlTemplate : "workspaces/{{workspaceId}}/workfiles/{{id}}",
+        urlTemplate : function() {
+            if (this.has("versionNum") && (parseInt(this.get("versionNum")) !== parseInt(this.get("latestVersionNum")))) {
+                return "workspace/{{workspaceId}}/workfile/{{id}}/version/{{versionNum}}"
+            } else {
+                return "workspace/{{workspaceId}}/workfile/{{id}}"
+            }
+        },
 
         initialize : function() {
             if (this.collection && this.collection.attributes.workspaceId) {
@@ -96,7 +102,35 @@
 
         _workfileId : function() {
             return this.get("id");
-        }
+        },
 
+        save : function(attrs, options) {
+            if (this.canEdit()) {
+                options = options || {};
+                var overrides = {};
+
+                if (this.has("versionNum")) {
+                    overrides.url = "/edc/workspace/" + this.get("workspaceId") + "/workfile/" + this.get("id") + "/version/" + this.get("versionNum");
+                }
+
+                return this._super("save", [attrs, _.extend(options, overrides)]);
+            }
+        },
+
+        saveAsNewVersion: function(attrs, options) {
+            options = options || {};
+            var overrides = {
+                url : "/edc/workspace/" + this.get("workspaceId") + "/workfile/" + this.get("id") + "/version"
+            };
+
+            var oldId = this.id;
+            delete this.id;
+
+            var ret = this._super("save", [attrs, _.extend(options, overrides)])
+
+            this.id = oldId;
+
+            return ret;
+        }
     });
 })(chorus.models);

@@ -338,6 +338,7 @@
                             "source":"empty",
                             "owner":"edcadmin",
                             "description":null,
+                            "versionNum": 1,
                             "latestVersionNum":1,
                             "versionFileId":"1111_1111",
                             "isDeleted":false,

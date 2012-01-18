@@ -213,4 +213,67 @@ describe("chorus.models.Workfile", function() {
             expect(this.collection.models[0].get("workspaceId")).toBe(this.collection.attributes.workspaceId);
         });
     });
+
+    describe("#fetch", function() {
+        context("when the versionNum equals the latestVersionNum", function() {
+            beforeEach(function() {
+                this.model.set({ versionNum : "99", latestVersionNum : 99 });
+                this.model.fetch();
+            })
+
+            it("fetches the correct url", function() {
+                expect(this.server.lastFetch().url).toBe("/edc/workspace/10000/workfile/10020")
+            })
+        })
+
+        context("when the versionNum is not equal to the latestVersionNum", function() {
+            beforeEach(function() {
+                this.model.set({ versionNum : "88", latestVersionNum : 99 });
+                this.model.fetch();
+            })
+
+            it("fetches the correct url", function() {
+                expect(this.server.lastFetch().url).toBe("/edc/workspace/10000/workfile/10020/version/88")
+            })
+        })
+    })
+
+    describe("#save", function() {
+        context("with an old version", function() {
+            beforeEach(function() {
+                this.model.set({ versionNum : "88", latestVersionNum : 99 });
+                this.model.save();
+            })
+
+            it("does not save", function() {
+                expect(this.server.lastUpdate()).toBeUndefined();
+            })
+        })
+
+        context("with the latest version", function() {
+            beforeEach(function() {
+                this.model.set({ versionNum : "99", latestVersionNum : 99 });
+            })
+
+            context("replacing the current version", function() {
+                beforeEach(function() {
+                    this.model.save();
+                })
+
+                it("saves to the correct url", function() {
+                    expect(this.server.lastUpdate().url).toBe("/edc/workspace/10000/workfile/10020/version/99")
+                })
+            })
+
+            context("saving as a new version", function() {
+                beforeEach(function() {
+                    this.model.saveAsNewVersion();
+                })
+
+                it("saves to the correct url", function() {
+                    expect(this.server.lastCreate().url).toBe("/edc/workspace/10000/workfile/10020/version")
+                })
+            })
+        })
+    })
 });
