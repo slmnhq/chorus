@@ -1,3 +1,9 @@
-<button class="run_file">{{t "workfile.content_details.run_file"}}</button>
+<button class="run_file">{{t "workfile.content_details.run_file"}}<span class="down_arrow"></span></button>
 
 {{{renderTemplate "workfile_content_details"}}}
+
+<div class="run_workfile hidden">
+    <ul class="run_menu">
+        <li><a href="#" class="run_sandbox">{{t "workfile.content_details.run_workspace_sandbox"}}</a></li>
+    </ul>
+</div>

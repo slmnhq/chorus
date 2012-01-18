@@ -108,14 +108,23 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
         describe("the workfile detail view raises file:save event", function() {
             beforeEach(function() {
-                this.saveSpy = jasmine.createSpy("file:saveCurrent");
-                this.page.mainContent.content.bind("file:saveCurrent", this.saveSpy);
-
+                spyOnEvent(this.page.mainContent.content, 'file:saveCurrent');
                 this.page.mainContent.contentDetails.trigger("file:saveCurrent");
             });
 
             it("relays the event to the workfile content", function() {
-                expect(this.saveSpy).toHaveBeenCalled();
+                expect('file:saveCurrent').toHaveBeenTriggeredOn(this.page.mainContent.content);
+            });
+        });
+
+        describe("the workfile detail view raises file:runCurrent event", function() {
+            beforeEach(function() {
+                spyOnEvent(this.page.mainContent.content, 'file:runCurrent');
+                this.page.mainContent.contentDetails.trigger("file:runCurrent");
+            });
+
+            it("relays the event to the workfile content", function() {
+                expect('file:runCurrent').toHaveBeenTriggeredOn(this.page.mainContent.content);
             });
         });
 
@@ -160,5 +169,5 @@ describe("chorus.pages.WorkfileShowPage", function() {
                 });
             })
         });
-    })
+    });
 });
