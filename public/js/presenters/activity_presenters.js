@@ -38,7 +38,8 @@
                 workspaceName : this.workspace ? this.workspace.get("name") : "no workspace name for activity type: " + this.activityType,
                 workspaceUrl : this.workspace ? this.workspace.showUrl() : "no workspace URL for activity type: " + this.activityType,
                 iconSrc : this.author.imageUrl(),
-                iconHref : this.author.showUrl()
+                iconHref : this.author.showUrl(),
+                iconClass : 'profile'
             };
         },
 
@@ -102,6 +103,7 @@
                 objectUrl : model.workfile().showUrl(),
                 iconSrc : "/images/version_large.png",
                 iconHref : model.workfile().showUrl(),
+                iconClass : '',
                 versionName : t("workfile.version_title", { versionNum: model.workfile().get("versionNum")}),
                 versionUrl : model.workfile().showUrl(),
                 body : model.get("commitMessage")

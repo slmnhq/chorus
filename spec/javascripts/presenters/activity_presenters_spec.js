@@ -293,6 +293,10 @@ describe("chorus.presenters.Activity", function() {
             expect(this.presenter.iconHref).toBe(this.workfile.showUrl());
         });
 
+        it("should not have an iconClass", function() {
+            expect(this.presenter.iconClass).toBe('');
+        });
+
         it("should have the right objectName", function() {
             expect(this.presenter.objectName).toBe(this.workfile.get("name"));
         });
@@ -421,6 +425,10 @@ describe("chorus.presenters.Activity", function() {
 
         it("should link the new user's icon to the new user's show page", function() {
             expect(this.presenter.iconHref).toBe(this.model.author().showUrl());
+        });
+
+        it("should have a iconClass of 'profile'", function() {
+            expect(this.presenter.iconClass).toBe('profile');
         });
     }
 
