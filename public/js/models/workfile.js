@@ -53,15 +53,6 @@
             return draft;
         },
 
-        createNewVersion : function() {
-            return new ns.models.WorkfileNewVersion({
-                workspaceId : this.get("workspaceId"),
-                content : this.get("content"),
-                commitMessage: this.get("commitMessage"),
-                "workfileId" : this._workfileId()
-            })
-        },
-
         allVersions : function() {
             return new ns.models.WorkfileVersionSet([], {
                 workspaceId : this.get("workspaceId"),

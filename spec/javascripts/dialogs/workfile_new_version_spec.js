@@ -36,7 +36,6 @@ describe("chorus.dialogs.WorkfileNewVersion", function() {
         describe("when the save completes", function() {
             beforeEach(function() {
                 spyOn(this.dialog, 'closeModal');
-                spyOnEvent(this.dialog.model, "autosaved");
                 this.dialog.model.trigger("saved");
             });
 
@@ -44,9 +43,6 @@ describe("chorus.dialogs.WorkfileNewVersion", function() {
                 expect(this.dialog.closeModal).toHaveBeenCalled();
             });
 
-            it("triggers autosaved", function() {
-                expect("autosaved").toHaveBeenTriggeredOn(this.dialog.model);
-            });
             it("sets the versionNum and versionFileId to the page model", function() {
                 this.dialog.model.set({ "versionNum": 1000, "versionFileId" : "ID1"})
                 this.completeSaveFor(this.dialog.model)

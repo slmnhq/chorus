@@ -25,8 +25,6 @@
         },
 
         saved : function() {
-            this.model.fetch();
-            this.model.trigger("autosaved");
             this.closeModal();
         }
     });
