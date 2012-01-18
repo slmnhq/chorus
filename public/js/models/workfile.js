@@ -29,6 +29,10 @@
             })
         },
 
+        sandbox: function() {
+            return new ns.Sandbox({ id: this.get("sandboxId"), workspaceId: this.get("workspaceId") });
+        },
+
         lastComment : function() {
             var comments = this.get("recentComments");
             return comments && comments.length > 0 &&  new ns.Comment({

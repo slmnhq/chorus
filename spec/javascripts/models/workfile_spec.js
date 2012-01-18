@@ -14,6 +14,14 @@ describe("chorus.models.Workfile", function() {
         });
     })
 
+    describe("#sandbox", function() {
+        it("returns a sandbox with the right id and workspaceId", function() {
+            var sandbox = this.model.sandbox();
+            expect(sandbox.get("id")).toBe(this.model.get("sandboxId"));
+            expect(sandbox.get("workspaceId")).toBe(this.model.get("workspaceId"));
+        });
+    });
+
     describe("#lastComment", function() {
         beforeEach(function() {
             this.comment = this.model.lastComment();
