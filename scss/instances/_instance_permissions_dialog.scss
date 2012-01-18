@@ -100,10 +100,14 @@ $link-padding: 6px;
                         font-size: 12px;
                     }
 
-                    .cancel_change_owner, .change_owner, .make_owner, .edit {
+                    .action {
                         border-left: 1px solid $link-color;
                         padding-left: $link-padding;
                         margin-left: $link-padding;
+                    }
+
+                    .action:first-child {
+                        border-left: none;
                     }
                 }
 
@@ -148,12 +152,6 @@ $link-padding: 6px;
                                 border-left: 1px solid $link-color;
                             }
                         }
-                    }
-                }
-
-                &.no_owner {
-                    .links .edit {
-                        border-left: 0;
                     }
                 }
 

@@ -11,21 +11,21 @@
 <div class="collection_list">
     <ul>
         {{#each models}}
-            <li data-id={{id}} {{#unless isOwner}}class="no_owner"{{/unless}}>
+            <li data-id={{id}}>
                 <div class="links">
                     {{#if isOwner}}
-                        <span class="owner">{{t "instances.permissions.owner"}}</span>
+                        <span class="owner action">{{t "instances.permissions.owner"}}</span>
                     {{/if}}
-                    <a href="#" class="edit">{{t "instances.permissions.edit"}}</a>
+                    <a href="#" class="edit action">{{t "instances.permissions.edit"}}</a>
                     {{#if isOwner}}
                         {{#if ../../sharedAccount}}
-                            <a href="#" class="change_owner">{{t "instances.permissions.change_owner"}}</a>
+                            <a href="#" class="change_owner action">{{t "instances.permissions.change_owner"}}</a>
                         {{/if}}
-                        <a href="#" class="save_owner hidden">{{t "instances.permissions.save_owner"}}</a>
-                        <a href="#" class="cancel_change_owner hidden">{{t "actions.cancel"}}</a>
+                        <a href="#" class="save_owner hidden action">{{t "instances.permissions.save_owner"}}</a>
+                        <a href="#" class="cancel_change_owner hidden action">{{t "actions.cancel"}}</a>
                     {{else}}
                         {{#unless ../../sharedAccount}}
-                            <a href="#" class="make_owner">{{t "instances.permissions.make_owner"}}</a>
+                            <a href="#" class="make_owner action">{{t "instances.permissions.make_owner"}}</a>
                         {{/unless}}
                     {{/if}}
                 </div>
