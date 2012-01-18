@@ -1,11 +1,12 @@
-;(function(ns) {
+;
+(function(ns) {
     ns.Activity = chorus.models.Base.extend({
         author : function() {
             this._author = this._author || new chorus.models.User(this.get("author"));
             return this._author;
         },
 
-        comments: function(){
+        comments: function() {
             this._comments || (this._comments = new chorus.models.CommentSet(this.get("comments")));
             return this._comments;
         },
@@ -29,13 +30,13 @@
         workfile: function() {
             if (this.get("workfile")) {
                 if (!this._workfile) {
-                    if(!this.get("version")) {
-                        this._workfile = new chorus.models.Workfile(this.get("workfile"));
-                    } else {
-                        this._workfile = new chorus.models.WorkfileVersion(this.get("workfile"));
-                        this._workfile.set({versionNum: this.get("version"), workfileId : this._workfile.get("id")})
+                    this._workfile = new chorus.models.Workfile(this.get("workfile"));
+
+                    if (this.get("version")) {
+                        this._workfile.set({versionNum: this.get("version")})
                     }
-                        if (this.workspace() && this.workspace().get("id")) {
+
+                    if (this.workspace() && this.workspace().get("id")) {
                         this._workfile.set({ workspaceId : this.workspace().get("id") });
                     }
                 }

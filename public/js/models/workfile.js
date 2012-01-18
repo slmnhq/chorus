@@ -8,6 +8,12 @@
         urlTemplate : "workspace/{{workspaceId}}/workfile/{{id}}",
         showUrlTemplate : "workspaces/{{workspaceId}}/workfiles/{{id}}",
 
+        initialize : function() {
+            if (this.collection && this.collection.attributes.workspaceId) {
+                this.set({workspaceId: this.collection.attributes.workspaceId}, {silent : true});
+            }
+        },
+
         modifier : function() {
             return new ns.User({
                 userName : this.get("modifiedBy"),
@@ -85,7 +91,7 @@
         },
 
         canEdit : function() {
-            return true;
+            return this.get("latestVersionNum") == this.get("versionNum");
         },
 
         _workfileId : function() {

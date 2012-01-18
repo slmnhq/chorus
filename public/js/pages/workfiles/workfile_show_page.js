@@ -16,10 +16,9 @@
             this.workspace = new ns.models.Workspace({id: workspaceId});
             this.workspace.fetch();
 
-            if (versionNum) {
-                this.model = new ns.models.WorkfileVersion({workfileId: workfileId, workspaceId: workspaceId, versionNum: versionNum})
-            } else {
-                this.model = new ns.models.Workfile({id: workfileId, workspaceId: workspaceId});
+            this.model = new ns.models.Workfile({id: workfileId, workspaceId: workspaceId});
+            if(versionNum) {
+                this.model.set({ versionNum : versionNum }, { silent : true })
             }
 
             this.bindings.add(this.model, "change", this.modelChanged);

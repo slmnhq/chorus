@@ -148,7 +148,13 @@ describe("chorus.models.Workfile", function() {
     });
 
     describe("canEdit", function() {
-        it("always returns true", function() {
+        it("returns false when its version is not the current version", function() {
+            this.model.set({latestVersionNum: "6", versionNum: "3"});
+            expect(this.model.canEdit()).toBeFalsy();
+        });
+
+        it("returns true when its version is the current version", function() {
+            this.model.set({latestVersionNum: "6", versionNum: "6"});
             expect(this.model.canEdit()).toBeTruthy();
         });
     });
@@ -192,6 +198,19 @@ describe("chorus.models.Workfile", function() {
             it("returns false", function() {
                 expect(this.model.isText()).toBeFalsy();
             });
+        });
+    });
+
+    describe("initializing from a WorkfileVersionSet", function() {
+        beforeEach(function() {
+            this.collection = new chorus.models.WorkfileVersionSet([], {workspaceId: 1, workfileId: 2});
+        });
+
+        it("sets the workspaceId attribute on the model", function() {
+            this.collection.add({versionNum: 5});
+
+            expect(this.collection.models[0]).toBeA(chorus.models.Workfile);
+            expect(this.collection.models[0].get("workspaceId")).toBe(this.collection.attributes.workspaceId);
         });
     });
 });
