@@ -201,6 +201,18 @@ describe("chorus.views.Activity", function() {
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
+        context("type: WORKFILE_UPGRADED_VERSION", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activities.WORKFILE_UPGRADED_VERSION();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            itShouldRenderVersionDetails({checkLink : true })
+            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderWorkspaceDetails({checkLink : true});
+            itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+        })
 
         context("when the type is unknown", function() {
             beforeEach(function() {
@@ -228,9 +240,7 @@ describe("chorus.views.Activity", function() {
         it("contains the author's url", function() {
             expect(this.view.$('a.author').attr('href')).toBe(this.view.model.author().showUrl());
         });
-    }
-
-    ;
+    };
 
     function itShouldRenderObjectDetails(options) {
         options || (options = {});
@@ -244,9 +254,7 @@ describe("chorus.views.Activity", function() {
                 expect(this.view.$('.activity_header a[href="' + this.presenter.objectUrl + '"]')).toExist();
             });
         }
-    }
-
-    ;
+    };
 
     function itShouldRenderWorkspaceDetails(options) {
         options || (options = {});
@@ -260,9 +268,21 @@ describe("chorus.views.Activity", function() {
                 expect(this.view.$('.activity_header a[href="' + this.presenter.workspaceUrl + '"]')).toExist();
             });
         }
-    }
+    };
 
-    ;
+    function itShouldRenderVersionDetails(options) {
+        options || (options = {});
+
+        it("contains the version's name", function() {
+            expect(this.view.$(".activity_header")).toContainText(this.presenter.versionName);
+        });
+
+        if (options.checkLink) {
+            it("contains the version's url", function() {
+                expect(this.view.$('.activity_header a[href="' + this.presenter.versionUrl + '"]')).toExist();
+            });
+        }
+    };
 
     function itShouldRenderACommentLink(entityType, entityTitle) {
         it("sets the correct entityType on the comment dialog link", function() {
