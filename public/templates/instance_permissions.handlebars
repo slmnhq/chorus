@@ -11,7 +11,7 @@
 <div class="collection_list">
     <ul>
         {{#each models}}
-            <li data-id={{id}}>
+            <li data-id={{id}} {{#unless isOwner}}class="no_owner"{{/unless}}>
                 <div class="links">
                     {{#if isOwner}}
                         <span class="owner">{{t "instances.permissions.owner"}}</span>

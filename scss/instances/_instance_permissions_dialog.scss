@@ -72,82 +72,88 @@ $link-padding: 6px;
 
                 div {
                     display: inline-block;
+                }
 
-                    &.image {
-                        position: relative;
-                        display: inline-block;
+                .image {
+                    position: relative;
+                    display: inline-block;
 
-                        img {
-                            padding: 2px;
-                        }
+                    img {
+                        padding: 2px;
+                    }
+                }
+
+                .name {
+                    @include ellipsis;
+                    padding-left: 10px;
+                }
+
+                .links {
+                    float: right;
+                    font-size: 12px;
+
+                    .owner {
+                        color: $color-text4;
                     }
 
-                    &.name {
-                        @include ellipsis;
-                        padding-left: 10px;
-                    }
-
-                    &.links {
-                        float: right;
+                    a {
                         font-size: 12px;
+                    }
 
-                        .owner {
-                            color: $color-text4;
-                        }
+                    .cancel_change_owner, .change_owner, .make_owner, .edit {
+                        border-left: 1px solid $link-color;
+                        padding-left: $link-padding;
+                        margin-left: $link-padding;
+                    }
+                }
 
-                        a {
-                            font-size: 12px;
-                        }
+                .credentials {
+                    display: none;
+                    margin-left: 52px;
+                    line-height: 12px;
 
-                        .cancel_change_owner, .change_owner, .make_owner, .edit {
-                            border-left: 1px solid $link-color;
-                            padding-left: $link-padding;
-                            margin-left: $link-padding;
+                    a {
+                        font-size: 12px;
+                    }
+
+                    .field_wrapper {
+                        width: 48%;
+                        padding-right: 4px;
+
+                        label {
+                            padding-bottom: 4px;
+                            display: block;
                         }
                     }
 
-                    &.credentials {
-                        display: none;
-                        margin-left: 52px;
-                        line-height: 12px;
+                    .actions {
+                        padding: 8px 0;
+                        display: block;
+                        color: $link-color;
 
                         a {
-                            font-size: 12px;
-                        }
+                            padding: 0 ($link-padding + 2);
 
-                        .field_wrapper {
-                            width: 48%;
-                            padding-right: 4px;
+                            &:first-child {
+                                padding-left: 0;
+                            }
 
-                            label {
-                                padding-bottom: 4px;
-                                display: block;
+                            div[aria-role=progressbar] {
+                                left: -98px;
+                                top: 5px;
+                                display: inline;
+                            }
+
+                            &.cancel {
+                                border-left: 1px solid $link-color;
                             }
                         }
+                    }
+                }
 
-                        .actions {
-                            padding: 8px 0;
-                            display: block;
-                            color: $link-color;
-
-                            a {
-                                padding: 0 ($link-padding + 2);
-
-                                &:first-child {
-                                    padding-left: 0;
-                                }
-
-                                div[aria-role=progressbar] {
-                                    left: -98px;
-                                    top: 5px;
-                                    display: inline;
-                                }
-
-                                &.cancel {
-                                    border-left: 1px solid $link-color;
-                                }
-                            }
-                        }
+                &.no_owner {
+                    .links .edit {
+                        border-left: 0;
                     }
                 }
 
