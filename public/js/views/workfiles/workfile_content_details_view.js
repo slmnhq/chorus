@@ -16,47 +16,21 @@
 
             postRender: function() {
                 var self = this;
-                this.$(".save_as").qtip({
+                chorus.menu(this.$('.save_as'), {
                     content: this.$(".save_options").html(),
-                    show: 'click',
-                    hide: 'unfocus',
-                    position: {
-                        my: "top center",
-                        at: "bottom center"
-                    },
-                    style: {
-                        classes: "tooltip-white",
-                        tip: {
-                            width: 20,
-                            height: 15,
-                            offset: 40
-                        }
-                    },
-                    events: {
-                        render: function(event, api) {
-                            var me = this;
-                            $(api.elements.content).find(".save_as_current").bind('click', function(e) {
-                                self.replaceCurrentVersion(e);
-                                api.hide();
-                            });
-                            $(api.elements.content).find(".save_as_new").bind('click', function(e) {
-                                self.workfileNewVersion(e);
-                                api.hide();
-                            });
-                        }
+                    contentEvents: {
+                        '.save_as_current': _.bind(this.replaceCurrentVersion, this),
+                        '.save_as_new': _.bind(this.workfileNewVersion, this)
                     }
                 });
             },
 
-            replaceCurrentVersion: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+            replaceCurrentVersion: function() {
                 this.trigger("file:saveCurrent");
                 this.updateAutosaveText("workfile.content_details.save");
             },
 
-            workfileNewVersion : function(e) {
-                e.preventDefault();
+            workfileNewVersion : function() {
                 this.trigger("file:createWorkfileNewVersion");
             },
 
@@ -82,6 +56,8 @@
             buildFor : function(model) {
                 if (model.isImage()) {
                     return new ns.ImageWorkfileContentDetails({ model : model });
+                } else if (model.isSql()) {
+                    return new ns.SqlWorkfileContentDetails({ model : model });
                 }
 
                 return new ns.WorkfileContentDetails({ model : model });

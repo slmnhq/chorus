@@ -93,6 +93,18 @@ describe("chorus.models.Workfile", function() {
         });
     });
 
+    describe("isSql", function() {
+        it("returns true when the workfile is a sql file", function() {
+            this.model.set({ fileType: 'SQL'});
+            expect(this.model.isSql()).toBeTruthy();
+        })
+
+        it("returns false when the workfile is NOT a sql file", function() {
+            this.model.set({ fileType: 'CSV'});
+            expect(this.model.isSql()).toBeFalsy();
+        })
+    });
+
     describe("createDraft", function() {
         it("sets the required attributes", function() {
             var workfile = new chorus.models.Workfile({id: "123", workspaceId: "456", content: "asdf"});

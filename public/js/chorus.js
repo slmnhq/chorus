@@ -41,6 +41,45 @@
             $.jGrowl(t(message, options), toastOpts);
         }
 
+        self.menu = function(menuElement, options) {
+            var qtipArgs = {
+                content: options.content,
+                show: {
+                    event: 'click'
+                },
+                hide: 'unfocus',
+                position: {
+                    my: "top center",
+                    at: "bottom center"
+                },
+                style: {
+                    classes: "tooltip-white",
+                    tip: {
+                        width: 20,
+                        height: 15,
+                        offset: 40
+                    }
+                }
+            };
+            if(options.contentEvents) {
+                qtipArgs.events = {};
+                qtipArgs.events.render = function(event, api) {
+                    _.each(options.contentEvents, function(callback, selector) {
+                        var wrappedCallback = function(event) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            callback();
+                            api.hide();
+                        }
+                        $(api.elements.content).find(selector).click(wrappedCallback);
+                    })
+                };
+            }
+
+            menuElement.qtip(qtipArgs);
+
+        }
+
         self.styleSelect = function(element, options) {
             var $element = $(element);
             if($element.data('selectmenu')){$element.selectmenu("destroy");}

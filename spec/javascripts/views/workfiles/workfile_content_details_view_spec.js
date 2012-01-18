@@ -7,6 +7,7 @@ describe("WorkfileContentDetails", function() {
         context("when the given workfile is an image", function() {
             beforeEach(function() {
                 spyOn(this.model, 'isImage').andReturn(true);
+                spyOn(this.model, 'isSql').andReturn(false);
                 spyOn(chorus.views, "ImageWorkfileContentDetails");
                 chorus.views.WorkfileContentDetails.buildFor(this.model);
             });
@@ -16,9 +17,23 @@ describe("WorkfileContentDetails", function() {
             });
         });
 
-        context("when the given workfile is NOT an image", function() {
+        context("when the given workfile is a SQL file", function() {
+            beforeEach(function() {
+                spyOn(this.model, 'isSql').andReturn(true);
+                spyOn(this.model, 'isImage').andReturn(false);
+                spyOn(chorus.views, "SqlWorkfileContentDetails");
+                chorus.views.WorkfileContentDetails.buildFor(this.model);
+            });
+
+            it("instantiates a SqlWorkfileContentDetails view with the given workfile", function() {
+                expect(chorus.views.SqlWorkfileContentDetails).toHaveBeenCalledWith({ model : this.model });
+            });
+        });
+
+        context("when given anything else", function() {
             beforeEach(function() {
                 spyOn(this.model, 'isImage').andReturn(false);
+                spyOn(this.model, 'isSql').andReturn(false);
                 spyOn(chorus.views, "WorkfileContentDetails");
                 chorus.views.WorkfileContentDetails.buildFor = chorus.views.WorkfileContentDetails.originalValue.buildFor;
                 chorus.views.WorkfileContentDetails.buildFor(this.model);
@@ -32,12 +47,14 @@ describe("WorkfileContentDetails", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            this.qtipMenu = stubQtip();
             this.view = new chorus.views.WorkfileContentDetails({model : this.model});
             this.view.render();
         });
 
-        it("has the three action links in the details bar", function() {
-            expect(this.view.$("button").length).toBe(2);
+        it("has the save_as button in the details bar", function() {
+            expect(this.view.$("button").length).toBe(1);
+            expect(this.view.$("button")).toContainTranslation('workfile.content_details.save_as');
         });
 
         it("should not have disabled class from the save as link", function() {
@@ -48,16 +65,11 @@ describe("WorkfileContentDetails", function() {
             expect(this.view.$("span.auto_save")).toHaveClass("hidden");
         });
 
-        it("should show the save_options", function() {
+        it("should not show the save_options", function() {
             expect(this.view.$(".save_options")).toHaveClass("hidden");
         });
 
         context("when user is editing the file", function() {
-
-            it("should display the save button", function() {
-                expect(this.view.$(".save_as")).not.toHaveAttr("disabled");
-            });
-
             context("and the autosave event is fired", function() {
                 beforeEach(function() {
                     this.view.trigger("autosaved");
@@ -69,8 +81,8 @@ describe("WorkfileContentDetails", function() {
 
                 context("and the save as current button is clicked", function() {
                     beforeEach(function() {
-                        var event = $.Event("click");
-                        this.view.replaceCurrentVersion(event);
+                        this.view.$(".save_as").click();
+                        this.qtipMenu.find('.save_as_current').click();
                     });
 
                     it("should display the 'Saved at' text", function() {
@@ -81,20 +93,17 @@ describe("WorkfileContentDetails", function() {
 
             context("when user click on the 'save as file' button", function() {
                 beforeEach(function() {
-                    spyOn($.fn, 'qtip');
                     this.view.render();
                     this.view.$(".save_as").click();
-                    this.qtipCall = $.fn.qtip.calls[0];
                 });
 
                 it("displays the tooltip", function() {
-                    expect($.fn.qtip).toHaveBeenCalled();
-                    expect(this.qtipCall.object).toBe(".save_as");
+                    expect(this.qtipMenu).toHaveVisibleQtip();
                 });
 
                 it("renders the tooltip content", function() {
-                    expect(this.qtipCall.args[0].content).toContain("Save as new version");
-                    expect(this.qtipCall.args[0].content).toContain("Replace current version");
+                    expect(this.qtipMenu).toContainText("Save as new version");
+                    expect(this.qtipMenu).toContainText("Replace current version");
                 });
             });
         });

@@ -60,6 +60,11 @@
             return type && type.match(imageRegex);
         },
 
+        isSql: function() {
+            var type = this.get("fileType");
+            return type == "SQL";
+        },
+
         isText: function() {
             var type = this.get("mimeType");
             return type && type.match(textRegex);

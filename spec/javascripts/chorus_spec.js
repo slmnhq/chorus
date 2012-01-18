@@ -1,4 +1,4 @@
-describe("chorus", function() {
+describe("chorus global", function() {
     beforeEach(function() {
         this.chorus = new Chorus();
         this.backboneSpy = spyOn(Backbone.history, "start")
@@ -39,6 +39,62 @@ describe("chorus", function() {
         it("accepts toastOpts in the options hash", function() {
             chorus.toast("test.with_param", { param: "Nobody", toastOpts : {sticky : true, foo: "bar"}});
             expect($.jGrowl).toHaveBeenCalledWith("Nobody says hi", {life: 5000, sticky: true, foo: "bar"});
+        });
+    });
+
+    describe("#menu", function() {
+        beforeEach(function() {
+            this.qtipElement = stubQtip();
+            this.element = $("<div></div>");
+            this.eventSpy = jasmine.createSpy();
+            chorus.menu(this.element, {
+                content: "menu content<a class='test_link'></a>",
+                contentEvents: {
+                    '.test_link': this.eventSpy
+                }
+            });
+            this.qtipArgs = $.fn.qtip.mostRecentCall.args[0];
+        })
+
+        it("calls qtip on the given element", function() {
+            expect($.fn.qtip.mostRecentCall.object.get(0)).toEqual(this.element.get(0));
+        })
+
+        it("passes down the given content", function() {
+            expect(this.qtipArgs.content).toEqual("menu content<a class='test_link'></a>");
+        })
+
+        it("sets up the events on the contents", function() {
+            this.element.click();
+            this.qtipElement.find('.test_link').click()
+            expect(this.eventSpy).toHaveBeenCalled();
+        })
+
+        context("event handling", function() {
+            beforeEach(function() {
+                this.element.click();
+            })
+
+            it("closes the qtip", function() {
+                expect(this.qtipElement).toHaveVisibleQtip();
+                this.qtipElement.find('.test_link').click()
+                expect(this.qtipElement).not.toHaveVisibleQtip();
+            });
+        })
+
+        it("sets up our menu styling", function() {
+            expect(this.qtipArgs.show.event).toEqual('click');
+            expect(this.qtipArgs.hide).toEqual('unfocus');
+            expect(this.qtipArgs.position.my).toEqual("top center")
+            expect(this.qtipArgs.position.at).toEqual("bottom center")
+            expect(this.qtipArgs.style).toEqual({
+                classes: "tooltip-white",
+                tip: {
+                    width: 20,
+                    height: 15,
+                    offset: 40
+                }
+            });
         });
     });
 

@@ -38,6 +38,7 @@
         'sandbox_new_instance_mode',
         'sandbox_new_standalone_mode',
         'shuttle_widget',
+        'sql_workfile_content_details',
         'sub_nav',
         'tab_control',
         'text_workfile_content',
@@ -192,6 +193,10 @@
                     }
 
                     return (new URI(this.actual)).equals(target);
+                },
+
+                toHaveVisibleQtip : function() {
+                    return this.actual.find('.qtip').attr('aria-hidden') == 'false'
                 }
             });
 
@@ -277,6 +282,23 @@
         spy.settings = {}
         return spy;
     };
+
+    window.stubQtip = function() {
+        var qtip = $.fn.qtip;
+        var qtipElement = $('<div></div>');
+        $('#jasmine_content').append(qtipElement);
+        spyOn($.fn, 'qtip').andCallFake(function() {
+            var args = arguments;
+            if(_.isObject(args[0])) {
+                args[0].show || (args[0].show = {});
+                args[0].show.delay = 0;
+                args[0].position || (args[0].position = {});
+                args[0].position.container = qtipElement
+            }
+            qtip.apply(this, args);
+        })
+        return qtipElement;
+    }
 
     if ( $.browser.msie && !window['con' + 'sole'] ) {
       (function(F,i,r,e,b,u,g,L,I,T,E){if(F.getElementById(b))return;E=F[i+'NS']&&F.documentElement.namespaceURI;E=E?F[i+'NS'](E,'script'):F[i]('script');E[r]('id',b);E[r]('src',I+g+T);E[r](b,u);(F[e]('head')[0]||F[e]('body')[0]).appendChild(E);E=new Image;E[r]('src',I+L);})(document,'createElement','setAttribute','getElementsByTagName','FirebugLite','4','firebug-lite.js','releases/lite/latest/skin/xp/sprite.png','/firebug-lite/build/','#startOpened');
