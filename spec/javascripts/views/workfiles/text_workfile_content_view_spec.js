@@ -5,6 +5,7 @@
 
         this.view = new chorus.views.TextWorkfileContent({model: this.textfile});
         this.saveInterval = this.view.saveInterval;
+        $("#jasmine_content").append(this.view.el);
 
         // in IE8, we can't 'select' a textrange whose textarea is not on the DOM
         if ($.browser.msie) { spyOn(window.TextRange.prototype, 'select'); }
@@ -218,13 +219,13 @@
                 }
                 this.failSaveFor(this.view.model, message);
             });
-    
+
             it("should show the version conflict dialog", function() {
                 expect(chorus.Modal.prototype.launchModal).toHaveBeenCalled();
             });
         });
     });
-        
+
     describe("when navigating away", function() {
         beforeEach(function() {
             this.view.render();
