@@ -2,7 +2,11 @@
     ns.views.Bare = Backbone.View.extend(_.extend({}, ns.Mixins.Events, {
         initialize: function initialize() {
             this.preInitialize.apply(this, arguments);
+
+            this.bindings = new ns.BindingGroup(this);
+            ns.router.bindOnce("leaving", this.beforeNavigateAway, this);
             this.bindCallbacks()
+
             this.setup.apply(this, arguments);
         },
 
@@ -13,6 +17,10 @@
         preRender: $.noop,
         setupSubviews : $.noop,
         displayLoadingSection : $.noop,
+
+        beforeNavigateAway: function() {
+            this.bindings.removeAll();
+        },
 
         context : {},
         subviews : {},
@@ -116,9 +124,6 @@
         },
 
         bindCallbacks : function() {
-            this.beforeNavigateAway && ns.router.bindOnce("leaving", this.beforeNavigateAway, this);
-            this.bindings = new ns.BindingGroup(this);
-
             if (this.resource) {
                 this.bindings.add(this.resource, "saveFailed validationFailed", this.showErrors);
                 this.bindings.add(this.resource, "validated", this.clearErrors);
@@ -126,10 +131,6 @@
                     this.bindings.add(this.resource, "change reset add remove", this.render);
                 }
             }
-        },
-
-        beforeNavigateAway: function() {
-            this.bindings.removeAll();
         },
 
         context: function context() {
