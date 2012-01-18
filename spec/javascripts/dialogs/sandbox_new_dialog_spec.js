@@ -240,6 +240,17 @@ describe("chorus.dialogs.SandboxNew", function() {
                 expect(this.sandbox.get("databaseName")).toBe("New_Database");
                 expect(this.sandbox.get("schemaName")).toBe("New_Schema");
             });
+
+            describe("when the model is saved successfully", function() {
+                    beforeEach(function() {
+                        spyOn(chorus, 'toast');
+                        this.sandbox.trigger("saved");
+                    });
+
+                    it("shows a toast message", function() {
+                        expect(chorus.toast).toHaveBeenCalledWith("sandbox.create.standalone.toast");
+                    });
+                });
         });
     });
 });

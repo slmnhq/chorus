@@ -61,13 +61,17 @@
 
         save: function(e) {
             this.$("button.submit").startLoading("sandbox.adding_sandbox");
-            var sandboxType = this.$("input:radio[name='sandbox_type']:checked").val();
-            var currentForm = (sandboxType === 'within_instance') ? this.instanceMode : this.standaloneMode;
+            this.sandboxType = this.$("input:radio[name='sandbox_type']:checked").val();
+            var currentForm = (this.sandboxType === 'within_instance') ? this.instanceMode : this.standaloneMode;
             this.model.save(currentForm.fieldValues());
         },
 
         saved: function() {
-            ns.toast("sandbox.create.toast");
+            if(this.sandboxType === 'within_instance') {
+                ns.toast("sandbox.create.toast");
+            } else {
+                ns.toast("sandbox.create.standalone.toast");
+            }
             this.pageModel.fetch();
             this.pageModel.trigger("invalidated");
             this.closeModal();
