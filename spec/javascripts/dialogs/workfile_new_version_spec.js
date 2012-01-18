@@ -1,6 +1,6 @@
 describe("chorus.dialogs.WorkfileNewVersion", function() {
     beforeEach(function() {
-        this.workfile = fixtures.workfile();
+        this.workfile = fixtures.workfile({id: "55", workspaceId: "44", versionNum: "4", latestVersionNum: "4"});
         var launchElement = $("<a></a>");
         this.dialog = new chorus.dialogs.WorkfileNewVersion({ pageModel: this.workfile, launchElement: launchElement });
         this.dialog.render();
@@ -14,22 +14,23 @@ describe("chorus.dialogs.WorkfileNewVersion", function() {
 
     describe("when the form is submitted", function() {
         beforeEach(function() {
-            spyOn(this.dialog.model, "save").andCallThrough();
+            spyOn(Backbone.Model.prototype, "save").andCallThrough();
             this.workfile.set({"content": "new blood"});
             this.dialog.$("[name=commitMessage]").val("new commit")
             this.dialog.$("form").submit();
         });
 
-        it("has WorkfileNewVersion as the model", function() {
-            expect(this.dialog.model).toBeA(chorus.models.WorkfileNewVersion);
+        it("has Workfile as the model", function() {
+            expect(this.dialog.model).toBeA(chorus.models.Workfile);
         });
 
         it("sets commit message on the model", function() {
             expect(this.dialog.model.get("commitMessage")).toBe("new commit");
         });
 
-        it("saves the model with the fields from the form", function() {
-            expect(this.dialog.model.save).toHaveBeenCalled()
+        it("saves the model with the fields from the form with the correct post url", function() {
+            expect(Backbone.Model.prototype.save).toHaveBeenCalled()
+            expect(this.server.lastCreate().url).toBe("/edc/workspace/44/workfile/55/version");
         });
 
         describe("when the save completes", function() {

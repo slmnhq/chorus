@@ -217,7 +217,10 @@
                     "message" : "Bad version, bro",
                     "msgkey" : "WORKFILE.VERSION_TIMESTAMP_NOT_MATCH"
                 }
-                this.failSaveFor(this.view.model, message);
+                var model = this.view.model
+                var url = "/edc/workspace/" + model.get("workspaceId") + "/workfile/" +
+                    model.get("id") + "/version/" + model.get("versionNum");
+                this.failSaveFor(this.view.model, message, {url: url});
             });
 
             it("should show the version conflict dialog", function() {
@@ -279,9 +282,8 @@
             expect(chorus.dialogs.WorkfileNewVersion.prototype.launchModal).toHaveBeenCalled();
         });
 
-
         it("launches the new dialog with the correct model", function() {
-            expect(this.view.dialog.model).toBeA(chorus.models.WorkfileNewVersion);
+            expect(this.view.dialog.model).toBeA(chorus.models.Workfile);
 
         });
     });

@@ -1,5 +1,5 @@
-(function($, ns) {
-    ns.WorkfileNewVersion = chorus.dialogs.Base.extend({
+(function(ns) {
+    ns.dialogs.WorkfileNewVersion = ns.dialogs.Base.extend({
         className : "workfile_new_version",
         title : t("workfile.new_version_dialog.title"),
 
@@ -15,21 +15,19 @@
 
         makeModel : function() {
             this._super("makeModel", arguments);
-            this.model = this.pageModel.createNewVersion();
+            this.model = this.pageModel;
         },
 
         saveWorkfileNewVersion : function(e) {
             e.preventDefault();
             this.model.set({"commitMessage" : this.$("[name=commitMessage]").val()}, {silent : true});
-            this.model.save();
-            
+            this.model.saveAsNewVersion();
         },
 
         saved : function() {
-            this.pageModel.set({"versionNum" : this.model.get("versionNum"),
-                                "versionFileId" : this.model.get("versionFileId")});
+            this.model.fetch();
             this.model.trigger("autosaved");
             this.closeModal();
         }
     });
-})(jQuery, chorus.dialogs);
+})(chorus);

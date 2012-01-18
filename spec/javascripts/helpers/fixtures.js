@@ -22,16 +22,18 @@
             this.server.respond();
         }
 
-        this.failSaveFor = function(model, message){
+        this.failSaveFor = function(model, message, overrides){
             var response = {
                 status: "fail",
                 message: [message],
                 resource: []
             }
-            var method = model.isNew() ? 'POST' : 'PUT'
+            var method = overrides.method || (model.isNew() ? 'POST' : 'PUT');
+            var url = overrides.url || model.url();
+
             this.server.respondWith(
                 method,
-                model.url(),
+                url,
                 this.prepareResponse(response)
             );
             this.server.respond();
