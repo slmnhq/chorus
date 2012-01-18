@@ -37,7 +37,7 @@
             }
 
             var ed = this.editor;
-            _.defer(function() {ed.refresh(); ed.refresh();});
+            _.defer(function() {ed.refresh(); ed.refresh(); ed.refresh();});
         },
 
         editText : function() {
