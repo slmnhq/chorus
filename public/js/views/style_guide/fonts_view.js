@@ -21,6 +21,7 @@
         "text2",
         "text3",
         "text4",
+        "text5",
         "link"
     ];
 
@@ -48,7 +49,7 @@
         "18 normal link" : "user and workfile names on list pages",
         "18 semibold link" : "workspace names on dashboard workspace list",
 
-        "19 semibold text2" : "heading-sidebar",
+        "18 semibold text5" : "heading-sidebar",
 
         "24 semibold text1" : "heading-normal"
     };

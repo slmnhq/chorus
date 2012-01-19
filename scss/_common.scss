@@ -32,6 +32,7 @@ $color-text1 : black;
 $color-text2 : #5f5f5f;
 $color-text3 : #7D7D7D;
 $color-text4 : #959595;
+$color-text5 : #464646;
 $error-text-color: white;
 
 $link-color : #2c95dd;
@@ -123,9 +124,9 @@ $medium-font: 14px;
 
 @mixin heading-sidebar {
     @include debugging-mixin;
-    font-size: 19px;
+    font-size: 18px;
     font-weight: $semibold;
-    color: $color-text2;
+    color: $color-text5;
 }
 
 @mixin dialog-label {
