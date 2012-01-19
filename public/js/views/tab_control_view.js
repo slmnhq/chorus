@@ -20,6 +20,10 @@
             };
         },
 
+        removeTab: function(name) {
+            this.$("li." + name).remove();
+        },
+
         clickTab: function(evt) {
             this.setSelectedTab($(evt.target));
         },

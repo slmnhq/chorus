@@ -39,6 +39,7 @@
         'sandbox_new',
         'sandbox_new_instance_mode',
         'sandbox_new_standalone_mode',
+        'schema_metadata_list',
         'shuttle_widget',
         'sql_workfile_content',
         'sql_workfile_content_details',
