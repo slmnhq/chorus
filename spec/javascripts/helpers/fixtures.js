@@ -1567,9 +1567,38 @@
                     lastUpdatedStamp : "2012-01-04 14:42:15.318",
                     lastUpdatedTxStamp : "2012-01-04 14:42:15.309",
                     createdStamp : "2012-01-04 14:42:15.318",
-                    createdTxStamp : "2012-01-04 14:42:15.309"
+                    createdTxStamp : "2012-01-04 14:42:15.309",
+                    instanceId : this.nextId().toString(),
+                    databaseName: "My fixture database"
                 }, overrides);
                 return new chorus.models.Schema(attributes);
+            },
+
+            table: function(overrides) {
+                var id = this.nextId().toString();
+                var attributes = _.extend({
+                    name : "campaign_dim",
+                    rows : 500,
+                    columns : 6,
+                    onDiskSize : "64 kB",
+                    lastAnalyzedTime : "2012-01-18 13:43:31.70468",
+                    imports : null,
+                    masterTable : null,
+                    partitions : 0,
+                    hasData : true,
+                    desc : null,
+                    type : "table",
+                    instanceId : this.nextId().toString(),
+                    databaseName : "table databaseName from fixture",
+                    schemaName : "table schemaName from fixture"
+                }, overrides);
+                return new chorus.models.Table(attributes);
+            },
+
+            tableSet: function(models, overrides) {
+                var id = this.nextId().toString()
+                models = (models && (models.length > 0)) || [this.table(overrides), this.table(overrides)];
+                return new chorus.models.TableSet(models, overrides);
             },
 
             workspace: function(overrides) {
