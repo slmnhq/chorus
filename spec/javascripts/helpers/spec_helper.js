@@ -1,6 +1,7 @@
 (function($) {
     var templates = [
         'activity',
+        'activity_list',
         'alert',
         'breadcrumbs',
         'change_password',
@@ -29,7 +30,6 @@
         'loading_section',
         'logged_in_layout',
         'login',
-        'activity_list',
         'main_content',
         'notes_new',
         'notes_new_file_attachment',
