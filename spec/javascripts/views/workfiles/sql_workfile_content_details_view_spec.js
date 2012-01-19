@@ -43,18 +43,18 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 it("should show 'Run in the workspace sandbox'", function() {
                     expect(this.qtipElement).toContainTranslation("workfile.content_details.run_workspace_sandbox")
                 });
+
+                context("clicking on 'Run in my workspace'", function() {
+                    beforeEach(function() {
+                        spyOnEvent(this.view, "file:runCurrent");
+                        this.qtipElement.find('.run_sandbox').click();
+                    });
+
+                    it("triggers the 'file:runCurrent' event on the view", function() {
+                        expect("file:runCurrent").toHaveBeenTriggeredOn(this.view);
+                    });
+                })
             });
-
-            context("clicking on 'Run in my workspace'", function() {
-                beforeEach(function() {
-                    spyOnEvent(this.view, "file:runCurrent");
-                    this.qtipElement.find('.run_sandbox').click();
-                });
-
-                it("triggers the 'file:runCurrent' event on the view", function() {
-                    expect("file:runCurrent").toHaveBeenTriggeredOn(this.view);
-                });
-            })
         })
     });
 });
