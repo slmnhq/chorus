@@ -67,7 +67,7 @@
                     window.scroll(0, 0);
                 };
 
-                if (className == 'Login') {
+                if (className === 'Login' || className === 'StyleGuide') {
                     navFunction();
                 } else {
                     self.app.session.fetch({
