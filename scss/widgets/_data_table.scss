@@ -1,0 +1,46 @@
+.data_table {
+    .view_port {
+        border: 1px solid black;
+        font-size: 0;
+        width: 350px;
+
+        height: 300px;
+        overflow-y: hidden;
+        overflow-x: scroll;
+        white-space: nowrap;
+    }
+
+    .thead {
+    }
+
+    .tbody {
+        // background: red;
+        height: 100%;
+        overflow-y: scroll;
+    }
+
+    .column {
+        display: inline-block;
+        width: 100px;
+        overflow: hidden;
+    }
+
+    .td, .th {
+        line-height: 20px;
+        width: 100px;
+    }
+
+    .th {
+        display: inline-block;
+
+        @include font-content-details;
+        border-bottom: 1px solid $subheader-border-color-dark;
+        background: #eaeef2;
+    }
+
+    .td {
+        @include font-normal-alpha;
+        border-bottom : $dotted-list-item-border;
+    }
+
+}

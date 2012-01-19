@@ -1,8 +1,16 @@
-{{#each columns}}
-    <div class="column">
-        <div class="th">{{name}}</div>
-        {{#each values}}
-            <div class="td">{{this}}</div>
+<div class="view_port">
+    <div class="thead">
+        {{#each columns}}
+            <div class="th">{{name}}</div>
         {{/each}}
     </div>
-{{/each}}
+    <div class="tbody">
+        {{#each columns}}
+            <div class="column">
+                {{#each values}}
+                    <div class="td">{{this}}</div>
+                {{/each}}
+            </div>
+        {{/each}}
+    </div>
+</div>

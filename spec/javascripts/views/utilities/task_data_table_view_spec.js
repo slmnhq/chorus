@@ -22,10 +22,10 @@ describe("chorus.views.TaskDataTable", function() {
         });
 
         it("renders a column header for each column, with the column's name", function() {
-            expect(this.view.$(".column:eq(0) div.th").text()).toBe("id");
-            expect(this.view.$(".column:eq(1) div.th").text()).toBe("city");
-            expect(this.view.$(".column:eq(2) div.th").text()).toBe("state");
-            expect(this.view.$(".column:eq(3) div.th").text()).toBe("zip");
+            expect(this.view.$("div.th:eq(0)").text()).toBe("id");
+            expect(this.view.$("div.th:eq(1)").text()).toBe("city");
+            expect(this.view.$("div.th:eq(2)").text()).toBe("state");
+            expect(this.view.$("div.th:eq(3)").text()).toBe("zip");
         });
 
         it("renders a cell for every field", function() {
