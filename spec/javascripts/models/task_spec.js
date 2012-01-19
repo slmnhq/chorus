@@ -20,14 +20,14 @@ describe("chorus.models.Task", function() {
 
     describe("#columnOrientedData", function() {
         beforeEach(function() {
-            this.model = fixtures.task({
+            this.model = fixtures.task({ result: {
                 columns: [{ name: "id" }, { name: "city" }, { name: "state" }, { name: "zip" }],
                 rows: [
                     { id: 1 , city: "Oakland"   , state: "CA" , zip: "94612" } ,
                     { id: 2 , city: "Arcata"    , state: "CA" , zip: "95521" } ,
                     { id: 3 , city: "Lafayette" , state: "IN" , zip: "47909" }
                 ]
-            });
+            }});
 
             this.data = this.model.columnOrientedData();
         });

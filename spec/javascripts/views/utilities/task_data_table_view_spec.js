@@ -1,13 +1,13 @@
 describe("chorus.views.TaskDataTable", function() {
     beforeEach(function() {
-        this.task = fixtures.task({
+        this.task = fixtures.task({ result: {
             columns: [{ name: "id" }, { name: "city" }, { name: "state" }, { name: "zip" }],
             rows: [
                 { id: 1 , city: "Oakland"   , state: "CA" , zip: "94612" } ,
                 { id: 2 , city: "Arcata"    , state: "CA" , zip: "95521" } ,
                 { id: 3 , city: "Lafayette" , state: "IN" , zip: "47909" }
             ]
-        });
+        }});
 
         this.view = new chorus.views.TaskDataTable({ model: this.task });
     });

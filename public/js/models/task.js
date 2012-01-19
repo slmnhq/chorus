@@ -7,8 +7,10 @@
         },
 
         columnOrientedData : function() {
-            var rows = this.get("rows");
-            return _.map(this.get("columns"), function(column) {
+            var rows    = this.get("result").rows,
+                columns = this.get("result").columns;
+
+            return _.map(columns, function(column) {
                 var name = column.name;
                 return {
                     name: name,
