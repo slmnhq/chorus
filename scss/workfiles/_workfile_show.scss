@@ -84,3 +84,20 @@
         }
     }
 }
+
+
+.right {
+  float: right;
+}
+
+.right {
+    .execution_info {
+      display: none;
+    }
+}
+
+.executing {
+    .execution_info {
+        display: inline;
+    }
+}
