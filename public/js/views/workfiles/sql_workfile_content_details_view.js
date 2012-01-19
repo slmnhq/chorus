@@ -14,6 +14,7 @@
         },
 
         setup: function() {
+            this._super("setup", arguments);
             this.sandbox = this.model.sandbox();
             this.sandbox.bind("change", this.render, this);
             this.sandbox.fetch();
