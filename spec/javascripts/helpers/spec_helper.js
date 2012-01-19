@@ -39,6 +39,7 @@
         'sandbox_new_instance_mode',
         'sandbox_new_standalone_mode',
         'shuttle_widget',
+        'sql_workfile_content',
         'sql_workfile_content_details',
         'sub_nav',
         'tab_control',

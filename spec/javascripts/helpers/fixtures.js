@@ -1645,6 +1645,14 @@
                 return this.workfile(overrides);
             },
 
+            sqlWorkfile: function(overrides) {
+                return this.textWorkfile(_.extend(overrides, {
+                    fileName : "sample.sql",
+                    fileType : "SQL",
+                    mimeType : "text/x-sql"
+                }));
+            },
+
             draft: function(overrides) {
                var attributes = _.extend(this.draftJson(), {
                 }, overrides);

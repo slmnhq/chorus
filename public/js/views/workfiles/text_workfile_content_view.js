@@ -7,7 +7,6 @@
         setup : function() {
             this.bind("file:saveCurrent", this.replaceCurrentVersion);
             this.bind("file:createWorkfileNewVersion", this.createWorkfileNewVersion);
-            this.bind("file:runCurrent", this.runCurrent, this)
             this.model.bind("saveFailed", this.versionConflict, this)
         },
 
@@ -99,20 +98,6 @@
             this.dialog.launchModal(); // we need to manually create the dialog instead of using data-dialog because qtip is not part of page
             this.dialog.model.bind("change", this.render, this);
             this.dialog.model.bind("autosaved", function() { this.trigger("autosaved", "workfile.content_details.save");}, this);
-        },
-
-        runCurrent : function() {
-            this.task = new ns.models.Task({
-                sql: this.editor.getValue(),
-                entityId: this.model.get('id'),
-                schemaId: this.model.sandbox().get('schemaId'),
-                instanceId: this.model.sandbox().get('instanceId'),
-                databaseId: this.model.sandbox().get('databaseId')
-            });
-            this.task.bind("saved", _.bind(function() { 
-                this.trigger("file:executionCompleted", this.task);
-            }, this));
-            this.task.save();
         }
     });
 
