@@ -55,12 +55,21 @@
                 style: {
                     classes: "tooltip-white",
                     tip: {
+                        mimic: "top center",
                         width: 20,
                         height: 15,
-                        offset: 40
                     }
                 }
             };
+
+            if (options.orientation === "right") {
+                qtipArgs.position.my = "top left";
+                qtipArgs.style.tip.offset = 40;
+            } else if (options.orientation === "left") {
+                qtipArgs.position.my = "top right";
+                qtipArgs.style.tip.offset = 40;
+            }
+
             if(options.contentEvents) {
                 qtipArgs.events = {};
                 qtipArgs.events.render = function(event, api) {

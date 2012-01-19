@@ -6,6 +6,7 @@
             var self = this;
             chorus.menu(this.$('.run_file'), {
                 content: this.$(".run_workfile").html(),
+                orientation: "right",
                 contentEvents: {
                     ".run_sandbox": _.bind(this.runInSandbox, this)
                 }

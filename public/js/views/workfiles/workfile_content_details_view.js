@@ -18,6 +18,7 @@
                 var self = this;
                 chorus.menu(this.$('.save_as'), {
                     content: this.$(".save_options").html(),
+                    orientation: "left",
                     contentEvents: {
                         '.save_as_current': _.bind(this.replaceCurrentVersion, this),
                         '.save_as_new': _.bind(this.workfileNewVersion, this)
