@@ -12,6 +12,16 @@
     });
 
     ns.pages.WorkfileShowPage = ns.pages.Base.extend({
+        events : function() {
+            var superClassEvents = this._super("events");
+            return _.extend({}, superClassEvents, {
+                "keydown" : "handleShortcut"
+            });
+        },
+
+        handleShortcut: function() {
+        },
+
         setup : function(workspaceId, workfileId, versionNum) {
             this.workspace = new ns.models.Workspace({id: workspaceId});
             this.workspace.fetch();

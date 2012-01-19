@@ -256,6 +256,18 @@
             expect(this.server.creates().length).toBe(1);
             expect(this.server.lastCreate().url).toBe(this.view.task.url());
         });
+
+        describe("when the task completes successfully", function() {
+            beforeEach(function() {
+                this.executionSpy = jasmine.createSpy("execution")
+                this.view.bind("file:executionCompleted", this.executionSpy);
+                this.server.lastCreate().succeed([]);
+            })
+
+            it('triggers file:executionCompleted on the view', function() {
+                expect(this.executionSpy).toHaveBeenCalledWith(jasmine.any(chorus.models.Task));
+            })
+        })
     });
 
     describe("when navigating away", function() {

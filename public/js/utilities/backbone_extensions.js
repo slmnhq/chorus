@@ -97,7 +97,12 @@ Backbone.sync = function(method, model, options) {
         parentObject  = findSuper(methodName, currentObject);
     this._superCallObjects[methodName] = parentObject;
 
-    var result = parentObject[methodName].apply(this, args || []);
+    var result;
+    if (_.isFunction(parentObject[methodName])) {
+        result = parentObject[methodName].apply(this, args || []);
+    } else {
+        result = parentObject[methodName];
+    }
     delete this._superCallObjects[methodName];
     return result;
   }

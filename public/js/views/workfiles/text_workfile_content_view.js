@@ -109,6 +109,9 @@
                 instanceId: this.model.sandbox().get('instanceId'),
                 databaseId: this.model.sandbox().get('databaseId')
             });
+            this.task.bind("saved", _.bind(function() { 
+                this.trigger("file:executionCompleted", this.task);
+            }, this));
             this.task.save();
         }
     });
