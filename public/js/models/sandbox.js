@@ -52,6 +52,19 @@
 
         isCreatingNew: function(type, attrs) {
             return !this.get(type) && !attrs[type];
+        },
+
+        schema: function() {
+            this._schema = this._schema || new ns.models.Schema({
+                id: this.get("schemaId"),
+                name: this.get("schemaName"),
+                databaseId: this.get("databaseId"),
+                databaseName: this.get("databaseName"),
+                instanceId: this.get("instanceId"),
+                instanceName: this.get("instanceName")
+            });
+
+            return this._schema;
         }
     });
 })(chorus);

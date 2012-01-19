@@ -1,15 +1,34 @@
 describe("chorus.models.Sandbox", function() {
     beforeEach(function() {
-        this.model = new chorus.models.Sandbox({ workspaceId: '123', id: '456' });
+        this.model = fixtures.sandbox();
     });
 
     describe("#url", function() {
         context("when creating", function() {
             it("has the right url", function() {
                 var uri = new URI(this.model.url({ method: "create" }));
-                expect(uri.path()).toBe("/edc/workspace/123/sandbox");
+                expect(uri.path()).toBe("/edc/workspace/" + this.model.get('workspaceId') + "/sandbox");
             });
         });
+    });
+
+    describe("#schema", function() {
+        beforeEach(function() {
+            this.schema = this.model.schema();
+        });
+
+        it("should be created with instance, database, and schema names and ids", function() {
+            expect(this.schema.get('instanceId')).toBe(this.model.get('instanceId'));
+            expect(this.schema.get('databaseId')).toBe(this.model.get('databaseId'));
+            expect(this.schema.get('id')).toBe(this.model.get('schemaId'));
+            expect(this.schema.get('instanceName')).toBe(this.model.get('instanceName'));
+            expect(this.schema.get('databaseName')).toBe(this.model.get('databaseName'));
+            expect(this.schema.get('name')).toBe(this.model.get('schemaName'));
+        });
+
+        it("should memoize the schema", function() {
+            expect(this.schema).toBe(this.model.schema());
+        })
     });
 
     describe("#beforeSave", function() {
@@ -86,9 +105,13 @@ describe("chorus.models.Sandbox", function() {
         });
 
         context("with a database id", function() {
-            context("without a schema id", function() {
+            beforeEach(function() {
+                this.model.unset('databaseId');
+            });
+            context("without a schema", function() {
                 beforeEach(function() {
                     this.model.unset("schema");
+                    this.model.unset("schemaName");
                 });
 
                 it("requires a schema name", function() {
