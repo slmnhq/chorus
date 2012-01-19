@@ -48,7 +48,7 @@
 
             draft.bind("saved", function() {
                 this.isDraft = true;
-                this.set({ hasDraft: true });
+                this.set({ hasDraft: true }, { silent : true });
             }, this);
             return draft;
         },

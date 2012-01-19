@@ -131,6 +131,7 @@ describe("chorus.models.Workfile", function() {
         describe("when the draft is saved", function() {
             beforeEach(function() {
                 var draft = this.workfile.createDraft();
+                spyOnEvent(this.workfile, "change")
                 draft.trigger("saved");
             });
 
@@ -140,6 +141,10 @@ describe("chorus.models.Workfile", function() {
 
             it("sets the isDraft property on the workfile", function() {
                 expect(this.workfile.isDraft).toBeTruthy();
+            })
+
+            it("does not trigger change on the workfile", function() {
+                expect("change").not.toHaveBeenTriggeredOn(this.workfile);
             })
         });
     });
