@@ -11,9 +11,7 @@
 
         setup : function() {
             this.bind("instance:selected", this.setInstance, this);
-            this.tabControl = new chorus.views.TabControl(['activity', 'configuration']);
-            this.tabControl.bind("activity:selected", this.showActivityList, this)
-            this.tabControl.bind("configuration:selected", this.showConfiguration, this);
+            this.tabControl = new chorus.views.TabControl([{name: 'activity', selector: ".activity_list"}, {name: 'configuration', selector: ".configuration_detail"}]);
         },
 
         additionalContext : function() {
@@ -56,24 +54,8 @@
             this.render();
         },
 
-        showActivityList : function(){
-            toggleElement(".activity_list");
-        },
-
-        showConfiguration : function(){
-            toggleElement(".configuration_detail");
-        },
-
         canEditInstance : function() {
             return (this.resource.owner().get("id") == chorus.session.user().get("id") ) || chorus.session.user().get("admin");
         }
-    })
-
-
-
-    function toggleElement(selector) {
-        var element = this.$(selector)
-        element.siblings().hide();
-        element.show()
-    }
+    });
 })(jQuery, chorus);
