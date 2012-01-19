@@ -1,46 +1,50 @@
 .data_table {
-    .view_port {
-        border: 1px solid black;
-        font-size: 0;
-        width: 350px;
+    $line-height: 20px;
 
-        height: 300px;
-        overflow-y: hidden;
-        overflow-x: scroll;
-        white-space: nowrap;
-    }
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+
+    // don't render whitespace that is between DOM elements
+    font-size: 0;
+    background: #eaeef2;
+
 
     .thead {
+        position: absolute;
+        top: 0;
+        left: 0;
     }
 
     .tbody {
-        // background: red;
-        height: 100%;
-        overflow-y: scroll;
+        position: absolute;
+        top: $line-height + 1px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        overflow: scroll;
     }
 
     .column {
         display: inline-block;
-        width: 100px;
         overflow: hidden;
     }
 
     .td, .th {
-        line-height: 20px;
         width: 100px;
+        line-height: $line-height;
     }
 
     .th {
         display: inline-block;
-
-        @include font-content-details;
         border-bottom: 1px solid $subheader-border-color-dark;
-        background: #eaeef2;
+        @include font-content-details;
     }
 
     .td {
-        @include font-normal-alpha;
         border-bottom : $dotted-list-item-border;
+        @include font-normal-alpha;
     }
 
 }

@@ -131,6 +131,7 @@
 
             var self = this;
             _.each(this.views, function(view, name) {
+                if (name != "Data Table") return;
                 $(self.el).append("<li class='view'><h1>" + name + "</h1><div class='view_guts'/></li>")
                 view.el = self.$(".view_guts:last");
                 view.delegateEvents();

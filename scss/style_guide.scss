@@ -57,6 +57,12 @@
         @include secondary-text-small;
     }
 
+    .data_table {
+        border: 1px solid black;
+        width: 350px;
+        height: 300px;
+    }
+
     table {
         td, th, tr { @include debugging-mixin; }
         width: 90%;
