@@ -1,0 +1,59 @@
+.results_console {
+    height: 32px;
+    line-height: 32px;
+    vertical-align: middle;
+    padding: 0 $padding-x;
+    
+    h1 {
+        @include results-console;
+        display: inline-block;
+        padding-right: $padding-x;
+    }
+
+    a {
+        font-size: 12px;
+        font-weight: $semibold;
+    }
+
+    .right {
+        float: right;
+
+        .message {
+            @include results-console-message;
+        }
+
+        .execution_info {
+            display: none;
+
+            .loading {
+                @include results-console-message;
+                border-right: 1px solid $results-console-border-color;
+                padding-right: $padding-x;
+
+                div[aria-role=progressbar] {
+                    left: -65px;
+                    top: 5px;
+                    display: inline;
+                }
+            }
+
+            .link {
+                padding-left: $padding-x;
+                
+                a {
+                    font-weight: normal;
+                }
+            }
+        }
+
+        &.executing {
+            .message {
+                display: none;
+            }
+            
+            .execution_info {
+                display: inline;
+            }
+        }
+    }
+}

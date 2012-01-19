@@ -20,7 +20,7 @@
         color: $workfiles-action-details-link-color;
 
         button {
-            margin-left: 4px;
+            margin-left: 0;
             color: $workfiles-action-details-link-color;
             font-weight: $semibold;
             font-size: 13px;
@@ -31,7 +31,7 @@
             float: right;
 
             span.view {
-                margin-right: 9px;
+                margin-right: 0;
                 font-size: 11px
             }
 
@@ -82,22 +82,5 @@
                 text-decoration: underline;
             }
         }
-    }
-}
-
-
-.right {
-  float: right;
-}
-
-.right {
-    .execution_info {
-      display: none;
-    }
-}
-
-.executing {
-    .execution_info {
-        display: inline;
     }
 }

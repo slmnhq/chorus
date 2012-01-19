@@ -54,6 +54,7 @@ $list-border-color: #B9BBBD;
 $workfiles-action-details-link-border-color: #98B675;
 $dotted-list-item-border: 1px dotted $subheader-border-color;
 $tab-gradient-color : #D5E0EB;
+$results-console-border-color: #88A8D3;
 
 $progress-bar-background-color : #D8DEE6;
 
@@ -173,6 +174,20 @@ $medium-font: 14px;
     color: $color-text1;
 }
 
+@mixin results-console {
+    @include debugging-mixin;
+    font-size: 14px;
+    font-weight: $semibold;
+    color: $color-text5;
+}
+
+@mixin results-console-message {
+    @include debugging-mixin;
+    font-size: 12px;
+    font-weight: normal;
+    color: $color-text2;
+}
+
 @mixin list-section-heading {
     @include debugging-mixin;
     font-size: 14px;
@@ -192,7 +207,6 @@ $medium-font: 14px;
     font-size: 12px;
     font-weight: normal;
     color: $color-text3;
-
 }
 
 @mixin after-clearfix($which: both) {

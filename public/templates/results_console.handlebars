@@ -1,6 +1,6 @@
 <div>
     <h1>{{t "results_console_view.title"}}</h1>
-    <a href="#">{{t "results_console_view.new_window"}}</a>
+    <a>{{t "results_console_view.new_window"}}</a>
     <div class="right">
         <span class="message">
             {{#if result}}
@@ -11,7 +11,9 @@
             <span class="loading">
                 {{t "results_console_view.executing"}}
             </span>
-            <a class="cancel" href='#'>{{t "actions.cancel"}}</a>
+            <span class="link">
+                <a class="cancel" href='#'>{{t "actions.cancel"}}</a>
+            </span>
         </span>
     </div>
 </div>
