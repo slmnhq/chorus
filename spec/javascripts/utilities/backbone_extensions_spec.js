@@ -21,6 +21,16 @@ describe("backbone_extensions", function() {
             expect(this.model.url).toHaveBeenCalledWith({ method: 'update' });
         });
 
+        it("allows method override through options", function() {
+            expect(this.server.lastCreate()).toBeUndefined();
+            this.model.save();
+            expect(this.server.lastCreate().method).toBe("POST");
+
+            expect(this.server.lastUpdate()).toBeUndefined();
+            this.model.save({}, { method : 'update' });
+            expect(this.server.lastUpdate().method).toBe("PUT");
+        })
+        
         context("with a non-file upload model", function() {
             describe("#save", function() {
                 it("uses AJAX", function() {

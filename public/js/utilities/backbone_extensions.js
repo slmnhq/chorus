@@ -17,6 +17,8 @@ var methodMap = {
 Backbone.emulateJSON = true;
 
 Backbone.sync = function(method, model, options) {
+    method = (options && options.method) || method;
+
     var type = methodMap[method];
 
     // Default JSON-request options.
