@@ -115,18 +115,13 @@
 
         saveAsNewVersion: function(attrs, options) {
             options = options || {};
+
             var overrides = {
+                method : 'create',
                 url : "/edc/workspace/" + this.get("workspaceId") + "/workfile/" + this.get("id") + "/version"
             };
 
-            var oldId = this.id;
-            delete this.id;
-
-            var ret = this._super("save", [attrs, _.extend(options, overrides)])
-
-            this.id = oldId;
-
-            return ret;
+            return this._super("save", [attrs, _.extend(options, overrides)])
         }
     });
 })(chorus);
