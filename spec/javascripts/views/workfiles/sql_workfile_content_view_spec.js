@@ -4,6 +4,12 @@ describe("chorus.views.SqlWorkfileContentView", function() {
         this.view = new chorus.views.SqlWorkfileContent({model: this.textfile});
     })
 
+    describe("initialization", function() {
+        it("has a TextWorkfileContent view", function() {
+            expect(this.view.textContent).toBeA(chorus.views.TextWorkfileContent);
+        })
+    })
+
     describe("event file:runCurrent", function() {
         beforeEach(function() {
             this.view.model.set({
@@ -16,7 +22,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 schemaId: '4'
             });
             this.view.render();
-            this.view.editor.setValue("select * from foos");
+            this.view.textContent.editor.setValue("select * from foos");
             this.view.trigger("file:runCurrent");
         });
 
