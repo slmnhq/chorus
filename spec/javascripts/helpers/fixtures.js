@@ -1756,6 +1756,18 @@
                 return new chorus.models.Task(_.extend({
                     id : this.nextId().toString()
                 }, overrides));
+            },
+
+            taskWithResult: function(overrides) {
+                overrides = _.extend({ result: {
+                    columns: [{ name: "id" }, { name: "city" }, { name: "state" }, { name: "zip" }],
+                    rows: [
+                        { id: 1 , city: "Oakland"   , state: "CA" , zip: "94612" } ,
+                        { id: 2 , city: "Arcata"    , state: "CA" , zip: "95521" } ,
+                        { id: 3 , city: "Lafayette" , state: "IN" , zip: "47909" }
+                    ]
+                }}, overrides);
+                return this.task(overrides);
             }
         });
     });

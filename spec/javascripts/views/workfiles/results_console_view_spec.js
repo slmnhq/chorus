@@ -57,6 +57,27 @@ describe("chorus.views.ResultsConsoleView", function() {
                     expect(this.view.$(".loading").isLoading()).toBeFalsy();
                 })
             })
+
+            describe("file:executionCompleted", function() {
+                beforeEach(function() {
+                    this.task = fixtures.taskWithResult();
+                    this.view.trigger("file:executionCompleted", this.task);
+                });
+
+                it("renders a task data table with the given task", function() {
+                    expect(this.view.dataTable).toBeA(chorus.views.TaskDataTable);
+                    expect(this.view.dataTable.model).toBe(this.task);
+                    expect($(this.view.el)).toContain(this.view.dataTable.el);
+                });
+
+                it("unsets the executing class", function() {
+                    expect(this.view.$(".right")).not.toHaveClass("executing");
+                });
+
+                it("stops the spinner", function() {
+                    expect(this.view.$(".loading").isLoading()).toBeFalsy();
+                })
+            });
         })
     })
 })
