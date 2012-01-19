@@ -49,6 +49,7 @@
                 draft.id = "ForceBackboneToUsePut"
             }
             draft.bind("saved", function() {
+                this.isDraft = true;
                 this.set({ hasDraft: true });
             }, this);
             return draft;

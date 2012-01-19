@@ -147,6 +147,10 @@ describe("chorus.models.Workfile", function() {
             it("sets the workfile's 'hasDraft' field to true", function() {
                 expect(this.workfile.get("hasDraft")).toBeTruthy();
             });
+
+            it("sets the isDraft property on the workfile", function() {
+                expect(this.workfile.isDraft).toBeTruthy();
+            })
         });
     });
 

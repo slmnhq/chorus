@@ -1494,8 +1494,8 @@
                 }
             },
 
-            draftJson: function() {
-                return {
+            draftJson: function(overrides) {
+                return _.extend({
                     content: "Some Content",
                     createdStamp: "2012-01-17 16:17:26.439",
                     createdTxStamp: "2012-01-17 16:17:26.411",
@@ -1505,8 +1505,9 @@
                     isDeleted: false,
                     lastUpdatedStamp: "2012-01-17 16:17:26.439",
                     lastUpdatedTxStamp: "2012-01-17 16:17:26.411",
-                    workfileId: this.nextId().toString()
-                }
+                    workfileId: this.nextId().toString(),
+                    workspaceId : this.nextId().toString()
+                }, overrides);
             },
 
             workspaceJson: function() {

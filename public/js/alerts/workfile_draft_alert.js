@@ -27,8 +27,13 @@
 
         deleteDraft : function() {
             var draft = new chorus.models.Draft({workspaceId : this.model.get("workspaceId"), workfileId: this.model.get("id")});
-            draft.bind("change", function(draft) {
+
+            draft.bind("change", function() {
                 draft.destroy();
+            }, this);
+
+            draft.bind("destroy", function() {
+                this.model.set({ hasDraft : false })
             }, this);
 
             draft.fetch();
