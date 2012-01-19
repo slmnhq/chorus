@@ -9,6 +9,10 @@
                     return new ns.ImageWorkfileContent({ model : model });
                 }
 
+                if (model.isSql()) {
+                    return new ns.SqlWorkfileContent( { model : model });
+                }
+
                 if (model.isText()) {
                     return new ns.TextWorkfileContent({ model : model });
                 }
