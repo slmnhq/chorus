@@ -13,6 +13,7 @@
         'dashboard_sidebar',
         'dashboard_workspace_list',
         'dashboard_workspace_list_footer',
+		'data_table',
         'default_content_header',
         'header',
         'image_upload',
@@ -234,6 +235,8 @@
     //global helpers
     window.context = window.describe;
     window.xcontext = window.xdescribe;
+    window.specify = window.it;
+    window.xspecify = window.xit;
 
     window.unsetLoggedInUser = function() {
         chorus.session.unset("id");
