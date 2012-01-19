@@ -37,7 +37,7 @@ $link-padding: 15px;
         }
     }
 
-    button {
+    button, .button {
         margin-left: 20px;
         @include font-content-details;
         @include content-details-button($border-color);

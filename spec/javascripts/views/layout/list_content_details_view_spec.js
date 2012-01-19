@@ -34,8 +34,8 @@ describe("ListContentDetails", function() {
                     expect(this.view.$('button[data-dialog="WorkspacesNew"]').text()).toBe("Create a Workspace");
                     expect(this.view.$('button[data-dialog="WorkspacesNew"]')).toHaveData("foo", "bar");
 
-                    expect(this.view.$("a[href=#/foo] button")).toExist();
-                    expect(this.view.$("a[href=#/foo] button").text()).toBe("Create a Foo");
+                    expect(this.view.$("a.button[href=#/foo]")).toExist();
+                    expect(this.view.$("a.button[href=#/foo]")).toContainText("Create a Foo");
                 });
             });
         });
