@@ -30,7 +30,8 @@
         },
 
         sandbox: function() {
-            return new ns.models.Sandbox({ id: this.get("sandboxId"), workspaceId: this.get("workspaceId") });
+            this._sandbox || (this._sandbox = new ns.models.Sandbox({ id: this.get("sandboxId"), workspaceId: this.get("workspaceId") }));
+            return this._sandbox;
         },
 
         lastComment : function() {

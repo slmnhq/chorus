@@ -10,7 +10,11 @@ describe("chorus.models.Task", function() {
     });
 
     it("has the right url", function() {
-        var expectedUrl = "/edc/task/sync";
+        var expectedUrl = "/edc/task/sync/";
         expect(this.model.url()).toMatchUrl(expectedUrl);
     });
+
+    it("has the taskType of workfileSQLExecution by default", function(){
+       expect(this.model.get("taskType")).toBe("workfileSQLExecution");
+    })
 });

@@ -20,6 +20,10 @@ describe("chorus.models.Workfile", function() {
             expect(sandbox.get("id")).toBe(this.model.get("sandboxId"));
             expect(sandbox.get("workspaceId")).toBe(this.model.get("workspaceId"));
         });
+
+        it("memoizes", function() {
+            expect(this.model.sandbox()).toBe(this.model.sandbox());
+        });
     });
 
     describe("#lastComment", function() {

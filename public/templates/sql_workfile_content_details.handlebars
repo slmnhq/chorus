@@ -4,6 +4,9 @@
 
 <div class="run_workfile hidden">
     <ul class="run_menu">
-        <li><a href="#" class="run_sandbox">{{t "workfile.content_details.run_workspace_sandbox"}}</a></li>
+        {{#if sandboxLoaded}}
+            <li><a href="#" class="run_sandbox">{{t "workfile.content_details.run_workspace_sandbox"}}</a></li>
+        {{/if}}
+        <li><a href="#" class="run_sandbox">{{t "workfile.content_details.run_in_another_schema"}}</a></li>
     </ul>
 </div>

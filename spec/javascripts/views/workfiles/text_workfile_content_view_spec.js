@@ -1,7 +1,6 @@
     describe("chorus.views.TextWorkfileContentView", function() {
     beforeEach(function() {
-        fixtures.model = "Workfile";
-        this.textfile = fixtures.modelFor("fetchText");
+        this.textfile = fixtures.textWorkfile({ content: "select * from foos where bar_id = 1;" });
 
         this.view = new chorus.views.TextWorkfileContent({model: this.textfile});
         this.saveInterval = this.view.saveInterval;
@@ -229,6 +228,36 @@
         });
     });
 
+    describe("event file:runCurrent", function() {
+        beforeEach(function() {
+            this.view.model.set({
+                content: "select * from foos",
+                id: '101'
+            });
+            this.view.model.sandbox().set({
+                instanceId: '2',
+                databaseId: '3',
+                schemaId: '4'
+            });
+            this.view.render();
+            this.view.editor.setValue("select * from foos");
+            this.view.trigger("file:runCurrent");
+        });
+
+        it("creates a task with the right parameters", function() {
+            expect(this.view.task.get("sql")).toBe("select * from foos");
+            expect(this.view.task.get("instanceId")).toBe("2");
+            expect(this.view.task.get("databaseId")).toBe("3");
+            expect(this.view.task.get("schemaId")).toBe("4");
+            expect(this.view.task.get("entityId")).toBe("101");
+        });
+
+        it("saves the task", function() {
+            expect(this.server.creates().length).toBe(1);
+            expect(this.server.lastCreate().url).toBe(this.view.task.url());
+        });
+    });
+
     describe("when navigating away", function() {
         beforeEach(function() {
             this.view.render();
@@ -251,7 +280,7 @@
             });
 
             it("does not save the draft", function() {
-                expect(this.server.requests.length).toBe(0);
+                expect(this.server.creates().length).toBe(0);
             });
         });
     });
