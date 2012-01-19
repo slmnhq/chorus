@@ -45,9 +45,7 @@
 
         createDraft : function() {
             var draft = new ns.models.Draft({workfileId: this._workfileId(), workspaceId : this.get("workspaceId"), content : this.get("content")})
-            if (this.get("hasDraft")) {
-                draft.id = "ForceBackboneToUsePut"
-            }
+
             draft.bind("saved", function() {
                 this.isDraft = true;
                 this.set({ hasDraft: true });

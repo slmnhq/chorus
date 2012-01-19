@@ -70,7 +70,11 @@
             this.stopTimer();
             this.trigger("autosaved");
             this.model.set({"content" : this.editor.getValue()}, {silent: true});
-            this.model.createDraft().save();
+            overrides = {}
+            if(this.model.get("hasDraft")) {
+                overrides.method = 'update'
+            }
+            this.model.createDraft().save({}, overrides);
         },
 
         beforeNavigateAway : function() {

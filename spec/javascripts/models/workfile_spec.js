@@ -128,16 +128,6 @@ describe("chorus.models.Workfile", function() {
             expect(draft.get("content")).toBe("asdf");
         });
 
-        context("when the workfile has a draft", function() {
-            beforeEach(function() {
-                this.workfile.set({ hasDraft: true });
-            });
-
-            it("is not considered 'new'", function() {
-                expect(this.workfile.createDraft().isNew()).toBeFalsy();
-            });
-        });
-
         describe("when the draft is saved", function() {
             beforeEach(function() {
                 var draft = this.workfile.createDraft();
