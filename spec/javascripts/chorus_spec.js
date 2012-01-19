@@ -90,9 +90,9 @@ describe("chorus global", function() {
             expect(this.qtipArgs.style).toEqual({
                 classes: "tooltip-white",
                 tip: {
+                    mimic: "top center",
                     width: 20,
-                    height: 15,
-                    offset: 40
+                    height: 15
                 }
             });
         });
