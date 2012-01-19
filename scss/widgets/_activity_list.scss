@@ -159,7 +159,11 @@ $system-action-color: #7C7D7D;
 
 }
 
-#sidebar.instance_list_sidebar {
-    .activity_list .heading { display: none}
+#sidebar {
+    &.instance_list_sidebar, &.workfile_show_sidebar {
+        .activity_list .heading {
+            display: none
+        }
+    }
 }
 

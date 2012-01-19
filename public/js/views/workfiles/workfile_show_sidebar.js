@@ -6,7 +6,8 @@
             "click a.version_list" : "displayVersionList"
         },
         subviews : {
-            '.activities' : 'activityList'
+            '.activity_list' : 'activityList',
+            '.tab_control' : 'tabControl'
         },
 
         setup : function() {
@@ -19,6 +20,8 @@
                 additionalClass : "sidebar",
                 displayStyle : ['without_object', 'without_workspace']
             });
+
+            this.tabControl = new chorus.views.TabControl([{name: 'activity', selector: ".activity_list"}]);
 
             this.allVersions = this.model.allVersions();
             this.versionList = new ns.views.WorkfileVersionList({collection : this.allVersions});
