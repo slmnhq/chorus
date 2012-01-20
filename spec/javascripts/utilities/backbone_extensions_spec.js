@@ -165,7 +165,9 @@ describe("backbone_extensions", function() {
             Friend = Backbone.Model.extend({
                 greet: function(personName, timeOfDay) {
                     return "Good " + timeOfDay + ", " + personName + ". My name is " + this.get("name") + ".";
-                }
+                },
+
+                numFeet: 2
             });
 
             // super needs to work even when there are classes in the
@@ -183,6 +185,10 @@ describe("backbone_extensions", function() {
             Dog = Pet.extend({
                 greet: function(person, timeOfDay) {
                     return this._super("greet", arguments) + " Ruff ruff!";
+                },
+
+                numFeet: function() {
+                    return this._super("numFeet") + 2;
                 }
             });
 
@@ -191,6 +197,13 @@ describe("backbone_extensions", function() {
             spyOn(Friend.prototype, 'greet').andCallThrough();
             spyOn(Mammal.prototype, 'greet').andCallThrough();
             spyOn(Dog.prototype,    'greet').andCallThrough();
+        });
+
+        context("when the superclass has a non-function property with the same name", function() {
+            it("returns the value of that property", function() {
+                var dog = new Dog();
+                expect(dog.numFeet()).toBe(4);
+            });
         });
 
         context("when used only once in the inheritance hierarchy", function() {

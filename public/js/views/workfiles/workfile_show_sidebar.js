@@ -21,7 +21,6 @@
                 displayStyle : ['without_object', 'without_workspace']
             });
 
-
             this.allVersions = this.model.allVersions();
             this.versionList = new ns.views.WorkfileVersionList({collection : this.allVersions});
             this.allVersions.fetch();
@@ -36,9 +35,12 @@
 
             if(this.model.isSql()) {
                 tabs.push({name: 'functions', selector: ".schema_functions"});
+                tabs.push({name: "metadata", selector: ".metadata_list"});
 
                 this.schemaFunction = new ns.views.SchemaFunctions(this.model.sandbox());
+                this.metadataList = new ns.views.SchemaMetadataList({model : this.model});
                 this.subviews[".schema_functions"] = "schemaFunction";
+                this.subviews[".metadata_list"] = "metadataList";
             }
             this.tabControl = new chorus.views.TabControl(tabs);
         },

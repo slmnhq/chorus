@@ -1,6 +1,7 @@
 (function($) {
     var templates = [
         'activity',
+        'activity_list',
         'alert',
         'breadcrumbs',
         'change_password',
@@ -12,6 +13,7 @@
         'dashboard_sidebar',
         'dashboard_workspace_list',
         'dashboard_workspace_list_footer',
+		'data_table',
         'default_content_header',
         'header',
         'image_upload',
@@ -29,16 +31,18 @@
         'loading_section',
         'logged_in_layout',
         'login',
-        'activity_list',
         'main_content',
         'notes_new',
         'notes_new_file_attachment',
         'plain_text',
+        'results_console',
         'sandbox_new',
         'sandbox_new_instance_mode',
         'sandbox_new_standalone_mode',
         'schema_functions',
+        'schema_metadata_list',
         'shuttle_widget',
+        'sql_workfile_content',
         'sql_workfile_content_details',
         'sub_nav',
         'tab_control',
@@ -235,6 +239,8 @@
     //global helpers
     window.context = window.describe;
     window.xcontext = window.xdescribe;
+    window.specify = window.it;
+    window.xspecify = window.xit;
 
     window.unsetLoggedInUser = function() {
         chorus.session.unset("id");

@@ -65,4 +65,14 @@ describe("chorus.views.TabControl", function() {
             });
         })
     });
+
+    describe("#removeTab", function() {
+        beforeEach(function() {
+            this.view.removeTab("tab1");
+        });
+
+        it("removes the specified tab", function() {
+            expect(this.view.$("li.tab1")).not.toExist();
+        });
+    });
 });

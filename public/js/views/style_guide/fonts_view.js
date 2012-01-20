@@ -27,7 +27,7 @@
 
     combinations = {
         "12 normal text3" : "secondary-text-small, activity timestamps,...",
-        "12 normal text2" : "comment timestamp in workspace list sidebar",
+        "12 normal text2" : "comment timestamp in workspace list sidebar, results console message",
         "12 semibold text1" : "font-normal-gamma",
         "12 semibold text2"  : "font-content-details (sub-header), comment author name in workspace list",
         "12 semibold link" : "sidebar actions links",
@@ -41,6 +41,7 @@
         "14 normal link"    : "normal links",
         "14 semibold text2" : "list-section-heading",
         "14 semibold link"    : "author in activity stream",
+        "14 semibold text5" : "results console",
 
         "16 normal text1" : "default font, user show page",
         "16 normal text4" : "disabled buttons",

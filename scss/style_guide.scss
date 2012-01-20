@@ -6,6 +6,8 @@
     .weak_text_color { color : $color-text4 }
 
     ul.views {
+        padding: 20px;
+
         li.view {
             padding: 20px 0;
 
@@ -53,6 +55,12 @@
 
     .secondary_text_small {
         @include secondary-text-small;
+    }
+
+    .data_table {
+        border: 1px solid black;
+        width: 350px;
+        height: 300px;
     }
 
     table {

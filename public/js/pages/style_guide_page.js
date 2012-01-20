@@ -93,6 +93,35 @@
                             text : "Create Other Thing"
                         }
                     ]
+                }),
+
+                "Data Table" : new chorus.views.TaskDataTable({
+                    model: new chorus.models.Task({ result: {
+                        columns: [{ name: "id" }, { name: "city" }, { name: "state" }, { name: "zip" }, { name: "other_state" }, { name: "other_zip" }],
+                        rows: [
+                            { id: 1 , city: "Oakland"   , state: "CA" , zip: "94612" , other_state: "CA" , other_zip: "94612" },
+                            { id: 2 , city: "Arcata"    , state: "CA" , zip: "95521" , other_state: "CA" , other_zip: "95521" },
+                            { id: 3 , city: "Lafayette" , state: "IN" , zip: "47909" , other_state: "IN" , other_zip: "47909" },
+                            { id: 1 , city: "Oakland"   , state: "CA" , zip: "94612" , other_state: "CA" , other_zip: "94612" },
+                            { id: 2 , city: "Arcata"    , state: "CA" , zip: "95521" , other_state: "CA" , other_zip: "95521" },
+                            { id: 3 , city: "Lafayette" , state: "IN" , zip: "47909" , other_state: "IN" , other_zip: "47909" },
+                            { id: 1 , city: "Oakland"   , state: "CA" , zip: "94612" , other_state: "CA" , other_zip: "94612" },
+                            { id: 2 , city: "Arcata"    , state: "CA" , zip: "95521" , other_state: "CA" , other_zip: "95521" },
+                            { id: 3 , city: "Lafayette" , state: "IN" , zip: "47909" , other_state: "IN" , other_zip: "47909" },
+                            { id: 1 , city: "Oakland"   , state: "CA" , zip: "94612" , other_state: "CA" , other_zip: "94612" },
+                            { id: 2 , city: "Arcata"    , state: "CA" , zip: "95521" , other_state: "CA" , other_zip: "95521" },
+                            { id: 3 , city: "Lafayette" , state: "IN" , zip: "47909" , other_state: "IN" , other_zip: "47909" },
+                            { id: 1 , city: "Oakland"   , state: "CA" , zip: "94612" , other_state: "CA" , other_zip: "94612" },
+                            { id: 2 , city: "Arcata"    , state: "CA" , zip: "95521" , other_state: "CA" , other_zip: "95521" },
+                            { id: 3 , city: "Lafayette" , state: "IN" , zip: "47909" , other_state: "IN" , other_zip: "47909" },
+                            { id: 1 , city: "Oakland"   , state: "CA" , zip: "94612" , other_state: "CA" , other_zip: "94612" },
+                            { id: 2 , city: "Arcata"    , state: "CA" , zip: "95521" , other_state: "CA" , other_zip: "95521" },
+                            { id: 3 , city: "Lafayette" , state: "IN" , zip: "47909" , other_state: "IN" , other_zip: "47909" },
+                            { id: 1 , city: "Oakland"   , state: "CA" , zip: "94612" , other_state: "CA" , other_zip: "94612" },
+                            { id: 2 , city: "Arcata"    , state: "CA" , zip: "95521" , other_state: "CA" , other_zip: "95521" },
+                            { id: 3 , city: "Lafayette" , state: "IN" , zip: "47909" , other_state: "IN" , other_zip: "47909" }
+                        ]
+                    }})
                 })
             }
         },

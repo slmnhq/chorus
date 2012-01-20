@@ -43,9 +43,17 @@ describe("WorkfileShowSidebar", function() {
             beforeEach(function() {
                 this.view.render();
             });
-            it("should have a functions tab and area", function() {
+            
+            it("should have an activities tab", function() {
                 expect(this.view.$('.tab_control .activity')).toExist();
+            });
+            
+            it("should have a functions tab", function() {
                 expect(this.view.$('.tab_control .functions')).toExist();
+            });
+            
+            it("should have a metadata tab", function() {
+                expect(this.view.$('.tab_control .metadata')).toExist();
             });
 
             it("renders the functions subview", function() {
@@ -73,9 +81,10 @@ describe("WorkfileShowSidebar", function() {
                 this.view.render();
             });
 
-            it("should not have a functions tab and area", function() {
+            it("should not have a functions, or meatadata tabs", function() {
                 expect(this.view.$('.tab_control .activity')).toExist();
                 expect(this.view.$('.tab_control .functions')).not.toExist();
+                expect(this.view.$('.tab_control .metadata')).not.toExist();
             });
 
             it("displays the filename", function() {
@@ -110,6 +119,7 @@ describe("WorkfileShowSidebar", function() {
                 expect(this.view.$(".activity_list")).toExist();
             })
         })
+    })
 
     });
 
@@ -117,11 +127,18 @@ describe("WorkfileShowSidebar", function() {
     describe("when the model is changed", function() {
         beforeEach(function() {
             spyOn(this.view.activityList, "render").andCallThrough();
+            spyOn(this.view.metadataList, "render").andCallThrough();
             this.view.model.trigger("change")
+            this.view.model.sandbox().trigger("change");
+            this.view.model.sandbox().schema().tables().trigger("reset");
         })
 
         it("re-renders the activity list", function() {
             expect(this.view.activityList.render).toHaveBeenCalled();
+        })
+
+        it("re-renders the metadata list", function() {
+            expect(this.view.metadataList.render).toHaveBeenCalled();
         })
     })
 

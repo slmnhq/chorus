@@ -5,8 +5,11 @@
 <div class="run_workfile hidden">
     <ul class="run_menu">
         {{#if sandboxLoaded}}
-            <li><a href="#" class="run_sandbox">{{t "workfile.content_details.run_workspace_sandbox"}}</a></li>
+            <li>
+                <a href="#" class="run_sandbox" accesskey="r R">{{t "workfile.content_details.run_workspace_sandbox"}}</a>
+                <span class="menu_shortcut">{{t "workfile.content_details.shortcut.run_sandbox"}}</span>
+            </li>
         {{/if}}
-        <li><a href="#" class="run_sandbox">{{t "workfile.content_details.run_in_another_schema"}}</a></li>
+        <li><a href="#" class="run_other_schema">{{t "workfile.content_details.run_in_another_schema"}}</a></li>
     </ul>
 </div>

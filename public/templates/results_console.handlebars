@@ -1,0 +1,21 @@
+<div class="execution">
+    <h1>{{t "results_console_view.title"}}</h1>
+    <a>{{t "results_console_view.new_window"}}</a>
+    <div class="right">
+        <span class="message">
+            {{#if result}}
+                {{result.message}}
+            {{/if}}
+        </span>
+        <span class='execution_info'>
+            <span class="elapsed_time"/>
+            <span class="loading">
+                {{t "results_console_view.executing"}}
+            </span>
+            <span class="link">
+                <a class="cancel" href='#'>{{t "actions.cancel"}}</a>
+            </span>
+        </span>
+    </div>
+</div>
+<div class="result_table"/>

@@ -20,7 +20,7 @@ describe "save as Menu" do
     click_button "Add SQL File"
     wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
     wait_until {
-        !!evaluate_script('chorus.page.mainContent && chorus.page.mainContent.content && chorus.page.mainContent.content.editor && !!chorus.page.mainContent.content.editor.setValue')
+        !!evaluate_script('chorus.page.mainContent && chorus.page.mainContent.content && chorus.page.mainContent.content.textContent && chorus.page.mainContent.content.textContent.editor && !!chorus.page.mainContent.content.textContent.editor.setValue')
     }
   end
 
@@ -34,7 +34,7 @@ describe "save as Menu" do
   end
 
   it "click the save as replace version" do
-    page.execute_script('chorus.page.mainContent.content.editor.setValue("new Blood")')
+    page.execute_script('chorus.page.mainContent.content.textContent.editor.setValue("new Blood")')
     page.find(".save .save_as").click
     wait_until { page.find(".qtip[aria-hidden=false]") }
     page.find("a.save_as_current").click
@@ -43,7 +43,7 @@ describe "save as Menu" do
   end
 
   it "click the save as new  version" do
-    page.execute_script('chorus.page.mainContent.content.editor.setValue("new Blood -2")')
+    page.execute_script('chorus.page.mainContent.content.textContent.editor.setValue("new Blood -2")')
     page.find(".save .save_as").click
     wait_until { page.find(".qtip[aria-hidden=false]") }
     page.find("a.save_as_new").click
