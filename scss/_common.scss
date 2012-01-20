@@ -127,7 +127,7 @@ $medium-font: 14px;
     @include debugging-mixin;
     font-size: 18px;
     font-weight: $semibold;
-    color: $color-text5;
+    color: $color-text1;
 }
 
 @mixin dialog-label {
@@ -178,7 +178,7 @@ $medium-font: 14px;
     @include debugging-mixin;
     font-size: 14px;
     font-weight: $semibold;
-    color: $color-text5;
+    color: $color-text1;
 }
 
 @mixin results-console-message {
