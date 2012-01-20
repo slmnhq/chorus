@@ -145,4 +145,33 @@ describe("chorus global", function() {
             verifyUrl(undefined, "plain");
         });
     });
+
+    describe("#search", function() {
+        beforeEach(function() {
+            this.input = $("<input></input>");
+            this.list = $("<ul></ul>");
+            _.each(["joseph", "max", "nitin"], function(name) {
+                $("<li></li>").append('<div class="name">'+name+'</div>').append('<div>add</div>').appendTo(this.list);
+            }, this);
+            chorus.search({ input: this.input, list: this.list, selector: ".name" });
+        });
+
+        describe("when text is entered in the search input", function() {
+            it("hides elements in the list that do not contain the search string", function() {
+                this.input.val("nit").trigger("textchange");
+
+                expect(this.list.find("li").eq(0)).toHaveClass("hidden");
+                expect(this.list.find("li").eq(1)).toHaveClass("hidden");
+                expect(this.list.find("li").eq(2)).not.toHaveClass("hidden");
+            });
+
+            it("only searches text within the selector", function() {
+                this.input.val("add").trigger("textchange");
+
+                expect(this.list.find("li").eq(0)).toHaveClass("hidden");
+                expect(this.list.find("li").eq(1)).toHaveClass("hidden");
+                expect(this.list.find("li").eq(2)).toHaveClass("hidden");
+            });
+        });
+    })
 });

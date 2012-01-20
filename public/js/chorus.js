@@ -98,6 +98,22 @@
             }
             $element.selectmenu({change: changeFunction, position: {offset: "0 -1"}});
         }
+
+        self.search = function(options) {
+            var input = options.input,
+                list = options.list,
+                selector = options.selector;
+
+            input.unbind("textchange").bind("textchange", _.bind(filterSearchList, this, input, list, selector));
+        }
+
+        function filterSearchList(input, list, selector) {
+            var compare = input.val().toLowerCase();
+            list.find("li").each(function() {
+                var matches = ($(this).find(selector).text().toLowerCase().indexOf(compare) >= 0);
+                $(this).toggleClass("hidden", !matches);
+            });
+        }
     }
 
     window.chorus = window.chorus || new Chorus();

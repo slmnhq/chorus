@@ -35,7 +35,11 @@
 
         postRender : function() {
             this._updateLabels();
-            this.$("input").unbind("textchange").bind("textchange", _.bind(this.searchItems, this));
+            chorus.search({
+                input: this.$("input"),
+                list: this.$("ul.available"),
+                selector: ".name"
+            });
         },
 
         toggleAdd : function(e) {
@@ -69,14 +73,6 @@
             this.$("li").removeClass("added");
             this.$("li.non_removable").addClass('added');
             this._updateLabels();
-        },
-
-        searchItems : function(e) {
-            var compare = this.$("input").val().toLowerCase();
-            this.$("ul.available li").each(function() {
-                var matches = ($(this).find(".name").text().toLowerCase().indexOf(compare) >= 0);
-                $(this).toggleClass("hidden", !matches);
-            });
         },
 
         _updateLabels : function() {
