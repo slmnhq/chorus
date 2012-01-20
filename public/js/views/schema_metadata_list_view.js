@@ -8,6 +8,13 @@
             this.model.bind("change", this.fetchSandbox, this);
         },
 
+        postRender : function() {
+            this.$('.empty').addClass("hidden");
+            if (this.collection && _.isEmpty(this.collection.models)) {
+                this.$('.empty').removeClass("hidden");
+            }
+        },
+
         fetchSandbox: function() {
             this.model.sandbox().bind("change", this.fetchTables, this);
             this.model.sandbox().fetch();
@@ -23,6 +30,10 @@
             return {
                 name: model.get("name")
             }
+        },
+
+        displayLoadingSection : function() {
+            return !(this.collection && this.collection.loaded);
         }
     });
 })(jQuery, chorus);

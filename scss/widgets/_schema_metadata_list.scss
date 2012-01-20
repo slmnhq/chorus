@@ -1,6 +1,13 @@
 @import "../_common.scss";
 
 .schema_metadata_list.list {
+
+    .empty {
+        padding: 5px;
+        margin-left: 10px;
+        @include font-normal-beta;
+    }
+
     li {
         height: 29px;
         padding-top: 0px;
