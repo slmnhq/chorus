@@ -1,5 +1,6 @@
 .data_table {
-    $line-height: 20px;
+    $header-line-height: 32px;
+    $line-height: 40px;
 
     overflow: hidden;
     white-space: nowrap;
@@ -14,11 +15,12 @@
         position: absolute;
         top: 0;
         left: 0;
+        background: #eaeef2;
     }
 
     .tbody {
         position: absolute;
-        top: $line-height + 1px;
+        top: $header-line-height + 1px;
         bottom: 0;
         left: 0;
         right: 0;
@@ -37,19 +39,34 @@
     }
 
     .td, .th {
-        padding-right: 10px;
-        width: 100px;
-        line-height: $line-height;
+        width: 150px;
         @include ellipsis;
     }
 
     .th {
+        line-height: $header-line-height;
+        padding: 0 10px;
         display: inline-block;
         border-bottom: 1px solid $subheader-border-color-dark;
         @include font-content-details;
     }
 
+    .th a.move_to_first {
+        display: none;
+        width: 10px;
+        height: 10px;
+        float: right;
+        background-image: url("/images/shuttle_left.png");
+        background-repeat: no-repeat;
+    }
+
+    .th:hover a.move_to_first {
+        display: inline;
+    }
+
     .td {
+        line-height: $line-height;
+        padding: 0 10px;
         border-bottom : $dotted-list-item-border;
         @include font-normal-alpha;
     }
