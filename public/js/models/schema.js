@@ -20,6 +20,17 @@
                 });
             }
             return this._tables;
+        },
+
+        views: function() {
+            if(!this._views) {
+                this._views = new chorus.models.DatabaseViewSet([], {
+                    instanceId : this.get("instanceId"),
+                    databaseName : this.get("databaseName"),
+                    schemaName : this.get("name")
+                });
+            }
+            return this._views;
         }
     }, {
         DEFAULT_NAME: "public"

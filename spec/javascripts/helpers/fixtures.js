@@ -1619,10 +1619,24 @@
                 return new chorus.models.Table(attributes);
             },
 
+            databaseView: function(overrides) {
+                var id = this.nextId().toString();
+                var attributes = _.extend({
+                    name : "view name from fixture"
+                }, overrides);
+                return new chorus.models.DatabaseView(attributes);
+            },
+
             tableSet: function(models, overrides) {
                 var id = this.nextId().toString()
                 models = (models && (models.length > 0)) || [this.table(overrides), this.table(overrides)];
                 return new chorus.models.TableSet(models, overrides);
+            },
+
+            databaseViewSet: function(models, overrides) {
+                var id = this.nextId().toString()
+                models = (models && (models.length > 0)) || [this.databaseView(overrides), this.databaseView(overrides)];
+                return new chorus.models.DatabaseViewSet(models, overrides);
             },
 
             workspace: function(overrides) {

@@ -5,7 +5,18 @@
         useLoadingSection : true,
 
         setup: function() {
-            this.model.bind("change", this.fetchSandbox, this);
+            this.collection = new chorus.models.Collection();
+            this.resource = this.collection;
+
+            this.schema = this.options.sandbox.schema();
+            this.tables = this.schema.tables();
+            this.views  = this.schema.views();
+
+            this.tables.bind("reset", this.tableFetchComplete, this);
+            this.tables.fetch();
+
+            this.views.bind("reset", this.viewFetchComplete, this);
+            this.views.fetch();
         },
 
         postRender : function() {
@@ -15,17 +26,16 @@
             }
         },
 
-        fetchSandbox: function() {
-            this.model.sandbox().bind("change", this.fetchTables, this);
-            this.model.sandbox().fetch();
+        tableFetchComplete: function() {
+            this.collection.add(this.tables.models);
+            this.render();
         },
 
-        fetchTables: function() {
-            this.collection = this.model.sandbox().schema().tables();
-            this.collection.bind("reset", this.render, this);
-            this.collection.fetch();
+        viewFetchComplete: function() {
+            this.collection.add(this.views.models);
+            this.render();
         },
-        
+
         collectionModelContext : function(model) {
             return {
                 name: model.get("name")
@@ -33,7 +43,7 @@
         },
 
         displayLoadingSection : function() {
-            return !(this.collection && this.collection.loaded);
+            return !(this.tables && this.tables.loaded && this.views && this.views.loaded);
         }
     });
 })(jQuery, chorus);
