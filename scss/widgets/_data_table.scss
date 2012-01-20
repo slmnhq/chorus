@@ -4,7 +4,6 @@
     $cell-width: 100px;
     $short-name-width: 90px;
 
-    overflow: hidden;
     white-space: nowrap;
     position: relative;
 
@@ -27,7 +26,7 @@
         left: 0;
         right: 0;
 
-        overflow: scroll;
+        overflow: auto;
     }
 
     .column {
