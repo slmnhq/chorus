@@ -21,7 +21,12 @@ describe("chorus.models.Task", function() {
     describe("#columnOrientedData", function() {
         beforeEach(function() {
             this.model = fixtures.task({ result: {
-                columns: [{ name: "id" }, { name: "city" }, { name: "state" }, { name: "zip" }],
+                columns: [
+                    { name: "id",    typeCategory : "WHOLE_NUMBER" },
+                    { name: "city",  typeCategory : "OTHER" },
+                    { name: "state", typeCategory : "OTHER" },
+                    { name: "zip",   typeCategory : "OTHER" }
+                ],
                 rows: [
                     { id: 1 , city: "Oakland"   , state: "CA" , zip: "94612" } ,
                     { id: 2 , city: "Arcata"    , state: "CA" , zip: "95521" } ,
@@ -39,6 +44,11 @@ describe("chorus.models.Task", function() {
             expect(this.data[1].name).toBe("city");
             expect(this.data[2].name).toBe("state");
             expect(this.data[3].name).toBe("zip");
+        });
+
+        specify("each entry has a 'type' field", function() {
+            expect(this.data[0].type).toBe("WHOLE_NUMBER");
+            expect(this.data[1].type).toBe("OTHER");
         });
 
         specify("each entry has an array of all values for that column", function() {

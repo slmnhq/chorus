@@ -1,15 +1,15 @@
-    <div class="thead">
-        {{#each columns}}
-            <div class="th">{{name}}</div>
-        {{/each}}
-    </div>
+<div class="thead">
+    {{#each columns}}
+    <div class="th">{{name}}</div>
+    {{/each}}
+</div>
 
-    <div class="tbody">
-        {{#each columns}}
-            <div class="column">
-                {{#each values}}
-                    <div class="td">{{this}}</div>
-                {{/each}}
-            </div>
+<div class="tbody">
+    {{#each columns}}
+    <div class="column" data-type="{{type}}">
+        {{#each values}}
+        <div class="td">{{this}}</div>
         {{/each}}
     </div>
+    {{/each}}
+</div>

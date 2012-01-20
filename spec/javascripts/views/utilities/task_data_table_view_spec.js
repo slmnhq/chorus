@@ -1,7 +1,12 @@
 describe("chorus.views.TaskDataTable", function() {
     beforeEach(function() {
         this.task = fixtures.task({ result: {
-            columns: [{ name: "id" }, { name: "city" }, { name: "state" }, { name: "zip" }],
+            columns: [
+                { name: "id",    typeCategory : "WHOLE_NUMBER" },
+                { name: "city",  typeCategory : "OTHER" },
+                { name: "state", typeCategory : "OTHER" },
+                { name: "zip",   typeCategory : "OTHER" }
+            ],
             rows: [
                 { id: 1 , city: "Oakland"   , state: "CA" , zip: "94612" } ,
                 { id: 2 , city: "Arcata"    , state: "CA" , zip: "95521" } ,
@@ -44,6 +49,11 @@ describe("chorus.views.TaskDataTable", function() {
             expect(this.view.$(".column:eq(3) div.td:eq(0)").text()).toBe("94612");
             expect(this.view.$(".column:eq(3) div.td:eq(1)").text()).toBe("95521");
             expect(this.view.$(".column:eq(3) div.td:eq(2)").text()).toBe("47909");
+        });
+
+        it("adds a data attribute to each column, specifying its type", function() {
+            expect(this.view.$(".column:eq(0)").attr("data-type")).toBe("WHOLE_NUMBER");
+            expect(this.view.$(".column:eq(1)").attr("data-type")).toBe("OTHER");
         });
     });
 });

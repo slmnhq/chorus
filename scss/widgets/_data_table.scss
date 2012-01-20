@@ -31,7 +31,13 @@
         overflow: hidden;
     }
 
+    .column[data-type="WHOLE_NUMBER"],
+    .column[data-type="REAL_NUMBER"] {
+        text-align: right;
+    }
+
     .td, .th {
+        padding-right: 10px;
         width: 100px;
         line-height: $line-height;
         @include ellipsis;

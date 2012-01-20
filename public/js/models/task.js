@@ -14,6 +14,7 @@
                 var name = column.name;
                 return {
                     name: name,
+                    type: column.typeCategory,
                     values: _.pluck(rows, name)
                 };
             });
