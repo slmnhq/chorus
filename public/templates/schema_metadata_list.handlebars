@@ -1,7 +1,12 @@
 <ul>
 {{#each models}}
     <li>
-        {{name}}
+        <span class="spacer left"/>
+        <img src="images/small_table.png">
+        <div class="name">
+            <a href="#" title="{{name}}">{{name}}</a>
+        </div>
+        <span class="spacer right"/>
     </li>
 {{/each}}
 </ul>

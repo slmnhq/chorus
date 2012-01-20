@@ -1,6 +1,7 @@
 (function($, ns) {
     ns.views.SchemaMetadataList = ns.views.Base.extend({
         className : "schema_metadata_list",
+        additionalClass : "list",
         useLoadingSection : true,
 
         setup: function() {
