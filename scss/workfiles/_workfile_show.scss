@@ -59,8 +59,18 @@
         height: 100%;
     }
 
-    .data_table {
+    .minimized .data_table {
         height: 200px;
+        width: 100%;
+    }
+
+    .collapsed .data_table {
+        height: 0px;
+        width: 0px;
+    }
+
+    .maximized .data_table {
+        height: 500px;
         width: 100%;
     }
 

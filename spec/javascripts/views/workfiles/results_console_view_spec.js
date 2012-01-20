@@ -18,6 +18,11 @@ describe("chorus.views.ResultsConsoleView", function() {
             expect(this.view.$(".right")).not.toHaveClass("executing");
             expect(this.view.$(".message").text().trim()).toBe("hi there")
         })
+
+        it("hides the minimize and maximize links", function() {
+            expect(this.view.$("a.minimize")).toHaveClass('hidden')
+            expect(this.view.$("a.maximize")).toHaveClass('hidden')
+        })
     })
 
     describe("event handling", function() {
@@ -135,6 +140,55 @@ describe("chorus.views.ResultsConsoleView", function() {
                     expect(this.view.dataTable).toBeA(chorus.views.TaskDataTable);
                     expect(this.view.dataTable.model).toBe(this.task);
                     expect($(this.view.el)).toContain(this.view.dataTable.el);
+                });
+
+                it("changes the state of the result table to 'minimized'", function() {
+                    expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
+                    expect(this.view.$('.result_table')).toHaveClass("minimized");
+                    expect(this.view.$('.result_table')).not.toHaveClass("maximized");
+                });
+
+                it("renders the maximize link", function() {
+                    expect(this.view.$("a.maximize")).not.toHaveClass("hidden");
+                    expect(this.view.$("a.minimize")).toHaveClass("hidden");
+                });
+
+                describe("clicking the maximize link", function() {
+                    beforeEach(function() {
+                        this.view.$("a.maximize").click();
+                    });
+
+                    it("hides the maximize link and shows the minimize link", function() {
+                        expect(this.view.$("a.maximize")).toHaveClass("hidden");
+                        expect(this.view.$("a.minimize")).not.toHaveClass("hidden");
+                    });
+
+                    it("changes the state of the result table to 'minimized'", function() {
+                        expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
+                        expect(this.view.$('.result_table')).not.toHaveClass("minimized");
+                        expect(this.view.$('.result_table')).toHaveClass("maximized");
+                    });
+
+                    xit("sets .data_table height to use the full viewport", function() {
+
+                    });
+
+                    describe("clicking the minimize link", function() {
+                        beforeEach(function() {
+                            this.view.$("a.minimize").click();
+                        });
+
+                        it("hides the minimize link and shows the maximize link", function() {
+                            expect(this.view.$("a.minimize")).toHaveClass("hidden");
+                            expect(this.view.$("a.maximize")).not.toHaveClass("hidden");
+                        });
+
+                        it("changes the state of the result table to 'minimized'", function() {
+                            expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
+                            expect(this.view.$('.result_table')).toHaveClass("minimized");
+                            expect(this.view.$('.result_table')).not.toHaveClass("maximized");
+                        });
+                    })
                 });
             }
         })
