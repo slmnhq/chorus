@@ -49,8 +49,6 @@
     @include tooltip($error-text-color, #282828, #282828);
 
     .ui-tooltip-content {
-        min-width: 300px;
-        max-width: 300px;
         font-size: 13px;
     }
 }

@@ -44,6 +44,7 @@
     }
 
     .th {
+        vertical-align: middle;
         line-height: $header-line-height;
         padding: 0 10px;
         display: inline-block;
@@ -55,13 +56,18 @@
         display: none;
         width: 10px;
         height: 10px;
+        margin-top: 12px;
         float: right;
         background-image: url("/images/shuttle_left.png");
         background-repeat: no-repeat;
     }
 
     .th:hover a.move_to_first {
-        display: inline;
+        display: block;
+    }
+
+    .th:first-child:hover a.move_to_first {
+        display: none;
     }
 
     .td {

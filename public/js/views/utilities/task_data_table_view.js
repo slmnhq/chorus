@@ -9,6 +9,25 @@
         // backbone events don't work for scroll?!
         postRender: function() {
             this.$(".tbody").bind("scroll", _.bind(this.adjustHeaderPosition, this));
+            this.$("a.move_to_first").qtip({
+                content: {
+                    text: t("results_console_view.data_table.move_to_first_column")
+                },
+                show: 'mouseover',
+                hide: 'mouseout',
+                style: {
+                    classes: "tooltip-help",
+                    tip: {
+                        width: 12,
+                        height: 12
+                    }
+                },
+                position : {
+                    my: "bottom center",
+                    at: "top center",
+                    container: this.el
+                }
+            });
         },
 
         additionalContext : function() {
