@@ -24,7 +24,7 @@ describe("chorus.views.ResultsConsoleView", function() {
         beforeEach(function() {
             this.view.render();
         })
-        
+
         describe("file:executionStarted", function() {
             beforeEach(function() {
                 spyOn(_, "delay").andCallThrough();
@@ -32,7 +32,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 this.view.trigger("file:executionStarted")
             })
-            
+
             it("sets the executing class", function() {
                 expect(this.view.$(".right")).toHaveClass("executing");
             })
@@ -49,7 +49,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 expect(_.delay).toHaveBeenCalledWith(jasmine.any(Function), 1000);
             })
 
-            describe("cancelling the execution", function(){
+            describe("cancelling the execution", function() {
                 context("when the spinner has not yet been started", function() {
                     beforeEach(function() {
                         this.view.$(".cancel").click();
@@ -84,20 +84,24 @@ describe("chorus.views.ResultsConsoleView", function() {
             describe("when the execution is completed", function() {
                 context("when the spinner has not yet been started", function() {
                     beforeEach(function() {
-                        this.view.trigger("file:executionCompleted");
+                        this.task = fixtures.taskWithResult();
+                        this.view.trigger("file:executionCompleted", this.task);
                     })
 
                     itRemovesExecutionUI(true);
+                    itShowsExecutionResults();
                 });
 
                 context("when the spinner has been started", function() {
                     beforeEach(function() {
                         delete this.view.spinnerTimer;
                         delete this.view.elapsedTimer;
-                        this.view.trigger("file:executionCompleted");
+                        this.task = fixtures.taskWithResult();
+                        this.view.trigger("file:executionCompleted", this.task);
                     })
 
                     itRemovesExecutionUI(false);
+                    itShowsExecutionResults();
                 })
             })
 
@@ -124,6 +128,14 @@ describe("chorus.views.ResultsConsoleView", function() {
                     expect(this.view.spinnerTimer).toBeUndefined();
                     expect(this.view.elapsedTimer).toBeUndefined();
                 })
+            }
+
+            function itShowsExecutionResults() {
+                it("renders a task data table with the given task", function() {
+                    expect(this.view.dataTable).toBeA(chorus.views.TaskDataTable);
+                    expect(this.view.dataTable.model).toBe(this.task);
+                    expect($(this.view.el)).toContain(this.view.dataTable.el);
+                });
             }
         })
     })

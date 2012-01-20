@@ -1,5 +1,6 @@
 .data_table {
-    $line-height: 20px;
+    $header-line-height: 32px;
+    $line-height: 40px;
 
     overflow: hidden;
     white-space: nowrap;
@@ -14,11 +15,12 @@
         position: absolute;
         top: 0;
         left: 0;
+        background: #eaeef2;
     }
 
     .tbody {
         position: absolute;
-        top: $line-height + 1px;
+        top: $header-line-height + 1px;
         bottom: 0;
         left: 0;
         right: 0;
@@ -31,18 +33,56 @@
         overflow: hidden;
     }
 
+    .column[data-type="WHOLE_NUMBER"],
+    .column[data-type="REAL_NUMBER"] {
+        text-align: right;
+    }
+
     .td, .th {
         width: 100px;
-        line-height: $line-height;
+        @include ellipsis;
     }
 
     .th {
+        vertical-align: middle;
+        line-height: $header-line-height;
+        padding: 0 10px;
         display: inline-block;
         border-bottom: 1px solid $subheader-border-color-dark;
         @include font-content-details;
+
+        .name {
+            display: inline-block;
+            width: 100px;
+            @include ellipsis;
+        }
+    }
+
+    .th:hover .name {
+        width: 85px;
+    }
+
+    .th a.move_to_first {
+        display: none;
+        width: 10px;
+        height: 10px;
+        margin-top: 12px;
+        float: right;
+        background-image: url("/images/shuttle_left.png");
+        background-repeat: no-repeat;
+    }
+
+    .th:hover a.move_to_first {
+        display: block;
+    }
+
+    .th:first-child:hover a.move_to_first {
+        display: none;
     }
 
     .td {
+        line-height: $line-height;
+        padding: 0 10px;
         border-bottom : $dotted-list-item-border;
         @include font-normal-alpha;
     }

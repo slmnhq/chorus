@@ -27,7 +27,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
         it("forwards the file:executionCompleted event to the results console", function() {
             spyOnEvent(this.view.resultsConsole, "file:executionCompleted");
-            this.view.trigger("file:executionCompleted");
+            this.view.trigger("file:executionCompleted", fixtures.taskWithResult());
             expect("file:executionCompleted").toHaveBeenTriggeredOn(this.view.resultsConsole)
         })
 

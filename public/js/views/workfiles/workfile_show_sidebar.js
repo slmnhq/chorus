@@ -7,6 +7,7 @@
         },
         subviews : {
             '.activity_list' : 'activityList',
+            '.metadata_list' : 'metadataList',
             '.tab_control' : 'tabControl'
         },
 
@@ -21,7 +22,16 @@
                 displayStyle : ['without_object', 'without_workspace']
             });
 
-            this.tabControl = new chorus.views.TabControl([{name: 'activity', selector: ".activity_list"}]);
+            this.metadataList = new ns.views.SchemaMetadataList({model : this.model});
+            this.tabControl = new chorus.views.TabControl([
+                {name: 'activity', selector: ".activity_list"},
+                {name: "metadata", selector: ".metadata_list"}]);
+
+            this.model.bind("change", function() {
+                if (!this.model.isSql()) {
+                    this.tabControl.removeTab("metadata");
+                }
+            }, this);
 
             this.allVersions = this.model.allVersions();
             this.versionList = new ns.views.WorkfileVersionList({collection : this.allVersions});

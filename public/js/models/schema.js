@@ -4,7 +4,11 @@
 
         tables: function() {
             if(!this._tables) {
-                this._tables = new chorus.models.TableSet([], {schema: this});
+                this._tables = new chorus.models.TableSet([], {
+                    instanceId : this.get("instanceId"),
+                    databaseName : this.get("databaseName"),
+                    schemaName : this.get("name")
+                });
             }
             return this._tables;
         }

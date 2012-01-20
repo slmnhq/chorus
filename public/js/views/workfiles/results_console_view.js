@@ -28,10 +28,13 @@
             this.elapsedTimer = _.delay(_.bind(this.incrementElapsedTime, this), 1000)
         },
 
-        executionCompleted : function() {
+        executionCompleted : function(task) {
             this.cancelTimers()
             this.$(".right").removeClass("executing")
             this.$(".loading").stopLoading()
+            this.dataTable = new ns.views.TaskDataTable({model: task});
+            this.dataTable.render();
+            this.$(".result_table").append(this.dataTable.el);
         },
 
         cancelExecution : function(event) {
