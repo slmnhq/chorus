@@ -11,6 +11,12 @@
             this.functions.fetch();
         },
 
+        additionalContext: function() {
+            return {
+                schemaName: this.sandbox.get('schemaName')
+            };
+        },
+
         postRender: function() {
             chorus.search({
                 input: this.$('input.search'),

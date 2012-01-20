@@ -37,6 +37,24 @@ describe("chorus.views.SchemaFunctions", function() {
                 expect(this.view.$('ul.functions')).toExist();
                 expect(this.view.$('ul.functions li').length).toBe(2);
             });
+
+            it("should display the current schema name", function() {
+                expect(this.view.$('.schema_name')).toContainText(this.sandbox.get('schemaName'));
+            })
+
+            it("should not show the 'no functions found' text", function() {
+                expect(this.view.$('.none_found')).not.toExist();
+            });
+        });
+
+        context("when the schema has no functions", function() {
+            beforeEach(function() {
+                this.server.completeFetchFor(this.view.functions, []);
+            });
+
+            it("should show the 'no functions found' text", function() {
+                expect(this.view.$('.none_found')).toContainTranslation("schema.functions.none_found");
+            });
         });
     })
 });

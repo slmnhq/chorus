@@ -57,7 +57,23 @@
     }
 
     .schema_functions {
+        .schema_name {
+            @include font-content-details;
+            margin: 4px 0 15px 20px;
+        }
+
+        .none_found {
+            @include font-normal-beta;
+        }
+
         li {
+            &:first-child {
+                border-top: $dotted-list-item-border;
+            }
+            &:last-child {
+                border-bottom: $dotted-list-item-border;
+            }
+
             @include list-section-heading;
             background: url('/images/function.png') no-repeat left center;
             padding: 0 0 0 29px;

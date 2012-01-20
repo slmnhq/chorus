@@ -1,6 +1,11 @@
 <input class="search" />
-<ul class="functions list">
-    {{#each models}}
-        <li title="{{functionName}}">{{functionName}}</li>
-    {{/each}}
-</ul>
+<div class="schema_name">{{t "schema.functions.search_in" schemaName=schemaName}}</div>
+{{#if models.length}}
+    <ul class="functions list">
+        {{#each models}}
+            <li title="{{functionName}}">{{functionName}}</li>
+        {{/each}}
+    </ul>
+{{else}}
+    <div class="none_found">{{t "schema.functions.none_found"}}</div>
+{{/if}}
