@@ -25,10 +25,15 @@
         .execution_info {
             display: none;
 
+            .elapsed_time {
+                @include results-console-message;
+            }
+
             .loading {
                 @include results-console-message;
                 border-right: 1px solid $results-console-border-color;
                 padding-right: $padding-x;
+                margin-left: 25px;
 
                 div[aria-role=progressbar] {
                     left: -65px;

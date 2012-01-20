@@ -11,27 +11,45 @@
         },
 
         executionStarted : function() {
+            this.elapsedTime = 0
             this.$(".right").addClass("executing")
-            this.timerId = _.delay(_.bind(function(){
-                delete this.timerId;
-                this.$(".loading").startLoading("results_console_view.executing")
-            }, this), 250)
+            this.spinnerTimer = _.delay(_.bind(this.startSpinner, this), 250)
+            this.elapsedTimer = _.delay(_.bind(this.incrementElapsedTime, this), 1000)
+        },
+
+        startSpinner : function() {
+            delete this.spinnerTimer;
+            this.$(".loading").startLoading("results_console_view.executing")
+        },
+
+        incrementElapsedTime : function() {
+            this.elapsedTime++
+            this.$(".elapsed_time").text(t("results_console_view.elapsed", { sec : this.elapsedTime }))
+            this.elapsedTimer = _.delay(_.bind(this.incrementElapsedTime, this), 1000)
         },
 
         executionCompleted : function() {
-            if (this.timerId) {
-                clearTimeout(this.timerId);
-            }
+            this.cancelTimers()
             this.$(".right").removeClass("executing")
             this.$(".loading").stopLoading()
         },
 
         cancelExecution : function(event) {
-            if (this.timerId) {
-                clearTimeout(this.timerId);
-            }
+            this.cancelTimers()
             event.preventDefault();
             this.model.save({ action : "cancel" });
+        },
+
+        cancelTimers : function() {
+            if (this.spinnerTimer) {
+                clearTimeout(this.spinnerTimer);
+                delete this.spinnerTimer
+            }
+
+            if (this.elapsedTimer) {
+                clearTimeout(this.elapsedTimer);
+                delete this.elapsedTimer
+            }
         }
     });
 })(jQuery, chorus);

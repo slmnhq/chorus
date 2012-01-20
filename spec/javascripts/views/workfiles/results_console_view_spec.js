@@ -27,10 +27,7 @@ describe("chorus.views.ResultsConsoleView", function() {
         
         describe("file:executionStarted", function() {
             beforeEach(function() {
-                spyOn(_, "delay").andCallFake(function(fn, ms) {
-                    fn();
-                    return 22;
-                });
+                spyOn(_, "delay").andCallThrough();
                 spyOn(window, "clearTimeout");
 
                 this.view.trigger("file:executionStarted")
@@ -40,13 +37,16 @@ describe("chorus.views.ResultsConsoleView", function() {
                 expect(this.view.$(".right")).toHaveClass("executing");
             })
 
-            it("starts a spinner", function() {
+            it("sets a delay to start a spinner", function() {
                 expect(_.delay).toHaveBeenCalledWith(jasmine.any(Function), 250);
-                expect(this.view.$(".loading").isLoading()).toBeTruthy();
             })
 
-            it("saves the timer id", function() {
-                expect(this.view.timerId).toBeDefined();
+            it("saves the spinner timer id", function() {
+                expect(this.view.spinnerTimer).toBeDefined();
+            })
+
+            it("starts tracking execution time", function() {
+                expect(_.delay).toHaveBeenCalledWith(jasmine.any(Function), 1000);
             })
 
             describe("cancelling the execution", function(){
@@ -66,7 +66,8 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 context("when the spinner has been started", function() {
                     beforeEach(function() {
-                        delete this.view.timerId;
+                        delete this.view.spinnerTimer;
+                        delete this.view.elapsedTimer;
                         this.view.$(".cancel").click();
                     })
 
@@ -91,7 +92,8 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 context("when the spinner has been started", function() {
                     beforeEach(function() {
-                        delete this.view.timerId;
+                        delete this.view.spinnerTimer;
+                        delete this.view.elapsedTimer;
                         this.view.trigger("file:executionCompleted");
                     })
 
@@ -99,7 +101,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 })
             })
 
-            function itRemovesExecutionUI(shouldCancelTimer) {
+            function itRemovesExecutionUI(shouldCancelTimers) {
                 it("removes the executing class", function() {
                     expect(this.view.$(".right")).not.toHaveClass("executing");
                 })
@@ -108,16 +110,55 @@ describe("chorus.views.ResultsConsoleView", function() {
                     expect(this.view.$(".loading").isLoading()).toBeFalsy();
                 })
 
-                if (shouldCancelTimer) {
-                    it("cancels a running spinner delay", function() {
-                        expect(window.clearTimeout).toHaveBeenCalledWith(22);
+                if (shouldCancelTimers) {
+                    it("cancels the spinner and elapsed time timers", function() {
+                        expect(window.clearTimeout.callCount).toBe(2);
                     })
                 } else {
                     it("does not cancel the spinner delay", function() {
                         expect(window.clearTimeout).not.toHaveBeenCalled();
                     })
                 }
+
+                it("clears timer ids", function() {
+                    expect(this.view.spinnerTimer).toBeUndefined();
+                    expect(this.view.elapsedTimer).toBeUndefined();
+                })
             }
+        })
+    })
+
+    describe("#startSpinner", function() {
+        beforeEach(function() {
+            this.view.render();
+            this.view.spinnerTimer = 22;
+            this.view.startSpinner();
+        })
+
+        it("deletes the timer id", function() {
+            expect(this.view.spinnerTimer).toBeUndefined();
+        })
+
+        it("starts the spinner", function() {
+            expect(this.view.$(".loading").isLoading()).toBeTruthy();
+        })
+    })
+
+    describe("#incrementElapsedTime", function() {
+        beforeEach(function() {
+            this.view.render();
+            this.view.elapsedTimer = 22;
+            this.view.elapsedTime = 40;
+            spyOn(_, "delay").andCallThrough();
+            this.view.incrementElapsedTime();
+        })
+
+        it("updates execution time", function() {
+            expect(this.view.$(".elapsed_time").text().trim()).toMatchTranslation("results_console_view.elapsed", { sec : 41 })
+        })
+
+        it("reschedules itself", function() {
+            expect(_.delay).toHaveBeenCalledWith(jasmine.any(Function), 1000);
         })
     })
 })
