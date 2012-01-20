@@ -82,6 +82,7 @@
                 }
                 this.pagination = data.pagination;
                 this.loaded = true;
+                this.trigger('loaded');
                 return data.resource;
             },
 
@@ -162,6 +163,9 @@
                 var success = options.success;
                 options.success = function(model, resp, xhr) {
                     if (model.serverErrors) model.trigger('fetchFailed', model, resp, xhr);
+                    if(model.loaded) {
+                        model.trigger('loaded');
+                    }
                     if (success) success(model, resp, xhr);
                 };
                 return Backbone.Model.prototype.fetch.call(this, options);

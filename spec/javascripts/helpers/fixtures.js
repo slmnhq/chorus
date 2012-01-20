@@ -20,7 +20,7 @@
                 model.url(),
                 this.prepareResponse(response));
             this.server.respond();
-        }
+        };
 
         this.failSaveFor = function(model, message, overrides){
             var response = {
@@ -1483,15 +1483,39 @@
                 }, overrides)
             },
 
-            workfileJson: function() {
-                var id = this.nextId();
+            workfileJson: function(overrides) {
+                var id = this.nextId().toString();
                 var name = 'Workfile ' + id;
-                return {
-                    id : id.toString(),
-                    lastUpdatedStamp : '2011-10-22 14:40:42.11',
+                var modifiedByUser = this.userJson();
+                return _.extend({
+                    id : id,
                     name : name,
-                    fileName: name
-                }
+                    fileName: name,
+                    mimeType: "text/plain",
+                    fileType: "txt",
+                    isBinary: false,
+                    workspaceId: this.nextId().toString(),
+                    source: "fs",
+                    owner: "edcadmin",
+                    description: null,
+                    latestVersionNum: 1,
+                    isDeleted: false,
+                    modifiedBy: modifiedByUser.userName,
+                    modifiedByFirstName: modifiedByUser.firstName,
+                    modifiedByLastName: modifiedByUser.lastName,
+                    modifiedById: modifiedByUser.id,
+                    lastUpdatedStamp: "2011-11-29 10:46:03.152",
+                    lastUpdatedTxStamp: "2011-11-29 10:46:03.145",
+                    createdStamp: "2011-11-29 10:46:03.152",
+                    createdTxStamp: "2011-11-29 10:46:03.145",
+                    versionFileId: this.nextId().toString(),
+                    versionNum: "1",
+                    versionOwner: "edcadmin",
+                    content: "Workfile Content!" + id,
+                    editable: true,
+                    hasDraft: false,
+                    sandboxId: this.nextId().toString()
+                }, overrides);
             },
 
             draftJson: function(overrides) {
@@ -1581,38 +1605,23 @@
             },
 
             workfile: function(overrides) {
-                var attributes = _.extend(this.workfileJson(), {
-                    workspaceId: this.nextId().toString()
-                }, overrides);
+                var attributes = this.workfileJson(overrides);
                 return new chorus.models.Workfile(attributes);
             },
 
             textWorkfile: function(overrides) {
-                _.defaults(overrides, {
-                            "id":"10004",
-                            "fileName":"editabletextfile.txt",
-                            "mimeType":"text/plain",
-                            "fileType":"txt",
-                            "isBinary":false,
-                            "workspaceId":"10001",
-                            "source":"fs",
-                            "owner":"edcadmin",
-                            "description":null,
-                            "latestVersionNum":1,
-                            "isDeleted":false,
-                            "modifiedBy":"edcadmin",
-                            "lastUpdatedStamp":"2011-11-29 10:46:03.152",
-                            "lastUpdatedTxStamp":"2011-11-29 10:46:03.145",
-                            "createdStamp":"2011-11-29 10:46:03.152",
-                            "createdTxStamp":"2011-11-29 10:46:03.145",
-                            "versionFileId":"1322592363143_7126",
-                            "versionNum":"1",
-                            "versionOwner":"edcadmin",
-                            "content":"This is a text file.\n\nThis is the 3rd line.\n\nReally really long line.  Really really long line.  Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.",
-                            "editable":true,
-                            "hasDraft":false,
-                            "sandboxId":null
-                });
+                overrides = _.extend({
+                    mimeType: "text/plain",
+                    fileType: "txt"
+                }, overrides);
+                return this.workfile(overrides);
+            },
+
+            sqlWorkfile: function(overrides) {
+                overrides = _.extend({
+                    mimeType: "text/x-sql",
+                    fileType: "SQL"
+                }, overrides);
                 return this.workfile(overrides);
             },
 
@@ -1712,6 +1721,17 @@
                     workspaceId: this.nextId().toString()
                 }, overrides);
                 return new chorus.models.Sandbox(attributes);
+            },
+
+            schemaFunction: function(overrides) {
+                var attributes = _.extend({
+                    argTypes : "{text,text,text}",
+                    argNames : null,
+                    language : "plpgsql",
+                    functionName : "function" + this.nextId().toString(),
+                    returnType : "void"
+                }, overrides);
+                return new chorus.models.SchemaFunction(attributes);
             },
 
             task: function(overrides) {

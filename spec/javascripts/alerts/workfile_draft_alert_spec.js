@@ -22,7 +22,7 @@ describe("chorus.alerts.WorkfileDraft", function() {
                 this.alert.model.bind('change', this.changeSpy);
                 this.server.respondWith(
                     'GET',
-                    "/edc/workspace/2/workfile/1/draft",
+                    "/edc/workspace/"+this.workfile.get('workspaceId')+"/workfile/"+this.workfile.get('id')+"/draft",
                     this.prepareResponse(fixtures.jsonFor("fetchWithDraft")));
 
                 this.server.respond();
@@ -53,7 +53,7 @@ describe("chorus.alerts.WorkfileDraft", function() {
         })
 
         it("fetches the draft", function() {
-            expect(this.server.lastFetch().url).toBe("/edc/workspace/2/workfile/1/draft");
+            expect(this.server.lastFetch().url).toBe("/edc/workspace/"+this.workfile.get('workspaceId')+"/workfile/"+this.workfile.get('id')+"/draft");
             expect(this.server.lastFetch().method).toBe("GET");
         });
 

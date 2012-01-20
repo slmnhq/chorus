@@ -21,13 +21,26 @@
                 displayStyle : ['without_object', 'without_workspace']
             });
 
-            this.tabControl = new chorus.views.TabControl([{name: 'activity', selector: ".activity_list"}]);
 
             this.allVersions = this.model.allVersions();
             this.versionList = new ns.views.WorkfileVersionList({collection : this.allVersions});
             this.allVersions.fetch();
             this.model.bind("invalidated", this.allVersions.fetch, this.allVersions);
             this.allVersions.bind("changed", this.render, this);
+            this.requiredResources.push(this.model);
+            this.requiredResources.push(this.model.sandbox());
+        },
+
+        resourcesLoaded: function() {
+            var tabs = [{name: 'activity', selector: ".activity_list"}];
+
+            if(this.model.isSql()) {
+                tabs.push({name: 'functions', selector: ".schema_functions"});
+
+                this.schemaFunction = new ns.views.SchemaFunctions(this.model.sandbox());
+                this.subviews[".schema_functions"] = "schemaFunction";
+            }
+            this.tabControl = new chorus.views.TabControl(tabs);
         },
 
         postRender : function() {

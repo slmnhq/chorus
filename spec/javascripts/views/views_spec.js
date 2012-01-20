@@ -1,4 +1,52 @@
-describe("chorus.views", function() {
+describe("chorus.views.base", function() {
+    describe("initialize", function() {
+        describe("resourcesLoaded", function() {
+            context("when the resources are already loaded", function() {
+                beforeEach(function() {
+                    this.model = new chorus.models.Base();
+                    this.model.loaded = true;
+                    spyOn(chorus.views.Base.prototype, 'resourcesLoaded');
+                    this.view = new chorus.views.Base({requiredResources: [this.model]});
+                });
+
+                it("calls resourcesLoaded during initialization", function() {
+                    expect(this.view.resourcesLoaded).toHaveBeenCalled();
+                });
+            });
+
+            context("when the resources are not loaded", function() {
+                beforeEach(function() {
+                    this.model = new chorus.models.Base();
+                    this.model.loaded = false;
+                    spyOn(this.model, 'url').andReturn('/foo/bar');
+                    spyOn(chorus.views.Base.prototype, 'resourcesLoaded');
+                    spyOn(chorus.views.Base.prototype, 'render');
+                    this.view = new chorus.views.Base({requiredResources: [this.model]});
+                    this.model.fetch();
+                });
+
+                it("does not call resourcesLoaded during initialization", function() {
+                    expect(this.view.resourcesLoaded).not.toHaveBeenCalled();
+                });
+
+                describe("once it has been loaded", function() {
+                    beforeEach(function() {
+                        this.server.completeFetchFor(this.model);
+                    });
+
+                    it("calls resourcesLoaded after model has been loaded", function() {
+                        expect(this.view.resourcesLoaded).toHaveBeenCalled();
+                    });
+
+                    it("calls render", function() {
+                        expect(this.view.render).toHaveBeenCalled();
+                    });
+                });
+
+            });
+        });
+    });
+
     describe("event bindings", function() {
         beforeEach(function() {
             this.model = new chorus.models.Base();
@@ -90,7 +138,9 @@ describe("chorus.views", function() {
                 });
 
                 it("calls #additionalContext, passing the default context (including the server errors)", function() {
-                    this.model.serverErrors = [{ message: "wrong" }];
+                    this.model.serverErrors = [
+                        { message: "wrong" }
+                    ];
                     this.view.context();
                     var contextPassed = this.view.additionalContext.mostRecentCall.args[0];
                     expect(contextPassed.serverErrors).toBe(this.model.serverErrors);
@@ -232,8 +282,8 @@ describe("chorus.views", function() {
         });
 
         it("calls #showErrors when validation fails on the model", function() {
-           this.model.trigger("validationFailed");
-           expect(this.view.showErrors).toHaveBeenCalled();
+            this.model.trigger("validationFailed");
+            expect(this.view.showErrors).toHaveBeenCalled();
         });
 
         it("calls #clearErrors when validation succeeds on the model", function() {

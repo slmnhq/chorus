@@ -41,6 +41,15 @@ _.extend(sinon.fakeServer, {
 
     lastDestroy: function() {
         return _.last(this.destroys());
+    },
+
+    completeFetchFor: function(model, results) {
+        results = results || model.attributes;
+        var request = _.find(this.fetches(), function(potentialRequest) {
+           return potentialRequest.url == model.url()
+        });
+
+        request.succeed(results);
     }
 });
 

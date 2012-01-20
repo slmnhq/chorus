@@ -5,9 +5,11 @@
 
             this.bindings = new ns.BindingGroup(this);
             ns.router.bindOnce("leaving", this.beforeNavigateAway, this);
-            this.bindCallbacks()
 
             this.setup.apply(this, arguments);
+            this.bindCallbacks();
+
+            this.verifyResourcesLoaded(true);
         },
 
         preInitialize : $.noop,
@@ -16,6 +18,7 @@
         bindCallbacks: $.noop,
         preRender: $.noop,
         setupSubviews : $.noop,
+        resourcesLoaded : $.noop,
         displayLoadingSection : $.noop,
 
         beforeNavigateAway: function() {
@@ -24,6 +27,27 @@
 
         context : {},
         subviews : {},
+
+        _configure: function(options) {
+            this._super('_configure', arguments);
+            this.requiredResources = options.requiredResources || [];
+        },
+        
+        verifyResourcesLoaded: function(preventRender) {
+            if(this.requiredResources.length == 0) {
+                return;
+            }
+            var allResourcesLoaded = _.all(this.requiredResources, function(resource) {
+                return resource.loaded;
+            });
+            if(allResourcesLoaded) {
+                this.resourcesLoaded();
+
+                if(!preventRender) {
+                    this.render();
+                }
+            }
+        },
 
         render: function render() {
             this.preRender($(this.el));
@@ -49,10 +73,11 @@
                 if (view) {
                     var element = self.$(selector);
                     if (element.length) {
-                        var id = element.attr("id"), klass = element.attr("class");
+                        var id = element.attr("id"), klass = element.attr("class"), displayStyle = element.css('display');
                         element.replaceWith(view.render().el);
                         $(view.el).attr("id", id);
                         $(view.el).addClass(klass);
+                        $(view.el).css('display', displayStyle);
                         view.delegateEvents();
                     }
                 }
@@ -131,6 +156,9 @@
                     this.bindings.add(this.resource, "change reset add remove", this.render);
                 }
             }
+            _.each(this.requiredResources, _.bind(function(resource){
+                resource.bindOnce('loaded', this.verifyResourcesLoaded, this);
+            },this));
         },
 
         context: function context() {
