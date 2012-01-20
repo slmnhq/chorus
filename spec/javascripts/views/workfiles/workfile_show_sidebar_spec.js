@@ -119,28 +119,7 @@ describe("WorkfileShowSidebar", function() {
                 expect(this.view.$(".activity_list")).toExist();
             })
         })
-    })
-
     });
-
-
-    describe("when the model is changed", function() {
-        beforeEach(function() {
-            spyOn(this.view.activityList, "render").andCallThrough();
-            spyOn(this.view.metadataList, "render").andCallThrough();
-            this.view.model.trigger("change")
-            this.view.model.sandbox().trigger("change");
-            this.view.model.sandbox().schema().tables().trigger("reset");
-        })
-
-        it("re-renders the activity list", function() {
-            expect(this.view.activityList.render).toHaveBeenCalled();
-        })
-
-        it("re-renders the metadata list", function() {
-            expect(this.view.metadataList.render).toHaveBeenCalled();
-        })
-    })
 
     describe("when the model is invalidated", function() {
         it("fetches the activity set", function() {

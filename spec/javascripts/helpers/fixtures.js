@@ -1655,11 +1655,11 @@
             },
 
             sqlWorkfile: function(overrides) {
-                return this.textWorkfile(_.extend(overrides, {
+                return this.textWorkfile(_.extend({
                     fileName : "sample.sql",
                     fileType : "SQL",
                     mimeType : "text/x-sql"
-                }));
+                }, overrides));
             },
 
             draft: function(overrides) {
