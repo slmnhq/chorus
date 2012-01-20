@@ -75,7 +75,7 @@
             var compare = this.$("input").val().toLowerCase();
             this.$("ul.available li").each(function() {
                 var matches = ($(this).find(".name").text().toLowerCase().indexOf(compare) >= 0);
-                $(this).toggleClass("filtered_out", !matches);
+                $(this).toggleClass("hidden", !matches);
             });
         },
 

@@ -59,8 +59,8 @@ describe("chorus.views.ShuttleWidget", function() {
             expect(selected[0]).toBe("10001");
         });
 
-        it("does not add the filtered_out class to anything when first rendered", function() {
-            expect(this.view.$("ul.available li.filtered_out").length).toBe(0);
+        it("does not add the hidden class to anything when first rendered", function() {
+            expect(this.view.$("ul.available li.hidden").length).toBe(0);
         });
 
         it("does not have a remove link for non-removable items", function() {
@@ -146,13 +146,13 @@ describe("chorus.views.ShuttleWidget", function() {
                     this.view.$(".search input").trigger("textchange");
                 });
 
-                it("should add the filtered_out class to the non-matching items", function() {
-                    expect(this.view.$("ul.available li:eq(0)")).toHaveClass("filtered_out");
-                    expect(this.view.$("ul.available li:eq(2)")).toHaveClass("filtered_out");
+                it("should add the hidden class to the non-matching items", function() {
+                    expect(this.view.$("ul.available li:eq(0)")).toHaveClass("hidden");
+                    expect(this.view.$("ul.available li:eq(2)")).toHaveClass("hidden");
                 });
 
-                it("should not add the filtered_out class to the matching item", function() {
-                    expect(this.view.$("ul.available li:eq(1)")).not.toHaveClass("filtered_out");
+                it("should not add the hidden class to the matching item", function() {
+                    expect(this.view.$("ul.available li:eq(1)")).not.toHaveClass("hidden");
                 });
             });
 
@@ -162,13 +162,13 @@ describe("chorus.views.ShuttleWidget", function() {
                     this.view.$(".search input").trigger("textchange");
                 });
 
-                it("should add the filtered_out class to the non-matching item", function() {
-                    expect(this.view.$("ul.available li:eq(1)")).toHaveClass("filtered_out");
+                it("should add the hidden class to the non-matching item", function() {
+                    expect(this.view.$("ul.available li:eq(1)")).toHaveClass("hidden");
                 });
 
-                it("should not add the filtered_out class to the matching items", function() {
-                    expect(this.view.$("ul.available li:eq(0)")).not.toHaveClass("filtered_out");
-                    expect(this.view.$("ul.available li:eq(2)")).not.toHaveClass("filtered_out");
+                it("should not add the hidden class to the matching items", function() {
+                    expect(this.view.$("ul.available li:eq(0)")).not.toHaveClass("hidden");
+                    expect(this.view.$("ul.available li:eq(2)")).not.toHaveClass("hidden");
                 });
             });
 
@@ -178,10 +178,10 @@ describe("chorus.views.ShuttleWidget", function() {
                     this.view.$(".search input").trigger("textchange");
                 });
 
-                it("should add the filtered_out class to the non-matching item", function() {
-                    expect(this.view.$("ul.available li:eq(0)")).toHaveClass("filtered_out");
-                    expect(this.view.$("ul.available li:eq(1)")).toHaveClass("filtered_out");
-                    expect(this.view.$("ul.available li:eq(2)")).toHaveClass("filtered_out");
+                it("should add the hidden class to the non-matching item", function() {
+                    expect(this.view.$("ul.available li:eq(0)")).toHaveClass("hidden");
+                    expect(this.view.$("ul.available li:eq(1)")).toHaveClass("hidden");
+                    expect(this.view.$("ul.available li:eq(2)")).toHaveClass("hidden");
                 });
             });
 
@@ -191,10 +191,10 @@ describe("chorus.views.ShuttleWidget", function() {
                     this.view.$(".search input").trigger("textchange");
                 });
 
-                it("should not add the filtered_out class to anything", function() {
-                    expect(this.view.$("ul.available li:eq(0)")).not.toHaveClass("filtered_out");
-                    expect(this.view.$("ul.available li:eq(1)")).not.toHaveClass("filtered_out");
-                    expect(this.view.$("ul.available li:eq(2)")).not.toHaveClass("filtered_out");
+                it("should not add the hidden class to anything", function() {
+                    expect(this.view.$("ul.available li:eq(0)")).not.toHaveClass("hidden");
+                    expect(this.view.$("ul.available li:eq(1)")).not.toHaveClass("hidden");
+                    expect(this.view.$("ul.available li:eq(2)")).not.toHaveClass("hidden");
                 });
             });
         });
