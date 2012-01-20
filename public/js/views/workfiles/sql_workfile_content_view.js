@@ -21,6 +21,8 @@
 
             this.forwardEvent("file:executionStarted", this.resultsConsole);
             this.forwardEvent("file:executionCompleted", this.resultsConsole);
+            this.forwardEvent("file:saveCurrent", this.textContent);
+            this.forwardEvent("file:createWorkfileNewVersion", this.textContent);
         },
 
         runCurrent : function() {

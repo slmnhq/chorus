@@ -15,6 +15,10 @@ describe("chorus.views.SqlWorkfileContentView", function() {
     })
 
     describe("event forwarding", function() {
+        beforeEach(function() {
+            stubModals();
+            this.view.render();
+        })
         it("forwards the file:executionStarted event to the results console", function() {
             spyOnEvent(this.view.resultsConsole, "file:executionStarted");
             this.view.trigger("file:executionStarted");
@@ -25,6 +29,18 @@ describe("chorus.views.SqlWorkfileContentView", function() {
             spyOnEvent(this.view.resultsConsole, "file:executionCompleted");
             this.view.trigger("file:executionCompleted");
             expect("file:executionCompleted").toHaveBeenTriggeredOn(this.view.resultsConsole)
+        })
+
+        it("forwards file:saveCurrent events to the textContent subview", function() {
+            spyOnEvent(this.view.textContent, "file:saveCurrent");
+            this.view.trigger("file:saveCurrent");
+            expect("file:saveCurrent").toHaveBeenTriggeredOn(this.view.textContent)
+        })
+
+        it("forwards file:createWorkfileNewVersion events to the textContent subview", function() {
+            spyOnEvent(this.view.textContent, "file:createWorkfileNewVersion");
+            this.view.trigger("file:createWorkfileNewVersion");
+            expect("file:createWorkfileNewVersion").toHaveBeenTriggeredOn(this.view.textContent)
         })
     })
 
