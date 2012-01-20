@@ -14,7 +14,6 @@
             this.task = new ns.models.Task({ });
 
             this.task.bind("saved", this.executionComplete, this);
-            this.task.bind("saveFailed", this.executionComplete, this);
 
             this.textContent = new chorus.views.TextWorkfileContent({ model : this.model })
             this.resultsConsole = new ns.views.ResultsConsole({ model : this.task });
