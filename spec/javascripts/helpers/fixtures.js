@@ -1598,7 +1598,7 @@
                 return new chorus.models.Schema(attributes);
             },
 
-            table: function(overrides) {
+            databaseTable: function(overrides) {
                 var id = this.nextId().toString();
                 var attributes = _.extend({
                     name : "campaign_dim",
@@ -1616,7 +1616,7 @@
                     databaseName : "table databaseName from fixture",
                     schemaName : "table schemaName from fixture"
                 }, overrides);
-                return new chorus.models.Table(attributes);
+                return new chorus.models.DatabaseTable(attributes);
             },
 
             databaseView: function(overrides) {
@@ -1627,10 +1627,10 @@
                 return new chorus.models.DatabaseView(attributes);
             },
 
-            tableSet: function(models, overrides) {
+            databaseTableSet: function(models, overrides) {
                 var id = this.nextId().toString()
                 models = (models && (models.length > 0)) || [this.table(overrides), this.table(overrides)];
-                return new chorus.models.TableSet(models, overrides);
+                return new chorus.models.DatabaseTableSet(models, overrides);
             },
 
             databaseViewSet: function(models, overrides) {

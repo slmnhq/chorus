@@ -19,7 +19,7 @@ describe("chorus.views.SchemaMetadataList", function() {
 
     context("when the table fetch completes", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.view.tables, [fixtures.table(), fixtures.table()]);
+            this.server.completeFetchFor(this.view.tables, [fixtures.databaseTable(), fixtures.databaseTable()]);
         });
 
         it("should set the list of tables in the collection", function() {
@@ -54,7 +54,7 @@ describe("chorus.views.SchemaMetadataList", function() {
 
         context("after only the table fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.view.tables, [fixtures.table(), fixtures.table()]);
+                this.server.completeFetchFor(this.view.tables, [fixtures.databaseTable(), fixtures.databaseTable()]);
             })
 
             it("still displays a loading spinner", function() {
@@ -84,8 +84,14 @@ describe("chorus.views.SchemaMetadataList", function() {
 
             context("and some data was fetched", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(this.view.views, [fixtures.databaseView(), fixtures.databaseView()]);
-                    this.server.completeFetchFor(this.view.tables, [fixtures.table(), fixtures.table()]);
+                    this.server.completeFetchFor(this.view.views, [
+                        fixtures.databaseView({name: "Data1"}),
+                        fixtures.databaseView({name: "zebra"})
+                    ]);
+                    this.server.completeFetchFor(this.view.tables, [
+                        fixtures.databaseTable({name: "Data2"}),
+                        fixtures.databaseTable({name: "apple"})
+                    ]);
                     this.view.render();
                 });
 
@@ -95,6 +101,13 @@ describe("chorus.views.SchemaMetadataList", function() {
 
                 it("renders an li for each item in the collection", function() {
                     expect(this.view.$("li").length).toBe(this.view.collection.length);
+                });
+
+                it("sorts the data by name", function() {
+                    expect(this.view.$("li").eq(0).text().trim()).toBe("apple");
+                    expect(this.view.$("li").eq(1).text().trim()).toBe("Data1");
+                    expect(this.view.$("li").eq(2).text().trim()).toBe("Data2");
+                    expect(this.view.$("li").eq(3).text().trim()).toBe("zebra");
                 });
 
                 it("should not display a message saying there are no tables/views", function() {

@@ -5,9 +5,7 @@
         useLoadingSection : true,
 
         setup: function() {
-            this.collection = new chorus.models.Collection();
-            this.resource = this.collection;
-
+            this.resource = this.collection = new chorus.models.Collection();
             this.schema = this.options.sandbox.schema();
             this.tables = this.schema.tables();
             this.views  = this.schema.views();
@@ -19,7 +17,7 @@
             this.views.fetch();
         },
 
-        postRender : function() {
+        postRender: function() {
             this.$('.empty').addClass("hidden");
             if (this.collection && _.isEmpty(this.collection.models)) {
                 this.$('.empty').removeClass("hidden");
@@ -34,6 +32,15 @@
         viewFetchComplete: function() {
             this.collection.add(this.views.models);
             this.render();
+        },
+
+        additionalContext: function() {
+            var models = _.clone(this.collection.models);
+            models.sort(function(a, b) {
+                return naturalSort(a.get("name").toLowerCase(), b.get("name").toLowerCase());
+            });
+
+            this.collection.models = models;
         },
 
         collectionModelContext : function(model) {

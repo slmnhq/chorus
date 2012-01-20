@@ -7,9 +7,9 @@ describe("chorus.models.Schema", function() {
         });
 
         describe("#tables", function() {
-            it("should return a TableSet", function() {
+            it("should return a DataaseTableSet", function() {
                 var tableSet = this.model.tables();
-                expect(tableSet).toBeA(chorus.models.TableSet);
+                expect(tableSet).toBeA(chorus.models.DatabaseTableSet);
             });
 
             it("should memoize the result", function() {

@@ -1,6 +1,6 @@
-describe("chorus.models.Table", function() {
+describe("chorus.models.DatabaseTable", function() {
     beforeEach(function() {
-        this.table = new chorus.models.Table({name: "Tabler", instanceId: "33", databaseName: "dataman", schemaName: "partyman"});
+        this.table = new chorus.models.DatabaseTable({name: "Tabler", instanceId: "33", databaseName: "dataman", schemaName: "partyman"});
     });
 
     it("should have the correct url template", function() {

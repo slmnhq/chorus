@@ -13,7 +13,7 @@
 
         tables: function() {
             if(!this._tables) {
-                this._tables = new chorus.models.TableSet([], {
+                this._tables = new chorus.models.DatabaseTableSet([], {
                     instanceId : this.get("instanceId"),
                     databaseName : this.get("databaseName"),
                     schemaName : this.get("name")
