@@ -168,6 +168,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 describe("clicking the maximize link", function() {
                     beforeEach(function() {
+                        spyOn(this.view, "getDesiredDataTableHeight").andReturn(777);
                         this.view.$("a.maximize").click();
                     });
 
@@ -187,8 +188,8 @@ describe("chorus.views.ResultsConsoleView", function() {
                         expect(this.view.$(".arrow")).not.toHaveClass("down");
                     });
 
-                    xit("sets .data_table height to use the full viewport", function() {
-
+                    it("sets .data_table height to use the full viewport", function() {
+                        expect(this.view.$(".data_table").css("height")).toBe("777px");
                     });
 
                     itCanExpandAndCollapseTheResults("maximized", "minimized");
@@ -213,6 +214,10 @@ describe("chorus.views.ResultsConsoleView", function() {
                              expect(this.view.$(".arrow")).toHaveClass("up");
                              expect(this.view.$(".arrow")).not.toHaveClass("down");
                          });
+
+                        it("does not keep the maxmized height", function() {
+                            expect(this.view.$(".data_table").css("height")).not.toBe("777px");
+                        });
 
                     })
                 });

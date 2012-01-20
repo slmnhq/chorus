@@ -62,6 +62,7 @@
 
         minimizeTable : function(e) {
             e && e.preventDefault()
+            this.$('.data_table').css("height", "");
             this.$("a.minimize").addClass("hidden");
             this.$("a.maximize").removeClass("hidden");
 
@@ -82,6 +83,11 @@
             this.$(".result_table").removeClass("collapsed");
             this.$(".result_table").removeClass("minimized");
             this.$(".result_table").addClass("maximized");
+            this.$(".data_table").css("height", this.getDesiredDataTableHeight());
+        },
+
+        getDesiredDataTableHeight : function() {
+            return $(window).height() - this.$(".data_table").position().top - this.$(".bottom_gutter").height();
         },
 
         collapseTable : function() {

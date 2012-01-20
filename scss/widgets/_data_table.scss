@@ -2,7 +2,7 @@
     $header-line-height: 32px;
     $line-height: 40px;
     $cell-width: 100px;
-    $short-name-width: 85px;
+    $short-name-width: 90px;
 
     overflow: hidden;
     white-space: nowrap;
@@ -46,8 +46,10 @@
     }
 
     .th {
+        position: relative;
         vertical-align: middle;
         line-height: $header-line-height;
+        height: $header-line-height;
         padding: 0 10px;
         display: inline-block;
         border-bottom: 1px solid $subheader-border-color-dark;
@@ -62,15 +64,16 @@
 
 
     .th:hover:first-child .name {
-        width: 100px;
+        width: $cell-width;
     }
 
     .th a.move_to_first {
+        position: absolute;
+        top: 10px;
+        right: 6px;
         display: none;
         width: 10px;
         height: 10px;
-        margin-top: 12px;
-        float: right;
         background-image: url("/images/shuttle_left.png");
         background-repeat: no-repeat;
     }
