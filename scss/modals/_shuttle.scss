@@ -15,21 +15,13 @@ $shuttle-width: 720px;
         position: relative;
         height: 33px;
 
-        .search {
+        .search_container {
             left: 0;
             border-right: 1px solid $list-border-color;
 
             input[type=text] {
                 width: 70%;
-                display: inline-block;
                 margin: 0 12px;
-                @include border-radius(12px);
-                font-size: 14px;
-                padding: 2px 4px 0px 29px;
-                background: url("/images/search-icon.png") no-repeat 9px 3px;
-                outline: none;
-                background-color: white;
-                border-color: $subheader-border-color;
             }
         }
 
@@ -37,7 +29,7 @@ $shuttle-width: 720px;
             left: 50%;
         }
 
-         .search, .summary {
+         .search_container, .summary {
             position: absolute;
             width: 50%;
             height: 100%;

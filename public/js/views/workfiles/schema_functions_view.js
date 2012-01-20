@@ -9,6 +9,13 @@
             this.resource = this.collection = this.functions = this.schema.functions();
             this.bindings.add(this.resource, "change reset add remove", this.render);
             this.functions.fetch();
+        },
+
+        postRender: function() {
+            chorus.search({
+                input: this.$('input.search'),
+                list: this.$('ul')
+            });
         }
 
     });

@@ -142,8 +142,8 @@ describe("chorus.views.ShuttleWidget", function() {
         describe("search", function() {
             context("when typing something that matches one name", function() {
                 beforeEach(function() {
-                    this.view.$(".search input").val("admin");
-                    this.view.$(".search input").trigger("textchange");
+                    this.view.$("input.search").val("admin");
+                    this.view.$("input.search").trigger("textchange");
                 });
 
                 it("should add the hidden class to the non-matching items", function() {
@@ -158,8 +158,8 @@ describe("chorus.views.ShuttleWidget", function() {
 
             context("when typing something that matches more than one name", function() {
                 beforeEach(function() {
-                    this.view.$(".search input").val("ma");
-                    this.view.$(".search input").trigger("textchange");
+                    this.view.$("input.search").val("ma");
+                    this.view.$("input.search").trigger("textchange");
                 });
 
                 it("should add the hidden class to the non-matching item", function() {
@@ -174,8 +174,8 @@ describe("chorus.views.ShuttleWidget", function() {
 
             context("when typing something that matches nothing", function() {
                 beforeEach(function() {
-                    this.view.$(".search input").val("xx");
-                    this.view.$(".search input").trigger("textchange");
+                    this.view.$("input.search").val("xx");
+                    this.view.$("input.search").trigger("textchange");
                 });
 
                 it("should add the hidden class to the non-matching item", function() {
@@ -187,8 +187,8 @@ describe("chorus.views.ShuttleWidget", function() {
 
             context("when the search bar is empty", function() {
                 beforeEach(function() {
-                    this.view.$(".search input").val("");
-                    this.view.$(".search input").trigger("textchange");
+                    this.view.$("input.search").val("");
+                    this.view.$("input.search").trigger("textchange");
                 });
 
                 it("should not add the hidden class to anything", function() {

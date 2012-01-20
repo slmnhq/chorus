@@ -1,0 +1,12 @@
+@import "_common.scss";
+
+input.search {
+    display: inline-block;
+    @include border-radius(12px);
+    font-size: 14px;
+    padding: 2px 4px 0px 29px;
+    background: url("/images/search-icon.png") no-repeat 9px 3px;
+    outline: none;
+    background-color: white;
+    border-color: $subheader-border-color;
+}
