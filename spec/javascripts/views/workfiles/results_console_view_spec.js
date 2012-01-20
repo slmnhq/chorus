@@ -27,6 +27,10 @@ describe("chorus.views.ResultsConsoleView", function() {
         
         describe("file:executionStarted", function() {
             beforeEach(function() {
+                spyOn(_, "delay").andCallFake(function(fn, ms) {
+                    fn();
+                });
+
                 this.view.trigger("file:executionStarted")
             })
             
@@ -35,6 +39,7 @@ describe("chorus.views.ResultsConsoleView", function() {
             })
 
             it("starts a spinner", function() {
+                expect(_.delay).toHaveBeenCalledWith(jasmine.any(Function), 250);
                 expect(this.view.$(".loading").isLoading()).toBeTruthy();
             })
 

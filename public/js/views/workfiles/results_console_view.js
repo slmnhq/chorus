@@ -11,7 +11,7 @@
 
         executionStarted : function() {
             this.$(".right").addClass("executing")
-            this.$(".loading").startLoading("results_console_view.executing")
+            _.delay(_.bind(function(){ this.$(".loading").startLoading("results_console_view.executing") }, this), 250)
         },
 
         cancelExecution : function(event) {
