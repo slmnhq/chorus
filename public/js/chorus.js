@@ -114,6 +114,23 @@
                 $(this).toggleClass("hidden", !matches);
             });
         }
+
+        self.hotKeyMeta = BrowserDetect.OS == "Mac" ? "ctrl" : "alt";
+
+        self.hotKeyEvent = function(keyChar) {
+            var ev = $.Event("keydown", { which : keyChar.toUpperCase().charCodeAt(0)});
+            if (chorus.hotKeyMeta == "ctrl") {
+                ev.ctrlKey = true;
+            } else if (chorus.hotKeyMeta == "alt") {
+                ev.altKey = true;
+            }
+
+            return ev;
+        }
+
+        self.triggerHotKey = function(keyChar) {
+            $(document).trigger(chorus.hotKeyEvent(keyChar))
+        }
     }
 
     window.chorus = window.chorus || new Chorus();

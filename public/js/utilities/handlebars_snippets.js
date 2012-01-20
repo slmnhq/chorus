@@ -145,7 +145,13 @@
                 chorus.templates[templateName] = Handlebars.compile(tag.html());
             }
             return chorus.templates[templateName](context);
+        },
+
+        hotKeyName : function(hotKeyChar) {
+            return _.str.capitalize(chorus.hotKeyMeta) + " + " + hotKeyChar;
         }
+
+
     }
 
     _.each(ns.helpers, function(helper, name) {

@@ -97,5 +97,12 @@
                 text-decoration: underline;
             }
         }
+
+        .menu_shortcut {
+            @include font-menu;
+            color : $color-text4;
+            float: right;
+            padding-left: (6 * $padding-x);
+        }
     }
 }

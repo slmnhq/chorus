@@ -1,4 +1,4 @@
-    describe("chorus.views.TextWorkfileContentView", function() {
+describe("chorus.views.TextWorkfileContentView", function() {
     beforeEach(function() {
         this.textfile = fixtures.textWorkfile({ content: "select * from foos where bar_id = 1;" });
 
@@ -44,6 +44,13 @@
         it("uses the 'text/plain' mode for plain text files", function() {
             expect(this.view.editor.getOption("mode")).toBe("text/plain");
         });
+
+        it("triggers a Ctrl+R keydown on the document when Ctrl+R keydown is received by the editor", function() {
+//            Cant find a way to trigger keydown events to CodeMirror
+//            spyOn(chorus, "triggerHotKey");
+//            $(this.view.$(".CodeMirror")[0].firstChild.firstChild).trigger(chorus.hotKeyEvent('r'));
+//            expect(chorus.triggerHotKey).toHaveBeenCalledWith('r');
+        })
 
         context("when the model is an SQL file", function() {
             beforeEach(function() {

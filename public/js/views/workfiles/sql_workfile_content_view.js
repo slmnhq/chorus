@@ -8,6 +8,10 @@
             '.results_console' : 'resultsConsole'
         },
 
+        hotkeys : {
+            'r' : 'file:runCurrent'
+        },
+
         setup : function() {
             this._super("setup");
 

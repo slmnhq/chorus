@@ -12,6 +12,10 @@ describe("chorus.views.SqlWorkfileContentView", function() {
         it("has a ResultsConsole view", function() {
             expect(this.view.resultsConsole).toBeA(chorus.views.ResultsConsole);
         })
+
+        it("delcares hotkeys", function() {
+            expect(this.view.hotkeys.r).toBeDefined();
+        })
     })
 
     describe("event forwarding", function() {

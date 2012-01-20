@@ -21,14 +21,19 @@
             var readOnlyMode = this.model.canEdit() ? false : "nocursor";
             var self = this;
             var opts = {
-               readOnly : readOnlyMode,
-               lineNumbers: true,
-               mode: this.model.get("mimeType"),
-               fixedGutter: true,
-               theme: "default",
-               lineWrapping: true,
-               onChange: _.bind(this.startTimer, this)
+                readOnly : readOnlyMode,
+                lineNumbers: true,
+                mode: this.model.get("mimeType"),
+                fixedGutter: true,
+                theme: "default",
+                lineWrapping: true,
+                onChange: _.bind(this.startTimer, this),
+                extraKeys : {}
             };
+
+            opts.extraKeys[_.str.capitalize(chorus.hotKeyMeta) + "-R"] = function() {
+                chorus.triggerHotKey("r");
+            }
 
             this.editor = CodeMirror.fromTextArea(this.$(".text_editor")[0], opts);
 

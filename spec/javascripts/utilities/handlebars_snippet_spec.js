@@ -383,6 +383,12 @@ describe("handlebars", function() {
                 expect(link).toMatch('&lt;script&gt;');
             });
         });
+
+        describe("hotKeyName", function() {
+            it("uses chorus.hotKeyMeta to construct a human-readable hot key description", function() {
+                expect(Handlebars.helpers.hotKeyName('k')).toBe(_.str.capitalize(chorus.hotKeyMeta) + " + k")
+            })
+        })
     });
 
     describe("partials", function() {

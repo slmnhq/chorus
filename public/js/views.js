@@ -7,7 +7,8 @@
             ns.router.bindOnce("leaving", this.beforeNavigateAway, this);
 
             this.setup.apply(this, arguments);
-            this.bindCallbacks();
+            this.bindCallbacks()
+            this.bindHotkeys()
 
             this.verifyResourcesLoaded(true);
         },
@@ -23,6 +24,14 @@
 
         beforeNavigateAway: function() {
             this.bindings.removeAll();
+        },
+
+        bindHotkeys : function() {
+            _.each(this.hotkeys || {}, _.bind(function(eventName, hotkey) {
+                this.bindings.add($(document), "keydown", chorus.hotKeyMeta + '+' + hotkey, _.bind(function(event) {
+                    this.trigger(eventName, event);
+                }, this));
+            }, this))
         },
 
         context : {},

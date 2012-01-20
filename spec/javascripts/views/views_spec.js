@@ -89,6 +89,37 @@ describe("chorus.views.base", function() {
         });
     });
 
+    describe("hotkey bindings", function() {
+        beforeEach(function() {
+            this.oldHotKeyMeta = chorus.hotKeyMeta;
+            chorus.hotKeyMeta = 'ctrl';
+
+            chorus.views.HotKeyTest = chorus.views.Base.extend({
+                hotkeys : {
+                    'r' : 'my:event'
+                }
+            })
+
+            spyOn($.fn, "bind").andCallThrough();
+            this.view = new chorus.views.HotKeyTest();
+        })
+
+        afterEach(function() {
+            chorus.hotKeyMeta = this.oldHotKeyMeta;
+        })
+
+        it("binds hotkeys", function() {
+            expect($.fn.bind).toHaveBeenCalledWith("keydown", "ctrl+r", jasmine.any(Function));
+            expect($.fn.bind.mostRecentCall.object).toBe($(document))
+        })
+
+        it("triggers events on hotkeys", function() {
+            spyOnEvent(this.view, "my:event");
+            var ev = $.Event("keydown", { which : 82, ctrlKey : true })
+            $(document).trigger(ev);
+            expect("my:event").toHaveBeenTriggeredOn(this.view);
+        })
+    })
     describe("#context", function() {
 
         describe("for a view with a model", function() {
