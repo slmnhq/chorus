@@ -4,7 +4,8 @@
         events : {
             "click .cancel" : "cancelExecution",
             "click a.maximize" : "maximizeTable",
-            "click a.minimize" : "minimizeTable"
+            "click a.minimize" : "minimizeTable",
+            "click .expander_button" : "toggleExpand"
         },
 
         setup: function() {
@@ -67,6 +68,10 @@
             this.$(".result_table").removeClass("collapsed");
             this.$(".result_table").removeClass("maximized");
             this.$(".result_table").addClass("minimized");
+
+            this.$(".bottom_gutter").removeClass("hidden")
+            this.$(".arrow").removeClass("down")
+            this.$(".arrow").addClass("up")
         },
 
         maximizeTable : function(e) {
@@ -77,6 +82,31 @@
             this.$(".result_table").removeClass("collapsed");
             this.$(".result_table").removeClass("minimized");
             this.$(".result_table").addClass("maximized");
+        },
+
+        collapseTable : function() {
+            this.$("a.maximize").addClass("hidden");
+            this.$("a.minimize").addClass("hidden");
+
+            this.$(".result_table").addClass("collapsed");
+            this.$(".result_table").removeClass("minimized");
+            this.$(".result_table").removeClass("maximized");
+        },
+
+        toggleExpand : function() {
+            var $arrow = this.$(".arrow");
+            if ($arrow.is(".up")) {
+                $arrow.removeClass("up").addClass("down");
+                this._shouldMinimize = this.$('.result_table').is(".minimized");
+                this.collapseTable();
+            } else {
+                $arrow.removeClass("down").addClass("up");
+                if(this._shouldMinimize) {
+                    this.minimizeTable();
+                } else {
+                    this.maximizeTable();
+                }
+            }
         }
     });
 })(jQuery, chorus);

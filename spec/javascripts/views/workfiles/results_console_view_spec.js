@@ -23,6 +23,10 @@ describe("chorus.views.ResultsConsoleView", function() {
             expect(this.view.$("a.minimize")).toHaveClass('hidden')
             expect(this.view.$("a.maximize")).toHaveClass('hidden')
         })
+
+        it("hides the bottom gutter", function() {
+            expect(this.view.$(".bottom_gutter")).toHaveClass("hidden");
+        });
     })
 
     describe("event handling", function() {
@@ -153,6 +157,15 @@ describe("chorus.views.ResultsConsoleView", function() {
                     expect(this.view.$("a.minimize")).toHaveClass("hidden");
                 });
 
+                it("shows the bottom gutter (with the expander button)", function() {
+                    expect(this.view.$(".bottom_gutter")).not.toHaveClass("hidden");
+                });
+
+                specify("the expander button arrow points up", function() {
+                    expect(this.view.$(".arrow")).toHaveClass("up");
+                    expect(this.view.$(".arrow")).not.toHaveClass("down");
+                });
+
                 describe("clicking the maximize link", function() {
                     beforeEach(function() {
                         this.view.$("a.maximize").click();
@@ -169,9 +182,16 @@ describe("chorus.views.ResultsConsoleView", function() {
                         expect(this.view.$('.result_table')).toHaveClass("maximized");
                     });
 
+                    specify("the expander button arrow points up", function() {
+                        expect(this.view.$(".arrow")).toHaveClass("up");
+                        expect(this.view.$(".arrow")).not.toHaveClass("down");
+                    });
+
                     xit("sets .data_table height to use the full viewport", function() {
 
                     });
+
+                    itCanExpandAndCollapseTheResults("maximized", "minimized");
 
                     describe("clicking the minimize link", function() {
                         beforeEach(function() {
@@ -188,8 +208,65 @@ describe("chorus.views.ResultsConsoleView", function() {
                             expect(this.view.$('.result_table')).toHaveClass("minimized");
                             expect(this.view.$('.result_table')).not.toHaveClass("maximized");
                         });
+
+                        specify("the expander button arrow points up", function() {
+                             expect(this.view.$(".arrow")).toHaveClass("up");
+                             expect(this.view.$(".arrow")).not.toHaveClass("down");
+                         });
+
                     })
                 });
+
+                itCanExpandAndCollapseTheResults("minimized", "maximized");
+            }
+
+            function itCanExpandAndCollapseTheResults(tableShouldHaveClass, tableShouldNotHaveClass) {
+                describe("clicking the expander arrow when it points up", function() {
+                    beforeEach(function() {
+                        this.view.$(".arrow").click();
+                    })
+
+                    it("collapses the result table", function() {
+                        expect(this.view.$('.result_table')).toHaveClass("collapsed");
+                        expect(this.view.$('.result_table')).not.toHaveClass("minimized");
+                        expect(this.view.$('.result_table')).not.toHaveClass("maximized");
+                    })
+
+                    it("makes the arrow point down", function() {
+                        expect(this.view.$(".arrow")).not.toHaveClass("up");
+                        expect(this.view.$(".arrow")).toHaveClass("down");
+                        expect(this.view.$(".bottom_gutter")).not.toHaveClass("hidden");
+                    })
+
+                    it("hides the minimize/maximize links", function() {
+                        expect(this.view.$("a.minimize")).toHaveClass("hidden");
+                        expect(this.view.$("a.maximize")).toHaveClass("hidden");
+                    })
+
+                    describe("clicking the arrow when it points down", function() {
+                        beforeEach(function() {
+                            this.view.$(".arrow").click();
+                        })
+                        it("restores the result table", function() {
+                            expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
+                            expect(this.view.$('.result_table')).toHaveClass(tableShouldHaveClass);
+                            expect(this.view.$('.result_table')).not.toHaveClass(tableShouldNotHaveClass);
+                        })
+
+                        it("makes the arrow point up", function() {
+                            expect(this.view.$(".arrow")).toHaveClass("up");
+                            expect(this.view.$(".arrow")).not.toHaveClass("down");
+                            expect(this.view.$(".bottom_gutter")).not.toHaveClass("hidden");
+                        })
+
+                        it("restores the minimize/maximize link", function() {
+                            var selector1 = "."+tableShouldHaveClass.slice(0,-1);
+                            var selector2 = "."+tableShouldNotHaveClass.slice(0,-1);
+                            expect(this.view.$(selector1)).toHaveClass("hidden")
+                            expect(this.view.$(selector2)).not.toHaveClass("hidden")
+                        })
+                    });
+                })
             }
         })
     })
