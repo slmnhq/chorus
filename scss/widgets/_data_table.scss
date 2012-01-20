@@ -1,6 +1,8 @@
 .data_table {
     $header-line-height: 32px;
     $line-height: 40px;
+    $cell-width: 100px;
+    $short-name-width: 85px;
 
     overflow: hidden;
     white-space: nowrap;
@@ -39,7 +41,7 @@
     }
 
     .td, .th {
-        width: 100px;
+        width: $cell-width;
         @include ellipsis;
     }
 
@@ -53,13 +55,14 @@
 
         .name {
             display: inline-block;
-            width: 100px;
+            width: $cell-width;
             @include ellipsis;
         }
     }
 
-    .th:hover .name {
-        width: 85px;
+
+    .th:hover:first-child .name {
+        width: 100px;
     }
 
     .th a.move_to_first {
@@ -72,12 +75,24 @@
         background-repeat: no-repeat;
     }
 
-    .th:hover a.move_to_first {
-        display: block;
+    .th:hover {
+        a.move_to_first {
+            display: block;
+        }
+
+        .name {
+            width: $short-name-width;
+        }
     }
 
-    .th:first-child:hover a.move_to_first {
-        display: none;
+    .th:first-child:hover {
+        a.move_to_first {
+            display: none;
+        }
+
+        .name {
+            width: $cell-width;
+        }
     }
 
     .td {
