@@ -4,6 +4,7 @@
         line-height: 32px;
         vertical-align: middle;
         padding: 0 $padding-x;
+        border-bottom: 1px solid $guts-border-color;
 
         h1 {
             @include results-console;
