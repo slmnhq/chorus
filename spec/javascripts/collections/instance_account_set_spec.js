@@ -3,12 +3,6 @@ describe("chorus.models.InstanceAccountSet", function() {
         this.accountSet = new chorus.models.InstanceAccountSet([], {instanceId : '1'});
     });
 
-    describe("#url", function() {
-        it("has the instanceId in the url parameters", function() {
-            expect(this.accountSet.url()).toContain("/edc/instance/accountmap?instanceId=1");
-        });
-    });
-
     describe("#users", function() {
         beforeEach(function() {
             this.accountSet.reset([

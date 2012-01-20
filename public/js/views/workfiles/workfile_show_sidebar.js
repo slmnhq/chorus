@@ -37,7 +37,7 @@
                 tabs.push({name: 'functions', selector: ".schema_functions"});
                 tabs.push({name: "metadata", selector: ".metadata_list"});
 
-                this.schemaFunction = new ns.views.SchemaFunctions(this.model.sandbox());
+                this.schemaFunction = new ns.views.SchemaFunctions({sandbox: this.model.sandbox()});
                 this.metadataList = new ns.views.SchemaMetadataList({model : this.model});
                 this.subviews[".schema_functions"] = "schemaFunction";
                 this.subviews[".metadata_list"] = "metadataList";

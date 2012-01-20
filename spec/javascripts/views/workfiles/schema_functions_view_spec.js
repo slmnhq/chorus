@@ -3,7 +3,7 @@ describe("chorus.views.SchemaFunctions", function() {
         this.sandbox = fixtures.sandbox();
         this.schema = this.sandbox.schema();
         spyOn(this.schema.functions(), "fetch").andCallThrough();
-        this.view = new chorus.views.SchemaFunctions(this.sandbox);
+        this.view = new chorus.views.SchemaFunctions({sandbox: this.sandbox});
     });
 
     it("should fetch the functions for the sandbox", function() {

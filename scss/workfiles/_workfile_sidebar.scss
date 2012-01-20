@@ -56,6 +56,16 @@
         }
     }
 
+    .schema_functions {
+        li {
+            @include list-section-heading;
+            background: url('/images/function.png') no-repeat left center;
+            padding: 0 0 0 29px;
+            height: 28px;
+            line-height: 28px;
+        }
+    }
+
 }
 
 .workfile_version_list {

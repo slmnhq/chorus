@@ -3,8 +3,8 @@
         className : "schema_functions",
         useLoadingSection: true,
 
-        setup: function(sandbox) {
-            this.sandbox = sandbox;
+        setup: function() {
+            this.sandbox = this.options.sandbox;
             this.schema = this.sandbox.schema();
             this.resource = this.collection = this.functions = this.schema.functions();
             this.bindings.add(this.resource, "change reset add remove", this.render);
