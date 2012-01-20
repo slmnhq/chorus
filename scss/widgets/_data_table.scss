@@ -39,7 +39,7 @@
     }
 
     .td, .th {
-        width: 150px;
+        width: 100px;
         @include ellipsis;
     }
 
@@ -50,6 +50,16 @@
         display: inline-block;
         border-bottom: 1px solid $subheader-border-color-dark;
         @include font-content-details;
+
+        .name {
+            display: inline-block;
+            width: 100px;
+            @include ellipsis;
+        }
+    }
+
+    .th:hover .name {
+        width: 85px;
     }
 
     .th a.move_to_first {
