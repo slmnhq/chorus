@@ -14,7 +14,8 @@
                     page : 1
                 }, options);
 
-                var uri = new URI("/edc/" + Handlebars.compile(this.urlTemplate)(this.attributes));
+                var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
+                var uri = new URI("/edc/" + Handlebars.compile(template)(this.attributes));
 
                 if (this.urlParams) {
                     var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;

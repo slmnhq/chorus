@@ -792,6 +792,22 @@ describe("chorus.models", function() {
                 });
             });
 
+            context("when the urlTemplate is a function", function() {
+                beforeEach(function() {
+                    this.collection.urlTemplate = function() { return "my_other_items/{{foo}}" };
+                });
+
+                it("uses the function's return value", function() {
+                    expect(this.collection.url()).toContain("/edc/my_other_items/bar");
+                });
+
+                it("passes any options to the urlTemplate function", function() {
+                    spyOn(this.collection, 'urlTemplate').andReturn("foo");
+                    this.collection.url({ method: 'create' });
+                    expect(this.collection.urlTemplate).toHaveBeenCalledWith({rows: 50, page: 1, method: 'create'});
+                });
+            });
+
             context("when the collection has NO pagination or page property", function() {
                 it("fetches the first page of the collection", function() {
                     expect(this.collection.url()).toBe("/edc/bar/bar?page=1&rows=50");

@@ -6,4 +6,22 @@ describe("chorus.models.DatabaseView", function() {
     it("should have the correct url template", function() {
         expect(this.model.url()).toBe("/edc/data/33/database/dataman/schema/partyman/view/View1");
     });
+
+    describe("#columns", function() {
+        it("should memoize the result", function() {
+            expect(this.model.columns()).toBe(this.model.columns());
+        });
+
+        it("should return a DatabaseColumnSet", function() {
+            expect(this.model.columns()).toBeA(chorus.models.DatabaseColumnSet);
+        })
+
+        it("should pass the correct parameters to the DatabaseColumnSet", function() {
+            var columns = this.model.columns();
+            expect(columns.attributes.instanceId).toBe(this.model.instanceId);
+            expect(columns.attributes.databaseName).toBe(this.model.databaseName);
+            expect(columns.attributes.schemaName).toBe(this.model.schemaName);
+            expect(columns.attributes.tableName).toBe(this.model.name);
+        });
+    });
 });
