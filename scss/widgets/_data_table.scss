@@ -4,12 +4,9 @@
     $cell-width: 100px;
     $short-name-width: 90px;
 
-    white-space: nowrap;
     position: relative;
     overflow: hidden;
 
-    // don't render whitespace that is between DOM elements
-    font-size: 0;
     background: #eaeef2;
 
     .thead {

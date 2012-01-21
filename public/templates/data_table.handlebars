@@ -1,18 +1,15 @@
 <div class="thead">
-    {{#each columns}}
-    <div class="th">
+    {{! These divs are right next to the each statements to prevent whitespace between the elements. }}
+    {{#each columns}}<div class="th">
         <div class="name" title="{{{name}}}">{{name}}</div>
         <a class="move_to_first" href="#"/>
-    </div>
-    {{/each}}
+    </div>{{/each}}
 </div>
 
 <div class="tbody">
-    {{#each columns}}
-    <div class="column" data-type="{{type}}">
+    {{#each columns}}<div class="column" data-type="{{type}}">
         {{#each values}}
         <div class="td" title="{{{this}}}">{{this}}</div>
         {{/each}}
-    </div>
-    {{/each}}
+    </div>{{/each}}
 </div>
