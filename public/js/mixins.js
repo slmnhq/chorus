@@ -35,8 +35,10 @@
                 throw "No showUrlTemplate defined";
             }
 
+            var template = _.isFunction(this.showUrlTemplate) ? this.showUrlTemplate() : this.showUrlTemplate;
+
             var prefix = hidePrefix ? '' : "#/"
-            return prefix + Handlebars.compile(this.showUrlTemplate)(this.attributes);
+            return prefix + Handlebars.compile(template)(this.attributes);
         }
     }
 })(chorus);

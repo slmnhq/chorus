@@ -121,13 +121,37 @@ describe("chorus.Mixins", function() {
         });
 
         describe("#showUrl", function() {
-            it("returns #/{{showUrlTemplate}}", function() {
-                this.object.showUrlTemplate = "my_items/show/{{id}}";
-                expect(this.object.showUrl()).toBe("#/my_items/show/45")
-            });
+            context("when showUrlTemplate is not set", function() {
+                beforeEach(function() {
+                    this.object.showUrlTemplate = null;
+                })
 
-            it("throws when showUrlTemplate is not set", function() {
-                expect(this.object.showUrl).toThrow("No showUrlTemplate defined");
+                it("throws an exception", function() {
+                    expect(this.object.showUrl).toThrow("No showUrlTemplate defined");
+                });
+            })
+
+            context("when showUrlTemplate is a function", function() {
+                beforeEach(function() {
+                    this.object.showUrlTemplate = function() {
+                        return "my_items/show/foo/{{id}}";
+                    }
+                })
+
+                it("calls the function ", function() {
+                    expect(this.object.showUrl()).toBe("#/my_items/show/foo/45")
+                });
+            })
+
+            context("when showUrlTemplate is not a function", function() {
+                beforeEach(function() {
+                    this.object.showUrlTemplate = "my_items/show/{{id}}";
+                })
+
+                it("returns #/{{showUrlTemplate}}", function() {
+                    this.object.showUrlTemplate = "my_items/show/{{id}}";
+                    expect(this.object.showUrl()).toBe("#/my_items/show/45")
+                });
             });
         });
     });
