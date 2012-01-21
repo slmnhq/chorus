@@ -1,7 +1,6 @@
 (function($, ns) {
     ns.views.SchemaMetadataList = ns.views.Base.extend({
         className : "schema_metadata_list",
-        additionalClass : "list",
         useLoadingSection : true,
 
         setup: function() {
@@ -18,10 +17,10 @@
         },
 
         postRender: function() {
-            this.$('.empty').addClass("hidden");
-            if (this.collection && _.isEmpty(this.collection.models)) {
-                this.$('.empty').removeClass("hidden");
-            }
+            chorus.search({
+                input: this.$('input.search'),
+                list: this.$('ul')
+            });
         },
 
         tableFetchComplete: function() {
@@ -35,12 +34,13 @@
         },
 
         additionalContext: function() {
-            var models = _.clone(this.collection.models);
-            models.sort(function(a, b) {
+            this.collection.models.sort(function(a, b) {
                 return naturalSort(a.get("name").toLowerCase(), b.get("name").toLowerCase());
             });
 
-            this.collection.models = models;
+            return {
+                schemaName: this.schema.get('name')
+            };
         },
 
         collectionModelContext : function(model) {

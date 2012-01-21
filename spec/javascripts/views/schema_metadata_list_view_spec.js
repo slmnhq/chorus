@@ -111,7 +111,7 @@ describe("chorus.views.SchemaMetadataList", function() {
                 });
 
                 it("should not display a message saying there are no tables/views", function() {
-                    expect(this.view.$('.empty')).toHaveClass("hidden");
+                    expect(this.view.$('.none_found')).not.toExist();
                 });
             });
 
@@ -122,8 +122,8 @@ describe("chorus.views.SchemaMetadataList", function() {
                 });
 
                 it("should display a message saying there are no tables/views", function() {
-                    expect(this.view.$('.empty')).not.toHaveClass("hidden");
-                    expect(this.view.$('.empty').text().trim()).toMatchTranslation("schema.metadata.list.empty");
+                    expect(this.view.$('.none_found')).toExist();
+                    expect(this.view.$('.none_found').text().trim()).toMatchTranslation("schema.metadata.list.empty");
                 })
             });
         });
