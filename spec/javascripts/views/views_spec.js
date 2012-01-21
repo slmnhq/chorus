@@ -110,7 +110,6 @@ describe("chorus.views.base", function() {
 
         it("binds hotkeys", function() {
             expect($.fn.bind).toHaveBeenCalledWith("keydown", "ctrl+r", jasmine.any(Function));
-            expect($.fn.bind.mostRecentCall.object).toBe($(document))
         })
 
         it("triggers events on hotkeys", function() {
