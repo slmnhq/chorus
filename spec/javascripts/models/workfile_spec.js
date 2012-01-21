@@ -74,9 +74,27 @@ describe("chorus.models.Workfile", function() {
             expect(this.model.url()).toBe("/edc/workspace/10/workfile/5");
         });
 
-        it("has the right frontend show URL", function() {
-            expect(this.model.showUrl()).toBe("#/workspaces/10/workfiles/5");
-        });
+        describe("#showUrlTemplate", function() {
+            context("when the workfile is the most recent version", function() {
+                beforeEach(function() {
+                    this.model.set({ versionNum : "1", latestVersionNum : 1 })
+                })
+
+                it("does not include a version", function() {
+                    expect(this.model.showUrlTemplate()).toBe("workspaces/{{workspaceId}}/workfiles/{{id}}")
+                })
+            })
+
+            context("when the workfile is not the most recent version", function() {
+                beforeEach(function() {
+                    this.model.set({ versionNum : "6", latestVersionNum : 9 })
+                })
+
+                it("includes a version", function() {
+                    expect(this.model.showUrlTemplate()).toBe("workspaces/{{workspaceId}}/workfiles/{{workfileId}}/versions/{{versionNum}}")
+                })
+            })
+        })
 
         it("has the right download URL", function() {
             expect(this.model.downloadUrl()).toBe("/edc/workspace/10/workfile/5/file/12345?download=true");

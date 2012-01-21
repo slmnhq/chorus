@@ -4,14 +4,22 @@
 
     ns.models.Workfile = chorus.models.Base.extend({
         entityType : "workfile",
-        showUrlTemplate: "workspaces/{{workspaceId}}/workfiles/{{id}}",
 
         urlTemplate : function() {
-            if (this.has("versionNum") && (parseInt(this.get("versionNum")) !== parseInt(this.get("latestVersionNum")))) {
-                return "workspace/{{workspaceId}}/workfile/{{id}}/version/{{versionNum}}"
-            } else {
+            if (this.isLatestVersion()) {
                 return "workspace/{{workspaceId}}/workfile/{{id}}"
+            } else {
+                return "workspace/{{workspaceId}}/workfile/{{id}}/version/{{versionNum}}"
             }
+        },
+
+        showUrlTemplate : function() {
+            if (this.isLatestVersion()) {
+                return "workspaces/{{workspaceId}}/workfiles/{{id}}"
+            } else {
+                return "workspaces/{{workspaceId}}/workfiles/{{workfileId}}/versions/{{versionNum}}"
+            }
+
         },
 
         initialize : function() {
@@ -92,7 +100,11 @@
         },
 
         canEdit : function() {
-            return this.get("latestVersionNum") == this.get("versionNum");
+            return this.isLatestVersion();
+        },
+
+        isLatestVersion : function() {
+            return (!this.has("versionNum") || parseInt(this.get("versionNum")) === parseInt(this.get("latestVersionNum")))
         },
 
         _workfileId : function() {
