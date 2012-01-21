@@ -41,7 +41,7 @@
             this._super('_configure', arguments);
             this.requiredResources = options.requiredResources || [];
         },
-        
+
         verifyResourcesLoaded: function(preventRender) {
             if(this.requiredResources.length == 0) {
                 return;

@@ -1,12 +1,20 @@
 describe("chorus.views.base", function() {
     describe("initialize", function() {
         describe("resourcesLoaded", function() {
+            beforeEach(function() {
+                this.model1 = new chorus.models.Base();
+                this.model2 = new chorus.models.Base();
+                spyOn(this.model1, 'url').andReturn('/foo/bar');
+                spyOn(this.model2, 'url').andReturn('/foo/quux');
+                spyOn(chorus.views.Base.prototype, 'resourcesLoaded');
+                spyOn(chorus.views.Base.prototype, 'render');
+            });
+
             context("when the resources are already loaded", function() {
                 beforeEach(function() {
-                    this.model = new chorus.models.Base();
-                    this.model.loaded = true;
-                    spyOn(chorus.views.Base.prototype, 'resourcesLoaded');
-                    this.view = new chorus.views.Base({requiredResources: [this.model]});
+                    this.model1.loaded = true;
+                    this.model2.loaded = true;
+                    this.view = new chorus.views.Base({requiredResources: [this.model1, this.model2]});
                 });
 
                 it("calls resourcesLoaded during initialization", function() {
@@ -16,13 +24,11 @@ describe("chorus.views.base", function() {
 
             context("when the resources are not loaded", function() {
                 beforeEach(function() {
-                    this.model = new chorus.models.Base();
-                    this.model.loaded = false;
-                    spyOn(this.model, 'url').andReturn('/foo/bar');
-                    spyOn(chorus.views.Base.prototype, 'resourcesLoaded');
-                    spyOn(chorus.views.Base.prototype, 'render');
-                    this.view = new chorus.views.Base({requiredResources: [this.model]});
-                    this.model.fetch();
+                    this.model1.loaded = false;
+                    this.model2.loaded = false;
+                    this.model1.fetch();
+                    this.model2.fetch();
+                    this.view = new chorus.views.Base({requiredResources: [this.model1, this.model2]});
                 });
 
                 it("does not call resourcesLoaded during initialization", function() {
@@ -31,7 +37,8 @@ describe("chorus.views.base", function() {
 
                 describe("once it has been loaded", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.model);
+                        this.server.completeFetchFor(this.model1);
+                        this.server.completeFetchFor(this.model2);
                     });
 
                     it("calls resourcesLoaded after model has been loaded", function() {
