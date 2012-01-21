@@ -65,6 +65,17 @@
             });
 
             return this._schema;
+        },
+
+        database: function() {
+            this._database = this._database || new ns.models.Database({
+                id: this.get("databaseId"),
+                name: this.get("databaseName"),
+                instanceId: this.get("instanceId"),
+                instanceName: this.get("instanceName")
+            });
+
+            return this._database;
         }
     });
 })(chorus);

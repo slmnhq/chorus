@@ -31,6 +31,22 @@ describe("chorus.models.Sandbox", function() {
         })
     });
 
+    describe("#database", function() {
+        beforeEach(function() {
+            this.database = this.model.database();
+        });
+
+        it("returns a database with the right id and instanceId", function() {
+            expect(this.database).toBeA(chorus.models.Database);
+            expect(this.database.get("id")).toBe(this.model.get("databaseId"));
+            expect(this.database.get("instanceId")).toBe(this.model.get("instanceId"));
+        });
+
+        it("memoizes", function() {
+            expect(this.database).toBe(this.model.database());
+        });
+    });
+
     describe("#beforeSave", function() {
         it("sets the 'type' field as required by the api", function() {
             this.model.save({ instance: '22', database: '11', schema: '33' });
