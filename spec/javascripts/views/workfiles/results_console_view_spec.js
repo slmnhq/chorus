@@ -235,6 +235,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                         expect(this.view.$('.result_table')).toHaveClass("collapsed");
                         expect(this.view.$('.result_table')).not.toHaveClass("minimized");
                         expect(this.view.$('.result_table')).not.toHaveClass("maximized");
+                        expect(this.view.$('.data_table').css("height")).toBe("0px");
                     })
 
                     it("makes the arrow point down", function() {

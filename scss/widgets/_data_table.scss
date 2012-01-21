@@ -6,11 +6,11 @@
 
     white-space: nowrap;
     position: relative;
+    overflow: hidden;
 
     // don't render whitespace that is between DOM elements
     font-size: 0;
     background: #eaeef2;
-
 
     .thead {
         position: absolute;

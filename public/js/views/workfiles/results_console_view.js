@@ -97,6 +97,7 @@
             this.$(".result_table").addClass("collapsed");
             this.$(".result_table").removeClass("minimized");
             this.$(".result_table").removeClass("maximized");
+            this.$(".data_table").css("height", "");
         },
 
         toggleExpand : function() {
