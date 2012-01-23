@@ -31,7 +31,7 @@
             if (this.get("workfile")) {
                 if (!this._workfile) {
                     this._workfile = new ns.models.Workfile(this.get("workfile"));
-
+                    this._workfile.set({workfileId : this._workfile.get("id")})
                     if (this.get("version")) {
                         this._workfile.set({versionNum: this.get("version")})
                     }

@@ -70,7 +70,14 @@ describe("chorus.models.Activity", function() {
         context("with a workfile", function() {
             context("with a workspace", function() {
                 beforeEach(function() {
-                    this.model = fixtures.activity({workspace: fixtures.workspaceJson(), workfile: fixtures.workfileJson()})
+                    this.model = fixtures.activity({
+                        workspace: fixtures.workspaceJson(),
+                        workfile: {
+                            id : 10001,
+                            name : "my_workfile"
+                        },
+                        version: "5"
+                    })
                 })
 
                 it("creates a workfile", function() {
@@ -84,11 +91,29 @@ describe("chorus.models.Activity", function() {
                 it("sets the workspace id in the workfile", function() {
                     expect(this.model.workfile().get("workspaceId")).toBeDefined();
                 })
+
+                it("sets workfileId in the workfile", function() {
+                    expect(this.model.workfile().get("workfileId")).toBeDefined();
+                })
+
+                it("sets versionNum in the workfile", function() {
+                    expect(this.model.workfile().get("versionNum")).toBe("5");
+                })
+
+                it("does not set latestVersionNum in the workfile", function() {
+                    expect(this.model.workfile().get("latestVersionNum")).toBeUndefined();
+                })
             });
 
             context("without a workspace", function() {
                 beforeEach(function() {
-                    this.model = fixtures.activity({workfile: fixtures.workfileJson()})
+                    this.model = fixtures.activity({
+                        workfile: {
+                            id : 10001,
+                            name : "my_workfile"
+                        },
+                        version: "5"
+                    })
                 })
 
                 it("creates a workfile", function() {
@@ -98,6 +123,22 @@ describe("chorus.models.Activity", function() {
                 it("returns the same workfile when called multiple times", function() {
                     expect(this.model.workfile()).toBe(this.model.workfile());
                 });
+
+                it("does not set the workspace id in the workfile", function() {
+                    expect(this.model.workfile().get("workspaceId")).toBeUndefined();
+                })
+
+                it("sets workfileId in the workfile", function() {
+                    expect(this.model.workfile().get("workfileId")).toBeDefined();
+                })
+
+                it("sets versionNum in the workfile", function() {
+                    expect(this.model.workfile().get("versionNum")).toBe("5");
+                })
+
+                it("does not set latestVersionNum in the workfile", function() {
+                    expect(this.model.workfile().get("latestVersionNum")).toBeUndefined();
+                })
             });
         });
 
