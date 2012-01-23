@@ -4,7 +4,7 @@
 
         columns: function() {
             if (!this._columns) {
-                this._columns = new chorus.models.DatabaseColumnSet({
+                this._columns = new chorus.models.DatabaseColumnSet([], {
                     instanceId : this.get("instanceId"),
                     databaseName : this.get("databaseName"),
                     schemaName : this.get("schemaName"),

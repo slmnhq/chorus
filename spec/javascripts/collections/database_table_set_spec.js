@@ -5,5 +5,28 @@ describe("chorus.collections.DatabaseTableSet", function() {
 
     it("has the correct urlTemplate", function() {
         expect(this.collection.url()).toContain("/edc/data/50/database/partyman/schema/myschema/table");
-    })
+    });
+
+    describe("#findByName", function() {
+        beforeEach(function() {
+            this.collection.reset([
+                fixtures.databaseTable({ name: "garbage" }),
+                fixtures.databaseTable({ name: "monsters" }),
+                fixtures.databaseTable({ name: "foods" }),
+                fixtures.databaseTable({ name: "beverages" })
+            ]);
+        });
+
+        context("when a table with the given name exists in the collection", function() {
+            it("returns that table", function() {
+                expect(this.collection.findByName("garbage")).toBe(this.collection.models[0]);
+            });
+        });
+
+        context("when no table with the given name exists in the collection", function() {
+            it("returns undefined", function() {
+                expect(this.collection.findByName("potpourri")).toBeFalsy();
+            });
+        });
+    });
 });
