@@ -148,7 +148,9 @@ describe("chorus.dialogs.InstancePermissions", function() {
             context("clicking the switch to individual account link", function() {
                 beforeEach(function() {
                     spyOn(this.dialog, "launchSubModal").andCallThrough();
-                    this.dialog.sharedAccount = fixtures.instanceAccount({ shared : "yes", dbUserName : "foo", id : "999" });
+                    spyOn(this.instance, "sharedAccount").andCallFake(function() {
+                        return fixtures.instanceAccount({ shared : "yes", dbUserName : "foo", id : "999" });
+                    })
                     this.dialog.$("a.remove_shared_account").click();
                 });
 
@@ -159,40 +161,28 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 context("when the alert is confirmed", function() {
                     beforeEach(function() {
-                        spyOn(this.dialog.sharedAccount, "save").andCallThrough();
                         this.dialog.launchSubModal.calls[0].args[0].confirmAlert();
                     });
 
-                    it("calls save on the account with shared:no", function() {
-                        expect(this.dialog.sharedAccount.save.calls[0].args[0].shared).toBe("no");
+                    it("saves the instance account", function() {
+                        expect(this.server.lastUpdate().url).toBe("/edc/instance/accountmap/999")
+                        expect(this.server.lastUpdate().requestBody).toBe("id=999&shared=no")
                     });
-
-                    it("only sends the shared parameter", function() {
-                        expect(_.last(this.server.requests).url).toBe("/edc/instance/accountmap/999")
-                        expect(_.last(this.server.requests).requestBody).toBe("id=999&shared=no");
-                    })
 
                     context("when the save succeeds", function() {
                         beforeEach(function() {
                             spyOn(chorus, 'toast');
-                            this.otherSavedSpy = jasmine.createSpy();
                             spyOn(this.dialog, "postRender").andCallThrough();
-                            this.dialog.sharedAccount.bind("saved", this.otherSavedSpy);
                             expect(this.dialog.instance.has("sharedAccount")).toBeTruthy();
-                            this.dialog.sharedAccount.trigger("saved");
+                            this.server.lastUpdate().succeed([fixtures.instanceAccount({ shared : "no", dbUserName : "foo", id : "999" })])
                         });
 
                         it("displays a toast message", function() {
                             expect(chorus.toast).toHaveBeenCalledWith("instances.shared_account_removed");
-                            expect(this.otherSavedSpy).toHaveBeenCalled();
                         });
 
                         it("clears shared account information from the instance model in the dialog", function() {
                             expect(this.dialog.instance.has("sharedAccount")).toBeFalsy();
-                        })
-
-                        it("clears memoized shared account information from the dialog", function() {
-                            expect(this.dialog.sharedAccount).toBeUndefined();
                         })
 
                         it("re-renders the dialog in the new individual account state", function() {
@@ -203,16 +193,12 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     context("when the save fails", function() {
                         beforeEach(function() {
                             spyOn(chorus, 'toast');
-                            this.dialog.sharedAccount.trigger("saveFailed");
+                            this.server.lastUpdate().fail("nope")
                         });
 
                         it("displays a save failed toast message", function() {
                             expect(chorus.toast).toHaveBeenCalledWith("instances.shared_account_remove_failed");
                         });
-
-                        it("clears memoized shared account information from the dialog", function() {
-                            expect(this.dialog.sharedAccount).toBeUndefined();
-                        })
                     })
                 });
             });
@@ -709,21 +695,6 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 })
             });
         });
-    });
-
-    context("when switching back and forth between shared and individual", function() {
-        beforeEach(function() {
-            this.instance = fixtures.instanceWithSharedAccount();
-            this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.instance });
-        });
-
-        it("handles confirmRemoveSharedAccount when dialog.sharedAccount does not exist", function() {
-            delete this.dialog.sharedAccount;
-            this.dialog.confirmRemoveSharedAccount();
-
-            expect(this.dialog.sharedAccount).toBeDefined();
-        });
-
     });
 
     // this shared example assumes that
