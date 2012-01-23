@@ -39,6 +39,7 @@
         'sandbox_new',
         'sandbox_new_instance_mode',
         'sandbox_new_standalone_mode',
+        'schema_column_list',
         'schema_functions',
         'schema_metadata_list',
         'shuttle_widget',
@@ -184,7 +185,7 @@
                             } else {
                                 return [
                                     "Expected event " + eventName + " to have been triggered on " + target + " with" + args + " but it was never triggered",
-                                    "Expected event " + eventName + " not to have been triggered on " + target + " with" + args + " but was triggered with " + call.args
+                                    "Expected event " + eventName + " not to have been triggered on " + target + " with" + args + " but it was"
                                 ];
                             }
                         }
