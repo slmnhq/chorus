@@ -15,7 +15,6 @@
         setup: function() {
             this.instances = new ns.models.InstanceSet();
             this.instances.bind("reset", this.updateInstances, this);
-            this.$('.instance .loading_text').removeClass('hidden');
             this.instances.fetchAll();
         },
 
@@ -86,11 +85,11 @@
             section.find("a.new").removeClass("hidden");
             section.find(".loading_text").addClass('hidden');
             section.find(".create_container").addClass('hidden');
-            section.find(".select_container").hide();
-            section.find(".unavailable").hide();
+            section.find(".select_container").addClass("hidden")
+            section.find(".unavailable").addClass("hidden")
 
             if (options.loading)          { section.find(".loading_text").removeClass('hidden'); }
-            else if (options.unavailable) { section.find(".unavailable").show(); }
+            else if (options.unavailable) { section.find(".unavailable").removeClass("hidden"); }
             else if (options.create) {
                 var createContainer = section.find(".create_container");
                 section.find("a.new").addClass("hidden");
@@ -102,7 +101,7 @@
                 }
             } else {
                 section.find("a.new").removeClass("hidden");
-                section.find(".select_container").show();
+                section.find(".select_container").removeClass("hidden");
                 chorus.styleSelect(section.find("select"));
             }
             this.checkIfValid();
@@ -117,7 +116,7 @@
 
             var select = section.find("select");
             select.empty();
-            select.closest('.select_container').hide();
+            select.closest('.select_container').addClass("hidden")
             select.append($("<option/>").prop('value', '').text(t("sandbox.select_one")));
             return select;
         },

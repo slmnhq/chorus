@@ -13,10 +13,6 @@
         font-size: 13px;
     }
 
-    .select_container {
-        display: none;
-    }
-
     legend div {
         display: inline-block;
         margin: 0 8px;
@@ -42,7 +38,6 @@
     }
 
     .unavailable {
-        display: none;
         @include font-normal-beta;
     }
 

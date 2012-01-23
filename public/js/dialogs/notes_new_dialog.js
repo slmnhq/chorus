@@ -130,8 +130,8 @@
 
         showOptions : function(e) {
             e.preventDefault();
-            this.$(".options_text").hide();
-            this.$(".options_area").show();
+            this.$(".options_text").addClass("hidden")
+            this.$(".options_area").removeClass("hidden")
         },
 
         launchWorkfileDialog: function(e) {
