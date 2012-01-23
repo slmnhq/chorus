@@ -246,7 +246,7 @@
 
             var map = this.sharedAccount;
             this.sharedAccount.bind("saved", displaySuccessToast, this);
-            this.sharedAccount.bind("saveFailed", displayFailureToast);
+            this.sharedAccount.bind("saveFailed", displayFailureToast, this);
 
             var id = this.sharedAccount.get("id")
             this.sharedAccount.clear({silent: true});
@@ -258,12 +258,14 @@
                 this.render();
                 map.unbind("saved", displaySuccessToast);
                 map.unbind("saveFailed", displayFailureToast);
+                delete this.sharedAccount;
             }
 
             function displayFailureToast() {
                 ns.toast("instances.shared_account_remove_failed");
                 map.unbind("saved", displaySuccessToast);
                 map.unbind("saveFailed", displayFailureToast);
+                delete this.sharedAccount;
             }
         },
 

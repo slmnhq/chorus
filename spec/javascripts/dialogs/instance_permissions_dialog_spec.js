@@ -191,20 +191,13 @@ describe("chorus.dialogs.InstancePermissions", function() {
                             expect(this.dialog.instance.has("sharedAccount")).toBeFalsy();
                         })
 
+                        it("clears memoized shared account information from the dialog", function() {
+                            expect(this.dialog.sharedAccount).toBeUndefined();
+                        })
+
                         it("re-renders the dialog in the new individual account state", function() {
                             expect(this.dialog.postRender).toHaveBeenCalled();
                         })
-
-                        context("and the same model saves again", function() {
-                            it("doesn't display a toast message", function() {
-                                chorus.toast.reset();
-                                this.otherSavedSpy.reset();
-                                this.dialog.sharedAccount.trigger("saved");
-
-                                expect(chorus.toast).not.toHaveBeenCalled();
-                                expect(this.otherSavedSpy).toHaveBeenCalled();
-                            });
-                        });
                     });
 
                     context("when the save fails", function() {
@@ -217,15 +210,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
                             expect(chorus.toast).toHaveBeenCalledWith("instances.shared_account_remove_failed");
                         });
 
-                        context("and then a save succeeds", function() {
-                            beforeEach(function() {
-                                chorus.toast.reset();
-                                this.dialog.sharedAccount.trigger("saved");
-                            });
-
-                            it("doesn't display the saved toast message", function() {
-                                expect(chorus.toast).not.toHaveBeenCalledWith("instances.shared_account_removed");
-                            });
+                        it("clears memoized shared account information from the dialog", function() {
+                            expect(this.dialog.sharedAccount).toBeUndefined();
                         })
                     })
                 });
