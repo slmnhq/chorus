@@ -20,16 +20,23 @@
         },
 
         setup: function() {
+            ns.models.Instance.aurora().bind("loaded", this.fetchConfig, this);
+            ns.models.Instance.aurora().fetch();
+        },
+
+        fetchConfig : function() {
+            this.config = new ns.models.Config();
+            this.config.bind("loaded", this.createSubViews, this);
+            this.config.fetch();
+        },
+
+        createSubViews : function() {
+            this.setMaxSize();
             this.instanceMode = new ns.views.SandboxNewInstanceMode();
             this.instanceMode.bind("change", this.enableOrDisableSaveButton, this);
-            ns.models.Instance.aurora().fetch();
-            ns.models.Instance.aurora().bind("change", this.render, this);
-
-            this.config = new ns.models.Config();
-            this.config.fetch();
-            this.config.bind("change", this.setMaxSize, this);
 
             this.standaloneMode = new ns.views.SandboxNewStandaloneMode();
+            this.render();
         },
 
         postRender : function() {
@@ -87,7 +94,7 @@
         },
 
         displayMaxSize : function() {
-            if (this.config.get("provisionMaxSizeInGB")) {
+            if (this.config && this.config.get("provisionMaxSizeInGB")) {
                 this.$(".max_size").text(t("sandbox.create_standalone_dialog.max_size", { size : this.config.get("provisionMaxSizeInGB")}));
             }
         },
