@@ -172,24 +172,40 @@
                 },
 
                 toHaveBeenTriggeredOn: function(target, args) {
-                    var eventName = this.actual;
-                    this.message = function() {
-                        return [
-                            "Expected event " + eventName + " to have been triggered on " + target,
-                            "Expected event " + eventName + " not to have been triggered on " + target
-                        ];
-                    };
+                    var call, eventName = this.actual;
+
+                    if (args) {
+                        this.message = function() {
+                            if (call) {
+                                return [
+                                    "Expected event " + eventName + " to have been triggered on " + target + " with" + args + " but was triggered with " + call.args,
+                                    "Expected event " + eventName + " not to have been triggered on " + target + " with" + args + " but was triggered with " + call.args
+                                ];
+                            } else {
+                                return [
+                                    "Expected event " + eventName + " to have been triggered on " + target + " with" + args + " but it was never triggered",
+                                    "Expected event " + eventName + " not to have been triggered on " + target + " with" + args + " but was triggered with " + call.args
+                                ];
+                            }
+                        }
+                    } else {
+                        this.message = function() {
+                            return [
+                                "Expected event " + eventName + " to have been triggered on " + target,
+                                "Expected event " + eventName + " not to have been triggered on " + target
+                            ];
+                        }
+                    }
+
                     if (_.isString(target) || target instanceof jQuery) {
                         return jasmine.JQuery.events.wasTriggered(target, eventName);
+                    } else if (target._chorusEventSpies && target._chorusEventSpies[eventName]) {
+                        call = _.last(target._chorusEventSpies[eventName].calls);
+                        if (!call) return false;
+                        if (args)  return (_.isEqual(call.args, args));
+                        return true;
                     } else {
-                        if (target._chorusEventSpies && target._chorusEventSpies[eventName]) {
-                            var call = _.last(target._chorusEventSpies[eventName].calls);
-                            if (!call) return false;
-                            if (args && !_.isEqual(call.args, args)) return false;
-                            return true;
-                        } else {
-                            throw "The event '" + eventName + "' has not been spied on, for the object " + target;
-                        }
+                        throw "The event '" + eventName + "' has not been spied on, for the object " + target;
                     }
                 },
 
