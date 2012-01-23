@@ -18,10 +18,10 @@ describe("chorus.models.DatabaseView", function() {
 
         it("should pass the correct parameters to the DatabaseColumnSet", function() {
             var columns = this.model.columns();
-            expect(columns.attributes.instanceId).toBe(this.model.instanceId);
-            expect(columns.attributes.databaseName).toBe(this.model.databaseName);
-            expect(columns.attributes.schemaName).toBe(this.model.schemaName);
-            expect(columns.attributes.tableName).toBe(this.model.name);
+            expect(columns.attributes.instanceId).toBe(this.model.get("instanceId"));
+            expect(columns.attributes.databaseName).toBe(this.model.get("databaseName"));
+            expect(columns.attributes.schemaName).toBe(this.model.get("schemaName"));
+            expect(columns.attributes.viewName).toBe(this.model.get("name"));
         });
     });
 });

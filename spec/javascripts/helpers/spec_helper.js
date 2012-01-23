@@ -171,7 +171,7 @@
                     return this.env.contains_(this.actual.text(), text);
                 },
 
-                toHaveBeenTriggeredOn: function(target) {
+                toHaveBeenTriggeredOn: function(target, args) {
                     var eventName = this.actual;
                     this.message = function() {
                         return [
@@ -183,7 +183,10 @@
                         return jasmine.JQuery.events.wasTriggered(target, eventName);
                     } else {
                         if (target._chorusEventSpies && target._chorusEventSpies[eventName]) {
-                            return target._chorusEventSpies[eventName].calls.length > 0;
+                            var call = _.last(target._chorusEventSpies[eventName].calls);
+                            if (!call) return false;
+                            if (args && !_.isEqual(call.args, args)) return false;
+                            return true;
                         } else {
                             throw "The event '" + eventName + "' has not been spied on, for the object " + target;
                         }

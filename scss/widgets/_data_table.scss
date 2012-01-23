@@ -39,6 +39,7 @@
     .td, .th {
         width: $cell-width;
         @include ellipsis;
+        border-right: 1px solid $subheader-border-color-dark;
     }
 
     .th {
