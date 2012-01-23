@@ -29,4 +29,24 @@ describe("chorus.collections.DatabaseTableSet", function() {
             });
         });
     });
+
+    describe("#parse", function() {
+        beforeEach(function() {
+            this.collection.fetch();
+            this.server.lastFetchFor(this.collection).succeed([
+                { name: "brian_the_table" },
+                { name: "rand_the_table" }
+            ]);
+        });
+
+        it("sets the instanceId, databaseName, and schemaName from the collection on each model", function() {
+            expect(this.collection.at(0).get("instanceId")).toBe("50");
+            expect(this.collection.at(0).get("databaseName")).toBe("partyman");
+            expect(this.collection.at(0).get("schemaName")).toBe("myschema");
+
+            expect(this.collection.at(1).get("instanceId")).toBe("50");
+            expect(this.collection.at(1).get("databaseName")).toBe("partyman");
+            expect(this.collection.at(1).get("schemaName")).toBe("myschema");
+        });
+    });
 });
