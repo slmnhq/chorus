@@ -57,6 +57,30 @@
         @include secondary-text-small;
     }
 
+    .selected_row_hover_background_color {
+        background-color: $selected-row-hover-background-color;
+    }
+
+    .error_background_color {
+        background-color:   $error-background-color;
+    }
+
+    .alert_background_color {
+    background-color: $alert-background-color;
+    }
+    .workfiles-action-details-background-color {
+    background-color: $workfiles-action-details-background-color;
+    }
+
+    .picklist_selected_background_color {
+    background-color: $picklist-selected-background-color;
+    }
+
+    .activity_stream_comment_background_color {
+    background-color: $activity-stream-comment-background-color;
+    }
+
+
     .data_table {
         border: 1px solid black;
         width: 350px;

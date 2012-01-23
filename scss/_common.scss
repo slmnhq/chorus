@@ -72,6 +72,7 @@ $workfiles-action-details-background-color: #B4D88B;
 $picklist-selected-background-color: #3795DD;
 
 $activity-stream-comment-background-color: #DFE5EB;
+$selected-row-hover-background-color: #DCE2E8;
 
 // z-indices
 $guts-z-index: 0;
@@ -113,7 +114,7 @@ $medium-font: 14px;
 // Un-comment these lines to find text that isn't styled with a mixin
 // * { text-shadow: red 0 0 2px !important; }
 @mixin debugging-mixin {
-    // text-shadow: none !important; 
+    // text-shadow: none !important;
 }
 
 @mixin heading-normal {
