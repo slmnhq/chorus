@@ -209,7 +209,7 @@
                 },
 
                 toHaveBeenFetched : function() {
-                    return this.spec.server.fetchFor(this.actual);
+                    return this.spec.server.lastFetchFor(this.actual);
                 }
             });
 
