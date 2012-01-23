@@ -45,6 +45,36 @@ describe("chorus.views.SchemaFunctions", function() {
             it("should not show the 'no functions found' text", function() {
                 expect(this.view.$('.none_found')).not.toExist();
             });
+
+            it("should not show the 'insert arrows'", function() {
+                expect(this.view.$('.functions .insert_hover')).toHaveClass("hidden")
+            })
+
+            context("when hovering over a function li", function() {
+                beforeEach(function() {
+                   this.view.$('.functions li:eq(1)').mouseenter();
+                });
+
+                it("shows the insert arrow", function() {
+                    expect(this.view.$('.functions .insert_hover:eq(1)')).not.toHaveClass('hidden');
+                    expect(this.view.$('.functions .insert_hover:eq(0)')).toHaveClass('hidden');
+                })
+
+                it("has the insert text", function() {
+                    expect(this.view.$('.functions .insert_link:eq(1)').text()).toMatchTranslation('schema.functions.insert')
+                })
+
+                context("when leaving the function li", function() {
+                    beforeEach(function() {
+                      this.view.$('.functions li:eq(1)').mouseleave();
+                    })
+
+                    it("should not show the insert arrow", function() {
+                      expect(this.view.$('.functions .insert_hover:eq(1)')).toHaveClass('hidden');
+                      expect(this.view.$('.functions .insert_hover:eq(0)')).toHaveClass('hidden');
+                    })
+                })
+            })
         });
 
         context("when the schema has no functions", function() {

@@ -22,6 +22,16 @@
                 input: this.$('input.search'),
                 list: this.$('ul')
             });
+            this.$('.functions li').hover(_.bind(this.showInsert, this), _.bind(this.hideInsert, this))
+
+        },
+
+        showInsert: function(e) {
+            $(e.target).find('.insert_hover').removeClass('hidden')
+        },
+
+        hideInsert: function() {
+            this.$('.insert_hover').addClass('hidden');
         }
 
     });

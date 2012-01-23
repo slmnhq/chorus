@@ -3,7 +3,12 @@
 {{#if models.length}}
     <ul class="functions list">
         {{#each models}}
-            <li title="{{functionName}}">{{functionName}}</li>
+            <li title="{{functionName}}">{{functionName}}
+                <div class="insert_hover hidden">
+                    <div class="arrow_left"/><div class="arrow_left_filling"/>
+                    <a class="insert_link" href="#">{{t "schema.functions.insert"}}</a>
+                </div>
+            </li>
         {{/each}}
     </ul>
 {{else}}

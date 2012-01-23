@@ -69,6 +69,7 @@
         li {
             &:first-child {
                 border-top: $dotted-list-item-border;
+                margin-top: -1px;
             }
             &:last-child {
                 border-bottom: $dotted-list-item-border;
@@ -79,7 +80,59 @@
             padding: 0 0 0 29px;
             height: 28px;
             line-height: 28px;
-        }
+
+            &:hover {
+                margin-top: -1px;
+                background-color: $selected-row-hover-background-color;
+                border-top: 1px solid $list-border-color;
+                border-bottom: 1px solid $list-border-color;
+            }
+            .insert_hover {
+                z-index: 100;
+                background-color: $selected-row-hover-background-color;
+                position: absolute;
+                right: 100%;
+                display: inline_block;
+                top: -1px;
+
+
+                $arrow-height: 30px;
+               .arrow_left {
+                    width: 0;
+                    height: 0;
+                    border-top: $arrow-height/2 solid transparent;
+                    border-bottom: $arrow-height/2 solid transparent;
+                    border-right: $arrow-height/2 solid $list-border-color;
+                    position:relative;
+                    right: 100%;
+                    position: absolute
+                }
+
+                $arrow-filling-height: 28px;
+                .arrow_left_filling{
+                    content:'';
+                    position:absolute;
+                    right: 100%;
+                    top: 1px;
+                    width: 0;
+                    height: 0;
+                    border-top: $arrow-filling-height/2 solid transparent;
+                    border-bottom: $arrow-filling-height/2 solid transparent;
+                    border-right: $arrow-filling-height/2 solid $selected-row-hover-background-color;
+                }
+
+
+                .insert_link {
+                    display: inline-block;
+                    font-size: 12px;
+                    font-weight: $semibold;
+                    padding-right: 20px;
+                    border: 1px solid $list-border-color;
+                    border-right: none;
+                    border-left: none;
+                }
+            }
+       }
     }
 
     .schema_metadata_list {
