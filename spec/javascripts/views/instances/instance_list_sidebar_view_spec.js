@@ -166,8 +166,8 @@ describe("chorus.views.InstanceListSidebar", function() {
             })
 
             it("shows configuration", function() {
-                expect(this.view.$(".configuration_detail")).toBeVisible();
-                expect(this.view.$(".activity_list")).not.toBeVisible();
+                expect(this.view.$(".configuration_detail")).not.toHaveClass("hidden")
+                expect(this.view.$(".activity_list")).toHaveClass("hidden")
             })
 
             describe("for existing greenplum instance", function() {

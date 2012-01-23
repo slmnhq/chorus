@@ -82,11 +82,10 @@
                 if (view) {
                     var element = self.$(selector);
                     if (element.length) {
-                        var id = element.attr("id"), klass = element.attr("class"), displayStyle = element.css('display');
+                        var id = element.attr("id"), klass = element.attr("class");
                         element.replaceWith(view.render().el);
                         $(view.el).attr("id", id);
                         $(view.el).addClass(klass);
-                        $(view.el).css('display', displayStyle);
                         view.delegateEvents();
                     }
                 }
