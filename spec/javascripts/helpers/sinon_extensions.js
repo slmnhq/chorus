@@ -44,7 +44,7 @@ _.extend(sinon.fakeServer, {
     },
 
     completeFetchFor: function(model, results) {
-        results = results || model.attributes;
+        results = results || [model.attributes];
         var request = _.find(this.fetches(), function(potentialRequest) {
            return potentialRequest.url == model.url()
         });
