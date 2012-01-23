@@ -1617,8 +1617,8 @@
                     desc : null,
                     type : "table",
                     instanceId : this.nextId().toString(),
-                    databaseName : "table databaseName from fixture",
-                    schemaName : "table schemaName from fixture"
+                    databaseName : "database_name",
+                    schemaName : "schema_name"
                 }, overrides);
                 return new chorus.models.DatabaseTable(attributes);
             },
@@ -1626,9 +1626,30 @@
             databaseView: function(overrides) {
                 var id = this.nextId().toString();
                 var attributes = _.extend({
-                    name : "view name from fixture"
+                    name : "campaign_dim",
+                    rows : 500,
+                    columns : 6,
+                    onDiskSize : "64 kB",
+                    lastAnalyzedTime : "2012-01-18 13:43:31.70468",
+                    imports : null,
+                    masterTable : null,
+                    partitions : 0,
+                    hasData : true,
+                    desc : null,
+                    type : "view",
+                    instanceId : this.nextId().toString(),
+                    databaseName : "database_name",
+                    schemaName : "schema_name"
                 }, overrides);
                 return new chorus.models.DatabaseView(attributes);
+            },
+
+            databaseColumn: function(overrides) {
+                var id = this.nextId().toString();
+                var attributes = _.extend({
+                    name : "column_name"
+                }, overrides);
+                return new chorus.models.DatabaseColumn(attributes);
             },
 
             databaseTableSet: function(models, overrides) {
@@ -1641,6 +1662,12 @@
                 var id = this.nextId().toString()
                 models = (models && (models.length > 0)) || [this.databaseView(overrides), this.databaseView(overrides)];
                 return new chorus.models.DatabaseViewSet(models, overrides);
+            },
+
+            databaseColumnSet: function(models, overrides) {
+                var id = this.nextId().toString()
+                models = (models && (models.length > 0)) || [this.databaseColumn(overrides), this.databaseColumn(overrides)];
+                return new chorus.models.DatabaseColumnSet(models, overrides);
             },
 
             workspace: function(overrides) {
