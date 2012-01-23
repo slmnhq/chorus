@@ -1,7 +1,6 @@
 describe("chorus.models.Workfile", function() {
     beforeEach(function() {
-        fixtures.model = "Workfile"
-        this.model = fixtures.modelFor("fetch");
+        this.model = fixtures.workfile({workspaceId: '10000', id: '10020'});
     });
 
     describe("#modifier", function() {
@@ -12,7 +11,7 @@ describe("chorus.models.Workfile", function() {
             expect(modifier.get("lastName")).toBe(this.model.get("modifiedByLastName"));
             expect(modifier.get("id")).toBe(this.model.get("modifiedById"))
         });
-    })
+    });
 
     describe("#sandbox", function() {
         it("returns a sandbox with the right id and workspaceId", function() {
@@ -29,17 +28,18 @@ describe("chorus.models.Workfile", function() {
     describe("#lastComment", function() {
         beforeEach(function() {
             this.comment = this.model.lastComment();
+            this.lastCommentJson = this.model.get('recentComments')[0];
         });
 
         it("has the right body", function() {
-            expect(this.comment.get("body")).toBe("I am loving commenting");
+            expect(this.comment.get("body")).toBe(this.lastCommentJson.text);
         });
 
         it("has the right creator", function() {
             var creator = this.comment.author()
-            expect(creator.get("id")).toBe("InitialUser");
-            expect(creator.get("firstName")).toBe("EDC");
-            expect(creator.get("lastName")).toBe("Admin");
+            expect(creator.get("id")).toBe(this.lastCommentJson.author.id);
+            expect(creator.get("firstName")).toBe(this.lastCommentJson.author.firstName);
+            expect(creator.get("lastName")).toBe(this.lastCommentJson.author.lastName);
         });
 
         context("when the workfile doesn't have any comments", function() {

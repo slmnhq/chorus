@@ -1514,7 +1514,11 @@
                     content: "Workfile Content!" + id,
                     editable: true,
                     hasDraft: false,
-                    sandboxId: this.nextId().toString()
+                    sandboxId: this.nextId().toString(),
+                    recentComments: [
+                        this.commentJson(),
+                        this.commentJson()
+                    ]
                 }, overrides);
             },
 
