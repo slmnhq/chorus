@@ -25,6 +25,7 @@
         },
 
         saved : function() {
+            this.pageModel.trigger("invalidated");
             this.closeModal();
         }
     });

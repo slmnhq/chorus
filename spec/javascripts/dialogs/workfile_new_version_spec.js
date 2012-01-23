@@ -36,12 +36,18 @@ describe("chorus.dialogs.WorkfileNewVersion", function() {
         describe("when the save completes", function() {
             beforeEach(function() {
                 spyOn(this.dialog, 'closeModal');
+                this.invalidatedSpy = jasmine.createSpy("invalidated");
+                this.workfile.bind("invalidated", this.invalidatedSpy);
                 this.dialog.model.trigger("saved");
             });
 
             it("closes the dialog", function() {
                 expect(this.dialog.closeModal).toHaveBeenCalled();
             });
+            
+            it("invalidates the page model", function() {
+              expect(this.invalidatedSpy).toHaveBeenCalled();
+            })
 
             it("sets the versionNum and versionFileId to the page model", function() {
                 this.dialog.model.set({ "versionNum": 1000, "versionFileId" : "ID1"})
