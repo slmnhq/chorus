@@ -43,6 +43,12 @@ _.extend(sinon.fakeServer, {
         return _.last(this.destroys());
     },
 
+    fetchFor: function(model) {
+        return _.find(this.fetches(), function(request) {
+            return (new URI(request.url)).equals(model.url());
+        })
+    },
+
     completeFetchFor: function(model, results) {
         results = results || [model.attributes];
         var request = _.find(this.fetches(), function(potentialRequest) {

@@ -203,6 +203,10 @@
 
                 toHaveVisibleQtip : function() {
                     return this.actual.find('.qtip').attr('aria-hidden') == 'false'
+                },
+
+                toHaveBeenFetched : function() {
+                    return this.spec.server.fetchFor(this.actual);
                 }
             });
 
