@@ -60,7 +60,7 @@
         },
 
         createDraft : function() {
-            var draft = new ns.models.Draft({workfileId: this.get("id"), workspaceId : this.get("workspaceId"), draftInfo: {content : this.content()}})
+            var draft = new ns.models.Draft({workfileId: this.get("id"), workspaceId : this.get("workspaceId"), content : this.content()});
             draft.bind("saved", function() {
                 this.isDraft = true;
                 this.set({ hasDraft: true }, { silent : true });

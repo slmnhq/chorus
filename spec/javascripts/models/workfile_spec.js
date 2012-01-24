@@ -144,7 +144,9 @@ describe("chorus.models.Workfile", function() {
             var draft = this.workfile.createDraft();
             expect(draft.get("workfileId")).toBe(this.workfile.get('id'));
             expect(draft.get("workspaceId")).toBe(this.workfile.get('workspaceId'));
-            expect(draft.get("draftInfo").content).toBe(this.workfile.content());
+
+            // backend expects content to be a first level property when saving, but it returns content nested elsewhere
+            expect(draft.get("content")).toBe(this.workfile.content());
         });
 
         describe("when the draft is saved", function() {

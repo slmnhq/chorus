@@ -19,11 +19,13 @@ describe("chorus.alerts.WorkfileDraft", function() {
             beforeEach(function() {
                 this.changeSpy = jasmine.createSpy();
                 this.alert.model.bind('change', this.changeSpy);
-                this.server.completeFetchFor(this.workfile.createDraft());
+                var draft = fixtures.draft({workfileId: this.workfile.get("id"), workspaceId: this.workfile.get("workspaceId")})
+                this.expectedContent = draft.get("draftInfo").content;
+                this.server.completeFetchFor(draft);
             })
 
             it("sets the page model content to the draft content", function() {
-                expect(this.alert.model.content()).toBe(this.workfile.createDraft().get("draftInfo").content);
+                expect(this.alert.model.content()).toBe(this.expectedContent);
             })
 
             it("triggers change on the page model", function() {
