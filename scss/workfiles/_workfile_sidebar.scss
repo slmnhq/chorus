@@ -89,15 +89,19 @@
                     display: inline-block;
                     vertical-align: middle;
                 }
-                .name {
+
+                .name, .type {
                     margin-top: 2px;
                     font-size: 14px;
-                    font-weight: $semibold;
                     display: inline-block;
                     @include ellipsis;
                     max-width: 75%;
                     vertical-align: middle;
                     line-height: 14px;
+                }
+
+                .name {
+                    font-weight: $semibold;
                 }
 
                 &:first-child {
@@ -106,6 +110,14 @@
                 &:last-child {
                     border-bottom: $dotted-list-item-border;
                 }
+            }
+        }
+
+        .database_column_list {
+            li .type {
+                float: right;
+                margin-top: 8px;
+                color: $color-text3;
             }
         }
     }

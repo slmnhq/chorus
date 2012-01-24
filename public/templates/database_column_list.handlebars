@@ -4,10 +4,11 @@
 {{#if models.length}}
     <ul class="list">
         {{#each models}}
-            <li data-name="{{name}}">
+            <li data-name="{{name}}" title="{{name}}">
                 <span class="spacer left"/>
                 <img src="images/small_column.png">
-                <div class="name">{{name}}</div>
+                <span class="name">{{name}}</span>
+                <span class="type">{{type}}</span>
                 <span class="spacer right"/>
             </li>
         {{/each}}
