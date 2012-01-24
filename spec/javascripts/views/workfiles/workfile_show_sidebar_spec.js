@@ -1,4 +1,4 @@
-describe("WorkfileShowSidebar", function() {
+describe("chorus.views.WorkfileShowSidebar", function() {
     beforeEach(function() {
         this.workfile = fixtures.textWorkfile();
         this.view = new chorus.views.WorkfileShowSidebar({ model : this.workfile });
@@ -24,7 +24,6 @@ describe("WorkfileShowSidebar", function() {
             expect(this.view.$('.loading_section')).toExist();
         });
     });
-
 
     context("with a sql workfile", function() {
         beforeEach(function() {
@@ -58,6 +57,54 @@ describe("WorkfileShowSidebar", function() {
 
             it("renders the functions subview", function() {
                 expect(this.view.schemaFunction).toBeA(chorus.views.SchemaFunctions);
+            });
+
+            context("when the metadata tab is selected", function() {
+                beforeEach(function() {
+                    this.view.$(".tab_control .metadata_list").click();
+                });
+
+                it("shows the metadata list view", function() {
+                    expect(this.view.$(".metadata_list")).not.toHaveClass("hidden");
+                });
+
+                it("hides the column list view", function() {
+                    expect(this.view.$(".column_list")).toHaveClass("hidden");
+                });
+
+                context("when a table is selected in the metadata list", function() {
+                    beforeEach(function() {
+                        this.table = fixtures.databaseTable();
+                        spyOnEvent(this.view.columnList, 'datasetSelected');
+                        this.view.metadataList.trigger("datasetSelected", this.table);
+                    });
+
+                    it("hides the metadata list", function() {
+                        expect(this.view.$(".metadata_list")).toHaveClass("hidden");
+                    });
+
+                    it("shows the column list", function() {
+                        expect(this.view.$(".column_list")).not.toHaveClass("hidden");
+                    });
+
+                    it("forwards the selection event to the column list view", function() {
+                        expect("datasetSelected").toHaveBeenTriggeredOn(this.view.columnList, [ this.table ]);
+                    });
+
+                    context("when the back link is clicked", function() {
+                        beforeEach(function() {
+                            this.view.columnList.trigger("back");
+                        });
+
+                        it("should hide the column list", function() {
+                            expect(this.view.$(".column_list")).toHaveClass("hidden");
+                        });
+
+                        it("should show the metadata list", function() {
+                            expect(this.view.$(".metadata_list")).not.toHaveClass("hidden");
+                        });
+                    });
+                });
             });
         });
     });

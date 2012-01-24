@@ -56,52 +56,67 @@
         }
     }
 
-    .schema_name {
-        @include font-content-details;
-        margin: 4px 0 15px 20px;
-    }
-
-    .none_found {
-            @include font-normal-beta;
-    }
-
-    .schema_functions {
-        li {
-            &:first-child {
-                border-top: $dotted-list-item-border;
-            }
-            &:last-child {
-                border-bottom: $dotted-list-item-border;
-            }
-
-            @include list-section-heading;
-            background: url('/images/function.png') no-repeat left center;
-            padding: 0 0 0 29px;
-            height: 28px;
-            line-height: 28px;
+    .tabbed_area {
+        .schema_name {
+            @include font-content-details;
         }
-    }
 
-    .schema_metadata_list {
-        li {
-            height: 29px;
-            padding-top: 0px;
-            padding-bottom: 0px;
+        .back {
+            font-size: 12px;
+            font-weight: $semibold;
+        }
 
-            img {
-                margin-top: 2px;
-                display: inline-block;
-                vertical-align: middle;
+        .schema_name, .back {
+            margin: 4px 0px 0px 20px;
+        }
+
+        .none_found {
+            @include font-normal-beta;
+        }
+        
+        .functions, .metadata, .columns {
+            margin-top: 15px;
+        }
+
+        .functions {
+            li {
+                &:first-child {
+                    border-top: $dotted-list-item-border;
+                }
+                &:last-child {
+                    border-bottom: $dotted-list-item-border;
+                }
+
+                @include list-section-heading;
+                background: url('/images/function.png') no-repeat left center;
+                padding: 0 0 0 29px;
+                height: 28px;
+                line-height: 28px;
             }
-            .name {
-                margin-top: 2px;
-                font-size: 14px;
-                font-weight: $semibold;
-                display: inline-block;
-                @include ellipsis;
-                max-width: 75%;
-                vertical-align: middle;
-                line-height: 14px;
+        }
+
+        .metadata, .columns {
+
+            li {
+                height: 29px;
+                padding-top: 0px;
+                padding-bottom: 0px;
+
+                img {
+                    margin-top: 2px;
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+                .name {
+                    margin-top: 2px;
+                    font-size: 14px;
+                    font-weight: $semibold;
+                    display: inline-block;
+                    @include ellipsis;
+                    max-width: 75%;
+                    vertical-align: middle;
+                    line-height: 14px;
+                }
             }
         }
     }

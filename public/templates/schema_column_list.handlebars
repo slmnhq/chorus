@@ -1,0 +1,19 @@
+<input class="search" placeholder='{{t "schema.metadata.list.hint.datasets"}}'/>
+<div class="schema_name">{{t "schema.functions.search_in" schemaName=schemaName}}</div>
+<a class="back" href="#">{{t "schema.column.list.back"}}</a>
+{{#if models.length}}
+    <ul class="columns list">
+    {{#each models}}
+        <li data-name="{{name}}">
+            <span class="spacer left"/>
+            <img src="images/small_column.png">
+            <div class="name">
+                <a href="#" title="{{name}}">{{name}}</a>
+            </div>
+            <span class="spacer right"/>
+        </li>
+    {{/each}}
+    </ul>
+{{else}}
+    <div class="none_found">{{t "schema.column.list.empty"}}</div>
+{{/if}}

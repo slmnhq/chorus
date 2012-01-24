@@ -3,6 +3,10 @@
         className : "schema_metadata_list",
         useLoadingSection : true,
 
+        events: {
+            "click a" : "datasetSelected"
+        },
+        
         setup: function() {
             this.resource = this.collection = new chorus.models.Collection();
             this.schema = this.options.sandbox.schema();
@@ -33,6 +37,16 @@
             this.render();
         },
 
+        datasetSelected: function(e) {
+            e.preventDefault();
+            var li = $(e.currentTarget).closest("li"),
+                type = li.data("type"),
+                name = li.data("name");
+
+            var dataset = (type === "table") ? this.tables.findByName(name) : this.views.findByName(name);
+            this.trigger("datasetSelected", dataset);
+        },
+
         additionalContext: function() {
             this.collection.models.sort(function(a, b) {
                 return naturalSort(a.get("name").toLowerCase(), b.get("name").toLowerCase());
@@ -45,6 +59,7 @@
 
         collectionModelContext : function(model) {
             return {
+                type: model.get("type"),
                 name: model.get("name")
             }
         },

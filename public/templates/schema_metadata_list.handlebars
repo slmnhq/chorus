@@ -1,9 +1,9 @@
 <input class="search" placeholder='{{t "schema.metadata.list.hint.datasets"}}'/>
 <div class="schema_name">{{t "schema.functions.search_in" schemaName=schemaName}}</div>
 {{#if models.length}}
-    <ul class="schema_metadata_list list">
+    <ul class="metadata list">
     {{#each models}}
-        <li>
+        <li data-name="{{name}}" data-type="{{type}}">
             <span class="spacer left"/>
             <img src="images/small_table.png">
             <div class="name">

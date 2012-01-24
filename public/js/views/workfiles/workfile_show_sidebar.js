@@ -35,13 +35,26 @@
 
             if(this.model.isSql()) {
                 tabs.push({name: 'functions', selector: ".schema_functions"});
-                tabs.push({name: "metadata", selector: ".metadata_list"});
+                tabs.push({name: "metadata", selector: ".datasets"});
 
-                this.schemaFunction = new ns.views.SchemaFunctions({sandbox: this.model.sandbox()});
-                this.metadataList = new ns.views.SchemaMetadataList({sandbox : this.model.sandbox()});
+                this.schemaFunction = new ns.views.SchemaFunctions({ sandbox: this.model.sandbox() });
+                this.metadataList   = new ns.views.SchemaMetadataList({ sandbox: this.model.sandbox() });
+                this.columnList     = new ns.views.SchemaColumnList({ sandbox: this.model.sandbox() });
 
+                this.metadataList.bind("datasetSelected", function(tableOrView) {
+                    this.columnList.trigger("datasetSelected", tableOrView);
+                    this.$(".column_list").removeClass("hidden");
+                    this.$(".metadata_list").addClass("hidden");
+                }, this);
+
+                this.columnList.bind("back", function() {
+                    this.$(".metadata_list").removeClass("hidden");
+                    this.$(".column_list").addClass("hidden");
+                }, this);
+                
                 this.subviews[".schema_functions"] = "schemaFunction";
                 this.subviews[".metadata_list"] = "metadataList";
+                this.subviews[".column_list"] = "columnList";
             }
             this.tabControl = new chorus.views.TabControl(tabs);
         },

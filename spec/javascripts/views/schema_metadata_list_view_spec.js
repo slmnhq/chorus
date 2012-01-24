@@ -113,6 +113,30 @@ describe("chorus.views.SchemaMetadataList", function() {
                 it("should not display a message saying there are no tables/views", function() {
                     expect(this.view.$('.none_found')).not.toExist();
                 });
+
+                describe("user clicks a view in the list", function() {
+                    beforeEach(function() {
+                        this.clickedView = this.view.views.findByName("Data1");
+                        spyOnEvent(this.view, "datasetSelected");
+                        this.view.$("li:contains('Data1') a").click();
+                    });
+
+                    it("triggers a 'datasetSelected' event on itself, with the view", function() {
+                        expect("datasetSelected").toHaveBeenTriggeredOn(this.view, [this.clickedView]);
+                    });
+                });
+
+                describe("user clicks on a table in the list", function() {
+                    beforeEach(function() {
+                        this.clickedTable = this.view.tables.findByName("Data2");
+                        spyOnEvent(this.view, "datasetSelected");
+                        this.view.$("li:contains('Data2') a").click();
+                    });
+
+                    it("triggers a 'datasetSelected' event on itself, with the table", function() {
+                        expect("datasetSelected").toHaveBeenTriggeredOn(this.view, [this.clickedTable]);
+                    });
+                });
             });
 
             context("and no data was fetched", function() {
