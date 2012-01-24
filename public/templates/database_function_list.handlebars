@@ -3,11 +3,7 @@
 {{#if models.length}}
     <ul class="list">
         {{#each models}}
-            <li title="{{functionName}}">
-                <div class="insert_hover hidden">
-                    <div class="arrow_left"/><div class="arrow_left_filling"/>
-                    <a class="insert_link" href="#" data-fun_cid="{{cid}}">{{t "schema.functions.insert"}}</a>
-                </div>
+            <li title="{{functionName}}" data-fun_cid="{{cid}}">
                 <span class="spacer left"/>
                 <img src="images/function.png">
                 <div class="name">{{functionName}}</div>

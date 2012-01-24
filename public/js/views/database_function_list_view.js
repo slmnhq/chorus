@@ -28,23 +28,53 @@
                 input: this.$('input.search'),
                 list: this.$('ul')
             });
-            this.$('.list li').hover(_.bind(this.showInsert, this), _.bind(this.hideInsert, this))
-            this.$('.list .insert_link').bind('click', _.bind(this.insertFunction, this));
-
+            this.$("li").qtip({
+                content: "<a>"+t('database.sidebar.insert')+"</a>",
+                events: {
+                    render: _.bind(function(e, api) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $(api.elements.content).find('a').click(_.bind(this.insertFunction, this, $(api.elements.target).data('fun_cid')));
+                    }, this),
+                    show: function(e, api) {
+                        $(api.elements.target).addClass('hover');
+                    },
+                    hide: function(e, api) {
+                        $(api.elements.target).removeClass('hover');
+                    }
+                },
+                show: {
+                    delay: 0,
+                    solo : true,
+                    effect:false
+                },
+                hide: {
+                    delay: 0,
+                    fixed: true,
+                    effect:false
+                },
+                position : {
+                    my: "right center",
+                    at: "left center",
+                    adjust : {
+                        x: -16
+                    }
+                },
+                style: {
+                    classes: "tooltip-insert",
+                    tip: {
+                        corner: "left center",
+                        width: 16,
+                        height: 29
+                    }
+                }
+            });
         },
 
-        insertFunction: function(e) {
+        insertFunction: function(cid, e) {
             e && e.preventDefault();
-            var schemaFunction = this.functions.getByCid($(e.currentTarget).data('fun_cid'))
+            var schemaFunction = this.functions.getByCid(cid)
             this.trigger("file:insertFunction", schemaFunction.toString())
-        },
-
-        showInsert: function(e) {
-            $(e.currentTarget).find('.insert_hover').removeClass('hidden')
-        },
-
-        hideInsert: function() {
-            this.$('.insert_hover').addClass('hidden');
         }
 
     });

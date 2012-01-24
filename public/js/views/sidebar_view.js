@@ -54,7 +54,6 @@
             sidebar.lionbars();
 
             sidebar.css("position", "absolute")
-            sidebar.css("overflow", "visible");
 
             sidebar.unbind('hover').hover(function() {
                 sidebar.find('.lb-v-scrollbar, .lb-h-scrollbar').fadeIn(150)

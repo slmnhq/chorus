@@ -4,6 +4,7 @@ describe("chorus.views.DatabaseFunctionList", function() {
         this.schema = this.sandbox.schema();
         spyOn(this.schema.functions(), "fetch").andCallThrough();
         this.view = new chorus.views.DatabaseFunctionList({sandbox: this.sandbox});
+        this.qtipElement = stubQtip();
     });
 
     it("should fetch the functions for the sandbox", function() {
@@ -46,43 +47,24 @@ describe("chorus.views.DatabaseFunctionList", function() {
                 expect(this.view.$('.none_found')).not.toExist();
             });
 
-            it("should not show the 'insert arrows'", function() {
-                expect(this.view.$('.list .insert_hover')).toHaveClass("hidden")
-            })
 
             context("when hovering over a function li", function() {
                 beforeEach(function() {
                    this.view.$('.list li:eq(1)').mouseenter();
                 });
 
-                it("shows the insert arrow", function() {
-                    expect(this.view.$('.list .insert_hover:eq(1)')).not.toHaveClass('hidden');
-                    expect(this.view.$('.list .insert_hover:eq(0)')).toHaveClass('hidden');
-                })
-
-                it("has the insert text", function() {
-                    expect(this.view.$('.list .insert_link:eq(1)').text()).toMatchTranslation('schema.functions.insert')
+                it("has the insert text in the insert arrow", function() {
+                    expect(this.qtipElement.find("a").text()).toMatchTranslation('database.sidebar.insert')
                 })
 
                 context("when clicking the insert arrow", function() {
                     beforeEach(function() {
                         spyOnEvent(this.view, "file:insertFunction");
-                        this.view.$('.list .insert_hover:eq(1) a').click()
+                        this.qtipElement.find("a").click()
                     })
 
                     it("triggers a file:insertFunction with the functions string representation", function() {
                         expect("file:insertFunction").toHaveBeenTriggeredOn(this.view, [this.view.functions.models[1].toString()]);
-                    })
-                })
-
-                context("when leaving the function li", function() {
-                    beforeEach(function() {
-                      this.view.$('.list li:eq(1)').mouseleave();
-                    })
-
-                    it("should not show the insert arrow", function() {
-                      expect(this.view.$('.list .insert_hover:eq(1)')).toHaveClass('hidden');
-                      expect(this.view.$('.list .insert_hover:eq(0)')).toHaveClass('hidden');
                     })
                 })
             })

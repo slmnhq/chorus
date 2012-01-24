@@ -122,7 +122,7 @@
                     border-bottom: $dotted-list-item-border;
                 }
 
-                &:hover {
+                &.hover {
                     margin-top: -1px;
                     background-color: $selected-row-hover-background-color;
                     border-top: 1px solid $list-border-color;
@@ -159,19 +159,6 @@
                         border-top: $arrow-filling-height/2 solid transparent;
                         border-bottom: $arrow-filling-height/2 solid transparent;
                         border-right: $arrow-filling-height/2 solid $selected-row-hover-background-color;
-                    }
-
-
-                    .insert_link {
-                        display: inline-block;
-                        font-size: 12px;
-                        height: 100%;
-                        line-height: 29px;
-                        font-weight: $semibold;
-                        padding-right: 20px;
-                        border: 1px solid $list-border-color;
-                        border-right: none;
-                        border-left: none;
                     }
                 }
            }

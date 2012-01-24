@@ -53,3 +53,18 @@
     }
 }
 
+
+.tooltip-insert {
+    @include tooltip(red, $selected-row-hover-background-color, $list-border-color);
+    .ui-tooltip-content {
+        $height: 19px;
+        height: $height;
+        line-height: $height;
+        font-weight: $semibold;
+        border-right: none;
+    }
+    a {
+        font-size: 12px;
+        cursor: pointer;
+    }
+}
