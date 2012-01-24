@@ -39,7 +39,7 @@ describe("chorus.views.DatabaseFunctionList", function() {
             });
 
             it("should display the current schema name", function() {
-                expect(this.view.$('.schema_name')).toContainText(this.sandbox.get('schemaName'));
+                expect(this.view.$('.context')).toContainText(this.sandbox.get('schemaName'));
             })
 
             it("should not show the 'no functions found' text", function() {

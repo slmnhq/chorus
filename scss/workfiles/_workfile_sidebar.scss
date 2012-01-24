@@ -57,7 +57,7 @@
     }
 
     .tabbed_area {
-        .schema_name {
+        .context {
             @include font-content-details;
         }
 
@@ -70,7 +70,7 @@
             @include font-normal-beta;
         }
 
-        .schema_name, .back, .none_found {
+        .context, .back, .none_found {
             margin: 4px 0px 0px 20px;
         }
 
@@ -114,6 +114,14 @@
         }
 
         .database_column_list {
+            .context {
+                .table, .schema {
+                    display: inline-block;
+                    max-width: 80px;
+                    @include ellipsis;
+                }
+            }
+
             li .type {
                 float: right;
                 margin-top: 8px;

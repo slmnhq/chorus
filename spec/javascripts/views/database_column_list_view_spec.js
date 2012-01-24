@@ -14,7 +14,7 @@ describe("chorus.views.DatabaseColumnList", function() {
 
         describe("when the 'datasetSelected' event is triggered", function() {
             beforeEach(function() {
-                this.table = fixtures.databaseTable({ name: "coffee_mugs" });
+                this.table = fixtures.databaseTable({ name: "brian_the_table", schemaName: "john_the_schema" });
                 this.view.trigger("datasetSelected", this.table);
             });
 
@@ -46,7 +46,11 @@ describe("chorus.views.DatabaseColumnList", function() {
                     });
 
                     it("shows the table name next to the schema name", function() {
-                        expect(this.view.$(".schema_name")).toContainText("coffee_mugs");
+                        expect(this.view.$(".context .schema")).toHaveText("john_the_schema");
+                        expect(this.view.$(".context .schema")).toHaveAttr("title", "john_the_schema");
+
+                        expect(this.view.$(".context .table")).toHaveText("brian_the_table");
+                        expect(this.view.$(".context .table")).toHaveAttr("title", "brian_the_table");
                     });
 
                     it("should show an 'li' for each column", function() {

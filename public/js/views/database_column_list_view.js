@@ -37,6 +37,16 @@
         onBackClicked: function(e) {
             e.preventDefault();
             this.trigger("back");
+        },
+
+        additionalContext: function() {
+            var tableName = this.collection.attributes.tableName;
+            var schemaName = this.collection.attributes.schemaName;
+
+            return {
+                schemaSpan: ns.helpers.spanFor(schemaName, { class: "schema", title: schemaName }),
+                tableSpan: ns.helpers.spanFor(tableName, { class: "table", title: tableName })
+            };
         }
     });
 })(jQuery, chorus);

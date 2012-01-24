@@ -138,6 +138,10 @@
             return $("<a></a>").attr("href", url).text(text).attr(attributes || {}).outerHtml();
         },
 
+        spanFor: function(text, attributes) {
+            return $("<span></span>").text(text).attr(attributes || {}).outerHtml()
+        },
+
         renderTemplate : function(templateName, context) {
             if (!chorus.templates[templateName]) {
                 var tag = $('#' + templateName + "_template");
