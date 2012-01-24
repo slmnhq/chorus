@@ -1,6 +1,6 @@
 describe("chorus.views.DatabaseFunctionList", function() {
     beforeEach(function() {
-        this.sandbox = fixtures.sandbox();
+        this.sandbox = fixtures.sandbox({ schemaName: "righteous_tables" });
         this.schema = this.sandbox.schema();
         spyOn(this.schema.functions(), "fetch").andCallThrough();
         this.view = new chorus.views.DatabaseFunctionList({sandbox: this.sandbox});
@@ -25,9 +25,28 @@ describe("chorus.views.DatabaseFunctionList", function() {
             expect(this.view.$('.loading_section')).toExist();
         });
 
+<<<<<<< HEAD
         context("after functions have loaded", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.view.functions, [fixtures.schemaFunction(), fixtures.schemaFunction()]);
+=======
+        it("fetches all of the schemas in the sandbox's database", function() {
+            expect(this.server.lastFetchFor(this.sandbox.database().schemas())).toBeTruthy();
+        });
+
+        context("after functions and schemas have loaded", function() {
+            beforeEach(function() {
+                this.server.completeFetchFor(this.sandbox.database().schemas(), [
+                    this.schema,
+                    fixtures.schema({ name: "awesome_tables", id: "5" }),
+                    fixtures.schema({ name: "orphaned_tables", id: "6" })
+                ]);
+
+                this.server.completeFetchFor(this.view.functions, [
+                    fixtures.schemaFunction({ functionName: "laplace_transform" }),
+                    fixtures.schemaFunction({ functionName: "inc" })
+                ]);
+>>>>>>> add schema menu to database function list view
             });
             jasmine.sharedExamples.DatabaseList();
 
@@ -36,16 +55,73 @@ describe("chorus.views.DatabaseFunctionList", function() {
             });
 
             it("should render the functions", function() {
-                expect(this.view.$('ul')).toExist();
                 expect(this.view.$('ul li').length).toBe(2);
+                expect(this.view.$("ul li")).toContainText("laplace_transform");
+                expect(this.view.$("ul li")).toContainText("inc");
             });
 
             it("should display the current schema name", function() {
-                expect(this.view.$('.context')).toContainText(this.sandbox.get('schemaName'));
+                expect(this.view.$('.context')).toContainText("righteous_tables");
             })
 
             it("should not show the 'no functions found' text", function() {
                 expect(this.view.$('.none_found')).not.toExist();
+            });
+
+            describe("selecting a schema", function() {
+                beforeEach(function() {
+                    this.view.$(".context a").click();
+                });
+
+                it("opens a chorus menu", function() {
+                    expect(this.menu).toHaveVisibleQtip();
+                });
+
+                it("shows the names of all of the workspace's database's schemas", function() {
+                    expect(this.menu).toContainText("righteous_tables");
+                    expect(this.menu).toContainText("awesome_tables");
+                    expect(this.menu).toContainText("orphaned_tables");
+                });
+
+                describe("when a schema is clicked", function() {
+                    beforeEach(function(){
+                        this.menu.find("a[data-id=5]").click()
+                        this.otherSchema = this.view.schemas.get("5");
+                    })
+
+                    it("should fetch the functions for the new schema", function() {
+                        expect(this.server.lastFetchFor(this.otherSchema.functions())).not.toBeUndefined()
+                    });
+
+                    it("should show the loading spinner", function() {
+                        expect(this.view.$('.loading_section')).toExist();
+                    });
+
+                    describe("when the function fetch completes", function() {
+                        beforeEach(function() {
+                            this.server.completeFetchFor(this.view.functions, [
+                                fixtures.schemaFunction({ functionName: "fourier_transform" }),
+                                fixtures.schemaFunction({ functionName: "obnoxious_transform" })
+                            ]);
+                        });
+
+                        it("removes the loading spinner", function() {
+                            expect(this.view.$('.loading_section')).not.toExist();
+                            expect(this.view.$(".none_found")).not.toExist()
+                        });
+
+                        it("shows the new schema name as context", function() {
+                            expect(this.view.$(".context")).toContainText("awesome_tables")
+                        })
+
+                        it("shows the new functions in the sidebar", function() {
+                            expect(this.view.$("ul")).toExist()
+
+                            expect(this.view.$("ul li")).toContainText("fourier_transform");
+                            expect(this.view.$("ul li")).toContainText("obnoxious_transform");
+                        });
+                    })
+                })
             });
         });
 
