@@ -41,6 +41,7 @@
         'notes_new_file_attachment',
         'plain_text',
         'results_console',
+        'run_file_in_schema',
         'sandbox_new',
         'sandbox_new_instance_mode',
         'sandbox_new_standalone_mode',

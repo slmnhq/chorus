@@ -54,6 +54,17 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                         expect("file:runCurrent").toHaveBeenTriggeredOn(this.view);
                     });
                 })
+
+                describe("clicking on 'Run in another schema'", function() {
+                    beforeEach(function() {
+                        spyOn(chorus.dialogs.RunFileInSchema.prototype, "launchModal")
+                        this.qtipElement.find('.run_other_schema').click();
+                    });
+
+                    it("launches the RunFileInSchema dialog", function() {
+                        expect(chorus.dialogs.RunFileInSchema.prototype.launchModal).toHaveBeenCalled();
+                    })
+                })
             });
         })
     });

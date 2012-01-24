@@ -8,7 +8,8 @@
                 content: this.$(".run_workfile").html(),
                 orientation: "right",
                 contentEvents: {
-                    ".run_sandbox": _.bind(this.runInSandbox, this)
+                    ".run_sandbox": _.bind(this.runInSandbox, this),
+                    ".run_other_schema": _.bind(this.runOtherSchema, this)
                 }
             });
         },
@@ -28,6 +29,11 @@
 
         runInSandbox: function() {
             this.trigger("file:runCurrent");
+        },
+
+        runOtherSchema: function() {
+            var dialog = new chorus.dialogs.RunFileInSchema({model: this.model});
+            dialog.launchModal();
         }
     });
 })(jQuery, chorus);
