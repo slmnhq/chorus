@@ -1,12 +1,12 @@
 (function($, ns) {
-    ns.views.SchemaMetadataList = ns.views.Base.extend({
-        className : "schema_metadata_list",
+    ns.views.DatabaseDatasetList = ns.views.Base.extend({
+        className : "database_dataset_list",
         useLoadingSection : true,
 
         events: {
             "click a" : "datasetSelected"
         },
-        
+
         setup: function() {
             this.resource = this.collection = new chorus.models.Collection();
             this.schema = this.options.sandbox.schema();

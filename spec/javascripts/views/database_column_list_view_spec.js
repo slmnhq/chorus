@@ -1,6 +1,6 @@
-describe("chorus.views.SchemaColumnList", function() {
+describe("chorus.views.DatabaseColumnList", function() {
     beforeEach(function() {
-        this.view = new chorus.views.SchemaColumnList({ sandbox: fixtures.sandbox() });
+        this.view = new chorus.views.DatabaseColumnList({ sandbox: fixtures.sandbox() });
     });
 
     describe("#render", function() {

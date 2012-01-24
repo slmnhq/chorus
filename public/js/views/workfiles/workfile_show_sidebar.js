@@ -31,30 +31,30 @@
         },
 
         resourcesLoaded: function() {
-            var tabs = [{name: 'activity', selector: ".activity_list"}];
+            var tabs = [{name: 'activity_list'}];
 
             if(this.model.isSql()) {
-                tabs.push({name: 'functions', selector: ".schema_functions"});
-                tabs.push({name: "metadata", selector: ".datasets"});
+                tabs.push({name: 'database_function_list'});
+                tabs.push({name: "datasets_and_columns"});
 
-                this.schemaFunction = new ns.views.SchemaFunctions({ sandbox: this.model.sandbox() });
-                this.metadataList   = new ns.views.SchemaMetadataList({ sandbox: this.model.sandbox() });
-                this.columnList     = new ns.views.SchemaColumnList({ sandbox: this.model.sandbox() });
+                this.functionList = new ns.views.DatabaseFunctionList({ sandbox: this.model.sandbox() });
+                this.datasetList  = new ns.views.DatabaseDatasetList({ sandbox: this.model.sandbox() });
+                this.columnList   = new ns.views.DatabaseColumnList({ sandbox: this.model.sandbox() });
 
-                this.metadataList.bind("datasetSelected", function(tableOrView) {
+                this.datasetList.bind("datasetSelected", function(tableOrView) {
                     this.columnList.trigger("datasetSelected", tableOrView);
-                    this.$(".column_list").removeClass("hidden");
-                    this.$(".metadata_list").addClass("hidden");
+                    this.$(".database_column_list").removeClass("hidden");
+                    this.$(".database_dataset_list").addClass("hidden");
                 }, this);
 
                 this.columnList.bind("back", function() {
-                    this.$(".metadata_list").removeClass("hidden");
-                    this.$(".column_list").addClass("hidden");
+                    this.$(".database_dataset_list").removeClass("hidden");
+                    this.$(".database_column_list").addClass("hidden");
                 }, this);
-                
-                this.subviews[".schema_functions"] = "schemaFunction";
-                this.subviews[".metadata_list"] = "metadataList";
-                this.subviews[".column_list"] = "columnList";
+
+                this.subviews[".tabbed_area .database_function_list"] = "functionList";
+                this.subviews[".tabbed_area .database_dataset_list"] = "datasetList";
+                this.subviews[".tabbed_area .database_column_list"] = "columnList";
             }
             this.tabControl = new chorus.views.TabControl(tabs);
         },

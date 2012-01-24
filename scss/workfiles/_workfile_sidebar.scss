@@ -73,12 +73,12 @@
         .none_found {
             @include font-normal-beta;
         }
-        
-        .functions, .metadata, .columns {
+
+        .database_function_list, .database_dataset_list, .database_column_list {
             margin-top: 15px;
         }
 
-        .functions {
+        .database_function_list {
             li {
                 &:first-child {
                     border-top: $dotted-list-item-border;
@@ -95,7 +95,7 @@
             }
         }
 
-        .metadata, .columns {
+        .database_dataset_list, .database_column_list {
 
             li {
                 height: 29px;

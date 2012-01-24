@@ -1,4 +1,4 @@
-describe("chorus.views.SchemaMetadataList", function() {
+describe("chorus.views.DatabaseDatasetList", function() {
     beforeEach(function() {
         this.sandbox = fixtures.sandbox();
         this.schema = this.sandbox.schema();
@@ -6,7 +6,7 @@ describe("chorus.views.SchemaMetadataList", function() {
         spyOn(this.schema.views(), "fetch").andCallThrough();
         spyOn(this.schema.tables(), "fetch").andCallThrough();
 
-        this.view = new chorus.views.SchemaMetadataList({sandbox: this.sandbox});
+        this.view = new chorus.views.DatabaseDatasetList({sandbox: this.sandbox});
     });
 
     it("should fetch the list of tables", function() {
