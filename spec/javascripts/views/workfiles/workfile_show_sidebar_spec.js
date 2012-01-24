@@ -59,6 +59,10 @@ describe("chorus.views.WorkfileShowSidebar", function() {
                 expect(this.view.functionList).toBeA(chorus.views.DatabaseFunctionList);
             });
 
+            it("renders selected version", function() {
+                expect(this.view.$(".chosen").text()).toMatchTranslation("workfile.version_title", {versionNum: this.view.model.get("versionInfo").versionNum})
+            })
+
             context("when the dataset tab is selected", function() {
                 beforeEach(function() {
                     this.view.$(".tab_control .database_dataset_list").click();
