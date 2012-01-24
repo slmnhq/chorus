@@ -77,7 +77,7 @@
                         var wrappedCallback = function(event) {
                             event.preventDefault();
                             event.stopPropagation();
-                            callback();
+                            callback(event);
                             api.hide();
                         }
                         $(api.elements.content).find(selector).click(wrappedCallback);
