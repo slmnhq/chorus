@@ -67,7 +67,15 @@ _.extend(sinon.fakeServer, {
 });
 
 _.extend(sinon.FakeXMLHttpRequest.prototype, {
-    succeed: function(resource) {
+    succeed: function(models) {
+        var resource = _.map(models, function(model) {
+            if (model instanceof Backbone.Model) {
+                return model.attributes;
+            } else {
+                return model;
+            }
+        });
+
         return this.respond(
             200,
             { 'Content-Type': 'application/json' },
