@@ -51,6 +51,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
                 it("does creates subviews", function() {
                     expect(this.dialog.instanceMode).toBeDefined();
+                    expect(this.dialog.instanceMode.options.allowCreate).toBeTruthy();
                     expect(this.dialog.standaloneMode).toBeDefined();
                 })
 

@@ -13,7 +13,9 @@
 </div>
 <div class="database hidden">
     <div class="header_container">
-        <a class="new hidden" href="">{{t "sandbox.new.database"}}</a>
+        {{#if allowCreate}}
+            <a class="new hidden" href="">{{t "sandbox.new.database"}}</a>
+        {{/if}}
         <label class="required">{{t "sandbox.select.database"}}</label>
     </div>
     <div class="loading_text hidden">
@@ -24,14 +26,18 @@
     <div class="select_container">
         <select name="database"></select>
     </div>
-    <div class="create_container hidden">
-        <input class="name" name="databaseName" maxlength="63" placeholder="{{t "sandbox.database.name.placeholder"}}"></input>
-        <a class="cancel" href="#">{{t "actions.cancel"}}</a>
-    </div>
+    {{#if allowCreate}}
+        <div class="create_container hidden">
+            <input class="name" name="databaseName" maxlength="63" placeholder="{{t "sandbox.database.name.placeholder"}}"></input>
+            <a class="cancel" href="#">{{t "actions.cancel"}}</a>
+        </div>
+    {{/if}}
 </div>
 <div class="schema hidden">
     <div class="header_container">
-        <a class="new hidden" href="#">{{t "sandbox.new.schema"}}</a>
+        {{#if allowCreate}}
+            <a class="new hidden" href="#">{{t "sandbox.new.schema"}}</a>
+        {{/if}}
         <label class="required">{{t "sandbox.select.schema"}}</label>
     </div>
     <div class="loading_text hidden">
@@ -42,8 +48,10 @@
     <div class="select_container">
         <select name="schema"></select>
     </div>
-    <div class="create_container hidden">
-        <input class="name" name="schemaName" maxlength="63" placeholder="{{t "sandbox.schema.name.placeholder"}}" ></input>
-        <a class="cancel" href="#" tabindex=2>{{t "actions.cancel"}}</a>
-    </div>
+    {{#if allowCreate}}
+        <div class="create_container hidden">
+            <input class="name" name="schemaName" maxlength="63" placeholder="{{t "sandbox.schema.name.placeholder"}}" ></input>
+            <a class="cancel" href="#" tabindex=2>{{t "actions.cancel"}}</a>
+        </div>
+    {{/if}}
 </div>

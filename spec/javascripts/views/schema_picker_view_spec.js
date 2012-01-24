@@ -1,334 +1,344 @@
 describe("chorus.views.SchemaPicker", function() {
     beforeEach(function() {
-        this.workspace = fixtures.workspace();
-        spyOn(chorus, 'styleSelect');
-        var launchElement = $("<a data-workspace-id='45'></a>");
-        this.view = new chorus.views.SchemaPicker();
     });
 
     describe("#render", function() {
         beforeEach(function() {
-            spyOnEvent(this.view, 'change');
-            this.view.render();
-            this.dialogContainer = $("<div class='dialog sandbox_new'></div>").append(this.view.el);
-            $('#jasmine_content').append(this.dialogContainer);
-        });
+            spyOn(chorus, 'styleSelect');
+        })
 
-        it("fetches the list of instances", function() {
-            expect(this.server.requests[0].url).toMatch("/edc/instance/");
-        });
-
-        itDisplaysLoadingPlaceholderFor('instance');
-
-        itShowsUnavailableTextWhenResponseIsEmptyFor('instance');
-
-        context("when the instance list fetch completes", function() {
+        context("when allowCreate is true", function() {
             beforeEach(function() {
-                this.view.instances.loaded = true;
-                this.view.instances.reset([fixtures.instance(), fixtures.instance()]);
-            });
-
-            itShowsSelect('instance');
-            itPopulatesSelect('instance');
-            itHidesSection('database');
-            itHidesSection('schema');
-
-            itDisplaysDefaultOptionFor('instance')
-
-            itSortsTheSelectOptionsAlphabetically('instance');
-
-            it("does not add Hadoop instances to the instance list", function() {
-                this.view.instances.reset([fixtures.instance(), fixtures.instance({instanceProvider: "Hadoop"}), fixtures.instance()]);
-                var options = this.view.$(".instance select option");
-                expect(options.length).toBe(3);
-                expect(options.eq(0).val()).toBeFalsy();
-                expect(options.eq(1).val()).toBe(this.view.instances.models[0].get("id"));
-                expect(options.eq(2).val()).toBe(this.view.instances.models[2].get("id"));
-            });
-
-            it("hides the loading placeholder", function() {
-                expect(this.view.$(".instance .loading_text")).toHaveClass("hidden")
+                this.view = new chorus.views.SchemaPicker({ allowCreate : true });
+                spyOnEvent(this.view, 'change');
+                this.view.render();
+                this.dialogContainer = $("<div class='dialog sandbox_new'></div>").append(this.view.el);
+                $('#jasmine_content').append(this.dialogContainer);
             })
 
-            context("choosing an instance", function() {
+            it("renders creation markup", function() {
+                expect(this.view.$(".database a.new")).toExist();
+                expect(this.view.$(".database .create_container")).toExist();
+                expect(this.view.$(".schema a.new")).toExist();
+                expect(this.view.$(".schema .create_container")).toExist();
+            });
+
+            it("fetches the list of instances", function() {
+                expect(this.server.requests[0].url).toMatch("/edc/instance/");
+            });
+
+            itDisplaysLoadingPlaceholderFor('instance');
+
+            itShowsUnavailableTextWhenResponseIsEmptyFor('instance');
+
+            context("when the instance list fetch completes", function() {
                 beforeEach(function() {
-                    this.view.$(".instance select").prop("selectedIndex", 1).change();
-                    this.selectedInstance = this.view.instances.get(this.view.$('.instance select option:selected').val());
+                    this.view.instances.loaded = true;
+                    this.view.instances.reset([fixtures.instance(), fixtures.instance()]);
                 });
 
-                itDisplaysLoadingPlaceholderFor('database');
+                itShowsSelect('instance');
+                itPopulatesSelect('instance');
+                itHidesSection('database');
                 itHidesSection('schema');
 
-                context("when the response is empty for databases", function() {
-                    beforeEach(function() {
-                        this.view.databases.loaded = true;
-                        this.view.databases.reset([]);
-                    });
+                itDisplaysDefaultOptionFor('instance')
 
-                    itShowsUnavailable("database");
+                itSortsTheSelectOptionsAlphabetically('instance');
 
-                    describe("choosing another instance", function() {
-                        beforeEach(function() {
-                            this.view.$(".instance select").prop("selectedIndex", 2).change();
-                        });
-
-                        itDisplaysLoadingPlaceholderFor('database');
-                    });
-
-                    describe("clicking 'new database'", function() {
-                        beforeEach(function() {
-                            this.view.$(".database a.new").click();
-                        });
-
-                        itShowsCreateFields('database');
-                    });
+                it("does not add Hadoop instances to the instance list", function() {
+                    this.view.instances.reset([fixtures.instance(), fixtures.instance({instanceProvider: "Hadoop"}), fixtures.instance()]);
+                    var options = this.view.$(".instance select option");
+                    expect(options.length).toBe(3);
+                    expect(options.eq(0).val()).toBeFalsy();
+                    expect(options.eq(1).val()).toBe(this.view.instances.models[0].get("id"));
+                    expect(options.eq(2).val()).toBe(this.view.instances.models[2].get("id"));
                 });
 
-                it("fetches the list of databases", function() {
-                    expect(this.server.requests[1].url).toMatch("/edc/instance/" + this.selectedInstance.get('id') + "/database");
-                });
+                it("hides the loading placeholder", function() {
+                    expect(this.view.$(".instance .loading_text")).toHaveClass("hidden")
+                })
 
-                context("when the database list fetch completes", function() {
+                context("choosing an instance", function() {
                     beforeEach(function() {
-                        this.view.databases.loaded = true;
-                        this.view.databases.reset([fixtures.database(), fixtures.database()]);
+                        this.view.$(".instance select").prop("selectedIndex", 1).change();
+                        this.selectedInstance = this.view.instances.get(this.view.$('.instance select option:selected').val());
                     });
 
-                    itShowsSelect('database');
-                    itPopulatesSelect('database');
-                    itDisplaysDefaultOptionFor('database');
+                    itDisplaysLoadingPlaceholderFor('database');
+                    itHidesSection('schema');
 
-                    itSortsTheSelectOptionsAlphabetically('database')
-
-                    it("hides the loading placeholder", function() {
-                        expect(this.view.$(".database .loading_text")).toHaveClass("hidden")
-                    });
-
-                    it("shows the 'new database' link", function() {
-                        expect(this.view.$(".database a.new")).not.toHaveClass("hidden")
-                    });
-
-                    context("creating a database", function() {
+                    context("when the response is empty for databases", function() {
                         beforeEach(function() {
-                            this.view.$(".database a.new").click();
+                            this.view.databases.loaded = true;
+                            this.view.databases.reset([]);
                         });
 
-                        it("hides the database selector", function() {
-                            expect(this.view.$(".database select")).toBeHidden();
-                        });
+                        itShowsUnavailable("database");
 
-                        it("shows the database name, save, and cancel link", function() {
-                            expect(this.view.$(".database .create_container")).not.toHaveClass("hidden")
-                            expect(this.view.$(".database .create_container a.cancel")).not.toHaveClass("hidden")
-                        });
-
-                        it("shows the schema section", function() {
-                            expect(this.view.$(".schema")).not.toHaveClass("hidden")
-                        });
-
-                        it("shows the schema name field and cancel link", function() {
-                            expect(this.view.$(".schema .create_container")).not.toHaveClass("hidden")
-                            expect(this.view.$(".schema .create_container a.cancel")).toBeHidden();
-                        });
-
-                        it("has a default schema name of 'public'", function() {
-                            expect(this.view.$(".schema input.name").val()).toBe('public');
-                        });
-
-                        itTriggersTheChangeEvent();
-
-                        context("clicking the cancel link", function() {
+                        describe("choosing another instance", function() {
                             beforeEach(function() {
-                                this.view.$(".database input.name").val("my_database").keyup();
-                                this.view.$(".database .cancel").click();
+                                this.view.$(".instance select").prop("selectedIndex", 2).change();
                             });
 
-                            it("hides the name, save, and cancel link", function() {
-                                expect(this.view.$(".database .create_container")).toHaveClass("hidden");
+                            itDisplaysLoadingPlaceholderFor('database');
+                        });
+
+                        describe("clicking 'new database'", function() {
+                            beforeEach(function() {
+                                this.view.$(".database a.new").click();
+                            });
+
+                            itShowsCreateFields('database');
+                        });
+                    });
+
+                    it("fetches the list of databases", function() {
+                        expect(this.server.requests[1].url).toMatch("/edc/instance/" + this.selectedInstance.get('id') + "/database");
+                    });
+
+                    context("when the database list fetch completes", function() {
+                        beforeEach(function() {
+                            this.view.databases.loaded = true;
+                            this.view.databases.reset([fixtures.database(), fixtures.database()]);
+                        });
+
+                        itShowsSelect('database');
+                        itPopulatesSelect('database');
+                        itDisplaysDefaultOptionFor('database');
+
+                        itSortsTheSelectOptionsAlphabetically('database')
+
+                        it("hides the loading placeholder", function() {
+                            expect(this.view.$(".database .loading_text")).toHaveClass("hidden")
+                        });
+
+                        it("shows the 'new database' link", function() {
+                            expect(this.view.$(".database a.new")).not.toHaveClass("hidden")
+                        });
+
+                        context("creating a database", function() {
+                            beforeEach(function() {
+                                this.view.$(".database a.new").click();
+                            });
+
+                            it("hides the database selector", function() {
+                                expect(this.view.$(".database select")).toBeHidden();
+                            });
+
+                            it("shows the database name, save, and cancel link", function() {
+                                expect(this.view.$(".database .create_container")).not.toHaveClass("hidden")
+                                expect(this.view.$(".database .create_container a.cancel")).not.toHaveClass("hidden")
+                            });
+
+                            it("shows the schema section", function() {
+                                expect(this.view.$(".schema")).not.toHaveClass("hidden")
+                            });
+
+                            it("shows the schema name field and cancel link", function() {
+                                expect(this.view.$(".schema .create_container")).not.toHaveClass("hidden")
+                                expect(this.view.$(".schema .create_container a.cancel")).toBeHidden();
+                            });
+
+                            it("has a default schema name of 'public'", function() {
+                                expect(this.view.$(".schema input.name").val()).toBe('public');
                             });
 
                             itTriggersTheChangeEvent();
 
-                            it("hides the schema section", function() {
-                                expect(this.view.$(".schema")).toHaveClass("hidden");
-                            });
-
-                            describe("choosing a database and then creating a schema", function() {
+                            context("clicking the cancel link", function() {
                                 beforeEach(function() {
-                                    var select = this.view.$(".database select");
-                                    select.prop("selectedIndex", 1);
-                                    select.change();
-                                    this.view.$(".schema a.new").click();
+                                    this.view.$(".database input.name").val("my_database").keyup();
+                                    this.view.$(".database .cancel").click();
                                 });
 
-                                it("shows the cancel link", function() {
-                                    expect(this.view.$(".schema a.cancel")).not.toHaveClass("hidden")
-                                });
-
-                                it("has no default schema name", function() {
-                                    expect(this.view.$(".schema input.name").val()).toBe("");
-                                });
-                            });
-                        });
-                    });
-
-                    context("choosing a database", function() {
-                        beforeEach(function() {
-                            var select = this.view.$(".database select");
-                            select.prop("selectedIndex", 1);
-                            select.change();
-                            this.selectedDatabase = this.view.databases.get(this.view.$('.database select option:selected').val());
-                        });
-
-                        itDisplaysLoadingPlaceholderFor('schema');
-
-                        it("fetches the list of databases", function() {
-                            expect(this.server.requests[2].url).toMatch("/edc/instance/" + this.selectedInstance.get('id') + "/database/" + this.selectedDatabase.get("id") + "/schema");
-                        });
-
-                        itShowsUnavailableTextWhenResponseIsEmptyFor('schema');
-
-                        context("when the schema list fetch completes", function() {
-                            beforeEach(function() {
-                                this.view.schemas.loaded = true;
-                                this.view.schemas.reset(fixtures.schema());
-                            });
-
-                            itShowsSelect("schema");
-                            itPopulatesSelect("schema");
-                            itDisplaysDefaultOptionFor('schema')
-
-                            itSortsTheSelectOptionsAlphabetically('schema');
-
-                            it("hides the loading placeholder", function() {
-                                expect(this.view.$(".schema .loading_text")).toHaveClass("hidden")
-                            });
-
-                            it("shows the 'new schema' link", function() {
-                                expect(this.view.$(".schema a.new")).not.toHaveClass("hidden")
-                            });
-
-                            context("creating a schema", function() {
-                                beforeEach(function() {
-                                    this.view.$(".schema a.new").click();
-                                });
-
-                                it("hides the schema selector", function() {
-                                    expect(this.view.$(".schema .unavailable")).toHaveClass("hidden");
-                                    expect(this.view.$(".schema .select_container")).toHaveClass("hidden");
-                                });
-
-                                it("hides the 'new schema' link", function() {
-                                    expect(this.view.$(".schema a.new")).toHaveClass("hidden");
-                                });
-
-                                it("shows the schema name and cancel link", function() {
-                                    expect(this.view.$(".schema .create_container")).not.toHaveClass("hidden")
-                                    expect(this.view.$(".schema .create_container a.cancel")).not.toHaveClass("hidden")
-                                });
-
-                                it("has no default schema name", function() {
-                                    expect(this.view.$(".schema input.name").val()).toBe("");
+                                it("hides the name, save, and cancel link", function() {
+                                    expect(this.view.$(".database .create_container")).toHaveClass("hidden");
                                 });
 
                                 itTriggersTheChangeEvent();
 
-                                context("clicking the cancel link", function() {
+                                it("hides the schema section", function() {
+                                    expect(this.view.$(".schema")).toHaveClass("hidden");
+                                });
+
+                                describe("choosing a database and then creating a schema", function() {
                                     beforeEach(function() {
-                                        this.view.$(".schema .cancel").click();
+                                        var select = this.view.$(".database select");
+                                        select.prop("selectedIndex", 1);
+                                        select.change();
+                                        this.view.$(".schema a.new").click();
+                                    });
+
+                                    it("shows the cancel link", function() {
+                                        expect(this.view.$(".schema a.cancel")).not.toHaveClass("hidden")
+                                    });
+
+                                    it("has no default schema name", function() {
+                                        expect(this.view.$(".schema input.name").val()).toBe("");
+                                    });
+                                });
+                            });
+                        });
+
+                        context("choosing a database", function() {
+                            beforeEach(function() {
+                                var select = this.view.$(".database select");
+                                select.prop("selectedIndex", 1);
+                                select.change();
+                                this.selectedDatabase = this.view.databases.get(this.view.$('.database select option:selected').val());
+                            });
+
+                            itDisplaysLoadingPlaceholderFor('schema');
+
+                            it("fetches the list of databases", function() {
+                                expect(this.server.requests[2].url).toMatch("/edc/instance/" + this.selectedInstance.get('id') + "/database/" + this.selectedDatabase.get("id") + "/schema");
+                            });
+
+                            itShowsUnavailableTextWhenResponseIsEmptyFor('schema');
+
+                            context("when the schema list fetch completes", function() {
+                                beforeEach(function() {
+                                    this.view.schemas.loaded = true;
+                                    this.view.schemas.reset(fixtures.schema());
+                                });
+
+                                itShowsSelect("schema");
+                                itPopulatesSelect("schema");
+                                itDisplaysDefaultOptionFor('schema')
+
+                                itSortsTheSelectOptionsAlphabetically('schema');
+
+                                it("hides the loading placeholder", function() {
+                                    expect(this.view.$(".schema .loading_text")).toHaveClass("hidden")
+                                });
+
+                                it("shows the 'new schema' link", function() {
+                                    expect(this.view.$(".schema a.new")).not.toHaveClass("hidden")
+                                });
+
+                                context("creating a schema", function() {
+                                    beforeEach(function() {
+                                        this.view.$(".schema a.new").click();
+                                    });
+
+                                    it("hides the schema selector", function() {
+                                        expect(this.view.$(".schema .unavailable")).toHaveClass("hidden");
+                                        expect(this.view.$(".schema .select_container")).toHaveClass("hidden");
+                                    });
+
+                                    it("hides the 'new schema' link", function() {
+                                        expect(this.view.$(".schema a.new")).toHaveClass("hidden");
+                                    });
+
+                                    it("shows the schema name and cancel link", function() {
+                                        expect(this.view.$(".schema .create_container")).not.toHaveClass("hidden")
+                                        expect(this.view.$(".schema .create_container a.cancel")).not.toHaveClass("hidden")
+                                    });
+
+                                    it("has no default schema name", function() {
+                                        expect(this.view.$(".schema input.name").val()).toBe("");
                                     });
 
                                     itTriggersTheChangeEvent();
 
-                                    it("shows the schema selector", function() {
-                                        expect(this.view.$(".schema .select_container")).not.toHaveClass("hidden")
+                                    context("clicking the cancel link", function() {
+                                        beforeEach(function() {
+                                            this.view.$(".schema .cancel").click();
+                                        });
+
+                                        itTriggersTheChangeEvent();
+
+                                        it("shows the schema selector", function() {
+                                            expect(this.view.$(".schema .select_container")).not.toHaveClass("hidden")
+                                        });
+
+                                        it("shows the 'new schema' link", function() {
+                                            expect(this.view.$(".schema a.new")).not.toHaveClass("hidden")
+                                        });
+
+                                        it("hides the schema name, and cancel link", function() {
+                                            expect(this.view.$(".schema .create_container")).toHaveClass("hidden");
+                                            expect(this.view.$(".schema .create_container a.cancel")).toBeHidden();
+                                        });
+
+                                        describe("when you click new database", function() {
+                                            beforeEach(function() {
+                                                this.view.$(".database a.new").click();
+                                            });
+
+                                            it("should set the default schema name to 'public'", function() {
+                                                expect(this.view.$(".schema input.name").val()).toBe("public");
+                                            });
+                                        });
+                                    });
+                                });
+
+                                context("choosing a schema", function() {
+                                    beforeEach(function() {
+                                        var select = this.view.$(".schema select");
+                                        select.prop("selectedIndex", 1);
+                                        select.change();
+                                        this.selectedSchema = this.view.schemas.get(this.view.$('.schema select option:selected').val());
                                     });
 
-                                    it("shows the 'new schema' link", function() {
-                                        expect(this.view.$(".schema a.new")).not.toHaveClass("hidden")
+                                    itTriggersTheChangeEvent();
+
+                                    context("un-choosing a schema", function() {
+                                        beforeEach(function() {
+                                            this.view.$(".schema select").prop("selectedIndex", 0).change();
+                                        });
+
+                                        itTriggersTheChangeEvent();
                                     });
 
-                                    it("hides the schema name, and cancel link", function() {
-                                        expect(this.view.$(".schema .create_container")).toHaveClass("hidden");
-                                        expect(this.view.$(".schema .create_container a.cancel")).toBeHidden();
-                                    });
-
-                                    describe("when you click new database", function() {
+                                    describe("clicking the 'new database' link", function() {
                                         beforeEach(function() {
                                             this.view.$(".database a.new").click();
                                         });
 
-                                        it("should set the default schema name to 'public'", function() {
-                                            expect(this.view.$(".schema input.name").val()).toBe("public");
-                                        });
-                                    });
-                                });
-                            });
-
-                            context("choosing a schema", function() {
-                                beforeEach(function() {
-                                    var select = this.view.$(".schema select");
-                                    select.prop("selectedIndex", 1);
-                                    select.change();
-                                    this.selectedSchema = this.view.schemas.get(this.view.$('.schema select option:selected').val());
-                                });
-
-                                itTriggersTheChangeEvent();
-
-                                context("un-choosing a schema", function() {
-                                    beforeEach(function() {
-                                        this.view.$(".schema select").prop("selectedIndex", 0).change();
+                                        itTriggersTheChangeEvent();
                                     });
 
-                                    itTriggersTheChangeEvent();
-                                });
-
-                                describe("clicking the 'new database' link", function() {
-                                    beforeEach(function() {
-                                        this.view.$(".database a.new").click();
-                                    });
-
-                                    itTriggersTheChangeEvent();
-                                });
-
-                                context("changing the database", function() {
-                                    beforeEach(function() {
-                                        var select = this.view.$(".database select");
-                                        select.prop("selectedIndex", 2);
-                                        select.change();
-                                    });
-
-                                    itShouldResetSelect('schema');
-
-                                    context("changing the instance", function() {
+                                    context("changing the database", function() {
                                         beforeEach(function() {
-                                            var select = this.view.$(".instance select");
+                                            var select = this.view.$(".database select");
                                             select.prop("selectedIndex", 2);
                                             select.change();
                                         });
 
-                                        itShouldResetSelect('database');
                                         itShouldResetSelect('schema');
+
+                                        context("changing the instance", function() {
+                                            beforeEach(function() {
+                                                var select = this.view.$(".instance select");
+                                                select.prop("selectedIndex", 2);
+                                                select.change();
+                                            });
+
+                                            itShouldResetSelect('database');
+                                            itShouldResetSelect('schema');
+                                        });
                                     });
-                                });
 
-                                context("unselecting the database", function() {
-                                    beforeEach(function() {
-                                        var select = this.view.$(".database select");
-                                        select.prop("selectedIndex", 0);
-                                        select.change();
-                                    });
-
-                                    itHidesSection('schema');
-
-                                    context("unselecting the instance", function() {
+                                    context("unselecting the database", function() {
                                         beforeEach(function() {
-                                            var select = this.view.$(".instance select");
+                                            var select = this.view.$(".database select");
                                             select.prop("selectedIndex", 0);
                                             select.change();
                                         });
 
-                                        itHidesSection('database');
+                                        itHidesSection('schema');
+
+                                        context("unselecting the instance", function() {
+                                            beforeEach(function() {
+                                                var select = this.view.$(".instance select");
+                                                select.prop("selectedIndex", 0);
+                                                select.change();
+                                            });
+
+                                            itHidesSection('database');
+                                        });
                                     });
                                 });
                             });
@@ -337,10 +347,28 @@ describe("chorus.views.SchemaPicker", function() {
                 });
             });
         });
-    });
+
+        context("when allowCreate is false", function() {
+            beforeEach(function() {
+                this.view = new chorus.views.SchemaPicker({ allowCreate : false });
+                this.view.render();
+                this.dialogContainer = $("<div class='dialog sandbox_new'></div>").append(this.view.el);
+                $('#jasmine_content').append(this.dialogContainer);
+            })
+
+            it("does not render creation markup", function() {
+                expect(this.view.$(".database a.new")).not.toExist();
+                expect(this.view.$(".database .create_container")).not.toExist();
+                expect(this.view.$(".schema a.new")).not.toExist();
+                expect(this.view.$(".schema .create_container")).not.toExist();
+            });
+        })
+    })
+
 
     describe("#fieldValues", function() {
         beforeEach(function() {
+            this.view = new chorus.views.SchemaPicker({ allowCreate : true });
             this.view.render();
             this.view.instances.reset([ fixtures.instance({ id: '4' }) ]);
             this.view.$(".instance select").val("4").change();

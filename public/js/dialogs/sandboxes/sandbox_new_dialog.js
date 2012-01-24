@@ -32,7 +32,7 @@
 
         createSubViews : function() {
             this.setMaxSize();
-            this.instanceMode = new ns.views.SchemaPicker();
+            this.instanceMode = new ns.views.SchemaPicker({allowCreate : true});
             this.instanceMode.bind("change", this.enableOrDisableSaveButton, this);
 
             this.standaloneMode = new ns.views.SandboxNewStandaloneMode();

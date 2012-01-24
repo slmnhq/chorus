@@ -1,73 +1,15 @@
 .dialog.sandbox_new {
-    $inner-width: 350px;
-
     width: 440px;
-
-    form > div {
-        width: $inner-width;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    a {
-        font-size: 13px;
-    }
 
     legend div {
         display: inline-block;
         margin: 0 8px;
     }
 
-    select {
-        display: block;
-        width: $inner-width;
-    }
-
-    .instance .header_container {
-        margin-top: 10px;
-    }
-
-    .header_container {
-        margin-top: 15px;
-        margin-bottom: 3px;
-
-        a {
-            float: right;
-            margin-top: 8px;
-        }
-    }
-
-    .unavailable {
-        @include font-normal-beta;
-    }
-
-    .create_container {
-        input {
-            margin: 0;
-            width: $inner-width;
-        }
-
-        a.cancel {
-            display: none;
-        }
-
-        &.show_cancel_link {
-            input {
-                width: 285px;
-            }
-
-            a.cancel {
-                display: inline;
-                float: right;
-                line-height: 28px;
-            }
-        }
-    }
-
     .size_and_max {
         line-height: 32px;
         vertical-align: middle;
-        
+
         input[name=size] {
             width: 100px;
             margin-right: 10px;

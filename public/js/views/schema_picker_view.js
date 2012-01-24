@@ -172,6 +172,12 @@
             });
 
             this.showSection(type, { loading: false, unavailable: (models.length === 0) });
+        },
+
+        additionalContext: function() {
+            return {
+                "allowCreate": this.options.allowCreate
+            }
         }
     });
 })(chorus, jQuery);

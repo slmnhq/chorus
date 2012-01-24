@@ -10,10 +10,16 @@
             "click input#another_schema": "otherSchemaSelected"
         },
 
+        subviews: {
+            ".schema_picker"   : "schemaPicker"
+        },
+
         setup : function() {
             this.sandbox = this.model.sandbox();
             this.sandbox.bind("loaded", this.sandboxLoaded, this);
             this.sandbox.fetch();
+
+            this.schemaPicker = new chorus.views.SchemaPicker();
         },
 
         sandboxLoaded : function() {
