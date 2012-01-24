@@ -4,7 +4,7 @@ describe("chorus.models.SchemaFunction", function() {
     })
     describe("#toString", function() {
         it("formats the string to put into the sql editor", function(){
-            expect(this.model.toString()).toBe('"aa"."fun"(Int elephant, Bool Arg2)');
+            expect(this.model.toString()).toBe('"aa"."fun"(Int elephant, Bool arg2)');
         })
     })
 })

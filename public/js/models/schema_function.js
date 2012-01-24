@@ -4,7 +4,7 @@
         toString : function() {
             var argNames = this.get('argNames');
             var functionArguments = _.map(this.get('argTypes'), function(argType, index) {
-                var argName = argNames[index] || "Arg" + (index + 1);
+                var argName = argNames[index] || "arg" + (index + 1);
                 return argType + ' ' + argName;
             });
 
