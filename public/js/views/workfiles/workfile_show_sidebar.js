@@ -49,6 +49,7 @@
                 }, this);
 
                 this.columnList.bind("back", function() {
+                    this.$("input.search").val("");
                     this.$(".database_dataset_list").removeClass("hidden");
                     this.$(".database_column_list").addClass("hidden");
                 }, this);
