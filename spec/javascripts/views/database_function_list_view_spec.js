@@ -59,12 +59,12 @@ describe("chorus.views.DatabaseFunctionList", function() {
 
                 context("when clicking the insert arrow", function() {
                     beforeEach(function() {
-                        spyOnEvent(this.view, "file:insertFunction");
+                        spyOnEvent(this.view, "file:insertText");
                         this.qtipElement.find("a").click()
                     })
 
-                    it("triggers a file:insertFunction with the functions string representation", function() {
-                        expect("file:insertFunction").toHaveBeenTriggeredOn(this.view, [this.view.functions.models[1].toString()]);
+                    it("triggers a file:insertText with the functions string representation", function() {
+                        expect("file:insertText").toHaveBeenTriggeredOn(this.view, [this.view.functions.models[1].toString()]);
                     })
                 })
             })

@@ -68,7 +68,7 @@
 
         bindSidebar : function() {
             if(this.model && this.model.isSql()) {
-              this.sidebar.functionList.forwardEvent("file:insertFunction", this.mainContent.content)
+              this.sidebar.functionList.forwardEvent("file:insertText", this.mainContent.content)
             }
         }
     });

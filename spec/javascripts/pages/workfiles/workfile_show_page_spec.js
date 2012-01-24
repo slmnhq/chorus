@@ -128,18 +128,18 @@ describe("chorus.pages.WorkfileShowPage", function() {
             });
         });
 
-        describe("when the sidebar triggers 'file:insertFunction'", function() {
+        describe("when the sidebar triggers 'file:insertText'", function() {
             beforeEach(function() {
                 this.page.sidebar.functionList = new chorus.views.Base();
                 this.page.render()
-                spyOnEvent(this.page.mainContent.content, 'file:insertFunction')
+                spyOnEvent(this.page.mainContent.content, 'file:insertText')
                 spyOn(this.page.model, 'isSql').andReturn(true)
                 this.page.sidebar.trigger("sidebar:loaded")
-                this.page.sidebar.functionList.trigger("file:insertFunction", "");
+                this.page.sidebar.functionList.trigger("file:insertText", "");
             })
 
             it("should relay the event to textContent", function() {
-                expect('file:insertFunction').toHaveBeenTriggeredOn(this.page.mainContent.content)
+                expect('file:insertText').toHaveBeenTriggeredOn(this.page.mainContent.content)
             })
         })
 

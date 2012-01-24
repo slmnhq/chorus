@@ -7,7 +7,7 @@
         setup : function() {
             this.bind("file:saveCurrent", this.replaceCurrentVersion);
             this.bind("file:createWorkfileNewVersion", this.createWorkfileNewVersion);
-            this.bind("file:insertFunction", this.insertFunction, this)
+            this.bind("file:insertText", this.insertFunction, this)
             this.model.bind("saveFailed", this.versionConflict, this)
         },
 

@@ -65,7 +65,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
             context("and the user clicks insert on a function", function() {
                 beforeEach(function() {
                     spyOn(this.view.editor, 'replaceSelection')
-                    this.view.trigger("file:insertFunction", "my awesome function");
+                    this.view.trigger("file:insertText", "my awesome function");
                 })
                 it("inserts the function", function() {
                     expect(this.view.editor.replaceSelection).toHaveBeenCalledWith("my awesome function");

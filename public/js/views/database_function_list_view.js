@@ -74,7 +74,7 @@
         insertFunction: function(cid, e) {
             e && e.preventDefault();
             var schemaFunction = this.functions.getByCid(cid)
-            this.trigger("file:insertFunction", schemaFunction.toString())
+            this.trigger("file:insertText", schemaFunction.toString())
         }
 
     });

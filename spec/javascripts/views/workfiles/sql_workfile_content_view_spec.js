@@ -47,10 +47,10 @@ describe("chorus.views.SqlWorkfileContentView", function() {
             expect("file:createWorkfileNewVersion").toHaveBeenTriggeredOn(this.view.textContent);
         });
 
-        it("forwards file:insertFunction events to the textContent subview", function() {
-            spyOnEvent(this.view.textContent, "file:insertFunction");
-            this.view.trigger("file:insertFunction", "");
-            expect("file:insertFunction").toHaveBeenTriggeredOn(this.view.textContent)
+        it("forwards file:insertText events to the textContent subview", function() {
+            spyOnEvent(this.view.textContent, "file:insertText");
+            this.view.trigger("file:insertText", "");
+            expect("file:insertText").toHaveBeenTriggeredOn(this.view.textContent)
         });
     })
 
