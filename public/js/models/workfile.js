@@ -39,6 +39,7 @@
         content: function(newContent) {
             if (arguments.length) {
                 this.get("versionInfo").content = newContent;
+                this.trigger("change");
             } else {
                 return this.get("versionInfo").content;
             }
@@ -59,7 +60,7 @@
         },
 
         createDraft : function() {
-            var draft = new ns.models.Draft({id: this.get("id"), workspaceId : this.get("workspaceId"), draftInfo: {content : this.content()}})
+            var draft = new ns.models.Draft({workfileId: this.get("id"), workspaceId : this.get("workspaceId"), draftInfo: {content : this.content()}})
             draft.bind("saved", function() {
                 this.isDraft = true;
                 this.set({ hasDraft: true }, { silent : true });

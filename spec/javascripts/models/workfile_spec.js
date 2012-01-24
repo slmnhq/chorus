@@ -142,7 +142,7 @@ describe("chorus.models.Workfile", function() {
         });
         it("sets the required attributes", function() {
             var draft = this.workfile.createDraft();
-            expect(draft.get("id")).toBe(this.workfile.get('id'));
+            expect(draft.get("workfileId")).toBe(this.workfile.get('id'));
             expect(draft.get("workspaceId")).toBe(this.workfile.get('workspaceId'));
             expect(draft.get("draftInfo").content).toBe(this.workfile.content());
         });

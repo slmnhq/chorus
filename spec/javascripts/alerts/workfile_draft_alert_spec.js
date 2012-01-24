@@ -1,6 +1,6 @@
 describe("chorus.alerts.WorkfileDraft", function() {
     beforeEach(function() {
-        this.workfile = fixtures.draft();;
+        this.workfile = fixtures.workfile();
         this.alert = new chorus.alerts.WorkfileDraft({ model : this.workfile });
         this.alert.render();
     });
@@ -12,18 +12,18 @@ describe("chorus.alerts.WorkfileDraft", function() {
         })
 
         it("fetches the draft workfile", function() {
-            expect(this.server.requests[0].url).toBe(this.workfile.url())
+            expect(this.server.requests[0].url).toBe(this.workfile.createDraft().url())
         })
 
         describe("when the fetch succeeds", function() {
             beforeEach(function() {
                 this.changeSpy = jasmine.createSpy();
                 this.alert.model.bind('change', this.changeSpy);
-                this.server.completeFetchFor(this.workfile);
+                this.server.completeFetchFor(this.workfile.createDraft());
             })
 
             it("sets the page model content to the draft content", function() {
-                expect(this.alert.model.get("content")).toBe(this.workfile.get('draftInfo').content);
+                expect(this.alert.model.content()).toBe(this.workfile.createDraft().get("draftInfo").content);
             })
 
             it("triggers change on the page model", function() {
@@ -53,7 +53,7 @@ describe("chorus.alerts.WorkfileDraft", function() {
 
         context("and the fetch returns", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.workfile);
+                this.server.completeFetchFor(this.workfile.createDraft());
             })
 
             it("deletes the draft", function() {

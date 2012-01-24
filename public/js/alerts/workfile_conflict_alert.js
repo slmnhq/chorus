@@ -24,7 +24,7 @@
         },
 
         discardChanges : function() {
-            var draft = new chorus.models.Draft({workspaceId : this.model.get("workspaceId"), id: this.model.get("id")});
+            var draft = new chorus.models.Draft({workspaceId : this.model.get("workspaceId"), workfileId: this.model.get("id")});
             draft.bind("change", function(draft) {
                 draft.destroy();
             }, this);
