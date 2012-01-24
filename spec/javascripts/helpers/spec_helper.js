@@ -17,6 +17,7 @@
         'database_column_list',
         'database_function_list',
         'database_dataset_list',
+        'dataset_list',
         'default_content_header',
         'header',
         'image_upload',
