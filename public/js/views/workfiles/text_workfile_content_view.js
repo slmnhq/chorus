@@ -73,7 +73,7 @@
         saveDraft : function() {
             this.stopTimer();
             this.trigger("autosaved");
-            this.model.set({"content" : this.editor.getValue()}, {silent: true});
+            this.model.content(this.editor.getValue(), {silent: true});
             var overrides = {}
             if(this.model.get("hasDraft")) {
                 overrides.method = 'update'
@@ -89,7 +89,7 @@
         replaceCurrentVersion : function() {
             this.stopTimer();
             this.cursor = this.editor.getCursor();
-            this.model.set({"content" : this.editor.getValue()}, {silent : true});
+            this.model.content(this.editor.getValue(), {silent: true});
             this.model.save({}, {silent : true}); // Need to save silently because content details and content share the same models, and we don't want to render content details
             this.render();
         },
@@ -97,7 +97,7 @@
         createWorkfileNewVersion : function() {
             this.stopTimer();
             this.cursor = this.editor.getCursor();
-            this.model.set({"content" : this.editor.getValue()}, {silent : true});
+            this.model.content(this.editor.getValue(), {silent: true});
 
             this.dialog = new chorus.dialogs.WorkfileNewVersion({ launchElement : this, pageModel : this.model, pageCollection : this.collection });
             this.dialog.launchModal(); // we need to manually create the dialog instead of using data-dialog because qtip is not part of page

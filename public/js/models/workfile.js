@@ -36,10 +36,10 @@
             })
         },
 
-        content: function(newContent) {
+        content: function(newContent, options) {
             if (arguments.length) {
                 this.get("versionInfo").content = newContent;
-                this.trigger("change");
+                this.set({content : newContent}, options);
             } else {
                 return this.get("versionInfo").content;
             }

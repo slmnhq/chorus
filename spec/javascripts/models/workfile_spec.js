@@ -318,11 +318,37 @@ describe("chorus.models.Workfile", function() {
     describe("#content", function() {
         context("with an argument", function() {
             beforeEach(function() {
+                spyOnEvent(this.model, "change");
                 this.model.content("i am not old content")
             });
 
             it("sets the content", function() {
                 expect(this.model.get("versionInfo").content).toBe('i am not old content');
+            })
+
+            it("triggers change", function() {
+                expect("change").toHaveBeenTriggeredOn(this.model);
+            });
+            it("sets the content in the model", function() {
+                expect(this.model.get("content")).toBe('i am not old content');
+            })
+        });
+
+        context("with silent: true", function() {
+            beforeEach(function() {
+                spyOnEvent(this.model, "change");
+                this.model.content("i am not old content", {silent : true})
+            });
+
+            it("sets the content", function() {
+                expect(this.model.get("versionInfo").content).toBe('i am not old content');
+            })
+
+            it("does not trigger change", function() {
+                expect("change").not.toHaveBeenTriggeredOn(this.model);
+            });
+            it("sets the content in the model", function() {
+                expect(this.model.get("content")).toBe('i am not old content');
             })
         });
 

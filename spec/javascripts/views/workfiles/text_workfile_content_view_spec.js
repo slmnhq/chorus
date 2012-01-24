@@ -1,7 +1,7 @@
 describe("chorus.views.TextWorkfileContentView", function() {
     beforeEach(function() {
-        this.textfile = fixtures.textWorkfile({ content: "select * from foos where bar_id = 1;" });
-
+        this.textfile = fixtures.textWorkfile();
+        this.textfile.content("select * from foos where bar_id = 1;")
         this.view = new chorus.views.TextWorkfileContent({model: this.textfile});
         this.saveInterval = this.view.saveInterval;
         $("#jasmine_content").append(this.view.el);
@@ -38,7 +38,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
         });
 
         it("displays the text file content", function() {
-            expect(this.view.editor.getValue()).toBe(this.textfile.get("content"));
+            expect(this.view.editor.getValue()).toBe(this.textfile.content());
         });
 
         it("uses the 'text/plain' mode for plain text files", function() {
@@ -281,7 +281,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
         });
 
         it("updates the model", function() {
-            expect(this.view.model.get("content")).toBe("new content");
+            expect(this.view.model.content()).toBe("new content");
         });
 
         it("launches save workfile as new version dialog", function() {
