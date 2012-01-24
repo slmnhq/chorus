@@ -1,7 +1,6 @@
 describe("ImageWorkfileContent", function() {
     beforeEach(function() {
-        fixtures.model = "Workfile"
-        this.model = fixtures.modelFor("image")
+        this.model = fixtures.imageWorkfile();
         this.view = new chorus.views.ImageWorkfileContent({ model : this.model })
     });
 
@@ -13,7 +12,7 @@ describe("ImageWorkfileContent", function() {
         it("creates an image tag referencing the workfile", function() {
             var img = this.view.$("img")
             expect(img).toExist();
-            expect(img).toHaveAttr("src", "/edc/workspace/10000/workfile/10035/file/1322591475139_3804")
+            expect(img).toHaveAttr("src", "/edc/workspace/" + this.model.get("workspaceId") + "/workfile/" + this.model.get("id") + "/file/" + this.model.get("versionInfo").versionFileId)
         })
     })
 });

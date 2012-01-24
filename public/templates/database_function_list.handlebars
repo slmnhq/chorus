@@ -1,13 +1,17 @@
 <input class="search" />
-<div class="schema_name">{{t "schema.functions.search_in" schemaName=schemaName}}</div>
+<div class="context">{{t "schema.functions.search_in" schemaName=schemaName}}</div>
 {{#if models.length}}
-    <ul class="functions list">
+    <ul class="list">
         {{#each models}}
-            <li title="{{functionName}}">{{functionName}}
+            <li title="{{functionName}}">
                 <div class="insert_hover hidden">
                     <div class="arrow_left"/><div class="arrow_left_filling"/>
                     <a class="insert_link" href="#">{{t "schema.functions.insert"}}</a>
                 </div>
+                <span class="spacer left"/>
+                <img src="images/function.png">
+                <div class="name">{{functionName}}</div>
+                <span class="spacer right"/>
             </li>
         {{/each}}
     </ul>

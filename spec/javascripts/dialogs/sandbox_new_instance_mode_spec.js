@@ -47,7 +47,7 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
             });
 
             it("hides the loading placeholder", function() {
-                expect(this.view.$(".instance .loading_text")).not.toBeVisible();
+                expect(this.view.$(".instance .loading_text")).toHaveClass("hidden")
             })
 
             context("choosing an instance", function() {
@@ -101,11 +101,11 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
                     itSortsTheSelectOptionsAlphabetically('database')
 
                     it("hides the loading placeholder", function() {
-                        expect(this.view.$(".database .loading_text")).not.toBeVisible();
+                        expect(this.view.$(".database .loading_text")).toHaveClass("hidden")
                     });
 
                     it("shows the 'new database' link", function() {
-                        expect(this.view.$(".database a.new")).toBeVisible();
+                        expect(this.view.$(".database a.new")).not.toHaveClass("hidden")
                     });
 
                     context("creating a database", function() {
@@ -118,16 +118,16 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
                         });
 
                         it("shows the database name, save, and cancel link", function() {
-                            expect(this.view.$(".database .create_container")).toBeVisible();
-                            expect(this.view.$(".database .create_container a.cancel")).toBeVisible();
+                            expect(this.view.$(".database .create_container")).not.toHaveClass("hidden")
+                            expect(this.view.$(".database .create_container a.cancel")).not.toHaveClass("hidden")
                         });
 
                         it("shows the schema section", function() {
-                            expect(this.view.$(".schema")).toBeVisible();
+                            expect(this.view.$(".schema")).not.toHaveClass("hidden")
                         });
 
                         it("shows the schema name field and cancel link", function() {
-                            expect(this.view.$(".schema .create_container")).toBeVisible();
+                            expect(this.view.$(".schema .create_container")).not.toHaveClass("hidden")
                             expect(this.view.$(".schema .create_container a.cancel")).toBeHidden();
                         });
 
@@ -144,23 +144,13 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
                             });
 
                             it("hides the name, save, and cancel link", function() {
-                                expect(this.view.$(".database .create_container")).toBeHidden();
-                                expect(this.view.$(".database .create_container a.cancel")).toBeHidden();
+                                expect(this.view.$(".database .create_container")).toHaveClass("hidden");
                             });
 
                             itTriggersTheChangeEvent();
 
                             it("hides the schema section", function() {
-                                expect(this.view.$(".schema")).toBeHidden();
-                            });
-
-                            it("hides the 'new schema' link", function() {
-                                expect(this.view.$(".schema a.new")).toBeHidden();
-                            });
-
-                            it("hides the schema name field and cancel link", function() {
-                                expect(this.view.$(".schema .create_container")).toBeHidden();
-                                expect(this.view.$(".schema .create_container a.cancel")).toBeHidden();
+                                expect(this.view.$(".schema")).toHaveClass("hidden");
                             });
 
                             describe("choosing a database and then creating a schema", function() {
@@ -172,7 +162,7 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
                                 });
 
                                 it("shows the cancel link", function() {
-                                    expect(this.view.$(".schema a.cancel")).toBeVisible();
+                                    expect(this.view.$(".schema a.cancel")).not.toHaveClass("hidden")
                                 });
 
                                 it("has no default schema name", function() {
@@ -211,11 +201,11 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
                             itSortsTheSelectOptionsAlphabetically('schema');
 
                             it("hides the loading placeholder", function() {
-                                expect(this.view.$(".schema .loading_text")).not.toBeVisible();
+                                expect(this.view.$(".schema .loading_text")).toHaveClass("hidden")
                             });
 
                             it("shows the 'new schema' link", function() {
-                                expect(this.view.$(".schema a.new")).toBeVisible();
+                                expect(this.view.$(".schema a.new")).not.toHaveClass("hidden")
                             });
 
                             context("creating a schema", function() {
@@ -224,17 +214,17 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
                                 });
 
                                 it("hides the schema selector", function() {
-                                    expect(this.view.$(".schema .unavailable")).toBeHidden();
-                                    expect(this.view.$(".schema .select_container")).toBeHidden();
+                                    expect(this.view.$(".schema .unavailable")).toHaveClass("hidden");
+                                    expect(this.view.$(".schema .select_container")).toHaveClass("hidden");
                                 });
 
                                 it("hides the 'new schema' link", function() {
-                                    expect(this.view.$(".schema a.new")).toBeHidden();
+                                    expect(this.view.$(".schema a.new")).toHaveClass("hidden");
                                 });
 
                                 it("shows the schema name and cancel link", function() {
-                                    expect(this.view.$(".schema .create_container")).toBeVisible();
-                                    expect(this.view.$(".schema .create_container a.cancel")).toBeVisible();
+                                    expect(this.view.$(".schema .create_container")).not.toHaveClass("hidden")
+                                    expect(this.view.$(".schema .create_container a.cancel")).not.toHaveClass("hidden")
                                 });
 
                                 it("has no default schema name", function() {
@@ -251,15 +241,15 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
                                     itTriggersTheChangeEvent();
 
                                     it("shows the schema selector", function() {
-                                        expect(this.view.$(".schema .select_container")).toBeVisible();
+                                        expect(this.view.$(".schema .select_container")).not.toHaveClass("hidden")
                                     });
 
                                     it("shows the 'new schema' link", function() {
-                                        expect(this.view.$(".schema a.new")).toBeVisible();
+                                        expect(this.view.$(".schema a.new")).not.toHaveClass("hidden")
                                     });
 
                                     it("hides the schema name, and cancel link", function() {
-                                        expect(this.view.$(".schema .create_container")).toBeHidden();
+                                        expect(this.view.$(".schema .create_container")).toHaveClass("hidden");
                                         expect(this.view.$(".schema .create_container a.cancel")).toBeHidden();
                                     });
 
@@ -393,14 +383,14 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
 
     function itDisplaysLoadingPlaceholderFor(type) {
         it("displays the loading placeholder for " + type, function() {
-            expect(this.view.$("." + type + " .loading_text")).toBeVisible();
-            expect(this.view.$("." + type + " select")).not.toBeVisible();
-            expect(this.view.$('.' + type + ' label ')).toBeVisible();
-            expect(this.view.$('.' + type + ' .unavailable')).toBeHidden();
+            expect(this.view.$("." + type + " .loading_text")).not.toHaveClass("hidden")
+            expect(this.view.$("." + type + " select")).toBeHidden();
+            expect(this.view.$('.' + type + ' label ')).not.toHaveClass("hidden")
+            expect(this.view.$('.' + type + ' .unavailable')).toHaveClass("hidden")
 
             // Remove when adding "register a new instance" story
             if (type != "instance") {
-                expect(this.view.$('.' + type + ' a')).toBeVisible();
+                expect(this.view.$('.' + type + ' a')).not.toHaveClass("hidden")
             }
         });
     }
@@ -422,10 +412,7 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
 
     function itHidesSection(type) {
         it("should hide the " + type + " section", function() {
-            expect(this.view.$('.' + type + ' label')).toBeHidden();
-            expect(this.view.$('.' + type + ' select ').val()).toBeFalsy();
-            expect(this.view.$('.' + type + ' select')).toBeHidden();
-            expect(this.view.$('.' + type + ' a')).toBeHidden();
+            expect(this.view.$('.' + type)).toHaveClass("hidden");
         });
     }
 
@@ -439,15 +426,15 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
         it("should show the " + type + " select and hide the 'unavailable' message", function() {
             expect(this.view.$('.' + type + ' label ')).not.toHaveClass("hidden");
             expect(this.view.$('.' + type + ' select option').length).toBeGreaterThan(1);
-            expect(this.view.$('.' + type + ' select')).toBeVisible();
+            expect(this.view.$('.' + type + ' select')).not.toHaveClass("hidden")
         });
     }
 
     function itShowsUnavailable(type) {
         it("should show the 'unavailable' text for the " + type + " section and hide the select", function() {
-            expect(this.view.$('.' + type + ' .unavailable')).toBeVisible();
-            expect(this.view.$('.' + type + ' .loading_text')).toBeHidden();
-            expect(this.view.$('.' + type + ' .select_container')).not.toBeVisible();
+            expect(this.view.$('.' + type + ' .unavailable')).not.toHaveClass("hidden")
+            expect(this.view.$('.' + type + ' .loading_text')).toHaveClass("hidden");
+            expect(this.view.$('.' + type + ' .select_container')).toHaveClass("hidden")
         });
     }
 
@@ -464,10 +451,10 @@ describe("chorus.dialogs.SandboxNewInstanceMode", function() {
 
     function itShowsCreateFields(type) {
         it("shows the fields to create a new " + type, function() {
-            expect(this.view.$(".create_container")).toBeVisible();
-            expect(this.view.$('.' + type + ' .unavailable')).toBeHidden();
-            expect(this.view.$('.' + type + ' .loading_text')).toBeHidden();
-            expect(this.view.$('.' + type + ' .select_container')).toBeHidden();
+            expect(this.view.$(".create_container")).not.toHaveClass("hidden")
+            expect(this.view.$('.' + type + ' .unavailable')).toHaveClass("hidden")
+            expect(this.view.$('.' + type + ' .loading_text')).toHaveClass("hidden")
+            expect(this.view.$('.' + type + ' .select_container')).toHaveClass("hidden")
         });
     }
 

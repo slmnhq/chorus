@@ -47,9 +47,7 @@
         },
 
         modelChanged : function() {
-            var isOldVersion = (this.model.get("versionNum") != this.model.get("latestVersionNum"));
-
-            if (!isOldVersion && this.model.get("hasDraft") && !this.model.isDraft) {
+            if (this.model.isLatestVersion() && this.model.get("hasDraft") && !this.model.isDraft) {
                 var alert = new chorus.alerts.WorkfileDraft({model : this.model});
                 alert.launchModal();
             }

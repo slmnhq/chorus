@@ -36,6 +36,7 @@
                     border-right: 1px solid $results-console-border-color;
                     padding-right: $padding-x;
                     margin-left: 25px;
+                    display: inline-block;
 
                     div[aria-role=progressbar] {
                         left: -65px;

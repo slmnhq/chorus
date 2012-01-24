@@ -563,9 +563,23 @@ describe("chorus.views.base", function() {
         describe("rendering the loading section", function() {
             context("when displayLoadingSection returns true", function() {
                 beforeEach(function() {
+                    this.view.context = jasmine.createSpy('context');
+                    this.view.subviews = {".asdf": "fdsa"};
+                    spyOn(this.view, 'getSubview').andCallThrough();
                     this.view.displayLoadingSection = function() {
                         return true;
                     }
+                });
+
+                it("does not call context", function() {
+                    this.view.render();
+                    expect(this.view.context).not.toHaveBeenCalled();
+                });
+
+                it("does not render regular subviews", function() {
+                    this.view.render();
+                    expect(this.view.getSubview).toHaveBeenCalledWith('makeLoadingSectionView');
+                    expect(this.view.getSubview.callCount).toBe(1);
                 });
 
                 it("renders the loading template", function() {

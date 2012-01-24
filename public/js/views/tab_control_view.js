@@ -50,8 +50,8 @@
 
         toggleTabbedArea : function() {
             var element = $('.tabbed_area').find(this.selectedTab().selector);
-            element.siblings().hide();
-            element.show();
+            element.siblings().addClass("hidden");
+            element.removeClass("hidden");
         }
     });
 })(jQuery, chorus.views);

@@ -22,7 +22,7 @@
             this.server.respond();
         };
 
-        this.failSaveFor = function(model, message, overrides){
+        this.failSaveFor = function(model, message, overrides) {
             var response = {
                 status: "fail",
                 message: [message],
@@ -320,137 +320,6 @@
             },
 
             Workfile : {
-                fetch : {
-                    "message":[],
-                    "status":"ok",
-                    "requestId":17,
-                    "resource":[
-                        {
-                            "createdStamp":"2011-11-22",
-                            "lastUpdatedStamp":"2011-11-22 14:40:42.11",
-                            "modifiedBy":"edcadmin",
-                            "ownerFullName":"EDC Admin",
-                            "imageId":null,
-                            "id":"10020",
-                            "fileName":"who.sql",
-                            "mimeType":"text/x-sql",
-                            "fileType":"sql",
-                            "isBinary":false,
-                            "workspaceId":"10000",
-                            "source":"empty",
-                            "owner":"edcadmin",
-                            "description":null,
-                            "versionNum": 1,
-                            "latestVersionNum":1,
-                            "versionFileId":"1111_1111",
-                            "isDeleted":false,
-                            "modifiedByFirstName":"EDC",
-                            "modifiedByLastName":"Admin",
-                            "modifiedById":"10010",
-                            "commentCount":2,
-                            "recentComments" : [
-                                {
-                                    "author" : {
-                                        id : "InitialUser",
-                                        lastName : "Admin",
-                                        firstName : "EDC"
-                                    },
-                                    "comments" : [],
-                                    "id" : 10303,
-                                    "text" : "I am loving commenting",
-                                    "timestamp" : "2011-11-22 14:40:42",
-                                    "type" : "NOTE"
-                                }
-                            ]
-                        }
-                    ],
-                    "method":"GET",
-                    "resourcelink":"/edc/workspace/10000/workfile/10020",
-                    "pagination":null,
-                    "version":"0.1"
-                },
-
-                fetchWithDraft : {
-                    "message":[],
-                    "status":"ok",
-                    "requestId":17,
-                    "resource":[
-                        {
-                            "content" : "draft content",
-                            "createdStamp":"2011-11-22",
-                            "lastUpdatedStamp":"2011-11-22 14:40:42.11",
-                            "modifiedBy":"edcadmin",
-                            "ownerFullName":"EDC Admin",
-                            "hasDraft" : true,
-                            "imageId":null,
-                            "id":"10020",
-                            "fileName":"who.sql",
-                            "mimeType":"text/x-sql",
-                            "fileType":"sql",
-                            "isBinary":false,
-                            "workspaceId":"10000",
-                            "source":"empty",
-                            "owner":"edcadmin",
-                            "description":null,
-                            "latestVersionNum":1,
-                            "versionNum":1,
-                            "versionFileId":"1111_1111",
-                            "isDeleted":false,
-                            "modifiedByFirstName":"EDC",
-                            "modifiedByLastName":"Admin",
-                            "modifiedById":"10010",
-                            "commentCount":2,
-                            "recentComments" : [
-                                {
-                                    "author" : {
-                                        id : "InitialUser",
-                                        lastName : "Admin",
-                                        firstName : "EDC"
-                                    },
-                                    "comments" : [],
-                                    "id" : 10303,
-                                    "text" : "I am loving commenting",
-                                    "timestamp" : "2011-11-22 14:40:42",
-                                    "type" : "NOTE"
-                                }
-                            ]
-                        }
-                    ],
-                    "method":"GET",
-                    "resourcelink":"/edc/workspace/10000/workfile/10020",
-                    "pagination":null,
-                    "version":"0.1"
-                },
-                copy : {
-                    "message":[],
-                    "status":"ok",
-                    "requestId":1137,
-                    "resource":[
-                        {
-                            "fileName":"test.sql",
-                            "mimeType":"text/x-sql",
-                            "fileType":"sql",
-                            "isBinary":false,
-                            "workspaceId":"10010",
-                            "source":"chorus",
-                            "owner":"edcadmin",
-                            "description":"null",
-                            "latestVersionNum":1,
-                            "isDeleted":false,
-                            "modifiedBy":"edcadmin",
-                            "id":"10026",
-                            "lastUpdatedTxStamp":"2011-11-28 13:47:42.245",
-                            "createdTxStamp":"2011-11-28 13:47:42.245",
-                            "lastUpdatedStamp":"2011-11-28 13:47:42.253",
-                            "createdStamp":"2011-11-28 13:47:42.253"
-                        }
-                    ],
-                    "method":"POST",
-                    "resourcelink":"/edc/workspace/10010/workfile",
-                    "pagination":null,
-                    "version":"0.1"
-                },
-
                 copyFailed : {
                     "message":[
                         {
@@ -468,348 +337,6 @@
                     "resourcelink":"/edc/workspace/10010/workfile",
                     "pagination":null,
                     "version":"0.1"
-                },
-
-                image : {
-                    "message": [],
-                    "status": "ok",
-                    "requestId": 1913,
-                    "resource": [
-                        {
-                            "id": "10035",
-                            "fileName": "avatar.jpg",
-                            "mimeType": "image/jpeg",
-                            "fileType": "N/A",
-                            "isBinary": true,
-                            "workspaceId": "10000",
-                            "source": "fs",
-                            "owner": "edcadmin",
-                            "description": null,
-                            "latestVersionNum": 1,
-                            "isDeleted": false,
-                            "modifiedBy": "edcadmin",
-                            "lastUpdatedStamp": "2011-11-29 10:31:15.153",
-                            "lastUpdatedTxStamp": "2011-11-29 10:31:15.143",
-                            "createdStamp": "2011-11-29 10:31:15.153",
-                            "createdTxStamp": "2011-11-29 10:31:15.143",
-                            "versionFileId": "1322591475139_3804",
-                            "versionNum": "1",
-                            "versionOwner": "edcadmin",
-                            "hasDraft": false,
-                            "sandboxId": null
-                        }
-                    ],
-                    "method": "GET",
-                    "resourcelink": "/edc/workspace/10000/workfile/10035",
-                    "pagination": null,
-                    "version": "0.1"
-                },
-
-                fetchText : {
-                    "message":[],
-                    "status":"ok",
-                    "requestId":449,
-                    "resource":[
-
-                        {
-                            "id":"10004",
-                            "fileName":"editabletextfile.txt",
-                            "mimeType":"text/plain",
-                            "fileType":"txt",
-                            "isBinary":false,
-                            "workspaceId":"10001",
-                            "source":"fs",
-                            "owner":"edcadmin",
-                            "description":null,
-                            "latestVersionNum":1,
-                            "isDeleted":false,
-                            "modifiedBy":"edcadmin",
-                            "lastUpdatedStamp":"2011-11-29 10:46:03.152",
-                            "lastUpdatedTxStamp":"2011-11-29 10:46:03.145",
-                            "createdStamp":"2011-11-29 10:46:03.152",
-                            "createdTxStamp":"2011-11-29 10:46:03.145",
-                            "versionFileId":"1322592363143_7126",
-                            "versionNum":"1",
-                            "versionOwner":"edcadmin",
-                            "content":"This is a text file.\n\nThis is the 3rd line.\n\nReally really long line.  Really really long line.  Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.",
-                            "editable":true,
-                            "hasDraft":false,
-                            "sandboxId":null
-                        }
-                    ],
-                    "method":"GET",
-                    "resourcelink":"/edc/workspace/10001/workfile/10004",
-                    "pagination":null,
-                    "version":"0.1"
-                }
-            },
-
-            Draft : {
-                fetch : {
-                    "message":[],
-                    "status":"ok",
-                    "requestId":17,
-                    "resource":[
-                        {
-                            id : "10001"
-                        }
-                    ],
-                    "method":"GET",
-                    "resourcelink":"/edc/workspace/10000/workfile/10020/draft",
-                    "pagination":null,
-                    "version":"0.1"
-                },
-
-                fetchWithDraft : {
-                    "message":[],
-                    "status":"ok",
-                    "requestId":17,
-                    "resource":[
-                        {
-                            "content" : "draft content",
-                            "createdStamp":"2011-11-22",
-                            "lastUpdatedStamp":"2011-11-22 14:40:42.11",
-                            "modifiedBy":"edcadmin",
-                            "ownerFullName":"EDC Admin",
-                            "hasDraft" : true,
-                            "imageId":null,
-                            "id":"10020",
-                            "fileName":"who.sql",
-                            "mimeType":"text/x-sql",
-                            "fileType":"sql",
-                            "isBinary":false,
-                            "workspaceId":"10000",
-                            "source":"empty",
-                            "owner":"edcadmin",
-                            "description":null,
-                            "latestVersionNum":1,
-                            "versionFileId":"1111_1111",
-                            "isDeleted":false,
-                            "modifiedByFirstName":"EDC",
-                            "modifiedByLastName":"Admin",
-                            "modifiedById":"10010",
-                            "commentCount":2,
-                            "recentComments" : [
-                                {
-                                    "author" : {
-                                        id : "InitialUser",
-                                        lastName : "Admin",
-                                        firstName : "EDC"
-                                    },
-                                    "comments" : [],
-                                    "id" : 10303,
-                                    "text" : "I am loving commenting",
-                                    "timestamp" : "2011-11-22 14:40:42",
-                                    "type" : "NOTE"
-                                }
-                            ]
-                        }
-                    ],
-                    "method":"GET",
-                    "resourcelink":"/edc/workspace/10000/workfile/10020",
-                    "pagination":null,
-                    "version":"0.1"
-                },
-                copy : {
-                    "message":[],
-                    "status":"ok",
-                    "requestId":1137,
-                    "resource":[
-                        {
-                            "fileName":"test.sql",
-                            "mimeType":"text/x-sql",
-                            "fileType":"sql",
-                            "isBinary":false,
-                            "workspaceId":"10010",
-                            "source":"chorus",
-                            "owner":"edcadmin",
-                            "description":"null",
-                            "latestVersionNum":1,
-                            "isDeleted":false,
-                            "modifiedBy":"edcadmin",
-                            "id":"10026",
-                            "lastUpdatedTxStamp":"2011-11-28 13:47:42.245",
-                            "createdTxStamp":"2011-11-28 13:47:42.245",
-                            "lastUpdatedStamp":"2011-11-28 13:47:42.253",
-                            "createdStamp":"2011-11-28 13:47:42.253"
-                        }
-                    ],
-                    "method":"POST",
-                    "resourcelink":"/edc/workspace/10010/workfile",
-                    "pagination":null,
-                    "version":"0.1"
-                },
-
-                copyFailed : {
-                    "message":[
-                        {
-                            "message":"Workspace already has a workfile with this name. Specify a different name.",
-                            "msgcode":"E_14_0013",
-                            "description":null,
-                            "severity":"error",
-                            "msgkey":"WORKFILE.FILENAME_EXISTS"
-                        }
-                    ],
-                    "status":"fail",
-                    "requestId":1156,
-                    "resource":[],
-                    "method":"POST",
-                    "resourcelink":"/edc/workspace/10010/workfile",
-                    "pagination":null,
-                    "version":"0.1"
-                },
-
-                image : {
-                    "message": [],
-                    "status": "ok",
-                    "requestId": 1913,
-                    "resource": [
-                        {
-                            "id": "10035",
-                            "fileName": "avatar.jpg",
-                            "mimeType": "image/jpeg",
-                            "fileType": "N/A",
-                            "isBinary": true,
-                            "workspaceId": "10000",
-                            "source": "fs",
-                            "owner": "edcadmin",
-                            "description": null,
-                            "latestVersionNum": 1,
-                            "isDeleted": false,
-                            "modifiedBy": "edcadmin",
-                            "lastUpdatedStamp": "2011-11-29 10:31:15.153",
-                            "lastUpdatedTxStamp": "2011-11-29 10:31:15.143",
-                            "createdStamp": "2011-11-29 10:31:15.153",
-                            "createdTxStamp": "2011-11-29 10:31:15.143",
-                            "versionFileId": "1322591475139_3804",
-                            "versionNum": "1",
-                            "versionOwner": "edcadmin",
-                            "hasDraft": false,
-                            "sandboxId": null
-                        }
-                    ],
-                    "method": "GET",
-                    "resourcelink": "/edc/workspace/10000/workfile/10035",
-                    "pagination": null,
-                    "version": "0.1"
-                },
-
-                fetchText : {
-                    "message":[],
-                    "status":"ok",
-                    "requestId":449,
-                    "resource":[
-
-                        {
-                            "id":"10004",
-                            "fileName":"editabletextfile.txt",
-                            "mimeType":"text/plain",
-                            "fileType":"txt",
-                            "isBinary":false,
-                            "workspaceId":"10001",
-                            "source":"fs",
-                            "owner":"edcadmin",
-                            "description":null,
-                            "latestVersionNum":1,
-                            "isDeleted":false,
-                            "modifiedBy":"edcadmin",
-                            "lastUpdatedStamp":"2011-11-29 10:46:03.152",
-                            "lastUpdatedTxStamp":"2011-11-29 10:46:03.145",
-                            "createdStamp":"2011-11-29 10:46:03.152",
-                            "createdTxStamp":"2011-11-29 10:46:03.145",
-                            "versionFileId":"1322592363143_7126",
-                            "versionNum":"1",
-                            "versionOwner":"edcadmin",
-                            "content":"This is a text file.\n\nThis is the 3rd line.\n\nReally really long line.  Really really long line.  Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.Really really long line.",
-                            "editable":true,
-                            "hasDraft":false,
-                            "sandboxId":null
-                        }
-                    ],
-                    "method":"GET",
-                    "resourcelink":"/edc/workspace/10001/workfile/10004",
-                    "pagination":null,
-                    "version":"0.1"
-                }
-            },
-
-            WorkfileSet : {
-                fetch : {
-                    "message" : [ ],
-                    "status" : "ok",
-                    "requestId" : 256,
-                    "resource" : [
-                        {
-                            "createdStamp":"2011-10-22",
-                            "lastUpdatedStamp":"2011-10-22 14:40:42.11",
-                            "modifiedBy":"edcadmin",
-                            "ownerFullName":"EDC Admin",
-                            "imageId":null,
-                            "id":"10020",
-                            "fileName":"who.sql",
-                            "mimeType":"text/x-sql",
-                            "fileType":"sql",
-                            "isBinary":false,
-                            "workspaceId":"10000",
-                            "source":"empty",
-                            "owner":"edcadmin",
-                            "description":null,
-                            "latestVersionNum":1,
-                            "versionFileId":"1111_1111",
-                            "isDeleted":false,
-                            "modifiedByFirstName":"EDC",
-                            "modifiedByLastName":"Admin",
-                            "modifiedById":"10010",
-                            "commentCount":2,
-                            "recentComments" : [
-                                {
-                                    "author" : {
-                                        id : "InitialUser",
-                                        lastName : "Admin",
-                                        firstName : "EDC"
-                                    },
-                                    "comments" : [],
-                                    "id" : 10303,
-                                    "text" : "I am loving commenting",
-                                    "timestamp" : "2011-11-22 14:40:42",
-                                    "type" : "NOTE"
-                                }
-                            ]
-                        },
-                        {
-                            "createdStamp":"2011-11-22",
-                            "lastUpdatedStamp":"2011-11-22 14:40:42.11",
-                            "modifiedBy":"edcadmin",
-                            "ownerFullName":"Joe Blow",
-                            "imageId":null,
-                            "id":"10021",
-                            "fileName":"what.sql",
-                            "mimeType":"text/plain",
-                            "fileType":"txt",
-                            "isBinary":false,
-                            "workspaceId":"10000",
-                            "source":"empty",
-                            "owner":"joeblow",
-                            "description":null,
-                            "latestVersionNum":1,
-                            "versionFileId":"1111_1111",
-                            "isDeleted":false,
-                            "modifiedByFirstName":"Joe",
-                            "modifiedByLastName":"Blow",
-                            "modifiedById":"10011",
-                            "commentCount":0,
-                            "recentComments" : []
-                        }
-                    ],
-                    "method" : "GET",
-                    "resourcelink" : "/edc/activitystream/workspace/10000",
-                    "pagination" :
-                    {
-                        "total" : "1",
-                        "page" : "1",
-                        "records" : "8"
-                    },
-                    "version" : "0.1"
                 }
             },
 
@@ -1266,13 +793,13 @@
                     });
                 },
 
-                "NOTE_ON_WORKFILE" : function() {
-                    return new chorus.models.Activity({
+                "NOTE_ON_WORKFILE_JSON" : function() {
+                    return {
                         author: fixtures.authorJson(),
                         type: "NOTE",
                         text: "How about that.",
                         timestamp: "2011-12-01 00:00:00",
-                        id : "10101",
+                        id : fixtures.nextId().toString(),
                         comments: [
                             {
                                 text: "sub-comment 1",
@@ -1280,25 +807,29 @@
                                 timestamp : "2011-12-15 12:34:56"
                             }
                         ],
-                        workfile : fixtures.workfileJson(),
+                        workfile : fixtures.nestedWorkfileJson(),
                         workspace : fixtures.workspaceJson(),
                         artifacts : [
                             {
-                                entityId: "10101",
+                                entityId: fixtures.nextId().toString(),
                                 entityType: "file",
-                                id: "10101",
+                                id: fixtures.nextId().toString(),
                                 name: "something.sql",
                                 type: "SQL"
                             },
                             {
-                                entityId: "10102",
+                                entityId: fixtures.nextId().toString(),
                                 entityType: "file",
-                                id: "10102",
+                                id: fixtures.nextId().toString(),
                                 name: "something.txt",
                                 type: "TXT"
                             }
                         ]
-                    });
+                    };
+                },
+
+                "NOTE_ON_WORKFILE" : function() {
+                    return new chorus.models.Activity(fixtures.activities.NOTE_ON_WORKFILE_JSON());
                 },
 
                 "USER_ADDED" : function() {
@@ -1483,58 +1014,81 @@
                 }, overrides)
             },
 
+            nestedWorkfileJson: function() {
+                var id = this.nextId().toString();
+                return {
+                    id : id,
+                    name : "file" + id + ".sql"
+                }
+            },
+
+            versionInfoJson: function(overrides, modifiedByUser) {
+                var id = this.nextId().toString();
+                return _.extend({
+                    versionNum : 1,
+                    lastUpdatedStamp : "2011-11-29 10:46:03.255",
+                    versionFileId: this.nextId().toString(),
+                    instanceId : null,
+                    databaseId : null,
+                    schemaId : null,
+                    content: "Workfile Content!" + id,
+                    modifiedByFirstName: modifiedByUser.firstName,
+                    modifiedByLastName: modifiedByUser.lastName,
+                    modifiedById: modifiedByUser.id,
+                    versionOwner : "edcadmin",
+                    commitMessage : null,
+                    isEditable : true
+                }, overrides);
+            },
+
+            workfileDraft: function() {
+                return {
+                    content : 'draft!',
+                    baseVersionNum : 1,
+                    draftOwner : 'edcadmin',
+                    draftFileId : this.nextId().toString(),
+                    isDeleted : false
+                }
+            },
+
             workfileJson: function(overrides) {
                 var id = this.nextId().toString();
                 var name = 'Workfile ' + id;
                 var modifiedByUser = this.userJson();
+                var ownerUser = this.userJson();
                 return _.extend({
                     id : id,
-                    name : name,
                     fileName: name,
-                    mimeType: "text/plain",
                     fileType: "txt",
-                    isBinary: false,
-                    workspaceId: this.nextId().toString(),
-                    source: "fs",
-                    owner: "edcadmin",
-                    description: null,
+                    mimeType: "text/plain",
+                    versionInfo: this.versionInfoJson(overrides && overrides.versionInfo, modifiedByUser),
                     latestVersionNum: 1,
+                    recentComments: [
+                        fixtures.activities.NOTE_ON_WORKFILE_JSON(),
+                        fixtures.activities.NOTE_ON_WORKFILE_JSON()
+                    ],
+                    commentCount: 2,
+                    draftInfo: {
+                        content : null,
+                        baseVersionNum : null,
+                        draftOwner : null,
+                        draftFileId : null,
+                        isDeleted : null
+                    },
+                    hasDraft: false,
                     isDeleted: false,
-                    modifiedBy: modifiedByUser.userName,
                     modifiedByFirstName: modifiedByUser.firstName,
                     modifiedByLastName: modifiedByUser.lastName,
                     modifiedById: modifiedByUser.id,
+                    modifiedBy: modifiedByUser.userName,
+                    owner: ownerUser.userName,
+                    ownerId: ownerUser.id,
+                    workspaceId: this.nextId().toString(),
+                    imageId : null,
+                    isBinary: false,
+                    source: "empty",
                     lastUpdatedStamp: "2011-11-29 10:46:03.152",
-                    lastUpdatedTxStamp: "2011-11-29 10:46:03.145",
-                    createdStamp: "2011-11-29 10:46:03.152",
-                    createdTxStamp: "2011-11-29 10:46:03.145",
-                    versionFileId: this.nextId().toString(),
-                    versionNum: "1",
-                    versionOwner: "edcadmin",
-                    content: "Workfile Content!" + id,
-                    editable: true,
-                    hasDraft: false,
-                    sandboxId: this.nextId().toString(),
-                    recentComments: [
-                        this.commentJson(),
-                        this.commentJson()
-                    ]
-                }, overrides);
-            },
-
-            draftJson: function(overrides) {
-                return _.extend({
-                    content: "Some Content",
-                    createdStamp: "2012-01-17 16:17:26.439",
-                    createdTxStamp: "2012-01-17 16:17:26.411",
-                    draftFileId: "1326845846420_8660",
-                    draftOwner: "edcadmin",
-                    id: this.nextId().toString(),
-                    isDeleted: false,
-                    lastUpdatedStamp: "2012-01-17 16:17:26.439",
-                    lastUpdatedTxStamp: "2012-01-17 16:17:26.411",
-                    workfileId: this.nextId().toString(),
-                    workspaceId : this.nextId().toString()
+                    createdStamp: "2011-11-29 10:46:03.152"
                 }, overrides);
             },
 
@@ -1617,8 +1171,8 @@
                     desc : null,
                     type : "table",
                     instanceId : this.nextId().toString(),
-                    databaseName : "table databaseName from fixture",
-                    schemaName : "table schemaName from fixture"
+                    databaseName : "database_name",
+                    schemaName : "schema_name"
                 }, overrides);
                 return new chorus.models.DatabaseTable(attributes);
             },
@@ -1626,9 +1180,30 @@
             databaseView: function(overrides) {
                 var id = this.nextId().toString();
                 var attributes = _.extend({
-                    name : "view name from fixture"
+                    name : "campaign_dim",
+                    rows : 500,
+                    columns : 6,
+                    onDiskSize : "64 kB",
+                    lastAnalyzedTime : "2012-01-18 13:43:31.70468",
+                    imports : null,
+                    masterTable : null,
+                    partitions : 0,
+                    hasData : true,
+                    desc : null,
+                    type : "view",
+                    instanceId : this.nextId().toString(),
+                    databaseName : "database_name",
+                    schemaName : "schema_name"
                 }, overrides);
                 return new chorus.models.DatabaseView(attributes);
+            },
+
+            databaseColumn: function(overrides) {
+                var id = this.nextId().toString();
+                var attributes = _.extend({
+                    name : "column_name"
+                }, overrides);
+                return new chorus.models.DatabaseColumn(attributes);
             },
 
             databaseTableSet: function(models, overrides) {
@@ -1641,6 +1216,12 @@
                 var id = this.nextId().toString()
                 models = (models && (models.length > 0)) || [this.databaseView(overrides), this.databaseView(overrides)];
                 return new chorus.models.DatabaseViewSet(models, overrides);
+            },
+
+            databaseColumnSet: function(models, overrides) {
+                var id = this.nextId().toString()
+                models = (models && (models.length > 0)) || [this.databaseColumn(overrides), this.databaseColumn(overrides)];
+                return new chorus.models.DatabaseColumnSet(models, overrides);
             },
 
             workspace: function(overrides) {
@@ -1656,6 +1237,11 @@
                 return new chorus.models.Workfile(attributes);
             },
 
+            draft: function(overrides) {
+                var attributes = _.extend({draftInfo: this.workfileDraft(), hasDraft: true}, overrides);
+                return new chorus.models.Draft(this.workfileJson(attributes));
+            },
+
             textWorkfile: function(overrides) {
                 overrides = _.extend({
                     mimeType: "text/plain",
@@ -1664,26 +1250,30 @@
                 return this.workfile(overrides);
             },
 
-            sqlWorkfile: function(overrides) {
+            imageWorkfile: function(overrides) {
                 overrides = _.extend({
-                    mimeType: "text/x-sql",
-                    fileType: "SQL"
+                    mimeType: "image/jpeg",
+                    fileName: "avatar.jpg"
+                }, overrides);
+                return this.workfile(overrides);
+            },
+
+            otherWorkfile: function(overrides) {
+                overrides = _.extend({
+                    fileType: "N/A",
+                    fileName: "zipfile.zip",
+                    mimeType: "application/zip"
                 }, overrides);
                 return this.workfile(overrides);
             },
 
             sqlWorkfile: function(overrides) {
-                return this.textWorkfile(_.extend({
+                overrides = _.extend({
                     fileName : "sample.sql",
                     fileType : "SQL",
                     mimeType : "text/x-sql"
-                }, overrides));
-            },
-
-            draft: function(overrides) {
-               var attributes = _.extend(this.draftJson(), {
                 }, overrides);
-                return new chorus.models.Draft(attributes);
+                return this.workfile(overrides);
             },
 
             workfileSet: function(models) {
@@ -1753,7 +1343,7 @@
                 return new chorus.models.InstanceAccount(attributes);
             },
 
-           instanceAccountSet: function(models) {
+            instanceAccountSet: function(models) {
                 models = models || [this.instanceAccount(), this.instanceAccount()];
                 return new chorus.models.InstanceAccountSet(models);
             },
@@ -1798,7 +1388,12 @@
 
             taskWithResult: function(overrides) {
                 overrides = _.extend({ result: {
-                    columns: [{ name: "id" }, { name: "city" }, { name: "state" }, { name: "zip" }],
+                    columns: [
+                        { name: "id" },
+                        { name: "city" },
+                        { name: "state" },
+                        { name: "zip" }
+                    ],
                     rows: [
                         { id: 1 , city: "Oakland"   , state: "CA" , zip: "94612" } ,
                         { id: 2 , city: "Arcata"    , state: "CA" , zip: "95521" } ,

@@ -1,4 +1,4 @@
-describe("WorkfileShowSidebar", function() {
+describe("chorus.views.WorkfileShowSidebar", function() {
     beforeEach(function() {
         this.workfile = fixtures.textWorkfile();
         this.view = new chorus.views.WorkfileShowSidebar({ model : this.workfile });
@@ -25,7 +25,6 @@ describe("WorkfileShowSidebar", function() {
         });
     });
 
-
     context("with a sql workfile", function() {
         beforeEach(function() {
             this.workfile = fixtures.sqlWorkfile();
@@ -43,21 +42,73 @@ describe("WorkfileShowSidebar", function() {
             beforeEach(function() {
                 this.view.render();
             });
-            
+
             it("should have an activities tab", function() {
-                expect(this.view.$('.tab_control .activity')).toExist();
+                expect(this.view.$('.tab_control .activity_list')).toExist();
             });
-            
+
             it("should have a functions tab", function() {
-                expect(this.view.$('.tab_control .functions')).toExist();
+                expect(this.view.$('.tab_control .database_function_list')).toExist();
             });
-            
-            it("should have a metadata tab", function() {
-                expect(this.view.$('.tab_control .metadata')).toExist();
+
+            it("should have a dataset tab", function() {
+                expect(this.view.$('.tab_control .datasets_and_columns')).toExist();
             });
 
             it("renders the functions subview", function() {
-                expect(this.view.schemaFunction).toBeA(chorus.views.SchemaFunctions);
+                expect(this.view.functionList).toBeA(chorus.views.DatabaseFunctionList);
+            });
+
+            it("renders selected version", function() {
+                expect(this.view.$(".chosen").text()).toMatchTranslation("workfile.version_title", {versionNum: this.view.model.get("versionInfo").versionNum})
+            })
+
+            context("when the dataset tab is selected", function() {
+                beforeEach(function() {
+                    this.view.$(".tab_control .database_dataset_list").click();
+                });
+
+                it("shows the dataset list view", function() {
+                    expect(this.view.$(".database_dataset_list")).not.toHaveClass("hidden");
+                });
+
+                it("hides the column list view", function() {
+                    expect(this.view.$(".database_column_list")).toHaveClass("hidden");
+                });
+
+                context("when a table is selected in the dataset list", function() {
+                    beforeEach(function() {
+                        this.table = fixtures.databaseTable();
+                        spyOnEvent(this.view.columnList, 'datasetSelected');
+                        this.view.datasetList.trigger("datasetSelected", this.table);
+                    });
+
+                    it("hides the metadata list", function() {
+                        expect(this.view.$(".database_dataset_list")).toHaveClass("hidden");
+                    });
+
+                    it("shows the column list", function() {
+                        expect(this.view.$(".database_column_list")).not.toHaveClass("hidden");
+                    });
+
+                    it("forwards the selection event to the column list view", function() {
+                        expect("datasetSelected").toHaveBeenTriggeredOn(this.view.columnList, [ this.table ]);
+                    });
+
+                    context("when the back link is clicked", function() {
+                        beforeEach(function() {
+                            this.view.columnList.trigger("back");
+                        });
+
+                        it("should hide the column list", function() {
+                            expect(this.view.$(".database_column_list")).toHaveClass("hidden");
+                        });
+
+                        it("should show the dataset list", function() {
+                            expect(this.view.$(".database_dataset_list")).not.toHaveClass("hidden");
+                        });
+                    });
+                });
             });
         });
     });
@@ -81,10 +132,10 @@ describe("WorkfileShowSidebar", function() {
                 this.view.render();
             });
 
-            it("should not have a functions, or meatadata tabs", function() {
-                expect(this.view.$('.tab_control .activity')).toExist();
-                expect(this.view.$('.tab_control .functions')).not.toExist();
-                expect(this.view.$('.tab_control .metadata')).not.toExist();
+            it("should not have function or dataset tabs", function() {
+                expect(this.view.$('.tab_control .activity_list')).toExist();
+                expect(this.view.$('.tab_control .database_function_list')).not.toExist();
+                expect(this.view.$('.tab_control .database_dataset_list')).not.toExist();
             });
 
             it("displays the filename", function() {
@@ -105,7 +156,7 @@ describe("WorkfileShowSidebar", function() {
             })
 
             it("displays a link to download the workfile", function() {
-                expect(this.view.$(".actions a.download")).toHaveAttr("href", "/edc/workspace/" + this.workfile.get('workspaceId') + "/workfile/" + this.workfile.get('id') + "/file/" + this.workfile.get('versionFileId') + "?download=true")
+                expect(this.view.$(".actions a.download")).toHaveAttr("href", "/edc/workspace/" + this.workfile.get('workspaceId') + "/workfile/" + this.workfile.get('id') + "/file/" + this.workfile.get('versionInfo').versionFileId + "?download=true")
             });
 
             it("displays a link to add a note", function() {

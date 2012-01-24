@@ -43,13 +43,20 @@ _.extend(sinon.fakeServer, {
         return _.last(this.destroys());
     },
 
-    completeFetchFor: function(model, results) {
-        results = results || model.attributes;
-        var request = _.find(this.fetches(), function(potentialRequest) {
-           return potentialRequest.url == model.url()
-        });
+    lastFetchFor: function(model) {
+        return _.last(_.filter(this.fetches(), function(potentialRequest) {
+           return (new URI(potentialRequest.url)).equals(model.url());
+        }));
+    },
 
-        request.succeed(results);
+    completeFetchFor: function(model, results) {
+        results = results || [model.attributes];
+        var fetch = this.lastFetchFor(model)
+        if(fetch) {
+            fetch.succeed(results);
+        } else {
+            throw "No fetch found for " + model.url() + ". Found fetches for: [" + _.pluck(this.fetches(), 'url').join(', ') + "]";
+        }
     }
 });
 

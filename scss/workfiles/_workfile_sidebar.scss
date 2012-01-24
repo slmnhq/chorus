@@ -56,105 +56,146 @@
         }
     }
 
-    .schema_name {
-        @include font-content-details;
-        margin: 4px 0 15px 20px;
-    }
+    .tabbed_area {
+        .context {
+            @include font-content-details;
+        }
 
-    .none_found {
+        .back {
+            font-size: 12px;
+            font-weight: $semibold;
+        }
+
+        .none_found {
             @include font-normal-beta;
-    }
+        }
 
-    .schema_functions {
-        li {
-            &:first-child {
-                border-top: $dotted-list-item-border;
-                margin-top: -1px;
-            }
-            &:last-child {
-                border-bottom: $dotted-list-item-border;
-            }
+        .context, .back, .none_found {
+            margin: 4px 0px 0px 20px;
+        }
 
-            @include list-section-heading;
-            background: url('/images/function.png') no-repeat left center;
-            padding: 0 0 0 29px;
-            height: 28px;
-            line-height: 28px;
-
-            &:hover {
-                margin-top: -1px;
-                background-color: $selected-row-hover-background-color;
-                border-top: 1px solid $list-border-color;
-                border-bottom: 1px solid $list-border-color;
-            }
-            .insert_hover {
-                z-index: 100;
-                background-color: $selected-row-hover-background-color;
-                position: absolute;
-                right: 100%;
-                display: inline_block;
-                top: -1px;
-
-
-                $arrow-height: 30px;
-               .arrow_left {
-                    width: 0;
-                    height: 0;
-                    border-top: $arrow-height/2 solid transparent;
-                    border-bottom: $arrow-height/2 solid transparent;
-                    border-right: $arrow-height/2 solid $list-border-color;
-                    position:relative;
-                    right: 100%;
-                    position: absolute
+        .database_function_list {
+            li {
+                &:first-child {
+                    border-top: $dotted-list-item-border;
+                    margin-top: -1px;
+                }
+                &:last-child {
+                    border-bottom: $dotted-list-item-border;
                 }
 
-                $arrow-filling-height: 28px;
-                .arrow_left_filling{
-                    content:'';
-                    position:absolute;
-                    right: 100%;
-                    top: 1px;
-                    width: 0;
-                    height: 0;
-                    border-top: $arrow-filling-height/2 solid transparent;
-                    border-bottom: $arrow-filling-height/2 solid transparent;
-                    border-right: $arrow-filling-height/2 solid $selected-row-hover-background-color;
+                @include list-section-heading;
+                background: url('/images/function.png') no-repeat left center;
+                padding: 0 0 0 29px;
+                height: 28px;
+                line-height: 28px;
+
+                &:hover {
+                    margin-top: -1px;
+                    background-color: $selected-row-hover-background-color;
+                    border-top: 1px solid $list-border-color;
+                    border-bottom: 1px solid $list-border-color;
                 }
+                .insert_hover {
+                    z-index: 100;
+                    background-color: $selected-row-hover-background-color;
+                    position: absolute;
+                    right: 100%;
+                    display: inline_block;
+                    top: -1px;
 
 
-                .insert_link {
+                    $arrow-height: 30px;
+                   .arrow_left {
+                        width: 0;
+                        height: 0;
+                        border-top: $arrow-height/2 solid transparent;
+                        border-bottom: $arrow-height/2 solid transparent;
+                        border-right: $arrow-height/2 solid $list-border-color;
+                        position:relative;
+                        right: 100%;
+                        position: absolute
+                    }
+
+                    $arrow-filling-height: 28px;
+                    .arrow_left_filling{
+                        content:'';
+                        position:absolute;
+                        right: 100%;
+                        top: 1px;
+                        width: 0;
+                        height: 0;
+                        border-top: $arrow-filling-height/2 solid transparent;
+                        border-bottom: $arrow-filling-height/2 solid transparent;
+                        border-right: $arrow-filling-height/2 solid $selected-row-hover-background-color;
+                    }
+
+
+                    .insert_link {
+                        display: inline-block;
+                        font-size: 12px;
+                        font-weight: $semibold;
+                        padding-right: 20px;
+                        border: 1px solid $list-border-color;
+                        border-right: none;
+                        border-left: none;
+                    }
+                }
+           }
+        }
+
+
+        .database_function_list, .database_dataset_list, .database_column_list {
+            margin-top: 15px;
+
+            li {
+                height: 29px;
+                padding-top: 0px;
+                padding-bottom: 0px;
+                color: $color-text2;
+
+                img {
+                    margin-top: 2px;
                     display: inline-block;
-                    font-size: 12px;
+                    vertical-align: middle;
+                }
+
+                .name, .type {
+                    margin-top: 2px;
+                    font-size: 14px;
+                    display: inline-block;
+                    @include ellipsis;
+                    max-width: 75%;
+                    vertical-align: middle;
+                    line-height: 14px;
+                }
+
+                .name {
                     font-weight: $semibold;
-                    padding-right: 20px;
-                    border: 1px solid $list-border-color;
-                    border-right: none;
-                    border-left: none;
+                }
+
+                &:first-child {
+                    border-top: $dotted-list-item-border;
+                }
+                &:last-child {
+                    border-bottom: $dotted-list-item-border;
                 }
             }
-       }
-    }
+        }
 
-    .schema_metadata_list {
-        li {
-            height: 29px;
-            padding-top: 0px;
-            padding-bottom: 0px;
-
-            img {
-                margin-top: 2px;
-                display: inline-block;
-                vertical-align: middle;
+        .database_column_list {
+            .context {
+                .table, .schema {
+                    display: inline-block;
+                    max-width: 80px;
+                    @include ellipsis;
+                }
             }
-            .name {
-                margin-top: 2px;
-                font-size: 14px;
-                font-weight: $semibold;
-                display: inline-block;
-                @include ellipsis;
-                max-width: 75%;
-                vertical-align: middle;
-                line-height: 14px;
+
+            li .type {
+                float: right;
+                margin-top: 8px;
+                color: $color-text3;
             }
         }
     }

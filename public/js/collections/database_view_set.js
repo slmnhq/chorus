@@ -1,5 +1,5 @@
 (function(ns) {
-    ns.models.DatabaseViewSet = ns.models.Collection.extend({
+    ns.models.DatabaseViewSet = ns.models.DatabaseTableSet.extend({
         model : ns.models.DatabaseView,
         urlTemplate : "data/{{instanceId}}/database/{{databaseName}}/schema/{{schemaName}}/view"
     });

@@ -2,6 +2,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
     beforeEach(function() {
         this.workspaceId = 4;
         this.workfileId = 5;
+        this.model = fixtures.sqlWorkfile({id: '5', workspaceId: '4'});
     });
 
     describe("#setup", function() {
@@ -29,17 +30,12 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
         describe("when the workfile is fetched", function() {
             beforeEach(function() {
-                spyOn(this.page.mainContent, "render");
-                fixtures.model = "Workfile";
+                spyOn(this.page.mainContent, "render").andCallThrough();
             });
 
             context("and the workfile does not have a draft", function() {
                 beforeEach(function() {
-                    this.server.respondWith(
-                        'GET',
-                        this.page.model.url(),
-                        this.prepareResponse(fixtures.jsonFor("fetch")));
-                    this.server.respond();
+                    this.server.completeFetchFor(this.model);
                 })
 
                 it("instantiates the content details view", function() {
@@ -57,13 +53,10 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
             context('and the workfile has a draft', function() {
                 beforeEach(function() {
+                    this.model.set({'draftInfo': fixtures.workfileDraft(), hasDraft: true});
                     stubModals();
                     spyOn(chorus.Modal.prototype, 'launchModal').andCallThrough();
-                    this.server.respondWith(
-                        'GET',
-                        this.page.model.url(),
-                        this.prepareResponse(fixtures.jsonFor("fetchWithDraft")));
-                    this.server.respond();
+                    this.server.completeFetchFor(this.model);
                 })
 
                 it("shows an alert", function() {
@@ -90,16 +83,11 @@ describe("chorus.pages.WorkfileShowPage", function() {
         beforeEach(function() {
             this.page = new chorus.pages.WorkfileShowPage(this.workspaceId, this.workfileId);
             this.page.workspace.set({name: "Cool Workspace"});
-            fixtures.model = "Workfile";
-            this.server.respondWith(
-                'GET',
-                this.page.model.url(),
-                this.prepareResponse(fixtures.jsonFor("fetch")));
-            this.server.respond();
+            this.server.completeFetchFor(this.model);
         });
 
         it("it displays the workfile name in the content header", function() {
-            expect(this.page.mainContent.contentHeader.$("h1").text()).toBe("who.sql");
+            expect(this.page.mainContent.contentHeader.$("h1").text()).toBe(this.model.get('fileName'));
         });
 
         it("displays the file icon in the content header", function() {
@@ -154,7 +142,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
                 expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toMatchTranslation("breadcrumbs.workfiles.all");
                 expect(this.page.$(".breadcrumb:eq(3) a").attr("href")).toBe("#/workspaces/4/workfiles");
 
-                expect(this.page.$(".breadcrumb:eq(4)").text().trim()).toBe("who.sql");
+                expect(this.page.$(".breadcrumb:eq(4)").text().trim()).toBe(this.model.get('fileName'));
             });
             
             context("with a long workspace name", function() {

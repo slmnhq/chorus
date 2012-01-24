@@ -1,0 +1,18 @@
+<input class="search" placeholder='{{t "schema.metadata.list.hint.datasets"}}'/>
+<div class="context">{{t "schema.functions.search_in" schemaName=schemaName}}</div>
+{{#if models.length}}
+    <ul class="list">
+        {{#each models}}
+            <li data-name="{{name}}" data-type="{{type}}" title="{{name}}">
+                <span class="spacer left"/>
+                <img src="images/small_table.png">
+                <div class="name">
+                    <a href="#" title="{{name}}">{{name}}</a>
+                </div>
+                <span class="spacer right"/>
+            </li>
+        {{/each}}
+    </ul>
+{{else}}
+    <div class="none_found">{{t "schema.metadata.list.empty"}}</div>
+{{/if}}

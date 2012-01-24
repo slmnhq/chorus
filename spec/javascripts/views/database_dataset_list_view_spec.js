@@ -1,4 +1,4 @@
-describe("chorus.views.SchemaMetadataList", function() {
+describe("chorus.views.DatabaseDatasetList", function() {
     beforeEach(function() {
         this.sandbox = fixtures.sandbox();
         this.schema = this.sandbox.schema();
@@ -6,7 +6,7 @@ describe("chorus.views.SchemaMetadataList", function() {
         spyOn(this.schema.views(), "fetch").andCallThrough();
         spyOn(this.schema.tables(), "fetch").andCallThrough();
 
-        this.view = new chorus.views.SchemaMetadataList({sandbox: this.sandbox});
+        this.view = new chorus.views.DatabaseDatasetList({sandbox: this.sandbox});
     });
 
     it("should fetch the list of tables", function() {
@@ -112,6 +112,30 @@ describe("chorus.views.SchemaMetadataList", function() {
 
                 it("should not display a message saying there are no tables/views", function() {
                     expect(this.view.$('.none_found')).not.toExist();
+                });
+
+                describe("user clicks a view in the list", function() {
+                    beforeEach(function() {
+                        this.clickedView = this.view.views.findByName("Data1");
+                        spyOnEvent(this.view, "datasetSelected");
+                        this.view.$("li:contains('Data1') a").click();
+                    });
+
+                    it("triggers a 'datasetSelected' event on itself, with the view", function() {
+                        expect("datasetSelected").toHaveBeenTriggeredOn(this.view, [this.clickedView]);
+                    });
+                });
+
+                describe("user clicks on a table in the list", function() {
+                    beforeEach(function() {
+                        this.clickedTable = this.view.tables.findByName("Data2");
+                        spyOnEvent(this.view, "datasetSelected");
+                        this.view.$("li:contains('Data2') a").click();
+                    });
+
+                    it("triggers a 'datasetSelected' event on itself, with the table", function() {
+                        expect("datasetSelected").toHaveBeenTriggeredOn(this.view, [this.clickedTable]);
+                    });
                 });
             });
 

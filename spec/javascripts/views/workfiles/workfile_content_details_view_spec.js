@@ -6,8 +6,7 @@ describe("WorkfileContentDetails", function() {
     describe(".buildFor", function() {
         context("when the given workfile is an image", function() {
             beforeEach(function() {
-                spyOn(this.model, 'isImage').andReturn(true);
-                spyOn(this.model, 'isSql').andReturn(false);
+                this.model = fixtures.imageWorkfile();
                 spyOn(chorus.views, "ImageWorkfileContentDetails");
                 chorus.views.WorkfileContentDetails.buildFor(this.model);
             });
@@ -19,8 +18,7 @@ describe("WorkfileContentDetails", function() {
 
         context("when the given workfile is a SQL file", function() {
             beforeEach(function() {
-                spyOn(this.model, 'isSql').andReturn(true);
-                spyOn(this.model, 'isImage').andReturn(false);
+                this.model = fixtures.sqlWorkfile();
                 spyOn(chorus.views, "SqlWorkfileContentDetails");
                 chorus.views.WorkfileContentDetails.buildFor(this.model);
             });
@@ -32,8 +30,7 @@ describe("WorkfileContentDetails", function() {
 
         context("when given anything else", function() {
             beforeEach(function() {
-                spyOn(this.model, 'isImage').andReturn(false);
-                spyOn(this.model, 'isSql').andReturn(false);
+                fixtures.otherWorkfile();
                 spyOn(chorus.views, "WorkfileContentDetails");
                 chorus.views.WorkfileContentDetails.buildFor = chorus.views.WorkfileContentDetails.originalValue.buildFor;
                 chorus.views.WorkfileContentDetails.buildFor(this.model);

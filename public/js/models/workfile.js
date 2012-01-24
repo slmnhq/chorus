@@ -9,7 +9,7 @@
             if (this.isLatestVersion()) {
                 return "workspace/{{workspaceId}}/workfile/{{id}}"
             } else {
-                return "workspace/{{workspaceId}}/workfile/{{id}}/version/{{versionNum}}"
+                return "workspace/{{workspaceId}}/workfile/{{id}}/version/{{versionInfo.versionNum}}"
             }
         },
 
@@ -17,9 +17,8 @@
             if (this.isLatestVersion()) {
                 return "workspaces/{{workspaceId}}/workfiles/{{id}}"
             } else {
-                return "workspaces/{{workspaceId}}/workfiles/{{workfileId}}/versions/{{versionNum}}"
+                return "workspaces/{{workspaceId}}/workfiles/{{workfileId}}/versions/{{versionInfo.versionNum}}"
             }
-
         },
 
         initialize : function() {
@@ -37,6 +36,15 @@
             })
         },
 
+        content: function(newContent, options) {
+            if (arguments.length) {
+                this.get("versionInfo").content = newContent;
+                this.set({content : newContent}, options);
+            } else {
+                return this.get("versionInfo").content;
+            }
+        },
+
         sandbox: function() {
             this._sandbox || (this._sandbox = new ns.models.Sandbox({ id: this.get("sandboxId"), workspaceId: this.get("workspaceId") }));
             return this._sandbox;
@@ -52,8 +60,7 @@
         },
 
         createDraft : function() {
-            var draft = new ns.models.Draft({workfileId: this._workfileId(), workspaceId : this.get("workspaceId"), content : this.get("content")})
-
+            var draft = new ns.models.Draft({workfileId: this.get("id"), workspaceId : this.get("workspaceId"), content : this.content()});
             draft.bind("saved", function() {
                 this.isDraft = true;
                 this.set({ hasDraft: true }, { silent : true });
@@ -64,7 +71,7 @@
         allVersions : function() {
             return new ns.models.WorkfileVersionSet([], {
                 workspaceId : this.get("workspaceId"),
-                workfileId : this._workfileId()
+                workfileId : this.get("id")
             });
         },
 
@@ -92,7 +99,7 @@
         },
 
         downloadUrl : function() {
-            return this.url() + "/file/" + this.get("versionFileId") + "?download=true";
+            return this.url() + "/file/" + this.get("versionInfo").versionFileId + "?download=true";
         },
 
         workfilesUrl : function() {
@@ -104,20 +111,18 @@
         },
 
         isLatestVersion : function() {
-            return (!this.has("versionNum") || parseInt(this.get("versionNum")) === parseInt(this.get("latestVersionNum")))
+            var versionNum = this.get('versionInfo') && this.get('versionInfo').versionNum;
+            return (!versionNum || versionNum === this.get("latestVersionNum"))
         },
 
-        _workfileId : function() {
-            return this.get("id");
-        },
 
         save : function(attrs, options) {
             if (this.canEdit()) {
                 options = options || {};
                 var overrides = {};
 
-                if (this.has("versionNum")) {
-                    overrides.url = "/edc/workspace/" + this.get("workspaceId") + "/workfile/" + this.get("id") + "/version/" + this.get("versionNum");
+                if (this.get("versionInfo") && this.get("versionInfo").versionNum) {
+                    overrides.url = "/edc/workspace/" + this.get("workspaceId") + "/workfile/" + this.get("id") + "/version/" + this.get("versionInfo").versionNum;
                 }
 
                 return this._super("save", [attrs, _.extend(options, overrides)]);

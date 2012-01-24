@@ -257,7 +257,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectName", function() {
-            expect(this.presenter.objectName).toBe(this.workfile.get("name"));
+            expect(this.presenter.objectName).toBe(this.workfile.get("fileName"));
         });
 
         it("should have the right objectUrl", function() {
@@ -298,7 +298,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectName", function() {
-            expect(this.presenter.objectName).toBe(this.workfile.get("name"));
+            expect(this.presenter.objectName).toBe(this.workfile.get("fileName"));
         });
 
         it("should have the right objectUrl", function() {
@@ -306,7 +306,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("has the right versionName", function() {
-            expect(this.presenter.versionName).toMatchTranslation("workfile.version_title", { versionNum : "3" });
+            expect(this.presenter.versionName).toMatchTranslation("workfile.version_title", { versionNum : this.model.get('version') });
         })
 
         it("has the right versionUrl", function() {

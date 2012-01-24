@@ -66,8 +66,7 @@ describe("chorus.models.Workfile", function() {
 
     describe("#urls", function() {
         beforeEach(function() {
-            this.model = new chorus.models.Workfile({id: 5, workspaceId: 10})
-            this.model.set({versionFileId: "12345"});
+            this.model = fixtures.workfile({id: 5, workspaceId: 10, versionInfo: {versionFileId: '12345'}});
         });
 
         it("has the right backend URL", function() {
@@ -77,7 +76,8 @@ describe("chorus.models.Workfile", function() {
         describe("#showUrlTemplate", function() {
             context("when the workfile is the most recent version", function() {
                 beforeEach(function() {
-                    this.model.set({ versionNum : "1", latestVersionNum : 1 })
+                    this.model.get('versionInfo').versionNum = 1;
+                    this.model.set({ latestVersionNum : 1 })
                 })
 
                 it("does not include a version", function() {
@@ -87,11 +87,12 @@ describe("chorus.models.Workfile", function() {
 
             context("when the workfile is not the most recent version", function() {
                 beforeEach(function() {
-                    this.model.set({ versionNum : "6", latestVersionNum : 9 })
+                    this.model.get("versionInfo").versionNum = 6
+                    this.model.set({latestVersionNum : 9 })
                 })
 
                 it("includes a version", function() {
-                    expect(this.model.showUrlTemplate()).toBe("workspaces/{{workspaceId}}/workfiles/{{workfileId}}/versions/{{versionNum}}")
+                    expect(this.model.showUrlTemplate()).toBe("workspaces/{{workspaceId}}/workfiles/{{workfileId}}/versions/{{versionInfo.versionNum}}")
                 })
             })
         })
@@ -137,13 +138,15 @@ describe("chorus.models.Workfile", function() {
 
     describe("createDraft", function() {
         beforeEach(function() {
-            this.workfile = new chorus.models.Workfile({id: "123", workspaceId: "456", content: "asdf"});
+            this.workfile = fixtures.workfile();
         });
         it("sets the required attributes", function() {
             var draft = this.workfile.createDraft();
-            expect(draft.get("workfileId")).toBe("123");
-            expect(draft.get("workspaceId")).toBe("456");
-            expect(draft.get("content")).toBe("asdf");
+            expect(draft.get("workfileId")).toBe(this.workfile.get('id'));
+            expect(draft.get("workspaceId")).toBe(this.workfile.get('workspaceId'));
+
+            // backend expects content to be a first level property when saving, but it returns content nested elsewhere
+            expect(draft.get("content")).toBe(this.workfile.content());
         });
 
         describe("when the draft is saved", function() {
@@ -178,12 +181,14 @@ describe("chorus.models.Workfile", function() {
 
     describe("canEdit", function() {
         it("returns false when its version is not the current version", function() {
-            this.model.set({latestVersionNum: "6", versionNum: "3"});
+            this.model.set({latestVersionNum: 6});
+            this.model.get('versionInfo').versionNum = 3
             expect(this.model.canEdit()).toBeFalsy();
         });
 
         it("returns true when its version is the current version", function() {
-            this.model.set({latestVersionNum: "6", versionNum: "6"});
+            this.model.set({latestVersionNum: 6});
+            this.model.get('versionInfo').versionNum = 6
             expect(this.model.canEdit()).toBeTruthy();
         });
     });
@@ -236,7 +241,7 @@ describe("chorus.models.Workfile", function() {
         });
 
         it("sets the workspaceId attribute on the model", function() {
-            this.collection.add({versionNum: 5});
+            this.collection.add({versionInfo: {versionNum: 5}});
 
             expect(this.collection.models[0]).toBeA(chorus.models.Workfile);
             expect(this.collection.models[0].get("workspaceId")).toBe(this.collection.attributes.workspaceId);
@@ -246,7 +251,8 @@ describe("chorus.models.Workfile", function() {
     describe("#fetch", function() {
         context("when the versionNum equals the latestVersionNum", function() {
             beforeEach(function() {
-                this.model.set({ versionNum : "99", latestVersionNum : 99 });
+                this.model.get('versionInfo').versionNum = 99
+                this.model.set({ latestVersionNum : 99 });
                 this.model.fetch();
             })
 
@@ -257,7 +263,8 @@ describe("chorus.models.Workfile", function() {
 
         context("when the versionNum is not equal to the latestVersionNum", function() {
             beforeEach(function() {
-                this.model.set({ versionNum : "88", latestVersionNum : 99 });
+                this.model.get('versionInfo').versionNum = 88;
+                this.model.set({ latestVersionNum : 99 });
                 this.model.fetch();
             })
 
@@ -270,7 +277,8 @@ describe("chorus.models.Workfile", function() {
     describe("#save", function() {
         context("with an old version", function() {
             beforeEach(function() {
-                this.model.set({ versionNum : "88", latestVersionNum : 99 });
+                this.model.get('versionInfo').versionNum = 88
+                this.model.set({ latestVersionNum : 99 });
                 this.model.save();
             })
 
@@ -281,7 +289,8 @@ describe("chorus.models.Workfile", function() {
 
         context("with the latest version", function() {
             beforeEach(function() {
-                this.model.set({ versionNum : "99", latestVersionNum : 99 });
+                this.model.get('versionInfo').versionNum = 99
+                this.model.set({ latestVersionNum : 99 });
             })
 
             context("replacing the current version", function() {
@@ -302,6 +311,50 @@ describe("chorus.models.Workfile", function() {
                 it("saves to the correct url", function() {
                     expect(this.server.lastCreate().url).toBe("/edc/workspace/10000/workfile/10020/version")
                 })
+            })
+        })
+    })
+
+    describe("#content", function() {
+        context("with an argument", function() {
+            beforeEach(function() {
+                spyOnEvent(this.model, "change");
+                this.model.content("i am not old content")
+            });
+
+            it("sets the content", function() {
+                expect(this.model.get("versionInfo").content).toBe('i am not old content');
+            })
+
+            it("triggers change", function() {
+                expect("change").toHaveBeenTriggeredOn(this.model);
+            });
+            it("sets the content in the model", function() {
+                expect(this.model.get("content")).toBe('i am not old content');
+            })
+        });
+
+        context("with silent: true", function() {
+            beforeEach(function() {
+                spyOnEvent(this.model, "change");
+                this.model.content("i am not old content", {silent : true})
+            });
+
+            it("sets the content", function() {
+                expect(this.model.get("versionInfo").content).toBe('i am not old content');
+            })
+
+            it("does not trigger change", function() {
+                expect("change").not.toHaveBeenTriggeredOn(this.model);
+            });
+            it("sets the content in the model", function() {
+                expect(this.model.get("content")).toBe('i am not old content');
+            })
+        });
+
+        context("without an argument", function() {
+            it("returns the content", function() {
+                expect(this.model.content()).toBe(this.model.get('versionInfo').content);
             })
         })
     })

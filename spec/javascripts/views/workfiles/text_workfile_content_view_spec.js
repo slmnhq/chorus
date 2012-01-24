@@ -1,7 +1,7 @@
 describe("chorus.views.TextWorkfileContentView", function() {
     beforeEach(function() {
-        this.textfile = fixtures.textWorkfile({ content: "select * from foos where bar_id = 1;" });
-
+        this.textfile = fixtures.textWorkfile();
+        this.textfile.content("select * from foos where bar_id = 1;")
         this.view = new chorus.views.TextWorkfileContent({model: this.textfile});
         this.saveInterval = this.view.saveInterval;
         $("#jasmine_content").append(this.view.el);
@@ -38,7 +38,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
         });
 
         it("displays the text file content", function() {
-            expect(this.view.editor.getValue()).toBe(this.textfile.get("content"));
+            expect(this.view.editor.getValue()).toBe(this.textfile.content());
         });
 
         it("uses the 'text/plain' mode for plain text files", function() {
@@ -225,7 +225,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
                 }
                 var model = this.view.model
                 var url = "/edc/workspace/" + model.get("workspaceId") + "/workfile/" +
-                    model.get("id") + "/version/" + model.get("versionNum");
+                    model.get("id") + "/version/" + model.get("versionInfo").versionNum;
                 this.failSaveFor(this.view.model, message, {url: url});
             });
 
@@ -264,7 +264,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
     describe("event file:createWorkfileNewVersion", function(){
         beforeEach(function() {
-            this.view.model.set({"content": "old content"});
+            this.view.model.get("versionInfo").content = "old content";
             this.view.model.set({"latestVersionNum": 2});
 
             this.view.render();
@@ -281,7 +281,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
         });
 
         it("updates the model", function() {
-            expect(this.view.model.get("content")).toBe("new content");
+            expect(this.view.model.content()).toBe("new content");
         });
 
         it("launches save workfile as new version dialog", function() {

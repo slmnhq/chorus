@@ -22,7 +22,6 @@
             this._super("makeModel", arguments);
             this.instance = this.model;
 
-            this.sharedAccount = this.instance.sharedAccount();
             this.users = new ns.models.UserSet();
             this.users.bind("reset", this.populateSelect, this);
             this.users.sortAsc("firstName");
@@ -242,28 +241,27 @@
         },
 
         confirmRemoveSharedAccount : function() {
-            this.sharedAccount || (this.sharedAccount = this.instance.sharedAccount());
+            var sharedAccount = this.instance.sharedAccount();
 
-            var map = this.sharedAccount;
-            this.sharedAccount.bind("saved", displaySuccessToast, this);
-            this.sharedAccount.bind("saveFailed", displayFailureToast);
+            sharedAccount.bind("saved", displaySuccessToast, this);
+            sharedAccount.bind("saveFailed", displayFailureToast, this);
 
-            var id = this.sharedAccount.get("id")
-            this.sharedAccount.clear({silent: true});
-            this.sharedAccount.save({id: id, shared: "no"});
+            var id = sharedAccount.get("id")
+            sharedAccount.clear({silent: true});
+            sharedAccount.save({id: id, shared: "no"});
 
             function displaySuccessToast() {
                 ns.toast("instances.shared_account_removed");
                 this.instance.unset("sharedAccount");
                 this.render();
-                map.unbind("saved", displaySuccessToast);
-                map.unbind("saveFailed", displayFailureToast);
+                sharedAccount.unbind("saved", displaySuccessToast);
+                sharedAccount.unbind("saveFailed", displayFailureToast);
             }
 
             function displayFailureToast() {
                 ns.toast("instances.shared_account_remove_failed");
-                map.unbind("saved", displaySuccessToast);
-                map.unbind("saveFailed", displayFailureToast);
+                sharedAccount.unbind("saved", displaySuccessToast);
+                sharedAccount.unbind("saveFailed", displayFailureToast);
             }
         },
 

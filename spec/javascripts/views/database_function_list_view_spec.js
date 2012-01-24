@@ -1,9 +1,9 @@
-describe("chorus.views.SchemaFunctions", function() {
+describe("chorus.views.DatabaseFunctionList", function() {
     beforeEach(function() {
         this.sandbox = fixtures.sandbox();
         this.schema = this.sandbox.schema();
         spyOn(this.schema.functions(), "fetch").andCallThrough();
-        this.view = new chorus.views.SchemaFunctions({sandbox: this.sandbox});
+        this.view = new chorus.views.DatabaseFunctionList({sandbox: this.sandbox});
     });
 
     it("should fetch the functions for the sandbox", function() {
@@ -34,12 +34,12 @@ describe("chorus.views.SchemaFunctions", function() {
             });
 
             it("should render the functions", function() {
-                expect(this.view.$('ul.functions')).toExist();
-                expect(this.view.$('ul.functions li').length).toBe(2);
+                expect(this.view.$('ul')).toExist();
+                expect(this.view.$('ul li').length).toBe(2);
             });
 
             it("should display the current schema name", function() {
-                expect(this.view.$('.schema_name')).toContainText(this.sandbox.get('schemaName'));
+                expect(this.view.$('.context')).toContainText(this.sandbox.get('schemaName'));
             })
 
             it("should not show the 'no functions found' text", function() {

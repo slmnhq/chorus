@@ -62,7 +62,7 @@
                 sidebar.find('.lb-v-scrollbar, .lb-h-scrollbar').fadeOut(150)
             });
 
-            sidebar.find('.lb-v-scrollbar, .lb-h-scrollbar').hide();
+            sidebar.find('.lb-v-scrollbar, .lb-h-scrollbar').fadeOut(0)
 
             sidebar.find('.lb-wrap').unbind('mousewheel').bind('mousewheel', this.onMouseWheel)
             sidebar.siblings('.jump_to_top').unbind('mousewheel').bind('mousewheel', this.onJumpMouseWheel)

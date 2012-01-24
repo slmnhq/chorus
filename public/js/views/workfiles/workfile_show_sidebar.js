@@ -1,6 +1,7 @@
 (function($, ns) {
     ns.views.WorkfileShowSidebar = ns.views.Sidebar.extend({
         className : "workfile_show_sidebar",
+        useLoadingSection: true,
 
         events : {
             "click a.version_list" : "displayVersionList"
@@ -31,17 +32,30 @@
         },
 
         resourcesLoaded: function() {
-            var tabs = [{name: 'activity', selector: ".activity_list"}];
+            var tabs = [{name: 'activity_list'}];
 
             if(this.model.isSql()) {
-                tabs.push({name: 'functions', selector: ".schema_functions"});
-                tabs.push({name: "metadata", selector: ".metadata_list"});
+                tabs.push({name: 'database_function_list'});
+                tabs.push({name: "datasets_and_columns"});
 
-                this.schemaFunction = new ns.views.SchemaFunctions({sandbox: this.model.sandbox()});
-                this.metadataList = new ns.views.SchemaMetadataList({sandbox : this.model.sandbox()});
+                this.functionList = new ns.views.DatabaseFunctionList({ sandbox: this.model.sandbox() });
+                this.datasetList  = new ns.views.DatabaseDatasetList({ sandbox: this.model.sandbox() });
+                this.columnList   = new ns.views.DatabaseColumnList({ sandbox: this.model.sandbox() });
 
-                this.subviews[".schema_functions"] = "schemaFunction";
-                this.subviews[".metadata_list"] = "metadataList";
+                this.datasetList.bind("datasetSelected", function(tableOrView) {
+                    this.columnList.trigger("datasetSelected", tableOrView);
+                    this.$(".database_column_list").removeClass("hidden");
+                    this.$(".database_dataset_list").addClass("hidden");
+                }, this);
+
+                this.columnList.bind("back", function() {
+                    this.$(".database_dataset_list").removeClass("hidden");
+                    this.$(".database_column_list").addClass("hidden");
+                }, this);
+
+                this.subviews[".tabbed_area .database_function_list"] = "functionList";
+                this.subviews[".tabbed_area .database_dataset_list"] = "datasetList";
+                this.subviews[".tabbed_area .database_column_list"] = "columnList";
             }
             this.tabControl = new chorus.views.TabControl(tabs);
         },

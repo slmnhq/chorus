@@ -3,7 +3,7 @@
     <div title="{{fileName}}" class="fileName">{{fileName}}</div>
     <span class="display_title">{{t "actions.display"}}</span>
     <a class="version_list" href="#">
-        <span class="chosen">{{t "workfile.version_title" versionNum=versionNum}}</span>
+        <span class="chosen">{{t "workfile.version_title" versionNum=versionInfo.versionNum}}</span>
         <img src="/images/blue-menu-triangle.png"/>
     </a>
     <div class="updated">{{t "workfiles.updated_by"}} <a class="updated_by" href="{{modifierUrl}}">{{updatedBy}}</a> on <span class="updated_on">{{displayTimestamp lastUpdatedStamp}}</span></div>
@@ -17,6 +17,9 @@
 <div class="tab_control"></div>
 <div class="tabbed_area">
     <div class="activity_list"/>
-    <div class="schema_functions"/>
-    <div class="metadata_list"/>
+    <div class="database_function_list"/>
+    <div class="datasets_and_columns">
+        <div class="database_dataset_list"/>
+        <div class="database_column_list hidden"/>
+    </div>
 </div>

@@ -2,7 +2,6 @@ describe("chorus.alerts.WorkfileConflict", function() {
     beforeEach(function() {
         stubModals();
         spyOn(chorus.Modal.prototype, "launchModal").andCallThrough();
-        fixtures.model = 'Workfile';
         this.workfile = fixtures.workfile({ content : "version content" });
         this.message = "This work file has been modified by Christine Klunk"
         this.workfile.serverErrors = [{message: this.message}];
@@ -46,10 +45,8 @@ describe("chorus.alerts.WorkfileConflict", function() {
         beforeEach(function() {
             spyOn(this.alert, "closeModal");
             spyOnEvent(this.alert.model, "invalidated");
-            fixtures.model = 'Draft';
             this.alert.$("button.cancel").click();
-            this.draft = fixtures.modelFor('fetch')
-            this.draft.set({workspaceId: this.workfile.get("workspaceId"), workfileId: this.workfile.get("id")});
+            this.draft = fixtures.draft({workspaceId: this.workfile.get("workspaceId"), workfileId: this.workfile.get("id")});
         });
 
         it("fetches the draft", function() {
@@ -64,12 +61,7 @@ describe("chorus.alerts.WorkfileConflict", function() {
 
         context("and the fetch returns", function() {
             beforeEach(function() {
-                this.server.respondWith(
-                    'GET',
-                    this.draft.url(),
-                    this.prepareResponse(fixtures.jsonFor("fetch")));
-
-                this.server.respond();
+                this.server.completeFetchFor(this.draft);
             })
 
             it("deletes the draft", function() {

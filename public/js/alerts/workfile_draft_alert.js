@@ -18,7 +18,7 @@
             var draft = new chorus.models.Draft({workspaceId : this.model.get("workspaceId"), workfileId: this.model.get("id")});
             draft.bind("change", function(draft) {
                 this.model.isDraft = true;
-                this.model.set({"content" : draft.get("content")});
+                this.model.content(draft.get("draftInfo").content);
             }, this);
 
             draft.fetch();
@@ -26,7 +26,7 @@
         },
 
         deleteDraft : function() {
-            var draft = new chorus.models.Draft({workspaceId : this.model.get("workspaceId"), workfileId: this.model.get("id")});
+            var draft = new chorus.models.Draft({workspaceId : this.model.get("workspaceId"), workfileId: this.model.get("id"), id: "Dummy"});
 
             draft.bind("change", function() {
                 draft.destroy();

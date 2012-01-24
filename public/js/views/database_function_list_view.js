@@ -1,6 +1,6 @@
 (function($, ns) {
-    ns.views.SchemaFunctions = ns.views.Base.extend({
-        className : "schema_functions",
+    ns.views.DatabaseFunctionList = ns.views.Base.extend({
+        className : "database_function_list",
         useLoadingSection: true,
 
         setup: function() {
