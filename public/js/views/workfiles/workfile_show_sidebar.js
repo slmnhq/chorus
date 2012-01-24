@@ -58,6 +58,7 @@
                 this.subviews[".tabbed_area .database_column_list"] = "columnList";
             }
             this.tabControl = new chorus.views.TabControl(tabs);
+            this.trigger("sidebar:loaded");
         },
 
         postRender : function() {

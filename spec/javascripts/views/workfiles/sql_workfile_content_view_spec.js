@@ -44,8 +44,14 @@ describe("chorus.views.SqlWorkfileContentView", function() {
         it("forwards file:createWorkfileNewVersion events to the textContent subview", function() {
             spyOnEvent(this.view.textContent, "file:createWorkfileNewVersion");
             this.view.trigger("file:createWorkfileNewVersion");
-            expect("file:createWorkfileNewVersion").toHaveBeenTriggeredOn(this.view.textContent)
-        })
+            expect("file:createWorkfileNewVersion").toHaveBeenTriggeredOn(this.view.textContent);
+        });
+
+        it("forwards file:insertFunction events to the textContent subview", function() {
+            spyOnEvent(this.view.textContent, "file:insertFunction");
+            this.view.trigger("file:insertFunction", "");
+            expect("file:insertFunction").toHaveBeenTriggeredOn(this.view.textContent)
+        });
     })
 
     describe("event file:runCurrent", function() {

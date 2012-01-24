@@ -37,6 +37,7 @@
             this.breadcrumbs = new breadcrumbsView({workspace: this.workspace, model: this.model});
 
             this.sidebar = new chorus.views.WorkfileShowSidebar({model : this.model});
+            this.sidebar.bindOnce("sidebar:loaded", _.bind(this.bindSidebar, this));
 
             this.subNav = new ns.views.SubNav({workspace: this.workspace, tab: "workfiles"});
 
@@ -63,6 +64,12 @@
             }
 
             this.render();
+        },
+
+        bindSidebar : function() {
+            if(this.model && this.model.isSql()) {
+              this.sidebar.functionList.forwardEvent("file:insertFunction", this.mainContent.content)
+            }
         }
     });
 

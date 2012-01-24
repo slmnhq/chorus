@@ -47,31 +47,42 @@ describe("chorus.views.DatabaseFunctionList", function() {
             });
 
             it("should not show the 'insert arrows'", function() {
-                expect(this.view.$('.functions .insert_hover')).toHaveClass("hidden")
+                expect(this.view.$('.list .insert_hover')).toHaveClass("hidden")
             })
 
             context("when hovering over a function li", function() {
                 beforeEach(function() {
-                   this.view.$('.functions li:eq(1)').mouseenter();
+                   this.view.$('.list li:eq(1)').mouseenter();
                 });
 
                 it("shows the insert arrow", function() {
-                    expect(this.view.$('.functions .insert_hover:eq(1)')).not.toHaveClass('hidden');
-                    expect(this.view.$('.functions .insert_hover:eq(0)')).toHaveClass('hidden');
+                    expect(this.view.$('.list .insert_hover:eq(1)')).not.toHaveClass('hidden');
+                    expect(this.view.$('.list .insert_hover:eq(0)')).toHaveClass('hidden');
                 })
 
                 it("has the insert text", function() {
-                    expect(this.view.$('.functions .insert_link:eq(1)').text()).toMatchTranslation('schema.functions.insert')
+                    expect(this.view.$('.list .insert_link:eq(1)').text()).toMatchTranslation('schema.functions.insert')
+                })
+
+                context("when clicking the insert arrow", function() {
+                    beforeEach(function() {
+                        spyOnEvent(this.view, "file:insertFunction");
+                        this.view.$('.list .insert_hover:eq(1) a').click()
+                    })
+
+                    it("triggers a file:insertFunction with the functions string representation", function() {
+                        expect("file:insertFunction").toHaveBeenTriggeredOn(this.view, [this.view.functions.models[1].toString()]);
+                    })
                 })
 
                 context("when leaving the function li", function() {
                     beforeEach(function() {
-                      this.view.$('.functions li:eq(1)').mouseleave();
+                      this.view.$('.list li:eq(1)').mouseleave();
                     })
 
                     it("should not show the insert arrow", function() {
-                      expect(this.view.$('.functions .insert_hover:eq(1)')).toHaveClass('hidden');
-                      expect(this.view.$('.functions .insert_hover:eq(0)')).toHaveClass('hidden');
+                      expect(this.view.$('.list .insert_hover:eq(1)')).toHaveClass('hidden');
+                      expect(this.view.$('.list .insert_hover:eq(0)')).toHaveClass('hidden');
                     })
                 })
             })

@@ -18,4 +18,12 @@ describe("chorus.models.SchemaFunctionSet", function() {
             expect(functionNames).toEqual(['a', 'G', 'z']);
         })
     });
+
+    describe("add", function() {
+        it("sets the schemaName on the added function", function() {
+            this.functionSet.add(fixtures.schemaFunction());
+            expect(this.functionSet.models[0].get('schemaName')).not.toBeFalsy();
+            expect(this.functionSet.models[0].get('schemaName')).toBe(this.schema.get('name'));
+        })
+    });
 });

@@ -5,6 +5,12 @@
 
         comparator : function(schemaFunction) {
             return schemaFunction.get('functionName').toLowerCase();
+        },
+
+        _add : function(model, options) {
+            model = this._super("_add", arguments);
+            model.set({"schemaName": this.attributes.schemaName});
+            return model;
         }
 
     });

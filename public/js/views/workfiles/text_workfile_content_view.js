@@ -7,6 +7,7 @@
         setup : function() {
             this.bind("file:saveCurrent", this.replaceCurrentVersion);
             this.bind("file:createWorkfileNewVersion", this.createWorkfileNewVersion);
+            this.bind("file:insertFunction", this.insertFunction, this)
             this.model.bind("saveFailed", this.versionConflict, this)
         },
 
@@ -49,7 +50,10 @@
             if (this.cursor) {
                 this.editor.setCursor(this.cursor.line, this.cursor.ch);
             } else {
-                this.editor.setCursor(0, 0);
+                var lineCount = this.editor.lineCount();
+                var lastLine = this.editor.getLine(lineCount-1)
+                var charCount = lastLine.length
+                this.editor.setCursor(lineCount-1, charCount)
             }
 
             this.editor.setOption("readOnly", false);
@@ -103,6 +107,11 @@
             this.dialog.launchModal(); // we need to manually create the dialog instead of using data-dialog because qtip is not part of page
             this.dialog.model.bind("change", this.render, this);
             this.dialog.model.bind("autosaved", function() { this.trigger("autosaved", "workfile.content_details.save");}, this);
+        },
+
+        insertFunction : function(text) {
+            this.editor.focus();
+            this.editor.replaceSelection(text)
         }
     });
 

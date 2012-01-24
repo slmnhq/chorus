@@ -1,12 +1,13 @@
 ;(function(ns) {
     ns.models.Schema = ns.models.Base.extend({
         urlTemplate: "/data/{{instanceId}}/database/{{databaseName}}/schema/{{schemaName}}",
-        
+
         functions: function() {
             this._schemaFunctions = this._schemaFunctions || new ns.models.SchemaFunctionSet([], {
                 instanceId: this.get("instanceId"),
                 databaseId: this.get("databaseId"),
-                schemaId: this.get("id")
+                schemaId: this.get("id"),
+                schemaName: this.get('name')
             });
             return this._schemaFunctions;
         },

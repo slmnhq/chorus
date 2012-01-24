@@ -61,6 +61,16 @@ describe("chorus.views.TextWorkfileContentView", function() {
             it("uses the 'text/x-sql' mode", function() {
                 expect(this.view.editor.getOption("mode")).toBe("text/x-sql");
             });
+
+            context("and the user clicks insert on a function", function() {
+                beforeEach(function() {
+                    spyOn(this.view.editor, 'replaceSelection')
+                    this.view.trigger("file:insertFunction", "my awesome function");
+                })
+                it("inserts the function", function() {
+                    expect(this.view.editor.replaceSelection).toHaveBeenCalledWith("my awesome function");
+                })
+            })
         });
     });
 
@@ -85,10 +95,10 @@ describe("chorus.views.TextWorkfileContentView", function() {
             expect(this.view.editor.focus).toHaveBeenCalled();
         });
 
-        it("puts the cursor at the beginning of the first line", function() {
+        it("puts the cursor at the end of the file", function() {
             var coords = this.view.editor.getCursor();
             expect(coords.line).toBe(0);
-            expect(coords.ch).toBe(0);
+            expect(coords.ch).toBe(36);
         });
 
         it("adds the editable class to the CodeMirror div", function(){

@@ -1387,7 +1387,7 @@ var CodeMirror = (function() {
         '<span id="CodeMirror-temp-' + tempId + '">' + htmlEscape(line.text.charAt(ch) || " ") + "</span>" +
         extra + "</pre>";
       var elt = document.getElementById("CodeMirror-temp-" + tempId);
-      var top = elt.offsetTop, left = elt.offsetLeft;
+      var top = elt ? elt.offsetTop : 0, left = elt ? elt.offsetLeft : 0;
       // Older IEs report zero offsets for spans directly after a wrap
       if (ie && ch && top == 0 && left == 0) {
         var backup = document.createElement("span");

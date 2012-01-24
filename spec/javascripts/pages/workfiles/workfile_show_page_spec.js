@@ -128,6 +128,21 @@ describe("chorus.pages.WorkfileShowPage", function() {
             });
         });
 
+        describe("when the sidebar triggers 'file:insertFunction'", function() {
+            beforeEach(function() {
+                this.page.sidebar.functionList = new chorus.views.Base();
+                this.page.render()
+                spyOnEvent(this.page.mainContent.content, 'file:insertFunction')
+                spyOn(this.page.model, 'isSql').andReturn(true)
+                this.page.sidebar.trigger("sidebar:loaded")
+                this.page.sidebar.functionList.trigger("file:insertFunction", "");
+            })
+
+            it("should relay the event to textContent", function() {
+                expect('file:insertFunction').toHaveBeenTriggeredOn(this.page.mainContent.content)
+            })
+        })
+
         describe("breadcrumbs", function() {
             it("renders home > Workspaces > {workspace name} > All work files > {workfile name}", function() {
                 expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
@@ -144,13 +159,13 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
                 expect(this.page.$(".breadcrumb:eq(4)").text().trim()).toBe(this.model.get('fileName'));
             });
-            
+
             context("with a long workspace name", function() {
                 beforeEach(function() {
                     this.page.workspace.set({name: "LongLongLongLongLongWorkspaceName"});
                     this.page.render();
                 });
-                
+
                 it("ellipsizes the workspace name in the breadcrumb view", function() {
                     expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/4");
                     expect(this.page.$(".breadcrumb:eq(2) a").text()).toBe("LongLongLongLongLong...");

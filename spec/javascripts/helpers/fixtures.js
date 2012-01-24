@@ -1370,10 +1370,11 @@
 
             schemaFunction: function(overrides) {
                 var attributes = _.extend({
-                    argTypes : "{text,text,text}",
-                    argNames : null,
+                    argTypes : ['text','text','text'],
+                    argNames : ['first_name', 'last_name', ''],
                     language : "plpgsql",
                     functionName : "function" + this.nextId().toString(),
+                    schemaName : 'mmmmySchema',
                     returnType : "void"
                 }, overrides);
                 return new chorus.models.SchemaFunction(attributes);
