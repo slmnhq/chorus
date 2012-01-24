@@ -2,16 +2,16 @@
 <div class="schema_name">{{t "schema.functions.search_in" schemaName=schemaName}}</div>
 {{#if models.length}}
     <ul class="list">
-    {{#each models}}
-        <li data-name="{{name}}" data-type="{{type}}">
-            <span class="spacer left"/>
-            <img src="images/small_table.png">
-            <div class="name">
-                <a href="#" title="{{name}}">{{name}}</a>
-            </div>
-            <span class="spacer right"/>
-        </li>
-    {{/each}}
+        {{#each models}}
+            <li data-name="{{name}}" data-type="{{type}}">
+                <span class="spacer left"/>
+                <img src="images/small_table.png">
+                <div class="name">
+                    <a href="#" title="{{name}}">{{name}}</a>
+                </div>
+                <span class="spacer right"/>
+            </li>
+        {{/each}}
     </ul>
 {{else}}
     <div class="none_found">{{t "schema.metadata.list.empty"}}</div>

@@ -65,42 +65,24 @@
             font-size: 12px;
             font-weight: $semibold;
         }
-
-        .schema_name, .back {
-            margin: 4px 0px 0px 20px;
-        }
-
+        
         .none_found {
             @include font-normal-beta;
         }
 
+        .schema_name, .back, .none_found {
+            margin: 4px 0px 0px 20px;
+        }
+
+
         .database_function_list, .database_dataset_list, .database_column_list {
             margin-top: 15px;
-        }
-
-        .database_function_list {
-            li {
-                &:first-child {
-                    border-top: $dotted-list-item-border;
-                }
-                &:last-child {
-                    border-bottom: $dotted-list-item-border;
-                }
-
-                @include list-section-heading;
-                background: url('/images/function.png') no-repeat left center;
-                padding: 0 0 0 29px;
-                height: 28px;
-                line-height: 28px;
-            }
-        }
-
-        .database_dataset_list, .database_column_list {
 
             li {
                 height: 29px;
                 padding-top: 0px;
                 padding-bottom: 0px;
+                color: $color-text2;
 
                 img {
                     margin-top: 2px;
@@ -116,6 +98,13 @@
                     max-width: 75%;
                     vertical-align: middle;
                     line-height: 14px;
+                }
+
+                &:first-child {
+                    border-top: $dotted-list-item-border;
+                }
+                &:last-child {
+                    border-bottom: $dotted-list-item-border;
                 }
             }
         }

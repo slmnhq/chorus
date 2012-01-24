@@ -3,16 +3,14 @@
 <a class="back" href="#">{{t "schema.column.list.back"}}</a>
 {{#if models.length}}
     <ul class="list">
-    {{#each models}}
-        <li data-name="{{name}}">
-            <span class="spacer left"/>
-            <img src="images/small_column.png">
-            <div class="name">
-                <a href="#" title="{{name}}">{{name}}</a>
-            </div>
-            <span class="spacer right"/>
-        </li>
-    {{/each}}
+        {{#each models}}
+            <li data-name="{{name}}">
+                <span class="spacer left"/>
+                <img src="images/small_column.png">
+                <div class="name">{{name}}</div>
+                <span class="spacer right"/>
+            </li>
+        {{/each}}
     </ul>
 {{else}}
     <div class="none_found">{{t "schema.column.list.empty"}}</div>
