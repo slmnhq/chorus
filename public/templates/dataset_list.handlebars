@@ -1,0 +1,13 @@
+{{#each models}}
+    <li>
+        <div class="left"><img src="{{iconImgUrl}}" /></div>
+        <div class="right">
+            <a href="#" class="name">{{objectName}}</a>
+            <div class="location">
+                {{t "dataset.from"}} <a href="#">{{instance.name}}</a>
+                 / <a href="#">{{databaseName}}</a>
+                 / <a href="#">{{schemaName}}</a>
+            </div>
+        </div>
+    </li>
+{{/each}}

@@ -1368,6 +1368,58 @@
                 return new chorus.models.Sandbox(attributes);
             },
 
+            datasetCommonJson : function(overrides) {
+                var id = fixtures.nextId();
+                return _.extend({
+                    databaseName: "dca_demo",
+                    instance: {id:fixtures.nextId(), name:"some_instance"},
+                    isDeleted: false,
+                    modifiedBy: {id:"InitialUser", userName:"edcadmin"},
+                    objectName : "Dataset" + id,
+                    owner: {id:"InitialUser", userName:"edcadmin"},
+                    schemaName: "some_schema",
+                    workspace: {id:fixtures.nextId(), name:"some_workspace"}
+                }, overrides);
+
+            },
+
+            datasetChorusView : function(overrides) {
+                var attributes = _.extend(fixtures.datasetCommonJson(), {
+                    createdStamp: "2012-01-24 12:25:46.994",
+                    createdTxStamp: "2012-01-24 12:25:46.627",
+                    id: fixtures.nextId().toString(),
+                    lastUpdatedStamp: "2012-01-24 12:25:46.994",
+                    lastUpdatedTxStamp: "2012-01-24 12:25:46.627",
+                    objectType: "",
+                    query: "select * from cust",
+                    type: "CHORUS_VIEW"
+                }, overrides);
+                return new chorus.models.Dataset(attributes);
+            },
+
+            datasetSourceTable : function(overrides) {
+                var attributes = _.extend(fixtures.datasetCommonJson(), {
+                    createdStamp: "2012-01-24 12:25:11.077",
+                    createdTxStamp: "2012-01-24 12:25:10.701",
+                    id: fixtures.nextId().toString(),
+                    lastUpdatedStamp: "2012-01-24 12:25:11.077",
+                    lastUpdatedTxStamp: "2012-01-24 12:25:10.701",
+                    objectType: "BASE_TABLE",
+                    type: "SOURCE_TABLE"
+                }, overrides);
+                return new chorus.models.Dataset(attributes);
+            },
+
+            datasetSandboxTable : function(overrides) {
+                var attributes = _.extend(fixtures.datasetCommonJson(), {
+                    modifiedBy: {},
+                    objectType: "BASE_TABLE",
+                    owner: {},
+                    type: "SANDBOX_TABLE"
+                }, overrides);
+                return new chorus.models.Dataset(attributes);
+            },
+
             schemaFunction: function(overrides) {
                 var attributes = _.extend({
                     argTypes : ['text','text','text'],

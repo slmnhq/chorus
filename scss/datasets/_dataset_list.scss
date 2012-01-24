@@ -1,0 +1,23 @@
+.dataset_list {
+    .left {
+        display: inline-block;
+        width: 50px;
+    }
+
+    .right {
+        display: inline-block;
+        
+        .name {
+            font-weight: $semibold;
+        }
+        .location {
+            padding-top: 4px;
+            @include results-console-message;
+            a {
+                font-size: 12px;
+                font-weight: $semibold;
+            }
+        }
+
+    }
+}
