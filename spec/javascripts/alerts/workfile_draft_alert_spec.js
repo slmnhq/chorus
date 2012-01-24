@@ -1,7 +1,6 @@
 describe("chorus.alerts.WorkfileDraft", function() {
     beforeEach(function() {
-        fixtures.model = 'Workfile';
-        this.workfile = fixtures.workfile({ hasDraft : true, content : "version content" });
+        this.workfile = fixtures.draft();;
         this.alert = new chorus.alerts.WorkfileDraft({ model : this.workfile });
         this.alert.render();
     });
@@ -13,23 +12,18 @@ describe("chorus.alerts.WorkfileDraft", function() {
         })
 
         it("fetches the draft workfile", function() {
-            expect(this.server.requests[0].url).toBe(this.workfile.url() + "/draft")
+            expect(this.server.requests[0].url).toBe(this.workfile.url())
         })
 
         describe("when the fetch succeeds", function() {
             beforeEach(function() {
                 this.changeSpy = jasmine.createSpy();
                 this.alert.model.bind('change', this.changeSpy);
-                this.server.respondWith(
-                    'GET',
-                    "/edc/workspace/"+this.workfile.get('workspaceId')+"/workfile/"+this.workfile.get('id')+"/draft",
-                    this.prepareResponse(fixtures.jsonFor("fetchWithDraft")));
-
-                this.server.respond();
+                this.server.completeFetchFor(this.workfile);
             })
 
             it("sets the page model content to the draft content", function() {
-                expect(this.alert.model.get("content")).toBe("draft content");
+                expect(this.alert.model.get("content")).toBe(this.workfile.get('draftInfo').content);
             })
 
             it("triggers change on the page model", function() {
@@ -59,11 +53,11 @@ describe("chorus.alerts.WorkfileDraft", function() {
 
         context("and the fetch returns", function() {
             beforeEach(function() {
-                this.server.lastFetch().succeed([fixtures.draftJson({ workspaceId : "2", workfileId : "1" })]);
+                this.server.completeFetchFor(this.workfile);
             })
 
             it("deletes the draft", function() {
-                expect(this.server.lastDestroy().url).toBe("/edc/workspace/2/workfile/1/draft");
+                expect(this.server.lastDestroy().url).toBe("/edc/workspace/"+this.workfile.get('workspaceId')+"/workfile/"+this.workfile.get('id')+"/draft");
             })
 
             context("when the delete succeeds", function() {

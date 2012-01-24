@@ -24,8 +24,7 @@ describe("WorkfileListSidebar", function() {
     describe("workfile:selected event handling", function() {
         context("when a workfile is selected", function() {
             beforeEach(function() {
-                fixtures.model = "Workfile";
-                this.workfile = fixtures.modelFor("fetch")
+                this.workfile = fixtures.sqlWorkfile({lastUpdatedStamp: "2011-11-22 10:46:03.152"});
                 this.view.trigger("workfile:selected", this.workfile);
             })
 

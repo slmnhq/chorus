@@ -152,7 +152,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             })
 
             it("displays a link to download the workfile", function() {
-                expect(this.view.$(".actions a.download")).toHaveAttr("href", "/edc/workspace/" + this.workfile.get('workspaceId') + "/workfile/" + this.workfile.get('id') + "/file/" + this.workfile.get('versionFileId') + "?download=true")
+                expect(this.view.$(".actions a.download")).toHaveAttr("href", "/edc/workspace/" + this.workfile.get('workspaceId') + "/workfile/" + this.workfile.get('id') + "/file/" + this.workfile.get('versionInfo').versionFileId + "?download=true")
             });
 
             it("displays a link to add a note", function() {

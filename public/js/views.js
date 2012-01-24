@@ -61,7 +61,12 @@
         render: function render() {
             this.preRender($(this.el));
 
-            var evaluatedContext = _.isFunction(this.context) ? this.context() : this.context;
+            var evaluatedContext = {};
+            if(!this.displayLoadingSection()) {
+                // The only template rendered when loading section is displayed is the loading section itself, so no context is needed.
+                evaluatedContext = _.isFunction(this.context) ? this.context() : this.context;
+            }
+
             $(this.el).html(this.template(evaluatedContext))
                 .addClass(this.className)
                 .attr("title", this.options.title || this.title || "")
@@ -76,7 +81,13 @@
         renderSubviews: function() {
             var self = this;
             this.setupSubviews();
-            var subviews = _.extend({".loading_section" : "makeLoadingSectionView"}, this.subviews);
+            var subviews;
+            if(this.displayLoadingSection()) {
+                subviews = {".loading_section" : "makeLoadingSectionView"};
+            } else {
+                subviews = this.subviews
+            }
+
             _.each(subviews, _.bind(function(property, selector){
                 var view = this.getSubview(property);
                 if (view) {

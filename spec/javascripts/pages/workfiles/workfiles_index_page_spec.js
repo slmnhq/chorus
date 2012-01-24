@@ -1,11 +1,12 @@
 describe("chorus.pages.WorkfileIndexPage", function() {
     beforeEach(function() {
-        fixtures.model = "Workfile";
+        this.workspace = fixtures.workspace();
+        this.model = fixtures.sqlWorkfile({workspaceId: this.workspace.get('id')});
+        this.page = new chorus.pages.WorkfileIndexPage(this.model.get('workspaceId'));
     })
 
     describe("breadcrumbs", function() {
         beforeEach(function() {
-            this.page = new chorus.pages.WorkfileIndexPage(4);
             this.page.mainContent.model.set({name: "Cool Workspace"});
             this.page.mainContent.model.loaded = true;
             this.page.render();
@@ -18,7 +19,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/workspaces");
             expect(this.page.$(".breadcrumb:eq(1) a").text()).toMatchTranslation("breadcrumbs.workspaces");
 
-            expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/4");
+            expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/" + this.model.get('workspaceId'));
             expect(this.page.$(".breadcrumb:eq(2) a").text()).toBe("Cool Workspace");
 
             expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toMatchTranslation("breadcrumbs.workfiles.all");
@@ -31,19 +32,15 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             });
 
             it("ellipsizes the workspace name in the breadcrumb view", function() {
-                expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/4");
+                expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/" + this.model.get('workspaceId'));
                 expect(this.page.$(".breadcrumb:eq(2) a").text()).toBe("LongLongLongLongLong...");
             });
         });
     });
 
     describe("#initialize", function() {
-        beforeEach(function() {
-            this.page = new chorus.pages.WorkfileIndexPage(4);
-        })
-
         it("fetches the model", function() {
-            expect(this.server.requests[0].url).toBe("/edc/workspace/4");
+            expect(this.server.requests[0].url).toBe("/edc/workspace/" + this.model.get('workspaceId'));
         })
 
         it("defaults to alphabetical sorting", function() {
@@ -56,13 +53,13 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         })
 
         it("fetches the first page of the collection", function() {
-            expect(this.server.requests[1].url).toBe("/edc/workspace/4/workfile?page=1&rows=50&sidx=fileName&sord=asc")
+            expect(this.server.requests[1].url).toBe("/edc/workspace/"+this.model.get('workspaceId')+"/workfile?page=1&rows=50&sidx=fileName&sord=asc")
         })
     });
 
     describe("when the workfile:selected event is triggered on the list view", function() {
         beforeEach(function() {
-            this.page = new chorus.pages.WorkfileIndexPage(4);
+            this.server.completeFetchFor(this.workspace);
             this.page.render();
         })
 
@@ -70,24 +67,21 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             var listView = this.page.mainContent.content;
             var sidebar = this.page.sidebar;
             var workfileSelectedSpy = jasmine.createSpy("workfile:selected");
-            var workfile = fixtures.modelFor("fetch");
             sidebar.bind("workfile:selected", workfileSelectedSpy);
-            listView.trigger("workfile:selected", workfile);
+            listView.trigger("workfile:selected", this.model);
 
-            expect(workfileSelectedSpy).toHaveBeenCalledWith(workfile);
+            expect(workfileSelectedSpy).toHaveBeenCalledWith(this.model);
         });
 
         it("sets the model of the page", function() {
             var listView = this.page.mainContent.content;
-            var workfile = fixtures.modelFor("fetch");
-            listView.trigger("workfile:selected", workfile);
-            expect(this.page.model).toBe(workfile);
+            listView.trigger("workfile:selected", this.model);
+            expect(this.page.model).toBe(this.model);
         })
     });
 
     describe("menus", function() {
         beforeEach(function() {
-            this.page = new chorus.pages.WorkfileIndexPage(4);
             this.page.render();
         })
 
@@ -166,9 +160,6 @@ describe("chorus.pages.WorkfileIndexPage", function() {
     })
 
     describe("buttons", function() {
-        beforeEach(function() {
-            this.page = new chorus.pages.WorkfileIndexPage(4);
-        })
 
         context("before the workspace is fetched", function() {
             beforeEach(function() {

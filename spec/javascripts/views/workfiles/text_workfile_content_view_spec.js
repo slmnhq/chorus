@@ -225,7 +225,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
                 }
                 var model = this.view.model
                 var url = "/edc/workspace/" + model.get("workspaceId") + "/workfile/" +
-                    model.get("id") + "/version/" + model.get("versionNum");
+                    model.get("id") + "/version/" + model.get("versionInfo").versionNum;
                 this.failSaveFor(this.view.model, message, {url: url});
             });
 
@@ -264,7 +264,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
     describe("event file:createWorkfileNewVersion", function(){
         beforeEach(function() {
-            this.view.model.set({"content": "old content"});
+            this.view.model.get("versionInfo").content = "old content";
             this.view.model.set({"latestVersionNum": 2});
 
             this.view.render();

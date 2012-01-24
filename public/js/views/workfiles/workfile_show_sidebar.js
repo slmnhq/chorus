@@ -1,6 +1,7 @@
 (function($, ns) {
     ns.views.WorkfileShowSidebar = ns.views.Sidebar.extend({
         className : "workfile_show_sidebar",
+        useLoadingSection: true,
 
         events : {
             "click a.version_list" : "displayVersionList"

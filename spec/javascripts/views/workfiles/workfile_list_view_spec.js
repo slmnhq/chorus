@@ -20,54 +20,12 @@ describe("WorkfileListView", function() {
 
         context("with some workfiles in the collection", function() {
             beforeEach(function() {
-                this.model1 = new chorus.models.Workfile({
-                    id: 12,
-                    fileType: "sql",
-                    fileName: "some_file.sql",
-                    description: "describe 1",
-                    workspaceId: 1,
-                    mimeType: "text/x-sql",
-                    recentComments : [
-                        {
-                            text: "Comment 1",
-                            author : {
-                                id: "21",
-                                firstName: "Wayne",
-                                lastName: "Wayneson"
-                            },
-                            timestamp: "2011-12-08 17:16:47.308-08"
-                        }
-                    ],
-                    commentCount: "1"
-                });
-                this.model2 = new chorus.models.Workfile({
-                    id: 34,
-                    fileType: "txt",
-                    fileName: "other_file.txt",
-                    description: "describe 2",
-                    workspaceId: 1,
-                    mimeType: "text/plain",
-                    recentComments : [
-                        {
-                            text: "Comment 2",
-                            author : {
-                                id: "22",
-                                firstName: "Garth",
-                                lastName: "Garthson"
-                            },
-                            timestamp: "2011-12-08 17:16:47.308-08"
-                        }
-                    ],
-                    commentCount: "2"
-                });
-                this.model3 = new chorus.models.Workfile({
-                    id: 56,
-                    fileType: "N/A",
-                    fileName: "zipfile.zip",
-                    description: "describe 3",
-                    workspaceId: 1,
-                    mimeType: "application/zip"
-                });
+                this.model1 = fixtures.sqlWorkfile();
+                this.model1.get('recentComments').length = 1;
+                this.model1.set({commentCount: 1});
+                this.model2 = fixtures.textWorkfile();
+                this.model3 = fixtures.otherWorkfile();
+                this.model3.set({recentComments: [], commentCount: 0});
                 this.collection = new chorus.models.WorkfileSet([this.model1, this.model2, this.model3], {workspaceId: 1234});
                 this.view = new chorus.views.WorkfileList({collection: this.collection});
                 this.view.render();
@@ -88,9 +46,9 @@ describe("WorkfileListView", function() {
             });
 
             it("includes data-id for each item", function() {
-                expect($(this.view.$("li")[0]).data("id")).toBe(this.model1.get("id"));
-                expect($(this.view.$("li")[1]).data("id")).toBe(this.model2.get("id"));
-                expect($(this.view.$("li")[2]).data("id")).toBe(this.model3.get("id"));
+                expect($(this.view.$("li")[0]).data("id").toString()).toBe(this.model1.get("id"));
+                expect($(this.view.$("li")[1]).data("id").toString()).toBe(this.model2.get("id"));
+                expect($(this.view.$("li")[2]).data("id").toString()).toBe(this.model3.get("id"));
             });
 
             it("includes the filename as a link", function() {
@@ -125,7 +83,7 @@ describe("WorkfileListView", function() {
             });
 
             it("displays the abbreviated date of the most recent comment", function() {
-                expect(this.view.$("li:first-child .comment_info .on").text().trim()).toBe("Dec 8");
+                expect(this.view.$("li:first-child .comment_info .on").text().trim()).toBe("Dec 1");
             })
 
             it("pre-selects the first item in the list", function() {
@@ -135,7 +93,7 @@ describe("WorkfileListView", function() {
             describe("when a workfileId is provided in pageOptions", function() {
                 beforeEach(function() {
                     chorus.page = chorus.page || {};
-                    chorus.page.pageOptions = { workfileId : "56" }
+                    chorus.page.pageOptions = { workfileId : this.model3.get('id') }
                 })
 
                 context("and the workfile collection is loaded", function() {
@@ -149,7 +107,7 @@ describe("WorkfileListView", function() {
                         })
 
                         it("selects the indicated workfile", function() {
-                            expect(this.view.$("li[data-id=56]")).toHaveClass("selected");
+                            expect(this.view.$("li[data-id="+this.model3.get('id')+"]")).toHaveClass("selected");
                         })
 
                         it("clears the pageOptions after rendering", function() {

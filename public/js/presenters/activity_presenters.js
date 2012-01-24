@@ -99,12 +99,12 @@
 
         WORKFILE_UPGRADED_VERSION : function(model) {
             return {
-                objectName : model.workfile().get("name"),
+                objectName : model.workfile().get("fileName"),
                 objectUrl : model.workfile().showUrl(),
                 iconSrc : "/images/version_large.png",
                 iconHref : model.workfile().showUrl(),
                 iconClass : '',
-                versionName : t("workfile.version_title", { versionNum: model.workfile().get("versionNum")}),
+                versionName : t("workfile.version_title", { versionNum: model.get("version")}),
                 versionUrl : model.workfile().showUrl(),
                 body : model.get("commitMessage")
             }
@@ -156,7 +156,7 @@
 
     function workfileIsObject(model) {
         return {
-            objectName : model.workfile().get("name"),
+            objectName : model.workfile().get("fileName"),
             objectUrl : new ns.models.Workfile({id: model.workfile().get("id"), workspaceId : this.workspace.get("id")}).showUrl()
         }
     }

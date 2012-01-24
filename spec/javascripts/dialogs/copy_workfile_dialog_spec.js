@@ -84,10 +84,8 @@ describe("chorus.dialogs.CopyWorkfile", function() {
 
     describe("clicking Copy File", function() {
         beforeEach(function() {
-            fixtures.model = "Workspace";
-            this.workspace = fixtures.modelFor("fetch");
-            fixtures.model = "Workfile";
-            this.workfile = fixtures.modelFor("fetch");
+            this.workspace = fixtures.workspace();
+            this.workfile = fixtures.workfile({workspaceId: this.workspace.get('id')});
             this.dialog = new chorus.dialogs.CopyWorkfile({launchElement : this.launchElement });
             this.dialog.workfile = this.workfile;
             this.dialog.render();
@@ -127,12 +125,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
         })
         describe("when the API is successful", function() {
             beforeEach(function() {
-                this.server.respondWith(
-                    'POST',
-                    "/edc/workspace/" + this.workspace.get("id") + "/workfile",
-                    this.prepareResponse(fixtures.jsonFor("copy")));
-
-                this.server.respond();
+                this.server.lastCreate().succeed(this.workfile.attributes);
             })
 
             it("closes the dialog", function() {
@@ -146,6 +139,8 @@ describe("chorus.dialogs.CopyWorkfile", function() {
 
         describe("when the API fails", function() {
             beforeEach(function() {
+
+                fixtures.model = "Workfile";
                 this.server.respondWith(
                     'POST',
                     "/edc/workspace/" + this.workspace.get("id") + "/workfile",

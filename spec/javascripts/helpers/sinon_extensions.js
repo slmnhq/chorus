@@ -51,7 +51,12 @@ _.extend(sinon.fakeServer, {
 
     completeFetchFor: function(model, results) {
         results = results || [model.attributes];
-        this.lastFetchFor(model).succeed(results);
+        var fetch = this.lastFetchFor(model)
+        if(fetch) {
+            fetch.succeed(results);
+        } else {
+            throw "No fetch found for " + model.url() + ". Found fetches for: [" + _.pluck(this.fetches(), 'url').join(', ') + "]";
+        }
     }
 });
 
