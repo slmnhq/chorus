@@ -9,7 +9,7 @@
         applyInstanceIdToDatabases : function() {
             var id = this.attributes.instanceId;
             this.each(function(db) {
-                db.instanceId = id;
+                db.attributes.instanceId = id;
             });
         },
 

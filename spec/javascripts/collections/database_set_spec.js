@@ -1,4 +1,4 @@
-describe("DatabaseSet", function() {
+describe("chorus.models.DatabaseSet", function() {
     beforeEach(function() {
         this.instanceId = '8675309'
         this.collection = new chorus.models.DatabaseSet([], {instanceId: this.instanceId});
@@ -8,7 +8,7 @@ describe("DatabaseSet", function() {
         it("sets the instanceId on all the new models", function() {
             var database = fixtures.database();
             this.collection.reset(database);
-            expect(database.instanceId).toBe(this.instanceId);
+            expect(database.get("instanceId")).toBe(this.instanceId);
         });
     });
 
