@@ -17,6 +17,13 @@
             this.bind("datasetSelected", this.setTable, this);
         },
 
+        postRender: function() {
+            chorus.search({
+                input: this.$('input.search'),
+                list: this.$('ul')
+            });
+        },
+
         setTable: function(tableOrView) {
             this.resource = this.collection = tableOrView.columns();
             this.collection.fetch();

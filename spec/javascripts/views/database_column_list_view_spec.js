@@ -14,7 +14,7 @@ describe("chorus.views.DatabaseColumnList", function() {
 
         describe("when the 'datasetSelected' event is triggered", function() {
             beforeEach(function() {
-                this.table = fixtures.databaseTable();
+                this.table = fixtures.databaseTable({ name: "coffee_mugs" });
                 this.view.trigger("datasetSelected", this.table);
             });
 
@@ -27,7 +27,7 @@ describe("chorus.views.DatabaseColumnList", function() {
                     beforeEach(function() {
                         this.server.completeFetchFor(this.table.columns(), []);
                     });
-                    
+
                     it("should show the 'no columns found' message", function() {
                         expect(this.view.$(".none_found")).toContainTranslation("schema.column.list.empty");
                     });
@@ -43,6 +43,10 @@ describe("chorus.views.DatabaseColumnList", function() {
 
                     it("should show a 'back to all datasets' link", function() {
                         expect(this.view.$("a.back").text()).toMatchTranslation("schema.column.list.back");
+                    });
+
+                    it("shows the table name next to the schema name", function() {
+                        expect(this.view.$(".schema_name")).toContainText("coffee_mugs");
                     });
 
                     it("should show an 'li' for each column", function() {
