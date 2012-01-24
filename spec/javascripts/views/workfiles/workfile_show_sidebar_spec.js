@@ -66,6 +66,8 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             context("when the dataset tab is selected", function() {
                 beforeEach(function() {
                     this.view.$(".tab_control .database_dataset_list").click();
+                    this.server.completeAllFetches();
+                    this.view.$(".database_dataset_list input.search").val("searching for a table...");
                 });
 
                 it("shows the dataset list view", function() {
@@ -81,7 +83,10 @@ describe("chorus.views.WorkfileShowSidebar", function() {
                         this.table = fixtures.databaseTable();
                         spyOnEvent(this.view.columnList, 'datasetSelected');
                         this.view.datasetList.trigger("datasetSelected", this.table);
+                        this.server.completeAllFetches();
+                        this.view.$(".database_column_list input.search").val("searching for a column...");
                     });
+
 
                     it("hides the metadata list", function() {
                         expect(this.view.$(".database_dataset_list")).toHaveClass("hidden");
@@ -100,12 +105,27 @@ describe("chorus.views.WorkfileShowSidebar", function() {
                             this.view.columnList.trigger("back");
                         });
 
+                        it("clears the search text", function() {
+                            expect(this.view.$(".database_dataset_list input.search").val()).toBe("");
+                        });
+
                         it("should hide the column list", function() {
                             expect(this.view.$(".database_column_list")).toHaveClass("hidden");
                         });
 
                         it("should show the dataset list", function() {
                             expect(this.view.$(".database_dataset_list")).not.toHaveClass("hidden");
+                        });
+
+                        describe("clicking a table again", function() {
+                            beforeEach(function() {
+                                this.view.$(".tab_control .database_dataset_list").click();
+                                this.server.completeAllFetches();
+                            });
+
+                            it("clears the search text for the columns", function() {
+                                expect(this.view.$(".database_column_list input.search").val()).toBe("");
+                            });
                         });
                     });
                 });
