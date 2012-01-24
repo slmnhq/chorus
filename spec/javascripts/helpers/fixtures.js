@@ -1140,6 +1140,16 @@
                 return fixtures.comment(commentOverrides);
             },
 
+            schemaSet: function(overrides) {
+                var attributes = _.extend({
+                    id : this.nextId().toString(),
+                    databaseId: this.nextId().toString(),
+                    instanceId : this.nextId().toString(),
+                    databaseName: "My fixture database"
+                }, overrides);
+                return new chorus.models.SchemaSet([], attributes);
+            },
+
             schema: function(overrides) {
                 var id = this.nextId().toString();
 
