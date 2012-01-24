@@ -1,6 +1,6 @@
 ;(function(ns, $) {
-    ns.views.SandboxNewInstanceMode = ns.views.Base.extend({
-        className: "sandbox_new_instance_mode",
+    ns.views.SchemaPicker = ns.views.Base.extend({
+        className: "schema_picker",
 
         events : {
             "change .instance select" : "instanceSelected",

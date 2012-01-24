@@ -1,9 +1,9 @@
-describe("chorus.dialogs.SandboxNewInstanceMode", function() {
+describe("chorus.views.SchemaPicker", function() {
     beforeEach(function() {
         this.workspace = fixtures.workspace();
         spyOn(chorus, 'styleSelect');
         var launchElement = $("<a data-workspace-id='45'></a>");
-        this.view = new chorus.views.SandboxNewInstanceMode();
+        this.view = new chorus.views.SchemaPicker();
     });
 
     describe("#render", function() {
