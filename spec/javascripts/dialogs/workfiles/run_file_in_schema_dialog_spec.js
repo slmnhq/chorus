@@ -10,8 +10,8 @@ describe("chorus.dialogs.RunFileInSchema", function() {
     })
 
     describe("#setup", function() {
-        it("fetches the workspace sandbox", function() {
-            expect(this.server.lastFetchFor(fixtures.sandbox({ workspaceId : 999}))).toBeDefined();
+        it("fetches the workspace", function() {
+            expect(this.server.lastFetchFor(fixtures.workspace({ id : 999}))).toBeDefined();
         })
     })
 
@@ -20,7 +20,7 @@ describe("chorus.dialogs.RunFileInSchema", function() {
             this.dialog.render();
         })
 
-        context("before sandbox fetches complete", function() {
+        context("before the workspace fetche completes", function() {
             it("should show loading spinner", function() {
                 expect(this.dialog.$(".loading")).not.toHaveClass("hidden");
                 expect(this.dialog.$(".loading").isLoading()).toBeTruthy();
@@ -55,17 +55,17 @@ describe("chorus.dialogs.RunFileInSchema", function() {
             })
         })
 
-        context("after sandbox fetch completes", function() {
+        context("after the workspace fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(fixtures.sandbox({
+                this.server.completeFetchFor(fixtures.workspace({id : 999, sandboxInfo :{
                     instanceId : 44,
                     instanceName : "instance",
                     databaseId : 55,
                     databaseName : "database",
                     schemaId : 66,
                     schemaName : "schema",
-                    workspaceId : 999
-                }));
+                    sandboxId : "10001"
+                }}));
             });
 
             it("displays the canonical name for the sandbox schema", function() {

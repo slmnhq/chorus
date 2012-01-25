@@ -16,16 +16,16 @@
         },
 
         setup : function() {
-            this.sandbox = this.model.sandbox();
-            this.sandbox.bind("loaded", this.sandboxLoaded, this);
-            this.sandbox.fetch();
+            this.workspace = this.model.workspace();
+            this.workspace.bind("loaded", this.workspaceLoaded, this);
+            this.workspace.fetch();
 
             this.schemaPicker = new chorus.views.SchemaPicker();
             this.schemaPicker.bind("change", this.onSchemaPickerChange, this);
         },
 
-        sandboxLoaded : function() {
-            this.$(".name").text(this.sandbox.canonicalName());
+        workspaceLoaded : function() {
+            this.$(".name").text(this.workspace.sandbox().canonicalName());
         },
 
         postRender : function() {
@@ -40,10 +40,10 @@
             var options = {};
             if (this.$("#sandbox_schema").is(":checked")) {
                 options = {
-                    instance : this.sandbox.get("instanceId"),
-                    database : this.sandbox.get("databaseId"),
-                    schema   : this.sandbox.get("schemaId"),
-                }
+                    instance : this.workspace.sandbox().get("instanceId"),
+                    database : this.workspace.sandbox().get("databaseId"),
+                    schema   : this.workspace.sandbox().get("schemaId")
+                };
             } else {
                 options = this.schemaPicker.fieldValues();
             }

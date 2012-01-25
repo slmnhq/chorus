@@ -14,19 +14,6 @@
             });
         },
 
-        setup: function() {
-            this._super("setup", arguments);
-            this.sandbox = this.model.sandbox();
-            this.sandbox.bind("change", this.render, this);
-            this.sandbox.fetch();
-        },
-
-        additionalContext: function() {
-            return {
-                sandboxLoaded: this.sandbox.loaded
-            }
-        },
-
         runInSandbox: function() {
             this.trigger("file:runCurrent");
         },

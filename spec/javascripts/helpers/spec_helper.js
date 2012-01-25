@@ -113,6 +113,7 @@
 
     beforeEach(function() {
         loadTemplatesOnce();
+        stubHotkeys();
 
         // loadTemplatesOnce does asynchronous ajax requests in a waitsFor
         runs(function() {
@@ -326,6 +327,14 @@
             func();
         });
     }
+
+    window.stubHotkeys = function() {
+        spyOn(chorus.views.Bare.prototype, "bindHotkeys");
+    };
+
+    window.unstubHotkeys = function () {
+        chorus.views.Bare.prototype.bindHotkeys = chorus.views.Bare.prototype.bindHotkeys.originalValue;
+    };
 
     window.qtipElements = {};
     window.stubQtip = function(selector) {

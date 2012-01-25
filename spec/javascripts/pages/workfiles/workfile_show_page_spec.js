@@ -2,9 +2,9 @@ describe("chorus.pages.WorkfileShowPage", function() {
     beforeEach(function() {
         this.workspaceId = 4;
         this.workfileId = 5;
-        this.model = fixtures.sqlWorkfile({id: '5', workspaceId: '4'});
+        this.model = fixtures.sqlWorkfile({id: this.workfileId, workspaceId: this.workspaceId});
         stubDefer();
-    });
+   });
 
     describe("#setup", function() {
         beforeEach(function() {
@@ -12,16 +12,15 @@ describe("chorus.pages.WorkfileShowPage", function() {
             spyOn(chorus.views.WorkfileContent, 'buildFor').andCallThrough();
             this.page = new chorus.pages.WorkfileShowPage(this.workspaceId, this.workfileId);
         });
-        it("instantiates and fetches a workspace with  given id", function() {
-            var workspace = this.page.workspace;
-            expect(workspace.get("id")).toBe(this.workspaceId);
-            expect(this.server.requests[0].url).toBe(workspace.url());
-        });
 
         it("instantiates and fetches a workfile with the given id", function() {
             var workfile = this.page.model;
             expect(workfile.get("id")).toBe(this.workfileId);
-            expect(this.server.requests[1].url).toBe(workfile.url());
+            expect(this.server.lastFetchFor(this.page.model)).toBeDefined();
+        });
+
+        it("fetches the workfile's workspace", function() {
+            expect(this.server.lastFetchFor(this.page.model.workspace())).toBeDefined();
         });
 
         it("does not instantiate views for the content details or content", function() {
@@ -83,7 +82,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
     describe("#render", function(){
         beforeEach(function() {
             this.page = new chorus.pages.WorkfileShowPage(this.workspaceId, this.workfileId);
-            this.page.workspace.set({name: "Cool Workspace"});
+            this.page.model.workspace().set({name: "Cool Workspace"});
             this.server.completeFetchFor(this.model);
         });
 
@@ -108,6 +107,17 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
         describe("the workfile detail view raises file:runCurrent event", function() {
             beforeEach(function() {
+            this.page.model.workspace().set({
+                sandboxInfo : {
+                    databaseId: '3',
+                    databaseName: "db",
+                    instanceId: '2',
+                    instanceName: "instance",
+                    sandboxId: "10001",
+                    schemaId: '4',
+                    schemaName: "schema"
+                }});
+
                 spyOnEvent(this.page.mainContent.content, 'file:runCurrent');
                 this.page.mainContent.contentDetails.trigger("file:runCurrent");
             });
@@ -180,7 +190,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
             context("with a long workspace name", function() {
                 beforeEach(function() {
-                    this.page.workspace.set({name: "LongLongLongLongLongWorkspaceName"});
+                    this.page.model.workspace().set({name: "LongLongLongLongLongWorkspaceName"});
                     this.page.render();
                 });
 

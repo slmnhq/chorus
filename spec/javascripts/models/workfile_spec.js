@@ -13,16 +13,43 @@ describe("chorus.models.Workfile", function() {
         });
     });
 
-    describe("#sandbox", function() {
-        it("returns a sandbox with the right id and workspaceId", function() {
-            var sandbox = this.model.sandbox();
-            expect(sandbox.get("id")).toBe(this.model.get("sandboxId"));
-            expect(sandbox.get("workspaceId")).toBe(this.model.get("workspaceId"));
+    describe("#workspace", function() {
+        it("returns a workspace with the right id", function() {
+            expect(this.model.workspace()).toBeA(chorus.models.Workspace);
+            expect(this.model.workspace().get("id")).toBe("10000");
         });
 
         it("memoizes", function() {
-            expect(this.model.sandbox()).toBe(this.model.sandbox());
+            expect(this.model.workspace()).toBe(this.model.workspace());
         });
+    });
+
+    describe("#sandbox", function() {
+        context("when the workfile's workspace has been fetched", function() {
+            beforeEach(function() {
+                spyOn(this.model, "workspace").andReturn(fixtures.workspace({
+                    sandboxInfo : {
+                        databaseId: 4,
+                        databaseName: "db",
+                        instanceId: 5,
+                        instanceName: "instance",
+                        sandboxId: "10001",
+                        schemaId: 6,
+                        schemaName: "schema"
+                    }
+                }))
+            });
+
+            it("returns the sandbox from the workspace", function() {
+                expect(this.model.sandbox()).toBeA(chorus.models.Sandbox);
+            })
+        })
+
+        context("when the workfile's workspace has not been fetched", function() {
+            it("returns undefined", function() {
+                expect(this.model.sandbox()).toBeFalsy();
+            });
+        })
     });
 
     describe("#lastComment", function() {

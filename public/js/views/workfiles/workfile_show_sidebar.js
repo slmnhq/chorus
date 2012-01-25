@@ -28,7 +28,7 @@
             this.model.bind("invalidated", this.allVersions.fetch, this.allVersions);
             this.allVersions.bind("changed", this.render, this);
             this.requiredResources.push(this.model);
-            this.requiredResources.push(this.model.sandbox());
+            this.requiredResources.push(this.model.workspace());
         },
 
         resourcesLoaded: function() {

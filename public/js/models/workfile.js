@@ -31,6 +31,15 @@
             }
         },
 
+        workspace : function() {
+            this._workspace = (this._workspace || new chorus.models.Workspace({ id : this.get("workspaceId")}))
+            return this._workspace;
+        },
+
+        sandbox: function() {
+            return this.workspace().sandbox()
+        },
+
         modifier : function() {
             return new ns.models.User({
                 userName : this.get("modifiedBy"),
@@ -47,11 +56,6 @@
             } else {
                 return this.get("versionInfo").content;
             }
-        },
-
-        sandbox: function() {
-            this._sandbox || (this._sandbox = new ns.models.Sandbox({ id: this.get("sandboxId"), workspaceId: this.get("workspaceId") }));
-            return this._sandbox;
         },
 
         lastComment : function() {

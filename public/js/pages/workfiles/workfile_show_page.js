@@ -23,9 +23,6 @@
         },
 
         setup : function(workspaceId, workfileId, versionNum) {
-            this.workspace = new ns.models.Workspace({id: workspaceId});
-            this.workspace.fetch();
-
             this.model = new ns.models.Workfile({id: workfileId, workspaceId: workspaceId});
             if(versionNum) {
                 this.model.set({ versionNum : versionNum }, { silent : true })
@@ -33,13 +30,14 @@
 
             this.bindings.add(this.model, "change", this.modelChanged);
             this.model.fetch();
+            this.model.workspace().fetch();
 
-            this.breadcrumbs = new breadcrumbsView({workspace: this.workspace, model: this.model});
+            this.breadcrumbs = new breadcrumbsView({workspace: this.model.workspace(), model: this.model});
 
             this.sidebar = new chorus.views.WorkfileShowSidebar({model : this.model});
             this.sidebar.bindOnce("sidebar:loaded", _.bind(this.bindSidebar, this));
 
-            this.subNav = new ns.views.SubNav({workspace: this.workspace, tab: "workfiles"});
+            this.subNav = new ns.views.SubNav({workspace: this.model.workspace(), tab: "workfiles"});
 
             this.mainContent = new ns.views.MainContentView({
                 model : this.model,

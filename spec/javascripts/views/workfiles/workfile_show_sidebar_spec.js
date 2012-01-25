@@ -28,13 +28,23 @@ describe("chorus.views.WorkfileShowSidebar", function() {
     context("with a sql workfile", function() {
         beforeEach(function() {
             this.workfile = fixtures.sqlWorkfile();
-            this.view.model = this.workfile;
-            this.view.model.fetch();
-            this.view.model._sandbox = fixtures.sandbox();
-            this.view.model.sandbox().fetch();
             this.view = new chorus.views.WorkfileShowSidebar({ model : this.workfile });
+
+            this.view.model.fetch();
+            this.view.model.workspace().fetch();
+
             this.server.completeFetchFor(this.workfile);
-            this.server.completeFetchFor(this.workfile.sandbox());
+            this.server.completeFetchFor(this.workfile.workspace(), fixtures.workspace({
+                sandboxInfo : {
+                    databaseId: 4,
+                    databaseName: "db",
+                    instanceId: 5,
+                    instanceName: "instance",
+                    sandboxId: "10001",
+                    schemaId: 6,
+                    schemaName: "schema"
+                }
+            }));
         });
 
         describe("render", function() {
@@ -138,13 +148,25 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             this.workfile = fixtures.textWorkfile({
                 lastUpdatedStamp: "2011-11-22 10:46:03.152"
             });
-            this.workfile.fetch();
-            this.workfile.sandbox().fetch();
-            this.view = new chorus.views.WorkfileShowSidebar({ model : this.workfile });
-                $('#jasmine_content').append(this.view.el);
-            this.server.completeFetchFor(this.workfile);
-            this.server.completeFetchFor(this.workfile.sandbox());
             expect(this.workfile.isText()).toBeTruthy();
+
+            this.view = new chorus.views.WorkfileShowSidebar({ model : this.workfile });
+
+            this.view.model.fetch();
+            this.view.model.workspace().fetch();
+
+            this.server.completeFetchFor(this.workfile);
+            this.server.completeFetchFor(this.workfile.workspace(), fixtures.workspace({
+                sandboxInfo : {
+                    databaseId: 4,
+                    databaseName: "db",
+                    instanceId: 5,
+                    instanceName: "instance",
+                    sandboxId: "10001",
+                    schemaId: 6,
+                    schemaName: "schema"
+                }
+            }));
         });
 
         describe("render", function() {

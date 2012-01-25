@@ -98,6 +98,7 @@ describe("chorus.views.base", function() {
 
     describe("hotkey bindings", function() {
         beforeEach(function() {
+            unstubHotkeys();
             this.oldHotKeyMeta = chorus.hotKeyMeta;
             chorus.hotKeyMeta = 'ctrl';
 

@@ -1,6 +1,16 @@
 describe("chorus.views.SqlWorkfileContentView", function() {
     beforeEach(function() {
         this.workfile = fixtures.sqlWorkfile({ content: "select * from foos where bar_id = 1;" });
+        this.workfile.workspace().set({
+            sandboxInfo : {
+                databaseId: '3',
+                databaseName: "db",
+                instanceId: '2',
+                instanceName: "instance",
+                sandboxId: "10001",
+                schemaId: '4',
+                schemaName: "schema"
+            }});
         this.view = new chorus.views.SqlWorkfileContent({model: this.workfile});
         stubDefer();
     })
@@ -57,11 +67,6 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
     describe("executing the workfile", function() {
         beforeEach(function() {
-            this.view.model.sandbox().set({
-                instanceId: '2',
-                databaseId: '3',
-                schemaId: '4'
-            });
             this.view.render();
             this.view.textContent.editor.setValue("select * from foos");
             this.startedSpy = jasmine.createSpy("executionStarted")
