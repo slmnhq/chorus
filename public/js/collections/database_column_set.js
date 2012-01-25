@@ -8,6 +8,14 @@
             } else if (this.attributes.viewName) {
                 return "data/{{instanceId}}/database/{{databaseName}}/schema/{{schemaName}}/view/{{viewName}}/column";
             }
+        },
+
+        _add : function(model, options) {
+            model = this._super("_add", arguments);
+            model.set({"schemaName": this.attributes.schemaName});
+            model.set({"parentName": this.attributes.tableName || this.attributes.viewName});
+            return model;
         }
+
     });
 })(chorus);

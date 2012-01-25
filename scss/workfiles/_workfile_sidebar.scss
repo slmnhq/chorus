@@ -105,17 +105,6 @@
 
                 &:first-child {
                     border-top: $dotted-list-item-border;
-                }
-                &:last-child {
-                    border-bottom: $dotted-list-item-border;
-                }
-            }
-        }
-
-        .database_function_list, .database_dataset_list {
-            li {
-                &:first-child {
-                    border-top: $dotted-list-item-border;
                     margin-top: -1px;
                 }
                 &:last-child {
@@ -128,40 +117,7 @@
                     border-top: 1px solid $list-border-color;
                     border-bottom: 1px solid $list-border-color;
                 }
-                .insert_hover {
-                    z-index: 100;
-                    background-color: $selected-row-hover-background-color;
-                    position: absolute;
-                    right: 100%;
-                    height: 100%;
-                    top: -1px;
-
-
-                    $arrow-height: 30px;
-                   .arrow_left {
-                        width: 0;
-                        height: 0;
-                        border-top: $arrow-height/2 solid transparent;
-                        border-bottom: $arrow-height/2 solid transparent;
-                        border-right: $arrow-height/2 solid $list-border-color;
-                        right: 100%;
-                        position: absolute
-                    }
-
-                    $arrow-filling-height: 28px;
-                    .arrow_left_filling{
-                        content:'';
-                        position:absolute;
-                        right: 100%;
-                        top: 1px;
-                        width: 0;
-                        height: 0;
-                        border-top: $arrow-filling-height/2 solid transparent;
-                        border-bottom: $arrow-filling-height/2 solid transparent;
-                        border-right: $arrow-filling-height/2 solid $selected-row-hover-background-color;
-                    }
-                }
-           }
+            }
         }
 
         .database_column_list {

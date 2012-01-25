@@ -1,5 +1,5 @@
 (function($, ns) {
-    ns.views.DatabaseColumnList = ns.views.Base.extend({
+    ns.views.DatabaseColumnList = ns.views.DatabaseList.extend({
         className : "database_column_list",
         useLoadingSection: true,
 
@@ -15,13 +15,6 @@
 
         setup: function() {
             this.bind("datasetSelected", this.setTable, this);
-        },
-
-        postRender: function() {
-            chorus.search({
-                input: this.$('input.search'),
-                list: this.$('ul')
-            });
         },
 
         setTable: function(tableOrView) {
@@ -40,7 +33,7 @@
         },
 
         additionalContext: function() {
-            var tableName = this.collection.attributes.tableName;
+            var tableName = this.collection.attributes.tableName || this.collection.attributes.viewName;
             var schemaName = this.collection.attributes.schemaName;
 
             return {
