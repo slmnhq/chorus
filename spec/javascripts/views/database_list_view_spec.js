@@ -1,12 +1,12 @@
 describe("chorus.views.DatabaseList", function() {
     beforeEach(function() {
-        var object0 = new chorus.models.Base();
-        var object1 = new chorus.models.Base();
+        var object0 = new chorus.models.DatabaseTable();
+        var object1 = new chorus.models.DatabaseTable();
         object0.cid = 'c44';
         object1.cid = 'c55';
         this.collection = new chorus.collections.Base([object0, object1]);
-        spyOn(this.collection.models[0], 'toString').andReturn('object1');
-        spyOn(this.collection.models[1], 'toString').andReturn('object2');
+        spyOn(this.collection.models[0], 'toText').andReturn('object1');
+        spyOn(this.collection.models[1], 'toText').andReturn('object2');
         this.view = new chorus.views.DatabaseList({collection: this.collection});
         this.view.template = function() {
             return '<ul class="list"><li data-cid="c44"><a>as</a></li><li data-cid="c55"><a>gd</a></li></ul>';
@@ -36,7 +36,7 @@ describe("chorus.views.DatabaseList", function() {
                 })
 
                 it("triggers a file:insertText with the string representation", function() {
-                    expect("file:insertText").toHaveBeenTriggeredOn(this.view, [this.view.collection.models[1].toString()]);
+                    expect("file:insertText").toHaveBeenTriggeredOn(this.view, [this.view.collection.models[1].toText()]);
                 })
             })
 

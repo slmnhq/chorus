@@ -25,13 +25,13 @@ describe("chorus.models.DatabaseView", function() {
         });
     });
 
-    describe("#toString", function() {
+    describe("#toText", function() {
         context("with lowercase name", function() {
             beforeEach(function() {
                 this.model.set({name: "view1"});
             })
             it("formats the string to put into the sql editor", function() {
-                expect(this.model.toString()).toBe('partyman.view1');
+                expect(this.model.toText()).toBe('partyman.view1');
             })
         })
         context("with uppercase name", function() {
@@ -39,7 +39,7 @@ describe("chorus.models.DatabaseView", function() {
                 this.model.set({name: "View1", schemaName: "PartyMan"});
             })
             it("formats the string to put into the sql editor", function() {
-                expect(this.model.toString()).toBe('"PartyMan"."View1"');
+                expect(this.model.toText()).toBe('"PartyMan"."View1"');
             })
         })
     })

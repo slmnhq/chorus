@@ -60,7 +60,7 @@
         insertText: function(cid, e) {
             e && e.preventDefault();
             var model = this.collection.getByCid(cid)
-            this.trigger("file:insertText", model.toString())
+            this.trigger("file:insertText", model.toText())
         },
 
         closeQtip: function(e) {

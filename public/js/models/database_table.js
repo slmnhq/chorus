@@ -14,7 +14,7 @@
             return this._columns;
         },
 
-        toString: function() {
+        toText: function() {
             return this.safePGName(this.get("schemaName"))+'.'+this.safePGName(this.get("name"));
         }
     });

@@ -1,7 +1,7 @@
 ;
 (function(ns) {
     ns.models.SchemaFunction = ns.models.Base.extend({
-        toString : function() {
+        toText : function() {
             var argNames = this.get('argNames');
             var functionArguments = _.map(this.get('argTypes'), function(argType, index) {
                 var argName = argNames[index] || "arg" + (index + 1);
