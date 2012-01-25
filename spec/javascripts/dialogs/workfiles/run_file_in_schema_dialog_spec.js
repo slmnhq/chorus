@@ -105,6 +105,7 @@ describe("chorus.dialogs.RunFileInSchema", function() {
 
                 context("when 'within the workspace sandbox' is selected", function() {
                     beforeEach(function() {
+                        this.dialog.$("input#sandbox_schema").attr("checked", true)
                         this.dialog.$("input#sandbox_schema").click();
                     })
 
