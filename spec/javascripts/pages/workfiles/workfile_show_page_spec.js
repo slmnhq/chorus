@@ -131,6 +131,8 @@ describe("chorus.pages.WorkfileShowPage", function() {
         describe("when the sidebar triggers 'file:insertText'", function() {
             beforeEach(function() {
                 this.page.sidebar.functionList = new chorus.views.Base();
+                this.page.sidebar.datasetList = new chorus.views.Base();
+                this.page.sidebar.columnList = new chorus.views.Base();
                 this.page.render()
                 spyOnEvent(this.page.mainContent.content, 'file:insertText')
                 spyOn(this.page.model, 'isSql').andReturn(true)

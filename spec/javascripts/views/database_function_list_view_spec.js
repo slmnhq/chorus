@@ -29,6 +29,7 @@ describe("chorus.views.DatabaseFunctionList", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.view.functions, [fixtures.schemaFunction(), fixtures.schemaFunction()]);
             });
+            jasmine.sharedExamples.DatabaseList();
 
             it("should not show the loading section", function() {
                 expect(this.view.$('.loading_section')).not.toExist();

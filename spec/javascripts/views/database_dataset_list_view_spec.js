@@ -94,6 +94,7 @@ describe("chorus.views.DatabaseDatasetList", function() {
                     ]);
                     this.view.render();
                 });
+                jasmine.sharedExamples.DatabaseList();
 
                 it("should not display the loading spinner", function() {
                     expect(this.view.$(".loading_section")).not.toExist();

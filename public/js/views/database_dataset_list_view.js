@@ -1,5 +1,5 @@
 (function($, ns) {
-    ns.views.DatabaseDatasetList = ns.views.Base.extend({
+    ns.views.DatabaseDatasetList = ns.views.DatabaseList.extend({
         className : "database_dataset_list",
         useLoadingSection : true,
 
@@ -18,13 +18,6 @@
 
             this.views.bind("reset", this.viewFetchComplete, this);
             this.views.fetch();
-        },
-
-        postRender: function() {
-            chorus.search({
-                input: this.$('input.search'),
-                list: this.$('ul')
-            });
         },
 
         tableFetchComplete: function() {
@@ -60,7 +53,8 @@
         collectionModelContext : function(model) {
             return {
                 type: model.get("type"),
-                name: model.get("name")
+                name: model.get("name"),
+                cid: model.cid
             }
         },
 

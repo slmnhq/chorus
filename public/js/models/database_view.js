@@ -12,6 +12,10 @@
                 });
             }
             return this._columns;
+        },
+
+        toString: function() {
+            return '"'+this.get("schemaName")+'"."'+this.get("name")+'"'
         }
     });
 })(chorus);

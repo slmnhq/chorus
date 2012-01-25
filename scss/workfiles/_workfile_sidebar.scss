@@ -112,7 +112,7 @@
             }
         }
 
-        .database_function_list {
+        .database_function_list, .database_dataset_list {
             li {
                 &:first-child {
                     border-top: $dotted-list-item-border;

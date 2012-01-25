@@ -24,4 +24,10 @@ describe("chorus.models.DatabaseTable", function() {
             expect(columns.attributes.tableName).toBe(this.model.get("name"));
         });
     });
+
+    describe("#toString", function() {
+        it("formats the string to put into the sql editor", function(){
+            expect(this.model.toString()).toBe('"partyman"."Tabler"');
+        })
+    })
 });

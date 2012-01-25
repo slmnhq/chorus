@@ -24,4 +24,10 @@ describe("chorus.models.DatabaseView", function() {
             expect(columns.attributes.viewName).toBe(this.model.get("name"));
         });
     });
+
+    describe("#toString", function() {
+        it("formats the string to put into the sql editor", function() {
+            expect(this.model.toString()).toBe('"partyman"."View1"');
+        })
+    })
 });
