@@ -13,8 +13,7 @@
                 content: {
                     text: t("results_console_view.data_table.move_to_first_column")
                 },
-                show: 'mouseover',
-                hide: 'mouseout',
+                hide: 'mouseleave click',
                 style: {
                     classes: "tooltip-help",
                     tip: {
