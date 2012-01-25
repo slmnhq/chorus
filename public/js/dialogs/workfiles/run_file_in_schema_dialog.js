@@ -25,7 +25,7 @@
         },
 
         workspaceLoaded : function() {
-            this.$(".name").text(this.workspace.sandbox().canonicalName());
+            this.$(".name").text(this.workspace.sandbox().schema().canonicalName());
         },
 
         postRender : function() {
