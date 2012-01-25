@@ -318,21 +318,34 @@
         return spy;
     };
 
-    window.stubQtip = function() {
-        var qtip = $.fn.qtip;
-        var qtipElement = $('<div></div>');
-        $('#jasmine_content').append(qtipElement);
-        spyOn($.fn, 'qtip').andCallFake(function() {
-            var args = arguments;
-            if(_.isObject(args[0])) {
-                args[0].show || (args[0].show = {});
-                args[0].show.delay = 0;
-                args[0].position || (args[0].position = {});
-                args[0].position.container = qtipElement
-            }
-            qtip.apply(this, args);
-        })
-        return qtipElement;
+    var qtipElements = {};
+
+    window.stubQtip = function(selector) {
+        selector || (selector = "*");
+        qtipElements[selector] = $('<div></div>');
+        $('#jasmine_content').append(qtipElements[selector]);
+
+        if (!$.fn.qtip.isSpy) {
+            var qtip = $.fn.qtip;
+
+            spyOn($.fn, 'qtip').andCallFake(function() {
+                var jqueryObject = this;
+                var options = arguments[0] || {};
+
+                _.any(qtipElements, function(fakeQtipEl, selector) {
+                    if (!jqueryObject.is(selector)) return false;
+                    options.show || (options.show = {});
+                    options.position || (options.position = {});
+                    options.show.delay = 0;
+                    options.position.container = fakeQtipEl;
+
+                    qtip.call(jqueryObject, options);
+                    return true;
+                });
+            });
+        }
+
+        return qtipElements[selector];
     }
 
     if ( $.browser.msie && !window['con' + 'sole'] ) {
