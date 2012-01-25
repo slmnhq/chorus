@@ -37,6 +37,10 @@
     }
 
     .configuration_detail {
+        dl {
+            padding-right: 8px;
+        }
+
         dt {
             @include font-normal-alpha;
             float: left;
