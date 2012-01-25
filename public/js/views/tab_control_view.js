@@ -31,10 +31,11 @@
         setSelectedTab : function(tab) {
             tab.siblings().removeClass("selected")
             tab.addClass("selected")
-            this.trigger(tab.data("name") + ":selected")
 
             this.selectedTabName = tab.data('name');
             this.toggleTabbedArea();
+            this.trigger("selected:" + tab.data("name"));
+            this.trigger("selected");
         },
 
         selectedTab: function() {

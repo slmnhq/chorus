@@ -59,6 +59,7 @@
                 this.subviews[".tabbed_area .database_column_list"] = "columnList";
             }
             this.tabControl = new chorus.views.TabControl(tabs);
+            this.tabControl.bind("selected", _.bind(this.setupSidebarScrolling, this))
             this.trigger("sidebar:loaded");
         },
 
@@ -84,6 +85,7 @@
                         }
                     }
             });
+            this._super('postRender');
         },
 
         displayVersionList : function(e) {

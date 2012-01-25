@@ -2,9 +2,11 @@ describe("chorus.views.TabControl", function() {
     beforeEach(function() {
         this.tab1Spy = jasmine.createSpy('tab1Spy');
         this.tab2Spy = jasmine.createSpy('tab2Spy');
+        this.selectedSpy = jasmine.createSpy('selectedSpy');
         this.view = new chorus.views.TabControl([{name: 'tab1'}, {name: 'tab2', selector: '.other_tab'}]);
-        this.view.bind('tab1:selected', this.tab1Spy);
-        this.view.bind('tab2:selected', this.tab2Spy);
+        this.view.bind('selected:tab1', this.tab1Spy);
+        this.view.bind('selected:tab2', this.tab2Spy);
+        this.view.bind('selected', this.selectedSpy);
         $('#jasmine_content').append(this.view.el);
         $('#jasmine_content').append('<div class="tabbed_area"><div class="tab1"></div><div class="other_tab"></div></div>')
 
@@ -33,6 +35,7 @@ describe("chorus.views.TabControl", function() {
 
         it("triggers the correct callbacks", function() {
             expect(this.tab2Spy).toHaveBeenCalled();
+            expect(this.selectedSpy).toHaveBeenCalled();
             expect(this.tab1Spy).not.toHaveBeenCalled();
         });
 
@@ -50,12 +53,14 @@ describe("chorus.views.TabControl", function() {
             beforeEach(function() {
                 this.tab1Spy.reset();
                 this.tab2Spy.reset();
+                this.selectedSpy.reset();
                 this.view.render();
             })
 
             it("keeps the current tab selected", function() {
                 expect(this.tab1Spy).not.toHaveBeenCalled();
                 expect(this.tab2Spy).toHaveBeenCalled();
+                expect(this.selectedSpy).toHaveBeenCalled();
                 expect(this.view.$('.tab2')).toHaveClass('selected');
             });
 
