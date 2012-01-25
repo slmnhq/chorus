@@ -2,6 +2,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
     beforeEach(function() {
         this.workfile = fixtures.sqlWorkfile({ content: "select * from foos where bar_id = 1;" });
         this.view = new chorus.views.SqlWorkfileContent({model: this.workfile});
+        stubDefer();
     })
 
     describe("initialization", function() {

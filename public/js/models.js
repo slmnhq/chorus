@@ -8,6 +8,9 @@
                     var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;
                     uri.addSearch(params);
                 }
+                if (!window.jasmine) {
+                    uri.addSearch({iebuster: new Date().getTime()});
+                }
                 return uri.normalizeSearch().toString();
             },
 

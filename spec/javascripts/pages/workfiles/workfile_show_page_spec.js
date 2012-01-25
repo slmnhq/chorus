@@ -3,6 +3,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
         this.workspaceId = 4;
         this.workfileId = 5;
         this.model = fixtures.sqlWorkfile({id: '5', workspaceId: '4'});
+        stubDefer();
     });
 
     describe("#setup", function() {

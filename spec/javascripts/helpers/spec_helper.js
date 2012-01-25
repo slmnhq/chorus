@@ -321,6 +321,12 @@
         return spy;
     };
 
+    window.stubDefer = function() {
+        spyOn(_, 'defer').andCallFake(function(func) {
+            func();
+        });
+    }
+
     window.qtipElements = {};
     window.stubQtip = function(selector) {
         selector || (selector = "*");

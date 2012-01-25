@@ -34,16 +34,21 @@
 
             opts.extraKeys[_.str.capitalize(chorus.hotKeyMeta) + "-R"] = function() {
                 chorus.triggerHotKey("r");
-            }
+            };
+            _.defer(_.bind(function() {
+                var textArea = this.$(".text_editor")[0];
+                if(textArea !== this.textArea) {
+                    this.textArea = textArea;
+                    this.editor = CodeMirror.fromTextArea(this.textArea, opts);
 
-            this.editor = CodeMirror.fromTextArea(this.$(".text_editor")[0], opts);
+                    if (this.model.canEdit()) {
+                        setTimeout(_.bind(this.editText, this), 100);
+                    }
 
-            if (this.model.canEdit()) {
-                setTimeout(_.bind(this.editText, this), 100);
-            }
-
-            var ed = this.editor;
-            _.defer(function() {ed.refresh(); ed.refresh(); ed.refresh();});
+                    var ed = this.editor;
+                    _.defer(function() {ed.refresh(); ed.refresh(); ed.refresh();});
+                }
+            }, this));
         },
 
         editText : function() {
