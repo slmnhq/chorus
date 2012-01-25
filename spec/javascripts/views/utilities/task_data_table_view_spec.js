@@ -10,7 +10,7 @@ describe("chorus.views.TaskDataTable", function() {
             rows: [
                 { id: 1 , city: "Oakland"   , state: "CA" , zip: "94612" } ,
                 { id: 2 , city: "Arcata"    , state: "CA" , zip: "95521" } ,
-                { id: 3 , city: "Lafayette" , state: "IN" , zip: "47909" }
+                { id: 3 , city: "Lafayette" , state: "IN" , zip: null }
             ]
         }});
 
@@ -48,7 +48,9 @@ describe("chorus.views.TaskDataTable", function() {
 
             expect(this.view.$(".column:eq(3) div.td:eq(0)").text()).toBe("94612");
             expect(this.view.$(".column:eq(3) div.td:eq(1)").text()).toBe("95521");
-            expect(this.view.$(".column:eq(3) div.td:eq(2)").text()).toBe("47909");
+
+            // Empty divs don't render correctly - assert null values become non-breaking spaces.
+            expect(this.view.$(".column:eq(3) div.td:eq(2)").html().trim()).toBe("&nbsp;");
         });
 
         it("adds a data attribute to each column, specifying its type", function() {

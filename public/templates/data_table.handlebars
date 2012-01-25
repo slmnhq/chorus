@@ -9,7 +9,7 @@
 <div class="tbody">
     {{#each columns}}<div class="column" data-type="{{type}}">
         {{#each values}}
-        <div class="td" title="{{{this}}}">{{this}}</div>
+        <div class="td" title="{{{this}}}">{{#if this}}{{this}}{{else}}&nbsp;{{/if}}</div>
         {{/each}}
     </div>{{/each}}
 </div>
