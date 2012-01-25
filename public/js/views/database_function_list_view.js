@@ -31,11 +31,7 @@
         },
 
         postRender: function() {
-            chorus.search({
-                input: this.$('input.search'),
-                list: this.$('ul')
-            });
-
+            this._super('postRender');
             chorus.menu(this.$(".context a"), {
                 content: this.schemaMenuContent(),
                 contentEvents: {
