@@ -2,6 +2,7 @@ describe("chorus.models.Comment", function() {
     beforeEach(function() {
         this.model = fixtures.noteComment(
             {
+                id: '41',
                 author :
                 {
                     id : "45",
@@ -111,8 +112,8 @@ describe("chorus.models.Comment", function() {
                 });
 
                 it("sets the url of each upload", function() {
-                    expect(this.fileUpload1.data.url).toMatchUrl('/edc/comment/instance/1/6/file?iebuster=123');
-                    expect(this.fileUpload2.data.url).toMatchUrl('/edc/comment/instance/1/6/file?iebuster=123');
+                    expect(this.fileUpload1.data.url).toMatchUrl('/edc/comment/instance/1/41/file?iebuster=123');
+                    expect(this.fileUpload2.data.url).toMatchUrl('/edc/comment/instance/1/41/file?iebuster=123');
                 });
             });
 
