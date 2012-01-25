@@ -3,4 +3,39 @@
         <div title="{{objectName}}" class="name">{{objectName}}</div>
         <div class="type">{{typeString}}</div>
     </div>
+
+    <div class="tab_control"></div>
+    <div class="tabbed_area">
+        <div class="activity_list"></div>
+        <div class="statistics_detail">
+            <h2><span class='title'>{{t "dataset.statistics.dataset"}}:</span>{{objectName}}</h2>
+            <dl>
+                {{#if type}}
+                    <dt>{{t "dataset.statistics.type"}}</dt>
+                    <dd title="{{{host}}}">{{{host}}}</dd>
+                    <br />
+                {{/if}}
+                {{#if rows}}
+                    <dt>{{t "dataset.statistics.rows"}}</dt>
+                    <dd title="{{{port}}}">{{{port}}}</dd>
+                    <br />
+                {{/if}}
+                {{#if columns}}
+                    <dt>{{t "dataset.statistics.columns"}}</dt>
+                    <dd title="{{{size}}}">{{{size}}}GB</dd>
+                    <br />
+                {{/if}}
+                {{#if size}}
+                    <dt>{{t "dataset.statistics.size"}}</dt>
+                    <dd title="{{{dbUserName}}}">{{{dbUserName}}}</dd>
+                {{/if}}
+            </dl>
+            <div class='description'>
+                <h4>{{t "dataset.statistics.Description"}}</h4>
+                <p>
+                    {{description}}
+                </p>
+            </div>
+        </div>
+    </div>
 {{/if}}

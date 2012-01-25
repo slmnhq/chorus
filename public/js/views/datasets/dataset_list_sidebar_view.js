@@ -2,8 +2,13 @@
     ns.views.DatasetListSidebar = chorus.views.Sidebar.extend({
         className : "dataset_list_sidebar",
 
+        subviews : {
+            '.tab_control' : 'tabControl'
+        },
+
         setup: function() {
             this.bind("dataset:selected", this.setDataset, this);
+            this.tabControl = new chorus.views.TabControl([{name: 'activity', selector: ".activity_list"}, {name: 'statistics', selector: ".statistics_detail"}]);
         },
 
         setDataset: function(dataset) {
