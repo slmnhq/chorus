@@ -88,7 +88,9 @@
         }
 
         .database_function_list, .database_dataset_list, .database_column_list {
-            margin-top: 15px;
+            ul {
+                margin-top: 10px;
+            }
 
             li {
                 height: 29px;

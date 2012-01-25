@@ -48,6 +48,10 @@ describe("chorus.views.DatabaseFunctionList", function() {
                 expect(this.view.$('.loading_section')).not.toExist();
             });
 
+            it("should have the correct search placeholder text", function() {
+                expect(this.view.$("input.search").attr("placeholder")).toMatchTranslation("schema.functions.list.hint");
+            })
+
             it("should render the functions", function() {
                 expect(this.view.$("ul li")).toContainText("laplace_transform");
                 expect(this.view.$("ul li")).toContainText("inc");
