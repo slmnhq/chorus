@@ -26,12 +26,16 @@ describe("chorus.views.DatasetListSidebar", function() {
                 });
 
                 it("displays the selected dataset type", function() {
-                    expect(this.view.$(".type").text().trim()).toBe("SOURCE_TABLE");
+                    expect(this.view.$(".type").text().trim()).toBe(this.view.datasetType(this.dataset));
                 });
             });
         });
     })
 
-
-
+    describe("#datasetType", function() {
+        it("uses a translation based on the type and objectType of the supplied dataset", function() {
+            var dataset = fixtures.datasetSandboxTable();
+            expect(this.view.datasetType(dataset)).toMatchTranslation("dataset.types.SANDBOX_TABLE.BASE_TABLE");
+        });
+    });
 });
