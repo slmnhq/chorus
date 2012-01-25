@@ -17,7 +17,8 @@ describe("chorus.views.WorkspaceList", function() {
             id: 3,
             isPublic: false,
             active: true,
-            ownerFullName: "Dr Mario",
+            ownerFirstName: "Dr",
+            ownerLastName: "Mario",
             name: "my private workspace"
         });
 
@@ -79,7 +80,7 @@ describe("chorus.views.WorkspaceList", function() {
         });
 
         it("includes the owner's name", function() {
-            expect($(".owner", this.privateEl).text()).toContain(this.privateWorkspace.get("ownerFullName"));
+            expect($(".owner", this.privateEl).text()).toContain(this.privateWorkspace.owner().displayName());
         });
 
         it("links to the owner's profile", function() {

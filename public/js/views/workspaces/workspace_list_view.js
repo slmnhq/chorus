@@ -17,7 +17,8 @@
                 archiverUrl: model.archiver().showUrl(),
                 archiverFullName : model.archiver().get("fullName"),
                 truncatedSummary : model.truncatedSummary(100),
-                isTruncated: model.isTruncated()
+                isTruncated: model.isTruncated(),
+                ownerFullName : model.owner().displayName()
             };
         },
 

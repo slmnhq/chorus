@@ -35,11 +35,15 @@ describe("chorus.models.Workspace", function() {
 
     describe("#owner", function() {
         beforeEach(function() {
-            this.model.set({owner: "jhenry", ownerFullName: "John Henry", ownerId: "47"})
+            this.model.set({owner: "jhenry", ownerFirstName: "John", ownerLastName: "Henry", ownerId: "47"})
         });
 
-        it("has the right fullName", function() {
-            expect(this.model.owner().get("fullName")).toBe("John Henry");
+        it("has the first name ", function() {
+            expect(this.model.owner().get("firstName")).toBe("John");
+        });
+
+        it("has the last name ", function() {
+            expect(this.model.owner().get("lastName")).toBe("Henry");
         });
 
         it("has the right userId", function() {

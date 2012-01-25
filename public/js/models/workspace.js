@@ -19,8 +19,9 @@
 
         owner: function() {
             this._owner = this._owner || new ns.models.User({
-                fullName: this.get("ownerFullName"),
-                id: this.get("ownerId")
+                id: this.get("ownerId"),
+                firstName: this.get("ownerFirstName"),
+                lastName: this.get("ownerLastName")
             });
             return this._owner;
         },

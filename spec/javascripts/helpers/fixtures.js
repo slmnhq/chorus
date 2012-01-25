@@ -1125,6 +1125,9 @@
                 return {
                     id : id.toString(),
                     name : 'Workspace ' + id,
+                    ownerId : this.nextId().toString(),
+                    ownerFirstName : "Dr",
+                    ownerLastName : "Mario",
                     "sandboxInfo": {
                         databaseId: null,
                         databaseName: null,
