@@ -18,6 +18,7 @@
         'database_function_list',
         'database_dataset_list',
         'dataset_list',
+        'dataset_list_sidebar',
         'default_content_header',
         'header',
         'image_upload',

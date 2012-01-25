@@ -1,0 +1,11 @@
+.dataset_list_sidebar {
+    .info {
+        .name {
+            @include heading-sidebar;
+            margin-bottom: 10px;
+        }
+        .type {
+            @include secondary-text-small;
+        }
+    }
+}

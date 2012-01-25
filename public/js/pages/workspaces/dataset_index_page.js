@@ -11,7 +11,7 @@
         }
     });
 
-    ns.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
+    ns.DatasetIndexPage = chorus.pages.Base.extend({
         setup : function(workspaceId) {
             var workspace = new chorus.models.Workspace({id: workspaceId});
             workspace.fetch();
@@ -26,6 +26,10 @@
                 collection : this.collection,
                 model : workspace
             });
+
+            this.sidebar = new chorus.views.DatasetListSidebar();
+
+            this.mainContent.content.forwardEvent("dataset:selected", this.sidebar);
         }
     });
 })(jQuery, chorus.pages);
