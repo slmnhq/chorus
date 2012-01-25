@@ -34,8 +34,24 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 expect(this.qtipElement).toContainTranslation("workfile.content_details.run_in_another_schema")
             });
 
-            it("shows 'Run in the workspace sandbox'", function() {
-                expect(this.qtipElement).toContainTranslation("workfile.content_details.run_workspace_sandbox")
+            describe("when the workspace has a sandbox", function() {
+                it("shows 'Run in the workspace sandbox'", function() {
+                    expect(this.qtipElement.find(".run_sandbox")).toContainTranslation("workfile.content_details.run_workspace_sandbox")
+                    expect(this.qtipElement.find(".run_sandbox")).toBe("a");
+                });
+            });
+
+            describe("when the workspace does not have a sandbox", function() {
+                beforeEach(function() {
+                    spyOn(this.model.workspace(), 'sandbox');
+                    this.view.render();
+                    this.view.$(".run_file").click();
+                });
+
+                it("disables the 'run in sandbox' link", function() {
+                    expect(this.qtipElement.find(".run_sandbox")).toContainTranslation("workfile.content_details.run_workspace_sandbox")
+                    expect(this.qtipElement.find(".run_sandbox")).toBe("span");
+                });
             });
 
             context("clicking on 'Run in my workspace'", function() {

@@ -14,6 +14,12 @@
             });
         },
 
+        additionalContext : function() {
+            return {
+                hasSandbox : !!this.model.sandbox()
+            }
+        },
+
         runInSandbox: function() {
             this.trigger("file:runCurrent");
         },
