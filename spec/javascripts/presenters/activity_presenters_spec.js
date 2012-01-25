@@ -298,7 +298,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectName", function() {
-            expect(this.presenter.objectName).toBe(this.workfile.get("fileName"));
+            expect(this.presenter.objectName).toBe(this.workfile.get("name"));
         });
 
         it("should have the right objectUrl", function() {

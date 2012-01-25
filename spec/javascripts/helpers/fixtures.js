@@ -712,11 +712,13 @@
                         author: fixtures.authorJson(),
                         type: "WORKFILE_UPGRADED_VERSION",
                         timestamp: "2011-12-12 12:12:12",
-                        id: "10860",
+                        id: 10860,
+                        isPromoted: false,
+                        promoteCount: 0,
                         commitMessage: "make file better",
                         version: "3",
-                        workfile : fixtures.workfileJson(),
-                        workspace : fixtures.workspaceJson(),
+                        workfile : fixtures.nestedWorkfileJson(),
+                        workspace : fixtures.nestedWorkspaceJson(),
                         comments: [
                             {
                                 text: "OBAMA!!!!",

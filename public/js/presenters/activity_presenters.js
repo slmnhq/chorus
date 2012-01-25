@@ -104,7 +104,7 @@
 
         WORKFILE_UPGRADED_VERSION : function(model) {
             return {
-                objectName : model.workfile().get("fileName"),
+                objectName : model.workfile().get("name"),
                 objectUrl : model.workfile().showUrl(),
                 iconSrc : "/images/version_large.png",
                 iconHref : model.workfile().showUrl(),
@@ -156,13 +156,6 @@
         return {
             objectName : this.presenter.workspaceName,
             objectUrl : this.presenter.workspaceUrl
-        }
-    }
-
-    function workfileIsObject(model) {
-        return {
-            objectName : model.workfile().get("fileName"),
-            objectUrl : new ns.models.Workfile({id: model.workfile().get("id"), workspaceId : this.workspace.get("id")}).showUrl()
         }
     }
 
