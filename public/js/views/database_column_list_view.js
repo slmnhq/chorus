@@ -9,7 +9,7 @@
         },
 
         makeModel: function() {
-            this.collection = new ns.models.DatabaseColumnSet();
+            this.collection = new ns.collections.DatabaseColumnSet();
             this.schema = this.options.sandbox.schema();
         },
 

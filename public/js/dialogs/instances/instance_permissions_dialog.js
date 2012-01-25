@@ -22,7 +22,7 @@
             this._super("makeModel", arguments);
             this.instance = this.model;
 
-            this.users = new ns.models.UserSet();
+            this.users = new ns.collections.UserSet();
             this.users.bind("reset", this.populateSelect, this);
             this.users.sortAsc("firstName");
             this.users.fetchAll();
@@ -172,7 +172,7 @@
         },
 
         populateNewAccountSelect: function() {
-            var collectionUserSet = new chorus.models.UserSet(this.collection.users());
+            var collectionUserSet = new chorus.collections.UserSet(this.collection.users());
             var otherUsers = this.users.select(function(user){return !collectionUserSet.get(user.get("id"))})
 
             var select = this.$("li.new select.name");

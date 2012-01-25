@@ -39,11 +39,11 @@
         },
 
         databases : function() {
-            return new ns.models.DatabaseSet([], {instanceId : this.get("id")});
+            return new ns.collections.DatabaseSet([], {instanceId : this.get("id")});
         },
 
         accounts: function() {
-            this._accounts || (this._accounts = new ns.models.InstanceAccountSet([], {instanceId : this.get("id")}));
+            this._accounts || (this._accounts = new ns.collections.InstanceAccountSet([], {instanceId : this.get("id")}));
             return this._accounts;
         },
 

@@ -8,7 +8,7 @@
         },
 
         setup: function() {
-            this.resource = this.collection = new chorus.models.Collection();
+            this.resource = this.collection = new chorus.collections.Base();
             this.schema = this.options.sandbox.schema();
             this.tables = this.schema.tables();
             this.views  = this.schema.views();

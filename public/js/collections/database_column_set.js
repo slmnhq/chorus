@@ -1,5 +1,5 @@
 (function(ns) {
-    ns.models.DatabaseColumnSet = ns.models.Collection.extend({
+    ns.collections.DatabaseColumnSet = ns.collections.Base.extend({
         model : ns.models.DatabaseColumn,
 
         urlTemplate: function() {

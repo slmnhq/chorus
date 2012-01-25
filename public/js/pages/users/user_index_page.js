@@ -6,7 +6,7 @@
         ],
 
         setup : function() {
-            this.collection = new chorus.models.UserSet();
+            this.collection = new chorus.collections.UserSet();
             this.collection.sortAsc("lastName");
             this.collection.fetch();
 

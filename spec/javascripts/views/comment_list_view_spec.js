@@ -12,7 +12,7 @@ describe("CommentList", function() {
             text : "No hate plz"
         });
         this.comment3 = fixtures.comment();
-        this.comments = new chorus.models.CommentSet([this.comment1, this.comment2, this.comment3]);
+        this.comments = new chorus.collections.CommentSet([this.comment1, this.comment2, this.comment3]);
         this.view = new chorus.views.CommentList({ collection: this.comments, initialLimit: 2 });
     });
 

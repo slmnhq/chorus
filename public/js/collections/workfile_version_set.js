@@ -1,5 +1,5 @@
 ;(function(ns) {
-    ns.models.WorkfileVersionSet = ns.models.Collection.extend({
+    ns.collections.WorkfileVersionSet = ns.collections.Base.extend({
         urlTemplate : "workspace/{{workspaceId}}/workfile/{{workfileId}}/version",
         model : ns.models.Workfile,
         comparator : function(model) {

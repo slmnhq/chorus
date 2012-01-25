@@ -6,7 +6,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
     describe("#setup", function() {
         beforeEach(function() {
-            spyOn(chorus.models.UserSet.prototype, 'fetchAll');
+            spyOn(chorus.collections.UserSet.prototype, 'fetchAll');
             this.instance = fixtures.instanceWithSharedAccount();
             this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.instance })
         })
@@ -16,7 +16,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
         })
 
         it("fetches all chorus users", function() {
-            expect(this.dialog.users).toBeA(chorus.models.UserSet);
+            expect(this.dialog.users).toBeA(chorus.collections.UserSet);
             expect(this.dialog.users.fetchAll).toHaveBeenCalled();
         });
     })
@@ -207,7 +207,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
     context("when the instance has individual accounts", function() {
         beforeEach(function() {
-            spyOn(chorus.models.UserSet.prototype, 'fetchAll').andCallThrough();
+            spyOn(chorus.collections.UserSet.prototype, 'fetchAll').andCallThrough();
             this.owner = fixtures.user({firstName: 'EDC', lastName: 'Admin'});
             this.instance = fixtures.instance({ownerId: this.owner.get('id'), owner: this.owner.get('userName'), ownerFullName: this.owner.displayName()});
             this.accounts = this.instance.accounts();

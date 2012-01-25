@@ -773,7 +773,7 @@ describe("chorus.models", function() {
 
     describe("Collection", function() {
         beforeEach(function() {
-            this.collection = new chorus.models.Collection([], { foo: "bar" });
+            this.collection = new chorus.collections.Base([], { foo: "bar" });
             this.collection.urlTemplate = "bar/{{foo}}";
         })
 

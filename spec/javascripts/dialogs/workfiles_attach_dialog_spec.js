@@ -1,6 +1,6 @@
 describe("WorkfilesAttach", function() {
     beforeEach(function() {
-        spyOn(chorus.models.WorkfileSet.prototype, 'fetchAll');
+        spyOn(chorus.collections.WorkfileSet.prototype, 'fetchAll');
         this.workfiles = fixtures.workfileSet();
         this.dialog = new chorus.dialogs.WorkfilesAttach({ workspaceId : "33" });
         this.dialog.collection = this.workfiles;

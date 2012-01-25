@@ -1,9 +1,7 @@
-describe("UserSet", function() {
-    var models = chorus.models;
-
+describe("chorus.collections.UserSet", function() {
     beforeEach(function() {
         fixtures.model = 'UserSet';
-        this.collection = new models.UserSet();
+        this.collection = new chorus.collections.UserSet();
     });
 
     it("has the correct urlTemplate", function() {

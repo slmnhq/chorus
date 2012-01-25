@@ -1,6 +1,6 @@
 describe("chorus.collections.DatabaseTableSet", function() {
     beforeEach(function() {
-        this.collection = new chorus.models.DatabaseTableSet([], {instanceId: "50", databaseName: "partyman", schemaName: "myschema"});
+        this.collection = new chorus.collections.DatabaseTableSet([], {instanceId: "50", databaseName: "partyman", schemaName: "myschema"});
     });
 
     it("has the correct urlTemplate", function() {

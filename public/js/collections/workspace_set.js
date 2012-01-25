@@ -1,6 +1,6 @@
 (function(ns) {
-    ns.WorkspaceSet = ns.Collection.extend({
-        model : ns.Workspace,
+    ns.collections.WorkspaceSet = ns.collections.Base.extend({
+        model : ns.models.Workspace,
         urlTemplate : "workspace/",
 
         urlParams : function() {
@@ -21,4 +21,4 @@
             return params;
         }
     });
-})(chorus.models);
+})(chorus);

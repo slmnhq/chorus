@@ -95,7 +95,7 @@ describe("NotesNewDialog", function() {
 
             describe("when workfiles are selected", function() {
                 beforeEach(function() {
-                    this.workfileSet = new chorus.models.WorkfileSet([
+                    this.workfileSet = new chorus.collections.WorkfileSet([
                         new chorus.models.Workfile({ id: 1, fileName: "greed.sql", fileType: "sql" }),
                         new chorus.models.Workfile({ id: 2, fileName: "generosity.cpp", fileType: "cpp" })
                     ]);
@@ -291,7 +291,7 @@ describe("NotesNewDialog", function() {
 
             describe("when a workfile is selected later", function() {
                 beforeEach(function() {
-                    this.workfileSet = new chorus.models.WorkfileSet([
+                    this.workfileSet = new chorus.collections.WorkfileSet([
                         new chorus.models.Workfile({ id: 1, fileName: "greed.sql", fileType: "sql" }),
                         new chorus.models.Workfile({ id: 2, fileName: "generosity.cpp", fileType: "cpp" })
                     ]);

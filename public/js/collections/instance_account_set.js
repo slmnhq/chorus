@@ -1,5 +1,5 @@
 (function(ns) {
-    ns.models.InstanceAccountSet = ns.models.Collection.extend({
+    ns.collections.InstanceAccountSet = ns.collections.Base.extend({
         model : ns.models.InstanceAccount,
         urlTemplate : "instance/accountmap",
 

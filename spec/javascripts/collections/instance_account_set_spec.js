@@ -1,6 +1,6 @@
-describe("chorus.models.InstanceAccountSet", function() {
+describe("chorus.collections.InstanceAccountSet", function() {
     beforeEach(function() {
-        this.accountSet = new chorus.models.InstanceAccountSet([], {instanceId : '1'});
+        this.accountSet = new chorus.collections.InstanceAccountSet([], {instanceId : '1'});
     });
 
     describe("#users", function() {

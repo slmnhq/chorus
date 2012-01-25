@@ -9,7 +9,7 @@ describe("chorus.models.Schema", function() {
         describe("#tables", function() {
             it("should return a DataaseTableSet", function() {
                 var tableSet = this.model.tables();
-                expect(tableSet).toBeA(chorus.models.DatabaseTableSet);
+                expect(tableSet).toBeA(chorus.collections.DatabaseTableSet);
             });
 
             it("should memoize the result", function() {
@@ -26,7 +26,7 @@ describe("chorus.models.Schema", function() {
         describe("#views", function() {
             it("should return a DatabaseViewSet", function() {
                 var viewSet = this.model.views();
-                expect(viewSet).toBeA(chorus.models.DatabaseViewSet);
+                expect(viewSet).toBeA(chorus.collections.DatabaseViewSet);
             });
 
             it("should memoize the result", function() {
@@ -43,7 +43,7 @@ describe("chorus.models.Schema", function() {
         describe("functions", function() {
             it("should return a SchemaFunctionSet", function() {
                 var functionSet = this.model.functions();
-                expect(functionSet).toBeA(chorus.models.SchemaFunctionSet);
+                expect(functionSet).toBeA(chorus.collections.SchemaFunctionSet);
             });
 
             it("should memoize the result", function() {

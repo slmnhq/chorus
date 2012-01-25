@@ -1,7 +1,7 @@
 describe("chorus.views.InstanceList", function() {
     context("without instances", function() {
         beforeEach(function() {
-            this.collection = new chorus.models.InstanceSet();
+            this.collection = new chorus.collections.InstanceSet();
             this.view = new chorus.views.InstanceList({collection: this.collection});
         });
 
@@ -21,7 +21,7 @@ describe("chorus.views.InstanceList", function() {
 
     context("with instances", function() {
         beforeEach(function() {
-            this.collection = new chorus.models.InstanceSet();
+            this.collection = new chorus.collections.InstanceSet();
             this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database", name : "GP9"}));
             this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database", name : "gP1"}));
             this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database", name : "GP10"}));

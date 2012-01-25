@@ -6,7 +6,7 @@
         ],
 
         setup : function() {
-            this.collection = new ns.models.InstanceSet();
+            this.collection = new ns.collections.InstanceSet();
             this.collection.fetchAll();
 
             this.mainContent = new ns.views.MainContentView({

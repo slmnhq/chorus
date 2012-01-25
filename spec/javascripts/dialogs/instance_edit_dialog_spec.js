@@ -67,7 +67,7 @@ describe("InstanceEditDialog", function() {
 
         describe("#fetchUserSet", function() {
             beforeEach(function() {
-                this.dialog.users = new chorus.models.UserSet();
+                this.dialog.users = new chorus.collections.UserSet();
             })
             context("when the instance has shared account", function() {
                 beforeEach(function() {

@@ -32,7 +32,7 @@ describe("chorus.views.WorkspaceList", function() {
                 "this is an archived workspace this is an archived workspace this is an archived workspace this is an archived workspace this is an archived workspace"
         });
 
-        this.collection = new chorus.models.WorkspaceSet([
+        this.collection = new chorus.collections.WorkspaceSet([
             this.activeWorkspace,
             this.archivedWorkspace,
             this.privateWorkspace,

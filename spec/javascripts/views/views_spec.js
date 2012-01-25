@@ -235,7 +235,7 @@ describe("chorus.views.base", function() {
 
         describe("for a view with a collection", function () {
             beforeEach(function() {
-                this.collection = new chorus.models.Collection([
+                this.collection = new chorus.collections.Base([
                     new chorus.models.Base({ bar: "foo"}),
                     new chorus.models.Base({ bro: "baz"})
                 ], { custom: "stuff" });

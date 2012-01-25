@@ -7,7 +7,7 @@
         ],
 
         setup : function() {
-            this.collection = new chorus.models.WorkspaceSet();
+            this.collection = new chorus.collections.WorkspaceSet();
             this.mainContent = new chorus.views.MainContentList({
                     modelClass : "Workspace",
                     collection : this.collection,

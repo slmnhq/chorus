@@ -44,7 +44,7 @@ describe("chorus.models.Comment", function() {
 
     describe("saving the workfile attachments", function() {
         it("assigns the 'workfileIds' field as a comma-separated list of workfile ids", function() {
-            this.model.workfiles = new chorus.models.WorkfileSet([
+            this.model.workfiles = new chorus.collections.WorkfileSet([
                 new chorus.models.Workfile({ id: 44 }),
                 new chorus.models.Workfile({ id: 45 }),
                 new chorus.models.Workfile({ id: 46 })

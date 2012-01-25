@@ -1,5 +1,4 @@
-;
-(function(ns) {
+;(function(ns) {
     ns.models.Activity = ns.models.Base.extend({
         author : function() {
             this._author = this._author || new ns.models.User(this.get("author"));
@@ -7,7 +6,7 @@
         },
 
         comments: function() {
-            this._comments || (this._comments = new ns.models.CommentSet(this.get("comments")));
+            this._comments || (this._comments = new ns.collections.CommentSet(this.get("comments")));
             return this._comments;
         },
 

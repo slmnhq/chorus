@@ -69,7 +69,7 @@
         },
 
         allVersions : function() {
-            return new ns.models.WorkfileVersionSet([], {
+            return new ns.collections.WorkfileVersionSet([], {
                 workspaceId : this.get("workspaceId"),
                 workfileId : this.get("id")
             });

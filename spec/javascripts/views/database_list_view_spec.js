@@ -4,7 +4,7 @@ describe("chorus.views.DatabaseList", function() {
         var object1 = new chorus.models.Base();
         object0.cid = 'c44';
         object1.cid = 'c55';
-        this.collection = new chorus.models.Collection([object0, object1]);
+        this.collection = new chorus.collections.Base([object0, object1]);
         spyOn(this.collection.models[0], 'toString').andReturn('object1');
         spyOn(this.collection.models[1], 'toString').andReturn('object2');
         this.view = new chorus.views.DatabaseList({collection: this.collection});

@@ -1,8 +1,6 @@
-describe("WorkspaceSet", function() {
-    var models = chorus.models;
-
+describe("chorus.collections.WorkspaceSet", function() {
     beforeEach(function() {
-        this.collection = new models.WorkspaceSet();
+        this.collection = new chorus.collections.WorkspaceSet();
     });
 
     describe("without filtering", function() {

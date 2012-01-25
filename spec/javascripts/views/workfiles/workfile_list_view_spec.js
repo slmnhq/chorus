@@ -2,7 +2,7 @@ describe("WorkfileListView", function() {
     describe("#render", function() {
         context("with no workfiles in the collection", function() {
             beforeEach(function() {
-                this.collection = new chorus.models.WorkfileSet([], {workspaceId : 1234});
+                this.collection = new chorus.collections.WorkfileSet([], {workspaceId : 1234});
                 this.view = new chorus.views.WorkfileList({collection: this.collection});
                 this.workfileSelectedSpy = jasmine.createSpy("workfile:selected");
                 this.view.bind("workfile:selected", this.workfileSelectedSpy);
@@ -26,7 +26,7 @@ describe("WorkfileListView", function() {
                 this.model2 = fixtures.textWorkfile();
                 this.model3 = fixtures.otherWorkfile();
                 this.model3.set({recentComments: [], commentCount: 0});
-                this.collection = new chorus.models.WorkfileSet([this.model1, this.model2, this.model3], {workspaceId: 1234});
+                this.collection = new chorus.collections.WorkfileSet([this.model1, this.model2, this.model3], {workspaceId: 1234});
                 this.view = new chorus.views.WorkfileList({collection: this.collection});
                 this.view.render();
                 this.li2 = this.view.$("li")[1];
@@ -194,7 +194,7 @@ describe("WorkfileListView", function() {
 
     describe("#filter", function() {
         beforeEach(function() {
-            this.collection = new chorus.models.WorkfileSet([], {workspaceId : 1234});
+            this.collection = new chorus.collections.WorkfileSet([], {workspaceId : 1234});
             this.view = new chorus.views.WorkfileList({collection: this.collection});
             spyOn(this.view.collection, "fetch");
             this.view.filter("sql");

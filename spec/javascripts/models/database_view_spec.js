@@ -13,7 +13,7 @@ describe("chorus.models.DatabaseView", function() {
         });
 
         it("should return a DatabaseColumnSet", function() {
-            expect(this.model.columns()).toBeA(chorus.models.DatabaseColumnSet);
+            expect(this.model.columns()).toBeA(chorus.collections.DatabaseColumnSet);
         })
 
         it("should pass the correct parameters to the DatabaseColumnSet", function() {

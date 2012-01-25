@@ -1,4 +1,4 @@
-describe("chorus.models.SchemaFunctionSet", function() {
+describe("chorus.collections.SchemaFunctionSet", function() {
     beforeEach(function() {
         this.schema = fixtures.schema();
         this.functionSet = this.schema.functions();

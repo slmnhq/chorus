@@ -1,7 +1,7 @@
-describe("MemberSet", function() {
+describe("chorus.collections.MemberSet", function() {
     beforeEach(function() {
         this.workspace = new chorus.models.Workspace({id: 17})
-        this.memberSet = new chorus.models.MemberSet([], {workspaceId: 17})
+        this.memberSet = new chorus.collections.MemberSet([], {workspaceId: 17})
     });
 
     describe("#url", function() {

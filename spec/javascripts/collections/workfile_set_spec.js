@@ -1,7 +1,7 @@
-describe("workfile_set", function() {
+describe("chorus.collections.WorkfileSet", function() {
     describe("#fetch", function() {
         beforeEach(function() {
-            this.collection = new chorus.models.WorkfileSet([], {workspaceId : 1234});
+            this.collection = new chorus.collections.WorkfileSet([], {workspaceId : 1234});
         });
 
         describe("without filtering", function() {

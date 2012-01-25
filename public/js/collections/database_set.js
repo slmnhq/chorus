@@ -1,5 +1,5 @@
 ;(function(ns) {
-    ns.models.DatabaseSet = ns.models.Collection.extend({
+    ns.collections.DatabaseSet = ns.collections.Base.extend({
         model : ns.models.Database,
         urlTemplate : "instance/{{instanceId}}/database",
         setup : function() {

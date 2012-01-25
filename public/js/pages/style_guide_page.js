@@ -32,8 +32,8 @@
             this.subNav = new chorus.views.SubNav({model : this.workspace, tab : "workfiles"})
 
             //necessary for collection views down at the bottom 
-            this.loadingCollection = new chorus.models.UserSet();
-            this.userCollection = new chorus.models.UserSet([
+            this.loadingCollection = new chorus.collections.UserSet();
+            this.userCollection = new chorus.collections.UserSet([
                 new chorus.models.User({ userName: "edcadmin", fullName: "Johnny Danger", admin : false, id: "InitialUser"}),
                 new chorus.models.User({ userName: "edcadmin", fullName: "Laurie Blakenship", admin : true, id: "InitialUser"}),
                 new chorus.models.User({ userName: "edcadmin", fullName: "George Gorilla", admin : false, id: "InitialUser"})

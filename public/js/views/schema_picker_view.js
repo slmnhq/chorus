@@ -13,7 +13,7 @@
         },
 
         setup: function() {
-            this.instances = new ns.models.InstanceSet();
+            this.instances = new ns.collections.InstanceSet();
             this.instances.bind("reset", this.updateInstances, this);
             this.instances.fetchAll();
         },

@@ -10,7 +10,7 @@
         },
 
         makeModel : function() {
-            this.collection = new ns.models.WorkfileSet([], {workspaceId: this.options.workspaceId || this.options.launchElement.data("workspace-id")});
+            this.collection = new ns.collections.WorkfileSet([], {workspaceId: this.options.workspaceId || this.options.launchElement.data("workspace-id")});
             this.collection.fetchAll();
         },
 
@@ -31,7 +31,7 @@
                 return this.collection.get(id);
             }, this);
 
-            this.selectedFiles = new ns.models.WorkfileSet(workfiles, { workspaceId : this.collection.get("workspaceId") });
+            this.selectedFiles = new ns.collections.WorkfileSet(workfiles, { workspaceId : this.collection.get("workspaceId") });
             this.trigger("files:selected", this.selectedFiles);
             this.closeModal();
         },

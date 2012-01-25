@@ -51,7 +51,7 @@
                 },
 
                 modelFor: function modelFor(key, options) {
-                    var klass = chorus.models[model];
+                    var klass = chorus.models[model] || chorus.collections[model];
                     var obj = new klass(null, options);
                     var data = klass.prototype.parse.call(obj, self.fixtures.jsonFor(key, {
                         model: model
@@ -90,7 +90,7 @@
             },
 
             modelFor: function modelFor(key, options) {
-                var klass = chorus.models[this.model];
+                var klass = chorus.models[this.model] || chorus.collections[this.model];
                 var obj = new klass(null, options);
                 var data = klass.prototype.parse.call(obj, self.fixtures.jsonFor(key, {
                     model: this.model
@@ -1147,7 +1147,7 @@
                     instanceId : this.nextId().toString(),
                     databaseName: "My fixture database"
                 }, overrides);
-                return new chorus.models.SchemaSet([], attributes);
+                return new chorus.collections.SchemaSet([], attributes);
             },
 
             schema: function(overrides) {
@@ -1219,19 +1219,19 @@
             databaseTableSet: function(models, overrides) {
                 var id = this.nextId().toString()
                 models = (models && (models.length > 0)) || [this.table(overrides), this.table(overrides)];
-                return new chorus.models.DatabaseTableSet(models, overrides);
+                return new chorus.collections.DatabaseTableSet(models, overrides);
             },
 
             databaseViewSet: function(models, overrides) {
                 var id = this.nextId().toString()
                 models = (models && (models.length > 0)) || [this.databaseView(overrides), this.databaseView(overrides)];
-                return new chorus.models.DatabaseViewSet(models, overrides);
+                return new chorus.collections.DatabaseViewSet(models, overrides);
             },
 
             databaseColumnSet: function(models, overrides) {
                 var id = this.nextId().toString()
                 models = (models && (models.length > 0)) || [this.databaseColumn(overrides), this.databaseColumn(overrides)];
-                return new chorus.models.DatabaseColumnSet(models, overrides);
+                return new chorus.collections.DatabaseColumnSet(models, overrides);
             },
 
             workspace: function(overrides) {
@@ -1288,7 +1288,7 @@
 
             workfileSet: function(models) {
                 models = models || [this.workfile(), this.workfile()];
-                return new chorus.models.WorkfileSet(models);
+                return new chorus.collections.WorkfileSet(models);
             },
 
             artifact: function(overrides) {
@@ -1355,7 +1355,7 @@
 
             instanceAccountSet: function(models) {
                 models = models || [this.instanceAccount(), this.instanceAccount()];
-                return new chorus.models.InstanceAccountSet(models);
+                return new chorus.collections.InstanceAccountSet(models);
             },
 
             sandbox: function(overrides) {

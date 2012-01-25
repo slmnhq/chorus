@@ -1,7 +1,7 @@
 describe("chorus.views.DatasetList", function() {
     describe("#render", function() {
         beforeEach(function() {
-            this.collection = new chorus.models.DatasetSet([fixtures.datasetChorusView(), fixtures.datasetSandboxTable(), fixtures.datasetSourceTable()]);
+            this.collection = new chorus.collections.DatasetSet([fixtures.datasetChorusView(), fixtures.datasetSandboxTable(), fixtures.datasetSourceTable()]);
             this.view = new chorus.views.DatasetList({collection: this.collection});
             this.view.render();
         });

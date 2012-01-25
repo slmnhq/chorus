@@ -26,13 +26,13 @@
         },
 
         comments: function(){
-            this._comments || (this._comments = new chorus.models.CommentSet(this.get("latestCommentList")));
+            this._comments || (this._comments = new chorus.collections.CommentSet(this.get("latestCommentList")));
             return this._comments;
         },
 
         members: function(){
             if (!this._members) {
-                this._members = new chorus.models.MemberSet([], {workspaceId : this.get("id")})
+                this._members = new chorus.collections.MemberSet([], {workspaceId : this.get("id")})
                 this._members.bind("saved", function() { this.trigger("change") }, this);
             }
             return this._members;

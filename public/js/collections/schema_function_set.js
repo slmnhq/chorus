@@ -1,6 +1,6 @@
 (function(ns) {
-    ns.SchemaFunctionSet = ns.Collection.extend({
-        model : ns.SchemaFunction,
+    ns.collections.SchemaFunctionSet = ns.collections.Base.extend({
+        model : ns.models.SchemaFunction,
         urlTemplate : "instance/{{instanceId}}/database/{{databaseId}}/schema/{{schemaId}}/function",
 
         comparator : function(schemaFunction) {
@@ -14,4 +14,4 @@
         }
 
     });
-})(chorus.models);
+})(chorus);

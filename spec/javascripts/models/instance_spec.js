@@ -126,7 +126,7 @@ describe("chorus.models.Instance", function() {
         })
 
         it("returns an InstanceAccountSet", function() {
-            expect(this.instanceAccounts).toBeA(chorus.models.InstanceAccountSet)
+            expect(this.instanceAccounts).toBeA(chorus.collections.InstanceAccountSet)
         });
 
         it("sets the instance id", function() {

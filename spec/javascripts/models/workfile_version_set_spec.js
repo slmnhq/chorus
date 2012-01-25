@@ -1,6 +1,6 @@
 describe("chorus.models.WorkfileVersion", function() {
     beforeEach(function() {
-        this.collection = new chorus.models.WorkfileVersionSet([],{workspaceId: 1, workfileId: 2});
+        this.collection = new chorus.collections.WorkfileVersionSet([],{workspaceId: 1, workfileId: 2});
         this.collection.add({versionNum: 1});
         this.collection.add({versionNum: 2});
         this.collection.add({versionNum: 3});

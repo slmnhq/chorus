@@ -1,6 +1,6 @@
 (function(ns) {
-    ns.UserSet = ns.Collection.extend({
-        model : ns.User,
+    ns.collections.UserSet = ns.collections.Base.extend({
+        model : ns.models.User,
         urlTemplate : "user/"
     });
-})(chorus.models);
+})(chorus);

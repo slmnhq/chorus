@@ -169,7 +169,7 @@ describe("chorus.models.Activity", function() {
         });
 
         it("returns a CommentSet", function() {
-            expect(this.comments instanceof chorus.models.CommentSet).toBeTruthy();
+            expect(this.comments instanceof chorus.collections.CommentSet).toBeTruthy();
         });
 
         it("memoizes", function() {

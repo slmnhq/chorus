@@ -1,4 +1,4 @@
-describe("chorus.models.SchemaSet", function() {
+describe("chorus.collections.SchemaSet", function() {
     beforeEach(function() {
         this.collection = fixtures.schemaSet({ instanceId: '50', databaseId: '41', databaseName: "wicked_tables"});
     });

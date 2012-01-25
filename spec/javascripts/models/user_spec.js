@@ -20,7 +20,7 @@ describe("chorus.models.User", function() {
         });
 
         it("returns an instance of WorkspaceSet", function() {
-            expect(this.workspaces instanceof chorus.models.WorkspaceSet).toBeTruthy();
+            expect(this.workspaces instanceof chorus.collections.WorkspaceSet).toBeTruthy();
         });
 
         it("returns the same instance every time", function() {

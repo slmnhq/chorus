@@ -1,6 +1,6 @@
 (function(ns) {
-    ns.CommentSet = ns.Collection.extend({
-        model : ns.Comment,
+    ns.collections.CommentSet = ns.collections.Base.extend({
+        model : ns.models.Comment,
         urlTemplate : "comment/workspace/{{workspaceId}}",
     });
-})(chorus.models);
+})(chorus);

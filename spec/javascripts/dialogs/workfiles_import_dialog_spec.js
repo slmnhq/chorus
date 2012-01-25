@@ -2,7 +2,7 @@ describe("WorkfilesImportDialog", function() {
     beforeEach(function() {
         this.launchElement = $("<a data-workspace-id='4'></a>")
         this.model = fixtures.workfile({ workspaceId: 4 });
-        var workfileSet = new chorus.models.WorkfileSet([this.model], { workspaceId: 4 });
+        var workfileSet = new chorus.collections.WorkfileSet([this.model], { workspaceId: 4 });
         this.dialog = new chorus.dialogs.WorkfilesImport({ launchElement : this.launchElement, pageModel: this.model, pageCollection: workfileSet });
         this.successfulResponseTxt = {"result": '{"resource":[{"id":"9", "fileName" : "new_file.txt", "mimeType" : "text/plain", "workspaceId" : "4"}], "status": "ok"}'};
         this.successfulResponseOther = {"result": '{"resource":[{"id":"9", "fileName" : "new_file.sh", "mimeType" : "application/octet-stream", "workspaceId" : "4"}], "status": "ok"}'};

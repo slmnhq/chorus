@@ -1,106 +1,5 @@
 (function($) {
     chorus.models = {
-        Collection: Backbone.Collection.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, {
-            initialize: function(models, options) {
-                this.attributes = options || {};
-                this.setup(arguments);
-            },
-
-            setup: $.noop,
-
-            url: function(options) {
-                options = _.extend({
-                    rows : 50,
-                    page : 1
-                }, options);
-
-                var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
-                var uri = new URI("/edc/" + Handlebars.compile(template)(this.attributes));
-
-                if (this.urlParams) {
-                    var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;
-                    uri.addSearch(params);
-                }
-
-                uri.addSearch({
-                    page: options.page,
-                    rows: options.rows
-                });
-
-                if (this.sortIndex && this.sortOrder) {
-                    uri.addSearch({
-                        sidx: this.sortIndex,
-                        sord: this.sortOrder
-                    });
-                }
-
-                // this ensures that IE doesn't cache 'needs_login' responses
-                if (!window.jasmine) {
-                    uri.addSearch({iebuster: new Date().getTime()});
-                }
-
-                return uri.normalizeSearch().toString();
-            },
-
-            fetchPage: function(page, options) {
-                var url = this.url({page : page});
-                options = _.extend({}, options, { url: url });
-                this.fetch(options);
-            },
-
-            fetchAll : (function() {
-                var fetchPage = function(page) {
-                    this.fetch({
-                        url : this.url({ page: page, rows: 1000 }),
-                        silent: true,
-                        add : page != 1,
-                        success : function(collection, resp) {
-                            if (resp.status == "ok") {
-                                var total = parseInt(resp.pagination.total);
-                                var page = parseInt(resp.pagination.page);
-                                if (page >= total) {
-                                    collection.trigger("reset", collection);
-                                } else {
-                                    fetchPage.call(collection, page + 1);
-                                }
-                            } else {
-                                collection.trigger("reset", collection);
-
-                            }
-                        }
-                    });
-                };
-
-                return function() {
-                    fetchPage.call(this, 1);
-                }
-            })(),
-
-
-            parse : function(data) {
-                if (data.status == "needlogin") {
-                    chorus.session.trigger("needsLogin");
-                }
-                this.pagination = data.pagination;
-                this.loaded = true;
-                this.trigger('loaded');
-                return data.resource;
-            },
-
-            sortDesc : function(idx) {
-                this._sort(idx, "desc")
-            },
-
-            sortAsc : function(idx) {
-                this._sort(idx, "asc")
-            },
-
-            _sort : function(idx, order) {
-                this.sortIndex = idx
-                this.sortOrder = order
-            }
-        })),
-
         Base: Backbone.Model.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, {
             url: function(options) {
                 var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
@@ -118,7 +17,7 @@
                         throw "Cannot create activities without having an entityType";
                     }
 
-                    this._activities = new chorus.models.ActivitySet([], { entityType : this.entityType, entityId : this.entityId || this.get("id") });
+                    this._activities = new chorus.collections.ActivitySet([], { entityType : this.entityType, entityId : this.entityId || this.get("id") });
                     this.bind("invalidated", this._activities.fetch, this._activities)
                 }
 
@@ -273,4 +172,106 @@
         }))
     };
 
+    chorus.collections = {
+        Base: Backbone.Collection.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, {
+            initialize: function(models, options) {
+                this.attributes = options || {};
+                this.setup(arguments);
+            },
+
+            setup: $.noop,
+
+            url: function(options) {
+                options = _.extend({
+                    rows : 50,
+                    page : 1
+                }, options);
+
+                var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
+                var uri = new URI("/edc/" + Handlebars.compile(template)(this.attributes));
+
+                if (this.urlParams) {
+                    var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;
+                    uri.addSearch(params);
+                }
+
+                uri.addSearch({
+                    page: options.page,
+                    rows: options.rows
+                });
+
+                if (this.sortIndex && this.sortOrder) {
+                    uri.addSearch({
+                        sidx: this.sortIndex,
+                        sord: this.sortOrder
+                    });
+                }
+
+                // this ensures that IE doesn't cache 'needs_login' responses
+                if (!window.jasmine) {
+                    uri.addSearch({iebuster: new Date().getTime()});
+                }
+
+                return uri.normalizeSearch().toString();
+            },
+
+            fetchPage: function(page, options) {
+                var url = this.url({page : page});
+                options = _.extend({}, options, { url: url });
+                this.fetch(options);
+            },
+
+            fetchAll : (function() {
+                var fetchPage = function(page) {
+                    this.fetch({
+                        url : this.url({ page: page, rows: 1000 }),
+                        silent: true,
+                        add : page != 1,
+                        success : function(collection, resp) {
+                            if (resp.status == "ok") {
+                                var total = parseInt(resp.pagination.total);
+                                var page = parseInt(resp.pagination.page);
+                                if (page >= total) {
+                                    collection.trigger("reset", collection);
+                                } else {
+                                    fetchPage.call(collection, page + 1);
+                                }
+                            } else {
+                                collection.trigger("reset", collection);
+
+                            }
+                        }
+                    });
+                };
+
+                return function() {
+                    fetchPage.call(this, 1);
+                }
+            })(),
+
+
+            parse : function(data) {
+                if (data.status == "needlogin") {
+                    chorus.session.trigger("needsLogin");
+                }
+                this.pagination = data.pagination;
+                this.loaded = true;
+                this.trigger('loaded');
+                return data.resource;
+            },
+
+            sortDesc : function(idx) {
+                this._sort(idx, "desc")
+            },
+
+            sortAsc : function(idx) {
+                this._sort(idx, "asc")
+            },
+
+            _sort : function(idx, order) {
+                this.sortIndex = idx
+                this.sortOrder = order
+            }
+        }))
+    };
 })(jQuery);

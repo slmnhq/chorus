@@ -19,7 +19,7 @@
             workspace.fetch();
             this.breadcrumbs = new breadcrumbsView({model: workspace});
 
-            this.collection = new chorus.models.WorkfileSet([], {workspaceId: workspaceId});
+            this.collection = new chorus.collections.WorkfileSet([], {workspaceId: workspaceId});
             this.collection.fileType = "";
             this.collection.sortAsc("fileName");
             this.collection.fetch();

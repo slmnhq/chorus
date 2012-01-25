@@ -1,6 +1,6 @@
-describe("chorus.models.DatabaseViewSet", function() {
+describe("chorus.collections.DatabaseViewSet", function() {
     beforeEach(function() {
-        this.collection = new chorus.models.DatabaseViewSet([], {instanceId: "50", databaseName: "partyman", schemaName: "myschema"});
+        this.collection = new chorus.collections.DatabaseViewSet([], {instanceId: "50", databaseName: "partyman", schemaName: "myschema"});
     });
 
     it("has the correct urlTemplate", function() {

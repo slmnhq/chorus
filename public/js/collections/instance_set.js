@@ -1,5 +1,5 @@
 ;(function(ns){
-    ns.models.InstanceSet = ns.models.Collection.extend({
+    ns.collections.InstanceSet = ns.collections.Base.extend({
         model : ns.models.Instance,
         urlTemplate : "instance/"
     });

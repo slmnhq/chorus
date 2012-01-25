@@ -8,7 +8,7 @@
         makeModel : function() {
             this.model = this.options.pageModel;
 
-            this.users = new chorus.models.UserSet();
+            this.users = new chorus.collections.UserSet();
             this.fetchUserSet();
             this.users.bind("reset", this.render, this);
         },
@@ -65,7 +65,7 @@
             if (this.model.isShared()) {
                 this.users.fetchAll();
             } else {
-                this.accounts = this.accounts || new ns.models.InstanceAccountSet({}, { instanceId: this.model.get("id") });
+                this.accounts = this.accounts || new ns.collections.InstanceAccountSet({}, { instanceId: this.model.get("id") });
                 this.accounts.fetchAll();
                 this.accounts.bind("reset", function () {
                     this.users.add(this.accounts.users());

@@ -181,7 +181,7 @@ describe("ListContentDetails", function() {
 
             context("and the collection is empty", function() {
                 beforeEach(function() {
-                    this.view.collection = new chorus.models.UserSet();
+                    this.view.collection = new chorus.collections.UserSet();
                     this.view.render();
                 })
 

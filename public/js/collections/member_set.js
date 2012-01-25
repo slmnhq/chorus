@@ -1,6 +1,6 @@
 (function(ns) {
-    ns.MemberSet = ns.Collection.extend({
-        model : ns.User,
+    ns.collections.MemberSet = ns.collections.Base.extend({
+        model : ns.models.User,
         urlTemplate : "workspace/{{workspaceId}}/member",
 
         save: function() {
@@ -22,4 +22,4 @@
             }, "");
         }
     });
-})(chorus.models);
+})(chorus);

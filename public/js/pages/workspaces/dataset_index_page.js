@@ -17,7 +17,7 @@
             workspace.fetch();
             this.breadcrumbs = new breadcrumbsView({model: workspace});
 
-            this.collection = new chorus.models.DatasetSet([], {workspaceId: workspaceId});
+            this.collection = new chorus.collections.DatasetSet([], {workspaceId: workspaceId});
             this.collection.sortAsc("objectName");
             this.collection.fetch();
 

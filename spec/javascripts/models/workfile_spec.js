@@ -173,7 +173,7 @@ describe("chorus.models.Workfile", function() {
     describe("#allVersions", function() {
         it("sets the required attributes", function() {
             var workfileVersionSet = this.model.allVersions();
-            expect(workfileVersionSet).toBeA(chorus.models.WorkfileVersionSet);
+            expect(workfileVersionSet).toBeA(chorus.collections.WorkfileVersionSet);
             expect(workfileVersionSet.attributes.workspaceId).toBe(this.model.get("workspaceId"));
             expect(workfileVersionSet.attributes.workfileId).toBe(this.model.get("id"));
         });
@@ -237,7 +237,7 @@ describe("chorus.models.Workfile", function() {
 
     describe("initializing from a WorkfileVersionSet", function() {
         beforeEach(function() {
-            this.collection = new chorus.models.WorkfileVersionSet([], {workspaceId: 1, workfileId: 2});
+            this.collection = new chorus.collections.WorkfileVersionSet([], {workspaceId: 1, workfileId: 2});
         });
 
         it("sets the workspaceId attribute on the model", function() {

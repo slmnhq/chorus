@@ -1,5 +1,5 @@
 ;(function(ns) {
-    ns.models.DatasetSet = ns.models.Collection.extend({
+    ns.collections.DatasetSet = ns.collections.Base.extend({
         model : ns.models.Dataset,
         urlTemplate : "workspace/{{workspaceId}}/dataset"
     });

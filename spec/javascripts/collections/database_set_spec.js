@@ -1,7 +1,7 @@
-describe("chorus.models.DatabaseSet", function() {
+describe("chorus.collections.DatabaseSet", function() {
     beforeEach(function() {
         this.instanceId = '8675309'
-        this.collection = new chorus.models.DatabaseSet([], {instanceId: this.instanceId});
+        this.collection = new chorus.collections.DatabaseSet([], {instanceId: this.instanceId});
     });
 
     describe("reset", function() {

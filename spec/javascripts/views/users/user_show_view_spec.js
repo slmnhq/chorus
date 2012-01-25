@@ -9,7 +9,7 @@ describe("chorus.views.UserShow", function() {
                 userName: "gabe1",
                 notes: "My Notes"
             });
-            var workspaces = new chorus.models.WorkspaceSet();
+            var workspaces = new chorus.collections.WorkspaceSet();
             spyOn(workspaces, "fetch");
             workspaces.add(new chorus.models.Workspace({id: 1, name: "ws1"}));
             workspaces.add(new chorus.models.Workspace({id: 2, name: "ws2"}));
@@ -99,7 +99,7 @@ describe("chorus.views.UserShow", function() {
 
             context("when the user has no workspaces", function() {
                 beforeEach(function() {
-                    var workspaces = new chorus.models.WorkspaceSet();
+                    var workspaces = new chorus.collections.WorkspaceSet();
                     this.model.workspaces = function(){
                         return workspaces;
                     };

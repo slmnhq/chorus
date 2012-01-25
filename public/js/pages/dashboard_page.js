@@ -6,7 +6,7 @@
         ],
 
         setup : function(){
-            this.collection = this.workspaceSet = new ns.models.WorkspaceSet();
+            this.collection = this.workspaceSet = new ns.collections.WorkspaceSet();
             this.workspaceSet.attributes.showLatestComments = true;
             this.workspaceSet.sortAsc("name");
             this.workspaceSet.fetch();
