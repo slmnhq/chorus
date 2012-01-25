@@ -46,28 +46,6 @@ describe("chorus.views.DatabaseFunctionList", function() {
             it("should not show the 'no functions found' text", function() {
                 expect(this.view.$('.none_found')).not.toExist();
             });
-
-
-            context("when hovering over a function li", function() {
-                beforeEach(function() {
-                   this.view.$('.list li:eq(1)').mouseenter();
-                });
-
-                it("has the insert text in the insert arrow", function() {
-                    expect(this.qtipElement.find("a").text()).toMatchTranslation('database.sidebar.insert')
-                })
-
-                context("when clicking the insert arrow", function() {
-                    beforeEach(function() {
-                        spyOnEvent(this.view, "file:insertText");
-                        this.qtipElement.find("a").click()
-                    })
-
-                    it("triggers a file:insertText with the functions string representation", function() {
-                        expect("file:insertText").toHaveBeenTriggeredOn(this.view, [this.view.functions.models[1].toString()]);
-                    })
-                })
-            })
         });
 
         context("when the schema has no functions", function() {

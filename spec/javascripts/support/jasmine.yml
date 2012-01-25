@@ -31,6 +31,7 @@ src_files:
   - js/alerts.js
   - js/presenters.js
   - js/views/sidebar_view.js
+  - js/views/database_list_view.js
   - js/views/workfiles/workfile_content_details_view.js
   - js/views/workfiles/workfile_content_view.js
   - js/views/workfiles/text_workfile_content_view.js
