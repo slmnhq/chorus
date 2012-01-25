@@ -7,4 +7,10 @@ jasmine.sharedExamples.DatabaseList = function() {
     it("should have a collection defined", function() {
         expect(this.view.collection).toBeTruthy();
     });
+
+    it("should call super if overriding postRender", function() {
+        spyOn(chorus.views.DatabaseList.prototype, 'postRender');
+        this.view.render();
+        expect(chorus.views.DatabaseList.prototype.postRender).toHaveBeenCalled();
+    });
 }
