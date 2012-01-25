@@ -104,10 +104,18 @@ describe("chorus.models.Comment", function() {
                 expect(this.fileUpload2.data.submit).toHaveBeenCalled();
             });
 
-            it("sets the url of each upload", function() {
-                expect(this.fileUpload1.data.url).toBe(this.model.url() + '/file');
-                expect(this.fileUpload2.data.url).toBe(this.model.url() +  '/file');
+            describe("when a cache-busting query param is included", function() {
+                beforeEach(function() {
+                    this.model.urlParams = { iebuster: "123" };
+                    this.model.saveFiles();
+                });
+
+                it("sets the url of each upload", function() {
+                    expect(this.fileUpload1.data.url).toMatchUrl('/edc/comment/instance/1/6/file?iebuster=123');
+                    expect(this.fileUpload2.data.url).toMatchUrl('/edc/comment/instance/1/6/file?iebuster=123');
+                });
             });
+
 
             describe("when all saves succeed", function() {
                 beforeEach(function() {

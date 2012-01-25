@@ -1,13 +1,15 @@
 ;(function(ns) {
     ns.models.Comment = ns.models.Activity.extend({
-        urlTemplate: function() {
-            if (this.isNew()) {
+        urlTemplate: function(options) {
+            if (options && options.isFile) {
+                return "comment/{{entityType}}/{{entityId}}/{{id}}/file"
+            } else if (this.isNew()) {
                 return "comment/{{entityType}}/{{entityId}}"
             } else {
                 return "comment/{{entityType}}/{{entityId}}/{{id}}";
             }
         },
-        
+
         initialize: function() {
             this._super('initialize', arguments);
             this.files = [];
@@ -79,7 +81,7 @@
             this.fileUploadErrors = 0;
             this.filesToBeSaved = this.files.length;
             _.each(this.files, _.bind(function(file) {
-                file.data.url = this.url() + "/file";
+                file.data.url = this.url({ isFile: true });
                 file.data.submit().done(_.bind(this.uploadSuccess, this, file))
                     .fail(_.bind(this.uploadFailed, this, file));
             }, this));
