@@ -4,7 +4,6 @@ describe("chorus.views.DatabaseFunctionList", function() {
         this.schema = this.sandbox.schema();
         spyOn(this.schema.functions(), "fetch").andCallThrough();
         this.view = new chorus.views.DatabaseFunctionList({sandbox: this.sandbox});
-        this.qtipElement = stubQtip();
     });
 
     it("should fetch the functions for the sandbox", function() {
@@ -17,6 +16,7 @@ describe("chorus.views.DatabaseFunctionList", function() {
 
     describe("render", function() {
         beforeEach(function() {
+            this.menu = stubQtip(".context a");
             this.view.render();
             $('#jasmine_content').append(this.view.el);
         });
@@ -25,11 +25,6 @@ describe("chorus.views.DatabaseFunctionList", function() {
             expect(this.view.$('.loading_section')).toExist();
         });
 
-<<<<<<< HEAD
-        context("after functions have loaded", function() {
-            beforeEach(function() {
-                this.server.completeFetchFor(this.view.functions, [fixtures.schemaFunction(), fixtures.schemaFunction()]);
-=======
         it("fetches all of the schemas in the sandbox's database", function() {
             expect(this.server.lastFetchFor(this.sandbox.database().schemas())).toBeTruthy();
         });
@@ -46,7 +41,6 @@ describe("chorus.views.DatabaseFunctionList", function() {
                     fixtures.schemaFunction({ functionName: "laplace_transform" }),
                     fixtures.schemaFunction({ functionName: "inc" })
                 ]);
->>>>>>> add schema menu to database function list view
             });
             jasmine.sharedExamples.DatabaseList();
 
