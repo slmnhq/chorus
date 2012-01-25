@@ -265,7 +265,15 @@
                             "iconId":null,
                             "state":1,
                             "summary":"this is the workspace summary",
-                            "sandboxId":null,
+                            "sandboxInfo": {
+                                databaseId: null,
+                                databaseName: null,
+                                instanceId: null,
+                                instanceName: null,
+                                sandboxId: null,
+                                schemaId: null,
+                                schemaName: null
+                            },
                             "active":true,
                             "permission":["admin"]
                         }
@@ -291,7 +299,15 @@
                             "iconId":null,
                             "state":1,
                             "summary":"this is the workspace summary",
-                            "sandboxId":null,
+                            "sandboxInfo": {
+                                databaseId: null,
+                                databaseName: null,
+                                instanceId: null,
+                                instanceName: null,
+                                sandboxId: null,
+                                schemaId: null,
+                                schemaName: null
+                            },
                             "active":true,
                             "permission":["admin"],
                             "latestCommentList": [
@@ -1108,7 +1124,16 @@
                 var id = this.nextId();
                 return {
                     id : id.toString(),
-                    name : 'Workspace ' + id
+                    name : 'Workspace ' + id,
+                    "sandboxInfo": {
+                        databaseId: null,
+                        databaseName: null,
+                        instanceId: null,
+                        instanceName: null,
+                        sandboxId: null,
+                        schemaId: null,
+                        schemaName: null
+                    },
                 }
             },
 

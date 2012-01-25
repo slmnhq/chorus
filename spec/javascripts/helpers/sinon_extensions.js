@@ -50,7 +50,7 @@ _.extend(sinon.fakeServer, {
     },
 
     completeFetchFor: function(model, results) {
-        results = results || [model.attributes];
+        results = results || model.attributes;
         var fetch = this.lastFetchFor(model)
         if(fetch) {
             fetch.succeed(results);
@@ -68,6 +68,7 @@ _.extend(sinon.fakeServer, {
 
 _.extend(sinon.FakeXMLHttpRequest.prototype, {
     succeed: function(models) {
+        if (!_.isArray(models)) models = [models];
         var resource = _.map(models, function(model) {
             if (model instanceof Backbone.Model) {
                 return model.attributes;

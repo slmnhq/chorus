@@ -1,8 +1,4 @@
 describe("chorus.pages.WorkspaceSummaryPage", function() {
-    beforeEach(function() {
-        fixtures.model = "Workspace";
-    })
-
     describe("#initialize", function() {
         beforeEach(function() {
             this.page = new chorus.pages.WorkspaceSummaryPage(4);
@@ -35,8 +31,7 @@ describe("chorus.pages.WorkspaceSummaryPage", function() {
 
         context("when the model has loaded", function(){
             beforeEach(function(){
-                this.page.model.loaded = true;
-                this.page.model.set({summary: "this is a summary", name : "Cool Workspace"});
+                this.server.completeFetchFor(this.page.model, fixtures.workspace({summary: "this is a summary", name : "Cool Workspace"}))
                 this.page.render();
             });
 

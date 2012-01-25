@@ -25,6 +25,16 @@
             return this._owner;
         },
 
+        sandbox: function() {
+            if (this._sandbox) return this._sandbox;
+            var sandboxInfo = this.get("sandboxInfo");
+            if (sandboxInfo && sandboxInfo.sandboxId) {
+                var attrs = _.extend({}, sandboxInfo, { id: sandboxInfo.sandboxId })
+                delete attrs.sandboxId;
+                return this._sandbox = new chorus.models.Sandbox(attrs);
+            }
+        },
+
         comments: function(){
             this._comments || (this._comments = new chorus.collections.CommentSet(this.get("latestCommentList")));
             return this._comments;

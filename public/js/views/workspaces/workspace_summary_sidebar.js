@@ -16,6 +16,7 @@
                 workspaceAdmin : this.model.workspaceAdmin(),
                 imageUrl : this.model.imageUrl()+"&buster="+(new Date().getTime()),
                 hasImage : this.model.hasImage(),
+                hasSandbox : !!this.model.sandbox(),
                 members : this.model.members().chain().first(this.numMembers).map(function(member){
                      return {
                          imageUrl : member.imageUrl({size : 'icon'}),

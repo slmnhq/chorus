@@ -227,6 +227,54 @@ describe("chorus.models.Workspace", function() {
         });
     });
 
+    describe("#sandbox", function() {
+        context("when the workspace has a sandbox", function() {
+            beforeEach(function() {
+                this.model = fixtures.workspace({
+                    sandboxInfo : {
+                        databaseId: 4,
+                        databaseName: "db",
+                        instanceId: 5,
+                        instanceName: "instance",
+                        sandboxId: "10001",
+                        schemaId: 6,
+                        schemaName: "schema"
+                    }
+                })
+            });
+
+            it("returns a Sandbox model", function() {
+                expect(this.model.sandbox()).toBeA(chorus.models.Sandbox);
+                expect(this.model.sandbox().get("id")).toBe("10001")
+            })
+
+            it("memoizes", function() {
+                expect(this.model.sandbox()).toBe(this.model.sandbox());
+            });
+        })
+
+        context("when the workspace does not have a sandbox", function() {
+            beforeEach(function() {
+                this.model = fixtures.workspace({
+                    sandboxInfo : {
+                        databaseId: null,
+                        databaseName: null,
+                        instanceId: null,
+                        instanceName: null,
+                        sandboxId: null,
+                        schemaId: null,
+                        schemaName: null
+                    }
+                })
+            });
+
+            it("returns undefined", function() {
+                expect(this.model.sandbox()).toBeFalsy();
+            });
+
+        })
+    });
+
     describe("permissions checking", function() {
         describe("canRead", function() {
             it("is true when permission contains 'read'", function() {
@@ -278,7 +326,7 @@ describe("chorus.models.Workspace", function() {
                 expect(this.model.canUpdate()).toBeFalsy();
             });
         });
-        
+
         describe("workspaceAdmin", function() {
             it("is true when permission contains 'admin'", function() {
                 this.model.set({permission: ['admin']});

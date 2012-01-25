@@ -1,7 +1,10 @@
 describe("chorus.views.WorkspaceSummarySidebar", function() {
+    beforeEach(function() {
+            this.model = fixtures.workspace({name: "A Cool Workspace", id: '123', iconId: '123'});
+    });
+
     describe("#setup", function() {
         beforeEach(function() {
-            this.model = new chorus.models.Workspace({name: "A Cool Workspace", id: '123'});
             spyOn(this.model.members(), 'fetch');
             spyOn(this.model.members(), 'bind').andCallThrough();
             this.view = new chorus.views.WorkspaceSummarySidebar({model: this.model});
@@ -18,7 +21,6 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.model = new chorus.models.Workspace({name: "A Cool Workspace", id: '123'});
             this.view = new chorus.views.WorkspaceSummarySidebar({model: this.model});
             this.view.render();
         });
@@ -88,9 +90,9 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
                 expect(this.view.$("a.dialog[data-dialog=WorkspaceEditMembers]").text().trim()).toMatchTranslation("workspace.edit_members");
             });
 
-            context("the sandboxId is null", function() {
+            context("and the workspace does not have a sandbox", function() {
                 beforeEach(function() {
-                    this.model.set({sandboxId: null});
+                    spyOn(this.model, "sandbox").andReturn(undefined)
                     this.view.render();
                 });
 
@@ -100,9 +102,9 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
                 });
             });
 
-            context("there is a sandboxId", function() {
+            context("and the workspace has a sandbox", function() {
                 beforeEach(function() {
-                    this.model.set({sandboxId: "1234"});
+                    spyOn(this.model, "sandbox").andReturn(fixtures.sandbox())
                     this.view.render();
                 });
 
@@ -197,7 +199,6 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
 
     describe("#post_render", function() {
         it("unhides the .after_image area after the .workspace_image loads", function() {
-            this.model = fixtures.workspace({iconId: '123'});
             this.view = new chorus.views.WorkspaceSummarySidebar({model: this.model});
             spyOn($.fn, 'removeClass');
             $('#jasmine_content').append(this.view.el);
