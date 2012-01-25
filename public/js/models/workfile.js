@@ -123,10 +123,12 @@
         save : function(attrs, options) {
             if (this.canEdit()) {
                 options = options || {};
+                attrs = attrs || {};
                 var overrides = {};
 
                 if (this.get("versionInfo") && this.get("versionInfo").versionNum) {
                     overrides.url = "/edc/workspace/" + this.get("workspaceId") + "/workfile/" + this.get("id") + "/version/" + this.get("versionInfo").versionNum;
+                    attrs['lastUpdatedStamp'] = this.get("versionInfo").lastUpdatedStamp;
                 }
 
                 return this._super("save", [attrs, _.extend(options, overrides)]);

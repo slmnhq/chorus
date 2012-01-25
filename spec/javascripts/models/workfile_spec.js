@@ -302,7 +302,8 @@ describe("chorus.models.Workfile", function() {
         context("with the latest version", function() {
             beforeEach(function() {
                 this.model.get('versionInfo').versionNum = 99
-                this.model.set({ latestVersionNum : 99 });
+                this.model.get('versionInfo').lastUpdatedStamp = "THEVERSIONSTAMP"
+                this.model.set({ latestVersionNum : 99, lastUpdatedStamp: "THEWORKFILESTAMP"});
             })
 
             context("replacing the current version", function() {
@@ -312,7 +313,11 @@ describe("chorus.models.Workfile", function() {
 
                 it("saves to the correct url", function() {
                     expect(this.server.lastUpdate().url).toBe("/edc/workspace/10000/workfile/10020/version/99")
-                })
+                });
+                it("saves with the versionInfo lastUpdatedStamp", function() {
+                    expect(this.server.lastUpdate().requestBody).toContain("THEVERSIONSTAMP");
+                    expect(this.server.lastUpdate().requestBody).not.toContain("THEWORKFILESTAMP");
+                });
             })
 
             context("saving as a new version", function() {
