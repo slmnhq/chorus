@@ -24,6 +24,54 @@ describe("chorus.models.Workfile", function() {
         });
     });
 
+    describe("#defaultSchema", function() {
+        context("when the workfile has been executed in a schema other than its sandbox's schema", function() {
+            beforeEach(function() {
+                _.extend(this.model.get("versionInfo"), {
+                    instanceId: '51',
+                    databaseId: '52',
+                    schemaId: '53'
+                });
+            });
+
+            it("returns that schema", function() {
+                var schema = this.model.defaultSchema();
+                expect(schema.get("instanceId")).toBe('51');
+                expect(schema.get("databaseId")).toBe('52');
+                expect(schema.get("schemaId")).toBe('53');
+            });
+        });
+
+        context("when the workfile has not been executed outside its sandbox's schema", function() {
+            context("when the workfile's workspace is loaded and has a sandbox", function() {
+                beforeEach(function() {
+                    this.model.workspace().set({
+                        sandboxInfo: {
+                            databaseId: 4,
+                            databaseName: "db",
+                            instanceId: 5,
+                            instanceName: "instance",
+                            sandboxId: "10001",
+                            schemaId: 6,
+                            schemaName: "schema"
+                        }
+                    });
+                });
+
+                it("returns the sandbox's schema", function() {
+                    expect(this.model.defaultSchema()).toBeDefined();
+                    expect(this.model.defaultSchema()).toBe(this.model.sandbox().schema());
+                });
+            });
+
+            context("when the workfile's workspace is not loaded or has no sandbox", function() {
+                it("returns undefined", function() {
+                    expect(this.model.defaultSchema()).toBeUndefined();
+                });
+            });
+        });
+    });
+
     describe("#sandbox", function() {
         context("when the workfile's workspace has been fetched", function() {
             beforeEach(function() {

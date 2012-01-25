@@ -40,6 +40,19 @@
             return this.workspace().sandbox()
         },
 
+        defaultSchema: function() {
+            var versionInfo = this.get("versionInfo");
+            if (versionInfo.schemaId) {
+                return new ns.models.Schema({
+                    instanceId: versionInfo.instanceId,
+                    databaseId: versionInfo.databaseId,
+                    schemaId: versionInfo.schemaId
+                });
+            } else {
+                return this.sandbox() && this.sandbox().schema();
+            }
+        },
+
         modifier : function() {
             return new ns.models.User({
                 userName : this.get("modifiedBy"),
