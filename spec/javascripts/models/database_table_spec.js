@@ -26,8 +26,21 @@ describe("chorus.models.DatabaseTable", function() {
     });
 
     describe("#toString", function() {
-        it("formats the string to put into the sql editor", function(){
-            expect(this.model.toString()).toBe('"partyman"."Tabler"');
-        })
-    })
+        context("with lowercase names", function() {
+            beforeEach(function() {
+                this.model.set({name: "tabler"})
+            });
+            it("formats the string to put into the sql editor", function() {
+                expect(this.model.toString()).toBe('partyman.tabler');
+            });
+        });
+        context("with uppercase names", function() {
+            beforeEach(function() {
+                this.model.set({name: "Tabler", schemaName: "PartyMAN"});
+            });
+            it("puts quotes around the uppercase names", function() {
+                expect(this.model.toString()).toBe('"PartyMAN"."Tabler"');
+            });
+        });
+    });
 });

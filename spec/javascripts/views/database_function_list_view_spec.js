@@ -118,6 +118,7 @@ describe("chorus.views.DatabaseFunctionList", function() {
 
                             expect(this.view.$("ul li")).toContainText("fourier_transform");
                             expect(this.view.$("ul li")).toContainText("obnoxious_transform");
+                            expect(this.view.$('ul li:eq(0) .name').attr('title')).toBe(this.view.functions.models[0].toHintText())
                         });
                     })
                 })

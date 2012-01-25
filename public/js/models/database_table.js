@@ -15,7 +15,7 @@
         },
 
         toString: function() {
-            return '"'+this.get("schemaName")+'"."'+this.get("name")+'"'
+            return this.safePGName(this.get("schemaName"))+'.'+this.safePGName(this.get("name"));
         }
     });
 })(chorus);

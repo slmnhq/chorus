@@ -27,6 +27,13 @@
             };
         },
 
+        collectionModelContext: function(schemaFunction) {
+            return {
+                hintText: schemaFunction.toHintText(),
+                cid: schemaFunction.cid
+            }
+        },
+
         postRender: function() {
             this._super('postRender');
             chorus.menu(this.$(".context a"), {

@@ -155,4 +155,17 @@ describe("chorus.Mixins", function() {
             });
         });
     });
+
+    describe("dbHelpers", function() {
+        context("with uppercase", function() {
+            it("should displays quotes around the name", function() {
+                expect(chorus.Mixins.dbHelpers.safePGName("Hello")).toBe('"Hello"');
+            });
+        });
+        context("with all lowercase", function() {
+            it("should not displays quotes around the name", function() {
+                expect(chorus.Mixins.dbHelpers.safePGName("hello")).toBe('hello');
+            });
+        });
+    });
 });

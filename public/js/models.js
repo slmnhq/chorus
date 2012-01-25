@@ -1,6 +1,6 @@
 (function($) {
     chorus.models = {
-        Base: Backbone.Model.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, {
+        Base: Backbone.Model.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, chorus.Mixins.dbHelpers, {
             url: function(options) {
                 var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
                 var uri = new URI("/edc/" + Handlebars.compile(template)(this.attributes));

@@ -40,5 +40,11 @@
             var prefix = hidePrefix ? '' : "#/"
             return prefix + Handlebars.compile(template)(this.attributes);
         }
+    };
+
+    ns.Mixins.dbHelpers = {
+       safePGName : function(name) {
+           return (name !== name.toLowerCase()) ? '"' + name + '"' : name;
+       }
     }
 })(chorus);

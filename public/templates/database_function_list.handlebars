@@ -3,10 +3,10 @@
 {{#if models.length}}
     <ul class="list">
         {{#each models}}
-            <li title="{{functionName}}" data-cid="{{cid}}">
+            <li data-cid="{{cid}}">
                 <span class="spacer left"/>
                 <img src="images/function.png">
-                <div class="name">{{functionName}}</div>
+                <div class="name" title="{{hintText}}">{{functionName}}</div>
                 <span class="spacer right"/>
             </li>
         {{/each}}

@@ -1,8 +1,8 @@
 (function(ns) {
     ns.models.DatabaseColumn = chorus.models.Base.extend({
         toString: function() {
-            return '"' + this.get("schemaName") + '"."' + this.get("parentName")
-                + '"."' + this.get("name") + '"'
+            return this.safePGName(this.get("schemaName")) + '.' + this.safePGName(this.get("parentName"))
+                + '.' + this.safePGName(this.get("name"));
         }
     });
 })(chorus);
