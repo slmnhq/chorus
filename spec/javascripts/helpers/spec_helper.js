@@ -117,6 +117,7 @@
         runs(function() {
             this.server = sinon.fakeServer.create();
             chorus.router.unbind();
+            window.qtipElements = {};
 
             this.renderDOM = function(content) {
                 return $('#jasmine_content').html(content);
@@ -319,8 +320,7 @@
         return spy;
     };
 
-    var qtipElements = {};
-
+    window.qtipElements = {};
     window.stubQtip = function(selector) {
         selector || (selector = "*");
         qtipElements[selector] = $('<div></div>');
