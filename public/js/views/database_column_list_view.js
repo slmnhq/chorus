@@ -37,8 +37,8 @@
             var schemaName = this.collection.attributes.schemaName;
 
             return {
-                schemaSpan: ns.helpers.spanFor(schemaName, { class: "schema", title: schemaName }),
-                tableOrViewSpan: ns.helpers.spanFor(tableOrViewName, { class: "table", title: tableOrViewName })
+                schemaSpan: ns.helpers.spanFor(schemaName, { 'class': "schema", title: schemaName }),
+                tableOrViewSpan: ns.helpers.spanFor(tableOrViewName, { 'class': "table", title: tableOrViewName })
             };
         }
     });
