@@ -12,6 +12,8 @@
                 input: this.$('input.search'),
                 list: this.$('ul')
             });
+
+            this.$("li a").click(this.closeQtip);
             this.$("li").qtip({
                 content: "<a>" + t('database.sidebar.insert') + "</a>",
                 events: {
@@ -59,6 +61,10 @@
             e && e.preventDefault();
             var model = this.collection.getByCid(cid)
             this.trigger("file:insertText", model.toString())
+        },
+
+        closeQtip: function(e) {
+            $(e.currentTarget).trigger("mouseleave");
         }
     });
 })(chorus);

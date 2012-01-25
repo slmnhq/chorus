@@ -9,17 +9,18 @@ describe("chorus.views.DatabaseList", function() {
         spyOn(this.collection.models[1], 'toString').andReturn('object2');
         this.view = new chorus.views.DatabaseList({collection: this.collection});
         this.view.template = function() {
-            return '<ul class="list"><li data-cid="c44"></li><li data-cid="c55"></li></ul>';
+            return '<ul class="list"><li data-cid="c44"><a>as</a></li><li data-cid="c55"><a>gd</a></li></ul>';
         };
         this.qtipElement = stubQtip();
     });
 
     context("render", function() {
         beforeEach(function() {
+            spyOn(this.view, 'closeQtip');
             this.view.render();
         })
 
-        context("when hovering over a function li", function() {
+        context("when hovering over a collection li", function() {
             beforeEach(function() {
                 this.view.$('.list li:eq(1)').mouseenter();
             });
@@ -36,6 +37,16 @@ describe("chorus.views.DatabaseList", function() {
 
                 it("triggers a file:insertText with the string representation", function() {
                     expect("file:insertText").toHaveBeenTriggeredOn(this.view, [this.view.collection.models[1].toString()]);
+                })
+            })
+
+            context("when clicking a link within the li", function() {
+                beforeEach(function() {
+                    this.view.$('.list li:eq(1) a').click()
+                })
+
+                it("closes the open insert arrow", function() {
+                    expect(this.view.closeQtip).toHaveBeenCalled();
                 })
             })
 
