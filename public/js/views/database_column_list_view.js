@@ -14,10 +14,10 @@
         },
 
         setup: function() {
-            this.bind("datasetSelected", this.setTable, this);
+            this.bind("datasetSelected", this.setTableOrView, this);
         },
 
-        setTable: function(tableOrView) {
+        setTableOrView: function(tableOrView) {
             this.resource = this.collection = tableOrView.columns();
             this.collection.fetch();
             this.collection.bind("reset", this.render, this);
@@ -33,12 +33,12 @@
         },
 
         additionalContext: function() {
-            var tableName = this.collection.attributes.tableName || this.collection.attributes.viewName;
+            var tableOrViewName = this.collection.attributes.tableName || this.collection.attributes.viewName;
             var schemaName = this.collection.attributes.schemaName;
 
             return {
                 schemaSpan: ns.helpers.spanFor(schemaName, { class: "schema", title: schemaName }),
-                tableSpan: ns.helpers.spanFor(tableName, { class: "table", title: tableName })
+                tableOrViewSpan: ns.helpers.spanFor(tableOrViewName, { class: "table", title: tableOrViewName })
             };
         }
     });

@@ -59,6 +59,7 @@ describe("chorus.views.DatabaseColumnList", function() {
                     });
 
                     it("shows the table name next to the schema name", function() {
+                        $("#jasmine_content").append(this.view.el);
                         expect(this.view.$(".context .schema")).toHaveText("john_the_schema");
                         expect(this.view.$(".context .schema")).toHaveAttr("title", "john_the_schema");
 
