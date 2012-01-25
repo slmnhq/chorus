@@ -17,8 +17,12 @@
             if (this.isLatestVersion()) {
                 return "workspaces/{{workspaceId}}/workfiles/{{id}}"
             } else {
-                return "workspaces/{{workspaceId}}/workfiles/{{workfileId}}/versions/{{versionInfo.versionNum}}"
+                return "workspaces/{{workspaceId}}/workfiles/{{id}}/versions/{{versionInfo.versionNum}}"
             }
+        },
+
+        showUrlForVersion : function(version) {
+            return "#/workspaces/" + this.get("workspaceId") + "/workfiles/" + this.get("id") + "/versions/" + version;
         },
 
         initialize : function() {

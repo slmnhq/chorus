@@ -95,7 +95,12 @@
         WORKSPACE_ARCHIVED : workspaceIsObject,
         WORKSPACE_UNARCHIVED : workspaceIsObject,
 
-        WORKFILE_CREATED : workfileIsObject,
+        WORKFILE_CREATED : function(model) {
+            return {
+                objectName : model.workfile().get("name"),
+                objectUrl : model.workfile().showUrlForVersion(1)
+            }
+        },
 
         WORKFILE_UPGRADED_VERSION : function(model) {
             return {

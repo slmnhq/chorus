@@ -683,9 +683,11 @@
                         author: fixtures.authorJson(),
                         type: "WORKFILE_CREATED",
                         timestamp: "2011-12-12 12:12:12",
-                        id: "10860",
-                        workfile : fixtures.workfileJson(),
-                        workspace : fixtures.workspaceJson(),
+                        id: fixtures.nextId(),
+                        isPromoted: false,
+                        promoteCount: 0,
+                        workfile : fixtures.nestedWorkfileJson(),
+                        workspace : fixtures.nestedWorkspaceJson(),
                         comments: [
                             {
                                 text: "OBAMA!!!!",
@@ -1020,6 +1022,14 @@
                     id : id,
                     name : "file" + id + ".sql"
                 }
+            },
+
+            nestedWorkspaceJson: function() {
+                var id = this.nextId().toString();
+                return {
+                    id : id,
+                    name : "workspace" + id
+                };
             },
 
             versionInfoJson: function(overrides, modifiedByUser) {

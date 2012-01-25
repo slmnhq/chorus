@@ -92,8 +92,20 @@ describe("chorus.models.Workfile", function() {
                 })
 
                 it("includes a version", function() {
-                    expect(this.model.showUrlTemplate()).toBe("workspaces/{{workspaceId}}/workfiles/{{workfileId}}/versions/{{versionInfo.versionNum}}")
+                    expect(this.model.showUrlTemplate()).toBe("workspaces/{{workspaceId}}/workfiles/{{id}}/versions/{{versionInfo.versionNum}}")
                 })
+            })
+        })
+
+        describe("#showUrlForVersion", function() {
+            beforeEach(function() {
+                this.model.get('versionInfo').versionNum = 1;
+                this.model.set({ latestVersionNum : 5 })
+            })
+
+            it("shows the initial workfile version's url", function() {
+                var otherModel = new chorus.models.Workfile({id: this.model.get("id"), workspaceId: this.model.get("workspaceId")});
+                expect(otherModel.showUrlForVersion(1)).toBe(this.model.showUrl());
             })
         })
 

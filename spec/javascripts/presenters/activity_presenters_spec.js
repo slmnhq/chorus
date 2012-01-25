@@ -257,11 +257,11 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectName", function() {
-            expect(this.presenter.objectName).toBe(this.workfile.get("fileName"));
+            expect(this.presenter.objectName).toBe(this.workfile.get("name"));
         });
 
         it("should have the right objectUrl", function() {
-            var url = new chorus.models.Workfile({id: this.workfile.get("id"), workspaceId : this.workspace.get("id")}).showUrl();
+            var url = new chorus.models.Workfile({id: this.workfile.get("id"), workspaceId : this.workspace.get("id"), versionInfo : { versionNum: 1 }, latestVersionNum : 2}).showUrl();
             expect(this.presenter.objectUrl).toBe(url);
         });
 
