@@ -47,16 +47,6 @@ describe("chorus.models.Sandbox", function() {
         });
     });
 
-    describe("#canonicalName", function() {
-        beforeEach(function() {
-            this.model.set({instanceName : "instance", databaseName : "database", schemaName : "schema"});
-        })
-
-        it("should create the canonical name", function() {
-            expect(this.model.canonicalName()).toBe("instance / database / schema");
-        })
-    })
-
     describe("#beforeSave", function() {
         it("sets the 'type' field as required by the api", function() {
             this.model.save({ instance: '22', database: '11', schema: '33' });

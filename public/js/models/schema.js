@@ -32,6 +32,10 @@
                 });
             }
             return this._views;
+        },
+
+        canonicalName : function() {
+            return [this.get("instanceName"), this.get("databaseName"), this.get("name")].join(" / ");
         }
     }, {
         DEFAULT_NAME: "public"

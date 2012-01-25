@@ -76,10 +76,6 @@
             });
 
             return this._database;
-        },
-
-        canonicalName : function() {
-            return [this.get("instanceName"), this.get("databaseName"), this.get("schemaName")].join(" / ");
         }
     });
 })(chorus);

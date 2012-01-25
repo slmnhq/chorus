@@ -8,16 +8,19 @@
                 content: this.$(".run_workfile").html(),
                 orientation: "right",
                 contentEvents: {
-                    ".run_sandbox": _.bind(this.runInSandbox, this),
+                    ".run_default": _.bind(this.runInSandbox, this),
                     ".run_other_schema": _.bind(this.runOtherSchema, this)
                 }
             });
         },
 
         additionalContext : function() {
+            var defaultSchema = this.model.defaultSchema();
+            var sandboxSchema = this.model.sandbox() && this.model.sandbox().schema()
             return {
-                hasSandbox : !!this.model.sandbox()
-            }
+                schemaName : defaultSchema && defaultSchema.canonicalName(),
+                defaultSchemaIsSandbox : (defaultSchema === sandboxSchema)
+            };
         },
 
         runInSandbox: function() {
@@ -32,6 +35,8 @@
                 var args = _.toArray(arguments);
                 args.unshift("file:runInSchema");
                 this.trigger.apply(this, args);
+
+                this.model.fetch();
             }, this);
         }
     });

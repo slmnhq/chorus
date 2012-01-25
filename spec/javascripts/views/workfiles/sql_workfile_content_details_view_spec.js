@@ -34,10 +34,34 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 expect(this.qtipElement).toContainTranslation("workfile.content_details.run_in_another_schema")
             });
 
-            describe("when the workspace has a sandbox", function() {
+            describe("when the workspace has been run in a schema other than its sandbox's schema", function() {
+                beforeEach(function() {
+                    _.extend(this.model.get("versionInfo"), {
+                        instanceId: '51',
+                        instanceName: "bob_the_instance",
+                        databaseId: '52',
+                        databaseName: "bar",
+                        schemaId: '53',
+                        schemaName: "wow"
+                    });
+                    this.view.render();
+                    this.view.$(".run_file").click();
+                });
+
+                it("shows that schema's canonical name in the default 'run' link", function() {
+                    var runLink = this.qtipElement.find(".run_default");
+                    expect(runLink).toBe("a");
+                    expect(runLink).toContainTranslation("workfile.content_details.run_in_last_schema", {
+                        schemaName: this.model.defaultSchema().canonicalName()
+                    });
+                });
+            });
+
+            describe("when the workspace has a sandbox, and hasn't been executed in another schema'", function() {
                 it("shows 'Run in the workspace sandbox'", function() {
-                    expect(this.qtipElement.find(".run_sandbox")).toContainTranslation("workfile.content_details.run_workspace_sandbox")
-                    expect(this.qtipElement.find(".run_sandbox")).toBe("a");
+                    var runLink = this.qtipElement.find(".run_default");
+                    expect(runLink).toContainTranslation("workfile.content_details.run_workspace_sandbox")
+                    expect(runLink).toBe("a");
                 });
             });
 
@@ -49,15 +73,16 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 });
 
                 it("disables the 'run in sandbox' link", function() {
-                    expect(this.qtipElement.find(".run_sandbox")).toContainTranslation("workfile.content_details.run_workspace_sandbox")
-                    expect(this.qtipElement.find(".run_sandbox")).toBe("span");
+                    var runLink = this.qtipElement.find(".run_default");
+                    expect(runLink).toContainTranslation("workfile.content_details.run_workspace_sandbox")
+                    expect(runLink).toBe("span");
                 });
             });
 
-            context("clicking on 'Run in my workspace'", function() {
+            context("clicking on 'Run in sandbox'", function() {
                 beforeEach(function() {
                     spyOnEvent(this.view, "file:runCurrent");
-                    this.qtipElement.find('.run_sandbox').click();
+                    this.qtipElement.find('.run_default').click();
                 });
 
                 it("triggers the 'file:runCurrent' event on the view", function() {
@@ -76,11 +101,39 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 })
 
                 describe("event handling", function() {
-                    it("triggers file:runInSchema on itself when the dialog triggers a run event", function() {
+                    beforeEach(function() {
                         spyOnEvent(this.view, "file:runInSchema")
                         this.view.dialog.trigger("run", { foo : "bar" });
+                    });
+
+                    it("triggers file:runInSchema on itself when the dialog triggers a run event", function() {
                         expect("file:runInSchema").toHaveBeenTriggeredOn(this.view, [ { foo : "bar"}])
                     })
+
+                    it("re-fetches the workfile", function() {
+                        expect(this.server.lastFetchFor(this.view.model)).toBeDefined();
+                    })
+
+                    describe("when the fetch succeeds", function() {
+                        beforeEach(function() {
+                            this.view.model.set({
+                                versionInfo : {
+                                    databaseId: '33',
+                                    databaseName: "db33",
+                                    instanceId: '22',
+                                    instanceName: "instance22",
+                                    schemaId: '44',
+                                    schemaName: "schema44"
+                                }
+                            }, { silent : true })
+                            this.server.completeFetchFor(this.view.model)
+                        });
+
+                        it("re-renders, showing the new default schema", function() {
+                            this.view.$(".run_file").click();
+                            expect(this.qtipElement.find(".run_default")).toContainText(this.model.defaultSchema().canonicalName());
+                        });
+                    });
                 })
             })
         })

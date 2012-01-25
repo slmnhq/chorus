@@ -56,5 +56,15 @@ describe("chorus.models.Schema", function() {
                 expect(this.model.functions().attributes.schemaId).toBe(this.model.get('id'));
             });
         });
+
+        describe("#canonicalName", function() {
+            beforeEach(function() {
+                this.model.set({instanceName : "instance", databaseName : "database", name : "schema"});
+            })
+
+            it("should create the canonical name", function() {
+                expect(this.model.canonicalName()).toBe("instance / database / schema");
+            });
+        });
     });
 });
