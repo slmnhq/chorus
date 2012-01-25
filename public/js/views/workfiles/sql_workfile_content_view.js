@@ -21,7 +21,8 @@
 
             this.textContent = new chorus.views.TextWorkfileContent({ model : this.model })
             this.resultsConsole = new ns.views.ResultsConsole({ model : this.task });
-            this.bind("file:runCurrent", this.runCurrent, this);
+            this.bind("file:runCurrent", this.runInDefault, this);
+            this.bind("file:runInSchema", this.runInSchema, this);
 
             this.forwardEvent("file:executionStarted", this.resultsConsole);
             this.forwardEvent("file:executionCompleted", this.resultsConsole);
@@ -30,7 +31,19 @@
             this.forwardEvent("file:insertText", this.textContent);
         },
 
-        runCurrent : function() {
+        runInSchema : function(options) {
+            this.run(options);
+        },
+
+        runInDefault : function() {
+            this.run({
+                instance : this.model.sandbox().get('instanceId'),
+                database : this.model.sandbox().get('databaseId'),
+                schema : this.model.sandbox().get('schemaId')
+            })
+        },
+
+        run : function(options) {
             if (!this.executing) {
                 this.executing = true;
 
@@ -39,15 +52,16 @@
                     taskType: "workfileSQLExecution",
                     sql : this.textContent.editor.getValue(),
                     entityId : this.model.get("id"),
-                    schemaId: this.model.sandbox().get('schemaId'),
-                    instanceId: this.model.sandbox().get('instanceId'),
-                    databaseId: this.model.sandbox().get('databaseId'),
+                    schemaId: options.schema,
+                    instanceId: options.instance,
+                    databaseId: options.database,
                     checkId: (new Date().getTime().toString())
                 }, { silent : true })
 
                 this.task.save({}, { method : "create" });
                 this.trigger("file:executionStarted", this.task);
             }
+
         },
 
         executionComplete: function(task) {

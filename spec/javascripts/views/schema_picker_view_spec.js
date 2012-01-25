@@ -67,6 +67,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                     itDisplaysLoadingPlaceholderFor('database');
                     itHidesSection('schema');
+                    itTriggersTheChangeEvent();
 
                     context("when the response is empty for databases", function() {
                         beforeEach(function() {
@@ -146,6 +147,15 @@ describe("chorus.views.SchemaPicker", function() {
 
                             itTriggersTheChangeEvent();
 
+                            describe("typing into the database name field", function() {
+                                beforeEach(function() {
+                                    this.view._chorusEventSpies["change"].reset();
+                                    this.view.$(".database input.name").trigger("textchange");
+                                })
+
+                                itTriggersTheChangeEvent();
+                            })
+
                             context("clicking the cancel link", function() {
                                 beforeEach(function() {
                                     this.view.$(".database input.name").val("my_database").keyup();
@@ -183,6 +193,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                         context("choosing a database", function() {
                             beforeEach(function() {
+                                this.view._chorusEventSpies["change"].reset();
                                 var select = this.view.$(".database select");
                                 select.prop("selectedIndex", 1);
                                 select.change();
@@ -190,8 +201,9 @@ describe("chorus.views.SchemaPicker", function() {
                             });
 
                             itDisplaysLoadingPlaceholderFor('schema');
+                            itTriggersTheChangeEvent();
 
-                            it("fetches the list of databases", function() {
+                            it("fetches the list of schemas", function() {
                                 expect(this.server.requests[2].url).toMatch("/edc/instance/" + this.selectedInstance.get('id') + "/database/" + this.selectedDatabase.get("id") + "/schema");
                             });
 
@@ -240,6 +252,15 @@ describe("chorus.views.SchemaPicker", function() {
                                         expect(this.view.$(".schema input.name").val()).toBe("");
                                     });
 
+                                    describe("typing into the schema name field", function() {
+                                        beforeEach(function() {
+                                            this.view._chorusEventSpies["change"].reset();
+                                            this.view.$(".schema input.name").trigger("textchange");
+                                        })
+
+                                        itTriggersTheChangeEvent();
+                                    })
+
                                     itTriggersTheChangeEvent();
 
                                     context("clicking the cancel link", function() {
@@ -276,6 +297,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                                 context("choosing a schema", function() {
                                     beforeEach(function() {
+                                        this.view._chorusEventSpies["change"].reset();
                                         var select = this.view.$(".schema select");
                                         select.prop("selectedIndex", 1);
                                         select.change();
@@ -286,6 +308,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                                     context("un-choosing a schema", function() {
                                         beforeEach(function() {
+                                            this.view._chorusEventSpies["change"].reset();
                                             this.view.$(".schema select").prop("selectedIndex", 0).change();
                                         });
 
@@ -294,6 +317,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                                     describe("clicking the 'new database' link", function() {
                                         beforeEach(function() {
+                                            this.view._chorusEventSpies["change"].reset();
                                             this.view.$(".database a.new").click();
                                         });
 
@@ -408,6 +432,66 @@ describe("chorus.views.SchemaPicker", function() {
         });
     });
 
+    describe("#ready", function() {
+        beforeEach(function() {
+            this.view = new chorus.views.SchemaPicker({ allowCreate : true });
+        })
+
+        context("when an instance, database, and schema are selected", function() {
+            beforeEach(function() {
+                spyOn(this.view, "fieldValues").andReturn({
+                    instance: 5,
+                    database: 6,
+                    schema: 7
+                })
+            })
+
+            it("return true", function() {
+                expect(this.view.ready()).toBeTruthy();
+            })
+        })
+
+        context("when not completely specified", function() {
+            context("with only an instance", function() {
+                beforeEach(function() {
+                    spyOn(this.view, "fieldValues").andReturn({
+                        instance: 5
+                    })
+                })
+
+                it("return false", function() {
+                    expect(this.view.ready()).toBeFalsy();
+                })
+            })
+
+            context("with an instance and a blank databaseName", function() {
+                beforeEach(function() {
+                    spyOn(this.view, "fieldValues").andReturn({
+                        instance: 5,
+                        databaseName: ""
+                    })
+                })
+
+                it("return false", function() {
+                    expect(this.view.ready()).toBeFalsy();
+                })
+            })
+
+            context("with an instance, a database, and a blank schemaName", function() {
+                beforeEach(function() {
+                    spyOn(this.view, "fieldValues").andReturn({
+                        instance: 5,
+                        database: 6,
+                        schemaName: ""
+                    })
+                })
+
+                it("return false", function() {
+                    expect(this.view.ready()).toBeFalsy();
+                })
+            })
+        })
+    })
 
     function itDisplaysLoadingPlaceholderFor(type) {
         it("displays the loading placeholder for " + type, function() {

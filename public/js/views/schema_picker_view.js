@@ -20,6 +20,7 @@
 
         postRender: function() {
             this.$('.loading_spinner').startLoading();
+            this.$("input.name").bind("textchange", _.bind(this.checkIfValid, this))
         },
 
         instanceSelected : function() {
@@ -136,6 +137,11 @@
 
         checkIfValid: function() {
             this.trigger("change");
+        },
+
+        ready: function() {
+            var attrs = this.fieldValues();
+            return attrs.instance && (attrs.database || attrs.databaseName) && (attrs.schema || attrs.schemaName);
         },
 
         fieldValues: function() {

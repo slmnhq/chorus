@@ -61,6 +61,7 @@
                 this.mainContent.contentDetails.forwardEvent("file:saveCurrent", this.mainContent.content);
                 this.mainContent.contentDetails.forwardEvent("file:createWorkfileNewVersion", this.mainContent.content);
                 this.mainContent.contentDetails.forwardEvent("file:runCurrent", this.mainContent.content);
+                this.mainContent.contentDetails.forwardEvent("file:runInSchema", this.mainContent.content);
             }
 
             this.render();

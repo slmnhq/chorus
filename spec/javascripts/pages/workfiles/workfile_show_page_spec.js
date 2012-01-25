@@ -116,6 +116,21 @@ describe("chorus.pages.WorkfileShowPage", function() {
             });
         });
 
+        describe("the workfile detail view raises file:runInSchema event", function() {
+            beforeEach(function() {
+                spyOnEvent(this.page.mainContent.content, 'file:runInSchema');
+                this.page.mainContent.contentDetails.trigger("file:runInSchema", {
+                    instance: "4",
+                    database: "5",
+                    schema: "6"
+                });
+            });
+
+            it("relays the event to the workfile content", function() {
+                expect('file:runInSchema').toHaveBeenTriggeredOn(this.page.mainContent.content);
+            });
+        });
+
         context("when the content triggers autosaved", function() {
             beforeEach(function() {
                 this.page.render();

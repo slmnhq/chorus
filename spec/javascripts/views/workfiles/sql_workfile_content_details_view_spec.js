@@ -64,6 +64,14 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     it("launches the RunFileInSchema dialog", function() {
                         expect(chorus.dialogs.RunFileInSchema.prototype.launchModal).toHaveBeenCalled();
                     })
+
+                    describe("event handling", function() {
+                        it("triggers file:runInSchema on itself when the dialog triggers a run event", function() {
+                            spyOnEvent(this.view, "file:runInSchema")
+                            this.view.dialog.trigger("run", { foo : "bar" });
+                            expect("file:runInSchema").toHaveBeenTriggeredOn(this.view, [ { foo : "bar"}])
+                        })
+                    })
                 })
             });
         })

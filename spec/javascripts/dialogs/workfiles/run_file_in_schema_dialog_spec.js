@@ -11,7 +11,7 @@ describe("chorus.dialogs.RunFileInSchema", function() {
 
     describe("#setup", function() {
         it("fetches the workspace sandbox", function() {
-            expect(this.server.lastFetch().url).toBe("/edc/workspace/999/sandbox");
+            expect(this.server.lastFetchFor(fixtures.sandbox({ workspaceId : 999}))).toBeDefined();
         })
     })
 
@@ -24,10 +24,6 @@ describe("chorus.dialogs.RunFileInSchema", function() {
             it("should show loading spinner", function() {
                 expect(this.dialog.$(".loading")).not.toHaveClass("hidden");
                 expect(this.dialog.$(".loading").isLoading()).toBeTruthy();
-            })
-
-            it("does not show other content", function() {
-                expect(this.dialog.$(".schema_picker")).toHaveClass("hidden")
             })
 
             it("selects 'within another schema' by default", function() {
@@ -50,17 +46,23 @@ describe("chorus.dialogs.RunFileInSchema", function() {
                 expect(this.dialog.$("button.cancel").text().trim()).toMatchTranslation("actions.cancel")
             })
 
-            it("disables both buttons", function() {
+            it("disables the Run File button", function() {
                 expect(this.dialog.$("button.submit")).toBeDisabled();
-                expect(this.dialog.$("button.cancel")).toBeDisabled();
+            })
+
+            it("enables the Cancel button", function() {
+                expect(this.dialog.$("button.cancel")).toBeEnabled();
             })
         })
 
         context("after sandbox fetch completes", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(fixtures.sandbox({
-                    databaseName : "database",
+                    instanceId : 44,
                     instanceName : "instance",
+                    databaseId : 55,
+                    databaseName : "database",
+                    schemaId : 66,
                     schemaName : "schema",
                     workspaceId : 999
                 }));
@@ -86,6 +88,90 @@ describe("chorus.dialogs.RunFileInSchema", function() {
 
                     it("expands 'within another schema'", function() {
                         expect(this.dialog.$(".another_schema")).not.toHaveClass("collapsed");
+                    })
+                })
+            })
+
+            describe("button handling", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog.schemaPicker, "fieldValues").andReturn({
+                        instance : 5,
+                        database : 6,
+                        schema : 7
+                    })
+                    spyOn(this.dialog, "closeModal");
+                    spyOnEvent(this.dialog, "run");
+                })
+
+                context("when 'within the workspace sandbox' is selected", function() {
+                    beforeEach(function() {
+                        this.dialog.$("input#sandbox_schema").click();
+                    })
+
+                    it("enables the Run File button", function() {
+                        expect(this.dialog.$("button.submit")).toBeEnabled();
+                    })
+
+                    describe("and the Run File button is clicked", function() {
+                        beforeEach(function() {
+                            this.dialog.$("button.submit").click();
+                        })
+
+                        it("triggers the run event", function() {
+                            expect("run").toHaveBeenTriggeredOn(this.dialog, [
+                                {
+                                    instance : 44,
+                                    database : 55,
+                                    schema : 66
+                                }]);
+                        })
+
+                        it("closes the dialog", function() {
+                            expect(this.dialog.closeModal).toHaveBeenCalled();
+                        })
+                    })
+                })
+
+                context("when 'within another schema' is selected", function() {
+                    context("and the schema picker is not ready", function() {
+                        beforeEach(function() {
+                            spyOn(this.dialog.schemaPicker, "ready").andReturn(false);
+                            this.dialog.$("input#another_schema").click();
+                        })
+
+                        it("disables the Run File button", function() {
+                            expect(this.dialog.$("button.submit")).toBeDisabled();
+                        })
+                    })
+
+                    context("and the schema picker is ready", function() {
+                        beforeEach(function() {
+                            spyOn(this.dialog.schemaPicker, "ready").andReturn(true);
+                            this.dialog.$("input#another_schema").click();
+                        })
+
+                        it("enables the Run File button", function() {
+                            expect(this.dialog.$("button.submit")).toBeEnabled();
+                        })
+
+                        describe("and the Run File button is clicked", function() {
+                            beforeEach(function() {
+                                this.dialog.$("button.submit").click();
+                            })
+
+                            it("triggers the run event", function() {
+                                expect("run").toHaveBeenTriggeredOn(this.dialog, [
+                                    {
+                                        instance : 5,
+                                        database : 6,
+                                        schema : 7
+                                    }]);
+                            })
+
+                            it("closes the dialog", function() {
+                                expect(this.dialog.closeModal).toHaveBeenCalled();
+                            })
+                        })
                     })
                 })
             })

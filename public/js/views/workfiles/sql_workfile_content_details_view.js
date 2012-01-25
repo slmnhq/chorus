@@ -32,8 +32,14 @@
         },
 
         runOtherSchema: function() {
-            var dialog = new chorus.dialogs.RunFileInSchema({model: this.model});
-            dialog.launchModal();
+            this.dialog = new chorus.dialogs.RunFileInSchema({model: this.model});
+            this.dialog.launchModal();
+
+            this.dialog.bind("run", function() {
+                var args = _.toArray(arguments);
+                args.unshift("file:runInSchema");
+                this.trigger.apply(this, args);
+            }, this);
         }
     });
 })(jQuery, chorus);

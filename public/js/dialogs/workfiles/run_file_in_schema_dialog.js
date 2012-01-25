@@ -6,12 +6,13 @@
         persistent: true,
 
         events : {
-            "click input#sandbox_schema": "sandboxSchemaSelected",
-            "click input#another_schema": "otherSchemaSelected"
+            "click button.submit"        : "onClickSubmit",
+            "click input#sandbox_schema" : "sandboxSchemaSelected",
+            "click input#another_schema" : "anotherSchemaSelected"
         },
 
         subviews: {
-            ".schema_picker"   : "schemaPicker"
+            ".schema_picker" : "schemaPicker"
         },
 
         setup : function() {
@@ -20,6 +21,7 @@
             this.sandbox.fetch();
 
             this.schemaPicker = new chorus.views.SchemaPicker();
+            this.schemaPicker.bind("change", this.onSchemaPickerChange, this);
         },
 
         sandboxLoaded : function() {
@@ -30,12 +32,34 @@
             this.$(".loading").startLoading();
         },
 
-        sandboxSchemaSelected: function() {
-            this.$(".another_schema").addClass("collapsed");
+        onSchemaPickerChange: function() {
+            this.$("button.submit").attr("disabled", !this.schemaPicker.ready());
         },
 
-        otherSchemaSelected: function() {
+        onClickSubmit: function() {
+            var options = {};
+            if (this.$("#sandbox_schema").is(":checked")) {
+                options = {
+                    instance : this.sandbox.get("instanceId"),
+                    database : this.sandbox.get("databaseId"),
+                    schema   : this.sandbox.get("schemaId"),
+                }
+            } else {
+                options = this.schemaPicker.fieldValues();
+            }
+
+            this.trigger("run", options);
+            this.closeModal();
+        },
+
+        sandboxSchemaSelected: function() {
+            this.$(".another_schema").addClass("collapsed");
+            this.$("button.submit").attr("disabled", false);
+        },
+
+        anotherSchemaSelected: function() {
             this.$(".another_schema").removeClass("collapsed");
+            this.onSchemaPickerChange();
         }
     });
 })(jQuery, chorus.dialogs);

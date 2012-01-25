@@ -54,12 +54,8 @@ describe("chorus.views.SqlWorkfileContentView", function() {
         });
     })
 
-    describe("event file:runCurrent", function() {
+    describe("executing the workfile", function() {
         beforeEach(function() {
-            this.view.model.set({
-                content: "select * from foos"
-            });
-
             this.view.model.sandbox().set({
                 instanceId: '2',
                 databaseId: '3',
@@ -72,66 +68,87 @@ describe("chorus.views.SqlWorkfileContentView", function() {
         });
 
         context("when no execution is outstanding", function() {
-            beforeEach(function() {
-                this.view.trigger("file:runCurrent");
-            })
-
-            it("creates a task with the right parameters", function() {
-                expect(this.view.task.get("sql")).toBe("select * from foos");
-                expect(this.view.task.get("instanceId")).toBe("2");
-                expect(this.view.task.get("databaseId")).toBe("3");
-                expect(this.view.task.get("schemaId")).toBe("4");
-                expect(this.view.task.get("entityId")).toBe(this.workfile.get("id"));
-                expect(this.view.task.has("checkId")).toBeTruthy();
-            });
-
-            it("saves the task", function() {
-                expect(this.server.creates().length).toBe(1);
-                expect(this.server.lastCreate().url).toBe(this.view.task.url());
-            });
-
-            it("triggers file:executionStarted on the view", function() {
-                expect(this.startedSpy).toHaveBeenCalledWith(jasmine.any(chorus.models.Task));
-            })
-
-            describe("when the task completes successfully", function() {
+            describe("running in another schema", function() {
                 beforeEach(function() {
-                    this.completionSpy = jasmine.createSpy("executionCompleted")
-                    this.view.bind("file:executionCompleted", this.completionSpy);
-                    this.server.lastCreate().succeed([{
-                        id : "10100",
-                        state : "success",
-                        result : {
-                            message : "hi there"
-                        }
-                    }]);
+                    this.view.trigger("file:runInSchema", {
+                        instance: '4',
+                        database: '5',
+                        schema: '6'
+                    })
                 })
 
-                it('triggers file:executionCompleted on the view', function() {
-                    expect(this.completionSpy).toHaveBeenCalledWith(jasmine.any(chorus.models.Task));
+                it("creates a task with the right parameters", function() {
+                    expect(this.view.task.get("sql")).toBe("select * from foos");
+                    expect(this.view.task.get("instanceId")).toBe("4");
+                    expect(this.view.task.get("databaseId")).toBe("5");
+                    expect(this.view.task.get("schemaId")).toBe("6");
+                    expect(this.view.task.get("entityId")).toBe(this.workfile.get("id"));
+                    expect(this.view.task.has("checkId")).toBeTruthy();
+                });
+            })
+
+            describe("running in the sandbox", function() {
+                beforeEach(function() {
+                    this.view.trigger("file:runCurrent");
                 })
 
-                describe("executing again", function() {
+                it("creates a task with the right parameters", function() {
+                    expect(this.view.task.get("sql")).toBe("select * from foos");
+                    expect(this.view.task.get("instanceId")).toBe("2");
+                    expect(this.view.task.get("databaseId")).toBe("3");
+                    expect(this.view.task.get("schemaId")).toBe("4");
+                    expect(this.view.task.get("entityId")).toBe(this.workfile.get("id"));
+                    expect(this.view.task.has("checkId")).toBeTruthy();
+                });
+
+                it("saves the task", function() {
+                    expect(this.server.creates().length).toBe(1);
+                    expect(this.server.lastCreate().url).toBe(this.view.task.url());
+                });
+
+                it("triggers file:executionStarted on the view", function() {
+                    expect(this.startedSpy).toHaveBeenCalledWith(jasmine.any(chorus.models.Task));
+                })
+
+                describe("when the task completes successfully", function() {
                     beforeEach(function() {
-                        this.view.trigger("file:runCurrent");
+                        this.completionSpy = jasmine.createSpy("executionCompleted")
+                        this.view.bind("file:executionCompleted", this.completionSpy);
+                        this.server.lastCreate().succeed([{
+                            id : "10100",
+                            state : "success",
+                            result : {
+                                message : "hi there"
+                            }
+                        }]);
                     })
 
-                    it("executes the task again", function() {
-                        expect(this.server.creates().length).toBe(2);
+                    it('triggers file:executionCompleted on the view', function() {
+                        expect(this.completionSpy).toHaveBeenCalledWith(jasmine.any(chorus.models.Task));
+                    })
+
+                    describe("executing again", function() {
+                        beforeEach(function() {
+                            this.view.trigger("file:runCurrent");
+                        })
+
+                        it("executes the task again", function() {
+                            expect(this.server.creates().length).toBe(2);
+                        })
                     })
                 })
-            })
-        });
+            });
 
-        context("when an execution is already outstanding", function() {
-            beforeEach(function() {
-                this.view.trigger("file:runCurrent");
-                this.startedSpy.reset();
-                this.view.trigger("file:runCurrent");
-            })
+            context("when an execution is already outstanding", function() {
+                beforeEach(function() {
+                    this.view.trigger("file:runCurrent");
+                    this.startedSpy.reset();
+                    this.view.trigger("file:runCurrent");
+                })
 
-            it('does not start a new execution', function() {
-                expect(this.startedSpy).not.toHaveBeenCalled();
+                it('does not start a new execution', function() {
+                    expect(this.startedSpy).not.toHaveBeenCalled();
+                })
             })
         })
     });
