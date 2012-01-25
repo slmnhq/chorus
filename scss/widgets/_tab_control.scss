@@ -1,5 +1,5 @@
 .tab_control {
-    margin: 13px 0 10px;;
+    margin: 13px 10px 10px 0;
     @include tab-gradient;
     border-bottom: 1px solid $link-color;
     

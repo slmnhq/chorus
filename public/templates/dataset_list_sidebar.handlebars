@@ -8,34 +8,44 @@
     <div class="tabbed_area">
         <div class="activity_list"></div>
         <div class="statistics_detail">
-            <h2><span class='title'>{{t "dataset.statistics.dataset"}}:</span>{{objectName}}</h2>
-            <dl>
-                {{#if type}}
-                    <dt>{{t "dataset.statistics.type"}}</dt>
-                    <dd title="{{{host}}}">{{{host}}}</dd>
-                    <br />
-                {{/if}}
-                {{#if rows}}
-                    <dt>{{t "dataset.statistics.rows"}}</dt>
-                    <dd title="{{{port}}}">{{{port}}}</dd>
-                    <br />
-                {{/if}}
-                {{#if columns}}
-                    <dt>{{t "dataset.statistics.columns"}}</dt>
-                    <dd title="{{{size}}}">{{{size}}}GB</dd>
-                    <br />
-                {{/if}}
-                {{#if size}}
-                    <dt>{{t "dataset.statistics.size"}}</dt>
-                    <dd title="{{{dbUserName}}}">{{{dbUserName}}}</dd>
-                {{/if}}
-            </dl>
-            <div class='description'>
-                <h4>{{t "dataset.statistics.Description"}}</h4>
-                <p>
-                    {{description}}
-                </p>
-            </div>
+            <h2>
+                <div class='title'>{{t "dataset.statistics.dataset"}}:</div>
+                <div class="table_name">{{objectName}}</div>
+            </h2>
+            {{#if statistics}}
+                <div class="statistics">
+                    {{#if typeString}}
+                        <div class="pair">
+                            <div class="key">{{t "dataset.statistics.type"}}</div>
+                            <div class="value" title="{{{typeString}}}">{{{typeString}}}</div>
+                        </div>
+                    {{/if}}
+                    {{#if statistics.rows}}
+                        <div class="pair">
+                            <div class="key">{{t "dataset.statistics.rows"}}</div>
+                            <div class="value" title="{{{typeString}}}">{{{statistics.rows}}}</div>
+                        </div>
+                    {{/if}}
+                    {{#if statistics.columns}}
+                        <div class="pair">
+                            <div class="key">{{t "dataset.statistics.columns"}}</div>
+                            <div class="value" title="{{{typeString}}}">{{{statistics.columns}}}</div>
+                        </div>
+                    {{/if}}
+                    {{#if statistics.onDiskSize}}
+                        <div class="pair">
+                            <div class="key">{{t "dataset.statistics.size"}}</div>
+                            <div class="value" title="{{{typeString}}}">{{{statistics.onDiskSize}}}</div>
+                        </div>
+                    {{/if}}
+                </div>
+                <div class='description'>
+                    <h4>{{t "dataset.statistics.Description"}}</h4>
+                    <p>
+                        {{statistics.desc}}
+                    </p>
+                </div>
+            {{/if}}
         </div>
     </div>
 {{/if}}

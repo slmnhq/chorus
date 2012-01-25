@@ -15,7 +15,7 @@ describe("chorus.models.DatasetStatistics", function() {
                     objectName: "aName"
                 })
 
-                expect(this.datasetStatistics.url()).toBe("/edc/data/1/database/theDatabase/schema/theSchema/table/aName")
+                expect(this.datasetStatistics.url()).toMatchUrl("/edc/data/1/database/theDatabase/schema/theSchema?type=meta&filter=aName")
             })
         })
 
@@ -30,7 +30,7 @@ describe("chorus.models.DatasetStatistics", function() {
                     objectName: "anotherName"
                 })
 
-                expect(this.datasetStatistics.url()).toBe("/edc/data/1/database/theDatabase/schema/theSchema/view/anotherName")
+                expect(this.datasetStatistics.url()).toMatchUrl("/edc/data/1/database/theDatabase/schema/theSchema?type=meta&filter=anotherName")
             })
         })
     })

@@ -13,13 +13,22 @@
 
         setDataset: function(dataset) {
             this.resource = dataset;
+            this.statistics = dataset.statistics();
+            this.statistics.bindOnce("change", this.render, this);
+            this.statistics.fetch();
             this.render();
         },
 
         additionalContext : function() {
-            return {
+            var ctx = {
                 typeString: this.datasetType(this.resource)
             }
+
+            if (this.statistics) {
+                ctx.statistics = this.statistics.attributes;
+            }
+
+            return ctx;
         },
 
         datasetType : function(dataset) {

@@ -13,19 +13,19 @@
 
     ns.DatasetIndexPage = chorus.pages.Base.extend({
         setup : function(workspaceId) {
-            var workspace = new chorus.models.Workspace({id: workspaceId});
-            workspace.fetch();
-            this.breadcrumbs = new breadcrumbsView({model: workspace});
+            this.workspace = new chorus.models.Workspace({id: workspaceId});
+            this.workspace.fetch();
+            this.breadcrumbs = new breadcrumbsView({model: this.workspace});
 
             this.collection = new chorus.collections.DatasetSet([], {workspaceId: workspaceId});
             this.collection.sortAsc("objectName");
             this.collection.fetch();
 
-            this.subNav = new chorus.views.SubNav({workspace: workspace, tab: "datasets"});
+            this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
             this.mainContent = new chorus.views.MainContentList({
                 modelClass : "Dataset",
                 collection : this.collection,
-                model : workspace
+                model : this.workspace
             });
 
             this.sidebar = new chorus.views.DatasetListSidebar();

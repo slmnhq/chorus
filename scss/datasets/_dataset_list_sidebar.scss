@@ -8,4 +8,45 @@
             @include secondary-text-small;
         }
     }
+
+    .statistics_detail {
+        font-weight: normal;
+        font-size: 16px;
+        color: $color-text2;
+
+        .title {
+            display: inline-block;
+        }
+
+        .statistics {
+            margin-top: 15px;
+        }
+
+        .table_name {
+            display: inline-block;
+            @include ellipsis;
+            max-width: 200px;
+            color: black;
+        }
+
+        .key {
+            display: inline-block;
+            color: $color-text2;
+        }
+
+        .value {
+            float: right;
+            color: black;
+        }
+
+        .pair {
+            display: block;
+            border-bottom: $dotted-list-item-border;
+            padding-right: 10px;
+        }
+
+        .description {
+            margin-top: 15px;
+        }
+    }
 }
