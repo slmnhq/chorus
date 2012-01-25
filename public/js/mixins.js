@@ -44,7 +44,10 @@
 
     ns.Mixins.dbHelpers = {
        safePGName : function(name) {
-           return (name !== name.toLowerCase()) ? '"' + name + '"' : name;
+           var doQuote = false;
+           if((name !== name.toLowerCase())){ doQuote = true;}
+           if(name && name[0].match(/[^a-z]/)) {doQuote = true;}
+           return doQuote ? '"' + name + '"' : name;
        }
     }
 })(chorus);

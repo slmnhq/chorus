@@ -167,5 +167,11 @@ describe("chorus.Mixins", function() {
                 expect(chorus.Mixins.dbHelpers.safePGName("hello")).toBe('hello');
             });
         });
+        context("with a number as the first character", function() {
+            it("should display quotes around the name", function() {
+                expect(chorus.Mixins.dbHelpers.safePGName("1up")).toBe('"1up"');
+            })
+        })
+
     });
 });
