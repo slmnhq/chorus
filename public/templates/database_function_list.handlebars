@@ -14,3 +14,16 @@
 {{else}}
     <div class="none_found">{{t "schema.functions.none_found"}}</div>
 {{/if}}
+
+<div class="schema_menu_container">
+    <ul class="schema_menu">
+        {{#each schemas}}
+            <li>
+                {{#if isCurrent}}
+                    <div class="check"></div>
+                {{/if}}
+                <a class="schema" data-id="{{id}}">{{name}}</a>
+            </li>
+        {{/each}}
+    </ul>
+</div>

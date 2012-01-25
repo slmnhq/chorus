@@ -61,6 +61,8 @@
             @include font-content-details;
 
             a {
+                @include ellipsis;
+                max-width: 140px;
                 display: inline-block;
                 padding-right: 10px;
                 background-image: url("/images/blue-menu-triangle.png");
@@ -146,6 +148,12 @@
                 color: $color-text3;
             }
         }
+
+        .database_function_list {
+            .schema_menu {
+                display: none;
+            }
+        }
     }
 }
 
@@ -193,6 +201,28 @@
 
         .spacer {
             border-bottom: $dotted-list-item-border;
+        }
+    }
+}
+
+.schema_menu {
+    li {
+        margin: 2px 4px 0px 8px;
+
+        .check {
+            background-repeat: no-repeat;
+            background-image: url("/images/check.png");
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin-right: 2px;
+            margin-left: -14px;
+            position: relative;
+            top: 1px;
+
+            &.hidden {
+                visibility: hidden;
+            }
         }
     }
 }

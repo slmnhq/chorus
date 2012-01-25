@@ -49,7 +49,6 @@ describe("chorus.views.DatabaseFunctionList", function() {
             });
 
             it("should render the functions", function() {
-                expect(this.view.$('ul li').length).toBe(2);
                 expect(this.view.$("ul li")).toContainText("laplace_transform");
                 expect(this.view.$("ul li")).toContainText("inc");
             });
@@ -71,7 +70,13 @@ describe("chorus.views.DatabaseFunctionList", function() {
                     expect(this.menu).toHaveVisibleQtip();
                 });
 
+                it("shows a check mark next to the current schema", function() {
+                    expect(this.view.$("li:contains('righteous_tables')")).toContain('.check')
+                    expect(this.view.$("li:contains('awesome_tables')")).not.toContain('.check')
+                })
+
                 it("shows the names of all of the workspace's database's schemas", function() {
+                    expect(this.menu.find("li").length).toBe(3);
                     expect(this.menu).toContainText("righteous_tables");
                     expect(this.menu).toContainText("awesome_tables");
                     expect(this.menu).toContainText("orphaned_tables");

@@ -16,24 +16,21 @@
 
         additionalContext: function() {
             return {
-                schemaLink: ns.helpers.linkTo("#", this.schema.get('name'))
+                schemaLink: ns.helpers.linkTo("#", this.schema.get('name')),
+                schemas: this.schemas.map(function(schema) {
+                    return {
+                        id: schema.get("id"),
+                        name: schema.get("name"),
+                        isCurrent: this.schema.get('id') === schema.get('id')
+                    };
+                }, this)
             };
-        },
-
-        schemaMenuContent: function() {
-            var content = $("<ul></ul>");
-            this.schemas.each(function(schema) {
-                var a = "<a href='#' class='schema' data-id='" + schema.get("id") + "'>" + schema.get("name") + "</a>"
-                var li = $("<li></li>").html(a);
-                content.append(li);
-            });
-            return content.outerHtml()
         },
 
         postRender: function() {
             this._super('postRender');
             chorus.menu(this.$(".context a"), {
-                content: this.schemaMenuContent(),
+                content: this.$(".schema_menu_container").html(),
                 contentEvents: {
                     'a.schema': _.bind(this.schemaSelected, this)
                 }
