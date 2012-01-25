@@ -261,6 +261,7 @@
     });
 
     afterEach(function() {
+        chorus.router.trigger("leaving")
         this.server.restore();
         this.clock && this.clock.restore && this.clock.restore();
         $.cookie("userId", null)

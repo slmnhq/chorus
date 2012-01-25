@@ -284,6 +284,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
         describe("when navigating away", function() {
             beforeEach(function() {
+                this.clock = sinon.useFakeTimers();
                 this.view.render();
             });
 
@@ -311,6 +312,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
         describe("event file:createWorkfileNewVersion", function() {
             beforeEach(function() {
+                this.clock = sinon.useFakeTimers();
                 this.view.model.get("versionInfo").content = "old content";
                 this.view.model.set({"latestVersionNum": 2});
 
