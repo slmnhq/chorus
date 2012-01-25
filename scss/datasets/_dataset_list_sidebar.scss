@@ -11,15 +11,12 @@
 
     .statistics_detail {
         font-weight: normal;
-        font-size: 16px;
+        font-size: 14px;
         color: $color-text2;
 
         .title {
             display: inline-block;
-        }
-
-        .statistics {
-            margin-top: 15px;
+            font-size: 16px;
         }
 
         .table_name {
@@ -27,6 +24,12 @@
             @include ellipsis;
             max-width: 200px;
             color: black;
+            font-size: 16px;
+        }
+
+        .statistics {
+            margin-top: 15px;
+            margin-left: 15px;
         }
 
         .key {
@@ -37,16 +40,26 @@
         .value {
             float: right;
             color: black;
+            max-width: 120px;
+            text-align: right;
+            @include ellipsis;
         }
 
         .pair {
             display: block;
             border-bottom: $dotted-list-item-border;
-            padding-right: 10px;
+            margin-right: 10px;
         }
 
         .description {
             margin-top: 15px;
+            margin-left: 15px;
+            margin-right: 10px;
+
+            p {
+                margin-top: 8px;
+                font-size: 12px;
+            }
         }
     }
 }

@@ -16,35 +16,43 @@
                 <div class="statistics">
                     {{#if typeString}}
                         <div class="pair">
-                            <div class="key">{{t "dataset.statistics.type"}}</div>
+                            <div class="key table_type">{{t "dataset.statistics.type"}}</div>
                             <div class="value" title="{{{typeString}}}">{{{typeString}}}</div>
                         </div>
                     {{/if}}
                     {{#if statistics.rows}}
-                        <div class="pair">
+                        <div class="pair rows">
                             <div class="key">{{t "dataset.statistics.rows"}}</div>
                             <div class="value" title="{{{typeString}}}">{{{statistics.rows}}}</div>
                         </div>
                     {{/if}}
                     {{#if statistics.columns}}
-                        <div class="pair">
+                        <div class="pair columns">
                             <div class="key">{{t "dataset.statistics.columns"}}</div>
                             <div class="value" title="{{{typeString}}}">{{{statistics.columns}}}</div>
                         </div>
                     {{/if}}
                     {{#if statistics.onDiskSize}}
-                        <div class="pair">
+                        <div class="pair size">
                             <div class="key">{{t "dataset.statistics.size"}}</div>
                             <div class="value" title="{{{typeString}}}">{{{statistics.onDiskSize}}}</div>
                         </div>
                     {{/if}}
+                    {{#if statistics.lastAnalyzedTime}}
+                        <div class="pair last_analyzed_time">
+                            <div class="key">{{t "dataset.statistics.last_analyzed_time"}}</div>
+                            <div class="value" title="{{{typeString}}}">{{{relativeTimestamp statistics.lastAnalyzedTime}}}</div>
+                        </div>
+                    {{/if}}
                 </div>
+                {{#if statistics.desc}}
                 <div class='description'>
                     <h4>{{t "dataset.statistics.Description"}}</h4>
                     <p>
                         {{statistics.desc}}
                     </p>
                 </div>
+                {{/if}}
             {{/if}}
         </div>
     </div>

@@ -26,6 +26,13 @@
 
             if (this.statistics) {
                 ctx.statistics = this.statistics.attributes;
+                if(ctx.statistics.rows === 0) {
+                    ctx.statistics.rows = "0"
+                }
+
+                if(ctx.statistics.columns === 0) {
+                    ctx.statistics.columns = "0"
+                }
             }
 
             return ctx;
