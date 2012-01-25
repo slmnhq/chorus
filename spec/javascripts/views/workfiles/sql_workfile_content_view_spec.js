@@ -1,16 +1,14 @@
 describe("chorus.views.SqlWorkfileContentView", function() {
     beforeEach(function() {
         this.workfile = fixtures.sqlWorkfile({ content: "select * from foos where bar_id = 1;" });
-        this.workfile.workspace().set({
-            sandboxInfo : {
-                databaseId: '3',
-                databaseName: "db",
-                instanceId: '2',
-                instanceName: "instance",
-                sandboxId: "10001",
-                schemaId: '4',
-                schemaName: "schema"
-            }});
+        spyOn(this.workfile, 'defaultSchema').andReturn(fixtures.schema({
+            id: '4',
+            name: "schema",
+            databaseId: '3',
+            databaseName: "db",
+            instanceId: '2',
+            instanceName: "instance"
+        }));
         this.view = new chorus.views.SqlWorkfileContent({model: this.workfile});
         stubDefer();
     })
@@ -93,7 +91,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 });
             })
 
-            describe("running in the sandbox", function() {
+            describe("running in the default schema", function() {
                 beforeEach(function() {
                     this.view.trigger("file:runCurrent");
                 })

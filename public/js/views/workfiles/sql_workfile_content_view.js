@@ -37,9 +37,9 @@
 
         runInDefault : function() {
             this.run({
-                instance : this.model.sandbox().get('instanceId'),
-                database : this.model.sandbox().get('databaseId'),
-                schema : this.model.sandbox().get('schemaId')
+                instance : this.model.defaultSchema().get('instanceId'),
+                database : this.model.defaultSchema().get('databaseId'),
+                schema : this.model.defaultSchema().get('id')
             })
         },
 
