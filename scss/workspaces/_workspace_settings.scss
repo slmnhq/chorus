@@ -60,7 +60,7 @@ $image-width : 230px;
         font-size: 14px;
     }
 
-    div.owner {
+    div.owner, .sandboxLocation {
         @include font-normal-beta;
         padding-left: 12px;
     }

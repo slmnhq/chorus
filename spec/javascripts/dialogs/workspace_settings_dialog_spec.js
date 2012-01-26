@@ -55,6 +55,25 @@ describe("WorkspaceSettings dialog", function() {
             expect(this.dialog.$(".archived_text").text().trim()).toMatchTranslation("workspace.settings.archived_description");
         });
 
+        describe("sandbox location", function() {
+            context("with a sandbox", function() {
+                beforeEach(function() {
+                    this.workspace.set({ sandboxInfo: { databaseName: "Analytics",
+                                                        instanceName: "Gillette",
+                                                        sandboxId: "10070",
+                                                        schemaName: "analytics"} });
+                    this.dialog.render();
+                });
+                it("shows sandbox info", function() {
+                    expect(this.dialog.$(".sandboxLocation").text()).toBe("Gillette / Analytics / analytics");
+                });
+            });
+            context("without a sandbox", function() {
+                it("shows sandbox info", function() {
+                    expect(this.dialog.$(".sandboxLocation").text()).toMatchTranslation("workspace.settings.sandbox.none");
+                });
+            });
+        })
         context("when the workspace is public", function() {
             beforeEach(function() {
                 this.workspace.set({ isPublic : true })

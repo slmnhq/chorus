@@ -15,14 +15,20 @@
 
             var owner = this.pageModel.members().find(function(member) {
                 return member.get("id") == ownerId;
-            })
+            });
+
+            var sandbox = this.pageModel.sandbox();
+            var sandboxLocation = sandbox ?
+                sandbox.get("instanceName") + ' / ' + sandbox.get("databaseName") + ' / ' + sandbox.get("schemaName")
+                : t("workspace.settings.sandbox.none");
 
             return {
                 imageUrl : this.pageModel.imageUrl(),
                 hasImage : this.pageModel.hasImage(),
                 members : this.pageModel.members().models,
                 permission :  ((this.pageModel.get("ownerId") == chorus.session.user().get("id")) || chorus.session.user().get("admin")),
-                ownerName : owner && owner.displayName()
+                ownerName : owner && owner.displayName(),
+                sandboxLocation : sandboxLocation
             }
         },
 

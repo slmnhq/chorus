@@ -23,6 +23,9 @@
         </div>
     </div>
 
+    <label>{{t "workspace.settings.sandbox.location"}}</label>
+
+    <div class="sandboxLocation">{{sandboxLocation}}</div>
     {{#if permission}}
         <label>{{ t "workspace.settings.change_owner"}}</label>
         <select name="owner" class="owner">
