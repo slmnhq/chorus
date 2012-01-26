@@ -122,7 +122,26 @@
                             { id: 3 , city: "Lafayette" , state: "IN" , zip: "47909" , other_state: "IN" , other_zip: "47909" }
                         ]
                     }})
-                })
+                }),
+
+                "Visualization" : (function(){
+                    var animals = ['aardvark', 'bat', 'cheetah'];
+                    var columns = [{ name: "id" }, { name: "value" }, { name: "animal" }];
+                    var rows = _.map(_.range(50), function(i) {
+                        return {
+                            id: i,
+                            value : Math.round(100 * Math.random(), 0),
+                            animal : _.shuffle(animals)[0]
+                        }
+                    });
+
+                    return new chorus.views.Visualization({
+                        model: new chorus.models.Task({ result: {
+                            columns: columns,
+                            rows: rows
+                        }})
+                    })
+                })(),
             }
         },
 
