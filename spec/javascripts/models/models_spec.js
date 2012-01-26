@@ -874,6 +874,31 @@ describe("chorus.models", function() {
             })
         })
 
+        describe("#findWhere", function() {
+            beforeEach(function() {
+                this.m1 = fixtures.user({ firstName: "john", lastName: "coltrane", id: "5", admin: false });
+                this.m2 = fixtures.user({ firstName: "ravi", lastName: "coltrane", id: "6", admin: true });
+                this.m3 = fixtures.user({ firstName: "john", lastName: "medeski", id: "7", admin: true  });
+                this.collection.reset([ this.m1, this.m2, this.m3 ]);
+            });
+
+            context("when a model with the given attributes exists in the collection", function() {
+                it("returns that model", function() {
+                    expect(this.collection.findWhere({ firstName: "john", lastName: "coltrane" })).toBe(this.m1);
+                    expect(this.collection.findWhere({ firstName: "john", admin: false })).toBe(this.m1);
+                    expect(this.collection.findWhere({ lastName: "coltrane", admin: true })).toBe(this.m2);
+                    expect(this.collection.findWhere({ firstName: "john", admin: true })).toBe(this.m3);
+                    expect(this.collection.findWhere({ lastName: "medeski" })).toBe(this.m3);
+                });
+            });
+
+            context("when no model with the given attributes exists in the collection", function() {
+                it("returns undefined", function() {
+                    expect(this.collection.findWhere({ firstName: "ravi", lastName: "medeski" })).toBeUndefined();
+                });
+            });
+        });
+
         describe("#fetch", function() {
             context("when the collection does not contain pagination information", function() {
                 it("fetches the first page of items", function() {
