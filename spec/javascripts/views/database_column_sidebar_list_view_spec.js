@@ -1,6 +1,6 @@
-describe("chorus.views.DatabaseColumnList", function() {
+describe("chorus.views.DatabaseColumnSidebarList", function() {
     beforeEach(function() {
-        this.view = new chorus.views.DatabaseColumnList({ sandbox: fixtures.sandbox() });
+        this.view = new chorus.views.DatabaseColumnSidebarList({ sandbox: fixtures.sandbox() });
     });
 
     describe("#render", function() {
@@ -52,7 +52,7 @@ describe("chorus.views.DatabaseColumnList", function() {
                             fixtures.databaseColumn({name: "column_2"})
                         ]);
                     });
-                    jasmine.sharedExamples.DatabaseList();
+                    jasmine.sharedExamples.DatabaseSidebarList();
 
                     it("should show a 'back to all datasets' link", function() {
                         expect(this.view.$("a.back").text()).toMatchTranslation("schema.column.list.back");

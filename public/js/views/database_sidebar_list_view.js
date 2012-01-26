@@ -1,5 +1,5 @@
 (function(ns) {
-    ns.views.DatabaseList = ns.views.Base.extend({
+    ns.views.DatabaseSidebarList = ns.views.Base.extend({
         events: {
             "click .context a": "contextClicked"
         },

@@ -1,9 +1,9 @@
-describe("chorus.views.DatabaseFunctionList", function() {
+describe("chorus.views.DatabaseFunctionListSidebar", function() {
     beforeEach(function() {
         this.sandbox = fixtures.sandbox({ schemaName: "righteous_tables" });
         this.schema = this.sandbox.schema();
         spyOn(this.schema.functions(), "fetch").andCallThrough();
-        this.view = new chorus.views.DatabaseFunctionList({sandbox: this.sandbox});
+        this.view = new chorus.views.DatabaseFunctionListSidebar({sandbox: this.sandbox});
     });
 
     it("should fetch the functions for the sandbox", function() {

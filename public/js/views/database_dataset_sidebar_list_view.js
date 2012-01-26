@@ -1,6 +1,6 @@
 (function($, ns) {
-    ns.views.DatabaseDatasetList = ns.views.DatabaseList.extend({
-        className : "database_dataset_list",
+    ns.views.DatabaseDatasetListSidebar = ns.views.DatabaseSidebarList.extend({
+        className : "database_dataset_sidebar_list",
         useLoadingSection : true,
 
         events: _.extend({}, ns.views.DatabaseList.prototype.events, {

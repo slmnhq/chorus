@@ -1,4 +1,4 @@
-describe("chorus.views.DatabaseDatasetList", function() {
+describe("chorus.views.DatabaseDatasetListSidebar", function() {
     beforeEach(function() {
         this.sandbox = fixtures.sandbox();
         this.schema = this.sandbox.schema();
@@ -6,7 +6,7 @@ describe("chorus.views.DatabaseDatasetList", function() {
         spyOn(this.schema.views(), "fetchAll").andCallThrough();
         spyOn(this.schema.tables(), "fetchAll").andCallThrough();
 
-        this.view = new chorus.views.DatabaseDatasetList({sandbox: this.sandbox});
+        this.view = new chorus.views.DatabaseDatasetListSidebar({sandbox: this.sandbox});
     });
 
     it("should fetch the list of tables", function() {
@@ -102,7 +102,7 @@ describe("chorus.views.DatabaseDatasetList", function() {
                     ]);
                     this.view.render();
                 });
-                jasmine.sharedExamples.DatabaseList();
+                jasmine.sharedExamples.DatabaseSidebarList();
 
                 it("should not display the loading spinner", function() {
                     expect(this.view.$(".loading_section")).not.toExist();

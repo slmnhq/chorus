@@ -1,6 +1,6 @@
 (function($, ns) {
-    ns.views.DatabaseColumnList = ns.views.DatabaseList.extend({
-        className : "database_column_list",
+    ns.views.DatabaseColumnSidebarList = ns.views.DatabaseSidebarList.extend({
+        className : "database_column_sidebar_list",
         useLoadingSection: true,
 
         events: {

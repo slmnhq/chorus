@@ -1,4 +1,4 @@
-describe("chorus.views.DatabaseList", function() {
+describe("chorus.views.DatabaseSidebarList", function() {
     beforeEach(function() {
         var object0 = new chorus.models.DatabaseTable();
         var object1 = new chorus.models.DatabaseTable();
@@ -11,10 +11,11 @@ describe("chorus.views.DatabaseList", function() {
 
         spyOn(this.collection.models[0], 'toText').andReturn('object1');
         spyOn(this.collection.models[1], 'toText').andReturn('object2');
-
-        this.view = new chorus.views.DatabaseList({collection: this.collection, sandbox: this.sandbox });
+        this.view = new chorus.views.DatabaseSidebarList({collection: this.collection, sandbox: this.sandbox });
         this.view.className = "database_dataset_list";
-
+        this.view.template = function() {
+            return '<ul class="list"><li data-cid="c44"><a>as</a></li><li data-cid="c55"><a>gd</a></li></ul>';
+        };
         this.schemaMenuQtip = stubQtip(".context a");
         this.insertArrowQtip = stubQtip("li");
     });
