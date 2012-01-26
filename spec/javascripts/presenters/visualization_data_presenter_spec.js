@@ -1,21 +1,19 @@
 describe("chorus.presenters.visualizations", function() {
-    beforeEach(function() {
-        this.model = new chorus.models.Task({
-            result: {
-                columns: [{ name: "id" }, { name: "value" }, { name: "animal" }],
-                rows: [
-                    { id: 1, value: 5, animal: "aardvark" },
-                    { id: 2, value: 10, animal: "aardvark" },
-                    { id: 3, value: 15, animal: "aardvark" },
-                    { id: 4, value: 20, animal: "aardvark" },
-                    { id: 5, value: 25, animal: "aardvark" }
-                ]
-            }
-        });
-    });
-
     describe("XY", function() {
         beforeEach(function() {
+            this.model = new chorus.models.Task({
+                result: {
+                    columns: [{ name: "id" }, { name: "value" }, { name: "animal" }],
+                    rows: [
+                        { id: 1, value: 5, animal: "aardvark" },
+                        { id: 2, value: 10, animal: "aardvark" },
+                        { id: 3, value: 15, animal: "aardvark" },
+                        { id: 4, value: 20, animal: "aardvark" },
+                        { id: 5, value: 25, animal: "aardvark" }
+                    ]
+                }
+            });
+
             this.presenter = new chorus.presenters.visualizations.XY(this.model, {
                 x: "id",
                 y: "value"
@@ -32,6 +30,45 @@ describe("chorus.presenters.visualizations", function() {
             expect(this.data[2]).toEqual([3, 15]);
             expect(this.data[3]).toEqual([4, 20]);
             expect(this.data[4]).toEqual([5, 25]);
+        });
+    });
+
+    describe("Boxplot", function() {
+        beforeEach(function() {
+            this.model = new chorus.models.Task({
+                result: {
+                    columns: [{ name: "id" }, { name: "value" }, { name: "animal" }],
+                    rows: [
+                        { id: 1, value: 1, animal:  "aardvark" },
+                        { id: 2, value: 2, animal: "aardvark" },
+                        { id: 3, value: 3, animal: "aardvark" },
+                        { id: 4, value: 4, animal: "aardvark" },
+                        { id: 5, value: 100, animal: "beluga" },
+                        { id: 6, value: 200, animal: "beluga" },
+                        { id: 7, value: 300, animal: "beluga" },
+                        { id: 8, value: 400, animal: "beluga" },
+                        { id: 9, value: 10, animal: "chupacabra" },
+                        { id: 10, value: 20, animal: "chupacabra" },
+                        { id: 11, value: 30, animal: "chupacabra" },
+                        { id: 12, value: 40, animal: "chupacabra" }
+                    ]
+                }
+            });
+
+            this.presenter = new chorus.presenters.visualizations.Boxplot(this.model, {
+                x: "animal",
+                y: "value"
+            });
+
+            this.data = this.presenter.present();
+        });
+
+        it("presents arrays of [key, min, q1, q3, max]", function() {
+            expect(this.data.length).toBe(3);
+
+            expect(this.data[0]).toEqual(['aardvark', 1, 1, 3, 4]);
+            expect(this.data[1]).toEqual(['beluga', 100, 100, 300, 400]);
+            expect(this.data[2]).toEqual(['chupacabra', 10, 10, 30, 40]);
         });
     });
 });
