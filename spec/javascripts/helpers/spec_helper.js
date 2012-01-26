@@ -274,6 +274,9 @@
     window.xcontext = window.xdescribe;
     window.specify = window.it;
     window.xspecify = window.xit;
+    
+    window.xitBehavesLike = {};
+    _.each(window.itBehavesLike, function(value, key){ window.xitBehavesLike[key] = $.noop });
 
     window.unsetLoggedInUser = function() {
         chorus.session.unset("id");

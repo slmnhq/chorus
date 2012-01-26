@@ -1,0 +1,1 @@
+window.itBehavesLike = jasmine.sharedExamples = {};
