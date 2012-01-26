@@ -47,7 +47,9 @@
             this.mainContent = new chorus.views.MainContentList({
                 modelClass : "DatabaseColumn",
                 collection : this.columnSet,
-                model : this.workspace
+                model : this.workspace,
+                title : this.objectName,
+                imageUrl : "images/large_table.png"
             });
 
 //            this.sidebar = new chorus.views.DatasetListSidebar();

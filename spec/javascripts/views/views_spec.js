@@ -563,7 +563,7 @@ describe("chorus.views.base", function() {
             })
 
             it("does not render an image", function() {
-                expect(this.view.$(".title img")).not.toExist();
+                expect(this.view.$(".icon")).not.toExist();
             })
 
             context("when an imageUrl is provided", function() {
@@ -573,7 +573,7 @@ describe("chorus.views.base", function() {
                 })
 
                 it("renders the image", function() {
-                    expect(this.view.$(".title img")).toHaveAttr("src", "edc/image/foo/bar.png")
+                    expect(this.view.$(".icon")).toHaveAttr("src", "edc/image/foo/bar.png")
                 })
             });
         })
