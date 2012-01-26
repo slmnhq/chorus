@@ -42,14 +42,17 @@
             this.requiredResources = options.requiredResources || [];
         },
 
+        allRequiredResourcesLoaded: function() {
+            return _.all(this.requiredResources, function(resource) {
+                return resource.loaded;
+            });
+        },
+
         verifyResourcesLoaded: function(preventRender) {
             if(this.requiredResources.length == 0) {
                 return;
             }
-            var allResourcesLoaded = _.all(this.requiredResources, function(resource) {
-                return resource.loaded;
-            });
-            if(allResourcesLoaded) {
+            if(this.allRequiredResourcesLoaded()) {
                 this.resourcesLoaded();
 
                 if(!preventRender) {
@@ -201,7 +204,14 @@
         },
 
         displayLoadingSection : function() {
-            return this.useLoadingSection && this.resource && !this.resource.loaded;
+            if(!this.useLoadingSection) {
+                return false;
+            }
+            if(this.requiredResources.length > 0) {
+                return !this.allRequiredResourcesLoaded();
+            } else {
+                return this.resource && !this.resource.loaded;
+            }
         },
 
         showErrors : function(model) {

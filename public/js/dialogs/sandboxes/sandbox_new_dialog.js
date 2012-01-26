@@ -27,7 +27,6 @@
         fetchConfig : function() {
             this.config = new ns.models.Config.instance();
             this.config.onLoaded(this.createSubViews, this);
-            this.config.fetch();
         },
 
         createSubViews : function() {

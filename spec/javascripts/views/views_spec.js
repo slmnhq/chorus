@@ -653,18 +653,37 @@ describe("chorus.views.base", function() {
                     this.view.useLoadingSection = true;
                 });
 
-                it("returns the opposite of view.resource.loaded", function() {
-                    this.model.loaded = false;
-                    expect(this.view.displayLoadingSection()).toBeTruthy();
+                context("when there are requiredResources", function() {
+                    beforeEach(function() {
+                        this.view.requiredResources = ['asdf'];
+                        spyOn(this.view, 'allRequiredResourcesLoaded');
+                    })
 
-                    this.model.loaded = true;
-                    expect(this.view.displayLoadingSection()).toBeFalsy();
-                });
+                    it("returns true if the resources are not yet loaded", function() {
+                        this.view.allRequiredResourcesLoaded.andReturn(false);
+                        expect(this.view.displayLoadingSection()).toBeTruthy();
+                    })
 
-                it("returns false when the view does not have a resource", function() {
-                    delete this.view.resource;
-                    expect(this.view.displayLoadingSection()).toBeFalsy();
-                });
+                    it("returns false if the resources are loaded", function() {
+                        this.view.allRequiredResourcesLoaded.andReturn(true);
+                        expect(this.view.displayLoadingSection()).toBeFalsy();
+                    })
+                })
+
+                context("when there are no requiredResources", function() {
+                    it("returns the opposite of view.resource.loaded", function() {
+                        this.model.loaded = false;
+                        expect(this.view.displayLoadingSection()).toBeTruthy();
+
+                        this.model.loaded = true;
+                        expect(this.view.displayLoadingSection()).toBeFalsy();
+                    });
+
+                    it("returns false when the view does not have a resource", function() {
+                        delete this.view.resource;
+                        expect(this.view.displayLoadingSection()).toBeFalsy();
+                    });
+                })
             });
         });
     });

@@ -5,6 +5,14 @@ describe("chorus.dialogs.InstanceUsage", function() {
         this.dialog = new chorus.dialogs.InstanceUsage({launchElement : this.launchElement, pageModel : this.instance });
     });
 
+    it("requires the config object", function() {
+        expect(this.dialog.requiredResources).toContain(chorus.models.Config.instance());
+    });
+
+    it("fetches the usage", function() {
+        expect(this.dialog.usage).toHaveBeenFetched();
+    });
+
     describe("#render", function() {
         beforeEach(function() {
             this.dialog.render();
@@ -14,15 +22,12 @@ describe("chorus.dialogs.InstanceUsage", function() {
             expect(this.dialog.title).toMatchTranslation("instances.usage.title");
         });
 
-        it("fetches the usage", function() {
-            expect(this.server.lastFetch().url).toMatchUrl(this.dialog.usage.url());
-        });
-
-        context("when the usage has been fetched", function() {
+        context("when the usage and config have been fetched", function() {
             beforeEach(function(){
                 var sourceUsage = fixtures.instanceUsage();
                 sourceUsage.set({instanceId : this.dialog.usage.get("instanceId")});
                 this.server.completeFetchFor(sourceUsage);
+                this.server.completeFetchFor(chorus.models.Config.instance(), fixtures.configJson());
                 this.workspaces = this.dialog.usage.get("workspaces");
             });
 

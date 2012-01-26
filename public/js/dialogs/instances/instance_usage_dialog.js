@@ -2,11 +2,13 @@
     ns.dialogs.InstanceUsage = ns.dialogs.Base.extend({
         className : "instance_usage",
         title : t("instances.usage.title"),
+        useLoadingSection: true,
 
         setup : function() {
-            this.usage = new chorus.models.InstanceUsage({ instanceId: this.pageModel.get('id') })
-            this.usage.bindOnce("change", this.render, this);
+            this.usage = this.resource = new chorus.models.InstanceUsage({ instanceId: this.pageModel.get('id') })
             this.usage.fetch()
+            this.requiredResources.push(this.usage);
+            this.requiredResources.push(chorus.models.Config.instance());
         },
 
         additionalContext : function() {

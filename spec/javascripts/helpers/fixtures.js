@@ -1005,6 +1005,16 @@
                 }
             },
 
+            configJson: function(overrides) {
+                return _.extend({
+                    provisionMaxSizeInGB : 2000,
+                    logLevel : "INFO",
+                    provisionMaxSize : "2000 GB",
+                    sandboxRecommendSizeInBytes : 5368709120,
+                    sandboxRecommendSize : "5 GB"
+                }, overrides);
+            },
+
             databaseJson: function(overrides) {
                 var id = this.nextId().toString();
 
