@@ -41,6 +41,23 @@
 
             this.userCollection.loaded = true;
 
+            this.task = (function() {
+                var animals = ['aardvark', 'bat', 'cheetah'];
+                var columns = [{ name: "id" }, { name: "value" }, { name: "animal" }];
+                var rows = _.map(_.range(50), function(i) {
+                    return {
+                        id: i,
+                        value : Math.round(100 * Math.random(), 0),
+                        animal : _.shuffle(animals)[0]
+                    }
+                });
+
+                return new chorus.models.Task({ result: {
+                    columns: columns,
+                    rows: rows
+                }});
+            })();
+
             this.views = {
                 "Header" : new chorus.views.Header(),
 
@@ -124,28 +141,11 @@
                     }})
                 }),
 
-                "Visualization" : (function(){
-                    var animals = ['aardvark', 'bat', 'cheetah'];
-                    var columns = [{ name: "id" }, { name: "value" }, { name: "animal" }];
-                    var rows = _.map(_.range(50), function(i) {
-                        return {
-                            id: i,
-                            value : Math.round(100 * Math.random(), 0),
-                            animal : _.shuffle(animals)[0]
-                        }
-                    });
-
-                    var model = new chorus.models.Task({ result: {
-                        columns: columns,
-                        rows: rows
-                    }});
-
-                    return new chorus.views.visualizations.XY({
-                        model: model,
-                        x: 'id',
-                        y: 'value'
-                    });
-                })(),
+                "Visualization: XY" : new chorus.views.visualizations.XY({
+                    model: this.task,
+                    x: 'id',
+                    y: 'value'
+                })
             }
         },
 
