@@ -153,6 +153,31 @@
 
         hotKeyName : function(hotKeyChar) {
             return _.str.capitalize(chorus.hotKeyMeta) + " + " + hotKeyChar;
+        },
+
+        workspaceUsage : function(percentageUsed, sizeText) {
+            var markup = ""
+            if(percentageUsed >= 100) {
+                markup = '<div class="usage_bar">' +
+                            '<div class="used full" style="width: 100%;">' +
+                               '<span class="size_text">'+sizeText+'</span>' +
+                               '<span class="percentage_text">'+percentageUsed+'%</span>' +
+                            '</div>' +
+                        '</div>'
+            } else {
+                if(percentageUsed >= 50) {
+                    markup = '<div class="usage_bar">' +
+                                '<div class="used" style="width: '+percentageUsed+'%;">' +
+                                '<span class="size_text">'+sizeText+'</span></div>' +
+                            '</div>'
+                } else {
+                    markup = '<div class="usage_bar">' +
+                                '<div class="used" style="width: '+percentageUsed+'%;"></div>' +
+                                '<span class="size_text">'+sizeText+'</span>' +
+                            '</div>'
+                }
+            }
+            return markup
         }
 
 

@@ -7,11 +7,6 @@ $link-padding: 6px;
 .instance_permissions {
     width: 460px;
 
-    .dialog_content {
-        padding: 0 !important;
-        margin: 0;
-    }
-
     input[type=submit] {
         height: 1px;
         visibility: hidden;
@@ -24,8 +19,6 @@ $link-padding: 6px;
     }
 
     .sub_header {
-        padding: 0 15px !important;
-
         .individual_accounts_count {
             background : url("/images/instances/individual.png") no-repeat left 8px;
             display: inline-block;
@@ -46,8 +39,6 @@ $link-padding: 6px;
 
     .collection_list {
         height: 9*$list-item-height;
-        border-top: 1px solid $subheader-border-color-dark;
-        border-bottom: 1px solid $subheader-border-color-dark;
 
         ul {
             li {

@@ -16,6 +16,7 @@ describe("chorus.dialogs.InstanceUsage", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.dialog.render();
+            $('#jasmine_content').append(this.dialog.el);
         });
 
         it("has the right title", function() {
@@ -47,12 +48,15 @@ describe("chorus.dialogs.InstanceUsage", function() {
                 expect(this.dialog.$("li a.workspace_link").length).toBe(this.workspaces.length)
             })
 
-            xit("sets the width of the 'used' bar to be the percentage of the used chorus space", function() {
+            it("sets the width of the 'used' bar to be the percentage of the workspace size vs the recommended size", function() {
                 var zipped = _.zip(this.dialog.$("li"), this.workspaces);
+                var recommendedSize = this.dialog.config.get("sandboxRecommendSizeInBytes");
                 _.each(zipped, function(z) {
                     var el = $(z[0]);
                     var workspace = z[1];
-                    expect(el.find(".used").css("width")).toBe("50%");
+                    var expectedPercentage = parseInt(workspace.sizeInBytes) /recommendedSize;
+                    var actualPercentage = el.find(".used").width() / el.find(".usage_bar").width();
+                    expect(actualPercentage).toBeCloseTo(expectedPercentage, 1);
                 });
             });
 

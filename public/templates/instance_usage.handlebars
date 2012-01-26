@@ -1,29 +1,31 @@
-<div class="total_usage">{{t "instances.usage.total" size=usage.sandboxesSize}}</div>
+<div class='sub_header'>
+    <div class="total_usage">{{t "instances.usage.total" size=usage.sandboxesSize}}</div>
+</div>
 
-<ul>
-    {{#each usage.workspaces}}
-    <li>
-        <div class="image_container">
-            <img src="/images/workspace-icon-small.png"/>
-        </div>
-        <div class="details">
-            <a class="workspace_link" href="#">{{workspaceName}}</a>
-            <div class="usage_bar">
-                <div class="used" style="width: 50%;"></div>
+<div class="sub_content">
+    <ul>
+        {{#each usage.workspaces}}
+        <li>
+            <div class="image_container">
+                <img src="/images/workspace-icon-small.png"/>
             </div>
-            <div class="pair location">
-                <div class="key">{{t "instances.usage.location"}}</div>
-                <div class="value">{{databaseName}}/{{schemaName}}</div>
+            <div class="details">
+                <a class="workspace_link" href="#">{{workspaceName}}</a>
+                {{{workspaceUsage percentageUsed size}}}
+                <div class="pair location">
+                    <div class="value">{{databaseName}}/{{schemaName}}</div>
+                    <div class="key">{{t "instances.usage.location"}}</div>
+                </div>
+                <div class="pair owner">
+                    <div class="value">{{ownerFullName}}</div>
+                    <div class="key">{{t "instances.usage.owner"}}</div>
+                </div>
             </div>
-            <div class="pair owner">
-                <div class="key">{{t "instances.usage.owner"}}</div>
-                <div class="value">{{ownerFullName}}</div>
-            </div>
-        </div>
-    </li>
-    {{/each}}
-</ul>
-
+        </li>
+        {{/each}}
+    </ul>
+</div>
+    
 <div class="modal_controls">
     <button type="button" class="cancel">{{t "actions.close_window"}}</button>
 </div>

@@ -22,6 +22,7 @@
                 append(content).
                 addClass(this.className).
                 addClass("dialog").
+                addClass(this.additionalClass || "").
                 attr("title", this.options.title || this.title);
             this.delegateEvents()
             this.renderSubviews();

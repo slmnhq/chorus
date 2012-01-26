@@ -57,5 +57,30 @@
     label {
         @include dialog-label;
     }
+
+    &.with_sub_header {
+        .dialog_content {
+            padding: 0;
+        }
+
+        .sub_header {
+            padding: 0 15px;
+            border-bottom: 1px solid $menu-border-color;
+        }
+
+        .sub_content {
+            padding: 10px $dialog-padding;
+        }
+
+        .loading_section {
+            padding: 20px;
+        }
+
+        .modal_controls {
+            padding: $dialog-padding;
+            border-top: 1px solid $menu-border-color;
+            margin: 0;
+        }
+    }
 }
 

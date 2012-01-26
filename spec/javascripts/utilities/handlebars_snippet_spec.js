@@ -389,6 +389,35 @@ describe("handlebars", function() {
                 expect(Handlebars.helpers.hotKeyName('k')).toBe(_.str.capitalize(chorus.hotKeyMeta) + " + k")
             })
         })
+
+        describe("workspaceUsage", function() {
+            it("should never have a width greater than 100%", function() {
+                expect($(Handlebars.helpers.workspaceUsage(101)).find('.used').attr('style')).toContain("100%");
+            })
+
+            it("should be red if percentage is >= 100%", function() {
+                expect($(Handlebars.helpers.workspaceUsage(99, '1GB')).find('.used')).not.toHaveClass('full');
+                expect($(Handlebars.helpers.workspaceUsage(100, '1GB')).find('.used')).toHaveClass('full');
+                expect($(Handlebars.helpers.workspaceUsage(101, '1GB')).find('.used')).toHaveClass('full');
+            })
+
+            it("with percentage >= 100% it has percentage text", function() {
+                expect($(Handlebars.helpers.workspaceUsage(99, '1GB')).find('.percentage_text')).not.toExist();
+                expect($(Handlebars.helpers.workspaceUsage(100, '1GB')).find('.percentage_text')).toContainText('100%');
+                expect($(Handlebars.helpers.workspaceUsage(101, '1GB')).find('.percentage_text')).toContainText('101%');
+            });
+
+            it("with percentage >= 50 it has size text inside the used bar", function() {
+                expect($(Handlebars.helpers.workspaceUsage(50, '1GB')).find('.used .size_text')).toContainText('1GB');
+                expect($(Handlebars.helpers.workspaceUsage(100, '1GB')).find('.used .size_text')).toContainText('1GB');
+                expect($(Handlebars.helpers.workspaceUsage(50, '1GB')).find('> .size_text')).not.toExist();
+            });
+
+            it("with percentage < 50 it has size text outside the used bar", function() {
+                expect($(Handlebars.helpers.workspaceUsage(49, '1GB')).find('.used .size_text')).not.toExist();
+                expect($(Handlebars.helpers.workspaceUsage(49, '1GB')).find('> .size_text')).toContainText('1GB');
+            });
+        });
     });
 
     describe("partials", function() {

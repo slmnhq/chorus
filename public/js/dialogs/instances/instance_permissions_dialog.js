@@ -3,6 +3,7 @@
     ns.dialogs.InstancePermissions = ns.dialogs.Base.extend({
         className : "instance_permissions",
         title : t("instances.permissions_dialog.title"),
+        additionalClass: 'with_sub_header',
         persistent : true,
 
         events : {
