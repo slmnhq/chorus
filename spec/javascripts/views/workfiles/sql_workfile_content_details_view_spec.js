@@ -77,6 +77,12 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     expect(runLink).toContainTranslation("workfile.content_details.run_workspace_sandbox")
                     expect(runLink).toBe("span");
                 });
+
+                it("does nothing when the disabled span is clicked", function() {
+                    spyOnEvent(this.view, 'file:runCurrent');
+                    this.qtipElement.find(".run_default").click();
+                    expect("file:runCurrent").not.toHaveBeenTriggeredOn(this.view);
+                });
             });
 
             context("clicking on 'Run in sandbox'", function() {

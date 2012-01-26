@@ -8,7 +8,7 @@
                 content: this.$(".run_workfile").html(),
                 orientation: "right",
                 contentEvents: {
-                    ".run_default": _.bind(this.runInSandbox, this),
+                    "a.run_default": _.bind(this.runInSandbox, this),
                     ".run_other_schema": _.bind(this.runOtherSchema, this)
                 }
             });
