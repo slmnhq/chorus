@@ -145,6 +145,12 @@
                     model: this.task,
                     x: 'id',
                     y: 'value'
+                }),
+
+                "Visualization: Boxplot" : new chorus.views.visualizations.Boxplot({
+                    model: this.task,
+                    x: 'animal',
+                    y: 'value'
                 })
             }
         },
