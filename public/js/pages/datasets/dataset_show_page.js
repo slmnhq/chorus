@@ -44,12 +44,12 @@
 
         columnSetFetched : function() {
             this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
-//            this.mainContent = new chorus.views.MainContentList({
-//                modelClass : "DatabaseColumn",
-//                collection : this.columnSet,
-//                model : this.workspace
-//            });
-//
+            this.mainContent = new chorus.views.MainContentList({
+                modelClass : "DatabaseColumn",
+                collection : this.columnSet,
+                model : this.workspace
+            });
+
 //            this.sidebar = new chorus.views.DatasetListSidebar();
 //
 //            this.mainContent.content.forwardEvent("dataset:selected", this.sidebar);

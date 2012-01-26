@@ -15,6 +15,7 @@
         'dashboard_workspace_list_footer',
 		'data_table',
         'database_column_sidebar_list',
+        'database_column_list',
         'database_function_sidebar_list',
         'database_dataset_sidebar_list',
         'dataset_list',
