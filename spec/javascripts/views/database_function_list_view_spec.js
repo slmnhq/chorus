@@ -42,7 +42,8 @@ describe("chorus.views.DatabaseFunctionList", function() {
                     fixtures.schemaFunction({ functionName: "inc" })
                 ]);
             });
-            jasmine.sharedExamples.DatabaseList();
+
+            itBehavesLike.DatabaseList();
 
             it("should not show the loading section", function() {
                 expect(this.view.$('.loading_section')).not.toExist();

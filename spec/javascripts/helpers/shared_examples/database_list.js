@@ -13,4 +13,5 @@ jasmine.sharedExamples.DatabaseList = function() {
         this.view.render();
         expect(chorus.views.DatabaseList.prototype.postRender).toHaveBeenCalled();
     });
+
 }
