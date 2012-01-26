@@ -1,5 +1,8 @@
 (function(ns) {
     ns.views.DatabaseList = ns.views.Base.extend({
+        events: {
+            "click .context a": "contextClicked"
+        },
 
         collectionModelContext : function(model) {
             return {
@@ -7,10 +10,42 @@
             }
         },
 
+        setup: function() {
+            this.sandbox = this.options.sandbox;
+            this.schemas = this.sandbox.database().schemas();
+            this.schema = this.sandbox.schema();
+            this.schemas.fetch();
+            this.fetchResourceAfterSchemaSelected(this.schema);
+        },
+
+        additionalContext: function() {
+            return {
+                schemaName: this.schema.get("name"),
+                schemaLink: ns.helpers.linkTo("#", this.schema.get('name')),
+                schemas: this.schemas.map(function(schema) {
+                    return {
+                        id: schema.get("id"),
+                        name: schema.get("name"),
+                        isCurrent: this.schema.get('id') === schema.get('id')
+                    };
+                }, this)
+            };
+        },
+
+        fetchResourceAfterSchemaSelected: $.noop,
+
         postRender: function() {
             chorus.search({
                 input: this.$('input.search'),
                 list: this.$('ul')
+            });
+
+            chorus.menu(this.$(".context a"), {
+                content: this.$(".schema_menu_container").html(),
+                container: $('#sidebar_wrapper'),
+                contentEvents: {
+                    'a.schema': _.bind(this.schemaSelected, this)
+                }
             });
 
             this.$("li a").click(this.closeQtip);
@@ -57,6 +92,13 @@
             });
         },
 
+        schemaSelected: function(e) {
+            var schemaId = $(e.target).data("id")
+            this.schema = this.schemas.get(schemaId)
+            this.fetchResourceAfterSchemaSelected(this.schema);
+            this.render();
+        },
+
         insertText: function(cid, e) {
             e && e.preventDefault();
             var model = this.collection.getByCid(cid)
@@ -65,6 +107,8 @@
 
         closeQtip: function(e) {
             $(e.currentTarget).trigger("mouseleave");
-        }
+        },
+
+        contextClicked: function(e) { e.preventDefault(); }
     });
 })(chorus);

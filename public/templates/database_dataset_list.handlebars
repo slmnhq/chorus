@@ -1,5 +1,5 @@
 <input class="search" placeholder='{{t "schema.metadata.list.hint.datasets"}}'/>
-<div class="context">{{t "schema.datasets.search_in" schemaName=schemaName}}</div>
+<div class="context">{{{t "schema.functions.search_in" schemaLink=schemaLink}}}</div>
 {{#if models.length}}
     <ul class="list">
         {{#each models}}
@@ -16,3 +16,16 @@
 {{else}}
     <div class="none_found">{{t "schema.metadata.list.empty"}}</div>
 {{/if}}
+
+<div class="schema_menu_container">
+    <ul class="schema_menu">
+        {{#each schemas}}
+            <li>
+                {{#if isCurrent}}
+                    <div class="check"></div>
+                {{/if}}
+                <a class="schema" data-id="{{id}}">{{name}}</a>
+            </li>
+        {{/each}}
+    </ul>
+</div>

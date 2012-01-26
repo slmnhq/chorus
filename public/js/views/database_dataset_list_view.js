@@ -3,31 +3,24 @@
         className : "database_dataset_list",
         useLoadingSection : true,
 
-        events: {
-            "click a" : "datasetSelected"
-        },
+        events: _.extend({}, ns.views.DatabaseList.prototype.events, {
+            "click li a" : "datasetSelected"
+        }),
 
-        setup: function() {
+        fetchResourceAfterSchemaSelected: function(schema) {
             this.resource = this.collection = new chorus.collections.Base();
-            this.schema = this.options.sandbox.schema();
+
             this.tables = this.schema.tables();
             this.views  = this.schema.views();
-
-            this.tables.bind("reset", this.tableFetchComplete, this);
+            this.tables.bind("reset", datasetFetchComplete, this);
+            this.views.bind("reset", datasetFetchComplete, this);
             this.tables.fetch();
-
-            this.views.bind("reset", this.viewFetchComplete, this);
             this.views.fetch();
-        },
 
-        tableFetchComplete: function() {
-            this.collection.add(this.tables.models);
-            this.render();
-        },
-
-        viewFetchComplete: function() {
-            this.collection.add(this.views.models);
-            this.render();
+            function datasetFetchComplete(tableOrViewSet) {
+                this.collection.add(tableOrViewSet.models);
+                this.render();
+            }
         },
 
         datasetSelected: function(e) {
@@ -36,7 +29,7 @@
                 type = li.data("type"),
                 name = li.data("name");
 
-            var dataset = (type === "table") ? this.tables.findByName(name) : this.views.findByName(name);
+            var dataset = this.collection.findWhere({ type: type, name: name });
             this.trigger("datasetSelected", dataset);
         },
 
@@ -45,9 +38,7 @@
                 return naturalSort(a.get("name").toLowerCase(), b.get("name").toLowerCase());
             });
 
-            return {
-                schemaName: this.schema.get('name')
-            };
+            return this._super("additionalContext", arguments);
         },
 
         collectionModelContext : function(model) {

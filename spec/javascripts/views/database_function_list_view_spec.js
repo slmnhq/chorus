@@ -37,7 +37,7 @@ describe("chorus.views.DatabaseFunctionList", function() {
                     fixtures.schema({ name: "orphaned_tables", id: "6" })
                 ]);
 
-                this.server.completeFetchFor(this.view.functions, [
+                this.server.completeFetchFor(this.view.collection, [
                     fixtures.schemaFunction({ functionName: "laplace_transform" }),
                     fixtures.schemaFunction({ functionName: "inc" })
                 ]);
@@ -57,13 +57,13 @@ describe("chorus.views.DatabaseFunctionList", function() {
                 expect(this.view.$("ul li")).toContainText("inc");
             });
 
-            it("should display the current schema name", function() {
-                expect(this.view.$('.context')).toContainText("righteous_tables");
-            })
-
             it("should not show the 'no functions found' text", function() {
                 expect(this.view.$('.none_found')).not.toExist();
             });
+
+            it("should display the current schema name", function() {
+                expect(this.view.$('.context')).toContainText("righteous_tables");
+            })
 
             describe("selecting a schema", function() {
                 beforeEach(function() {
@@ -102,7 +102,7 @@ describe("chorus.views.DatabaseFunctionList", function() {
 
                     describe("when the function fetch completes", function() {
                         beforeEach(function() {
-                            this.server.completeFetchFor(this.view.functions, [
+                            this.server.completeFetchFor(this.view.collection, [
                                 fixtures.schemaFunction({ functionName: "fourier_transform" }),
                                 fixtures.schemaFunction({ functionName: "obnoxious_transform" })
                             ]);
@@ -122,7 +122,7 @@ describe("chorus.views.DatabaseFunctionList", function() {
 
                             expect(this.view.$("ul li")).toContainText("fourier_transform");
                             expect(this.view.$("ul li")).toContainText("obnoxious_transform");
-                            expect(this.view.$('ul li:eq(0) .name').attr('title')).toBe(this.view.functions.models[0].toHintText())
+                            expect(this.view.$('ul li:eq(0) .name').attr('title')).toBe(this.view.collection.models[0].toHintText())
                         });
                     })
                 })
@@ -131,7 +131,7 @@ describe("chorus.views.DatabaseFunctionList", function() {
 
         context("when the schema has no functions", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.view.functions, []);
+                this.server.completeFetchFor(this.view.collection, []);
             });
 
             it("should show the 'no functions found' text", function() {

@@ -4,10 +4,11 @@ describe("chorus.views.DatabaseList", function() {
         var object1 = new chorus.models.DatabaseTable();
         object0.cid = 'c44';
         object1.cid = 'c55';
+        this.sandbox = fixtures.sandbox();
         this.collection = new chorus.collections.Base([object0, object1]);
         spyOn(this.collection.models[0], 'toText').andReturn('object1');
         spyOn(this.collection.models[1], 'toText').andReturn('object2');
-        this.view = new chorus.views.DatabaseList({collection: this.collection});
+        this.view = new chorus.views.DatabaseList({collection: this.collection, sandbox: this.sandbox });
         this.view.template = function() {
             return '<ul class="list"><li data-cid="c44"><a>as</a></li><li data-cid="c55"><a>gd</a></li></ul>';
         };

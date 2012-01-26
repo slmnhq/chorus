@@ -19,31 +19,31 @@ describe("chorus.views.DatabaseDatasetList", function() {
 
     context("when the table fetch completes", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.view.tables, [fixtures.databaseTable(), fixtures.databaseTable()]);
+            this.server.completeFetchFor(this.schema.tables(), [fixtures.databaseTable(), fixtures.databaseTable()]);
         });
 
         it("should set the list of tables in the collection", function() {
-            expect(this.view.tables.length).toBe(2);
-            expect(this.view.collection.length).toBe(this.view.tables.length);
+            expect(this.view.collection.length).toBe(2);
+            expect(this.schema.tables().length).toBe(2);
         });
     });
 
     context("when the view fetch completes", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.view.views,  [fixtures.databaseView(), fixtures.databaseView()]);
+            this.server.completeFetchFor(this.schema.views(), [fixtures.databaseView(), fixtures.databaseView(), fixtures.databaseView()]);
         });
 
         it("should set the list of views in the collection", function() {
-            expect(this.view.views.length).toBe(2);
-            expect(this.view.collection.length).toBe(this.view.views.length);
+            expect(this.view.collection.length).toBe(3);
+            expect(this.schema.views().length).toBe(3);
         });
     });
 
     describe("#render", function() {
         context("before the tables or views have loaded", function() {
             beforeEach(function() {
-                this.view.views.loaded = false;
-                this.view.tables.loaded = false;
+                this.schema.views().loaded = false;
+                this.schema.tables().loaded = false;
                 this.view.render();
             })
 
@@ -54,7 +54,7 @@ describe("chorus.views.DatabaseDatasetList", function() {
 
         context("after only the table fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.view.tables, [fixtures.databaseTable(), fixtures.databaseTable()]);
+                this.server.completeFetchFor(this.schema.tables(), [fixtures.databaseTable(), fixtures.databaseTable()]);
             })
 
             it("still displays a loading spinner", function() {
@@ -64,7 +64,7 @@ describe("chorus.views.DatabaseDatasetList", function() {
 
         context("after only the view fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.view.views, [fixtures.databaseView(), fixtures.databaseView()]);
+                this.server.completeFetchFor(this.schema.views(), [fixtures.databaseView(), fixtures.databaseView()]);
             });
 
             it("still displays a loading spinner", function() {
@@ -74,8 +74,8 @@ describe("chorus.views.DatabaseDatasetList", function() {
 
         context("after both fetches have completed", function() {
             beforeEach(function() {
-                this.view.views.loaded = true;
-                this.view.tables.loaded = true;
+                this.schema.views().loaded = true;
+                this.schema.tables().loaded = true;
             });
 
             it("doesn't display a loading spinner", function() {
@@ -84,11 +84,11 @@ describe("chorus.views.DatabaseDatasetList", function() {
 
             context("and some data was fetched", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(this.view.views, [
+                    this.server.completeFetchFor(this.schema.views(), [
                         fixtures.databaseView({name: "Data1"}),
                         fixtures.databaseView({name: "zebra"})
                     ]);
-                    this.server.completeFetchFor(this.view.tables, [
+                    this.server.completeFetchFor(this.schema.tables(), [
                         fixtures.databaseTable({name: "Data2"}),
                         fixtures.databaseTable({name: "apple"})
                     ]);
@@ -117,7 +117,7 @@ describe("chorus.views.DatabaseDatasetList", function() {
 
                 describe("user clicks a view in the list", function() {
                     beforeEach(function() {
-                        this.clickedView = this.view.views.findByName("Data1");
+                        this.clickedView = this.schema.views().findByName("Data1");
                         spyOnEvent(this.view, "datasetSelected");
                         this.view.$("li:contains('Data1') a").click();
                     });
@@ -129,7 +129,7 @@ describe("chorus.views.DatabaseDatasetList", function() {
 
                 describe("user clicks on a table in the list", function() {
                     beforeEach(function() {
-                        this.clickedTable = this.view.tables.findByName("Data2");
+                        this.clickedTable = this.schema.tables().findByName("Data2");
                         spyOnEvent(this.view, "datasetSelected");
                         this.view.$("li:contains('Data2') a").click();
                     });
