@@ -36,7 +36,14 @@ describe("chorus.views.DatasetListSidebar", function() {
                 context("when the statistics arrive", function() {
                     beforeEach(function() {
                         this.stats = this.dataset.statistics();
-                        this.stats.set({rows: 0, columns: 0, lastAnalyzedTime: "2011-12-12 12:34:56", onDiskSize: "1 GB", desc: "foo"});
+                        this.stats.set({
+                            rows: 0,
+                            columns: 0,
+                            lastAnalyzedTime: "2011-12-12 12:34:56",
+                            onDiskSize: "1 GB",
+                            desc: "foo",
+                            partitions: 2
+                        });
                         this.server.completeFetchFor(this.stats);
                     });
 
@@ -59,6 +66,22 @@ describe("chorus.views.DatasetListSidebar", function() {
                     it("displays the last analyzed time", function() {
                         expect(this.view.$(".last_analyzed_time .value").text()).toBe(chorus.helpers.relativeTimestamp(this.stats.get("lastAnalyzedTime")));
                     });
+
+                    it("displays the partitions", function() {
+                        expect(this.view.$(".partitions .value").text()).toBe("2")
+                    })
+
+                    describe("when the partitions are 0", function() {
+                        beforeEach(function() {
+                            this.view = new chorus.views.DatasetListSidebar();
+                            this.stats.set({ partitions: 0 });
+                            this.server.completeFetchFor(this.stats);                            
+                        });
+
+                        it("should not show the partitions pair", function() {
+                            expect(this.view.$(".partitions")).not.toExist()
+                        })
+                    })
                 });
             });
         });

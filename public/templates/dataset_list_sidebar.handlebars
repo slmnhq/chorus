@@ -23,25 +23,31 @@
                     {{#if statistics.rows}}
                         <div class="pair rows">
                             <div class="key">{{t "dataset.statistics.rows"}}</div>
-                            <div class="value" title="{{{typeString}}}">{{{statistics.rows}}}</div>
+                            <div class="value" title="{{{statistics.rows}}}">{{{statistics.rows}}}</div>
                         </div>
                     {{/if}}
                     {{#if statistics.columns}}
                         <div class="pair columns">
                             <div class="key">{{t "dataset.statistics.columns"}}</div>
-                            <div class="value" title="{{{typeString}}}">{{{statistics.columns}}}</div>
+                            <div class="value" title="{{{statistics.columns}}}">{{{statistics.columns}}}</div>
                         </div>
                     {{/if}}
                     {{#if statistics.onDiskSize}}
                         <div class="pair size">
                             <div class="key">{{t "dataset.statistics.size"}}</div>
-                            <div class="value" title="{{{typeString}}}">{{{statistics.onDiskSize}}}</div>
+                            <div class="value" title="{{{statistics.onDiskSize}}}">{{{statistics.onDiskSize}}}</div>
                         </div>
                     {{/if}}
                     {{#if statistics.lastAnalyzedTime}}
                         <div class="pair last_analyzed_time">
                             <div class="key">{{t "dataset.statistics.last_analyzed_time"}}</div>
-                            <div class="value" title="{{{typeString}}}">{{{relativeTimestamp statistics.lastAnalyzedTime}}}</div>
+                            <div class="value" title="{{{relativeTimestamp statistics.lastAnalyzedTime}}}">{{{relativeTimestamp statistics.lastAnalyzedTime}}}</div>
+                        </div>
+                    {{/if}}
+                    {{#if statistics.partitions}}
+                        <div class="pair partitions">
+                            <div class="key">{{t "dataset.statistics.partitions"}}</div>
+                            <div class="value" title="{{{statistics.partitions}}}">{{{statistics.partitions}}}</div>
                         </div>
                     {{/if}}
                 </div>
