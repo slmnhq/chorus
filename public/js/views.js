@@ -317,7 +317,7 @@
             var modelClass = options.modelClass
             var collection = this.collection;
             this.content = new ns.views[modelClass + "List"]({collection: collection })
-            this.contentHeader = new ns.views.ListHeaderView({title: modelClass + "s", linkMenus : options.linkMenus})
+            this.contentHeader = new ns.views.ListHeaderView({title: options.title || (modelClass + "s"), linkMenus : options.linkMenus})
             this.contentDetails = new ns.views.ListContentDetails({collection : collection, modelClass : modelClass, buttons: options.buttons});
             this.contentFooter = new ns.views.ListContentDetails({collection : collection, modelClass : modelClass, hideCounts : true, hideIfNoPagination : true})
         },

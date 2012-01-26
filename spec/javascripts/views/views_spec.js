@@ -505,6 +505,33 @@ describe("chorus.views.base", function() {
         });
     });
 
+    describe("MainContentList", function() {
+        beforeEach(function() {
+            this.collection = fixtures.workfileSet();
+        })
+
+        describe("#setup", function() {
+            context("when no title override is provided", function() {
+                beforeEach(function() {
+                    this.view = new chorus.views.MainContentList({ collection : this.collection, modelClass : "Workfile" });
+                })
+
+                it("sets the title of the content header to the plural of the model class", function() {
+                    expect(this.view.contentHeader.options.title).toBe("Workfiles")
+                })
+            })
+            context("when a title override is provided", function() {
+                beforeEach(function() {
+                    this.view = new chorus.views.MainContentList({ collection : this.collection, modelClass : "Workfile", title : "YES!" });
+                })
+
+                it("sets the title of the content header to the override", function() {
+                    expect(this.view.contentHeader.options.title).toBe("YES!")
+                })
+            })
+        })
+    })
+    
     describe("ListHeaderView", function() {
         beforeEach(function() {
             this.view = new chorus.views.ListHeaderView({
