@@ -561,6 +561,21 @@ describe("chorus.views.base", function() {
             it("renders the header title", function() {
                 expect(this.view.$("h1").text().trim()).toBe("Hi there")
             })
+
+            it("does not render an image", function() {
+                expect(this.view.$(".title img")).not.toExist();
+            })
+
+            context("when an imageUrl is provided", function() {
+                beforeEach(function() {
+                    this.view.options.imageUrl = "edc/image/foo/bar.png";
+                    this.view.render();
+                })
+
+                it("renders the image", function() {
+                    expect(this.view.$(".title img")).toHaveAttr("src", "edc/image/foo/bar.png")
+                })
+            });
         })
 
         describe("event propagation", function() {
