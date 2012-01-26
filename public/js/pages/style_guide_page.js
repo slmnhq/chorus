@@ -135,12 +135,16 @@
                         }
                     });
 
-                    return new chorus.views.Visualization({
-                        model: new chorus.models.Task({ result: {
-                            columns: columns,
-                            rows: rows
-                        }})
-                    })
+                    var model = new chorus.models.Task({ result: {
+                        columns: columns,
+                        rows: rows
+                    }});
+
+                    return new chorus.views.visualizations.XY({
+                        model: model,
+                        x: 'id',
+                        y: 'value'
+                    });
                 })(),
             }
         },
