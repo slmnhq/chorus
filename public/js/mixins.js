@@ -26,6 +26,14 @@
                 this.unbind(eventName, callback);
                 this.unbind(eventName, unbinder);
             }
+        },
+
+        onLoaded: function(callback, context) {
+            if(this.loaded) {
+                callback.apply(context)
+            } else {
+                this.bind('loaded', callback, context)
+            }
         }
     };
 

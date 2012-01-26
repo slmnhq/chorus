@@ -81,7 +81,7 @@ describe("chorus.Mixins", function() {
                     this.source.trigger("increment", 'foo');
                     expect(this.callback).toHaveBeenCalledWith('foo');
                 });
-            };
+            }
 
             function itCallsTheBoundFunctionOnlyOnce() {
                 it("calls the bound function only once over multiple triggers", function() {
@@ -91,14 +91,14 @@ describe("chorus.Mixins", function() {
 
                     expect(this.callback.callCount).toBe(1);
                 });
-            };
+            }
 
             function itTriggersOnlyOnMatchingEventName() {
                 it("does not call the function when a different trigger occurs", function() {
                     this.source.trigger("foobar");
                     expect(this.callback).not.toHaveBeenCalled();
                 });
-            };
+            }
 
             function itUnbindsCorrectly() {
                 describe("unbinding", function() {
@@ -112,6 +112,46 @@ describe("chorus.Mixins", function() {
                     });
                 });
             }
+        });
+
+        describe("onLoaded", function() {
+            beforeEach(function() {
+                this.source = {};
+                _.extend(this.source, Backbone.Events, chorus.Mixins.Events);
+                this.callback = jasmine.createSpy('callback');
+                spyOn(this.source, 'bind');
+            });
+            context("when object is not loaded", function() {
+                beforeEach(function() {
+                    this.source.loaded = false;
+                });
+
+                it("binds the callback to loaded if the object is not yet loaded", function() {
+                    var otherContext = {};
+                    this.source.onLoaded(this.callback, otherContext);
+                    expect(this.callback).not.toHaveBeenCalled();
+                    expect(this.source.bind).toHaveBeenCalledWith('loaded', this.callback, otherContext);
+                });
+            });
+
+            context("when object is loaded", function() {
+                beforeEach(function() {
+                    this.source.loaded = true;
+                });
+
+                it("executes the callback in the context, if the object is already loaded", function() {
+                    var otherContext = {};
+                    this.source.onLoaded(this.callback, otherContext);
+                    expect(this.callback).toHaveBeenCalled();
+                    expect(this.callback.mostRecentCall.object).toBe(otherContext);
+                });
+
+                it("works when there is no context", function() {
+                    this.source.onLoaded(this.callback);
+                    expect(this.callback).toHaveBeenCalled();
+                });
+            })
+
         });
     });
 

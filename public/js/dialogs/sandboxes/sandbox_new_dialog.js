@@ -25,8 +25,8 @@
         },
 
         fetchConfig : function() {
-            this.config = new ns.models.Config();
-            this.config.bind("loaded", this.createSubViews, this);
+            this.config = new ns.models.Config.instance();
+            this.config.onLoaded(this.createSubViews, this);
             this.config.fetch();
         },
 
