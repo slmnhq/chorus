@@ -27,17 +27,18 @@ describe("chorus.pages.DatasetShowPage", function() {
 
         describe("when the workspace fetch completes", function() {
             beforeEach(function() {
+                spyOn(chorus.collections.DatabaseColumnSet.prototype, "fetchAll").andCallThrough();
                 this.server.completeFetchFor(this.workspace);
             })
 
-            it("fetches the columnSet", function() {
-                expect(this.server.lastFetchFor(this.columnSet)).toBeDefined();
+            it("fetches all of the columns", function() {
+                expect(chorus.collections.DatabaseColumnSet.prototype.fetchAll).toHaveBeenCalled();
             })
 
             describe("when the columnSet fetch completes", function() {
                 beforeEach(function() {
                     spyOn(this.page, "postRender");
-                    this.server.completeFetchFor(this.columnSet);
+                    this.server.lastFetch().succeed(this.columnSet.attributes)
                 })
 
                 it("renders", function() {
@@ -50,7 +51,7 @@ describe("chorus.pages.DatasetShowPage", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace);
-            this.server.completeFetchFor(this.columnSet);
+            this.server.lastFetch().succeed(this.columnSet.attributes)
         })
 
         describe("breadcrumbs", function() {

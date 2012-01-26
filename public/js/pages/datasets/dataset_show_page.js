@@ -39,7 +39,7 @@
             }
             this.columnSet = new chorus.collections.DatabaseColumnSet([], options);
             this.columnSet.bind("loaded", this.columnSetFetched, this);
-            this.columnSet.fetch();
+            this.columnSet.fetchAll();
         },
 
         columnSetFetched : function() {
