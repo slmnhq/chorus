@@ -33,12 +33,12 @@
 
         collectionModelContext : function(model) {
             return {
-                iconImgUrl : this.iconFor(model)
+                iconImgUrl : this.iconFor(model),
+                showUrl : model.showUrl()
             }
         },
 
         selectDataset : function(e) {
-            e.preventDefault();
             this.$("li").removeClass("selected");
             var selectedDataset = $(e.target).closest("li");
             selectedDataset.addClass("selected");

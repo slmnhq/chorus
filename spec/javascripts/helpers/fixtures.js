@@ -1232,7 +1232,8 @@
                     type : "table",
                     instanceId : this.nextId().toString(),
                     databaseName : "database_name",
-                    schemaName : "schema_name"
+                    schemaName : "schema_name",
+                    workspace : { id : this.nextId().toString(), name: "731 Market" }
                 }, overrides);
                 return new chorus.models.DatabaseTable(attributes);
             },
@@ -1281,7 +1282,9 @@
             databaseColumnSet: function(models, overrides) {
                 var id = this.nextId().toString()
                 models = (models && (models.length > 0)) || [this.databaseColumn(overrides), this.databaseColumn(overrides)];
-                return new chorus.collections.DatabaseColumnSet(models, overrides);
+                var collection = new chorus.collections.DatabaseColumnSet([], overrides);
+                collection.reset(models)
+                return collection;
             },
 
             workspace: function(overrides) {

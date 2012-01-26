@@ -1,6 +1,9 @@
 ;(function(ns){
     ns.models.Dataset = ns.models.Base.extend({
-        urlTemplate: "workspace/{{workspaceId}}/dataset/{{datasetId}}",
+        showUrlTemplate : function() {
+            var urlType = this.get("objectType").match(/TABLE/i) ? 'table' : 'view';
+            return "workspaces/" + this.get("workspace").id + "/"+ urlType + "/{{objectName}}";
+        },
 
         statistics : function() {
             return new ns.models.DatasetStatistics({

@@ -10,6 +10,12 @@ describe("chorus.views.DatasetList", function() {
             expect(this.view.$("> li").length).toBe(this.collection.length);
         });
 
+        it("links the datasets to their show page", function() {
+            _.each(this.collection.models, function(dataset, index) {
+                expect(this.view.$("li:eq(" + index + ") a.name")).toHaveAttr("href", this.collection.at(index).showUrl())
+            }, this);
+        })
+
         it("displays the datasets' names", function() {
             for (var i = 0; i < this.collection.length; i++) {
                 expect(this.view.$("a.name").eq(i).text().trim()).toBe(this.collection.models[i].get("objectName"));
