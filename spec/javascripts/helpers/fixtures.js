@@ -1543,9 +1543,21 @@
                         { id: 1 , city: "Oakland"   , state: "CA" , zip: "94612" } ,
                         { id: 2 , city: "Arcata"    , state: "CA" , zip: "95521" } ,
                         { id: 3 , city: "Lafayette" , state: "IN" , zip: "47909" }
-                    ]
+                    ],
+                    executeResult: "success",
+                    hasResult: "true",
+                    message: ""
                 }}, overrides);
                 return this.task(overrides);
+            },
+
+            taskWithErrors: function(overrides) {
+                var attributes = { result: _.extend({
+                    executeResult: "failed",
+                    hasResult: "false",
+                    message: 'ERROR: syntax error at or near "where 1=1; drop table users;"  Position: line 1 column 1'
+                }, overrides)};
+                return this.task(attributes);
             }
         });
     });

@@ -18,6 +18,10 @@
                     values: _.pluck(rows, name)
                 };
             });
+        },
+
+        errorMessage : function() {
+            return this.get("result").message;
         }
     });
 })(chorus);

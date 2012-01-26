@@ -66,6 +66,15 @@
         }
     }
 
+    .actions {
+        color: white;
+        float: right;
+        
+        a {
+            float: none;
+        }
+    }
+
     .bottom_gutter {
         background: white;
         height: 20px;

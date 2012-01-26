@@ -14,9 +14,8 @@ describe("chorus.views.ResultsConsoleView", function() {
             this.view.render();
         })
 
-        it("displays the result message", function() {
+        it("displays the executing spinner", function() {
             expect(this.view.$(".right")).not.toHaveClass("executing");
-            expect(this.view.$(".message").text().trim()).toBe("hi there")
         })
 
         it("hides the minimize and maximize links", function() {
@@ -112,6 +111,66 @@ describe("chorus.views.ResultsConsoleView", function() {
                     itRemovesExecutionUI(false);
                     itShowsExecutionResults();
                 })
+
+                it("displays the result message", function() {
+                    expect(this.view.$(".message").text().trim()).toBe("hi there")
+                })
+
+                context("and there was an execution error", function() {
+                    beforeEach(function() {
+                        this.task = fixtures.taskWithErrors();
+                        this.view.trigger("file:executionCompleted", this.task);
+                    });
+
+                    it("should show the error header", function() {
+                        expect(this.view.$('.errors')).not.toHaveClass('hidden');
+                    })
+
+                    it("should show 'View Details' and 'Close' links", function() {
+                        expect(this.view.$('.errors .view_details')).toExist();
+                        expect(this.view.$('.errors .close_errors')).toExist();
+                    })
+
+                    it("does not display the result message", function() {
+                        expect(this.view.$(".message")).toBeEmpty();
+                    });
+
+                    it("should hide the execution content area", function() {
+                        expect(this.view.$(".result_content")).toHaveClass("hidden");
+                    });
+
+                    describe("clicking on the close button", function() {
+                        beforeEach(function() {
+                            this.view.$(".close_errors").click();
+                        })
+
+                        it("should show the result content area", function() {
+                            expect(this.view.$(".result_content")).not.toHaveClass("hidden");
+                        });
+                    });
+                    
+                    context("when the sql is executed again without errors", function() {
+                        beforeEach(function() {
+                            this.task = fixtures.taskWithResult();
+                            this.view.trigger("file:executionCompleted", this.task);
+                        })
+
+                        it("should show the execution content area", function() {
+                            expect(this.view.$(".result_content")).not.toHaveClass("hidden");
+                        });
+                    })
+
+                    describe("clicking on view details", function() {
+                        beforeEach(function() {
+                            spyOn(chorus.Modal.prototype, "launchModal");
+                            this.view.$(".view_details").click();
+                        });
+
+                        it("should open a dialog", function() {
+                            expect(chorus.Modal.prototype.launchModal).toHaveBeenCalled();
+                        });
+                    });
+                });
             })
 
             function itRemovesExecutionUI(shouldCancelTimers) {
@@ -140,10 +199,15 @@ describe("chorus.views.ResultsConsoleView", function() {
             }
 
             function itShowsExecutionResults() {
+
                 it("renders a task data table with the given task", function() {
                     expect(this.view.dataTable).toBeA(chorus.views.TaskDataTable);
                     expect(this.view.dataTable.model).toBe(this.task);
                     expect($(this.view.el)).toContain(this.view.dataTable.el);
+                });
+
+                it("displays the result table", function() {
+                    expect(this.view.$('.result_table')).not.toHaveClass("hidden");
                 });
 
                 it("changes the state of the result table to 'minimized'", function() {

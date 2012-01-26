@@ -5,7 +5,9 @@
             "click .cancel" : "cancelExecution",
             "click a.maximize" : "maximizeTable",
             "click a.minimize" : "minimizeTable",
-            "click .expander_button" : "toggleExpand"
+            "click .expander_button" : "toggleExpand",
+            "click .close_errors" : "closeError",
+            "click .view_details" : "viewDetails"
         },
 
         setup: function() {
@@ -35,9 +37,17 @@
             this.cancelTimers()
             this.$(".right").removeClass("executing")
             this.$(".loading").stopLoading()
-            this.dataTable = new ns.views.TaskDataTable({model: task});
-            this.dataTable.render();
-            this.$(".result_table").append(this.dataTable.el);
+            
+            if (task.errorMessage()) {
+                this.$(".errors").removeClass("hidden")
+                this.$(".result_content").addClass("hidden");
+                this.$(".message").empty();
+            } else {
+                this.dataTable = new ns.views.TaskDataTable({model: task});
+                this.dataTable.render();
+                this.$(".result_content").removeClass("hidden");
+                this.$(".result_table").append(this.dataTable.el);
+            }
 
             this.minimizeTable();
         },
@@ -98,6 +108,18 @@
             this.$(".result_table").removeClass("minimized");
             this.$(".result_table").removeClass("maximized");
             this.$(".data_table").css("height", "");
+        },
+
+        closeError : function(e) {
+            e.preventDefault();
+            this.$(".result_content").removeClass("hidden");
+        },
+
+        viewDetails : function(e) {
+            e.preventDefault();
+
+            var alert = new chorus.alerts.ExecutionError({model : this.model});
+            alert.launchModal();
         },
 
         toggleExpand : function() {

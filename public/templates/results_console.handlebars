@@ -1,27 +1,37 @@
-<div class="execution">
-    <div class="right">
-        <span class="message">
-            {{#if result}}
-                {{result.message}}
-            {{/if}}
-        </span>
-        <span class='execution_info'>
-            <span class="elapsed_time"/>
-            <span class="loading">
-                {{t "results_console_view.executing"}}
-            </span>
-            <span class="link">
-                <a class="cancel" href='#'>{{t "actions.cancel"}}</a>
-            </span>
-        </span>
+<div class="errors hidden">
+    <ul>
+        <li>{{t "results_console_view.there_was_an_error"}}</li>
+    </ul>
+    <div class="actions">
+        <a href="#" class="action view_details">{{t "actions.view_details"}}</a> | <a href="#" class="action close_errors">{{t "actions.close"}}</a>
     </div>
-    <h1>{{t "results_console_view.title"}}</h1>
-    <a href="#" class="minimize hidden">{{t "results_console_view.minimize"}}</a>
-    <a href="#" class="maximize hidden">{{t "results_console_view.maximize"}}</a>
 </div>
-<div class="result_table collapsed"/>
-<div class="bottom_gutter hidden">
-    <div class="expander_button">
-        <div class="arrow down"></div>
+<div class="result_content">
+    <div class="execution">
+        <div class="right">
+            <span class="message">
+                {{#if result}}
+                    {{result.message}}
+                {{/if}}
+            </span>
+            <span class='execution_info'>
+                <span class="elapsed_time"/>
+                <span class="loading">
+                    {{t "results_console_view.executing"}}
+                </span>
+                <span class="link">
+                    <a class="cancel" href='#'>{{t "actions.cancel"}}</a>
+                </span>
+            </span>
+        </div>
+        <h1>{{t "results_console_view.title"}}</h1>
+        <a href="#" class="minimize hidden">{{t "results_console_view.minimize"}}</a>
+        <a href="#" class="maximize hidden">{{t "results_console_view.maximize"}}</a>
+    </div>
+    <div class="result_table collapsed"/>
+    <div class="bottom_gutter hidden">
+        <div class="expander_button">
+            <div class="arrow down"></div>
+        </div>
     </div>
 </div>

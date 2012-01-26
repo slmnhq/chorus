@@ -74,4 +74,16 @@ describe("chorus.models.Task", function() {
             expect(this.data[3].values[2]).toBe("47909");
         });
     });
+
+    describe("#errorMessage", function() {
+        it("should return errors if they exist", function() {
+            var task = fixtures.taskWithErrors();
+            expect(task.errorMessage()).toBe(task.get('result').message);
+        })
+
+        it("should return falsy when the response was not an error", function() {
+            var task = fixtures.taskWithResult();
+            expect(task.errorMessage()).toBeFalsy();
+        })
+    })
 });

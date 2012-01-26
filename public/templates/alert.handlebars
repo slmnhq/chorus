@@ -11,6 +11,11 @@
             <p>{{text}}</p>
         </div>
     </div>
+    {{#if body}}
+        <div class="body">
+            <p>{{body}}</p>
+        </div>
+    {{/if}}
     <div class="modal_controls">
         <button type="button" class="cancel" tabindex=2>{{cancel}}</button>
         <button type="submit" class="submit" tabindex=1>{{ok}}</button>
