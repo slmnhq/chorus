@@ -31,6 +31,7 @@
         'instances_edit',
         'instances_new',
         'instance_permissions',
+        'instance_usage',
         'link_menu',
         'list_content_details',
         'loading_section',

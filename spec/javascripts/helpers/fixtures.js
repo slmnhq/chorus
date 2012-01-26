@@ -1398,6 +1398,38 @@
                 return new chorus.collections.InstanceAccountSet(models);
             },
 
+            instanceUsage : function() {
+                return new chorus.models.InstanceUsage({
+                    "sandboxesSize" : "2.9GB",
+                    "sandboxesSizeInBytes" : 3157917696,
+                    "workspaces" : [
+                        {
+                            "workspaceId":"10040",
+                            "workspaceName":"ws",
+                            "iconId":null,
+                            "workspaceOwnerFullName":"EDC Admin",
+                            "sandboxId":"10010",
+                            "databaseName":"Analytics",
+                            "schemaName":"analytics",
+                            "ownerFullName":"EDC Admin",
+                            "sizeInBytes":"1648427008",
+                            "size":"1.5GB"
+                        },
+                        {
+                            "workspaceId":"10000",
+                            "workspaceName":"!!!",
+                            "iconId":null,"workspaceOwnerFullName":"EDC Admin",
+                            "sandboxId":"10000",
+                            "databaseName":"dca_demo",
+                            "schemaName":"public",
+                            "ownerFullName":"EDC Admin",
+                            "sizeInBytes":"1509490688",
+                            "size":"1.4GB"
+                        }
+                    ]
+                });
+            },
+
             sandbox: function(overrides) {
                 var databaseId = this.nextId().toString();
                 var instanceId = this.nextId().toString();

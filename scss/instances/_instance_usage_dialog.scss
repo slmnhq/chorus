@@ -1,0 +1,50 @@
+.instance_usage {
+    .total_usage {
+        border-bottom: 1px solid $menu-border-color;
+    }
+
+    li {
+        border-bottom: $dotted-list-item-border;
+        margin-top: 8px;
+        
+        img {
+            display: inline-block;
+        }
+
+        .details {
+            display: inline-block;
+        }
+
+        .workspace_link {
+            font-size: 18px;
+            font-weight: $semibold;
+        }
+
+        .pair {
+            font-size: 13px;
+            /*width: 100%;*/
+
+            .key {
+                color: $color-text2;
+            }
+
+            .value {
+                float: right;
+                max-width: 200px;
+                text-align: right;
+                @include ellipsis;
+            }
+        }
+    }
+
+    .usage_bar {
+        height: 20px;
+        width: 100%;
+        background: red;
+    }
+
+    .used {
+        height: 100%;
+        background: blue;
+    }
+}
