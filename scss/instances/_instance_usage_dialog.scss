@@ -6,13 +6,22 @@
     li {
         border-bottom: $dotted-list-item-border;
         margin-top: 8px;
+        position: relative;
         
-        img {
+        .image_container {
             display: inline-block;
+            width: 45px;
+            height: 85px;
+            vertical-align: top;
+            text-align: middle;
         }
 
         .details {
             display: inline-block;
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 55px;
         }
 
         .workspace_link {
@@ -22,23 +31,25 @@
 
         .pair {
             font-size: 13px;
-            /*width: 100%;*/
+            padding-top: 4px;
+            display: block;
+        }
 
-            .key {
-                color: $color-text2;
-            }
+        .key {
+            display: inline-block;
+            color: $color-text2;
+        }
 
-            .value {
-                float: right;
-                max-width: 200px;
-                text-align: right;
-                @include ellipsis;
-            }
+        .value {
+            float: right;
+            max-width: 200px;
+            text-align: right;
+            @include ellipsis;
         }
     }
 
     .usage_bar {
-        height: 20px;
+        height: 15px;
         width: 100%;
         background: red;
     }
