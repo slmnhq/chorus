@@ -49,6 +49,7 @@
                 },
                 hide: 'unfocus',
                 position: {
+                    container: options.container,
                     my: "top center",
                     at: "bottom center"
                 },

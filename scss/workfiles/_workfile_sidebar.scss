@@ -207,7 +207,10 @@
     }
 }
 
-.schema_menu {
+ul.schema_menu {
+    overflow: auto;
+    max-height: 300px;
+
     li {
         margin: 2px 4px 0px 8px;
 
@@ -225,6 +228,10 @@
             &.hidden {
                 visibility: hidden;
             }
+        }
+
+        a {
+            cursor: pointer;
         }
     }
 }

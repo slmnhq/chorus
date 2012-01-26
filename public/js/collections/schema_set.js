@@ -3,6 +3,10 @@
         model : ns.models.Schema,
         urlTemplate : "instance/{{instanceId}}/database/{{databaseId}}/schema",
 
+        comparator : function(schema) {
+            return schema.get('name').toLowerCase();
+        },
+
         parse: function(resp) {
             var resource = this._super("parse", arguments)
             return _.map(resource, function(model) {

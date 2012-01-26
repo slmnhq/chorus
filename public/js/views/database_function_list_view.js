@@ -38,6 +38,7 @@
             this._super('postRender');
             chorus.menu(this.$(".context a"), {
                 content: this.$(".schema_menu_container").html(),
+                container: $('#sidebar_wrapper'),
                 contentEvents: {
                     'a.schema': _.bind(this.schemaSelected, this)
                 }

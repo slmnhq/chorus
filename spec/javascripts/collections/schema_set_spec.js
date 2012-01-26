@@ -3,6 +3,21 @@ describe("chorus.collections.SchemaSet", function() {
         this.collection = fixtures.schemaSet({ instanceId: '50', databaseId: '41', databaseName: "wicked_tables"});
     });
 
+    describe("#sort", function() {
+        beforeEach(function() {
+            this.collection.reset([
+                fixtures.schema({ name: 'z'}),
+                fixtures.schema({ name: 'G'}),
+                fixtures.schema({ name: 'a'})
+            ]);
+        });
+
+        it("sorts by name, case insensitive", function() {
+            var names = this.collection.pluck('name')
+            expect(names).toEqual(['a', 'G', 'z']);
+        })
+    });
+
     describe("#parse", function() {
         beforeEach(function() {
             this.collection.fetch();
