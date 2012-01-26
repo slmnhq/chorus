@@ -1,5 +1,4 @@
 describe("chorus.models.Schema", function() {
-
     context("from a sandbox", function() {
         beforeEach(function() {
             this.sandbox = fixtures.sandbox();
@@ -56,15 +55,45 @@ describe("chorus.models.Schema", function() {
                 expect(this.model.functions().attributes.schemaId).toBe(this.model.get('id'));
             });
         });
+    });
 
-        describe("#canonicalName", function() {
-            beforeEach(function() {
-                this.model.set({instanceName : "instance", databaseName : "database", name : "schema"});
-            })
+    describe("#canonicalName", function() {
+        beforeEach(function() {
+            this.model = fixtures.schema({instanceName : "instance", databaseName : "database", name : "schema"});
+        })
 
-            it("should create the canonical name", function() {
-                expect(this.model.canonicalName()).toBe("instance / database / schema");
+        it("should create the canonical name", function() {
+            expect(this.model.canonicalName()).toBe("instance / database / schema");
+        });
+    });
+
+    describe("#isEqual", function() {
+        beforeEach(function() {
+            this.model = fixtures.schema({
+                instanceId:   '1',
+                instanceName: 'bar',
+                databaseId:   '2',
+                databaseName: 'foo',
+                id:           '3',
+                name:         'baz'
             });
+        });
+
+        it("checks that the names and ids of the instances, databases and schemas are equal", function() {
+            var other = fixtures.schema({
+                instanceId:   '1',
+                instanceName: 'bar',
+                databaseId:   '2',
+                databaseName: 'foo',
+                id:           '3',
+                name:         'baz'
+            });
+
+            expect(this.model.isEqual(other)).toBeTruthy();
+
+            other.set({ instanceId: '5' });
+
+            expect(this.model.isEqual(other)).toBeFalsy();
         });
     });
 });

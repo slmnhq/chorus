@@ -19,7 +19,7 @@
             var sandboxSchema = this.model.sandbox() && this.model.sandbox().schema()
             return {
                 schemaName : defaultSchema && defaultSchema.canonicalName(),
-                defaultSchemaIsSandbox : (defaultSchema === sandboxSchema)
+                defaultSchemaIsSandbox : (defaultSchema && defaultSchema.isEqual(sandboxSchema))
             };
         },
 

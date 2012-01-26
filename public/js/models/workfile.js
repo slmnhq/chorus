@@ -45,8 +45,11 @@
             if (versionInfo.schemaId) {
                 return new ns.models.Schema({
                     instanceId: versionInfo.instanceId,
+                    instanceName: versionInfo.instanceName,
                     databaseId: versionInfo.databaseId,
-                    schemaId: versionInfo.schemaId
+                    databaseName: versionInfo.databaseName,
+                    id: versionInfo.schemaId,
+                    name: versionInfo.schemaName
                 });
             } else {
                 return this.sandbox() && this.sandbox().schema();

@@ -29,16 +29,22 @@ describe("chorus.models.Workfile", function() {
             beforeEach(function() {
                 _.extend(this.model.get("versionInfo"), {
                     instanceId: '51',
+                    instanceName: "ned",
                     databaseId: '52',
-                    schemaId: '53'
+                    databaseName: "rob",
+                    schemaId: '53',
+                    schemaName: "louis"
                 });
             });
 
             it("returns that schema", function() {
                 var schema = this.model.defaultSchema();
                 expect(schema.get("instanceId")).toBe('51');
+                expect(schema.get("instanceName")).toBe('ned');
                 expect(schema.get("databaseId")).toBe('52');
-                expect(schema.get("schemaId")).toBe('53');
+                expect(schema.get("databaseName")).toBe('rob');
+                expect(schema.get("id")).toBe('53');
+                expect(schema.get("name")).toBe('louis');
             });
         });
 

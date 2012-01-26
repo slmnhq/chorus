@@ -36,6 +36,12 @@
 
         canonicalName : function() {
             return [this.get("instanceName"), this.get("databaseName"), this.get("name")].join(" / ");
+        },
+
+        isEqual : function(other) {
+            return _.all(["instanceId", "instanceName", "databaseId", "databaseName", "id", "name"], function(attr) {
+                return this.get(attr) === other.get(attr)
+            }, this)
         }
     }, {
         DEFAULT_NAME: "public"

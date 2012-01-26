@@ -57,7 +57,28 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 });
             });
 
-            describe("when the workspace has a sandbox, and hasn't been executed in another schema'", function() {
+            describe("when the workspace has a sandbox, and hasn't been executed", function() {
+                it("shows 'Run in the workspace sandbox'", function() {
+                    var runLink = this.qtipElement.find(".run_default");
+                    expect(runLink).toContainTranslation("workfile.content_details.run_workspace_sandbox")
+                    expect(runLink).toBe("a");
+                });
+            });
+
+            describe("when the workfile was last executed in its workspace's sandbox", function() {
+                beforeEach(function() {
+                    _.extend(this.model.get("versionInfo"), {
+                        databaseId: '3',
+                        databaseName: "db",
+                        instanceId: '2',
+                        instanceName: "instance",
+                        schemaId: '4',
+                        schemaName: "schema"
+                    });
+                    this.view.render();
+                    this.view.$(".run_file").click();
+                });
+
                 it("shows 'Run in the workspace sandbox'", function() {
                     var runLink = this.qtipElement.find(".run_default");
                     expect(runLink).toContainTranslation("workfile.content_details.run_workspace_sandbox")
