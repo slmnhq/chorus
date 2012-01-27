@@ -97,7 +97,6 @@ describe("chorus.views.WorkfileShowSidebar", function() {
                         this.view.$(".database_column_list input.search").val("searching for a column...");
                     });
 
-
                     it("hides the metadata list", function() {
                         expect(this.view.$(".database_dataset_list")).toHaveClass("hidden");
                     });

@@ -19,7 +19,7 @@
 
         setTableOrView: function(tableOrView) {
             this.resource = this.collection = tableOrView.columns();
-            this.collection.fetch();
+            this.collection.fetchAll();
             this.collection.bind("reset", this.render, this);
         },
 

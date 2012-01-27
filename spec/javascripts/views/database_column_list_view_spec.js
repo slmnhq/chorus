@@ -16,7 +16,7 @@ describe("chorus.views.DatabaseColumnList", function() {
             beforeEach(function() {
                 this.databaseView = fixtures.databaseView({ name: "brian_the_view", schemaName: "john_the_schema" });
                 this.view.trigger("datasetSelected", this.databaseView);
-                this.server.completeFetchFor(this.databaseView.columns(), [fixtures.databaseColumn()]);
+                this.server.completeFetchAllFor(this.databaseView.columns(), [fixtures.databaseColumn()]);
             });
 
             it("renders successfully", function() {
@@ -37,7 +37,7 @@ describe("chorus.views.DatabaseColumnList", function() {
             context("when the fetch completes", function() {
                 context("when there are no columns", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.table.columns(), []);
+                        this.server.completeFetchAllFor(this.table.columns(), []);
                     });
 
                     it("should show the 'no columns found' message", function() {
@@ -47,7 +47,7 @@ describe("chorus.views.DatabaseColumnList", function() {
 
                 context("when there are columns", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.table.columns(), [
+                        this.server.completeFetchAllFor(this.table.columns(), [
                             fixtures.databaseColumn({name: "column_1"}),
                             fixtures.databaseColumn({name: "column_2"})
                         ]);

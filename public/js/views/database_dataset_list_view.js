@@ -14,8 +14,8 @@
             this.views  = this.schema.views();
             this.tables.bind("reset", datasetFetchComplete, this);
             this.views.bind("reset", datasetFetchComplete, this);
-            this.tables.fetch();
-            this.views.fetch();
+            this.tables.fetchAll();
+            this.views.fetchAll();
 
             function datasetFetchComplete(tableOrViewSet) {
                 this.collection.add(tableOrViewSet.models);

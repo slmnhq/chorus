@@ -43,31 +43,38 @@ _.extend(sinon.fakeServer, {
         return _.last(this.destroys());
     },
 
-    lastFetchFor: function(model) {
+    lastFetchFor: function(model, options) {
         return _.last(_.filter(this.fetches(), function(potentialRequest) {
-           return (new URI(potentialRequest.url)).equals(model.url());
+           return (new URI(potentialRequest.url)).equals(model.url(options));
         }));
     },
 
-    completeFetchFor: function(model, results) {
+    completeFetchFor: function(model, results, options, pagination) {
         results = results || model.attributes;
-        var fetch = this.lastFetchFor(model)
+        var fetch = this.lastFetchFor(model, options)
         if(fetch) {
-            fetch.succeed(results);
+            fetch.succeed(results, pagination);
         } else {
             throw "No fetch found for " + model.url() + ". Found fetches for: [" + _.pluck(this.fetches(), 'url').join(', ') + "]";
         }
     },
 
-    completeAllFetches: function() {
+    completeFetchAllFor: function(model, results, options, pagination) {
+        options = options || {page: 1, rows: 1000};
+        pagination = pagination || {page: 1, total: 1, records: 1};
+        this.completeFetchFor(model, results, options, pagination);
+    },
+
+    completeAllFetches: function(pagination) {
+        pagination = pagination || {page: 1, total: 1, records: 1};
         _.each(this.fetches(), function(request) {
-            request.succeed([]);
+            request.succeed([], pagination);
         });
     }
 });
 
 _.extend(sinon.FakeXMLHttpRequest.prototype, {
-    succeed: function(models) {
+    succeed: function(models, pagination) {
         if (!_.isArray(models)) models = [models];
         var resource = _.map(models, function(model) {
             if (model instanceof Backbone.Model) {
@@ -82,7 +89,8 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
             { 'Content-Type': 'application/json' },
             JSON.stringify({
                 status: "ok",
-                resource: resource
+                resource: resource,
+                pagination: pagination
             })
         );
     },
