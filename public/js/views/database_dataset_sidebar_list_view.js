@@ -18,7 +18,7 @@
             this.views.fetchAll();
 
             function datasetFetchComplete(tableOrViewSet) {
-                this.collection.add(tableOrViewSet.models);
+                this.collection.add(tableOrViewSet.models, {silent: true});
                 this.render();
             }
         },

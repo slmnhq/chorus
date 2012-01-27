@@ -9,7 +9,7 @@
 
         _add : function(model, options) {
             model = this._super("_add", arguments);
-            model.set({"schemaName": this.attributes.schemaName});
+            model.set({"schemaName": this.attributes.schemaName}, {silent: true});
             return model;
         }
 

@@ -12,8 +12,8 @@
 
         _add : function(model, options) {
             model = this._super("_add", arguments);
-            model.set({"schemaName": this.attributes.schemaName});
-            model.set({"parentName": this.attributes.tableName || this.attributes.viewName});
+            model.set({"schemaName": this.attributes.schemaName}, {silent: true});
+            model.set({"parentName": this.attributes.tableName || this.attributes.viewName}, {silent: true});
             return model;
         }
 
