@@ -49,7 +49,8 @@
                 collection : this.columnSet,
                 model : this.workspace,
                 title : this.objectName,
-                imageUrl : "images/large_table.png"
+                imageUrl : "images/large_table.png",
+                contentDetails : new chorus.views.DatasetContentDetails({ collection : this.columnSet })
             });
 
 //            this.sidebar = new chorus.views.DatasetListSidebar();

@@ -20,6 +20,7 @@
         'database_dataset_sidebar_list',
         'dataset_list',
         'dataset_list_sidebar',
+        'dataset_content_details',
         'default_content_header',
         'header',
         'image_upload',
