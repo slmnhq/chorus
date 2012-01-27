@@ -1,12 +1,12 @@
 describe("chorus.models.Dataset", function() {
     beforeEach(function() {
-          this.dataset = fixtures.datasetChorusView({
-              workspace : {
-                  id : "44"
-              },
-              objectType : "foo",
-              objectName : "mama"
-          });
+        this.dataset = fixtures.datasetChorusView({
+            workspace : {
+                id : "44"
+            },
+            objectType : "foo",
+            objectName : "mama"
+        });
     })
 
     it("creates the correct showUrl", function() {
@@ -44,6 +44,36 @@ describe("chorus.models.Dataset", function() {
             it("works for " + type, function() {
                 expect(new chorus.models.Dataset({ objectType : type }).metaType()).toBe(str)
             });
+        })
+    })
+
+    describe("iconFor", function() {
+        var expectedMap = {
+            "CHORUS_VIEW" : {
+                "" : "view_large.png"
+            },
+
+            "SOURCE_TABLE" : {
+                "BASE_TABLE" : "source_table_large.png",
+                "EXTERNAL_TABLE" : "source_table_large.png",
+                "MASTER_TABLE" : "source_table_large.png",
+                "VIEW" : "source_view_large.png"
+            },
+
+            "SANDBOX_TABLE" : {
+                "BASE_TABLE" : "table_large.png",
+                "EXTERNAL_TABLE" : "table_large.png",
+                "MASTER_TABLE" : "table_large.png",
+                "VIEW" : "view_large.png"
+            }
+        }
+
+        _.each(expectedMap, function(subMap, type) {
+            _.each(subMap, function(filename, objectType) {
+                it("works for type " + type + " and objectType " + objectType, function() {
+                    expect(new chorus.models.Dataset({ type : type, objectType : objectType}).iconUrl()).toBe("/images/" + expectedMap[type][objectType]);
+                })
+            })
         })
     })
 })
