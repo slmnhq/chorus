@@ -31,7 +31,7 @@ describe("chorus.views.DatabaseColumnList", function() {
             });
 
             it("should fetch the columns for the table", function() {
-                expect(this.server.lastFetchFor(this.table.columns())).not.toBeUndefined();
+                expect(this.server.lastFetchFor(this.table.columns(), {page: 1, rows: 1000})).not.toBeUndefined();
             });
 
             context("when the fetch completes", function() {
