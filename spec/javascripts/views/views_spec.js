@@ -655,17 +655,18 @@ describe("chorus.views.base", function() {
 
                 context("when there are requiredResources", function() {
                     beforeEach(function() {
-                        this.view.requiredResources = ['asdf'];
-                        spyOn(this.view, 'allRequiredResourcesLoaded');
+                        this.resource = fixtures.user();
+                        this.view.requiredResources.push(this.resource);
+                        spyOn(this.view.requiredResources, 'allLoaded');
                     })
 
                     it("returns true if the resources are not yet loaded", function() {
-                        this.view.allRequiredResourcesLoaded.andReturn(false);
+                        this.view.requiredResources.allLoaded.andReturn(false);
                         expect(this.view.displayLoadingSection()).toBeTruthy();
                     })
 
                     it("returns false if the resources are loaded", function() {
-                        this.view.allRequiredResourcesLoaded.andReturn(true);
+                        this.view.requiredResources.allLoaded.andReturn(true);
                         expect(this.view.displayLoadingSection()).toBeFalsy();
                     })
                 })

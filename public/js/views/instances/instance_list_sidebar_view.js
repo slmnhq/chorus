@@ -12,11 +12,7 @@
 
         setup : function() {
             this.bind("instance:selected", this.setInstance, this);
-            this.instance = this.model;
             this.tabControl = new chorus.views.TabControl([{name: 'activity', selector: ".activity_list"}, {name: 'configuration', selector: ".configuration_detail"}]);
-            if(this.instance) {
-                this.fetchInstanceData();
-            }
         },
 
         additionalContext : function() {
@@ -39,7 +35,11 @@
             }
         },
 
-        fetchInstanceData : function() {
+        setInstance : function(instance) {
+            this.requiredResources.reset();
+            
+            this.resource = this.instance = this.model = instance;
+
             this.instance.activities().fetch();
             this.requiredResources.push(this.instance)
             if(!this.instance.loaded) {
@@ -59,6 +59,9 @@
             var instanceUsage = this.instance.usage();
             instanceUsage.fetch();
             this.requiredResources.push(instanceUsage)
+
+            this.resource.bind("change", this.render, this);
+            this.render();
         },
 
         canEditInstance : function() {

@@ -2,7 +2,7 @@ describe("chorus.views.InstanceListSidebar", function() {
     beforeEach(function() {
     });
 
-    context("when no instance is provided", function() {
+    context("when no instance is selected", function() {
         beforeEach(function() {
             this.view = new chorus.views.InstanceListSidebar();
             this.view.render();
@@ -15,7 +15,7 @@ describe("chorus.views.InstanceListSidebar", function() {
         });
     });
 
-    context("when an instance is provided", function() {
+    context("when an instance is selected", function() {
         beforeEach(function() {
             this.instance = fixtures.instance({instanceProvider: "Greenplum", name : "Harry's House of Glamour"})
             spyOn(this.instance, 'fetch').andCallThrough();
@@ -26,10 +26,9 @@ describe("chorus.views.InstanceListSidebar", function() {
             spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub)
 
             spyOn(chorus.views.Base.prototype, "render").andCallThrough();
-            this.view = new chorus.views.InstanceListSidebar({model: this.instance});
+            this.view = new chorus.views.InstanceListSidebar();
+            this.view.trigger("instance:selected", this.instance);
             $('#jasmine_content').append(this.view.el);
-
-            this.view.render();
         });
 
         it("fetches the activities", function() {
@@ -41,7 +40,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             expect(this.view.requiredResources).toContain(this.instance.usage());
         });
 
-        it("fetches the accounts for the instance", function() {
+        it("fetches the accounts for the instance and adds them to the required resources", function() {
             expect(this.instance.accounts().fetch).toHaveBeenCalled();
         });
 
@@ -150,19 +149,6 @@ describe("chorus.views.InstanceListSidebar", function() {
                     expect(this.view.render).toHaveBeenCalled();
                 })
             });
-
-            context("when activity is clicked", function() {
-                beforeEach(function() {
-                    this.view.$(".tab_control li.configuration").click();
-                    expect(this.view.$(".activity_list")).not.toBeVisible();
-                    this.view.$(".tab_control li.activity").click();
-                })
-
-                it("shows activity", function() {
-                    expect(this.view.$(".activity_list")).toBeVisible();
-                    expect(this.view.$(".configuration_detail")).not.toBeVisible();
-                })
-            })
 
             context("when configuration is clicked", function() {
                 beforeEach(function() {

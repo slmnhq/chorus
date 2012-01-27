@@ -39,20 +39,19 @@
 
         _configure: function(options) {
             this._super('_configure', arguments);
-            this.requiredResources = options.requiredResources || [];
-        },
 
-        allRequiredResourcesLoaded: function() {
-            return _.all(this.requiredResources, function(resource) {
-                return resource.loaded;
-            });
+            this.requiredResources = new ns.RequiredResources();
+            this.requiredResources.bind('add', function(resource) {
+                resource.bindOnce('loaded', this.verifyResourcesLoaded, this);
+            }, this);
+            this.requiredResources.reset(options.requiredResources);
         },
 
         verifyResourcesLoaded: function(preventRender) {
             if(this.requiredResources.length == 0) {
                 return;
             }
-            if(this.allRequiredResourcesLoaded()) {
+            if(this.requiredResources.allLoaded()) {
                 this.resourcesLoaded();
 
                 if(!preventRender) {
@@ -182,9 +181,6 @@
                     this.bindings.add(this.resource, "change reset add remove", this.render);
                 }
             }
-            _.each(this.requiredResources, _.bind(function(resource){
-                resource.bindOnce('loaded', this.verifyResourcesLoaded, this);
-            },this));
         },
 
         context: function context() {
@@ -212,7 +208,7 @@
                 return false;
             }
             if(this.requiredResources.length > 0) {
-                return !this.allRequiredResourcesLoaded();
+                return !this.requiredResources.allLoaded();
             } else {
                 return this.resource && !this.resource.loaded;
             }
