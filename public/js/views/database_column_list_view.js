@@ -7,6 +7,13 @@
             "click li" : "selectColumn"
         },
 
+        setup : function() {
+            this.collection.comparator = function(column) {
+                return parseInt(column.get("ordinalPosition"))
+            };
+            this.collection.sort();
+        },
+
         postRender : function() {
             this.$("li:eq(0)").click();
         },
