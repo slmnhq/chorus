@@ -1,8 +1,14 @@
-;(function(ns){
+;
+(function(ns) {
     ns.models.Dataset = ns.models.Base.extend({
         showUrlTemplate : function() {
-            var urlType = this.get("objectType").match(/TABLE/i) ? 'table' : 'view';
-            return "workspaces/" + this.get("workspace").id + "/"+ urlType + "/{{objectName}}";
+            return [
+                "workspaces",
+                this.get("workspace").id,
+                this.get("type").toLowerCase(),
+                this.get("objectType").toLowerCase(),
+                this.get("objectName")
+            ].join("/");
         },
 
         statistics : function() {
@@ -16,4 +22,5 @@
             });
         }
     });
-})(chorus);
+})
+    (chorus);

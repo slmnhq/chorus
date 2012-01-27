@@ -1,51 +1,20 @@
 describe("chorus.models.Dataset", function() {
-    describe("#showUrl", function() {
-        context("when the dataset is a table", function() {
-            beforeEach(function() {
-                this.dataset = fixtures.datasetSandboxTable({
-                    workspace : {
-                        id : "33"
-                    },
-                    objectName : "partyTable"
-                });
-            })
+    beforeEach(function() {
+          this.dataset = fixtures.datasetChorusView({
+              workspace : {
+                  id : "44"
+              },
+              objectType : "foo",
+              objectName : "mama"
+          });
+    })
 
-            it("returns the right url", function() {
-                expect(this.dataset.showUrl()).toBe("#/workspaces/33/table/partyTable");
-            })
-        })
-
-        context("when the dataset is a view", function() {
-            beforeEach(function() {
-                this.dataset = fixtures.datasetChorusView({
-                    workspace : {
-                        id : "33"
-                    },
-                    objectName : "partyView"
-                });
-            })
-
-            it("returns the right url", function() {
-                expect(this.dataset.showUrl()).toBe("#/workspaces/33/view/partyView");
-            })
-        })
-
-        it("compares the type case-insensitively", function() {
-            this.dataset = fixtures.datasetSandboxTable({
-                workspace : {
-                    id : "33"
-                },
-                objectName : "partyTable",
-                objectType : "table"
-            });
-
-            expect(this.dataset.showUrl()).toBe("#/workspaces/33/table/partyTable");
-        })
+    it("creates the correct showUrl", function() {
+        expect(this.dataset.showUrl()).toBe("#/workspaces/44/chorus_view/foo/mama");
     })
 
     describe("#statistics", function() {
         beforeEach(function() {
-            this.dataset = fixtures.datasetChorusView()
             this.datasetProperties = this.dataset.statistics()
         })
 

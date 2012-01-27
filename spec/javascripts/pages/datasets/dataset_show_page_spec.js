@@ -17,7 +17,7 @@ describe("chorus.pages.DatasetShowPage", function() {
             schemaName: this.workspace.get("sandboxInfo").schemaName,
             tableName: "table"
         });
-        this.page = new chorus.pages.DatasetShowPage(this.workspace.get("id"), "table", this.columnSet.attributes.tableName);
+        this.page = new chorus.pages.DatasetShowPage(this.workspace.get("id"), "SANDBOX_TABLE", "BASE_TABLE", this.columnSet.attributes.tableName);
     })
 
     describe("#initialize", function() {
@@ -39,6 +39,16 @@ describe("chorus.pages.DatasetShowPage", function() {
                 beforeEach(function() {
                     spyOn(this.page, "postRender");
                     this.server.lastFetch().succeed(this.columnSet.attributes)
+                })
+
+                it("creates the sidebar", function() {
+                    expect(this.page.sidebar).toBeDefined();
+                    expect(this.page.sidebar.resource.get("instance").id).toBe("5");
+                    expect(this.page.sidebar.resource.get("databaseName")).toBe("db");
+                    expect(this.page.sidebar.resource.get("schemaName")).toBe("schema");
+                    expect(this.page.sidebar.resource.get("objectName")).toBe("table");
+                    expect(this.page.sidebar.resource.get("objectType")).toBe("BASE_TABLE");
+                    expect(this.page.sidebar.resource.get("type")).toBe("SANDBOX_TABLE");
                 })
 
                 it("renders", function() {

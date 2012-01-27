@@ -11,6 +11,13 @@
             this.$("li:eq(0)").click();
         },
 
+        collectionModelContext : function(model) {
+            return {
+                typeClass : model.humanType(),
+                typeString : t("data_types." + model.humanType())
+            }
+        },
+
         selectColumn : function(e) {
             this.$("li").removeClass("selected");
             var selectedColumn = $(e.target).closest("li");

@@ -1,7 +1,7 @@
 describe("chorus.views.DatabaseColumnList", function() {
     describe("#render", function() {
         beforeEach(function() {
-            this.collection = fixtures.databaseColumnSet([], { name : "column_name", comment : "column comment" });
+            this.collection = fixtures.databaseColumnSet([], { name : "column_name", comment : "column comment", typeCategory: "WHOLE_NUMBER" });
             this.view = new chorus.views.DatabaseColumnList({collection: this.collection});
             this.view.render();
         });
@@ -16,6 +16,11 @@ describe("chorus.views.DatabaseColumnList", function() {
 
         it("shows the comment for each column", function() {
             expect(this.view.$("li:eq(0) .summary")).toHaveText("column comment");
+        })
+
+        it("shows the type for each column", function() {
+            expect(this.view.$("li:eq(0) .type").text().trim()).toMatchTranslation("data_types.numeric")
+            expect(this.view.$("li:eq(0) .type")).toHaveClass("numeric")
         })
         
         describe("clicking on a list item", function() {

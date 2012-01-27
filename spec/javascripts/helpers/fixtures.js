@@ -1262,7 +1262,8 @@
             databaseColumn: function(overrides) {
                 var id = this.nextId().toString();
                 var attributes = _.extend({
-                    name : "column_name"
+                    name : "column_name",
+                    typeCategory : "WHOLE_NUMBER"
                 }, overrides);
                 return new chorus.models.DatabaseColumn(attributes);
             },

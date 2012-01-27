@@ -21,4 +21,25 @@ describe("chorus.models.DatabaseColumn", function() {
             })
         })
     })
+
+    describe("#humanType", function() {
+        var expectedTypeMap = {
+            "WHOLE_NUMBER" : "numeric",
+            "REAL_NUMBER" : "numeric",
+            "STRING" : "string",
+            "LONG_STRING" : "string",
+            "BINARY" : "binary",
+            "BOOLEAN" : "boolean",
+            "DATE" : "date",
+            "TIME" : "time",
+            "DATETIME" : "date_time",
+            "OTHER" : "other"
+        }
+
+        _.each(expectedTypeMap, function(str, type) {
+            it("works for " + type, function() {
+                expect(new chorus.models.DatabaseColumn({ typeCategory : type }).humanType()).toBe(str)
+            });
+        })
+    })
 });
