@@ -31,4 +31,19 @@ describe("chorus.models.Dataset", function() {
             expect(this.datasetProperties.get('objectName')).toBe(this.dataset.get("objectName"))
         })
     })
+
+    describe("#meta_type", function() {
+        var expectedTypeMap = {
+            "BASE_TABLE" : "table",
+            "VIEW" : "view",
+            "EXTERNAL_TABLE" : "table",
+            "MASTER_TABLE" : "table"
+        }
+
+        _.each(expectedTypeMap, function(str, type) {
+            it("works for " + type, function() {
+                expect(new chorus.models.Dataset({ objectType : type }).metaType()).toBe(str)
+            });
+        })
+    })
 })

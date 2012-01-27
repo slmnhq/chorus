@@ -26,35 +26,7 @@
         },
 
         fetchColumnSet : function() {
-            var options = {
-                instanceId : this.workspace.sandbox().get("instanceId"),
-                databaseName : this.workspace.sandbox().get("databaseName"),
-                schemaName : this.workspace.sandbox().get("schemaName")
-
-            };
-
-            if (this.datasetType.match(/table/i)) {
-                options.tableName = this.objectName;
-            } else {
-                options.viewName = this.objectName;
-            }
-            this.columnSet = new chorus.collections.DatabaseColumnSet([], options);
-            this.columnSet.bind("loaded", this.columnSetFetched, this);
-            this.columnSet.fetchAll();
-        },
-
-        columnSetFetched : function() {
-            this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
-            this.mainContent = new chorus.views.MainContentList({
-                modelClass : "DatabaseColumn",
-                collection : this.columnSet,
-                model : this.workspace,
-                title : this.objectName,
-                imageUrl : "images/large_table.png",
-                contentDetails : new chorus.views.DatasetContentDetails({ collection : this.columnSet })
-            });
-
-            var dataset = new chorus.models.Dataset({
+            this.dataset = new chorus.models.Dataset({
                 instance : { id : this.workspace.sandbox().get("instanceId") },
                 databaseName : this.workspace.sandbox().get("databaseName"),
                 schemaName : this.workspace.sandbox().get("schemaName"),
@@ -63,8 +35,34 @@
                 objectName : this.objectName
             });
 
+
+            var options = {
+                instanceId : this.workspace.sandbox().get("instanceId"),
+                databaseName : this.workspace.sandbox().get("databaseName"),
+                schemaName : this.workspace.sandbox().get("schemaName")
+            };
+
+            options[this.dataset.metaType() + "Name"] = this.objectName;
+
+            this.columnSet = new chorus.collections.DatabaseColumnSet([], options);
+            this.columnSet.bind("loaded", this.columnSetFetched, this);
+            this.columnSet.fetchAll();
+        },
+
+        columnSetFetched : function() {
+
+            this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
+            this.mainContent = new chorus.views.MainContentList({
+                modelClass : "DatabaseColumn",
+                collection : this.columnSet,
+                model : this.workspace,
+                title : this.objectName,
+                imageUrl : "images/" +  this.dataset.metaType() + "_large.png",
+                contentDetails : new chorus.views.DatasetContentDetails({ collection : this.columnSet })
+            });
+
             this.sidebar = new chorus.views.DatasetListSidebar();
-            this.sidebar.setDataset(dataset);
+            this.sidebar.setDataset(this.dataset);
 
             this.render();
 

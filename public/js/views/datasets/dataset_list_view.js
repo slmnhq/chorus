@@ -12,12 +12,8 @@
 
             if (type == 'CHORUS_VIEW') {
                 return "/images/view_large.png";
-            } else if (type == "SOURCE_TABLE") {
-                return "/images/source_large.png";
-            } else if (type == "SANDBOX_TABLE") {
-                return "/images/table_large.png"
             } else {
-                return "/images/table_large.png"
+                return "/images/" + model.metaType() + "_large.png";
             }
         },
 

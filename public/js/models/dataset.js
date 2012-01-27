@@ -20,6 +20,16 @@
                 objectType : this.get("objectType"),
                 objectName : this.get("objectName")
             });
+        },
+        metaType : function() {
+            return ns.models.Dataset.metaTypeMap[this.get("objectType")]
+        }
+    }, {
+        metaTypeMap : {
+            "BASE_TABLE" : "table",
+            "VIEW" : "view",
+            "EXTERNAL_TABLE" : "table",
+            "MASTER_TABLE" : "table"
         }
     });
 })
