@@ -30,7 +30,7 @@ class DummyMiddleware
   def call(env)
     request = Rack::Request.new(env)
 
-    if request.path =~ /\/edc\/.+image/
+    if request.path =~ /\/edc\/.*image/
       headers = {
           "Content-Type" => "image/jpeg"
       }
@@ -41,6 +41,7 @@ class DummyMiddleware
       }
       [200, headers, []]
     else
+      puts "delegating for #{request.path}"
       @app.call(env)
     end
   end
