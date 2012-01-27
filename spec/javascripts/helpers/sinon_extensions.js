@@ -45,7 +45,7 @@ _.extend(sinon.fakeServer, {
 
     lastFetchFor: function(model) {
         return _.last(_.filter(this.fetches(), function(potentialRequest) {
-           return (new URI(potentialRequest.url)).equals(model.url());
+           return (new URI(potentialRequest.url)).equals(model.url( {method: 'read'} ));
         }));
     },
 

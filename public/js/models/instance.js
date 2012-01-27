@@ -91,6 +91,13 @@
 
         isShared : function() {
             return !(_.isEmpty(this.get('sharedAccount')));
+        },
+
+        usage : function() {
+            if(!this.instanceUsage) {
+                this.instanceUsage = new chorus.models.InstanceUsage({ instanceId: this.get('id')})
+            }
+            return this.instanceUsage
         }
     }, {
         aurora : function() {

@@ -3,6 +3,7 @@
     ns.views.InstanceListSidebar = chorus.views.Sidebar.extend({
 
         className : "instance_list_sidebar",
+        useLoadingSection: true,
 
         subviews : {
             '.activity_list' : 'activityList',
@@ -40,17 +41,24 @@
 
         fetchInstanceData : function() {
             this.instance.activities().fetch();
+            this.requiredResources.push(this.instance)
             if(!this.instance.loaded) {
                 this.instance.fetch();
             }
 
             this.instance.accounts().fetch();
+            this.requiredResources.push(this.instance.accounts())
             this.instance.accounts().bind("reset", this.render, this);
 
             var account = this.instance.accountForCurrentUser();
+            this.requiredResources.push(account)
             account.bind("change", this.render, this);
             account.bind("fetchFailed", this.render, this);
             account.fetch();
+
+            var instanceUsage = this.instance.usage();
+            instanceUsage.fetch();
+            this.requiredResources.push(instanceUsage)
         },
 
         canEditInstance : function() {

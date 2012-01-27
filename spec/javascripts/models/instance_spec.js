@@ -170,6 +170,24 @@ describe("chorus.models.Instance", function() {
         });
     });
 
+    describe("#usage", function() {
+        beforeEach(function() {
+            this.instanceUsage = this.instance.usage();
+        })
+
+        it("returns an InstanceUsage object", function() {
+            expect(this.instanceUsage).toBeA(chorus.models.InstanceUsage);
+        });
+
+        it("sets the instance id", function() {
+            expect(this.instanceUsage.attributes.instanceId).toBe(this.instance.get('id'));
+        });
+
+        it("memoizes", function() {
+            expect(this.instanceUsage).toBe(this.instance.usage());
+        });
+    })
+
     describe("validations", function() {
         context("when registering an existing instance", function() {
             beforeEach(function() {
