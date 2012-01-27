@@ -30,7 +30,7 @@ class DummyMiddleware
   def call(env)
     request = Rack::Request.new(env)
 
-    if request.path =~ /\/edc\/.*image/
+    if request.path =~ /\.(png|gif|jpg)/ || request.path =~ /\/edc\/.*image/
       headers = {
           "Content-Type" => "image/jpeg"
       }
@@ -41,7 +41,6 @@ class DummyMiddleware
       }
       [200, headers, []]
     else
-      puts "delegating for #{request.path}"
       @app.call(env)
     end
   end
@@ -62,6 +61,10 @@ module Jasmine
       map(config.root_path)    { run Rack::File.new(config.project_root) }
 
       map("/edc") do
+        run DummyMiddleware.new(self)
+      end
+
+      map("/images") do
         run DummyMiddleware.new(self)
       end
 
