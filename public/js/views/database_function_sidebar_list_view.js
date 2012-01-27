@@ -1,5 +1,5 @@
 (function($, ns) {
-    ns.views.DatabaseFunctionListSidebar = ns.views.DatabaseSidebarList.extend({
+    ns.views.DatabaseFunctionSidebarList = ns.views.DatabaseSidebarList.extend({
         className : "database_function_sidebar_list",
         useLoadingSection: true,
 

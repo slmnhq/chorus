@@ -1,9 +1,9 @@
 (function($, ns) {
-    ns.views.DatabaseDatasetListSidebar = ns.views.DatabaseSidebarList.extend({
+    ns.views.DatabaseDatasetSidebarList = ns.views.DatabaseSidebarList.extend({
         className : "database_dataset_sidebar_list",
         useLoadingSection : true,
 
-        events: _.extend({}, ns.views.DatabaseList.prototype.events, {
+        events: _.extend({}, ns.views.DatabaseSidebarList.prototype.events, {
             "click li a" : "datasetSelected"
         }),
 

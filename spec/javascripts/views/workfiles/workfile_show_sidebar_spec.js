@@ -66,7 +66,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             });
 
             it("renders the functions subview", function() {
-                expect(this.view.functionList).toBeA(chorus.views.DatabaseFunctionListSidebar);
+                expect(this.view.functionList).toBeA(chorus.views.DatabaseFunctionSidebarList);
             });
 
             it("renders selected version", function() {

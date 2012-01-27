@@ -38,7 +38,7 @@ describe("chorus.pages.DatasetShowPage", function() {
             describe("when the columnSet fetch completes", function() {
                 beforeEach(function() {
                     spyOn(this.page, "postRender");
-                    this.server.lastFetch().succeed(this.columnSet.attributes)
+                    this.server.lastFetch().succeed(this.columnSet.attributes, { page: "1", total: "1" })
                 })
 
                 it("creates the sidebar", function() {
@@ -61,7 +61,7 @@ describe("chorus.pages.DatasetShowPage", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace);
-            this.server.lastFetch().succeed(this.columnSet.attributes)
+            this.server.lastFetch().succeed(this.columnSet.attributes, { page: "1", total: "1" })
         })
 
         describe("breadcrumbs", function() {

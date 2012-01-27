@@ -1,4 +1,4 @@
-describe("chorus.views.DatabaseDatasetListSidebar", function() {
+describe("chorus.views.DatabaseDatasetSidebarList", function() {
     beforeEach(function() {
         this.sandbox = fixtures.sandbox();
         this.schema = this.sandbox.schema();
@@ -6,7 +6,7 @@ describe("chorus.views.DatabaseDatasetListSidebar", function() {
         spyOn(this.schema.views(), "fetchAll").andCallThrough();
         spyOn(this.schema.tables(), "fetchAll").andCallThrough();
 
-        this.view = new chorus.views.DatabaseDatasetListSidebar({sandbox: this.sandbox});
+        this.view = new chorus.views.DatabaseDatasetSidebarList({sandbox: this.sandbox});
     });
 
     it("should fetch the list of tables", function() {
