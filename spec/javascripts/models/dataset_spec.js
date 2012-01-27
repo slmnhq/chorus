@@ -4,6 +4,11 @@ describe("chorus.models.Dataset", function() {
             workspace : {
                 id : "44"
             },
+            instance : {
+                id : "45"
+            },
+            databaseName: "whirling_tops",
+            schemaName: "diamonds",
             objectType : "foo",
             objectName : "mama"
         });
@@ -12,6 +17,14 @@ describe("chorus.models.Dataset", function() {
     it("creates the correct showUrl", function() {
         expect(this.dataset.showUrl()).toBe("#/workspaces/44/chorus_view/foo/mama");
     })
+
+    it("initializes its 'entityId' correctly", function() {
+        expect(this.dataset.entityId).toBe("45|whirling_tops|diamonds|mama");
+    });
+
+    it("initializes its 'entityId' correctly", function() {
+        expect(this.dataset.entityId).toBe("45|whirling_tops|diamonds|mama");
+    });
 
     describe("#statistics", function() {
         beforeEach(function() {
@@ -42,7 +55,7 @@ describe("chorus.models.Dataset", function() {
 
         _.each(expectedTypeMap, function(str, type) {
             it("works for " + type, function() {
-                expect(new chorus.models.Dataset({ objectType : type }).metaType()).toBe(str)
+                expect(fixtures.datasetSandboxTable({ objectType : type }).metaType()).toBe(str)
             });
         })
     })
@@ -71,7 +84,7 @@ describe("chorus.models.Dataset", function() {
         _.each(expectedMap, function(subMap, type) {
             _.each(subMap, function(filename, objectType) {
                 it("works for type " + type + " and objectType " + objectType, function() {
-                    expect(new chorus.models.Dataset({ type : type, objectType : objectType}).iconUrl()).toBe("/images/" + expectedMap[type][objectType]);
+                    expect(fixtures.datasetSandboxTable({ type : type, objectType : objectType}).iconUrl()).toBe("/images/" + expectedMap[type][objectType]);
                 })
             })
         })
