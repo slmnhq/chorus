@@ -8,10 +8,18 @@
 
     _.extend(ns.presenters.visualizations.XY.prototype, {
         present: function() {
-            var x = this.options.x;
-            var y = this.options.y;
-            return _.map(this.task.get("result").rows, function(row) {
-                return [row[x], row[y]];
+            var rows = this.task.get("result").rows;
+            var xs = _.pluck(rows, this.options.x);
+            var ys = _.pluck(rows, this.options.y);
+            var data = _.map(rows, function(_row, i) {
+                return { x: xs[i], y: ys[i] };
+            });
+
+            return _.extend(data, {
+                maxX : _.max(xs),
+                maxY : _.max(ys),
+                minX : _.min(xs),
+                minY : _.min(ys)
             });
         }
     });

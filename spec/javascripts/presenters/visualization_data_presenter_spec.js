@@ -25,11 +25,19 @@ describe("chorus.presenters.visualizations", function() {
         it("presents an array of pairs of values from the given x and y columns", function() {
             expect(this.data.length).toBe(5);
 
-            expect(this.data[0]).toEqual([1, 5]);
-            expect(this.data[1]).toEqual([2, 10]);
-            expect(this.data[2]).toEqual([3, 15]);
-            expect(this.data[3]).toEqual([4, 20]);
-            expect(this.data[4]).toEqual([5, 25]);
+            expect(this.data[0]).toEqual({ x: 1, y: 5 });
+            expect(this.data[1]).toEqual({ x: 2, y: 10 });
+            expect(this.data[2]).toEqual({ x: 3, y: 15 });
+            expect(this.data[3]).toEqual({ x: 4, y: 20 });
+            expect(this.data[4]).toEqual({ x: 5, y: 25 });
+        });
+
+        it("has minimum and maximum values for the x and y columns", function() {
+            expect(this.data.minX).toBe(1);
+            expect(this.data.minY).toBe(5);
+
+            expect(this.data.maxX).toBe(5);
+            expect(this.data.maxY).toBe(25);
         });
     });
 

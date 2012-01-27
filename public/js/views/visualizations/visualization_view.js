@@ -12,61 +12,51 @@
             }).present();
 
             var chart = d3.selectAll(this.el).append("svg").
-                attr("class", "chart").
-                attr("height", "300px").
+                attr("class", "chart time_series").
+                attr("height", "500px").
                 attr("width", "100%").
-                // attr("preserveAspectRatio", "none").
                 attr("viewBox", "0 0 100 100");
 
-            var maxX = _.max(_.pluck(data, 0));
-            var maxY = _.max(_.pluck(data, 1));
-            var minX = _.min(_.pluck(data, 0));
-            var minY = _.min(_.pluck(data, 1));
-
-            var x = d3.scale.linear().
-                domain([minX, maxX]).
+            var xScaler = d3.scale.linear().
+                domain([data.minX, data.maxX]).
                 range(["2", "98"]);
-            var y = d3.scale.linear().
-                domain([minY, maxY]).
-                range(["2", "98"]);
+            var yScaler = d3.scale.linear().
+                domain([data.minY, data.maxY]).
+                range(["98", "2"]);
 
             var line = d3.svg.line().
-                x(function(d) { return x(d[0]); }).
-                y(function(d) { return y(d[1]); });
+                x(function(d) { return xScaler(d.x); }).
+                y(function(d) { return yScaler(d.y); });
 
-            var points = _.map(data, function(pair) {
-                return x(pair[0]) + " " + y(pair[1]);
-            }).join(",");
-
-            chart.selectAll("line.xtick").data(x.ticks(10)).enter().
+            chart.selectAll("line.xtick").data(xScaler.ticks(10)).enter().
                 append("line").
                 attr("class", "xtick").
-                attr("x1", x).
-                attr("x2", x).
-                attr("y1", y.range()[0]).
-                attr("y2", y.range()[1]).
-                style("stroke", "#aaa");
-
-            chart.selectAll("line.ytick").data(y.ticks(10)).enter().
+                attr("x1", xScaler).
+                attr("x2", xScaler).
+                attr("y1", yScaler.range()[0]).
+                attr("y2", yScaler.range()[1]);
+            chart.selectAll("line.ytick").data(yScaler.ticks(10)).enter().
                 append("line").
                 attr("class", "ytick").
-                attr("y1", y).
-                attr("y2", y).
-                attr("x1", x.range()[0]).
-                attr("x2", x.range()[1]).
-                style("stroke", "#777");
+                attr("y1", yScaler).
+                attr("y2", yScaler).
+                attr("x1", xScaler.range()[0]).
+                attr("x2", xScaler.range()[1]);
 
-            chart.selectAll("circle").data(data).enter().
-                append("circle").
-                attr("r", 4).
-                attr("cx", function(d) { return x(d[0]); }).
-                attr("cy", function(d) { return y(d[1]); }).
-                style("fill", "black");
+            chart.append("line").
+                attr("class", "yaxis").
+                attr("x1", xScaler.range()[0]).
+                attr("x2", xScaler.range()[0]).
+                attr("y1", yScaler.range()[0]).
+                attr("y2", yScaler.range()[1]);
+            chart.append("line").
+                attr("class", "xaxis").
+                attr("x1", xScaler.range()[0]).
+                attr("x2", xScaler.range()[1]).
+                attr("y1", yScaler.range()[0]).
+                attr("y2", yScaler.range()[0]);
 
-            chart.append("svg:polyline").
-                attr("points", points).
-                style("fill", "none").
-                style("stroke", "blue");
+            chart.append("path").attr("d", line(data));
 
             return this;
         }
