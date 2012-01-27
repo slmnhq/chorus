@@ -38,9 +38,9 @@
                 tabs.push({name: 'database_function_list'});
                 tabs.push({name: "datasets_and_columns"});
 
-                this.functionList = new ns.views.DatabaseFunctionSidebarList({ sandbox: this.model.sandbox() });
-                this.datasetList  = new ns.views.DatabaseDatasetSidebarList({ sandbox: this.model.sandbox() });
-                this.columnList   = new ns.views.DatabaseColumnSidebarList({ sandbox: this.model.sandbox() });
+                this.functionList = new ns.views.DatabaseFunctionSidebarList({ sandbox: this.model.workspace().sandbox() });
+                this.datasetList  = new ns.views.DatabaseDatasetSidebarList({ sandbox: this.model.workspace().sandbox() });
+                this.columnList   = new ns.views.DatabaseColumnSidebarList({ sandbox: this.model.workspace().sandbox() });
 
                 this.datasetList.bind("datasetSelected", function(tableOrView) {
                     this.columnList.trigger("datasetSelected", tableOrView);
