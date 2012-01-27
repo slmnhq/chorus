@@ -14,14 +14,15 @@
                 right: -16px;
                 top: 10px;
                 z-index: 10;
+                line-height: 11px;
                 height: 22px;
-                line-height: 22px;
                 vertical-align: middle;
 
                 .type_name {
                     @include database-column-type;
+                    height: 14px;
+                    display: inline-block;
                     padding: 4px 8px 4px 8px;
-                    line-height: 19px;
                 }
 
                 .left {
