@@ -2,7 +2,7 @@
 (function(ns) {
     ns.dialogs.Base = ns.Modal.extend({
         render: function render() {
-            this.preRender($(this.el));
+            this.preRender();
             
             var header = $("<div class='dialog_header'/>");
             var content = $("<div class='dialog_content'/>");

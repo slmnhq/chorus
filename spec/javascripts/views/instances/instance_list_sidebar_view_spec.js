@@ -1,33 +1,34 @@
 describe("chorus.views.InstanceListSidebar", function() {
     beforeEach(function() {
-        this.view = new chorus.views.InstanceListSidebar();
-        spyOn(this.view, "render").andCallThrough();
-        fixtures.model = "Instance";
     });
 
-    describe("render", function() {
+    context("when no instance is provided", function() {
         beforeEach(function() {
+            this.view = new chorus.views.InstanceListSidebar();
             this.view.render();
         });
 
-        describe("when no instance is selected", function() {
+        describe("render", function() {
             it("should not display instance information", function() {
                 expect(this.view.$(".info")).not.toExist();
             });
         });
     });
 
-    context("when an instance is selected", function() {
+    context("when an instance is provided", function() {
         beforeEach(function() {
-            $('#jasmine_content').append(this.view.el);
-            this.activityViewStub = stubView("OMG I'm the activity list")
-            spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub)
-
             this.instance = fixtures.instance({instanceProvider: "Greenplum", name : "Harry's House of Glamour"})
             spyOn(this.instance, 'fetch');
             spyOn(this.instance.accounts(), 'fetch');
             spyOn(this.instance.activities(), 'fetch');
-            this.view.trigger("instance:selected", this.instance);
+            this.activityViewStub = stubView("OMG I'm the activity list")
+            spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub)
+
+            spyOn(chorus.views.Base.prototype, "render").andCallThrough();
+            this.view = new chorus.views.InstanceListSidebar({model: this.instance});
+            $('#jasmine_content').append(this.view.el);
+
+            this.view.render();
         });
 
         it("displays instance name", function() {
@@ -124,16 +125,6 @@ describe("chorus.views.InstanceListSidebar", function() {
             });
 
         });
-        context("and the selected instance triggers a 'change' event", function() {
-            beforeEach(function() {
-                this.view.render.reset();
-                this.view.resource.trigger("change")
-            })
-
-            it("re-renders", function() {
-                expect(this.view.render).toHaveBeenCalled();
-            })
-        });
 
         context("when the fetched accounts triggers a 'reset' event", function() {
             beforeEach(function() {
@@ -172,13 +163,12 @@ describe("chorus.views.InstanceListSidebar", function() {
 
             describe("for existing greenplum instance", function() {
                 beforeEach(function() {
-                    this.view.model = fixtures.modelFor("fetch");
                     this.view.render();
                 });
 
                 context("and the instance has a shared account", function() {
                     beforeEach(function() {
-                        this.view.model = fixtures.modelFor("fetchWithSharedAccount");
+                        this.view.model = fixtures.instanceWithSharedAccount();
                         this.view.render();
                     });
 
@@ -217,7 +207,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 this.instance.set({
                     sharedAccount: { dbUserName: "polenta" }
                 });
-                this.view.trigger("instance:selected", this.instance);
+                this.view.render();
             });
 
             it("does not show the 'edit credentials' link", function() {
@@ -276,7 +266,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                     beforeEach(function() {
                         var account = fixtures.instanceAccount();
                         spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
-                        this.view.trigger("instance:selected", this.instance);
+                        this.view.render();
                     });
 
                     it("shows the 'access' text and image", function() {
@@ -322,7 +312,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                     spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
                     this.instance.accounts().add([fixtures.instanceAccount(), fixtures.instanceAccount()]);
                     setLoggedInUser({ userName : "benjamin", admin: true});
-                    this.view.trigger("instance:selected", this.instance);
+                    this.view.render();
                 });
 
                 it("does not show the individual_account area", function() {
@@ -339,12 +329,6 @@ describe("chorus.views.InstanceListSidebar", function() {
                     expect(this.view.$(".edit_individual_accounts")).toBeVisible();
                     expect(this.view.$(".edit_individual_accounts a[data-dialog=InstancePermissions]")).toBeVisible();
                     expect(this.view.$(".individual_accounts_count").text()).toMatchTranslation('instances.sidebar.there_are_x_individual_accounts', {count: 2});
-                });
-            });
-
-            context("when the current user is the owner", function() {
-                beforeEach(function() {
-                    setLoggedInUser({ userName : "benjamin", admin: true});
                 });
             });
         });

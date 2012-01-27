@@ -6,7 +6,7 @@
             'click li': 'selectItem'
         },
 
-        preRender : function(el) {
+        preRender : function() {
             if (!this.collection.comparator) {
                 this.collection.comparator = this.sortItems;
                 this.collection.sort();

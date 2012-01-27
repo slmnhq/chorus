@@ -11,7 +11,11 @@
 
         setup : function() {
             this.bind("instance:selected", this.setInstance, this);
+            this.instance = this.model;
             this.tabControl = new chorus.views.TabControl([{name: 'activity', selector: ".activity_list"}, {name: 'configuration', selector: ".configuration_detail"}]);
+            if(this.instance) {
+                this.fetchInstanceData();
+            }
         },
 
         additionalContext : function() {
@@ -34,8 +38,7 @@
             }
         },
 
-        setInstance : function(instance) {
-            this.resource = this.instance = this.model = instance;
+        fetchInstanceData : function() {
             this.instance.activities().fetch();
             if(!this.instance.loaded) {
                 this.instance.fetch();
@@ -44,14 +47,10 @@
             this.instance.accounts().fetch();
             this.instance.accounts().bind("reset", this.render, this);
 
-            this.resource.bind("change", this.render, this);
-
             var account = this.instance.accountForCurrentUser();
             account.bind("change", this.render, this);
             account.bind("fetchFailed", this.render, this);
             account.fetch();
-
-            this.render();
         },
 
         canEditInstance : function() {

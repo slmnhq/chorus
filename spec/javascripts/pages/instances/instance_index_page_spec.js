@@ -10,11 +10,10 @@ describe("chorus.pages.InstanceIndexPage", function() {
             this.page.render();
         })
 
-        it("forwards the instance:selected event from the instance list view to the instance list sidebar", function() {
-            spyOnEvent(this.page.sidebar, "instance:selected");
-            this.page.$("li .instance").eq(1).click();
-
-            expect("instance:selected").toHaveBeenTriggeredOn(this.page.sidebar);
+        it("creates a new sidebar when the instance:selected event is received", function() {
+            var oldSidebar = this.page.sidebar;
+            var instanceLi = this.page.$("li .instance:eq(1)").click();
+            expect(this.page.sidebar).not.toBe(oldSidebar);
         });
 
         it("forwards the instance:added event from the page to the content", function() {

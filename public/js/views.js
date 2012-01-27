@@ -62,7 +62,7 @@
         },
 
         render: function render() {
-            this.preRender($(this.el));
+            this.preRender();
 
             var evaluatedContext = {};
             if(!this.displayLoadingSection()) {
@@ -82,7 +82,6 @@
         },
 
         renderSubviews: function() {
-            var self = this;
             this.setupSubviews();
             var subviews;
             if(this.displayLoadingSection()) {
@@ -92,18 +91,23 @@
             }
 
             _.each(subviews, _.bind(function(property, selector){
-                var view = this.getSubview(property);
-                if (view) {
-                    var element = self.$(selector);
-                    if (element.length) {
-                        var id = element.attr("id"), klass = element.attr("class");
-                        element.replaceWith(view.render().el);
-                        $(view.el).attr("id", id);
-                        $(view.el).addClass(klass);
-                        view.delegateEvents();
-                    }
-                }
+                this.renderSubview(property, selector)
             }, this));
+        },
+
+        renderSubview: function(property, selector) {
+            var view = this.getSubview(property);
+            if (view) {
+                var element = this.$(selector);
+                if (element.length) {
+                    var id = element.attr("id"), klass = element.attr("class");
+                    $(view.el).attr("id", id);
+                    $(view.el).addClass(klass);
+                    element.replaceWith(view.el);
+                    view.render()
+                    view.delegateEvents();
+                }
+            }
         },
 
         getSubview : function(property) {
@@ -142,7 +146,7 @@
 
         template: function template(context) {
             if (this.displayLoadingSection()) {
-                return $('<div class="loading_section"/>');
+                return '<div class="loading_section"/>';
             } else {
                 return Handlebars.helpers.renderTemplate(this.className, context);
             }
