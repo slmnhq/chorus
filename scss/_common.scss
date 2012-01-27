@@ -241,6 +241,12 @@ $medium-font: 14px;
     text-overflow: ellipsis;
 }
 
+@mixin not-ellipsis {
+    white-space: inherit;
+    overflow: inherit;
+    text-overflow: inherit;
+}
+
 @mixin content-details-button($border-color) {
     border: 1px solid $border-color;
     @include border-radius(30px);
