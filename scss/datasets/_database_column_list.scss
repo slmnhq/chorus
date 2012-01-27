@@ -1,0 +1,63 @@
+.database_column_list {
+    &.list {
+        li {
+            div.text {
+                padding-left: 0;
+                
+                .summary {
+                    padding-bottom: 0;
+                }
+            }
+
+            .type {
+                @include database-column-type;
+                color: white;
+                position: absolute;
+                right: -18px;
+                top: 10px;
+                z-index: 10;
+                padding: 4px 15px 4px 20px;
+                line-height: 11px;
+                vertical-align: middle;
+
+                &.numeric {
+                    background-color: #2a7fe9;
+                }
+
+                &.string {
+                    background-color: #656599;
+                }
+
+                &.boolean {
+                    background-color: #3b474e;
+                }
+
+                &.binary {
+                    background-color: #6c8201;
+                }
+
+                &.date, &.time, &.date_time {
+                    background-color: #0195c5;
+                }
+
+                &.other {
+                    color: $color-text2;
+                    background-color: #cbcbcb;
+                }
+                /*.arrow_right {*/
+                  /*z-index: 100;*/
+                  /*position: absolute;*/
+                  /*right: 100%;*/
+                  /*$height: 11px;*/
+                  /*width:0px;*/
+                  /*height:0px;*/
+                  /*border-bottom:$height solid red;  *//* left arrow slant */
+                  /*border-top:$height solid red; *//* right arrow slant */
+                  /*border-left:$height solid transparent; *//* bottom, add background color here */
+                  /*font-size:0px;*/
+                  /*line-height:0px;*/
+                /*}*/
+            }
+        }
+    }
+}

@@ -1,6 +1,6 @@
 (function($, ns) {
-    ns.views.DatabaseFunctionList = ns.views.DatabaseList.extend({
-        className : "database_function_list",
+    ns.views.DatabaseFunctionSidebarList = ns.views.DatabaseSidebarList.extend({
+        className : "database_function_sidebar_list",
         useLoadingSection: true,
 
         collectionModelContext: function(schemaFunction) {

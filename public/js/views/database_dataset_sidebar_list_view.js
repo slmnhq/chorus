@@ -1,9 +1,9 @@
 (function($, ns) {
-    ns.views.DatabaseDatasetList = ns.views.DatabaseList.extend({
-        className : "database_dataset_list",
+    ns.views.DatabaseDatasetSidebarList = ns.views.DatabaseSidebarList.extend({
+        className : "database_dataset_sidebar_list",
         useLoadingSection : true,
 
-        events: _.extend({}, ns.views.DatabaseList.prototype.events, {
+        events: _.extend({}, ns.views.DatabaseSidebarList.prototype.events, {
             "click li a" : "datasetSelected"
         }),
 
@@ -14,8 +14,8 @@
             this.views  = this.schema.views();
             this.tables.bind("reset", datasetFetchComplete, this);
             this.views.bind("reset", datasetFetchComplete, this);
-            this.tables.fetch();
-            this.views.fetch();
+            this.tables.fetchAll();
+            this.views.fetchAll();
 
             function datasetFetchComplete(tableOrViewSet) {
                 this.collection.add(tableOrViewSet.models);

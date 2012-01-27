@@ -68,7 +68,7 @@ $card-border-color: $border-color;
 $error-background-color: #B61B1D;
 $error-color: white;
 $alert-background-color: #B5121B;
-$workfiles-action-details-background-color: #B4D88B;
+$content-details-action-background-color: #B4D88B;
 
 $picklist-selected-background-color: #3795DD;
 
@@ -197,6 +197,13 @@ $medium-font: 14px;
     color: $color-text2;
 }
 
+@mixin database-column-type {
+    @include debugging-mixin;
+    font-size: 11px;
+    font-weight: $semibold;
+    color: $color-text2;
+}
+
 @mixin secondary-text-normal {
     @include debugging-mixin;
     font-size: 14px;
@@ -232,6 +239,12 @@ $medium-font: 14px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+@mixin not-ellipsis {
+    white-space: inherit;
+    overflow: inherit;
+    text-overflow: inherit;
 }
 
 @mixin content-details-button($border-color) {

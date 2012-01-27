@@ -66,7 +66,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             });
 
             it("renders the functions subview", function() {
-                expect(this.view.functionList).toBeA(chorus.views.DatabaseFunctionList);
+                expect(this.view.functionList).toBeA(chorus.views.DatabaseFunctionSidebarList);
             });
 
             it("renders selected version", function() {
@@ -96,7 +96,6 @@ describe("chorus.views.WorkfileShowSidebar", function() {
                         this.server.completeAllFetches();
                         this.view.$(".database_column_list input.search").val("searching for a column...");
                     });
-
 
                     it("hides the metadata list", function() {
                         expect(this.view.$(".database_dataset_list")).toHaveClass("hidden");

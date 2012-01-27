@@ -1,9 +1,9 @@
-describe("chorus.views.DatabaseFunctionList", function() {
+describe("chorus.views.DatabaseFunctionSidebarList", function() {
     beforeEach(function() {
         this.sandbox = fixtures.sandbox({ schemaName: "righteous_tables" });
         this.schema = this.sandbox.schema();
         spyOn(this.schema.functions(), "fetch").andCallThrough();
-        this.view = new chorus.views.DatabaseFunctionList({sandbox: this.sandbox});
+        this.view = new chorus.views.DatabaseFunctionSidebarList({sandbox: this.sandbox});
     });
 
     it("should fetch the functions for the sandbox", function() {
@@ -43,7 +43,7 @@ describe("chorus.views.DatabaseFunctionList", function() {
                 ]);
             });
 
-            itBehavesLike.DatabaseList();
+            itBehavesLike.DatabaseSidebarList();
 
             it("should not show the loading section", function() {
                 expect(this.view.$('.loading_section')).not.toExist();

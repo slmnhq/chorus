@@ -12,12 +12,8 @@
 
             if (type == 'CHORUS_VIEW') {
                 return "/images/view_large.png";
-            } else if (type == "SOURCE_TABLE") {
-                return "/images/source_large.png";
-            } else if (type == "SANDBOX_TABLE") {
-                return "/images/table_large.png"
             } else {
-                return "/images/table_large.png"
+                return "/images/" + model.metaType() + "_large.png";
             }
         },
 
@@ -33,12 +29,12 @@
 
         collectionModelContext : function(model) {
             return {
-                iconImgUrl : this.iconFor(model)
+                iconImgUrl : this.iconFor(model),
+                showUrl : model.showUrl()
             }
         },
 
         selectDataset : function(e) {
-            e.preventDefault();
             this.$("li").removeClass("selected");
             var selectedDataset = $(e.target).closest("li");
             selectedDataset.addClass("selected");

@@ -1,25 +1,27 @@
-describe("chorus.views.DatabaseDatasetList", function() {
+describe("chorus.views.DatabaseDatasetSidebarList", function() {
     beforeEach(function() {
         this.sandbox = fixtures.sandbox();
         this.schema = this.sandbox.schema();
 
-        spyOn(this.schema.views(), "fetch").andCallThrough();
-        spyOn(this.schema.tables(), "fetch").andCallThrough();
+        spyOn(this.schema.views(), "fetchAll").andCallThrough();
+        spyOn(this.schema.tables(), "fetchAll").andCallThrough();
 
-        this.view = new chorus.views.DatabaseDatasetList({sandbox: this.sandbox});
+        this.view = new chorus.views.DatabaseDatasetSidebarList({sandbox: this.sandbox});
     });
 
     it("should fetch the list of tables", function() {
-        expect(this.schema.tables().fetch).toHaveBeenCalled();
+        expect(this.schema.tables().fetchAll).toHaveBeenCalled();
     });
 
     it("should fetch the list of views", function() {
-        expect(this.schema.views().fetch).toHaveBeenCalled();
+        expect(this.schema.views().fetchAll).toHaveBeenCalled();
     });
 
     context("when the table fetch completes", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.schema.tables(), [fixtures.databaseTable(), fixtures.databaseTable()]);
+            this.server.completeFetchAllFor(this.schema.tables(), [
+                fixtures.databaseTable(), fixtures.databaseTable()
+            ]);
         });
 
         it("should set the list of tables in the collection", function() {
@@ -30,7 +32,9 @@ describe("chorus.views.DatabaseDatasetList", function() {
 
     context("when the view fetch completes", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.schema.views(), [fixtures.databaseView(), fixtures.databaseView(), fixtures.databaseView()]);
+            this.server.completeFetchAllFor(this.schema.views(), [
+                fixtures.databaseView(), fixtures.databaseView(), fixtures.databaseView()
+            ]);
         });
 
         it("should set the list of views in the collection", function() {
@@ -54,7 +58,9 @@ describe("chorus.views.DatabaseDatasetList", function() {
 
         context("after only the table fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.schema.tables(), [fixtures.databaseTable(), fixtures.databaseTable()]);
+                this.server.completeFetchAllFor(this.schema.tables(), [
+                    fixtures.databaseTable(), fixtures.databaseTable()
+                ]);
             })
 
             it("still displays a loading spinner", function() {
@@ -64,7 +70,9 @@ describe("chorus.views.DatabaseDatasetList", function() {
 
         context("after only the view fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.schema.views(), [fixtures.databaseView(), fixtures.databaseView()]);
+                this.server.completeFetchAllFor(this.schema.views(), [
+                    fixtures.databaseView(), fixtures.databaseView()
+                ]);
             });
 
             it("still displays a loading spinner", function() {
@@ -84,17 +92,17 @@ describe("chorus.views.DatabaseDatasetList", function() {
 
             context("and some data was fetched", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(this.schema.views(), [
+                    this.server.completeFetchAllFor(this.schema.views(), [
                         fixtures.databaseView({name: "Data1"}),
                         fixtures.databaseView({name: "zebra"})
                     ]);
-                    this.server.completeFetchFor(this.schema.tables(), [
+                    this.server.completeFetchAllFor(this.schema.tables(), [
                         fixtures.databaseTable({name: "Data2"}),
                         fixtures.databaseTable({name: "apple"})
                     ]);
                     this.view.render();
                 });
-                jasmine.sharedExamples.DatabaseList();
+                jasmine.sharedExamples.DatabaseSidebarList();
 
                 it("should not display the loading spinner", function() {
                     expect(this.view.$(".loading_section")).not.toExist();

@@ -71,17 +71,41 @@ describe("chorus.views.DatasetListSidebar", function() {
                         expect(this.view.$(".partitions .value").text()).toBe("2")
                     })
 
+                    it("displays the statistics in the correct order", function() {
+                        expect(this.view.$(".statistics .pair").eq(0).find(".key").text().trim()).toMatchTranslation("dataset.statistics.type");
+                        expect(this.view.$(".statistics .pair").eq(1).find(".key").text().trim()).toMatchTranslation("dataset.statistics.partitions");
+                        expect(this.view.$(".statistics .pair").eq(2).find(".key").text().trim()).toMatchTranslation("dataset.statistics.columns");
+                        expect(this.view.$(".statistics .pair").eq(3).find(".key").text().trim()).toMatchTranslation("dataset.statistics.last_analyzed_time");
+                        expect(this.view.$(".statistics .pair").eq(4).find(".key").text().trim()).toMatchTranslation("dataset.statistics.rows");
+                        expect(this.view.$(".statistics .pair").eq(5).find(".key").text().trim()).toMatchTranslation("dataset.statistics.size");
+                    });
+                    
                     describe("when the partitions are 0", function() {
                         beforeEach(function() {
                             this.view = new chorus.views.DatasetListSidebar();
+                            this.view.setDataset(this.dataset);
                             this.stats.set({ partitions: 0 });
-                            this.server.completeFetchFor(this.stats);                            
+                            this.server.completeFetchFor(this.stats);
                         });
 
                         it("should not show the partitions pair", function() {
                             expect(this.view.$(".partitions")).not.toExist()
                         })
                     })
+
+                    describe("when the lastAnalyzedTime is null", function() {
+                        beforeEach(function() {
+                            this.view = new chorus.views.DatasetListSidebar();
+                            this.view.setDataset(this.dataset)
+                            this.stats.set({ lastAnalyzedTime: null, rows: 5837 });
+                            this.server.completeFetchFor(this.stats);
+                        })
+
+                        it("should not display the lastAnalyzedTime or row count", function() {
+                            expect(this.view.$(".rows")).not.toExist();
+                            expect(this.view.$(".last_analyzed_time")).not.toExist();
+                        });
+                    });
                 });
             });
         });

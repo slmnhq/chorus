@@ -1047,7 +1047,7 @@
                     ownerFullName: "EDC Admin",
                     sizeInBytes: "1648427008",
                     size: "1.5GB"
-                }.overrides);
+                }, overrides);
             },
 
             userJson: function(overrides) {
@@ -1248,7 +1248,8 @@
                     type : "table",
                     instanceId : this.nextId().toString(),
                     databaseName : "database_name",
-                    schemaName : "schema_name"
+                    schemaName : "schema_name",
+                    workspace : { id : this.nextId().toString(), name: "731 Market" }
                 }, overrides);
                 return new chorus.models.DatabaseTable(attributes);
             },
@@ -1277,7 +1278,8 @@
             databaseColumn: function(overrides) {
                 var id = this.nextId().toString();
                 var attributes = _.extend({
-                    name : "column_name"
+                    name : "column_name",
+                    typeCategory : "WHOLE_NUMBER"
                 }, overrides);
                 return new chorus.models.DatabaseColumn(attributes);
             },
@@ -1297,7 +1299,9 @@
             databaseColumnSet: function(models, overrides) {
                 var id = this.nextId().toString()
                 models = (models && (models.length > 0)) || [this.databaseColumn(overrides), this.databaseColumn(overrides)];
-                return new chorus.collections.DatabaseColumnSet(models, overrides);
+                var collection = new chorus.collections.DatabaseColumnSet([], overrides);
+                collection.reset(models)
+                return collection;
             },
 
             workspace: function(overrides) {

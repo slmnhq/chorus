@@ -1,0 +1,20 @@
+.dataset_content_details {
+    div {
+        padding: 0 $padding-x;
+    }
+    
+    .definition {
+        height: 32px;
+        background-color: $content-details-action-background-color;
+        border-bottom: 1px solid #8D9DA8;
+    }
+
+    .column_count {
+        border-top: 1px solid #B2C7D6;
+        background-color: #C4DCEB;
+
+        .count {
+            @include font-normal-alpha;
+        }
+    }
+}

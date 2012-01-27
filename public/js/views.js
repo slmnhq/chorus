@@ -1,4 +1,5 @@
-;(function(ns) {
+;
+(function(ns) {
     ns.views.Bare = Backbone.View.extend(_.extend({}, ns.Mixins.Events, {
         initialize: function initialize() {
             this.preInitialize.apply(this, arguments);
@@ -48,13 +49,13 @@
         },
 
         verifyResourcesLoaded: function(preventRender) {
-            if(this.requiredResources.length == 0) {
+            if (this.requiredResources.length == 0) {
                 return;
             }
             if(this.requiredResources.allLoaded()) {
                 this.resourcesLoaded();
 
-                if(!preventRender) {
+                if (!preventRender) {
                     this.render();
                 }
             }
@@ -64,7 +65,7 @@
             this.preRender();
 
             var evaluatedContext = {};
-            if(!this.displayLoadingSection()) {
+            if (!this.displayLoadingSection()) {
                 // The only template rendered when loading section is displayed is the loading section itself, so no context is needed.
                 evaluatedContext = _.isFunction(this.context) ? this.context() : this.context;
             }
@@ -83,7 +84,7 @@
         renderSubviews: function() {
             this.setupSubviews();
             var subviews;
-            if(this.displayLoadingSection()) {
+            if (this.displayLoadingSection()) {
                 subviews = {".loading_section" : "makeLoadingSectionView"};
             } else {
                 subviews = this.subviews
@@ -226,7 +227,9 @@
 
             this.clearErrors();
 
-            if(!model) {model = this.resource}
+            if (!model) {
+                model = this.resource
+            }
             _.each(model.errors, function(val, key) {
                 var input = self.$("input[name=" + key + "], form textarea[name=" + key + "]");
                 input.addClass("has_error");
@@ -317,9 +320,14 @@
             var modelClass = options.modelClass
             var collection = this.collection;
             this.content = new ns.views[modelClass + "List"]({collection: collection })
-            this.contentHeader = new ns.views.ListHeaderView({title: modelClass + "s", linkMenus : options.linkMenus})
-            this.contentDetails = new ns.views.ListContentDetails({collection : collection, modelClass : modelClass, buttons: options.buttons});
-            this.contentFooter = new ns.views.ListContentDetails({collection : collection, modelClass : modelClass, hideCounts : true, hideIfNoPagination : true})
+            this.contentHeader = new ns.views.ListHeaderView({title: options.title || (modelClass + "s"), linkMenus : options.linkMenus, imageUrl : options.imageUrl})
+
+            if (options.contentDetails) {
+                this.contentDetails = options.contentDetails;
+            } else {
+                this.contentDetails = new ns.views.ListContentDetails({collection : collection, modelClass : modelClass, buttons: options.buttons});
+                this.contentFooter = new ns.views.ListContentDetails({collection : collection, modelClass : modelClass, hideCounts : true, hideIfNoPagination : true})
+            }
         },
         additionalClass : "main_content_list"
     });

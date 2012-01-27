@@ -505,6 +505,65 @@ describe("chorus.views.base", function() {
         });
     });
 
+    describe("MainContentList", function() {
+        beforeEach(function() {
+            this.collection = fixtures.workfileSet();
+        })
+
+        describe("#setup", function() {
+            context("when no title override is provided", function() {
+                beforeEach(function() {
+                    this.view = new chorus.views.MainContentList({ collection : this.collection, modelClass : "Workfile" });
+                })
+
+                it("sets the title of the content header to the plural of the model class", function() {
+                    expect(this.view.contentHeader.options.title).toBe("Workfiles")
+                })
+            })
+
+            context("when a title override is provided", function() {
+                beforeEach(function() {
+                    this.view = new chorus.views.MainContentList({ collection : this.collection, modelClass : "Workfile", title : "YES!" });
+                })
+
+                it("sets the title of the content header to the override", function() {
+                    expect(this.view.contentHeader.options.title).toBe("YES!")
+                })
+            })
+
+            context("when no contentDetails is provided", function() {
+                beforeEach(function() {
+                    spyOn(chorus.views, "ListContentDetails")
+                    this.view = new chorus.views.MainContentList({ collection : this.collection, modelClass : "Workfile" });
+                })
+
+                it("creates a ListContentDetails view", function() {
+                    expect(chorus.views.ListContentDetails).toHaveBeenCalled();
+                })
+            })
+
+            context("when a custom contentDetails is provided", function() {
+                beforeEach(function() {
+                    spyOn(chorus.views, "ListContentDetails")
+                    this.contentDetails = stubView();
+                    this.view = new chorus.views.MainContentList({ collection : this.collection, modelClass : "Workfile", contentDetails : this.contentDetails });
+                })
+
+                it("does not create a ListContentDetails view", function() {
+                    expect(chorus.views.ListContentDetails).not.toHaveBeenCalled();
+                })
+
+                it("uses the custom contentDetails", function() {
+                    expect(this.view.contentDetails).toBe(this.contentDetails);
+                })
+
+                it("does not construct a contentFooter", function() {
+                    expect(this.view.contentFooter).toBeUndefined();
+                })
+            })
+        })
+    })
+    
     describe("ListHeaderView", function() {
         beforeEach(function() {
             this.view = new chorus.views.ListHeaderView({
@@ -534,6 +593,21 @@ describe("chorus.views.base", function() {
             it("renders the header title", function() {
                 expect(this.view.$("h1").text().trim()).toBe("Hi there")
             })
+
+            it("does not render an image", function() {
+                expect(this.view.$(".icon")).not.toExist();
+            })
+
+            context("when an imageUrl is provided", function() {
+                beforeEach(function() {
+                    this.view.options.imageUrl = "edc/image/foo/bar.png";
+                    this.view.render();
+                })
+
+                it("renders the image", function() {
+                    expect(this.view.$(".icon")).toHaveAttr("src", "edc/image/foo/bar.png")
+                })
+            });
         })
 
         describe("event propagation", function() {
