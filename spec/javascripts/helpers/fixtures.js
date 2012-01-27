@@ -1034,6 +1034,22 @@
                 }
             },
 
+            instanceWorkspaceUsageJson: function(overrides) {
+                var workspaceId = this.nextId().toString();
+                return _.extend({
+                    workspaceId: workspaceId,
+                    workspaceName: "workspace" + workspaceId,
+                    iconId: null,
+                    workspaceOwnerFullName: "EDC Admin",
+                    sandboxId: this.nextId().toString(),
+                    databaseName: "Analytics",
+                    schemaName: "analytics",
+                    ownerFullName: "EDC Admin",
+                    sizeInBytes: "1648427008",
+                    size: "1.5GB"
+                }.overrides);
+            },
+
             userJson: function(overrides) {
                 var id = this.nextId().toString();
                 return _.extend({
@@ -1146,7 +1162,7 @@
                         sandboxId: null,
                         schemaId: null,
                         schemaName: null
-                    },
+                    }
                 }
             },
 
@@ -1413,29 +1429,12 @@
                     "sandboxesSize" : "2.9GB",
                     "sandboxesSizeInBytes" : 3157917696,
                     "workspaces" : [
-                        {
-                            "workspaceId":"10040",
-                            "workspaceName":"ws",
-                            "iconId":null,
-                            "workspaceOwnerFullName":"EDC Admin",
-                            "sandboxId":"10010",
-                            "databaseName":"Analytics",
-                            "schemaName":"analytics",
-                            "ownerFullName":"EDC Admin",
-                            "sizeInBytes":"1648427008",
-                            "size":"1.5GB"
-                        },
-                        {
-                            "workspaceId":"10000",
-                            "workspaceName":"!!!",
-                            "iconId":null,"workspaceOwnerFullName":"EDC Admin",
-                            "sandboxId":"10000",
-                            "databaseName":"dca_demo",
-                            "schemaName":"public",
-                            "ownerFullName":"EDC Admin",
-                            "sizeInBytes":"1509490688",
-                            "size":"1.4GB"
-                        }
+                        this.instanceWorkspaceUsageJson({
+                            sizeInBytes:"1648427008"
+                        }),
+                        this.instanceWorkspaceUsageJson({
+                            sizeInBytes:"1509490688"
+                        })
                     ]
                 });
             },

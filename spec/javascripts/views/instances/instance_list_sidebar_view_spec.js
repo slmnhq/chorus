@@ -52,7 +52,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.instance.activities());
                 this.server.completeFetchFor(this.instance.accounts());
-                this.server.completeFetchFor(this.instance.usage());
+                this.server.completeFetchFor(this.instance.usage(), fixtures.instanceUsage());
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
                 this.server.completeFetchFor(this.instance);
             });
@@ -332,6 +332,34 @@ describe("chorus.views.InstanceListSidebar", function() {
                     });
                 });
             });
+
+            describe("workspace usage", function() {
+                context("when there are no workspaces", function() {
+                    beforeEach(function() {
+                        this.instance.usage().set({workspaces: []});
+                        this.view.render();
+                    });
+
+                    it("should not be a dialog link", function() {
+                        expect(this.view.$('.actions .workspace_usage')).toHaveClass('disabled');
+                        expect(this.view.$('.actions .workspace_usage').data('dialog')).toBeUndefined();
+                    });
+                })
+
+                context("when there are workspaces", function() {
+                    beforeEach(function() {
+                        this.instance.usage().set({workspaces: [fixtures.instanceWorkspaceUsageJson(), fixtures.instanceWorkspaceUsageJson()]});
+                    });
+
+                    it("should be a dialog link", function() {
+                        expect(this.view.$('.actions .workspace_usage').data('dialog')).not.toBeUndefined();
+                    })
+
+                    it("should show the appropriate number of workspaces", function() {
+                        expect(this.view.$('.actions .workspace_usage')).toContainTranslation('instances.sidebar.usage', {count: 2});
+                    });
+                })
+            })
 
         });
     });

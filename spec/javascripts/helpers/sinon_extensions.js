@@ -50,7 +50,11 @@ _.extend(sinon.fakeServer, {
     },
 
     completeFetchFor: function(model, results) {
-        results = results || model.attributes;
+        if(results) {
+            results = results.attributes ? results.attributes : results;
+        } else {
+            results = model.attributes;
+        }
         var fetch = this.lastFetchFor(model)
         if(fetch) {
             fetch.succeed(results);

@@ -24,9 +24,13 @@
             margin-bottom: 10px;
         }
 
-        a {
+        a, .disabled {
             font-size: 12px;
             font-weight: $semibold;
+        }
+
+        .disabled {
+            color: $color-text4;
         }
 
         li {

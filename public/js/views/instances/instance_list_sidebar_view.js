@@ -25,6 +25,7 @@
                 userHasAccount: account && account.has("id"),
                 userCanEditInstance : this.canEditInstance(),
                 instanceAccountsCount : this.instance.accounts().length,
+                workspaceCount : this.instance.usage().get('workspaces').length,
                 deleteable : this.instance.get("state") == "fault" && this.instance.get("provisionType") == "create"
             };
         },
