@@ -16,17 +16,19 @@ describe("chorus.pages.DatasetIndexPage", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace);
             this.page.render();
+
+            this.dataset = fixtures.datasetSourceTable();
+            var listView = this.page.mainContent.content;
+            spyOnEvent(this.page.sidebar, 'dataset:selected');
+            listView.trigger("dataset:selected", this.dataset);
         })
 
         it("triggers the event on the sidebar view", function() {
-            this.dataset = fixtures.datasetSourceTable();
-            var listView = this.page.mainContent.content;
-            var sidebar = this.page.sidebar;
-            var datasetSelectedSpy = jasmine.createSpy("dataset:selected");
-            sidebar.bind("dataset:selected", datasetSelectedSpy);
-            listView.trigger("dataset:selected", this.dataset);
+            expect('dataset:selected').toHaveBeenTriggeredOn(this.page.sidebar, [ this.dataset ]);
+        });
 
-            expect(datasetSelectedSpy).toHaveBeenCalledWith(this.dataset);
+        it("sets the selected dataset as its own model", function() {
+            expect(this.page.model).toBe(this.dataset);
         });
     });
 });

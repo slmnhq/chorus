@@ -31,6 +31,9 @@
             this.sidebar = new chorus.views.DatasetListSidebar();
 
             this.mainContent.content.forwardEvent("dataset:selected", this.sidebar);
+            this.mainContent.content.bind("dataset:selected", function(dataset) {
+                this.model = dataset;
+            }, this);
         }
     });
 })(jQuery, chorus.pages);

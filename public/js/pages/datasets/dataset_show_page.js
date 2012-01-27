@@ -57,7 +57,7 @@
                 collection : this.columnSet,
                 model : this.workspace,
                 title : this.objectName,
-                imageUrl : "images/" +  this.dataset.metaType() + "_large.png",
+                imageUrl : this.dataset.iconUrl(),
                 contentDetails : new chorus.views.DatasetContentDetails({ collection : this.columnSet })
             });
 

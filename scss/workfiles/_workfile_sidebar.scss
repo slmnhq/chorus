@@ -59,11 +59,11 @@
     .tabbed_area {
         .context {
             @include font-content-details;
+            font-size: 14px;
 
             a {
                 @include ellipsis;
                 max-width: 140px;
-                display: inline-block;
                 padding-right: 10px;
                 background-image: url("/images/blue-menu-triangle.png");
                 background-position: right;

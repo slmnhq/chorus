@@ -7,16 +7,6 @@
             "click li" : "selectDataset"
         },
 
-        iconFor: function(model) {
-            var type = model.get("type");
-
-            if (type == 'CHORUS_VIEW') {
-                return "/images/view_large.png";
-            } else {
-                return "/images/" + model.metaType() + "_large.png";
-            }
-        },
-
         postRender : function() {
             var lis = this.$("li");
 
@@ -29,7 +19,7 @@
 
         collectionModelContext : function(model) {
             return {
-                iconImgUrl : this.iconFor(model),
+                iconImgUrl : model.iconUrl(),
                 showUrl : model.showUrl()
             }
         },

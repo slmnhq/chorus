@@ -10,53 +10,103 @@
             }
 
             .type {
-                @include database-column-type;
-                color: white;
                 position: absolute;
-                right: -18px;
+                right: -16px;
                 top: 10px;
                 z-index: 10;
-                padding: 4px 15px 4px 20px;
                 line-height: 11px;
+                height: 22px;
                 vertical-align: middle;
 
+                .type_name {
+                    @include database-column-type;
+                    height: 14px;
+                    display: inline-block;
+                    padding: 4px 8px 4px 8px;
+                }
+
+                .left {
+                    width: 9px;
+                    height: 22px;
+                }
+
+                .right {
+                    width: 6px;
+                    height: 22px;
+                }
+
                 &.numeric {
-                    background-color: #2a7fe9;
+                    .left{
+                        background: url(/images/ribbons/label_datatype_dkblue1.png) no-repeat;
+                    }
+                    .type_name {
+                        background: url(/images/ribbons/label_datatype_dkblue2.png) repeat;
+                    }
+                    .right {
+                        background: url(/images/ribbons/label_datatype_dkblue3.png) no-repeat;
+                    }
                 }
 
                 &.string {
-                    background-color: #656599;
+                    .left{
+                        background: url(/images/ribbons/label_datatype_purple1.png) no-repeat;
+                    }
+                    .type_name {
+                        background: url(/images/ribbons/label_datatype_purple2.png) repeat;
+                    }
+                    .right {
+                        background: url(/images/ribbons/label_datatype_purple3.png) no-repeat;
+                    }
                 }
 
                 &.boolean {
-                    background-color: #3b474e;
+                    .left{
+                        background: url(/images/ribbons/label_datatype_black1.png) no-repeat;
+                    }
+                    .type_name {
+                        background: url(/images/ribbons/label_datatype_black2.png) repeat;
+                    }
+                    .right {
+                        background: url(/images/ribbons/label_datatype_black3.png) no-repeat;
+                    }
                 }
 
                 &.binary {
-                    background-color: #6c8201;
+                    .left{
+                        background: url(/images/ribbons/label_datatype_green1.png) no-repeat;
+                    }
+                    .type_name {
+                        background: url(/images/ribbons/label_datatype_green2.png) repeat;
+                    }
+                    .right {
+                        background: url(/images/ribbons/label_datatype_green3.png) no-repeat;
+                    }
                 }
 
                 &.date, &.time, &.date_time {
-                    background-color: #0195c5;
+                    .left{
+                        background: url(/images/ribbons/label_datatype_ltblue1.png) no-repeat;
+                    }
+                    .type_name {
+                        background: url(/images/ribbons/label_datatype_ltblue2.png) repeat;
+                    }
+                    .right {
+                        background: url(/images/ribbons/label_datatype_ltblue3.png) no-repeat;
+                    }
                 }
 
                 &.other {
-                    color: $color-text2;
-                    background-color: #cbcbcb;
+                    .left{
+                        background: url(/images/ribbons/label_datatype_white1.png) no-repeat;
+                    }
+                    .type_name {
+                        color: $color-text2;
+                        background: url(/images/ribbons/label_datatype_white2.png) repeat;
+                    }
+                    .right {
+                        background: url(/images/ribbons/label_datatype_white3.png) no-repeat;
+                    }
                 }
-                /*.arrow_right {*/
-                  /*z-index: 100;*/
-                  /*position: absolute;*/
-                  /*right: 100%;*/
-                  /*$height: 11px;*/
-                  /*width:0px;*/
-                  /*height:0px;*/
-                  /*border-bottom:$height solid red;  *//* left arrow slant */
-                  /*border-top:$height solid red; *//* right arrow slant */
-                  /*border-left:$height solid transparent; *//* bottom, add background color here */
-                  /*font-size:0px;*/
-                  /*line-height:0px;*/
-                /*}*/
             }
         }
     }
