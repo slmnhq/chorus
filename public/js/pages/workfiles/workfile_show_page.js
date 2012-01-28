@@ -28,12 +28,14 @@
                 this.model.set({ versionNum:versionNum }, { silent:true })
             }
 
-            this.bindings.add(this.model, "change", this.modelChanged);
             this.model.fetch();
             this.model.workspace().fetch();
+            this.requiredResources.push(this.model);
+            this.requiredResources.push(this.model.workspace());
+        },
 
+        resourcesLoaded:function () {
             this.breadcrumbs = new breadcrumbsView({workspace:this.model.workspace(), model:this.model});
-
             this.sidebar = new chorus.views.WorkfileShowSidebar({model:this.model});
             this.sidebar.bindOnce("sidebar:loaded", _.bind(this.bindSidebar, this));
 
@@ -43,6 +45,8 @@
                 model:this.model,
                 contentHeader:new chorus.views.WorkfileHeader({model:this.model})
             });
+            this.bindings.add(this.model, "change", this.modelChanged);
+            this.modelChanged();
         },
 
         modelChanged:function () {
@@ -50,7 +54,6 @@
                 var alert = new chorus.alerts.WorkfileDraft({model:this.model});
                 alert.launchModal();
             }
-
             if (!this.mainContent.contentDetails) {
                 this.mainContent.contentDetails = chorus.views.WorkfileContentDetails.buildFor(this.model);
                 this.mainContent.content = chorus.views.WorkfileContent.buildFor(this.model);

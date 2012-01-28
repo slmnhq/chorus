@@ -1,6 +1,6 @@
 <input class="search" placeholder='{{t "schema.functions.list.hint"}}'/>
 <div class="context">{{{t "schema.functions.search_in" schemaLink=schemaLink}}}</div>
-{{#if models.length}}
+{{#if models}}{{#if models.length}}
     <ul class="list">
         {{#each models}}
             <li data-cid="{{cid}}">
@@ -13,7 +13,7 @@
     </ul>
 {{else}}
     <div class="none_found">{{t "schema.functions.none_found"}}</div>
-{{/if}}
+{{/if}}{{/if}}
 
 <div class="schema_menu_container">
     <ul class="schema_menu">

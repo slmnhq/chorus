@@ -2,6 +2,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
     beforeEach(function() {
         this.workspaceId = 4;
         this.workfileId = 5;
+        this.workspace = fixtures.workspace({id: this.workspaceId});
         this.model = fixtures.sqlWorkfile({id: this.workfileId, workspaceId: this.workspaceId});
         stubDefer();
    });
@@ -23,19 +24,32 @@ describe("chorus.pages.WorkfileShowPage", function() {
             expect(this.server.lastFetchFor(this.page.model.workspace())).toBeDefined();
         });
 
-        it("does not instantiate views for the content details or content", function() {
-            expect(this.page.mainContent.contentDetails).toBeUndefined();
-            expect(this.page.mainContent.content).toBeUndefined();
-        });
+        it("does not instantiate any views", function() {
+            expect(this.page.mainContent).toBeUndefined();
+            expect(this.page.sidebar).toBeUndefined();
+            expect(this.page.subNav).toBeUndefined();
+            expect(this.page.breadcrumbs).toBeUndefined();
 
-        describe("when the workfile is fetched", function() {
+        })
+
+        describe("when the workspace and workfile are fetched", function() {
             beforeEach(function() {
-                spyOn(this.page.mainContent, "render").andCallThrough();
+                spyOn(chorus.views.Base.prototype, "render").andCallThrough();
+                this.server.completeFetchFor(this.workspace);
             });
 
             context("and the workfile does not have a draft", function() {
                 beforeEach(function() {
                     this.server.completeFetchFor(this.model);
+                    chorus.views.Base.prototype.render.reset();
+                    this.page.resourcesLoaded();
+                })
+
+                it("loads breadcrumbs, sidebar, subnavigation, and mainContent", function() {
+                    expect(this.page.breadcrumbs).toBeDefined()
+                    expect(this.page.sidebar).toBeDefined()
+                    expect(this.page.subNav).toBeDefined()
+                    expect(this.page.mainContent).toBeDefined()
                 })
 
                 it("instantiates the content details view", function() {
@@ -46,8 +60,8 @@ describe("chorus.pages.WorkfileShowPage", function() {
                     expect(chorus.views.WorkfileContent.buildFor).toHaveBeenCalledWith(this.page.model)
                 });
 
-                it("re-renders the mainContent", function() {
-                    expect(this.page.mainContent.render).toHaveBeenCalled();
+                it("re-renders", function() {
+                    expect(chorus.views.Base.prototype.render).toHaveBeenCalled();
                 });
             })
 
@@ -82,8 +96,10 @@ describe("chorus.pages.WorkfileShowPage", function() {
     describe("#render", function(){
         beforeEach(function() {
             this.page = new chorus.pages.WorkfileShowPage(this.workspaceId, this.workfileId);
-            this.page.model.workspace().set({name: "Cool Workspace"});
             this.server.completeFetchFor(this.model);
+            this.server.completeFetchFor(this.workspace);
+            this.page.model.workspace().set({name: "Cool Workspace"});
+            this.page.resourcesLoaded();
         });
 
         it("it displays the workfile name in the content header", function() {
@@ -156,9 +172,6 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
         describe("when the sidebar triggers 'file:insertText'", function() {
             beforeEach(function() {
-                this.page.sidebar.functionList = new chorus.views.Base();
-                this.page.sidebar.datasetList = new chorus.views.Base();
-                this.page.sidebar.columnList = new chorus.views.Base();
                 this.page.render()
                 spyOnEvent(this.page.mainContent.content, 'file:insertText')
                 spyOn(this.page.model, 'isSql').andReturn(true)

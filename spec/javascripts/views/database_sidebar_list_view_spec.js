@@ -1,24 +1,44 @@
 describe("chorus.views.DatabaseSidebarList", function() {
-    beforeEach(function() {
-        var object0 = new chorus.models.DatabaseTable();
-        var object1 = new chorus.models.DatabaseTable();
-        object0.cid = 'c44';
-        object1.cid = 'c55';
+    context("when there is no sandbox", function() {
+        beforeEach(function() {
+            this.view = new chorus.views.DatabaseSidebarList({sandbox: undefined });
+            this.view.className = "database_function_sidebar_list";
+        })
 
-        this.sandbox = fixtures.sandbox({ schemaName: "righteous_tables" });
-        this.schema = this.sandbox.schema();
-        this.collection = new chorus.collections.Base([object0, object1]);
+        describe("#setup", function() {
+            it("should not crash", function() {
+                expect(this.view).toBeDefined()
+            })
+        })
 
-        spyOn(this.collection.models[0], 'toText').andReturn('object1');
-        spyOn(this.collection.models[1], 'toText').andReturn('object2');
-        this.view = new chorus.views.DatabaseSidebarList({collection: this.collection, sandbox: this.sandbox });
-        this.view.className = "database_dataset_sidebar_list";
-        this.schemaMenuQtip = stubQtip(".context a");
-        this.insertArrowQtip = stubQtip("li");
-    });
+        describe("render", function() {
+            beforeEach(function() {
+                this.view.render();
+            })
+            
+            it("should not crash", function() {
+                expect($(this.view.el)).toHaveClass("database_function_sidebar_list");
+            })
+        })
+    })
 
     context("render", function() {
         beforeEach(function() {
+            var object0 = new chorus.models.DatabaseTable();
+            var object1 = new chorus.models.DatabaseTable();
+            object0.cid = 'c44';
+            object1.cid = 'c55';
+
+            this.sandbox = fixtures.sandbox({ schemaName: "righteous_tables" });
+            this.schema = this.sandbox.schema();
+            this.collection = new chorus.collections.Base([object0, object1]);
+
+            spyOn(this.collection.models[0], 'toText').andReturn('object1');
+            spyOn(this.collection.models[1], 'toText').andReturn('object2');
+            this.view = new chorus.views.DatabaseSidebarList({collection: this.collection, sandbox: this.sandbox });
+            this.view.className = "database_dataset_sidebar_list";
+            this.schemaMenuQtip = stubQtip(".context a");
+            this.insertArrowQtip = stubQtip("li");
             spyOn(this.view, 'closeQtip');
             this.view.render();
         });
@@ -56,7 +76,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
                 });
 
                 describe("when a schema is clicked", function() {
-                    beforeEach(function(){
+                    beforeEach(function() {
                         this.schemaMenuQtip.find("a[data-id=5]").click()
                         this.otherSchema = this.view.schemas.get("5");
                     });
@@ -98,7 +118,6 @@ describe("chorus.views.DatabaseSidebarList", function() {
                     expect(this.view.closeQtip).toHaveBeenCalled();
                 })
             })
-
         })
-    })
+    });
 });

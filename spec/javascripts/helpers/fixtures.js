@@ -1163,13 +1163,13 @@ beforeEach(function() {
                 ownerFirstName : "Dr",
                 ownerLastName : "Mario",
                 "sandboxInfo": {
-                    databaseId: null,
-                    databaseName: null,
-                    instanceId: null,
-                    instanceName: null,
-                    sandboxId: null,
-                    schemaId: null,
-                    schemaName: null
+                    databaseId: this.nextId().toString(),
+                    databaseName: "db",
+                    instanceId: this.nextId().toString(),
+                    instanceName: "instance name",
+                    sandboxId: this.nextId().toString(),
+                    schemaId: this.nextId().toString(),
+                    schemaName: "schema name"
                 }
             }
         },

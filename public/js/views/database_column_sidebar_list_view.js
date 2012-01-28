@@ -9,7 +9,7 @@ chorus.views.DatabaseColumnSidebarList = chorus.views.DatabaseSidebarList.extend
 
     makeModel:function () {
         this.collection = new chorus.collections.DatabaseColumnSet();
-        this.schema = this.options.sandbox.schema();
+        this.schema = this.options.sandbox && this.options.sandbox.schema();
     },
 
     setup:function () {
@@ -41,4 +41,3 @@ chorus.views.DatabaseColumnSidebarList = chorus.views.DatabaseSidebarList.extend
         };
     }
 });
-
