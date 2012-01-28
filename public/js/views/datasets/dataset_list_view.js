@@ -18,10 +18,25 @@
         },
 
         collectionModelContext : function(model) {
-            return {
+            var ctx = {
                 iconImgUrl : model.iconUrl(),
                 showUrl : model.showUrl()
             }
+
+            var recentComment = model.lastComment();
+            if (recentComment) {
+                var date = Date.parseFromApi(recentComment.get("commentCreatedStamp"))
+
+                ctx.lastComment = {
+                    body : recentComment.get("body"),
+                    creator : recentComment.author(),
+                    on : date && date.toString("MMM d")
+                }
+
+                ctx.otherCommentCount = parseInt(model.get("commentCount")) - 1;
+            }
+
+            return ctx;
         },
 
         selectDataset : function(e) {

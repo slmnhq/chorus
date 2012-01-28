@@ -263,3 +263,21 @@ $medium-font: 14px;
  @include linear-gradient(color-stops($body-background-color, $tab-gradient-color));
 
 }
+
+@mixin recent-comment {
+    .comment {
+        .body {
+            @include font-normal-alpha;
+        }
+
+        .user {
+            font-size: 13px;
+            font-weight: $semibold;
+        }
+
+        .comment_info {
+            font-size: 13px;
+            color: $color-text4;
+        }
+    }
+}

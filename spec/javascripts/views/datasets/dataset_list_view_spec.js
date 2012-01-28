@@ -1,7 +1,7 @@
 describe("chorus.views.DatasetList", function() {
     describe("#render", function() {
         beforeEach(function() {
-            this.collection = new chorus.collections.DatasetSet([fixtures.datasetChorusView(), fixtures.datasetSandboxTable(), fixtures.datasetSourceTable()]);
+            this.collection = new chorus.collections.DatasetSet([fixtures.datasetChorusView(), fixtures.datasetSandboxTable(), fixtures.datasetSourceTable({recentComment: null })]);
             this.view = new chorus.views.DatasetList({collection: this.collection});
             this.view.render();
         });
@@ -29,6 +29,15 @@ describe("chorus.views.DatasetList", function() {
                 expect(this.view.$("li img").eq(i).attr("src")).toBe(model.iconUrl());
             }
         });
+
+        it("does not create comment markup when there's no comment exist", function() {
+            expect(this.view.$("li:eq(2) .comment")).not.toExist();
+        });
+
+        it("creates comment markup when there's no comment exist", function() {
+            expect(this.view.$("li:eq(0) .comment")).toExist();
+        });
+
 
         it("displays the location of the dataset", function() {
             for (var i = 0; i < this.collection.length; i++) {

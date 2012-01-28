@@ -1,7 +1,9 @@
 {{#each models}}
     <li>
         <span class="spacer left"></span>
-        <div class="left"><img src="{{iconImgUrl}}" /></div>
+        <a class="image" href="{{showUrl}}">
+            <img src="{{iconImgUrl}}"/>
+        </a>
         <div class="right">
             <a href="{{showUrl}}" class="name">{{objectName}}</a>
             <div class="location">
@@ -9,6 +11,20 @@
                  / <a href="#">{{databaseName}}</a>
                  / <a href="#">{{schemaName}}</a>
             </div>
+            {{#if lastComment}}
+                <div class="comment">
+                    <div class="body">
+                        {{lastComment.body}}
+                    </div>
+                    {{{userProfileLink lastComment.creator}}}
+                    <span class="comment_info">
+                        {{t "comments.commented_on"}} <span class="on">{{lastComment.on}}</span>
+                        {{#if otherCommentCount }}
+                            - {{t "comments.other_comments" count=otherCommentCount}}
+                        {{/if}}
+                    </span>
+                </div>
+            {{/if}}
         </div>
         <span class="spacer right"></span>
     </li>
