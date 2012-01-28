@@ -1082,9 +1082,6 @@
                     versionNum : 1,
                     lastUpdatedStamp : "2011-11-29 10:46:03.255",
                     versionFileId: this.nextId().toString(),
-                    instanceId : null,
-                    databaseId : null,
-                    schemaId : null,
                     content: "Workfile Content!" + id,
                     modifiedByFirstName: modifiedByUser.firstName,
                     modifiedByLastName: modifiedByUser.lastName,
@@ -1092,6 +1089,17 @@
                     versionOwner : "edcadmin",
                     commitMessage : null,
                     isEditable : true
+                }, overrides);
+            },
+
+            executionInfoJson: function(overrides) {
+                return _.extend({
+                    databaseId: null,
+                    databaseName: null,
+                    instanceId: null,
+                    instanceName: null,
+                    schemaId: null,
+                    schemaName: null
                 }, overrides);
             },
 
@@ -1116,6 +1124,7 @@
                     fileType: "txt",
                     mimeType: "text/plain",
                     versionInfo: this.versionInfoJson(overrides && overrides.versionInfo, modifiedByUser),
+                    executionInfo : this.executionInfoJson(overrides && overrides.executionInfo),
                     latestVersionNum: 1,
                     recentComments: [
                         fixtures.activities.NOTE_ON_WORKFILE_JSON(),

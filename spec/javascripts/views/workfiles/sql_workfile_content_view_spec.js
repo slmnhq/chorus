@@ -1,7 +1,7 @@
 describe("chorus.views.SqlWorkfileContentView", function() {
     beforeEach(function() {
         this.workfile = fixtures.sqlWorkfile({ content: "select * from foos where bar_id = 1;" });
-        spyOn(this.workfile, 'defaultSchema').andReturn(fixtures.schema({
+        spyOn(this.workfile, 'executionSchema').andReturn(fixtures.schema({
             id: '4',
             name: "schema",
             databaseId: '3',

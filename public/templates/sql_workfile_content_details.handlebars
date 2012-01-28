@@ -7,7 +7,7 @@
         <li>
             {{#if schemaName}}
                 <span class="menu_shortcut">{{hotKeyName "r"}}</span>
-                {{#if defaultSchemaIsSandbox}}
+                {{#if executionSchemaIsSandbox}}
                     <a href="#" class="run_default">{{t "workfile.content_details.run_workspace_sandbox"}}</a>
                 {{else}}
                     <a href="#" class="run_default">{{t "workfile.content_details.run_in_last_schema" schemaName=schemaName}}</a>

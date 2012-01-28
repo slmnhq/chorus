@@ -40,16 +40,16 @@
             return this.workspace().sandbox()
         },
 
-        defaultSchema: function() {
-            var versionInfo = this.get("versionInfo");
-            if (versionInfo.schemaId) {
+        executionSchema: function() {
+            var executionInfo = this.get("executionInfo");
+            if (executionInfo && executionInfo.schemaId) {
                 return new ns.models.Schema({
-                    instanceId: versionInfo.instanceId,
-                    instanceName: versionInfo.instanceName,
-                    databaseId: versionInfo.databaseId,
-                    databaseName: versionInfo.databaseName,
-                    id: versionInfo.schemaId,
-                    name: versionInfo.schemaName
+                    instanceId: executionInfo.instanceId,
+                    instanceName: executionInfo.instanceName,
+                    databaseId: executionInfo.databaseId,
+                    databaseName: executionInfo.databaseName,
+                    id: executionInfo.schemaId,
+                    name: executionInfo.schemaName
                 });
             } else {
                 return this.sandbox() && this.sandbox().schema();

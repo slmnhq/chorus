@@ -37,9 +37,9 @@
 
         runInDefault : function() {
             this.run({
-                instance : this.model.defaultSchema().get('instanceId'),
-                database : this.model.defaultSchema().get('databaseId'),
-                schema : this.model.defaultSchema().get('id')
+                instance : this.model.executionSchema().get('instanceId'),
+                database : this.model.executionSchema().get('databaseId'),
+                schema : this.model.executionSchema().get('id')
             })
         },
 
