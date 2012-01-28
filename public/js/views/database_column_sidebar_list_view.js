@@ -10,7 +10,7 @@
 
         makeModel: function() {
             this.collection = new ns.collections.DatabaseColumnSet();
-            this.schema = this.options.sandbox.schema();
+            this.schema = this.options.sandbox && this.options.sandbox.schema();
         },
 
         setup: function() {

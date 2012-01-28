@@ -12,24 +12,30 @@
 
         setup: function() {
             this.sandbox = this.options.sandbox;
-            this.schemas = this.sandbox.database().schemas();
-            this.schema = this.sandbox.schema();
-            this.schemas.fetch();
-            this.fetchResourceAfterSchemaSelected(this.schema);
+            if(this.sandbox) {
+                this.schemas = this.sandbox.database().schemas();
+                this.schema = this.sandbox.schema();
+                this.schemas.fetch();
+                this.fetchResourceAfterSchemaSelected(this.schema);
+            }
         },
 
         additionalContext: function() {
-            return {
-                schemaName: this.schema.get("name"),
-                schemaLink: ns.helpers.linkTo("#", this.schema.get('name')),
-                schemas: this.schemas.map(function(schema) {
-                    return {
-                        id: schema.get("id"),
-                        name: schema.get("name"),
-                        isCurrent: this.schema.get('id') === schema.get('id')
-                    };
-                }, this)
-            };
+            if (!this.sandbox) {
+                return {}
+            } else {
+                return {
+                    schemaName: this.schema.get("name"),
+                    schemaLink: ns.helpers.linkTo("#", this.schema.get('name')),
+                    schemas: this.schemas.map(function(schema) {
+                        return {
+                            id: schema.get("id"),
+                            name: schema.get("name"),
+                            isCurrent: this.schema.get('id') === schema.get('id')
+                        };
+                    }, this)
+                };
+            }
         },
 
         fetchResourceAfterSchemaSelected: $.noop,

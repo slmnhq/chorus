@@ -1,10 +1,19 @@
 describe("chorus.views.DatabaseColumnSidebarList", function() {
-    beforeEach(function() {
-        this.view = new chorus.views.DatabaseColumnSidebarList({ sandbox: fixtures.sandbox() });
+    describe("initialization", function() {
+        context("when there is no sandbox", function() {
+            beforeEach(function() {
+                this.view = new chorus.views.DatabaseColumnSidebarList({ sandbox: undefined })
+            })
+
+            it("should not crash", function() {
+                expect(this.view).toBeDefined()
+            })
+        })
     });
 
     describe("#render", function() {
         beforeEach(function() {
+            this.view = new chorus.views.DatabaseColumnSidebarList({ sandbox: fixtures.sandbox() });
             this.view.render();
         });
 
