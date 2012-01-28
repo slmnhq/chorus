@@ -481,7 +481,6 @@ beforeEach(function() {
                             id : "10203",
                             name : "my workspace"
                         },
-
                         comments : [],
                         artifacts : []
                     }
@@ -847,8 +846,36 @@ beforeEach(function() {
                 };
             },
 
+            "NOTE_ON_DATASET_JSON" : function() {
+                return {
+                    author: fixtures.authorJson(),
+                    type: "NOTE",
+                    text: "How about that.",
+                    timestamp: "2011-12-01 00:00:00",
+                    id : fixtures.nextId().toString(),
+                    comments: [
+                        {
+                            text: "sub-comment 1",
+                            author : fixtures.authorJson(),
+                            timestamp : "2011-12-15 12:34:56"
+                        }
+                    ],
+                    artifacts: [],
+                    isPromoted: false,
+                    promoteCount: 0,
+                    table: {
+                        id: "10114|dca_demo|public|a",
+                        name: "a"
+                    }
+                };
+            },
+
             "NOTE_ON_WORKFILE" : function() {
                 return new chorus.models.Activity(fixtures.activities.NOTE_ON_WORKFILE_JSON());
+            },
+
+            "NOTE_ON_DATASET" : function() {
+                return new chorus.models.Activity(fixtures.activities.NOTE_ON_DATASET_JSON());
             },
 
             "USER_ADDED" : function() {
@@ -1163,13 +1190,13 @@ beforeEach(function() {
                 ownerFirstName : "Dr",
                 ownerLastName : "Mario",
                 "sandboxInfo": {
-                    databaseId: this.nextId().toString(),
-                    databaseName: "db",
-                    instanceId: this.nextId().toString(),
-                    instanceName: "instance name",
-                    sandboxId: this.nextId().toString(),
-                    schemaId: this.nextId().toString(),
-                    schemaName: "schema name"
+                    databaseId: null,
+                    databaseName: null,
+                    instanceId: null,
+                    instanceName: null,
+                    sandboxId: null,
+                    schemaId: null,
+                    schemaName: null
                 }
             }
         },
@@ -1481,7 +1508,8 @@ beforeEach(function() {
                 objectName : "Dataset" + id,
                 owner: {id:"InitialUser", userName:"edcadmin"},
                 schemaName: "some_schema",
-                workspace: {id:fixtures.nextId(), name:"some_workspace"}
+                workspace: {id:fixtures.nextId(), name:"some_workspace"},
+                recentComment : fixtures.activities.NOTE_ON_DATASET()
             }, overrides);
 
         },

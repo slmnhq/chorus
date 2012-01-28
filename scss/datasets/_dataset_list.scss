@@ -1,11 +1,13 @@
 .dataset_list, .database_column_list {
-    .left {
-        display: inline-block;
-        width: 50px;
+    .image {
+        display: block;
+        float: left;
     }
 
     .right {
-        display: inline-block;
+        @include recent-comment;
+        overflow: hidden;
+        padding-left: $padding-x;
         
         .name {
             font-weight: $semibold;
@@ -17,6 +19,11 @@
                 font-size: 12px;
                 font-weight: $semibold;
             }
+        }
+
+        .comment {
+            padding-top: 4px;
+            line-height: 19px;
         }
 
     }

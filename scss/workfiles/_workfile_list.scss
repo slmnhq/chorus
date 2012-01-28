@@ -1,21 +1,5 @@
 @import "_common.scss";
 
 ul.workfile_list {
-    .comment_info {
-        color: $color-text4;
-    }
-    .comment {
-        .body {
-            @include font-normal-alpha;
-        }
-
-        .user {
-            font-size: 13px;
-            font-weight: $semibold;
-        }
-
-        .comment_info {
-            font-size: 13px;
-        }
-    }
+    @include recent-comment;
 }

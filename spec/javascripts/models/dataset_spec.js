@@ -89,4 +89,29 @@ describe("chorus.models.Dataset", function() {
             })
         })
     })
+
+    describe("#lastComment", function() {
+        beforeEach(function() {
+            this.model = fixtures.datasetSandboxTable();
+            this.comment = this.model.lastComment();
+            this.lastCommentJson = this.model.get('recentComment');
+        });
+
+        it("has the right body", function() {
+            expect(this.comment.get("body")).toBe(this.lastCommentJson.text);
+        });
+
+        it("has the right creator", function() {
+            var creator = this.comment.author()
+            expect(creator.get("id")).toBe(this.lastCommentJson.author.id);
+            expect(creator.get("firstName")).toBe(this.lastCommentJson.author.firstName);
+            expect(creator.get("lastName")).toBe(this.lastCommentJson.author.lastName);
+        });
+
+        context("when the dataset doesn't have any comments", function() {
+            it("returns null", function() {
+                expect(fixtures.datasetSandboxTable({recentComment : null}).lastComment()).toBeFalsy();
+            });
+        });
+    });
 })

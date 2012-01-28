@@ -36,6 +36,15 @@ chorus.models.Dataset = chorus.models.Base.extend({
 
     iconUrl:function () {
         return "/images/" + chorus.models.Dataset.iconMap[this.get("type")][this.get("objectType")]
+    },
+
+    lastComment:function () {
+        var comment = this.get("recentComment");
+        return comment && new chorus.models.Comment({
+            body:comment.text,
+            author:comment.author,
+            commentCreatedStamp:comment.timestamp
+        });
     }
 }, {
     metaTypeMap:{
