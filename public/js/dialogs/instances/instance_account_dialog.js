@@ -1,31 +1,29 @@
-;(function(ns) {
-    ns.dialogs.InstanceAccount = ns.dialogs.Base.extend({
-        className : "instance_account",
+chorus.dialogs.InstanceAccount = chorus.dialogs.Base.extend({
+    className:"instance_account",
 
-        events: {
-            "submit form": "save"
-        },
+    events:{
+        "submit form":"save"
+    },
 
-        setup: function() {
-            this.title = this.options.launchElement.data("title");
-        },
+    setup:function () {
+        this.title = this.options.launchElement.data("title");
+    },
 
-        makeModel: function() {
-            this._super("makeModel", arguments);
-            this.model = this.pageModel.accountForCurrentUser();
-            this.model.bind("saved", this.saved, this);
-        },
+    makeModel:function () {
+        this._super("makeModel", arguments);
+        this.model = this.pageModel.accountForCurrentUser();
+        this.model.bind("saved", this.saved, this);
+    },
 
-        save: function(e) {
-            e.preventDefault();
-            this.model.save({
-                dbUserName: this.$("input[name=dbUserName]").val(),
-                dbPassword: this.$("input[name=dbPassword]").val()
-            });
-        },
+    save:function (e) {
+        e.preventDefault();
+        this.model.save({
+            dbUserName:this.$("input[name=dbUserName]").val(),
+            dbPassword:this.$("input[name=dbPassword]").val()
+        });
+    },
 
-        saved: function() {
-            this.closeModal();
-        }
-    });
-})(chorus);
+    saved:function () {
+        this.closeModal();
+    }
+});

@@ -1,18 +1,18 @@
-;(function(ns, $) {
-    ns.Modal = ns.views.Base.extend({
-        launchModal : function() {
+(function () {
+    chorus.Modal = chorus.views.Base.extend({
+        launchModal:function () {
             this.render();
             $(document).one('reveal.facebox', _.bind(this.revealed, this));
             $.facebox(this.el)
 
-            this.previousModal = ns.modal;
-            ns.modal = this;
+            this.previousModal = chorus.modal;
+            chorus.modal = this;
 
             _.bindAll(this, 'modalClosed', 'keydownHandler');
             pushModalBindings(this);
         },
 
-        makeModel : function(options) {
+        makeModel:function (options) {
             if (options && options.pageModel) {
                 this.pageModel = options.pageModel;
                 this.model = this.model || this.pageModel;
@@ -21,11 +21,11 @@
             this.bindPageModelCallbacks();
         },
 
-        closeModal : function() {
+        closeModal:function () {
             $(document).trigger("close.facebox");
         },
 
-        launchSubModal : function(subModal) {
+        launchSubModal:function (subModal) {
             popModalBindings(this);
 
             this.subModalId = "" + (new Date().getTime());
@@ -37,25 +37,25 @@
             subModal.launchModal();
         },
 
-        keydownHandler : function(e) {
+        keydownHandler:function (e) {
             if (e.keyCode == 27) {
                 this.escapePressed();
             }
         },
 
-        escapePressed: function() {
+        escapePressed:function () {
             $(document).trigger("close.facebox");
         },
 
-        modalClosed : function() {
-            if (this == ns.modal) {
+        modalClosed:function () {
+            if (this == chorus.modal) {
                 this.unbindPageModelCallbacks();
                 this.close();
                 $("#facebox").remove();
                 $.facebox.settings.inited = false;
-                delete ns.modal;
+                delete chorus.modal;
 
-                if(this.isSubModal) {
+                if (this.isSubModal) {
                     this.subModalClosed();
                 }
 
@@ -63,18 +63,18 @@
             }
         },
 
-        subModalClosed : function() {
+        subModalClosed:function () {
             $("#facebox-" + this.subModalId).attr("id", "facebox").removeClass("hidden");
             $("#facebox_overlay-" + this.subModalId).attr("id", "facebox_overlay");
-            ns.modal = this.previousModal;
+            chorus.modal = this.previousModal;
 
             pushModalBindings(this.previousModal);
         },
 
-        close : $.noop,
-        revealed : $.noop,
-        bindPageModelCallbacks : $.noop,
-        unbindPageModelCallbacks : $.noop
+        close:$.noop,
+        revealed:$.noop,
+        bindPageModelCallbacks:$.noop,
+        unbindPageModelCallbacks:$.noop
     });
 
     function pushModalBindings(modal) {
@@ -86,4 +86,4 @@
         $(document).unbind("close.facebox", modal.modalClosed);
         $(document).unbind("keydown.facebox", modal.keydownHandler);
     }
-})(chorus, jQuery);
+})();

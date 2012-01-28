@@ -1,9 +1,7 @@
-;(function(ns) {
-    ns.views.Visualization = ns.views.Base.extend({
-        render: function() {
-            var $el = $(this.el);
-            $el.addClass("visualization");
-            return this;
-        }
-    });
-})(chorus);
+chorus.views.Visualization = chorus.views.Base.extend({
+    render:function () {
+        var $el = $(this.el);
+        $el.addClass("visualization");
+        return this;
+    }
+});

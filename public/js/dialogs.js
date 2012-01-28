@@ -1,39 +1,36 @@
-;
-(function(ns) {
-    ns.dialogs.Base = ns.Modal.extend({
-        render: function render() {
-            this.preRender();
-            
-            var header = $("<div class='dialog_header'/>");
-            var content = $("<div class='dialog_content'/>");
-            var errors = $("<div class='errors'/>")
+chorus.dialogs.Base = chorus.Modal.extend({
+    render:function render() {
+        this.preRender();
 
-            this.events = this.events || {};
+        var header = $("<div class='dialog_header'/>");
+        var content = $("<div class='dialog_content'/>");
+        var errors = $("<div class='errors'/>")
 
-            this.events["click .modal_controls button.cancel"] = "closeModal";
+        this.events = this.events || {};
 
-            header.html($("<h1/>").text(this.title))
-            content.html(this.template(this.context()));
+        this.events["click .modal_controls button.cancel"] = "closeModal";
 
-            $(this.el).
-                empty().
-                append(header).
-                append(errors).
-                append(content).
-                addClass(this.className).
-                addClass("dialog").
-                addClass(this.additionalClass || "").
-                attr("title", this.options.title || this.title);
-            this.delegateEvents()
-            this.renderSubviews();
-            this.renderHelps();
-            this.postRender($(this.el));
+        header.html($("<h1/>").text(this.title))
+        content.html(this.template(this.context()));
 
-            return this;
-        },
+        $(this.el).
+            empty().
+            append(header).
+            append(errors).
+            append(content).
+            addClass(this.className).
+            addClass("dialog").
+            addClass(this.additionalClass || "").
+            attr("title", this.options.title || this.title);
+        this.delegateEvents()
+        this.renderSubviews();
+        this.renderHelps();
+        this.postRender($(this.el));
 
-        revealed : function () {
-            $("#facebox").removeClass().addClass("dialog_facebox");
-        }
-    })
-})(chorus)
+        return this;
+    },
+
+    revealed:function () {
+        $("#facebox").removeClass().addClass("dialog_facebox");
+    }
+})

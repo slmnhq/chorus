@@ -1,27 +1,27 @@
-(function($, ns) {
-    ns.UserNew = chorus.views.Base.extend({
-        className : "user_new",
+(function () {
+    chorus.views.UserNew = chorus.views.Base.extend({
+        className:"user_new",
 
-        events : {
-            "submit form" : 'submitNewUser',
-            "click button.cancel" : "goBack"
+        events:{
+            "submit form":'submitNewUser',
+            "click button.cancel":"goBack"
         },
 
-        persistent: true,
+        persistent:true,
 
-        setup : function() {
+        setup:function () {
             this.model.bind("saved", userSuccessfullySaved, this);
         },
 
-        makeModel : function() {
+        makeModel:function () {
             this.model = this.model || new chorus.models.User()
         },
 
-        submitNewUser : function submitNewUser(e) {
+        submitNewUser:function submitNewUser(e) {
             e.preventDefault();
 
             var updates = {};
-            _.each(this.$("input"), function(i) {
+            _.each(this.$("input"), function (i) {
                 var input = $(i);
                 updates[input.attr("name")] = input.val().trim();
             });
@@ -34,7 +34,7 @@
             this.model.save();
         },
 
-        goBack : function() {
+        goBack:function () {
             window.history.back();
         }
     });
@@ -42,4 +42,4 @@
     function userSuccessfullySaved() {
         chorus.router.navigate("/users", true);
     }
-})(jQuery, chorus.views);
+})();

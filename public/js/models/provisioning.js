@@ -1,9 +1,7 @@
-;(function(ns) {
-    ns.models.Provisioning = ns.models.Base.extend({
-        urlTemplate : "provisioning/{{provisionerPluginName}}?type={{type}}",
+chorus.models.Provisioning = chorus.models.Base.extend({
+    urlTemplate:"provisioning/{{provisionerPluginName}}?type={{type}}",
 
-        isInstalled: function() {
-            return this.get("installationStatus") === "install_succeed";
-        }
-    });
-})(chorus);
+    isInstalled:function () {
+        return this.get("installationStatus") === "install_succeed";
+    }
+});

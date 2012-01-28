@@ -1,18 +1,16 @@
-;(function($, ns) {
-    ns.UserShow = chorus.views.Base.extend({
-        className: "user_show",
+chorus.views.UserShow = chorus.views.Base.extend({
+    className:"user_show",
 
-        additionalContext: function(){
-            if (!this._fetchedWorkspaces) {
-                this.model.workspaces().fetch();
-                this._fetchedWorkspaces = true;
-            }
-
-            return {
-                workspaces: this.model.workspaces(),
-                department: this.model.get("ou"),
-                imageUrl: this.model.imageUrl()
-            }
+    additionalContext:function () {
+        if (!this._fetchedWorkspaces) {
+            this.model.workspaces().fetch();
+            this._fetchedWorkspaces = true;
         }
-    });
-})(jQuery, chorus.views);
+
+        return {
+            workspaces:this.model.workspaces(),
+            department:this.model.get("ou"),
+            imageUrl:this.model.imageUrl()
+        }
+    }
+});

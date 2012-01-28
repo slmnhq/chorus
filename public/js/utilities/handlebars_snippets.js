@@ -1,15 +1,15 @@
-(function(ns, Handlebars) {
+(function () {
 
     Handlebars.registerPartial("errorDiv", '<div class="errors">{{#if serverErrors }}{{#if serverErrors.length}}<ul>{{#each serverErrors}}<li>{{message}}</li>{{/each}}</ul><a class="close_errors action" href="#">{{t "actions.close"}}</a>{{/if}}{{/if}}</div>');
 
     var templates = {}; //for memoizing handlebars helpers templates
     var expectedDateFormat = /^(\d{4}-\d{1,2}-\d{1,2}\s+\d{1,2}:\d{2}:\d{2})/;
-    ns.helpers = {
-        cache_buster: function() {
+    chorus.helpers = {
+        cache_buster:function () {
             return new Date().getTime();
         },
 
-        ifAdmin: function(block) {
+        ifAdmin:function (block) {
             var user = chorus && chorus.session && chorus.session.user();
             if (user && user.get("admin")) {
                 return block(this);
@@ -18,7 +18,7 @@
             }
         },
 
-        ifCurrentUserNameIs: function(userName, block) {
+        ifCurrentUserNameIs:function (userName, block) {
             var user = chorus && chorus.session && chorus.session.user();
             if (user && user.get("userName") == userName) {
                 return block(this);
@@ -27,7 +27,7 @@
             }
         },
 
-        ifAll: function() {
+        ifAll:function () {
             // Handlebars actually passes in two functions: the first is block with block.inverse,
             // and the second function is just the block.inverse function itself.
             var args = _.toArray(arguments);
@@ -36,7 +36,7 @@
             if (args.length == 0) {
                 throw "ifAll expects arguments";
             }
-            if (_.all(args, function(arg) {
+            if (_.all(args, function (arg) {
                 return !!arg
             })) {
                 return block(this);
@@ -45,14 +45,14 @@
             }
         },
 
-        ifAny: function() {
+        ifAny:function () {
             var args = _.toArray(arguments);
             var elseBlock = args.pop();
             var block = args.pop();
             if (args.length == 0) {
                 throw "ifAny expects arguments";
             }
-            if (_.any(args, function(arg) {
+            if (_.any(args, function (arg) {
                 return !!arg
             })) {
                 return block(this);
@@ -61,25 +61,25 @@
             }
         },
 
-        currentUserName: function(block) {
+        currentUserName:function (block) {
             return chorus.session.get("userName");
         },
 
-        displayNameFromPerson: function(person) {
+        displayNameFromPerson:function (person) {
             return [person.firstName, person.lastName].join(' ')
         },
 
-        displayTimestamp: function(timestamp) {
+        displayTimestamp:function (timestamp) {
             var date = Date.parseFromApi(timestamp)
             return date ? date.toString("MMMM d") : "WHENEVER"
         },
 
-        relativeTimestamp: function(timestamp) {
+        relativeTimestamp:function (timestamp) {
             var date = Date.parseFromApi(timestamp);
             return date ? date.toRelativeTime(60000) : "WHENEVER"
         },
 
-        moreLink: function(collection, max, more_key, less_key) {
+        moreLink:function (collection, max, more_key, less_key) {
             if (collection && collection.length > max) {
                 templates.moreLinks = templates.moreLinks || Handlebars.compile(
                     "<ul class='morelinks'>\
@@ -89,16 +89,16 @@
                 );
 
                 return templates.moreLinks({
-                    more_key : more_key,
-                    more_count : collection.length - max,
-                    less_key : less_key
+                    more_key:more_key,
+                    more_count:collection.length - max,
+                    less_key:less_key
                 });
             } else {
                 return "";
             }
         },
 
-        eachWithMoreLink : function(context, max, more_key, less_key, fn, inverse) {
+        eachWithMoreLink:function (context, max, more_key, less_key, fn, inverse) {
             var ret = "";
 
             if (context && context.length > 0) {
@@ -113,12 +113,12 @@
             return ret;
         },
 
-        userProfileLink : function(user) {
+        userProfileLink:function (user) {
             templates.userLinkTemplate = templates.userLinkTemplate || Handlebars.compile("<a class='user' href='{{url}}'>{{name}}</a>");
-            return templates.userLinkTemplate({ url : user.showUrl(), name : user.displayName() });
+            return templates.userLinkTemplate({ url:user.showUrl(), name:user.displayName() });
         },
 
-        pluralize : function(collection, key) {
+        pluralize:function (collection, key) {
             if (collection.length == 1) {
                 return t(key);
             } else {
@@ -130,19 +130,19 @@
             }
         },
 
-        fileIconUrl : function(key, size) {
+        fileIconUrl:function (key, size) {
             return chorus.urlHelpers.fileIconUrl(key, size);
         },
 
-        linkTo: function(url, text, attributes) {
+        linkTo:function (url, text, attributes) {
             return $("<a></a>").attr("href", url).text(text).attr(attributes || {}).outerHtml();
         },
 
-        spanFor: function(text, attributes) {
+        spanFor:function (text, attributes) {
             return $("<span></span>").text(text).attr(attributes || {}).outerHtml()
         },
 
-        renderTemplate : function(templateName, context) {
+        renderTemplate:function (templateName, context) {
             if (!chorus.templates[templateName]) {
                 var tag = $('#' + templateName + "_template");
                 if (!tag.length) throw "No template for " + templateName;
@@ -151,30 +151,30 @@
             return chorus.templates[templateName](context);
         },
 
-        hotKeyName : function(hotKeyChar) {
+        hotKeyName:function (hotKeyChar) {
             return _.str.capitalize(chorus.hotKeyMeta) + " + " + hotKeyChar;
         },
 
-        workspaceUsage : function(percentageUsed, sizeText) {
+        workspaceUsage:function (percentageUsed, sizeText) {
             var markup = ""
-            if(percentageUsed >= 100) {
+            if (percentageUsed >= 100) {
                 markup = '<div class="usage_bar">' +
-                            '<div class="used full" style="width: 100%;">' +
-                               '<span class="size_text">'+sizeText+'</span>' +
-                               '<span class="percentage_text">'+percentageUsed+'%</span>' +
-                            '</div>' +
-                        '</div>'
+                    '<div class="used full" style="width: 100%;">' +
+                    '<span class="size_text">' + sizeText + '</span>' +
+                    '<span class="percentage_text">' + percentageUsed + '%</span>' +
+                    '</div>' +
+                    '</div>'
             } else {
-                if(percentageUsed >= 50) {
+                if (percentageUsed >= 50) {
                     markup = '<div class="usage_bar">' +
-                                '<div class="used" style="width: '+percentageUsed+'%;">' +
-                                '<span class="size_text">'+sizeText+'</span></div>' +
-                            '</div>'
+                        '<div class="used" style="width: ' + percentageUsed + '%;">' +
+                        '<span class="size_text">' + sizeText + '</span></div>' +
+                        '</div>'
                 } else {
                     markup = '<div class="usage_bar">' +
-                                '<div class="used" style="width: '+percentageUsed+'%;"></div>' +
-                                '<span class="size_text">'+sizeText+'</span>' +
-                            '</div>'
+                        '<div class="used" style="width: ' + percentageUsed + '%;"></div>' +
+                        '<span class="size_text">' + sizeText + '</span>' +
+                        '</div>'
                 }
             }
             return markup
@@ -183,8 +183,8 @@
 
     }
 
-    _.each(ns.helpers, function(helper, name) {
+    _.each(chorus.helpers, function (helper, name) {
         Handlebars.registerHelper(name, helper);
     });
 
-})(chorus, Handlebars);
+})();

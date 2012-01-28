@@ -1,16 +1,14 @@
-;(function(ns) {
-    ns.presenters.Base = function(model, options) {
-        var presentation = {
-            serverErrors : model.serverErrors,
-            loaded : model.loaded
-        };
+chorus.presenters.Base = function (model, options) {
+    var presentation = {
+        serverErrors:model.serverErrors,
+        loaded:model.loaded
+    };
 
-        return _.extend(presentation, model.attributes, this.present(model, options || {}));
-    }
+    return _.extend(presentation, model.attributes, this.present(model, options || {}));
+}
 
-    ns.presenters.Base.extend = Backbone.Model.extend;
+chorus.presenters.Base.extend = Backbone.Model.extend;
 
-    _.extend(ns.presenters.Base.prototype, {
-        present : $.noop
-    })
-})(chorus);
+_.extend(chorus.presenters.Base.prototype, {
+    present:$.noop
+})

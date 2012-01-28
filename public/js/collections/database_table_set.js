@@ -1,24 +1,21 @@
-(function(ns) {
-    ns.collections.DatabaseTableSet = ns.collections.Base.extend({
-        model : ns.models.DatabaseTable,
-        urlTemplate : "data/{{instanceId}}/database/{{databaseName}}/schema/{{schemaName}}/table",
+chorus.collections.DatabaseTableSet = chorus.collections.Base.extend({
+    model:chorus.models.DatabaseTable,
+    urlTemplate:"data/{{instanceId}}/database/{{databaseName}}/schema/{{schemaName}}/table",
 
-        findByName: function(name) {
-            return this.find(function(table) {
-                return table.get("name") === name;
-            });
-        },
+    findByName:function (name) {
+        return this.find(function (table) {
+            return table.get("name") === name;
+        });
+    },
 
-        parse: function(resp) {
-            var modelsJson = this._super("parse", arguments);
-            return _.map(modelsJson, function(modelJson) {
-                return _.extend({
-                    instanceId: this.attributes.instanceId,
-                    databaseName: this.attributes.databaseName,
-                    schemaName: this.attributes.schemaName
-                }, modelJson);
-            }, this);
-        }
-    });
-
-})(chorus);
+    parse:function (resp) {
+        var modelsJson = this._super("parse", arguments);
+        return _.map(modelsJson, function (modelJson) {
+            return _.extend({
+                instanceId:this.attributes.instanceId,
+                databaseName:this.attributes.databaseName,
+                schemaName:this.attributes.schemaName
+            }, modelJson);
+        }, this);
+    }
+});

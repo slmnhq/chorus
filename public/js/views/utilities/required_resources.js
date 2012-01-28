@@ -1,20 +1,18 @@
-;(function(ns) {
-    ns.RequiredResources = ns.collections.Base.extend({
-        allLoaded: function() {
-            return _.all(this.models, function(resource) {
-                return resource.loaded;
-            });
-        },
+chorus.RequiredResources = chorus.collections.Base.extend({
+    allLoaded:function () {
+        return _.all(this.models, function (resource) {
+            return resource.loaded;
+        });
+    },
 
-        _add: function(obj) {
-            this._super('_add', [obj, {silent: true}]);
-            this.trigger('add', obj);
-        },
+    _add:function (obj) {
+        this._super('_add', [obj, {silent:true}]);
+        this.trigger('add', obj);
+    },
 
-        _prepareModel: function(obj) {
-            return obj;
-        }
-    });
+    _prepareModel:function (obj) {
+        return obj;
+    }
+});
 
-    ns.RequiredResources.prototype.push = ns.RequiredResources.prototype.add;
-})(chorus);
+chorus.RequiredResources.prototype.push = chorus.RequiredResources.prototype.add;

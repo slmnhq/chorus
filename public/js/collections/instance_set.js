@@ -1,6 +1,4 @@
-;(function(ns){
-    ns.collections.InstanceSet = ns.collections.Base.extend({
-        model : ns.models.Instance,
-        urlTemplate : "instance/"
-    });
-})(chorus);
+chorus.collections.InstanceSet = chorus.collections.Base.extend({
+    model:chorus.models.Instance,
+    urlTemplate:"instance/"
+});

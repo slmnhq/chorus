@@ -1,6 +1,4 @@
-(function(ns) {
-    ns.collections.ActivitySet = ns.collections.Base.extend({
-        model : ns.models.Activity,
-        urlTemplate : "activitystream/{{entityType}}/{{entityId}}"
-    });
-})(chorus);
+chorus.collections.ActivitySet = chorus.collections.Base.extend({
+    model:chorus.models.Activity,
+    urlTemplate:"activitystream/{{entityType}}/{{entityId}}"
+});
