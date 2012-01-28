@@ -184,6 +184,17 @@ describe("chorus.pages.WorkfileShowPage", function() {
             })
         })
 
+        describe("when the content triggers file:executionCompleted", function() {
+            beforeEach(function() {
+                this.page.render();
+                spyOnEvent(this.page.mainContent.contentDetails, 'file:executionCompleted');
+                this.page.mainContent.content.trigger("file:executionCompleted", fixtures.taskWithResult());
+            });
+            it("should relay event to the contentDetails", function() {
+                expect('file:executionCompleted').toHaveBeenTriggeredOn(this.page.mainContent.contentDetails);
+            });
+        });
+
         describe("breadcrumbs", function() {
             it("renders home > Workspaces > {workspace name} > All work files > {workfile name}", function() {
                 expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");

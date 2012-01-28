@@ -1,4 +1,4 @@
-;(function($) {
+(function() {
     window.t = function(key, options) {
         if (_.isObject(options)) {
             return I18n.t(key, options);
@@ -28,4 +28,4 @@
             return _.trim(this);
         }
     }
-})(jQuery);
+})();

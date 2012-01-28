@@ -12,7 +12,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 schemaName: "schema"
             }});
         this.view = new chorus.views.SqlWorkfileContentDetails({ model : this.model })
-        spyOn(this.view, 'runInSandbox').andCallThrough();
+        spyOn(this.view, 'runInExecutionSchema').andCallThrough();
         this.qtipElement = stubQtip()
     });
 
@@ -36,7 +36,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
 
             describe("when the workspace has been run in a schema other than its sandbox's schema", function() {
                 beforeEach(function() {
-                    _.extend(this.model.get("versionInfo"), {
+                    _.extend(this.model.get("executionInfo"), {
                         instanceId: '51',
                         instanceName: "bob_the_instance",
                         databaseId: '52',
@@ -52,7 +52,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     var runLink = this.qtipElement.find(".run_default");
                     expect(runLink).toBe("a");
                     expect(runLink).toContainTranslation("workfile.content_details.run_in_last_schema", {
-                        schemaName: this.model.defaultSchema().canonicalName()
+                        schemaName: this.model.executionSchema().canonicalName()
                     });
                 });
             });
@@ -136,32 +136,38 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     it("triggers file:runInSchema on itself when the dialog triggers a run event", function() {
                         expect("file:runInSchema").toHaveBeenTriggeredOn(this.view, [ { foo : "bar"}])
                     })
+                });
+            });
+        })
+    });
 
-                    it("re-fetches the workfile", function() {
-                        expect(this.server.lastFetchFor(this.view.model)).toBeDefined();
-                    })
+    describe("event handling", function() {
+        describe("file:executionCompleted", function() {
+            beforeEach(function() {
+                spyOn(this.view, "render");
+                spyOnEvent(this.view.model, "change")
+                this.executionInfo = {
+                    instanceId: '51',
+                    instanceName: "ned",
+                    databaseId: '52',
+                    databaseName: "rob",
+                    schemaId: '53',
+                    schemaName: "louis"
+                }
 
-                    describe("when the fetch succeeds", function() {
-                        beforeEach(function() {
-                            this.view.model.set({
-                                versionInfo : {
-                                    databaseId: '33',
-                                    databaseName: "db33",
-                                    instanceId: '22',
-                                    instanceName: "instance22",
-                                    schemaId: '44',
-                                    schemaName: "schema44"
-                                }
-                            }, { silent : true })
-                            this.server.completeFetchFor(this.view.model)
-                        });
+                this.view.trigger("file:executionCompleted", fixtures.task({ executionInfo : this.executionInfo }));
+            })
 
-                        it("re-renders, showing the new default schema", function() {
-                            this.view.$(".run_file").click();
-                            expect(this.qtipElement.find(".run_default")).toContainText(this.model.defaultSchema().canonicalName());
-                        });
-                    });
-                })
+            it("updates the execution info in the workfile", function() {
+                expect(this.view.model.get("executionInfo")).toBe(this.executionInfo);
+            })
+
+            it("re-renders", function() {
+                expect(this.view.render).toHaveBeenCalled();
+            })
+
+            it("does not trigger change on the model", function() {
+                expect("change").not.toHaveBeenTriggeredOn(this.view.model);
             })
         })
     });

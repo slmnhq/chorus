@@ -24,58 +24,98 @@ describe("chorus.models.Workfile", function() {
         });
     });
 
-    describe("#defaultSchema", function() {
-        context("when the workfile has been executed in a schema other than its sandbox's schema", function() {
+    describe("#executionSchema", function() {
+        context("when the workfile is not loaded", function() {
             beforeEach(function() {
-                _.extend(this.model.get("versionInfo"), {
-                    instanceId: '51',
-                    instanceName: "ned",
-                    databaseId: '52',
-                    databaseName: "rob",
-                    schemaId: '53',
-                    schemaName: "louis"
+                this.model.clear();
+                delete this.model.loaded;
+            })
+
+            it("returns undefined", function() {
+                expect(this.model.executionSchema()).toBeUndefined();
+            });
+        })
+
+        context("when the workfile's workspace has a sandbox", function() {
+            beforeEach(function() {
+                this.model.workspace().set({
+                    sandboxInfo: {
+                        databaseId: "4",
+                        databaseName: "db",
+                        instanceId: "5",
+                        instanceName: "instance",
+                        sandboxId: "10001",
+                        schemaId: "6",
+                        schemaName: "schema"
+                    }
+                });
+            })
+
+            context("when the workfile has never been executed", function() {
+                it("returns the sandbox's schema", function() {
+                    var schema = this.model.executionSchema();
+                    expect(schema.get("instanceId")).toBe('5');
+                    expect(schema.get("instanceName")).toBe('instance');
+                    expect(schema.get("databaseId")).toBe('4');
+                    expect(schema.get("databaseName")).toBe('db');
+                    expect(schema.get("id")).toBe('6');
+                    expect(schema.get("name")).toBe('schema');
+                });
+            })
+
+            context("when the workfile was last executed in a schema other than its sandbox's schema", function() {
+                beforeEach(function() {
+                    _.extend(this.model.get("executionInfo"), {
+                        instanceId: '51',
+                        instanceName: "ned",
+                        databaseId: '52',
+                        databaseName: "rob",
+                        schemaId: '53',
+                        schemaName: "louis"
+                    });
+                });
+
+                it("returns that schema", function() {
+                    var schema = this.model.executionSchema();
+                    expect(schema.get("instanceId")).toBe('51');
+                    expect(schema.get("instanceName")).toBe('ned');
+                    expect(schema.get("databaseId")).toBe('52');
+                    expect(schema.get("databaseName")).toBe('rob');
+                    expect(schema.get("id")).toBe('53');
+                    expect(schema.get("name")).toBe('louis');
                 });
             });
 
-            it("returns that schema", function() {
-                var schema = this.model.defaultSchema();
-                expect(schema.get("instanceId")).toBe('51');
-                expect(schema.get("instanceName")).toBe('ned');
-                expect(schema.get("databaseId")).toBe('52');
-                expect(schema.get("databaseName")).toBe('rob');
-                expect(schema.get("id")).toBe('53');
-                expect(schema.get("name")).toBe('louis');
-            });
-        });
-
-        context("when the workfile has not been executed outside its sandbox's schema", function() {
-            context("when the workfile's workspace is loaded and has a sandbox", function() {
+            context("when the workfile was last executed in a its sandbox schema", function() {
                 beforeEach(function() {
-                    this.model.workspace().set({
-                        sandboxInfo: {
-                            databaseId: 4,
-                            databaseName: "db",
-                            instanceId: 5,
-                            instanceName: "instance",
-                            sandboxId: "10001",
-                            schemaId: 6,
-                            schemaName: "schema"
-                        }
+                    _.extend(this.model.get("executionInfo"), {
+                        databaseId: "4",
+                        databaseName: "db",
+                        instanceId: "5",
+                        instanceName: "instance",
+                        sandboxId: "10001",
+                        schemaId: "6",
+                        schemaName: "schema"
                     });
                 });
 
                 it("returns the sandbox's schema", function() {
-                    expect(this.model.defaultSchema()).toBeDefined();
-                    expect(this.model.defaultSchema()).toBe(this.model.sandbox().schema());
+                    var schema = this.model.executionSchema();
+                    expect(schema.get("instanceId")).toBe('5');
+                    expect(schema.get("instanceName")).toBe('instance');
+                    expect(schema.get("databaseId")).toBe('4');
+                    expect(schema.get("databaseName")).toBe('db');
+                    expect(schema.get("id")).toBe('6');
+                    expect(schema.get("name")).toBe('schema');
                 });
-            });
+            })
+        })
 
-            context("when the workfile's workspace is not loaded or has no sandbox", function() {
-                it("returns undefined", function() {
-                    expect(this.model.defaultSchema()).toBeUndefined();
-                });
+        context("when the workfile's workspace does not have a sandbox", function() {
+            it("returns undefined", function() {
+                expect(this.model.executionSchema()).toBeUndefined();
             });
-        });
+        })
     });
 
     describe("#sandbox", function() {

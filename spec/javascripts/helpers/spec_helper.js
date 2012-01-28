@@ -1,4 +1,4 @@
-(function($) {
+(function() {
     var templates = [
         'activity',
         'activity_list',
@@ -277,7 +277,7 @@
     window.xcontext = window.xdescribe;
     window.specify = window.it;
     window.xspecify = window.xit;
-    
+
     window.xitBehavesLike = {};
     _.each(window.itBehavesLike, function(value, key){ window.xitBehavesLike[key] = $.noop });
 
@@ -402,4 +402,4 @@
         $('#jasmine_content').empty();
     }
 
-})(jQuery);
+})();

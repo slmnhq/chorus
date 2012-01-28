@@ -1,6 +1,11 @@
 (function($, ns) {
     ns.views.SqlWorkfileContentDetails = ns.views.WorkfileContentDetails.extend({
         className : "sql_workfile_content_details",
+
+        setup : function() {
+            this.bind("file:executionCompleted", this.executionCompleted, this);
+        },
+
         postRender: function() {
             this._super("postRender")
             var self = this;
@@ -8,22 +13,22 @@
                 content: this.$(".run_workfile").html(),
                 orientation: "right",
                 contentEvents: {
-                    "a.run_default": _.bind(this.runInSandbox, this),
+                    "a.run_default": _.bind(this.runInExecutionSchema, this),
                     ".run_other_schema": _.bind(this.runOtherSchema, this)
                 }
             });
         },
 
         additionalContext : function() {
-            var defaultSchema = this.model.defaultSchema();
+            var executionSchema = this.model.executionSchema();
             var sandboxSchema = this.model.sandbox() && this.model.sandbox().schema()
             return {
-                schemaName : defaultSchema && defaultSchema.canonicalName(),
-                defaultSchemaIsSandbox : (defaultSchema && defaultSchema.isEqual(sandboxSchema))
+                schemaName : executionSchema && executionSchema.canonicalName(),
+                executionSchemaIsSandbox : (executionSchema && executionSchema.isEqual(sandboxSchema))
             };
         },
 
-        runInSandbox: function() {
+        runInExecutionSchema: function() {
             this.trigger("file:runCurrent");
         },
 
@@ -35,9 +40,12 @@
                 var args = _.toArray(arguments);
                 args.unshift("file:runInSchema");
                 this.trigger.apply(this, args);
-
-                this.model.fetch();
             }, this);
+        },
+
+        executionCompleted : function(task) {
+            this.model.set({executionInfo: task.get("executionInfo")}, {silent : true});
+            this.render();
         }
     });
 })(jQuery, chorus);
