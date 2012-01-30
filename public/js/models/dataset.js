@@ -31,8 +31,9 @@ chorus.models.Dataset = chorus.models.Base.extend({
             objectName:this.get("objectName")
         });
     },
+
     metaType:function () {
-        return chorus.models.Dataset.metaTypeMap[this.get("objectType")]
+        return chorus.models.Dataset.metaTypeMap[this.get("objectType")] || "table";
     },
 
     iconUrl:function () {
