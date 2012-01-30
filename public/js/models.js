@@ -236,6 +236,19 @@ chorus.collections = {
             return uri.normalizeSearch().toString();
         },
 
+        fetch: function(options) {
+            options || (options = {});
+            var success = options.success;
+            options.success = function(collection, resp) {
+                if(collection.loaded && !options.silent) {
+                    collection.trigger('loaded');
+                }
+                if (success) success(collection, resp);
+            };
+            return Backbone.Collection.prototype.fetch.call(this, options);
+        },
+
+
         fetchPage: function(page, options) {
             var url = this.url({page : page});
             options = _.extend({}, options, { url: url });
@@ -254,12 +267,13 @@ chorus.collections = {
                             var page = parseInt(resp.pagination.page);
                             if (page >= total) {
                                 collection.trigger("reset", collection);
+                                collection.trigger("loaded");
                             } else {
                                 fetchPage.call(collection, page + 1);
                             }
                         } else {
                             collection.trigger("reset", collection);
-
+                            collection.trigger("loaded");
                         }
                     }
                 });
@@ -278,7 +292,6 @@ chorus.collections = {
             this.pagination = data.pagination;
             if(data.status == 'ok') {
                 this.loaded = true;
-                this.trigger('loaded');
             }
             return data.resource;
         },
