@@ -30,7 +30,7 @@ describe("chorus.views.DatasetListSidebar", function() {
                 });
 
                 it("fetches the activities for the dataset", function() {
-                    expect(this.server.lastFetchFor(this.dataset.activities())).toBeDefined();
+                    expect(this.dataset.activities()).toHaveBeenFetched()
                 });
 
                 describe("when the activity fetch completes", function() {
@@ -45,7 +45,7 @@ describe("chorus.views.DatasetListSidebar", function() {
                 });
 
                 it("fetches the statistics for the dataset", function() {
-                    expect(this.server.lastFetchFor(this.dataset.statistics())).toBeDefined();
+                    expect(this.dataset.statistics()).toHaveBeenFetched()
                 });
 
                 context("when the statistics arrive", function() {

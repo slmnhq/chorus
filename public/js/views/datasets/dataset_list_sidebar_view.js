@@ -2,6 +2,7 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
     className:"dataset_list_sidebar",
 
     subviews:{
+        '.activity_list':'activityList',
         '.tab_control':'tabControl'
     },
 
@@ -18,6 +19,16 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
         this.statistics = dataset.statistics();
         this.statistics.bindOnce("change", this.render, this);
         this.statistics.fetch();
+
+        var activities = dataset.activities();
+        activities.fetch();
+        this.activityList = new chorus.views.ActivityList({
+            collection: activities,
+            headingText:t("workfile.content_details.activity"),
+            additionalClass:"sidebar",
+            displayStyle:['without_object', 'without_workspace']
+        });
+
         this.render();
     },
 

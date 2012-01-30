@@ -8,6 +8,7 @@ chorus.models.Dataset = chorus.models.Base.extend({
             this.get("objectName")
         ].join("|");
         this.entityType = this.metaType();
+        this.bind('invalidated', this.fetch, this)
     },
 
     showUrlTemplate:function () {

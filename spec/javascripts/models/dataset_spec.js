@@ -26,6 +26,13 @@ describe("chorus.models.Dataset", function() {
         expect(this.dataset.entityId).toBe("45|whirling_tops|diamonds|mama");
     });
 
+    describe("when the 'invalidated' event is triggered", function() {
+        it("re-fetches, because the last comment might have changed", function() {
+            this.dataset.trigger("invalidated");
+            expect(this.dataset).toHaveBeenFetched();
+        });
+    });
+
     describe("#statistics", function() {
         beforeEach(function() {
             this.datasetProperties = this.dataset.statistics()
