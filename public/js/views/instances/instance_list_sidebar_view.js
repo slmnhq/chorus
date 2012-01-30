@@ -45,7 +45,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
         this.instance.activities().fetch();
         this.requiredResources.push(this.instance)
         if (!this.instance.loaded) {
-            this.instance.fetch();
+            this.instance.fetchIfNotLoaded();
         }
 
         this.instance.accounts().fetch();
@@ -59,7 +59,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
         account.fetch();
 
         var instanceUsage = this.instance.usage();
-        instanceUsage.fetch();
+        instanceUsage.fetchIfNotLoaded();
         this.requiredResources.push(instanceUsage)
 
         this.resource.bind("change", this.render, this);
