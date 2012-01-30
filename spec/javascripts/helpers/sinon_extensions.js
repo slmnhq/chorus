@@ -52,11 +52,14 @@ _.extend(sinon.fakeServer, {
     },
 
     completeFetchFor: function(model, results, options, pagination) {
-        if(results) {
+        if (results) {
             results = results.attributes ? results.attributes : results;
-        } else {
+        } else if (model instanceof Backbone.Model) {
             results = model.attributes;
+        } else {
+            results = [];
         }
+
         var fetch = this.lastFetchFor(model, options)
         if(fetch) {
             fetch.succeed(results, pagination);
