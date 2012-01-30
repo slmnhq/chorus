@@ -40,8 +40,25 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
         this.userCollection.loaded = true;
 
-        this.views = {
-            "Header":new chorus.views.Header(),
+        this.task = (function() {
+            var animals = ['aardvark', 'bat', 'cheetah'];
+            var columns = [{ name: "id" }, { name: "value" }, { name: "animal" }];
+            var rows = _.map(_.range(50), function(i) {
+                return {
+                    id: i,
+                    value : Math.round(100 * Math.random(), 0),
+                    animal : _.shuffle(animals)[0]
+                }
+            });
+
+            return new chorus.models.Task({ result: {
+                columns: columns,
+                rows: rows
+            }});
+        })();
+        
+            this.views = {
+                "Header" : new chorus.views.Header(),
 
             "Breadcrumbs":new chorus.views.BreadcrumbsView({
                 breadcrumbs:[
@@ -129,39 +146,28 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                     ]
                 }})
             }),
+                
+            "Visualization: TimeSeries" : new chorus.views.visualizations.TimeSeriesPlot({
+                model: this.task,
+                x: 'id',
+                y: 'value'
+            }),
 
-            "Visualization":(function () {
-                var animals = ['aardvark', 'bat', 'cheetah'];
-                var columns = [
-                    { name:"id" },
-                    { name:"value" },
-                    { name:"animal" }
-                ];
-                var rows = _.map(_.range(50), function (i) {
-                    return {
-                        id:i,
-                        value:Math.round(100 * Math.random(), 0),
-                        animal:_.shuffle(animals)[0]
-                    }
-                });
-
-                return new chorus.views.Visualization({
-                    model:new chorus.models.Task({ result:{
-                        columns:columns,
-                        rows:rows
-                    }})
-                })
-            })()
+            "Visualization: BoxPlot" : new chorus.views.visualizations.BoxPlot({
+                model: this.task,
+                x: 'animal',
+                y: 'value'
+            })
         }
     },
-
-    render:function () {
+    
+    render : function(){
         $(this.el).empty()
 
         var self = this;
-        _.each(this.views, function (view, name) {
+        _.each(this.views, function(view, name) {
             $(self.el).append("<li class='view'><h1>" + name + "</h1><div class='view_guts'/></li>")
-            view.el = self.$(".view_guts:last");
+            view.el = self.$(".view_guts:last")[0];
             view.delegateEvents();
             view.render();
         })
