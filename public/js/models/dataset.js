@@ -11,6 +11,8 @@ chorus.models.Dataset = chorus.models.Base.extend({
         this.bind('invalidated', this.fetch, this)
     },
 
+    urlTemplate: "workspace/{{workspace.id}}/dataset/{{entityId}}",
+
     showUrlTemplate:function () {
         return [
             "workspaces",

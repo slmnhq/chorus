@@ -26,6 +26,11 @@ describe("chorus.models.Dataset", function() {
         expect(this.dataset.entityId).toBe("45|whirling_tops|diamonds|mama");
     });
 
+    it("has the right url", function() {
+        var url = encodeURI("/edc/workspace/44/dataset/45|whirling_tops|diamonds|mama");
+        expect(this.dataset.url()).toMatchUrl(url);
+    });
+
     describe("when the 'invalidated' event is triggered", function() {
         it("re-fetches, because the last comment might have changed", function() {
             this.dataset.trigger("invalidated");
