@@ -61,6 +61,10 @@
             @include font-content-details;
             font-size: 14px;
 
+            span {
+                vertical-align: bottom;
+            }
+
             a {
                 @include ellipsis;
                 max-width: 140px;
@@ -144,10 +148,15 @@
                 }
             }
 
-            li .type {
-                float: right;
-                margin-top: 8px;
-                color: $color-text3;
+            li {
+                .name {
+                    max-width: 60%;
+                }
+                .type {
+                    float: right;
+                    margin-top: 8px;
+                    color: $color-text3;
+                }
             }
         }
 
