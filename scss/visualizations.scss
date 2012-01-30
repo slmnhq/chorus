@@ -1,4 +1,10 @@
 .visualization {
+    svg {
+        background: white;
+        height: 340px;
+        width: 925px;
+    }
+
     path {
         fill: none;
     }
@@ -21,13 +27,23 @@
 
     .box_plot {
         .box rect {
-            fill: blue;
+            fill: #1C93DF;
         }
+
         .xaxis {
             stroke-dasharray: 1;
-            stroke-width: 0.25;
             stroke-width: 0.40;
-            stroke: #aaF;
+            stroke: #aaa;
+        }
+
+        .whisker {
+            stroke: black;
+            stroke-width: 0.4;
+        }
+
+        .median {
+            stroke: black;
+            stroke-width: 0.5;
         }
     }
 }

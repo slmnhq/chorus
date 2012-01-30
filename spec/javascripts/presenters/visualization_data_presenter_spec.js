@@ -112,9 +112,9 @@ describe("chorus.presenters.visualizations", function() {
         it("presents arrays of {key, min, q1, mean, q3, max}", function() {
             expect(this.data.length).toBe(3);
 
-            expect(this.data[0]).toEqual({name: 'aardvark', min: 1, q1: 1, mean: 2.5, q3: 3, max: 4});
-            expect(this.data[1]).toEqual({name: 'beluga', min: 100, q1: 100, mean: 250, q3: 300, max: 400});
-            expect(this.data[2]).toEqual({name: 'chupacabra', min: 10, q1: 10, mean: 25, q3: 30, max: 40});
+            expect(this.data[0]).toEqual({name: 'aardvark', min: 1, q1: 1, median: 2.5, q3: 3, max: 4});
+            expect(this.data[1]).toEqual({name: 'beluga', min: 100, q1: 100, median: 250, q3: 300, max: 400});
+            expect(this.data[2]).toEqual({name: 'chupacabra', min: 10, q1: 10, median: 25, q3: 30, max: 40});
         });
 
         it("sets minY and maxY", function() {

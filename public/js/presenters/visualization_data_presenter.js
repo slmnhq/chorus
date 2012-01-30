@@ -56,7 +56,7 @@
                 var max = _.max(values);
                 var quartiles = jStat.quartiles(values);
 
-                return {name: keyName, min: min, q1: quartiles[0], mean: jStat.mean(values), q3: quartiles[2], max: max};
+                return {name: keyName, min: min, q1: quartiles[0], median: jStat.median(values), q3: quartiles[2], max: max};
             })
             ret.minY = _.min(_.pluck(ret, "min"));
             ret.maxY = _.max(_.pluck(ret, "max"));
