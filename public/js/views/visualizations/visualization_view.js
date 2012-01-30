@@ -77,6 +77,60 @@ chorus.views.visualizations.BoxPlot = chorus.views.Base.extend({
 
         // render actual chart here
 
+
+        var chart = d3.select(this.el).append("svg").
+            attr("class", "chart box_plot").
+            attr("height", "500px").
+            attr("width", "100%").
+            attr("viewBox", "0 0 100 100").
+            append("g").
+                attr("class", "top_transform").
+                attr("transform", "scale(1,-1) translate(0,-100)");
+
+        var xScaler = d3.scale.ordinal().
+            domain(_.pluck(data, "name")).
+            rangeBands([0, 100]);
+
+        var yScaler = d3.scale.linear().
+           domain([data.minY, data.maxY]).
+           range([0, 100]);
+
+        chart.selectAll("line.ytick").data(yScaler.ticks(10)).enter().
+            append("line").
+            attr("class", "ytick").
+            attr("y1", yScaler).
+            attr("y2", yScaler).
+            attr("x1", xScaler.rangeExtent()[0]).
+            attr("x2", xScaler.rangeExtent()[1]);
+
+        var boxes = chart.selectAll("g.box").data(data).enter().
+            append("g").
+            attr("class", "box");
+
+        var boxWidth = xScaler.rangeBand() * 0.2;
+        var boxOffset = xScaler.rangeBand() * 0.4;
+        boxes.append("rect").
+            attr("width", boxWidth).
+            attr("height", function(d) { return yScaler(d.q3) - yScaler(d.q1) }).
+            attr("x", function(d) { return xScaler(d.name) + boxOffset}).
+            attr("y", function(d) { return yScaler(d.q1) }).
+            attr("name", function(d) {return d.name});
+
+
+        chart.append("line").
+            attr("class", "yaxis").
+            attr("x1", xScaler.rangeExtent()[0]).
+            attr("x2", xScaler.rangeExtent()[0]).
+            attr("y1", yScaler.range()[0]).
+            attr("y2", yScaler.range()[1]);
+        chart.append("line").
+            attr("class", "xaxis").
+            attr("x1", xScaler.rangeExtent()[0]).
+            attr("x2", xScaler.rangeExtent()[1]).
+            attr("y1", yScaler.range()[0]).
+            attr("y2", yScaler.range()[0]);
+
+
         return this;
     }
 });

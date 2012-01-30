@@ -18,4 +18,16 @@
         stroke-width: 0.6;
         stroke: black;
     }
+
+    .box_plot {
+        .box rect {
+            fill: blue;
+        }
+        .xaxis {
+            stroke-dasharray: 1;
+            stroke-width: 0.25;
+            stroke-width: 0.40;
+            stroke: #aaF;
+        }
+    }
 }
