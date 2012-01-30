@@ -2,14 +2,13 @@ chorus.models = {
     Base: Backbone.Model.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, chorus.Mixins.dbHelpers, chorus.Mixins.Fetching, {
         url: function(options) {
             var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
-            var uri = new URI("/edc/" + Handlebars.compile(template)(this.attributes));
+            var context = _.extend({}, this.attributes, { entityId: this.entityId, entityType: this.entityType })
+            var uri = new URI("/edc/" + Handlebars.compile(template)(context));
             if (this.urlParams) {
                 var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;
                 uri.addSearch(params);
             }
-            if (!window.jasmine) {
-                uri.addSearch({iebuster: new Date().getTime()});
-            }
+            if (!window.jasmine) { uri.addSearch({iebuster: new Date().getTime()}); }
             return uri.normalizeSearch().toString();
         },
 

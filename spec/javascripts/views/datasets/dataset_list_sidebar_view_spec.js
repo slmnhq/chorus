@@ -29,8 +29,23 @@ describe("chorus.views.DatasetListSidebar", function() {
                     expect(this.view.$(".type").text().trim()).toBe(this.view.datasetType(this.dataset));
                 });
 
+                it("fetches the activities for the dataset", function() {
+                    expect(this.server.lastFetchFor(this.dataset.activities())).toBeDefined();
+                });
+
+                describe("when the activity fetch completes", function() {
+                    beforeEach(function() {
+                        this.server.completeFetchFor(this.dataset.activities());
+                    });
+
+                    it("renders an activity list inside the tabbed area", function() {
+                        expect(this.view.activityList).toBeA(chorus.views.ActivityList);
+                        expect(this.view.activityList.el).toBe(this.view.$(".tabbed_area .activity_list")[0]);
+                    });
+                });
+
                 it("fetches the statistics for the dataset", function() {
-                    expect(this.server.lastRequest().url).toMatchUrl(this.dataset.statistics().url());
+                    expect(this.server.lastFetchFor(this.dataset.statistics())).toBeDefined();
                 });
 
                 context("when the statistics arrive", function() {

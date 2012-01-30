@@ -29,6 +29,12 @@ describe("chorus.models", function() {
                 expect(this.model.url()).toMatchUrl("/edc/my_items/foo");
             });
 
+            it("compiles the urlTemplate with the model's entityId and entityType", function() {
+                this.model.entityId = "45";
+                this.model.urlTemplate = "data/{{entityId}}"
+                expect(this.model.url()).toBe("/edc/data/45");
+            });
+
             context("when the model has additional url params", function() {
                 context("when the urlParams is a function", function() {
                     beforeEach(function() {
