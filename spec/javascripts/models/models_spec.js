@@ -973,7 +973,7 @@ describe("chorus.models", function() {
                     this.server.respond();
                 })
 
-                it("triggers the 'loaded' event on the model", function() {
+                it("triggers the 'loaded' event on the collection", function() {
                     expect(this.loadedSpy).toHaveBeenCalled();
                 })
             })

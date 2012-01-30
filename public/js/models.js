@@ -184,14 +184,6 @@ chorus.collections = {
             this.setup(arguments);
         },
 
-        fetch:function () {
-            this.fetching = true;
-            return this._super('fetch', arguments)
-                .always(_.bind(function() {
-                    this.fetching = false;
-                }, this));
-        },
-
         findWhere: function(attrs) {
             return this.find(function(model) {
                 return _.all(attrs, function(value, key) {
@@ -237,6 +229,7 @@ chorus.collections = {
         },
 
         fetch: function(options) {
+            this.fetching = true;
             options || (options = {});
             var success = options.success;
             options.success = function(collection, resp) {
@@ -245,7 +238,10 @@ chorus.collections = {
                 }
                 if (success) success(collection, resp);
             };
-            return Backbone.Collection.prototype.fetch.call(this, options);
+            return this._super('fetch', [options])
+                .always(_.bind(function() {
+                    this.fetching = false;
+                }, this));
         },
 
 
