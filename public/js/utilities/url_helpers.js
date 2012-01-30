@@ -33,4 +33,9 @@
         var imageName = (map[fileType] || "plain") + ".png";
         return "/images/workfiles/" + (size || "large") + "/" + imageName;
     }
+
+    chorus.urlHelpers.workspacePath = function(workspaceId) {
+        return "#/workspaces/" + workspaceId;
+    }
+    Handlebars.registerHelper('workspacePath', chorus.urlHelpers.workspacePath);
 })();
