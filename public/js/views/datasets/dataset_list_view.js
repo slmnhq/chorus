@@ -53,12 +53,8 @@ chorus.views.DatasetList = chorus.views.Base.extend({
         this.$("li").removeClass("selected");
         var selectedLi = $(e.target).closest("li");
         selectedLi.addClass("selected");
-        if (this.selectedDataset) {
-            this.bindings.remove(this.selectedDataset, "invalidated", this.refetchCollection)
-        }
 
         this.selectedDataset = selectedLi.data("dataset");
-        this.bindings.add(this.selectedDataset, "invalidated", this.refetchCollection, this);
         this.trigger("dataset:selected", this.selectedDataset);
     }
 });
