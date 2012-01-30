@@ -61,7 +61,6 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
         }
         this.tabControl = new chorus.views.TabControl(tabs);
         this.tabControl.bind("selected", _.bind(this.setupSidebarScrolling, this))
-        this.trigger("sidebar:loaded");
     },
 
     postRender:function () {

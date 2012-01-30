@@ -175,7 +175,6 @@ describe("chorus.pages.WorkfileShowPage", function() {
                 this.page.render()
                 spyOnEvent(this.page.mainContent.content, 'file:insertText')
                 spyOn(this.page.model, 'isSql').andReturn(true)
-                this.page.sidebar.trigger("sidebar:loaded")
                 this.page.sidebar.functionList.trigger("file:insertText", "");
             })
 

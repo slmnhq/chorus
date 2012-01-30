@@ -37,8 +37,6 @@
         resourcesLoaded:function () {
             this.breadcrumbs = new breadcrumbsView({workspace:this.model.workspace(), model:this.model});
             this.sidebar = new chorus.views.WorkfileShowSidebar({model:this.model});
-            this.sidebar.bindOnce("sidebar:loaded", _.bind(this.bindSidebar, this));
-
             this.subNav = new chorus.views.SubNav({workspace:this.model.workspace(), tab:"workfiles"});
 
             this.mainContent = new chorus.views.MainContentView({
@@ -68,15 +66,13 @@
                 this.mainContent.content.forwardEvent("file:executionCompleted", this.mainContent.contentDetails);
             }
 
-            this.render();
-        },
-
-        bindSidebar:function () {
             if (this.model && this.model.isSql()) {
-                this.sidebar.functionList.forwardEvent("file:insertText", this.mainContent.content)
-                this.sidebar.datasetList.forwardEvent("file:insertText", this.mainContent.content)
-                this.sidebar.columnList.forwardEvent("file:insertText", this.mainContent.content)
+                this.sidebar.functionList.forwardEvent("file:insertText", this.mainContent.content);
+                this.sidebar.datasetList.forwardEvent("file:insertText", this.mainContent.content);
+                this.sidebar.columnList.forwardEvent("file:insertText", this.mainContent.content);
             }
+
+            this.render();
         }
     });
 
