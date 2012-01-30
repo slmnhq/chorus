@@ -6,6 +6,23 @@ chorus.views.DatasetList = chorus.views.Base.extend({
         "click li":"selectDataset"
     },
 
+    setup : function() {
+        this.collection.onLoaded(this.bindInvalidatedHandlers, this);
+    },
+
+    bindInvalidatedHandlers : function() {
+        this.collection.each(function(dataset) {
+            dataset.bind("invalidated", this.refetchCollection, this);
+        }, this)
+    },
+
+    preRender : function() {
+        var selectedLi = this.$("li.selected");
+        if (selectedLi.length > 0) {
+            this.selectedIndex = selectedLi.index(selectedLi.parentNode)
+        }
+    },
+
     postRender:function () {
         var lis = this.$("li");
 
@@ -13,7 +30,11 @@ chorus.views.DatasetList = chorus.views.Base.extend({
             lis.eq(index).data("dataset", model);
         });
 
-        lis.eq(0).click();
+        lis.eq(this.selectedIndex || 0).click();
+    },
+
+    refetchCollection : function() {
+        this.collection.fetch();
     },
 
     collectionModelContext:function (model) {
