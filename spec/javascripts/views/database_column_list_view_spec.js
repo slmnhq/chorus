@@ -1,9 +1,9 @@
 describe("chorus.views.DatabaseColumnList", function() {
     describe("#render", function() {
         beforeEach(function() {
-            this.collection = fixtures.databaseColumnSet([], { comment : "column comment", typeCategory: "WHOLE_NUMBER" });
-            this.collection.at(0).set({ name : "column_name_2", ordinalPosition : "2" })
-            this.collection.at(1).set({ name : "column_name_1", ordinalPosition : "1" })
+            this.collection = fixtures.databaseColumnSet([], { comment : "column comment" });
+            this.collection.at(0).set({ name : "column_name_2", ordinalPosition : "2", typeCategory: "WHOLE_NUMBER", type: "int4" });
+            this.collection.at(1).set({ name : "column_name_1", ordinalPosition : "1", typeCategory: "BOOLEAN", type: "boolean" });
             this.view = new chorus.views.DatabaseColumnList({collection: this.collection});
             this.view.render();
         });
@@ -17,19 +17,22 @@ describe("chorus.views.DatabaseColumnList", function() {
         })
 
         it("shows the type for each column", function() {
-            expect(this.view.$("li:eq(0) .type").text().trim()).toMatchTranslation("data_types.numeric")
-            expect(this.view.$("li:eq(0) .type")).toHaveClass("numeric")
+            expect(this.view.$("li:eq(0) .type")).toHaveClass("boolean");
+            expect(this.view.$("li:eq(0) .type_name").text().trim()).toBe("boolean");
+
+            expect(this.view.$("li:eq(1) .type")).toHaveClass("numeric");
+            expect(this.view.$("li:eq(1) .type_name").text().trim()).toBe("int4");
         })
 
         it("sorts the columns by ordinalPosition", function() {
-            expect(this.view.$("li:eq(0) .name")).toHaveText("column_name_1")
-            expect(this.view.$("li:eq(1) .name")).toHaveText("column_name_2")
+            expect(this.view.$("li:eq(0) .name")).toHaveText("column_name_1");
+            expect(this.view.$("li:eq(1) .name")).toHaveText("column_name_2");
         })
         
         describe("clicking on a list item", function() {
             beforeEach(function() {
                 expect(this.view.$("li:eq(0)")).toHaveClass("selected");
-                this.view.$("li:eq(1)").click()
+                this.view.$("li:eq(1)").click();
             })
 
             it("moves the selected class", function() {

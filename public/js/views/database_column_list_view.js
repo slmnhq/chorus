@@ -20,7 +20,7 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
     collectionModelContext:function (model) {
         return {
             typeClass:model.humanType(),
-            typeString:t("data_types." + model.humanType())
+            typeString: model.get("type")
         }
     },
 
