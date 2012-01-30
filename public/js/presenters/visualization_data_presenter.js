@@ -24,6 +24,22 @@
         }
     });
 
+    ns.presenters.visualizations.Frequency = function(task, options) {
+        this.task = task;
+        this.options = options;
+    };
+
+    _.extend(ns.presenters.visualizations.Frequency.prototype, {
+        present: function() {
+            var groups = _.groupBy(this.task.get("result").rows, this.options.column);
+            var groupLengths = {};
+            _.each(groups, function(val, groupName) {
+                groupLengths[groupName] = val.length;
+            });
+            return { frequencies : groupLengths };
+        }
+    });
+
     ns.presenters.visualizations.Boxplot = function(task, options) {
         this.task = task;
         this.options = options;

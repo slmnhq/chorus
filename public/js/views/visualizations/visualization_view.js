@@ -1,17 +1,16 @@
 ;(function(ns) {
     ns.views.visualizations = {};
 
-    ns.views.visualizations.XY = ns.views.Base.extend({
+    ns.views.visualizations.TimeSeriesPlot = ns.views.Base.extend({
         render: function() {
-            var $el = $(this.el);
-            $el.addClass("visualization");
+            $(this.el).addClass("visualization");
 
             var data = new ns.presenters.visualizations.XY(this.model, {
                 x: this.options.x,
                 y: this.options.y
             }).present();
 
-            var chart = d3.selectAll(this.el).append("svg").
+            var chart = d3.select(this.el).append("svg").
                 attr("class", "chart time_series").
                 attr("height", "500px").
                 attr("width", "100%").
@@ -19,10 +18,10 @@
 
             var xScaler = d3.scale.linear().
                 domain([data.minX, data.maxX]).
-                range(["2", "98"]);
+                range([2, 98]);
             var yScaler = d3.scale.linear().
                 domain([data.minY, data.maxY]).
-                range(["98", "2"]);
+                range([98, 2]);
 
             var line = d3.svg.line().
                 x(function(d) { return xScaler(d.x); }).
@@ -62,7 +61,7 @@
         }
     });
 
-    ns.views.visualizations.Boxplot = ns.views.Base.extend({
+    ns.views.visualizations.BoxPlot = ns.views.Base.extend({
         render: function() {
             var $el = $(this.el);
             $el.addClass("visualization");

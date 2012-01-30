@@ -141,13 +141,13 @@
                     }})
                 }),
 
-                "Visualization: XY" : new chorus.views.visualizations.XY({
+                "Visualization: TimeSeries" : new chorus.views.visualizations.TimeSeriesPlot({
                     model: this.task,
                     x: 'id',
                     y: 'value'
                 }),
 
-                "Visualization: Boxplot" : new chorus.views.visualizations.Boxplot({
+                "Visualization: BoxPlot" : new chorus.views.visualizations.BoxPlot({
                     model: this.task,
                     x: 'animal',
                     y: 'value'
@@ -161,7 +161,7 @@
             var self = this;
             _.each(this.views, function(view, name) {
                 $(self.el).append("<li class='view'><h1>" + name + "</h1><div class='view_guts'/></li>")
-                view.el = self.$(".view_guts:last");
+                view.el = self.$(".view_guts:last")[0];
                 view.delegateEvents();
                 view.render();
             })
