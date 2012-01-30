@@ -1,5 +1,5 @@
 chorus.models = {
-    Base: Backbone.Model.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, chorus.Mixins.dbHelpers, {
+    Base: Backbone.Model.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, chorus.Mixins.dbHelpers, chorus.Mixins.Fetching, {
         url: function(options) {
             var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
             var uri = new URI("/edc/" + Handlebars.compile(template)(this.attributes));
@@ -30,8 +30,8 @@ chorus.models = {
             if (data.status == "needlogin") {
                 chorus.session.trigger("needsLogin");
             }
-            this.loaded = true;
             if (data.status == "ok") {
+                this.loaded = true;
                 return data.resource[0]
             } else {
                 this.serverErrors = data.message;
@@ -61,6 +61,7 @@ chorus.models = {
         },
 
         fetch: function(options) {
+            this.fetching = true;
             options || (options = {});
             var success = options.success;
             options.success = function(model, resp, xhr) {
@@ -70,7 +71,10 @@ chorus.models = {
                 }
                 if (success) success(model, resp, xhr);
             };
-            return Backbone.Model.prototype.fetch.call(this, options);
+            return this._super('fetch', [options])
+                .always(_.bind(function() {
+                    this.fetching = false;
+                }, this));
         },
 
         destroy : function(options) {
@@ -175,10 +179,18 @@ chorus.models = {
 };
 
 chorus.collections = {
-    Base: Backbone.Collection.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, {
+    Base: Backbone.Collection.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, chorus.Mixins.Fetching, {
         initialize: function(models, options) {
             this.attributes = options || {};
             this.setup(arguments);
+        },
+
+        fetch:function () {
+            this.fetching = true;
+            return this._super('fetch', arguments)
+                .always(_.bind(function() {
+                    this.fetching = false;
+                }, this));
         },
 
         findWhere: function(attrs) {
@@ -265,8 +277,10 @@ chorus.collections = {
                 chorus.session.trigger("needsLogin");
             }
             this.pagination = data.pagination;
-            this.loaded = true;
-            this.trigger('loaded');
+            if(data.status == 'ok') {
+                this.loaded = true;
+                this.trigger('loaded');
+            }
             return data.resource;
         },
 

@@ -1,17 +1,17 @@
 chorus.Mixins = chorus.Mixins || {};
 
 chorus.Mixins.Events = {
-    forwardEvent:function (eventName, target) {
-        this.bind(eventName, function () {
+    forwardEvent: function(eventName, target) {
+        this.bind(eventName, function() {
             var args = _.toArray(arguments);
             args.unshift(eventName);
             target.trigger.apply(target, args);
         });
     },
 
-    bindOnce:function (eventName, callback, context) {
+    bindOnce: function(eventName, callback, context) {
         var callbacksForThisEvent = this._callbacks && this._callbacks[eventName];
-        var callbackAlreadyBound = _.any(callbacksForThisEvent, function (pair) {
+        var callbackAlreadyBound = _.any(callbacksForThisEvent, function(pair) {
             var boundCallback = pair && pair[0];
             return boundCallback === callback;
         });
@@ -26,7 +26,7 @@ chorus.Mixins.Events = {
         }
     },
 
-    onLoaded:function (callback, context) {
+    onLoaded: function(callback, context) {
         if (this.loaded) {
             callback.apply(context)
         } else {
@@ -36,7 +36,7 @@ chorus.Mixins.Events = {
 };
 
 chorus.Mixins.Urls = {
-    showUrl:function (hidePrefix) {
+    showUrl: function(hidePrefix) {
         if (!this.showUrlTemplate) {
             throw "No showUrlTemplate defined";
         }
@@ -49,7 +49,7 @@ chorus.Mixins.Urls = {
 };
 
 chorus.Mixins.dbHelpers = {
-    safePGName:function (name) {
+    safePGName: function(name) {
         var doQuote = false;
         if ((name !== name.toLowerCase())) {
             doQuote = true;
@@ -58,5 +58,16 @@ chorus.Mixins.dbHelpers = {
             doQuote = true;
         }
         return doQuote ? '"' + name + '"' : name;
+    }
+}
+
+chorus.Mixins.Fetching = {
+    fetchIfNotLoaded: function() {
+        if (this.loaded) {
+            return;
+        }
+        if (!this.fetching) {
+            this.fetch();
+        }
     }
 }

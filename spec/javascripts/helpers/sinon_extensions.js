@@ -114,5 +114,13 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
                 message: message
             })
         );
+    },
+
+    error: function(message) {
+        return this.respond(
+            404,
+            {},
+            ''
+        )
     }
 });

@@ -2,7 +2,7 @@ chorus.models.Session = chorus.models.Base.extend({
     urlTemplate:"auth/login/",
 
     initialize:function () {
-        _.bindAll(this);
+        _.bindAll(this, ['logout']);
     },
 
     user:function () {
@@ -36,7 +36,7 @@ chorus.models.Session = chorus.models.Base.extend({
 
         };
 
-        return chorus.models.Base.prototype.fetch.call(this, options);
+        return this._super('fetch', [options]);
     },
 
     check:function (destinationRoute) {

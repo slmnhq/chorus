@@ -9,7 +9,9 @@ describe("chorus.models", function() {
 
             context("when the model's urlTemplate is a function", function() {
                 beforeEach(function() {
-                    this.model.urlTemplate = function() { return "my_other_items/{{id}}" };
+                    this.model.urlTemplate = function() {
+                        return "my_other_items/{{id}}"
+                    };
                 });
 
                 it("uses the function's return value", function() {
@@ -30,7 +32,9 @@ describe("chorus.models", function() {
             context("when the model has additional url params", function() {
                 context("when the urlParams is a function", function() {
                     beforeEach(function() {
-                        this.model.urlParams = function() { return { dance: "the thizzle" }; };
+                        this.model.urlParams = function() {
+                            return { dance: "the thizzle" };
+                        };
                     });
 
                     it("passes any options to the urlParams function", function() {
@@ -138,7 +142,7 @@ describe("chorus.models", function() {
         });
 
         describe("#save", function() {
-            describe("with valid model data", function () {
+            describe("with valid model data", function() {
                 beforeEach(function() {
                     this.validatedSpy = jasmine.createSpy();
                     this.model.bind("validated", this.validatedSpy);
@@ -155,8 +159,8 @@ describe("chorus.models", function() {
 
                 describe("when the request succeeds", function() {
                     beforeEach(function() {
-                        this.response = { status: "ok", resource : [
-                            { foo : "hi" }
+                        this.response = { status: "ok", resource: [
+                            { foo: "hi" }
                         ] };
 
                         this.server.respondWith(
@@ -175,9 +179,9 @@ describe("chorus.models", function() {
                 describe("when the request fails", function() {
                     beforeEach(function() {
 
-                        this.response = { status: "fail", message : [
-                            { message : "hi" },
-                            { message : "bye" }
+                        this.response = { status: "fail", message: [
+                            { message: "hi" },
+                            { message: "bye" }
                         ] };
                         this.server.respondWith(
                             'PUT',
@@ -198,8 +202,8 @@ describe("chorus.models", function() {
 
                 describe("and then another request succeeds", function() {
                     beforeEach(function() {
-                        this.response = { status: "ok", resource : [
-                            { foo : "hi" }
+                        this.response = { status: "ok", resource: [
+                            { foo: "hi" }
                         ] };
 
                         this.server.respondWith(
@@ -218,9 +222,9 @@ describe("chorus.models", function() {
                 describe("when the request fails on the server", function() {
                     beforeEach(function() {
 
-                        this.response = { status: "fail", message : [
-                            { message : "hi" },
-                            { message : "bye" }
+                        this.response = { status: "fail", message: [
+                            { message: "hi" },
+                            { message: "bye" }
                         ] };
                         this.server.respondWith(
                             'PUT',
@@ -236,8 +240,8 @@ describe("chorus.models", function() {
 
                     describe("and then another request succeeds", function() {
                         beforeEach(function() {
-                            this.response = { status: "ok", resource : [
-                                { foo : "hi" }
+                            this.response = { status: "ok", resource: [
+                                { foo: "hi" }
                             ] };
 
                             this.server = sinon.fakeServer.create();
@@ -293,7 +297,7 @@ describe("chorus.models", function() {
                         this.require('requiredAttr', newAttrs);
                     };
 
-                    this.model.set({requiredAttr : 'foo'});
+                    this.model.set({requiredAttr: 'foo'});
                     this.validationFailedSpy = jasmine.createSpy();
                     this.model.bind("validationFailed", this.validationFailedSpy);
                     this.validatedSpy = jasmine.createSpy();
@@ -303,7 +307,7 @@ describe("chorus.models", function() {
 
                 context("when the attrs are valid", function() {
                     beforeEach(function() {
-                        this.model.save({requiredAttr : "bar"})
+                        this.model.save({requiredAttr: "bar"})
                     });
 
                     it("saves the model", function() {
@@ -321,13 +325,13 @@ describe("chorus.models", function() {
                             })
 
                             Backbone.Model.prototype.save.reset();
-                            this.model.save({ requiredAttr : "bar" })
+                            this.model.save({ requiredAttr: "bar" })
                         })
 
                         it("saves the changed attrs", function() {
                             expect(Backbone.Model.prototype.save).toHaveBeenCalledWith({
-                                requiredAttr : "bar",
-                                otherAttr : "foo"
+                                requiredAttr: "bar",
+                                otherAttr: "foo"
                             }, jasmine.any(Object));
                         })
                     })
@@ -335,14 +339,14 @@ describe("chorus.models", function() {
                     describe("and beforeSave does not make any changes to the attrs", function() {
                         it("saves the unchanged attrs", function() {
                             expect(Backbone.Model.prototype.save).toHaveBeenCalledWith(
-                                { requiredAttr : "bar" }, jasmine.any(Object));
+                                { requiredAttr: "bar" }, jasmine.any(Object));
                         })
                     })
                 });
 
                 context("when the attrs are invalid", function() {
                     beforeEach(function() {
-                        this.model.save({requiredAttr : ""})
+                        this.model.save({requiredAttr: ""})
                     });
 
                     it("does not save the model", function() {
@@ -357,7 +361,7 @@ describe("chorus.models", function() {
 
             context("when no attributes are passed to the save method", function() {
                 beforeEach(function() {
-                    this.model.set({requiredAttr : 'foo'});
+                    this.model.set({requiredAttr: 'foo'});
                     spyOn(Backbone.Model.prototype, "save");
                 });
 
@@ -372,7 +376,7 @@ describe("chorus.models", function() {
 
                     it("saves the changed attrs", function() {
                         expect(Backbone.Model.prototype.save).toHaveBeenCalledWith({
-                            otherAttr : "foo"
+                            otherAttr: "foo"
                         }, jasmine.any(Object));
                     })
                 })
@@ -419,7 +423,7 @@ describe("chorus.models", function() {
             });
         });
 
-        describe("#destroy", function () {
+        describe("#destroy", function() {
             beforeEach(function() {
                 this.destroySpy = jasmine.createSpy();
                 this.destroyFailedSpy = jasmine.createSpy();
@@ -430,8 +434,8 @@ describe("chorus.models", function() {
 
             describe("when the request succeeds", function() {
                 beforeEach(function() {
-                    this.response = { status: "ok", resource : [
-                        { foo : "hi" }
+                    this.response = { status: "ok", resource: [
+                        { foo: "hi" }
                     ] };
 
                     this.server.respondWith(
@@ -453,9 +457,9 @@ describe("chorus.models", function() {
 
             describe("when the request fails", function() {
                 beforeEach(function() {
-                    this.response = { status: "fail", message : [
-                        { message : "hi" },
-                        { message : "bye" }
+                    this.response = { status: "fail", message: [
+                        { message: "hi" },
+                        { message: "bye" }
                     ] };
 
                     this.server.respondWith(
@@ -487,9 +491,14 @@ describe("chorus.models", function() {
                 this.thing = {hi: "there"};
             })
 
-            it("sets loaded", function() {
-                this.model.parse({ foo: "bar", resource: this.thing});
+            it("sets loaded when status is ok", function() {
+                this.model.parse({ foo: "bar", resource: this.thing, status: 'ok'});
                 expect(this.model.loaded).toBeTruthy();
+            });
+
+            it("does not set loaded when status is not ok", function() {
+                this.model.parse({ foo: "bar", resource: this.thing, status: 'needsLogin'});
+                expect(this.model.loaded).not.toBeTruthy();
             });
 
             it("returns the enclosed resource", function() {
@@ -520,13 +529,13 @@ describe("chorus.models", function() {
             })
 
             it("sets an error if the attribute is present, is a String, and contains only whitespace", function() {
-                this.model.set({ foo : "    " })
+                this.model.set({ foo: "    " })
                 this.model.require("foo");
                 expect(this.model.errors.foo).toBeDefined();
             })
 
             it("does not set an error if the attribute is present", function() {
-                this.model.set({ foo : "bar" });
+                this.model.set({ foo: "bar" });
                 this.model.require("foo");
                 expect(this.model.errors.foo).not.toBeDefined();
             })
@@ -559,7 +568,7 @@ describe("chorus.models", function() {
             context("model has attrToLabel set", function() {
                 beforeEach(function() {
                     this.model.attrToLabel = {
-                        "foo" : "users.first_name"
+                        "foo": "users.first_name"
                     }
                 });
 
@@ -586,13 +595,13 @@ describe("chorus.models", function() {
                 expect(this.model.errors.foo).toBe("nope");
             })
             it("sets an error if the attribute is present but doesn't match the pattern", function() {
-                this.model.set({ foo : "bar" });
+                this.model.set({ foo: "bar" });
                 this.model.requirePattern("foo", /baz/);
                 expect(this.model.errors.foo).toBeDefined();
             })
 
             it("does not set an error if the attribute is present and matches the pattern", function() {
-                this.model.set({ foo : "bar" }, { silent : true });
+                this.model.set({ foo: "bar" }, { silent: true });
                 this.model.requirePattern("foo", /bar/);
                 expect(this.model.errors.foo).not.toBeDefined();
             })
@@ -624,7 +633,7 @@ describe("chorus.models", function() {
             context("model has attrToLabel set", function() {
                 beforeEach(function() {
                     this.model.attrToLabel = {
-                        "foo" : "users.first_name"
+                        "foo": "users.first_name"
                     }
                 });
 
@@ -640,7 +649,7 @@ describe("chorus.models", function() {
                 this.model.errors = {};
             });
 
-            it("sets an error if the attribute isn't present", function () {
+            it("sets an error if the attribute isn't present", function() {
                 this.model.requireConfirmation("foo");
                 expect(this.model.errors.foo).toBeDefined();
             });
@@ -651,26 +660,26 @@ describe("chorus.models", function() {
                 expect(this.model.errors.foo).toBe("nope");
             })
 
-            it("sets an error if the confirmation isn't present", function () {
-                this.model.set({ foo : "bar" });
+            it("sets an error if the confirmation isn't present", function() {
+                this.model.set({ foo: "bar" });
                 this.model.requireConfirmation("foo");
                 expect(this.model.errors.foo).toBeDefined();
             });
 
             it("sets an error if the confirmation doesn't match the attribute", function() {
-                this.model.set({ foo : "bar", fooConfirmation : "baz" });
+                this.model.set({ foo: "bar", fooConfirmation: "baz" });
                 this.model.requireConfirmation("foo");
                 expect(this.model.errors.foo).toBeDefined();
             });
 
             it("does not set an error if the confirmation matches the attribute", function() {
-                this.model.set({ foo : "bar", fooConfirmation : "bar" });
+                this.model.set({ foo: "bar", fooConfirmation: "bar" });
                 this.model.requireConfirmation("foo");
                 expect(this.model.errors.foo).not.toBeDefined();
             });
 
             it("contains the attr name in the error", function() {
-                this.model.set({ foo : "bar", fooConfirmation : "baz" });
+                this.model.set({ foo: "bar", fooConfirmation: "baz" });
                 this.model.requireConfirmation("foo");
                 expect(this.model.errors.foo).toContain("foo");
             });
@@ -709,12 +718,12 @@ describe("chorus.models", function() {
             context("model has attrToLabel set", function() {
                 beforeEach(function() {
                     this.model.attrToLabel = {
-                        "foo" : "users.first_name"
+                        "foo": "users.first_name"
                     }
                 });
 
                 it("includes the translation in the error message", function() {
-                    this.model.set({ foo : "bar", fooConfirmation : "baz" });
+                    this.model.set({ foo: "bar", fooConfirmation: "baz" });
                     this.model.requireConfirmation("foo");
                     expect(this.model.errors.foo).toContain(t("users.first_name"));
                 });
@@ -726,7 +735,7 @@ describe("chorus.models", function() {
                 this.model.errors = {};
             });
 
-            it("sets an error if the attribute isn't present", function () {
+            it("sets an error if the attribute isn't present", function() {
                 this.model.requireIntegerRange("foo", 5, 10);
                 expect(this.model.errors.foo).toBeDefined();
             });
@@ -737,14 +746,14 @@ describe("chorus.models", function() {
                 expect(this.model.errors.foo).toBe("nope");
             })
 
-            it("sets an error if the attribute is present but less than the range minimum", function () {
-                this.model.set({ foo :  1});
+            it("sets an error if the attribute is present but less than the range minimum", function() {
+                this.model.set({ foo: 1});
                 this.model.requireIntegerRange("foo", 5, 10);
                 expect(this.model.errors.foo).toBeDefined();
             });
 
-            it("sets an error if the attribute is present but greater than the range maximum", function () {
-                this.model.set({ foo :  11});
+            it("sets an error if the attribute is present but greater than the range maximum", function() {
+                this.model.set({ foo: 11});
                 this.model.requireIntegerRange("foo", 5, 10);
                 expect(this.model.errors.foo).toBeDefined();
             });
@@ -763,12 +772,18 @@ describe("chorus.models", function() {
             });
 
             it("uses a custom error message, if provided", function() {
-                this.model.set({ foo :  11});
+                this.model.set({ foo: 11});
                 this.model.requireIntegerRange("foo", 5, 10, {}, "test.deer");
                 expect(this.model.errors.foo).toMatchTranslation("test.deer")
             })
         });
 
+        describe("behavior shared with collection", function() {
+            beforeEach(function() {
+                this.resource = fixtures.user();
+            });
+            fetchIfNotLoadedSpecs();
+        })
     });
 
     describe("Collection", function() {
@@ -794,7 +809,9 @@ describe("chorus.models", function() {
 
             context("when the urlTemplate is a function", function() {
                 beforeEach(function() {
-                    this.collection.urlTemplate = function() { return "my_other_items/{{foo}}" };
+                    this.collection.urlTemplate = function() {
+                        return "my_other_items/{{foo}}"
+                    };
                 });
 
                 it("uses the function's return value", function() {
@@ -815,11 +832,11 @@ describe("chorus.models", function() {
             });
 
             it("takes an optional page size", function() {
-                expect(this.collection.url({ rows : 1000 })).toBe("/edc/bar/bar?page=1&rows=1000");
+                expect(this.collection.url({ rows: 1000 })).toBe("/edc/bar/bar?page=1&rows=1000");
             });
 
             it("takes an optional page number", function() {
-                expect(this.collection.url({ page : 4 })).toBe("/edc/bar/bar?page=4&rows=50");
+                expect(this.collection.url({ page: 4 })).toBe("/edc/bar/bar?page=4&rows=50");
             });
 
             it("mixes in sortIndex and sortOrder from the collection", function() {
@@ -847,13 +864,18 @@ describe("chorus.models", function() {
                 ];
             })
 
-            it("sets loaded", function() {
-                this.collection.parse({ foo: "bar", resource: this.things});
+            it("sets loaded when status is ok", function() {
+                this.collection.parse({ foo: "bar", resource: this.things, status: 'ok'});
                 expect(this.collection.loaded).toBeTruthy();
             });
 
+            it("does not set loaded when status is not ok", function() {
+                this.collection.parse({ foo: "bar", resource: this.things, status: 'needsLogin'});
+                expect(this.collection.loaded).not.toBeTruthy();
+            });
+
             it("returns the enclosed resource", function() {
-                expect(this.collection.parse({ foo: "bar", resource: this.things})).toBe(this.things);
+                expect(this.collection.parse({ foo: "bar", resource: this.things, status: 'ok'})).toBe(this.things);
             })
 
             it("triggers needsLogin on chorus.session", function() {
@@ -864,12 +886,12 @@ describe("chorus.models", function() {
 
             it("stores pagination info on the collection", function() {
                 var pagination = {
-                    total : "2",
-                    page : "1",
-                    records : "52"
+                    total: "2",
+                    page: "1",
+                    records: "52"
                 }
 
-                this.collection.parse({ resource : this.things, pagination : pagination });
+                this.collection.parse({ resource: this.things, pagination: pagination });
                 expect(this.collection.pagination).toBe(pagination);
             })
         })
@@ -910,9 +932,9 @@ describe("chorus.models", function() {
             context("when the collection has pagination information", function() {
                 beforeEach(function() {
                     this.collection.pagination = {
-                        page : "2",
-                        total : "3",
-                        records : "22"
+                        page: "2",
+                        total: "3",
+                        records: "22"
                     }
                 })
 
@@ -934,9 +956,9 @@ describe("chorus.models", function() {
 
             describe("and the server responds successfully", function() {
                 beforeEach(function() {
-                    this.pageOneResponse = { status: "ok", resource : [
-                        { foo : "hi" },
-                        { foo : "there" }
+                    this.pageOneResponse = { status: "ok", resource: [
+                        { foo: "hi" },
+                        { foo: "there" }
                     ],
                         "pagination": {
                             "total": "2",
@@ -950,9 +972,9 @@ describe("chorus.models", function() {
                         '/edc/bar/bar?page=1&rows=1000',
                         this.prepareResponse(this.pageOneResponse));
 
-                    this.pageTwoResponse = { status: "ok", resource : [
-                        { foo : "hi" },
-                        { foo : "there" }
+                    this.pageTwoResponse = { status: "ok", resource: [
+                        { foo: "hi" },
+                        { foo: "there" }
                     ],
                         "pagination": {
                             "total": "2",
@@ -986,9 +1008,9 @@ describe("chorus.models", function() {
 
             describe("and the server responds with an error", function() {
                 beforeEach(function() {
-                    this.pageOneResponse = { status: "ok", resource : [
-                        { foo : "hi" },
-                        { foo : "there" }
+                    this.pageOneResponse = { status: "ok", resource: [
+                        { foo: "hi" },
+                        { foo: "there" }
                     ],
                         "pagination": {
                             "total": "2",
@@ -1005,9 +1027,9 @@ describe("chorus.models", function() {
                     this.pageTwoResponse = {
                         status: "fail",
                         resource: [],
-                        message:[
+                        message: [
                             {
-                                "message":"Something went sideways"
+                                "message": "Something went sideways"
                             }
                         ]
                     };
@@ -1044,7 +1066,7 @@ describe("chorus.models", function() {
 
             it("passes options through to fetch", function() {
                 spyOn(this.collection, "fetch");
-                this.collection.fetchPage(2, { foo : "bar" })
+                this.collection.fetchPage(2, { foo: "bar" })
                 var options = this.collection.fetch.mostRecentCall.args[0];
                 expect(options.foo).toBe("bar");
             })
@@ -1056,6 +1078,96 @@ describe("chorus.models", function() {
             })
 
         })
+
+        describe("behavior shared with models", function() {
+            beforeEach(function() {
+                this.resource = fixtures.workfileSet();
+            });
+            fetchIfNotLoadedSpecs();
+        })
     });
+
+    function fetchIfNotLoadedSpecs() {
+        describe("fetchIfNotLoaded", function() {
+            beforeEach(function() {
+                spyOn(this.resource, 'fetch').andCallThrough();
+            });
+
+            context("when not loaded or fetching", function() {
+                it("starts a fetch", function() {
+                    this.resource.fetchIfNotLoaded();
+                    expect(this.resource.fetch).toHaveBeenCalled();
+                })
+            })
+
+            context("when loaded", function() {
+                beforeEach(function() {
+                    this.resource.loaded = true;
+                })
+
+                it("it won't start fetching again", function() {
+                    this.resource.fetchIfNotLoaded();
+                    expect(this.resource.fetch).not.toHaveBeenCalled();
+                })
+            })
+
+            context("when fetching", function() {
+                beforeEach(function() {
+                    this.resource.fetch();
+                })
+
+                it("it won't start a second fetch", function() {
+                    this.resource.fetch.reset();
+                    this.resource.fetchIfNotLoaded();
+                    expect(this.resource.fetch).not.toHaveBeenCalled();
+                });
+            });
+
+            context("after fetch completes", function() {
+                beforeEach(function() {
+                    this.resource.fetch();
+                    this.server.completeFetchFor(this.resource);
+                })
+
+                context("if the model is declared unloaded", function() {
+                    beforeEach(function() {
+                        this.resource.loaded = false;
+                        this.resource.fetch.reset();
+                    })
+
+                    it('will fetch again', function() {
+                        this.resource.fetchIfNotLoaded();
+                        expect(this.resource.fetch).toHaveBeenCalled();
+                    })
+                })
+            });
+
+            context("after the fetch fails", function() {
+                beforeEach(function() {
+                    this.resource.fetch();
+                    this.server.lastFetchFor(this.resource).fail();
+                    this.resource.fetch.reset();
+                });
+
+                it('will fetch again', function() {
+                    this.resource.fetchIfNotLoaded();
+                    expect(this.resource.fetch).toHaveBeenCalled();
+                })
+            });
+
+            context("after the fetch errors", function() {
+                beforeEach(function() {
+                    this.resource.fetch();
+                    this.server.lastFetchFor(this.resource).error();
+                    this.resource.fetch.reset();
+                });
+
+                it('will fetch again', function() {
+                    this.resource.fetchIfNotLoaded();
+                    expect(this.resource.fetch).toHaveBeenCalled();
+                })
+            });
+        })
+    }
 });
 
