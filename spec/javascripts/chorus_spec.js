@@ -42,6 +42,15 @@ describe("chorus global", function() {
         });
     });
 
+    describe("#placeholder", function() {
+        it("wraps jquery.placeholder", function() {
+            spyOn($.fn, 'placeholder');
+            var input = $("<input/>");
+            input.placeholder();
+            expect($.fn.placeholder).toHaveBeenCalledOn(input);
+        });
+    });
+
     describe("#menu", function() {
         beforeEach(function() {
             this.qtipElement = stubQtip();
