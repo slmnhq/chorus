@@ -310,7 +310,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                     beforeEach(function() {
                         var account = fixtures.instanceAccount();
                         spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
-                        this.instance.accounts().add([fixtures.instanceAccount()]);
+                        this.instance.accounts().add([fixtures.instanceAccount(), fixtures.instanceAccount()]);
                         setLoggedInUser({ userName : "benjamin", admin: true});
                         this.view.render();
                     });
