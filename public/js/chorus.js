@@ -99,8 +99,8 @@ window.Chorus = function() {
         $element.selectmenu({change: changeFunction, position: {offset: "0 -1"}});
     }
 
-    self.placeholder = function(selector) {
-        $(selector).placeholder();
+    self.placeholder = function(element) {
+        $(element).placeholder();
     };
 
     self.search = function(options) {
