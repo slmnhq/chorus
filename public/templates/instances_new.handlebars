@@ -12,10 +12,13 @@
         <label>{{t "instances.dialog.description"}}</label>
         <textarea rows="3" name="description"/>
 
-        <label class="required" name="host">{{t "instances.dialog.host"}} </label>
+        <label class="required" name="host">{{t "instances.dialog.host"}}</label>
         <label class="required" name="port">{{t "instances.dialog.port"}}</label>
         <input type="text" name="host"/>
         <input type="text" name="port"/>
+
+        <label class="required" name="maintenanceDb">{{t "instances.dialog.maintenanceDb"}}</label>
+        <input type="text" name="maintenanceDb" value="postgres"/>
 
         <label class="required" name="dbUserName">{{t "instances.dialog.database_account"}}</label>
         <label class="required" name="dbPassword">{{t "instances.dialog.database_password"}}</label>

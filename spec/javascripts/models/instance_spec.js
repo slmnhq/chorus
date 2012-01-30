@@ -197,7 +197,8 @@ describe("chorus.models.Instance", function() {
                     host : "gillette",
                     dbUserName : "dude",
                     dbPassword : "whatever",
-                    port : "1234"
+                    port : "1234",
+                    maintenanceDb: "postgres"
                 }
             })
 
@@ -205,12 +206,11 @@ describe("chorus.models.Instance", function() {
                 expect(this.instance.performValidation(this.attrs)).toBeTruthy();
             })
 
-            _.each(["name", "host", "dbUserName", "dbPassword", "port"], function(attr) {
+            _.each(["name", "host", "dbUserName", "dbPassword", "port", "maintenanceDb"], function(attr) {
                 it("requires " + attr, function() {
                     this.attrs[attr] = "";
                     expect(this.instance.performValidation(this.attrs)).toBeFalsy();
                     expect(this.instance.errors[attr]).toBeTruthy();
-
                 })
             });
 

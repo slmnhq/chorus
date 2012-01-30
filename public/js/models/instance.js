@@ -14,6 +14,7 @@ chorus.models.Instance = chorus.models.Base.extend({
                 this.require("dbUserName", newAttrs);
                 this.require("dbPassword", newAttrs);
                 this.require("port", newAttrs);
+                this.require("maintenanceDb", newAttrs);
                 this.requirePattern("port", /^\d+$/, newAttrs);
                 break;
             case "create" :
@@ -86,6 +87,7 @@ chorus.models.Instance = chorus.models.Base.extend({
         "name":"instances.dialog.instance_name",
         "host":"instances.dialog.host",
         "port":"instances.dialog.port",
+        "maintenanceDb":"instances.dialog.maintenanceDb",
         "description":"instances.dialog.description",
         "size":"instances.dialog.size"
     },

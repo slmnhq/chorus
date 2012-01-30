@@ -22,7 +22,8 @@
         $input-spacing : 12px;
         $size_width : 75px;
 
-        label[name=host], input[name=host] {
+        label[name=host], input[name=host],
+        label[name=maintenanceDb], input[name=maintenanceDb] {
             width: $hostname-width;
         }
 

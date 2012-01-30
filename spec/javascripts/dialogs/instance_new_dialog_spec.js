@@ -90,33 +90,44 @@ describe("chorus.dialogs.InstanceNew", function() {
                 chorus.models.Instance.aurora().set({ installationStatus : "install_succeed"});
                 this.dialog.render();
             });
-            context("using register existing greenplum", function() {
+            
+            context("using register existing greenplum database", function() {
                 beforeEach(function() {
                     this.dialog.$(".register_existing_greenplum input[type=radio]").attr('checked', true).change();
-
-                    this.dialog.$(".register_existing_greenplum input[name=name]").val("Instance_Name");
-                    this.dialog.$(".register_existing_greenplum textarea[name=description]").val("Instance Description");
-                    this.dialog.$(".register_existing_greenplum input[name=host]").val("foo.bar");
-                    this.dialog.$(".register_existing_greenplum input[name=port]").val("1234");
-                    this.dialog.$(".register_existing_greenplum input[name=dbUserName]").val("user");
-                    this.dialog.$(".register_existing_greenplum input[name=dbPassword]").val("my_password");
-
-                    spyOn(this.dialog.model, "save").andCallThrough();
                 });
 
-                it("calls save on the dialog's model", function() {
-                    this.dialog.$("button.submit").click();
-                    expect(this.dialog.model.save).toHaveBeenCalled();
-
-                    var attrs = this.dialog.model.save.calls[0].args[0];
-
-                    expect(attrs.dbPassword).toBe("my_password");
-                    expect(attrs.name).toBe("Instance_Name");
-                    expect(attrs.provisionType).toBe("register");
-                    expect(attrs.description).toBe("Instance Description");
+                it("uses 'postgres' as the default database name", function() {
+                    expect(this.dialog.$(".register_existing_greenplum input[name=maintenanceDb]").val()).toBe("postgres");
                 });
 
-                testUpload();
+                context("after filling in the form", function() {
+                    beforeEach(function() {
+                        this.dialog.$(".register_existing_greenplum input[name=name]").val("Instance_Name");
+                        this.dialog.$(".register_existing_greenplum textarea[name=description]").val("Instance Description");
+                        this.dialog.$(".register_existing_greenplum input[name=host]").val("foo.bar");
+                        this.dialog.$(".register_existing_greenplum input[name=port]").val("1234");
+                        this.dialog.$(".register_existing_greenplum input[name=dbUserName]").val("user");
+                        this.dialog.$(".register_existing_greenplum input[name=dbPassword]").val("my_password");
+                        this.dialog.$(".register_existing_greenplum input[name=maintenanceDb]").val("foo");
+
+                        spyOn(this.dialog.model, "save").andCallThrough();
+                    });
+
+                    it("calls save on the dialog's model", function() {
+                        this.dialog.$("button.submit").click();
+                        expect(this.dialog.model.save).toHaveBeenCalled();
+
+                        var attrs = this.dialog.model.save.calls[0].args[0];
+
+                        expect(attrs.dbPassword).toBe("my_password");
+                        expect(attrs.name).toBe("Instance_Name");
+                        expect(attrs.provisionType).toBe("register");
+                        expect(attrs.description).toBe("Instance Description");
+                        expect(attrs.maintenanceDb).toBe("foo");
+                    });
+
+                    testUpload();
+                });
             });
 
             context("using a new Greenplum database instance", function() {
