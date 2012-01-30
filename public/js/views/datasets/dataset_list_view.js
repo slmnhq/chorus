@@ -6,16 +6,6 @@ chorus.views.DatasetList = chorus.views.Base.extend({
         "click li":"selectDataset"
     },
 
-    setup : function() {
-        this.collection.onLoaded(this.bindInvalidatedHandlers, this);
-    },
-
-    bindInvalidatedHandlers : function() {
-        this.collection.each(function(dataset) {
-            dataset.bind("invalidated", this.refetchCollection, this);
-        }, this)
-    },
-
     preRender : function() {
         var selectedLi = this.$("li.selected");
         if (selectedLi.length > 0) {
@@ -61,8 +51,14 @@ chorus.views.DatasetList = chorus.views.Base.extend({
 
     selectDataset:function (e) {
         this.$("li").removeClass("selected");
-        var selectedDataset = $(e.target).closest("li");
-        selectedDataset.addClass("selected");
-        this.trigger("dataset:selected", selectedDataset.data("dataset"));
+        var selectedLi = $(e.target).closest("li");
+        selectedLi.addClass("selected");
+        if (this.selectedDataset) {
+            this.bindings.remove(this.selectedDataset, "invalidated", this.refetchCollection)
+        }
+
+        this.selectedDataset = selectedLi.data("dataset");
+        this.bindings.add(this.selectedDataset, "invalidated", this.refetchCollection, this);
+        this.trigger("dataset:selected", this.selectedDataset);
     }
 });
