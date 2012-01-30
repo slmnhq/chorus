@@ -5,6 +5,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
         this.view = new chorus.views.TextWorkfileContent({model: this.textfile});
         this.saveInterval = this.view.saveInterval;
         $("#jasmine_content").append(this.view.el);
+        this.clock = sinon.useFakeTimers();
 
         // in IE8, we can't 'select' a textrange whose textarea is not on the DOM
         if ($.browser.msie) {
@@ -17,12 +18,8 @@ describe("chorus.views.TextWorkfileContentView", function() {
         it("defers call to CodeMirror", function() {
             this.view.render();
             expect(CodeMirror.fromTextArea).not.toHaveBeenCalled();
-            waitsFor(function() {
-                return CodeMirror.fromTextArea.callCount != 0;
-            })
-            runs(function() {
-                expect(CodeMirror.fromTextArea).toHaveBeenCalled();
-            })
+            this.clock.tick(1000);
+            expect(CodeMirror.fromTextArea).toHaveBeenCalled();
         });
     });
 
@@ -140,7 +137,6 @@ describe("chorus.views.TextWorkfileContentView", function() {
         describe("#autosave", function() {
             beforeEach(function() {
                 this.view.render();
-                this.clock = sinon.useFakeTimers();
             });
 
             describe("when the file is changed", function() {
@@ -212,34 +208,20 @@ describe("chorus.views.TextWorkfileContentView", function() {
                 this.view.editText();
                 this.view.editor.setCursor(0, 19);
                 this.view.replaceCurrentVersion();
+                this.clock.tick(1000);
             });
 
             it("should still be in edit mode", function(){
-                waitsFor(function() {
-                    return this.view.$(".CodeMirror").hasClass("editable");
-                })
-                runs(function() {
-                    expect(this.view.$(".CodeMirror")).toHaveClass("editable");
-                });
+                expect(this.view.$(".CodeMirror")).toHaveClass("editable");
             });
 
             it("sets readonly to nocursor", function() {
-                waitsFor(function() {
-                    return !this.view.editor.getOption("readOnly");
-                });
-                runs(function() {
-                    expect(this.view.editor.getOption("readOnly")).toBe(false);
-                });
+                expect(this.view.editor.getOption("readOnly")).toBe(false);
             });
 
             it("sets cursor at the correct position", function() {
-                waitsFor(function() {
-                    return this.view.editor.getCursor().ch == 19;
-                });
-                runs(function() {
-                    expect(this.view.editor.getCursor().ch).toBe(19);
-                    expect(this.view.editor.getCursor().line).toBe(0);
-                });
+                expect(this.view.editor.getCursor().ch).toBe(19);
+                expect(this.view.editor.getCursor().line).toBe(0);
             });
 
             it("saves the model", function() {
@@ -284,7 +266,6 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
         describe("when navigating away", function() {
             beforeEach(function() {
-                this.clock = sinon.useFakeTimers();
                 this.view.render();
             });
 
@@ -312,7 +293,6 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
         describe("event file:createWorkfileNewVersion", function() {
             beforeEach(function() {
-                this.clock = sinon.useFakeTimers();
                 this.view.model.get("versionInfo").content = "old content";
                 this.view.model.set({"latestVersionNum": 2});
 

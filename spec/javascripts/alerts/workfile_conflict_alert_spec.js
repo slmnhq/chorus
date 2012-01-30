@@ -1,6 +1,8 @@
 describe("chorus.alerts.WorkfileConflict", function() {
     beforeEach(function() {
         stubModals();
+        this.clock = sinon.useFakeTimers();
+
         spyOn(chorus.Modal.prototype, "launchModal").andCallThrough();
         this.workfile = fixtures.workfile({ content : "version content" });
         this.message = "This work file has been modified by Christine Klunk"
