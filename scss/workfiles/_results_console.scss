@@ -23,6 +23,11 @@
             .separator {
                 margin: 0 5px;
             }
+            &.collapsed {
+                .separator {
+                    display: none;
+                }
+            }
         }
         
         .right {

@@ -354,6 +354,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                     })
 
                     it("collapses the result table", function() {
+                        expect(this.view.$(".controls")).toHaveClass("collapsed");
                         expect(this.view.$('.result_table')).toHaveClass("collapsed");
                         expect(this.view.$('.result_table')).not.toHaveClass("minimized");
                         expect(this.view.$('.result_table')).not.toHaveClass("maximized");
@@ -376,6 +377,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                             this.view.$(".arrow").click();
                         })
                         it("restores the result table", function() {
+                            expect(this.view.$(".controls")).not.toHaveClass("collapsed");
                             expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
                             expect(this.view.$('.result_table')).toHaveClass(tableShouldHaveClass);
                             expect(this.view.$('.result_table')).not.toHaveClass(tableShouldNotHaveClass);
