@@ -895,7 +895,7 @@ describe("chorus.models", function() {
             });
 
             it("returns the enclosed resource", function() {
-                expect(this.collection.parse({ foo: "bar", resource: this.things, status: 'ok'})).toBe(this.things);
+                expect(this.collection.parse({ foo: "bar", resource: this.things, status: 'ok'})).toEqual(this.things);
             })
 
             it("triggers needsLogin on chorus.session", function() {
