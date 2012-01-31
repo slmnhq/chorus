@@ -17,14 +17,14 @@
         height: 31px;
         line-height: 30px;
         vertical-align: middle;
-        color: $workfiles-action-details-link-color;
+        color: $content-details-action-link-color;
 
         button {
             margin-left: 0;
-            color: $workfiles-action-details-link-color;
+            color: $content-details-action-link-color;
             font-weight: $semibold;
             font-size: 13px;
-            @include content-details-button($workfiles-action-details-link-border-color);
+            @include content-details-button($content-details-action-link-border-color);
         }
 
         .save {

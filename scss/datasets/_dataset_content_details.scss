@@ -1,13 +1,8 @@
-.dataset_content_details {
+.content_details .dataset_content_details {
     div {
         padding: 0 $padding-x;
     }
     
-    .definition {
-        height: 32px;
-        background-color: $content-details-action-background-color;
-        border-bottom: 1px solid #8D9DA8;
-    }
 
     .column_count {
         border-top: 1px solid #B2C7D6;
@@ -15,6 +10,56 @@
 
         .count {
             @include font-normal-alpha;
+        }
+    }
+
+    .definition {
+        height: 32px;
+        line-height: 32px;
+        background-color: $content-details-action-background-color;
+        border-bottom: 1px solid #8D9DA8;
+
+        button {
+            margin-left: 0;
+            color: $content-details-action-link-color;
+            font-weight: $semibold;
+            font-size: 13px;
+            margin-top: 2px;
+            @include content-details-button($content-details-action-link-border-color);
+        }
+
+        .transform {
+            float: right;
+        }
+
+        .down_arrow {
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid #aaa;
+            margin: 0 0 2px 8px;
+            display: inline-block;
+        }
+    }
+}
+
+.transform_menu {
+    li {
+        padding: 5px;
+
+        a {
+            @include font-menu;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        .menu_shortcut {
+            @include font-menu;
+            color : $color-text4;
+            float: right;
+            padding-left: (6 * $padding-x);
         }
     }
 }
