@@ -1584,6 +1584,16 @@ beforeEach(function() {
             return new chorus.models.Dataset(attributes);
         },
 
+        datasetHadoopExternalTable : function(overrides) {
+            var attributes = _.extend(fixtures.datasetCommonJson(), {
+                modifiedBy: {},
+                objectType: "HDFS_EXTERNAL_TABLE",
+                owner: {},
+                type: "SANDBOX_TABLE"
+            }, overrides);
+            return new chorus.models.Dataset(attributes);
+        },
+
         schemaFunction: function(overrides) {
             var attributes = _.extend({
                 argTypes : ['text','text','text'],
