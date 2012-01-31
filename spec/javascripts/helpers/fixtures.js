@@ -1777,6 +1777,27 @@ beforeEach(function() {
                 message: 'ERROR: syntax error at or near "where 1=1; drop table users;"  Position: line 1 column 1'
             }, overrides)};
             return this.task(attributes);
+        },
+
+        alertJson : function(overrides) {
+            var id = fixtures.nextId();
+            return _.extend({
+                content: "what an alert!",
+                operatorFullName: "Joe Bloggs",
+                operator: "joebloggs",
+                recipientFullName: "Nancy Schmeigel",
+                recipient: "nancy",
+                isDeleted: false
+            }, overrides);
+        },
+
+        alert : function(overrides) {
+            return new chorus.models.Alert(overrides);
+        },
+
+        alertSet: function(models, overrides) {
+            models = (models && (models.length > 0)) || [this.alert(overrides), this.alert(overrides)];
+            return new chorus.collections.AlertSet(models, overrides);
         }
     });
 });
