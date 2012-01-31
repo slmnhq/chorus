@@ -53,7 +53,7 @@ chorus.models.Dataset = chorus.models.Base.extend({
 
     preview: function() {
         if (!this._preview) {
-            this._preview = new chorus.models.DatabasePreview({
+            this._preview = new chorus.models.DatasetPreview({
                 instanceId : this.get("instance").id,
                 databaseName : this.get("databaseName"),
                 schemaName : this.get("schemaName")

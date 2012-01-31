@@ -134,8 +134,8 @@ describe("chorus.models.Dataset", function() {
                 this.preview = this.dataset.preview();
             });
 
-            it("should return a DatabasePreview", function() {
-                expect(this.preview).toBeA(chorus.models.DatabasePreview);
+            it("should return a DatasetPreview", function() {
+                expect(this.preview).toBeA(chorus.models.DatasetPreview);
             });
 
             it("should memoize the database preview", function() {
@@ -156,8 +156,8 @@ describe("chorus.models.Dataset", function() {
                 this.preview = this.dataset.preview();
             });
 
-            it("should return a DatabasePreview", function() {
-                expect(this.preview).toBeA(chorus.models.DatabasePreview);
+            it("should return a DatasetPreview", function() {
+                expect(this.preview).toBeA(chorus.models.DatasetPreview);
             });
 
             it("should memoize the database preview", function() {

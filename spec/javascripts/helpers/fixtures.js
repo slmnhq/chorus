@@ -1551,6 +1551,13 @@ beforeEach(function() {
             return new chorus.models.Dataset(attributes);
         },
 
+        datasetPreview: function(overrides) {
+            return new chorus.models.DatasetPreview(_.extend({
+                columns: [],
+                rows: []
+            }, overrides));
+        },
+
         schemaFunction: function(overrides) {
             var attributes = _.extend({
                 argTypes : ['text','text','text'],
