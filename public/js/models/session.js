@@ -51,18 +51,14 @@ chorus.models.Session = chorus.models.Base.extend({
 
         if (!this.get("errors")) {
             $.get("/edc/auth/logout/?authid=" + $.cookie("authid"), function () {
-                self.reset();
+                self.clear();
+                delete self._user;
+                self.sandboxPermissionsCreated = {};
                 self.trigger("needsLogin")
             })
         } else {
             this.trigger("needsLogin")
         }
-    },
-    
-    reset: function() {
-        this.clear();
-        delete this._user;
-        this.sandboxPermissionsCreated = {};
     },
 
     declareValidations:function (newAttrs) {

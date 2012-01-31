@@ -266,7 +266,7 @@
 
             spyOn($.fn, 'jGrowl');
 
-            chorus.session.reset();
+            chorus.session.sandboxPermissionsCreated = {};
             setLoggedInUser();
         });
     });
