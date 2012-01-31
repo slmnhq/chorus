@@ -265,6 +265,7 @@
 
             spyOn($.fn, 'jGrowl');
 
+            chorus.session.reset();
             setLoggedInUser();
         });
     });

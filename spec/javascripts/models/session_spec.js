@@ -59,6 +59,7 @@ describe("chorus.models.Session", function() {
             beforeEach(function() {
                 this.model.set({ foo: "bar", bro: "baz" });
                 this.model._user = fixtures.user();
+                this.model.sandboxPermissionsCreated['4'] = true;
                 this.model.logout();
             })
 
@@ -83,6 +84,7 @@ describe("chorus.models.Session", function() {
                 it("clears all attributes in the model", function() {
                     expect(_.size(this.model.attributes)).toBe(0);
                     expect(this.model._user).toBeUndefined();
+                    expect(this.model.sandboxPermissionsCreated).toEqual({});
                 })
             })
         })

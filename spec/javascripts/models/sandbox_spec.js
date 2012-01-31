@@ -46,6 +46,22 @@ describe("chorus.models.Sandbox", function() {
             expect(this.database).toBe(this.model.database());
         });
     });
+    
+    describe("#instance", function() {
+        beforeEach(function() {
+            this.instance = this.model.instance();
+        });
+
+        it("returns an instance with the right id and name", function() {
+            expect(this.instance).toBeA(chorus.models.Instance);
+            expect(this.instance.get("id")).toBe(this.model.get("instanceId"));
+            expect(this.instance.get("name")).toBe(this.model.get("instanceName"));
+        });
+
+        it("memoizes", function() {
+            expect(this.instance).toBe(this.model.instance());
+        });
+    });
 
     describe("#beforeSave", function() {
         it("sets the 'type' field as required by the api", function() {

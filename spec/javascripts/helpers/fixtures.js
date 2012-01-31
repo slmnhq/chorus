@@ -1511,6 +1511,14 @@ beforeEach(function() {
             return instance;
         },
 
+        emptyInstanceAccount: function(overrides) {
+            var attributes = _.extend({
+                instanceId: "10020",
+                userName: "u1"
+            }, overrides);
+            return new chorus.models.InstanceAccount(attributes);
+        },
+
         instanceAccount : function(overridesOrInstance) {
             var overrides;
             if (overridesOrInstance instanceof chorus.models.Instance) {
