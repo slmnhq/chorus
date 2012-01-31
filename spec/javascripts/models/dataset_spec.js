@@ -143,7 +143,7 @@ describe("chorus.models.Dataset", function() {
             });
 
             it("should return a database preview", function() {
-                expect(this.preview.get("instanceId")).toBe(this.dataset.get("instanceId"));
+                expect(this.preview.get("instanceId")).toBe(this.dataset.get("instance").id);
                 expect(this.preview.get("databaseName")).toBe(this.dataset.get("databaseName"));
                 expect(this.preview.get("schemaName")).toBe(this.dataset.get("schemaName"));
                 expect(this.preview.get("tableName")).toBe(this.dataset.get("objectName"));
@@ -165,7 +165,7 @@ describe("chorus.models.Dataset", function() {
             });
 
             it("should return a database preview", function() {
-                expect(this.preview.get("instanceId")).toBe(this.dataset.get("instanceId"));
+                expect(this.preview.get("instanceId")).toBe(this.dataset.get("instance").id);
                 expect(this.preview.get("databaseName")).toBe(this.dataset.get("databaseName"));
                 expect(this.preview.get("schemaName")).toBe(this.dataset.get("schemaName"));
                 expect(this.preview.get("viewName")).toBe(this.dataset.get("objectName"));
