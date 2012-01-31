@@ -1,4 +1,13 @@
 .visualization {
+    svg {
+        background: white;
+        height: 340px;
+        width: 925px;
+    }
+
+    text {
+        font-size: 0.5em;
+        }
     path {
         fill: none;
     }
@@ -17,5 +26,27 @@
     .time_series path {
         stroke-width: 0.6;
         stroke: black;
+    }
+
+    .box_plot {
+        .box rect {
+            fill: #1C93DF;
+        }
+
+        .xaxis {
+            stroke-dasharray: 1;
+            stroke-width: 0.40;
+            stroke: #aaa;
+        }
+
+        .whisker {
+            stroke: black;
+            stroke-width: 0.4;
+        }
+
+        .median {
+            stroke: black;
+            stroke-width: 0.5;
+        }
     }
 }

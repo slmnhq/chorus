@@ -20,6 +20,6 @@ chorus.models.Task = chorus.models.Base.extend({
     },
 
     errorMessage:function () {
-        return this.get("result").message;
+        return (this.get('result').executeResult !== 'success') && this.get("result").message;
     }
 });

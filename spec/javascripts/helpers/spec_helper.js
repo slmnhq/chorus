@@ -174,6 +174,12 @@
                     return this.actual.mostRecentCall.object.selector === selector;
                 },
 
+                toHaveBeenCalledOn: function(object) {
+                    return _.any(this.actual.calls, function(call) {
+                        return call.object === object
+                    })
+                },
+
                 toContainText: function(text) {
                     this.message = function() {
                         return 'Expected "' + this.actual.text() + '" to contain "' + text + '"';
@@ -259,6 +265,7 @@
 
             spyOn($.fn, 'jGrowl');
 
+            chorus.session.reset();
             setLoggedInUser();
         });
     });

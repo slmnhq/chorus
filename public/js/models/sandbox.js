@@ -69,6 +69,14 @@
             return this._schema;
         },
 
+        instance: function() {
+            this._instance = this._instance ||  new chorus.models.Instance({
+                id:this.get("instanceId"),
+                name:this.get("instanceName")
+            });
+            return this._instance;
+        },
+
         database:function () {
             this._database = this._database || new chorus.models.Database({
                 id:this.get("databaseId"),

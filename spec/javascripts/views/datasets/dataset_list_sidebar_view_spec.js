@@ -128,8 +128,19 @@ describe("chorus.views.DatasetListSidebar", function() {
 
     describe("#datasetType", function() {
         it("uses a translation based on the type and objectType of the supplied dataset", function() {
-            var dataset = fixtures.datasetSandboxTable();
+            var dataset;
+
+            dataset = fixtures.datasetSandboxTable();
             expect(this.view.datasetType(dataset)).toMatchTranslation("dataset.types.SANDBOX_TABLE.BASE_TABLE");
+
+            dataset = fixtures.datasetChorusView();
+            expect(this.view.datasetType(dataset)).toMatchTranslation("dataset.types.CHORUS_VIEW");
+
+            dataset = fixtures.datasetSourceTable();
+            expect(this.view.datasetType(dataset)).toMatchTranslation("dataset.types.SOURCE_TABLE.BASE_TABLE");
+
+            dataset = fixtures.datasetHadoopExternalTable();
+            expect(this.view.datasetType(dataset)).toMatchTranslation("dataset.types.SANDBOX_TABLE.HDFS_EXTERNAL_TABLE");
         });
     });
 });

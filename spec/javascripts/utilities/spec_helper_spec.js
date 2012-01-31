@@ -30,4 +30,21 @@ describe("spec_helper", function() {
             });
         });
     });
+
+    describe("#toHaveBeenCalledOn", function() {
+        beforeEach(function() {
+            this.model1 = fixtures.user()
+            this.model2 = fixtures.user()
+            spyOn(chorus.models.User.prototype, 'fetch')
+            spyOn(chorus.models.User.prototype, 'save')
+        });
+
+        it("passes if the given spy was ever called on the given object", function() {
+            this.model1.fetch()
+            this.model2.fetch()
+            expect(chorus.models.User.prototype.fetch).toHaveBeenCalledOn(this.model1)
+            this.model2.save()
+            expect(chorus.models.User.prototype.save).not.toHaveBeenCalledOn(this.model1)
+        });
+    });
 });

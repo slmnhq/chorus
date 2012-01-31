@@ -9,9 +9,10 @@
 //load vendorish stuff
 @import "vendorish/_codemirror-2.2";
 @import "vendorish/_jquery.jgrowl";
-@import "vendorish/_lionbars.scss";
 @import "vendorish/_jquery.ui.selectmenu.scss";
 @import "vendorish/_jquery.qtip2.scss";
+@import "vendorish/_jquery.placeholder.scss";
+@import "vendorish/_nanoscroller.scss";
 
 // vendorish/_facebox is loaded first in modals for clarity
 

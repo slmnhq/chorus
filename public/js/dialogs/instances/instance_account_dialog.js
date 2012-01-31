@@ -1,29 +1,15 @@
-chorus.dialogs.InstanceAccount = chorus.dialogs.Base.extend({
-    className:"instance_account",
-
-    events:{
-        "submit form":"save"
+chorus.dialogs.InstanceAccount = chorus.dialogs.Account.extend({
+    translationKeys: {
+        cancel: 'actions.cancel',
+        body: 'instances.account.enter_credentials'
     },
 
     setup:function () {
         this.title = this.options.launchElement.data("title");
     },
 
-    makeModel:function () {
+    makeModel:function (options) {
+        this.model = options.pageModel.accountForCurrentUser();
         this._super("makeModel", arguments);
-        this.model = this.pageModel.accountForCurrentUser();
-        this.model.bind("saved", this.saved, this);
-    },
-
-    save:function (e) {
-        e.preventDefault();
-        this.model.save({
-            dbUserName:this.$("input[name=dbUserName]").val(),
-            dbPassword:this.$("input[name=dbPassword]").val()
-        });
-    },
-
-    saved:function () {
-        this.closeModal();
     }
 });

@@ -50,14 +50,17 @@
             var y = this.options.y;
 
             var groups = _.groupBy(this.task.get("result").rows, this.options.x);
-            return _.map(groups, function(rows, keyName){
+            var ret =  _.map(groups, function(rows, keyName){
                 var values = _.pluck(rows, y);
                 var min = _.min(values);
                 var max = _.max(values);
                 var quartiles = jStat.quartiles(values);
 
-                return [keyName, min, quartiles[0], quartiles[2], max];
+                return {name: keyName, min: min, q1: quartiles[0], median: jStat.median(values), q3: quartiles[2], max: max};
             })
+            ret.minY = _.min(_.pluck(ret, "min"));
+            ret.maxY = _.max(_.pluck(ret, "max"));
+            return ret;
         }
     });
 })(chorus);

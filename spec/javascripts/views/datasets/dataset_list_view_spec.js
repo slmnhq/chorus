@@ -1,8 +1,12 @@
 describe("chorus.views.DatasetList", function() {
+    beforeEach(function() {
+        this.collection = new chorus.collections.DatasetSet([fixtures.datasetChorusView(), fixtures.datasetSandboxTable(), fixtures.datasetSourceTable({recentComment: null })]);
+        this.collection.loaded = true;
+        this.view = new chorus.views.DatasetList({collection: this.collection});
+    })
+
     describe("#render", function() {
         beforeEach(function() {
-            this.collection = new chorus.collections.DatasetSet([fixtures.datasetChorusView(), fixtures.datasetSandboxTable(), fixtures.datasetSourceTable({recentComment: null })]);
-            this.view = new chorus.views.DatasetList({collection: this.collection});
             this.view.render();
         });
 
@@ -48,9 +52,23 @@ describe("chorus.views.DatasetList", function() {
             }
         })
 
-        it("pre-selects the first item", function() {
-            expect(this.view.$("li").eq(0)).toHaveClass("selected");
+        context("when no item was previously selected", function() {
+            it("pre-selects the first item", function() {
+                expect(this.view.$("li").eq(0)).toHaveClass("selected");
+            });
         });
+
+        context("when an item was previously selected", function() {
+            beforeEach(function() {
+                this.view.$("li:eq(1)").click();
+                this.view.render();
+            })
+
+            it("restores that item selection", function() {
+                expect(this.view.$("li").eq(0)).not.toHaveClass("selected");
+                expect(this.view.$("li").eq(1)).toHaveClass("selected");
+            })
+        })
 
         describe("clicking an li", function() {
             beforeEach(function() {
@@ -69,4 +87,19 @@ describe("chorus.views.DatasetList", function() {
             });
         });
     });
+
+    describe("event handling", function() {
+        describe("when the page model is invalidated", function() {
+            beforeEach(function() {
+                this.view.render();
+                spyOn(this.view.collection, "fetch")
+                this.view.$("li:eq(1)").click();
+                this.collection.at(1).trigger("invalidated")
+            })
+
+            it("re-fetches the collection", function() {
+                expect(this.view.collection.fetch).toHaveBeenCalled();
+            })
+        })
+    })
 });

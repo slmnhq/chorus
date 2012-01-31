@@ -26,6 +26,7 @@ chorus.dialogs.Base = chorus.Modal.extend({
         this.renderSubviews();
         this.renderHelps();
         this.postRender($(this.el));
+        chorus.placeholder(this.$("input"));
 
         return this;
     },

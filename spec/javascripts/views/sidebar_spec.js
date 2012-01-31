@@ -20,22 +20,22 @@ describe("chorus.views.Sidebar", function() {
 
     describe("scrollbar handling", function() {
         beforeEach(function() {
-            spyOn($.fn, "lionbars");
+            spyOn($.fn, "nanoScroller");
             this.page.render();
         })
 
-        it("sets up lionbars (rooooooar)", function() {
-            expect($.fn.lionbars).toHaveBeenCalled();
+        it("sets up nanoScroller", function() {
+            expect($.fn.nanoScroller).toHaveBeenCalled();
         })
 
         describe("resizing", function() {
             beforeEach(function() {
-                $.fn.lionbars.reset();
+                $.fn.nanoScroller.reset();
                 $(window).trigger('resize');
             })
 
-            it("resets the lionbars", function() {
-                expect($.fn.lionbars).toHaveBeenCalled()
+            it("resets the nanoScroller", function() {
+                expect($.fn.nanoScroller).toHaveBeenCalled()
             })
         })
 
@@ -54,12 +54,12 @@ describe("chorus.views.Sidebar", function() {
 
         context("when a subview is re-rendered", function(){
             beforeEach(function() {
-                $.fn.lionbars.reset();
+                $.fn.nanoScroller.reset();
                 this.page.sidebar.fooView.render()
             });
 
-            it("resets the lionbars", function() {
-                expect($.fn.lionbars).toHaveBeenCalled()
+            it("resets the nanoScroller", function() {
+                expect($.fn.nanoScroller).toHaveBeenCalled()
             })
         })
     })

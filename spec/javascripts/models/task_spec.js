@@ -81,9 +81,16 @@ describe("chorus.models.Task", function() {
             expect(task.errorMessage()).toBe(task.get('result').message);
         })
 
-        it("should return falsy when the response was not an error", function() {
+        it("should return falsy when the response is successful and has no message", function() {
             var task = fixtures.taskWithResult();
             expect(task.errorMessage()).toBeFalsy();
         })
+
+        it("returns falsy when the response is successful, but has a warning message", function() {
+            var task = fixtures.taskWithResult({
+                result: { executeResult: "success", message: "this is just a warning, bro. not to worry." }
+            });
+            expect(task.errorMessage()).toBeFalsy();
+        });
     })
 });

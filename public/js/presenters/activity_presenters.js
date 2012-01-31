@@ -82,8 +82,10 @@
                 })
             };
 
-            attrs.objectName = this.noteObject.get("name");
-            attrs.objectUrl = this.noteObject.showUrl();
+            if(this.noteObject) {
+                attrs.objectName = this.noteObject.get("name");
+                attrs.objectUrl = this.noteObject.showUrl();
+            }
 
             return attrs
         },

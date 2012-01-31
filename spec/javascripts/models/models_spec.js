@@ -427,6 +427,20 @@ describe("chorus.models", function() {
                     expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.model);
                 });
             });
+
+            context("when the fetch succeeds", function() {
+                beforeEach(function() {
+                    this.loadedSpy = jasmine.createSpy("loaded");
+                    this.model.bind("loaded", this.loadedSpy);
+                })
+
+                it("triggers the 'loaded' event on the model", function() {
+                    this.model.fetch();
+                    this.server.respondWith([200, {'Content-Type': 'application/json'}, '{"resource":[], "status": "ok" }']);
+                    this.server.respond();
+                    expect(this.loadedSpy).toHaveBeenCalled();
+                })
+            })
         });
 
         describe("#destroy", function() {
@@ -949,6 +963,20 @@ describe("chorus.models", function() {
                     expect(this.server.requests[0].url).toBe("/edc/bar/bar?page=1&rows=50")
                 })
             })
+
+            context("when the fetch succeeds", function() {
+                beforeEach(function() {
+                    this.loadedSpy = jasmine.createSpy("loaded");
+                    this.collection.bind("loaded", this.loadedSpy);
+                    this.collection.fetch();
+                    this.server.respondWith([200, {'Content-Type': 'application/json'}, '{"resource":[], "status": "ok" }']);
+                    this.server.respond();
+                })
+
+                it("triggers the 'loaded' event on the collection", function() {
+                    expect(this.loadedSpy).toHaveBeenCalled();
+                })
+            })
         });
 
         describe("#fetchAll", function() {
@@ -984,6 +1012,7 @@ describe("chorus.models", function() {
                     ],
                         "pagination": {
                             "total": "2",
+
                             "page": "2",
                             "records": "3"
                         }
@@ -996,10 +1025,18 @@ describe("chorus.models", function() {
 
                     var self = this;
 
-                    this.resetListener = function(collection) {
+                    this.resetListener = jasmine.createSpy("reset");
+                    this.resetListener.andCallFake(function(collection) {
                         self.collectionLengthOnReset = collection.length;
-                    }
+                    })
                     this.collection.bind("reset", this.resetListener)
+
+                    this.loadedListener = jasmine.createSpy("loaded");
+                    this.loadedListener.andCallFake(function() {
+                        self.collectionLengthOnLoaded = this.length;
+                    })
+                    this.collection.bind("loaded", this.loadedListener)
+
                     this.server.respond();
                 })
 
@@ -1007,8 +1044,20 @@ describe("chorus.models", function() {
                     expect(this.server.requests[1].url).toBe("/edc/bar/bar?page=2&rows=1000");
                 })
 
+                it("triggers the reset event once", function() {
+                    expect(this.resetListener.callCount).toBe(1)
+                })
+
                 it("triggers the reset event after all models are in the collection", function() {
                     expect(this.collectionLengthOnReset).toBe(4)
+                })
+
+                it("triggers the loaded event once", function() {
+                    expect(this.loadedListener.callCount).toBe(1)
+                })
+
+                it("triggers the loaded event after all models are in the collection", function() {
+                    expect(this.collectionLengthOnLoaded).toBe(4)
                 })
             })
 

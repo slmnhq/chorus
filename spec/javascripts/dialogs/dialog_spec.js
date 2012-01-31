@@ -8,6 +8,7 @@ describe("chorus.views.Dialog", function() {
                 text : "OMG IM IN A DIALOG WHOA"
             }
         }
+        spyOn(chorus, 'placeholder');
     })
 
     describe("#render", function() {
@@ -22,6 +23,10 @@ describe("chorus.views.Dialog", function() {
         it("renders the view in the .dialog_content", function() {
             expect(this.dialog.$(".dialog_content").text()).toBe("OMG IM IN A DIALOG WHOA")
         })
+
+        it("sets up input placeholders for older browsers", function() {
+            expect(chorus.placeholder).toHaveBeenCalledWith(this.dialog.$("input"));
+        });
     })
 
 

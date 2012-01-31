@@ -24,7 +24,6 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
         activities.fetch();
         this.activityList = new chorus.views.ActivityList({
             collection: activities,
-            headingText:t("workfile.content_details.activity"),
             additionalClass:"sidebar",
             displayStyle:['without_object', 'without_workspace']
         });
@@ -57,11 +56,11 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
     },
 
     datasetType:function (dataset) {
-        if (!dataset) {
-            return "";
-        }
+        if (!dataset) { return ""; }
 
-        var key = ["dataset.types", dataset.get("type"), dataset.get("objectType")].join(".");
+        var keys = ["dataset.types", dataset.get("type")];
+        if (dataset.get("objectType")) { keys.push(dataset.get("objectType")); }
+        var key = keys.join(".");
         return t(key);
     }
 });

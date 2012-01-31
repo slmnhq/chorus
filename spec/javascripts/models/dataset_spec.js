@@ -32,9 +32,25 @@ describe("chorus.models.Dataset", function() {
     });
 
     describe("when the 'invalidated' event is triggered", function() {
-        it("re-fetches, because the last comment might have changed", function() {
-            this.dataset.trigger("invalidated");
-            expect(this.dataset).toHaveBeenFetched();
+        describe("when the dataset belongs to a collection", function() {
+            beforeEach(function() {
+                this.collection = new chorus.collections.DatasetSet();
+                this.collection.add(this.dataset);
+            });
+
+            it("re-fetches its collection, because the last comment might have changed", function() {
+                this.dataset.trigger("invalidated");
+                expect(this.collection).toHaveBeenFetched();
+            });
+        });
+
+        describe("when the dataset has no collection", function() {
+            it("does not fetch anything", function() {
+                var dataset = this.dataset;
+                expect(function() {
+                    dataset.trigger("invalidated");
+                }).not.toThrow();
+            });
         });
     });
 
