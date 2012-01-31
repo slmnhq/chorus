@@ -1,4 +1,9 @@
 _.extend(sinon.fakeServer, {
+
+    reset: function() {
+        this.requests = [];
+    },
+
     creates: function() {
         return _.filter(this.requests, function(request) {
             return request.method === "POST";
