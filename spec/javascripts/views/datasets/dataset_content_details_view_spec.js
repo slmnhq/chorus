@@ -12,10 +12,6 @@ describe("chorus.views.DatasetContentDetails", function() {
             expect(this.view.$(".data_preview h1").text().trim()).toMatchTranslation("dataset.data_preview")
         });
 
-        it("renders the definition bar", function() {
-            expect(this.view.$(".definition")).toExist();
-        })
-
         it("renders the 'Preview Data' button", function() {
             expect(this.view.$(".column_count .preview").text().trim()).toMatchTranslation("dataset.data_preview");
         })
@@ -97,6 +93,11 @@ describe("chorus.views.DatasetContentDetails", function() {
                     it("triggers the transform:visualize event", function() {
                         expect("transform:visualize").toHaveBeenTriggeredOn(this.view);
                     })
+
+                    it("hides the definition bar and shows the create_chart bar", function() {
+                        expect(this.view.$('.definition')).toHaveClass('hidden');
+                        expect(this.view.$('.create_chart')).not.toHaveClass('hidden');
+                    });
                 })
             })
         })

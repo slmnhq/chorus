@@ -68,7 +68,8 @@ $card-border-color: $border-color;
 $error-background-color: #B61B1D;
 $error-color: white;
 $alert-background-color: #B5121B;
-$content-details-action-background-color: #B4D88B;
+$content-details-action-background-color: #B3D988;
+$content-details-create-background-color: #49A942;
 
 $picklist-selected-background-color: #3795DD;
 
@@ -218,6 +219,12 @@ $medium-font: 14px;
     color: $color-text3;
 }
 
+@mixin create-bar-text {
+    font-size: 14px;
+    font-weight: $semibold;
+    color: white;
+}
+
 @mixin after-clearfix($which: both) {
     &:after {
             content: ".";
@@ -280,4 +287,26 @@ $medium-font: 14px;
             color: $color-text4;
         }
     }
+}
+
+@mixin triangle($pointing_direction, $color, $width, $height) {
+    width: 0;
+   	height: 0;
+	@if $pointing_direction == up {
+		border-bottom: $height solid $color;
+		border-left: $width/2 solid transparent;
+		border-right: $width/2 solid transparent;
+	} @else if $pointing_direction == down {
+		border-top: $height solid $color;
+		border-left: $width/2 solid transparent;
+		border-right: $width/2 solid transparent;
+	} @else if $pointing_direction == right {
+		border-left: $width solid $color;
+		border-top: $height/2 solid transparent;
+		border-bottom: $height/2 solid transparent;
+	} @else if $pointing_direction == left {
+		border-right: $width solid $color;
+		border-top: $height/2 solid transparent;
+		border-bottom: $height/2 solid transparent;
+	}
 }
