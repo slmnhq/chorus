@@ -14,6 +14,10 @@ describe("chorus.views.ResultsConsoleView", function() {
             this.view.render();
         })
 
+        it("does not display the close link", function() {
+            expect(this.view.$("a.close")).not.toExist();
+        });
+        
         it("displays the executing spinner", function() {
             expect(this.view.$(".right")).not.toHaveClass("executing");
         })
@@ -26,12 +30,52 @@ describe("chorus.views.ResultsConsoleView", function() {
         it("hides the bottom gutter", function() {
             expect(this.view.$(".bottom_gutter")).toHaveClass("hidden");
         });
+
+        it("displays the default title", function() {
+            expect(this.view.$("h1").text().trim()).toMatchTranslation("results_console_view.title")
+        });
+
+        context("with a title", function() {
+            beforeEach(function() {
+                this.view.options.titleKey = "test.deer";
+                this.view.render();
+            });
+
+            it("displays the supplied title", function() {
+                expect(this.view.$("h1").text().trim()).toMatchTranslation("test.deer")
+            })
+        });
+        
+        context("when the close button is enabled'", function() {
+            beforeEach(function() {
+                this.view.options.enableClose = true;
+                this.view.render();
+            });
+
+            it("displays a close link", function() {
+                expect(this.view.$("a.close")).toExist();
+            });
+        });
     })
 
     describe("event handling", function() {
         beforeEach(function() {
             this.view.render();
         })
+
+        describe("action:close", function() {
+            beforeEach(function() {
+                this.view.options.enableClose = true;
+                this.view.render();
+
+                spyOnEvent(this.view, "action:close");
+                this.view.$("a.close").click();
+            });
+            
+            it("triggers the event", function() {
+                expect("action:close").toHaveBeenTriggeredOn(this.view);
+            });
+        });
 
         describe("file:executionStarted", function() {
             beforeEach(function() {
@@ -114,7 +158,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 it("displays the result message", function() {
                     expect(this.view.$(".message").text().trim()).toBe("hi there")
-                })
+                });
 
                 context("and there was an execution error", function() {
                     beforeEach(function() {
@@ -208,6 +252,20 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 it("displays the result table", function() {
                     expect(this.view.$('.result_table')).not.toHaveClass("hidden");
+                });
+
+                it("renders only one data table", function() {
+                    expect(this.view.$(".result_table .data_table").length).toBe(1);
+                });
+
+                context("when another execution completed event occurs", function() {
+                    beforeEach(function() {
+                        this.view.trigger("file:executionCompleted", fixtures.taskWithResult());
+                    });
+
+                   it("still renders only one data table", function() {
+                        expect(this.view.$(".result_table .data_table").length).toBe(1);
+                    });
                 });
 
                 it("changes the state of the result table to 'minimized'", function() {

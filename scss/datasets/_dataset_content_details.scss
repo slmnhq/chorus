@@ -1,8 +1,4 @@
 .dataset_content_details {
-    div {
-        padding: 0 $padding-x;
-    }
-    
     .definition {
         height: 32px;
         background-color: $content-details-action-background-color;
@@ -10,11 +6,20 @@
     }
 
     .column_count {
+        padding: 0 $padding-x;
         border-top: 1px solid #B2C7D6;
         background-color: #C4DCEB;
 
         .count {
             @include font-normal-alpha;
         }
+
+        .right {
+            float: right;
+        }
+    }
+
+    .data_preview {
+        line-height: 16px;
     }
 }

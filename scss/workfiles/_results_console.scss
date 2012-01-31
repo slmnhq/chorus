@@ -17,6 +17,14 @@
             font-weight: $semibold;
         }
 
+        .controls {
+            float: right;
+
+            .separator {
+                margin: 0 5px;
+            }
+        }
+        
         .right {
             float: right;
 
@@ -122,5 +130,20 @@
             font-size:0px;
             line-height:0px;
         }
+    }
+
+    .minimized .data_table {
+        height: 200px;
+        width: 100%;
+    }
+
+    .collapsed .data_table {
+        height: 0px;
+        width: 0px;
+    }
+
+    .maximized .data_table {
+        height: 500px;
+        width: 100%;
     }
 }

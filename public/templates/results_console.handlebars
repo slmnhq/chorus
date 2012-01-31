@@ -23,10 +23,16 @@
                     <a class="cancel" href='#'>{{t "actions.cancel"}}</a>
                 </span>
             </span>
+            <span class="controls">
+                <a href="#" class="minimize hidden">{{t "results_console_view.minimize"}}</a>
+                <a href="#" class="maximize hidden">{{t "results_console_view.maximize"}}</a>
+                {{#if enableClose}}
+                    <span class="separator">|</span>
+                    <a class="close" href='#'>{{t "actions.close"}}</a>
+                 {{/if}}
+            </span>
         </div>
-        <h1>{{t "results_console_view.title"}}</h1>
-        <a href="#" class="minimize hidden">{{t "results_console_view.minimize"}}</a>
-        <a href="#" class="maximize hidden">{{t "results_console_view.maximize"}}</a>
+        <h1>{{t titleKey}}</h1>
     </div>
     <div class="result_table collapsed"/>
     <div class="bottom_gutter hidden">

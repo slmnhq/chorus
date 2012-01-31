@@ -59,21 +59,6 @@
         height: 100%;
     }
 
-    .minimized .data_table {
-        height: 200px;
-        width: 100%;
-    }
-
-    .collapsed .data_table {
-        height: 0px;
-        width: 0px;
-    }
-
-    .maximized .data_table {
-        height: 500px;
-        width: 100%;
-    }
-
     .CodeMirror-scroll {
         height: auto;
         overflow-y: visible;
@@ -84,8 +69,6 @@
     .CodeMirror.editable {
         background: white;
     }
-
-
 }
 .save_menu, .run_menu, .schema_menu {
     li {

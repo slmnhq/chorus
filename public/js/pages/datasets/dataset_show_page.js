@@ -57,7 +57,7 @@
                 model:this.workspace,
                 title:this.objectName,
                 imageUrl:this.dataset.iconUrl(),
-                contentDetails:new chorus.views.DatasetContentDetails({ collection:this.columnSet })
+                contentDetails:new chorus.views.DatasetContentDetails({ dataset:this.dataset, collection:this.columnSet })
             });
 
             this.sidebar = new chorus.views.DatasetListSidebar();
