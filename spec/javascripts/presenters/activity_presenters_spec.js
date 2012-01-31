@@ -9,9 +9,14 @@ describe("chorus.presenters.Activity", function() {
             this.model = fixtures.activities.NOTE_ON_DATASET_TABLE({
                 table: {
                     id: "10014|silverware|forks|shiny",
-                    name: "shiny"
+                    name : "shiny",
+                    type : "SOURCE_TABLE",
+                    objectType : "EXTERNAL_TABLE"
                 },
-                workspaceId: '4'
+                workspace: {
+                    id: '4',
+                    name: "janitorial_duties"
+                }
             });
             this.presenter = new chorus.presenters.Activity(this.model);
         });
@@ -21,7 +26,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectUrl", function() {
-            expect(this.presenter.objectUrl).toBe('/workspace/4/dataset/10014|silverware|forks|shiny');
+            expect(this.presenter.objectUrl).toBe('#/workspaces/4/source_table/external_table/shiny');
         });
     });
 

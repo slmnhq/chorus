@@ -30,7 +30,10 @@ chorus.models.Activity = chorus.models.Base.extend({
         if (datasetField) {
             return new chorus.models.Dataset({
                 id:   datasetField.id,
-                name: datasetField.name
+                type: datasetField.type,
+                objectType: datasetField.objectType,
+                objectName: datasetField.name,
+                workspace: this.get("workspace")
             });
         }
     },

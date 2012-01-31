@@ -1,12 +1,16 @@
 chorus.models.Dataset = chorus.models.Base.extend({
     initialize:function () {
         this._super("initialize", arguments);
-        this.entityId = [
-            this.get("instance").id,
-            this.get("databaseName"),
-            this.get("schemaName"),
-            this.get("objectName")
-        ].join("|");
+        if (this.has("instance")) {
+            this.entityId = [
+                this.get("instance").id,
+                this.get("databaseName"),
+                this.get("schemaName"),
+                this.get("objectName")
+            ].join("|");
+        } else {
+            this.entityId = this.get("id");
+        }
         this.entityType = this.metaType();
         this.bind('invalidated', this.refetchAfterInvalidated, this);
     },

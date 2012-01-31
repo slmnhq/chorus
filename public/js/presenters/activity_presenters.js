@@ -7,7 +7,7 @@
             this.author = model.author();
             this.workspace = model.workspace();
             this.workfile = model.workfile();
-            this.noteObject = model.instance() || this.workfile || this.workspace || this.model.dataset();
+            this.noteObject = model.instance() || this.workfile || this.model.dataset() || this.workspace;
             this.activityType = model.get("type")
 
             this.presenter = this.defaultPresenter(this.model)
@@ -83,7 +83,7 @@
             };
 
             if(this.noteObject) {
-                attrs.objectName = this.noteObject.get("name");
+                attrs.objectName = this.noteObject.get("name") || this.noteObject.get("objectName");
                 attrs.objectUrl = this.noteObject.showUrl();
             }
 

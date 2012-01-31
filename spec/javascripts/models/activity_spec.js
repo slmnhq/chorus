@@ -46,15 +46,28 @@ describe("chorus.models.Activity", function() {
                 this.model = fixtures.activities.NOTE_ON_DATASET_TABLE({
                     table: {
                         id: "10014|silverware|forks|shiny",
-                        name: "shiny"
+                        name: "shiny",
+                        type: "SOURCE_TABLE",
+                        objectType: "BASE_TABLE"
                     },
-                    workspaceId: '4'
+                    workspace: {
+                        id: '4',
+                        name: "janitorial_duties"
+                    }
                 });
             });
 
-            it("returns a Dataset model with the right id", function() {
+            it("returns a Dataset model with the right id, objectName, type and objectType", function() {
                 expect(this.model.dataset()).toBeA(chorus.models.Dataset);
                 expect(this.model.dataset().get("id")).toBe("10014|silverware|forks|shiny");
+                expect(this.model.dataset().get("objectName")).toBe("shiny");
+                expect(this.model.dataset().get("type")).toBe("SOURCE_TABLE");
+                expect(this.model.dataset().get("objectType")).toBe("BASE_TABLE");
+            });
+
+            it("has the right workspace information", function() {
+                expect(this.model.dataset().get("workspace").id).toBe('4');
+                expect(this.model.dataset().get("workspace").name).toBe('janitorial_duties');
             });
         });
 

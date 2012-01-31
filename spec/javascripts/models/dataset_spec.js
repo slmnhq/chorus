@@ -22,8 +22,17 @@ describe("chorus.models.Dataset", function() {
         expect(this.dataset.entityId).toBe("45|whirling_tops|diamonds|mama");
     });
 
-    it("initializes its 'entityId' correctly", function() {
-        expect(this.dataset.entityId).toBe("45|whirling_tops|diamonds|mama");
+    context("when the dataset is initialized with an Id, but no instance, database or schema", function() {
+        it("aliases the id to 'entityId'", function() {
+            dataset = new chorus.models.Dataset({ id: '45|whirling_tops|diamonds|mama' });
+            expect(dataset.entityId).toBe('45|whirling_tops|diamonds|mama');
+        });
+    });
+
+    context("when the dataset is initialized with an instance, database and schema, but no id", function() {
+        it("initializes its 'entityId' correctly", function() {
+            expect(this.dataset.entityId).toBe("45|whirling_tops|diamonds|mama");
+        });
     });
 
     it("has the right url", function() {
