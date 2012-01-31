@@ -25,7 +25,7 @@
         },
 
         fetchColumnSet:function () {
-            this.dataset = new chorus.models.Dataset({
+            this.model = this.dataset = new chorus.models.Dataset({
                 instance:{ id:this.workspace.sandbox().get("instanceId") },
                 databaseName:this.workspace.sandbox().get("databaseName"),
                 schemaName:this.workspace.sandbox().get("schemaName"),
@@ -63,8 +63,15 @@
             this.sidebar = new chorus.views.DatasetListSidebar();
             this.sidebar.setDataset(this.dataset);
 
+            this.mainContent.contentDetails.bind("transform:visualize", this.showVisualizeSidebar, this);
+
             this.render();
 
+        },
+
+        showVisualizeSidebar : function() {
+            this.sidebar = new chorus.views.DatasetVisualizationSidebar({collection: this.columnSet})
+            this.render();
         }
     });
 })();

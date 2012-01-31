@@ -1,0 +1,17 @@
+<div class="value">
+    <label>{{t "dataset.visualization.sidebar.value"}}</label>
+    <select>
+    {{#each models}}
+        <option value='{{name}}'>{{name}}</option>
+    {{/each}}
+    </select>
+</div>
+<div class="category">
+    <label>{{t "dataset.visualization.sidebar.category"}}</label>
+    <select>
+    {{#each models}}
+        <option value='{{name}}'>{{name}}</option>
+    {{/each}}
+    </select>
+</div>
+<button class="create">{{t "dataset.visualization.sidebar.create_chart"}}</button>
