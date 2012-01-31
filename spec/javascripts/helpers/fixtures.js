@@ -878,6 +878,39 @@ beforeEach(function() {
                 return new chorus.models.Activity(fixtures.activities.NOTE_ON_DATASET_JSON());
             },
 
+            "NOTE_ON_THING_WE_DONT_SUPPORT_YET" : function() {
+                return new chorus.models.Activity({
+                    author: fixtures.authorJson(),
+                    type: "NOTE",
+                    text: "How about that.",
+                    timestamp: "2011-12-01 00:00:00",
+                    id : fixtures.nextId().toString(),
+                    comments: [
+                        {
+                            text: "sub-comment 1",
+                            author : fixtures.authorJson(),
+                            timestamp : "2011-12-15 12:34:56"
+                        }
+                    ],
+                    artifacts : [
+                        {
+                            entityId: fixtures.nextId().toString(),
+                            entityType: "file",
+                            id: fixtures.nextId().toString(),
+                            name: "something.sql",
+                            type: "SQL"
+                        },
+                        {
+                            entityId: fixtures.nextId().toString(),
+                            entityType: "file",
+                            id: fixtures.nextId().toString(),
+                            name: "something.txt",
+                            type: "TXT"
+                        }
+                    ]
+                })
+            },
+
             "USER_ADDED" : function() {
                 return new chorus.models.Activity({
                     author: fixtures.authorJson(),

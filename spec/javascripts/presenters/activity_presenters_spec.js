@@ -74,6 +74,20 @@ describe("chorus.presenters.Activity", function() {
         itShouldHaveTheAuthorsIconAndUrl();
     })
 
+    context(".NOTE_ON_THING_WE_DONT_SUPPORT_YET", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.NOTE_ON_THING_WE_DONT_SUPPORT_YET();
+            this.presenter = new chorus.presenters.Activity(this.model)
+        });
+
+        it("should not blow up", function() {
+            expect(this.presenter.objectName).toContain("don't know object name for activity type:");
+        });
+
+        itShouldHaveFileAttachments();
+        itShouldHaveTheAuthorsIconAndUrl();
+    })
+
     context(".INSTANCE_CREATED", function() {
         beforeEach(function() {
             this.model = fixtures.activities.INSTANCE_CREATED();
