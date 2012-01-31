@@ -1,0 +1,29 @@
+.dataset_visualization_sidebar {
+    fieldset {
+        border: 1px solid $border-color;
+        padding: 15px $dialog-padding $dialog-padding;
+        margin-left: 15px;
+
+        legend {
+            @include heading-sidebar;
+        }
+
+        label {
+            @include font-content-details;
+        }
+
+        form label {
+            margin-top: 8px;
+        }
+
+        form label, input {
+            display: inline-block;
+        }
+
+        select, .ui-selectmenu-button {
+            display: block;
+            width: 210px;
+            padding-bottom: 10px;
+        }
+    }
+}

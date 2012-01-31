@@ -6,6 +6,7 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            spyOn(chorus, 'styleSelect');
             this.view.render();
         })
 
@@ -16,6 +17,10 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
 
             it("populates the select box", function() {
                 expect(this.view.$(".value select option").length).toBe(this.columns.models.length);
+            })
+
+            it("is styled", function() {
+                expect(chorus.styleSelect).toHaveBeenCalled()
             })
         })
 

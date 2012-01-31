@@ -3,5 +3,9 @@ chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
 
     setup: function() {
 
+    },
+
+    postRender : function() {
+        chorus.styleSelect(this.$('select'));
     }
 });
