@@ -114,7 +114,8 @@ describe("chorus.models.Dataset", function() {
                 "BASE_TABLE" : "table_large.png",
                 "EXTERNAL_TABLE" : "table_large.png",
                 "MASTER_TABLE" : "table_large.png",
-                "VIEW" : "view_large.png"
+                "VIEW" : "view_large.png",
+                "HDFS_EXTERNAL_TABLE": "table_large.png"
             }
         }
 
