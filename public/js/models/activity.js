@@ -25,6 +25,16 @@ chorus.models.Activity = chorus.models.Base.extend({
         return this._workspace;
     },
 
+    dataset: function() {
+        var datasetField = this.get("table") || this.get("view");
+        if (datasetField) {
+            return new chorus.models.Dataset({
+                id:   datasetField.id,
+                name: datasetField.name
+            });
+        }
+    },
+
     workfile:function () {
         if (this.get("workfile")) {
             if (!this._workfile) {

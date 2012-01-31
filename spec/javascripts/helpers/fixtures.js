@@ -777,14 +777,15 @@ beforeEach(function() {
                 });
             },
 
-            "NOTE_ON_DATASET_TABLE": function() {
-                var tableId = fixtures.nextId().toString();
-                return new chorus.models.Activity({
+            "NOTE_ON_DATASET_TABLE": function(overrides) {
+                var instanceId = fixtures.nextId().toString();
+                var attrs = _.extend({
                     author: fixtures.authorJson(),
                     type: "NOTE",
-                    text: "How about that table.",
+                    text: "How about that view.",
                     timestamp: "2011-12-01 00:00:00",
                     id: fixtures.nextId().toString(),
+                    workfileId: fixtures.nextId().toString(),
                     comments: [
                         {
                             text: "sub-comment 1",
@@ -793,8 +794,8 @@ beforeEach(function() {
                         }
                     ],
                     table: {
-                        id: tableId + '|dca_demo|public|a',
-                        name: 'a'
+                        id: instanceId + '|dca_demo|public|__a_table_name',
+                        name: '__a_table_name'
                     },
                     artifacts: [
                         {
@@ -812,7 +813,84 @@ beforeEach(function() {
                             type: "TXT"
                         }
                     ]
-                });
+                }, overrides);
+                return new chorus.models.Activity(attrs);
+            },
+
+            "NOTE_ON_DATASET_VIEW": function(overrides) {
+                var instanceId = fixtures.nextId().toString();
+                var attrs = _.extend({
+                    author: fixtures.authorJson(),
+                    type: "NOTE",
+                    text: "How about that view.",
+                    timestamp: "2011-12-01 00:00:00",
+                    id: fixtures.nextId().toString(),
+                    workfileId: fixtures.nextId().toString(),
+                    comments: [
+                        {
+                            text: "sub-comment 1",
+                            author: fixtures.authorJson(),
+                            timestamp: "2011-12-15 12:34:56"
+                        }
+                    ],
+                    view: {
+                        id: instanceId + '|dca_demo|public|__a_table_name',
+                        name: '__a_table_name'
+                    },
+                    artifacts: [
+                        {
+                            entityId: "10101",
+                            entityType: "file",
+                            id: "10101",
+                            name: "something.sql",
+                            type: "SQL"
+                        },
+                        {
+                            entityId: "10102",
+                            entityType: "file",
+                            id: "10102",
+                            name: "something.txt",
+                            type: "TXT"
+                        }
+                    ]
+                }, overrides);
+                return new chorus.models.Activity(attrs);
+                var attrs = _.extend({
+                    author: fixtures.authorJson(),
+                    type: "NOTE",
+                    text: "How about that view.",
+                    timestamp: "2011-12-01 00:00:00",
+                    id: fixtures.nextId().toString(),
+                    workfileId: fixtures.nextId().toString(),
+                    comments: [
+                        {
+                            text: "sub-comment 1",
+                            author: fixtures.authorJson(),
+                            timestamp: "2011-12-15 12:34:56"
+                        }
+                    ],
+                    view: {
+                        id: viewId + '|dca_demo|public|__a_table_name',
+                        name: '__a_table_name'
+                    },
+                    artifacts: [
+                        {
+                            entityId: "10101",
+                            entityType: "file",
+                            id: "10101",
+                            name: "something.sql",
+                            type: "SQL"
+                        },
+                        {
+                            entityId: "10102",
+                            entityType: "file",
+                            id: "10102",
+                            name: "something.txt",
+                            type: "TXT"
+                        }
+                    ]
+                }, overrides);
+                return new chorus.models.Activity(attrs);
             },
 
             "NOTE_ON_WORKSPACE" : function() {

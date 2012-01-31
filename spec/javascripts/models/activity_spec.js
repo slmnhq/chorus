@@ -40,6 +40,52 @@ describe("chorus.models.Activity", function() {
         });
     });
 
+    describe("#dataset", function() {
+        context("when the activity represents a note on a table", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.NOTE_ON_DATASET_TABLE({
+                    table: {
+                        id: "10014|silverware|forks|shiny",
+                        name: "shiny"
+                    },
+                    workspaceId: '4'
+                });
+            });
+
+            it("returns a Dataset model with the right id", function() {
+                expect(this.model.dataset()).toBeA(chorus.models.Dataset);
+                expect(this.model.dataset().get("id")).toBe("10014|silverware|forks|shiny");
+            });
+        });
+
+        context("when the activity represents a note on a view", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.NOTE_ON_DATASET_VIEW({
+                    view: {
+                        id: "10014|silverware|forks|shiny",
+                        name: "shiny"
+                    },
+                    workspaceId: '4'
+                });
+            });
+
+            it("returns a Dataset model with the right id", function() {
+                expect(this.model.dataset()).toBeA(chorus.models.Dataset);
+                expect(this.model.dataset().get("id")).toBe("10014|silverware|forks|shiny");
+            });
+        });
+
+        context("when the activity is not related to a dataset", function() {
+            beforeEach(function() {
+                this.model = fixtures.activity({instance: fixtures.instanceJson()})
+            })
+
+            it("returns undefined", function() {
+                expect(this.model.dataset()).toBeUndefined();
+            });
+        });
+    });
+
     describe("#workspace", function() {
         context("with an workspace", function() {
             beforeEach(function() {
