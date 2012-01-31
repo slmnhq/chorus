@@ -142,4 +142,50 @@ describe("chorus.models.Dataset", function() {
             });
         });
     });
+
+    describe("#preview", function() {
+        context("with a table", function() {
+            beforeEach(function() {
+                this.dataset.set({objectType: "BASE_TABLE", objectName: "foo"});
+                this.preview = this.dataset.preview();
+            });
+
+            it("should return a DatasetPreview", function() {
+                expect(this.preview).toBeA(chorus.models.DatasetPreview);
+            });
+
+            it("should memoize the database preview", function() {
+                expect(this.preview).toBe(this.dataset.preview());
+            });
+
+            it("should return a database preview", function() {
+                expect(this.preview.get("instanceId")).toBe(this.dataset.get("instance").id);
+                expect(this.preview.get("databaseName")).toBe(this.dataset.get("databaseName"));
+                expect(this.preview.get("schemaName")).toBe(this.dataset.get("schemaName"));
+                expect(this.preview.get("tableName")).toBe(this.dataset.get("objectName"));
+            });
+        });
+
+        context("with a view", function() {
+            beforeEach(function() {
+                this.dataset.set({objectType: "VIEW", objectName: "bar"});
+                this.preview = this.dataset.preview();
+            });
+
+            it("should return a DatasetPreview", function() {
+                expect(this.preview).toBeA(chorus.models.DatasetPreview);
+            });
+
+            it("should memoize the database preview", function() {
+                expect(this.preview).toBe(this.dataset.preview());
+            });
+
+            it("should return a database preview", function() {
+                expect(this.preview.get("instanceId")).toBe(this.dataset.get("instance").id);
+                expect(this.preview.get("databaseName")).toBe(this.dataset.get("databaseName"));
+                expect(this.preview.get("schemaName")).toBe(this.dataset.get("schemaName"));
+                expect(this.preview.get("viewName")).toBe(this.dataset.get("objectName"));
+            });
+        });
+    });
 })

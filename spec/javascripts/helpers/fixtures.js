@@ -1632,6 +1632,13 @@ beforeEach(function() {
             }, overrides);
             return new chorus.models.Dataset(attributes);
         },
+        
+        datasetPreview: function(overrides) {
+            return new chorus.models.DatasetPreview(_.extend({
+                columns: [],
+                rows: []
+            }, overrides));
+        },
 
         datasetHadoopExternalTable : function(overrides) {
             var attributes = _.extend(fixtures.datasetCommonJson(), {
@@ -1642,7 +1649,7 @@ beforeEach(function() {
             }, overrides);
             return new chorus.models.Dataset(attributes);
         },
-
+        
         schemaFunction: function(overrides) {
             var attributes = _.extend({
                 argTypes : ['text','text','text'],

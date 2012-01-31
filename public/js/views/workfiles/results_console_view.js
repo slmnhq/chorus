@@ -6,7 +6,8 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         "click a.minimize":"minimizeTable",
         "click .expander_button":"toggleExpand",
         "click .close_errors":"closeError",
-        "click .view_details":"viewDetails"
+        "click .view_details":"viewDetails",
+        "click a.close" : "clickClose"
     },
 
     setup:function () {
@@ -37,7 +38,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$(".right").removeClass("executing")
         this.$(".loading").stopLoading()
 
-        if (task.errorMessage()) {
+        if (task.errorMessage && task.errorMessage()) {
             this.$(".errors").removeClass("hidden")
             this.$(".result_content").addClass("hidden");
             this.$(".message").empty();
@@ -45,7 +46,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
             this.dataTable = new chorus.views.TaskDataTable({model:task});
             this.dataTable.render();
             this.$(".result_content").removeClass("hidden");
-            this.$(".result_table").append(this.dataTable.el);
+            this.$(".result_table").html(this.dataTable.el);
         }
 
         this.minimizeTable();
@@ -74,6 +75,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$('.data_table').css("height", "");
         this.$("a.minimize").addClass("hidden");
         this.$("a.maximize").removeClass("hidden");
+        this.$(".controls").removeClass("collapsed");
 
         this.$(".result_table").removeClass("collapsed");
         this.$(".result_table").removeClass("maximized");
@@ -88,6 +90,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         e && e.preventDefault()
         this.$("a.maximize").addClass("hidden");
         this.$("a.minimize").removeClass("hidden");
+        this.$(".controls").removeClass("collapsed");
 
         this.$(".result_table").removeClass("collapsed");
         this.$(".result_table").removeClass("minimized");
@@ -102,6 +105,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     collapseTable:function () {
         this.$("a.maximize").addClass("hidden");
         this.$("a.minimize").addClass("hidden");
+        this.$(".controls").addClass("collapsed");
 
         this.$(".result_table").addClass("collapsed");
         this.$(".result_table").removeClass("minimized");
@@ -134,6 +138,18 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
             } else {
                 this.maximizeTable();
             }
+        }
+    },
+
+    clickClose : function(e) {
+        e && e.preventDefault();
+        this.trigger("action:close");
+    },
+
+    additionalContext : function() {
+        return {
+            titleKey : this.options.titleKey || "results_console_view.title",
+            enableClose : this.options.enableClose
         }
     }
 });

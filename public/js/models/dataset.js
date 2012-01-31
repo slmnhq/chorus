@@ -55,6 +55,24 @@ chorus.models.Dataset = chorus.models.Base.extend({
             author:comment.author,
             commentCreatedStamp:comment.timestamp
         });
+    },
+
+    preview: function() {
+        if (!this._preview) {
+            this._preview = new chorus.models.DatasetPreview({
+                instanceId : this.get("instance").id,
+                databaseName : this.get("databaseName"),
+                schemaName : this.get("schemaName")
+            });
+            var objectName = this.get("objectName");
+            if (this.metaType() == "table") {
+                this._preview.set({tableName : objectName}, {silent : true});
+            } else {
+                this._preview.set({viewName : objectName}, {silent : true});
+            }
+        }
+
+        return this._preview;
     }
 }, {
     metaTypeMap:{

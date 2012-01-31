@@ -17,6 +17,19 @@
             font-weight: $semibold;
         }
 
+        .controls {
+            float: right;
+
+            .separator {
+                margin: 0 5px;
+            }
+            &.collapsed {
+                .separator {
+                    display: none;
+                }
+            }
+        }
+        
         .right {
             float: right;
 
@@ -81,6 +94,7 @@
         text-align: center;
         vertical-align: top;
         border-top: 1px solid $list-border-color;
+        line-height: 16px;
     }
 
     .expander_button {
@@ -122,5 +136,20 @@
             font-size:0px;
             line-height:0px;
         }
+    }
+
+    .minimized .data_table {
+        height: 200px;
+        width: 100%;
+    }
+
+    .collapsed .data_table {
+        height: 0px;
+        width: 0px;
+    }
+
+    .maximized .data_table {
+        height: 500px;
+        width: 100%;
     }
 }
