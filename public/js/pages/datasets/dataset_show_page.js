@@ -25,7 +25,7 @@
         },
 
         fetchColumnSet:function () {
-            this.dataset = new chorus.models.Dataset({
+            this.model = this.dataset = new chorus.models.Dataset({
                 instance:{ id:this.workspace.sandbox().get("instanceId") },
                 databaseName:this.workspace.sandbox().get("databaseName"),
                 schemaName:this.workspace.sandbox().get("schemaName"),
