@@ -777,6 +777,44 @@ beforeEach(function() {
                 });
             },
 
+            "NOTE_ON_DATASET_TABLE": function() {
+                var tableId = fixtures.nextId().toString();
+                return new chorus.models.Activity({
+                    author: fixtures.authorJson(),
+                    type: "NOTE",
+                    text: "How about that table.",
+                    timestamp: "2011-12-01 00:00:00",
+                    id: fixtures.nextId().toString(),
+                    comments: [
+                        {
+                            text: "sub-comment 1",
+                            author: fixtures.authorJson(),
+                            timestamp: "2011-12-15 12:34:56"
+                        }
+                    ],
+                    table: {
+                        id: tableId + '|dca_demo|public|a',
+                        name: 'a'
+                    },
+                    artifacts: [
+                        {
+                            entityId: "10101",
+                            entityType: "file",
+                            id: "10101",
+                            name: "something.sql",
+                            type: "SQL"
+                        },
+                        {
+                            entityId: "10102",
+                            entityType: "file",
+                            id: "10102",
+                            name: "something.txt",
+                            type: "TXT"
+                        }
+                    ]
+                });
+            },
+
             "NOTE_ON_WORKSPACE" : function() {
                 return new chorus.models.Activity({
                     author: fixtures.authorJson(),
@@ -1216,6 +1254,9 @@ beforeEach(function() {
 
         workspaceJson: function() {
             var id = this.nextId();
+            var databaseId = this.nextId();
+            var instanceId = this.nextId();
+            var schemaId = this.nextId();
             return {
                 id : id.toString(),
                 name : 'Workspace ' + id,
@@ -1223,13 +1264,13 @@ beforeEach(function() {
                 ownerFirstName : "Dr",
                 ownerLastName : "Mario",
                 "sandboxInfo": {
-                    databaseId: null,
-                    databaseName: null,
-                    instanceId: null,
-                    instanceName: null,
-                    sandboxId: null,
-                    schemaId: null,
-                    schemaName: null
+                    databaseId: databaseId,
+                    databaseName: 'database'+databaseId,
+                    instanceId: instanceId,
+                    instanceName: 'instance'+instanceId,
+                    sandboxId: this.nextId().toString(),
+                    schemaId: schemaId,
+                    schemaName: 'schema'+schemaId
                 }
             }
         },
