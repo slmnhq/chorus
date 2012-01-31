@@ -1486,7 +1486,10 @@ beforeEach(function() {
         databaseColumnSet: function(models, overrides) {
             var id = this.nextId().toString()
             models = (models && (models.length > 0)) || [this.databaseColumn(overrides), this.databaseColumn(overrides)];
-            var collection = new chorus.collections.DatabaseColumnSet([], overrides);
+            var attributes = _.extend({
+                tableName : "Table" + id
+            }, overrides);
+            var collection = new chorus.collections.DatabaseColumnSet([], attributes);
             collection.reset(models)
             return collection;
         },

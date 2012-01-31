@@ -62,6 +62,7 @@
         'user_show',
         'user_show_sidebar',
         'validating',
+        'visualization',
         'workfile_content_details',
         'workfile_header',
         'workfile_list',

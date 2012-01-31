@@ -38,6 +38,14 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
             it("should have the right caption", function() {
                 expect(this.view.$("button.create").text()).toMatchTranslation("dataset.visualization.sidebar.create_chart")
             })
+
+            it("should use the table name as the data-name attribute", function() {
+                expect(this.view.$("button.create").data("name")).toBe(this.columns.attributes.tableName);
+            });
+
+            it("should use 'Visualization' as the data-dialog attribute", function() {
+                expect(this.view.$("button.create").data("dialog")).toBe("Visualization");
+            })
         })
     })
 })
