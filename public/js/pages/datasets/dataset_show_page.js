@@ -63,8 +63,15 @@
             this.sidebar = new chorus.views.DatasetListSidebar();
             this.sidebar.setDataset(this.dataset);
 
+            this.mainContent.contentDetails.bind("transform:visualize", this.showVisualizeSidebar, this);
+
             this.render();
 
+        },
+
+        showVisualizeSidebar : function() {
+            this.sidebar = new chorus.views.DatasetVisualizationSidebar({collection: this.columnSet})
+            this.render();
         }
     });
 })();

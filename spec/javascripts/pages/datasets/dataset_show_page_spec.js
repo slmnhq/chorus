@@ -89,5 +89,16 @@ describe("chorus.pages.DatasetShowPage", function() {
                 expect(this.page.$("#breadcrumbs .breadcrumb .slug").text()).toBe(this.columnSet.attributes.tableName);
             })
         });
+
+        describe("when the 'transform:visualize' event is triggered", function() {
+            beforeEach(function() {
+                this.page.render()
+                this.page.mainContent.contentDetails.trigger("transform:visualize")
+            })
+
+            it("should swaps out the sidebar for the visualization sidebar", function() {
+                expect(this.page.sidebar).toBeA(chorus.views.DatasetVisualizationSidebar)
+            })
+        })
     })
 });
