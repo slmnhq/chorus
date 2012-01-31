@@ -24,7 +24,6 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
         activities.fetch();
         this.activityList = new chorus.views.ActivityList({
             collection: activities,
-            headingText:t("workfile.content_details.activity"),
             additionalClass:"sidebar",
             displayStyle:['without_object', 'without_workspace']
         });
