@@ -4,13 +4,19 @@ chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
         "click .add_filter" : "addFilter"
     },
 
-    postRender: function() {
-        var selects = this.$("select.column_filter");
-        _.defer(function(){chorus.styleSelect(selects)});
+    postRender : function() {
+        if (!this.$(".filters li").length) {
+            this.addFilter();
+        }
     },
 
     addFilter : function(e) {
         e && e.preventDefault();
-        this.$(".filters").append('<li class="filter"></li>');
+        var $li = $('<li class="filter"/>');
+        var filterView = new chorus.views.DatasetFilter({collection: this.collection});
+        filterView.el = $li[0];
+        filterView.render();
+
+        this.$(".filters").append(filterView.el);
     }
 });
