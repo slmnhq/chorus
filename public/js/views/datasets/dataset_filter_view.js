@@ -17,7 +17,8 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         }
     },
 
-    removeSelf : function() {
+    removeSelf : function(e) {
+        e && e.preventDefault();
         this.trigger("filterview:deleted", this);
     }
 });
