@@ -1,7 +1,7 @@
 @mixin chart-icon($type) {
-    background-image: url("/images/visualizations/dialog/" + $type + "_off.png");
+    background-image: url("/images/visualizations/dialog/#{$type}_off.png");
     &.on {
-       background-image: url("/images/visualizations/dialog/" + $type + "_on.png");
+       background-image: url("/images/visualizations/dialog/#{$type}_on.png");
     }
 }
 

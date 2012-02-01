@@ -2,9 +2,9 @@
 
 @mixin chart_icon($name) {
     .#{$name} {
-        background-image: url("/images/visualization_icons/off/#{$name}.png");
+        background-image: url("/images/visualizations/create_icons/#{$name}_off.png");
         &.selected {
-            background-image: url("/images/visualization_icons/on/#{$name}.png");
+            background-image: url("/images/visualizations/create_icons/#{$name}_on.png");
         }
     }
 }
