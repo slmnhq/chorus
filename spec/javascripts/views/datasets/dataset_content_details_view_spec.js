@@ -8,6 +8,10 @@ describe("chorus.views.DatasetContentDetails", function() {
             this.view.render();
         });
 
+        it("puts the dataset filter subview in the filters div", function() {
+            expect($(this.view.el).find(this.view.filterView.el)).toBeTruthy();
+        });
+
         it("renders the title", function() {
             expect(this.view.$(".data_preview h1").text().trim()).toMatchTranslation("dataset.data_preview")
         });

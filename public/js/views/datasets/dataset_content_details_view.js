@@ -2,7 +2,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     className:"dataset_content_details",
 
     subviews : {
-        ".data_preview" : "resultsConsole"
+        ".data_preview" : "resultsConsole",
+        ".filters" : "filterView"
     },
 
     events : {
@@ -15,6 +16,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.dataset = this.options.dataset;
         this.resultsConsole = new chorus.views.ResultsConsole({titleKey: "dataset.data_preview", enableClose: true});
         this.resultsConsole.bind("action:close", this.closeDataPreview, this);
+        this.filterView = new chorus.views.DatasetFilter({model: this.dataset});
     },
 
     dataPreview : function(e) {
