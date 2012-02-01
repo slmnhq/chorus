@@ -10,11 +10,16 @@
 <div class="create_chart hidden">
     <a href="#" class="cancel">{{t "actions.cancel"}}</a>
     <span class="create">{{t "dataset.content_details.create"}}</span><span class="triangle_right"></span>
-    <span class="chart_icon frequency"></span>
-    <span class="chart_icon histogram"></span>
-    <span class="chart_icon heatmap"></span>
-    <span class="chart_icon timeseries"></span>
-    <span class="chart_icon boxplot"></span>
+    <span data-chart_type="frequency" class="chart_icon frequency"><span class="triangle"></span></span>
+    <span data-chart_type="histogram" class="chart_icon histogram"><span class="triangle"></span></span>
+    <span data-chart_type="heatmap" class="chart_icon heatmap"><span class="triangle"></span></span>
+    <span data-chart_type="timeseries" class="chart_icon timeseries"><span class="triangle"></span></span>
+    <span data-chart_type="boxplot" class="chart_icon boxplot"><span class="triangle"></span></span>
+    <span class="frequency title hidden">{{t "dataset.visualization.names.frequency"}}</span>
+    <span class="histogram title hidden">{{t "dataset.visualization.names.histogram"}}</span>
+    <span class="heatmap title hidden">{{t "dataset.visualization.names.heatmap"}}</span>
+    <span class="timeseries title hidden">{{t "dataset.visualization.names.timeseries"}}</span>
+    <span class="boxplot title hidden">{{t "dataset.visualization.names.boxplot"}}</span>
 </div>
 <div class="column_count">
     <span class="count">{{t "dataset.column_count" count=models.length}}</span>

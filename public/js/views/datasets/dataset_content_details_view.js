@@ -8,7 +8,9 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     events : {
         "click .preview" : "dataPreview",
         "click .create_chart .cancel" : "cancelVisualization",
-        "click .chart_icon" : "selectVisualization"
+        "click .chart_icon" : "selectVisualization",
+        "mouseenter .chart_icon" : "showTitle",
+        "mouseleave .chart_icon" : "showSelectedTitle"
     },
 
     setup: function() {
@@ -59,11 +61,23 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     selectVisualization: function(e) {
         $(e.target).siblings('.chart_icon').removeClass('selected');
         $(e.target).addClass('selected');
+        this.showTitle(e);
     },
 
     cancelVisualization: function(e) {
         e.preventDefault();
         this.$('.definition').removeClass ("hidden")
         this.$('.create_chart').addClass("hidden")
+    },
+
+    showTitle: function(e) {
+        $(e.target).siblings('.title').addClass('hidden');
+        $(e.target).siblings('.title.'+ $(e.target).data('chart_type')).removeClass('hidden');
+    },
+
+    showSelectedTitle: function(e) {
+        $(e.target).siblings('.title').addClass('hidden');
+        var type = this.$('.selected').data('chart_type');
+        $(e.target).siblings('.title.'+ type).removeClass('hidden');
     }
 });

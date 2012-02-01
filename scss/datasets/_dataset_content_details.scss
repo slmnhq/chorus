@@ -1,7 +1,7 @@
 @import "../_common";
 
 @mixin chart_icon($name) {
-    .#{$name} {
+    .#{$name}.chart_icon {
         background-image: url("/images/visualizations/create_icons/#{$name}_off.png");
         &.selected {
             background-image: url("/images/visualizations/create_icons/#{$name}_on.png");
@@ -26,7 +26,7 @@
 
     .definition, .create_chart {
         height: 32px;
-        line-height: 32px;
+        line-height: 33px;
         border-bottom: 1px solid #8D9DA8;
         background-color: $content-details-action-background-color;
     }
@@ -81,7 +81,16 @@
             margin-right: 15px;
         }
 
+        .title {
+            font-size: 14px;
+            font-weight: $semibold;
+            color: $content-details-create-bar-link-color;
+            vertical-align: top;
+            margin-left: 5px;
+        }
+
         .chart_icon {
+            position: relative;
             width: 50px;
             height: 100%;
             display: inline-block;
@@ -93,6 +102,16 @@
             }
             &.selected {
                 background-color: $content-details-chart-icon-selected-background-color;
+                .triangle {
+                    display: inline-block;
+                    position: absolute;
+                    left: 17px;
+                    bottom: -12px;
+                }
+            }
+            .triangle {
+                display: none;
+                @include triangle(down, $content-details-chart-icon-selected-background-color, 16px, 12px);
             }
         }
 

@@ -278,7 +278,6 @@
         this.server.restore();
         this.clock && this.clock.restore && this.clock.restore();
         $.cookie("userId", null)
-        $("#jasmine_content").empty();
     });
 
     //global helpers

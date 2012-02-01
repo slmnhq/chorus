@@ -112,22 +112,60 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                     context("and a chart type is clicked", function() {
                         beforeEach(function() {
-                            this.view.$('.create_chart .chart_icon:eq(0)').click();
+                            var chartIcon = this.view.$('.create_chart .chart_icon:eq(0)').click();
+                            this.firstChartType = chartIcon.data('chart_type');
                         });
 
                         it("selects that icon", function() {
                             expect(this.view.$('.create_chart .chart_icon:eq(0)')).toHaveClass('selected');
                             expect(this.view.$('.create_chart .chart_icon:eq(1)')).not.toHaveClass('selected');
                         });
+
+                        it("shows the title for that chart type", function() {
+                            var chartType =
+                            expect(this.view.$('.title.'+this.firstChartType)).not.toHaveClass('hidden');
+                        })
+
+                        context("and a different chart type is hovered over", function() {
+                            beforeEach(function() {
+                                var chartIcon = this.view.$('.create_chart .chart_icon:eq(2)');
+                                this.hoverChartType = chartIcon.data('chart_type');
+                                chartIcon.mouseenter();
+                            });
+
+                            it("shows the title for the hovered icon and hides the selected title", function() {
+                                expect(this.view.$('.title.'+this.hoverChartType)).not.toHaveClass('hidden');
+                                expect(this.view.$('.title.'+this.firstChartType)).toHaveClass('hidden');
+                            });
+
+                            context("and we stop hovering", function() {
+                                beforeEach(function() {
+                                    var chartIcon = this.view.$('.create_chart .chart_icon:eq(2)');
+                                    chartIcon.mouseleave();
+                                });
+
+                                it("shows the selected title for the hovered icon and hides the hovered title", function() {
+                                    expect(this.view.$('.title.'+this.hoverChartType)).toHaveClass('hidden');
+                                    expect(this.view.$('.title.'+this.firstChartType)).not.toHaveClass('hidden');
+                                });
+                            })
+                        })
+
                         context("and a different chart type is clicked", function() {
                             beforeEach(function() {
-                                this.view.$('.create_chart .chart_icon:eq(1)').click();
+                                var chartIcon = this.view.$('.create_chart .chart_icon:eq(1)').click();
+                                this.secondChartType = chartIcon.data('chart_type');
                             });
 
                             it("selects that icon", function() {
                                 expect(this.view.$('.create_chart .chart_icon:eq(0)')).not.toHaveClass('selected');
                                 expect(this.view.$('.create_chart .chart_icon:eq(1)')).toHaveClass('selected');
                             });
+
+                            it("shows that title and hides the other visible ones", function() {
+                                expect(this.view.$('.title.'+this.secondChartType)).not.toHaveClass('hidden');
+                                expect(this.view.$('.title.'+this.firstChartType)).toHaveClass('hidden');
+                            })
                         })
                     })
                 })
