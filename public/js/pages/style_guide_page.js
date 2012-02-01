@@ -42,7 +42,11 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
         this.task = (function() {
             var animals = ['aardvark', 'bat', 'cheetah'];
-            var columns = [{ name: "id" }, { name: "value" }, { name: "animal" }];
+            var columns = [
+                { name: "id" },
+                { name: "value" },
+                { name: "animal" }
+            ];
             var rows = _.map(_.range(50), function(i) {
                 return {
                     id: i,
@@ -56,9 +60,9 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 rows: rows
             }});
         })();
-        
-            this.views = {
-                "Header" : new chorus.views.Header(),
+
+        this.views = {
+            "Header" : new chorus.views.Header(),
 
             "Breadcrumbs":new chorus.views.BreadcrumbsView({
                 breadcrumbs:[
@@ -146,7 +150,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                     ]
                 }})
             }),
-                
+
             "Visualization: TimeSeries" : new chorus.views.visualizations.TimeSeriesPlot({
                 model: this.task,
                 x: 'id',
@@ -157,10 +161,28 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 model: this.task,
                 x: 'animal',
                 y: 'value'
+            }),
+
+
+            "Visualization: HistogramPlot" : new chorus.views.visualizations.HistogramPlot({
+                model: new chorus.models.HistogramTask({
+                    columns: [
+                        {name : "bin", typeCategory: "STRING"},
+                        {name : "frequency", typeCategory: "WHOLE_NUMBER"}
+                    ],
+
+                    rows: [
+                        { bin: "Five", frequency: 5 },
+                        { bin: "Eight", frequency: 8 },
+                        { bin: "Zero", frequency: 0 },
+                        { bin: "One", frequency: 1 },
+                        { bin: "Twenty", frequency: 20 }
+                    ]
+                })
             })
         }
     },
-    
+
     render : function(){
         $(this.el).empty()
 

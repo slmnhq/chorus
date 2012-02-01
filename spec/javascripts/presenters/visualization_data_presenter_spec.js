@@ -122,4 +122,32 @@ describe("chorus.presenters.visualizations", function() {
             expect(this.data.maxY).toBe(400);
         })
     });
+
+    describe("histogram", function() {
+        beforeEach(function() {
+            this.model = new chorus.models.HistogramTask({
+                columns: [
+                    {name : "bin", typeCategory: "STRING"},
+                    {name : "frequency", typeCategory: "WHOLE_NUMBER"}
+                ],
+
+                rows: [
+                    { bin: "0-9", frequency: 5 },
+                    { bin: "10-19", frequency: 8 },
+                    { bin: "20-29", frequency: 0 },
+                    { bin: "30-39", frequency: 1 },
+                    { bin: "40-49", frequency: 2000 }
+                ]
+            });
+            this.presenter = new chorus.presenters.visualizations.Histogram(this.model);
+
+            this.data = this.presenter.present();
+        });
+        it("returns bin and frequency as x and y", function() {
+            var x = _.pluck(this.data, "x");
+            var y = _.pluck(this.data, "y");
+            expect(y).toEqual([5,8,0,1,2000]);
+            expect(x).toEqual(["0-9","10-19","20-29","30-39","40-49"]);
+        })
+    })
 });

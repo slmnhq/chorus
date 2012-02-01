@@ -79,24 +79,24 @@ chorus.views.visualizations.BoxPlot = chorus.views.Base.extend({
             attr("class", "chart box_plot").
             attr("viewBox", "0 0 272 100").
             append("g").
-                attr("class", "top_transform");
+            attr("class", "top_transform");
 
         var xPaddedScaler = d3.scale.ordinal().
             domain(_.pluck(data, "name")).
-            rangeBands([yLabelWidth+2, 270]);
+            rangeBands([yLabelWidth + 2, 270]);
 
-        
+
         var xEdgeScaler = d3.scale.ordinal().
             domain(_.pluck(data, "name")).
             rangeBands([yLabelWidth, 272]);
 
         var yPaddedScaler = d3.scale.linear().
-           domain([data.minY, data.maxY]).
-           range([98-xLabelHeight, 2]);
+            domain([data.minY, data.maxY]).
+            range([98 - xLabelHeight, 2]);
 
         var yEdgeScaler = d3.scale.linear().
-           domain([data.minY, data.maxY]).
-           range([100-xLabelHeight, 0]);
+            domain([data.minY, data.maxY]).
+            range([100 - xLabelHeight, 0]);
 
         chart.selectAll("line.ytick").data(yPaddedScaler.ticks(10)).enter().
             append("line").
@@ -122,38 +122,93 @@ chorus.views.visualizations.BoxPlot = chorus.views.Base.extend({
 
         boxes.append("line").
             attr("class", "whisker vertical").
-            attr("x1", function(d){return xPaddedScaler(d.name)+boxOffset+0.5*boxWidth}).
-            attr("x2", function(d){return xPaddedScaler(d.name)+boxOffset+0.5*boxWidth}).
-            attr("y1", function(d){return yPaddedScaler(d.min)}).
-            attr("y2", function(d){return yPaddedScaler(d.max)});
+            attr("x1",
+            function(d) {
+                return xPaddedScaler(d.name) + boxOffset + 0.5 * boxWidth
+            }).
+            attr("x2",
+            function(d) {
+                return xPaddedScaler(d.name) + boxOffset + 0.5 * boxWidth
+            }).
+            attr("y1",
+            function(d) {
+                return yPaddedScaler(d.min)
+            }).
+            attr("y2", function(d) {
+                return yPaddedScaler(d.max)
+            });
 
         boxes.append("line").
             attr("class", "whisker horizontal top").
-            attr("x1", function(d){return xPaddedScaler(d.name)+boxOffset+0.25*boxWidth}).
-            attr("x2", function(d){return xPaddedScaler(d.name)+boxOffset+0.75*boxWidth}).
-            attr("y1", function(d){return yPaddedScaler(d.max)}).
-            attr("y2", function(d){return yPaddedScaler(d.max)});
+            attr("x1",
+            function(d) {
+                return xPaddedScaler(d.name) + boxOffset + 0.25 * boxWidth
+            }).
+            attr("x2",
+            function(d) {
+                return xPaddedScaler(d.name) + boxOffset + 0.75 * boxWidth
+            }).
+            attr("y1",
+            function(d) {
+                return yPaddedScaler(d.max)
+            }).
+            attr("y2", function(d) {
+                return yPaddedScaler(d.max)
+            });
 
         boxes.append("line").
             attr("class", "whisker horizontal bottom").
-            attr("x1", function(d){return xPaddedScaler(d.name)+boxOffset+0.25*boxWidth}).
-            attr("x2", function(d){return xPaddedScaler(d.name)+boxOffset+0.75*boxWidth}).
-            attr("y1", function(d){return yPaddedScaler(d.min)}).
-            attr("y2", function(d){return yPaddedScaler(d.min)});
+            attr("x1",
+            function(d) {
+                return xPaddedScaler(d.name) + boxOffset + 0.25 * boxWidth
+            }).
+            attr("x2",
+            function(d) {
+                return xPaddedScaler(d.name) + boxOffset + 0.75 * boxWidth
+            }).
+            attr("y1",
+            function(d) {
+                return yPaddedScaler(d.min)
+            }).
+            attr("y2", function(d) {
+                return yPaddedScaler(d.min)
+            });
 
         boxes.append("rect").
             attr("width", boxWidth).
-            attr("height", function(d) { return Math.abs(yPaddedScaler(d.q3) - yPaddedScaler(d.q1)) }).
-            attr("x", function(d) { return xPaddedScaler(d.name) + boxOffset}).
-            attr("y", function(d) { return yPaddedScaler(d.q3) }).
-            attr("name", function(d) {return d.name});
+            attr("height",
+            function(d) {
+                return Math.abs(yPaddedScaler(d.q3) - yPaddedScaler(d.q1))
+            }).
+            attr("x",
+            function(d) {
+                return xPaddedScaler(d.name) + boxOffset
+            }).
+            attr("y",
+            function(d) {
+                return yPaddedScaler(d.q3)
+            }).
+            attr("name", function(d) {
+                return d.name
+            });
 
         boxes.append("line").
             attr("class", "median").
-            attr("x1", function(d) { return xPaddedScaler(d.name) + boxOffset}).
-            attr("x2", function(d) { return xPaddedScaler(d.name) + boxOffset+boxWidth}).
-            attr("y1", function(d){return yPaddedScaler(d.median)}).
-            attr("y2", function(d){return yPaddedScaler(d.median)});
+            attr("x1",
+            function(d) {
+                return xPaddedScaler(d.name) + boxOffset
+            }).
+            attr("x2",
+            function(d) {
+                return xPaddedScaler(d.name) + boxOffset + boxWidth
+            }).
+            attr("y1",
+            function(d) {
+                return yPaddedScaler(d.median)
+            }).
+            attr("y2", function(d) {
+                return yPaddedScaler(d.median)
+            });
 
         chart.append("line").
             attr("class", "yaxis").
@@ -168,6 +223,66 @@ chorus.views.visualizations.BoxPlot = chorus.views.Base.extend({
             attr("y1", yEdgeScaler.range()[0]).
             attr("y2", yEdgeScaler.range()[0]);
 
+
+        return this;
+    }
+});
+
+chorus.views.visualizations.HistogramPlot = chorus.views.Base.extend({
+    render: function() {
+        var $el = $(this.el);
+        $el.addClass("visualization");
+
+        var xLabelHeight = 8;
+        var yLabelWidth = 18;
+        var data = new chorus.presenters.visualizations.Histogram(this.model).present();
+        var x = _.pluck(data, "x");
+        var y = _.pluck(data, "y");
+
+
+        var chart = d3.select(this.el).append("svg").
+            attr("class", "chart histogram").
+            attr("viewBox", "0 0 272 100").
+            append("g").
+            attr("class", "top_transform");
+
+        var xPaddedScaler = d3.scale.ordinal().
+            domain(x).
+            rangeBands([yLabelWidth + 2, 270]);
+
+
+        var xEdgeScaler = d3.scale.ordinal().
+            domain(x).
+            rangeBands([yLabelWidth, 272]);
+
+        var yPaddedScaler = d3.scale.linear().
+            domain([_.min(y), _.max(y)]).
+            range([98 - xLabelHeight, 2]);
+
+        var yEdgeScaler = d3.scale.linear().
+            domain([_.min(y), _.max(y)]).
+            range([100 - xLabelHeight, 0]);
+
+        var bars = chart.selectAll("bar").data(data).enter().append("g").
+            attr("class", "bar");
+
+        var boxWidth = xPaddedScaler.rangeBand() * 0.2;
+        var boxOffset = xPaddedScaler.rangeBand() * 0.4;
+
+        bars.append("rect").
+            attr("width", boxWidth).
+            attr("height", function(d) { return Math.abs(yPaddedScaler(d.y)-yPaddedScaler(0)) }).
+            attr("x", function(d) { return xPaddedScaler(d.x) + boxOffset}).
+            attr("y", function(d) { return yPaddedScaler(d.y) }).
+            attr("name", function(d) {return d.x});
+
+        chart.selectAll("line.ytick").data(yPaddedScaler.ticks(10)).enter().
+            append("line").
+            attr("class", "ytick").
+            attr("y1", yPaddedScaler).
+            attr("y2", yPaddedScaler).
+            attr("x1", xPaddedScaler.rangeExtent()[0]).
+            attr("x2", xPaddedScaler.rangeExtent()[1]);
 
         return this;
     }

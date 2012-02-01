@@ -63,4 +63,19 @@
             return ret;
         }
     });
+
+    chorus.presenters.visualizations.Histogram = function(task, options) {
+        this.task = task;
+        this.options = options;
+    }
+
+    _.extend(chorus.presenters.visualizations.Histogram.prototype, {
+        present: function() {
+            return _.map(this.task.get("rows"), function(row) {
+                return {x: row.bin, y: row.frequency};
+            });
+        }
+    });
+
+
 })(chorus);
