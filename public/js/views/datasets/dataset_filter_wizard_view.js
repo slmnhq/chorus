@@ -16,6 +16,7 @@ chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
 
         _.each(this.filterViews, function(filterView){
             $ul.append(filterView.el);
+            filterView.render();
             filterView.delegateEvents();
         });
     },

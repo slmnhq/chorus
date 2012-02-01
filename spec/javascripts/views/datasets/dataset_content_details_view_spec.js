@@ -9,7 +9,7 @@ describe("chorus.views.DatasetContentDetails", function() {
         });
 
         it("puts the dataset filter subview in the filters div", function() {
-            expect($(this.view.el).find(this.view.filterView.el)).toBeTruthy();
+            expect($(this.view.el).find(this.view.filterWizardView.el)).toBeTruthy();
         });
 
         it("renders the title", function() {

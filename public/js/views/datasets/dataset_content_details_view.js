@@ -3,7 +3,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     subviews : {
         ".data_preview" : "resultsConsole",
-        ".filters" : "filterView"
+        ".filters" : "filterWizardView"
     },
 
     events : {
@@ -18,7 +18,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.dataset = this.options.dataset;
         this.resultsConsole = new chorus.views.ResultsConsole({titleKey: "dataset.data_preview", enableClose: true});
         this.resultsConsole.bind("action:close", this.closeDataPreview, this);
-        this.filterView = new chorus.views.DatasetFilterWizard({collection : this.collection});
+        this.filterWizardView = new chorus.views.DatasetFilterWizard({collection : this.collection});
     },
 
     dataPreview : function(e) {
@@ -60,6 +60,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$('.definition').addClass ("hidden")
         this.$('.create_chart').removeClass("hidden");
         this.$(".filters").removeClass("hidden");
+        this.filterWizardView.render();
     },
 
     selectVisualization: function(e) {
