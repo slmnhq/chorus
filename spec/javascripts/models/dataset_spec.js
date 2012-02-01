@@ -88,6 +88,32 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
+    describe("#makeHistogramTask", function() {
+        beforeEach(function() {
+            this.dataset.set({ sandboxId: "21" });
+
+            this.task = this.dataset.makeHistogramTask({
+                bins: 5,
+                yAxis: "blindness_rate"
+            });
+        });
+
+        it("returns a HistogramTask model", function() {
+            expect(this.task).toBeA(chorus.models.HistogramTask);
+        });
+
+        it("has the given number of bins and y axis", function() {
+            expect(this.task.get("bins")).toBe(5);
+            expect(this.task.get("yAxis")).toBe("blindness_rate");
+        });
+
+        it("has the right workspaceId, sandboxId and objectName", function() {
+            expect(this.task.get("workspaceId")).toBe("44");
+            expect(this.task.get("sandboxId")).toBe("21");
+            expect(this.task.get("objectName")).toBe("japanese_teas");
+        });
+    });
+
     describe("#statistics", function() {
         beforeEach(function() {
             this.datasetProperties = this.dataset.statistics()
