@@ -112,6 +112,11 @@ describe("chorus.views.DatasetContentDetails", function() {
                         expect(this.view.$('.create_chart')).not.toHaveClass('hidden');
                     });
 
+                    it("hides column_count and shows info_bar", function() {
+                        expect(this.view.$('.column_count')).toHaveClass('hidden');
+                        expect(this.view.$('.info_bar')).not.toHaveClass('hidden');
+                    });
+
                     it("shows the filters div", function () {
                         expect(this.view.$(".filters")).not.toHaveClass("hidden");
                     });
@@ -128,6 +133,11 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                         it("hides the filters div", function () {
                             expect(this.view.$(".filters")).toHaveClass("hidden");
+                        });
+
+                        it("shows the column_count and hides info_bar", function(){
+                            expect(this.view.$('.column_count')).not.toHaveClass('hidden');
+                            expect(this.view.$('.info_bar')).toHaveClass('hidden');
                         });
                     })
 
