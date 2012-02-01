@@ -1,5 +1,14 @@
 @import "../_common";
 
+@mixin chart_icon($name) {
+    .#{$name} {
+        background-image: url("/images/visualization_icons/off/#{$name}.png");
+        &.selected {
+            background-image: url("/images/visualization_icons/on/#{$name}.png");
+        }
+    }
+}
+
 .content_details .dataset_content_details {
     .column_count {
         padding: 0 $padding-x;
@@ -63,6 +72,35 @@
             display: inline-block;
             vertical-align: top;
         }
+
+        .cancel {
+            float: right;
+            color: $content-details-create-bar-link-color;
+            font-size: 12px;
+            font-weight: $semibold;
+            margin-right: 15px;
+        }
+
+        .chart_icon {
+            width: 50px;
+            height: 100%;
+            display: inline-block;
+            cursor: pointer;
+            background-position: center;
+            background-repeat: no-repeat;
+            &:hover {
+                background-color: $content-details-chart-icon-hover-background-color;
+            }
+            &.selected {
+                background-color: $content-details-chart-icon-selected-background-color;
+            }
+        }
+
+        @include chart_icon(frequency);
+        @include chart_icon(histogram);
+        @include chart_icon(heatmap);
+        @include chart_icon(timeseries);
+        @include chart_icon(boxplot);
     }
 }
 

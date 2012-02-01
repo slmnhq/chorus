@@ -60,7 +60,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                 });
             })
         })
-        
+
         describe("definition bar", function() {
             it("renders", function() {
                 expect(this.view.$(".definition")).toExist();
@@ -98,6 +98,38 @@ describe("chorus.views.DatasetContentDetails", function() {
                         expect(this.view.$('.definition')).toHaveClass('hidden');
                         expect(this.view.$('.create_chart')).not.toHaveClass('hidden');
                     });
+
+                    context("and cancel is clicked", function() {
+                        beforeEach(function() {
+                            this.view.$('.create_chart .cancel').click();
+                        });
+
+                        it("shows the definition bar and hides the create_chart bar", function() {
+                            expect(this.view.$('.definition')).not.toHaveClass('hidden');
+                            expect(this.view.$('.create_chart')).toHaveClass('hidden');
+                        });
+                    })
+
+                    context("and a chart type is clicked", function() {
+                        beforeEach(function() {
+                            this.view.$('.create_chart .chart_icon:eq(0)').click();
+                        });
+
+                        it("selects that icon", function() {
+                            expect(this.view.$('.create_chart .chart_icon:eq(0)')).toHaveClass('selected');
+                            expect(this.view.$('.create_chart .chart_icon:eq(1)')).not.toHaveClass('selected');
+                        });
+                        context("and a different chart type is clicked", function() {
+                            beforeEach(function() {
+                                this.view.$('.create_chart .chart_icon:eq(1)').click();
+                            });
+
+                            it("selects that icon", function() {
+                                expect(this.view.$('.create_chart .chart_icon:eq(0)')).not.toHaveClass('selected');
+                                expect(this.view.$('.create_chart .chart_icon:eq(1)')).toHaveClass('selected');
+                            });
+                        })
+                    })
                 })
             })
         })
@@ -108,7 +140,7 @@ describe("chorus.views.DatasetContentDetails", function() {
             })
 
             it("renders the column count", function() {
-                expect(this.view.$(".column_count .count").text().trim()).toMatchTranslation("dataset.column_count", { count : this.collection.models.length })
+                expect(this.view.$(".column_count .count").text().trim()).toMatchTranslation("dataset.column_count", { count: this.collection.models.length })
             })
         })
     })

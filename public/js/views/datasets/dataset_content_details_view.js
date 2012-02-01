@@ -6,7 +6,9 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     },
 
     events : {
-        "click .preview" : "dataPreview"
+        "click .preview" : "dataPreview",
+        "click .create_chart .cancel" : "cancelVisualization",
+        "click .chart_icon" : "selectVisualization"
     },
 
     setup: function() {
@@ -52,5 +54,16 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$('.definition').addClass ("hidden")
         this.$('.create_chart').removeClass("hidden")
 
+    },
+
+    selectVisualization: function(e) {
+        $(e.target).siblings('.chart_icon').removeClass('selected');
+        $(e.target).addClass('selected');
+    },
+
+    cancelVisualization: function(e) {
+        e.preventDefault();
+        this.$('.definition').removeClass ("hidden")
+        this.$('.create_chart').addClass("hidden")
     }
 });
