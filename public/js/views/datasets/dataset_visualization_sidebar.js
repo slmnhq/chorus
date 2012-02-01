@@ -14,6 +14,10 @@ chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
         });
     },
 
+    postRender: function() {
+        chorus.styleSelect(this.$('select'));
+    },
+
     allColumns: function() {
         return _.map(this.columns, function(col) {
             return col.get('name');

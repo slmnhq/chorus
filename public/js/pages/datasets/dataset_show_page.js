@@ -76,7 +76,7 @@
                     this.renderSubview('sidebar');
                     break;
                 case 'frequency':
-                    this.sidebar = new chorus.views.DatasetVisualizationFrequencySidebar();
+                    this.sidebar = new chorus.views.DatasetVisualizationFrequencySidebar({collection: this.columnSet});
                     this.renderSubview('sidebar');
                     break;
             }

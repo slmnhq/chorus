@@ -113,6 +113,7 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                 it("should swaps out the sidebar for the boxplot sidebar", function() {
                     expect(this.page.sidebar).toBeA(chorus.views.DatasetVisualizationBoxplotSidebar)
+                    expect(this.page.sidebar.collection).toBe(this.page.columnSet);
                 });
             });
 
@@ -123,6 +124,7 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                 it("should swaps out the sidebar for the frequency sidebar", function() {
                     expect(this.page.sidebar).toBeA(chorus.views.DatasetVisualizationFrequencySidebar)
+                    expect(this.page.sidebar.collection).toBe(this.page.columnSet);
                 });
             });
 

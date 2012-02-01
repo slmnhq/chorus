@@ -1,4 +1,10 @@
-chorus.views.DatasetVisualizationFrequencySidebar = chorus.views.Sidebar.extend({
+chorus.views.DatasetVisualizationFrequencySidebar = chorus.views.DatasetVisualizationSidebar.extend({
     className: "dataset_visualization_frequency_sidebar",
-    additionalClass: "dataset_visualization_sidebar"
+
+    additionalContext: function() {
+        return {
+            chartType: "frequency",
+            allColumns: this.allColumns()
+        }
+    }
 });
