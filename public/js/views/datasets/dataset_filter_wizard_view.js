@@ -1,20 +1,42 @@
 chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
     className: "dataset_filter_wizard",
     events : {
-        "click .add_filter" : "addFilter"
+        "click .add_filter" : "addFilterAndRender"
+    },
+
+    setup : function() {
+        this.filterViews = [];
     },
 
     postRender : function() {
-        if (!this.$(".filters li").length) {
+        var $ul = this.$(".filters");
+        if (!this.filterViews.length) {
             this.addFilter();
         }
+
+        _.each(this.filterViews, function(filterView){
+            $ul.append(filterView.el);
+            filterView.delegateEvents();
+        });
     },
 
-    addFilter : function(e) {
-        e && e.preventDefault();
+    addFilter : function() {
         var filterView = new chorus.views.DatasetFilter({collection: this.collection});
         filterView.render();
+        filterView.owner = this;
 
-        this.$(".filters").append(filterView.el);
+        filterView.bindOnce("filterview:deleted", this.removeFilterView, this);
+        this.filterViews.push(filterView);
+    },
+
+    addFilterAndRender : function(e) {
+        e && e.preventDefault();
+        this.addFilter();
+        this.$(".filters").append(_.last(this.filterViews).el);
+    },
+
+    removeFilterView : function(view) {
+        this.filterViews = _.without(this.filterViews, view);
+        $(view.el).remove();
     }
 });

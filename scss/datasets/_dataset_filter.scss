@@ -1,0 +1,20 @@
+.dataset_filter_wizard {
+    padding: 3px 10px 10px;
+
+    .filter_title {
+        @include secondary-text-small;
+    }
+
+    .add_filter {
+        float: right;
+        font-size: 12px;
+    }
+}
+
+.dataset_filter {
+    .remove {
+        display: inline-block;
+        margin-left: 10px;
+    }
+
+}

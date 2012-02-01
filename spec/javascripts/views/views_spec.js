@@ -229,7 +229,7 @@ describe("chorus.views.base", function () {
                         this.view.foo = this.subview;
 
                         this.view.subviews = {".foo":"foo"};
-                        spyOn(this.subview, "postRender");
+                        spyOn(this.subview, "render");
                     })
 
                     context("when the subview does not have required resources", function () {
@@ -238,7 +238,7 @@ describe("chorus.views.base", function () {
                         })
 
                         it("renders the subview", function () {
-                            expect(this.subview.postRender).toHaveBeenCalled();
+                            expect(this.subview.render).toHaveBeenCalled();
                         })
                     })
 
@@ -254,7 +254,7 @@ describe("chorus.views.base", function () {
                             })
 
                             it("does not render the subview", function() {
-                                expect(this.subview.postRender).not.toHaveBeenCalled();
+                                expect(this.subview.render).not.toHaveBeenCalled();
                             })
                         })
 
@@ -265,10 +265,27 @@ describe("chorus.views.base", function () {
                             })
 
                             it("renders the subview", function() {
-                                expect(this.subview.postRender).toHaveBeenCalled();
+                                expect(this.subview.render).toHaveBeenCalled();
                             })
                         })
                     })
+
+                    describe("renderSubview", function() {
+                        beforeEach(function() {
+                            this.view.render();
+                            this.subview.render.reset();
+                        });
+
+                        it("renders when given both object name and selector", function() {
+                            this.view.renderSubview('foo', '.foo');
+                            expect(this.subview.render).toHaveBeenCalled();
+                        });
+
+                        it("renders when given just the object name", function() {
+                            this.view.renderSubview('foo');
+                            expect(this.subview.render).toHaveBeenCalled();
+                        });
+                    });
                 })
             })
 

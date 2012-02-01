@@ -1,7 +1,9 @@
-@mixin chart-icon($type) {
-    background-image: url("/images/visualizations/dialog/#{$type}_off.png");
-    &.on {
-       background-image: url("/images/visualizations/dialog/#{$type}_on.png");
+@mixin chart_icon($name) {
+    .#{$name}.chart_icon {
+        background-image: url("/images/visualizations/dialog/#{$name}_off.png");
+        &.selected {
+           background-image: url("/images/visualizations/dialog/#{$name}_on.png");
+        }
     }
 }
 
@@ -31,7 +33,7 @@
             @include results-console;
         }
 
-        .icon {
+        .chart_icon {
             height: 35px;
             width: 45px;
             display: inline-block;
@@ -40,34 +42,17 @@
             background-position-y: 5px;
             border-left: 1px dotted $list-border-color;
 
-            &.on {
+            &.selected {
                 background-color: $chart-fill-color;
             }
         }
 
-        .boxplot {
-            @include chart-icon("boxplot");
-        }
-
-        .chorusview {
-            @include chart-icon("chorusview");
-        }
-
-        .frequency {
-            @include chart-icon("frequency");
-        }
-
-        .heatmap {
-            @include chart-icon("heatmap");
-        }
-
-        .histogram {
-            @include chart-icon("histogram");
-        }
-
-        .timeseries {
-            @include chart-icon("timeseries");
-        }
+        @include chart_icon(boxplot);
+        @include chart_icon(chorusview);
+        @include chart_icon(frequency);
+        @include chart_icon(heatmap);
+        @include chart_icon(histogram);
+        @include chart_icon(timeseries);
     }
 
     .right {

@@ -1,6 +1,7 @@
 describe("chorus.dialogs.Visualization", function() {
     beforeEach(function() {
-        this.launchElement = $('<a data-name="Foo"/>')
+        spyOn(chorus.Modal.prototype, "closeModal");
+        this.launchElement = $('<a data-name="Foo" data-chart_type="boxplot"/>')
         this.dialog = new chorus.dialogs.Visualization({launchElement : this.launchElement});
     });
 
@@ -29,6 +30,28 @@ describe("chorus.dialogs.Visualization", function() {
             expect(this.dialog.$("button.close_dialog").text().trim()).toMatchTranslation("actions.close");
         });
 
+        describe("the icon bar", function() {
+            it("should display the icons in the correct order", function() {
+                expect(this.dialog.$(".chart_icon").eq(0)).toHaveClass("frequency");
+                expect(this.dialog.$(".chart_icon").eq(1)).toHaveClass("histogram");
+                expect(this.dialog.$(".chart_icon").eq(2)).toHaveClass("heatmap");
+                expect(this.dialog.$(".chart_icon").eq(3)).toHaveClass("timeseries");
+                expect(this.dialog.$(".chart_icon").eq(4)).toHaveClass("boxplot");
+            });
+
+            it("should select the icon according to the dialog options", function() {
+                expect(this.dialog.$(".chart_icon.frequency")).not.toHaveClass("selected");
+                expect(this.dialog.$(".chart_icon.histogram")).not.toHaveClass("selected");
+                expect(this.dialog.$(".chart_icon.heatmap")).not.toHaveClass("selected");
+                expect(this.dialog.$(".chart_icon.timeseries")).not.toHaveClass("selected");
+                expect(this.dialog.$(".chart_icon.boxplot")).toHaveClass("selected");
+            });
+
+            it("should have the correct chart type text", function() {
+                expect(this.dialog.$(".headerbar .label").text().trim()).toMatchTranslation("dataset.visualization.names.boxplot");
+            });
+        });
+
         describe("the results console", function() {
             it("should be hidden", function() {
                 expect(this.dialog.$(".results_console")).toHaveClass("hidden");
@@ -40,6 +63,16 @@ describe("chorus.dialogs.Visualization", function() {
 
             it("should hide the 'Hide Data Table' link", function() {
                 expect(this.dialog.$(".controls a.hide")).toHaveClass("hidden");
+            });
+        });
+
+        describe("the close button", function() {
+            beforeEach(function() {
+                this.dialog.$("button.close_dialog").click();
+            });
+
+            it("should close the dialog", function() {
+                expect(chorus.Modal.prototype.closeModal).toHaveBeenCalled();
             });
         });
     })

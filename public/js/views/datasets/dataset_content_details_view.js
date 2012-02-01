@@ -54,13 +54,16 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     },
 
     startVisualizationWizard : function() {
-        this.trigger("transform:visualize")
+        this.$('.chart_icon:eq(0)').click();
+        this.$('.column_count').addClass('hidden');
+        this.$('.info_bar').removeClass('hidden');
         this.$('.definition').addClass ("hidden")
         this.$('.create_chart').removeClass("hidden");
         this.$(".filters").removeClass("hidden");
     },
 
     selectVisualization: function(e) {
+        this.trigger("transform:visualize", $(e.target).data('chart_type'))
         $(e.target).siblings('.chart_icon').removeClass('selected');
         $(e.target).addClass('selected');
         this.showTitle(e);
@@ -71,6 +74,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$('.definition').removeClass ("hidden")
         this.$('.create_chart').addClass("hidden");
         this.$(".filters").addClass("hidden");
+        this.$('.column_count').removeClass ("hidden")
+        this.$('.info_bar').addClass('hidden');
     },
 
     showTitle: function(e) {

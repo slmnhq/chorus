@@ -1,4 +1,4 @@
-describe("chorus.views.visualizations.TimeSeriesPlot", function() {
+describe("chorus.views.visualizations.TimeseriesPlot", function() {
     beforeEach(function() {
         this.task = new chorus.models.SqlExecutionTask({
             result: {
@@ -16,7 +16,7 @@ describe("chorus.views.visualizations.TimeSeriesPlot", function() {
             }
         });
 
-        this.view = new chorus.views.visualizations.TimeSeriesPlot({
+        this.view = new chorus.views.visualizations.TimeseriesPlot({
             model: this.task,
             x: "age",
             y: "weight"

@@ -1,15 +1,19 @@
 chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
-    className:"dataset_visualization_sidebar",
+    className: "dataset_visualization_sidebar",
 
     setup: function() {
-        this.collection.comparator = function(column) { return column.get("name") && column.get("name").toLowerCase(); }
-        this.collection.sort();
+        var alphaSort = function(column) {
+            return column.get("name") && column.get("name").toLowerCase();
+        }
 
         this.numericalColumns = _.filter(this.collection.models, function(col) {
-                var category = col.get('typeCategory')
-                var allowedCategories = ['WHOLE_NUMBER', 'REAL_NUMBER']
-                return _.include(allowedCategories, category)
+            var category = col.get('typeCategory')
+            var allowedCategories = ['WHOLE_NUMBER', 'REAL_NUMBER']
+            return _.include(allowedCategories, category)
         });
+
+        this.numericalColumns = _.sortBy(this.numericalColumns, alphaSort);
+        this.allColumns = _.sortBy(this.collection.models, alphaSort);
     },
 
     postRender: function() {
@@ -23,7 +27,14 @@ chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
 
     additionalContext: function() {
         return {
-            numericalColumns : _.map(this.numericalColumns, function(col) {
+            chartType: "boxplot",            
+            numericalColumns: _.map(this.numericalColumns, function(col) {
+                return {
+                    name: col.get('name'),
+                    typeCategory: col.get('typeCategory')
+                }
+            }),
+            allColumns: _.map(this.allColumns, function(col) {
                 return {
                     name: col.get('name'),
                     typeCategory: col.get('typeCategory')

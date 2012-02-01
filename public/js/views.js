@@ -96,6 +96,13 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
     renderSubview:function (property, selector) {
         var view = this.getSubview(property);
         if (view) {
+            if(!selector) {
+                _.each(this.subviews, function(value, key) {
+                    if(value == property) {
+                        selector = key;
+                    }
+                })
+            }
             var element = this.$(selector);
             if (element.length) {
                 var id = element.attr("id"), klass = element.attr("class");

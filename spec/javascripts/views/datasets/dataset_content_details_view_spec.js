@@ -94,17 +94,27 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                 context("and the visualize dataset link is clicked", function() {
                     beforeEach(function() {
-                        spyOnEvent(this.view, "transform:visualize");
+                        this.visualizeSpy = spyOnEvent(this.view, "transform:visualize");
                         this.qtipMenu.find('.visualize').click();
                     })
 
-                    it("triggers the transform:visualize event", function() {
-                        expect("transform:visualize").toHaveBeenTriggeredOn(this.view);
-                    })
+                    it("selects the first chart type", function() {
+                        expect(this.view.$('.create_chart .chart_icon:eq(0)')).toHaveClass('selected');
+                    });
+
+                    it("triggers the transform:visualize event for the first chart type", function() {
+                        var chartType = this.view.$('.create_chart .chart_icon:eq(0)').data('chart_type');
+                        expect("transform:visualize").toHaveBeenTriggeredOn(this.view, [chartType]);
+                    });
 
                     it("hides the definition bar and shows the create_chart bar", function() {
                         expect(this.view.$('.definition')).toHaveClass('hidden');
                         expect(this.view.$('.create_chart')).not.toHaveClass('hidden');
+                    });
+
+                    it("hides column_count and shows info_bar", function() {
+                        expect(this.view.$('.column_count')).toHaveClass('hidden');
+                        expect(this.view.$('.info_bar')).not.toHaveClass('hidden');
                     });
 
                     it("shows the filters div", function () {
@@ -124,18 +134,27 @@ describe("chorus.views.DatasetContentDetails", function() {
                         it("hides the filters div", function () {
                             expect(this.view.$(".filters")).toHaveClass("hidden");
                         });
+
+                        it("shows the column_count and hides info_bar", function(){
+                            expect(this.view.$('.column_count')).not.toHaveClass('hidden');
+                            expect(this.view.$('.info_bar')).toHaveClass('hidden');
+                        });
                     })
 
                     context("and a chart type is clicked", function() {
                         beforeEach(function() {
-                            var chartIcon = this.view.$('.create_chart .chart_icon:eq(0)').click();
+                            this.visualizeSpy.reset();
+                            var chartIcon = this.view.$('.create_chart .chart_icon:eq(3)').click();
                             this.firstChartType = chartIcon.data('chart_type');
                         });
 
                         it("selects that icon", function() {
-                            expect(this.view.$('.create_chart .chart_icon:eq(0)')).toHaveClass('selected');
-                            expect(this.view.$('.create_chart .chart_icon:eq(1)')).not.toHaveClass('selected');
+                            expect(this.view.$('.create_chart .chart_icon.' + this.firstChartType)).toHaveClass('selected');
                         });
+
+                        it("triggers the transform:visualize event for the chart type", function() {
+                            expect("transform:visualize").toHaveBeenTriggeredOn(this.view, [this.firstChartType]);
+                        })
 
                         it("shows the title for that chart type", function() {
                             var chartType =

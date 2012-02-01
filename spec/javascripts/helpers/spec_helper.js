@@ -203,8 +203,8 @@
                                 ];
                             } else {
                                 return [
-                                    "Expected event " + eventName + " to have been triggered on " + target + " with" + args + " but it was never triggered",
-                                    "Expected event " + eventName + " not to have been triggered on " + target + " with" + args + " but it was"
+                                    "Expected event " + eventName + " to have been triggered on " + target + " with " + args + " but it was never triggered",
+                                    "Expected event " + eventName + " not to have been triggered on " + target + " with " + args + " but it was"
                                 ];
                             }
                         }
