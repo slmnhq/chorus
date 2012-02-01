@@ -136,7 +136,11 @@
 
             this.addMatchers({
                 toBeA: function(klass) {
-                    return this.actual instanceof klass;
+                    if (_.isFunction(klass)) {
+                        return this.actual instanceof klass;
+                    } else {
+                        return (typeof this.actual === klass);
+                    }
                 },
 
                 toBeEnabled: function() {

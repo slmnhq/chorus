@@ -31,6 +31,24 @@ describe("spec_helper", function() {
         });
     });
 
+    describe("#toBeA", function() {
+        context("when passed a string", function() {
+            it("does a 'typeof' check", function() {
+                expect(1).toBeA("number");
+                expect(1).not.toBeA("string");
+                expect("hello").toBeA("string");
+                expect("hello").not.toBeA("number");
+            });
+        });
+
+        context("when passed a function", function() {
+            it("does an 'instanceof' check", function() {
+                expect(fixtures.user()).toBeA(chorus.models.User);
+                expect(fixtures.user()).not.toBeA(chorus.models.BoxplotTask);
+            });
+        });
+    });
+
     describe("#toHaveBeenCalledOn", function() {
         beforeEach(function() {
             this.model1 = fixtures.user()
