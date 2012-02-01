@@ -20,6 +20,10 @@ describe("chorus.pages.WorkfileShowPage", function() {
             expect(this.server.lastFetchFor(this.page.model)).toBeDefined();
         });
 
+        it("does not configure a version number into the workfile model", function() {
+            expect(this.page.model.isLatestVersion()).toBeTruthy();
+        })
+
         it("fetches the workfile's workspace", function() {
             expect(this.server.lastFetchFor(this.page.model.workspace())).toBeDefined();
         });
@@ -29,6 +33,17 @@ describe("chorus.pages.WorkfileShowPage", function() {
             expect(this.page.sidebar).toBeUndefined();
             expect(this.page.subNav).toBeUndefined();
             expect(this.page.breadcrumbs).toBeUndefined();
+
+        })
+
+        context("with a version number", function() {
+            beforeEach(function() {
+                this.page = new chorus.pages.WorkfileShowPage(this.workspaceId, this.workfileId, '16');
+            });
+
+            it("configures the version number into the workfile model", function() {
+                expect(this.page.model.isLatestVersion()).toBeFalsy();
+            })
 
         })
 

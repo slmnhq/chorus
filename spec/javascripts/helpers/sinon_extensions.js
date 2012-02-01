@@ -125,6 +125,11 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
         );
     },
 
+    params: function() {
+        var uri = new URI("?" + this.requestBody)
+        return uri.search(true);
+    },
+
     error: function(message) {
         return this.respond(
             404,

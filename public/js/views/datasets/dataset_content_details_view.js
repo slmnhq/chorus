@@ -2,7 +2,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     className:"dataset_content_details",
 
     subviews : {
-        ".data_preview" : "resultsConsole"
+        ".data_preview" : "resultsConsole",
+        ".filters" : "filterView"
     },
 
     events : {
@@ -17,6 +18,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.dataset = this.options.dataset;
         this.resultsConsole = new chorus.views.ResultsConsole({titleKey: "dataset.data_preview", enableClose: true});
         this.resultsConsole.bind("action:close", this.closeDataPreview, this);
+        this.filterView = new chorus.views.DatasetFilter({model: this.dataset});
     },
 
     dataPreview : function(e) {
@@ -54,8 +56,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     startVisualizationWizard : function() {
         this.trigger("transform:visualize")
         this.$('.definition').addClass ("hidden")
-        this.$('.create_chart').removeClass("hidden")
-
+        this.$('.create_chart').removeClass("hidden");
+        this.$(".filters").removeClass("hidden");
     },
 
     selectVisualization: function(e) {
@@ -67,7 +69,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     cancelVisualization: function(e) {
         e.preventDefault();
         this.$('.definition').removeClass ("hidden")
-        this.$('.create_chart').addClass("hidden")
+        this.$('.create_chart').addClass("hidden");
+        this.$(".filters").addClass("hidden");
     },
 
     showTitle: function(e) {

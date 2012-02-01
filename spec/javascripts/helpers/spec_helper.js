@@ -18,6 +18,7 @@
         'database_column_list',
         'database_function_sidebar_list',
         'database_dataset_sidebar_list',
+        'dataset_filter',
         'dataset_list',
         'dataset_list_sidebar',
         'dataset_content_details',

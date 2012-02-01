@@ -25,7 +25,7 @@
         setup:function (workspaceId, workfileId, versionNum) {
             this.model = new chorus.models.Workfile({id:workfileId, workspaceId:workspaceId});
             if (versionNum) {
-                this.model.set({ versionNum:versionNum }, { silent:true })
+                this.model.set({ versionInfo : { versionNum: versionNum } }, { silent:true })
             }
 
             this.model.fetch();

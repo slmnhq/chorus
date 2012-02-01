@@ -1,8 +1,9 @@
 .dataset_visualization_sidebar {
+    $fieldset-margin: 15px;
     fieldset {
         border: 1px solid $border-color;
-        padding: 15px $dialog-padding $dialog-padding;
-        margin-left: 15px;
+        padding: $fieldset-margin $dialog-padding $dialog-padding;
+        margin-left: $fieldset-margin;
         position: relative;
 
         legend {
@@ -23,12 +24,12 @@
         }
 
         button {
+            $avail-width: $sidebar-width - $fieldset-margin - (2 * $fieldset-margin) - 2px;
             position: absolute;
-            bottom: -14px;
-            left: 25%;
-            right: 25%;
-            width: 50%;
+            left: $avail-width/4;
+            right: $avail-width/4;
         }
+
         form label {
             margin-top: 8px;
         }
@@ -51,6 +52,11 @@
             right: 0px;
             position: absolute;
             bottom: 0;
+        }
+
+        .no_numerical_columns, .no_columns {
+            display: inline-block;
+            padding-bottom: 10px;
         }
     }
 }
