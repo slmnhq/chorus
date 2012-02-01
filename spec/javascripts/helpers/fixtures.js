@@ -1770,6 +1770,23 @@ beforeEach(function() {
             return this.task(overrides);
         },
 
+        frequencyTaskWithResult: function(overrides) {
+            var attributes = _.extend({ result: {
+                executeResult: "success",
+                hasResult: "true",
+                message: ""
+            }}, overrides);
+            attributes.result.columns = (overrides && overrides.result && overrides.result.columns) || [
+                { name: "bucket", typeCategory: "STRING" },
+                { name: "count",  typeCategory: "WHOLE_NUMBER" }
+            ];
+            attributes.result.rows = (overrides && overrides.result && overrides.result.rows) || [
+                { bucket: 1, count: '321' },
+                { bucket: 2, count: '1024' }
+            ];
+            return this.task(attributes);
+        },
+
         boxplotTaskWithResult: function(overrides) {
             var attributes = _.extend({ result: {
                 columns: [
@@ -1785,12 +1802,10 @@ beforeEach(function() {
                 hasResult: "true",
                 message: ""
             }}, overrides);
-
             attributes.result.rows = (overrides && overrides.result && overrides.result.rows) || [
                 { min: 0, median: 2, max: 4, count: 279089, percentage: '27.9%', bucket: 'FEMALE', firstQuartile: 1, thirdQuartile:  3 },
                 { min: 0, median: 2, max: 4, count: 720911, percentage: '72.1%', bucket: 'MALE', firstQuartile: 1, thirdQuartile:  3 }
             ];
-
             return this.task(attributes);
         },
 

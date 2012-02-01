@@ -43,38 +43,25 @@ describe("chorus.presenters.visualizations", function() {
 
     describe("Frequency", function() {
         beforeEach(function() {
-            this.model = new chorus.models.SqlExecutionTask({
+            this.model = fixtures.frequencyTaskWithResult({
                 result: {
-                    columns: [{ name: "id" }, { name: "value" }, { name: "animal" }],
                     rows: [
-                        { id: 1, value: 1, animal:  "aardvark" },
-                        { id: 2, value: 2, animal: "aardvark" },
-                        { id: 3, value: 3, animal: "aardvark" },
-                        { id: 4, value: 4, animal: "aardvark" },
-                        { id: 5, value: 100, animal: "beluga" },
-                        { id: 6, value: 200, animal: "beluga" },
-                        { id: 7, value: 300, animal: "beluga" },
-                        { id: 8, value: 400, animal: "beluga" },
-                        { id: 9, value: 10, animal: "chupacabra" },
-                        { id: 10, value: 20, animal: "chupacabra" },
-                        { id: 11, value: 30, animal: "chupacabra" },
-                        { id: 12, value: 40, animal: "chupacabra" }
+                        { bucket: 'chupacabra', count: 321 },
+                        { bucket: 'aardvark', count: 1024 },
+                        { bucket: 'beluga', count: 573 }
                     ]
                 }
             });
 
-            this.presenter = new chorus.presenters.visualizations.Frequency(this.model, {
-                column: "animal"
-            });
-
+            this.presenter = new chorus.presenters.visualizations.Frequency(this.model);
             this.data = this.presenter.present();
         });
 
         it("returns a hash of field-value to number of occurences", function() {
             expect(this.data.frequencies).toEqual({
-                'chupacabra' : 4,
-                'aardvark' : 4,
-                'beluga' : 4
+                chupacabra : 321,
+                aardvark : 1024,
+                beluga : 573
             });
         });
     });
