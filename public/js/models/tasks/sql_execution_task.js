@@ -1,9 +1,5 @@
-chorus.models.SqlExecutionTask = chorus.models.Base.extend({
-    urlTemplate:"task/sync/",
-
-    initialize:function (attrs) {
-        if (!attrs.taskType) this.set({ taskType:"workfileSQLExecution" });
-    },
+chorus.models.SqlExecutionTask = chorus.models.Task.extend({
+    taskType: "workfileSQLExecution",
 
     columnOrientedData:function () {
         var rows = this.get("result").rows,

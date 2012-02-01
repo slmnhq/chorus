@@ -37,6 +37,8 @@ src_files:
   - js/views/workfiles/workfile_content_view.js
   - js/views/workfiles/text_workfile_content_view.js
   - js/views/**/*.js
+  - js/models/tasks/task.js
+  - js/models/tasks/chart_task.js
   - js/models/**/*.js
   - js/**/*.js
 
