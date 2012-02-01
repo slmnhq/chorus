@@ -1779,7 +1779,7 @@ beforeEach(function() {
             return this.task(attributes);
         },
 
-        alertJson : function(overrides) {
+        notificationJson : function(overrides) {
             var id = fixtures.nextId();
             return _.extend({
                 content: "what an alert!",
@@ -1791,13 +1791,13 @@ beforeEach(function() {
             }, overrides);
         },
 
-        alert : function(overrides) {
-            return new chorus.models.Alert(overrides);
+        notification : function(overrides) {
+            return new chorus.models.Notification(this.notificationJson(overrides));
         },
 
-        alertSet: function(models, overrides) {
-            models = (models && (models.length > 0)) || [this.alert(overrides), this.alert(overrides)];
-            return new chorus.collections.AlertSet(models, overrides);
+        notificationSet: function(models, overrides) {
+            models = (models && (models.length > 0)) || [this.notification(overrides), this.notification(overrides)];
+            return new chorus.collections.NotificationSet(models, overrides);
         }
     });
 });

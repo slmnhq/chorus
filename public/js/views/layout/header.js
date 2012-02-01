@@ -5,25 +5,26 @@ chorus.views.Header = chorus.views.Base.extend({
         "click .account a":"togglePopupAccount"
     },
 
-    makeModel:function () {
-        this.model = chorus.session;
-    },
-
     setup:function () {
         $(document).bind("chorus:menu:popup", _.bind(this.popupEventHandler, this))
+        this.session = chorus.session;
+        this.notifications = new chorus.collections.NotificationSet();
+        this.requiredResources.add([this.session, this.notifications]);
+        this.notifications.fetchAll();
     },
 
     additionalContext:function (ctx) {
-        if (!ctx.fullName) {
-            ctx.fullName = ctx.firstName + ' ' + ctx.lastName;
-        }
+        this.requiredResources.reset()
+        var user = this.session.user();
+        var firstName = this.session.get("firstName");
+        var lastName = this.session.get("lastName");
+        var fullName = this.session.get("fullName") || ([firstName, lastName].join(' '));
 
-        var user = this.model.user()
-
-        return {
-            displayName:(ctx.fullName.length > 20 ? (ctx.firstName + ' ' + ctx.lastName[0] + '.') : ctx.fullName),
-            userUrl:user && user.showUrl()
-        }
+        return _.extend(ctx, this.session.attributes, {
+            notificationCount: this.notifications.length,
+            displayName: (fullName.length > 20 ? (firstName + ' ' + lastName[0] + '.') : fullName),
+            userUrl: user && user.showUrl()
+        });
     },
 
     togglePopupUsername:function (e) {

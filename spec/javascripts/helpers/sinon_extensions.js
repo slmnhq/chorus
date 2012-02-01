@@ -56,6 +56,10 @@ _.extend(sinon.fakeServer, {
         }));
     },
 
+    lastFetchAllFor : function(model, overrides) {
+        return this.lastFetchFor(model, _.extend({ rows : 1000}, overrides));
+    },
+
     completeFetchFor: function(model, results, options, pagination) {
         if (results) {
             results = results.attributes ? results.attributes : results;

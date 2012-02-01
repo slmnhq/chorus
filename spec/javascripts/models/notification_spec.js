@@ -1,6 +1,6 @@
-describe("chorus.models.Alert", function() {
+describe("chorus.models.Notification", function() {
     beforeEach(function() {
-        this.model = fixtures.alert()
+        this.model = fixtures.notification()
     })
 
     describe("initialization", function() {
