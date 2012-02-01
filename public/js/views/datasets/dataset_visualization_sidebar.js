@@ -27,6 +27,7 @@ chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
 
     additionalContext: function() {
         return {
+            chartType: "boxplot",            
             numericalColumns: _.map(this.numericalColumns, function(col) {
                 return {
                     name: col.get('name'),
