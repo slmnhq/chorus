@@ -21,9 +21,9 @@
             <label>{{t "dataset.visualization.sidebar.category"}}</label>
             <span class="column_hint">{{t "dataset.visualization.sidebar.hint.category"}}</span>
         </div>
-        {{#if models.length}}
+        {{#if allColumns.length}}
             <select>
-            {{#each models}}
+            {{#each allColumns}}
                 <option value='{{name}}'>{{name}}</option>
             {{/each}}
             </select>

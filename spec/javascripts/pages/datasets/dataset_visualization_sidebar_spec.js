@@ -13,6 +13,10 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
                 this.view.render();
             })
 
+            it("should not modify the collection order", function() {
+                expect(this.columns.pluck('name')).toEqual(['B Liger', 'a Speed', 'A Milk Duds']);
+            });
+
             describe("value select box", function() {
                 it("has the right label", function() {
                     expect(this.view.$(".value label").text()).toMatchTranslation("dataset.visualization.sidebar.value")

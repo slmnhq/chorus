@@ -93,12 +93,18 @@ describe("chorus.pages.DatasetShowPage", function() {
         describe("when the 'transform:visualize' event is triggered", function() {
             beforeEach(function() {
                 this.page.render()
+                spyOn(this.page, 'render');
                 this.page.mainContent.contentDetails.trigger("transform:visualize")
             })
 
             it("should swaps out the sidebar for the visualization sidebar", function() {
                 expect(this.page.sidebar).toBeA(chorus.views.DatasetVisualizationSidebar)
+                expect(this.page.$('#sidebar').get(0)).toBe(this.page.sidebar.el);
+            });
+
+            it("should not re-render the page", function() {
+                expect(this.page.render).not.toHaveBeenCalled();
             })
-        })
+        });
     })
 });

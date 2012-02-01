@@ -71,7 +71,7 @@
 
         showVisualizeSidebar : function() {
             this.sidebar = new chorus.views.DatasetVisualizationSidebar({collection: this.columnSet})
-            this.render();
+            this.renderSubview('sidebar');
         }
     });
 })();
