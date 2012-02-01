@@ -2,7 +2,7 @@ chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
     className:"dataset_visualization_sidebar",
 
     setup: function() {
-        this.collection.comparator = function(column) { return column.get("name").toLowerCase(); }
+        this.collection.comparator = function(column) { return column.get("name") && column.get("name").toLowerCase(); }
         this.collection.sort();
 
         this.numericalColumns = _.filter(this.collection.models, function(col) {

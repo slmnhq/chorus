@@ -1,3 +1,5 @@
+@import "../_common";
+
 .content_details .dataset_content_details {
     .column_count {
         padding: 0 $padding-x;
@@ -13,11 +15,14 @@
         }
     }
 
-    .definition {
+    .definition, .create_chart {
         height: 32px;
         line-height: 32px;
-        background-color: $content-details-action-background-color;
         border-bottom: 1px solid #8D9DA8;
+        background-color: $content-details-action-background-color;
+    }
+
+    .definition {
 
         button {
             margin-left: 0;
@@ -42,6 +47,23 @@
             display: inline-block;
         }
     }
+
+    .create_chart {
+        .create {
+            @include create-bar-text;
+            background-color: $content-details-create-background-color;
+            display: inline-block;
+            width: 65px;
+            vertical-align: top;
+            text-align: center;
+        }
+
+        .triangle_right {
+            @include triangle(right, $content-details-create-background-color, 10px, 32px);
+            display: inline-block;
+            vertical-align: top;
+        }
+    }
 }
 
 .transform_menu {
@@ -57,7 +79,7 @@
 
         .menu_shortcut {
             @include font-menu;
-            color : $color-text4;
+            color: $color-text4;
             float: right;
             padding-left: (6 * $padding-x);
         }

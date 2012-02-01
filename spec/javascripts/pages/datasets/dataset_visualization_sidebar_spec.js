@@ -93,6 +93,13 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
                 expect($.fn.focus.mostRecentCall.object).toBe("button.create");
             })
 
+            it("should use the table name as the data-name attribute", function() {
+                expect(this.view.$("button.create").data("name")).toBe(this.columns.attributes.tableName);
+            });
+
+            it("should use 'Visualization' as the data-dialog attribute", function() {
+                expect(this.view.$("button.create").data("dialog")).toBe("Visualization");
+            })
         })
     })
 })

@@ -4,6 +4,32 @@ describe("chorus.presenters.Activity", function() {
         this.model = fixtures.modelFor("fetch")
     });
 
+    context(".NOTE_ON_TABLE", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.NOTE_ON_DATASET_TABLE({
+                table: {
+                    id: "10014|silverware|forks|shiny",
+                    name : "shiny",
+                    type : "SOURCE_TABLE",
+                    objectType : "EXTERNAL_TABLE"
+                },
+                workspace: {
+                    id: '4',
+                    name: "janitorial_duties"
+                }
+            });
+            this.presenter = new chorus.presenters.Activity(this.model);
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe('shiny');
+        });
+
+        it("should have the right objectUrl", function() {
+            expect(this.presenter.objectUrl).toBe('#/workspaces/4/source_table/external_table/shiny');
+        });
+    });
+
     context(".NOTE_ON_WORKSPACE", function() {
         beforeEach(function() {
             this.model = fixtures.activities.NOTE_ON_WORKSPACE();

@@ -49,5 +49,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     startVisualizationWizard : function() {
         this.trigger("transform:visualize")
+        this.$('.definition').addClass ("hidden")
+        this.$('.create_chart').removeClass("hidden")
+
     }
 });
