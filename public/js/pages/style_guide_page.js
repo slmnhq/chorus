@@ -151,7 +151,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 }})
             }),
 
-            "Visualization: TimeSeries" : new chorus.views.visualizations.TimeSeriesPlot({
+            "Visualization: Timeseries" : new chorus.views.visualizations.TimeseriesPlot({
                 model: this.task,
                 x: 'id',
                 y: 'value'

@@ -1,12 +1,12 @@
 ;(function(ns) {
     ns.presenters.visualizations = {};
 
-    ns.presenters.visualizations.XY = function(task, options) {
+    ns.presenters.visualizations.Timeseries = function(task, options) {
         this.task = task;
         this.options = options;
     };
 
-    _.extend(ns.presenters.visualizations.XY.prototype, {
+    _.extend(ns.presenters.visualizations.Timeseries.prototype, {
         present: function() {
             var rows = this.task.get("result").rows;
             var xs = _.pluck(rows, this.options.x);
@@ -31,12 +31,11 @@
 
     _.extend(ns.presenters.visualizations.Frequency.prototype, {
         present: function() {
-            var groups = _.groupBy(this.task.get("result").rows, this.options.column);
-            var groupLengths = {};
-            _.each(groups, function(val, groupName) {
-                groupLengths[groupName] = val.length;
+            var frequencies = {};
+            _.each(this.task.get("result").rows, function(row) {
+                frequencies[row.bucket] = row.count;
             });
-            return { frequencies : groupLengths };
+            return { frequencies : frequencies };
         }
     });
 

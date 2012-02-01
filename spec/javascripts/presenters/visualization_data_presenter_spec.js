@@ -1,5 +1,5 @@
 describe("chorus.presenters.visualizations", function() {
-    describe("XY", function() {
+    describe("Timeseries", function() {
         beforeEach(function() {
             this.model = new chorus.models.SqlExecutionTask({
                 result: {
@@ -14,7 +14,7 @@ describe("chorus.presenters.visualizations", function() {
                 }
             });
 
-            this.presenter = new chorus.presenters.visualizations.XY(this.model, {
+            this.presenter = new chorus.presenters.visualizations.Timeseries(this.model, {
                 x: "id",
                 y: "value"
             });

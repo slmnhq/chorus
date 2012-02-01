@@ -1,10 +1,10 @@
 chorus.views.visualizations = {};
 
-chorus.views.visualizations.TimeSeriesPlot = chorus.views.Base.extend({
+chorus.views.visualizations.TimeseriesPlot = chorus.views.Base.extend({
     render: function() {
         $(this.el).addClass("visualization");
 
-        var data = new chorus.presenters.visualizations.XY(this.model, {
+        var data = new chorus.presenters.visualizations.Timeseries(this.model, {
             x: this.options.x,
             y: this.options.y
         }).present();
