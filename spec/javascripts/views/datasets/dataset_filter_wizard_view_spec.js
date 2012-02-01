@@ -25,6 +25,22 @@ describe("chorus.views.DatasetFilterWizard", function() {
             it("adds another filter", function() {
                 expect(this.view.$("li.dataset_filter").length).toBe(2);
             });
+
+            describe("removing the filter", function() {
+                beforeEach(function () {
+                    this.oldView = this.view.filterViews[1];
+                    this.view.$(".remove:eq(1)").click();
+                });
+
+                it("removes the filterView from the DOM", function() {
+                    expect(this.view.$("li.dataset_filter").length).toBe(1);
+                });
+
+                it("removes the filterView from the view's filterViews collection", function() {
+                    expect(this.view.filterViews.length).toBe(1);
+                    expect(this.view.filterViews[0]).not.toBe(this.oldView);
+                });
+            });
         });
     });
 });

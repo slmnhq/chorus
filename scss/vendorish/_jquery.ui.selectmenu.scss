@@ -15,12 +15,16 @@
             padding: 0;
             zoom: 1;
             width: 100%;
-            a {
+            a, &.ui-state-disabled {
                 @include ellipsis;
                 display: block;
                 padding: 2px 5px;
                 line-height: 1.5;
                 zoom: 1;
+            }
+            &.ui-state-disabled {
+                @include secondary-text-small;
+                font-style: italic;
             }
         }
     }

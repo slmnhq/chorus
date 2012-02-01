@@ -32,12 +32,12 @@ describe("chorus.views.DatasetFilter", function() {
 
         describe("clicking on the remove button", function() {
             beforeEach(function () {
-                this.content = $("<ul></ul>");
-                this.content.append(this.view.el);
-                this.content.find(".remove").click();
+                spyOnEvent(this.view, "filterview:deleted");
+                this.view.$(".remove").click();
             });
-            it("should delete the filter", function() {
-                expect(this.content.find("li")).not.toExist();
+
+            it("raises the filterview:deleted event", function() {
+                expect("filterview:deleted").toHaveBeenTriggeredOn(this.view, [this.view]);
             });
         });
 
