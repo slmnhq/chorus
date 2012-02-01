@@ -24,6 +24,7 @@
         'dataset_list_sidebar',
         'dataset_content_details',
         'dataset_visualization_boxplot_sidebar',
+        'dataset_visualization_frequency_sidebar',
         'default_content_header',
         'header',
         'image_upload',

@@ -6,10 +6,10 @@
             <label>{{t "dataset.visualization.sidebar.value"}}</label>
             <span class="column_hint">{{t "dataset.visualization.sidebar.hint.numeric"}}</span>
         </div>
-        {{#if numericalColumns.length}}
+        {{#if numericColumns.length}}
             <select>
-            {{#each numericalColumns}}
-                <option value='{{name}}'>{{name}}</option>
+            {{#each numericColumns}}
+                <option value='{{this}}'>{{this}}</option>
             {{/each}}
             </select>
         {{else}}
@@ -24,7 +24,7 @@
         {{#if allColumns.length}}
             <select>
             {{#each allColumns}}
-                <option value='{{name}}'>{{name}}</option>
+                <option value='{{this}}'>{{this}}</option>
             {{/each}}
             </select>
         {{else}}

@@ -116,6 +116,16 @@ describe("chorus.pages.DatasetShowPage", function() {
                 });
             });
 
+            context("for a frequency chart", function() {
+                beforeEach(function() {
+                    this.page.mainContent.contentDetails.trigger("transform:visualize", 'frequency');
+                });
+
+                it("should swaps out the sidebar for the frequency sidebar", function() {
+                    expect(this.page.sidebar).toBeA(chorus.views.DatasetVisualizationFrequencySidebar)
+                });
+            });
+
         });
     })
 });
