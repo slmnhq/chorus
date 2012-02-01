@@ -13,6 +13,10 @@ describe("chorus.models.BoxplotTask", function() {
         expect(this.model.get("chart[type]")).toBe("boxplot");
     });
 
+    it("has the rigth task type parameter", function() {
+        expect(this.model.get("taskType")).toBe("getChartData");
+    });
+
     it("has the right url", function() {
         expect(this.model.url()).toBe("/edc/task/sync/");
     });
@@ -26,5 +30,11 @@ describe("chorus.models.BoxplotTask", function() {
             var request = this.server.lastCreate();
             expect(request.params().relation).toBe("SELECT * FROM users");
         });
+
+        it("renames the 'xAxis' and 'yAxis' fields to 'chart[xAxis]' and 'chart[yAxis]' as required by the api", function() {
+            var request = this.server.lastCreate();
+            expect(request.params()['chart[xAxis]']).toBe("age");
+            expect(request.params()['chart[yAxis]']).toBe("height");
+        });
     });
-});
+})
