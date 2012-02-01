@@ -2,20 +2,34 @@
     <legend>{{t "dataset.visualization.sidebar.chart_display_settings"}}</legend>
     
     <div class="value">
-    <label>{{t "dataset.visualization.sidebar.value"}}</label>
-    <select>
-    {{#each models}}
-        <option value='{{name}}'>{{name}}</option>
-    {{/each}}
-    </select>
-</div>
-<div class="category">
-    <label>{{t "dataset.visualization.sidebar.category"}}</label>
-    <select>
-    {{#each models}}
-        <option value='{{name}}'>{{name}}</option>
-    {{/each}}
-    </select>
-</div>
-<button class="create">{{t "dataset.visualization.sidebar.create_chart"}}</button>
+        <div class='labels'>
+            <label>{{t "dataset.visualization.sidebar.value"}}</label>
+            <span class="column_hint">{{t "dataset.visualization.sidebar.hint.numeric"}}</span>
+        </div>
+        {{#if numericalColumns.length}}
+            <select>
+            {{#each numericalColumns}}
+                <option value='{{name}}'>{{name}}</option>
+            {{/each}}
+            </select>
+        {{else}}
+            <span class='no_numerical_columns'>{{t "dataset.visualization.sidebar.no_numerical_columns"}}</span>
+        {{/if}}
+    </div>
+    <div class="category">
+        <div class='labels'>
+            <label>{{t "dataset.visualization.sidebar.category"}}</label>
+            <span class="column_hint">{{t "dataset.visualization.sidebar.hint.category"}}</span>
+        </div>
+        {{#if models.length}}
+            <select>
+            {{#each models}}
+                <option value='{{name}}'>{{name}}</option>
+            {{/each}}
+            </select>
+        {{else}}
+            <span class='no_columns'>{{t "dataset.visualization.sidebar.no_columns"}}</span>
+        {{/if}}
+    </div>
+    <button class="create">{{t "dataset.visualization.sidebar.create_chart"}}</button>
 </fieldset>

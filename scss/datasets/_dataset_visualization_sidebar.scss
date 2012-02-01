@@ -3,6 +3,7 @@
         border: 1px solid $border-color;
         padding: 15px $dialog-padding $dialog-padding;
         margin-left: 15px;
+        position: relative;
 
         legend {
             @include heading-sidebar;
@@ -10,8 +11,24 @@
 
         label {
             @include font-content-details;
+            display: inline-block;
         }
 
+        .labels {
+            margin-bottom: 4px;
+            vertical-align: middle;
+            line-height: 12px;
+            position: relative;
+            margin-right: 1px;
+        }
+
+        button {
+            position: absolute;
+            bottom: -14px;
+            left: 25%;
+            right: 25%;
+            width: 50%;
+        }
         form label {
             margin-top: 8px;
         }
@@ -22,8 +39,18 @@
 
         select, .ui-selectmenu-button {
             display: block;
-            width: 210px;
+            width: 215px;
             padding-bottom: 10px;
+        }
+
+        .column_hint {
+            font-size: 12px;
+            font-weight: $semibold;
+            color: $color-text3;
+            /*float: right;*/
+            right: 0px;
+            position: absolute;
+            bottom: 0;
         }
     }
 }
