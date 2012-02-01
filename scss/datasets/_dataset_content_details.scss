@@ -1,6 +1,6 @@
 @import "../_common";
 
-@mixin chart_icon($name) {
+@mixin chart_icon($name){
     .#{$name} {
         background-image: url("/images/visualizations/create_icons/#{$name}_off.png");
         &.selected {
@@ -21,6 +21,14 @@
 
         .right {
             float: right;
+            a {
+                font-size: 12px;
+                font-weight: $semibold;
+                color: #344b5b;
+            }
+        }
+
+        .preview {
         }
     }
 
@@ -101,6 +109,10 @@
         @include chart_icon(heatmap);
         @include chart_icon(timeseries);
         @include chart_icon(boxplot);
+    }
+
+    .execution {
+        background: $shaded-background-color;
     }
 }
 
