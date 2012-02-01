@@ -23,7 +23,7 @@
         'dataset_list',
         'dataset_list_sidebar',
         'dataset_content_details',
-        'dataset_visualization_sidebar',
+        'dataset_visualization_boxplot_sidebar',
         'default_content_header',
         'header',
         'image_upload',

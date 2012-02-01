@@ -94,17 +94,28 @@ describe("chorus.pages.DatasetShowPage", function() {
             beforeEach(function() {
                 this.page.render()
                 spyOn(this.page, 'render');
-                this.page.mainContent.contentDetails.trigger("transform:visualize")
-            })
-
-            it("should swaps out the sidebar for the visualization sidebar", function() {
-                expect(this.page.sidebar).toBeA(chorus.views.DatasetVisualizationSidebar)
-                expect(this.page.$('#sidebar').get(0)).toBe(this.page.sidebar.el);
             });
 
             it("should not re-render the page", function() {
+                this.page.mainContent.contentDetails.trigger("transform:visualize", 'boxplot');
                 expect(this.page.render).not.toHaveBeenCalled();
-            })
+            });
+
+            it("should re-render the sidebar subview", function() {
+                this.page.mainContent.contentDetails.trigger("transform:visualize", 'boxplot');
+                expect(this.page.$('#sidebar').get(0)).toBe(this.page.sidebar.el);
+            });
+
+            context("for a boxplot", function() {
+                beforeEach(function() {
+                    this.page.mainContent.contentDetails.trigger("transform:visualize", 'boxplot');
+                });
+
+                it("should swaps out the sidebar for the boxplot sidebar", function() {
+                    expect(this.page.sidebar).toBeA(chorus.views.DatasetVisualizationBoxplotSidebar)
+                });
+            });
+
         });
     })
 });

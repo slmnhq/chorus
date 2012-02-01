@@ -70,7 +70,7 @@
         },
 
         showVisualizeSidebar : function() {
-            this.sidebar = new chorus.views.DatasetVisualizationSidebar({collection: this.columnSet})
+            this.sidebar = new chorus.views.DatasetVisualizationBoxplotSidebar({collection: this.columnSet})
             this.renderSubview('sidebar');
         }
     });

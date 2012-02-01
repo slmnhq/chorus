@@ -1,5 +1,6 @@
-chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
-    className: "dataset_visualization_sidebar",
+chorus.views.DatasetVisualizationBoxplotSidebar = chorus.views.Sidebar.extend({
+    className: "dataset_visualization_boxplot_sidebar",
+    additionalClass: "dataset_visualization_sidebar",
 
     setup: function() {
         var alphaSort = function(column) {

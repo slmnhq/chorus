@@ -1,4 +1,4 @@
-describe("chorus.views.DatasetVisualizationSidebar", function() {
+describe("chorus.views.DatasetVisualizationBoxplotSidebar", function() {
     describe("#render", function() {
         context("with valid column data", function() {
             beforeEach(function() {
@@ -7,7 +7,7 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
                 this.column3 = fixtures.databaseColumn({typeCategory: "WHOLE_NUMBER", name: "A Milk Duds"})
 
                 this.columns = fixtures.databaseColumnSet([this.column1, this.column2, this.column3]);
-                this.view = new chorus.views.DatasetVisualizationSidebar({collection: this.columns})
+                this.view = new chorus.views.DatasetVisualizationBoxplotSidebar({collection: this.columns})
                 spyOn(chorus, 'styleSelect');
                 spyOn($.fn, 'focus');
                 this.view.render();
@@ -62,7 +62,7 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
         context("with no columns", function() {
             beforeEach(function() {
                 this.columns = new chorus.collections.DatabaseColumnSet();
-                this.view = new chorus.views.DatasetVisualizationSidebar({collection: this.columns})
+                this.view = new chorus.views.DatasetVisualizationBoxplotSidebar({collection: this.columns})
                 spyOn(chorus, 'styleSelect');
                 spyOn($.fn, 'focus');
                 this.view.render();
@@ -82,7 +82,7 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
         describe("'create chart' button", function() {
             beforeEach(function() {
                 this.columns = fixtures.databaseColumnSet([]);
-                this.view = new chorus.views.DatasetVisualizationSidebar({collection: this.columns})
+                this.view = new chorus.views.DatasetVisualizationBoxplotSidebar({collection: this.columns})
                 spyOn(chorus, 'styleSelect');
                 spyOn($.fn, 'focus');
                 this.view.render();
