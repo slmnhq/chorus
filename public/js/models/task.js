@@ -1,4 +1,4 @@
-chorus.models.Task = chorus.models.Base.extend({
+chorus.models.SqlExecutionTask = chorus.models.Base.extend({
     urlTemplate:"task/sync/",
 
     initialize:function (attrs) {

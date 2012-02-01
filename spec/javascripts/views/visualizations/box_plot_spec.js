@@ -1,6 +1,6 @@
 describe("chorus.views.visualizations.BoxPlot", function() {
     beforeEach(function() {
-        this.task = new chorus.models.Task({
+        this.task = new chorus.models.SqlExecutionTask({
             result: {
                 columns: [{ name: "id" }, { name: "value" }, { name: "animal" }],
                 rows: [

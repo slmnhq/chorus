@@ -1,4 +1,4 @@
-describe("chorus.models.Task", function() {
+describe("chorus.models.SqlExecutionTask", function() {
     beforeEach(function() {
         this.model = fixtures.task({
             id: 1,

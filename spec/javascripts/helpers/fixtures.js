@@ -1745,7 +1745,7 @@ beforeEach(function() {
 
         task: function(overrides) {
             var id = this.nextId().toString();
-            return new chorus.models.Task(_.extend({
+            return new chorus.models.SqlExecutionTask(_.extend({
                 id : this.nextId().toString()
             }, overrides));
         },

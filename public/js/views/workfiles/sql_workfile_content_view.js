@@ -13,7 +13,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
     setup:function () {
         this._super("setup");
 
-        this.task = new chorus.models.Task({ });
+        this.task = new chorus.models.SqlExecutionTask({ });
 
         this.task.bind("saved", this.executionComplete, this);
 

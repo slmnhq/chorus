@@ -1,6 +1,6 @@
 describe("chorus.views.visualizations.TimeSeriesPlot", function() {
     beforeEach(function() {
-        this.task = new chorus.models.Task({
+        this.task = new chorus.models.SqlExecutionTask({
             result: {
                 columns: [{ name: "age" }, { name: "weight" }, { name: "animal" }],
                 rows: [

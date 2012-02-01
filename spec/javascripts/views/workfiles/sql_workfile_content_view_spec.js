@@ -111,7 +111,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 });
 
                 it("triggers file:executionStarted on the view", function() {
-                    expect(this.startedSpy).toHaveBeenCalledWith(jasmine.any(chorus.models.Task));
+                    expect(this.startedSpy).toHaveBeenCalledWith(jasmine.any(chorus.models.SqlExecutionTask));
                 })
 
                 describe("when the task completes successfully", function() {
@@ -128,7 +128,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     })
 
                     it('triggers file:executionCompleted on the view', function() {
-                        expect(this.completionSpy).toHaveBeenCalledWith(jasmine.any(chorus.models.Task));
+                        expect(this.completionSpy).toHaveBeenCalledWith(jasmine.any(chorus.models.SqlExecutionTask));
                     })
 
                     describe("executing again", function() {

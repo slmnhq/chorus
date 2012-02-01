@@ -1,6 +1,6 @@
 describe("chorus.views.visualizations.FrequencyPlot", function() {
     beforeEach(function() {
-        this.model = new chorus.models.Task({
+        this.model = new chorus.models.SqlExecutionTask({
             result: {
                 columns: [{ name: "id" }, { name: "value" }, { name: "animal" }],
                 rows: [

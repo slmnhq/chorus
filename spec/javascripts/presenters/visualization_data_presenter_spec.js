@@ -1,7 +1,7 @@
 describe("chorus.presenters.visualizations", function() {
     describe("XY", function() {
         beforeEach(function() {
-            this.model = new chorus.models.Task({
+            this.model = new chorus.models.SqlExecutionTask({
                 result: {
                     columns: [{ name: "id" }, { name: "value" }, { name: "animal" }],
                     rows: [
@@ -43,7 +43,7 @@ describe("chorus.presenters.visualizations", function() {
 
     describe("Frequency", function() {
         beforeEach(function() {
-            this.model = new chorus.models.Task({
+            this.model = new chorus.models.SqlExecutionTask({
                 result: {
                     columns: [{ name: "id" }, { name: "value" }, { name: "animal" }],
                     rows: [
@@ -81,7 +81,7 @@ describe("chorus.presenters.visualizations", function() {
 
     describe("Boxplot", function() {
         beforeEach(function() {
-            this.model = new chorus.models.Task({
+            this.model = new chorus.models.SqlExecutionTask({
                 result: {
                     columns: [{ name: "id" }, { name: "value" }, { name: "animal" }],
                     rows: [
