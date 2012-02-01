@@ -158,7 +158,26 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             }),
 
             "Visualization: BoxPlot" : new chorus.views.visualizations.BoxPlot({
-                model: this.task,
+                model: new chorus.models.BoxplotTask({
+                    result: {
+                        columns: [
+                            { name: "bucket",        typeCategory: "STRING" },
+                            { name: "min",           typeCategory: "REAL_NUMBER" },
+                            { name: "median",        typeCategory: "REAL_NUMBER" },
+                            { name: "max",           typeCategory: "REAL_NUMBER" },
+                            { name: "firstQuartile", typeCategory: "REAL_NUMBER" },
+                            { name: "thirdQuartile", typeCategory: "REAL_NUMBER" },
+                            { name: "percentage",    typeCategory: "STRING" }
+                        ],
+                        rows: [
+                            { min: 0, median: 4, max: 8, count: 279089, percentage: '27.9%', bucket: 1, firstQuartile: 2, thirdQuartile:  3 },
+                            { min: 0, median: 2, max: 3, count: 720911, percentage: '72.1%', bucket: 2, firstQuartile: 1, thirdQuartile:  3 }
+                        ],
+                        executeResult: "success",
+                        hasResult: "true",
+                        message: ""
+                    }
+                }),
                 x: 'animal',
                 y: 'value'
             }),
