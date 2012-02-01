@@ -52,8 +52,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     startVisualizationWizard : function() {
         this.trigger("transform:visualize")
         this.$('.definition').addClass ("hidden")
-        this.$('.create_chart').removeClass("hidden")
-
+        this.$('.create_chart').removeClass("hidden");
+        this.$(".filters").removeClass("hidden");
     },
 
     selectVisualization: function(e) {
@@ -64,6 +64,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     cancelVisualization: function(e) {
         e.preventDefault();
         this.$('.definition').removeClass ("hidden")
-        this.$('.create_chart').addClass("hidden")
+        this.$('.create_chart').addClass("hidden");
+        this.$(".filters").addClass("hidden");
     }
 });

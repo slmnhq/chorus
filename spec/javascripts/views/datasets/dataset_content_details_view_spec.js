@@ -16,6 +16,10 @@ describe("chorus.views.DatasetContentDetails", function() {
             expect(this.view.$(".column_count .preview").text().trim()).toMatchTranslation("dataset.data_preview");
         })
 
+        it("hides the filters div", function() {
+            expect(this.view.$(".filters")).toHaveClass("hidden");
+        });
+
         context("when 'Preview Data' is clicked", function() {
             beforeEach(function() {
                 this.view.$(".column_count .preview").click();
@@ -99,6 +103,10 @@ describe("chorus.views.DatasetContentDetails", function() {
                         expect(this.view.$('.create_chart')).not.toHaveClass('hidden');
                     });
 
+                    it("shows the filters div", function () {
+                        expect(this.view.$(".filters")).not.toHaveClass("hidden");
+                    });
+
                     context("and cancel is clicked", function() {
                         beforeEach(function() {
                             this.view.$('.create_chart .cancel').click();
@@ -107,6 +115,10 @@ describe("chorus.views.DatasetContentDetails", function() {
                         it("shows the definition bar and hides the create_chart bar", function() {
                             expect(this.view.$('.definition')).not.toHaveClass('hidden');
                             expect(this.view.$('.create_chart')).toHaveClass('hidden');
+                        });
+
+                        it("hides the filters div", function () {
+                            expect(this.view.$(".filters")).toHaveClass("hidden");
                         });
                     })
 
