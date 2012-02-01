@@ -170,8 +170,10 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                             { name: "percentage",    typeCategory: "STRING" }
                         ],
                         rows: [
-                            { min: 0, median: 4, max: 8, count: 279089, percentage: '27.9%', bucket: 1, firstQuartile: 2, thirdQuartile:  3 },
-                            { min: 0, median: 2, max: 3, count: 720911, percentage: '72.1%', bucket: 2, firstQuartile: 1, thirdQuartile:  3 }
+                            { bucket: 'january',  min: 1,  firstQuartile: 5,  median: 8, thirdQuartile: 12,  max: 25,  percentage: "20%" },
+                            { bucket: 'february', min: 2, firstQuartile: 3, median: 5,  thirdQuartile: 7, max: 8, percentage: "40%" },
+                            { bucket: 'march',    min: 10, firstQuartile: 10, median: 25,  thirdQuartile: 30, max: 35, percentage: "10%" },
+                            { bucket: 'april',    min: 2,  firstQuartile: 3,  median: 8,   thirdQuartile: 9,  max: 15, percentage: "30%" }
                         ],
                         executeResult: "success",
                         hasResult: "true",
