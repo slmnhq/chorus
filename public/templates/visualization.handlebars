@@ -1,5 +1,4 @@
 <div class="headerbar">
-
     <div class="text type">{{t "visualization.type"}}</div>
 
     <div class="icon boxplot"/>
@@ -19,8 +18,9 @@
     <div class="right">
         <div class="text type">{{t "visualization.category_limit"}}</div>
         <select>
-            <option value="1" selected>1</option>
+            <option value="1">1</option>
         </select>
+        <a href="#" class="filter">{{t "visualization.show_filters" count=filterCount}}</a>
     </div>
 </div>
 
@@ -33,9 +33,11 @@
 </div>
 
 <div class="controls">
-    <a href="#">{{t "visualization.show_table"}}</a>
-    <div class="right">
-        <button>{{t "actions.save_as"}}</button>
-        <button>{{t "actions.close"}}</button>
+    <div class="vertical">
+        <a href="#">{{t "visualization.show_table"}}</a>
+        <div class="right">
+            <button>{{t "actions.save_as"}}</button>
+            <button>{{t "actions.close"}}</button>
+        </div>
     </div>
 </div>

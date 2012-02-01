@@ -6,7 +6,6 @@
 }
 
 .visualization.dialog {
-
     .dialog_content {
         padding: 0;
     }
@@ -73,14 +72,54 @@
 
     .right {
         float: right;
+
+        .ui-button-text {
+            line-height: 14px;
+        }
+        
+        .ui-selectmenu-button {
+            padding-top: 4px;
+            padding-right: 10px;
+        }
+
+        .filter {
+            font-size: 12px;
+            font-weight: $semibold;
+            padding: 0 10px 0 10px;
+            border-left: 1px dotted $list-border-color;
+        }
     }
 
     .controls {
         width: 100%;
+        height: 55px;
+        background: $body-background-color;
+        border-top: 1px solid $list-border-color;
+
+        .vertical {
+
+            a {
+                font-size: 12px;
+                font-weight: $semibold;
+                padding-left: 10px;
+                display: inline-block;
+                padding: 20px 0 0 10px;
+            }
+
+            .right {
+                margin-right: 10px;
+
+                button {
+                    margin-top: 12px;
+                    margin-left: 5px;
+                }
+            }
+        }
     }
 
     .chart_area {
         width: 940px;
         height: 340px;
+        background: white;
     }
 }
