@@ -31,7 +31,9 @@
                 schemaName:this.workspace.sandbox().get("schemaName"),
                 type:this.datasetType.toUpperCase(),
                 objectType:this.objectType.toUpperCase(),
-                objectName:this.objectName
+                objectName:this.objectName,
+                workspace:{ id: this.workspace.get("id") },
+                sandboxId:this.workspace.sandbox().get("id")
             });
 
 

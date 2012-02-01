@@ -1,8 +1,15 @@
 describe("chorus.dialogs.Visualization", function() {
     beforeEach(function() {
         spyOn(chorus.Modal.prototype, "closeModal");
-        this.launchElement = $('<a data-name="Foo" data-chart_type="boxplot"/>')
-        this.dialog = new chorus.dialogs.Visualization({launchElement : this.launchElement});
+        this.launchElement = $('<a data-name="Foo" data-chart_type="boxplot"/>');
+        this.dataset = fixtures.datasetSourceTable();
+        this.dialog = new chorus.dialogs.Visualization({model: this.dataset, launchElement : this.launchElement});
+    });
+
+    describe("#initialization", function() {
+        it("should fetch the chart data", function() {
+            expect(this.server.lastCreate()).toBeDefined();
+        });
     });
 
     describe("#render", function() {

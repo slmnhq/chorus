@@ -19,6 +19,10 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         $(document).one('reveal.facebox', _.bind(function() {
             chorus.styleSelect(this.$(".headerbar select"));
         }, this));
+
+        var func = 'make' + _.capitalize(this.type) + 'Task';
+        this.task = this.model[func]({xAxis: "Foo", yAxis: "Bar"});
+        this.task.save();
     },
 
     postRender : function() {
