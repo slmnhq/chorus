@@ -1,5 +1,5 @@
-chorus.views.DatasetFilter = chorus.views.Base.extend({
-    className: "dataset_filter",
+chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
+    className: "dataset_filter_wizard",
     events : {
         "click .add_filter" : "addFilter"
     },

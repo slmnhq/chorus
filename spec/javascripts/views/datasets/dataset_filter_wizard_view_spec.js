@@ -1,7 +1,7 @@
-describe("chorus.views.DatasetFilter", function() {
+describe("chorus.views.DatasetFilterWizard", function() {
     beforeEach(function () {
         this.collection = fixtures.databaseColumnSet();
-        this.view = new chorus.views.DatasetFilter({collection: this.collection});
+        this.view = new chorus.views.DatasetFilterWizard({collection: this.collection});
     });
 
     describe("#render", function() {
