@@ -1,0 +1,86 @@
+@mixin chart-icon($type) {
+    background-image: url("/images/visualizations/dialog/" + $type + "_off.png");
+    &.on {
+       background-image: url("/images/visualizations/dialog/" + $type + "_on.png");
+    }
+}
+
+.visualization.dialog {
+
+    .dialog_content {
+        padding: 0;
+    }
+
+    .headerbar {
+        background: $body-background-color;
+        border-bottom: 1px solid $list-border-color;
+        font-size: 0;
+
+        .text {
+            padding: 12px 10px 0;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .type {
+            font-size: 14px;
+            font-weight: $semibold;
+            color: $color-text3;
+        }
+
+        .label {
+            @include results-console;
+        }
+
+        .icon {
+            height: 35px;
+            width: 45px;
+            display: inline-block;
+            background-repeat: no-repeat;
+            background-position-x: 5px;
+            background-position-y: 5px;
+            border-left: 1px dotted $list-border-color;
+
+            &.on {
+                background-color: $chart-fill-color;
+            }
+        }
+
+        .boxplot {
+            @include chart-icon("boxplot");
+        }
+
+        .chorusview {
+            @include chart-icon("chorusview");
+        }
+
+        .frequency {
+            @include chart-icon("frequency");
+        }
+
+        .heatmap {
+            @include chart-icon("heatmap");
+        }
+
+        .histogram {
+            @include chart-icon("histogram");
+        }
+
+        .timeseries {
+            @include chart-icon("timeseries");
+        }
+    }
+
+    .right {
+        float: right;
+    }
+
+    .controls {
+        width: 100%;
+    }
+
+    .chart_area {
+        width: 940px;
+        height: 340px;
+    }
+}

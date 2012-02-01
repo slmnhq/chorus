@@ -1,3 +1,5 @@
+@import "_common.scss";
+
 .visualization {
     svg {
         background: white;
@@ -30,7 +32,7 @@
 
     .box_plot {
         .box rect {
-            fill: #1C93DF;
+            fill: $chart-fill-color;
         }
 
         .xaxis {
