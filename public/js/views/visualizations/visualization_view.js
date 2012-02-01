@@ -246,7 +246,7 @@ chorus.views.visualizations.HistogramPlot = chorus.views.Base.extend({
             append("g").
             attr("class", "top_transform");
 
-        var xPaddedScaler = d3.scale.ordinal().
+        var xEdgeScaler = d3.scale.ordinal().
             domain(x).
             rangeBands([yLabelWidth + 2, 270]);
 
@@ -255,7 +255,7 @@ chorus.views.visualizations.HistogramPlot = chorus.views.Base.extend({
             domain(x).
             rangeBands([yLabelWidth, 272]);
 
-        var yPaddedScaler = d3.scale.linear().
+        var yEdgeScaler = d3.scale.linear().
             domain([_.min(y), _.max(y)]).
             range([98 - xLabelHeight, 2]);
 
@@ -266,23 +266,36 @@ chorus.views.visualizations.HistogramPlot = chorus.views.Base.extend({
         var bars = chart.selectAll("bar").data(data).enter().append("g").
             attr("class", "bar");
 
-        var boxWidth = xPaddedScaler.rangeBand() * 0.2;
-        var boxOffset = xPaddedScaler.rangeBand() * 0.4;
+        var boxWidth = xEdgeScaler.rangeBand() * 0.6;
+        var boxOffset = xEdgeScaler.rangeBand() * 0.2;
 
         bars.append("rect").
             attr("width", boxWidth).
-            attr("height", function(d) { return Math.abs(yPaddedScaler(d.y)-yPaddedScaler(0)) }).
-            attr("x", function(d) { return xPaddedScaler(d.x) + boxOffset}).
-            attr("y", function(d) { return yPaddedScaler(d.y) }).
+            attr("height", function(d) { return Math.abs(yEdgeScaler(d.y)-yEdgeScaler(0)) }).
+            attr("x", function(d) { return xEdgeScaler(d.x) + boxOffset}).
+            attr("y", function(d) { return yEdgeScaler(d.y) }).
             attr("name", function(d) {return d.x});
 
-        chart.selectAll("line.ytick").data(yPaddedScaler.ticks(10)).enter().
+        chart.selectAll("line.ytick").data(yEdgeScaler.ticks(10)).enter().
             append("line").
             attr("class", "ytick").
-            attr("y1", yPaddedScaler).
-            attr("y2", yPaddedScaler).
-            attr("x1", xPaddedScaler.rangeExtent()[0]).
-            attr("x2", xPaddedScaler.rangeExtent()[1]);
+            attr("y1", yEdgeScaler).
+            attr("y2", yEdgeScaler).
+            attr("x1", xEdgeScaler.rangeExtent()[0]).
+            attr("x2", xEdgeScaler.rangeExtent()[1]);
+
+        chart.append("line").
+            attr("class", "yaxis").
+            attr("x1", xEdgeScaler.rangeExtent()[0]).
+            attr("x2", xEdgeScaler.rangeExtent()[0]).
+            attr("y1", yEdgeScaler.range()[0]).
+            attr("y2", yEdgeScaler.range()[1]);
+        chart.append("line").
+            attr("class", "xaxis").
+            attr("x1", xEdgeScaler.rangeExtent()[0]).
+            attr("x2", xEdgeScaler.rangeExtent()[1]).
+            attr("y1", yEdgeScaler.range()[0]).
+            attr("y2", yEdgeScaler.range()[0]);
 
         return this;
     }
