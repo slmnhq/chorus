@@ -47,20 +47,21 @@
 
     _.extend(ns.presenters.visualizations.Boxplot.prototype, {
         present: function() {
-            var y = this.options.y;
+            var boxes = _.map(this.task.get("result").rows, function(row) {
+                return {
+                    min:           row.min,
+                    median:        row.median,
+                    bucket:        row.bucket,
+                    max:           row.max,
+                    firstQuartile: row.firstQuartile,
+                    thirdQuartile: row.thirdQuartile
+                };
+            });
 
-            var groups = _.groupBy(this.task.get("result").rows, this.options.x);
-            var ret =  _.map(groups, function(rows, keyName){
-                var values = _.pluck(rows, y);
-                var min = _.min(values);
-                var max = _.max(values);
-                var quartiles = jStat.quartiles(values);
+            boxes.minY = _.min(_.pluck(boxes, "min"));
+            boxes.maxY = _.max(_.pluck(boxes, "max"));
 
-                return {name: keyName, min: min, q1: quartiles[0], median: jStat.median(values), q3: quartiles[2], max: max};
-            })
-            ret.minY = _.min(_.pluck(ret, "min"));
-            ret.maxY = _.max(_.pluck(ret, "max"));
-            return ret;
+            return boxes;
         }
     });
 

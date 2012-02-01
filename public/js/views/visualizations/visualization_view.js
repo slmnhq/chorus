@@ -178,7 +178,7 @@ chorus.views.visualizations.BoxPlot = chorus.views.Base.extend({
             attr("width", boxWidth).
             attr("height",
             function(d) {
-                return Math.abs(yPaddedScaler(d.q3) - yPaddedScaler(d.q1))
+                return Math.abs(yPaddedScaler(d.thirdQuartile) - yPaddedScaler(d.firstQuartile))
             }).
             attr("x",
             function(d) {
@@ -186,7 +186,7 @@ chorus.views.visualizations.BoxPlot = chorus.views.Base.extend({
             }).
             attr("y",
             function(d) {
-                return yPaddedScaler(d.q3)
+                return yPaddedScaler(d.thirdQuartile)
             }).
             attr("name", function(d) {
                 return d.name

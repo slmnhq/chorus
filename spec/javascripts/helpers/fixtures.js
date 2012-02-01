@@ -1770,6 +1770,30 @@ beforeEach(function() {
             return this.task(overrides);
         },
 
+        boxplotTaskWithResult: function(overrides) {
+            var attributes = _.extend({ result: {
+                columns: [
+                    { name: "bucket",        typeCategory: "STRING" },
+                    { name: "min",           typeCategory: "REAL_NUMBER" },
+                    { name: "median",        typeCategory: "REAL_NUMBER" },
+                    { name: "max",           typeCategory: "REAL_NUMBER" },
+                    { name: "firstQuartile", typeCategory: "REAL_NUMBER" },
+                    { name: "thirdQuartile", typeCategory: "REAL_NUMBER" },
+                    { name: "percentage",    typeCategory: "STRING" }
+                ],
+                executeResult: "success",
+                hasResult: "true",
+                message: ""
+            }}, overrides);
+
+            attributes.result.rows = (overrides && overrides.result && overrides.result.rows) || [
+                { min: 0, median: 2, max: 4, count: 279089, percentage: '27.9%', bucket: 'FEMALE', firstQuartile: 1, thirdQuartile:  3 },
+                { min: 0, median: 2, max: 4, count: 720911, percentage: '72.1%', bucket: 'MALE', firstQuartile: 1, thirdQuartile:  3 }
+            ];
+
+            return this.task(attributes);
+        },
+
         taskWithErrors: function(overrides) {
             var attributes = { result: _.extend({
                 executeResult: "failed",

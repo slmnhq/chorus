@@ -81,46 +81,32 @@ describe("chorus.presenters.visualizations", function() {
 
     describe("Boxplot", function() {
         beforeEach(function() {
-            this.model = new chorus.models.SqlExecutionTask({
+            this.model = fixtures.boxplotTaskWithResult({
                 result: {
-                    columns: [{ name: "id" }, { name: "value" }, { name: "animal" }],
                     rows: [
-                        { id: 1, value: 1, animal:  "aardvark" },
-                        { id: 2, value: 2, animal: "aardvark" },
-                        { id: 3, value: 3, animal: "aardvark" },
-                        { id: 4, value: 4, animal: "aardvark" },
-                        { id: 5, value: 100, animal: "beluga" },
-                        { id: 6, value: 200, animal: "beluga" },
-                        { id: 7, value: 300, animal: "beluga" },
-                        { id: 8, value: 400, animal: "beluga" },
-                        { id: 9, value: 10, animal: "chupacabra" },
-                        { id: 10, value: 20, animal: "chupacabra" },
-                        { id: 11, value: 30, animal: "chupacabra" },
-                        { id: 12, value: 40, animal: "chupacabra" }
-                    ]
+                        { bucket: 'aardvark',   min: 1,   firstQuartile: 1,   median: 2.5, thirdQuartile: 3,   max: 4,   percentage: "25%" },
+                        { bucket: 'beluga',     min: 100, firstQuartile: 100, median: 250, thirdQuartile: 300, max: 400, percentage: "33.3%" },
+                        { bucket: 'chupacabra', min: 10,  firstQuartile: 10,  median: 25,  thirdQuartile: 30,  max: 40,  percentage: "81.5%" }
+                    ],
                 }
             });
 
-            this.presenter = new chorus.presenters.visualizations.Boxplot(this.model, {
-                x: "animal",
-                y: "value"
-            });
-
+            this.presenter = new chorus.presenters.visualizations.Boxplot(this.model);
             this.data = this.presenter.present();
         });
 
-        it("presents arrays of {key, min, q1, mean, q3, max}", function() {
+        it("presents arrays of {bucket, min, firstQuartile, median, thirdQuartile, max}", function() {
             expect(this.data.length).toBe(3);
 
-            expect(this.data[0]).toEqual({name: 'aardvark', min: 1, q1: 1, median: 2.5, q3: 3, max: 4});
-            expect(this.data[1]).toEqual({name: 'beluga', min: 100, q1: 100, median: 250, q3: 300, max: 400});
-            expect(this.data[2]).toEqual({name: 'chupacabra', min: 10, q1: 10, median: 25, q3: 30, max: 40});
+            expect(this.data[0]).toEqual({ bucket: 'aardvark',   min: 1,   firstQuartile: 1,   median: 2.5, thirdQuartile: 3,   max: 4 });
+            expect(this.data[1]).toEqual({ bucket: 'beluga',     min: 100, firstQuartile: 100, median: 250, thirdQuartile: 300, max: 400 });
+            expect(this.data[2]).toEqual({ bucket: 'chupacabra', min: 10,  firstQuartile: 10,  median: 25,  thirdQuartile: 30,  max: 40 });
         });
 
         it("sets minY and maxY", function() {
             expect(this.data.minY).toBe(1);
             expect(this.data.maxY).toBe(400);
-        })
+        });
     });
 
     describe("histogram", function() {
