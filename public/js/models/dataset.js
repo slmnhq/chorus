@@ -33,6 +33,16 @@ chorus.models.Dataset = chorus.models.Base.extend({
         ].join("/");
     },
 
+    makeBoxplotTask: function(taskAttrs) {
+        return new chorus.models.BoxplotTask({
+            xAxis: taskAttrs.xAxis,
+            yAxis: taskAttrs.yAxis,
+            objectName: this.get("objectName"),
+            workspaceId: this.get("workspace").id,
+            sandboxId: this.get("sandboxId")
+        });
+    },
+
     statistics:function () {
         return new chorus.models.DatasetStatistics({
             instanceId:this.get("instance").id,

@@ -10,33 +10,33 @@ describe("chorus.models.Dataset", function() {
             databaseName: "whirling_tops",
             schemaName: "diamonds",
             objectType : "foo",
-            objectName : "mama"
+            objectName : "japanese_teas"
         });
     })
 
     it("creates the correct showUrl", function() {
-        expect(this.dataset.showUrl()).toBe("#/workspaces/44/chorus_view/foo/mama");
+        expect(this.dataset.showUrl()).toBe("#/workspaces/44/chorus_view/foo/japanese_teas");
     })
 
     it("initializes its 'entityId' correctly", function() {
-        expect(this.dataset.entityId).toBe("45|whirling_tops|diamonds|mama");
+        expect(this.dataset.entityId).toBe("45|whirling_tops|diamonds|japanese_teas");
     });
 
     context("when the dataset is initialized with an Id, but no instance, database or schema", function() {
         it("aliases the id to 'entityId'", function() {
-            dataset = new chorus.models.Dataset({ id: '45|whirling_tops|diamonds|mama' });
-            expect(dataset.entityId).toBe('45|whirling_tops|diamonds|mama');
+            dataset = new chorus.models.Dataset({ id: '45|whirling_tops|diamonds|japanese_teas' });
+            expect(dataset.entityId).toBe('45|whirling_tops|diamonds|japanese_teas');
         });
     });
 
     context("when the dataset is initialized with an instance, database and schema, but no id", function() {
         it("initializes its 'entityId' correctly", function() {
-            expect(this.dataset.entityId).toBe("45|whirling_tops|diamonds|mama");
+            expect(this.dataset.entityId).toBe("45|whirling_tops|diamonds|japanese_teas");
         });
     });
 
     it("has the right url", function() {
-        var url = encodeURI("/edc/workspace/44/dataset/45|whirling_tops|diamonds|mama");
+        var url = encodeURI("/edc/workspace/44/dataset/45|whirling_tops|diamonds|japanese_teas");
         expect(this.dataset.url()).toMatchUrl(url);
     });
 
@@ -60,6 +60,31 @@ describe("chorus.models.Dataset", function() {
                     dataset.trigger("invalidated");
                 }).not.toThrow();
             });
+        });
+    });
+
+    describe("#makeBoxplotTask", function() {
+        beforeEach(function() {
+
+            // for now, the task api requires a sandboxId, which is
+            // *not* included when we fetch a a dataset.
+            // we need to set it ourselves.
+            this.dataset.set({ sandboxId: "21" });
+
+            this.task = this.dataset.makeBoxplotTask({
+                xAxis: "dog_breed",
+                yAxis: "blindness_rate"
+            });
+        });
+
+        it("returns a BoxplotTask model", function() {
+            expect(this.task).toBeA(chorus.models.BoxplotTask);
+        });
+
+        it("has the right workspaceId, sandboxId and objectName", function() {
+            expect(this.task.get("workspaceId")).toBe("44");
+            expect(this.task.get("sandboxId")).toBe("21");
+            expect(this.task.get("objectName")).toBe("japanese_teas");
         });
     });
 
