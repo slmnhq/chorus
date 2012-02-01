@@ -29,5 +29,28 @@ describe("chorus.views.DatasetFilter", function() {
         it("displays remove button", function() {
             expect(this.view.$(".remove")).toExist();
         });
+
+        describe("clicking on the remove button", function() {
+            beforeEach(function () {
+                this.content = $("<ul></ul>");
+                this.content.append(this.view.el);
+                this.content.find(".remove").click();
+            });
+            it("should delete the filter", function() {
+                expect(this.content.find("li")).not.toExist();
+            });
+        });
+
+        describe("columns with typeCategory: other", function() {
+            beforeEach(function () {
+                this.collection.models[0].set({typeCategory:"OTHER"});
+                this.view.render();
+            });
+
+            it("disables the option for the 'other' column", function() {
+                expect(this.view.$("option[value='" + this.collection.models[0].get("name") + "']")).toHaveAttr("disabled");
+                expect(this.view.$("option[value='" + this.collection.models[1].get("name") + "']")).not.toHaveAttr("disabled");
+            });
+        });
     });
 });

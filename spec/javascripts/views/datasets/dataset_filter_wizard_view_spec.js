@@ -14,7 +14,7 @@ describe("chorus.views.DatasetFilterWizard", function() {
         });
 
         it("displays one filter when rendered at first", function() {
-            expect(this.view.$("li.filter").length).toBe(1);
+            expect(this.view.$("li.dataset_filter").length).toBe(1);
         });
 
         describe("clicking the add filter link", function() {
@@ -23,7 +23,7 @@ describe("chorus.views.DatasetFilterWizard", function() {
             });
 
             it("adds another filter", function() {
-                expect(this.view.$("li.filter").length).toBe(2);
+                expect(this.view.$("li.dataset_filter").length).toBe(2);
             });
         });
     });

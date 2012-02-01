@@ -12,9 +12,7 @@ chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
 
     addFilter : function(e) {
         e && e.preventDefault();
-        var $li = $('<li class="filter"/>');
         var filterView = new chorus.views.DatasetFilter({collection: this.collection});
-        filterView.el = $li[0];
         filterView.render();
 
         this.$(".filters").append(filterView.el);
