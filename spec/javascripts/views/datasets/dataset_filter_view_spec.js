@@ -115,8 +115,8 @@ describe("chorus.views.DatasetFilter", function() {
             });
 
             describe("when choosing a comparator", function() {
-                _.each(_.keys(chorus.utilities.DatasetFilterMaps.string), function(key){
-                    if (chorus.utilities.DatasetFilterMaps.string[key].usesInput){
+                _.each(_.keys(chorus.utilities.DatasetFilterMaps.string.comparators), function(key){
+                    if (chorus.utilities.DatasetFilterMaps.string.comparators[key].usesInput){
                         it("correctly shows the input for " + key, function() {
                             this.view.$(".comparator").val(key).change();
                             expect(this.view.$("input.filter_input")).not.toHaveClass("hidden");
@@ -168,8 +168,8 @@ describe("chorus.views.DatasetFilter", function() {
             });
 
             describe("when choosing an option", function() {
-                _.each(_.keys(chorus.utilities.DatasetFilterMaps.numeric), function(key){
-                    if (chorus.utilities.DatasetFilterMaps.numeric[key].usesInput){
+                _.each(_.keys(chorus.utilities.DatasetFilterMaps.numeric.comparators), function(key){
+                    if (chorus.utilities.DatasetFilterMaps.numeric.comparators[key].usesInput){
                         it("correctly shows the input for " + key, function() {
                             this.view.$(".comparator").val(key).change();
                             expect(this.view.$("input.filter_input")).not.toHaveClass("hidden");
@@ -191,12 +191,12 @@ describe("chorus.views.DatasetFilter", function() {
 
                 this.view.$(".comparator").val("not_equal").change();
                 this.view.$(".filter_input").val("test")
-                spyOn(chorus.utilities.DatasetFilterMaps.string.not_equal, "generate");
+                spyOn(chorus.utilities.DatasetFilterMaps.string.comparators.not_equal, "generate");
                 this.view.filterString();
             });
 
             it("calls the generate function of the correct filter type", function() {
-                expect(chorus.utilities.DatasetFilterMaps.string.not_equal.generate).toHaveBeenCalledWith(this.collection.models[0].get("name"), "test");
+                expect(chorus.utilities.DatasetFilterMaps.string.comparators.not_equal.generate).toHaveBeenCalledWith(this.collection.models[0].get("name"), "test");
             });
         });
     });

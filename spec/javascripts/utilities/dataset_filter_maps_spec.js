@@ -1,5 +1,6 @@
 
 describe("chorus.utilities.DatasetFilterMaps.string", function() {
+    var strings = chorus.utilities.DatasetFilterMaps.string;
     itReturnsTheRightClauseFor("equal", "column_name", "some_value", "\"column_name\" = 'some_value'")
     itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "\"column_name\" != 'some_value'")
     itReturnsTheRightClauseFor("like", "column_name", "some_value", "\"column_name\" LIKE 'some_value'")
@@ -14,25 +15,26 @@ describe("chorus.utilities.DatasetFilterMaps.string", function() {
 
     function itReturnsTheRightClauseFor(key, columnName, inputValue, expected, ignoreEmptyCase) {
         it("returns the right clause for " + key, function() {
-            expect(chorus.utilities.DatasetFilterMaps.string[key].generate(columnName, inputValue)).toBe(expected);
+            expect(strings.comparators[key].generate(columnName, inputValue)).toBe(expected);
         });
 
         if (!ignoreEmptyCase) {
             it("returns an empty string when input is empty for " + key, function() {
-                expect(chorus.utilities.DatasetFilterMaps.string[key].generate(columnName, "")).toBe("");
+                expect(strings.comparators[key].generate(columnName, "")).toBe("");
             });
         }
     }
 
     it("marks all strings as valid", function() {
-        expect(chorus.utilities.DatasetFilterMaps.string.validate("")).toBeTruthy();
-        expect(chorus.utilities.DatasetFilterMaps.string.validate("2342gegrerger*(&^%")).toBeTruthy();
-        expect(chorus.utilities.DatasetFilterMaps.string.validate("';DROP TABLE users;--")).toBeTruthy();
-        expect(chorus.utilities.DatasetFilterMaps.string.validate("\n                    \t")).toBeTruthy();
+        expect(strings.validate("")).toBeTruthy();
+        expect(strings.validate("2342gegrerger*(&^%")).toBeTruthy();
+        expect(strings.validate("';DROP TABLE users;--")).toBeTruthy();
+        expect(strings.validate("\n                    \t")).toBeTruthy();
     })
 });
 
 describe("chorus.utilities.DatasetFilterMaps.numeric", function() {
+    var numericals = chorus.utilities.DatasetFilterMaps.numeric;
     itReturnsTheRightClauseFor("equal", "column_name", "some_value", "\"column_name\" = 'some_value'")
     itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "\"column_name\" != 'some_value'")
     itReturnsTheRightClauseFor("greater", "column_name", "some_value", "\"column_name\" > 'some_value'")
@@ -44,33 +46,33 @@ describe("chorus.utilities.DatasetFilterMaps.numeric", function() {
 
     function itReturnsTheRightClauseFor(key, columnName, inputValue, expected, ignoreEmptyCase) {
         it("returns the right clause for " + key, function() {
-            expect(chorus.utilities.DatasetFilterMaps.numeric[key].generate(columnName, inputValue)).toBe(expected);
+            expect(numericals.comparators[key].generate(columnName, inputValue)).toBe(expected);
         });
 
         if (!ignoreEmptyCase) {
             it("returns an empty string when input is empty for " + key, function() {
-                expect(chorus.utilities.DatasetFilterMaps.numeric[key].generate(columnName, "")).toBe("");
+                expect(numericals.comparators[key].generate(columnName, "")).toBe("");
             });
         }
     }
 
     it("mark whole numbers as valid", function() {
-        expect(chorus.utilities.DatasetFilterMaps.numeric.validate("1234")).toBeTruthy();
+        expect(numericals.validate("1234")).toBeTruthy();
     })
 
     it("mark floating comma numbers as valid", function() {
-        expect(chorus.utilities.DatasetFilterMaps.numeric.validate("4,5")).toBeTruthy();
+        expect(numericals.validate("4,5")).toBeTruthy();
     })
 
     it("mark floating point numbers as valid", function() {
-        expect(chorus.utilities.DatasetFilterMaps.numeric.validate("4.5")).toBeTruthy();
+        expect(numericals.validate("4.5")).toBeTruthy();
     })
 
     it("mark non-numerical strings as invalid", function() {
-        expect(chorus.utilities.DatasetFilterMaps.numeric.validate("I'm the string")).toBeFalsy();
+        expect(numericals.validate("I'm the string")).toBeFalsy();
     })
 
     it("mark negative numbers as invalid", function() {
-        expect(chorus.utilities.DatasetFilterMaps.numeric.validate("-1")).toBeFalsy();
+        expect(numericals.validate("-1")).toBeFalsy();
     })
 });

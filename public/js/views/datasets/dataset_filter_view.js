@@ -46,7 +46,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
             case "STRING":
             case "LONG_STRING":
                 $comparator.addClass("string").removeClass("numeric");
-                _.each(chorus.utilities.DatasetFilterMaps.string, function (value, key) {
+                _.each(chorus.utilities.DatasetFilterMaps.string.comparators, function (value, key) {
                     var el = $("<option/>").text(t("dataset.filter." + key)).addClass("map_" + key).attr("value", key);
                     $comparator.append(el);
                 });
@@ -55,7 +55,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
             case "WHOLE_NUMBER":
             case "REAL_NUMBER":
                 $comparator.addClass("numeric").removeClass("string");
-                _.each(chorus.utilities.DatasetFilterMaps.numeric, function(value, key) {
+                _.each(chorus.utilities.DatasetFilterMaps.numeric.comparators, function(value, key) {
                     var el = $("<option/>").text(t("dataset.filter." + key)).addClass("map_" + key).attr("value", key);
                     $comparator.append(el);
                 });
@@ -74,7 +74,12 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         var $choice = $comparator.find("option:selected");
         var $input = this.$(".filter_input");
 
-        _.each(this.getMap(), function (value, key) {
+        var map = this.getMap();
+        if (!map) {
+            return;
+        }
+
+        _.each(map.comparators, function (value, key) {
             if ($choice.hasClass("map_" + key)) {
                 $input.toggleClass("hidden", !value.usesInput);
             }
@@ -97,12 +102,9 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         var columnName = this.$("select.column_filter").val();
         var $comparator = this.$("select.comparator");
         var $input = this.$(".filter_input");
-
-        if ($comparator.is(".string")) {
-            return chorus.utilities.DatasetFilterMaps.string[$comparator.val()].generate(columnName, $input.val())
-        } else if ($comparator.is(".numeric")) {
-            return chorus.utilities.DatasetFilterMaps.numeric[$comparator.val()].generate(columnName, $input.val())
-        }
+        
+        var map = this.getMap();
+        return map.comparators[$comparator.val()].generate(columnName,  $input.val());
     },
 
     validateInput : function() {
