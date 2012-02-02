@@ -20,7 +20,7 @@
                 .attr("dy", attrs.dyTitle)
                 .text(options.title);
 
-            axisGroup
+            var labels = axisGroup
                 .append("svg:g")
                 .attr("class", "labels")
                 .selectAll("text")
@@ -32,7 +32,14 @@
                 .attr("dy", attrs.dyLabel)
                 .text(function(d) {
                     return d.label
-                });
+                })
+
+            if(options.center_horizontal){
+                labels.attr("dx", function(){return -0.5*this.getBBox().width;})
+            }
+            if(options.center_vertical){
+                labels.attr("dy", function(){return 0.25*this.getBBox().height;})
+            }
 
             axisGroup
                 .append("svg:g")

@@ -275,8 +275,8 @@
             y : yLabels
         };
         this.axes = {
-            x : new chorus.views.visualizations.Axis(this, { title : config.yAxisTitle || 'x axis', padding : 0, rangeType : 'rangeBands', from : "y", to : "right" }).south(),
-            y : new chorus.views.visualizations.Axis(this, { title : config.xAxisTitle || 'count', rangeType : 'range', ticks: true, axis_edge: true, from : "height", to : "top" }).west()
+            x : new chorus.views.visualizations.Axis(this, { title : config.yAxisTitle || 'x axis', padding : 0, rangeType : 'rangeBands', from : "y", to : "right", center_horizontal: true }).south(),
+            y : new chorus.views.visualizations.Axis(this, { title : config.xAxisTitle || 'count', rangeType : 'range', ticks: true, axis_edge: true, from : "height", to : "top", center_vertical: true }).west()
         }
         this.layout = new chorus.views.visualizations.Layout(this, { xAxis : this.axes.x, yAxis : this.axes.y });
     }
