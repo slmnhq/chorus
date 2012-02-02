@@ -21,6 +21,28 @@ describe("chorus.views.DatasetFilterWizard", function() {
             expect(this.view.$("li.dataset_filter")).toHaveClass("last");
         });
 
+        describe("#whereClause", function() {
+            beforeEach(function () {
+                spyOn(this.view.filterViews[0], "filterString").andReturn("foo = 1");
+            });
+
+            it("joins the individual filters' conditions", function() {
+                expect(this.view.whereClause()).toBe("WHERE foo = 1");
+            });
+        });
+
+        describe("removing the only filter", function() {
+            beforeEach(function () {
+                this.view.$(".remove").click();
+            });
+
+            describe("#whereClause", function() {
+                it("returns an empty string", function() {
+                    expect(this.view.whereClause()).toBe("");
+                });
+            });
+        });
+
         describe("clicking the add filter link", function() {
             beforeEach(function () {
                 this.view.$("a.add_filter").click();
@@ -33,6 +55,17 @@ describe("chorus.views.DatasetFilterWizard", function() {
             it("adds the last class to the new filter and removes it from the old", function() {
                 expect(this.view.$("li.dataset_filter:eq(0)")).not.toHaveClass("last");
                 expect(this.view.$("li.dataset_filter:eq(1)")).toHaveClass("last");
+            });
+
+            describe("#whereClause", function() {
+                beforeEach(function () {
+                    spyOn(this.view.filterViews[0], "filterString").andReturn("foo = 1");
+                    spyOn(this.view.filterViews[1], "filterString").andReturn("bar = 2");
+                });
+
+                it("joins the individual filters' conditions", function() {
+                    expect(this.view.whereClause()).toBe("WHERE foo = 1 AND bar = 2");
+                });
             });
 
             describe("removing the filter", function() {

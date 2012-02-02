@@ -65,6 +65,16 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
                 }
             });
         }
+    },
+
+    filterString : function() {
+        var columnName = this.$("select.column_filter").val();
+        var $comparator = this.$("select.comparator");
+        var $input = this.$(".filter_input");
+
+        if ($comparator.is(".string")) {
+            return chorus.views.DatasetFilter.stringMap[$comparator.val()].generate(columnName, $input.val())
+        }
     }
 });
 

@@ -49,5 +49,13 @@ chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
         var $ul = this.$(".filters");
         $ul.find("li").removeClass("last");
         $ul.find("li:last-child").addClass("last");
+    },
+
+    whereClause : function() {
+        var wheres = _.map(this.filterViews, function(filterView){
+            return filterView.filterString();
+        });
+
+        return wheres.length ? ("WHERE " + wheres.join(" AND ")) : "";
     }
 });

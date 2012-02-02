@@ -97,6 +97,22 @@ describe("chorus.views.DatasetFilter", function() {
                 });
             });
         });
+
+        describe("#filterString", function() {
+            beforeEach(function () {
+                this.collection.models[0].set({typeCategory:"STRING"});
+                this.view.render();
+
+                this.view.$(".comparator").val("not_equal").change();
+                this.view.$(".filter_input").val("test")
+                spyOn(chorus.views.DatasetFilter.stringMap.not_equal, "generate");
+                this.view.filterString();
+            });
+
+            it("calls the generate function of the correct filter type", function() {
+                expect(chorus.views.DatasetFilter.stringMap.not_equal.generate).toHaveBeenCalledWith(this.collection.models[0].get("name"), "test");
+            });
+        });
     });
 });
 
