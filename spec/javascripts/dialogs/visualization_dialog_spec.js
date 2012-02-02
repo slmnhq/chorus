@@ -1,8 +1,29 @@
 describe("chorus.dialogs.Visualization", function() {
     beforeEach(function() {
         spyOn(chorus.Modal.prototype, "closeModal");
-        this.launchElement = $('<a data-name="Foo" data-chart_type="boxplot"/>')
-        this.dialog = new chorus.dialogs.Visualization({launchElement : this.launchElement});
+        this.dataset = fixtures.datasetSourceTable();
+        this.chartOptions = {type: "boxplot", name: "Foo"};
+        this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions});
+    });
+
+    describe("#initialization", function() {
+        beforeEach(function() {
+            spyOnEvent(this.dialog.chartData, "file:executionCompleted");
+        });
+
+        it("should call save on the task", function() {
+            expect(this.server.lastCreate()).toBeDefined();
+        });
+
+        describe("when the save completes", function() {
+            beforeEach(function() {
+                this.dialog.onExecutionComplete();
+            });
+
+            it("should trigger file:executionCompleted on the result console", function() {
+                expect("file:executionCompleted").toHaveBeenTriggeredOn(this.dialog.chartData);
+            });
+        });
     });
 
     describe("#render", function() {
@@ -15,11 +36,11 @@ describe("chorus.dialogs.Visualization", function() {
         });
 
         it("should have a 'Show Data Table' link", function() {
-            expect(this.dialog.$(".controls a.show").text().trim()).toMatchTranslation("visualization.show_table")
+            expect(this.dialog.$(".dialog_controls a.show").text().trim()).toMatchTranslation("visualization.show_table")
         });
 
         it("should have a 'Hide Data Table' link", function() {
-            expect(this.dialog.$(".controls a.hide").text().trim()).toMatchTranslation("visualization.hide_table");
+            expect(this.dialog.$(".dialog_controls a.hide").text().trim()).toMatchTranslation("visualization.hide_table");
         });
 
         it("should have a 'Save As' button", function() {
@@ -58,11 +79,11 @@ describe("chorus.dialogs.Visualization", function() {
             });
 
             it("should show a 'Show Data Table' link", function() {
-                expect(this.dialog.$(".controls a.show")).not.toHaveClass("hidden");
+                expect(this.dialog.$(".dialog_controls a.show")).not.toHaveClass("hidden");
             });
 
             it("should hide the 'Hide Data Table' link", function() {
-                expect(this.dialog.$(".controls a.hide")).toHaveClass("hidden");
+                expect(this.dialog.$(".dialog_controls a.hide")).toHaveClass("hidden");
             });
         });
 
@@ -84,7 +105,7 @@ describe("chorus.dialogs.Visualization", function() {
         
         describe("clicking on the 'Show Data Table' link", function() {
             beforeEach(function() {
-                this.dialog.$(".controls a.show").click();
+                this.dialog.$(".dialog_controls a.show").click();
             });
 
             it("should show the data table", function() {
@@ -92,16 +113,16 @@ describe("chorus.dialogs.Visualization", function() {
             })
 
             it("should hide the show table link", function() {
-                expect(this.dialog.$(".controls a.show")).toHaveClass("hidden");
+                expect(this.dialog.$(".dialog_controls a.show")).toHaveClass("hidden");
             })
 
             it("should show the hide table link", function() {
-                expect(this.dialog.$(".controls a.hide")).not.toHaveClass("hidden");
+                expect(this.dialog.$(".dialog_controls a.hide")).not.toHaveClass("hidden");
             })
 
             describe("clicking on the 'Hide Chart Data' link", function() {
                 beforeEach(function() {
-                    this.dialog.$(".controls a.hide").click();
+                    this.dialog.$(".dialog_controls a.hide").click();
                 });
 
                 it("should hide the data table", function() {
@@ -109,11 +130,11 @@ describe("chorus.dialogs.Visualization", function() {
                 });
 
                 it("should show the 'Show Data Table' link", function() {
-                    expect(this.dialog.$(".controls a.show")).not.toHaveClass("hidden");
+                    expect(this.dialog.$(".dialog_controls a.show")).not.toHaveClass("hidden");
                 });
 
                 it("should hide the 'Hide Data Table' link", function() {
-                    expect(this.dialog.$(".controls a.hide")).toHaveClass("hidden");
+                    expect(this.dialog.$(".dialog_controls a.hide")).toHaveClass("hidden");
                 });
             });
         });

@@ -15,6 +15,16 @@ describe("chorus.views.DatasetVisualizationBoxplotSidebar", function() {
 
             itBehavesLike.DatasetVisualizationSidebar();
 
+            describe("#chartOptions", function() {
+                it("should return all the chart options for a boxplot", function() {
+                    var options = this.view.chartOptions();
+                    expect(options.name).toBeDefined();
+                    expect(options.type).toBe("boxplot");
+                    expect(options.xAxis).toBe("A Milk Duds");
+                    expect(options.yAxis).toBe("a Speed");
+                })
+            });
+            
             describe("value select box", function() {
                 it("has the right label", function() {
                     expect(this.view.$(".value label").text()).toMatchTranslation("dataset.visualization.sidebar.value")
@@ -93,14 +103,6 @@ describe("chorus.views.DatasetVisualizationBoxplotSidebar", function() {
             it("should be focused", function() {
                 expect($.fn.focus).toHaveBeenCalled();
                 expect($.fn.focus.mostRecentCall.object).toBe("button.create");
-            })
-
-            it("should use the table name as the data-name attribute", function() {
-                expect(this.view.$("button.create").data("name")).toBe(this.columns.attributes.tableName);
-            });
-
-            it("should use 'Visualization' as the data-dialog attribute", function() {
-                expect(this.view.$("button.create").data("dialog")).toBe("Visualization");
             })
         })
     })

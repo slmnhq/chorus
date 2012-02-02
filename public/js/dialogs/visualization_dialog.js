@@ -12,17 +12,27 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     setup : function() {
-        this.type = this.options.launchElement.data("chart_type") || "boxplot"
-        this.title = t("visualization.title", {name: this.options.launchElement.data("name")});
+        this.model = this.options.model;
+        this.type = this.options.chartOptions.type;
+        this.title = t("visualization.title", {name: this.options.chartOptions.name});
 
         this.chartData = new chorus.views.ResultsConsole();
         $(document).one('reveal.facebox', _.bind(function() {
             chorus.styleSelect(this.$(".headerbar select"));
         }, this));
+
+        var func = 'make' + _.capitalize(this.type) + 'Task';
+        this.task = this.model[func](this.options.chartOptions);
+        this.task.bind("saved", this.onExecutionComplete, this);
+        this.task.save();
     },
 
     postRender : function() {
         this.$('.chart_icon.' + this.type).addClass("selected");
+    },
+
+    onExecutionComplete: function() {
+        this.chartData.trigger('file:executionCompleted', this.task);
     },
 
     additionalContext: function() {
@@ -35,14 +45,14 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     showTabularData: function(e) {
         e && e.preventDefault();
         this.$('.results_console').removeClass("hidden");
-        this.$(".controls a.hide").removeClass("hidden");
-        this.$(".controls a.show").addClass("hidden");
+        this.$(".dialog_controls a.hide").removeClass("hidden");
+        this.$(".dialog_controls a.show").addClass("hidden");
     },
 
     hideTabularData: function(e) {
         e && e.preventDefault();
         this.$('.results_console').addClass("hidden")
-        this.$(".controls a.show").removeClass("hidden");
-        this.$(".controls a.hide").addClass("hidden");
+        this.$(".dialog_controls a.show").removeClass("hidden");
+        this.$(".dialog_controls a.hide").addClass("hidden");
     }
 });

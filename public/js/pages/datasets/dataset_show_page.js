@@ -26,12 +26,14 @@
 
         fetchColumnSet: function() {
             this.model = this.dataset = new chorus.models.Dataset({
-                instance: { id: this.workspace.sandbox().get("instanceId") },
-                databaseName: this.workspace.sandbox().get("databaseName"),
-                schemaName: this.workspace.sandbox().get("schemaName"),
-                type: this.datasetType.toUpperCase(),
-                objectType: this.objectType.toUpperCase(),
-                objectName: this.objectName
+                instance:{ id:this.workspace.sandbox().get("instanceId") },
+                databaseName:this.workspace.sandbox().get("databaseName"),
+                schemaName:this.workspace.sandbox().get("schemaName"),
+                type:this.datasetType.toUpperCase(),
+                objectType:this.objectType.toUpperCase(),
+                objectName:this.objectName,
+                workspace:{ id: this.workspace.get("id") },
+                sandboxId:this.workspace.sandbox().get("id")
             });
 
 
@@ -72,7 +74,7 @@
         showVisualizeSidebar: function(chartType) {
             switch (chartType) {
                 case 'boxplot':
-                    this.sidebar = new chorus.views.DatasetVisualizationBoxplotSidebar({collection: this.columnSet});
+                    this.sidebar = new chorus.views.DatasetVisualizationBoxplotSidebar({model: this.model, collection: this.columnSet});
                     this.renderSubview('sidebar');
                     break;
                 case 'frequency':

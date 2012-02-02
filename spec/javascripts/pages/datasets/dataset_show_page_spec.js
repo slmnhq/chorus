@@ -54,6 +54,13 @@ describe("chorus.pages.DatasetShowPage", function() {
                 it("renders", function() {
                     expect(this.page.postRender).toHaveBeenCalled();
                 })
+
+                it("creates a model with the required attributes", function() {
+                    expect(this.page.model).toBeDefined();
+                    expect(this.page.model.get("workspace").id).toBe("2");
+                    expect(this.page.model.get("instance").id).toBe("5");
+                    expect(this.page.model.get("sandboxId")).toBe("99");
+                });
             })
         })
     });
