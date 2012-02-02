@@ -26,6 +26,19 @@ chorus.views.TaskDataTable = chorus.views.Base.extend({
                 container:this.el
             }
         });
+
+        _.defer(_.bind(function() {
+            var el = this.$(".tbody");
+
+            el.jScrollPane();
+            el.find('.jspVerticalBar, .jspHorizontalBar').fadeOut(0);
+
+            el.unbind('hover').hover(function () {
+                el.find('.jspVerticalBar, .jspHorizontalBar').fadeIn(150)
+            }, function () {
+                el.find('.jspVerticalBar, .jspHorizontalBar').fadeOut(150)
+            });
+        }, this));
     },
 
     additionalContext:function () {
@@ -33,7 +46,16 @@ chorus.views.TaskDataTable = chorus.views.Base.extend({
     },
 
     adjustHeaderPosition:function () {
-        this.$(".thead").css({ "left":-this.$(".tbody").scrollLeft() });
+        this.$(".thead").css({ "left": - this.scrollLeft() });
+    },
+
+    recalculateScrolling : function() {
+        this.$(".tbody").jScrollPane();
+    },
+
+    scrollLeft : function() {
+        var api = this.$(".tbody").data("jsp");
+        return api && api.getContentPositionX();
     },
 
     moveColumnToFirst:function (e) {

@@ -20,22 +20,22 @@ describe("chorus.views.Sidebar", function() {
 
     describe("scrollbar handling", function() {
         beforeEach(function() {
-            spyOn($.fn, "nanoScroller");
+            spyOn($.fn, "jScrollPane");
             this.page.render();
         })
 
-        it("sets up nanoScroller", function() {
-            expect($.fn.nanoScroller).toHaveBeenCalled();
+        it("sets up custom scrolling", function() {
+            expect($.fn.jScrollPane).toHaveBeenCalled();
         })
 
         describe("resizing", function() {
             beforeEach(function() {
-                $.fn.nanoScroller.reset();
+                $.fn.jScrollPane.reset();
                 $(window).trigger('resize');
             })
 
-            it("resets the nanoScroller", function() {
-                expect($.fn.nanoScroller).toHaveBeenCalled()
+            it("resets the custom scroller", function() {
+                expect($.fn.jScrollPane).toHaveBeenCalled()
             })
         })
 
@@ -54,12 +54,12 @@ describe("chorus.views.Sidebar", function() {
 
         context("when a subview is re-rendered", function(){
             beforeEach(function() {
-                $.fn.nanoScroller.reset();
+                $.fn.jScrollPane.reset();
                 this.page.sidebar.fooView.render()
             });
 
-            it("resets the nanoScroller", function() {
-                expect($.fn.nanoScroller).toHaveBeenCalled()
+            it("resets the custom scroller", function() {
+                expect($.fn.jScrollPane).toHaveBeenCalled()
             })
         })
     })

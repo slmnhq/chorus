@@ -50,11 +50,11 @@ chorus.views.Sidebar = chorus.views.Base.extend({
     setupSidebarScrolling:function () {
         var sidebar = $("#sidebar")
         if (sidebar) {
-            var api = sidebar.data("jsp");
-            if (api) {
-                api.reinitialise();
-            } else {
-                sidebar.jScrollPane();
+            var alreadyInitialized = sidebar.data("jsp");
+
+            sidebar.jScrollPane();
+            if (!alreadyInitialized)
+            {
                 sidebar.find('.jspContainer').unbind('mousewheel', this.onMouseWheel).bind('mousewheel', this.onMouseWheel)
                 sidebar.siblings('.jump_to_top').unbind('mousewheel').bind('mousewheel', this.onJumpMouseWheel)
 
@@ -64,7 +64,6 @@ chorus.views.Sidebar = chorus.views.Base.extend({
                     sidebar.find('.jspVerticalBar, .jspHorizontalBar').fadeOut(150)
                 });
             }
-
 
             sidebar.find('.jspVerticalBar, .jspHorizontalBar').fadeOut(0)
         }
