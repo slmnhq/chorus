@@ -8,7 +8,7 @@
 
     _.extend(ns.presenters.visualizations.Timeseries.prototype, {
         present: function() {
-            var rows = this.task.get("result").rows;
+            var rows = this.task.get("rows");
             var xs = _.pluck(rows, this.options.x);
             var ys = _.pluck(rows, this.options.y);
             var data = _.map(rows, function(_row, i) {
@@ -32,7 +32,7 @@
     _.extend(ns.presenters.visualizations.Frequency.prototype, {
         present: function() {
             var frequencies = {};
-            _.each(this.task.get("result").rows, function(row) {
+            _.each(this.task.get("rows"), function(row) {
                 frequencies[row.bucket] = row.count;
             });
             return { frequencies : frequencies };
@@ -46,7 +46,7 @@
 
     _.extend(ns.presenters.visualizations.Boxplot.prototype, {
         present: function() {
-            var boxes = _.map(this.task.get("result").rows, function(row) {
+            var boxes = _.map(this.task.get("rows"), function(row) {
                 return {
                     min:           row.min,
                     median:        row.median,
