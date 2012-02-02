@@ -77,7 +77,7 @@
     _.extend(chorus.presenters.visualizations.Histogram.prototype, {
         present: function() {
             return _.map(this.task.get("rows"), function(row) {
-                return {x: row.bin, y: row.frequency};
+                return {bin: row.bin, frequency: row.frequency};
             });
         }
     });

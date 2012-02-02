@@ -15,7 +15,7 @@ describe("chorus.views.visualizations.Histogram", function() {
             ]
         });
         this.foo = "bar"
-        this.view = new chorus.views.visualizations.HistogramPlot({
+        this.view = new chorus.views.visualizations.HistogramPlotBeta({
             model: this.task
         });
     });
@@ -30,11 +30,11 @@ describe("chorus.views.visualizations.Histogram", function() {
         })
 
         it("renders no xtick lines by default", function() {
-            expect(this.view.$("line.xtick").length).toBe(0);
+            expect(this.view.$(".axis.south line").length).toBe(0);
         });
 
         it("renders ytick lines by default", function() {
-            expect(this.view.$("line.ytick").length).toBeGreaterThan(1);
+            expect(this.view.$(".axis.west line").length).toBeGreaterThan(1);
         });
 
         it("renders x and y axis lines", function() {
@@ -43,14 +43,14 @@ describe("chorus.views.visualizations.Histogram", function() {
         })
 
         it("has correct heights on the bars", function() {
-            var $bars = this.view.$("g.bar").find("rect")
+            var $bars = this.view.$("g.plot").find("rect")
             var heights = _.map($bars, function(bar){return $(bar).attr("height")})
             var sorted_heights = heights.slice(0).sort();
             expect(sorted_heights).toEqual([heights[2], heights[3], heights[0], heights[1], heights[4]])
         })
 
         it("has equal widths on the bars", function() {
-            var $bars = this.view.$("g.bar").find("rect")
+            var $bars = this.view.$("g.plot").find("rect")
             var widths = _.map($bars, function(bar) {return $(bar).attr("width")})
             widths.sort()
             expect(widths[0]).toEqual(widths[widths.length-1])
