@@ -5,6 +5,7 @@ describe("chorus.views.Sidebar", function() {
             fn.call();
         }
         this.page = new chorus.pages.Base();
+        chorus.page = this.page;
         this.page.sidebar = new chorus.views.Sidebar();
         this.page.sidebar.className = "user_show_sidebar"
         this.page.sidebar.subviews = {
@@ -31,7 +32,7 @@ describe("chorus.views.Sidebar", function() {
         describe("resizing", function() {
             beforeEach(function() {
                 $.fn.jScrollPane.reset();
-                $(window).trigger('resize');
+                this.page.trigger("window:resized")
             })
 
             it("resets the custom scroller", function() {

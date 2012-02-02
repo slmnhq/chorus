@@ -29,14 +29,9 @@ chorus.views.Sidebar = chorus.views.Base.extend({
 
         var resizeTimer;
 
-        // avoid rapid-fire resize events
-        //
-        $(window).resize(_.bind(function () {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(_.bind(function () {
-                this.setupSidebarScrolling();
-            }, this), 100);
-        }, this));
+        if (chorus.page && chorus.page.bind) {
+            chorus.page.bind("window:resized", this.setupSidebarScrolling, this);
+        }
 
         $("#sidebar_wrapper .jump_to_top").bind("click", function (e) {
             var api = $("#sidebar").data("jsp")
