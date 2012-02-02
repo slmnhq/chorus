@@ -172,7 +172,7 @@
                         "Expected text '" + actual + "' not to contain the translation for '" + translationKey + "' (" + translatedText +")"
                         ];
                     };
-                    if (translatedText === '[' + translationKey + ']') {
+                    if (!I18n.lookup(translationKey)) {
                         throw("No entry in messages.properties for " + translationKey);
                     }
 

@@ -39,18 +39,28 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         switch (type) {
             case "STRING":
             case "LONG_STRING":
-                $comparator.addClass("string");
+                $comparator.addClass("string").removeClass("numeric");
                 _.each(chorus.views.DatasetFilter.stringMap, function (value, key) {
                     var el = $("<option/>").text(t("dataset.filter." + key)).addClass("map_" + key).attr("value", key);
                     $comparator.append(el);
                 });
 
                 break;
+            case "WHOLE_NUMBER":
+            case "REAL_NUMBER":
+                $comparator.addClass("numeric").removeClass("string");
+                _.each(chorus.views.DatasetFilter.numericMap, function(value, key) {
+                    var el = $("<option/>").text(t("dataset.filter." + key)).addClass("map_" + key).attr("value", key);
+                    $comparator.append(el);
+                });
+                break;
         }
 
         _.defer(function () {
             chorus.styleSelect($comparator)
         });
+
+        this.comparatorSelected();
     },
 
     comparatorSelected:function () {
@@ -60,6 +70,12 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
 
         if ($comparator.is(".string")) {
             _.each(chorus.views.DatasetFilter.stringMap, function (value, key) {
+                if ($choice.hasClass("map_" + key)) {
+                    $input.toggleClass("hidden", !value.usesInput);
+                }
+            });
+        } else if ($comparator.is(".numeric")) {
+            _.each(chorus.views.DatasetFilter.numericMap, function (value, key) {
                 if ($choice.hasClass("map_" + key)) {
                     $input.toggleClass("hidden", !value.usesInput);
                 }
@@ -74,6 +90,8 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
 
         if ($comparator.is(".string")) {
             return chorus.views.DatasetFilter.stringMap[$comparator.val()].generate(columnName, $input.val())
+        } else if ($comparator.is(".numeric")) {
+            return chorus.views.DatasetFilter.numericMap[$comparator.val()].generate(columnName, $input.val())
         }
     }
 });
@@ -115,6 +133,33 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         }}
     };
 
+    chorus.views.DatasetFilter.numericMap = {
+        "equal": {usesInput: true, generate: function(columnName, inputValue) {
+            return inputValue ? qd(columnName) + " = " + qs(inputValue) : "";
+        }},
+        "not_equal": {usesInput: true, generate: function(columnName, inputValue) {
+            return inputValue ? qd(columnName) + " != " + qs(inputValue) : "";
+        }},
+        "null": {usesInput: false, generate: function(columnName, inputValue) {
+            return qd(columnName) + " IS NULL";
+        }},
+        "not_null": {usesInput: false, generate: function(columnName, inputValue) {
+            return qd(columnName) + " IS NOT NULL";
+        }},
+        "greater": {usesInput: true, generate: function(columnName, inputValue) {
+            return inputValue ? qd(columnName) + " > " + qs(inputValue) : "";
+        }},
+        "greater_equal": {usesInput: true, generate: function(columnName, inputValue) {
+            return inputValue ? qd(columnName) + " >= " + qs(inputValue) : "";
+        }},
+        "less": {usesInput: true, generate: function(columnName, inputValue) {
+            return inputValue ? qd(columnName) + " < " + qs(inputValue) : "";
+        }},
+        "less_equal": {usesInput: true, generate: function(columnName, inputValue) {
+            return inputValue ? qd(columnName) + " <= " + qs(inputValue) : "";
+        }}
+    };
+
     // quote double
     function qd(string) {
         return '"' + string + '"';
@@ -125,3 +170,4 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         return "'" + string + "'";
     }
 })();
+

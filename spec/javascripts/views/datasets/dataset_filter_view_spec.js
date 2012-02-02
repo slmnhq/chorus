@@ -14,7 +14,7 @@ describe("chorus.views.DatasetFilter", function() {
         });
 
         it("populates the filter's select options with the names of the columns", function() {
-            expect(this.view.$("option").length).toBe(this.collection.length);
+            expect(this.view.$(".column_filter option").length).toBe(this.collection.length);
 
             var view = this.view;
             this.collection.each(function(model){
@@ -81,9 +81,62 @@ describe("chorus.views.DatasetFilter", function() {
                 });
             });
 
-            describe("when choosing an option", function() {
+            describe("when choosing a comparator", function() {
                 _.each(_.keys(chorus.views.DatasetFilter.stringMap), function(key){
                     if (chorus.views.DatasetFilter.stringMap[key].usesInput){
+                        it("correctly shows the input for " + key, function() {
+                            this.view.$(".comparator").val(key).change();
+                            expect(this.view.$("input.filter_input")).not.toHaveClass("hidden");
+                        });
+                    } else {
+                        it("correctly hides the input for " + key, function() {
+                            this.view.$(".comparator").val(key).change();
+                            expect(this.view.$("input.filter_input")).toHaveClass("hidden");
+                        });
+                    }
+                });
+            });
+
+            describe("when the input is hidden and a new column is chosen and the default option should show the input", function() {
+                beforeEach(function() {
+                    this.view.$('input.filter_input').addClass('hidden')
+                    this.view.$('.column_filter').prop("selectedIndex", 1).change();
+                })
+
+                it("should show the input box", function() {
+                    expect(this.view.$('input.filter_input')).not.toHaveClass('hidden')
+                })
+            })
+        });
+
+        describe("columns with typeCategory: WHOLE_NUMBER, REAL_NUMBER", function() {
+            beforeEach(function () {
+                this.collection.models[0].set({typeCategory:"REAL_NUMBER"});
+                this.view.render();
+
+                this.keys = [
+                    "equal",
+                    "not_equal",
+                    "null",
+                    "not_null",
+                    "greater",
+                    "greater_equal",
+                    "less",
+                    "less_equal"
+                ];
+            });
+
+            it("adds a second select with the numeric options", function() {
+                var view = this.view;
+
+                _.each(this.keys, function(key){
+                    expect(view.$(".numeric option")).toContainTranslation("dataset.filter." + key);
+                });
+            });
+
+            describe("when choosing an option", function() {
+                _.each(_.keys(chorus.views.DatasetFilter.numericMap), function(key){
+                    if (chorus.views.DatasetFilter.numericMap[key].usesInput){
                         it("correctly shows the input for " + key, function() {
                             this.view.$(".comparator").val(key).change();
                             expect(this.view.$("input.filter_input")).not.toHaveClass("hidden");
