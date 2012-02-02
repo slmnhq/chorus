@@ -1,5 +1,5 @@
-chorus.models.BoxplotTask = chorus.models.ChartTask.extend({
-    chartType: "boxplot",
+chorus.models.TimeseriesTask = chorus.models.ChartTask.extend({
+    chartType: "timeseries",
 
     beforeSave: function() {
         this._super("beforeSave");
@@ -9,3 +9,4 @@ chorus.models.BoxplotTask = chorus.models.ChartTask.extend({
         });
     }
 });
+
