@@ -199,5 +199,20 @@ describe("chorus.views.DatasetFilter", function() {
                 expect(chorus.utilities.DatasetFilterMaps.string.comparators.not_equal.generate).toHaveBeenCalledWith(this.collection.models[0].get("name"), "test");
             });
         });
+
+        describe("#getInputField", function() {
+            it("returns .filter_input when you pick a string", function() {
+                spyOn(this.view, 'getMap').andReturn(chorus.utilities.DatasetFilterMaps.string)
+                expect(this.view.getInputField()).toBe(this.view.$(".filter_input"))
+            })
+            it("returns .filter_input when you pick a numeric", function() {
+                spyOn(this.view, 'getMap').andReturn(chorus.utilities.DatasetFilterMaps.numeric)
+                expect(this.view.getInputField()).toBe(this.view.$(".filter_input"))
+            })
+            it("returns .time_input when you pick a time", function() {
+                spyOn(this.view, 'getMap').andReturn(chorus.utilities.DatasetFilterMaps.time)
+                expect(this.view.getInputField()).toBe(this.view.$(".time_input"))
+            })
+        })
     });
 });

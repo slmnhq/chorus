@@ -1,4 +1,3 @@
-
 describe("chorus.utilities.DatasetFilterMaps.string", function() {
     var strings = chorus.utilities.DatasetFilterMaps.string;
     itReturnsTheRightClauseFor("equal", "column_name", "some_value", "\"column_name\" = 'some_value'")
@@ -56,23 +55,64 @@ describe("chorus.utilities.DatasetFilterMaps.numeric", function() {
         }
     }
 
-    it("mark whole numbers as valid", function() {
+    it("marks whole numbers as valid", function() {
         expect(numericals.validate("1234")).toBeTruthy();
     })
 
-    it("mark floating comma numbers as valid", function() {
+    it("marks floating comma numbers as valid", function() {
         expect(numericals.validate("4,5")).toBeTruthy();
     })
 
-    it("mark floating point numbers as valid", function() {
+    it("marks floating point numbers as valid", function() {
         expect(numericals.validate("4.5")).toBeTruthy();
     })
 
-    it("mark non-numerical strings as invalid", function() {
+    it("marks non-numerical strings as invalid", function() {
         expect(numericals.validate("I'm the string")).toBeFalsy();
     })
 
-    it("mark negative numbers as invalid", function() {
+    it("marks negative numbers as invalid", function() {
         expect(numericals.validate("-1")).toBeFalsy();
+    })
+});
+
+describe("chorus.utilities.DatasetFilterMaps.time", function() {
+    var time = chorus.utilities.DatasetFilterMaps.time;
+    itReturnsTheRightClauseFor("equal", "column_name", "some_value", "\"column_name\" = 'some_value'")
+    itReturnsTheRightClauseFor("before", "column_name", "some_value", "\"column_name\" < 'some_value'")
+    itReturnsTheRightClauseFor("after", "column_name", "some_value", "\"column_name\" > 'some_value'")
+    itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "\"column_name\" IS NOT NULL", true)
+    itReturnsTheRightClauseFor("null", "column_name", "some_value", "\"column_name\" IS NULL", true)
+
+    function itReturnsTheRightClauseFor(key, columnName, inputValue, expected, ignoreEmptyCase) {
+        it("returns the right clause for " + key, function() {
+            expect(time.comparators[key].generate(columnName, inputValue)).toBe(expected);
+        });
+
+        if (!ignoreEmptyCase) {
+            it("returns an empty string when input is empty for " + key, function() {
+                expect(time.comparators[key].generate(columnName, "")).toBe("");
+            });
+        }
+    }
+
+    it("marks times as valid", function() {
+        expect(time.validate("13")).toBeTruthy();
+        expect(time.validate("13:37")).toBeTruthy();
+        expect(time.validate("31:13:37")).toBeTruthy();
+    })
+
+    it("marks weird, time-like stings as valid", function() {
+        expect(time.validate("13:")).toBeTruthy();
+        expect(time.validate("1:::37")).toBeTruthy();
+        expect(time.validate("::::::::")).toBeTruthy();
+    })
+
+    it("marks anything but times as invalid", function() {
+        expect(time.validate("4,5")).toBeFalsy();
+        expect(time.validate("Greetings")).toBeFalsy();
+        expect(time.validate("www.google.com")).toBeFalsy();
+        expect(time.validate("13.45")).toBeFalsy();
+        expect(time.validate("12am")).toBeFalsy();
     })
 });
