@@ -9,7 +9,7 @@ chorus.models.SqlExecutionTask = chorus.models.Task.extend(_.extend({}, chorus.M
         return this.get("result").columns;
     },
 
-    errorMessage:function () {
-        return (this.get('result').executeResult !== 'success') && this.get("result").message;
+    getErrors : function() {
+        return this.get("result");
     }
 }));

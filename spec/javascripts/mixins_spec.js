@@ -216,6 +216,105 @@ describe("chorus.Mixins", function () {
     });
 
     describe("SQLResults", function () {
+        describe("#errorMessage", function() {
+            context("when the host provides a custom getErrors function ", function() {
+                beforeEach(function() {
+                    this.hostModel = chorus.models.Base.extend(_.extend({}, chorus.Mixins.SQLResults, {
+                        getErrors : function() {
+                            return this.get("error");
+                        }
+                    }));
+                });
+
+                context("when the execution fails", function() {
+                    beforeEach(function() {
+                        this.host = new this.hostModel({
+                            error : {
+                                executeResult : "error",
+                                message : "Foo"
+                            }
+                        });
+                    });
+
+                    it("returns the error message", function() {
+                        expect(this.host.errorMessage()).toBe("Foo");
+                    });
+                });
+
+                context("when the execution suceeds", function() {
+                    beforeEach(function() {
+                        this.host = new this.hostModel({
+                            error : {
+                                executeResult : "success",
+                                message : "Executed in 2 seconds"
+                            }
+                        });
+                    });
+
+                    it("returns the error message", function() {
+                        expect(this.host.errorMessage()).toBeFalsy();
+                    });
+                });
+
+                context("when there is no status or message in the response", function() {
+                    beforeEach(function() {
+                        this.host = new this.hostModel({
+                            error : {
+                            }
+                        });
+                    });
+
+                    it("returns the error message", function() {
+                        expect(this.host.errorMessage()).toBeFalsy();
+                    });
+                });
+            });
+
+            context("when the host does not provide a custom getErrors function", function() {
+                beforeEach(function() {
+                    this.hostModel = chorus.models.Base.extend(_.extend({}, chorus.Mixins.SQLResults, {
+                    }));
+                });
+
+                context("when the execution fails", function() {
+                    beforeEach(function() {
+                        this.host = new this.hostModel({
+                            executeResult : "error",
+                            message : "Foo"
+                        });
+                    });
+
+                    it("returns the error message", function() {
+                        expect(this.host.errorMessage()).toBe("Foo");
+                    });
+                });
+
+                context("when the execution suceeds", function() {
+                    beforeEach(function() {
+                        this.host = new this.hostModel({
+                            executeResult : "success",
+                            message : "Executed in 2 seconds"
+                        });
+                    });
+
+                    it("returns the error message", function() {
+                        expect(this.host.errorMessage()).toBeFalsy();
+                    });
+                });
+
+                context("when there is no status or message in the response", function() {
+                    beforeEach(function() {
+                        this.host = new this.hostModel({
+                        });
+                    });
+
+                    it("returns the error message", function() {
+                        expect(this.host.errorMessage()).toBeFalsy();
+                    });
+                });
+            });
+        });
+
         describe("#columnOrientedData", function () {
             context("when the host provides custom getRows and getColumns functions", function () {
                 beforeEach(function () {
@@ -225,7 +324,6 @@ describe("chorus.Mixins", function () {
                         },
 
                         getColumns : function () {
-                            console.log(this.attributes);
                             return this.get("c");
                         }
                     }));

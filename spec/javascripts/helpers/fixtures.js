@@ -1852,11 +1852,11 @@ beforeEach(function() {
         },
 
         taskWithErrors: function(overrides) {
-            var attributes = { result: _.extend({
+            var attributes = _.extend({ result: {
                 executeResult: "failed",
                 hasResult: "false",
                 message: 'ERROR: syntax error at or near "where 1=1; drop table users;"  Position: line 1 column 1'
-            }, overrides)};
+            }}, overrides);
             return this.task(attributes);
         },
 
