@@ -53,14 +53,19 @@
                     bucket:        row.bucket,
                     max:           row.max,
                     firstQuartile: row.firstQuartile,
-                    thirdQuartile: row.thirdQuartile
+                    thirdQuartile: row.thirdQuartile,
+                    percentage:    row.percentage
                 };
             });
 
-            boxes.minY = _.min(_.pluck(boxes, "min"));
-            boxes.maxY = _.max(_.pluck(boxes, "max"));
+            var orderedBoxes = _.sortBy(boxes, function(box) {
+                return -1 * parseInt(box.percentage);
+            });
 
-            return boxes;
+            orderedBoxes.minY = _.min(_.pluck(orderedBoxes, "min"));
+            orderedBoxes.maxY = _.max(_.pluck(orderedBoxes, "max"));
+
+            return orderedBoxes;
         }
     });
 

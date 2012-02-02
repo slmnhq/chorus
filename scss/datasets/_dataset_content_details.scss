@@ -100,7 +100,8 @@
         .chart_icon {
             position: relative;
             width: 50px;
-            height: 100%;
+            height: 25px;
+            margin-top: 2px;
             display: inline-block;
             cursor: pointer;
             background-position: center;
@@ -128,6 +129,14 @@
         @include chart_icon(heatmap);
         @include chart_icon(timeseries);
         @include chart_icon(boxplot);
+    }
+
+    .info_bar {
+        background-color: $content-details-info-bar-background-color;
+        padding: 0 $padding-x;
+        font-size: 14px;
+        color: $color-text1;
+        font-weight: normal;
     }
 
     .execution {

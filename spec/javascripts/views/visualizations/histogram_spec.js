@@ -25,10 +25,6 @@ describe("chorus.views.visualizations.Histogram", function() {
             this.view.render();
         })
 
-        it("doesn't crash and creates svg node", function() {
-            expect(this.view.$('svg')).toExist();
-        })
-
         it("has one bar for each bin", function() {
             expect(this.view.$(".bar").length).toBe(5);
         })
@@ -41,7 +37,34 @@ describe("chorus.views.visualizations.Histogram", function() {
             expect(this.view.$("line.ytick").length).toBeGreaterThan(1);
         });
 
-        // TODO: bar heights, widths, location x&y, labels x&y, axis line x&y
+        it("renders x and y axis lines", function() {
+            expect(this.view.$("line.xaxis")).toExist()
+            expect(this.view.$("line.yaxis")).toExist()
+        })
+
+        it("has correct heights on the bars", function() {
+            var $bars = this.view.$("g.bar").find("rect")
+            var heights = _.map($bars, function(bar){return $(bar).attr("height")})
+            var sorted_heights = heights.slice(0).sort();
+            expect(sorted_heights).toEqual([heights[2], heights[3], heights[0], heights[1], heights[4]])
+        })
+
+        it("has equal widths on the bars", function() {
+            var $bars = this.view.$("g.bar").find("rect")
+            var widths = _.map($bars, function(bar) {return $(bar).attr("width")})
+            widths.sort()
+            expect(widths[0]).toEqual(widths[widths.length-1])
+        });
+
+        it("starts the bars on/near the x axis", function() {
+            var $bars = this.view.$("g.bar").find("rect")
+            var bottomY = parseFloat($(this.view.$("line.xaxis")).attr("y1"))
+            var bottoms = _.map($bars, function(bar) {
+                expect(parseFloat($(bar).attr("y"))+parseFloat($(bar).attr("height"))).toBeCloseTo(bottomY)
+            })
+        })
+
+        // TODO: labels x&y
 
     });
 });

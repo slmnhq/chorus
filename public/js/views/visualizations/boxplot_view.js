@@ -17,12 +17,12 @@ chorus.views.visualizations.BoxPlot = chorus.views.Base.extend({
             attr("class", "top_transform");
 
         var xPaddedScaler = d3.scale.ordinal().
-            domain(_.pluck(data, "name")).
+            domain(_.pluck(data, "bucket")).
             rangeBands([yLabelWidth + 2, 270]);
 
 
         var xEdgeScaler = d3.scale.ordinal().
-            domain(_.pluck(data, "name")).
+            domain(_.pluck(data, "bucket")).
             rangeBands([yLabelWidth, 272]);
 
         var yPaddedScaler = d3.scale.linear().
@@ -59,11 +59,11 @@ chorus.views.visualizations.BoxPlot = chorus.views.Base.extend({
             attr("class", "whisker vertical").
             attr("x1",
             function(d) {
-                return xPaddedScaler(d.name) + boxOffset + 0.5 * boxWidth
+                return xPaddedScaler(d.bucket) + boxOffset + 0.5 * boxWidth
             }).
             attr("x2",
             function(d) {
-                return xPaddedScaler(d.name) + boxOffset + 0.5 * boxWidth
+                return xPaddedScaler(d.bucket) + boxOffset + 0.5 * boxWidth
             }).
             attr("y1",
             function(d) {
@@ -77,11 +77,11 @@ chorus.views.visualizations.BoxPlot = chorus.views.Base.extend({
             attr("class", "whisker horizontal top").
             attr("x1",
             function(d) {
-                return xPaddedScaler(d.name) + boxOffset + 0.25 * boxWidth
+                return xPaddedScaler(d.bucket) + boxOffset + 0.25 * boxWidth
             }).
             attr("x2",
             function(d) {
-                return xPaddedScaler(d.name) + boxOffset + 0.75 * boxWidth
+                return xPaddedScaler(d.bucket) + boxOffset + 0.75 * boxWidth
             }).
             attr("y1",
             function(d) {
@@ -95,11 +95,11 @@ chorus.views.visualizations.BoxPlot = chorus.views.Base.extend({
             attr("class", "whisker horizontal bottom").
             attr("x1",
             function(d) {
-                return xPaddedScaler(d.name) + boxOffset + 0.25 * boxWidth
+                return xPaddedScaler(d.bucket) + boxOffset + 0.25 * boxWidth
             }).
             attr("x2",
             function(d) {
-                return xPaddedScaler(d.name) + boxOffset + 0.75 * boxWidth
+                return xPaddedScaler(d.bucket) + boxOffset + 0.75 * boxWidth
             }).
             attr("y1",
             function(d) {
@@ -117,25 +117,25 @@ chorus.views.visualizations.BoxPlot = chorus.views.Base.extend({
             }).
             attr("x",
             function(d) {
-                return xPaddedScaler(d.name) + boxOffset
+                return xPaddedScaler(d.bucket) + boxOffset
             }).
             attr("y",
             function(d) {
                 return yPaddedScaler(d.thirdQuartile)
             }).
-            attr("name", function(d) {
-                return d.name
+            attr("bucket", function(d) {
+                return d.bucket
             });
 
         boxes.append("line").
             attr("class", "median").
             attr("x1",
             function(d) {
-                return xPaddedScaler(d.name) + boxOffset
+                return xPaddedScaler(d.bucket) + boxOffset
             }).
             attr("x2",
             function(d) {
-                return xPaddedScaler(d.name) + boxOffset + boxWidth
+                return xPaddedScaler(d.bucket) + boxOffset + boxWidth
             }).
             attr("y1",
             function(d) {

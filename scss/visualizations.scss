@@ -51,4 +51,10 @@
             stroke-width: 0.5;
         }
     }
+
+    .histogram {
+        .bar rect {
+            fill: $chart-fill-color;
+        }
+    }
 }

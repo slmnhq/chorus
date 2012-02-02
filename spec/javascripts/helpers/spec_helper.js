@@ -23,7 +23,8 @@
         'dataset_list',
         'dataset_list_sidebar',
         'dataset_content_details',
-        'dataset_visualization_sidebar',
+        'dataset_visualization_boxplot_sidebar',
+        'dataset_visualization_frequency_sidebar',
         'default_content_header',
         'header',
         'image_upload',
@@ -136,7 +137,11 @@
 
             this.addMatchers({
                 toBeA: function(klass) {
-                    return this.actual instanceof klass;
+                    if (_.isFunction(klass)) {
+                        return this.actual instanceof klass;
+                    } else {
+                        return (typeof this.actual === klass);
+                    }
                 },
 
                 toBeEnabled: function() {

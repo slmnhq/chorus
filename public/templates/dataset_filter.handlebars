@@ -1,6 +1,12 @@
+<div class="brackets">
+    <div class="brackets_top"></div>
+    <div class="brackets_bottom"></div>
+</div>
 <select class="column_filter">
     {{#each models}}
-        <option value="{{name}}" {{#if disable}}disabled="disabled"{{/if}}>{{name}}</option>
+        <option value="{{name}}" data-type-category="{{typeCategory}}" {{#if disable}}disabled="disabled"{{/if}}>{{name}}</option>
     {{/each}}
 </select>
-<span class="remove">X</span>
+<select class="comparator"/>
+<input class="filter_input hidden" type="text"/>
+<a href="#" class="remove"><img src="/images/remove_icon.png"/></a>

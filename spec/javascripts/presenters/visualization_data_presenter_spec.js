@@ -71,8 +71,8 @@ describe("chorus.presenters.visualizations", function() {
             this.model = fixtures.boxplotTaskWithResult({
                 result: {
                     rows: [
-                        { bucket: 'aardvark',   min: 1,   firstQuartile: 1,   median: 2.5, thirdQuartile: 3,   max: 4,   percentage: "25%" },
                         { bucket: 'beluga',     min: 100, firstQuartile: 100, median: 250, thirdQuartile: 300, max: 400, percentage: "33.3%" },
+                        { bucket: 'aardvark',   min: 1,   firstQuartile: 1,   median: 2.5, thirdQuartile: 3,   max: 4,   percentage: "25%" },
                         { bucket: 'chupacabra', min: 10,  firstQuartile: 10,  median: 25,  thirdQuartile: 30,  max: 40,  percentage: "81.5%" }
                     ],
                 }
@@ -82,12 +82,12 @@ describe("chorus.presenters.visualizations", function() {
             this.data = this.presenter.present();
         });
 
-        it("presents arrays of {bucket, min, firstQuartile, median, thirdQuartile, max}", function() {
+        it("presents arrays of {bucket, min, firstQuartile, median, thirdQuartile, max, percentage}, in order of descending percentage", function() {
             expect(this.data.length).toBe(3);
 
-            expect(this.data[0]).toEqual({ bucket: 'aardvark',   min: 1,   firstQuartile: 1,   median: 2.5, thirdQuartile: 3,   max: 4 });
-            expect(this.data[1]).toEqual({ bucket: 'beluga',     min: 100, firstQuartile: 100, median: 250, thirdQuartile: 300, max: 400 });
-            expect(this.data[2]).toEqual({ bucket: 'chupacabra', min: 10,  firstQuartile: 10,  median: 25,  thirdQuartile: 30,  max: 40 });
+            expect(this.data[0]).toEqual({ bucket: 'chupacabra', min: 10,  firstQuartile: 10,  median: 25,  thirdQuartile: 30,  max: 40,  percentage: "81.5%" });
+            expect(this.data[1]).toEqual({ bucket: 'beluga',     min: 100, firstQuartile: 100, median: 250, thirdQuartile: 300, max: 400, percentage: "33.3%" });
+            expect(this.data[2]).toEqual({ bucket: 'aardvark',   min: 1,   firstQuartile: 1,   median: 2.5, thirdQuartile: 3,   max: 4,   percentage: "25%" });
         });
 
         it("sets minY and maxY", function() {

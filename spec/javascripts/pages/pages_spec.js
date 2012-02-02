@@ -100,7 +100,7 @@ describe("chorus.pages.Base", function() {
             this.view.render();
             delete this.view.sidebar;
             this.view.render();
-            expect(this.view.$("#sidebar").html().length).toBe(0)
+            expect(this.view.$("#sidebar").text().length).toBe(0)
         });
     });
 

@@ -32,6 +32,7 @@ src_files:
   - js/alerts.js
   - js/presenters.js
   - js/views/sidebar_view.js
+  - js/views/datasets/dataset_visualization_sidebar.js
   - js/views/database_sidebar_list_view.js
   - js/views/workfiles/workfile_content_details_view.js
   - js/views/workfiles/workfile_content_view.js

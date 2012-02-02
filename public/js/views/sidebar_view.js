@@ -25,8 +25,6 @@ chorus.views.Sidebar = chorus.views.Base.extend({
     postRender:function () {
         this._super('postRender');
 
-        var sidebar = $(this.el).closest("#sidebar")
-        sidebar.removeAttr("style")
         this.setupSidebarScrolling();
 
         var resizeTimer;
@@ -40,31 +38,41 @@ chorus.views.Sidebar = chorus.views.Base.extend({
             }, this), 100);
         }, this));
 
-        $("#sidebar_wrapper").find(".jump_to_top").bind("click", function (e) {
-            $(this).siblings("#sidebar_nano").nanoScroller({scroll:'top'});
-            $("#sidebar").find(".lb-wrap").scrollTop(0);
-            $(this).removeClass("clickable");
+        $("#sidebar_wrapper .jump_to_top").bind("click", function (e) {
+            var api = $("#sidebar").data("jsp")
+            if (api) {
+                api.scrollTo(0, 0);
+                $(this).removeClass("clickable");
+            }
         });
     },
 
     setupSidebarScrolling:function () {
-        var sidebar = $(this.el).closest("#sidebar_nano");
+        var sidebar = $("#sidebar")
         if (sidebar) {
-            sidebar.nanoScroller();
-            sidebar.find('.nano_content').unbind('mousewheel').bind('mousewheel', this.onMouseWheel)
-            sidebar.find('.jump_to_top').unbind('mousewheel').bind('mousewheel', this.onJumpMouseWheel)
+            var alreadyInitialized = sidebar.data("jsp");
+
+            sidebar.jScrollPane();
+            if (!alreadyInitialized)
+            {
+                sidebar.find('.jspContainer').unbind('mousewheel', this.onMouseWheel).bind('mousewheel', this.onMouseWheel)
+                sidebar.siblings('.jump_to_top').unbind('mousewheel').bind('mousewheel', this.onJumpMouseWheel)
+
+                sidebar.unbind('hover').hover(function () {
+                    sidebar.find('.jspVerticalBar, .jspHorizontalBar').fadeIn(150)
+                }, function () {
+                    sidebar.find('.jspVerticalBar, .jspHorizontalBar').fadeOut(150)
+                });
+            }
+
+            sidebar.find('.jspVerticalBar, .jspHorizontalBar').fadeOut(0)
         }
     },
 
     onMouseWheel:function (event, d) {
-        $("#sidebar_wrapper").find(".jump_to_top").toggleClass("clickable", this.scrollTop > 10);
-
-        if ((this.scrollTop === 0 && d > 0)) {
-            event.preventDefault();
-        } else if ((this.clientHeight + this.scrollTop >= this.scrollHeight) && d < 0) {
-            event.preventDefault();
-        }
-
+        var api = $("#sidebar").data("jsp")
+        $("#sidebar_wrapper .jump_to_top").toggleClass("clickable", api.getContentPositionY() > 10);
+        event.preventDefault();
         return true;
     },
 

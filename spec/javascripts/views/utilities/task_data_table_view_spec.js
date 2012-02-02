@@ -19,6 +19,8 @@ describe("chorus.views.TaskDataTable", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            stubDefer();
+            spyOn($.fn, "jScrollPane")
             this.view.render();
         });
 
@@ -57,6 +59,10 @@ describe("chorus.views.TaskDataTable", function() {
             expect(this.view.$(".column:eq(0)").attr("data-type")).toBe("WHOLE_NUMBER");
             expect(this.view.$(".column:eq(1)").attr("data-type")).toBe("OTHER");
         });
+
+        it("sets up custom scrolling", function() {
+            expect($.fn.jScrollPane).toHaveBeenCalled();
+        })
 
         context("clicking on the jump to left arrow", function() {
             beforeEach(function(){

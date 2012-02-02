@@ -84,6 +84,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$(".bottom_gutter").removeClass("hidden")
         this.$(".arrow").removeClass("down")
         this.$(".arrow").addClass("up")
+        this.recalculateScrolling();
     },
 
     maximizeTable:function (e) {
@@ -96,6 +97,13 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$(".result_table").removeClass("minimized");
         this.$(".result_table").addClass("maximized");
         this.$(".data_table").css("height", this.getDesiredDataTableHeight());
+        this.recalculateScrolling();
+    },
+
+    recalculateScrolling : function() {
+        if (this.dataTable) {
+            this.dataTable.recalculateScrolling();
+        }
     },
 
     getDesiredDataTableHeight:function () {

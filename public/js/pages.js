@@ -17,7 +17,7 @@ chorus.pages.Base = chorus.pages.Bare.extend({
         "#header":"header",
         "#main_content":"mainContent",
         "#breadcrumbs":"breadcrumbs",
-        "#sidebar":"sidebar",
+        "#sidebar .sidebar_content":"sidebar",
         "#sub_nav":"subNav"
     },
 
