@@ -78,7 +78,7 @@ window.Chorus = function() {
                     var wrappedCallback = function(event) {
                         event.preventDefault();
                         event.stopPropagation();
-                        callback(event);
+                        callback(event, api);
                         api.hide();
                     }
                     $(api.elements.content).find(selector).click(wrappedCallback);

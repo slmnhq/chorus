@@ -12,7 +12,7 @@ describe("chorus.views.DatasetVisualizationBoxplotSidebar", function() {
                 this.view.render();
             })
 
-            itBehavesLike.DatasetVisualizationSidebar();
+            itBehavesLike.DatasetVisualizationSidebarLimiter();
 
             describe("#chartOptions", function() {
                 it("should return all the chart options for a boxplot", function() {
@@ -76,7 +76,7 @@ describe("chorus.views.DatasetVisualizationBoxplotSidebar", function() {
 
             it("should display 'No numerical columns' instead of the numerical column selector", function() {
                 expect(this.view.$(".value select option")).not.toExist()
-                expect(this.view.$(".no_numerical_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_numerical_columns")
+                expect(this.view.$(".no_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_numerical_columns")
             })
 
             it("should display 'No columns' instead of the categorical column selector", function() {

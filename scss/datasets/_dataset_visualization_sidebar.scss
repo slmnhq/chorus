@@ -54,14 +54,14 @@
             bottom: 0;
         }
 
-        .no_numerical_columns, .no_columns {
+        .no_columns {
             display: inline-block;
             padding-bottom: 10px;
         }
     }
 
 
-    .category_limit {
+    .limiter {
         font-size: 12px;
         color: $color-text2;
         font-weight: $semibold;
@@ -86,12 +86,12 @@
             @include triangle(down, $link-color, 7px, 4px);
         }
     }
-    .category_limit_menu {
+    .limiter_menu {
         display: none;
     }
 }
 
-ul.category_limit_menu {
+ul.limiter_menu {
     li {
         cursor: pointer;
         font-size: 14px;
