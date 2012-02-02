@@ -325,6 +325,17 @@ describe("chorus.Mixins", function () {
 
                         getColumns : function () {
                             return this.get("c");
+                        },
+
+                        getColumnLabel : function(name) {
+                            switch (name) {
+                                case "foo":
+                                    return "A Foo";
+                                case "bar":
+                                    return "A Bar";
+                                default:
+                                    return name;
+                            }
                         }
                     }));
 
@@ -357,13 +368,13 @@ describe("chorus.Mixins", function () {
                     var val = this.host.columnOrientedData();
                     expect(val.length).toBe(2);
 
-                    expect(val[0].name).toBe("foo");
+                    expect(val[0].name).toBe("A Foo");
                     expect(val[0].type).toBe("whatever");
                     expect(val[0].values.length).toBe(2);
                     expect(val[0].values[0]).toBe("value1");
                     expect(val[0].values[1]).toBe("value2");
 
-                    expect(val[1].name).toBe("bar");
+                    expect(val[1].name).toBe("A Bar");
                     expect(val[1].type).toBe("what");
                     expect(val[1].values.length).toBe(2);
                     expect(val[1].values[0]).toBe("bar1");
