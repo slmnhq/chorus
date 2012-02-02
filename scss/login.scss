@@ -2,8 +2,7 @@
 
 $login-width : 450px;
 div.login {
-    text-align: center;
-    margin-top: 40px;
+    margin-top: 190px;
 
     .card {
         @include borderbox;
@@ -21,11 +20,13 @@ div.login {
         }
 
         form {
+            text-align: center;
             padding: 11px 15px 9px 20px;
             .content {
                 margin: auto;
                 text-align: left;
                 width: 300px;
+                padding-top: 5px;
 
                 input {
                     margin-bottom: 12px;
@@ -39,17 +40,44 @@ div.login {
     }
 
     footer {
-        margin-top : 30px;
-        display : inline-block;
-        text-align : left;
         width : $login-width;
-        color: $color-text4;
-        font-size : 12px;
-        div {
-            display : inline-block;
+        color: #999999;
+        font-size : 10px;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+
+        .logos {
+            @include after-clearfix;
+            width: $login-width;
+            margin: 25px 0;
+
+            .greenplum {
+                float: left;
+            }
+
+            .emc {
+                float: right;
+            }
         }
-    }
-    .version {
-        float : right;
+
+        .legal {
+            text-align: left;
+            
+            p {
+                padding-bottom: 12px;
+                span {
+                    display: inline-block;
+
+                    &.version {
+                        padding-right: 8px;
+                    }
+
+                    &.copyright {
+                        padding-left: 8px;
+                    }
+                }
+            }
+        }
     }
 }

@@ -1,23 +1,35 @@
-<img class="logo" src="images/logo-large.png"></img>
 <div class="card">
-{{> errorDiv }}
-<form class="login" action="/edc/auth/login/" method="post">
-    <h1>{{t "login.title"}}</h1>
-    <div class="content">
-        <label for="userName">{{t "login.username"}}</label>
-        <input type="text" name="userName" id="userName" maxlength="256"/>
+    {{> errorDiv }}
+    <img class="logo" src="images/uap-badge.png"/>
+    <form class="login" action="/edc/auth/login/" method="post">
+        <img class="logo" src="images/login-logo.png"/>
+        <div class="content">
+            <label for="userName">{{t "login.username"}}</label>
+            <input type="text" name="userName" id="userName" maxlength="256"/>
 
-        <label for="password">{{t "login.password"}}</label>
-        <input type="password" name="password" id="password" maxlength="256"/>
-    </div>
-    <div class="modal_controls">
-        <button type="submit">{{t "login.button"}}</button>
-    </div>
-</form>
+            <label for="password">{{t "login.password"}}</label>
+            <input type="password" name="password" id="password" maxlength="256"/>
+        </div>
+        <div class="modal_controls">
+            <button type="submit">{{t "login.button"}}</button>
+        </div>
+    </form>
 </div>
 <footer>
-<div class="legal">
-    {{t "login.copyright"}} <a href="http://www.greenplum.com">Greenplum</a>. {{t "login.rights"}}
-</div>
-<div class="version">{{t "login.version"}} 0.9.0</div>
+    <div class="logos">
+        <img class="greenplum" src="/images/greenplum-logo.png"></img>
+        <img class="emc" src="/images/emc-logo.png"></img>
+    </div>
+    <div class="legal">
+        <p>
+            <span class="version">{{t "login.version"}} 0.9.0</span>|<span class="copyright">{{t "login.copyright"}}</span>
+        </p>
+        <p>
+            {{t "login.legal1"}}
+        </p>
+        <p>
+            {{t "login.legal2"}}
+        </p>
+    </div>
+<div class="version"></div>
 </footer>
