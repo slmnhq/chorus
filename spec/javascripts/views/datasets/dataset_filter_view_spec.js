@@ -57,7 +57,7 @@ describe("chorus.views.DatasetFilter", function() {
             beforeEach(function() {
                 this.collection.models[0].set({typeCategory:"REAL_NUMBER"});
                 this.view.render();
-                spyOn(chorus.views.DatasetFilter.numericMap, "validate");
+                spyOn(chorus.utilities.DatasetFilterMaps.numeric, "validate");
                 spyOn(this.view, "markInputAsInvalid");
                 
                 this.view.$("input.filter_input").val("123");
@@ -66,11 +66,11 @@ describe("chorus.views.DatasetFilter", function() {
             it("passes the input argument to the right method", function() {
                 this.view.validateInput();
                 
-                expect(chorus.views.DatasetFilter.numericMap.validate).toHaveBeenCalledWith("123");
+                expect(chorus.utilities.DatasetFilterMaps.numeric.validate).toHaveBeenCalledWith("123");
             });
 
             it("adds a qtip with invalid input", function() {
-                chorus.views.DatasetFilter.numericMap.validate.andReturn(false);
+                chorus.utilities.DatasetFilterMaps.numeric.validate.andReturn(false);
 
                 this.view.validateInput();
 
@@ -78,7 +78,7 @@ describe("chorus.views.DatasetFilter", function() {
             });
 
             it("does not add a qtip with valid input", function() {
-                chorus.views.DatasetFilter.numericMap.validate.andReturn(true);
+                chorus.utilities.DatasetFilterMaps.numeric.validate.andReturn(true);
 
                 this.view.validateInput();
 
@@ -115,8 +115,8 @@ describe("chorus.views.DatasetFilter", function() {
             });
 
             describe("when choosing a comparator", function() {
-                _.each(_.keys(chorus.views.DatasetFilter.stringMap), function(key){
-                    if (chorus.views.DatasetFilter.stringMap[key].usesInput){
+                _.each(_.keys(chorus.utilities.DatasetFilterMaps.string), function(key){
+                    if (chorus.utilities.DatasetFilterMaps.string[key].usesInput){
                         it("correctly shows the input for " + key, function() {
                             this.view.$(".comparator").val(key).change();
                             expect(this.view.$("input.filter_input")).not.toHaveClass("hidden");
@@ -168,8 +168,8 @@ describe("chorus.views.DatasetFilter", function() {
             });
 
             describe("when choosing an option", function() {
-                _.each(_.keys(chorus.views.DatasetFilter.numericMap), function(key){
-                    if (chorus.views.DatasetFilter.numericMap[key].usesInput){
+                _.each(_.keys(chorus.utilities.DatasetFilterMaps.numeric), function(key){
+                    if (chorus.utilities.DatasetFilterMaps.numeric[key].usesInput){
                         it("correctly shows the input for " + key, function() {
                             this.view.$(".comparator").val(key).change();
                             expect(this.view.$("input.filter_input")).not.toHaveClass("hidden");
@@ -191,89 +191,13 @@ describe("chorus.views.DatasetFilter", function() {
 
                 this.view.$(".comparator").val("not_equal").change();
                 this.view.$(".filter_input").val("test")
-                spyOn(chorus.views.DatasetFilter.stringMap.not_equal, "generate");
+                spyOn(chorus.utilities.DatasetFilterMaps.string.not_equal, "generate");
                 this.view.filterString();
             });
 
             it("calls the generate function of the correct filter type", function() {
-                expect(chorus.views.DatasetFilter.stringMap.not_equal.generate).toHaveBeenCalledWith(this.collection.models[0].get("name"), "test");
+                expect(chorus.utilities.DatasetFilterMaps.string.not_equal.generate).toHaveBeenCalledWith(this.collection.models[0].get("name"), "test");
             });
         });
     });
-});
-
-describe("chorus.views.DatasetFilter.stringMap", function() {
-    itReturnsTheRightClauseFor("equal", "column_name", "some_value", "\"column_name\" = 'some_value'")
-    itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "\"column_name\" != 'some_value'")
-    itReturnsTheRightClauseFor("like", "column_name", "some_value", "\"column_name\" LIKE 'some_value'")
-    itReturnsTheRightClauseFor("begin_with", "column_name", "some_value", "\"column_name\" = 'some_value%'")
-    itReturnsTheRightClauseFor("end_with", "column_name", "some_value", "\"column_name\" = '%some_value'")
-    itReturnsTheRightClauseFor("alpha_after", "column_name", "some_value", "\"column_name\" > 'some_value'")
-    itReturnsTheRightClauseFor("alpha_after_equal", "column_name", "some_value", "\"column_name\" >= 'some_value'")
-    itReturnsTheRightClauseFor("alpha_before", "column_name", "some_value", "\"column_name\" < 'some_value'")
-    itReturnsTheRightClauseFor("alpha_before_equal", "column_name", "some_value", "\"column_name\" <= 'some_value'")
-    itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "\"column_name\" IS NOT NULL", true)
-    itReturnsTheRightClauseFor("null", "column_name", "some_value", "\"column_name\" IS NULL", true)
-
-    function itReturnsTheRightClauseFor(key, columnName, inputValue, expected, ignoreEmptyCase) {
-        it("returns the right clause for " + key, function() {
-            expect(chorus.views.DatasetFilter.stringMap[key].generate(columnName, inputValue)).toBe(expected);
-        });
-
-        if (!ignoreEmptyCase) {
-            it("returns an empty string when input is empty for " + key, function() {
-                expect(chorus.views.DatasetFilter.stringMap[key].generate(columnName, "")).toBe("");
-            });
-        }
-    }
-
-    it("marks all strings as valid", function() {
-        expect(chorus.views.DatasetFilter.stringMap.validate("")).toBeTruthy();
-        expect(chorus.views.DatasetFilter.stringMap.validate("2342gegrerger*(&^%")).toBeTruthy();
-        expect(chorus.views.DatasetFilter.stringMap.validate("';DROP TABLE users;--")).toBeTruthy();
-        expect(chorus.views.DatasetFilter.stringMap.validate("\n                    \t")).toBeTruthy();
-    })
-});
-
-describe("chorus.views.DatasetFilter.numericMap", function() {
-    itReturnsTheRightClauseFor("equal", "column_name", "some_value", "\"column_name\" = 'some_value'")
-    itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "\"column_name\" != 'some_value'")
-    itReturnsTheRightClauseFor("greater", "column_name", "some_value", "\"column_name\" > 'some_value'")
-    itReturnsTheRightClauseFor("greater_equal", "column_name", "some_value", "\"column_name\" >= 'some_value'")
-    itReturnsTheRightClauseFor("less", "column_name", "some_value", "\"column_name\" < 'some_value'")
-    itReturnsTheRightClauseFor("less_equal", "column_name", "some_value", "\"column_name\" <= 'some_value'")
-    itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "\"column_name\" IS NOT NULL", true)
-    itReturnsTheRightClauseFor("null", "column_name", "some_value", "\"column_name\" IS NULL", true)
-
-    function itReturnsTheRightClauseFor(key, columnName, inputValue, expected, ignoreEmptyCase) {
-        it("returns the right clause for " + key, function() {
-            expect(chorus.views.DatasetFilter.numericMap[key].generate(columnName, inputValue)).toBe(expected);
-        });
-
-        if (!ignoreEmptyCase) {
-            it("returns an empty string when input is empty for " + key, function() {
-                expect(chorus.views.DatasetFilter.numericMap[key].generate(columnName, "")).toBe("");
-            });
-        }
-    }
-
-    it("mark whole numbers as valid", function() {
-        expect(chorus.views.DatasetFilter.numericMap.validate("1234")).toBeTruthy();
-    })
-
-    it("mark floating comma numbers as valid", function() {
-        expect(chorus.views.DatasetFilter.numericMap.validate("4,5")).toBeTruthy();
-    })
-
-    it("mark floating point numbers as valid", function() {
-        expect(chorus.views.DatasetFilter.numericMap.validate("4.5")).toBeTruthy();
-    })
-
-    it("mark non-numerical strings as invalid", function() {
-        expect(chorus.views.DatasetFilter.numericMap.validate("I'm the string")).toBeFalsy();
-    })
-
-    it("mark negative numbers as invalid", function() {
-        expect(chorus.views.DatasetFilter.numericMap.validate("-1")).toBeFalsy();
-    })
 });

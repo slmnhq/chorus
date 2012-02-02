@@ -8,6 +8,7 @@ window.Chorus = function() {
     self.alerts = {};
     self.templates = {};
     self.features = {};
+    self.utilities = {};
     self.locale = 'en';
 
     self.initialize = function() {
