@@ -46,21 +46,22 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
             case "STRING":
             case "LONG_STRING":
                 $comparator.addClass("string").removeClass("numeric");
-                _.each(chorus.utilities.DatasetFilterMaps.string.comparators, function (value, key) {
-                    var el = $("<option/>").text(t("dataset.filter." + key)).addClass("map_" + key).attr("value", key);
-                    $comparator.append(el);
-                });
-
                 break;
             case "WHOLE_NUMBER":
             case "REAL_NUMBER":
                 $comparator.addClass("numeric").removeClass("string");
-                _.each(chorus.utilities.DatasetFilterMaps.numeric.comparators, function(value, key) {
-                    var el = $("<option/>").text(t("dataset.filter." + key)).addClass("map_" + key).attr("value", key);
-                    $comparator.append(el);
-                });
                 break;
         }
+
+        var map = this.getMap();
+        if (!map) {
+            return;
+        }
+
+        _.each(map.comparators, function(value, key) {
+            var el = $("<option/>").text(t("dataset.filter." + key)).addClass("map_" + key).attr("value", key);
+            $comparator.append(el);
+        });
 
         _.defer(function () {
             chorus.styleSelect($comparator)
