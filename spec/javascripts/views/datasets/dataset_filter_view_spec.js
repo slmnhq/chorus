@@ -43,13 +43,46 @@ describe("chorus.views.DatasetFilter", function() {
 
         describe("columns with typeCategory: other", function() {
             beforeEach(function () {
-                this.collection.models[0].set({typeCategory:"OTHER"});
+                this.collection.models[1].set({typeCategory:"OTHER"});
                 this.view.render();
             });
 
             it("disables the option for the 'other' column", function() {
-                expect(this.view.$(".column_filter option[value='" + this.collection.models[0].get("name") + "']")).toHaveAttr("disabled");
-                expect(this.view.$(".column_filter option[value='" + this.collection.models[1].get("name") + "']")).not.toHaveAttr("disabled");
+                expect(this.view.$(".column_filter option[value='" + this.collection.models[1].get("name") + "']")).toHaveAttr("disabled");
+                expect(this.view.$(".column_filter option[value='" + this.collection.models[0].get("name") + "']")).not.toHaveAttr("disabled");
+            });
+        });
+        
+        describe("#validateInput", function() {
+            beforeEach(function() {
+                this.collection.models[0].set({typeCategory:"REAL_NUMBER"});
+                this.view.render();
+                spyOn(chorus.views.DatasetFilter.numericMap, "validate");
+                spyOn(this.view, "markInputAsInvalid");
+                
+                this.view.$("input.filter_input").val("123");
+            });
+            
+            it("passes the input argument to the right method", function() {
+                this.view.validateInput();
+                
+                expect(chorus.views.DatasetFilter.numericMap.validate).toHaveBeenCalledWith("123");
+            });
+
+            it("adds a qtip with invalid input", function() {
+                chorus.views.DatasetFilter.numericMap.validate.andReturn(false);
+
+                this.view.validateInput();
+
+                expect(this.view.markInputAsInvalid).toHaveBeenCalled();
+            });
+
+            it("does not add a qtip with valid input", function() {
+                chorus.views.DatasetFilter.numericMap.validate.andReturn(true);
+
+                this.view.validateInput();
+
+                expect(this.view.markInputAsInvalid).not.toHaveBeenCalled();
             });
         });
 
@@ -193,4 +226,54 @@ describe("chorus.views.DatasetFilter.stringMap", function() {
             });
         }
     }
+
+    it("marks all strings as valid", function() {
+        expect(chorus.views.DatasetFilter.stringMap.validate("")).toBeTruthy();
+        expect(chorus.views.DatasetFilter.stringMap.validate("2342gegrerger*(&^%")).toBeTruthy();
+        expect(chorus.views.DatasetFilter.stringMap.validate("';DROP TABLE users;--")).toBeTruthy();
+        expect(chorus.views.DatasetFilter.stringMap.validate("\n                    \t")).toBeTruthy();
+    })
+});
+
+describe("chorus.views.DatasetFilter.numericMap", function() {
+    itReturnsTheRightClauseFor("equal", "column_name", "some_value", "\"column_name\" = 'some_value'")
+    itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "\"column_name\" != 'some_value'")
+    itReturnsTheRightClauseFor("greater", "column_name", "some_value", "\"column_name\" > 'some_value'")
+    itReturnsTheRightClauseFor("greater_equal", "column_name", "some_value", "\"column_name\" >= 'some_value'")
+    itReturnsTheRightClauseFor("less", "column_name", "some_value", "\"column_name\" < 'some_value'")
+    itReturnsTheRightClauseFor("less_equal", "column_name", "some_value", "\"column_name\" <= 'some_value'")
+    itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "\"column_name\" IS NOT NULL", true)
+    itReturnsTheRightClauseFor("null", "column_name", "some_value", "\"column_name\" IS NULL", true)
+
+    function itReturnsTheRightClauseFor(key, columnName, inputValue, expected, ignoreEmptyCase) {
+        it("returns the right clause for " + key, function() {
+            expect(chorus.views.DatasetFilter.numericMap[key].generate(columnName, inputValue)).toBe(expected);
+        });
+
+        if (!ignoreEmptyCase) {
+            it("returns an empty string when input is empty for " + key, function() {
+                expect(chorus.views.DatasetFilter.numericMap[key].generate(columnName, "")).toBe("");
+            });
+        }
+    }
+
+    it("mark whole numbers as valid", function() {
+        expect(chorus.views.DatasetFilter.numericMap.validate("1234")).toBeTruthy();
+    })
+
+    it("mark floating comma numbers as valid", function() {
+        expect(chorus.views.DatasetFilter.numericMap.validate("4,5")).toBeTruthy();
+    })
+
+    it("mark floating point numbers as valid", function() {
+        expect(chorus.views.DatasetFilter.numericMap.validate("4.5")).toBeTruthy();
+    })
+
+    it("mark non-numerical strings as invalid", function() {
+        expect(chorus.views.DatasetFilter.numericMap.validate("I'm the string")).toBeFalsy();
+    })
+
+    it("mark negative numbers as invalid", function() {
+        expect(chorus.views.DatasetFilter.numericMap.validate("-1")).toBeFalsy();
+    })
 });

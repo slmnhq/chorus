@@ -5,7 +5,9 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
     events:{
         "click .remove":"removeSelf",
         "change select.column_filter":"columnSelected",
-        "change select.comparator":"comparatorSelected"
+        "change select.comparator":"comparatorSelected",
+        "paste input.filter_input":"validateInput",
+        "keyup input.filter_input":"validateInput"
     },
 
     postRender:function () {
@@ -68,18 +70,22 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         var $choice = $comparator.find("option:selected");
         var $input = this.$(".filter_input");
 
+        _.each(this.getMap(), function (value, key) {
+            if ($choice.hasClass("map_" + key)) {
+                $input.toggleClass("hidden", !value.usesInput);
+            }
+        });
+
+        this.validateInput();
+    },
+
+    getMap: function() {
+        var $comparator = this.$("select.comparator");
+
         if ($comparator.is(".string")) {
-            _.each(chorus.views.DatasetFilter.stringMap, function (value, key) {
-                if ($choice.hasClass("map_" + key)) {
-                    $input.toggleClass("hidden", !value.usesInput);
-                }
-            });
+            return chorus.views.DatasetFilter.stringMap
         } else if ($comparator.is(".numeric")) {
-            _.each(chorus.views.DatasetFilter.numericMap, function (value, key) {
-                if ($choice.hasClass("map_" + key)) {
-                    $input.toggleClass("hidden", !value.usesInput);
-                }
-            });
+            return chorus.views.DatasetFilter.numericMap
         }
     },
 
@@ -92,6 +98,17 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
             return chorus.views.DatasetFilter.stringMap[$comparator.val()].generate(columnName, $input.val())
         } else if ($comparator.is(".numeric")) {
             return chorus.views.DatasetFilter.numericMap[$comparator.val()].generate(columnName, $input.val())
+        }
+    },
+
+    validateInput : function() {
+        var $input = this.$('.filter_input')
+        var value = $input.val()
+
+        if(this.getMap().validate(value)) {
+            this.clearErrors();
+        } else {
+            this.markInputAsInvalid($input, "Please enter only numbers, dots or commas [0-9,.]", false)
         }
     }
 });
@@ -130,7 +147,10 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         }},
         "alpha_before_equal":{usesInput:true, generate:function (columnName, inputValue) {
             return inputValue ? qd(columnName) + " <= " + qs(inputValue) : "";
-        }}
+        }},
+        validate: function(value) {
+            return true
+        }
     };
 
     chorus.views.DatasetFilter.numericMap = {
@@ -157,7 +177,10 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         }},
         "less_equal": {usesInput: true, generate: function(columnName, inputValue) {
             return inputValue ? qd(columnName) + " <= " + qs(inputValue) : "";
-        }}
+        }},
+        validate: function(value) {
+            return value.match(/^[0-9,.]+$/);
+        }
     };
 
     // quote double
