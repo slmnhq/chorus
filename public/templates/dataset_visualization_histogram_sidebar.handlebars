@@ -1,22 +1,23 @@
 <fieldset>
     <legend>{{t "dataset.visualization.sidebar.chart_display_settings"}}</legend>
+    <div>
+        <div class="category field">
+            <div class='labels'>
+                <label>{{t "dataset.visualization.sidebar.category"}}</label>
+                <span class="column_hint">{{t "dataset.visualization.sidebar.hint.numeric"}}</span>
+            </div>
 
-    <div class="category">
-        <div class='labels'>
-            <label>{{t "dataset.visualization.sidebar.category"}}</label>
-            <span class="column_hint">{{t "dataset.visualization.sidebar.hint.numeric"}}</span>
+            {{#if numericColumns.length}}
+            <select>
+                {{#each numericColumns}}
+                <option value='{{this}}'>{{this}}</option>
+                {{/each}}
+            </select>
+            {{{limit_chooser translationKey="dataset.visualization.sidebar.number_of_bins"}}}
+            {{else}}
+            <span class='no_columns'>{{t "dataset.visualization.sidebar.no_columns"}}</span>
+            {{/if}}
         </div>
-
-        {{#if numericColumns.length}}
-        <select>
-            {{#each numericColumns}}
-            <option value='{{this}}'>{{this}}</option>
-            {{/each}}
-        </select>
-        {{{limit_chooser translationKey="dataset.visualization.sidebar.number_of_bins"}}}
-        {{else}}
-        <span class='no_columns'>{{t "dataset.visualization.sidebar.no_columns"}}</span>
-        {{/if}}
     </div>
     <button class="create dialog" data-chart_type="{{{chartType}}}" data-name="{{{tableName}}}"
             data-dialog="Visualization">{{t "dataset.visualization.sidebar.create_chart"}}

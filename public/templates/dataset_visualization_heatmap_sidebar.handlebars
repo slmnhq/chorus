@@ -1,40 +1,41 @@
 <fieldset>
     <legend>{{t "dataset.visualization.sidebar.chart_display_settings"}}</legend>
+    <div>
+        <div class="x_axis field">
+            <div class='labels'>
+                <label>{{t "dataset.visualization.sidebar.x_axis"}}</label>
+                <span class="column_hint">{{t "dataset.visualization.sidebar.hint.numeric"}}</span>
+            </div>
 
-    <div class="x_axis">
-        <div class='labels'>
-            <label>{{t "dataset.visualization.sidebar.x_axis"}}</label>
-            <span class="column_hint">{{t "dataset.visualization.sidebar.hint.numeric"}}</span>
+            {{#if numericColumns.length}}
+            <select>
+                {{#each numericColumns}}
+                <option value='{{this}}'>{{this}}</option>
+                {{/each}}
+            </select>
+            {{{limit_chooser className="x_axis" translationKey="dataset.visualization.sidebar.number_of_bins"}}}
+            {{else}}
+            <span class='no_columns'>{{t "dataset.visualization.sidebar.no_numerical_columns"}}</span>
+            {{/if}}
         </div>
 
-        {{#if numericColumns.length}}
-        <select>
-            {{#each numericColumns}}
-            <option value='{{this}}'>{{this}}</option>
-            {{/each}}
-        </select>
-        {{{limit_chooser className="x_axis" translationKey="dataset.visualization.sidebar.number_of_bins"}}}
-        {{else}}
-        <span class='no_columns'>{{t "dataset.visualization.sidebar.no_numerical_columns"}}</span>
-        {{/if}}
-    </div>
+        <div class="y_axis field">
+            <div class='labels'>
+                <label>{{t "dataset.visualization.sidebar.y_axis"}}</label>
+                <span class="column_hint">{{t "dataset.visualization.sidebar.hint.numeric"}}</span>
+            </div>
 
-    <div class="y_axis">
-        <div class='labels'>
-            <label>{{t "dataset.visualization.sidebar.y_axis"}}</label>
-            <span class="column_hint">{{t "dataset.visualization.sidebar.hint.numeric"}}</span>
+            {{#if numericColumns.length}}
+            <select>
+                {{#each numericColumns}}
+                <option value='{{this}}'>{{this}}</option>
+                {{/each}}
+            </select>
+            {{{limit_chooser className="y_axis" translationKey="dataset.visualization.sidebar.number_of_bins"}}}
+            {{else}}
+            <span class='no_columns'>{{t "dataset.visualization.sidebar.no_numerical_columns"}}</span>
+            {{/if}}
         </div>
-
-        {{#if numericColumns.length}}
-        <select>
-            {{#each numericColumns}}
-            <option value='{{this}}'>{{this}}</option>
-            {{/each}}
-        </select>
-        {{{limit_chooser className="y_axis" translationKey="dataset.visualization.sidebar.number_of_bins"}}}
-        {{else}}
-        <span class='no_columns'>{{t "dataset.visualization.sidebar.no_numerical_columns"}}</span>
-        {{/if}}
     </div>
 
 

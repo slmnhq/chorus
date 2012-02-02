@@ -1,36 +1,37 @@
 <fieldset>
     <legend>{{t "dataset.visualization.sidebar.chart_display_settings"}}</legend>
-    
-    <div class="value">
-        <div class='labels'>
-            <label>{{t "dataset.visualization.sidebar.value"}}</label>
-            <span class="column_hint">{{t "dataset.visualization.sidebar.hint.numeric"}}</span>
-        </div>
-        {{#if numericColumns.length}}
+    <div>
+        <div class="value field">
+            <div class='labels'>
+                <label>{{t "dataset.visualization.sidebar.value"}}</label>
+                <span class="column_hint">{{t "dataset.visualization.sidebar.hint.numeric"}}</span>
+            </div>
+            {{#if numericColumns.length}}
             <select>
-            {{#each numericColumns}}
+                {{#each numericColumns}}
                 <option value='{{this}}'>{{this}}</option>
-            {{/each}}
+                {{/each}}
             </select>
-        {{else}}
+            {{else}}
             <span class='no_columns'>{{t "dataset.visualization.sidebar.no_numerical_columns"}}</span>
-        {{/if}}
-    </div>
-    <div class="category">
-        <div class='labels'>
-            <label>{{t "dataset.visualization.sidebar.category"}}</label>
-            <span class="column_hint">{{t "dataset.visualization.sidebar.hint.category"}}</span>
+            {{/if}}
         </div>
-        {{#if allColumns.length}}
+        <div class="category field">
+            <div class='labels'>
+                <label>{{t "dataset.visualization.sidebar.category"}}</label>
+                <span class="column_hint">{{t "dataset.visualization.sidebar.hint.category"}}</span>
+            </div>
+            {{#if allColumns.length}}
             <select>
-            {{#each allColumns}}
+                {{#each allColumns}}
                 <option value='{{this}}'>{{this}}</option>
-            {{/each}}
+                {{/each}}
             </select>
             {{{limit_chooser}}}
-        {{else}}
+            {{else}}
             <span class='no_columns'>{{t "dataset.visualization.sidebar.no_columns"}}</span>
-        {{/if}}
+            {{/if}}
+        </div>
     </div>
     <button class="create">{{t "dataset.visualization.sidebar.create_chart"}}</button>
 </fieldset>
