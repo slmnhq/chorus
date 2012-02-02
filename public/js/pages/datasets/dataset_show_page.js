@@ -81,6 +81,10 @@
                     this.sidebar = new chorus.views.DatasetVisualizationFrequencySidebar({collection: this.columnSet});
                     this.renderSubview('sidebar');
                     break;
+                case 'histogram':
+                    this.sidebar = new chorus.views.DatasetVisualizationHistogramSidebar({collection: this.columnSet});
+                    this.renderSubview('sidebar');
+                    break;
             }
 
         }
