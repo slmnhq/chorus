@@ -8,6 +8,20 @@ describe("chorus.views.Login", function() {
         expect(this.view.$("form.login")).toExist();
     });
 
+    it("requests the version string from the server", function() {
+        expect(this.server.requests[0].url).toBe("/VERSION");
+    })
+
+    describe("when the version string is returned", function() {
+        beforeEach(function () {
+            this.server.requests[0].respond(200, {}, "THE_VERSION");
+        });
+
+        it("inserts the version string", function() {
+            expect(this.view.$(".legal .version")).toHaveText("THE_VERSION")
+        })
+    })
+
     describe("attempting to login", function() {
         beforeEach(function() {
             this.view.model.set({ foo: "bar" })
