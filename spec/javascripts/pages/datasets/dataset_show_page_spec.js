@@ -103,7 +103,7 @@ describe("chorus.pages.DatasetShowPage", function() {
 
             it("should re-render the sidebar subview", function() {
                 this.page.mainContent.contentDetails.trigger("transform:visualize", 'boxplot');
-                expect(this.page.$('#sidebar').get(0)).toBe(this.page.sidebar.el);
+                expect(this.page.$('#sidebar .sidebar_content').get(0)).toBe(this.page.sidebar.el);
             });
 
             context("for a boxplot", function() {

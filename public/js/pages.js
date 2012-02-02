@@ -1,6 +1,12 @@
 chorus.pages.Bare = chorus.views.Bare.extend({
     bindCallbacks:function () {
         if (chorus.user) this.bindings.add(chorus.user, "change", this.render);
+        $(window).bind("resize", _.bind(function () {
+            clearTimeout(this.resizeTimer);
+            this.resizeTimer = setTimeout(_.bind(function () {
+                this.trigger("window:resized")
+            }, this), 100);
+        }, this));
     }
 });
 

@@ -11,12 +11,18 @@ describe("chorus.pages.Base", function() {
     describe("initialize", function() {
         beforeEach(function() {
             spyOn(chorus.user, "bind");
+            spyOn($.fn, "bind").andCallThrough();
             this.view = new chorus.pages.Base();
             this.view.mainContent = Backbone.View;
         });
 
         it("binds to change on chorus.user", function() {
             expect(chorus.user.bind).toHaveBeenCalledWith("change", this.view.render, this.view);
+        })
+
+        it("binds to resize on the window", function() {
+            expect($.fn.bind.mostRecentCall.object[0]).toEqual(window);
+            expect($.fn.bind).toHaveBeenCalledWith("resize", jasmine.any(Function));
         })
     })
 
@@ -220,5 +226,27 @@ describe("chorus.pages.Base", function() {
 
             expect(this.fooAlertSpy.pageModel).toBe(this.view.model);
         });
+    })
+
+    describe("resize handling", function() {
+        context("when a window resize occurs", function() {
+            beforeEach(function () {
+                this.realSetTimeout = window.setTimeout;
+                window.setTimeout = function(fn, delay) {
+                    fn.call();
+                }
+                this.view = new chorus.pages.Base();
+                spyOnEvent(this.view, "window:resized")
+                $(window).resize();
+            });
+
+            afterEach(function() {
+                window.setTimeout = this.realSetTimeout;
+            })
+
+            it("triggers window:resized on the page", function() {
+                expect("window:resized").toHaveBeenTriggeredOn(this.view);
+            })
+        })
     })
 })
