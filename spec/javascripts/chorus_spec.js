@@ -76,7 +76,7 @@ describe("chorus global", function() {
         it("sets up the events on the contents", function() {
             this.element.click();
             this.qtipElement.find('.test_link').click()
-            expect(this.eventSpy).toHaveBeenCalledWith(jasmine.any(jQuery.Event));
+            expect(this.eventSpy).toHaveBeenCalledWith(jasmine.any(jQuery.Event), this.element.data('qtip'));
         })
 
         context("event handling", function() {

@@ -23,6 +23,7 @@ chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
 
         chorus.menu(this.$(".limiter a"), {
             content: this.$(".limiter_menu_container").html(),
+            container: $(this.el),
             contentEvents: {
                 'li': _.bind(this.limiterSelected, this)
             }

@@ -93,8 +93,10 @@
             @include triangle(down, $link-color, 7px, 4px);
         }
     }
-    .limiter_menu {
-        display: none;
+    .limiter_menu_container {
+        .limiter_menu {
+            display: none;
+        }
     }
 }
 
