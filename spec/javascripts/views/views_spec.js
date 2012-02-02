@@ -832,4 +832,100 @@ describe("chorus.views.base", function () {
             });
         });
     });
+
+    describe("chorus.views.Bare", function() {
+        describe("#setupScrolling", function() {
+            beforeEach(function () {
+                this.page = new chorus.pages.Base();
+                chorus.page = this.page;
+                this.view = new chorus.views.Bare();
+                this.view.template = function () { return "<div class='foo'/>" };
+                this.view.render();
+                stubDefer();
+
+                spyOn($.fn, "jScrollPane").andCallThrough();
+                spyOn($.fn, "hide").andCallThrough();
+                spyOn($.fn, "bind").andCallThrough();
+                spyOn(this.page, "bind").andCallThrough();
+                spyOn(this.view, "recalculateScrolling").andCallThrough();
+                this.view.setupScrolling(".foo")
+            });
+
+            it("defers the setup", function() {
+                expect(_.defer).toHaveBeenCalled();
+            })
+
+            it("calls jScrollPane", function() {
+                expect($.fn.jScrollPane).toHaveBeenCalledOnSelector(".foo");
+            })
+
+            it("adds the custom_scroll class to the element", function() {
+                expect($(this.view.$(".foo"))).toHaveClass("custom_scroll")
+            })
+
+            it("hides the scrollbars initially", function() {
+                expect($.fn.hide).toHaveBeenCalledOnSelector(".foo .jspVerticalBar");
+                expect($.fn.hide).toHaveBeenCalledOnSelector(".foo .jspHorizontalBar");
+            })
+
+            it("binds the view to window:resized events on the page", function() {
+                expect(this.page.bind).toHaveBeenCalledWith("window:resized", jasmine.any(Function), jasmine.any(Object));
+            })
+
+            it("binds to the mousewheel event on the container", function() {
+                expect($.fn.bind).toHaveBeenCalledOnSelector(".foo .jspContainer");
+                expect($.fn.bind).toHaveBeenCalledWith("mousewheel", jasmine.any(Function));
+            })
+
+            context("when called again", function() {
+                beforeEach(function () {
+                    this.page.bind.reset();
+                    $.fn.hide.reset();
+                    $.fn.jScrollPane.reset();
+                    $.fn.bind.reset();
+                    this.view.setupScrolling(".foo")
+                });
+
+                it("calls jScrollPane", function() {
+                    expect($.fn.jScrollPane).toHaveBeenCalledOnSelector(".foo");
+                })
+
+                it("hides the scrollbars initially", function() {
+                    expect($.fn.hide).toHaveBeenCalledOnSelector(".foo .jspVerticalBar");
+                    expect($.fn.hide).toHaveBeenCalledOnSelector(".foo .jspHorizontalBar");
+                })
+
+                it("does not re-bind the view to window:resized events on the page", function() {
+                    expect(this.page.bind).not.toHaveBeenCalledWith("window:resized", jasmine.any(Function), jasmine.any(Object));
+                })
+
+                it("does not re-bind to the mousewheel event on the container", function() {
+                    expect($.fn.bind).not.toHaveBeenCalledOnSelector(".foo .jspContainer");
+                })
+            })
+
+            describe("when a window:resized event occurs", function() {
+                beforeEach(function () {
+                    spyOn(this.view.$(".foo").data("jsp"), "reinitialise")
+                    this.page.trigger("window:resized");
+                });
+
+                it("recalculates scrolling", function() {
+                    expect(this.view.$(".foo").data("jsp").reinitialise).toHaveBeenCalled();
+                })
+            })
+
+            describe("when a mousewheel event occurs", function() {
+                beforeEach(function () {
+                    this.event = jQuery.Event("mousewheel");
+                    this.view.$(".jspContainer").trigger(this.event)
+                });
+
+                it("prevents default", function() {
+                    expect(this.event.isDefaultPrevented()).toBeTruthy();
+                })
+            })
+        })
+    })
+
 })

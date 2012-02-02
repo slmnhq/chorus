@@ -96,9 +96,9 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
     renderSubview:function (property, selector) {
         var view = this.getSubview(property);
         if (view) {
-            if(!selector) {
-                _.each(this.subviews, function(value, key) {
-                    if(value == property) {
+            if (!selector) {
+                _.each(this.subviews, function (value, key) {
+                    if (value == property) {
                         selector = key;
                     }
                 })
@@ -166,6 +166,53 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
 
     loadingSectionOptions:function () {
         return { delay:125 };
+    },
+
+    setupScrolling:function (selector_or_element, options) {
+        _.defer(_.bind(function () {
+            var el = this.$(selector_or_element);
+
+            if (el.length > 0) {
+                var alreadyInitialized = el.data("jsp");
+
+                el.jScrollPane(options);
+                el.find('.jspVerticalBar').hide();
+                el.find('.jspHorizontalBar').hide();
+
+                if (!alreadyInitialized) {
+                    el.addClass("custom_scroll");
+                    el.unbind('hover').hover(function () {
+                        el.find('.jspVerticalBar, .jspHorizontalBar').fadeIn(150)
+                    }, function () {
+                        el.find('.jspVerticalBar, .jspHorizontalBar').fadeOut(150)
+                    });
+
+                    el.find('.jspContainer').unbind('mousewheel', this.onMouseWheel).bind('mousewheel', this.onMouseWheel);
+
+                    if (chorus.page && chorus.page.bind) {
+                        chorus.page.bind("window:resized", this.recalculateScrolling, this);
+                    }
+                }
+            }
+        }, this))
+    },
+
+    onMouseWheel:function (event, d) {
+        event.preventDefault();
+    },
+
+    recalculateScrolling : function() {
+        _.each(this.$(".custom_scroll"), function(el) {
+            el = $(el)
+            var api = el.data("jsp");
+            if (api) {
+                _.defer(_.bind(function() {
+                    api.reinitialise();
+                    el.find('.jspVerticalBar').hide();
+                    el.find('.jspHorizontalBar').hide();
+                }, this));
+            }
+        })
     }
 }));
 

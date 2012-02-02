@@ -100,12 +100,6 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.recalculateScrolling();
     },
 
-    recalculateScrolling : function() {
-        if (this.dataTable) {
-            this.dataTable.recalculateScrolling();
-        }
-    },
-
     getDesiredDataTableHeight:function () {
         return $(window).height() - this.$(".data_table").position().top - this.$(".bottom_gutter").height();
     },

@@ -181,7 +181,9 @@
                 },
 
                 toHaveBeenCalledOnSelector: function(selector) {
-                    return this.actual.mostRecentCall.object.selector === selector;
+                    return _.any(this.actual.calls, function(call) {
+                        return call.object.selector === selector;
+                    })
                 },
 
                 toHaveBeenCalledOn: function(object) {
