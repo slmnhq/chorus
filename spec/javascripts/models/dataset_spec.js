@@ -119,8 +119,8 @@ describe("chorus.models.Dataset", function() {
             this.dataset.set({ sandboxId: "21" });
 
             this.task = this.dataset.makeHeatmapTask({
-                xbins: 5,
-                ybins: 6,
+                xBins: 5,
+                yBins: 6,
                 xAxis: "dog_breed",
                 yAxis: "blindness_rate"
             });
@@ -131,8 +131,8 @@ describe("chorus.models.Dataset", function() {
         });
 
         it("has the given number of bins and y axis", function() {
-            expect(this.task.get("xbins")).toBe(5);
-            expect(this.task.get("ybins")).toBe(6);
+            expect(this.task.get("xBins")).toBe(5);
+            expect(this.task.get("yBins")).toBe(6);
             expect(this.task.get("xAxis")).toBe("dog_breed");
             expect(this.task.get("yAxis")).toBe("blindness_rate");
         });
