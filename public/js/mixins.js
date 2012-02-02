@@ -71,3 +71,27 @@ chorus.Mixins.Fetching = {
         }
     }
 }
+
+chorus.Mixins.SQLResults = {
+    getRows : function() {
+        return this.get("rows");
+    },
+
+    getColumns : function() {
+        return this.get("columns");
+    },
+
+    columnOrientedData: function() {
+        var rows = this.getRows();
+        var columns = this.getColumns();
+
+        return _.map(columns, function (column) {
+            var name = column.name;
+            return {
+                name:name,
+                type:column.typeCategory,
+                values:_.pluck(rows, name)
+            };
+        });
+    }
+}
