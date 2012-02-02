@@ -39,7 +39,7 @@ chorus.models.Dataset = chorus.models.Base.extend({
             yAxis: taskAttrs.yAxis,
             objectName: this.get("objectName"),
             workspaceId: this.get("workspace").id,
-            sandboxId: this.get("sandboxId")
+            datasetId: this.entityId
         });
     },
 
@@ -49,19 +49,19 @@ chorus.models.Dataset = chorus.models.Base.extend({
             yAxis: taskAttrs.yAxis,
             objectName: this.get("objectName"),
             workspaceId: this.get("workspace").id,
-            sandboxId: this.get("sandboxId")
+            datasetId: this.entityId
         });
     },
 
     makeHeatmapTask: function(taskAttrs) {
         return new chorus.models.HeatmapTask({
-            xbins: taskAttrs.xbins,
-            ybins: taskAttrs.ybins,
+            xBins: taskAttrs.xBins,
+            yBins: taskAttrs.yBins,
             xAxis: taskAttrs.xAxis,
             yAxis: taskAttrs.yAxis,
             objectName: this.get("objectName"),
             workspaceId: this.get("workspace").id,
-            sandboxId: this.get("sandboxId")
+            datasetId: this.entityId
         });
     },
 
