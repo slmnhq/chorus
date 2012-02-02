@@ -99,3 +99,29 @@ describe("chorus.views.DatasetFilter", function() {
         });
     });
 });
+
+describe("chorus.views.DatasetFilter.stringMap", function() {
+    itReturnsTheRightClauseFor("equal", "column_name", "some_value", "\"column_name\" = 'some_value'")
+    itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "\"column_name\" != 'some_value'")
+    itReturnsTheRightClauseFor("like", "column_name", "some_value", "\"column_name\" LIKE 'some_value'")
+    itReturnsTheRightClauseFor("begin_with", "column_name", "some_value", "\"column_name\" = 'some_value%'")
+    itReturnsTheRightClauseFor("end_with", "column_name", "some_value", "\"column_name\" = '%some_value'")
+    itReturnsTheRightClauseFor("alpha_after", "column_name", "some_value", "\"column_name\" > 'some_value'")
+    itReturnsTheRightClauseFor("alpha_after_equal", "column_name", "some_value", "\"column_name\" >= 'some_value'")
+    itReturnsTheRightClauseFor("alpha_before", "column_name", "some_value", "\"column_name\" < 'some_value'")
+    itReturnsTheRightClauseFor("alpha_before_equal", "column_name", "some_value", "\"column_name\" <= 'some_value'")
+    itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "\"column_name\" IS NOT NULL", true)
+    itReturnsTheRightClauseFor("null", "column_name", "some_value", "\"column_name\" IS NULL", true)
+
+    function itReturnsTheRightClauseFor(key, columnName, inputValue, expected, ignoreEmptyCase) {
+        it("returns the right clause for " + key, function() {
+            expect(chorus.views.DatasetFilter.stringMap[key].generate(columnName, inputValue)).toBe(expected);
+        });
+
+        if (!ignoreEmptyCase) {
+            it("returns an empty string when input is empty for " + key, function() {
+                expect(chorus.views.DatasetFilter.stringMap[key].generate(columnName, "")).toBe("");
+            });
+        }
+    }
+});

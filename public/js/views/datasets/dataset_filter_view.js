@@ -68,16 +68,50 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
     }
 });
 
-chorus.views.DatasetFilter.stringMap = {
-    "equal":{usesInput: true},
-    "not_equal":{usesInput: true},
-    "null":{usesInput: false},
-    "not_null":{usesInput: false},
-    "like":{usesInput: true},
-    "begin_with":{usesInput: true},
-    "end_with":{usesInput: true},
-    "alpha_after":{usesInput: true},
-    "alpha_after_equal":{usesInput: true},
-    "alpha_before":{usesInput: true},
-    "alpha_before_equal":{usesInput: true}
-};
+(function(){
+    chorus.views.DatasetFilter.stringMap = {
+        "equal":{usesInput:true, generate:function (columnName, inputValue) {
+            return inputValue ? qd(columnName) + " = " + qs(inputValue) : "";
+        }},
+        "not_equal":{usesInput:true, generate:function (columnName, inputValue) {
+            return inputValue ? qd(columnName) + " != " + qs(inputValue) : "";
+        }},
+        "null":{usesInput:false, generate:function (columnName, inputValue) {
+            return qd(columnName) + " IS NULL";
+        }},
+        "not_null":{usesInput:false, generate:function (columnName, inputValue) {
+            return qd(columnName) + " IS NOT NULL";
+        }},
+        "like":{usesInput:true, generate:function (columnName, inputValue) {
+            return inputValue ? qd(columnName) + " LIKE " + qs(inputValue) : "";
+        }},
+        "begin_with":{usesInput:true, generate:function (columnName, inputValue) {
+            return inputValue ? qd(columnName) + " = " + qs(inputValue + '%') : "";
+        }},
+        "end_with":{usesInput:true, generate:function (columnName, inputValue) {
+            return inputValue ? qd(columnName) + " = " + qs('%' + inputValue) : "";
+        }},
+        "alpha_after":{usesInput:true, generate:function (columnName, inputValue) {
+            return inputValue ? qd(columnName) + " > " + qs(inputValue) : "";
+        }},
+        "alpha_after_equal":{usesInput:true, generate:function (columnName, inputValue) {
+            return inputValue ? qd(columnName) + " >= " + qs(inputValue) : "";
+        }},
+        "alpha_before":{usesInput:true, generate:function (columnName, inputValue) {
+            return inputValue ? qd(columnName) + " < " + qs(inputValue) : "";
+        }},
+        "alpha_before_equal":{usesInput:true, generate:function (columnName, inputValue) {
+            return inputValue ? qd(columnName) + " <= " + qs(inputValue) : "";
+        }}
+    };
+
+    // quote double
+    function qd(string) {
+        return '"' + string + '"';
+    }
+
+    // quote single
+    function qs(string) {
+        return "'" + string + "'";
+    }
+})();
