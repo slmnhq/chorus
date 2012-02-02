@@ -5,10 +5,10 @@ describe("chorus.views.visualizations.BoxPlot", function() {
                 { bucket: 'aardvark',   min: 1,   firstQuartile: 1,   median: 2.5, thirdQuartile: 3,   max: 4,   percentage: "25%" },
                 { bucket: 'beluga',     min: 100, firstQuartile: 100, median: 250, thirdQuartile: 300, max: 400, percentage: "33.3%" },
                 { bucket: 'chupacabra', min: 10,  firstQuartile: 10,  median: 25,  thirdQuartile: 30,  max: 40,  percentage: "81.5%" }
-            ],
+            ]
         });
 
-        this.view = new chorus.views.visualizations.BoxPlot({
+        this.view = new chorus.views.visualizations.Boxplot({
             model: this.task,
             x: "animal",
             y: "value"

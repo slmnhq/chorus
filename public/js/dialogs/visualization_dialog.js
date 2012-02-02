@@ -2,7 +2,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     className : "visualization",
 
     subviews: {
-        ".tabledata": "chartData"
+        ".tabledata": "chartData",
+        ".chart_area": "chart"
     },
 
     events: {
@@ -17,11 +18,11 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.title = t("visualization.title", {name: this.options.chartOptions.name});
 
         this.chartData = new chorus.views.ResultsConsole();
-
         var func = 'make' + _.capitalize(this.type) + 'Task';
         this.task = this.model[func](this.options.chartOptions);
         this.task.bind("saved", this.onExecutionComplete, this);
         this.task.save();
+        this.chart = new chorus.views.visualizations[_.capitalize(this.type)]({model: this.task});
     },
 
     postRender : function() {
@@ -30,6 +31,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     onExecutionComplete: function() {
         this.chartData.trigger('file:executionCompleted', this.task);
+        this.chart.render();
     },
 
     additionalContext: function() {
