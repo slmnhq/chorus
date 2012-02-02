@@ -173,6 +173,7 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
             var el = this.$(selector_or_element);
 
             if (el.length > 0) {
+
                 var alreadyInitialized = el.data("jsp");
 
                 el.jScrollPane(options);
@@ -190,7 +191,16 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
                     el.find('.jspContainer').unbind('mousewheel', this.onMouseWheel).bind('mousewheel', this.onMouseWheel);
 
                     if (chorus.page && chorus.page.bind) {
-                        chorus.page.bind("window:resized", this.recalculateScrolling, this);
+                        chorus.page.bind("window:resized", function() { this.recalculateScrolling(el) }, this);
+                    }
+
+                    if (this.subviews) {
+                        _.each(this.subviews, _.bind(function (property, selector) {
+                            var view = this.getSubview(property);
+                            if (view) {
+                                view.bind("rendered", this.recalculateScrolling, this)
+                            }
+                        }, this));
                     }
                 }
             }
@@ -201,8 +211,9 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
         event.preventDefault();
     },
 
-    recalculateScrolling : function() {
-        _.each(this.$(".custom_scroll"), function(el) {
+    recalculateScrolling : function(el) {
+        var elements = el ? [el] : this.$(".custom_scroll");
+        _.each(elements, function(el) {
             el = $(el)
             var api = el.data("jsp");
             if (api) {

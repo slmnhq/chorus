@@ -242,46 +242,46 @@ describe("chorus.views.base", function () {
                         })
                     })
 
-                    context("when the subview has required resources", function() {
-                        beforeEach(function() {
+                    context("when the subview has required resources", function () {
+                        beforeEach(function () {
                             this.subviewModel = fixtures.user();
                             this.subview.requiredResources.add(this.subviewModel);
                         })
 
-                        context("and the required resources are not loaded", function() {
-                            beforeEach(function() {
+                        context("and the required resources are not loaded", function () {
+                            beforeEach(function () {
                                 this.view.render();
                             })
 
-                            it("does not render the subview", function() {
+                            it("does not render the subview", function () {
                                 expect(this.subview.render).not.toHaveBeenCalled();
                             })
                         })
 
-                        context("and the required resources are loaded", function() {
-                            beforeEach(function() {
+                        context("and the required resources are loaded", function () {
+                            beforeEach(function () {
                                 this.subviewModel.loaded = true;
                                 this.view.render();
                             })
 
-                            it("renders the subview", function() {
+                            it("renders the subview", function () {
                                 expect(this.subview.render).toHaveBeenCalled();
                             })
                         })
                     })
 
-                    describe("renderSubview", function() {
-                        beforeEach(function() {
+                    describe("renderSubview", function () {
+                        beforeEach(function () {
                             this.view.render();
                             this.subview.render.reset();
                         });
 
-                        it("renders when given both object name and selector", function() {
+                        it("renders when given both object name and selector", function () {
                             this.view.renderSubview('foo', '.foo');
                             expect(this.subview.render).toHaveBeenCalled();
                         });
 
-                        it("renders when given just the object name", function() {
+                        it("renders when given just the object name", function () {
                             this.view.renderSubview('foo');
                             expect(this.subview.render).toHaveBeenCalled();
                         });
@@ -833,13 +833,18 @@ describe("chorus.views.base", function () {
         });
     });
 
-    describe("chorus.views.Bare", function() {
-        describe("#setupScrolling", function() {
+    describe("chorus.views.Bare", function () {
+        describe("#setupScrolling", function () {
             beforeEach(function () {
                 this.page = new chorus.pages.Base();
                 chorus.page = this.page;
                 this.view = new chorus.views.Bare();
-                this.view.template = function () { return "<div class='foo'/>" };
+                this.view.template = function () {
+                    return "<div class='foo'><div class='subfoo'/></div>"
+                };
+                this.view.subviews = { ".subfoo":"subfoo" }
+                this.view.subfoo = new chorus.views.Bare();
+                this.view.subfoo.className = "plain_text"
                 this.view.render();
                 stubDefer();
 
@@ -851,33 +856,33 @@ describe("chorus.views.base", function () {
                 this.view.setupScrolling(".foo")
             });
 
-            it("defers the setup", function() {
+            it("defers the setup", function () {
                 expect(_.defer).toHaveBeenCalled();
             })
 
-            it("calls jScrollPane", function() {
+            it("calls jScrollPane", function () {
                 expect($.fn.jScrollPane).toHaveBeenCalledOnSelector(".foo");
             })
 
-            it("adds the custom_scroll class to the element", function() {
+            it("adds the custom_scroll class to the element", function () {
                 expect($(this.view.$(".foo"))).toHaveClass("custom_scroll")
             })
 
-            it("hides the scrollbars initially", function() {
+            it("hides the scrollbars initially", function () {
                 expect($.fn.hide).toHaveBeenCalledOnSelector(".foo .jspVerticalBar");
                 expect($.fn.hide).toHaveBeenCalledOnSelector(".foo .jspHorizontalBar");
             })
 
-            it("binds the view to window:resized events on the page", function() {
+            it("binds the view to window:resized events on the page", function () {
                 expect(this.page.bind).toHaveBeenCalledWith("window:resized", jasmine.any(Function), jasmine.any(Object));
             })
 
-            it("binds to the mousewheel event on the container", function() {
+            it("binds to the mousewheel event on the container", function () {
                 expect($.fn.bind).toHaveBeenCalledOnSelector(".foo .jspContainer");
                 expect($.fn.bind).toHaveBeenCalledWith("mousewheel", jasmine.any(Function));
             })
 
-            context("when called again", function() {
+            context("when called again", function () {
                 beforeEach(function () {
                     this.page.bind.reset();
                     $.fn.hide.reset();
@@ -886,43 +891,54 @@ describe("chorus.views.base", function () {
                     this.view.setupScrolling(".foo")
                 });
 
-                it("calls jScrollPane", function() {
+                it("calls jScrollPane", function () {
                     expect($.fn.jScrollPane).toHaveBeenCalledOnSelector(".foo");
                 })
 
-                it("hides the scrollbars initially", function() {
+                it("hides the scrollbars initially", function () {
                     expect($.fn.hide).toHaveBeenCalledOnSelector(".foo .jspVerticalBar");
                     expect($.fn.hide).toHaveBeenCalledOnSelector(".foo .jspHorizontalBar");
                 })
 
-                it("does not re-bind the view to window:resized events on the page", function() {
+                it("does not re-bind the view to window:resized events on the page", function () {
                     expect(this.page.bind).not.toHaveBeenCalledWith("window:resized", jasmine.any(Function), jasmine.any(Object));
                 })
 
-                it("does not re-bind to the mousewheel event on the container", function() {
+                it("does not re-bind to the mousewheel event on the container", function () {
                     expect($.fn.bind).not.toHaveBeenCalledOnSelector(".foo .jspContainer");
                 })
             })
 
-            describe("when a window:resized event occurs", function() {
+            describe("when a window:resized event occurs", function () {
                 beforeEach(function () {
                     spyOn(this.view.$(".foo").data("jsp"), "reinitialise")
                     this.page.trigger("window:resized");
                 });
 
-                it("recalculates scrolling", function() {
+                it("recalculates scrolling", function () {
                     expect(this.view.$(".foo").data("jsp").reinitialise).toHaveBeenCalled();
                 })
             })
 
-            describe("when a mousewheel event occurs", function() {
+            describe("when a mousewheel event occurs", function () {
                 beforeEach(function () {
                     this.event = jQuery.Event("mousewheel");
                     this.view.$(".jspContainer").trigger(this.event)
                 });
 
-                it("prevents default", function() {
+                it("prevents default", function () {
                     expect(this.event.isDefaultPrevented()).toBeTruthy();
+                })
+            })
+
+            describe("when a subview is re-rendered", function () {
+                beforeEach(function () {
+                    this.view.recalculateScrolling.reset();
+                    this.view.subfoo.render()
+                });
+
+                it("recalculates scrolling", function () {
+                    expect(this.view.recalculateScrolling).toHaveBeenCalled()
                 })
             })
         })

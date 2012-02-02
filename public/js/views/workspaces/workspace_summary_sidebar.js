@@ -32,7 +32,7 @@ chorus.views.WorkspaceSummarySidebar = chorus.views.Sidebar.extend({
         this.$(".workspace_image").load(function () {
             self.$(".after_image").removeClass("hidden");
         });
-        this.$('.workspace_image').load(_.bind(this.setupSidebarScrolling, this));
+        this.$('.workspace_image').load(_.bind(this.recalculateScrolling, this));
         this._super('postRender');
     }
 });

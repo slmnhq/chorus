@@ -48,14 +48,14 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
 
             context("and the image is loaded", function() {
                 beforeEach(function() {
-                    spyOn(this.view, 'setupSidebarScrolling').andCallThrough();
+                    spyOn(this.view, 'recalculateScrolling').andCallThrough();
                     this.view.render();
-                    this.view.setupSidebarScrolling.reset();
+                    this.view.recalculateScrolling.reset();
                     this.view.$('.workspace_image').trigger('load');
                 });
 
-                it("calls setupSidebarScrolling", function() {
-                    expect(this.view.setupSidebarScrolling).toHaveBeenCalled();
+                it("calls recalculateScrolling", function() {
+                    expect(this.view.recalculateScrolling).toHaveBeenCalled();
                 });
             });
         });
