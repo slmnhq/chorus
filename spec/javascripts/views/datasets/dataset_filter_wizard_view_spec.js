@@ -29,6 +29,16 @@ describe("chorus.views.DatasetFilterWizard", function() {
             it("joins the individual filters' conditions", function() {
                 expect(this.view.whereClause()).toBe("WHERE foo = 1");
             });
+
+            describe("when all filterViews return an empty string", function() {
+                beforeEach(function() {
+                    this.view.filterViews[0].filterString.andReturn("");
+                });
+
+                it("returns an empty string (not 'WHERE ')", function() {
+                    expect(this.view.whereClause()).toBe("");
+                });
+            });
         });
 
         describe("removing the only filter", function() {

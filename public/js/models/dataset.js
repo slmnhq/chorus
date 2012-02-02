@@ -6,6 +6,7 @@ chorus.models.Dataset = chorus.models.Base.extend({
                 this.get("instance").id,
                 this.get("databaseName"),
                 this.get("schemaName"),
+                this.get("objectType"),
                 this.get("objectName")
             ].join("|");
         } else {

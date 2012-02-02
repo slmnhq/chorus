@@ -18,25 +18,21 @@ describe("chorus.models.Dataset", function() {
         expect(this.dataset.showUrl()).toBe("#/workspaces/44/chorus_view/foo/japanese_teas");
     })
 
-    it("initializes its 'entityId' correctly", function() {
-        expect(this.dataset.entityId).toBe("45|whirling_tops|diamonds|japanese_teas");
-    });
-
     context("when the dataset is initialized with an Id, but no instance, database or schema", function() {
         it("aliases the id to 'entityId'", function() {
-            dataset = new chorus.models.Dataset({ id: '45|whirling_tops|diamonds|japanese_teas' });
-            expect(dataset.entityId).toBe('45|whirling_tops|diamonds|japanese_teas');
+            dataset = new chorus.models.Dataset({ id: '45|whirling_tops|diamonds|foo|japanese_teas' });
+            expect(dataset.entityId).toBe('45|whirling_tops|diamonds|foo|japanese_teas');
         });
     });
 
     context("when the dataset is initialized with an instance, database and schema, but no id", function() {
         it("initializes its 'entityId' correctly", function() {
-            expect(this.dataset.entityId).toBe("45|whirling_tops|diamonds|japanese_teas");
+            expect(this.dataset.entityId).toBe("45|whirling_tops|diamonds|foo|japanese_teas");
         });
     });
 
     it("has the right url", function() {
-        var url = encodeURI("/edc/workspace/44/dataset/45|whirling_tops|diamonds|japanese_teas");
+        var url = encodeURI("/edc/workspace/44/dataset/45|whirling_tops|diamonds|foo|japanese_teas");
         expect(this.dataset.url()).toMatchUrl(url);
     });
 
@@ -83,7 +79,7 @@ describe("chorus.models.Dataset", function() {
 
         it("has the right workspaceId, dataset id and objectName", function() {
             expect(this.task.get("workspaceId")).toBe("44");
-            expect(this.task.get("datasetId")).toBe("45|whirling_tops|diamonds|japanese_teas");
+            expect(this.task.get("datasetId")).toBe(this.dataset.entityId);
             expect(this.task.get("objectName")).toBe("japanese_teas");
         });
     });
@@ -109,7 +105,7 @@ describe("chorus.models.Dataset", function() {
 
         it("has the right workspaceId, dataset id and objectName", function() {
             expect(this.task.get("workspaceId")).toBe("44");
-            expect(this.task.get("datasetId")).toBe("45|whirling_tops|diamonds|japanese_teas");
+            expect(this.task.get("datasetId")).toBe(this.dataset.entityId);
             expect(this.task.get("objectName")).toBe("japanese_teas");
         });
     });
@@ -119,8 +115,8 @@ describe("chorus.models.Dataset", function() {
             this.dataset.set({ sandboxId: "21" });
 
             this.task = this.dataset.makeHeatmapTask({
-                xbins: 5,
-                ybins: 6,
+                xBins: 5,
+                yBins: 6,
                 xAxis: "dog_breed",
                 yAxis: "blindness_rate"
             });
@@ -131,15 +127,15 @@ describe("chorus.models.Dataset", function() {
         });
 
         it("has the given number of bins and y axis", function() {
-            expect(this.task.get("xbins")).toBe(5);
-            expect(this.task.get("ybins")).toBe(6);
+            expect(this.task.get("xBins")).toBe(5);
+            expect(this.task.get("yBins")).toBe(6);
             expect(this.task.get("xAxis")).toBe("dog_breed");
             expect(this.task.get("yAxis")).toBe("blindness_rate");
         });
 
         it("has the right workspaceId, dataset id and objectName", function() {
             expect(this.task.get("workspaceId")).toBe("44");
-            expect(this.task.get("datasetId")).toBe("45|whirling_tops|diamonds|japanese_teas");
+            expect(this.task.get("datasetId")).toBe(this.dataset.entityId);
             expect(this.task.get("objectName")).toBe("japanese_teas");
         });
     });

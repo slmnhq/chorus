@@ -22,6 +22,7 @@ describe("chorus.models.DatasetPreview", function() {
     });
 
     it("mixes in SQLResults", function() {
+        expect(this.model.errorMessage).toBeDefined();
         expect(this.model.columnOrientedData).toBeDefined();
     })
 });

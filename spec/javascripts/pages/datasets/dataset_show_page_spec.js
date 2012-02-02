@@ -135,6 +135,17 @@ describe("chorus.pages.DatasetShowPage", function() {
                 });
             });
 
+            context("for a histogram chart", function() {
+                beforeEach(function() {
+                    this.page.mainContent.contentDetails.trigger("transform:visualize", 'histogram');
+                });
+
+                it("should swaps out the sidebar for the histogram sidebar", function() {
+                    expect(this.page.sidebar).toBeA(chorus.views.DatasetVisualizationHistogramSidebar)
+                    expect(this.page.sidebar.collection).toBe(this.page.columnSet);
+                });
+            });
+
         });
     })
 });

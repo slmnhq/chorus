@@ -56,6 +56,8 @@ chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
             return filterView.filterString();
         });
 
+        wheres = _.without(wheres, "")
+
         return wheres.length ? ("WHERE " + wheres.join(" AND ")) : "";
     }
 });

@@ -14,16 +14,19 @@ describe("chorus.models.SqlExecutionTask", function() {
     })
 
     it("mixes in SQLResults", function() {
+        expect(this.model.errorMessage).toBeDefined();
         expect(this.model.columnOrientedData).toBeDefined();
     })
 
     describe("SQLResults support functions", function() {
         beforeEach(function() {
-            this.columns = [ { name:"id" } ]
+            this.columns = [ { name:"id" } ];
             this.rows = [ { id: 1 }];
             this.model = new chorus.models.SqlExecutionTask({ result : {
                 columns : this.columns,
-                rows : this.rows
+                rows : this.rows,
+                executeResult : "failed",
+                message : "This is broken!"
             }})
         });
 
@@ -38,24 +41,12 @@ describe("chorus.models.SqlExecutionTask", function() {
                 expect(this.model.getColumns()).toEqual(this.columns);
             })
         })
-    });
 
-    describe("#errorMessage", function() {
-        it("should return errors if they exist", function() {
-            var task = fixtures.taskWithErrors();
-            expect(task.errorMessage()).toBe(task.get('result').message);
-        })
-
-        it("should return falsy when the response is successful and has no message", function() {
-            var task = fixtures.taskWithResult();
-            expect(task.errorMessage()).toBeFalsy();
-        })
-
-        it("returns falsy when the response is successful, but has a warning message", function() {
-            var task = fixtures.taskWithResult({
-                result: { executeResult: "success", message: "this is just a warning, bro. not to worry." }
+        describe("#getErrors", function() {
+            it("returns the errors", function() {
+                expect(this.model.getErrors().executeResult).toEqual("failed");
+                expect(this.model.getErrors().message).toEqual("This is broken!");
             });
-            expect(task.errorMessage()).toBeFalsy();
         });
-    })
+    });
 });

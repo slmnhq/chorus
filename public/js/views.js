@@ -225,12 +225,7 @@ chorus.views.Base = chorus.views.Bare.extend({
     showErrors:function (model) {
         var self = this;
 
-        var classes;
-        if ($(this.el).closest(".dialog").length) {
-            classes = "tooltip-error tooltip-modal";
-        } else {
-            classes = "tooltip-error";
-        }
+        var isModal = $(this.el).closest(".dialog").length;
 
         this.clearErrors();
 
@@ -238,30 +233,35 @@ chorus.views.Base = chorus.views.Bare.extend({
             model = this.resource
         }
         _.each(model.errors, function (val, key) {
-            var input = self.$("input[name=" + key + "], form textarea[name=" + key + "]");
-            input.addClass("has_error");
-            input.qtip({
-                content:{
-                    text:val
-                },
-                show:'mouseover focus',
-                hide:'mouseout blur',
-                style:{
-                    classes:classes,
-                    tip:{
-                        width:12,
-                        height:12
-                    }
-                },
-                position:{
-                    my:"left center",
-                    at:"right center",
-                    container:self.el
-                }
-            });
+            var $input = self.$("input[name=" + key + "], form textarea[name=" + key + "]");
+            self.markInputAsInvalid($input, val, isModal);
         });
 
         this.$(".errors").replaceWith(Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context(), Handlebars.helpers, Handlebars.partials));
+    },
+
+    markInputAsInvalid : function($input, message, isModal) {
+        var classes = isModal ? "tooltip-error tooltip-modal" : "tooltip-error";
+        $input.addClass("has_error");
+        $input.qtip({
+            content:{
+                text: message
+            },
+            show:'mouseover focus',
+            hide:'mouseout blur',
+            style:{
+                classes:classes,
+                tip:{
+                    width:12,
+                    height:12
+                }
+            },
+            position:{
+                my:"left center",
+                at:"right center",
+                container:self.el
+            }
+        });
     },
 
     clearErrors:function () {

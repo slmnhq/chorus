@@ -38,8 +38,8 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$(".right").removeClass("executing")
         this.$(".loading").stopLoading()
 
-        if (task.errorMessage && task.errorMessage()) {
-            this.$(".errors").removeClass("hidden")
+        if (task.errorMessage()) {
+            this.$(".errors").removeClass("hidden");
             this.$(".result_content").addClass("hidden");
             this.$(".message").empty();
         } else {

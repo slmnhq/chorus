@@ -5,14 +5,20 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
     events:{
         "click .remove":"removeSelf",
         "change select.column_filter":"columnSelected",
-        "change select.comparator":"comparatorSelected"
+        "change select.comparator":"comparatorSelected",
+        "paste input.filter_input":"validateInput",
+        "keyup input.filter_input":"validateInput"
     },
 
     postRender:function () {
-        var select = this.$("select.column_filter");
+        var $select = this.$("select.column_filter");
         _.defer(function () {
-            chorus.styleSelect(select)
+            chorus.styleSelect($select);
         });
+
+        if (!$select.find("option").length) {
+            return;
+        }
 
         this.columnSelected();
         this.comparatorSelected();
@@ -40,7 +46,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
             case "STRING":
             case "LONG_STRING":
                 $comparator.addClass("string").removeClass("numeric");
-                _.each(chorus.views.DatasetFilter.stringMap, function (value, key) {
+                _.each(chorus.utilities.DatasetFilterMaps.string.comparators, function (value, key) {
                     var el = $("<option/>").text(t("dataset.filter." + key)).addClass("map_" + key).attr("value", key);
                     $comparator.append(el);
                 });
@@ -49,7 +55,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
             case "WHOLE_NUMBER":
             case "REAL_NUMBER":
                 $comparator.addClass("numeric").removeClass("string");
-                _.each(chorus.views.DatasetFilter.numericMap, function(value, key) {
+                _.each(chorus.utilities.DatasetFilterMaps.numeric.comparators, function(value, key) {
                     var el = $("<option/>").text(t("dataset.filter." + key)).addClass("map_" + key).attr("value", key);
                     $comparator.append(el);
                 });
@@ -68,18 +74,27 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         var $choice = $comparator.find("option:selected");
         var $input = this.$(".filter_input");
 
+        var map = this.getMap();
+        if (!map) {
+            return;
+        }
+
+        _.each(map.comparators, function (value, key) {
+            if ($choice.hasClass("map_" + key)) {
+                $input.toggleClass("hidden", !value.usesInput);
+            }
+        });
+
+        this.validateInput();
+    },
+
+    getMap: function() {
+        var $comparator = this.$("select.comparator");
+
         if ($comparator.is(".string")) {
-            _.each(chorus.views.DatasetFilter.stringMap, function (value, key) {
-                if ($choice.hasClass("map_" + key)) {
-                    $input.toggleClass("hidden", !value.usesInput);
-                }
-            });
+            return chorus.utilities.DatasetFilterMaps.string
         } else if ($comparator.is(".numeric")) {
-            _.each(chorus.views.DatasetFilter.numericMap, function (value, key) {
-                if ($choice.hasClass("map_" + key)) {
-                    $input.toggleClass("hidden", !value.usesInput);
-                }
-            });
+            return chorus.utilities.DatasetFilterMaps.numeric
         }
     },
 
@@ -87,87 +102,24 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         var columnName = this.$("select.column_filter").val();
         var $comparator = this.$("select.comparator");
         var $input = this.$(".filter_input");
+        
+        var map = this.getMap();
+        return map.comparators[$comparator.val()].generate(columnName,  $input.val());
+    },
 
-        if ($comparator.is(".string")) {
-            return chorus.views.DatasetFilter.stringMap[$comparator.val()].generate(columnName, $input.val())
-        } else if ($comparator.is(".numeric")) {
-            return chorus.views.DatasetFilter.numericMap[$comparator.val()].generate(columnName, $input.val())
+    validateInput : function() {
+        var $input = this.$('.filter_input')
+        var value = $input.val()
+
+        var map = this.getMap();
+        if (!map) {
+            return;
+        }
+
+        if (map.validate(value)) {
+            this.clearErrors();
+        } else {
+            this.markInputAsInvalid($input, "Please enter only numbers, dots or commas [0-9,.]", false)
         }
     }
 });
-
-(function(){
-    chorus.views.DatasetFilter.stringMap = {
-        "equal":{usesInput:true, generate:function (columnName, inputValue) {
-            return inputValue ? qd(columnName) + " = " + qs(inputValue) : "";
-        }},
-        "not_equal":{usesInput:true, generate:function (columnName, inputValue) {
-            return inputValue ? qd(columnName) + " != " + qs(inputValue) : "";
-        }},
-        "null":{usesInput:false, generate:function (columnName, inputValue) {
-            return qd(columnName) + " IS NULL";
-        }},
-        "not_null":{usesInput:false, generate:function (columnName, inputValue) {
-            return qd(columnName) + " IS NOT NULL";
-        }},
-        "like":{usesInput:true, generate:function (columnName, inputValue) {
-            return inputValue ? qd(columnName) + " LIKE " + qs(inputValue) : "";
-        }},
-        "begin_with":{usesInput:true, generate:function (columnName, inputValue) {
-            return inputValue ? qd(columnName) + " = " + qs(inputValue + '%') : "";
-        }},
-        "end_with":{usesInput:true, generate:function (columnName, inputValue) {
-            return inputValue ? qd(columnName) + " = " + qs('%' + inputValue) : "";
-        }},
-        "alpha_after":{usesInput:true, generate:function (columnName, inputValue) {
-            return inputValue ? qd(columnName) + " > " + qs(inputValue) : "";
-        }},
-        "alpha_after_equal":{usesInput:true, generate:function (columnName, inputValue) {
-            return inputValue ? qd(columnName) + " >= " + qs(inputValue) : "";
-        }},
-        "alpha_before":{usesInput:true, generate:function (columnName, inputValue) {
-            return inputValue ? qd(columnName) + " < " + qs(inputValue) : "";
-        }},
-        "alpha_before_equal":{usesInput:true, generate:function (columnName, inputValue) {
-            return inputValue ? qd(columnName) + " <= " + qs(inputValue) : "";
-        }}
-    };
-
-    chorus.views.DatasetFilter.numericMap = {
-        "equal": {usesInput: true, generate: function(columnName, inputValue) {
-            return inputValue ? qd(columnName) + " = " + qs(inputValue) : "";
-        }},
-        "not_equal": {usesInput: true, generate: function(columnName, inputValue) {
-            return inputValue ? qd(columnName) + " != " + qs(inputValue) : "";
-        }},
-        "null": {usesInput: false, generate: function(columnName, inputValue) {
-            return qd(columnName) + " IS NULL";
-        }},
-        "not_null": {usesInput: false, generate: function(columnName, inputValue) {
-            return qd(columnName) + " IS NOT NULL";
-        }},
-        "greater": {usesInput: true, generate: function(columnName, inputValue) {
-            return inputValue ? qd(columnName) + " > " + qs(inputValue) : "";
-        }},
-        "greater_equal": {usesInput: true, generate: function(columnName, inputValue) {
-            return inputValue ? qd(columnName) + " >= " + qs(inputValue) : "";
-        }},
-        "less": {usesInput: true, generate: function(columnName, inputValue) {
-            return inputValue ? qd(columnName) + " < " + qs(inputValue) : "";
-        }},
-        "less_equal": {usesInput: true, generate: function(columnName, inputValue) {
-            return inputValue ? qd(columnName) + " <= " + qs(inputValue) : "";
-        }}
-    };
-
-    // quote double
-    function qd(string) {
-        return '"' + string + '"';
-    }
-
-    // quote single
-    function qs(string) {
-        return "'" + string + "'";
-    }
-})();
-

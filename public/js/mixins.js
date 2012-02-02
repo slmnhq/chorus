@@ -81,6 +81,10 @@ chorus.Mixins.SQLResults = {
         return this.get("columns");
     },
 
+    getErrors : function() {
+        return this.attributes;
+    },
+
     columnOrientedData: function() {
         var rows = this.getRows();
         var columns = this.getColumns();
@@ -93,5 +97,10 @@ chorus.Mixins.SQLResults = {
                 values:_.pluck(rows, name)
             };
         });
+    },
+    
+    errorMessage:function () {
+        var errors = this.getErrors();
+        return (errors.executeResult !== 'success') && errors.message;
     }
 }
