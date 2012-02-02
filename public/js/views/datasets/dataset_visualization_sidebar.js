@@ -21,16 +21,17 @@ chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
     postRender: function() {
         chorus.styleSelect(this.$('select'));
 
-        chorus.menu(this.$(".category_limit a"), {
-            content: this.$(".category_limit_menu_container").html(),
+        chorus.menu(this.$(".limiter a"), {
+            content: this.$(".limiter_menu_container").html(),
+            container: $(this.el),
             contentEvents: {
-                'li': _.bind(this.categoryLimitSelected, this)
+                'li': _.bind(this.limiterSelected, this)
             }
         });
     },
 
-    categoryLimitSelected: function(e) {
-        this.$('.category_limit a .selected_value').text($(e.target).text());
+    limiterSelected: function(e, api) {
+        api.elements.target.find('.selected_value').text($(e.target).text());
     },
 
     allColumns: function() {

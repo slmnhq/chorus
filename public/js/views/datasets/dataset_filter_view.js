@@ -6,8 +6,8 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         "click .remove":"removeSelf",
         "change select.column_filter":"columnSelected",
         "change select.comparator":"comparatorSelected",
-        "paste input.filter_input":"validateInput",
-        "keyup input.filter_input":"validateInput"
+        "paste input.validatable":"validateInput",
+        "keyup input.validatable":"validateInput"
     },
 
     postRender:function () {
@@ -45,11 +45,14 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         switch (type) {
             case "STRING":
             case "LONG_STRING":
-                $comparator.addClass("string").removeClass("numeric");
+                $comparator.addClass("string").removeClass("numeric time");
                 break;
             case "WHOLE_NUMBER":
             case "REAL_NUMBER":
-                $comparator.addClass("numeric").removeClass("string");
+                $comparator.addClass("numeric").removeClass("string time");
+                break;
+            case "TIME":
+                $comparator.addClass("time").removeClass("numeric string");
                 break;
         }
 
@@ -73,15 +76,15 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
     comparatorSelected:function () {
         var $comparator = this.$("select.comparator");
         var $choice = $comparator.find("option:selected");
-        var $input = this.$(".filter_input");
 
         var map = this.getMap();
         if (!map) {
             return;
         }
 
-        var usesInput = map.comparators[$choice.val()].usesInput;
-        $input.toggleClass("hidden", !usesInput);
+        var comparator = map.comparators[$choice.val()];
+        this.$(".filter_input").toggleClass("hidden", !comparator.usesInput);
+        this.$(".time_input").toggleClass("hidden", !comparator.usesTimeInput);
 
         this.validateInput();
     },
@@ -93,20 +96,34 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
             return chorus.utilities.DatasetFilterMaps.string
         } else if ($comparator.is(".numeric")) {
             return chorus.utilities.DatasetFilterMaps.numeric
+        } else if ($comparator.is(".time")) {
+            return chorus.utilities.DatasetFilterMaps.time
+        } else if ($comparator.is(".date")) {
+            return chorus.utilities.DatasetFilterMaps.date
         }
     },
 
     filterString : function() {
         var columnName = this.$("select.column_filter").val();
         var $comparator = this.$("select.comparator");
-        var $input = this.$(".filter_input");
+        var $input = this.getInputField();
         
         var map = this.getMap();
         return map.comparators[$comparator.val()].generate(columnName,  $input.val());
     },
 
+    getInputField : function() {
+        var map = this.getMap();
+        var maps = chorus.utilities.DatasetFilterMaps;
+        if (map == maps.string || map == maps.numeric) {
+            return this.$(".filter_input");
+        } else if (map == maps.time) {
+            return this.$(".time_input");
+        }
+    },
+
     validateInput : function() {
-        var $input = this.$('.filter_input')
+        var $input = this.getInputField()
         var value = $input.val()
 
         var map = this.getMap();
@@ -117,7 +134,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         if (map.validate(value)) {
             this.clearErrors();
         } else {
-            this.markInputAsInvalid($input, t("dataset.filter.number_required"), false)
+            this.markInputAsInvalid($input, t(map.errorMessage), false)
         }
     }
 });

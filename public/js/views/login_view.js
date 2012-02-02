@@ -10,6 +10,10 @@ chorus.views.Login = chorus.views.Base.extend({
         this.model.bind("saved", this.navigateToDashboard)
     },
 
+    postRender : function() {
+        this.$(".legal .version").load("/VERSION");
+    },
+
     navigateToDashboard:function (model) {
         chorus.router.navigate("/", true);
     },

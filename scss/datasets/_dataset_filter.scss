@@ -1,5 +1,19 @@
 .dataset_filter_wizard {
-    padding: 3px 10px 10px;
+
+    .filter_content {
+        padding: 0 10px;
+    }
+    
+    .gradient_top {
+        height: 10px;
+        @include background-image(linear-gradient($content-details-info-bar-background-color, $body-background-color));
+        border-top: 1px solid $list-border-color;
+    }
+
+    .gradient_bottom {
+        @include background-image(linear-gradient($body-background-color, $content-details-info-bar-background-color));
+        height: 10px;
+    }
 
     .filter_title {
         @include secondary-text-small;

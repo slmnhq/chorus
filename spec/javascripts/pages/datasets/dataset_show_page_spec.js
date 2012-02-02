@@ -118,7 +118,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                     this.page.mainContent.contentDetails.trigger("transform:visualize", 'boxplot');
                 });
 
-                it("should swaps out the sidebar for the boxplot sidebar", function() {
+                it("should swap out the sidebar for the boxplot sidebar", function() {
                     expect(this.page.sidebar).toBeA(chorus.views.DatasetVisualizationBoxplotSidebar)
                     expect(this.page.sidebar.collection).toBe(this.page.columnSet);
                 });
@@ -129,7 +129,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                     this.page.mainContent.contentDetails.trigger("transform:visualize", 'frequency');
                 });
 
-                it("should swaps out the sidebar for the frequency sidebar", function() {
+                it("should swap out the sidebar for the frequency sidebar", function() {
                     expect(this.page.sidebar).toBeA(chorus.views.DatasetVisualizationFrequencySidebar)
                     expect(this.page.sidebar.collection).toBe(this.page.columnSet);
                 });
@@ -140,8 +140,19 @@ describe("chorus.pages.DatasetShowPage", function() {
                     this.page.mainContent.contentDetails.trigger("transform:visualize", 'histogram');
                 });
 
-                it("should swaps out the sidebar for the histogram sidebar", function() {
+                it("should swap out the sidebar for the histogram sidebar", function() {
                     expect(this.page.sidebar).toBeA(chorus.views.DatasetVisualizationHistogramSidebar)
+                    expect(this.page.sidebar.collection).toBe(this.page.columnSet);
+                });
+            });
+
+            context("for a heatmap chart", function() {
+                beforeEach(function() {
+                    this.page.mainContent.contentDetails.trigger("transform:visualize", 'heatmap');
+                });
+
+                it("should swap out the sidebar for the heatmap sidebar", function() {
+                    expect(this.page.sidebar).toBeA(chorus.views.DatasetVisualizationHeatmapSidebar)
                     expect(this.page.sidebar.collection).toBe(this.page.columnSet);
                 });
             });

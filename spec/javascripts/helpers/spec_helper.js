@@ -26,6 +26,7 @@
         'dataset_visualization_boxplot_sidebar',
         'dataset_visualization_frequency_sidebar',
         'dataset_visualization_histogram_sidebar',
+        'dataset_visualization_heatmap_sidebar',
         'default_content_header',
         'header',
         'image_upload',
@@ -194,7 +195,10 @@
 
                 toContainText: function(text) {
                     this.message = function() {
-                        return 'Expected "' + this.actual.text() + '" to contain "' + text + '"';
+                        return [
+                            'Expected "' + this.actual.text() + '" to contain "' + text + '"',
+                            'Expected "' + this.actual.text() + '" not to contain "' + text + '"'
+                        ];
                     }
                     return this.env.contains_(this.actual.text(), text);
                 },

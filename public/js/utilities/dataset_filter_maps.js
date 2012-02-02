@@ -24,12 +24,8 @@
         comparators: {
             "equal": {usesInput: true, generate: makeGenerate("=") },
             "not_equal": {usesInput: true, generate: makeGenerate("!=") },
-            "null": {usesInput: false, generate: function(columnName, inputValue) {
-                return qd(columnName) + " IS NULL";
-            }},
-            "not_null": {usesInput: false, generate: function(columnName, inputValue) {
-                return qd(columnName) + " IS NOT NULL";
-            }},
+            "null": {usesInput: false, generate: isNull },
+            "not_null": {usesInput: false, generate: isNotNull },
             "greater": {usesInput: true, generate: makeGenerate(">") },
             "greater_equal": {usesInput: true, generate: makeGenerate(">=") },
             "less": {usesInput: true, generate: makeGenerate("<") },
@@ -37,6 +33,34 @@
         },
         validate: function(value) {
             return value.match(/^[0-9,.]*$/);
+        },
+        errorMessage: "dataset.filter.number_required"
+    };
+
+    chorus.utilities.DatasetFilterMaps.time = {
+        comparators: {
+            "equal": {usesTimeInput: true, generate: makeGenerate("=") },
+            "before": {usesTimeInput: true, generate: makeGenerate("<") },
+            "after": {usesTimeInput: true, generate: makeGenerate(">") },
+            "null": {usesTimeInput: false, generate: isNull },
+            "not_null": {usesTimeInput: false, generate: isNotNull }
+        },
+        validate: function(value) {
+            return value.match(/^[0-9:]*$/);
+        },
+        errorMessage: "dataset.filter.time_required"
+    };
+
+    chorus.utilities.DatasetFilterMaps.date = {
+        comparators: {
+            "on": {usesDateInput: true, generate: makeGenerate("=") },
+            "before": {usesDateInput: true, generate: makeGenerate("<") },
+            "after": {usesDateInput: true, generate: makeGenerate(">") },
+            "null": {usesDateInput: false, generate: isNull },
+            "not_null": {usesDateInput: false, generate: isNotNull }
+        },
+        validate: function(value) {
+            return true
         }
     };
 

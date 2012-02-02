@@ -20,12 +20,12 @@ describe("chorus.models.BoxplotTask", function() {
     describe("column label translations", function() {
         it("provides translations for the column labels", function() {
             expect(this.model.getColumnLabel("bucket")).toMatchTranslation("dataset.visualization.boxplot.bucket");
-            expect(this.model.getColumnLabel("minimum")).toMatchTranslation("dataset.visualization.boxplot.minimum");
+            expect(this.model.getColumnLabel("min")).toMatchTranslation("dataset.visualization.boxplot.minimum");
             expect(this.model.getColumnLabel("median")).toMatchTranslation("dataset.visualization.boxplot.median");
-            expect(this.model.getColumnLabel("maximum")).toMatchTranslation("dataset.visualization.boxplot.maximum");
+            expect(this.model.getColumnLabel("max")).toMatchTranslation("dataset.visualization.boxplot.maximum");
             expect(this.model.getColumnLabel("percentage")).toMatchTranslation("dataset.visualization.boxplot.percentage");
-            expect(this.model.getColumnLabel("1stquartile")).toMatchTranslation("dataset.visualization.boxplot.1stquartile");
-            expect(this.model.getColumnLabel("3rdquartile")).toMatchTranslation("dataset.visualization.boxplot.3rdquartile");
+            expect(this.model.getColumnLabel("firstQuartile")).toMatchTranslation("dataset.visualization.boxplot.1stquartile");
+            expect(this.model.getColumnLabel("thirdQuartile")).toMatchTranslation("dataset.visualization.boxplot.3rdquartile");
         });
 
         it("provides reasonable defaults for missing keys", function() {
