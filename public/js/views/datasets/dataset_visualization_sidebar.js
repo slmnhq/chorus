@@ -1,6 +1,10 @@
 chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
     additionalClass: "dataset_visualization_sidebar",
 
+    events: {
+        "click button.create": "launchVisualizationDialog"
+    },
+
     setup: function() {
         var alphaSort = function(column) {
             return column.get("name") && column.get("name").toLowerCase();
@@ -28,5 +32,11 @@ chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
         return _.map(this.numericalColumns, function(col) {
            return col.get('name');
         });
+    },
+
+    launchVisualizationDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.Visualization({model: this.model, chartOptions: this.chartOptions()});
+        dialog.launchModal();
     }
 });

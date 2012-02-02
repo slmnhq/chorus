@@ -8,5 +8,19 @@ chorus.models.ChartTask = chorus.models.Task.extend({
 
     beforeSave: function() {
         this.set({ relation: "SELECT * FROM " + this.get("objectName") });
+    },
+
+    columnOrientedData: function() {
+        var rows = this.get("rows");
+        var columns = this.get("columns");
+
+        return _.map(columns, function (column) {
+            var name = column.name;
+            return {
+                name:name,
+                type:column.typeCategory,
+                values:_.pluck(rows, name)
+            };
+        });
     }
 });

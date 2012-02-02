@@ -7,9 +7,17 @@ chorus.views.DatasetVisualizationBoxplotSidebar = chorus.views.DatasetVisualizat
         this.$("button.create").focus();
     },
 
+    chartOptions: function() {
+        return {
+            name: "foo",
+            type: "boxplot",
+            xAxis: this.$(".value select option:selected").text(),
+            yAxis: this.$(".category select option:selected").text()
+        }
+    },
+
     additionalContext: function() {
         return {
-            chartType: "boxplot",            
             numericColumns: this.numericColumns(),
             allColumns: this.allColumns()
         }

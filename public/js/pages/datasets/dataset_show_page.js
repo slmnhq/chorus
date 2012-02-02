@@ -74,7 +74,7 @@
         showVisualizeSidebar: function(chartType) {
             switch (chartType) {
                 case 'boxplot':
-                    this.sidebar = new chorus.views.DatasetVisualizationBoxplotSidebar({collection: this.columnSet});
+                    this.sidebar = new chorus.views.DatasetVisualizationBoxplotSidebar({model: this.model, collection: this.columnSet});
                     this.renderSubview('sidebar');
                     break;
                 case 'frequency':

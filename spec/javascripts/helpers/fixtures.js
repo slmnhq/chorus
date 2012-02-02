@@ -1721,6 +1721,13 @@ beforeEach(function() {
             }, overrides));
         },
 
+        chartTask: function(overrides) {
+            return new chorus.models.ChartTask(_.extend({
+                columns: [],
+                rows: []
+            }, overrides));
+        },
+
         datasetHadoopExternalTable : function(overrides) {
             var attributes = _.extend(fixtures.datasetCommonJson(), {
                 modifiedBy: {},
