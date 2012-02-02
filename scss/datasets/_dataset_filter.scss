@@ -48,4 +48,9 @@
     select, .ui-selectmenu-button {
         width: 215px;
     }
+
+    input[type=text] {
+        width: 250px;
+        display: inline-block;
+    }
 }

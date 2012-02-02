@@ -4,7 +4,9 @@
 </div>
 <select class="column_filter">
     {{#each models}}
-        <option value="{{name}}" {{#if disable}}disabled="disabled"{{/if}}>{{name}}</option>
+        <option value="{{name}}" data-type-category="{{typeCategory}}" {{#if disable}}disabled="disabled"{{/if}}>{{name}}</option>
     {{/each}}
 </select>
+<select class="comparator"/>
+<input class="filter_input hidden" type="text"/>
 <a href="#" class="remove"><img src="/images/remove_icon.png"/></a>
