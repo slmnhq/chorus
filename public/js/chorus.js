@@ -85,6 +85,10 @@ window.Chorus = function() {
             };
         }
 
+        menuElement.click(function(e) {
+            e.preventDefault();
+        });
+
         menuElement.qtip(qtipArgs);
 
     }

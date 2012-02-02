@@ -13,6 +13,8 @@ describe("chorus.views.DatasetVisualizationBoxplotSidebar", function() {
                 this.view.render();
             })
 
+            itBehavesLike.DatasetVisualizationSidebar();
+
             describe("value select box", function() {
                 it("has the right label", function() {
                     expect(this.view.$(".value label").text()).toMatchTranslation("dataset.visualization.sidebar.value")

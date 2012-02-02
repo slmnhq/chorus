@@ -16,6 +16,17 @@ chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
 
     postRender: function() {
         chorus.styleSelect(this.$('select'));
+
+        chorus.menu(this.$(".category_limit a"), {
+            content: this.$(".category_limit_menu_container").html(),
+            contentEvents: {
+                'li': _.bind(this.categoryLimitSelected, this)
+            }
+        });
+    },
+
+    categoryLimitSelected: function(e) {
+        this.$('.category_limit a .selected_value').text($(e.target).text());
     },
 
     allColumns: function() {
@@ -26,7 +37,7 @@ chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
 
     numericColumns: function() {
         return _.map(this.numericalColumns, function(col) {
-           return col.get('name');
+            return col.get('name');
         });
     }
 });

@@ -59,4 +59,41 @@
             padding-bottom: 10px;
         }
     }
+
+
+    .category_limit {
+        @include font-normal-alpha;
+        margin-bottom: 10px;
+        .pointing_l {
+            display: inline-block;
+            border-bottom: 1px solid $color-text3;
+            border-left: 1px solid $color-text3;
+            width: 5px;
+            height: 7px;
+            margin-right: 3px;
+            margin-left: 2px;
+            vertical-align: top;
+        }
+        .triangle {
+            display: inline-block;
+            margin-left: 5px;
+            margin-bottom: 2px;
+            @include triangle(down, $link-color, 8px, 4px);
+        }
+    }
+    .category_limit_menu {
+        display: none;
+    }
+}
+
+ul.category_limit_menu {
+    li {
+        cursor: pointer;
+        font-size: 14px;
+        line-height: 16px;
+        &:hover {
+            text-decoration: underline;
+
+        }
+    }
 }

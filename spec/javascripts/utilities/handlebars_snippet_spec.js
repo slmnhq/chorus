@@ -64,7 +64,7 @@ describe("handlebars", function() {
 
         describe("ifCurrentUserNameIs", function() {
             beforeEach(function() {
-                setLoggedInUser({ userName : "benjamin" });
+                setLoggedInUser({ userName: "benjamin" });
                 this.spy = jasmine.createSpy("ifCurrentUserNameIs");
                 this.spy.inverse = jasmine.createSpy("ifCurrentUserNameIs inverse");
             });
@@ -246,7 +246,7 @@ describe("handlebars", function() {
         describe("moreLink", function() {
             describe("when the collection has more than max elements", function() {
                 it("returns markup", function() {
-                    var el = $("<div>" + Handlebars.helpers.moreLink([1,2,3,4], 3, "activity_stream.comments.more", "activity_stream.comments.less") + "</div>");
+                    var el = $("<div>" + Handlebars.helpers.moreLink([1, 2, 3, 4], 3, "activity_stream.comments.more", "activity_stream.comments.less") + "</div>");
                     expect(el.find(".morelinks a.more")).toExist();
                     expect(el.find(".morelinks a.less")).toExist();
                     expect(el.find(".morelinks a.more")).toHaveText(t("activity_stream.comments.more", {count: 1}));
@@ -255,7 +255,7 @@ describe("handlebars", function() {
             });
             describe("when the collection has less than max + 1 elements", function() {
                 it("returns no markup", function() {
-                    var el = $("<div>" + Handlebars.helpers.moreLink([1,2,3,4], 3, "thing", "less") + "</div>");
+                    var el = $("<div>" + Handlebars.helpers.moreLink([1, 2, 3, 4], 3, "thing", "less") + "</div>");
                     expect(el.find(".links")).not.toExist();
                 })
             });
@@ -264,7 +264,7 @@ describe("handlebars", function() {
         describe("currentUserName", function() {
             beforeEach(function() {
                 this.template = "{{currentUserName}}";
-                chorus.session.set({userName : "bob"});
+                chorus.session.set({userName: "bob"});
             });
             it("should return the user", function() {
                 expect(Handlebars.compile(this.template)({})).toBe(chorus.session.get("userName"));
@@ -418,6 +418,33 @@ describe("handlebars", function() {
                 expect($(Handlebars.helpers.workspaceUsage(49, '1GB')).find('> .size_text')).toContainText('1GB');
             });
         });
+
+        describe("category_limit_chooser", function() {
+            it("returns a list of numbers up to the max specified", function() {
+                var chooser = $(Handlebars.helpers.category_limit_chooser(3))
+                expect(chooser.find('.category_limit_menu_container ul.category_limit_menu li').length).toBe(3);
+                expect(chooser.find('li:first')).toContainText('1');
+            });
+
+            it("has a category_limit class", function() {
+                expect($(Handlebars.helpers.category_limit_chooser(1))).toHaveClass('category_limit');
+            });
+
+            it("sets the default to the provided value", function() {
+                var chooser = $(Handlebars.helpers.category_limit_chooser(3, 2));
+                expect(chooser.find('a')).toContainText('2');
+            })
+
+            it("sets the default to max if no default provided", function() {
+                var chooser = $(Handlebars.helpers.category_limit_chooser(3));
+                expect(chooser.find('a')).toContainText('3');
+            })
+
+            it("guards against insane handlebars behavior", function() {
+                var chooser = $(Handlebars.helpers.category_limit_chooser(3, {hash: {}}));
+                expect(chooser.find('a')).toContainText('3');
+            })
+        })
     });
 
     describe("partials", function() {
@@ -446,7 +473,10 @@ describe("handlebars", function() {
 
             context("when context.serverErrors is an array of hashes with 'message' keys", function() {
                 beforeEach(function() {
-                    this.context = { serverErrors: [{ message: "one" }, { message: "two" }] };
+                    this.context = { serverErrors: [
+                        { message: "one" },
+                        { message: "two" }
+                    ] };
                 });
 
                 it("renders the messages", function() {

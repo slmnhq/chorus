@@ -13,6 +13,7 @@
             <option value='{{this}}'>{{this}}</option>
             {{/each}}
         </select>
+        {{{category_limit_chooser 20}}}
         {{else}}
         <span class='no_columns'>{{t "dataset.visualization.sidebar.no_columns"}}</span>
         {{/if}}
