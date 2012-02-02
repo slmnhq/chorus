@@ -75,6 +75,13 @@
             text-align: center;
         }
 
+        .separator {
+            border-right: 1px dotted $content-details-create-bar-link-color;
+            display: inline-block;
+            height: 20px;
+            margin-bottom: 1px;
+        }
+
         .triangle_right {
             @include triangle(right, $content-details-create-background-color, 10px, 32px);
             display: inline-block;

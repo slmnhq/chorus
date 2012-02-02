@@ -81,9 +81,9 @@ describe("chorus.models.Dataset", function() {
             expect(this.task).toBeA(chorus.models.BoxplotTask);
         });
 
-        it("has the right workspaceId, sandboxId and objectName", function() {
+        it("has the right workspaceId, dataset id and objectName", function() {
             expect(this.task.get("workspaceId")).toBe("44");
-            expect(this.task.get("sandboxId")).toBe("21");
+            expect(this.task.get("datasetId")).toBe("45|whirling_tops|diamonds|japanese_teas");
             expect(this.task.get("objectName")).toBe("japanese_teas");
         });
     });
@@ -107,9 +107,9 @@ describe("chorus.models.Dataset", function() {
             expect(this.task.get("yAxis")).toBe("blindness_rate");
         });
 
-        it("has the right workspaceId, sandboxId and objectName", function() {
+        it("has the right workspaceId, dataset id and objectName", function() {
             expect(this.task.get("workspaceId")).toBe("44");
-            expect(this.task.get("sandboxId")).toBe("21");
+            expect(this.task.get("datasetId")).toBe("45|whirling_tops|diamonds|japanese_teas");
             expect(this.task.get("objectName")).toBe("japanese_teas");
         });
     });
@@ -137,9 +137,9 @@ describe("chorus.models.Dataset", function() {
             expect(this.task.get("yAxis")).toBe("blindness_rate");
         });
 
-        it("has the right workspaceId, sandboxId and objectName", function() {
+        it("has the right workspaceId, dataset id and objectName", function() {
             expect(this.task.get("workspaceId")).toBe("44");
-            expect(this.task.get("sandboxId")).toBe("21");
+            expect(this.task.get("datasetId")).toBe("45|whirling_tops|diamonds|japanese_teas");
             expect(this.task.get("objectName")).toBe("japanese_teas");
         });
     });
