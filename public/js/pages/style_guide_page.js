@@ -183,7 +183,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             }),
 
 
-            "Visualization: HistogramPlot" : new chorus.views.visualizations.HistogramPlot({
+            "Visualization: HistogramPlot" : new chorus.views.visualizations.HistogramPlotBeta({
                 model: new chorus.models.HistogramTask({
                     columns: [
                         {name : "bin", typeCategory: "STRING"},
