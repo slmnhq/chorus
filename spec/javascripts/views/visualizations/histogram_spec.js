@@ -30,16 +30,21 @@ describe("chorus.views.visualizations.Histogram", function() {
         })
 
         it("renders no xtick lines by default", function() {
-            expect(this.view.$(".axis.south line").length).toBe(0);
+            expect(this.view.$(".axis.south .grid line").length).toBe(0);
         });
 
         it("renders ytick lines by default", function() {
             expect(this.view.$(".axis.west line").length).toBeGreaterThan(1);
         });
 
-        xit("renders x and y axis lines", function() {
-            expect(this.view.$("line.xaxis")).toExist()
-            expect(this.view.$("line.yaxis")).toExist()
+        it("renders the y axis edge", function() {
+            expect(this.view.$(".axis.west .axis_edge line")).toExist()
+            expect(this.view.$(".axis.west .axis_edge line").attr("y1")).toBeGreaterThan(this.view.$(".axis.west .axis_edge line").attr("y2"))
+
+        })
+
+        it("does not render the x axis edge", function() {
+            expect(this.view.$(".axis.south .axis_edge line")).not.toExist()
         })
 
         it("has correct heights on the bars", function() {

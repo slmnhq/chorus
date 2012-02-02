@@ -227,15 +227,19 @@
         canvas.attr('class', 'histogram');
         var plot = canvas.append("svg:g")
             .attr("class", "plot")
+
+        var barWidth = chart.scales.x.rangeBand() * 0.6;
+        var barOffset = chart.scales.x.rangeBand() * 0.2;
+
         plot
             .selectAll("rect")
             .data(data)
             .enter().append("svg:rect")
             .attr("class", "bar")
             .attr("x", function(d) {
-                return chart.scales.x(d.bin)
+                return (chart.scales.x(d.bin)+barOffset)
             })
-            .attr("width", chart.scales.x.rangeBand)
+            .attr("width", barWidth)
             .attr("y", function(d) {
                 return chart.scales.y(d.frequency)
             })
@@ -272,7 +276,7 @@
         };
         this.axes = {
             x : new chorus.views.visualizations.Axis(this, { title : config.yAxisTitle || 'x axis', padding : 0, rangeType : 'rangeBands', from : "y", to : "right" }).south(),
-            y : new chorus.views.visualizations.Axis(this, { title : config.xAxisTitle || 'count', rangeType : 'range', ticks: true, from : "height", to : "top" }).west()
+            y : new chorus.views.visualizations.Axis(this, { title : config.xAxisTitle || 'count', rangeType : 'range', ticks: true, axis_edge: true, from : "height", to : "top" }).west()
         }
         this.layout = new chorus.views.visualizations.Layout(this, { xAxis : this.axes.x, yAxis : this.axes.y });
     }

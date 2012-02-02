@@ -8,36 +8,44 @@
             attrs = this.renderOptions;
 
             var axisGroup = canvas
-            .append("svg:g")
-            .attr("class", "axis " + self.orientation);
+                .append("svg:g")
+                .attr("class", "axis " + self.orientation);
 
             axisGroup
-            .append("svg:g")
-            .attr("class", "title")
-            .append("svg:text")
-            .attr("x", attrs.x)
-            .attr("y", attrs.y)
-            .attr("dy", attrs.dyTitle)
-            .text(options.title);
+                .append("svg:g")
+                .attr("class", "title")
+                .append("svg:text")
+                .attr("x", attrs.x)
+                .attr("y", attrs.y)
+                .attr("dy", attrs.dyTitle)
+                .text(options.title);
 
             axisGroup
-            .append("svg:g")
-            .attr("class", "labels")
-            .selectAll("text")
-            .data(this.labels)
-            .enter().append("svg:text")
-            .attr("x", attrs.x)
-            .attr("y", attrs.y)
-            .attr("dx", attrs.dxLabel)
-            .attr("dy", attrs.dyLabel)
-            .text(function(d) {return d.label});
+                .append("svg:g")
+                .attr("class", "labels")
+                .selectAll("text")
+                .data(this.labels)
+                .enter().append("svg:text")
+                .attr("x", attrs.x)
+                .attr("y", attrs.y)
+                .attr("dx", attrs.dxLabel)
+                .attr("dy", attrs.dyLabel)
+                .text(function(d) {
+                    return d.label
+                });
 
             axisGroup
-            .append("svg:g")
-            .attr("class", "grid")
-            .selectAll("line")
-            .data(this.labels)
-            .enter().append("svg:line");
+                .append("svg:g")
+                .attr("class", "axis_edge")
+                .append("svg:line");
+
+            axisGroup
+                .append("svg:g")
+                .attr("class", "grid")
+                .selectAll("line")
+                .data(this.labels)
+                .enter().append("svg:line");
+
 
             this.gfx = axisGroup;
             if (this.rotation) rotateTitle(this.rotation);
@@ -100,18 +108,21 @@
             var maxLabel = maxWidth(texts[0]);
             var rotate = (maxLabel > columnWidth);
             var ticks = self.gfx.select("g.grid").selectAll("line");
+            var axis_edge = self.gfx.select("g.axis_edge").selectAll("line");
 
             texts
-            .attr("x", scale.rangeBand ? function(d) {
+                .attr("x", scale.rangeBand ? function(d) {
                 return scale(d.locator) + scale.rangeBand() / 2
-            } : function(d) { return scale(d.locator)});
+            } : function(d) {
+                return scale(d.locator)
+            });
 
 
             if (rotate) {
                 var height = (Math.sin(rotation * (Math.PI / 180)) * maxLabel);
 
                 texts
-                .attr("transform", function(d, i) {
+                    .attr("transform", function(d, i) {
                     var box = dimensions(this);
                     var translateX = (box.width / 2);
                     var rotateX = box.x + translateX;
@@ -126,18 +137,37 @@
                 });
             }
 
+            var xleft = chart.scales.x.range()[0];
+            var xright = chart.scales.x.range()[chart.scales.x.range().length-1]+ chart.scales.x.rangeBand();
+            if( options.axis_edge) {
+            axis_edge
+                .attr("x1", xleft)
+                .attr("x2", xright)
+                .attr("y1", chart.scales.y.range()[0])
+                .attr("y2", chart.scales.y.range()[0]);
+            } else {
+                axis_edge.remove();
+            }
+
+
 
             if (options.ticks) {
                 var bandedOffset = chart.scales.y.rangeBand ? chart.scales.y.rangeBand() : 0;
 
                 ticks
-                .attr("x1", function(d) { return scale(d.locator)})
-                .attr("x2", function(d) { return scale(d.locator)})
-                .attr("y1", chart.scales.y.range()[0])
-                .attr("y2", chart.scales.y.range()[chart.scales.y.range().length - 1] + bandedOffset);
+                    .attr("x1", function(d) {
+                    return scale(d.locator)
+                })
+                    .attr("x2", function(d) {
+                        return scale(d.locator)
+                    })
+                    .attr("y1", chart.scales.y.range()[0])
+                    .attr("y2", chart.scales.y.range()[chart.scales.y.range().length - 1] + bandedOffset);
             } else {
                 ticks.remove();
             }
+
+
         }
 
         function layoutY(dim, scale) {
@@ -146,23 +176,38 @@
             var group = self.gfx.select("g.labels");
             var texts = group.selectAll("text");
             var ticks = self.gfx.select("g.grid").selectAll("line");
+            var axis_edge = self.gfx.select("g.axis_edge").selectAll("line");
+
 
             group
-            .attr("height", height)
+                .attr("height", height)
 
             texts
-            .attr("y", scale.rangeBand ? function(d) {
+                .attr("y", scale.rangeBand ? function(d) {
                 return scale(d.locator) + scale.rangeBand() / 2
-            } : function(d) { return scale(d.locator)});
+            } : function(d) {
+                return scale(d.locator)
+            });
+
+            axis_edge
+                .attr("x1", chart.scales.x.range()[0])
+                .attr("x2", chart.scales.x.range()[0])
+                .attr("y1", chart.scales.y.range()[0])
+                .attr("y2", chart.scales.y.range()[1]);
+
 
             if (options.ticks) {
                 var lastXVal = chart.scales.x.range()[chart.scales.x.range().length - 1];
                 if (chart.scales.x.rangeBand) lastXVal += chart.scales.x.rangeBand();
                 ticks
-                .attr("y1", function(d) { return scale(d.locator)})
-                .attr("y2", function(d) { return scale(d.locator)})
-                .attr("x1", chart.scales.x.range()[0])
-                .attr("x2", lastXVal);
+                    .attr("y1", function(d) {
+                    return scale(d.locator)
+                })
+                    .attr("y2", function(d) {
+                        return scale(d.locator)
+                    })
+                    .attr("x1", chart.scales.x.range()[0])
+                    .attr("x2", lastXVal);
             }
         }
 

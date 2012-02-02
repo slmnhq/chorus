@@ -7,6 +7,11 @@
         width: 925px;
     }
 
+    line {
+        stroke-width: 0.4;
+        stroke: red;
+    }
+
     text {
         font-size: 0.5em;
         }
@@ -20,7 +25,18 @@
         stroke: #aaa;
     }
 
+    .axis.west .grid line {
+        stroke-dasharray: 1;
+        stroke-width: 0.25;
+        stroke: #444;
+    }
+
     .xaxis, .yaxis {
+        stroke-width: 0.40;
+        stroke: #444;
+    }
+
+    .axis_edge line {
         stroke-width: 0.40;
         stroke: #444;
     }
@@ -53,7 +69,7 @@
     }
 
     .histogram {
-        .bar rect {
+        rect.bar {
             fill: $chart-fill-color;
         }
     }

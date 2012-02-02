@@ -168,7 +168,6 @@ chorus.views.visualizations.HistogramPlotBeta = chorus.views.Base.extend({
         this.plotHeight = 340;
         
         return d3.select(el)
-
             .append("svg:svg")
             .attr("class", "chart")
             .attr("width", this.plotWidth)
