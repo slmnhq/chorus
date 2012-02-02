@@ -59,7 +59,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         }
 
         _.each(map.comparators, function(value, key) {
-            var el = $("<option/>").text(t("dataset.filter." + key)).addClass("map_" + key).attr("value", key);
+            var el = $("<option/>").text(t("dataset.filter." + key)).attr("value", key);
             $comparator.append(el);
         });
 
@@ -80,11 +80,8 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
             return;
         }
 
-        _.each(map.comparators, function (value, key) {
-            if ($choice.hasClass("map_" + key)) {
-                $input.toggleClass("hidden", !value.usesInput);
-            }
-        });
+        var usesInput = map.comparators[$choice.val()].usesInput;
+        $input.toggleClass("hidden", !usesInput);
 
         this.validateInput();
     },
@@ -120,7 +117,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         if (map.validate(value)) {
             this.clearErrors();
         } else {
-            this.markInputAsInvalid($input, "Please enter only numbers, dots or commas [0-9,.]", false)
+            this.markInputAsInvalid($input, t("dataset.filter.number_required"), false)
         }
     }
 });
