@@ -37,7 +37,7 @@ describe("chorus.views.visualizations.Histogram", function() {
             expect(this.view.$(".axis.west line").length).toBeGreaterThan(1);
         });
 
-        it("renders x and y axis lines", function() {
+        xit("renders x and y axis lines", function() {
             expect(this.view.$("line.xaxis")).toExist()
             expect(this.view.$("line.yaxis")).toExist()
         })

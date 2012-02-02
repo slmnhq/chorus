@@ -13,6 +13,7 @@ chorus.pages.StyleGuidePage = chorus.pages.Base.extend({
         this.workspace = new chorus.models.Workspace({ description:"One awesome workspace"})
         this.workspace.loaded = true;
         this.subNav = new chorus.views.SubNav({model:this.workspace, tab:"workfiles"})
+        _.defer(_.bind(this.render, this));
     },
 
     postRender:function () {

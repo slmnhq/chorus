@@ -116,9 +116,9 @@ describe("chorus.presenters.visualizations", function() {
 
             this.data = this.presenter.present();
         });
-        it("returns bin and frequency as x and y", function() {
-            var x = _.pluck(this.data, "x");
-            var y = _.pluck(this.data, "y");
+        it("returns bin and frequency as bin and frequency", function() {
+            var x = _.pluck(this.data, "bin");
+            var y = _.pluck(this.data, "frequency");
             expect(y).toEqual([5,8,0,1,2000]);
             expect(x).toEqual(["0-9","10-19","20-29","30-39","40-49"]);
         })
