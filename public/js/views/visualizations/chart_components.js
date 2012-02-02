@@ -6,7 +6,7 @@
 
         this.render = function render() { // private
             attrs = this.renderOptions;
-
+           
             var axisGroup = canvas
                 .append("svg:g")
                 .attr("class", "axis " + self.orientation);
@@ -35,10 +35,10 @@
                 })
 
             if(options.center_horizontal){
-                labels.attr("dx", function(){return -0.5*this.getBBox().width;})
+                labels.attr("dx", function(){return -0.5*this.getBoundingClientRect().width;})
             }
             if(options.center_vertical){
-                labels.attr("dy", function(){return 0.25*this.getBBox().height;})
+                labels.attr("dy", function(){return 0.25*this.getBoundingClientRect().height;})
             }
 
             axisGroup
@@ -61,7 +61,8 @@
 
         function rotateTitle(deg) { // private
             var title = self.gfx.select("g.title");
-            var box = title[0][0].getBBox();
+            var isRendered = title[0][0].getBoundingClientRect().bottom
+            var box = isRendered ? title[0][0].getBBox(): {y : 0};
             var rotx = 0;
             var roty = box.y;
 
@@ -282,7 +283,9 @@
                 svg = svg[0];
             }
 
-            return svg.getBBox();
+            var isRendered = svg.getBoundingClientRect().bottom;
+                        
+            return isRendered ? svg.getBBox(): { x: 0, y : 0, width : 0, height : 0 };
         }
 
         return { x: 0, y : 0, width : 0, height : 0 };
