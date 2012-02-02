@@ -4,7 +4,6 @@ chorus.views.DatasetVisualizationBoxplotSidebar = chorus.views.DatasetVisualizat
     postRender: function() {
         this._super('postRender');
         this.$(".category option:eq(1)").attr('selected', 'selected');
-        this.$("button.create").focus();
     },
 
     chartOptions: function() {

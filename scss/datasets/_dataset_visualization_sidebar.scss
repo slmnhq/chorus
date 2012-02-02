@@ -3,7 +3,7 @@
     fieldset {
         border: 1px solid $border-color;
         padding: $fieldset-margin $dialog-padding $dialog-padding;
-        margin-left: $fieldset-margin;
+        margin-right: $fieldset-margin;
         position: relative;
 
         legend {
@@ -62,8 +62,13 @@
 
 
     .category_limit {
-        @include font-normal-alpha;
+        font-size: 12px;
+        color: $color-text2;
+        font-weight: $semibold;
         margin-bottom: 10px;
+        a {
+            font-size: 12px;
+        }
         .pointing_l {
             display: inline-block;
             border-bottom: 1px solid $color-text3;
@@ -78,7 +83,7 @@
             display: inline-block;
             margin-left: 5px;
             margin-bottom: 2px;
-            @include triangle(down, $link-color, 8px, 4px);
+            @include triangle(down, $link-color, 7px, 4px);
         }
     }
     .category_limit_menu {

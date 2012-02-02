@@ -9,7 +9,6 @@ describe("chorus.views.DatasetVisualizationBoxplotSidebar", function() {
                 this.columns = fixtures.databaseColumnSet([this.column1, this.column2, this.column3]);
                 this.view = new chorus.views.DatasetVisualizationBoxplotSidebar({collection: this.columns})
                 spyOn(chorus, 'styleSelect');
-                spyOn($.fn, 'focus');
                 this.view.render();
             })
 
@@ -72,7 +71,6 @@ describe("chorus.views.DatasetVisualizationBoxplotSidebar", function() {
                 this.columns = new chorus.collections.DatabaseColumnSet();
                 this.view = new chorus.views.DatasetVisualizationBoxplotSidebar({collection: this.columns})
                 spyOn(chorus, 'styleSelect');
-                spyOn($.fn, 'focus');
                 this.view.render();
             })
 
@@ -92,18 +90,12 @@ describe("chorus.views.DatasetVisualizationBoxplotSidebar", function() {
                 this.columns = fixtures.databaseColumnSet([]);
                 this.view = new chorus.views.DatasetVisualizationBoxplotSidebar({collection: this.columns})
                 spyOn(chorus, 'styleSelect');
-                spyOn($.fn, 'focus');
                 this.view.render();
             })
 
             it("should have the right caption", function() {
                 expect(this.view.$("button.create").text()).toMatchTranslation("dataset.visualization.sidebar.create_chart")
             });
-
-            it("should be focused", function() {
-                expect($.fn.focus).toHaveBeenCalled();
-                expect($.fn.focus.mostRecentCall.object).toBe("button.create");
-            })
         })
     })
 })
