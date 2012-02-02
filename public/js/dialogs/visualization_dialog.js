@@ -17,9 +17,6 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.title = t("visualization.title", {name: this.options.chartOptions.name});
 
         this.chartData = new chorus.views.ResultsConsole();
-        $(document).one('reveal.facebox', _.bind(function() {
-            chorus.styleSelect(this.$(".headerbar select"));
-        }, this));
 
         var func = 'make' + _.capitalize(this.type) + 'Task';
         this.task = this.model[func](this.options.chartOptions);

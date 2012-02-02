@@ -291,7 +291,7 @@ describe("chorus.views.ResultsConsoleView", function () {
                 describe("clicking the maximize link", function () {
                     beforeEach(function () {
                         spyOn(this.view, "getDesiredDataTableHeight").andReturn(777);
-                        spyOn(this.view.dataTable, "recalculateScrolling");
+                        spyOn(this.view, "recalculateScrolling");
                         this.view.$("a.maximize").click();
                     });
 
@@ -307,7 +307,7 @@ describe("chorus.views.ResultsConsoleView", function () {
                     });
 
                     it("recalculates scrolling", function () {
-                        expect(this.view.dataTable.recalculateScrolling).toHaveBeenCalled();
+                        expect(this.view.recalculateScrolling).toHaveBeenCalled();
                     })
 
                     specify("the expander button arrow points up", function () {
@@ -323,7 +323,7 @@ describe("chorus.views.ResultsConsoleView", function () {
 
                     describe("clicking the minimize link", function () {
                         beforeEach(function () {
-                            this.view.dataTable.recalculateScrolling.reset();
+                            this.view.recalculateScrolling.reset();
                             this.view.$("a.minimize").click();
                         });
 
@@ -339,7 +339,7 @@ describe("chorus.views.ResultsConsoleView", function () {
                         });
 
                         it("recalculates scrolling", function () {
-                            expect(this.view.dataTable.recalculateScrolling).toHaveBeenCalled();
+                            expect(this.view.recalculateScrolling).toHaveBeenCalled();
                         })
 
 

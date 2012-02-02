@@ -60,7 +60,7 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
             this.subviews[".tabbed_area .database_column_list"] = "columnList";
         }
         this.tabControl = new chorus.views.TabControl(tabs);
-        this.tabControl.bind("selected", _.bind(this.setupSidebarScrolling, this))
+        this.tabControl.bind("selected", _.bind(this.recalculateScrolling, this))
     },
 
     postRender:function () {

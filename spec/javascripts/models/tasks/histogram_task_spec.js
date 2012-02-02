@@ -22,9 +22,10 @@ describe("chorus.models.HistogramTask", function() {
             this.model.save();
         });
 
-        it("renames the 'yAxis' field to 'chart[yAxis]' as required by the api", function() {
+        it("renames the 'yAxis' and 'bins' fields as required by the api", function() {
             var request = this.server.lastCreate();
             expect(request.params()['chart[yAxis]']).toBe("height");
+            expect(request.params()['chart[bins]']).toBe('5');
         });
     });
 })

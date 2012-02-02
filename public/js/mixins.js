@@ -85,14 +85,19 @@ chorus.Mixins.SQLResults = {
         return this.attributes;
     },
 
+    getColumnLabel : function(columnName) {
+        return columnName;
+    },
+
     columnOrientedData: function() {
         var rows = this.getRows();
         var columns = this.getColumns();
 
+        var self = this;
         return _.map(columns, function (column) {
             var name = column.name;
             return {
-                name:name,
+                name: self.getColumnLabel(name),
                 type:column.typeCategory,
                 values:_.pluck(rows, name)
             };

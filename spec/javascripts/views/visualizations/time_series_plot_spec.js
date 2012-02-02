@@ -23,7 +23,7 @@ describe("chorus.views.visualizations.TimeseriesPlot", function() {
         });
     });
 
-    describe("#render", function() {
+    xdescribe("#render", function() {
         beforeEach(function() {
             this.view.render();
         });

@@ -57,10 +57,10 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 }
             });
 
-            return new chorus.models.SqlExecutionTask({ result: {
+            return new chorus.models.SqlExecutionTask({
                 columns: columns,
                 rows: rows
-            }});
+            });
         })();
 
         this.views = {
@@ -161,26 +161,21 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
             "Visualization: BoxPlot" : new chorus.views.visualizations.BoxPlot({
                 model: new chorus.models.BoxplotTask({
-                    result: {
-                        columns: [
-                            { name: "bucket",        typeCategory: "STRING" },
-                            { name: "min",           typeCategory: "REAL_NUMBER" },
-                            { name: "median",        typeCategory: "REAL_NUMBER" },
-                            { name: "max",           typeCategory: "REAL_NUMBER" },
-                            { name: "firstQuartile", typeCategory: "REAL_NUMBER" },
-                            { name: "thirdQuartile", typeCategory: "REAL_NUMBER" },
-                            { name: "percentage",    typeCategory: "STRING" }
-                        ],
-                        rows: [
-                            { bucket: 'january',  min: 1,  firstQuartile: 5,  median: 8, thirdQuartile: 12,  max: 25,  percentage: "20%" },
-                            { bucket: 'february', min: 2, firstQuartile: 3, median: 5,  thirdQuartile: 7, max: 8, percentage: "40%" },
-                            { bucket: 'march',    min: 10, firstQuartile: 10, median: 25,  thirdQuartile: 30, max: 35, percentage: "10%" },
-                            { bucket: 'april',    min: 2,  firstQuartile: 3,  median: 8,   thirdQuartile: 9,  max: 15, percentage: "30%" }
-                        ],
-                        executeResult: "success",
-                        hasResult: "true",
-                        message: ""
-                    }
+                    columns: [
+                        { name: "bucket",        typeCategory: "STRING" },
+                        { name: "min",           typeCategory: "REAL_NUMBER" },
+                        { name: "median",        typeCategory: "REAL_NUMBER" },
+                        { name: "max",           typeCategory: "REAL_NUMBER" },
+                        { name: "firstQuartile", typeCategory: "REAL_NUMBER" },
+                        { name: "thirdQuartile", typeCategory: "REAL_NUMBER" },
+                        { name: "percentage",    typeCategory: "STRING" }
+                    ],
+                    rows: [
+                        { bucket: 'january',  min: 1,  firstQuartile: 5,  median: 8, thirdQuartile: 12,  max: 25,  percentage: "20%" },
+                        { bucket: 'february', min: 2, firstQuartile: 3, median: 5,  thirdQuartile: 7, max: 8, percentage: "40%" },
+                        { bucket: 'march',    min: 10, firstQuartile: 10, median: 25,  thirdQuartile: 30, max: 35, percentage: "10%" },
+                        { bucket: 'april',    min: 2,  firstQuartile: 3,  median: 8,   thirdQuartile: 9,  max: 15, percentage: "30%" }
+                    ]
                 }),
                 x: 'animal',
                 y: 'value'

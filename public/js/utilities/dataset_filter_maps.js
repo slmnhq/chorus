@@ -3,39 +3,17 @@
 
     chorus.utilities.DatasetFilterMaps.string = {
         comparators: {
-            "equal":{usesInput:true, generate:function (columnName, inputValue) {
-                return inputValue ? qd(columnName) + " = " + qs(inputValue) : "";
-            }},
-            "not_equal":{usesInput:true, generate:function (columnName, inputValue) {
-                return inputValue ? qd(columnName) + " != " + qs(inputValue) : "";
-            }},
-            "null":{usesInput:false, generate:function (columnName, inputValue) {
-                return qd(columnName) + " IS NULL";
-            }},
-            "not_null":{usesInput:false, generate:function (columnName, inputValue) {
-                return qd(columnName) + " IS NOT NULL";
-            }},
-            "like":{usesInput:true, generate:function (columnName, inputValue) {
-                return inputValue ? qd(columnName) + " LIKE " + qs(inputValue) : "";
-            }},
-            "begin_with":{usesInput:true, generate:function (columnName, inputValue) {
-                return inputValue ? qd(columnName) + " = " + qs(inputValue + '%') : "";
-            }},
-            "end_with":{usesInput:true, generate:function (columnName, inputValue) {
-                return inputValue ? qd(columnName) + " = " + qs('%' + inputValue) : "";
-            }},
-            "alpha_after":{usesInput:true, generate:function (columnName, inputValue) {
-                return inputValue ? qd(columnName) + " > " + qs(inputValue) : "";
-            }},
-            "alpha_after_equal":{usesInput:true, generate:function (columnName, inputValue) {
-                return inputValue ? qd(columnName) + " >= " + qs(inputValue) : "";
-            }},
-            "alpha_before":{usesInput:true, generate:function (columnName, inputValue) {
-                return inputValue ? qd(columnName) + " < " + qs(inputValue) : "";
-            }},
-            "alpha_before_equal":{usesInput:true, generate:function (columnName, inputValue) {
-                return inputValue ? qd(columnName) + " <= " + qs(inputValue) : "";
-            }}
+            "equal":{usesInput:true, generate: makeGenerate("=") },
+            "not_equal":{usesInput:true, generate: makeGenerate("!=") },
+            "null":{usesInput:false, generate:isNull },
+            "not_null":{usesInput:false, generate:isNotNull },
+            "like":{usesInput:true, generate: makeGenerate("LIKE") },
+            "begin_with":{usesInput:true, generate:makeGenerate("=", {inputSuffix: '%'}) },
+            "end_with":{usesInput:true, generate:makeGenerate("=", {inputPrefix: '%'}) },
+            "alpha_after":{usesInput:true, generate:makeGenerate(">") },
+            "alpha_after_equal":{usesInput:true, generate:makeGenerate(">=") },
+            "alpha_before":{usesInput:true, generate:makeGenerate("<") },
+            "alpha_before_equal":{usesInput:true, generate:makeGenerate("<=") }
         },
         validate: function(value) {
             return true
@@ -44,35 +22,44 @@
 
     chorus.utilities.DatasetFilterMaps.numeric = {
         comparators: {
-            "equal": {usesInput: true, generate: function(columnName, inputValue) {
-                return inputValue ? qd(columnName) + " = " + qs(inputValue) : "";
-            }},
-            "not_equal": {usesInput: true, generate: function(columnName, inputValue) {
-                return inputValue ? qd(columnName) + " != " + qs(inputValue) : "";
-            }},
+            "equal": {usesInput: true, generate: makeGenerate("=") },
+            "not_equal": {usesInput: true, generate: makeGenerate("!=") },
             "null": {usesInput: false, generate: function(columnName, inputValue) {
                 return qd(columnName) + " IS NULL";
             }},
             "not_null": {usesInput: false, generate: function(columnName, inputValue) {
                 return qd(columnName) + " IS NOT NULL";
             }},
-            "greater": {usesInput: true, generate: function(columnName, inputValue) {
-                return inputValue ? qd(columnName) + " > " + qs(inputValue) : "";
-            }},
-            "greater_equal": {usesInput: true, generate: function(columnName, inputValue) {
-                return inputValue ? qd(columnName) + " >= " + qs(inputValue) : "";
-            }},
-            "less": {usesInput: true, generate: function(columnName, inputValue) {
-                return inputValue ? qd(columnName) + " < " + qs(inputValue) : "";
-            }},
-            "less_equal": {usesInput: true, generate: function(columnName, inputValue) {
-                return inputValue ? qd(columnName) + " <= " + qs(inputValue) : "";
-            }}
+            "greater": {usesInput: true, generate: makeGenerate(">") },
+            "greater_equal": {usesInput: true, generate: makeGenerate(">=") },
+            "less": {usesInput: true, generate: makeGenerate("<") },
+            "less_equal": {usesInput: true, generate: makeGenerate("<=") }
         },
         validate: function(value) {
             return value.match(/^[0-9,.]*$/);
         }
     };
+
+    function isNull(columnName, inputValue){
+        return qd(columnName) + " IS NULL";
+    }
+
+    function isNotNull(columnName, inputValue){
+        return qd(columnName) + " IS NOT NULL";
+    }
+
+    function makeGenerate(comparator, options) {
+        options || (options = {});
+        _.defaults(options, {
+            inputPrefix: "",
+            inputSuffix: ""
+        })
+        return function(columnName, inputValue) {
+            return inputValue ?
+                qd(columnName) + " " + comparator + " " + qs(options.inputPrefix + inputValue + options.inputSuffix) :
+                "";
+        }
+    }
 
     // quote double
     function qd(string) {

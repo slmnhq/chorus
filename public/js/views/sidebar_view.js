@@ -5,16 +5,6 @@ chorus.views.Sidebar = chorus.views.Base.extend({
         // We don't want to deal with having multiple declarations of `events`,
         // so we unbind click in preRender and bind it in postRender.
         $("#sidebar_wrapper").find(".jump_to_top").unbind("click");
-
-        if (this.subviews && !this.subviewsBound) {
-            _.each(this.subviews, _.bind(function (property, selector) {
-                var view = this.getSubview(property);
-                if (view) {
-                    view.bind("rendered", this.setupSidebarScrolling, this)
-                }
-            }, this));
-            this.subviewsBound = true;
-        }
     },
 
     template:function () {
@@ -25,13 +15,7 @@ chorus.views.Sidebar = chorus.views.Base.extend({
     postRender:function () {
         this._super('postRender');
 
-        this.setupSidebarScrolling();
-
-        var resizeTimer;
-
-        if (chorus.page && chorus.page.bind) {
-            chorus.page.bind("window:resized", this.setupSidebarScrolling, this);
-        }
+        this.setupScrolling($(this.el).closest("#sidebar"));
 
         $("#sidebar_wrapper .jump_to_top").bind("click", function (e) {
             var api = $("#sidebar").data("jsp")
@@ -42,36 +26,10 @@ chorus.views.Sidebar = chorus.views.Base.extend({
         });
     },
 
-    setupSidebarScrolling:function () {
-        var sidebar = $("#sidebar")
-        if (sidebar) {
-            var alreadyInitialized = sidebar.data("jsp");
-
-            sidebar.jScrollPane();
-            if (!alreadyInitialized)
-            {
-                sidebar.find('.jspContainer').unbind('mousewheel', this.onMouseWheel).bind('mousewheel', this.onMouseWheel)
-                sidebar.siblings('.jump_to_top').unbind('mousewheel').bind('mousewheel', this.onJumpMouseWheel)
-
-                sidebar.unbind('hover').hover(function () {
-                    sidebar.find('.jspVerticalBar, .jspHorizontalBar').fadeIn(150)
-                }, function () {
-                    sidebar.find('.jspVerticalBar, .jspHorizontalBar').fadeOut(150)
-                });
-            }
-
-            sidebar.find('.jspVerticalBar, .jspHorizontalBar').fadeOut(0)
-        }
-    },
-
     onMouseWheel:function (event, d) {
         var api = $("#sidebar").data("jsp")
         $("#sidebar_wrapper .jump_to_top").toggleClass("clickable", api.getContentPositionY() > 10);
         event.preventDefault();
         return true;
-    },
-
-    onJumpMouseWheel:function (event) {
-        event.preventDefault();
     }
 }); 

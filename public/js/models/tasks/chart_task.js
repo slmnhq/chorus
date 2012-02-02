@@ -8,5 +8,9 @@ chorus.models.ChartTask = chorus.models.Task.extend(_.extend({}, chorus.Mixins.S
 
     beforeSave: function() {
         this.set({ relation: "SELECT * FROM " + this.get("objectName") });
+    },
+
+    getColumnLabel: function(columnName) {
+        return this.columnLabels[columnName] ? t(this.columnLabels[columnName]) : columnName;
     }
 }));
