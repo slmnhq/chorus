@@ -4,7 +4,7 @@ chorus.pages.Bare = chorus.views.Bare.extend({
         $(window).bind("resize", _.bind(function () {
             clearTimeout(this.resizeTimer);
             this.resizeTimer = setTimeout(_.bind(function () {
-                this.trigger("window:resized")
+                this.trigger("resized")
             }, this), 100);
         }, this));
     }
@@ -23,7 +23,8 @@ chorus.pages.Base = chorus.pages.Bare.extend({
         "#header":"header",
         "#main_content":"mainContent",
         "#breadcrumbs":"breadcrumbs",
-        "#sidebar .sidebar_content":"sidebar",
+        "#sidebar .sidebar_content.primary":"sidebar",
+        "#sidebar .sidebar_content.secondary":"secondarySidebar",
         "#sub_nav":"subNav"
     },
 

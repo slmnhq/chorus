@@ -129,6 +129,7 @@
         runs(function() {
             this.server = sinon.fakeServer.create();
             chorus.router.unbind();
+            delete chorus.page;
             window.qtipElements = {};
 
             this.renderDOM = function(content) {

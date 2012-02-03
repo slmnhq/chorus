@@ -66,31 +66,40 @@
             this.sidebar.setDataset(this.dataset);
 
             this.mainContent.contentDetails.bind("transform:visualize", this.showVisualizeSidebar, this);
+            this.mainContent.contentDetails.bind("cancel:visualize", this.hideVisualizeSidebar, this);
 
             this.render();
 
         },
 
         showVisualizeSidebar: function(chartType) {
+            this.$('.sidebar_content.primary').addClass("hidden")
+            this.$('.sidebar_content.secondary').removeClass("hidden")
             switch (chartType) {
                 case 'boxplot':
-                    this.sidebar = new chorus.views.DatasetVisualizationBoxplotSidebar({model: this.model, collection: this.columnSet});
-                    this.renderSubview('sidebar');
+                    this.secondarySidebar = new chorus.views.DatasetVisualizationBoxplotSidebar({model: this.model, collection: this.columnSet});
+                    this.renderSubview('secondarySidebar');
                     break;
                 case 'frequency':
-                    this.sidebar = new chorus.views.DatasetVisualizationFrequencySidebar({collection: this.columnSet});
-                    this.renderSubview('sidebar');
+                    this.secondarySidebar = new chorus.views.DatasetVisualizationFrequencySidebar({collection: this.columnSet});
+                    this.renderSubview('secondarySidebar');
                     break;
                 case 'histogram':
-                    this.sidebar = new chorus.views.DatasetVisualizationHistogramSidebar({collection: this.columnSet});
-                    this.renderSubview('sidebar');
+                    this.secondarySidebar = new chorus.views.DatasetVisualizationHistogramSidebar({collection: this.columnSet});
+                    this.renderSubview('secondarySidebar');
                     break;
                 case 'heatmap':
-                    this.sidebar = new chorus.views.DatasetVisualizationHeatmapSidebar({collection: this.columnSet});
-                    this.renderSubview('sidebar');
+                    this.secondarySidebar = new chorus.views.DatasetVisualizationHeatmapSidebar({collection: this.columnSet});
+                    this.renderSubview('secondarySidebar');
                     break;
             }
+            this.trigger('resized');
+        },
 
+        hideVisualizeSidebar: function(chartType) {
+            this.$('.sidebar_content.primary').removeClass("hidden")
+            this.$('.sidebar_content.secondary').addClass("hidden")
+            this.trigger('resized');
         }
     });
 })();

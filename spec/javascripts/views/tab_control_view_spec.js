@@ -29,8 +29,14 @@ describe("chorus.views.TabControl", function() {
 
     context("clicking on a tab", function() {
         beforeEach(function() {
+            chorus.page = new chorus.pages.Base();
+            spyOnEvent(chorus.page, 'resized');
             this.tab1Spy.reset()
             this.view.$('li.tab2').click();
+        });
+
+        it("triggers 'resized' on the page", function() {
+            expect('resized').toHaveBeenTriggeredOn(chorus.page);
         });
 
         it("triggers the correct callbacks", function() {

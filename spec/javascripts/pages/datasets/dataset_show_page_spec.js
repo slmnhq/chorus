@@ -68,6 +68,7 @@ describe("chorus.pages.DatasetShowPage", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace);
+            this.resizedSpy = spyOnEvent(this.page, 'resized');
             this.server.lastFetch().succeed(this.columnSet.attributes, { page: "1", total: "1" })
         })
 
@@ -103,14 +104,25 @@ describe("chorus.pages.DatasetShowPage", function() {
                 spyOn(this.page, 'render');
             });
 
+            it("triggers 'resized' on the page", function() {
+                this.page.mainContent.contentDetails.trigger("transform:visualize", 'boxplot');
+                expect('resized').toHaveBeenTriggeredOn(this.page);
+            });
+
             it("should not re-render the page", function() {
                 this.page.mainContent.contentDetails.trigger("transform:visualize", 'boxplot');
                 expect(this.page.render).not.toHaveBeenCalled();
             });
 
+            it("should hide the original sidebar and shows the viz_sidebar", function() {
+                this.page.mainContent.contentDetails.trigger("transform:visualize", 'boxplot');
+                expect(this.page.$('#sidebar .sidebar_content.primary')).toHaveClass('hidden');
+                expect(this.page.$('#sidebar .sidebar_content.secondary')).not.toHaveClass('hidden');
+            });
+
             it("should re-render the sidebar subview", function() {
                 this.page.mainContent.contentDetails.trigger("transform:visualize", 'boxplot');
-                expect(this.page.$('#sidebar .sidebar_content').get(0)).toBe(this.page.sidebar.el);
+                expect(this.page.$('#sidebar .sidebar_content').get(1)).toBe(this.page.secondarySidebar.el);
             });
 
             context("for a boxplot", function() {
@@ -119,8 +131,8 @@ describe("chorus.pages.DatasetShowPage", function() {
                 });
 
                 it("should swap out the sidebar for the boxplot sidebar", function() {
-                    expect(this.page.sidebar).toBeA(chorus.views.DatasetVisualizationBoxplotSidebar)
-                    expect(this.page.sidebar.collection).toBe(this.page.columnSet);
+                    expect(this.page.secondarySidebar).toBeA(chorus.views.DatasetVisualizationBoxplotSidebar)
+                    expect(this.page.secondarySidebar.collection).toBe(this.page.columnSet);
                 });
             });
 
@@ -130,8 +142,8 @@ describe("chorus.pages.DatasetShowPage", function() {
                 });
 
                 it("should swap out the sidebar for the frequency sidebar", function() {
-                    expect(this.page.sidebar).toBeA(chorus.views.DatasetVisualizationFrequencySidebar)
-                    expect(this.page.sidebar.collection).toBe(this.page.columnSet);
+                    expect(this.page.secondarySidebar).toBeA(chorus.views.DatasetVisualizationFrequencySidebar)
+                    expect(this.page.secondarySidebar.collection).toBe(this.page.columnSet);
                 });
             });
 
@@ -141,8 +153,8 @@ describe("chorus.pages.DatasetShowPage", function() {
                 });
 
                 it("should swap out the sidebar for the histogram sidebar", function() {
-                    expect(this.page.sidebar).toBeA(chorus.views.DatasetVisualizationHistogramSidebar)
-                    expect(this.page.sidebar.collection).toBe(this.page.columnSet);
+                    expect(this.page.secondarySidebar).toBeA(chorus.views.DatasetVisualizationHistogramSidebar)
+                    expect(this.page.secondarySidebar.collection).toBe(this.page.columnSet);
                 });
             });
 
@@ -152,11 +164,27 @@ describe("chorus.pages.DatasetShowPage", function() {
                 });
 
                 it("should swap out the sidebar for the heatmap sidebar", function() {
-                    expect(this.page.sidebar).toBeA(chorus.views.DatasetVisualizationHeatmapSidebar)
-                    expect(this.page.sidebar.collection).toBe(this.page.columnSet);
+                    expect(this.page.secondarySidebar).toBeA(chorus.views.DatasetVisualizationHeatmapSidebar)
+                    expect(this.page.secondarySidebar.collection).toBe(this.page.columnSet);
                 });
             });
 
+            describe("when the cancel:visualize event is triggered", function() {
+                beforeEach(function() {
+                    this.page.mainContent.contentDetails.trigger("transform:visualize", 'heatmap');
+                    this.resizedSpy.reset();
+                    this.page.mainContent.contentDetails.trigger("cancel:visualize");
+                });
+
+                it("triggers 'resized' on the page", function() {
+                    expect('resized').toHaveBeenTriggeredOn(this.page);
+                });
+
+                it("restores the original sidebar while hiding the secondarySidebar", function() {
+                    expect(this.page.$('#sidebar .sidebar_content.primary')).not.toHaveClass('hidden');
+                    expect(this.page.$('#sidebar .sidebar_content.secondary')).toHaveClass('hidden');
+                });
+            });
         });
     })
 });

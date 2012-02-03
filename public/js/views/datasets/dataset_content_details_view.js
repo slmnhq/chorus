@@ -77,6 +77,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$(".filters").addClass("hidden");
         this.$('.column_count').removeClass ("hidden")
         this.$('.info_bar').addClass('hidden');
+        this.trigger("cancel:visualize");
     },
 
     showTitle: function(e) {

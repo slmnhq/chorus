@@ -123,6 +123,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                     context("and cancel is clicked", function() {
                         beforeEach(function() {
+                            spyOnEvent(this.view, "cancel:visualize");
                             this.view.$('.create_chart .cancel').click();
                         });
 
@@ -139,6 +140,10 @@ describe("chorus.views.DatasetContentDetails", function() {
                             expect(this.view.$('.column_count')).not.toHaveClass('hidden');
                             expect(this.view.$('.info_bar')).toHaveClass('hidden');
                         });
+
+                        it("triggers the cancel:visualize event", function() {
+                            expect("cancel:visualize").toHaveBeenTriggeredOn(this.view);
+                        })
                     })
 
                     context("and a chart type is clicked", function() {

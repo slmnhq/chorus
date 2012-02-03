@@ -873,8 +873,8 @@ describe("chorus.views.base", function () {
                 expect($.fn.hide).toHaveBeenCalledOnSelector(".foo .jspHorizontalBar");
             })
 
-            it("binds the view to window:resized events on the page", function () {
-                expect(this.page.bind).toHaveBeenCalledWith("window:resized", jasmine.any(Function), jasmine.any(Object));
+            it("binds the view to resized events on the page", function () {
+                expect(this.page.bind).toHaveBeenCalledWith("resized", jasmine.any(Function), jasmine.any(Object));
             })
 
             it("binds to the mousewheel event on the container", function () {
@@ -900,8 +900,8 @@ describe("chorus.views.base", function () {
                     expect($.fn.hide).toHaveBeenCalledOnSelector(".foo .jspHorizontalBar");
                 })
 
-                it("does not re-bind the view to window:resized events on the page", function () {
-                    expect(this.page.bind).not.toHaveBeenCalledWith("window:resized", jasmine.any(Function), jasmine.any(Object));
+                it("does not re-bind the view to resized events on the page", function () {
+                    expect(this.page.bind).not.toHaveBeenCalledWith("resized", jasmine.any(Function), jasmine.any(Object));
                 })
 
                 it("does not re-bind to the mousewheel event on the container", function () {
@@ -909,10 +909,10 @@ describe("chorus.views.base", function () {
                 })
             })
 
-            describe("when a window:resized event occurs", function () {
+            describe("when a resized event occurs", function () {
                 beforeEach(function () {
                     spyOn(this.view.$(".foo").data("jsp"), "reinitialise")
-                    this.page.trigger("window:resized");
+                    this.page.trigger("resized");
                 });
 
                 it("recalculates scrolling", function () {

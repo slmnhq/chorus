@@ -236,7 +236,7 @@ describe("chorus.pages.Base", function() {
                     fn.call();
                 }
                 this.view = new chorus.pages.Base();
-                spyOnEvent(this.view, "window:resized")
+                spyOnEvent(this.view, "resized")
                 $(window).resize();
             });
 
@@ -244,8 +244,8 @@ describe("chorus.pages.Base", function() {
                 window.setTimeout = this.realSetTimeout;
             })
 
-            it("triggers window:resized on the page", function() {
-                expect("window:resized").toHaveBeenTriggeredOn(this.view);
+            it("triggers resized on the page", function() {
+                expect("resized").toHaveBeenTriggeredOn(this.view);
             })
         })
     })

@@ -191,7 +191,7 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
                     el.find('.jspContainer').unbind('mousewheel', this.onMouseWheel).bind('mousewheel', this.onMouseWheel);
 
                     if (chorus.page && chorus.page.bind) {
-                        chorus.page.bind("window:resized", function() { this.recalculateScrolling(el) }, this);
+                        chorus.page.bind("resized", function() { this.recalculateScrolling(el) }, this);
                     }
 
                     if (this.subviews) {

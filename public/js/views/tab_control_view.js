@@ -25,6 +25,9 @@ chorus.views.TabControl = chorus.views.Base.extend({
 
     clickTab:function (evt) {
         this.setSelectedTab($(evt.target));
+        if(chorus.page) {
+            chorus.page.trigger('resized');
+        }
     },
 
     setSelectedTab:function (tab) {
