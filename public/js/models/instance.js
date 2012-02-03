@@ -101,6 +101,10 @@ chorus.models.Instance = chorus.models.Base.extend({
             this.instanceUsage = new chorus.models.InstanceUsage({ instanceId:this.get('id')})
         }
         return this.instanceUsage
+    },
+
+    isGreenplum: function() {
+        return this.get('instanceProvider') == 'Greenplum Database'
     }
 }, {
     aurora:function () {
