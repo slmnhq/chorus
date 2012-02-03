@@ -1,7 +1,4 @@
 describe("chorus.views.InstanceListSidebar", function() {
-    beforeEach(function() {
-    });
-
     context("when no instance is selected", function() {
         beforeEach(function() {
             this.view = new chorus.views.InstanceListSidebar();
