@@ -23,25 +23,29 @@ module Jasmine
 end
 
 class DummyMiddleware
-   def initialize(app)
+  def initialize(app)
     @app = app
   end
 
   def call(env)
     request = Rack::Request.new(env)
 
-    if request.path =~ /\.(png|gif|jpg)/ || request.path =~ /\/edc\/.*image/
+    path = env['PATH_INFO']
+    if path =~ /\.(png|gif|jpg)/ || path =~ /\/.*image/
       headers = {
           "Content-Type" => "image/jpeg"
       }
       [200, headers, []]
-    elsif request.path =~ /\/file\/[^\/]+$/
+    elsif path =~ /\/file\/[^\/]+$/
       headers = {
           "Content-Type" => "text/plain"
       }
       [200, headers, []]
     else
-      @app.call(env)
+      headers = {
+          "Content-Type" => "application/json"
+      }
+      [200, headers, ["{}"]]
     end
   end
 end
