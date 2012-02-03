@@ -23,7 +23,7 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
         var sandboxSchema = this.model.sandbox() && this.model.sandbox().schema()
         return {
             schemaName:executionSchema && executionSchema.canonicalName(),
-            executionSchemaIsSandbox:(executionSchema && executionSchema.isEqual(sandboxSchema))
+            executionSchemaIsSandbox:(executionSchema && sandboxSchema && executionSchema.isEqual(sandboxSchema))
         };
     },
 

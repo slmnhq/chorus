@@ -34,4 +34,8 @@
 	.schema_picker {
 		padding: 0 20px;
 	}
+
+    label.disabled {
+        color: $color-text4;
+    }
 }

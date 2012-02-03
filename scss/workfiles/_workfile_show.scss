@@ -74,11 +74,18 @@
     li {
         padding: 5px;
 
-        a {
+        a, span {
             @include font-menu;
+        }
+        
+        a {
             &:hover {
                 text-decoration: underline;
             }
+        }
+
+        span.run_default {
+            color: $color-text4;
         }
 
         .menu_shortcut {
