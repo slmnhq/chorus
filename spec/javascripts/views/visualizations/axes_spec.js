@@ -179,6 +179,10 @@ describe("chorus.views.visualizations.NewAxis", function() {
         });
     });
 
+    describe("with an orientation of 'west'", function() {
+        
+    });
+
     function topY(el) {
         return _.min(coordsY(el));
     }
