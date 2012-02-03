@@ -17,7 +17,9 @@ describe("chorus.dialogs.Visualization", function() {
 
         describe("when the save completes", function() {
             beforeEach(function() {
-                spyOn(this.dialog, "drawChart")
+                spyOn(chorus.views.visualizations, "Boxplot").andReturn(stubView())
+                spyOn(this.dialog, "drawChart").andCallThrough()
+                this.dialog.render();
                 this.dialog.onExecutionComplete();
             });
 
@@ -27,6 +29,10 @@ describe("chorus.dialogs.Visualization", function() {
 
             it("should draw the chart", function() {
                 expect(this.dialog.drawChart).toHaveBeenCalled();
+            })
+
+            it("enables the Save Chart button", function() {
+                expect(this.dialog.$("button.save")).toBeEnabled();
             })
         });
     });
@@ -48,13 +54,17 @@ describe("chorus.dialogs.Visualization", function() {
             expect(this.dialog.$(".dialog_controls a.hide").text().trim()).toMatchTranslation("visualization.hide_table");
         });
 
-        it("should have a 'Save As' button", function() {
-            expect(this.dialog.$("button.save").text().trim()).toMatchTranslation("actions.save_as");
+        it("should have a 'Save Chart' button", function() {
+            expect(this.dialog.$("button.save").text().trim()).toMatchTranslation("actions.save_chart");
         });
 
         it("should have a 'Close' button", function() {
             expect(this.dialog.$("button.close_dialog").text().trim()).toMatchTranslation("actions.close");
         });
+
+        it("disables the Save Chart button", function() {
+            expect(this.dialog.$("button.save")).toBeDisabled();
+        })
 
         describe("the icon bar", function() {
             it("should display the icons in the correct order", function() {
@@ -101,6 +111,53 @@ describe("chorus.dialogs.Visualization", function() {
                 expect(chorus.Modal.prototype.closeModal).toHaveBeenCalled();
             });
         });
+
+        describe("downloading the chart", function() {
+            describe("clicking on the 'save chart' button", function() {
+                beforeEach(function () {
+                    this.submitSpy = jasmine.createSpy("submit");
+                    this.hideSpy = jasmine.createSpy("hide")
+
+                    this.fakeForm = {
+                        submit : this.submitSpy,
+                        hide : this.hideSpy
+                    }
+
+                    spyOn(this.dialog, "createDownloadForm").andReturn(this.fakeForm)
+                    this.dialog.$("button.save").attr("disabled", false);
+                    this.dialog.$("button.save").click();
+                });
+
+                it("constructs a form for download", function() {
+                    expect(this.dialog.createDownloadForm).toHaveBeenCalled();
+                });
+
+                it("hides the form", function() {
+                    expect(this.hideSpy).toHaveBeenCalled();
+                })
+
+                it("submits the form", function() {
+                   expect(this.submitSpy).toHaveBeenCalled();
+                });
+            })
+
+            describe("constructing the download form", function() {
+                beforeEach(function () {
+                    this.dialog.$(".chart_area").addClass("visualization").append("<svg/>")
+                    this.form = this.dialog.createDownloadForm();
+                });
+
+                it("has the correct action", function() {
+                    expect(this.form).toHaveAttr("action", "/downloadChart.jsp")
+                })
+
+                it("has the correct form elements", function() {
+                    expect($("input[name=svg]", this.form)).toExist();
+                    expect($("input[name=chart-name]", this.form)).toHaveValue("Foo")
+                    expect($("input[name=chart-type]", this.form)).toHaveValue("boxplot");
+                })
+            })
+        })
     })
 
     describe("show and hide tabular data", function() {
