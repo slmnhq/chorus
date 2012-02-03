@@ -1,4 +1,4 @@
-describe("chorus.views.visualizations.Axis", function() {
+describe("chorus.views.visualizations.NewAxis", function() {
     beforeEach(function() {
         var div = document.createElement("div");
         this.width = 300;

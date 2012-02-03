@@ -9,7 +9,7 @@
             .rangeBands([0, this.el.attr("width")]);
     };
 
-    _.extend(chorus.views.visualizations.Axis.prototype, {
+    _.extend(chorus.views.visualizations.NewAxis.prototype, {
         render: function() {
             this.drawMainAxisLine();
             this.drawLabels();
