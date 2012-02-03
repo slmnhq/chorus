@@ -6,8 +6,9 @@ describe("chorus.views.DatasetVisualizationBoxplotSidebar", function() {
                 this.column2 = fixtures.databaseColumn({typeCategory: "REAL_NUMBER", name: "a Speed"})
                 this.column3 = fixtures.databaseColumn({typeCategory: "WHOLE_NUMBER", name: "A Milk Duds"})
 
+                this.model = fixtures.datasetChorusView({objectName: "Foo"});
                 this.columns = fixtures.databaseColumnSet([this.column1, this.column2, this.column3]);
-                this.view = new chorus.views.DatasetVisualizationBoxplotSidebar({collection: this.columns})
+                this.view = new chorus.views.DatasetVisualizationBoxplotSidebar({model: this.model, collection: this.columns})
                 spyOn(chorus, 'styleSelect');
                 this.view.render();
             })
@@ -17,7 +18,7 @@ describe("chorus.views.DatasetVisualizationBoxplotSidebar", function() {
             describe("#chartOptions", function() {
                 it("should return all the chart options for a boxplot", function() {
                     var options = this.view.chartOptions();
-                    expect(options.name).toBeDefined();
+                    expect(options.name).toBe("Foo");
                     expect(options.type).toBe("boxplot");
                     expect(options.xAxis).toBe("A Milk Duds");
                     expect(options.yAxis).toBe("a Speed");
