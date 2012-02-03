@@ -21,10 +21,11 @@
 
 .controls, .modal_controls {
     button {
+        display: inline-block;
         div[aria-role=progressbar] {
-            top: 7px;
+            top: -4px;
             left: 17px;
-            display: inline;
+            display: inline-block;
             > group {
                 /* Position fixes for IE8 VML fallback */
                 position: absolute;
