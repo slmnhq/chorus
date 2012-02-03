@@ -93,23 +93,17 @@ describe("chorus.views.visualizations.NewAxis", function() {
                 expect(y1s).not.toEqual(y2s);
             });
 
-            it("centers each tick mark with its corresponding label", function() {
+            xit("centers each tick mark with its corresponding label", function() {
                 var tickXs   = pluckAttr(this.ticks, 'x1');
-                var labelX1s = pluckAttr(this.labels, 'x');
-                var labelX2s = this.labels.map(function(i, label) {
-                    return parseFloat($(label).attr("x")) + parseFloat($(label).width());
+                var labelCenters = this.labels.map(function(i, label) {
+                    return parseFloat($(label).attr("x")) + (parseFloat($(label).width()) / 2);
                 });
 
-                expect(tickXs[0]).toBeGreaterThan(labelX1s[0]);
-                expect(tickXs[0]).toBeLessThan(labelX2s[0]);
-                expect(tickXs[1]).toBeGreaterThan(labelX1s[1]);
-                expect(tickXs[1]).toBeLessThan(labelX2s[1]);
-                expect(tickXs[2]).toBeGreaterThan(labelX1s[2]);
-                expect(tickXs[2]).toBeLessThan(labelX2s[2]);
-                expect(tickXs[3]).toBeGreaterThan(labelX1s[3]);
-                expect(tickXs[3]).toBeLessThan(labelX2s[3]);
-                expect(tickXs[4]).toBeGreaterThan(labelX1s[4]);
-                expect(tickXs[4]).toBeLessThan(labelX2s[4]);
+                expect(tickXs[0]).toBeCloseTo(labelCenters[0], 20);
+                expect(tickXs[1]).toBeCloseTo(labelCenters[1], 20);
+                expect(tickXs[2]).toBeCloseTo(labelCenters[2], 20);
+                expect(tickXs[3]).toBeCloseTo(labelCenters[3], 20);
+                expect(tickXs[4]).toBeCloseTo(labelCenters[4], 20);
             });
         });
     });
