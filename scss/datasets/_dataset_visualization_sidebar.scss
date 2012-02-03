@@ -73,6 +73,7 @@
         color: $color-text2;
         font-weight: $semibold;
         margin-bottom: 10px;
+
         a {
             font-size: 12px;
         }
@@ -86,9 +87,11 @@
             margin-left: 2px;
             vertical-align: top;
         }
+        .selected_value {
+            padding-right: 5px;
+        }
         .triangle {
             display: inline-block;
-            margin-left: 5px;
             margin-bottom: 2px;
             @include triangle(down, $link-color, 7px, 4px);
         }
