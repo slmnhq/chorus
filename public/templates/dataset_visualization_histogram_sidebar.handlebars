@@ -7,13 +7,13 @@
                 <span class="column_hint">{{t "dataset.visualization.sidebar.hint.numeric"}}</span>
             </div>
 
-            {{#if numericColumns.length}}
+            {{#if numericColumnNames.length}}
             <select>
-                {{#each numericColumns}}
+                {{#each numericColumnNames}}
                 <option value='{{this}}'>{{this}}</option>
                 {{/each}}
             </select>
-            {{{limit_chooser translationKey="dataset.visualization.sidebar.number_of_bins"}}}
+            {{{range_chooser translationKey="dataset.visualization.sidebar.number_of_bins"}}}
             {{else}}
             <span class='no_columns'>{{t "dataset.visualization.sidebar.no_columns"}}</span>
             {{/if}}

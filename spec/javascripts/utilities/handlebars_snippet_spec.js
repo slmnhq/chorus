@@ -419,29 +419,35 @@ describe("handlebars", function() {
             });
         });
 
-        describe("limit_chooser", function() {
+        describe("range_chooser", function() {
             it("returns a list of numbers up to the max specified", function() {
-                var chooser = $(Handlebars.helpers.limit_chooser({hash: {max: 3}}))
+                var html = Handlebars.compile("{{range_chooser max=3}}")();
+                var chooser = $(html);
                 expect(chooser.find('.limiter_menu_container ul.limiter_menu li').length).toBe(3);
                 expect(chooser.find('li:first')).toContainText('1');
             });
 
             it("has a limiter class", function() {
-                expect($(Handlebars.helpers.limit_chooser({hash: {max: 1}}))).toHaveClass('limiter');
+                var html = Handlebars.compile("{{range_chooser max=1}}")();
+                var chooser = $(html);
+                expect(chooser).toHaveClass('limiter');
             });
 
             it("sets the default to the provided value", function() {
-                var chooser = $(Handlebars.helpers.limit_chooser({hash: {max: 3, initial: 2}}));
+                var html = Handlebars.compile("{{range_chooser max=3 initial=2}}")();
+                var chooser = $(html);
                 expect(chooser.find('a')).toContainText('2');
             })
 
             it("sets the default to max if no default provided", function() {
-                var chooser = $(Handlebars.helpers.limit_chooser({hash: {max: 3}}));
+                var html = Handlebars.compile("{{range_chooser max=3}}")();
+                var chooser = $(html);
                 expect(chooser.find('a')).toContainText('3');
             })
 
             it("sets the className if provided", function() {
-                var chooser = $(Handlebars.helpers.limit_chooser({hash: {max: 3, className: 'foo'}}));
+                var html = Handlebars.compile('{{range_chooser max=3 className="foo"}}')();
+                var chooser = $(html);
                 expect(chooser).toHaveClass('foo');
             })
         })

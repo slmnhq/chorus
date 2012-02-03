@@ -8,38 +8,46 @@
 
             var svg = d3.select(this.el).append("svg").
                 attr("class", "chart heatmap").
-                attr("width", 290).
-                attr("height", 310).
-                attr("viewBox", "0 0 272 100");
+                attr("width", 925).
+                attr("height", 340);
 
-            var config = {};
-            var chart = new Heatmap(svg, data, config);
-            chart.layout.render();
+            var axis = new chorus.views.visualizations.NewAxis({
+                el: svg,
+                labels: ['one', 'two', 'three', 'four', 'five'],
+                orientation: "south",
+                ticks: true
+            });
 
-            var fill = d3.scale.linear().domain([0, data.maxValue]).range(["white", "steelblue"]);
+            axis.render();
 
-            chart.canvas.append("svg:g")
-                .attr("class", "plot")
-                .selectAll("rect")
-                .data(data)
-                .enter().append("svg:rect")
-                .attr("x", function(d) {
-                    return chart.scales.x(d.x);
-                })
-                .attr("y", function(d) {
-                    return chart.scales.y(d.y) + chart.scales.y.rangeBand();
-                })
-                .attr("width", function(d) {
-                    return chart.scales.x.rangeBand();
-                })
-                .attr("height", function(d) {
-                    return Math.abs(chart.scales.y.rangeBand());
-                })
-                .style("stroke", "white")// TODO: move to css
-                .style("stroke-width", "0")// TODO: move to css
-                .style("fill", function(d) {
-                    return fill(d.value);
-                });
+            // var config = {};
+            // var chart = new Heatmap(svg, data, config);
+            // chart.layout.render();
+
+            // var fill = d3.scale.linear().domain([0, data.maxValue]).range(["white", "steelblue"]);
+
+            // chart.canvas.append("svg:g")
+            //     .attr("class", "plot")
+            //     .selectAll("rect")
+            //     .data(data)
+            //     .enter().append("svg:rect")
+            //     .attr("x", function(d) {
+            //         return chart.scales.x(d.x);
+            //     })
+            //     .attr("y", function(d) {
+            //         return chart.scales.y(d.y) + chart.scales.y.rangeBand();
+            //     })
+            //     .attr("width", function(d) {
+            //         return chart.scales.x.rangeBand();
+            //     })
+            //     .attr("height", function(d) {
+            //         return Math.abs(chart.scales.y.rangeBand());
+            //     })
+            //     .style("stroke", "white")// TODO: move to css
+            //     .style("stroke-width", "0")// TODO: move to css
+            //     .style("fill", function(d) {
+            //         return fill(d.value);
+            //     });
         }
     });
 

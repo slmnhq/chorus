@@ -46,7 +46,7 @@ $link-padding: 6px;
                 min-height: $list-item-height;
                 padding-right: 15px;
 
-                select {
+                select, .ui-selectmenu {
                     width: 215px;
                 }
                 select.name {
@@ -76,7 +76,6 @@ $link-padding: 6px;
 
                 .name {
                     @include ellipsis;
-                    padding-left: 10px;
                 }
 
                 .links {

@@ -13,7 +13,7 @@ describe("chorus.views.DatasetVisualizationBoxplotSidebar", function() {
                 this.view.render();
             })
 
-            itBehavesLike.DatasetVisualizationSidebarLimiter();
+            itBehavesLike.DatasetVisualizationSidebarRangeChooser();
 
             describe("#chartOptions", function() {
                 it("should return all the chart options for a boxplot", function() {

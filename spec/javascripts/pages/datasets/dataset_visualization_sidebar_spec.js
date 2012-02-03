@@ -15,21 +15,21 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
         expect(this.columns.pluck('name')).toEqual([ 'B Liger', 'a Speed', 'A Milk Duds', 'the date', 'the time', 'the time & date']);
     });
 
-    describe("allColumns", function() {
+    describe("allColumnNames", function() {
         it("returns a sorted array of column names", function() {
-            expect(this.view.allColumns()).toEqual(['A Milk Duds', 'a Speed', 'B Liger', 'the date', 'the time', 'the time & date']);
+            expect(this.view.allColumnNames()).toEqual(['A Milk Duds', 'a Speed', 'B Liger', 'the date', 'the time', 'the time & date']);
         })
     })
 
-    describe("numericColumns", function() {
+    describe("numericColumnNames", function() {
         it("returns a sorted array of numeric column names", function() {
-            expect(this.view.numericColumns()).toEqual(['A Milk Duds', 'a Speed']);
+            expect(this.view.numericColumnNames()).toEqual(['A Milk Duds', 'a Speed']);
         })
     })
 
-    describe("datetimeColumns", function() {
+    describe("datetimeColumnNames", function() {
         it("returns a sorted array of date/time column names", function() {
-            expect(this.view.datetimeColumns()).toEqual(["the date", "the time", "the time & date"]);
+            expect(this.view.datetimeColumnNames()).toEqual(["the date", "the time", "the time & date"]);
         })
     })
 })

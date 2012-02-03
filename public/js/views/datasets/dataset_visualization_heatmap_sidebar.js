@@ -8,7 +8,7 @@ chorus.views.DatasetVisualizationHeatmapSidebar = chorus.views.DatasetVisualizat
 
     additionalContext:function () {
         return {
-            numericColumns:this.numericColumns(),
+            numericColumnNames:this.numericColumnNames()
         }
     }
 });

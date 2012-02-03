@@ -12,9 +12,13 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
     },
 
     setup:function () {
-        this.instances = new chorus.collections.InstanceSet();
-        this.instances.bind("reset", this.updateInstances, this);
-        this.instances.fetchAll();
+        if(!this.options.instance) {
+            this.instances = new chorus.collections.InstanceSet();
+            this.instances.bind("reset", this.updateInstances, this);
+            this.instances.fetchAll();
+        } else{
+            this.instanceSelected();
+        }
     },
 
     postRender:function () {
@@ -25,13 +29,17 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
     instanceSelected:function () {
         this.resetSelect('database');
         this.resetSelect('schema');
-        this.selectedInstance = this.instances.get(this.$('.instance select option:selected').val());
+        this.selectedInstance = this.getSelectedInstance();
         if (this.selectedInstance) {
             this.showSection("database", { loading:true });
             this.databases = this.selectedInstance.databases();
             this.databases.bind("reset", this.updateDatabases, this);
             this.databases.fetch();
         }
+    },
+
+    getSelectedInstance: function() {
+        return this.options.instance || this.instances.get(this.$('.instance select option:selected').val());
     },
 
     databaseSelected:function () {
@@ -189,7 +197,8 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
 
     additionalContext:function () {
         return {
-            "allowCreate":this.options.allowCreate
+            "allowCreate":this.options.allowCreate,
+            options: this.options
         }
     }
 });

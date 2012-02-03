@@ -10,15 +10,15 @@ describe("chorus.views.DatasetVisualizationHeatmapSidebar", function() {
 
             describe("input select boxes", function() {
                 it("populates the X axis box with numeric columns", function() {
-                    expect(this.view.$(".x_axis select option").length).toBe(this.view.numericColumns().length);
+                    expect(this.view.$(".x_axis select option").length).toBe(this.view.numericColumnNames().length);
                 })
                 it("populates the Y axis box with numeric columns", function() {
-                    expect(this.view.$(".y_axis select option").length).toBe(this.view.numericColumns().length);
+                    expect(this.view.$(".y_axis select option").length).toBe(this.view.numericColumnNames().length);
                 })
             })
 
-            itBehavesLike.DatasetVisualizationSidebarLimiter('.limiter.x_axis');
-            itBehavesLike.DatasetVisualizationSidebarLimiter('.limiter.y_axis');
+            itBehavesLike.DatasetVisualizationSidebarRangeChooser('.limiter.x_axis');
+            itBehavesLike.DatasetVisualizationSidebarRangeChooser('.limiter.y_axis');
         })
 
         context("with no columns", function() {

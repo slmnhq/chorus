@@ -64,28 +64,12 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
     },
 
     postRender:function () {
-        var versionList = this.versionList;
-        this.$("a.version_list").qtip({
-            content:{
-                text:function () {
-                    return $(versionList.render().el);
-                }
-            },
-            show:'click',
-            hide:'unfocus',
-            position:{
-                my:"top center",
-                at:"bottom center"
-            },
-            style:{
-                classes:"tooltip-white",
-                tip:{
-                    width:20,
-                    height:15
-                }
-            }
-        });
         this._super('postRender');
+        var versionList = this.versionList.render();
+        chorus.menu(this.$('a.version_list'), {
+            content:$(versionList.el)
+        });
+
     },
 
     displayVersionList:function (e) {

@@ -7,12 +7,13 @@
                 <span class="column_hint">{{t "dataset.visualization.sidebar.hint.numeric"}}</span>
             </div>
 
-            {{#if numericColumns.length}}
+            {{#if numericColumnNames.length}}
             <select>
-                {{#each numericColumns}}
+                {{#each numericColumnNames}}
                 <option value='{{this}}'>{{this}}</option>
                 {{/each}}
             </select>
+            {{chooser_menu dataGroupingChoices className="value" translationKey="dataset.visualization.sidebar.group_by"}}
             {{else}}
             <span class='no_columns'>{{t "dataset.visualization.sidebar.no_numerical_columns"}}</span>
             {{/if}}
@@ -24,12 +25,13 @@
                 <span class="column_hint">{{t "dataset.visualization.sidebar.hint.datetime"}}</span>
             </div>
 
-            {{#if datetimeColumns.length}}
+            {{#if datetimeColumnNames.length}}
             <select>
-                {{#each datetimeColumns}}
+                {{#each datetimeColumnNames}}
                 <option value='{{this}}'>{{this}}</option>
                 {{/each}}
             </select>
+            {{chooser_menu dateTimeIntervals className="datetime" translationKey="dataset.visualization.sidebar.interval"}}
             {{else}}
             <span class='no_columns'>{{t "dataset.visualization.sidebar.no_datetime_columns"}}</span>
             {{/if}}

@@ -1,66 +1,67 @@
-chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
-    additionalClass: "dataset_visualization_sidebar",
+;
+(function() {
+    chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
+        additionalClass: "dataset_visualization_sidebar",
 
-    events: {
-        "click button.create": "launchVisualizationDialog"
-    },
+        events: {
+            "click button.create": "launchVisualizationDialog"
+        },
 
-    setup: function() {
-        var alphaSort = function(column) {
-            return column.get("name") && column.get("name").toLowerCase();
-        }
-        this.columns = _.sortBy(this.collection.models, alphaSort);
-
-        this.numericalColumns = _.filter(this.columns, function(col) {
-            var category = col.get('typeCategory')
-            var allowedCategories = ['WHOLE_NUMBER', 'REAL_NUMBER']
-            return _.include(allowedCategories, category)
-        });
-
-        this.dateTimeColumns = _.filter(this.columns, function(col) {
-            var category = col.get('typeCategory')
-            var allowedCategories = ['DATE', 'TIME', "DATETIME"]
-            return _.include(allowedCategories, category)
-        });
-    },
-
-    postRender: function() {
-        chorus.styleSelect(this.$('select'));
-
-        chorus.menu(this.$(".limiter a"), {
-            content: this.$(".limiter_menu_container").html(),
-            container: $(this.el),
-            contentEvents: {
-                'li': _.bind(this.limiterSelected, this)
+        setup: function() {
+            var alphaSort = function(column) {
+                return column.get("name") && column.get("name").toLowerCase();
             }
-        });
-    },
+            this.columns = _.sortBy(this.collection.models, alphaSort);
 
-    limiterSelected: function(e, api) {
-        api.elements.target.find('.selected_value').text($(e.target).text());
-    },
+            this.numericalColumns = filterColumns(['WHOLE_NUMBER', 'REAL_NUMBER'], this.columns)
+            this.datetimeColumns = filterColumns(['DATE', 'TIME', "DATETIME"], this.columns);
 
-    allColumns: function() {
-        return _.map(this.columns, function(col) {
-            return col.get('name');
-        });
-    },
+            function filterColumns(types, columns) {
+                return _.filter(columns, function(col) {
+                    var category = col.get('typeCategory')
+                    return _.include(types, category)
+                })
+            }
+        },
 
-    numericColumns: function() {
-        return _.map(this.numericalColumns, function(col) {
-            return col.get('name');
-        });
-    },
+        postRender: function() {
+            chorus.styleSelect(this.$('select'));
 
-    datetimeColumns: function() {
-        return _.map(this.dateTimeColumns, function(col) {
-            return col.get('name');
-        });
-    },
+            var $a = this.$(".limiter a");
+            var $el = $(this.el);
+            var limiterSelected = _.bind(this.limiterSelected, this);
+            $.each($a, function(index, link) {
+                var $link = $(link);
+                chorus.menu($link, {
+                    content: $link.parent().find(".limiter_menu_container").html(),
+                    container: $el,
+                    contentEvents: {
+                        'li': limiterSelected
+                    }
+                })
+            })
+        },
 
-    launchVisualizationDialog: function(e) {
-        e && e.preventDefault();
-        var dialog = new chorus.dialogs.Visualization({model: this.model, chartOptions: this.chartOptions()});
-        dialog.launchModal();
+        limiterSelected: function(e, api) {
+            api.elements.target.find('.selected_value').text($(e.target).text());
+        },
+
+        allColumnNames: nameGetter("columns"),
+        numericColumnNames: nameGetter("numericalColumns"),
+        datetimeColumnNames: nameGetter("datetimeColumns"),
+
+        launchVisualizationDialog: function(e) {
+            e && e.preventDefault();
+            var dialog = new chorus.dialogs.Visualization({model: this.model, chartOptions: this.chartOptions()});
+            dialog.launchModal();
+        }
+    });
+
+    function nameGetter(prop) {
+        return function() {
+            return _.map(this[prop], function(col) {
+                return col.get('name');
+            });
+        }
     }
-});
+})();

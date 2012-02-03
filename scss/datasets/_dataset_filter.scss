@@ -59,14 +59,20 @@
         vertical-align: top;
     }
 
-    select, .ui-selectmenu-button {
+    select, .ui-selectmenu {
         width: 215px;
-        padding-right: 10px;
+        margin-right: 10px;
+    }
+
+    .ui-selectmenu-menu ul {
+      padding: 2px 8px 2px 2px;
     }
 
     input[type=text] {
         width: 250px;
         display: inline-block;
         margin-right: 10px;
+        vertical-align: top;
+        margin-top: 4px;
     }
 }

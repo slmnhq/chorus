@@ -13,7 +13,7 @@ chorus.views.DatasetVisualizationHistogramSidebar = chorus.views.DatasetVisualiz
     additionalContext: function() {
         return {
             chartType: "histogram",
-            numericColumns: this.numericColumns()
+            numericColumnNames: this.numericColumnNames()
         }
     }
 });

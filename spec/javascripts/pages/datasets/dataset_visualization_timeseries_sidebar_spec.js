@@ -4,19 +4,23 @@ describe("chorus.views.DatasetVisualizationTimeSeriesSidebar", function() {
             beforeEach(function() {
                 this.columns = fixtures.databaseColumnSet();
                 this.columns.add(fixtures.databaseColumn({typeCategory: 'SmellyThings'}));
+                this.columns.add(fixtures.databaseColumn({typeCategory: 'TIME'}));
                 this.view = new chorus.views.DatasetVisualizationTimeSeriesSidebar({collection: this.columns})
                 this.view.render();
             })
 
             describe("input select boxes", function() {
                 it("populates the Value box with numeric columns", function() {
-                    expect(this.view.$(".value select option").length).toBe(this.view.numericColumns().length);
+                    expect(this.view.$(".value select option").length).toBe(this.view.numericColumnNames().length);
                     expect(this.view.$(".value .labels").text()).toContainTranslation("dataset.visualization.sidebar.value")
                 })
                 it("populates the Time box with date/time columns", function() {
-                    expect(this.view.$(".time select option").length).toBe(this.view.datetimeColumns().length);
+                    expect(this.view.$(".time select option").length).toBe(this.view.datetimeColumnNames().length);
                     expect(this.view.$(".time .labels").text()).toContainTranslation("dataset.visualization.sidebar.time")
                 })
+
+                itBehavesLike.DatasetVisualizationSidebarChooser(2, "maximum", ".value .limiter");
+                itBehavesLike.DatasetVisualizationSidebarChooser(2, "day", ".time .limiter");
             })
         })
 
