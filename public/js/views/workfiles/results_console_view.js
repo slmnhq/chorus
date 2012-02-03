@@ -43,7 +43,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
             this.$(".result_content").addClass("hidden");
             this.$(".message").empty();
         } else {
-            this.dataTable = new chorus.views.TaskDataTable({model:task});
+            this.dataTable = new chorus.views.TaskDataTable({shuttle:this.options.shuttle, model:task});
             this.dataTable.render();
             this.$(".result_content").removeClass("hidden");
             this.$(".result_table").html(this.dataTable.el);

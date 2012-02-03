@@ -16,7 +16,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.type = this.options.chartOptions.type;
         this.title = t("visualization.title", {name: this.options.chartOptions.name});
 
-        this.chartData = new chorus.views.ResultsConsole();
+        this.chartData = new chorus.views.ResultsConsole({shuttle: false});
+
         var func = 'make' + _.capitalize(this.type) + 'Task';
         this.task = this.model[func](this.options.chartOptions);
         this.task.bind("saved", this.onExecutionComplete, this);
@@ -50,6 +51,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.$('.results_console').removeClass("hidden");
         this.$(".dialog_controls a.hide").removeClass("hidden");
         this.$(".dialog_controls a.show").addClass("hidden");
+        this.recalculateScrolling();
     },
 
     hideTabularData: function(e) {

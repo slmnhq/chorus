@@ -31,7 +31,10 @@ chorus.views.TaskDataTable = chorus.views.Base.extend({
     },
 
     additionalContext:function () {
-        return { columns:this.model.columnOrientedData() };
+        return {
+            shuttle: this.options.shuttle == undefined || this.options.shuttle,
+            columns: this.model.columnOrientedData()
+        };
     },
 
     adjustHeaderPosition:function () {

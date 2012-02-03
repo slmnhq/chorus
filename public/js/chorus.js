@@ -12,6 +12,11 @@ window.Chorus = function() {
     self.locale = 'en';
 
     self.initialize = function() {
+        // Check and prompt for Chrome Frame install if applicable
+        CFInstall.check({
+            mode: "overlay"
+        });
+
         self.session = new chorus.models.Session();
         self.router = new chorus.Router(self);
         self.detectFeatures();

@@ -183,7 +183,7 @@
         limit_chooser:function (options) {
             options = options.hash;
             var max = options.max || 20;
-            var selected = options.default || max;
+            var selected = options.initial || max;
             var translationKey = options.translationKey || "dataset.visualization.sidebar.category_limit";
             var className = options.className || '';
             var markup = "<div class='limiter " + className + "'><span class='pointing_l'></span>" + t(translationKey) + " &nbsp;<a href='#'><span class='selected_value'>" + selected + "</span><span class='triangle'></span></a><div class='limiter_menu_container'><ul class='limiter_menu'>";

@@ -2,7 +2,9 @@
     {{! These divs are right next to the each statements to prevent whitespace between the elements. }}
     {{#each columns}}<div class="th">
         <div class="name" title="{{{name}}}">{{name}}</div>
-        <a class="move_to_first" href="#"/>
+        {{#if ../shuttle}}
+            <a class="move_to_first" href="#"/>
+        {{/if}}
     </div>{{/each}}
 </div>
 
