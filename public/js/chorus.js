@@ -13,9 +13,11 @@ window.Chorus = function() {
 
     self.initialize = function() {
         // Check and prompt for Chrome Frame install if applicable
-        window.jasmine || CFInstall.check({
-            mode: "overlay"
-        });
+        if(!window.jasmine && BrowserDetect.browser == "Explorer" && BrowserDetect.version <= "8") {
+             CFInstall.check({
+                mode: "overlay"
+            });
+        }
 
         self.session = new chorus.models.Session();
         self.router = new chorus.Router(self);
