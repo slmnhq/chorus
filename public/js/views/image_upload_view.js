@@ -29,6 +29,10 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
             dataType:"text"
         });
 
+        if(this.model.hasImage()) {
+            this.$('img').removeClass('hidden')
+        }
+
         function fileSelected(e, data) {
             if (self.spinnerSmall) {
                 self.spinner = new Spinner({
@@ -74,6 +78,7 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
                 self.resource.trigger("validated");
                 self.model.trigger("image:change");
                 self.$("img").attr('src', originalUrl + "&buster=" + (new Date().getTime()));
+                self.$("img").removeClass("hidden");
             } else {
                 self.resource.serverErrors = json.message;
                 self.resource.trigger("saveFailed");

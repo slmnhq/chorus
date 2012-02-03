@@ -28,6 +28,10 @@ describe("chorus.views.ImageUpload", function() {
             it("does assign a 'src' attribute to the image", function() {
                 expect(this.view.$("img").attr('src')).toBeUndefined();
             })
+
+            it("the image is hidden", function() {
+                expect(this.view.$("img")).toHaveClass('hidden')
+            })
         });
 
         context("when the model has an image", function() {
@@ -44,6 +48,9 @@ describe("chorus.views.ImageUpload", function() {
                 expect(this.view.$("img").attr("src")).toContain(this.user.imageUrl());
             });
 
+            it("the image is not hidden", function() {
+                expect(this.view.$("img")).not.toHaveClass('hidden')
+            })
         });
 
         context("when a photo to upload has been chosen", function() {
@@ -91,6 +98,10 @@ describe("chorus.views.ImageUpload", function() {
                 it("removes the disabled class from the image", function() {
                     expect(this.view.$("img")).not.toHaveClass("disabled");
                 });
+
+                it("removes the hidden class from the image", function() {
+                    expect(this.view.$("img")).not.toHaveClass('hidden')
+                })
 
                 it("changes/adds the cache-buster on the original image's URL", function() {
                     var originalUrl = this.view.model.imageUrl();
