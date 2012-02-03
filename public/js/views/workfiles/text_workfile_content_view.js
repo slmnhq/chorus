@@ -5,7 +5,7 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
     setup:function () {
         this.bind("file:saveCurrent", this.replaceCurrentVersion);
         this.bind("file:createWorkfileNewVersion", this.createWorkfileNewVersion);
-        this.bind("file:insertText", this.insertFunction, this)
+        this.bind("file:insertText", this.insertText, this)
         this.model.bind("saveFailed", this.versionConflict, this)
     },
 
@@ -118,8 +118,9 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
         }, this);
     },
 
-    insertFunction:function (text) {
+    insertText:function (text) {
         this.editor.focus();
         this.editor.replaceSelection(text)
+        this.editor.setCursor(this.editor.getCursor(false))
     }
 });
