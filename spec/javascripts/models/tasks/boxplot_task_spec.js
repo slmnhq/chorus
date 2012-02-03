@@ -44,4 +44,14 @@ describe("chorus.models.BoxplotTask", function() {
             expect(request.params()['chart[yAxis]']).toBe("height");
         });
     });
+
+    describe("#getSortedRows", function() {
+        beforeEach(function() {
+            this.rows = [ { percentage: '5%'}, { percentage : '3.2%'} , { percentage : '3.3%'}];
+            this.sortedRows = [ { percentage: '5%'}, { percentage : '3.3%'} , { percentage : '3.2%'}];
+        });
+        it("should sort them descending order by percentage", function() {
+            expect(this.model.getSortedRows(this.rows)).toEqual(this.sortedRows);
+        })
+    });
 })

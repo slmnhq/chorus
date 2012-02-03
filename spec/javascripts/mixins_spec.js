@@ -316,7 +316,7 @@ describe("chorus.Mixins", function () {
         });
 
         describe("#columnOrientedData", function () {
-            context("when the host provides custom getRows and getColumns functions", function () {
+            context("when the host provides custom functions", function () {
                 beforeEach(function () {
                     this.hostModel = chorus.models.Base.extend(_.extend({}, chorus.Mixins.SQLResults, {
                         getRows : function () {
@@ -325,6 +325,12 @@ describe("chorus.Mixins", function () {
 
                         getColumns : function () {
                             return this.get("c");
+                        },
+
+                        getSortedRows : function(rows) {
+                            return _.sortBy(rows, function(row) {
+                                return -1 * row.foo;
+                            });
                         },
 
                         getColumnLabel : function(name) {
@@ -353,12 +359,12 @@ describe("chorus.Mixins", function () {
 
                         r:[
                             {
-                                "foo":"value1",
-                                "bar":"bar1"
+                                "foo": 1,
+                                "bar": 3
                             },
                             {
-                                "foo":"value2",
-                                "bar":"bar2"
+                                "foo": 2,
+                                "bar": 4
                             }
                         ]
                     });
@@ -371,17 +377,17 @@ describe("chorus.Mixins", function () {
                     expect(val[0].name).toBe("A Foo");
                     expect(val[0].type).toBe("whatever");
                     expect(val[0].values.length).toBe(2);
-                    expect(val[0].values[0]).toBe("value1");
-                    expect(val[0].values[1]).toBe("value2");
+                    expect(val[0].values[0]).toBe(2);
+                    expect(val[0].values[1]).toBe(1);
 
                     expect(val[1].name).toBe("A Bar");
                     expect(val[1].type).toBe("what");
                     expect(val[1].values.length).toBe(2);
-                    expect(val[1].values[0]).toBe("bar1");
-                    expect(val[1].values[1]).toBe("bar2");
+                    expect(val[1].values[0]).toBe(4);
+                    expect(val[1].values[1]).toBe(3);
                 })
             })
-            context("when the host does not provide custom getRows and getColumns functions", function () {
+            context("when the host does not provide custom functions", function () {
                 beforeEach(function () {
                     this.hostModel = chorus.models.Base.extend(_.extend({}, chorus.Mixins.SQLResults, {
                     }));
@@ -400,12 +406,12 @@ describe("chorus.Mixins", function () {
 
                         rows:[
                             {
-                                "foo":"value1",
-                                "bar":"bar1"
+                                "foo": 1,
+                                "bar": 3
                             },
                             {
-                                "foo":"value2",
-                                "bar":"bar2"
+                                "foo": 2,
+                                "bar": 4
                             }
                         ]
                     });
@@ -418,14 +424,14 @@ describe("chorus.Mixins", function () {
                     expect(val[0].name).toBe("foo");
                     expect(val[0].type).toBe("whatever");
                     expect(val[0].values.length).toBe(2);
-                    expect(val[0].values[0]).toBe("value1");
-                    expect(val[0].values[1]).toBe("value2");
+                    expect(val[0].values[0]).toBe(1);
+                    expect(val[0].values[1]).toBe(2);
 
                     expect(val[1].name).toBe("bar");
                     expect(val[1].type).toBe("what");
                     expect(val[1].values.length).toBe(2);
-                    expect(val[1].values[0]).toBe("bar1");
-                    expect(val[1].values[1]).toBe("bar2");
+                    expect(val[1].values[0]).toBe(3);
+                    expect(val[1].values[1]).toBe(4);
                 })
             })
         })

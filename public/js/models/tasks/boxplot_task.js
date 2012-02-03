@@ -10,6 +10,12 @@ chorus.models.BoxplotTask = chorus.models.ChartTask.extend({
         "thirdQuartile" : "dataset.visualization.boxplot.3rdquartile"
     },
 
+    getSortedRows : function(rows) {
+        return _.sortBy(rows, function(row) {
+            return -1 * parseFloat(row.percentage);
+        });
+    },
+
     beforeSave: function() {
         this._super("beforeSave");
         this.set({

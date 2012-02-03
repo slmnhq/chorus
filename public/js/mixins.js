@@ -89,9 +89,14 @@ chorus.Mixins.SQLResults = {
         return columnName;
     },
 
+    getSortedRows : function(rows) {
+        return rows;
+    },
+
     columnOrientedData: function() {
-        var rows = this.getRows();
+
         var columns = this.getColumns();
+        var rows = this.getSortedRows(this.getRows());
 
         var self = this;
         return _.map(columns, function (column) {
