@@ -180,16 +180,15 @@
             return markup
         },
 
-        category_limit_chooser: function(max, selected, translationKey) {
-            if(_.isObject(selected) || !selected) {
-                selected = max
-            }
-            if(!_.isString(translationKey)) {
-                translationKey = "dataset.visualization.sidebar.category_limit";
-            }
-            var markup = "<div class='category_limit'><span class='pointing_l'></span>" + t(translationKey) +" &nbsp;<a href='#'><span class='selected_value'>" + selected + "</span><span class='triangle'></span></a><div class='category_limit_menu_container'><ul class='category_limit_menu'>";
-            _.times(max, function(n){
-              markup = markup + '<li>' + (n+1) + '</li>';
+        limit_chooser:function (options) {
+            options = options.hash;
+            var max = options.max || 20;
+            var selected = options.initial || max;
+            var translationKey = options.translationKey || "dataset.visualization.sidebar.category_limit";
+            var className = options.className || '';
+            var markup = "<div class='limiter " + className + "'><span class='pointing_l'></span>" + t(translationKey) + " &nbsp;<a href='#'><span class='selected_value'>" + selected + "</span><span class='triangle'></span></a><div class='limiter_menu_container'><ul class='limiter_menu'>";
+            _.times(max, function (n) {
+                markup = markup + '<li>' + (n + 1) + '</li>';
             })
             markup = markup + '</ul></div></div>'
             return markup;

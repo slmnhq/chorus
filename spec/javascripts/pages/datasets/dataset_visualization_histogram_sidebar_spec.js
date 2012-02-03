@@ -15,9 +15,9 @@ describe("chorus.views.DatasetVisualizationHistogramSidebar", function() {
             })
 
             it("has # of bins", function() {
-                expect(this.view.$('.category_limit')).toContainTranslation('dataset.visualization.sidebar.number_of_bins');
+                expect(this.view.$('.limiter')).toContainTranslation('dataset.visualization.sidebar.number_of_bins');
             })
-            itBehavesLike.DatasetVisualizationSidebar();
+            itBehavesLike.DatasetVisualizationSidebarLimiter();
         })
 
         context("with no columns", function() {

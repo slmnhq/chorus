@@ -12,7 +12,7 @@ describe("chorus.views.DatasetVisualizationFrequencySidebar", function() {
                     expect(this.view.$(".category select option").length).toBe(this.columns.models.length);
                 })
             })
-            itBehavesLike.DatasetVisualizationSidebar();
+            itBehavesLike.DatasetVisualizationSidebarLimiter();
         })
 
         context("with no columns", function() {

@@ -85,6 +85,10 @@
                     this.sidebar = new chorus.views.DatasetVisualizationHistogramSidebar({collection: this.columnSet});
                     this.renderSubview('sidebar');
                     break;
+                case 'heatmap':
+                    this.sidebar = new chorus.views.DatasetVisualizationHeatmapSidebar({collection: this.columnSet});
+                    this.renderSubview('sidebar');
+                    break;
             }
 
         }

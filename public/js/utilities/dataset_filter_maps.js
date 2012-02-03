@@ -51,6 +51,19 @@
         errorMessage: "dataset.filter.time_required"
     };
 
+    chorus.utilities.DatasetFilterMaps.date = {
+        comparators: {
+            "on": {usesDateInput: true, generate: makeGenerate("=") },
+            "before": {usesDateInput: true, generate: makeGenerate("<") },
+            "after": {usesDateInput: true, generate: makeGenerate(">") },
+            "null": {usesDateInput: false, generate: isNull },
+            "not_null": {usesDateInput: false, generate: isNotNull }
+        },
+        validate: function(value) {
+            return true
+        }
+    };
+
     function isNull(columnName, inputValue){
         return qd(columnName) + " IS NULL";
     }

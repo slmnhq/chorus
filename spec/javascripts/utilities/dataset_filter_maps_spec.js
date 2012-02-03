@@ -116,3 +116,24 @@ describe("chorus.utilities.DatasetFilterMaps.time", function() {
         expect(time.validate("12am")).toBeFalsy();
     })
 });
+
+describe("chorus.utilities.DatasetFilterMaps.date", function() {
+    var date = chorus.utilities.DatasetFilterMaps.date;
+    itReturnsTheRightClauseFor("on", "column_name", "some_value", "\"column_name\" = 'some_value'")
+    itReturnsTheRightClauseFor("before", "column_name", "some_value", "\"column_name\" < 'some_value'")
+    itReturnsTheRightClauseFor("after", "column_name", "some_value", "\"column_name\" > 'some_value'")
+    itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "\"column_name\" IS NOT NULL", true)
+    itReturnsTheRightClauseFor("null", "column_name", "some_value", "\"column_name\" IS NULL", true)
+
+    function itReturnsTheRightClauseFor(key, columnName, inputValue, expected, ignoreEmptyCase) {
+        it("returns the right clause for " + key, function() {
+            expect(date.comparators[key].generate(columnName, inputValue)).toBe(expected);
+        });
+
+        if (!ignoreEmptyCase) {
+            it("returns an empty string when input is empty for " + key, function() {
+                expect(date.comparators[key].generate(columnName, "")).toBe("");
+            });
+        }
+    }
+});

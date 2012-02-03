@@ -98,6 +98,8 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
             return chorus.utilities.DatasetFilterMaps.numeric
         } else if ($comparator.is(".time")) {
             return chorus.utilities.DatasetFilterMaps.time
+        } else if ($comparator.is(".date")) {
+            return chorus.utilities.DatasetFilterMaps.date
         }
     },
 

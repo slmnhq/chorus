@@ -1,6 +1,7 @@
-chorus.views.visualizations.BoxPlot = chorus.views.Base.extend({
+chorus.views.visualizations.Boxplot = chorus.views.Base.extend({
     render: function() {
         var $el = $(this.el);
+        $el.html("");
         $el.addClass("visualization");
 
         var xLabelHeight = 8;
@@ -19,7 +20,6 @@ chorus.views.visualizations.BoxPlot = chorus.views.Base.extend({
         var xPaddedScaler = d3.scale.ordinal().
             domain(_.pluck(data, "bucket")).
             rangeBands([yLabelWidth + 2, 270]);
-
 
         var xEdgeScaler = d3.scale.ordinal().
             domain(_.pluck(data, "bucket")).
