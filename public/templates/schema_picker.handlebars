@@ -1,19 +1,28 @@
 <div class="instance">
-    <div class="header_container">
-        <label class="required">{{t "sandbox.select.instance"}}</label>
-    </div>
-    <div class="loading_text">
-        <span class="loading_spinner"></span>
-    </div>
+    {{#if options.instance}}
+        <div class="header_container">
+            <label>{{t "sandbox.select.instance"}}</label>
+        </div>
+        <div class="title">
+            {{options.instance.attributes.name}}
+        </div>
+    {{else}}
+        <div class="header_container">
+            <label class="required">{{t "sandbox.select.instance"}}</label>
+        </div>
+        <div class="loading_text">
+            <span class="loading_spinner"></span>
+        </div>
 
-    <div class="unavailable hidden">{{t "sandbox.unavailable.instance"}}</div>
-    <div class="select_container hidden">
-        <select name="instance"></select>
-    </div>
+        <div class="unavailable hidden">{{t "sandbox.unavailable.instance"}}</div>
+        <div class="select_container hidden">
+            <select name="instance"></select>
+        </div>
+    {{/if}}
 </div>
 <div class="database hidden">
     <div class="header_container">
-        {{#if allowCreate}}
+        {{#if options.allowCreate}}
             <a class="new hidden" href="">{{t "sandbox.new.database"}}</a>
         {{/if}}
         <label class="required">{{t "sandbox.select.database"}}</label>
@@ -26,7 +35,7 @@
     <div class="select_container">
         <select name="database"></select>
     </div>
-    {{#if allowCreate}}
+    {{#if options.allowCreate}}
         <div class="create_container hidden">
             <input class="name" name="databaseName" maxlength="63" placeholder="{{t "sandbox.database.name.placeholder"}}"></input>
             <a class="cancel" href="#">{{t "actions.cancel"}}</a>
@@ -35,7 +44,7 @@
 </div>
 <div class="schema hidden">
     <div class="header_container">
-        {{#if allowCreate}}
+        {{#if options.allowCreate}}
             <a class="new hidden" href="#">{{t "sandbox.new.schema"}}</a>
         {{/if}}
         <label class="required">{{t "sandbox.select.schema"}}</label>
@@ -48,7 +57,7 @@
     <div class="select_container">
         <select name="schema"></select>
     </div>
-    {{#if allowCreate}}
+    {{#if options.allowCreate}}
         <div class="create_container hidden">
             <input class="name" name="schemaName" maxlength="63" placeholder="{{t "sandbox.schema.name.placeholder"}}" ></input>
             <a class="cancel" href="#" tabindex=2>{{t "actions.cancel"}}</a>

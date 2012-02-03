@@ -4,6 +4,7 @@
         'activity_list',
         'alert',
         'breadcrumbs',
+        'browse_datasets',
         'change_password',
         'collection_picklist',
         'comment',

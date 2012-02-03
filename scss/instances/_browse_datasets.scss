@@ -1,0 +1,13 @@
+@import "_common.scss";
+
+.browse_datasets {
+    .required::after {
+        content: none;
+    }
+
+    .instance {
+        .title {
+            @include dialog-label;
+        }
+    }
+}
