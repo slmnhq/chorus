@@ -99,6 +99,15 @@ describe("chorus.models", function() {
                     expect(this.model.activities()).toBe(this.activitySet);
                 });
 
+                it("accepts an override for the entityType", function() {
+                    this.activitySet = this.model.activities("myType");
+                    expect(this.activitySet.attributes.entityType).toBe("myType");
+                });
+
+                it("does not return the same activities if the effective entityType is different", function() {
+                    expect(this.model.activities("myType")).not.toBe(this.model.activities());
+                })
+
                 context("when a model specifies an entityId", function() {
                     beforeEach(function() {
                         delete this.model._activities;

@@ -12,13 +12,15 @@ chorus.models = {
             return uri.normalizeSearch().toString();
         },
 
-        activities : function() {
-            if (!this._activities) {
-                if (!this.entityType) {
+        activities : function(entityType) {
+            entityType = entityType || this.entityType;
+
+            if (!this._activities || this._activities.attributes.entityType != entityType) {
+                if (!entityType) {
                     throw "Cannot create activities without having an entityType";
                 }
 
-                this._activities = new chorus.collections.ActivitySet([], { entityType : this.entityType, entityId : this.entityId || this.get("id") });
+                this._activities = new chorus.collections.ActivitySet([], { entityType : entityType, entityId : this.entityId || this.get("id") });
                 this.bind("invalidated", this._activities.fetch, this._activities)
             }
 
