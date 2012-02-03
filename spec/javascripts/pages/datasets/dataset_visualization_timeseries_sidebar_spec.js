@@ -4,6 +4,7 @@ describe("chorus.views.DatasetVisualizationTimeSeriesSidebar", function() {
             beforeEach(function() {
                 this.columns = fixtures.databaseColumnSet();
                 this.columns.add(fixtures.databaseColumn({typeCategory: 'SmellyThings'}));
+                this.columns.add(fixtures.databaseColumn({typeCategory: 'TIME'}));
                 this.view = new chorus.views.DatasetVisualizationTimeSeriesSidebar({collection: this.columns})
                 this.view.render();
             })
@@ -17,6 +18,9 @@ describe("chorus.views.DatasetVisualizationTimeSeriesSidebar", function() {
                     expect(this.view.$(".time select option").length).toBe(this.view.datetimeColumns().length);
                     expect(this.view.$(".time .labels").text()).toContainTranslation("dataset.visualization.sidebar.time")
                 })
+
+                itBehavesLike.DatasetVisualizationSidebarChooser(2, "maximum", ".value .limiter");
+                itBehavesLike.DatasetVisualizationSidebarChooser(2, "day", ".time .limiter");
             })
         })
 

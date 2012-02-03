@@ -13,6 +13,7 @@
                 <option value='{{this}}'>{{this}}</option>
                 {{/each}}
             </select>
+            {{chooser_menu dataGroupingChoices className="value" translationKey="dataset.visualization.sidebar.group_by"}}
             {{else}}
             <span class='no_columns'>{{t "dataset.visualization.sidebar.no_numerical_columns"}}</span>
             {{/if}}
@@ -30,6 +31,7 @@
                 <option value='{{this}}'>{{this}}</option>
                 {{/each}}
             </select>
+            {{chooser_menu dateTimeIntervals className="datetime" translationKey="dataset.visualization.sidebar.interval"}}
             {{else}}
             <span class='no_columns'>{{t "dataset.visualization.sidebar.no_datetime_columns"}}</span>
             {{/if}}

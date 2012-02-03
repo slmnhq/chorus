@@ -180,18 +180,23 @@
             return markup
         },
 
-        limit_chooser:function (options) {
+        range_chooser:function (options) {
+            var max = options.hash.max || 20;
+            options.hash.initial = options.hash.initial || max;
+            return new Handlebars.SafeString(chorus.helpers.chooser_menu(_.range(1, max+1), options));
+        },
+
+        chooser_menu: function(choices, options) {
             options = options.hash;
-            var max = options.max || 20;
-            var selected = options.initial || max;
+            var selected = options.initial || choices[0];
             var translationKey = options.translationKey || "dataset.visualization.sidebar.category_limit";
             var className = options.className || '';
-            var markup = "<div class='limiter " + className + "'><span class='pointing_l'></span>" + t(translationKey) + " &nbsp;<a href='#'><span class='selected_value'>" + selected + "</span><span class='triangle'></span></a><div class='limiter_menu_container'><ul class='limiter_menu'>";
-            _.times(max, function (n) {
-                markup = markup + '<li>' + (n + 1) + '</li>';
-            })
+            var markup = "<div class='limiter " + className + "'><span class='pointing_l'></span>" + t(translationKey) + " &nbsp;<a href='#'><span class='selected_value'>" + selected + "</span><span class='triangle'></span></a><div class='limiter_menu_container'><ul class='limiter_menu " + className + "'>";
+            _.each(choices, function(thing) {
+                markup = markup + '<li>' + thing + '</li>';
+            });
             markup = markup + '</ul></div></div>'
-            return markup;
+            return new Handlebars.SafeString(markup);
         }
 
     }

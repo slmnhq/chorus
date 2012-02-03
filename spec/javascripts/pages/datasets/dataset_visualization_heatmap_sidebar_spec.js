@@ -17,8 +17,8 @@ describe("chorus.views.DatasetVisualizationHeatmapSidebar", function() {
                 })
             })
 
-            itBehavesLike.DatasetVisualizationSidebarLimiter('.limiter.x_axis');
-            itBehavesLike.DatasetVisualizationSidebarLimiter('.limiter.y_axis');
+            itBehavesLike.DatasetVisualizationSidebarRangeChooser('.limiter.x_axis');
+            itBehavesLike.DatasetVisualizationSidebarRangeChooser('.limiter.y_axis');
         })
 
         context("with no columns", function() {

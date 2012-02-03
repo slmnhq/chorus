@@ -27,13 +27,19 @@ chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
     postRender: function() {
         chorus.styleSelect(this.$('select'));
 
-        chorus.menu(this.$(".limiter a"), {
-            content: this.$(".limiter_menu_container").html(),
-            container: $(this.el),
-            contentEvents: {
-                'li': _.bind(this.limiterSelected, this)
-            }
-        });
+        var $a = this.$(".limiter a");
+        var $el = $(this.el);
+        var limiterSelected = _.bind(this.limiterSelected, this);
+        $.each($a, function(index,link) {
+            var $link = $(link);
+            chorus.menu($link, {
+                content: $link.parent().find(".limiter_menu_container").html(),
+                container: $el,
+                contentEvents: {
+                    'li': limiterSelected
+                }
+            })
+        })
     },
 
     limiterSelected: function(e, api) {
