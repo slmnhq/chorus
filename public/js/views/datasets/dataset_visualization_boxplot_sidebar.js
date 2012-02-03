@@ -10,8 +10,8 @@ chorus.views.DatasetVisualizationBoxplotSidebar = chorus.views.DatasetVisualizat
         return {
             type: "boxplot",
             name: this.model.get("objectName"),
-            xAxis: this.$(".value select option:selected").text(),
-            yAxis: this.$(".category select option:selected").text()
+            xAxis: this.$(".category select option:selected").text(),
+            yAxis: this.$(".value select option:selected").text()
         }
     },
 

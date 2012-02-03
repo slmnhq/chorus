@@ -20,8 +20,8 @@ describe("chorus.views.DatasetVisualizationBoxplotSidebar", function() {
                     var options = this.view.chartOptions();
                     expect(options.name).toBe("Foo");
                     expect(options.type).toBe("boxplot");
-                    expect(options.xAxis).toBe("A Milk Duds");
-                    expect(options.yAxis).toBe("a Speed");
+                    expect(options.xAxis).toBe("a Speed");
+                    expect(options.yAxis).toBe("A Milk Duds");
                 })
             });
             
