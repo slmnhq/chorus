@@ -24,6 +24,10 @@ describe("chorus.views.TaskDataTable", function() {
             this.view.render();
         });
 
+        it("should enable shuttling", function() {
+            expect(this.view.$(".th a.move_to_first").length).not.toBe(0);
+        });
+
         it("renders a column div for every column of the result", function() {
             expect(this.view.$("div.column").length).toBe(4);
         });
@@ -79,6 +83,30 @@ describe("chorus.views.TaskDataTable", function() {
                 expect(this.view.$(".column:eq(1) div.td:eq(0)").text()).toBe("1");
                 expect(this.view.$(".column:eq(2) div.td:eq(0)").text()).toBe("Oakland");
                 expect(this.view.$(".column:eq(3) div.td:eq(0)").text()).toBe("94612");
+            });
+        });
+
+        describe("enable and disable shuttling", function() {
+            context("when shuttling is enabled", function() {
+                beforeEach(function() {
+                    this.view.options.shuttle = true;
+                    this.view.render();
+                });
+
+                it("should enable shuttling", function() {
+                    expect(this.view.$(".th a.move_to_first").length).not.toBe(0);
+                });
+            });
+
+            context("when shuttling is disabled", function() {
+                beforeEach(function() {
+                    this.view.options.shuttle = false;
+                    this.view.render();
+                });
+
+                it("should disable shuttling", function() {
+                    expect(this.view.$(".th a.move_to_first").length).toBe(0);
+                });
             });
         });
     });

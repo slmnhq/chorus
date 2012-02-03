@@ -16,7 +16,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.type = this.options.chartOptions.type;
         this.title = t("visualization.title", {name: this.options.chartOptions.name});
 
-        this.chartData = new chorus.views.ResultsConsole();
+        this.chartData = new chorus.views.ResultsConsole({shuttle: false});
 
         var func = 'make' + _.capitalize(this.type) + 'Task';
         this.task = this.model[func](this.options.chartOptions);
