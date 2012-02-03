@@ -431,7 +431,7 @@ describe("handlebars", function() {
             });
 
             it("sets the default to the provided value", function() {
-                var chooser = $(Handlebars.helpers.limit_chooser({hash: {max: 3, default: 2}}));
+                var chooser = $(Handlebars.helpers.limit_chooser({hash: {max: 3, initial: 2}}));
                 expect(chooser.find('a')).toContainText('2');
             })
 
