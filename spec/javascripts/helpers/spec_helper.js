@@ -256,6 +256,10 @@
                     return this.actual.find('.qtip').attr('aria-hidden') == 'false'
                 },
 
+                toBeBetween: function(lowerBound, upperBound) {
+                    return (this.actual >= lowerBound) && (this.actual <= upperBound);
+                },
+
                 toHaveBeenFetched : function() {
                     return this.spec.server.lastFetchFor(this.actual);
                 }
