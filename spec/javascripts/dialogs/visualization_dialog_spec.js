@@ -4,7 +4,6 @@ describe("chorus.dialogs.Visualization", function() {
         this.dataset = fixtures.datasetSourceTable();
         this.chartOptions = {type: "boxplot", name: "Foo"};
         this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions});
-        spyOn(this.dialog.chart, "render");
     });
 
     describe("#initialization", function() {
@@ -18,7 +17,7 @@ describe("chorus.dialogs.Visualization", function() {
 
         describe("when the save completes", function() {
             beforeEach(function() {
-                this.dialog.chart.render.reset();
+                spyOn(this.dialog, "drawChart")
                 this.dialog.onExecutionComplete();
             });
 
@@ -26,8 +25,8 @@ describe("chorus.dialogs.Visualization", function() {
                 expect("file:executionCompleted").toHaveBeenTriggeredOn(this.dialog.chartData);
             });
 
-            it("should render the chart", function() {
-                expect(this.dialog.chart.render).toHaveBeenCalled();
+            it("should draw the chart", function() {
+                expect(this.dialog.drawChart).toHaveBeenCalled();
             })
         });
     });

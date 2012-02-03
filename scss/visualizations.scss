@@ -46,25 +46,28 @@
         stroke: black;
     }
 
-    .box_plot {
+    .box_plot, .boxplot {
         .box rect {
             fill: $chart-fill-color;
         }
 
         .xaxis {
             stroke-dasharray: 1;
-            stroke-width: 0.40;
+            stroke-width: 1.0;
             stroke: #aaa;
         }
 
         .whisker {
             stroke: black;
-            stroke-width: 0.4;
+            stroke-width: 1.0;
         }
 
         .median {
             stroke: black;
-            stroke-width: 0.5;
+            stroke-width: 1.0;
+        }
+        text {
+            font-size: 12px;
         }
     }
 

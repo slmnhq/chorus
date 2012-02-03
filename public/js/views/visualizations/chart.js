@@ -20,32 +20,37 @@
         var plot = canvas.append("svg:g")
             .attr("class", "plot")
 
-        function quartileRectangles(plot) {
-            plot
-                .selectAll("rect")
-                .data(data)
-                .enter().append("svg:rect")
-                .attr("x", function(d) {
-                    return chart.scales.x(d.bucket)
-                })
-                .attr("width", function(d) {
-                    return chart.scales.x.rangeBand()
-                })
-                .attr("y", function(d) {
-                    return chart.scales.y(d.thirdQuartile)
-                })
-                .attr("height", function(d) {
-                    return chart.scales.y(d.firstQuartile) - chart.scales.y(d.thirdQuartile)
-                })
+        var boxWidth = chart.scales.x.rangeBand() * 0.2;
+        var boxOffset = chart.scales.x.rangeBand() * 0.4;
 
+        var boxes = plot.selectAll("g.box").data(data).enter().
+            append("g").
+            attr("class", "box");
+
+        function quartileRectangles(boxes) {
+            boxes.append("rect").
+                attr("width", boxWidth).
+                attr("height",
+                function(d) {
+                    return Math.abs(chart.scales.y(d.thirdQuartile) - chart.scales.y(d.firstQuartile))
+                }).
+                attr("x",
+                function(d) {
+                    return chart.scales.x(d.bucket) + boxOffset
+                }).
+                attr("y",
+                function(d) {
+                    return chart.scales.y(d.thirdQuartile)
+                }).
+                attr("bucket", function(d) {
+                    return d.bucket
+                });
         }
 
-        function midline(plot) {
-            plot
-                .selectAll("line.mid")
-                .data(data)
-                .enter().append("svg:line")
-                .attr("class", "mid")
+        function midline(boxes) {
+            boxes
+                .append("svg:line")
+                .attr("class", "mid whisker")
                 .attr("x1", function(d) {
                     return chart.scales.x(d.bucket) + chart.scales.x.rangeBand() / 2
                 })
@@ -61,17 +66,15 @@
 
         }
 
-        function medianline(plot) {
-            plot
-                .selectAll("line.median")
-                .data(data)
-                .enter().append("svg:line")
+        function medianline(boxes) {
+            boxes
+                .append("svg:line")
                 .attr("class", "median")
                 .attr("x1", function(d) {
-                    return chart.scales.x(d.bucket)
+                    return chart.scales.x(d.bucket) + boxOffset
                 })
                 .attr("x2", function(d) {
-                    return chart.scales.x(d.bucket) + chart.scales.x.rangeBand()
+                    return chart.scales.x(d.bucket) + boxOffset + boxWidth
                 })
                 .attr("y1", function(d) {
                     return chart.scales.y(d.median)
@@ -82,34 +85,32 @@
 
         }
 
-        function whiskers(plot) {
-            plot
-                .selectAll("line.whisker-top")
-                .data(data)
-                .enter().append("svg:line")
-                .attr("class", "whisker-top")
+        function whiskers(boxes) {
+            boxes
+                .append("svg:line")
+                .attr("class", "whisker top")
                 .attr("x1", function(d) {
-                    return chart.scales.x(d.bucket)
+                    return chart.scales.x(d.bucket) + boxOffset + 0.25 * boxWidth
+
                 })
                 .attr("x2", function(d) {
-                    return chart.scales.x(d.bucket) + chart.scales.x.rangeBand()
+                    return chart.scales.x(d.bucket) + boxOffset + 0.75 * boxWidth
                 })
                 .attr("y1", function(d) {
+
                     return chart.scales.y(d.max)
                 })
                 .attr("y2", function(d) {
                     return chart.scales.y(d.max)
                 })
-            plot
-                .selectAll("line.whisker-bottom")
-                .data(data)
-                .enter().append("svg:line")
-                .attr("class", "whisker-bottom")
+            boxes
+                .append("svg:line")
+                .attr("class", "whisker bottom")
                 .attr("x1", function(d) {
-                    return chart.scales.x(d.bucket)
+                    return chart.scales.x(d.bucket) + boxOffset + 0.25 * boxWidth
                 })
                 .attr("x2", function(d) {
-                    return chart.scales.x(d.bucket) + chart.scales.x.rangeBand()
+                    return chart.scales.x(d.bucket) + boxOffset + 0.75 * boxWidth
                 })
                 .attr("y1", function(d) {
                     return chart.scales.y(d.min)
@@ -120,10 +121,11 @@
 
         }
 
-        quartileRectangles(plot);
-        midline(plot);
-        medianline(plot);
-        whiskers(plot);
+        midline(boxes);
+        quartileRectangles(boxes);
+        medianline(boxes);
+        whiskers(boxes);
+
     };
 
     function Boxplot(canvas, data, config) {
@@ -143,7 +145,9 @@
         });
 
         this.scales = {
-            x : d3.scale.ordinal().domain(_.map(data, function(d) { return d.bucket })),
+            x : d3.scale.ordinal().domain(_.map(data, function(d) {
+                return d.bucket
+            })),
             y : d3.scale.linear().domain([min, max])
         };
 
@@ -156,8 +160,8 @@
         };
 
         this.axes = {
-            x : new chorus.views.visualizations.Axis(this, { title : config.xAxisTitle || 'x axis', padding : 0, rangeType : 'rangeBands', from : "y", to : "right" }).south(),
-            y : new chorus.views.visualizations.Axis(this, { title : config.yAxisTitle || 'y axis', rangeType : 'range', ticks : true, from : "height", to : "top" }).west()
+            x : new chorus.views.visualizations.Axis(this, { title : config.xAxisTitle || 'x axis', padding : 0, rangeType : 'rangeBands', from : "y", to : "right", center_horizontal: true }).south(),
+            y : new chorus.views.visualizations.Axis(this, { title : config.yAxisTitle || 'y axis', rangeType : 'range', ticks : true, from : "height", to : "top", center_vertical: true }).west()
         }
         this.layout = new chorus.views.visualizations.Layout(this, { xAxis : this.axes.x, yAxis : this.axes.y });
     }
@@ -201,7 +205,9 @@
 
         this.scales = {
             x : d3.scale.linear().domain([0, max]),
-            y : d3.scale.ordinal().domain(_.map(yLabels, function(d) {return d.locator}))
+            y : d3.scale.ordinal().domain(_.map(yLabels, function(d) {
+                return d.locator
+            }))
         };
 
         var xLabels = _.map(this.scales.x.ticks(8), function(d) {
@@ -237,7 +243,7 @@
             .enter().append("svg:rect")
             .attr("class", "bar")
             .attr("x", function(d) {
-                return (chart.scales.x(d.bin)+barOffset)
+                return (chart.scales.x(d.bin) + barOffset)
             })
             .attr("width", barWidth)
             .attr("y", function(d) {
@@ -262,7 +268,9 @@
         });
 
         this.scales = {
-            x : d3.scale.ordinal().domain(_.map(xLabels, function(d) {return d.locator})),
+            x : d3.scale.ordinal().domain(_.map(xLabels, function(d) {
+                return d.locator
+            })),
             y : d3.scale.linear().domain([0, max])
         };
 
@@ -280,7 +288,6 @@
         }
         this.layout = new chorus.views.visualizations.Layout(this, { xAxis : this.axes.x, yAxis : this.axes.y });
     }
-
 
 
     chorus.chart.timeseries = function(canvas, data, config) {
@@ -317,7 +324,9 @@
             return {label : d.time, locator : d.time};
         });
         this.scales = {
-            x : d3.scale.ordinal().domain(_.map(xLabels, function(d){ return d.locator})),
+            x : d3.scale.ordinal().domain(_.map(xLabels, function(d) {
+                return d.locator
+            })),
             y : d3.scale.linear().domain([bounds.min, bounds.max])
         };
         var yLabels = _.map(this.scales.y.ticks(8), function(d) {

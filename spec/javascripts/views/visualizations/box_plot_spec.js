@@ -25,11 +25,11 @@ describe("chorus.views.visualizations.BoxPlot", function() {
         });
 
         it("renders no xtick lines by default", function() {
-            expect(this.view.$("line.xtick").length).toBe(0);
+            expect(this.view.$(".axis.south .grid line").length).toBe(0);
         });
 
         it("renders ytick lines by default", function() {
-            expect(this.view.$("line.ytick").length).toBeGreaterThan(1);
+            expect(this.view.$(".axis.west .grid line").length).toBeGreaterThan(1);
         });
 
         it("draws the median line", function() {
@@ -61,7 +61,7 @@ describe("chorus.views.visualizations.BoxPlot", function() {
                     var width = parseFloat($rect.attr("width"));
                     var x = parseFloat($rect.attr("x"));
 
-                    var $line = $box.find("line.whisker.vertical");
+                    var $line = $box.find("line.whisker.mid");
                     expect($line.attr("x2")).toBe($line.attr("x1"));
                     expect($line.attr("x2")).toBeCloseTo(x+0.5*width);
                 });

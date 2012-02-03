@@ -159,7 +159,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 y: 'value'
             }),
 
-            "Visualization: BoxPlot" : new chorus.views.visualizations.BoxPlot({
+            "Visualization: BoxPlot" : new chorus.views.visualizations.Boxplot({
                 model: new chorus.models.BoxplotTask({
                     columns: [
                         { name: "bucket",        typeCategory: "STRING" },
