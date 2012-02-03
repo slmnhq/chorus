@@ -82,5 +82,34 @@
         }
     });
 
+    chorus.presenters.visualizations.Heatmap = function(task, options) {
+        this.task = task;
+        this.options = options;
+    }
+
+    _.extend(chorus.presenters.visualizations.Heatmap.prototype, {
+        present: function() {
+            var rows = _.clone(this.task.get("rows"));
+            var xs = _.map(rows, function(row) {
+                var numbers = row.xLabel.match(/[\d\.]+/g);
+                return _.map(numbers, parseFloat);
+            });
+            var ys = _.map(rows, function(row) {
+                var numbers = row.yLabel.match(/[\d\.]+/g);
+                return _.map(numbers, parseFloat);
+            });
+            var values = _.pluck(rows, 'value');
+
+            rows.minX = _.min(_.flatten(xs));
+            rows.minY = _.min(_.flatten(ys));
+            rows.maxX = _.max(_.flatten(xs));
+            rows.maxY = _.max(_.flatten(ys));
+
+            rows.minValue = _.min(values)
+            rows.maxValue = _.max(values)
+
+            return rows;
+        }
+    })
 
 })(chorus);
