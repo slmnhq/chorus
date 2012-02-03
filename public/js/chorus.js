@@ -13,7 +13,7 @@ window.Chorus = function() {
 
     self.initialize = function() {
         // Check and prompt for Chrome Frame install if applicable
-        CFInstall.check({
+        window.jasmine || CFInstall.check({
             mode: "overlay"
         });
 
