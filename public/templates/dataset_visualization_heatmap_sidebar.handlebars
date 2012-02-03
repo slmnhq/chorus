@@ -7,9 +7,9 @@
                 <span class="column_hint">{{t "dataset.visualization.sidebar.hint.numeric"}}</span>
             </div>
 
-            {{#if numericColumns.length}}
+            {{#if numericColumnNames.length}}
             <select>
-                {{#each numericColumns}}
+                {{#each numericColumnNames}}
                 <option value='{{this}}'>{{this}}</option>
                 {{/each}}
             </select>
@@ -25,9 +25,9 @@
                 <span class="column_hint">{{t "dataset.visualization.sidebar.hint.numeric"}}</span>
             </div>
 
-            {{#if numericColumns.length}}
+            {{#if numericColumnNames.length}}
             <select>
-                {{#each numericColumns}}
+                {{#each numericColumnNames}}
                 <option value='{{this}}'>{{this}}</option>
                 {{/each}}
             </select>

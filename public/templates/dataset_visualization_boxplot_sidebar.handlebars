@@ -6,9 +6,9 @@
                 <label>{{t "dataset.visualization.sidebar.value"}}</label>
                 <span class="column_hint">{{t "dataset.visualization.sidebar.hint.numeric"}}</span>
             </div>
-            {{#if numericColumns.length}}
+            {{#if numericColumnNames.length}}
             <select>
-                {{#each numericColumns}}
+                {{#each numericColumnNames}}
                 <option value='{{this}}'>{{this}}</option>
                 {{/each}}
             </select>
@@ -21,9 +21,9 @@
                 <label>{{t "dataset.visualization.sidebar.category"}}</label>
                 <span class="column_hint">{{t "dataset.visualization.sidebar.hint.category"}}</span>
             </div>
-            {{#if allColumns.length}}
+            {{#if allColumnNames.length}}
             <select>
-                {{#each allColumns}}
+                {{#each allColumnNames}}
                 <option value='{{this}}'>{{this}}</option>
                 {{/each}}
             </select>

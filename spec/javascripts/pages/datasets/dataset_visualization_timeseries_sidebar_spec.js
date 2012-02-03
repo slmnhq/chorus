@@ -11,11 +11,11 @@ describe("chorus.views.DatasetVisualizationTimeSeriesSidebar", function() {
 
             describe("input select boxes", function() {
                 it("populates the Value box with numeric columns", function() {
-                    expect(this.view.$(".value select option").length).toBe(this.view.numericColumns().length);
+                    expect(this.view.$(".value select option").length).toBe(this.view.numericColumnNames().length);
                     expect(this.view.$(".value .labels").text()).toContainTranslation("dataset.visualization.sidebar.value")
                 })
                 it("populates the Time box with date/time columns", function() {
-                    expect(this.view.$(".time select option").length).toBe(this.view.datetimeColumns().length);
+                    expect(this.view.$(".time select option").length).toBe(this.view.datetimeColumnNames().length);
                     expect(this.view.$(".time .labels").text()).toContainTranslation("dataset.visualization.sidebar.time")
                 })
 

@@ -4,7 +4,7 @@ chorus.views.DatasetVisualizationFrequencySidebar = chorus.views.DatasetVisualiz
     additionalContext: function() {
         return {
             chartType: "frequency",
-            allColumns: this.allColumns()
+            allColumnNames: this.allColumnNames()
         }
     }
 });

@@ -7,9 +7,9 @@
                 <span class="column_hint">{{t "dataset.visualization.sidebar.hint.category"}}</span>
             </div>
 
-            {{#if allColumns.length}}
+            {{#if allColumnNames.length}}
             <select>
-                {{#each allColumns}}
+                {{#each allColumnNames}}
                 <option value='{{this}}'>{{this}}</option>
                 {{/each}}
             </select>

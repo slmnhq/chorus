@@ -17,8 +17,8 @@ chorus.views.DatasetVisualizationBoxplotSidebar = chorus.views.DatasetVisualizat
 
     additionalContext: function() {
         return {
-            numericColumns: this.numericColumns(),
-            allColumns: this.allColumns()
+            numericColumnNames: this.numericColumnNames(),
+            allColumnNames: this.allColumnNames()
         }
     }
 });

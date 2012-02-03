@@ -8,8 +8,8 @@ chorus.views.DatasetVisualizationTimeSeriesSidebar = chorus.views.DatasetVisuali
 
     additionalContext: function() {
         return {
-            numericColumns: this.numericColumns(),
-            datetimeColumns: this.datetimeColumns(),
+            numericColumnNames: this.numericColumnNames(),
+            datetimeColumnNames: this.datetimeColumnNames(),
             dataGroupingChoices: _.map(["sum", "min", "max", "average", "count"], function(name) {
                 return t("dataset.group." + name);
             }),

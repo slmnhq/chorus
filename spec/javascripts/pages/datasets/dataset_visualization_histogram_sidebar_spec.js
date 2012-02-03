@@ -10,7 +10,7 @@ describe("chorus.views.DatasetVisualizationHistogramSidebar", function() {
 
             describe("category select box", function() {
                 it("populates the select box with numeric columns", function() {
-                    expect(this.view.$(".category select option").length).toBe(this.view.numericColumns().length);
+                    expect(this.view.$(".category select option").length).toBe(this.view.numericColumnNames().length);
                 })
             })
 
