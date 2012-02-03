@@ -8,6 +8,11 @@
     .instance {
         .title {
             @include dialog-label;
+            margin-left: 15px;
         }
+    }
+
+    .schema_picker {
+        padding: 0 15px;
     }
 }
