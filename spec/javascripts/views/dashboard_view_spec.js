@@ -1,10 +1,19 @@
 describe("chorus.views.Dashboard", function(){
     beforeEach(function(){
         this.view = new chorus.views.Dashboard({ collection: new chorus.collections.WorkspaceSet() });
-        this.view.render();
     });
 
+    describe("#setup", function() {
+        it("creates a 'home' activity list", function() {
+            expect(this.view.activityList.collection.attributes.entityType).toBe("home")
+        })
+    })
+
     describe("#render", function() {
+        beforeEach(function () {
+            this.view.render();
+        });
+
         describe("the workspace list", function(){
             it("renders the workspace list with the right title", function() {
                 expect(this.view.$(".main_content.workspace_list .content_header h1").text()).toMatchTranslation("header.my_workspaces");

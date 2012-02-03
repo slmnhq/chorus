@@ -9,7 +9,7 @@ chorus.views.Dashboard = chorus.views.Base.extend({
             contentFooter:new chorus.views.StaticTemplate("dashboard_workspace_list_footer")
         });
 
-        var activities = chorus.session.user().activities();
+        var activities = chorus.session.user().activities('home');
         activities.fetch();
         this.activityList = new chorus.views.ActivityList({
             collection:activities,
