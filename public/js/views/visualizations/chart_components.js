@@ -318,7 +318,6 @@
             chart.axes.y.render();
             setScale(chart.axes.x, chart.scales.x);
             setScale(chart.axes.y, chart.scales.y);
-            setScale(chart.axes.x, chart.scales.x);
         }
     };
 
