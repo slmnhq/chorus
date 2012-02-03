@@ -1,4 +1,60 @@
 (function(chorus) {
+    chorus.views.visualizations.NewAxis = function(options) {
+        this.el      = options.el;
+        this.labels  = options.labels;
+        this.options = options;
+
+        this.scaler = d3.scale.ordinal()
+            .domain(this.labels)
+            .rangeBands([0, this.el.attr("width")]);
+    };
+
+    _.extend(chorus.views.visualizations.Axis.prototype, {
+        render: function() {
+            this.drawMainAxisLine();
+            this.drawLabels();
+            this.drawTicks();
+        },
+
+        drawMainAxisLine: function() {
+            var width = this.el.attr("width");
+            this.el.append("svg:line")
+                .attr("x1", 0)
+                .attr("x2", width)
+                .attr("y1", 0)
+                .attr("y2", 0);
+        },
+
+        drawLabels: function() {
+            var self = this;
+            this.el.selectAll(".label")
+                .data(this.labels).enter()
+                .append("svg:text")
+                .attr("class", "label")
+                .attr("y", 0)
+                .attr("x", self.scaler)
+                .text(function(d) {
+                    return d
+                });
+        },
+
+        drawTicks: function() {
+            var self = this;
+            this.el.selectAll(".tick")
+                .data(this.labels).enter()
+                .append("svg:line")
+                .attr("class", "tick")
+                .attr("y1", 0)
+                .attr("y2", .2)
+                .attr("x1", function(d, i) {
+                    return self.scaler(d) + 1;
+                })
+                .attr("x2", function(d, i) {
+                    return self.scaler(d) + 1;
+                });
+        }
+    });
+
     chorus.views.visualizations.Axis = function(chart, options) {
         var self = this;
         var rotation = 45;
@@ -174,8 +230,6 @@
             } else {
                 ticks.remove();
             }
-
-
         }
 
         function layoutY(dim, scale) {
