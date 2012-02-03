@@ -108,7 +108,7 @@ window.Chorus = function() {
         var changeFunction = function() {
             $(element).trigger('change');
         }
-        $element.selectmenu({change: changeFunction, position: {offset: "0 -1"}});
+        $element.selectmenu({change: changeFunction, positionOptions: {offset: "0 -1"}});
     }
 
     self.placeholder = function(element) {
