@@ -118,7 +118,7 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
         }, this);
     },
 
-    insertText:function (text) {
+     insertText:function (text) {
         this.editor.focus();
         this.editor.replaceSelection(text)
         this.editor.setCursor(this.editor.getCursor(false))

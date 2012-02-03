@@ -27,6 +27,7 @@
         'dataset_visualization_frequency_sidebar',
         'dataset_visualization_histogram_sidebar',
         'dataset_visualization_heatmap_sidebar',
+        'dataset_visualization_timeseries_sidebar',
         'default_content_header',
         'header',
         'image_upload',

@@ -169,6 +169,17 @@ describe("chorus.pages.DatasetShowPage", function() {
                 });
             });
 
+            context("for a time series chart", function() {
+                beforeEach(function() {
+                    this.page.mainContent.contentDetails.trigger("transform:visualize", 'timeseries');
+                });
+
+                it("should swap out the sidebar for the time series sidebar", function() {
+                    expect(this.page.secondarySidebar).toBeA(chorus.views.DatasetVisualizationTimeSeriesSidebar)
+                    expect(this.page.secondarySidebar.collection).toBe(this.page.columnSet);
+                });
+            });
+
             describe("when the cancel:visualize event is triggered", function() {
                 beforeEach(function() {
                     this.page.mainContent.contentDetails.trigger("transform:visualize", 'heatmap');

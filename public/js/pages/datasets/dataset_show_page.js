@@ -92,6 +92,10 @@
                     this.secondarySidebar = new chorus.views.DatasetVisualizationHeatmapSidebar({collection: this.columnSet});
                     this.renderSubview('secondarySidebar');
                     break;
+                case 'timeseries':
+                    this.secondarySidebar = new chorus.views.DatasetVisualizationTimeSeriesSidebar({collection: this.columnSet});
+                    this.renderSubview('secondarySidebar');
+                    break;
             }
             this.trigger('resized');
         },
