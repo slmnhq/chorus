@@ -12,10 +12,11 @@ describe("chorus.views.visualizations.Histogram", function() {
                 { bin: "20-29", frequency: 0 },
                 { bin: "30-39", frequency: 1 },
                 { bin: "40-49", frequency: 2000 }
-            ]
+            ],
+            "chart[xAxis]": "I am the x axis"
         });
-        this.foo = "bar"
-        this.view = new chorus.views.visualizations.HistogramPlotBeta({
+
+        this.view = new chorus.views.visualizations.Histogram({
             model: this.task
         });
     });
@@ -34,13 +35,37 @@ describe("chorus.views.visualizations.Histogram", function() {
         });
 
         it("renders ytick lines by default", function() {
-            expect(this.view.$(".axis.west line").length).toBeGreaterThan(1);
+            expect(this.view.$(".axis.west .grid line").length).toBeGreaterThan(1);
         });
 
         it("renders the y axis edge", function() {
             expect(this.view.$(".axis.west .axis_edge line")).toExist()
             expect(this.view.$(".axis.west .axis_edge line").attr("y1")).toBeGreaterThan(this.view.$(".axis.west .axis_edge line").attr("y2"))
 
+        })
+
+        it("labels the y axis ticks", function(){
+            var labels = this.view.$(".axis.west .labels text")
+            expect(labels.length).toBeGreaterThan(2)
+            
+            _.each (labels, function(l){
+                expect(l.textContent <= 2000).toBeTruthy();
+                expect(l.textContent >= 0).toBeTruthy();
+            })
+        })
+
+        it("labels the x axis ticks", function(){
+            var labels = _.pluck(this.view.$(".axis.south .labels text"), "textContent")
+            var expectedLabels = _.pluck(this.task.get("rows"), "bin");
+            expect(labels).toEqual(expectedLabels);
+        })
+
+        it ("labels the x axis", function(){
+            expect(this.view.$(".axis.south .title").text()).toBe("I am the x axis")
+        })
+
+        it ("labels the y axis", function(){
+            expect(this.view.$(".axis.west .title").text()).toBe("count")
         })
 
         it("does not render the x axis edge", function() {
@@ -68,8 +93,6 @@ describe("chorus.views.visualizations.Histogram", function() {
                 expect(parseFloat($(bar).attr("y"))+parseFloat($(bar).attr("height"))).toBeCloseTo(bottomY)
             })
         })
-
-        // TODO: labels x&y
 
     });
 });

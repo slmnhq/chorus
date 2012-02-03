@@ -274,7 +274,7 @@
             y : d3.scale.linear().domain([0, max])
         };
 
-        var yLabels = _.map(this.scales.y.ticks(8), function(d) {
+        var yLabels = _.map(this.scales.y.ticks(6), function(d) {
             return {label : d, locator : d};
         });
 
@@ -283,8 +283,8 @@
             y : yLabels
         };
         this.axes = {
-            x : new chorus.views.visualizations.Axis(this, { title : config.yAxisTitle || 'x axis', padding : 0, rangeType : 'rangeBands', from : "y", to : "right", center_horizontal: true }).south(),
-            y : new chorus.views.visualizations.Axis(this, { title : config.xAxisTitle || 'count', rangeType : 'range', ticks: true, axis_edge: true, from : "height", to : "top", center_vertical: true }).west()
+            x : new chorus.views.visualizations.Axis(this, { title : config.xAxisTitle || 'x axis', padding : 0, rangeType : 'rangeBands', from : "y", to : "right", center_horizontal: true }).south(),
+            y : new chorus.views.visualizations.Axis(this, { title : config.yAxisTitle || 'count', rangeType : 'range', ticks: true, axis_edge: true, from : "height", to : "top", center_vertical: true }).west()
         }
         this.layout = new chorus.views.visualizations.Layout(this, { xAxis : this.axes.x, yAxis : this.axes.y });
     }

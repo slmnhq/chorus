@@ -182,7 +182,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
             }),
 
 
-            "Visualization: HistogramPlot" : new chorus.views.visualizations.HistogramPlotBeta({
+            "Visualization: HistogramPlot" : new chorus.views.visualizations.Histogram({
                 model: new chorus.models.HistogramTask({
                     columns: [
                         {name : "bin", typeCategory: "STRING"},
@@ -195,7 +195,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                         { bin: "Zero", frequency: 0 },
                         { bin: "One", frequency: 1 },
                         { bin: "Twenty", frequency: 20 }
-                    ]
+                    ],
+                    "chart[xAxis]": "Custom x Axis Title"
                 })
             }),
 
@@ -228,7 +229,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                         { yLabel: "[155.4-197.2]", xLabel: "[5.4-7.2]", value: 40359, y: 4, x: 4 }
                     ]
                 })
-            }),
+            })
         }
     },
 
