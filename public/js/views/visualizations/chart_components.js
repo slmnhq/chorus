@@ -91,7 +91,7 @@
                 })
 
             if(options.center_horizontal){
-                labels.attr("dx", function(){return -0.5*this.getBoundingClientRect().width;})
+                labels.attr("dx", function(){return -0.75*this.getBoundingClientRect().width;})
             }
             if(options.center_vertical){
                 labels.attr("dy", function(){return 0.25*this.getBoundingClientRect().height;})

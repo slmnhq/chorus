@@ -5,13 +5,12 @@ describe("chorus.views.visualizations.BoxPlot", function() {
                 { bucket: 'aardvark',   min: 1,   firstQuartile: 1,   median: 2.5, thirdQuartile: 3,   max: 4,   percentage: "25%" },
                 { bucket: 'beluga',     min: 100, firstQuartile: 100, median: 250, thirdQuartile: 300, max: 400, percentage: "33.3%" },
                 { bucket: 'chupacabra', min: 10,  firstQuartile: 10,  median: 25,  thirdQuartile: 30,  max: 40,  percentage: "81.5%" }
-            ]
-        });
+            ],
+            "chart[xAxis]": "foo",
+            "chart[yAxis]": "bar" });
 
         this.view = new chorus.views.visualizations.Boxplot({
-            model: this.task,
-            x: "animal",
-            y: "value"
+            model: this.task
         });
     });
 
@@ -19,6 +18,11 @@ describe("chorus.views.visualizations.BoxPlot", function() {
         beforeEach(function() {
             this.view.render();
         });
+
+        it("has the correct axis labels", function() {
+            expect(this.view.$('.axis.south .title text').text()).toBe("foo")
+            expect(this.view.$('.axis.west .title text').text()).toBe("bar")
+        })
 
         it("has one box for each bucket", function() {
             expect(this.view.$("g.box").length).toBe(3);

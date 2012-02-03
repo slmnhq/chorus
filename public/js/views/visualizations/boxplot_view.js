@@ -171,7 +171,8 @@ chorus.views.visualizations.Boxplot = chorus.views.Base.extend({
         chorus.chart.boxplot(
             this.chartArea(this.el),
             data,
-            {}
+            {xAxisTitle: this.model.get("chart[xAxis]"),
+             yAxisTitle: this.model.get("chart[yAxis]")}
         );
         this.postRender();
     },
