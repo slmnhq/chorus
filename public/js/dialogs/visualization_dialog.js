@@ -46,6 +46,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.$('.results_console').removeClass("hidden");
         this.$(".dialog_controls a.hide").removeClass("hidden");
         this.$(".dialog_controls a.show").addClass("hidden");
+        this.recalculateScrolling();
     },
 
     hideTabularData: function(e) {
