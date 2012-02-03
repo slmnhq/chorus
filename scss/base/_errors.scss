@@ -40,3 +40,9 @@ input.has_error, textarea.has_error {
     background: red;
     color: white;
 }
+
+.ie9, ie8, ie7, ie6 {
+    textarea.has_error {
+        background-position: 93%;
+    }
+}
