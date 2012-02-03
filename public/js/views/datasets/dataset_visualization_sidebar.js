@@ -16,6 +16,12 @@ chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
             var allowedCategories = ['WHOLE_NUMBER', 'REAL_NUMBER']
             return _.include(allowedCategories, category)
         });
+
+        this.dateTimeColumns = _.filter(this.columns, function(col) {
+            var category = col.get('typeCategory')
+            var allowedCategories = ['DATE', 'TIME', "DATETIME"]
+            return _.include(allowedCategories, category)
+        });
     },
 
     postRender: function() {
@@ -42,6 +48,12 @@ chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
 
     numericColumns: function() {
         return _.map(this.numericalColumns, function(col) {
+            return col.get('name');
+        });
+    },
+
+    datetimeColumns: function() {
+        return _.map(this.dateTimeColumns, function(col) {
             return col.get('name');
         });
     },

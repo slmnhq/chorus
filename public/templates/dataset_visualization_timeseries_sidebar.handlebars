@@ -1,9 +1,9 @@
 <fieldset>
     <legend>{{t "dataset.visualization.sidebar.chart_display_settings"}}</legend>
     <div>
-        <div class="x_axis field">
+        <div class="value field">
             <div class='labels'>
-                <label>{{t "dataset.visualization.sidebar.x_axis"}}</label>
+                <label>{{t "dataset.visualization.sidebar.value"}}</label>
                 <span class="column_hint">{{t "dataset.visualization.sidebar.hint.numeric"}}</span>
             </div>
 
@@ -13,31 +13,28 @@
                 <option value='{{this}}'>{{this}}</option>
                 {{/each}}
             </select>
-            {{{limit_chooser className="x_axis" translationKey="dataset.visualization.sidebar.number_of_bins"}}}
             {{else}}
             <span class='no_columns'>{{t "dataset.visualization.sidebar.no_numerical_columns"}}</span>
             {{/if}}
         </div>
 
-        <div class="y_axis field">
+        <div class="time field">
             <div class='labels'>
-                <label>{{t "dataset.visualization.sidebar.y_axis"}}</label>
-                <span class="column_hint">{{t "dataset.visualization.sidebar.hint.numeric"}}</span>
+                <label>{{t "dataset.visualization.sidebar.time"}}</label>
+                <span class="column_hint">{{t "dataset.visualization.sidebar.hint.datetime"}}</span>
             </div>
 
-            {{#if numericColumns.length}}
+            {{#if datetimeColumns.length}}
             <select>
-                {{#each numericColumns}}
+                {{#each datetimeColumns}}
                 <option value='{{this}}'>{{this}}</option>
                 {{/each}}
             </select>
-            {{{limit_chooser className="y_axis" translationKey="dataset.visualization.sidebar.number_of_bins"}}}
             {{else}}
-            <span class='no_columns'>{{t "dataset.visualization.sidebar.no_numerical_columns"}}</span>
+            <span class='no_columns'>{{t "dataset.visualization.sidebar.no_datetime_columns"}}</span>
             {{/if}}
         </div>
     </div>
-
 
     <button class="create dialog" data-chart_type="{{{chartType}}}" data-name="{{{tableName}}}"
             data-dialog="Visualization">{{t "dataset.visualization.sidebar.create_chart"}}

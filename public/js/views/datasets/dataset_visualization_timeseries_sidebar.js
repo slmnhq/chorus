@@ -9,6 +9,7 @@ chorus.views.DatasetVisualizationTimeSeriesSidebar = chorus.views.DatasetVisuali
     additionalContext:function () {
         return {
             numericColumns:this.numericColumns(),
+            datetimeColumns:this.datetimeColumns()
         }
     }
 });

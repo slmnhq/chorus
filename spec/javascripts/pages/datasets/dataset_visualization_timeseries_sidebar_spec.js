@@ -9,16 +9,15 @@ describe("chorus.views.DatasetVisualizationTimeSeriesSidebar", function() {
             })
 
             describe("input select boxes", function() {
-                it("populates the X axis box with numeric columns", function() {
-                    expect(this.view.$(".x_axis select option").length).toBe(this.view.numericColumns().length);
+                it("populates the Value box with numeric columns", function() {
+                    expect(this.view.$(".value select option").length).toBe(this.view.numericColumns().length);
+                    expect(this.view.$(".value .labels").text()).toContainTranslation("dataset.visualization.sidebar.value")
                 })
-                it("populates the Y axis box with numeric columns", function() {
-                    expect(this.view.$(".y_axis select option").length).toBe(this.view.numericColumns().length);
+                it("populates the Time box with date/time columns", function() {
+                    expect(this.view.$(".time select option").length).toBe(this.view.datetimeColumns().length);
+                    expect(this.view.$(".time .labels").text()).toContainTranslation("dataset.visualization.sidebar.time")
                 })
             })
-
-            itBehavesLike.DatasetVisualizationSidebarLimiter('.limiter.x_axis');
-            itBehavesLike.DatasetVisualizationSidebarLimiter('.limiter.y_axis');
         })
 
         context("with no columns", function() {
@@ -28,14 +27,14 @@ describe("chorus.views.DatasetVisualizationTimeSeriesSidebar", function() {
                 this.view.render();
             })
 
-            it("should display 'No numerical columns' instead of the numerical column selector for x_axis", function() {
-                expect(this.view.$(".x_axis select option")).not.toExist()
-                expect(this.view.$(".x_axis .no_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_numerical_columns")
+            it("should display 'No numerical columns' instead of the numerical column selector for value", function() {
+                expect(this.view.$(".value select option")).not.toExist()
+                expect(this.view.$(".value .no_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_numerical_columns")
             })
 
-            it("should display 'No numerical columns' instead of the numerical column selector for y_axis", function() {
-                expect(this.view.$(".y_axis select option")).not.toExist()
-                expect(this.view.$(".y_axis .no_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_numerical_columns")
+            it("should display 'No time columns' instead of the numerical column selector for time", function() {
+                expect(this.view.$(".time select option")).not.toExist()
+                expect(this.view.$(".time .no_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_datetime_columns")
             })
         })
     })
