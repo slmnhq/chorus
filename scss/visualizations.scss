@@ -46,7 +46,7 @@
         stroke: black;
     }
 
-    .box_plot, .boxplot {
+    .box_plot, .boxplot, .histogram {
         .box rect {
             fill: $chart-fill-color;
         }
