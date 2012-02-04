@@ -177,7 +177,8 @@ describe("chorus.views.visualizations.Axes", function() {
             });
 
             it("draws the labels inside the padding", function() {
-                expect(bottomY(this.labels[0])).toBeLessThanOrEqualTo(this.innerHeight);
+                var innerHeightPlusBoundingBoxError = this.innerHeight + 5;
+                expect(bottomY(this.labels[0])).toBeLessThanOrEqualTo(innerHeightPlusBoundingBoxError);
             });
         });
     });
@@ -373,7 +374,6 @@ describe("chorus.views.visualizations.Axes", function() {
 
         describe("axis positioning", function() {
             beforeEach(function() {
-                
             });
         });
     });
