@@ -6,7 +6,7 @@ describe("chorus.dialogs.BrowseDatasets", function () {
             launchElement: this.launchElement,
             pageModel: this.instance
         });
-        spyOn(this.view, 'navigate');
+        spyOn(this.view, 'navigate').andCallThrough();
         this.view.render();
     });
 
@@ -24,12 +24,14 @@ describe("chorus.dialogs.BrowseDatasets", function () {
 
         describe("clicking show datasets", function () {
             beforeEach(function () {
+                spyOn(chorus.router, "navigate");
                 this.view.$(".submit").click();
             });
 
             it("should navigate away", function () {
                 expect(this.view.navigate).toHaveBeenCalled();
-            })
+                expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.schemaPicker.selectedSchema.showUrl(), true);
+            });
         })
     });
 

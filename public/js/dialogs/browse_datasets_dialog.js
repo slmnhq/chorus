@@ -21,6 +21,6 @@ chorus.dialogs.BrowseDatasets = chorus.dialogs.Base.extend({
     },
 
     navigate: function () {
-
+        chorus.router.navigate(this.schemaPicker.selectedSchema.showUrl(), true);
     }
 });

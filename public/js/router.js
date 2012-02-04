@@ -19,6 +19,7 @@
             ["/workspaces/:workspaceId/workfiles/:workfileId/versions/:versionId", "WorkfileShow"],
             ["/workspaces/:workspaceId/data", "DatasetIndex"],
             ["/instances", "InstanceIndex"],
+            ["/instances/:instanceId/database/:databaseName/schema/:schemaName", "SchemaBrowse"],
             ["/styleguide", "StyleGuide"]
         ],
 
