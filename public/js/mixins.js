@@ -114,3 +114,16 @@ chorus.Mixins.SQLResults = {
         return (errors.executeResult !== 'success') && errors.message;
     }
 }
+
+chorus.Mixins.VisHelpers = {
+    labelFormat : function(label, maxLength) {
+        maxLength = maxLength || 6
+
+        if ((typeof label == "number") && label.toString().length > maxLength){
+            return label.toExponential(2)
+        }else
+        {
+            return label;
+        }
+    }
+}

@@ -7,7 +7,7 @@
 
         this.render = function render() { // private
             attrs = this.renderOptions;
-           
+
             var axisGroup = canvas
                 .append("svg:g")
                 .attr("class", "axis " + self.orientation);
@@ -32,7 +32,7 @@
                 .attr("dx", attrs.dxLabel)
                 .attr("dy", attrs.dyLabel)
                 .text(function(d) {
-                    return d.label
+                    return self.labelFormat(d.label, 3)
                 })
 
             if(options.center_horizontal){
@@ -221,6 +221,8 @@
         this.chart = chart;
         this.options = options;
     };
+
+    _.extend(chorus.views.visualizations.Axis.prototype, chorus.Mixins.VisHelpers);
 
     chorus.views.visualizations.Layout = function(chart) {
         var canvas = chart.canvas;
