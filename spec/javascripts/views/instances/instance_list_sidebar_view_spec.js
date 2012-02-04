@@ -14,7 +14,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
     context("when an instance is selected", function() {
         beforeEach(function() {
-            this.instance = fixtures.instance({instanceProvider: "Greenplum", name : "Harry's House of Glamour"})
+            this.instance = fixtures.instance({instanceProvider: "Greenplum Database", name : "Harry's House of Glamour"})
             spyOn(this.instance, 'fetch').andCallThrough();
             spyOn(this.instance.accounts(), 'fetch').andCallThrough();
             spyOn(this.instance.usage(), 'fetch').andCallThrough();
@@ -59,7 +59,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             });
 
             it("displays instance type", function() {
-                expect(this.view.$(".instance_type").text()).toBe("Greenplum");
+                expect(this.view.$(".instance_type").text()).toBe("Greenplum Database");
             });
 
             it("renders ActivityList subview", function() {
@@ -239,6 +239,11 @@ describe("chorus.views.InstanceListSidebar", function() {
                     it("should be a dialog link", function() {
                         expect(this.view.$('.actions .browse_datasets').data('dialog')).toBe('BrowseDatasets');
                         expect(this.view.$('.actions .browse_datasets')).toContainTranslation('actions.browse_datasets');
+                    })
+
+                    it("should not show up if the instance is not a greenplum database", function() {
+                        this.instance.set({instanceProvider: 'Something Else'});
+                        expect(this.view.$('.actions .browse_datasets')).not.toExist();
                     })
                 });
             });

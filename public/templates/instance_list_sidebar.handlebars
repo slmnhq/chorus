@@ -52,10 +52,12 @@
         {{else}}
             <li><span class="disabled workspace_usage">{{t "instances.sidebar.usage" count=workspaceCount}}</span></li>
         {{/if}}
-        {{#if userHasAccount}}
-            <li><a class="dialog browse_datasets" href="#" data-dialog="BrowseDatasets">{{t "actions.browse_datasets"}}</a></li>
-        {{else}}
-            <li><a class="disabled browse_datasets">{{t "actions.browse_datasets"}}</a></li>
+        {{#if isGreenplum}}
+            {{#if userHasAccount}}
+                <li><a class="dialog browse_datasets" href="#" data-dialog="BrowseDatasets">{{t "actions.browse_datasets"}}</a></li>
+            {{else}}
+                <li><a class="disabled browse_datasets">{{t "actions.browse_datasets"}}</a></li>
+        {{/if}}
         {{/if}}
         <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="instance" data-allow-workfile-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
     </ul>

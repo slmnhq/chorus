@@ -188,6 +188,16 @@ describe("chorus.models.Instance", function() {
         });
     })
 
+    describe("#isGreenplum", function() {
+        it("returns true for greenplum instances", function() {
+            expect(fixtures.instance().isGreenplum()).toBeTruthy();
+        })
+
+        it("returns false otherwise", function() {
+            expect(fixtures.instance({instanceProvider: 'somethingElse'}).isGreenplum()).toBeFalsy();
+        })
+    })
+
     describe("validations", function() {
         context("when registering an existing instance", function() {
             beforeEach(function() {

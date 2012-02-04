@@ -22,6 +22,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
         }
         var account = this.model.accountForCurrentUser();
         return {
+            isGreenplum: this.model.isGreenplum(),
             dbUserName:this.model.get('sharedAccount') && this.model.get('sharedAccount').dbUserName,
             userHasAccount:account && account.has("id"),
             userCanEditInstance:this.canEditInstance(),
