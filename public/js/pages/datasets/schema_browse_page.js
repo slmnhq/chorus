@@ -23,8 +23,9 @@
             this.instance = new chorus.models.Instance({id: instanceId});
             this.instance.bindOnce("loaded", function() {
                 this.schema.set({instanceName : this.instance.get("name")});
+                this.mainContent.contentHeader.options.title = this.schema.canonicalName();
+                this.mainContent.contentHeader.render();
             }, this);
-
             this.instance.fetch();
 
             this.breadcrumbs = new breadcrumbsView({model: this.schema});

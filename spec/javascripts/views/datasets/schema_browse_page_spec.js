@@ -49,6 +49,10 @@ describe("chorus.pages.SchemaBrowsePage", function() {
                 expect(this.page.$("#breadcrumbs .breadcrumb .slug").text()).toBe(this.page.schema.get("name"));
             });
 
+            it("has the right title", function() {
+                expect(this.page.$(".content_header h1").text()).toBe(this.page.schema.canonicalName());
+            });
+
             it("constructs the main content list correctly", function() {
                 expect(this.page.mainContent).toBeA(chorus.views.MainContentList);
                 expect(this.page.mainContent.collection).toBe(this.page.collection);
