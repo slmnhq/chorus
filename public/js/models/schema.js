@@ -35,7 +35,7 @@ chorus.models.Schema = chorus.models.Base.extend({
     },
 
     canonicalName:function () {
-        return [this.get("instanceName"), this.get("databaseName"), this.get("name")].join(" / ");
+        return [this.get("instanceName"), this.get("databaseName"), this.get("name")].join(".");
     },
 
     isEqual:function (other) {

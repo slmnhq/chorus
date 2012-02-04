@@ -75,7 +75,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
                 });
 
                 it("displays the canonical name for the sandbox schema", function () {
-                    expect(this.dialog.$(".name").text().trim()).toBe("instance / database / schema")
+                    expect(this.dialog.$(".name").text().trim()).toBe(this.dialog.workspace.sandbox().schema().canonicalName())
                 })
 
                 it("enables the 'within the workspace sandbox' radio button", function () {

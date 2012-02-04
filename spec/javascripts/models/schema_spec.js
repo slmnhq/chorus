@@ -63,7 +63,7 @@ describe("chorus.models.Schema", function() {
         })
 
         it("should create the canonical name", function() {
-            expect(this.model.canonicalName()).toBe("instance / database / schema");
+            expect(this.model.canonicalName()).toBe("instance.database.schema");
         });
     });
 
