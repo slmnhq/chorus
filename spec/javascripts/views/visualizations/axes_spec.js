@@ -318,11 +318,11 @@ describe("chorus.views.visualizations.Axes", function() {
             });
 
             it("centers each label on its corresponding tick mark", function() {
-                expect(topY(this.ticks[0])).toBeWithinDeltaOf(centerY(this.labels[0]), 2);
-                expect(topY(this.ticks[1])).toBeWithinDeltaOf(centerY(this.labels[1]), 2);
-                expect(topY(this.ticks[2])).toBeWithinDeltaOf(centerY(this.labels[2]), 2);
-                expect(topY(this.ticks[3])).toBeWithinDeltaOf(centerY(this.labels[3]), 2);
-                expect(topY(this.ticks[4])).toBeWithinDeltaOf(centerY(this.labels[4]), 2);
+                expect(centerY(this.labels[0])).toBeWithinDeltaOf(topY(this.ticks[0]), 2);
+                expect(centerY(this.labels[1])).toBeWithinDeltaOf(topY(this.ticks[1]), 2);
+                expect(centerY(this.labels[2])).toBeWithinDeltaOf(topY(this.ticks[2]), 2);
+                expect(centerY(this.labels[3])).toBeWithinDeltaOf(topY(this.ticks[3]), 2);
+                expect(centerY(this.labels[4])).toBeWithinDeltaOf(topY(this.ticks[4]), 2);
             });
         });
 
@@ -405,26 +405,12 @@ describe("chorus.views.visualizations.Axes", function() {
     }
 
     function coordsX(el) {
-        var x1, x2, $el = $(el);
-        if ($el.is("text")) {
-            x1 = parseFloat($el.attr("x"));
-            x2 = parseFloat($el.attr("x")) + $el.width();
-        } else {
-            x1 = parseFloat($el.attr("x1"));
-            x2 = parseFloat($el.attr("x2"));
-        }
-        return [x1, x2];
+        var box = $(el)[0].getBBox();
+        return [box.x, box.x + box.width];
     }
 
     function coordsY(el) {
-        var y1, y2, $el = $(el);
-        if ($el.is("text")) {
-            y1 = parseFloat($el.attr("y"));
-            y2 = parseFloat($el.attr("y")) - $el.height();
-        } else {
-            y1 = parseFloat($el.attr("y1"));
-            y2 = parseFloat($el.attr("y2"));
-        }
-        return [y1, y2];
+        var box = $(el)[0].getBBox();
+        return [box.y, box.y + box.height];
     }
 });

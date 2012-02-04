@@ -4,8 +4,8 @@ chorus.views.visualizations.XAxis = function(options) {
     this.height   = options.el.attr("height");
     this.el       = options.el.append("svg:g")
         .attr("class", "xaxis");
-        // .attr("width", this.width)
-        // .attr("height", this.height);
+
+
     this.paddingX = options.paddingX || 20;
     this.paddingY = options.paddingY || 20;
     this.tickLength = options.tickLength || 5;
@@ -99,9 +99,9 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
         this.el.selectAll(".label")
             .attr("x", this.paddingX)
             .attr("y", function(d) {
-                var center = self.scaler(d);
-                var height = $(this).height();
-                return center + (height / 2);
+                var scalePoint = self.scaler(d);
+                var height = this.getBBox().height;
+                return scalePoint + (height / 4); // not 2? bounding box for 'text' elements gives too tall a height
             });
 
         var labelWidth = $(this.el.selectAll(".label")[0][0]).width();

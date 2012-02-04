@@ -8,7 +8,6 @@
 
             var svg = d3.select(this.el).append("svg").
                 attr("class", "chart heatmap").
-                attr("transform", "rotate(45, 0, 0)").
                 attr("width", 925).
                 attr("height", 340);
 
