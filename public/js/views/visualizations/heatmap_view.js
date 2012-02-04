@@ -8,17 +8,23 @@
 
             var svg = d3.select(this.el).append("svg").
                 attr("class", "chart heatmap").
+                attr("transform", "rotate(45, 0, 0)").
                 attr("width", 925).
                 attr("height", 340);
 
-            var axis = new chorus.views.visualizations.NewAxis({
+            var xAxis = new chorus.views.visualizations.XAxis({
                 el: svg,
                 labels: ['one', 'two', 'three', 'four', 'five'],
-                orientation: "south",
+                ticks: true
+            });
+            var yAxis = new chorus.views.visualizations.YAxis({
+                el: svg,
+                labels: ['one', 'two', 'three', 'four', 'five'],
                 ticks: true
             });
 
-            axis.render();
+            xAxis.render();
+            yAxis.render();
 
             // var config = {};
             // var chart = new Heatmap(svg, data, config);
