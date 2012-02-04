@@ -123,7 +123,10 @@
         },
 
         downloadUrl:function () {
-            return this.url() + "/file/" + this.get("versionInfo").versionFileId + "?download=true";
+            var url = URI(this.url())
+            url.path(url.path() + "/file/" + this.get("versionInfo").versionFileId)
+            url.addSearch({ download: "true" })
+            return url.toString();
         },
 
         workfilesUrl:function () {
