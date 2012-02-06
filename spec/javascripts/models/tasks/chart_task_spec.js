@@ -13,6 +13,12 @@ describe("chorus.models.ChartTask", function() {
        expect(this.model.get("chart[type]")).toBe("fantastic");
     });
 
+    it("honors the filters in the SELECT statement", function() {
+        this.model.set({"filters": "WHERE ABC"});
+        this.model.save();
+        expect(this.model.get("relation")).toEqual("SELECT * FROM dog_breeds WHERE ABC");
+    });
+
     describe("creating the task", function() {
         beforeEach(function() {
             this.model.save();

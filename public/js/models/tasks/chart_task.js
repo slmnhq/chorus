@@ -7,7 +7,11 @@ chorus.models.ChartTask = chorus.models.Task.extend(_.extend({}, chorus.Mixins.S
     },
 
     beforeSave: function() {
-        this.set({ relation: "SELECT * FROM " + this.get("objectName") });
+        var relation = "SELECT * FROM " + this.get("objectName");
+        if (this.get("filters")) {
+            relation += " " + this.get("filters");
+        }
+        this.set({ relation: relation });
     },
 
     getColumnLabel: function(columnName) {

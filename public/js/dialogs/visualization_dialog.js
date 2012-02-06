@@ -21,6 +21,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
         var func = 'make' + _.capitalize(this.type) + 'Task';
         this.task = this.model[func](this.options.chartOptions);
+        this.task.set({filters: this.options.filters && this.options.filters.whereClause()});
         this.task.bind("saved", this.onExecutionComplete, this);
         this.task.save();
     },

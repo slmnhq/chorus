@@ -78,25 +78,22 @@
             switch (chartType) {
                 case 'boxplot':
                     this.secondarySidebar = new chorus.views.DatasetVisualizationBoxplotSidebar({model: this.model, collection: this.columnSet});
-                    this.renderSubview('secondarySidebar');
                     break;
                 case 'frequency':
                     this.secondarySidebar = new chorus.views.DatasetVisualizationFrequencySidebar({model: this.model, collection: this.columnSet});
-                    this.renderSubview('secondarySidebar');
                     break;
                 case 'histogram':
                     this.secondarySidebar = new chorus.views.DatasetVisualizationHistogramSidebar({model: this.model, collection: this.columnSet});
-                    this.renderSubview('secondarySidebar');
                     break;
                 case 'heatmap':
                     this.secondarySidebar = new chorus.views.DatasetVisualizationHeatmapSidebar({model: this.model, collection: this.columnSet});
-                    this.renderSubview('secondarySidebar');
                     break;
                 case 'timeseries':
                     this.secondarySidebar = new chorus.views.DatasetVisualizationTimeSeriesSidebar({model: this.model, collection: this.columnSet});
-                    this.renderSubview('secondarySidebar');
                     break;
             }
+            this.secondarySidebar.filters = this.mainContent.contentDetails.filterWizardView;
+            this.renderSubview('secondarySidebar');
             this.trigger('resized');
         },
 

@@ -52,7 +52,7 @@
 
         launchVisualizationDialog: function(e) {
             e && e.preventDefault();
-            var dialog = new chorus.dialogs.Visualization({model: this.model, chartOptions: this.chartOptions()});
+            var dialog = new chorus.dialogs.Visualization({model: this.model, chartOptions: this.chartOptions(), filters: this.filters });
             dialog.launchModal();
         }
     });
