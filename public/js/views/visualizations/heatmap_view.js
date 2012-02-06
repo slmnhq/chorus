@@ -11,20 +11,16 @@
                 attr("width", 925).
                 attr("height", 340);
 
-            var xAxis = new chorus.views.visualizations.XAxis({
+            var axes = new chorus.views.visualizations.Axes({
                 el: svg,
-                labels: ['one', 'two', 'three', 'four', 'five'],
-                ticks: true
-            });
-            var yAxis = new chorus.views.visualizations.YAxis({
-                el: svg,
-                labels: ['one', 'two', 'three', 'four', 'five'],
+                xLabels: ['january', 'february', 'march', 'april'],
+                yLabels: ['one', 'two', 'three', 'four', 'five'],
+                paddingX: [],
                 ticks: true
             });
 
             if ($el.isOnDom()) {
-                yAxis.render();
-                xAxis.render();
+                axes.render();
             }
 
             // var config = {};

@@ -6,16 +6,14 @@ chorus.views.visualizations.XAxis = function(options) {
 
     this.paddingX = options.paddingX || 20;
     this.paddingY = options.paddingY || 20;
+    this.offsetX = options.offsetX   || 0;
     this.tickLength = options.tickLength || 5;
     this.labelSpacing = options.labelSpacing || 10;
 
-    this.scaler = d3.scale.ordinal()
-    .domain(this.labels)
-    .rangeBands([this.paddingX, this.width - this.paddingX]);
 };
 
 _.extend(chorus.views.visualizations.XAxis.prototype, {
-    originY: function() {
+    requiredBottomSpace: function() {
         this.el = this.container.append("svg:g").attr("class", "xaxis");
         var testLabels = this.el.selectAll(".label.test-origin-y")
             .data(this.labels).enter()
@@ -27,10 +25,14 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
 
         var height = this.el.selectAll(".label")[0][0].getBBox().height + this.labelSpacing + this.tickLength
         testLabels.remove();
-        return this.height - this.paddingY - height;
+        return height;
     },
 
     render: function() {
+        this.scaler = d3.scale.ordinal()
+            .domain(this.labels)
+            .rangeBands([this.paddingX + this.offsetX, this.width - this.paddingX]);
+
         var self = this;
         this.el = this.container.append("svg:g").attr("class", "xaxis");
 
@@ -72,7 +74,7 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
         // draw main axis line
         this.el.append("svg:line")
             .attr("class", "axis")
-            .attr("x1", this.paddingX)
+            .attr("x1", this.paddingX + this.offsetX)
             .attr("x2", this.width - this.paddingX)
             .attr("y1", tickTop)
             .attr("y2", tickTop);
@@ -86,16 +88,14 @@ chorus.views.visualizations.YAxis = function(options) {
     this.height   = options.el.attr("height");
     this.paddingX = options.paddingX || 20;
     this.paddingY = options.paddingY || 20;
+    this.offsetY  = options.offsetY  || 0;
     this.tickLength = options.tickLength || 10;
     this.labelSpacing = options.labelSpacing || 10;
 
-    this.scaler = d3.scale.ordinal()
-                          .domain(this.labels)
-                          .rangeBands([this.height - this.paddingY, this.paddingY]);
 };
 
 _.extend(chorus.views.visualizations.YAxis.prototype, {
-    originX: function() {
+    requiredLeftSpace: function() {
         this.el = this.container.append("svg:g").attr("class", "yaxis");
         var testLabels = this.el.selectAll(".label.test-origin-x")
             .data(this.labels).enter()
@@ -110,12 +110,15 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
 
         var width = maxWidth + this.labelSpacing + this.tickLength
         testLabels.remove();
-        return this.paddingX + width;
+        return width;
     },
 
     render : function() {
         var self = this;
         this.el = this.container.append("svg:g").attr("class", "yaxis");
+        this.scaler = d3.scale.ordinal()
+            .domain(this.labels)
+            .rangeBands([this.height - this.paddingY - this.offsetY, this.paddingY]);
 
         // draw labels
         this.el.selectAll(".label")
@@ -158,7 +161,7 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
         // draw main axis line
         this.el.append("svg:line")
             .attr("class", "axis")
-            .attr("y1", this.height - this.paddingY)
+            .attr("y1", this.height - this.paddingY - this.offsetY)
             .attr("y2", this.paddingY)
             .attr("x1", tickRight)
             .attr("x2", tickRight);
@@ -167,11 +170,14 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
 
 chorus.views.visualizations.Axes = function(options) {
     this.xAxis = new chorus.views.visualizations.XAxis({ el: options.el, labels: options.xLabels})
-    this.yAxis = new chorus.views.visualizations.YAxis({ el: options.el, labels: options.xLabels})
+    this.yAxis = new chorus.views.visualizations.YAxis({ el: options.el, labels: options.yLabels})
 }
 
 _.extend(chorus.views.visualizations.Axes.prototype, {
     render: function() {
+        this.xAxis.offsetX = this.yAxis.requiredLeftSpace();
+        this.yAxis.offsetY = this.xAxis.requiredBottomSpace();
+
         this.xAxis.render()
         this.yAxis.render()
     }

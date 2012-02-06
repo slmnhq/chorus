@@ -68,9 +68,9 @@ describe("chorus.views.visualizations.Axes", function() {
             this.labels   = this.$el.find(".label");
         });
 
-        describe("#originY (used for drawing the y axis)", function() {
+        describe("#requiredBottomSpace (used for drawing the y axis)", function() {
             beforeEach(function() {
-                this.actualY = topY(this.axisLine);
+                this.actualHeight = this.height - this.paddingY - topY(this.axisLine);
 
                 this.newAxis = new chorus.views.visualizations.XAxis({
                     el: this.el,
@@ -81,13 +81,12 @@ describe("chorus.views.visualizations.Axes", function() {
                 });
             });
 
-            it("returns the y-position where the x axis line will be drawn, " +
-               "taking into account the height of the labels and ticks", function() {
-                expect(this.newAxis.originY()).toEqual(this.actualY);
+            it("returns the height required for the labels and ticks", function() {
+                expect(this.newAxis.requiredBottomSpace()).toEqual(this.actualHeight);
             });
 
             it("does not alter the contents of the container", function() {
-                this.newAxis.originY();
+                this.newAxis.requiredBottomSpace();
                 expect(this.$el.find(".label")).toEqual(this.labels);
             });
         });
@@ -227,9 +226,9 @@ describe("chorus.views.visualizations.Axes", function() {
             this.labels   = this.$el.find(".label");
         });
 
-        describe("#originX (used for drawing the x axis)", function() {
+        describe("#requiredLeftSpace (used for drawing the x axis)", function() {
             beforeEach(function() {
-                this.actualX = leftX(this.axisLine);
+                this.actualWidth = leftX(this.axisLine) - this.paddingX;
 
                 this.newAxis = new chorus.views.visualizations.YAxis({
                     el: this.el,
@@ -240,13 +239,12 @@ describe("chorus.views.visualizations.Axes", function() {
                 });
             });
 
-            it("returns the x-position where the y axis line will be drawn, " +
-               "taking into account the width of the labels and ticks", function() {
-                expect(this.newAxis.originX()).toEqual(this.actualX);
+            it("returns the horizontal space required for the labels and ticks", function() {
+                expect(this.newAxis.requiredLeftSpace()).toEqual(this.actualWidth);
             });
 
             it("does not alter the contents of the container", function() {
-                this.newAxis.originX();
+                this.newAxis.requiredLeftSpace();
                 expect(this.$el.find(".label")).toEqual(this.labels);
             });
         });
@@ -422,7 +420,7 @@ describe("chorus.views.visualizations.Axes", function() {
             this.yLabels   = this.$el.find("g.yaxis text.label");
         });
 
-        xdescribe("axis positioning", function() {
+        describe("axis positioning", function() {
             it("positions the x and y axes so that they meet at the origin", function() {
                 expect(leftX(this.xAxisLine)).toEqual(leftX(this.yAxisLine));
                 expect(bottomY(this.yAxisLine)).toEqual(bottomY(this.xAxisLine));
@@ -434,6 +432,12 @@ describe("chorus.views.visualizations.Axes", function() {
                 expect(leftX(this.xLabels[2])).toBeGreaterThanOrEqualTo(this.paddingX)
                 expect(leftX(this.xLabels[3])).toBeGreaterThanOrEqualTo(this.paddingX)
                 expect(leftX(this.xLabels[4])).toBeGreaterThanOrEqualTo(this.paddingX)
+
+                expect(bottomY(this.yLabels[0])).toBeLessThanOrEqualTo(this.height - this.paddingY)
+                expect(bottomY(this.yLabels[1])).toBeLessThanOrEqualTo(this.height - this.paddingY)
+                expect(bottomY(this.yLabels[2])).toBeLessThanOrEqualTo(this.height - this.paddingY)
+                expect(bottomY(this.yLabels[3])).toBeLessThanOrEqualTo(this.height - this.paddingY)
+                expect(bottomY(this.yLabels[4])).toBeLessThanOrEqualTo(this.height - this.paddingY)
             });
         });
     });
