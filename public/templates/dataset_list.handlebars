@@ -1,11 +1,22 @@
 {{#each models}}
     <li>
         <span class="spacer left"></span>
-        <a class="image" href="{{showUrl}}">
-            <img src="{{iconImgUrl}}"/>
-        </a>
+        {{#if ../browsingSchema}}
+            <div class="image"">
+                <img src="{{iconImgUrl}}"/>
+            </div>
+        {{else}}
+            <a class="image" href="{{showUrl}}">
+                 <img src="{{iconImgUrl}}"/>
+            </a>
+        {{/if}}
+
         <div class="right">
-            <a href="{{showUrl}}" class="name">{{objectName}}</a>
+            {{#if ../browsingSchema}}
+                <div class="name_disabled">{{objectName}}</div>
+            {{else}}
+                <a href="{{showUrl}}" class="name">{{objectName}}</a>
+            {{/if}}
             <div class="location">
                 {{t "dataset.from"}} <a href="#">{{instance.name}}</a>
                  / <a href="#">{{databaseName}}</a>

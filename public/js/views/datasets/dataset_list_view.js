@@ -27,6 +27,10 @@ chorus.views.DatasetList = chorus.views.Base.extend({
         this.collection.fetch();
     },
 
+    additionalContext:function(){
+        return {browsingSchema: this.options.browsingSchema};
+    },
+
     collectionModelContext:function (model) {
         var ctx = {
             iconImgUrl:model.iconUrl(),

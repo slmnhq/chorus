@@ -42,6 +42,36 @@ describe("chorus.views.DatasetList", function() {
             expect(this.view.$("li:eq(0) .comment")).toExist();
         });
 
+        it("does not render the disabled names", function() {
+            expect(this.view.$(".name_disabled")).not.toExist();
+        });
+
+        context("when browsingSchema is true", function() {
+            beforeEach(function() {
+                this.view.options.browsingSchema = true;
+                this.view.render();
+            });
+
+            it("does not link the datasets' names", function() {
+                expect(this.view.$("a.name")).not.toExist();
+            });
+
+            it("does not link the datasets' image", function() {
+                expect(this.view.$("a img")).not.toExist();
+            });
+
+            it("does include the datasets' image", function() {
+                expect(this.view.$("div.image img")).toExist();
+            });
+
+            it("does renders the disabled names", function() {
+                expect(this.view.$(".name_disabled")).toExist();
+            });
+
+            xit("includes the 'found in workspace' information", function() {
+            });
+        });
+
 
         it("displays the location of the dataset", function() {
             for (var i = 0; i < this.collection.length; i++) {

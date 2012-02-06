@@ -12,6 +12,9 @@
         .name {
             font-weight: $semibold;
         }
+        .name_disabled {
+            color: $color-text2;
+        }
         .location {
             padding-top: 4px;
             @include results-console-message;

@@ -37,7 +37,8 @@
             this.mainContent = new chorus.views.MainContentList({
                 modelClass: "Dataset",
                 collection: this.collection,
-                title: this.schema.canonicalName()
+                title: this.schema.canonicalName(),
+                contentOptions: {browsingSchema: true}
             });
 
             this.sidebar = new chorus.views.DatasetListSidebar();
