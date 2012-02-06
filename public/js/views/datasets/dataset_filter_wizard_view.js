@@ -51,13 +51,20 @@ chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
         $ul.find("li:last-child").addClass("last");
     },
 
-    whereClause : function() {
-        var wheres = _.map(this.filterViews, function(filterView){
+    filterStrings: function() {
+        var wheres = _.map(this.filterViews, function(filterView) {
             return filterView.filterString();
         });
-
         wheres = _.without(wheres, "")
+        return wheres
+    },
 
+    whereClause : function() {
+        var wheres = this.filterStrings();
         return wheres.length ? ("WHERE " + wheres.join(" AND ")) : "";
+    },
+
+    filterCount: function() {
+        return this.filterStrings().length;
     }
 });

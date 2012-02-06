@@ -41,6 +41,20 @@ describe("chorus.views.DatasetFilterWizard", function() {
             });
         });
 
+        describe("#filterCount", function() {
+            beforeEach(function() {
+                this.view.filterViews = [
+                    {filterString: function() {return "foo = 2"}},
+                    {filterString: function() {return ""}},
+                    {filterString: function() {return "foo = 4"}}
+                ]
+            })
+
+            it("eliminates empty filters", function() {
+                expect(this.view.filterCount()).toBe(2);
+            })
+        })
+
         describe("removing the only filter", function() {
             beforeEach(function () {
                 this.view.$(".remove").click();

@@ -58,8 +58,10 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     additionalContext:function () {
+        var filterCount = this.options.filters ? this.options.filters.filterCount() : 0;
+
         return {
-            filterCount:2,
+            filterCount: filterCount,
             chartType:t("dataset.visualization.names." + this.type),
             hasChart: !!this.chart
         }

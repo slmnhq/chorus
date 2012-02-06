@@ -3,7 +3,8 @@ describe("chorus.dialogs.Visualization", function() {
         spyOn(chorus.Modal.prototype, "closeModal");
         this.dataset = fixtures.datasetSourceTable();
         this.chartOptions = {type: "boxplot", name: "Foo"};
-        this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions});
+        this.filters = {whereClause: function() {return "ABC";}, filterCount: function(){return 7;}};
+        this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions, filters: this.filters});
     });
 
     describe("#initialization", function() {
@@ -65,6 +66,10 @@ describe("chorus.dialogs.Visualization", function() {
         it("disables the Save Chart button", function() {
             expect(this.dialog.$("button.save")).toBeDisabled();
         })
+
+        it("has a link to filters with the filter count", function() {
+            expect(this.dialog.$("a.filter").text()).toMatchTranslation("visualization.show_filters", {count: 7});
+        });
 
         describe("the icon bar", function() {
             it("should display the icons in the correct order", function() {
