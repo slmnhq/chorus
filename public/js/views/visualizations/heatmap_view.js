@@ -21,6 +21,7 @@
 
             if ($el.isOnDom()) {
                 axes.render();
+                var scales = axes.scales();
             }
 
             // var config = {};

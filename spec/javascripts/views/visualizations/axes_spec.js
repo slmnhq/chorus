@@ -91,6 +91,19 @@ describe("chorus.views.visualizations.Axes", function() {
             });
         });
 
+        describe("#scale", function() {
+            it("returns a scale function with the correct domain and range", function() {
+                var scale = this.axis.scale();
+                var s = (this.width - 2 * this.paddingX) / 5
+
+                expect(scale("one")).toBe(this.paddingX + 0 * s);
+                expect(scale("two")).toBe(this.paddingX + 1 * s);
+                expect(scale("three")).toBe(this.paddingX + 2 * s);
+                expect(scale("four")).toBe(this.paddingX + 3 * s);
+                expect(scale("five")).toBe(this.paddingX + 4 * s);
+            });
+        });
+
         describe("the axis line", function() {
             it("is rendered to the chart", function() {
                 expect(this.axisLine).toExist();
@@ -250,6 +263,19 @@ describe("chorus.views.visualizations.Axes", function() {
             });
         });
 
+        describe("#scale", function() {
+            it("returns a scale function with the correct domain and range", function() {
+                var scale = this.axis.scale();
+                var s = (this.height - 2 * this.paddingY) / 5
+                var innerHeight = this.height - this.paddingY
+
+                expect(scale("one")).toBe(innerHeight - 0 * s);
+                expect(scale("two")).toBe(innerHeight - 1 * s);
+                expect(scale("three")).toBe(innerHeight - 2 * s);
+                expect(scale("four")).toBe(innerHeight - 3 * s);
+                expect(scale("five")).toBe(innerHeight - 4 * s);
+            });
+        });
 
         it("does not interfere with other elements in the svg container", function() {
             this.$el.empty();
@@ -455,6 +481,17 @@ describe("chorus.views.visualizations.Axes", function() {
                 expect(bottomY(this.yLabels[4])).toBeLessThanOrEqualTo(this.height - this.paddingY)
             });
         });
+
+        describe("#scales", function() {
+            it("returns a scales hash", function() {
+                var scales = this.axes.scales();
+                expect(scales.x).toBeA("function");
+                expect(scales.y).toBeA("function");
+
+                expect(scales.x("three")).toEqual(this.axes.xAxis.scale()("three"));
+                expect(scales.y("february")).toEqual(this.axes.yAxis.scale()("february"));
+            });
+        })
     });
 
     function topY(el) {

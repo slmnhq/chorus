@@ -32,11 +32,15 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
         return this.el.selectAll(".label")[0][0].getBBox().height;
     },
 
-    render: function() {
-        var scaler = d3.scale.ordinal()
+    scale: function() {
+        return d3.scale.ordinal()
             .domain(this.labels)
             .rangeBands([this.paddingX + this.offsetX, this.width - this.paddingX]);
-        var centerScaler = function(d) { return scaler(d) + scaler.rangeBand() / 2 };
+    },
+
+    render: function() {
+        var scale = this.scale();
+        var centerScale = function(d) { return scale(d) + scale.rangeBand() / 2 };
 
         var self = this;
         this.el = this.container.append("svg:g").attr("class", "xaxis");
@@ -56,13 +60,12 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
         this.el.selectAll(".label")
             .attr("y", this.height - this.paddingY)
             .attr("x", function(d) {
-                var left = centerScaler(d);
+                var left = centerScale(d);
                 var width = this.getBBox().width;
                 return left - (width / 2);
             });
 
-        var labelTop = this.height - this.paddingY - this.labelHeight();
-        var tickBottom = labelTop - this.labelSpacing;
+        var tickBottom = this.height - this.paddingY - this.labelHeight() - this.labelSpacing;
         var tickTop    = tickBottom - this.tickLength;
 
         // draw ticks
@@ -72,8 +75,8 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
             .attr("class", "tick")
             .attr("y1", tickTop)
             .attr("y2", tickBottom)
-            .attr("x1", centerScaler)
-            .attr("x2", centerScaler)
+            .attr("x1", centerScale)
+            .attr("x2", centerScale)
 
         // draw main axis line
         this.el.append("svg:line")
@@ -120,14 +123,18 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
         }))
     },
 
+    scale: function() {
+        return d3.scale.ordinal()
+            .domain(this.labels)
+            .rangeBands([this.height - this.paddingY - this.offsetY, this.paddingY]);
+    },
+
     render : function() {
         var self = this;
         this.el = this.container.append("svg:g").attr("class", "yaxis");
 
-        var scaler = d3.scale.ordinal()
-            .domain(this.labels)
-            .rangeBands([this.height - this.paddingY - this.offsetY, this.paddingY]);
-        var centerScaler = function(d) { return scaler(d) + scaler.rangeBand() / 2 };
+        var scale = this.scale()
+        var centerScale = function(d) { return scale(d) + scale.rangeBand() / 2 };
 
         // draw labels
         this.el.selectAll(".label")
@@ -144,13 +151,12 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
         this.el.selectAll(".label")
             .attr("x", this.paddingX)
             .attr("y", function(d) {
-                var scalePoint = centerScaler(d);
+                var scalePoint = centerScale(d);
                 var height = this.getBBox().height;
                 return scalePoint + (height / 4);
             });
 
-        var labelRight = this.paddingX + this.labelWidth();
-        var tickLeft   = labelRight + this.labelSpacing;
+        var tickLeft   = this.paddingX + this.labelWidth() + this.labelSpacing;
         var tickRight  = tickLeft + this.tickLength;
 
         // draw ticks
@@ -158,8 +164,8 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
             .data(this.labels).enter()
             .append("svg:line")
             .attr("class", "tick")
-            .attr("y1", centerScaler)
-            .attr("y2", centerScaler)
+            .attr("y1", centerScale)
+            .attr("y2", centerScale)
             .attr("x1", tickLeft)
             .attr("x2", tickRight);
 
@@ -179,6 +185,10 @@ chorus.views.visualizations.Axes = function(options) {
 }
 
 _.extend(chorus.views.visualizations.Axes.prototype, {
+    scales: function() {
+        return { x: this.xAxis.scale(), y: this.yAxis.scale() };
+    },
+
     render: function() {
         this.xAxis.offsetX = this.yAxis.requiredLeftSpace();
         this.yAxis.offsetY = this.xAxis.requiredBottomSpace();
