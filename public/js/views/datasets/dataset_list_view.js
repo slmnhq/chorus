@@ -58,7 +58,6 @@ chorus.views.DatasetList = chorus.views.Base.extend({
     },
 
     selectDatasetByClick : function(e) {
-        e.preventDefault();
         this.selectDataset($(e.target).closest("li"));
     }
 });
