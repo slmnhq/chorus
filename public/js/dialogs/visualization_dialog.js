@@ -30,8 +30,9 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     onExecutionComplete:function () {
-        this.chartData.trigger('file:executionCompleted', this.task);
         this.drawChart();
+        this.chartData.trigger('file:executionCompleted', this.task);
+
     },
 
     drawChart:function () {
