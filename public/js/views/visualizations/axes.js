@@ -2,9 +2,7 @@ chorus.views.visualizations.XAxis = function(options) {
     this.labels   = options.labels;
     this.width    = options.el.attr("width");
     this.height   = options.el.attr("height");
-    this.el       = options.el.append("svg:g")
-        .attr("class", "xaxis");
-
+    this.container       = options.el;
 
     this.paddingX = options.paddingX || 20;
     this.paddingY = options.paddingY || 20;
@@ -19,6 +17,7 @@ chorus.views.visualizations.XAxis = function(options) {
 _.extend(chorus.views.visualizations.XAxis.prototype, {
     render: function() {
         var self = this;
+        this.el = this.container.append("svg:g").attr("class", "xaxis");
 
         // draw labels
         this.el.selectAll(".label")
@@ -66,7 +65,7 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
 });
 
 chorus.views.visualizations.YAxis = function(options) {
-    this.el       = options.el.append("svg:g").attr("class", "yaxis");
+    this.container = options.el;
     this.labels   = options.labels;
     this.width    = options.el.attr("width");
     this.height   = options.el.attr("height");
@@ -83,6 +82,7 @@ chorus.views.visualizations.YAxis = function(options) {
 _.extend(chorus.views.visualizations.YAxis.prototype, {
     render : function() {
         var self = this;
+        this.el = this.container.append("svg:g").attr("class", "yaxis");
 
         // draw labels
         this.el.selectAll(".label")
