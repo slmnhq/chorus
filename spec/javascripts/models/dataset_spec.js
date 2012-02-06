@@ -140,6 +140,30 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
+    describe("#makeFrequencyTask", function() {
+        beforeEach(function() {
+            this.dataset.set({sandboxId: "21"});
+
+            this.task = this.dataset.makeFrequencyTask({
+                yAxis: "blindness_rate"
+            });
+        })
+
+        it("returns a FrequencyTask model", function() {
+            expect(this.task).toBeA(chorus.models.FrequencyTask);
+        });
+
+        it("has the given y axis", function() {
+            expect(this.task.get("yAxis")).toBe("blindness_rate");
+        });
+
+        it("has the right workspaceId, dataset id and objectName", function() {
+            expect(this.task.get("workspaceId")).toBe("44");
+            expect(this.task.get("datasetId")).toBe(this.dataset.entityId);
+            expect(this.task.get("objectName")).toBe("japanese_teas");
+        });
+    })
+
     describe("#statistics", function() {
         beforeEach(function() {
             this.datasetProperties = this.dataset.statistics()

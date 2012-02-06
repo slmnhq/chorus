@@ -44,6 +44,15 @@ chorus.models.Dataset = chorus.models.Base.extend({
         });
     },
 
+    makeFrequencyTask: function(taskAttrs) {
+        return new chorus.models.FrequencyTask({
+            yAxis: taskAttrs.yAxis,
+            objectName: this.get("objectName"),
+            workspaceId: this.get("workspace").id,
+            datasetId: this.entityId
+        });
+    },
+
     makeHistogramTask: function(taskAttrs) {
         return new chorus.models.HistogramTask({
             bins: taskAttrs.bins,

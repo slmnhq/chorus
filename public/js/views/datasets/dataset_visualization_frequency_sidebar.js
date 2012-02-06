@@ -6,5 +6,13 @@ chorus.views.DatasetVisualizationFrequencySidebar = chorus.views.DatasetVisualiz
             chartType: "frequency",
             allColumnNames: this.allColumnNames()
         }
+    },
+
+    chartOptions: function() {
+        return {
+            type: "frequency",
+            name: this.model.get("objectName"),
+            yAxis: this.$(".category select option:selected").text()
+        }
     }
 });

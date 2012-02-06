@@ -16,6 +16,17 @@ describe("chorus.models.FrequencyTask", function() {
         expect(this.model.get("chart[type]")).toBe("frequency");
     });
 
+    describe("column label translations", function() {
+        it("provides translations for the column labels", function() {
+            expect(this.model.getColumnLabel("bucket")).toMatchTranslation("dataset.visualization.frequency.bucket");
+            expect(this.model.getColumnLabel("count")).toMatchTranslation("dataset.visualization.frequency.count");
+        });
+
+        it("provides reasonable defaults for missing keys", function() {
+            expect(this.model.getColumnLabel("foo")).toBe("foo");
+        });
+    });
+
     describe("creating the task", function() {
         beforeEach(function() {
             this.model.save();

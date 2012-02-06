@@ -2,8 +2,11 @@ describe("chorus.views.DatasetVisualizationFrequencySidebar", function() {
     describe("#render", function() {
         context("with valid column data", function() {
             beforeEach(function() {
-                this.columns = fixtures.databaseColumnSet();
-                this.view = new chorus.views.DatasetVisualizationFrequencySidebar({collection: this.columns})
+                this.column = fixtures.databaseColumn({typeCategory: "STRING", name: "Sandwich"});
+                this.columns = fixtures.databaseColumnSet([this.column]);
+
+                this.model = fixtures.datasetChorusView({objectName: "Foo"})
+                this.view = new chorus.views.DatasetVisualizationFrequencySidebar({collection: this.columns, model: this.model})
                 this.view.render();
             })
 
@@ -13,6 +16,15 @@ describe("chorus.views.DatasetVisualizationFrequencySidebar", function() {
                 })
             })
             itBehavesLike.DatasetVisualizationSidebarRangeChooser();
+
+            describe("#chartOptions", function() {
+                it("should return all the chart options for a frequency plot", function() {
+                    var options = this.view.chartOptions();
+                    expect(options.name).toBe("Foo");
+                    expect(options.type).toBe("frequency");
+                    expect(options.yAxis).toBe("Sandwich");
+                })
+            })
         })
 
         context("with no columns", function() {
