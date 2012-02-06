@@ -2,7 +2,7 @@ describe("chorus.models.HistogramTask", function() {
     beforeEach(function() {
         this.model = new chorus.models.HistogramTask({
             bins: 5,
-            yAxis: "height",
+            xAxis: "height",
             objectName: "users",
             sandboxId: '4',
             workspaceId: '5'
@@ -22,9 +22,9 @@ describe("chorus.models.HistogramTask", function() {
             this.model.save();
         });
 
-        it("renames the 'yAxis' and 'bins' fields as required by the api", function() {
+        it("renames the 'xAxis' and 'bins' fields as required by the api", function() {
             var request = this.server.lastCreate();
-            expect(request.params()['chart[yAxis]']).toBe("height");
+            expect(request.params()['chart[xAxis]']).toBe("height");
             expect(request.params()['chart[bins]']).toBe('5');
         });
     });

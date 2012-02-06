@@ -4,7 +4,7 @@ chorus.models.HistogramTask = chorus.models.ChartTask.extend({
     beforeSave: function() {
         this._super("beforeSave", arguments);
         this.set({
-            'chart[yAxis]': this.get("yAxis"),
+            'chart[xAxis]': this.get("xAxis"),
             'chart[bins]': this.get("bins")
         });
     }

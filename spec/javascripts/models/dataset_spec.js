@@ -90,7 +90,7 @@ describe("chorus.models.Dataset", function() {
 
             this.task = this.dataset.makeHistogramTask({
                 bins: 5,
-                yAxis: "blindness_rate"
+                xAxis: "blindness_rate"
             });
         });
 
@@ -100,7 +100,7 @@ describe("chorus.models.Dataset", function() {
 
         it("has the given number of bins and y axis", function() {
             expect(this.task.get("bins")).toBe(5);
-            expect(this.task.get("yAxis")).toBe("blindness_rate");
+            expect(this.task.get("xAxis")).toBe("blindness_rate");
         });
 
         it("has the right workspaceId, dataset id and objectName", function() {

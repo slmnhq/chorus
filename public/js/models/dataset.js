@@ -47,7 +47,7 @@ chorus.models.Dataset = chorus.models.Base.extend({
     makeHistogramTask: function(taskAttrs) {
         return new chorus.models.HistogramTask({
             bins: taskAttrs.bins,
-            yAxis: taskAttrs.yAxis,
+            xAxis: taskAttrs.xAxis,
             objectName: this.get("objectName"),
             workspaceId: this.get("workspace").id,
             datasetId: this.entityId
