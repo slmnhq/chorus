@@ -1,3 +1,5 @@
+@import "../_common.scss";
+
 .data_table {
     $header-line-height: 32px;
     $line-height: 40px;
@@ -5,7 +7,6 @@
     $short-name-width: 90px;
 
     position: relative;
-    overflow: hidden;
 
     background: $data-table-background-color;
 
@@ -15,16 +16,15 @@
         left: 0;
         background: #eaeef2;
         white-space: nowrap;
+        z-index: $data-table-head-z-index;
     }
 
     .tbody {
-        position: absolute;
-        top: $header-line-height + 1px;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        padding-top: $header-line-height + 1px;
         white-space: nowrap;
+        z-index: $data-table-body-z-index;
 
+        height: 100%;
         overflow: auto;
     }
 

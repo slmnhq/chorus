@@ -19,6 +19,7 @@
 
         .controls {
             float: right;
+            margin-left: 10px;
 
             .separator {
                 margin: 0 5px;
@@ -29,7 +30,7 @@
                 }
             }
         }
-        
+
         .right {
             float: right;
 
@@ -79,10 +80,14 @@
         }
     }
 
+    .result_table {
+        clear: both;
+    }
+
     .actions {
         color: white;
         float: right;
-        
+
         a {
             float: none;
         }
@@ -144,8 +149,7 @@
     }
 
     .collapsed .data_table {
-        height: 0px;
-        width: 0px;
+        display: none;
     }
 
     .maximized .data_table {

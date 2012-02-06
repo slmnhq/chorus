@@ -46,7 +46,7 @@
             color: $content-details-action-link-color;
             font-weight: $semibold;
             font-size: 13px;
-            margin-top: 2px;
+            margin-top: 1px;
             @include content-details-button($content-details-action-link-border-color);
         }
 

@@ -9,6 +9,14 @@
 <div class="result_content">
     <div class="execution">
         <div class="right">
+            <span class="controls">
+                <a href="#" class="minimize hidden">{{t "results_console_view.minimize"}}</a>
+                <a href="#" class="maximize hidden">{{t "results_console_view.maximize"}}</a>
+                {{#if enableClose}}
+                    <span class="separator">|</span>
+                    <a class="close" href='#'>{{t "actions.close"}}</a>
+                 {{/if}}
+            </span>
             <span class="message">
                 {{#if result}}
                     {{result.message}}
@@ -22,14 +30,6 @@
                 <span class="link">
                     <a class="cancel" href='#'>{{t "actions.cancel"}}</a>
                 </span>
-            </span>
-            <span class="controls">
-                <a href="#" class="minimize hidden">{{t "results_console_view.minimize"}}</a>
-                <a href="#" class="maximize hidden">{{t "results_console_view.maximize"}}</a>
-                {{#if enableClose}}
-                    <span class="separator">|</span>
-                    <a class="close" href='#'>{{t "actions.close"}}</a>
-                 {{/if}}
             </span>
         </div>
         <h1 class="title">{{t titleKey}}</h1>
