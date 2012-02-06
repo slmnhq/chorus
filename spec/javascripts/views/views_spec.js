@@ -601,6 +601,16 @@ describe("chorus.views.base", function () {
                 })
             })
 
+            context("when a contentOptions hash is provided", function() {
+                beforeEach(function () {
+                    this.view = new chorus.views.MainContentList({ collection:this.collection, modelClass:"Workfile", contentOptions : {foo: "bar"} });
+                })
+
+                it("gets mixed in to the content's options", function () {
+                    expect(this.view.content.options).toEqual({foo: "bar", collection: this.collection});
+                })
+            });
+
             context("when no contentDetails is provided", function () {
                 beforeEach(function () {
                     spyOn(chorus.views, "ListContentDetails")

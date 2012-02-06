@@ -384,7 +384,7 @@ chorus.views.MainContentList = chorus.views.MainContentView.extend({
     setup:function (options) {
         var modelClass = options.modelClass
         var collection = this.collection;
-        this.content = new chorus.views[modelClass + "List"]({collection:collection })
+        this.content = new chorus.views[modelClass + "List"](_.extend({collection:collection}, options.contentOptions));
         this.contentHeader = new chorus.views.ListHeaderView({title:options.title || (modelClass + "s"), linkMenus:options.linkMenus, imageUrl:options.imageUrl})
 
         if (options.contentDetails) {
