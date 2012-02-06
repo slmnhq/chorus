@@ -1,6 +1,17 @@
 .dataset_preview {
     width: 800px;
 
+    &.dialog {
+        .dialog_content {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+
+    .modal_controls {
+        margin-right: $dialog-padding;
+    }
+
     .results_console {
 
         .controls {
@@ -19,7 +30,10 @@
 
         .minimized {
             .data_table {
-                height: 400px;
+                height: inherit;
+                .tbody {
+                    max-height: 600px;
+                }
             }
         }
     }

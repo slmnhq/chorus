@@ -1,5 +1,6 @@
 chorus.dialogs.DatasetPreview = chorus.dialogs.Base.extend({
     className: 'dataset_preview',
+    title:t("dataset.data_preview"),
 
     subviews: {
         '.results_console': 'resultsConsole'

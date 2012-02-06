@@ -16,6 +16,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     execute: function(model) {
+        this.model = model;
         model.fetchIfNotLoaded();
         this.executionStarted();
         model.onLoaded(_.bind(this.executionCompleted, this, model));
@@ -30,7 +31,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
     startSpinner: function() {
         delete this.spinnerTimer;
-        this.$(".loading").startLoading("results_console_view.executing")
+        this.$(".task_loading").startLoading("results_console_view.executing")
     },
 
     incrementElapsedTime: function() {
@@ -42,7 +43,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     executionCompleted: function(task) {
         this.cancelTimers()
         this.$(".right").removeClass("executing")
-        this.$(".loading").stopLoading()
+        this.$(".task_loading").stopLoading()
 
         if (task.errorMessage()) {
             this.$(".errors").removeClass("hidden");

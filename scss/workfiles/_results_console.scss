@@ -45,7 +45,7 @@
                     @include results-console-message;
                 }
 
-                .loading {
+                .task_loading {
                     @include results-console-message;
                     border-right: 1px solid $results-console-border-color;
                     padding-right: $padding-x;
