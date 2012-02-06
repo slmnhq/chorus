@@ -29,6 +29,7 @@ describe("chorus.pages.SchemaBrowsePage", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.instance);
                 this.server.completeFetchFor(this.schema);
+                this.page.collection.add(fixtures.datasetChorusView());
                 this.page.render();
             });
 
@@ -59,6 +60,25 @@ describe("chorus.pages.SchemaBrowsePage", function() {
                 expect(this.page.mainContent.collection).toBeA(chorus.collections.DatasetSet);
 
                 expect(this.page.$(this.page.mainContent.el).length).toBe(1);
+            });
+
+            context("with some items in the dataset", function() {
+                beforeEach(function() {
+                    this.page.collection.add(fixtures.datasetChorusView());
+                    this.page.collection.add(fixtures.datasetSourceTable());
+                    this.page.render();
+                });
+
+                it("pre-selects the first item", function() {
+                    expect(this.page.$(".dataset_list li").eq(0)).toHaveClass("selected");
+                });
+
+                it("changes the selection after clicking another item", function() {
+                    this.page.$(".dataset_list li").eq(1).click();
+
+                    expect(this.page.$(".dataset_list li").eq(0)).not.toHaveClass("selected");
+                    expect(this.page.$(".dataset_list li").eq(1)).toHaveClass("selected");
+                });
             });
         });
     });

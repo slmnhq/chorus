@@ -16,17 +16,22 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
 
     setDataset:function (dataset) {
         this.resource = dataset;
-        this.statistics = dataset.statistics();
-        this.statistics.bindOnce("change", this.render, this);
-        this.statistics.fetch();
+        if (dataset) {
+            this.statistics = dataset.statistics();
+            this.statistics.bindOnce("change", this.render, this);
+            this.statistics.fetch();
 
-        var activities = dataset.activities();
-        activities.fetch();
-        this.activityList = new chorus.views.ActivityList({
-            collection: activities,
-            additionalClass:"sidebar",
-            displayStyle:['without_object', 'without_workspace']
-        });
+            var activities = dataset.activities();
+            activities.fetch();
+            this.activityList = new chorus.views.ActivityList({
+                collection: activities,
+                additionalClass:"sidebar",
+                displayStyle:['without_object', 'without_workspace']
+            });
+        } else {
+            delete this.statistics;
+            delete this.activityList;
+        }
 
         this.render();
     },

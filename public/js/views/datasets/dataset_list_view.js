@@ -3,7 +3,7 @@ chorus.views.DatasetList = chorus.views.Base.extend({
     className:"dataset_list",
     additionalClass:"list",
     events:{
-        "click li":"selectDataset"
+        "click li":"selectDatasetByClick"
     },
 
     preRender : function() {
@@ -20,7 +20,7 @@ chorus.views.DatasetList = chorus.views.Base.extend({
             lis.eq(index).data("dataset", model);
         });
 
-        lis.eq(this.selectedIndex || 0).click();
+        this.selectDataset(lis.eq(this.selectedIndex || 0));
     },
 
     refetchCollection : function() {
@@ -49,12 +49,16 @@ chorus.views.DatasetList = chorus.views.Base.extend({
         return ctx;
     },
 
-    selectDataset:function (e) {
+    selectDataset:function ($li) {
         this.$("li").removeClass("selected");
-        var selectedLi = $(e.target).closest("li");
-        selectedLi.addClass("selected");
+        $li.addClass("selected");
 
-        this.selectedDataset = selectedLi.data("dataset");
+        this.selectedDataset = $li.data("dataset");
         this.trigger("dataset:selected", this.selectedDataset);
+    },
+
+    selectDatasetByClick : function(e) {
+        e.preventDefault();
+        this.selectDataset($(e.target).closest("li"));
     }
 });
