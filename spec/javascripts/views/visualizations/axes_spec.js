@@ -137,17 +137,18 @@ describe("chorus.views.visualizations.Axes", function() {
                 expect(leftX(this.ticks[3])).toBeLessThan(leftX(this.ticks[4]));
             });
 
-            it("spaces the ticks evenly across the width of the chart area", function() {
-                var xs = this.ticks.map(function(i, tick) { return leftX(tick) });
+            it("divides the width of the chart evenly into bands, " +
+               "and places each tick at the center of a band", function() {
+                var bandWidth = (this.width - 2*this.paddingX) / 5;
+                var bandCenters = _.map([0, 1, 2, 3, 4], function(i) {
+                    return (i + 0.5) * bandWidth + this.paddingX;
+                }, this);
 
-                var distance = xs[1] - xs[0];
-                var innerWidth = this.width - (2 * this.paddingX);
-
-                expect(xs[2] - xs[1]).toEqual(distance);
-                expect(xs[3] - xs[2]).toEqual(distance);
-                expect(xs[4] - xs[3]).toEqual(distance);
-
-                expect(distance).toBeBetween(innerWidth / 6, innerWidth / 5);
+                expect(leftX(this.ticks[0])).toBeWithinDeltaOf(bandCenters[0], 10);
+                expect(leftX(this.ticks[1])).toBeWithinDeltaOf(bandCenters[1], 10);
+                expect(leftX(this.ticks[2])).toBeWithinDeltaOf(bandCenters[2], 10);
+                expect(leftX(this.ticks[3])).toBeWithinDeltaOf(bandCenters[3], 10);
+                expect(leftX(this.ticks[4])).toBeWithinDeltaOf(bandCenters[4], 10);
             });
         });
 
@@ -336,6 +337,20 @@ describe("chorus.views.visualizations.Axes", function() {
                 expect(Math.abs(ys[4] - ys[3])).toEqual(distance);
 
                 expect(distance).toBeBetween(innerHeight / 6, innerHeight / 5);
+            });
+
+            it("divides the height of the chart evenly into bands, " +
+               "and places each tick at the center of a band", function() {
+                var bandHeight = (this.height - 2*this.paddingY) / 5;
+                var bandCenters = _.map([0, 1, 2, 3, 4], function(i) {
+                    return this.height - this.paddingY - ((i + 0.5) * bandHeight);
+                }, this);
+
+                expect(topY(this.ticks[0])).toBeWithinDeltaOf(bandCenters[0], 10);
+                expect(topY(this.ticks[1])).toBeWithinDeltaOf(bandCenters[1], 10);
+                expect(topY(this.ticks[2])).toBeWithinDeltaOf(bandCenters[2], 10);
+                expect(topY(this.ticks[3])).toBeWithinDeltaOf(bandCenters[3], 10);
+                expect(topY(this.ticks[4])).toBeWithinDeltaOf(bandCenters[4], 10);
             });
         });
 

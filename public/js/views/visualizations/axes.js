@@ -23,15 +23,20 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
                 return d
             });
 
-        var height = this.el.selectAll(".label")[0][0].getBBox().height + this.labelSpacing + this.tickLength
+        var height = this.labelHeight() + this.labelSpacing + this.tickLength
         testLabels.remove();
         return height;
     },
 
+    labelHeight: function() {
+        return this.el.selectAll(".label")[0][0].getBBox().height;
+    },
+
     render: function() {
-        this.scaler = d3.scale.ordinal()
+        var scaler = d3.scale.ordinal()
             .domain(this.labels)
             .rangeBands([this.paddingX + this.offsetX, this.width - this.paddingX]);
+        var centerScaler = function(d) { return scaler(d) + scaler.rangeBand() / 2 };
 
         var self = this;
         this.el = this.container.append("svg:g").attr("class", "xaxis");
@@ -49,15 +54,14 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
 
         // reposition labels now that we know their width
         this.el.selectAll(".label")
+            .attr("y", this.height - this.paddingY)
             .attr("x", function(d) {
-                var left = self.scaler(d);
+                var left = centerScaler(d);
                 var width = this.getBBox().width;
                 return left - (width / 2);
-            })
-            .attr("y", this.height - this.paddingY);
+            });
 
-        var labelHeight = this.el.selectAll(".label")[0][0].getBBox().height;
-        var labelTop = this.height - this.paddingY - labelHeight;
+        var labelTop = this.height - this.paddingY - this.labelHeight();
         var tickBottom = labelTop - this.labelSpacing;
         var tickTop    = tickBottom - this.tickLength;
 
@@ -68,8 +72,8 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
             .attr("class", "tick")
             .attr("y1", tickTop)
             .attr("y2", tickBottom)
-            .attr("x1", this.scaler)
-            .attr("x2", this.scaler);
+            .attr("x1", centerScaler)
+            .attr("x2", centerScaler)
 
         // draw main axis line
         this.el.append("svg:line")
@@ -104,21 +108,26 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
             .text(function(d) {
                 return d
             });
-        var maxWidth = _.max(_.map(this.el.selectAll(".label")[0], function(label) {
-            return label.getBBox().width
-        }))
 
-        var width = maxWidth + this.labelSpacing + this.tickLength
+        var width = this.labelWidth() + this.labelSpacing + this.tickLength
         testLabels.remove();
         return width;
+    },
+
+    labelWidth: function() {
+        return _.max(_.map(this.el.selectAll(".label")[0], function(label) {
+            return label.getBBox().width
+        }))
     },
 
     render : function() {
         var self = this;
         this.el = this.container.append("svg:g").attr("class", "yaxis");
-        this.scaler = d3.scale.ordinal()
+
+        var scaler = d3.scale.ordinal()
             .domain(this.labels)
             .rangeBands([this.height - this.paddingY - this.offsetY, this.paddingY]);
+        var centerScaler = function(d) { return scaler(d) + scaler.rangeBand() / 2 };
 
         // draw labels
         this.el.selectAll(".label")
@@ -135,16 +144,12 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
         this.el.selectAll(".label")
             .attr("x", this.paddingX)
             .attr("y", function(d) {
-                var scalePoint = self.scaler(d);
+                var scalePoint = centerScaler(d);
                 var height = this.getBBox().height;
                 return scalePoint + (height / 4);
             });
 
-        var labelWidth = _.max(_.map(this.el.selectAll(".label")[0], function(label) {
-            return label.getBBox().width;
-        }));
-
-        var labelRight = this.paddingX + labelWidth;
+        var labelRight = this.paddingX + this.labelWidth();
         var tickLeft   = labelRight + this.labelSpacing;
         var tickRight  = tickLeft + this.tickLength;
 
@@ -153,8 +158,8 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
             .data(this.labels).enter()
             .append("svg:line")
             .attr("class", "tick")
-            .attr("y1", this.scaler)
-            .attr("y2", this.scaler)
+            .attr("y1", centerScaler)
+            .attr("y2", centerScaler)
             .attr("x1", tickLeft)
             .attr("x2", tickRight);
 
