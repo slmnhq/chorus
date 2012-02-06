@@ -147,6 +147,19 @@ describe("jquery extensions", function() {
         });
     });
 
+    describe("#isOnDom", function() {
+        it("should be true if element is on the dom", function() {
+            var stuff = $("<div class='stuff'></div>")
+            $('#jasmine_content').append(stuff)
+            expect(stuff.isOnDom()).toBeTruthy();
+        })
+
+        it("should be false if element is not on the dom", function() {
+            var stuff = $("<div class='stuff'></div>")
+            expect(stuff.isOnDom()).toBeFalsy();
+        })
+    });
+
     describe("#outerHtml", function() {
         it("converts the first element to html", function() {
             var el = $("<a></a>").addClass("author");
