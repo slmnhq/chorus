@@ -18,9 +18,8 @@
                 <a href="{{showUrl}}" class="name">{{objectName}}</a>
             {{/if}}
             <div class="location">
-                {{t "dataset.from"}} <a href="#">{{instance.name}}</a>
-                 / <a href="#">{{databaseName}}</a>
-                 / <a href="#">{{schemaName}}</a>
+                {{t "dataset.from"}}
+                <a href="#">{{instance.name}}</a>.<a href="#">{{databaseName}}</a>.<a href="#">{{schemaName}}</a>
             </div>
             {{#if lastComment}}
                 <div class="comment">
