@@ -1,39 +1,45 @@
 chorus.views.ResultsConsole = chorus.views.Base.extend({
-    className:"results_console",
-    events:{
-        "click .cancel":"cancelExecution",
-        "click a.maximize":"maximizeTable",
-        "click a.minimize":"minimizeTable",
-        "click .expander_button":"toggleExpand",
-        "click .close_errors":"closeError",
-        "click .view_details":"viewDetails",
-        "click a.close" : "clickClose"
+    className: "results_console",
+    events: {
+        "click .cancel": "cancelExecution",
+        "click a.maximize": "maximizeTable",
+        "click a.minimize": "minimizeTable",
+        "click .expander_button": "toggleExpand",
+        "click .close_errors": "closeError",
+        "click .view_details": "viewDetails",
+        "click a.close": "clickClose"
     },
 
-    setup:function () {
+    setup: function() {
         this.bind("file:executionStarted", this.executionStarted, this)
         this.bind("file:executionCompleted", this.executionCompleted, this)
     },
 
-    executionStarted:function () {
+    execute: function(model) {
+        model.fetchIfNotLoaded();
+        this.executionStarted();
+        model.onLoaded(_.bind(this.executionCompleted, this, model));
+    },
+
+    executionStarted: function() {
         this.elapsedTime = 0
         this.$(".right").addClass("executing")
         this.spinnerTimer = _.delay(_.bind(this.startSpinner, this), 250)
         this.elapsedTimer = _.delay(_.bind(this.incrementElapsedTime, this), 1000)
     },
 
-    startSpinner:function () {
+    startSpinner: function() {
         delete this.spinnerTimer;
         this.$(".loading").startLoading("results_console_view.executing")
     },
 
-    incrementElapsedTime:function () {
+    incrementElapsedTime: function() {
         this.elapsedTime++
-        this.$(".elapsed_time").text(t("results_console_view.elapsed", { sec:this.elapsedTime }))
+        this.$(".elapsed_time").text(t("results_console_view.elapsed", { sec: this.elapsedTime }))
         this.elapsedTimer = _.delay(_.bind(this.incrementElapsedTime, this), 1000)
     },
 
-    executionCompleted:function (task) {
+    executionCompleted: function(task) {
         this.cancelTimers()
         this.$(".right").removeClass("executing")
         this.$(".loading").stopLoading()
@@ -43,7 +49,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
             this.$(".result_content").addClass("hidden");
             this.$(".message").empty();
         } else {
-            this.dataTable = new chorus.views.TaskDataTable({shuttle:this.options.shuttle, model:task});
+            this.dataTable = new chorus.views.TaskDataTable({shuttle: this.options.shuttle, model: task});
             this.dataTable.render();
             this.$(".result_content").removeClass("hidden");
             this.$(".result_table").html(this.dataTable.el);
@@ -52,13 +58,13 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.minimizeTable();
     },
 
-    cancelExecution:function (event) {
+    cancelExecution: function(event) {
         this.cancelTimers()
         event.preventDefault();
-        this.model.save({ action:"cancel" });
+        this.model.save({ action: "cancel" });
     },
 
-    cancelTimers:function () {
+    cancelTimers: function() {
         if (this.spinnerTimer) {
             clearTimeout(this.spinnerTimer);
             delete this.spinnerTimer
@@ -70,7 +76,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         }
     },
 
-    minimizeTable:function (e) {
+    minimizeTable: function(e) {
         e && e.preventDefault()
         this.$('.data_table').css("height", "");
         this.$("a.minimize").addClass("hidden");
@@ -87,7 +93,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.recalculateScrolling();
     },
 
-    maximizeTable:function (e) {
+    maximizeTable: function(e) {
         e && e.preventDefault()
         this.$("a.maximize").addClass("hidden");
         this.$("a.minimize").removeClass("hidden");
@@ -100,11 +106,11 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.recalculateScrolling();
     },
 
-    getDesiredDataTableHeight:function () {
+    getDesiredDataTableHeight: function() {
         return $(window).height() - this.$(".data_table").position().top - this.$(".bottom_gutter").height();
     },
 
-    collapseTable:function () {
+    collapseTable: function() {
         this.$("a.maximize").addClass("hidden");
         this.$("a.minimize").addClass("hidden");
         this.$(".controls").addClass("collapsed");
@@ -115,19 +121,19 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$(".data_table").css("height", "");
     },
 
-    closeError:function (e) {
+    closeError: function(e) {
         e.preventDefault();
         this.$(".result_content").removeClass("hidden");
     },
 
-    viewDetails:function (e) {
+    viewDetails: function(e) {
         e.preventDefault();
 
-        var alert = new chorus.alerts.ExecutionError({model:this.model});
+        var alert = new chorus.alerts.ExecutionError({model: this.model});
         alert.launchModal();
     },
 
-    toggleExpand:function () {
+    toggleExpand: function() {
         var $arrow = this.$(".arrow");
         if ($arrow.is(".up")) {
             $arrow.removeClass("up").addClass("down");
@@ -143,15 +149,15 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         }
     },
 
-    clickClose : function(e) {
+    clickClose: function(e) {
         e && e.preventDefault();
         this.trigger("action:close");
     },
 
-    additionalContext : function() {
+    additionalContext: function() {
         return {
-            titleKey : this.options.titleKey || "results_console_view.title",
-            enableClose : this.options.enableClose
+            titleKey: this.options.titleKey || "results_console_view.title",
+            enableClose: this.options.enableClose
         }
     }
 });

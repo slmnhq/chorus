@@ -14,7 +14,7 @@
         'dashboard_sidebar',
         'dashboard_workspace_list',
         'dashboard_workspace_list_footer',
-		'data_table',
+        'data_table',
         'database_column_sidebar_list',
         'database_column_list',
         'database_function_sidebar_list',
@@ -23,6 +23,7 @@
         'dataset_filter_wizard',
         'dataset_list',
         'dataset_list_sidebar',
+        'dataset_preview',
         'dataset_content_details',
         'dataset_visualization_boxplot_sidebar',
         'dataset_visualization_frequency_sidebar',
@@ -120,7 +121,7 @@
                 $("body").append(templateContainer);
                 allTemplatesLoaded = true;
             });
-        };
+        }
     });
 
     beforeEach(function() {
@@ -157,8 +158,8 @@
                     var translatedText = t.apply(this, arguments);
                     this.message = function() {
                         return [
-                        "Expected text '" + this.actual + "' to match the translation for '" + translationKey + "' (" + translatedText + ")",
-                        "Expected text '" + this.actual + "' not to match the translation for '" + translationKey + "' (" + translatedText +")"
+                            "Expected text '" + this.actual + "' to match the translation for '" + translationKey + "' (" + translatedText + ")",
+                            "Expected text '" + this.actual + "' not to match the translation for '" + translationKey + "' (" + translatedText + ")"
                         ];
                     };
                     if (!I18n.lookup(translationKey)) {
@@ -173,8 +174,8 @@
                     var translatedText = t.apply(this, arguments);
                     this.message = function() {
                         return [
-                        "Expected text '" + actual + "' to contain the translation for '" + translationKey + "' (" + translatedText + ")",
-                        "Expected text '" + actual + "' not to contain the translation for '" + translationKey + "' (" + translatedText +")"
+                            "Expected text '" + actual + "' to contain the translation for '" + translationKey + "' (" + translatedText + ")",
+                            "Expected text '" + actual + "' not to contain the translation for '" + translationKey + "' (" + translatedText + ")"
                         ];
                     };
                     if (!I18n.lookup(translationKey)) {
@@ -244,7 +245,7 @@
                     }
                 },
 
-                toMatchUrl : function(target) {
+                toMatchUrl: function(target) {
                     this.message = function() {
                         return [
                             "Expected url " + this.actual + " to be equivalent to url " + target,
@@ -255,7 +256,7 @@
                     return (new URI(this.actual)).equals(target);
                 },
 
-                toHaveVisibleQtip : function() {
+                toHaveVisibleQtip: function() {
                     return this.actual.find('.qtip').attr('aria-hidden') == 'false'
                 },
 
@@ -263,19 +264,19 @@
                     return (this.actual >= lowerBound) && (this.actual <= upperBound);
                 },
 
-                toHaveBeenFetched : function() {
+                toHaveBeenFetched: function() {
                     return this.spec.server.lastFetchFor(this.actual);
                 }
             });
 
             var fakeSpinner = {
-                spin : jasmine.createSpy('MockSpinner.spin').andCallFake(function(parentEl) {
+                spin: jasmine.createSpy('MockSpinner.spin').andCallFake(function(parentEl) {
                     this.el = $('<div aria-role="progressbar"/>')[0];
                     parentEl && parentEl.appendChild(this.el);
                     return this;
                 }),
 
-                stop : jasmine.createSpy('MockSpinner.stop').andCallFake(function() {
+                stop: jasmine.createSpy('MockSpinner.stop').andCallFake(function() {
                     if (this.el) {
                         $(this.el).detach();
                     }
@@ -308,7 +309,7 @@
     window.xspecify = window.xit;
 
     window.xitBehavesLike = {};
-    _.each(window.itBehavesLike, function(value, key){ window.xitBehavesLike[key] = $.noop });
+    _.each(window.itBehavesLike, function(value, key) { window.xitBehavesLike[key] = $.noop });
 
     window.unsetLoggedInUser = function() {
         chorus.session.unset("id");
@@ -341,11 +342,11 @@
 
     window.stubView = function(html) {
         var stubClass = Backbone.View.extend({
-            initialize : function() {
+            initialize: function() {
                 _.bindAll(this, "render")
             },
 
-            render :  function() {
+            render: function() {
                 this.$(this.el).html(html)
                 return this;
             }
@@ -370,7 +371,7 @@
         spyOn(chorus.views.Bare.prototype, "bindHotkeys");
     };
 
-    window.unstubHotkeys = function () {
+    window.unstubHotkeys = function() {
         chorus.views.Bare.prototype.bindHotkeys = chorus.views.Bare.prototype.bindHotkeys.originalValue;
     };
 
@@ -413,7 +414,7 @@
     };
 
     //initialization
-    ;(function safeStart() {
+    (function safeStart() {
 
         var origLogin = chorus.requireLogin;
         var origHistory = chorus.startHistory;

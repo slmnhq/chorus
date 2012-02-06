@@ -1,0 +1,26 @@
+.dataset_preview {
+    width: 800px;
+
+    .results_console {
+
+        .controls {
+            display: none;
+        }
+
+        .execution {
+            h1.title {
+                display: none;
+            }
+        }
+
+        .bottom_gutter {
+            display: none;
+        }
+
+        .minimized {
+            .data_table {
+                height: 400px;
+            }
+        }
+    }
+}

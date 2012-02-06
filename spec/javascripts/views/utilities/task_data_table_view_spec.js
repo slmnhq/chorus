@@ -2,15 +2,15 @@ describe("chorus.views.TaskDataTable", function() {
     beforeEach(function() {
         this.task = fixtures.task({ result: {
             columns: [
-                { name: "id",    typeCategory : "WHOLE_NUMBER" },
-                { name: "city",  typeCategory : "OTHER" },
-                { name: "state", typeCategory : "OTHER" },
-                { name: "zip",   typeCategory : "OTHER" }
+                { name: "id", typeCategory: "WHOLE_NUMBER" },
+                { name: "city", typeCategory: "OTHER" },
+                { name: "state", typeCategory: "OTHER" },
+                { name: "zip", typeCategory: "OTHER" }
             ],
             rows: [
-                { id: 1 , city: "Oakland"   , state: "CA" , zip: "94612" } ,
-                { id: 2 , city: "Arcata"    , state: "CA" , zip: "95521" } ,
-                { id: 3 , city: "Lafayette" , state: "IN" , zip: null }
+                { id: 1, city: "Oakland", state: "CA", zip: "94612" } ,
+                { id: 2, city: "Arcata", state: "CA", zip: "95521" } ,
+                { id: 3, city: "Lafayette", state: "IN", zip: null }
             ]
         }});
 
@@ -20,7 +20,7 @@ describe("chorus.views.TaskDataTable", function() {
     describe("#render", function() {
         beforeEach(function() {
             stubDefer();
-            spyOn($.fn, "jScrollPane")
+            spyOn($.fn, "jScrollPane").andCallThrough();
             this.view.render();
         });
 
@@ -69,7 +69,7 @@ describe("chorus.views.TaskDataTable", function() {
         })
 
         context("clicking on the jump to left arrow", function() {
-            beforeEach(function(){
+            beforeEach(function() {
                 this.view.$(".th:eq(2) a.move_to_first").click();
             });
 
@@ -84,6 +84,11 @@ describe("chorus.views.TaskDataTable", function() {
                 expect(this.view.$(".column:eq(2) div.td:eq(0)").text()).toBe("Oakland");
                 expect(this.view.$(".column:eq(3) div.td:eq(0)").text()).toBe("94612");
             });
+
+            it("keeps all the columns and headers at the same level", function() {
+                expect(this.view.$("div.th:eq(0)").parent().children('.th').length).toBe(4);
+                expect(this.view.$(".column:eq(0)").parent().children('.column').length).toBe(4);
+            })
         });
 
         describe("enable and disable shuttling", function() {

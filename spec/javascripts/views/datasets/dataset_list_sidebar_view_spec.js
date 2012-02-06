@@ -8,7 +8,7 @@ describe("chorus.views.DatasetListSidebar", function() {
             this.view.render();
         });
 
-        context("when no dataset is selected", function () {
+        context("when no dataset is selected", function() {
             it("does not render the info section", function() {
                 expect(this.view.$(".info")).not.toExist();
             });
@@ -27,6 +27,11 @@ describe("chorus.views.DatasetListSidebar", function() {
 
                 it("displays the selected dataset type", function() {
                     expect(this.view.$(".type").text().trim()).toBe(this.view.datasetType(this.dataset));
+                });
+
+                it("displays the preview data link", function() {
+                    expect(this.view.$('.actions .dialog.dataset_preview').data('dialog')).toBe('DatasetPreview');
+                    expect(this.view.$('.actions .dataset_preview')).toContainTranslation('actions.dataset_preview');
                 });
 
                 it("fetches the activities for the dataset", function() {
@@ -94,7 +99,7 @@ describe("chorus.views.DatasetListSidebar", function() {
                         expect(this.view.$(".statistics .pair").eq(4).find(".key").text().trim()).toMatchTranslation("dataset.statistics.rows");
                         expect(this.view.$(".statistics .pair").eq(5).find(".key").text().trim()).toMatchTranslation("dataset.statistics.size");
                     });
-                    
+
                     describe("when the partitions are 0", function() {
                         beforeEach(function() {
                             this.view = new chorus.views.DatasetListSidebar();
