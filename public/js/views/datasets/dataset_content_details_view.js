@@ -27,19 +27,12 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$(".column_count").addClass("hidden");
         this.$(".data_preview").removeClass("hidden");
 
-        this.resultsConsole.trigger("file:executionStarted");
-        this.preview = this.dataset.preview();
-        this.preview.bind("loaded", this.onFetchComplete, this);
-        this.preview.fetch();
+        this.resultsConsole.execute(this.dataset.preview());
     },
 
     closeDataPreview : function() {
         this.$(".column_count").removeClass("hidden");
         this.$(".data_preview").addClass("hidden");
-    },
-
-    onFetchComplete: function() {
-        this.resultsConsole.trigger("file:executionCompleted", this.preview);
     },
     
     postRender:function () {

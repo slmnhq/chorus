@@ -58,12 +58,12 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                 context("when the preview data button is clicked", function() {
                     beforeEach(function() {
-                        spyOn(this.view.preview, "fetch");
+                        spyOn(this.view.resultsConsole, "execute");
                         this.view.$(".preview").click();
                     });
 
-                    it("should fetch the database preview model", function() {
-                        expect(this.view.preview.fetch).toHaveBeenCalled();
+                    it("should execute database preview model", function() {
+                        expect(this.view.resultsConsole.execute).toHaveBeenCalledWith(this.view.dataset.preview());
                     });
                 });
             })
