@@ -7,7 +7,7 @@ chorus.models.ChartTask = chorus.models.Task.extend(_.extend({}, chorus.Mixins.S
     },
 
     beforeSave: function() {
-        var relation = "SELECT * FROM " + this.get("objectName");
+        var relation = "SELECT * FROM " + this.safePGName(this.get("objectName"));
         if (this.get("filters")) {
             relation += " " + this.get("filters");
         }

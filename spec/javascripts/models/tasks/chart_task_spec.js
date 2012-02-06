@@ -19,6 +19,12 @@ describe("chorus.models.ChartTask", function() {
         expect(this.model.get("relation")).toEqual("SELECT * FROM dog_breeds WHERE ABC");
     });
 
+    it("escapes unsafe object names", function() {
+        this.model.set({objectName : "DOG_BREEDs"});
+        this.model.save();
+        expect(this.model.get("relation")).toEqual('SELECT * FROM "DOG_BREEDs"');
+    })  
+
     describe("creating the task", function() {
         beforeEach(function() {
             this.model.save();
