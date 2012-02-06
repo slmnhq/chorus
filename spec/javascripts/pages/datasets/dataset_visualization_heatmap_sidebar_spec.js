@@ -2,9 +2,11 @@ describe("chorus.views.DatasetVisualizationHeatmapSidebar", function() {
     describe("#render", function() {
         context("with valid column data", function() {
             beforeEach(function() {
-                this.columns = fixtures.databaseColumnSet();
-                this.columns.add(fixtures.databaseColumn({typeCategory: 'SmellyThings'}));
-                this.view = new chorus.views.DatasetVisualizationHeatmapSidebar({collection: this.columns})
+                this.column1 = fixtures.databaseColumn({typeCategory: 'REAL_NUMBER', name: "Rotten Eggs"});
+                this.columns = fixtures.databaseColumnSet([this.column1]);
+
+                this.model = fixtures.datasetChorusView({objectName: "Foo"});
+                this.view = new chorus.views.DatasetVisualizationHeatmapSidebar({model: this.model, collection: this.columns})
                 this.view.render();
             })
 
@@ -19,12 +21,24 @@ describe("chorus.views.DatasetVisualizationHeatmapSidebar", function() {
 
             itBehavesLike.DatasetVisualizationSidebarRangeChooser('.limiter.x_axis');
             itBehavesLike.DatasetVisualizationSidebarRangeChooser('.limiter.y_axis');
+
+            describe("#chartOptions", function() {
+                it("should return all the chart options for a heatmap", function() {
+                    var options = this.view.chartOptions();
+                    expect(options.name).toBe("Foo");
+                    expect(options.type).toBe("heatmap");
+                    expect(options.xAxis).toBe("Rotten Eggs");
+                    expect(options.yAxis).toBe("Rotten Eggs");
+                    expect(options.xBins).toBe("20");
+                    expect(options.yBins).toBe("20");
+                })
+            });
         })
 
         context("with no columns", function() {
             beforeEach(function() {
                 this.columns = new chorus.collections.DatabaseColumnSet();
-                this.view = new chorus.views.DatasetVisualizationHeatmapSidebar({collection: this.columns})
+                this.view = new chorus.views.DatasetVisualizationHeatmapSidebar({model: this.model, collection: this.columns})
                 this.view.render();
             })
 
