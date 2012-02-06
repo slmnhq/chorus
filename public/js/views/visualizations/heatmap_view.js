@@ -22,8 +22,10 @@
                 ticks: true
             });
 
-            xAxis.render();
-            yAxis.render();
+            if ($el.isOnDom()) {
+                yAxis.render();
+                xAxis.render();
+            }
 
             // var config = {};
             // var chart = new Heatmap(svg, data, config);

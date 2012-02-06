@@ -2,7 +2,7 @@ chorus.views.visualizations.XAxis = function(options) {
     this.labels   = options.labels;
     this.width    = options.el.attr("width");
     this.height   = options.el.attr("height");
-    this.container       = options.el;
+    this.container = options.el;
 
     this.paddingX = options.paddingX || 20;
     this.paddingY = options.paddingY || 20;
@@ -34,12 +34,12 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
         this.el.selectAll(".label")
             .attr("x", function(d) {
                 var left = self.scaler(d);
-                var width = $(this).width();
+                var width = this.getBBox().width;
                 return left - (width / 2);
             })
             .attr("y", this.height - this.paddingY);
 
-        var labelHeight = $(this.el.selectAll(".label")[0][0]).height();
+        var labelHeight = this.el.selectAll(".label")[0][0].getBBox().height;
         var labelTop = this.height - this.paddingY - labelHeight;
         var tickBottom = labelTop - this.labelSpacing;
         var tickTop    = tickBottom - this.tickLength;
@@ -101,10 +101,13 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
             .attr("y", function(d) {
                 var scalePoint = self.scaler(d);
                 var height = this.getBBox().height;
-                return scalePoint + (height / 4); // not 2? bounding box for 'text' elements gives too tall a height
+                return scalePoint + (height / 4);
             });
 
-        var labelWidth = $(this.el.selectAll(".label")[0][0]).width();
+        var labelWidth = _.max(_.map(this.el.selectAll(".label")[0], function(label) {
+            return label.getBBox().width;
+        }));
+
         var labelRight = this.paddingX + labelWidth;
         var tickLeft   = labelRight + this.labelSpacing;
         var tickRight  = tickLeft + this.tickLength;

@@ -341,7 +341,8 @@ describe("chorus.views.visualizations.Axes", function() {
             });
 
             it("draws the labels inside the padding", function() {
-                expect(leftX(this.labels[0])).toBeGreaterThanOrEqualTo(this.paddingX);
+                var paddingMinusBoundingBoxError = this.paddingX - 5;
+                expect(leftX(this.labels[0])).toBeGreaterThanOrEqualTo(paddingMinusBoundingBoxError);
             });
         });
     });

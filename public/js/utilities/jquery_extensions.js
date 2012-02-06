@@ -25,6 +25,10 @@ jQuery.fn.extend({
         });
     },
 
+    isOnDom: function() {
+        return jQuery.contains(document.body, this[0]);
+    },
+
     stopLoading : function() {
         this.each(function() {
             var el = $(this);
