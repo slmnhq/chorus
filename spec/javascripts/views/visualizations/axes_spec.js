@@ -68,6 +68,30 @@ describe("chorus.views.visualizations.Axes", function() {
             this.labels   = this.$el.find(".label");
         });
 
+        describe("#originY (used for drawing the y axis)", function() {
+            beforeEach(function() {
+                this.actualY = topY(this.axisLine);
+
+                this.newAxis = new chorus.views.visualizations.XAxis({
+                    el: this.el,
+                    labels: _.shuffle(this.labelValues),
+                    ticks: true,
+                    paddingX: this.paddingX,
+                    paddingY: this.paddingY
+                });
+            });
+
+            it("returns the y-position where the x axis line will be drawn, " +
+               "taking into account the height of the labels and ticks", function() {
+                expect(this.newAxis.originY()).toEqual(this.actualY);
+            });
+
+            it("does not alter the contents of the container", function() {
+                this.newAxis.originY();
+                expect(this.$el.find(".label")).toEqual(this.labels);
+            });
+        });
+
         describe("the axis line", function() {
             it("is rendered to the chart", function() {
                 expect(this.axisLine).toExist();
@@ -202,6 +226,31 @@ describe("chorus.views.visualizations.Axes", function() {
             this.ticks    = this.$el.find("line.tick");
             this.labels   = this.$el.find(".label");
         });
+
+        describe("#originX (used for drawing the x axis)", function() {
+            beforeEach(function() {
+                this.actualX = leftX(this.axisLine);
+
+                this.newAxis = new chorus.views.visualizations.YAxis({
+                    el: this.el,
+                    labels: _.shuffle(this.labelValues),
+                    ticks: true,
+                    paddingX: this.paddingX,
+                    paddingY: this.paddingY
+                });
+            });
+
+            it("returns the x-position where the y axis line will be drawn, " +
+               "taking into account the width of the labels and ticks", function() {
+                expect(this.newAxis.originX()).toEqual(this.actualX);
+            });
+
+            it("does not alter the contents of the container", function() {
+                this.newAxis.originX();
+                expect(this.$el.find(".label")).toEqual(this.labels);
+            });
+        });
+
 
         it("does not interfere with other elements in the svg container", function() {
             this.$el.empty();
@@ -373,8 +422,18 @@ describe("chorus.views.visualizations.Axes", function() {
             this.yLabels   = this.$el.find("g.yaxis text.label");
         });
 
-        describe("axis positioning", function() {
-            beforeEach(function() {
+        xdescribe("axis positioning", function() {
+            it("positions the x and y axes so that they meet at the origin", function() {
+                expect(leftX(this.xAxisLine)).toEqual(leftX(this.yAxisLine));
+                expect(bottomY(this.yAxisLine)).toEqual(bottomY(this.xAxisLine));
+            });
+
+            it("keeps labels inside the padding", function() {
+                expect(leftX(this.xLabels[0])).toBeGreaterThanOrEqualTo(this.paddingX)
+                expect(leftX(this.xLabels[1])).toBeGreaterThanOrEqualTo(this.paddingX)
+                expect(leftX(this.xLabels[2])).toBeGreaterThanOrEqualTo(this.paddingX)
+                expect(leftX(this.xLabels[3])).toBeGreaterThanOrEqualTo(this.paddingX)
+                expect(leftX(this.xLabels[4])).toBeGreaterThanOrEqualTo(this.paddingX)
             });
         });
     });

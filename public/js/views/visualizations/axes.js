@@ -15,6 +15,21 @@ chorus.views.visualizations.XAxis = function(options) {
 };
 
 _.extend(chorus.views.visualizations.XAxis.prototype, {
+    originY: function() {
+        this.el = this.container.append("svg:g").attr("class", "xaxis");
+        var testLabels = this.el.selectAll(".label.test-origin-y")
+            .data(this.labels).enter()
+            .append("svg:text")
+            .attr("class", "label test-origin-y")
+            .text(function(d) {
+                return d
+            });
+
+        var height = this.el.selectAll(".label")[0][0].getBBox().height + this.labelSpacing + this.tickLength
+        testLabels.remove();
+        return this.height - this.paddingY - height;
+    },
+
     render: function() {
         var self = this;
         this.el = this.container.append("svg:g").attr("class", "xaxis");
@@ -80,6 +95,24 @@ chorus.views.visualizations.YAxis = function(options) {
 };
 
 _.extend(chorus.views.visualizations.YAxis.prototype, {
+    originX: function() {
+        this.el = this.container.append("svg:g").attr("class", "yaxis");
+        var testLabels = this.el.selectAll(".label.test-origin-x")
+            .data(this.labels).enter()
+            .append("svg:text")
+            .attr("class", "label")
+            .text(function(d) {
+                return d
+            });
+        var maxWidth = _.max(_.map(this.el.selectAll(".label")[0], function(label) {
+            return label.getBBox().width
+        }))
+
+        var width = maxWidth + this.labelSpacing + this.tickLength
+        testLabels.remove();
+        return this.paddingX + width;
+    },
+
     render : function() {
         var self = this;
         this.el = this.container.append("svg:g").attr("class", "yaxis");
@@ -132,3 +165,14 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
     }
 });
 
+chorus.views.visualizations.Axes = function(options) {
+    this.xAxis = new chorus.views.visualizations.XAxis({ el: options.el, labels: options.xLabels})
+    this.yAxis = new chorus.views.visualizations.YAxis({ el: options.el, labels: options.xLabels})
+}
+
+_.extend(chorus.views.visualizations.Axes.prototype, {
+    render: function() {
+        this.xAxis.render()
+        this.yAxis.render()
+    }
+})
