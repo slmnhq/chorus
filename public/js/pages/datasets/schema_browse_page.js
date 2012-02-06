@@ -30,7 +30,7 @@
 
             this.breadcrumbs = new breadcrumbsView({model: this.schema});
 
-            this.collection = new chorus.collections.DatasetSet([], {workspaceId: 10000});
+            this.collection = new chorus.collections.DatasetSet([], {instanceId: instanceId, databaseName: databaseName, schemaName:schemaName });
             this.collection.sortAsc("objectName");
             this.collection.fetch();
 

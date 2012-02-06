@@ -6,5 +6,13 @@ chorus.collections.DatasetSet = chorus.collections.Base.extend({
         } else {
             return "data/{{instanceId}}/database/{{databaseName}}/schema/{{schemaName}}";
         }
+    },
+
+    urlParams: function(){
+        if (this.attributes.workspaceId){
+            return {}
+        } else {
+            return {type: "meta"}
+        }
     }
 });

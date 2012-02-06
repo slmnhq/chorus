@@ -29,12 +29,10 @@ describe("chorus.pages.SchemaBrowsePage", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.instance);
                 this.server.completeFetchFor(this.schema);
-                this.page.collection.add(fixtures.datasetChorusView());
                 this.page.render();
             });
 
             it("has the right breadcrumbs", function() {
-
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).attr("href")).toBe("#/");
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).text()).toBe(t("breadcrumbs.home"));
 
@@ -62,6 +60,12 @@ describe("chorus.pages.SchemaBrowsePage", function() {
 
                 expect(this.page.$(this.page.mainContent.el).length).toBe(1);
             });
+
+            it("creates the collection with the right options", function(){
+                expect(this.page.collection.attributes.instanceId).toBe(this.schema.get("instanceId"))
+                expect(this.page.collection.attributes.databaseName).toBe(this.schema.get("databaseName"))
+                expect(this.page.collection.attributes.schemaName).toBe(this.schema.get("name"))
+            })
 
             context("with some items in the dataset", function() {
                 beforeEach(function() {
