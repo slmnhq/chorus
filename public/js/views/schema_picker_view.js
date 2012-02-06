@@ -12,12 +12,17 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
     },
 
     setup:function () {
-        if(!this.options.instance) {
+        if (this.options.instance) {
+            if (this.options.database) {
+                this.selectedInstance = this.options.instance;
+                this.databaseSelected();
+            } else {
+                this.instanceSelected();
+            }
+        } else {
             this.instances = new chorus.collections.InstanceSet();
             this.instances.bind("reset", this.updateInstances, this);
             this.instances.fetchAll();
-        } else{
-            this.instanceSelected();
         }
     },
 
@@ -44,13 +49,17 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
 
     databaseSelected:function () {
         this.resetSelect('schema');
-        this.selectedDatabase = this.databases.get(this.$('.database select option:selected').val());
+        this.selectedDatabase = this.getSelectedDatabase();
         if (this.selectedDatabase) {
             this.showSection("schema", { loading:true });
             this.schemas = this.selectedDatabase.schemas();
             this.schemas.bind("reset", this.updateSchemas, this);
             this.schemas.fetch();
         }
+    },
+
+    getSelectedDatabase : function() {
+        return this.options.database || this.databases.get(this.$('.database select option:selected').val());
     },
 
     schemaSelected:function () {

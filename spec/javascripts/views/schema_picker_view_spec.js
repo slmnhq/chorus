@@ -24,6 +24,29 @@ describe("chorus.views.SchemaPicker", function () {
             });
         });
 
+        context("when an instance and a database are provided", function() {
+            beforeEach(function () {
+                this.instance = fixtures.instance();
+                this.database = fixtures.database({instanceId: this.instance.get("id")});
+                this.view = new chorus.views.SchemaPicker({ instance: this.instance, database: this.database });
+                this.view.render();
+            });
+
+            it('does not try to fetch the instances or the databases', function () {
+                expect(this.server.lastFetchAllFor(new chorus.collections.InstanceSet())).toBeUndefined();
+                expect(this.server.lastFetchAllFor(new chorus.collections.DatabaseSet({instanceId: this.instance.get("id")}))).toBeUndefined();
+            });
+
+            it("renders a label instead of a select for instance and database", function () {
+                expect(this.view.$('.instance select')).not.toExist();
+                expect(this.view.$('.database select')).not.toExist();
+            });
+
+            it("fetches the schemas", function () {
+                expect(this.server.lastFetchFor(this.database.schemas())).toBeDefined();
+            });
+        });
+
         context("when allowCreate is true", function () {
             beforeEach(function () {
                 this.view = new chorus.views.SchemaPicker({ allowCreate: true });
