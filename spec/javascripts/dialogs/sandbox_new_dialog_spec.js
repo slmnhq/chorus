@@ -8,7 +8,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
     describe("#setup", function() {
         it("fetches the aurora config", function() {
-            expect(this.server.lastFetch().url).toBe("/edc/provisioning/A4CProvisioner?type=install")
+            //expect(this.server.lastFetch().url).toBe("/edc/provisioning/A4CProvisioner?type=install")
         })
 
         it("does not create subviews yet", function() {
@@ -22,7 +22,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
         describe("when the aurora config fetch returns", function() {
             beforeEach(function() {
-                this.server.lastFetch().succeed([{installationStatus: "install_succeed"}]);
+                //this.server.lastFetch().succeed([{installationStatus: "install_succeed"}]);
             })
 
             it("fetches the chorus config", function() {
@@ -60,7 +60,6 @@ describe("chorus.dialogs.SandboxNew", function() {
                 })
             })
         })
-
     })
 
     context("#render", function() {
@@ -68,7 +67,8 @@ describe("chorus.dialogs.SandboxNew", function() {
             spyOn($.fn, 'qtip');
         });
 
-        context("when aurora is configured", function() {
+        // This API is temporarily removed for EAP
+        xcontext("when aurora is configured", function() {
             beforeEach(function() {
                 this.server.lastFetch().succeed([{installationStatus: "install_succeed"}]);
             })
@@ -135,7 +135,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
         context("when aurora is not configured", function() {
             beforeEach(function() {
-                this.server.lastFetch().succeed([{installationStatus: "not-installed"}]);
+                //this.server.lastFetch().succeed([{installationStatus: "not-installed"}]);
             })
 
             context("and the configuration fetch has returned", function() {
@@ -163,7 +163,7 @@ describe("chorus.dialogs.SandboxNew", function() {
         beforeEach(function() {
             this.sandbox = this.dialog.model;
             spyOn(this.sandbox, 'save').andCallThrough();
-            this.server.lastFetch().succeed([{installationStatus: "install_succeed"}]);
+            //this.server.lastFetch().succeed([{installationStatus: "install_succeed"}]);
             this.server.lastFetch().succeed([{
                 "provisionMaxSizeInGB" : 2000,
                 "provisionMaxSize" : "2000 GB",
@@ -284,15 +284,15 @@ describe("chorus.dialogs.SandboxNew", function() {
             });
 
             describe("when the model is saved successfully", function() {
-                    beforeEach(function() {
-                        spyOn(chorus, 'toast');
-                        this.sandbox.trigger("saved");
-                    });
-
-                    it("shows a toast message", function() {
-                        expect(chorus.toast).toHaveBeenCalledWith("sandbox.create.standalone.toast");
-                    });
+                beforeEach(function() {
+                    spyOn(chorus, 'toast');
+                    this.sandbox.trigger("saved");
                 });
+
+                it("shows a toast message", function() {
+                    expect(chorus.toast).toHaveBeenCalledWith("sandbox.create.standalone.toast");
+                });
+            });
         });
     });
 });
