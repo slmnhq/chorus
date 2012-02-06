@@ -25,13 +25,17 @@ chorus.models.Dataset = chorus.models.Base.extend({
     urlTemplate: "workspace/{{workspace.id}}/dataset/{{entityId}}",
 
     showUrlTemplate:function () {
-        return [
-            "workspaces",
-            this.get("workspace").id,
-            this.get("type").toLowerCase(),
-            this.get("objectType").toLowerCase(),
-            this.get("objectName")
-        ].join("/");
+        if (this.has("workspace")) {
+            return [
+                "workspaces",
+                this.get("workspace").id,
+                this.get("type").toLowerCase(),
+                this.get("objectType").toLowerCase(),
+                this.get("objectName")
+            ].join("/");
+        } else {
+            return "/";
+        }
     },
 
     makeBoxplotTask: function(taskAttrs) {
@@ -89,7 +93,7 @@ chorus.models.Dataset = chorus.models.Base.extend({
 
     statistics:function () {
         return new chorus.models.DatasetStatistics({
-            instanceId:this.get("instance").id,
+            instanceId: this.has("instance") ? this.get("instance").id : this.collection.attributes.instanceId,
             databaseName:this.get("databaseName"),
             schemaName:this.get("schemaName"),
             type:this.get("type"),
