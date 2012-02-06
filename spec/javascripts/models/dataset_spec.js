@@ -164,6 +164,36 @@ describe("chorus.models.Dataset", function() {
         });
     })
 
+    describe("#makeTimeseriesTask", function() {
+        beforeEach(function() {
+            this.dataset.set({sandboxId: "21"});
+
+            this.task = this.dataset.makeTimeseriesTask({
+                xAxis: "years",
+                yAxis: "height_in_inches",
+                aggregation: "sum",
+                timeInterval: "minute"
+            });
+        });
+
+        it("returns a TimeseriesTask model", function() {
+            expect(this.task).toBeA(chorus.models.TimeseriesTask);
+        });
+
+        it("has the given y axis", function() {
+            expect(this.task.get("xAxis")).toBe("years");
+            expect(this.task.get("yAxis")).toBe("height_in_inches");
+            expect(this.task.get("aggregation")).toBe("sum");
+            expect(this.task.get("timeInterval")).toBe("minute");
+        });
+
+        it("has the right workspaceId, dataset id and objectName", function() {
+            expect(this.task.get("workspaceId")).toBe("44");
+            expect(this.task.get("datasetId")).toBe(this.dataset.entityId);
+            expect(this.task.get("objectName")).toBe("japanese_teas");
+        });
+    });
+
     describe("#statistics", function() {
         beforeEach(function() {
             this.datasetProperties = this.dataset.statistics()

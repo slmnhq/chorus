@@ -2,10 +2,13 @@ describe("chorus.views.DatasetVisualizationTimeSeriesSidebar", function() {
     describe("#render", function() {
         context("with valid column data", function() {
             beforeEach(function() {
-                this.columns = fixtures.databaseColumnSet();
-                this.columns.add(fixtures.databaseColumn({typeCategory: 'SmellyThings'}));
-                this.columns.add(fixtures.databaseColumn({typeCategory: 'TIME'}));
-                this.view = new chorus.views.DatasetVisualizationTimeSeriesSidebar({collection: this.columns})
+                this.column1 = fixtures.databaseColumn({typeCategory: 'REAL_NUMBER', name: "Sandwich"});
+                this.column2 = fixtures.databaseColumn({typeCategory: 'TIME', name: "Stopwatch"});
+                this.column3 = fixtures.databaseColumn({typeCategory: 'FOO', name: "A Foo"});
+                this.columns = fixtures.databaseColumnSet([this.column1, this.column2, this.column3]);
+
+                this.model = fixtures.datasetChorusView({objectName: "Foo"});
+                this.view = new chorus.views.DatasetVisualizationTimeSeriesSidebar({model: this.model, collection: this.columns})
                 this.view.render();
             })
 
@@ -22,12 +25,24 @@ describe("chorus.views.DatasetVisualizationTimeSeriesSidebar", function() {
                 itBehavesLike.DatasetVisualizationSidebarChooser(2, "maximum", ".value .limiter");
                 itBehavesLike.DatasetVisualizationSidebarChooser(2, "day", ".time .limiter");
             })
+
+            describe("#chartOptions", function() {
+                it("should return all the chart options for a timeseries", function() {
+                    var options = this.view.chartOptions();
+                    expect(options.name).toBe("Foo");
+                    expect(options.type).toBe("timeseries");
+                    expect(options.yAxis).toBe("Sandwich");
+                    expect(options.xAxis).toBe("Stopwatch");
+                    expect(options.aggregation).toBe("sum");
+                    expect(options.timeInterval).toBe("minute");
+                })
+            });
         })
 
         context("with no columns", function() {
             beforeEach(function() {
                 this.columns = new chorus.collections.DatabaseColumnSet();
-                this.view = new chorus.views.DatasetVisualizationTimeSeriesSidebar({collection: this.columns})
+                this.view = new chorus.views.DatasetVisualizationTimeSeriesSidebar({model: this.model, collection: this.columns})
                 this.view.render();
             })
 

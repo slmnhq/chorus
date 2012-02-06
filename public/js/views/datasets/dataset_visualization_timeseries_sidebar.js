@@ -6,6 +6,17 @@ chorus.views.DatasetVisualizationTimeSeriesSidebar = chorus.views.DatasetVisuali
         this.$(".category option:eq(1)").attr('selected', 'selected');
     },
 
+    chartOptions: function() {
+        return {
+            type: "timeseries",
+            name: this.model.get("objectName"),
+            xAxis: this.$(".time select option:selected").text(),
+            yAxis: this.$(".value select option:selected").text(),
+            aggregation: this.$(".value .selected_value").text(),
+            timeInterval: this.$(".time .selected_value").text()
+        }
+    },
+
     additionalContext: function() {
         return {
             numericColumnNames: this.numericColumnNames(),

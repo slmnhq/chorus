@@ -75,6 +75,18 @@ chorus.models.Dataset = chorus.models.Base.extend({
         });
     },
 
+    makeTimeseriesTask: function(taskAttrs) {
+        return new chorus.models.TimeseriesTask({
+            xAxis: taskAttrs.xAxis,
+            yAxis: taskAttrs.yAxis,
+            aggregation: taskAttrs.aggregation,
+            timeInterval: taskAttrs.timeInterval,
+            objectName: this.get("objectName"),
+            workspaceId: this.get("workspace").id,
+            datasetId: this.entityId
+        });
+    },
+
     statistics:function () {
         return new chorus.models.DatasetStatistics({
             instanceId:this.get("instance").id,
