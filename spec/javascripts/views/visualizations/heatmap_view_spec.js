@@ -1,4 +1,30 @@
 describe("chorus.views.visualizations.Heatmap", function() {
+    var leftX = chorus.svgHelpers.leftX,
+        rightX = chorus.svgHelpers.rightX,
+        width = chorus.svgHelpers.width,
+        height = chorus.svgHelpers.height,
+        centerX = chorus.svgHelpers.centerX,
+        topY = chorus.svgHelpers.topY,
+        bottomY = chorus.svgHelpers.bottomY,
+        centerY = chorus.svgHelpers.centerY;
+
+    beforeEach(function() {
+        this.addMatchers({
+            toAllBeEqual: function() {
+                var firstValue = this.actual[0];
+                return _.all(this.actual, function(element) {
+                    return _.isEqual(element, firstValue);
+                });
+            },
+
+            toBeDarkerThan: function(el) {
+                var fill1 = $(this.actual).css("fill"),
+                    fill2 = $(el).css("fill");
+                return relativeLightness(fill1) < relativeLightness(fill2);
+            }
+        });
+    });
+
     beforeEach(function() {
         this.task = fixtures.heatmapTaskWithResult({
             rows: [
@@ -17,22 +43,81 @@ describe("chorus.views.visualizations.Heatmap", function() {
             ],
         });
 
+        this.width = 925;
+        this.height = 340;
         this.view = new chorus.views.visualizations.Heatmap({ model: this.task });
     });
 
-    xdescribe("#render", function() {
+    describe("#render", function() {
         beforeEach(function() {
+            $("#jasmine_content").append(this.view.el);
             this.view.render();
+
+            this.minX = this.view.axes.scales().x.rangeExtent()[0];
+            this.maxX = this.view.axes.scales().x.rangeExtent()[1];
+            this.minY = this.view.axes.scales().y.rangeExtent()[1];
+            this.maxY = this.view.axes.scales().y.rangeExtent()[0];
         });
 
         it("has a chart container", function() {
             expect(this.view.$("svg.chart")).toExist();
         });
 
-        it("has one box for each combination of bins", function() {
-            expect(this.view.$("rect").length).toBe(12);
+        it("has x and y axes", function() {
+            expect(this.view.$(".xaxis")).toExist();
+            expect(this.view.$(".yaxis")).toExist();
+        });
+
+        describe("the bins", function() {
+            beforeEach(function() {
+                this.bins = this.view.$("rect.bin");
+            });
+
+            it("has one box for each combination of bins", function() {
+                expect(this.bins.length).toBe(12);
+            });
+
+            it("divides the space of the plot evenly between the bins", function() {
+                var contentWidth = this.maxX - this.minX;
+                var contentHeight = this.maxY - this.minY;
+
+                var widths  = _.map(this.bins, function(bin) { return width(bin); });
+                var heights = _.map(this.bins, function(bin) { return height(bin); });
+
+                expect(widths).toAllBeEqual();
+                expect(heights).toAllBeEqual();
+            });
+
+            it("positions the bins correctly", function() {
+                var binWidth = width(this.bins[0]);
+                var binHeight = height(this.bins[0]);
+
+                _.each(this.bins, function(bin, i) {
+                    var row = this.task.get('rows')[i]
+                    var x = row.x - 1
+                    var y = row.y - 1
+                    expect(leftX(bin)).toBeCloseTo(this.minX + x * binWidth)
+                    expect(bottomY(bin)).toBeCloseTo(this.maxY - y * binHeight)
+                }, this);
+            });
+
+            it("makes bins with greater values darker than those with lesser values", function() {
+                var rows = this.task.get("rows");
+                expect(rows[1].value).toBeGreaterThan(rows[0].value);
+                expect(this.bins[1]).toBeDarkerThan(this.bins[0]);
+
+                expect(rows[10].value).toBeGreaterThan(rows[1].value);
+                expect(this.bins[10]).toBeDarkerThan(this.bins[1]);
+            });
         });
     });
+
+    function relativeLightness(hexString) {
+        var r = parseInt(hexString.slice(1, 3), 16),
+            g = parseInt(hexString.slice(3, 5), 16),
+            b = parseInt(hexString.slice(5, 7), 16);
+        return r + g + b;
+    }
 });
 
 

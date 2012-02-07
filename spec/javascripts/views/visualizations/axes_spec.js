@@ -1,4 +1,11 @@
 describe("chorus.views.visualizations.Axes", function() {
+    var leftX = chorus.svgHelpers.leftX,
+        rightX = chorus.svgHelpers.rightX,
+        centerX = chorus.svgHelpers.centerX,
+        topY = chorus.svgHelpers.topY,
+        bottomY = chorus.svgHelpers.bottomY,
+        centerY = chorus.svgHelpers.centerY;
+
     beforeEach(function() {
         var div = document.createElement("div");
         this.width = 300;
@@ -493,40 +500,4 @@ describe("chorus.views.visualizations.Axes", function() {
             });
         })
     });
-
-    function topY(el) {
-        return _.min(coordsY(el));
-    }
-
-    function bottomY(el) {
-        return _.max(coordsY(el));
-    }
-
-    function rightX(el) {
-        return _.max(coordsX(el));
-    }
-
-    function leftX(el) {
-        return _.min(coordsX(el));
-    }
-
-    function centerY(el) {
-        var ys = coordsY(el);
-        return (ys[0] + ys[1]) / 2;
-    }
-
-    function centerX(el) {
-        var xs = coordsX(el);
-        return (xs[0] + xs[1]) / 2;
-    }
-
-    function coordsX(el) {
-        var box = $(el)[0].getBBox();
-        return [box.x, box.x + box.width];
-    }
-
-    function coordsY(el) {
-        var box = $(el)[0].getBBox();
-        return [box.y, box.y + box.height];
-    }
 });
