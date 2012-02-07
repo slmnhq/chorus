@@ -37,6 +37,9 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
         beforeEach(function() {
             spyOn(chorus.dialogs.Visualization.prototype, "onExecutionComplete");
             spyOn(this.view, "onSqlError");
+            spyOn(this.view, "clearSqlErrors");
+            spyOn(this.view, "showLoadingSpinner")
+            spyOn(this.view, "hideLoadingSpinner")
             stubModals();
             this.server.reset();
             this.view.chartOptions = function() {return {type:'histogram'};};
@@ -44,9 +47,21 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
             this.view.launchVisualizationDialog();
         })
 
+        it("should clear the sql error bar", function() {
+            expect(this.view.clearSqlErrors).toHaveBeenCalled();
+        });
+
         it("should call save on the task", function() {
             expect(this.server.lastCreate()).toBeDefined();
         });
+
+        it("should have a spinner", function() {
+            expect(this.view.showLoadingSpinner).toHaveBeenCalled()
+        })
+
+        it("should disable the create button", function() {
+            expect(this.view.showLoadingSpinner).toHaveBeenCalled()
+        })
 
         describe("when the save completes", function() {
             beforeEach(function() {
@@ -56,6 +71,14 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
             it("starts up the visualization dialog", function() {
                 expect(this.view.dialog.onExecutionComplete).toHaveBeenCalled();
             });
+
+            it("should not have a spinner", function() {
+                expect(this.view.hideLoadingSpinner).toHaveBeenCalled()
+            })
+
+            it("should enable the create button", function() {
+                expect(this.view.hideLoadingSpinner).toHaveBeenCalled()
+            })
         });
 
         describe("when the save fails", function() {
@@ -66,6 +89,14 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
             it("displays the error DIV", function() {
                 expect(this.view.onSqlError).toHaveBeenCalled();
             });
+
+            it("should not have a spinner", function() {
+                expect(this.view.hideLoadingSpinner).toHaveBeenCalled()
+            })
+
+            it("should enable the create button", function() {
+                expect(this.view.hideLoadingSpinner).toHaveBeenCalled()
+            })
         });
     })
 })

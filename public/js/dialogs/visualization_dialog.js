@@ -12,31 +12,42 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         "click button.save":"downloadVisualization"
     },
 
-    setup:function () {
+    setup: function () {
         this.type = this.options.chartOptions.type;
         this.title = t("visualization.title", {name:this.options.chartOptions.name});
 
         this.chartData = new chorus.views.ResultsConsole({shuttle:false});
     },
 
-    postRender:function () {
+    postRender: function () {
         this.$('.chart_icon.' + this.type).addClass("selected");
     },
 
-    onExecutionComplete:function () {
+    onExecutionComplete: function () {
         this.launchModal();
         this.drawChart();
-        this.chartData.trigger('file:executionCompleted', this.task);
-
     },
 
-    drawChart:function () {
-        this.chart = new chorus.views.visualizations[_.capitalize(this.type)]({model:this.task});
-        this.subviews[".chart_area"] = "chart";
+    drawChart: function () {
+        if (this.isValidData()) {
+            this.chart = new chorus.views.visualizations[_.capitalize(this.type)]({model:this.task});
+            this.subviews[".chart_area"] = "chart";
+        } else {
+            this.displayEmptyChartWarning()
+        }
         this.render();
     },
 
-    createDownloadForm:function () {
+    displayEmptyChartWarning: function() {
+        this.emptyDataWarning = new chorus.views.visualizations.EmptyDataWarning()
+        this.subviews[".chart_area"] = "emptyDataWarning";
+    },
+
+    isValidData: function() {
+        return !_.isEmpty(this.task.get("rows"));
+    },
+
+    createDownloadForm: function () {
         var serializer = new XMLSerializer;
         var svg = this.$(".chart_area.visualization svg")[0];
 

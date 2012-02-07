@@ -97,5 +97,13 @@
         width: 940px;
         height: 340px;
         background: white;
+
+        line-height: 340px;
+        vertical-align: middle;
+        text-align: center;
+
+        .empty_data {
+            font-weight: $semibold;
+        }
     }
 }

@@ -149,6 +149,15 @@
     .execution {
         background: $shaded-background-color;
     }
+
+    .actions {
+        color: white;
+        float: right;
+
+        a {
+            float: none;
+        }
+    }
 }
 
 .transform_menu {

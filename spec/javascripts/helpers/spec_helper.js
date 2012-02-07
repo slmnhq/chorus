@@ -31,6 +31,7 @@
         'dataset_visualization_heatmap_sidebar',
         'dataset_visualization_timeseries_sidebar',
         'default_content_header',
+        'empty_data_warning',
         'header',
         'image_upload',
         'image_workfile_content',

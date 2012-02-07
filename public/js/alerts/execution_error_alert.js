@@ -11,6 +11,7 @@ chorus.alerts.ExecutionError = chorus.alerts.Base.extend({
     },
 
     postRender:function () {
+        this.$(".errors").addClass('hidden');
         this.$("button.submit").addClass("hidden");
     }
 });

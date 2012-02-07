@@ -4,7 +4,7 @@ describe("chorus.dialogs.Visualization", function() {
         spyOn(chorus.Modal.prototype, "closeModal");
         this.dataset = fixtures.datasetSourceTable();
         this.chartOptions = {type: "boxplot", name: "Foo"};
-        this.filters = {whereClause: function() {return "ABC";}, filterCount: function(){return 7;}};
+        this.filters = {whereClause: function() {return "ABC";}, filterCount: function() {return 7;}};
         this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions, filters: this.filters});
         this.dialog.task = fixtures.taskWithErrors();
     });
@@ -18,29 +18,86 @@ describe("chorus.dialogs.Visualization", function() {
             beforeEach(function() {
                 spyOn(chorus.views.visualizations, "Boxplot").andReturn(stubView())
                 spyOn(this.dialog, "drawChart").andCallThrough()
-                this.dialog.render();
-                this.dialog.onExecutionComplete();
             });
+            
+            describe("when the task data is valid", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog, "isValidData").andReturn(true);
+                    this.dialog.render();
+                    this.dialog.onExecutionComplete();
+                })
 
-            it("should trigger file:executionCompleted on the result console", function() {
-                expect("file:executionCompleted").toHaveBeenTriggeredOn(this.dialog.chartData);
-            });
+                it("should draw the chart", function() {
+                    expect(this.dialog.drawChart).toHaveBeenCalled();
+                })
 
-            it("should draw the chart", function() {
-                expect(this.dialog.drawChart).toHaveBeenCalled();
+                it("enables the Save Chart button", function() {
+                    expect(this.dialog.$("button.save")).toBeEnabled();
+                })
+
+                it("shows the Show Data link", function() {
+                    expect(this.dialog.$("a.show")).not.toHaveClass('hidden');
+                })
             })
 
-            it("enables the Save Chart button", function() {
-                expect(this.dialog.$("button.save")).toBeEnabled();
+            describe("when the task data is not valid", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog, "isValidData").andReturn(false);
+                    this.dialog.render();
+                    this.dialog.onExecutionComplete();
+                })
+
+                it("does not enable the save chart button", function() {
+                    expect(this.dialog.$("button.save")).toBeDisabled();
+                });
+
+                it("hides the Show Data link", function() {
+                    expect(this.dialog.$("a.show")).toHaveClass('hidden');
+                });
+
+                it("does not have a chart", function() {
+                    expect(this.dialog.chart).toBeUndefined();
+                });
+
+                it("has a notification of empty data", function() {
+                    expect(this.dialog.$(".empty_data").text()).toMatchTranslation("visualization.empty_data");
+                });
             })
+
         });
     });
+
+    describe("#isValidData", function() {
+        describe("it has rows", function() {
+            beforeEach(function() {
+                this.chartOptions["type"] = "histogram";
+                this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions, filters: this.filters});
+                this.dialog.task = fixtures.boxplotTaskWithResult();
+            })
+
+            it("should be valid", function() {
+                expect(this.dialog.isValidData()).toBeTruthy()
+            })
+        })
+
+        describe("it has no rows", function() {
+            beforeEach(function() {
+                this.chartOptions["type"] = "histogram";
+                this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions, filters: this.filters});
+                this.dialog.task = fixtures.task({result: {rows: []}});
+            })
+
+            it("should not be valid", function() {
+                expect(this.dialog.isValidData()).toBeFalsy()
+            })
+        })
+    })
 
     describe("#render", function() {
         beforeEach(function() {
             this.dialog.render();
         });
-        
+
         it("should have a title", function() {
             expect(this.dialog.title).toMatchTranslation("visualization.title", {name: "Foo"});
         });
@@ -96,8 +153,8 @@ describe("chorus.dialogs.Visualization", function() {
                 expect(this.dialog.$(".results_console")).toHaveClass("hidden");
             });
 
-            it("should show a 'Show Data Table' link", function() {
-                expect(this.dialog.$(".dialog_controls a.show")).not.toHaveClass("hidden");
+            it("should not show the 'Show Data Table' link (until the chart is loaded)", function() {
+                expect(this.dialog.$(".dialog_controls a.show")).toHaveClass("hidden");
             });
 
             it("should hide the 'Hide Data Table' link", function() {
@@ -140,7 +197,7 @@ describe("chorus.dialogs.Visualization", function() {
                 })
 
                 it("submits the form", function() {
-                   expect(this.submitSpy).toHaveBeenCalled();
+                    expect(this.submitSpy).toHaveBeenCalled();
                 });
             })
 
@@ -167,7 +224,7 @@ describe("chorus.dialogs.Visualization", function() {
         beforeEach(function() {
             this.dialog.render();
         });
-        
+
         describe("clicking on the 'Show Data Table' link", function() {
             beforeEach(function() {
                 this.dialog.$(".dialog_controls a.show").click();

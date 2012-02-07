@@ -4,6 +4,8 @@
     @include after-clearfix;
     background-color: $error-background-color;
     vertical-align: middle;
+    font-weight: normal;
+    line-height: 16px;
 
     ul {
         float: left;
@@ -14,10 +16,12 @@
             padding: 10px 10px 10px 16px;
             color: $error-color;
             font-size: 14px;
+
         }
     }
 
     .action {
+        font-weight: normal;
         display: inline-block;
         float: right;
         margin: 0 10px;

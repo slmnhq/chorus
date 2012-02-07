@@ -35,6 +35,12 @@
             position: absolute;
             left: $avail-width/4;
             right: $avail-width/4;
+
+            div[aria-role=progressbar]{
+                position: absolute;
+                right: -100px;
+                top: -13px;
+            }
         }
 
         form label {
