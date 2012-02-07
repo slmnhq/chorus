@@ -20,7 +20,6 @@ describe("chorus.views.visualizations.Heatmap", function() {
             toBeDarkerThan: function(el) {
                 var fill1 = $.color.extract($(this.actual), "fill"),
                     fill2 = $.color.extract($(el), "fill");
-                console.log(fill1, fill2);
                 return relativeLightness(fill1) < relativeLightness(fill2);
             }
         });
@@ -41,7 +40,7 @@ describe("chorus.views.visualizations.Heatmap", function() {
                 { yLabel: "[30-71.8]",     xLabel: "[5.4-7.2]", value: 40551, y: 1, x: 4 },
                 { yLabel: "[71.8-113.6]",  xLabel: "[5.4-7.2]", value: 40411, y: 2, x: 4 },
                 { yLabel: "[113.6-155.4]", xLabel: "[5.4-7.2]", value: 39841, y: 3, x: 4 },
-            ],
+            ]
         });
 
         this.width = 925;

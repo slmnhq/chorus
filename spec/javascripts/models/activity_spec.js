@@ -221,7 +221,7 @@ describe("chorus.models.Activity", function() {
                         author : fixtures.authorJson(),
                         timestamp : "2011-12-15 12:34:56"
                     }
-                ],
+                ]
             });
             this.model.set({id: 5});
             this.comments = this.model.comments();

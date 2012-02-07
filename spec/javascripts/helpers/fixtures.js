@@ -1802,7 +1802,7 @@ beforeEach(function() {
                 rows: [
                     { bucket: 1, count: '321' },
                     { bucket: 2, count: '1024' }
-                ],
+                ]
             }, overrides);
             return this.task(attributes);
         },
@@ -1824,7 +1824,7 @@ beforeEach(function() {
                 rows: [
                     { min: 0, median: 2, max: 4, count: 279089, percentage: '27.9%', bucket: 'FEMALE', firstQuartile: 1, thirdQuartile:  3 },
                     { min: 0, median: 2, max: 4, count: 720911, percentage: '72.1%', bucket: 'MALE', firstQuartile: 1, thirdQuartile:  3 }
-                ],
+                ]
             }, overrides);
             return this.task(attributes);
         },

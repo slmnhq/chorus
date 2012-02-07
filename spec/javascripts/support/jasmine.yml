@@ -17,6 +17,7 @@ src_files:
   - js/vendor/jquery.ui.widget.js
   - js/vendor/jquery.ui.*.js
   - js/vendor/codemirror-2.16.js
+  - js/vendor/es5-shim.js
   - js/vendor/d3.js
   - js/vendor/**/*.js
   - js/bootstrap.js
