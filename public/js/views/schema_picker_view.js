@@ -1,14 +1,14 @@
 chorus.views.SchemaPicker = chorus.views.Base.extend({
     className:"schema_picker",
 
-    events:{
-        "change .instance select":"instanceSelected",
-        "change .database select":"databaseSelected",
-        "change .schema select":"schemaSelected",
-        "click .database a.new":"createNewDatabase",
-        "click .database .cancel":"cancelNewDatabase",
-        "click .schema a.new":"createNewSchema",
-        "click .schema .cancel":"cancelNewSchema"
+    events: {
+        "change .instance select": "instanceSelected",
+        "change .database select": "databaseSelected",
+        "change .schema select": "schemaSelected",
+        "click .database a.new": "createNewDatabase",
+        "click .database .cancel": "cancelNewDatabase",
+        "click .schema a.new": "createNewSchema",
+        "click .schema .cancel": "cancelNewSchema"
     },
 
     setup:function () {
@@ -31,7 +31,7 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
         }
 
         this.$('.loading_spinner').startLoading();
-        this.$("input.name").bind("textchange", _.bind(this.checkIfValid, this))
+        this.$("input.name").bind("textchange", _.bind(this.triggerSchemaSelected, this))
     },
 
     instanceSelected:function () {
@@ -67,7 +67,7 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
 
     schemaSelected:function () {
         this.selectedSchema = this.schemas.get(this.$('.schema select option:selected').val());
-        this.checkIfValid();
+        this.triggerSchemaSelected();
     },
 
     createNewDatabase:function (e) {
@@ -128,7 +128,7 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
             section.find(".select_container").removeClass("hidden");
             chorus.styleSelect(section.find("select"));
         }
-        this.checkIfValid();
+        this.triggerSchemaSelected();
     },
 
     resetSelect:function (type) {
@@ -136,7 +136,7 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
         section.addClass("hidden");
         section.find("a.new").addClass("hidden");
         delete this["selected" + _.capitalize(type)];
-        this.checkIfValid();
+        this.triggerSchemaSelected();
 
         var select = section.find("select");
         select.empty();
@@ -160,8 +160,9 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
         this.updateFor('schema');
     },
 
-    checkIfValid:function () {
-        this.trigger("change");
+    triggerSchemaSelected:function () {
+        var schemaValue = this.$('.schema select').val();
+        this.trigger("change", schemaValue);
     },
 
     ready:function () {

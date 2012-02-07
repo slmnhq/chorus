@@ -22,6 +22,7 @@ chorus.dialogs.BrowseDatasets = chorus.dialogs.Base.extend({
         } else {
             this.schemaPicker = new chorus.views.SchemaPicker({instance: this.pageModel});
         }
+        this.schemaPicker.bind("change", this.setSubmitButtonState, this);
     },
 
     clickShowDatasets: function() {
@@ -32,5 +33,9 @@ chorus.dialogs.BrowseDatasets = chorus.dialogs.Base.extend({
 
     navigate: function () {
         chorus.router.navigate(this.schemaPicker.selectedSchema.showUrl(), true);
+    },
+
+    setSubmitButtonState: function(schema) {
+        this.$('button.submit').prop('disabled', !schema);
     }
 });

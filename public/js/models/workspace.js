@@ -25,11 +25,15 @@ chorus.models.Workspace = chorus.models.Base.extend({
         return this._owner;
     },
 
-    sandbox:function () {
+    sandbox: function() {
         if (this._sandbox) return this._sandbox;
         var sandboxInfo = this.get("sandboxInfo");
         if (sandboxInfo && sandboxInfo.sandboxId) {
-            var attrs = _.extend({}, sandboxInfo, { id:sandboxInfo.sandboxId })
+            var attrs = _.extend(
+                {},
+                sandboxInfo,
+                { id: sandboxInfo.sandboxId, workspaceId: this.get('id') }
+            )
             delete attrs.sandboxId;
             return this._sandbox = new chorus.models.Sandbox(attrs);
         }

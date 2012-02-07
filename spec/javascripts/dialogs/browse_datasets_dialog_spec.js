@@ -15,12 +15,16 @@ describe("chorus.dialogs.BrowseDatasets", function () {
             expect(this.view.$('.instance .title')).toContainText(this.instance.get('name'));
         });
 
-        context("after selecting database and schema", function () {
-            beforeEach(function () {
-                this.view.schemaPicker.databases.reset([ fixtures.database({ id: '5' }) ]);
+        it("should have the 'Browse Datasets' button disabled", function() {
+            expect(this.view.$('button.submit')).toBeDisabled();
+        });
+
+        context("after selecting database and schema", function() {
+            beforeEach(function() {
+                this.view.schemaPicker.databases.reset([ fixtures.database({ id: '5' }), fixtures.database({ id: '6' }) ]);
                 this.view.$(".database select").val("5").change();
-                this.view.schemaPicker.schemas.reset([ fixtures.schema({ id: '6' }) ]);
-                this.view.$(".schema select").val("6").change();
+                this.view.schemaPicker.schemas.reset([ fixtures.schema({ id: '7' }) ]);
+                this.view.$(".schema select").val("7").change();
             });
 
             describe("clicking show datasets", function () {
@@ -33,7 +37,21 @@ describe("chorus.dialogs.BrowseDatasets", function () {
                     expect(this.view.navigate).toHaveBeenCalled();
                     expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.schemaPicker.selectedSchema.showUrl(), true);
                 });
-            })
+            });
+
+            it("should have the 'Browse Datasets' button enabled", function() {
+                expect(this.view.$('button.submit')).toBeEnabled();
+            });
+
+            describe("selecting a different database", function() {
+                beforeEach(function() {
+                    this.view.$(".database select").val("6").change();
+                });
+
+                it("should have the 'Browse Datasets' button disabled", function() {
+                    expect(this.view.$('button.submit')).toBeDisabled();
+                });
+            });
         });
 
         context("without database and schema selected", function () {

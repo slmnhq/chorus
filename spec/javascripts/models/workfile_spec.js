@@ -136,7 +136,7 @@ describe("chorus.models.Workfile", function() {
 
             it("returns the sandbox from the workspace", function() {
                 expect(this.model.sandbox()).toBeA(chorus.models.Sandbox);
-            })
+            });
         })
 
         context("when the workfile's workspace has not been fetched", function() {

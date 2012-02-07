@@ -250,7 +250,11 @@ describe("chorus.models.Workspace", function() {
             it("returns a Sandbox model", function() {
                 expect(this.model.sandbox()).toBeA(chorus.models.Sandbox);
                 expect(this.model.sandbox().get("id")).toBe("10001")
-            })
+            });
+
+            it("populates the workspaceId", function() {
+                expect(this.model.sandbox().get('workspaceId')).toBe(this.model.get('id'));
+            });
 
             it("memoizes", function() {
                 expect(this.model.sandbox()).toBe(this.model.sandbox());
