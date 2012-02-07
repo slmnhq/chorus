@@ -18,8 +18,9 @@ describe("chorus.views.visualizations.Heatmap", function() {
             },
 
             toBeDarkerThan: function(el) {
-                var fill1 = $(this.actual).css("fill"),
-                    fill2 = $(el).css("fill");
+                var fill1 = $.color.extract($(this.actual), "fill"),
+                    fill2 = $.color.extract($(el), "fill");
+                console.log(fill1, fill2);
                 return relativeLightness(fill1) < relativeLightness(fill2);
             }
         });
@@ -96,8 +97,8 @@ describe("chorus.views.visualizations.Heatmap", function() {
                     var row = this.task.get('rows')[i]
                     var x = row.x - 1
                     var y = row.y - 1
-                    expect(leftX(bin)).toBeCloseTo(this.minX + x * binWidth)
-                    expect(bottomY(bin)).toBeCloseTo(this.maxY - y * binHeight)
+                    expect(leftX(bin)).toBeCloseTo(this.minX + x * binWidth, 1)
+                    expect(bottomY(bin)).toBeCloseTo(this.maxY - y * binHeight, 1)
                 }, this);
             });
 
@@ -112,11 +113,8 @@ describe("chorus.views.visualizations.Heatmap", function() {
         });
     });
 
-    function relativeLightness(hexString) {
-        var r = parseInt(hexString.slice(1, 3), 16),
-            g = parseInt(hexString.slice(3, 5), 16),
-            b = parseInt(hexString.slice(5, 7), 16);
-        return r + g + b;
+    function relativeLightness(color) {
+        return color.r + color.g + color.b;
     }
 });
 
