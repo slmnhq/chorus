@@ -202,6 +202,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
             "Visualization: Heatmap" : new chorus.views.visualizations.Heatmap({
                 model: new chorus.models.HistogramTask({
+                    xAxis: "brutality",
+                    yAxis: "victory_points",
                     columns: [
                         { "name": "x",      "typeCategory": "WHOLE_NUMBER" },
                         { "name": "y",      "typeCategory": "WHOLE_NUMBER" },

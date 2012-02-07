@@ -16,13 +16,16 @@ chorus.views.visualizations.XAxis = function(options) {
 _.extend(chorus.views.visualizations.XAxis.prototype, {
     requiredBottomSpace: function() {
         this.el = this.container.append("svg:g").attr("class", "xaxis");
-        var testTickLabels = this.el.selectAll(".label.test-origin-x")
+        var testTickLabels = this.el.selectAll(".label")
             .data(this.labels).enter()
+            .append("svg:g")
+            .attr("class", "label")
             .append("svg:text")
-            .attr("class", "label test-origin-y")
             .text(function(d) {
                 return d
             });
+
+        this.rotateTickLabelsIfNeeded();
 
         var testAxisLabel = this.el.append("svg:text")
             .text(this.axisLabel)
@@ -34,7 +37,9 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
     },
 
     tickLabelHeight: function() {
-        return this.el.selectAll(".label")[0][0].getBBox().height;
+        return _.max(_.map(this.el.selectAll(".label")[0], function(label) {
+            return label.getBBox().height;
+        }))
     },
 
     axisLabelHeight: function() {
@@ -45,6 +50,25 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
         return d3.scale.ordinal()
             .domain(this.labels)
             .rangeBands([this.paddingX + this.offsetX, this.width - this.paddingX]);
+    },
+
+    rotateTickLabelsIfNeeded: function() {
+        var maxWidth = this.scale().rangeBand() / 2;
+        var tickLabels = this.el.selectAll(".label text");
+        var needToRotate = _.any(tickLabels[0], function(label) {
+            return label.getBBox().width > maxWidth;
+        });
+
+        if (needToRotate) {
+            tickLabels.attr("transform", function() {
+                var box = this.getBBox();
+                var centerX = box.x + box.width / 2;
+                var centerY = box.y + box.height / 2;
+                var rotation = "rotate(290 " + centerX + " " + centerY + ")";
+                var translation = "translate(0 " + (-0.5 * box.width) + ") ";
+                return translation + rotation;
+            });
+        }
     },
 
     render: function() {
@@ -62,16 +86,17 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
             .attr("class", "axis_label")
 
         // reposition axis label now that we know its width
-        var labelWidth = axisLabel[0][0].getBBox().width
-        var centerX = (scale.rangeExtent()[0] + scale.rangeExtent()[1]) / 2 - labelWidth / 2;
+        var axisLabelWidth = axisLabel[0][0].getBBox().width
+        var centerX = (scale.rangeExtent()[0] + scale.rangeExtent()[1]) / 2 - axisLabelWidth / 2;
         this.el.select(".axis_label").attr("x", centerX)
 
-        // draw labels
+        // draw tick labels
         var tickLabelBottom = this.height - this.paddingY - this.labelSpacing - this.axisLabelHeight();
-        this.el.selectAll(".label")
+        var tickLabels = this.el.selectAll(".label")
             .data(this.labels).enter()
-            .append("svg:text")
+            .append("svg:g")
             .attr("class", "label")
+            .append("svg:text")
             .attr("y", tickLabelBottom)
             .attr("x", 0)
             .text(function(d) {
@@ -79,12 +104,25 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
             });
 
         // reposition labels now that we know their width
-        this.el.selectAll(".label")
+        tickLabels
             .attr("x", function(d) {
                 var left = centerScale(d);
                 var width = this.getBBox().width;
                 return left - (width / 2);
             });
+
+        this.rotateTickLabelsIfNeeded();
+
+        // bounding boxes
+        // _.each(tickLabels[0], function(label) {
+        //     var box = $(label).parent()[0].getBBox();
+        //     this.el.append("svg:rect")
+        //         .attr("x", box.x)
+        //         .attr("y", box.y)
+        //         .attr("width", box.width)
+        //         .attr("height", box.height)
+        //         .style("fill", "none");
+        // }, this);
 
         var tickBottom = tickLabelBottom - this.tickLabelHeight() - this.labelSpacing;
         var tickTop    = tickBottom - this.tickLength;
