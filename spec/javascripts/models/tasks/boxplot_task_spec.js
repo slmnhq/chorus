@@ -3,6 +3,7 @@ describe("chorus.models.BoxplotTask", function() {
         this.model = new chorus.models.BoxplotTask({
             xAxis: "age",
             yAxis: "height",
+            bins: "56",
             objectName: "users",
             sandboxId: '4',
             workspaceId: '5'
@@ -43,6 +44,11 @@ describe("chorus.models.BoxplotTask", function() {
             expect(request.params()['chart[xAxis]']).toBe("age");
             expect(request.params()['chart[yAxis]']).toBe("height");
         });
+
+        it("renames the 'bins' field to 'chart[bins]' as required by the api", function() {
+            var request = this.server.lastCreate();
+            expect(request.params()['chart[bins]']).toBe("56");
+        })
     });
 
     describe("#getSortedRows", function() {

@@ -19,6 +19,7 @@ chorus.models.BoxplotTask = chorus.models.ChartTask.extend({
     beforeSave: function() {
         this._super("beforeSave");
         this.set({
+            'chart[bins]' : this.get("bins"),
             'chart[xAxis]': this.get("xAxis"),
             'chart[yAxis]': this.get("yAxis")
         });

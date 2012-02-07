@@ -11,6 +11,7 @@ describe("chorus.views.DatasetVisualizationBoxplotSidebar", function() {
                 this.view = new chorus.views.DatasetVisualizationBoxplotSidebar({model: this.model, collection: this.columns})
                 spyOn(chorus, 'styleSelect');
                 this.view.render();
+                this.view.$(".limiter .selected_value").text("3")
             })
 
             itBehavesLike.DatasetVisualizationSidebarRangeChooser();
@@ -22,6 +23,7 @@ describe("chorus.views.DatasetVisualizationBoxplotSidebar", function() {
                     expect(options.type).toBe("boxplot");
                     expect(options.xAxis).toBe("a Speed");
                     expect(options.yAxis).toBe("A Milk Duds");
+                    expect(options.bins).toBe('3')
                 })
             });
             

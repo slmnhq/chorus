@@ -43,7 +43,8 @@ chorus.models.Dataset = chorus.models.Base.extend({
             yAxis: taskAttrs.yAxis,
             objectName: this.get("objectName"),
             workspaceId: this.get("workspace").id,
-            datasetId: this.entityId
+            datasetId: this.entityId,
+            bins : taskAttrs.bins
         });
     },
 
