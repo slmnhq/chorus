@@ -17,12 +17,29 @@ describe("chorus.pages.DatasetShowPage", function() {
             schemaName: this.workspace.get("sandboxInfo").schemaName,
             tableName: "table"
         });
-        this.page = new chorus.pages.DatasetShowPage(this.workspace.get("id"), "SANDBOX_TABLE", "BASE_TABLE", this.columnSet.attributes.tableName);
+
+        this.datasetId = [
+            this.workspace.get("sandboxInfo").instanceId,
+            this.workspace.get("sandboxInfo").databaseName,
+            this.workspace.get("sandboxInfo").schemaName,
+            "BASE_TABLE",
+            this.columnSet.attributes.tableName
+        ].join("|");
+
+        this.page = new chorus.pages.DatasetShowPage(this.workspace.get("id"), "SANDBOX_TABLE", this.datasetId);
     })
 
     describe("#initialize", function() {
         it("fetches the workspace", function() {
             expect(this.server.lastFetchFor(this.workspace)).toBeDefined();
+        });
+
+        it("parses the datasetId", function() {
+            expect(this.page.instanceId).toBe("5");
+            expect(this.page.databaseName).toBe("db");
+            expect(this.page.schemaName).toBe("schema");
+            expect(this.page.objectType).toBe("BASE_TABLE");
+            expect(this.page.objectName).toBe("table");
         });
 
         describe("when the workspace fetch completes", function() {

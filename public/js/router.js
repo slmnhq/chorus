@@ -14,7 +14,7 @@
             ["/workspaces", "WorkspaceIndex"],
             ["/workspaces/:id", "WorkspaceSummary"],
             ["/workspaces/:workspaceId/workfiles", "WorkfileIndex"],
-            ["/workspaces/:workspaceId/:datasetType/:objectType/:objectName", "DatasetShow"],
+            ["/workspaces/:workspaceId/:datasetType/:datasetId", "DatasetShow"],
             ["/workspaces/:workspaceId/workfiles/:workfileId", "WorkfileShow"],
             ["/workspaces/:workspaceId/workfiles/:workfileId/versions/:versionId", "WorkfileShow"],
             ["/workspaces/:workspaceId/data", "DatasetIndex"],

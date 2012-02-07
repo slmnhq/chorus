@@ -15,7 +15,7 @@ describe("chorus.models.Dataset", function() {
     })
 
     it("creates the correct showUrl", function() {
-        expect(this.dataset.showUrl()).toBe("#/workspaces/44/chorus_view/foo/japanese_teas");
+        expect(this.dataset.showUrl()).toBe("#/workspaces/44/chorus_view/45|whirling_tops|diamonds|foo|japanese_teas");
     })
 
     context("when the dataset is initialized with an Id, but no instance, database or schema", function() {

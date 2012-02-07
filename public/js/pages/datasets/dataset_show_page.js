@@ -12,10 +12,16 @@
     });
 
     chorus.pages.DatasetShowPage = chorus.pages.Base.extend({
-        setup: function(workspaceId, datasetType, objectType, objectName) {
+        setup: function(workspaceId, datasetType, datasetId) {
             this.datasetType = datasetType;
-            this.objectType = objectType;
-            this.objectName = objectName;
+            this.datasetId = datasetId;
+
+            var id = datasetId.split("|");
+            this.instanceId = id[0];
+            this.databaseName = id[1];
+            this.schemaName = id[2];
+            this.objectType = id[3];
+            this.objectName = id[4];
 
             this.workspace = new chorus.models.Workspace({id: workspaceId});
             this.workspace.bind("loaded", this.fetchColumnSet, this);
@@ -26,21 +32,20 @@
 
         fetchColumnSet: function() {
             this.model = this.dataset = new chorus.models.Dataset({
-                instance:{ id:this.workspace.sandbox().get("instanceId") },
-                databaseName:this.workspace.sandbox().get("databaseName"),
-                schemaName:this.workspace.sandbox().get("schemaName"),
+                instance: { id: this.instanceId },
+                databaseName: this.databaseName,
+                schemaName: this.schemaName,
                 type:this.datasetType.toUpperCase(),
-                objectType:this.objectType.toUpperCase(),
-                objectName:this.objectName,
-                workspace:{ id: this.workspace.get("id") },
-                sandboxId:this.workspace.sandbox().get("id")
+                objectType: this.objectType,
+                objectName: this.objectName,
+                workspace: { id: this.workspace.get("id") },
+                sandboxId: this.workspace.sandbox().get("id")
             });
 
-
             var options = {
-                instanceId: this.workspace.sandbox().get("instanceId"),
-                databaseName: this.workspace.sandbox().get("databaseName"),
-                schemaName: this.workspace.sandbox().get("schemaName")
+                instanceId: this.instanceId,
+                databaseName: this.databaseName,
+                schemaName: this.schemaName
             };
 
             options[this.dataset.metaType() + "Name"] = this.objectName;

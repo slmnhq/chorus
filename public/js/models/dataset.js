@@ -30,8 +30,7 @@ chorus.models.Dataset = chorus.models.Base.extend({
                 "workspaces",
                 this.get("workspace").id,
                 this.get("type").toLowerCase(),
-                this.get("objectType").toLowerCase(),
-                this.get("objectName")
+                this.entityId
             ].join("/");
         } else {
             return "/";
