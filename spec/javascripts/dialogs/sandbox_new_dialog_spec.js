@@ -177,6 +177,21 @@ describe("chorus.dialogs.SandboxNew", function() {
                 this.dialog.$("input[value='within_instance']").click();
             });
 
+            context("without schema selected yet", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
+                        instance: "4",
+                        database: "5",
+                        schemaName: ""
+                    });
+                    this.dialog.instanceMode.trigger("change", "");
+                });
+
+                it("disables the submit button", function() {
+                    expect(this.dialog.$(".modal_controls button.submit")).toBeDisabled();
+                });
+            });
+
             context("with a instance id, database id, and schema id", function() {
                 beforeEach(function() {
                     spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
@@ -184,7 +199,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                         database: "5",
                         schema:   "6"
                     });
-                    this.dialog.instanceMode.trigger("change");
+                    this.dialog.instanceMode.trigger("change", "6");
                     this.dialog.$(".modal_controls button.submit").click();
                 });
 
@@ -252,7 +267,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                         schemaName:   "New_Schema"
                     });
 
-                    this.dialog.instanceMode.trigger("change");
+                    this.dialog.instanceMode.trigger("change", "New_Schema");
                     this.dialog.$("button.submit").click();
                 });
 
