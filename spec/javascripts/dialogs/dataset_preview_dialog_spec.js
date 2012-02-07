@@ -20,4 +20,8 @@ describe("chorus.dialogs.DatasetPreview", function () {
         expect(this.view.resultsConsole.el).toBe(this.view.$('.results_console').get(0));
     });
 
+    it("puts the objectName in the title", function() {
+        expect(this.view.$('.dialog_header h1')).toContainTranslation('dataset.data_preview_title', {name: this.dataset.get('objectName')});
+    });
+
 });

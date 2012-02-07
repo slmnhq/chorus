@@ -3,4 +3,11 @@
         padding: 0;
         height: auto;
     }
+
+    #sidebar {
+        li.dataset_preview {
+            display: none;
+        }
+    }
+
 }

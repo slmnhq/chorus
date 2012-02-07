@@ -1,10 +1,11 @@
-.dataset_preview {
+.dataset_preview.dialog {
     width: 800px;
 
     &.dialog {
         .dialog_content {
             padding-left: 0;
             padding-right: 0;
+            padding-top: 0;
         }
     }
 
@@ -13,10 +14,7 @@
     }
 
     .results_console {
-
-        .controls {
-            display: none;
-        }
+        border-bottom: 1px solid $list-border-color;
 
         .execution {
             h1.title {
@@ -28,13 +26,5 @@
             display: none;
         }
 
-        .minimized {
-            .data_table {
-                height: inherit;
-                .tbody {
-                    max-height: 600px;
-                }
-            }
-        }
     }
 }

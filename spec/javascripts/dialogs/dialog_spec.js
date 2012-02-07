@@ -27,7 +27,18 @@ describe("chorus.views.Dialog", function() {
         it("sets up input placeholders for older browsers", function() {
             expect(chorus.placeholder).toHaveBeenCalledWith(this.dialog.$("input"));
         });
-    })
+
+        context("with a function as the title", function() {
+            beforeEach(function() {
+                this.dialog.title = function() {return 'foo'};
+                this.dialog.render();
+            });
+
+            it("displays the results of the function", function() {
+                expect(this.dialog.$(".dialog_header h1")).toContainText('foo');
+            });
+        });
+    });
 
 
     describe("#launchModal", function() {
