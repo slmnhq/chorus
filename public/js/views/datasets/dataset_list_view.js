@@ -17,7 +17,9 @@ chorus.views.DatasetList = chorus.views.Base.extend({
         var lis = this.$("li");
 
         _.each(this.collection.models, function (model, index) {
-            lis.eq(index).data("dataset", model);
+            var $li = lis.eq(index);
+            $li.data("dataset", model);
+            $li.find("a.instance, a.database").data("instance", model.get("instance"));
         });
 
         this.selectDataset(lis.eq(this.selectedIndex || 0));

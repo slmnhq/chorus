@@ -11,7 +11,17 @@ chorus.dialogs.BrowseDatasets = chorus.dialogs.Base.extend({
     },
 
     setup: function () {
-        this.schemaPicker = new chorus.views.SchemaPicker({instance: this.pageModel});
+        var instanceJson = this.options.launchElement.data("instance");
+        var databaseName = this.options.launchElement.data("databaseName");
+        if (instanceJson) {
+            if (databaseName) {
+                this.schemaPicker = new chorus.views.SchemaPicker({instance: new chorus.models.Instance(instanceJson), database: new chorus.models.Database({name: databaseName, instanceId: instanceJson.id})});
+            } else {
+                this.schemaPicker = new chorus.views.SchemaPicker({instance: new chorus.models.Instance(instanceJson)});
+            }
+        } else {
+            this.schemaPicker = new chorus.views.SchemaPicker({instance: this.pageModel});
+        }
     },
 
     clickShowDatasets: function() {

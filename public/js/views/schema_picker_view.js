@@ -15,6 +15,7 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
         if (this.options.instance) {
             if (this.options.database) {
                 this.selectedInstance = this.options.instance;
+                this.showSection("database");
                 this.databaseSelected();
             } else {
                 this.instanceSelected();
