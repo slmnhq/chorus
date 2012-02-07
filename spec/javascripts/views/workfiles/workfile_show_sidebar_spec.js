@@ -53,6 +53,13 @@ describe("chorus.views.WorkfileShowSidebar", function() {
                 this.view.render();
             });
 
+            it("displays a link to copy the workfile to another workspace", function() {
+                var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
+                expect(copyLink).toExist();
+                expect(copyLink).toHaveAttr("data-workspace-id", this.view.model.get("workspaceId"))
+                expect(copyLink).toHaveAttr("data-workfile-id", this.view.model.get("id"))
+            })
+
             it("should have an activities tab", function() {
                 expect(this.view.$('.tab_control .activity_list')).toExist();
             });
@@ -178,6 +185,13 @@ describe("chorus.views.WorkfileShowSidebar", function() {
                 expect(this.view.$('.tab_control .database_function_list')).not.toExist();
                 expect(this.view.$('.tab_control .database_dataset_list')).not.toExist();
             });
+
+            it("displays a link to copy the workfile to another workspace", function() {
+                var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
+                expect(copyLink).toExist();
+                expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"))
+                expect(copyLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
+            })
 
             it("displays the filename", function() {
                 expect(this.view.$(".fileName").text().trim()).toBe(this.workfile.get("fileName"))
