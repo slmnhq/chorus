@@ -9,7 +9,9 @@ describe("chorus.views.DatasetVisualizationBoxplotSidebar", function() {
                 this.model = fixtures.datasetChorusView({objectName: "Foo"});
                 this.columns = fixtures.databaseColumnSet([this.column1, this.column2, this.column3]);
                 this.view = new chorus.views.DatasetVisualizationBoxplotSidebar({model: this.model, collection: this.columns})
-                spyOn(chorus, 'styleSelect');
+                spyOn(chorus, 'styleSelect').andCallFake(_.bind(function() {
+                    this.styledSelected = this.view.$(".category select").val()
+                }, this));
                 this.view.render();
                 this.view.$(".limiter .selected_value").text("3")
             })
@@ -64,7 +66,13 @@ describe("chorus.views.DatasetVisualizationBoxplotSidebar", function() {
                 })
 
                 it("pre-selects the first option that is not in the first select", function() {
-                    expect(this.view.$(".category select option:eq(1)").attr("selected")).toBe("selected")
+                    var selected = this.view.$(".category select option:eq(1)")
+                    expect(selected.attr("selected")).toBe("selected");
+                })
+
+                it("pre-selected the first option before styleSelect is called", function() {
+                    var selected = this.view.$(".category select option:eq(1)")
+                    expect(this.styledSelected).toBe(selected.text());
                 })
             })
         })

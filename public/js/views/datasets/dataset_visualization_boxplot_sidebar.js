@@ -2,8 +2,8 @@ chorus.views.DatasetVisualizationBoxplotSidebar = chorus.views.DatasetVisualizat
     className: "dataset_visualization_boxplot_sidebar",
 
     postRender: function() {
-        this._super('postRender');
         this.$(".category option:eq(1)").attr('selected', 'selected');
+        this._super('postRender');
     },
 
     chartOptions: function() {
