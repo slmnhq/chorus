@@ -1,11 +1,13 @@
-<div class="heading">
-    <div class="order">
-        <span class="order_by">{{t "ordering.order_by"}}</span>
-        <span class="most_recent">{{t "ordering.most_recent"}}</span>
+{{#unless suppressHeading}}
+    <div class="heading">
+        <div class="order">
+            <span class="order_by">{{t "ordering.order_by"}}</span>
+            <span class="most_recent">{{t "ordering.most_recent"}}</span>
+        </div>
+        <h1>{{headingText}}</h1>
     </div>
+{{/unless}}
 
-    <h1>{{headingText}}</h1>
-</div>
 <ul class="activities"/>
 {{#if showMoreLink}}
     <div class="more_activities">

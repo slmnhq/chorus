@@ -16,6 +16,7 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
         this.collection.bind("changed", this.render, this);
         this.activityList = new chorus.views.ActivityList({
             collection:this.collection,
+            suppressHeading: true,
             headingText:t("workfile.content_details.activity"),
             additionalClass:"sidebar",
             displayStyle:['without_object', 'without_workspace']

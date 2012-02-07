@@ -10,6 +10,10 @@ describe("chorus.views.ActivityList", function() {
             this.view.render();
         });
 
+        it("renders the heading", function() {
+            expect(this.view.$(".heading h1")).toExist();
+        });
+
         it("adds additionalClass to the top-level element", function() {
             expect($(this.view.el)).toHaveClass("foo_class");
         })
@@ -34,6 +38,17 @@ describe("chorus.views.ActivityList", function() {
             expect(link.data("entity-type")).toBe("comment");
             expect(link.data("entity-id")).toBe(10001);
         })
+
+        describe("the suppressHeading option", function() {
+            beforeEach(function() {
+                this.view.options.suppressHeading = true;
+                this.view.render();
+            });
+
+            it("does not render the heading", function() {
+                expect(this.view.$(".heading h1")).not.toExist();
+            });
+        });
 
         describe("comment rendering", function() {
             it("displays comments for each activity, if any", function() {
