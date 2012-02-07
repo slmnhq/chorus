@@ -64,15 +64,17 @@ describe("chorus.views.visualizations.Axes", function() {
             this.axis = new chorus.views.visualizations.XAxis({
                 el: this.el,
                 labels: this.labelValues,
+                axisLabel: "numbers",
                 ticks: true,
                 paddingX: this.paddingX,
                 paddingY: this.paddingY
             });
             this.axis.render();
 
-            this.axisLine = this.$el.find("line.axis");
-            this.ticks    = this.$el.find("line.tick");
-            this.labels   = this.$el.find(".label");
+            this.axisLine  = this.$el.find("line.axis");
+            this.ticks     = this.$el.find("line.tick");
+            this.axisLabel = this.$el.find(".axis_label");
+            this.labels    = this.$el.find(".label");
         });
 
         describe("#requiredBottomSpace (used for drawing the y axis)", function() {
@@ -82,6 +84,7 @@ describe("chorus.views.visualizations.Axes", function() {
                 this.newAxis = new chorus.views.visualizations.XAxis({
                     el: this.el,
                     labels: _.shuffle(this.labelValues),
+                    axisLabel: "numbers",
                     ticks: true,
                     paddingX: this.paddingX,
                     paddingY: this.paddingY
@@ -206,6 +209,25 @@ describe("chorus.views.visualizations.Axes", function() {
                 expect(leftX(this.ticks[4])).toBeWithinDeltaOf(centerX(this.labels[4]), 2);
             });
         });
+
+        describe("the axis label", function() {
+            it("should have the correct label", function() {
+                expect(this.axisLabel).toHaveText("numbers")
+            });
+
+            it("should be centered in the chart", function() {
+                expect(centerX(this.axisLabel)).toBeWithinDeltaOf(centerX(this.axisLine), 2);
+            })
+
+            it("is below the tick labels", function() {
+                expect(topY(this.axisLabel)).toBeGreaterThan(bottomY(this.ticks[0]));
+            });
+
+            it("is above the padding", function() {
+                var innerHeightPlusBoundingBoxError = this.height - this.paddingY + 5;
+                expect(bottomY(this.axisLabel)).toBeLessThanOrEqualTo(innerHeightPlusBoundingBoxError);
+            });
+        })
 
         describe("the placement of the axis group", function() {
             beforeEach(function() {

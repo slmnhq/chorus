@@ -1,5 +1,6 @@
 chorus.views.visualizations.XAxis = function(options) {
     this.labels   = options.labels;
+    this.axisLabel = options.axisLabel;
     this.width    = options.el.attr("width");
     this.height   = options.el.attr("height");
     this.container = options.el;
@@ -15,7 +16,7 @@ chorus.views.visualizations.XAxis = function(options) {
 _.extend(chorus.views.visualizations.XAxis.prototype, {
     requiredBottomSpace: function() {
         this.el = this.container.append("svg:g").attr("class", "xaxis");
-        var testLabels = this.el.selectAll(".label.test-origin-y")
+        var testTickLabels = this.el.selectAll(".label.test-origin-x")
             .data(this.labels).enter()
             .append("svg:text")
             .attr("class", "label test-origin-y")
@@ -23,13 +24,21 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
                 return d
             });
 
-        var height = this.labelHeight() + this.labelSpacing + this.tickLength
-        testLabels.remove();
+        var testAxisLabel = this.el.append("svg:text")
+            .text(this.axisLabel)
+            .attr("class", "axis_label");
+
+        var height = this.tickLabelHeight() + this.axisLabelHeight() + 2*this.labelSpacing + this.tickLength;
+        this.el.remove();
         return height;
     },
 
-    labelHeight: function() {
+    tickLabelHeight: function() {
         return this.el.selectAll(".label")[0][0].getBBox().height;
+    },
+
+    axisLabelHeight: function() {
+        return this.el.selectAll(".axis_label")[0][0].getBBox().height;
     },
 
     scale: function() {
@@ -45,12 +54,25 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
         var self = this;
         this.el = this.container.append("svg:g").attr("class", "xaxis");
 
+        // draw axis label
+        var axisLabel = this.el.append("svg:text")
+            .text(this.axisLabel)
+            .attr("x", 0)
+            .attr("y", this.height - this.paddingY)
+            .attr("class", "axis_label")
+
+        // reposition axis label now that we know its width
+        var labelWidth = axisLabel[0][0].getBBox().width
+        var centerX = (scale.rangeExtent()[0] + scale.rangeExtent()[1]) / 2 - labelWidth / 2;
+        this.el.select(".axis_label").attr("x", centerX)
+
         // draw labels
+        var tickLabelBottom = this.height - this.paddingY - this.labelSpacing - this.axisLabelHeight();
         this.el.selectAll(".label")
             .data(this.labels).enter()
             .append("svg:text")
             .attr("class", "label")
-            .attr("y", 0)
+            .attr("y", tickLabelBottom)
             .attr("x", 0)
             .text(function(d) {
                 return d
@@ -58,14 +80,13 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
 
         // reposition labels now that we know their width
         this.el.selectAll(".label")
-            .attr("y", this.height - this.paddingY)
             .attr("x", function(d) {
                 var left = centerScale(d);
                 var width = this.getBBox().width;
                 return left - (width / 2);
             });
 
-        var tickBottom = this.height - this.paddingY - this.labelHeight() - this.labelSpacing;
+        var tickBottom = tickLabelBottom - this.tickLabelHeight() - this.labelSpacing;
         var tickTop    = tickBottom - this.tickLength;
 
         // draw ticks
@@ -180,8 +201,8 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
 });
 
 chorus.views.visualizations.Axes = function(options) {
-    this.xAxis = new chorus.views.visualizations.XAxis({ el: options.el, labels: options.xLabels})
-    this.yAxis = new chorus.views.visualizations.YAxis({ el: options.el, labels: options.yLabels})
+    this.xAxis = new chorus.views.visualizations.XAxis({ el: options.el, labels: options.xLabels, axisLabel: options.xAxisLabel });
+    this.yAxis = new chorus.views.visualizations.YAxis({ el: options.el, labels: options.yLabels, axisLabel: options.yAxisLabel });
 }
 
 _.extend(chorus.views.visualizations.Axes.prototype, {
