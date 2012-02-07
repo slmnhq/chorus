@@ -1691,6 +1691,19 @@ beforeEach(function() {
             return new chorus.models.Dataset(attributes);
         },
 
+        datasetSourceView : function(overrides) {
+            var attributes = _.extend(fixtures.datasetCommonJson(), {
+                createdStamp: "2012-01-24 12:25:11.077",
+                createdTxStamp: "2012-01-24 12:25:10.701",
+                id: fixtures.nextId().toString(),
+                lastUpdatedStamp: "2012-01-24 12:25:11.077",
+                lastUpdatedTxStamp: "2012-01-24 12:25:10.701",
+                objectType: "VIEW",
+                type: "SOURCE_TABLE"
+            }, overrides);
+            return new chorus.models.Dataset(attributes);
+        },
+
         datasetSourceTable : function(overrides) {
             var attributes = _.extend(fixtures.datasetCommonJson(), {
                 createdStamp: "2012-01-24 12:25:11.077",

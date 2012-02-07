@@ -146,6 +146,9 @@ describe("chorus.views.DatasetListSidebar", function() {
 
             dataset = fixtures.datasetHadoopExternalTable();
             expect(this.view.datasetType(dataset)).toMatchTranslation("dataset.types.SANDBOX_TABLE.HDFS_EXTERNAL_TABLE");
+
+            dataset = fixtures.datasetSourceView();
+            expect(this.view.datasetType(dataset)).toMatchTranslation("dataset.types.SOURCE_TABLE.VIEW");
         });
     });
 });
