@@ -1,6 +1,6 @@
 chorus.collections.SchemaSet = chorus.collections.Base.extend({
     model:chorus.models.Schema,
-    urlTemplate:"instance/{{instanceId}}/database/{{databaseId}}/schema",
+    urlTemplate:"instance/{{instanceId}}/database/{{databaseName}}/schema",
 
     comparator:function (schema) {
         return schema.get('name').toLowerCase();
