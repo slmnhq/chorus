@@ -25,6 +25,7 @@
         'dataset_list_sidebar',
         'dataset_preview',
         'dataset_content_details',
+        'dataset_create_chorus_view_sidebar',
         'dataset_visualization_boxplot_sidebar',
         'dataset_visualization_frequency_sidebar',
         'dataset_visualization_histogram_sidebar',

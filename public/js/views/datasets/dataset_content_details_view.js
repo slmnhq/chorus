@@ -9,6 +9,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     events : {
         "click .preview" : "dataPreview",
         "click .create_chart .cancel" : "cancelVisualization",
+        "click .create_chorus_view .cancel" : "cancelChorusView",
         "click .chart_icon" : "selectVisualization",
         "click .close_errors": "closeError",
         "click .view_error_details": "viewErrorDetails",
@@ -47,7 +48,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
             content:this.$(".transform_options").html(),
             orientation:"left",
             contentEvents:{
-                '.visualize':_.bind(this.startVisualizationWizard, this)
+                '.visualize':_.bind(this.startVisualizationWizard, this),
+                '.derive': _.bind(this.startCreateChorusViewWizard, this)
             }
         });
     },
@@ -63,7 +65,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     },
 
     selectVisualization: function(e) {
-        this.trigger("transform:visualize", $(e.target).data('chart_type'))
+        this.trigger("transform:sidebar", $(e.target).data('chart_type'))
         $(e.target).siblings('.chart_icon').removeClass('selected');
         $(e.target).addClass('selected');
         this.showTitle(e);
@@ -76,7 +78,28 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$(".filters").addClass("hidden");
         this.$('.column_count').removeClass("hidden")
         this.$('.info_bar').addClass('hidden');
-        this.trigger("cancel:visualize");
+        this.trigger("cancel:sidebar");
+    },
+
+    startCreateChorusViewWizard: function() {
+        this.trigger("transform:sidebar", "chorus_view");
+        this.$('.chorusview').addClass("selected");
+        this.$('.definition').addClass("hidden")
+        this.$('.create_chart').addClass("hidden");
+        this.$('.create_chorus_view').removeClass("hidden");
+        this.$('.chorus_view_info').removeClass("hidden");
+        this.$('.column_count').addClass("hidden");
+        this.$('.filters').removeClass("hidden");
+    },
+
+    cancelChorusView: function(e) {
+        e.preventDefault();
+        this.trigger("cancel:sidebar");
+        this.$('.definition').removeClass("hidden")
+        this.$('.create_chorus_view').addClass("hidden");
+        this.$(".filters").addClass("hidden");
+        this.$('.column_count').removeClass("hidden")
+        this.$('.chorus_view_info').addClass('hidden');
     },
 
     closeError: function(e) {

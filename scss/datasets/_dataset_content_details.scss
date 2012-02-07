@@ -1,7 +1,7 @@
 @import "../_common";
 
 @mixin chart_icon($name) {
-    .#{$name}.chart_icon {
+    .#{$name}.chart_icon, .chorusview {
         background-image: url("/images/visualizations/create_icons/#{$name}_off.png");
         &.selected {
             background-image: url("/images/visualizations/create_icons/#{$name}_on.png");
@@ -32,7 +32,7 @@
         }
     }
 
-    .definition, .create_chart {
+    .definition, .create_chart, .create_chorus_view {
         height: 32px;
         line-height: 33px;
         border-bottom: 1px solid #8D9DA8;
@@ -65,7 +65,7 @@
         }
     }
 
-    .create_chart {
+    .create_chart, .create_chorus_view {
         .create {
             @include create-bar-text;
             background-color: $content-details-create-background-color;
@@ -104,7 +104,7 @@
             margin-left: 5px;
         }
 
-        .chart_icon {
+        .chart_icon, .chorusview {
             position: relative;
             width: 50px;
             height: 25px;
@@ -136,9 +136,10 @@
         @include chart_icon(heatmap);
         @include chart_icon(timeseries);
         @include chart_icon(boxplot);
+        @include chart_icon(chorusview);
     }
 
-    .info_bar {
+    .info_bar, .chorus_view_info {
         background-color: $content-details-info-bar-background-color;
         padding: 0 $padding-x;
         font-size: 14px;

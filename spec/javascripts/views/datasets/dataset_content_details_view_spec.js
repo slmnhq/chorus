@@ -79,6 +79,10 @@ describe("chorus.views.DatasetContentDetails", function() {
                 expect(this.view.$("button.transform").text()).toMatchTranslation("dataset.content_details.transform");
             })
 
+            it("doesn't render the chorus view info bar", function() {
+                expect(this.view.$(".chorus_view_info")).toHaveClass("hidden");
+            });
+
             describe("the 'Transform' button is clicked", function() {
                 beforeEach(function() {
                     this.view.$(".transform").click();
@@ -94,7 +98,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                 context("and the visualize dataset link is clicked", function() {
                     beforeEach(function() {
-                        this.visualizeSpy = spyOnEvent(this.view, "transform:visualize");
+                        this.visualizeSpy = spyOnEvent(this.view, "transform:sidebar");
                         this.qtipMenu.find('.visualize').click();
                     })
 
@@ -102,9 +106,9 @@ describe("chorus.views.DatasetContentDetails", function() {
                         expect(this.view.$('.create_chart .chart_icon:eq(0)')).toHaveClass('selected');
                     });
 
-                    it("triggers the transform:visualize event for the first chart type", function() {
+                    it("triggers the transform:sidebar event for the first chart type", function() {
                         var chartType = this.view.$('.create_chart .chart_icon:eq(0)').data('chart_type');
-                        expect("transform:visualize").toHaveBeenTriggeredOn(this.view, [chartType]);
+                        expect("transform:sidebar").toHaveBeenTriggeredOn(this.view, [chartType]);
                     });
 
                     it("hides the definition bar and shows the create_chart bar", function() {
@@ -123,7 +127,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                     context("and cancel is clicked", function() {
                         beforeEach(function() {
-                            spyOnEvent(this.view, "cancel:visualize");
+                            spyOnEvent(this.view, "cancel:sidebar");
                             this.view.$('.create_chart .cancel').click();
                         });
 
@@ -141,8 +145,8 @@ describe("chorus.views.DatasetContentDetails", function() {
                             expect(this.view.$('.info_bar')).toHaveClass('hidden');
                         });
 
-                        it("triggers the cancel:visualize event", function() {
-                            expect("cancel:visualize").toHaveBeenTriggeredOn(this.view);
+                        it("triggers the cancel:sidebar event", function() {
+                            expect("cancel:sidebar").toHaveBeenTriggeredOn(this.view);
                         })
                     })
 
@@ -157,8 +161,8 @@ describe("chorus.views.DatasetContentDetails", function() {
                             expect(this.view.$('.create_chart .chart_icon.' + this.firstChartType)).toHaveClass('selected');
                         });
 
-                        it("triggers the transform:visualize event for the chart type", function() {
-                            expect("transform:visualize").toHaveBeenTriggeredOn(this.view, [this.firstChartType]);
+                        it("triggers the transform:sidebar event for the chart type", function() {
+                            expect("transform:sidebar").toHaveBeenTriggeredOn(this.view, [this.firstChartType]);
                         })
 
                         it("shows the title for that chart type", function() {
@@ -208,6 +212,65 @@ describe("chorus.views.DatasetContentDetails", function() {
                             })
                         })
                     })
+                })
+
+                context("and the derive a chorus view link is clicked", function() {
+                     beforeEach(function() {
+                         this.chorusViewSpy = spyOnEvent(this.view, "transform:sidebar");
+                        this.qtipMenu.find('.derive').click();
+                    })
+                    it("swap the green definition bar to Create Bar", function() {
+                        expect(this.view.$(".create_chorus_view")).not.toHaveClass("hidden");
+                        expect(this.view.$(".create_chart")).toHaveClass("hidden");
+                        expect(this.view.$(".definition")).toHaveClass("hidden");
+                    });
+
+                    it("shows the chorus view info bar", function() {
+                        expect(this.view.$(".chorus_view_info")).not.toHaveClass("hidden");
+                        expect(this.view.$(".info_bar")).toHaveClass("hidden");
+                        expect(this.view.$(".column_count")).toHaveClass("hidden");
+                    });
+
+                    it("should select the chorus view icon", function() {
+                       expect(this.view.$('.create_chorus_view .chorusview')).toHaveClass("selected");
+                    });
+
+                    it("shows the filter section", function() {
+                        expect(this.view.$(".filters")).not.toHaveClass("hidden")
+                    });
+
+                    it("shows the derive chorus view info", function() {
+                        expect(this.view.$(".chorus_view_info").text().trim()).toMatchTranslation("dataset.content_details.derive_info");
+                    })
+
+                    it("triggers transform:createChorusView", function() {
+                        expect(this.chorusViewSpy).toHaveBeenCalled();
+                    })
+
+                    describe("and the cancel link is clicked", function() {
+                        beforeEach(function() {
+                            this.cancelSpy = spyOnEvent(this.view, "cancel:sidebar");
+                            this.view.$(".create_chorus_view .cancel").click();
+                        });
+
+                        it("swap the Create Bar to green definition bar", function() {
+                            expect(this.view.$(".create_chorus_view")).toHaveClass("hidden");
+                            expect(this.view.$(".definition")).not.toHaveClass("hidden");
+                        })
+
+                        it("hides the filters section", function() {
+                            expect(this.view.$(".filters")).toHaveClass("hidden")
+                        });
+
+                        it("shows the chorus view info bar", function() {
+                            expect(this.view.$(".chorus_view_info")).toHaveClass("hidden");
+                            expect(this.view.$(".column_count")).not.toHaveClass("hidden");
+                        });
+
+                        it("triggers 'cancel:createChorusView'", function() {
+                            expect(this.cancelSpy).toHaveBeenCalled();
+                        })
+                    });
                 })
             })
         })

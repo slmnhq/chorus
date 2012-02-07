@@ -115,36 +115,36 @@ describe("chorus.pages.DatasetShowPage", function() {
             })
         });
 
-        describe("when the 'transform:visualize' event is triggered", function() {
+        describe("when the transform:sidebar event is triggered", function() {
             beforeEach(function() {
                 this.page.render()
                 spyOn(this.page, 'render');
             });
 
             it("triggers 'resized' on the page", function() {
-                this.page.mainContent.contentDetails.trigger("transform:visualize", 'boxplot');
+                this.page.mainContent.contentDetails.trigger("transform:sidebar", "boxplot");
                 expect('resized').toHaveBeenTriggeredOn(this.page);
             });
 
             it("should not re-render the page", function() {
-                this.page.mainContent.contentDetails.trigger("transform:visualize", 'boxplot');
+                this.page.mainContent.contentDetails.trigger("transform:sidebar", "boxplot");
                 expect(this.page.render).not.toHaveBeenCalled();
             });
 
             it("should hide the original sidebar and shows the viz_sidebar", function() {
-                this.page.mainContent.contentDetails.trigger("transform:visualize", 'boxplot');
+                this.page.mainContent.contentDetails.trigger("transform:sidebar", "boxplot");
                 expect(this.page.$('#sidebar .sidebar_content.primary')).toHaveClass('hidden');
                 expect(this.page.$('#sidebar .sidebar_content.secondary')).not.toHaveClass('hidden');
             });
 
             it("should re-render the sidebar subview", function() {
-                this.page.mainContent.contentDetails.trigger("transform:visualize", 'boxplot');
+                this.page.mainContent.contentDetails.trigger("transform:sidebar", "boxplot");
                 expect(this.page.$('#sidebar .sidebar_content').get(1)).toBe(this.page.secondarySidebar.el);
             });
 
             context("for a boxplot", function() {
                 beforeEach(function() {
-                    this.page.mainContent.contentDetails.trigger("transform:visualize", 'boxplot');
+                    this.page.mainContent.contentDetails.trigger("transform:sidebar", 'boxplot');
                 });
 
                 it("should swap out the sidebar for the boxplot sidebar", function() {
@@ -155,7 +155,7 @@ describe("chorus.pages.DatasetShowPage", function() {
 
             context("for a frequency chart", function() {
                 beforeEach(function() {
-                    this.page.mainContent.contentDetails.trigger("transform:visualize", 'frequency');
+                    this.page.mainContent.contentDetails.trigger("transform:sidebar", 'frequency');
                 });
 
                 it("should swap out the sidebar for the frequency sidebar", function() {
@@ -166,7 +166,7 @@ describe("chorus.pages.DatasetShowPage", function() {
 
             context("for a histogram chart", function() {
                 beforeEach(function() {
-                    this.page.mainContent.contentDetails.trigger("transform:visualize", 'histogram');
+                    this.page.mainContent.contentDetails.trigger("transform:sidebar", 'histogram');
                 });
 
                 it("should swap out the sidebar for the histogram sidebar", function() {
@@ -177,7 +177,7 @@ describe("chorus.pages.DatasetShowPage", function() {
 
             context("for a heatmap chart", function() {
                 beforeEach(function() {
-                    this.page.mainContent.contentDetails.trigger("transform:visualize", 'heatmap');
+                    this.page.mainContent.contentDetails.trigger("transform:sidebar", 'heatmap');
                 });
 
                 it("should swap out the sidebar for the heatmap sidebar", function() {
@@ -188,7 +188,7 @@ describe("chorus.pages.DatasetShowPage", function() {
 
             context("for a time series chart", function() {
                 beforeEach(function() {
-                    this.page.mainContent.contentDetails.trigger("transform:visualize", 'timeseries');
+                    this.page.mainContent.contentDetails.trigger("transform:sidebar", 'timeseries');
                 });
 
                 it("should swap out the sidebar for the time series sidebar", function() {
@@ -196,12 +196,22 @@ describe("chorus.pages.DatasetShowPage", function() {
                     expect(this.page.secondarySidebar.collection).toBe(this.page.columnSet);
                 });
             });
+            
+            context("for a chorus view", function() {
+                 beforeEach(function() {
+                    this.page.mainContent.contentDetails.trigger("transform:sidebar", 'chorus_view');
+                });
 
-            describe("when the cancel:visualize event is triggered", function() {
+                it("should swap out the sidebar for the chorus view sidebar", function() {
+                    expect(this.page.secondarySidebar).toBeA(chorus.views.CreateChorusViewSidebar)
+                });
+            });
+
+
+            describe("when the cancel:sidebar event is triggered", function() {
                 beforeEach(function() {
-                    this.page.mainContent.contentDetails.trigger("transform:visualize", 'heatmap');
                     this.resizedSpy.reset();
-                    this.page.mainContent.contentDetails.trigger("cancel:visualize");
+                    this.page.mainContent.contentDetails.trigger("cancel:sidebar");
                 });
 
                 it("triggers 'resized' on the page", function() {

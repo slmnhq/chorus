@@ -70,17 +70,17 @@
             this.sidebar = new chorus.views.DatasetListSidebar();
             this.sidebar.setDataset(this.dataset);
 
-            this.mainContent.contentDetails.bind("transform:visualize", this.showVisualizeSidebar, this);
-            this.mainContent.contentDetails.bind("cancel:visualize", this.hideVisualizeSidebar, this);
+            this.mainContent.contentDetails.bind("transform:sidebar", this.showSidebar, this);
+            this.mainContent.contentDetails.bind("cancel:sidebar", this.hideSidebar, this);
 
             this.render();
 
         },
 
-        showVisualizeSidebar: function(chartType) {
+        showSidebar: function(type) {
             this.$('.sidebar_content.primary').addClass("hidden")
             this.$('.sidebar_content.secondary').removeClass("hidden")
-            switch (chartType) {
+            switch (type) {
                 case 'boxplot':
                     this.secondarySidebar = new chorus.views.DatasetVisualizationBoxplotSidebar({model: this.model, collection: this.columnSet});
                     break;
@@ -96,14 +96,18 @@
                 case 'timeseries':
                     this.secondarySidebar = new chorus.views.DatasetVisualizationTimeSeriesSidebar({model: this.model, collection: this.columnSet});
                     break;
+                case 'chorus_view':
+                    this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model : this.model});
+                    break;
             }
+
             this.secondarySidebar.filters = this.mainContent.contentDetails.filterWizardView;
             this.secondarySidebar.errorContainer = this.mainContent.contentDetails;
             this.renderSubview('secondarySidebar');
             this.trigger('resized');
         },
 
-        hideVisualizeSidebar: function(chartType) {
+        hideSidebar: function(chartType) {
             this.$('.sidebar_content.primary').removeClass("hidden")
             this.$('.sidebar_content.secondary').addClass("hidden")
             this.trigger('resized');
