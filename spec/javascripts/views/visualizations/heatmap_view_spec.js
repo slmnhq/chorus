@@ -27,6 +27,10 @@ describe("chorus.views.visualizations.Heatmap", function() {
 
     beforeEach(function() {
         this.task = fixtures.heatmapTaskWithResult({
+            xAxis: "hair_length",
+            yAxis: "kill_count",
+            xBins: "4",
+            yBins: "3",
             rows: [
                 { yLabel: "[30-71.8]",     xLabel: "[0-1.8]",   value: 39541, y: 1, x: 1 },
                 { yLabel: "[71.8-113.6]",  xLabel: "[0-1.8]",   value: 39873, y: 2, x: 1 },
@@ -63,9 +67,9 @@ describe("chorus.views.visualizations.Heatmap", function() {
             expect(this.view.$("svg.chart")).toExist();
         });
 
-        it("has x and y axes", function() {
-            expect(this.view.$(".xaxis")).toExist();
-            expect(this.view.$(".yaxis")).toExist();
+        it("has x and y axes with the right labels", function() {
+            expect(this.view.$(".xaxis .axis_label")).toHaveText("hair_length");
+            expect(this.view.$(".yaxis .axis_label")).toHaveText("kill_count");
         });
 
         describe("the bins", function() {

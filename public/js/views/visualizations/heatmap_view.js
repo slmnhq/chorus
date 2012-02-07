@@ -16,8 +16,8 @@ chorus.views.visualizations.Heatmap = chorus.views.Base.extend({
             el: svg,
             xLabels: xLabels,
             yLabels: yLabels,
-            xAxisLabel: "foo",
-            yAxisLabel: "oh_my_gosh_bar",
+            xAxisLabel: this.model.get("xAxis"),
+            yAxisLabel: this.model.get("yAxis"),
             ticks: true
         });
 
