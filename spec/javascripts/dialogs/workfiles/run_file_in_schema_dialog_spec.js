@@ -161,9 +161,9 @@ describe("chorus.dialogs.RunFileInSchema", function () {
                         it("triggers the run event", function () {
                             expect("run").toHaveBeenTriggeredOn(this.dialog, [
                                 {
-                                    instance:44,
-                                    database:55,
-                                    schema:66
+                                    instanceId:44,
+                                    databaseId:55,
+                                    schemaId:66
                                 }
                             ]);
                         })

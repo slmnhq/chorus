@@ -75,9 +75,9 @@ describe("chorus.views.SqlWorkfileContentView", function() {
             describe("running in another schema", function() {
                 beforeEach(function() {
                     this.view.trigger("file:runInSchema", {
-                        instance: '4',
-                        database: '5',
-                        schema: '6'
+                        instanceId: '4',
+                        databaseId: '5',
+                        schemaId: '6'
                     })
                 })
 

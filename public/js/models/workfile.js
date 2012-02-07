@@ -42,7 +42,7 @@
 
         executionSchema:function () {
             var executionInfo = this.get("executionInfo");
-            if (executionInfo && executionInfo.schemaId) {
+            if (executionInfo && executionInfo.schemaName) {
                 return new chorus.models.Schema({
                     instanceId:executionInfo.instanceId,
                     instanceName:executionInfo.instanceName,

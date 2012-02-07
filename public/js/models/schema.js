@@ -6,6 +6,7 @@ chorus.models.Schema = chorus.models.Base.extend({
         this._schemaFunctions = this._schemaFunctions || new chorus.collections.SchemaFunctionSet([], {
             instanceId:this.get("instanceId"),
             databaseId:this.get("databaseId"),
+            databaseName:this.get("databaseName"),
             schemaId:this.get("id"),
             schemaName:this.get('name')
         });
