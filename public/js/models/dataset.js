@@ -12,7 +12,7 @@ chorus.models.Dataset = chorus.models.Base.extend({
         } else {
             this.entityId = this.get("id");
         }
-        this.entityType = this.metaType();
+        this.entityType = this.getEntityType();
         this.bind('invalidated', this.refetchAfterInvalidated, this);
     },
 
@@ -101,6 +101,10 @@ chorus.models.Dataset = chorus.models.Base.extend({
         });
     },
 
+    getEntityType : function() {
+        return chorus.models.Dataset.entityTypeMap[this.get("type")] || "databaseObject"
+    },
+
     metaType:function () {
         return chorus.models.Dataset.metaTypeMap[this.get("objectType")] || "table";
     },
@@ -141,6 +145,12 @@ chorus.models.Dataset = chorus.models.Base.extend({
         "VIEW":"view",
         "EXTERNAL_TABLE":"table",
         "MASTER_TABLE":"table"
+    },
+
+    entityTypeMap: {
+        "SOURCE_TABLE": "databaseObject",
+        "SANDBOX_TABLE": "databaseObject",
+        "CHORUS_VIEW": "chorusView"
     },
 
     iconMap:{

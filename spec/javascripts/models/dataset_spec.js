@@ -226,6 +226,20 @@ describe("chorus.models.Dataset", function() {
                 expect(fixtures.datasetSandboxTable({ objectType : type }).metaType()).toBe(str)
             });
         })
+    });
+
+     describe("#entity_type", function() {
+        var expectedEntityTypeMap = {
+            "SOURCE_TABLE" : "databaseObject",
+            "SANDBOX_TABLE" : "databaseObject",
+            "CHORUS_VIEW" : "chorusView"
+        }
+
+        _.each(expectedEntityTypeMap, function(str, type) {
+            it("works for " + type, function() {
+                expect(fixtures.datasetSandboxTable({ type : type }).getEntityType()).toBe(str);
+            });
+        })
     })
 
     describe("iconFor", function() {
