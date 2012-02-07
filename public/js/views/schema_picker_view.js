@@ -12,6 +12,14 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
     },
 
     setup:function () {
+        if (!this.options.instance) {
+            this.instances = new chorus.collections.InstanceSet();
+            this.instances.bind("reset", this.updateInstances, this);
+            this.instances.fetchAll();
+        }
+    },
+
+    postRender:function () {
         if (this.options.instance) {
             if (this.options.database) {
                 this.selectedInstance = this.options.instance;
@@ -20,14 +28,8 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
             } else {
                 this.instanceSelected();
             }
-        } else {
-            this.instances = new chorus.collections.InstanceSet();
-            this.instances.bind("reset", this.updateInstances, this);
-            this.instances.fetchAll();
         }
-    },
 
-    postRender:function () {
         this.$('.loading_spinner').startLoading();
         this.$("input.name").bind("textchange", _.bind(this.checkIfValid, this))
     },
