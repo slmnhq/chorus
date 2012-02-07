@@ -1,19 +1,17 @@
 describe("chorus.dialogs.Visualization", function() {
     beforeEach(function() {
+        stubModals();
         spyOn(chorus.Modal.prototype, "closeModal");
         this.dataset = fixtures.datasetSourceTable();
         this.chartOptions = {type: "boxplot", name: "Foo"};
         this.filters = {whereClause: function() {return "ABC";}, filterCount: function(){return 7;}};
         this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions, filters: this.filters});
+        this.dialog.task = fixtures.taskWithErrors();
     });
 
     describe("#initialization", function() {
         beforeEach(function() {
             spyOnEvent(this.dialog.chartData, "file:executionCompleted");
-        });
-
-        it("should call save on the task", function() {
-            expect(this.server.lastCreate()).toBeDefined();
         });
 
         describe("when the save completes", function() {

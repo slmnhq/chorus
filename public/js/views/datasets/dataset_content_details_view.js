@@ -10,6 +10,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         "click .preview" : "dataPreview",
         "click .create_chart .cancel" : "cancelVisualization",
         "click .chart_icon" : "selectVisualization",
+        "click .close_errors": "closeError",
+        "click .view_error_details": "viewErrorDetails",
         "mouseenter .chart_icon" : "showTitle",
         "mouseleave .chart_icon" : "showSelectedTitle"
     },
@@ -34,7 +36,11 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$(".column_count").removeClass("hidden");
         this.$(".data_preview").addClass("hidden");
     },
-    
+
+    onFetchComplete: function() {
+        this.resultsConsole.trigger("file:executionCompleted", this.preview);
+    },
+
     postRender:function () {
         var self = this;
         chorus.menu(this.$('.transform'), {
@@ -50,7 +56,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$('.chart_icon:eq(0)').click();
         this.$('.column_count').addClass('hidden');
         this.$('.info_bar').removeClass('hidden');
-        this.$('.definition').addClass ("hidden")
+        this.$('.definition').addClass("hidden")
         this.$('.create_chart').removeClass("hidden");
         this.$(".filters").removeClass("hidden");
         this.filterWizardView.render();
@@ -65,22 +71,35 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     cancelVisualization: function(e) {
         e.preventDefault();
-        this.$('.definition').removeClass ("hidden")
+        this.$('.definition').removeClass("hidden")
         this.$('.create_chart').addClass("hidden");
         this.$(".filters").addClass("hidden");
-        this.$('.column_count').removeClass ("hidden")
+        this.$('.column_count').removeClass("hidden")
         this.$('.info_bar').addClass('hidden');
         this.trigger("cancel:visualize");
     },
 
+    closeError: function(e) {
+        e.preventDefault();
+        this.$(".sql_errors").addClass("hidden");
+    },
+
+    viewErrorDetails: function(e) {
+        e.preventDefault();
+
+        var alert = new chorus.alerts.ExecutionError({model: this.task});
+        alert.launchModal();
+        $(".errors").addClass("hidden");
+    },
+
     showTitle: function(e) {
         $(e.target).siblings('.title').addClass('hidden');
-        $(e.target).siblings('.title.'+ $(e.target).data('chart_type')).removeClass('hidden');
+        $(e.target).siblings('.title.' + $(e.target).data('chart_type')).removeClass('hidden');
     },
 
     showSelectedTitle: function(e) {
         $(e.target).siblings('.title').addClass('hidden');
         var type = this.$('.selected').data('chart_type');
-        $(e.target).siblings('.title.'+ type).removeClass('hidden');
+        $(e.target).siblings('.title.' + type).removeClass('hidden');
     }
 });

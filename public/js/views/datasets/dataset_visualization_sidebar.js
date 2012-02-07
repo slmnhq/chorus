@@ -52,8 +52,20 @@
 
         launchVisualizationDialog: function(e) {
             e && e.preventDefault();
+
             var dialog = new chorus.dialogs.Visualization({model: this.model, chartOptions: this.chartOptions(), filters: this.filters });
-            dialog.launchModal();
+            this.dialog = dialog
+            var func = 'make' + _.capitalize(this.chartOptions().type) + 'Task';
+            this.task = dialog.task = this.model[func](this.chartOptions());
+            dialog.task.set({filters: this.filters && this.filters.whereClause()});
+            dialog.task.bindOnce("saved", dialog.onExecutionComplete, dialog);
+            dialog.task.bindOnce("saveFailed", this.onSqlError, this)
+            dialog.task.save();
+        },
+
+        onSqlError: function() {
+            this.errorContainer.task = this.task;
+            this.errorContainer.$(".sql_errors").removeClass("hidden");
         }
     });
 

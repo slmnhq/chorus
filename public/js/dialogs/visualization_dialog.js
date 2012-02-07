@@ -13,17 +13,10 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     setup:function () {
-        this.model = this.options.model;
         this.type = this.options.chartOptions.type;
         this.title = t("visualization.title", {name:this.options.chartOptions.name});
 
         this.chartData = new chorus.views.ResultsConsole({shuttle:false});
-
-        var func = 'make' + _.capitalize(this.type) + 'Task';
-        this.task = this.model[func](this.options.chartOptions);
-        this.task.set({filters: this.options.filters && this.options.filters.whereClause()});
-        this.task.bind("saved", this.onExecutionComplete, this);
-        this.task.save();
     },
 
     postRender:function () {
@@ -31,6 +24,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     onExecutionComplete:function () {
+        this.launchModal();
         this.drawChart();
         this.chartData.trigger('file:executionCompleted', this.task);
 

@@ -221,5 +221,16 @@ describe("chorus.views.DatasetContentDetails", function() {
                 expect(this.view.$(".column_count .count").text().trim()).toMatchTranslation("dataset.column_count", { count: this.collection.models.length })
             })
         })
+
+        describe("sql errors bar", function() {
+            it("renders, hidden", function() {
+                expect(this.view.$(".sql_errors")).toHaveClass("hidden");
+            })
+
+            it("isn't cleared by clearErrors", function() {
+                this.view.clearErrors();
+                expect(this.view.$(".sql_errors").html()).not.toBe("");
+            })
+        })
     })
 });

@@ -32,4 +32,40 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
             expect(this.view.datetimeColumnNames()).toEqual(["the date", "the time", "the time & date"]);
         })
     })
+
+    describe("Creating a Visualization", function() {
+        beforeEach(function() {
+            spyOn(chorus.dialogs.Visualization.prototype, "onExecutionComplete");
+            spyOn(this.view, "onSqlError");
+            stubModals();
+            this.server.reset();
+            this.view.chartOptions = function() {return {type:'histogram'};};
+            this.view.model = fixtures.datasetSourceTable();
+            this.view.launchVisualizationDialog();
+        })
+
+        it("should call save on the task", function() {
+            expect(this.server.lastCreate()).toBeDefined();
+        });
+
+        describe("when the save completes", function() {
+            beforeEach(function() {
+                this.view.task.trigger("saved");
+            });
+
+            it("starts up the visualization dialog", function() {
+                expect(this.view.dialog.onExecutionComplete).toHaveBeenCalled();
+            });
+        });
+
+        describe("when the save fails", function() {
+            beforeEach(function() {
+                this.view.task.trigger("saveFailed");
+            });
+
+            it("displays the error DIV", function() {
+                expect(this.view.onSqlError).toHaveBeenCalled();
+            });
+        });
+    })
 })

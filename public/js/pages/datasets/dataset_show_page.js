@@ -98,6 +98,7 @@
                     break;
             }
             this.secondarySidebar.filters = this.mainContent.contentDetails.filterWizardView;
+            this.secondarySidebar.errorContainer = this.mainContent.contentDetails;
             this.renderSubview('secondarySidebar');
             this.trigger('resized');
         },

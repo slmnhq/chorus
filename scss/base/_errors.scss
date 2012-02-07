@@ -1,6 +1,6 @@
 @import "../_common.scss";
 
-.errors {
+.errors, .sql_errors {
     @include after-clearfix;
     background-color: $error-background-color;
     vertical-align: middle;
