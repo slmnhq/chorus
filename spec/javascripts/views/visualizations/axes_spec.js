@@ -4,7 +4,9 @@ describe("chorus.views.visualizations.Axes", function() {
         centerX = chorus.svgHelpers.centerX,
         topY = chorus.svgHelpers.topY,
         bottomY = chorus.svgHelpers.bottomY,
-        centerY = chorus.svgHelpers.centerY;
+        centerY = chorus.svgHelpers.centerY,
+        height = chorus.svgHelpers.height,
+        width = chorus.svgHelpers.width;
 
     beforeEach(function() {
         var div = document.createElement("div");
@@ -211,7 +213,7 @@ describe("chorus.views.visualizations.Axes", function() {
         });
 
         describe("the axis label", function() {
-            it("should have the correct label", function() {
+            it("should have the correct text", function() {
                 expect(this.axisLabel).toHaveText("numbers")
             });
 
@@ -220,7 +222,7 @@ describe("chorus.views.visualizations.Axes", function() {
             })
 
             it("is below the tick labels", function() {
-                expect(topY(this.axisLabel)).toBeGreaterThan(bottomY(this.ticks[0]));
+                expect(topY(this.axisLabel)).toBeGreaterThan(bottomY(this.labels[0]));
             });
 
             it("is above the padding", function() {
@@ -258,15 +260,17 @@ describe("chorus.views.visualizations.Axes", function() {
             this.axis = new chorus.views.visualizations.YAxis({
                 el: this.el,
                 labels: this.labelValues,
+                axisLabel: "magic_numbers",
                 ticks: true,
                 paddingX: this.paddingX,
                 paddingY: this.paddingY
             });
             this.axis.render();
 
-            this.axisLine = this.$el.find("line.axis");
-            this.ticks    = this.$el.find("line.tick");
-            this.labels   = this.$el.find(".label");
+            this.axisLine  = this.$el.find("line.axis");
+            this.ticks     = this.$el.find("line.tick");
+            this.axisLabel = this.$el.find(".axis_label");
+            this.labels    = this.$el.find(".label");
         });
 
         describe("#requiredLeftSpace (used for drawing the x axis)", function() {
@@ -276,6 +280,7 @@ describe("chorus.views.visualizations.Axes", function() {
                 this.newAxis = new chorus.views.visualizations.YAxis({
                     el: this.el,
                     labels: _.shuffle(this.labelValues),
+                    axisLabel: "magic_numbers",
                     ticks: true,
                     paddingX: this.paddingX,
                     paddingY: this.paddingY
@@ -303,6 +308,29 @@ describe("chorus.views.visualizations.Axes", function() {
                 expect(scale("three")).toBe(innerHeight - 2 * s);
                 expect(scale("four")).toBe(innerHeight - 3 * s);
                 expect(scale("five")).toBe(innerHeight - 4 * s);
+            });
+        });
+
+        describe("the axis label", function() {
+            it("should have the correct text", function() {
+                expect(this.axisLabel).toHaveText("magic_numbers")
+            });
+
+            it("should be centered along the axis", function() {
+                expect(centerY(this.axisLabel)).toBeWithinDeltaOf(centerY(this.axisLine), 2);
+            })
+
+            it("is to the left of the tick labels", function() {
+                expect(rightX(this.axisLabel)).toBeLessThan(leftX(this.labels[0]));
+            });
+
+            it("is oriented vertically", function() {
+                expect(height(this.axisLabel)).toBeGreaterThanOrEqualTo(width(this.axisLabel));
+            });
+
+            it("is inside the padding", function() {
+                var leftPaddingMinusBoundingBoxError = this.paddingX - 5;
+                expect(leftX(this.axisLabel)).toBeGreaterThanOrEqualTo(leftPaddingMinusBoundingBoxError);
             });
         });
 

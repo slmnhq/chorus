@@ -1,7 +1,7 @@
 @import "_common.scss";
 
 .visualization {
-    svg {
+    > svg {
         background: white;
         height: 340px;
         width: 925px;
@@ -46,7 +46,7 @@
         stroke: black;
     }
 
-    .box_plot, .boxplot, .histogram {
+    .box_plot, .boxplot, .histogram, .heatmap {
         .box rect {
             fill: $chart-fill-color;
         }

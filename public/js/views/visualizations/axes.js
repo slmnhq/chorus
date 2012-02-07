@@ -112,6 +112,7 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
 chorus.views.visualizations.YAxis = function(options) {
     this.container = options.el;
     this.labels   = options.labels;
+    this.axisLabel = options.axisLabel;
     this.width    = options.el.attr("width");
     this.height   = options.el.attr("height");
     this.paddingX = options.paddingX || 20;
@@ -119,7 +120,6 @@ chorus.views.visualizations.YAxis = function(options) {
     this.offsetY  = options.offsetY  || 0;
     this.tickLength = options.tickLength || 10;
     this.labelSpacing = options.labelSpacing || 10;
-
 };
 
 _.extend(chorus.views.visualizations.YAxis.prototype, {
@@ -132,9 +132,17 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
             .text(function(d) {
                 return d
             });
+        var testAxisLabel = this.el.append("svg:g")
+            .attr("class", "axis_label")
+            .append("svg:text")
+            .attr("x", 0)
+            .attr("y", 0)
+            .text(this.axisLabel)
+        var axisLabelHeight  = testAxisLabel[0][0].getBBox().height;
+        var width = axisLabelHeight + this.labelWidth() + 2*this.labelSpacing + this.tickLength;
 
-        var width = this.labelWidth() + this.labelSpacing + this.tickLength
         testLabels.remove();
+        testAxisLabel.remove();
         return width;
     },
 
@@ -157,6 +165,26 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
         var scale = this.scale()
         var centerScale = function(d) { return scale(d) + scale.rangeBand() / 2 };
 
+        // draw axis label
+        var axisLabelContainer = this.el.append("svg:g")
+            .attr("class", "axis_label")
+        var axisLabel = axisLabelContainer.append("svg:text")
+            .attr("x", 0)
+            .attr("y", 0)
+            .text(this.axisLabel)
+
+        // reposition axis label now that we know its height
+        var centerY = (scale.rangeExtent()[0] + scale.rangeExtent()[1]) / 2
+        var axisLabelBox    = axisLabel[0][0].getBBox();
+        var axisLabelWidth  = axisLabelBox.width;
+        var axisLabelHeight = axisLabelBox.height;
+        axisLabel
+            .attr("transform", "rotate(270)")
+            .attr("x", -1 * (centerY + axisLabelWidth / 2))
+            .attr("y", this.paddingX + axisLabelHeight)
+
+        var tickLabelLeft = this.paddingX + axisLabelHeight + this.labelSpacing;
+
         // draw labels
         this.el.selectAll(".label")
             .data(this.labels).enter()
@@ -170,15 +198,15 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
 
         // reposition labels now that we know their width
         this.el.selectAll(".label")
-            .attr("x", this.paddingX)
+            .attr("x", tickLabelLeft)
             .attr("y", function(d) {
                 var scalePoint = centerScale(d);
                 var height = this.getBBox().height;
                 return scalePoint + (height / 4);
             });
 
-        var tickLeft   = this.paddingX + this.labelWidth() + this.labelSpacing;
-        var tickRight  = tickLeft + this.tickLength;
+        var tickLeft  = tickLabelLeft + this.labelWidth() + this.labelSpacing;
+        var tickRight = tickLeft + this.tickLength;
 
         // draw ticks
         this.el.selectAll(".tick")

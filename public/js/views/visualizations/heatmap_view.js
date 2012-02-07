@@ -17,7 +17,7 @@ chorus.views.visualizations.Heatmap = chorus.views.Base.extend({
             xLabels: xLabels,
             yLabels: yLabels,
             xAxisLabel: "foo",
-            yAxisLabel: "bar",
+            yAxisLabel: "oh_my_gosh_bar",
             ticks: true
         });
 
