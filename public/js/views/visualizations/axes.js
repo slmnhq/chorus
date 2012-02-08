@@ -61,13 +61,15 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
 
         if (needToRotate) {
             var maxWidth = _.max(_.map(tickLabels[0], function(tickLabel){ return tickLabel.getBBox().width; }));
+            var angle = 290;
+            var translationY = Math.sin(angle * Math.PI / 180) * maxWidth;
 
             tickLabels.attr("transform", function() {
                 var box = this.getBBox();
                 var rightX = box.x + box.width;
                 var centerY = box.y + box.height / 2;
-                var translation = "translate(" + (-0.5 * box.width) + " " + (-0.98 * maxWidth) + ") ";
-                var rotation = "rotate(290 " + rightX + " " + centerY + ")";
+                var translation = "translate(" + (-0.5 * box.width) + " " + translationY + ") ";
+                var rotation = "rotate(" + angle + " " + rightX + " " + centerY + ")";
                 return translation + rotation;
             });
         }

@@ -145,8 +145,9 @@ describe("chorus.views.DatasetContentDetails", function() {
                             expect(this.view.$('.info_bar')).toHaveClass('hidden');
                         });
 
-                        it("triggers the cancel:sidebar event", function() {
-                            expect("cancel:sidebar").toHaveBeenTriggeredOn(this.view);
+                        it("triggers the cancel:sidebar event for the chart type", function() {
+                            var chartType = this.view.$('.create_chart .chart_icon:eq(0)').data('chart_type');
+                            expect("cancel:sidebar").toHaveBeenTriggeredOn(this.view, [chartType]);
                         })
                     })
 
@@ -239,16 +240,13 @@ describe("chorus.views.DatasetContentDetails", function() {
                         expect(this.view.$(".filters")).not.toHaveClass("hidden")
                     });
 
-                    it("shows the derive chorus view info", function() {
-                        expect(this.view.$(".chorus_view_info").text().trim()).toMatchTranslation("dataset.content_details.derive_info");
-                    })
-
-                    it("triggers transform:createChorusView", function() {
+                    it("triggers transform:sidebar", function() {
                         expect(this.chorusViewSpy).toHaveBeenCalled();
                     })
 
                     describe("and the cancel link is clicked", function() {
                         beforeEach(function() {
+                            
                             this.cancelSpy = spyOnEvent(this.view, "cancel:sidebar");
                             this.view.$(".create_chorus_view .cancel").click();
                         });
@@ -267,8 +265,8 @@ describe("chorus.views.DatasetContentDetails", function() {
                             expect(this.view.$(".column_count")).not.toHaveClass("hidden");
                         });
 
-                        it("triggers 'cancel:createChorusView'", function() {
-                            expect(this.cancelSpy).toHaveBeenCalled();
+                        it("triggers 'cancel:sidebar'", function() {
+                            expect("cancel:sidebar").toHaveBeenTriggeredOn(this.view, ['chorus_view']);
                         })
                     });
                 })

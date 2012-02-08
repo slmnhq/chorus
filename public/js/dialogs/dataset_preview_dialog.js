@@ -8,7 +8,11 @@ chorus.dialogs.DatasetPreview = chorus.dialogs.Base.extend({
 
     setup: function() {
         _.bindAll(this, 'title');
-        this.resultsConsole = new chorus.views.ResultsConsole();
+        this.resultsConsole = new chorus.views.ResultsConsole({footerSize: _.bind(this.footerSize, this)});
+    },
+
+    footerSize: function() {
+        return this.$('.modal_controls').outerHeight(true);
     },
 
     postRender: function() {

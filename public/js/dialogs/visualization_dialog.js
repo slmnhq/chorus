@@ -16,7 +16,11 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.type = this.options.chartOptions.type;
         this.title = t("visualization.title", {name:this.options.chartOptions.name});
 
-        this.tableData = new chorus.views.ResultsConsole({shuttle:false});
+        this.tableData = new chorus.views.ResultsConsole({shuttle:false, footerSize: _.bind(this.footerSize, this)});
+    },
+
+    footerSize: function() {
+        return this.$('.modal_controls').outerHeight(true);
     },
 
     postRender: function () {
@@ -80,16 +84,16 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     showTabularData:function (e) {
         e && e.preventDefault();
         this.$('.results_console').removeClass("hidden");
-        this.$(".dialog_controls a.hide").removeClass("hidden");
-        this.$(".dialog_controls a.show").addClass("hidden");
+        this.$(".modal_controls a.hide").removeClass("hidden");
+        this.$(".modal_controls a.show").addClass("hidden");
         this.recalculateScrolling();
     },
 
     hideTabularData:function (e) {
         e && e.preventDefault();
         this.$('.results_console').addClass("hidden")
-        this.$(".dialog_controls a.show").removeClass("hidden");
-        this.$(".dialog_controls a.hide").addClass("hidden");
+        this.$(".modal_controls a.show").removeClass("hidden");
+        this.$(".modal_controls a.hide").addClass("hidden");
     },
 
     downloadVisualization:function (event) {

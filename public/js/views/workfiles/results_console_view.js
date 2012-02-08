@@ -108,7 +108,14 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     getDesiredDataTableHeight: function() {
-        return $(window).height() - this.$(".data_table").position().top - this.$(".bottom_gutter").height();
+        return $(window).height() - this.$(".data_table").offset().top - this.$(".bottom_gutter").height() - this.footerSize();
+    },
+
+    footerSize: function() {
+        if(this.options.footerSize) {
+            return this.options.footerSize();
+        }
+        return 0;
     },
 
     collapseTable: function() {
