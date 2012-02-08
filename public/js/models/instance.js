@@ -39,7 +39,8 @@ chorus.models.Instance = chorus.models.Base.extend({
     },
 
     databases:function () {
-        return new chorus.collections.DatabaseSet([], {instanceId:this.get("id")});
+        this._databases || (this._databases = new chorus.collections.DatabaseSet([], {instanceId:this.get("id")}));
+        return this._databases;
     },
 
     accounts:function () {

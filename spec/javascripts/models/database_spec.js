@@ -15,5 +15,9 @@ describe("chorus.models.Database", function() {
             expect(this.schemas.attributes.instanceName).toBe("insta_whip");
             expect(this.schemas.attributes.databaseName).toBe("love_poems");
         });
+
+        it("memoizes", function() {
+            expect(this.schemas).toBe(this.model.schemas());
+        });
     });
 });

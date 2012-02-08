@@ -138,6 +138,24 @@ describe("chorus.models.Instance", function() {
         });
     });
 
+    describe("#databases", function() {
+        beforeEach(function() {
+            this.databases = this.instance.databases();
+        })
+
+        it("returns an DatabaseSet", function() {
+            expect(this.databases).toBeA(chorus.collections.DatabaseSet)
+        });
+
+        it("sets the instance id", function() {
+            expect(this.databases.attributes.instanceId).toBe(this.instance.get('id'));
+        });
+
+        it("memoizes", function() {
+            expect(this.databases).toBe(this.instance.databases());
+        });
+    });
+
     describe("#sharedAccount", function() {
         context("when the instance has a shared account", function() {
             beforeEach(function() {

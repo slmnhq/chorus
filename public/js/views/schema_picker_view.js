@@ -14,7 +14,7 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
     setup:function () {
         if (!this.options.instance) {
             this.instances = new chorus.collections.InstanceSet();
-            this.instances.bind("reset", this.updateInstances, this);
+            this.instances.onLoaded(this.updateInstances, this);
             this.instances.fetchAll();
         }
     },
@@ -41,8 +41,8 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
         if (this.selectedInstance) {
             this.showSection("database", { loading:true });
             this.databases = this.selectedInstance.databases();
-            this.databases.bind("reset", this.updateDatabases, this);
-            this.databases.fetch();
+            this.databases.fetchIfNotLoaded();
+            this.databases.onLoaded(this.updateDatabases, this);
         }
     },
 
@@ -56,8 +56,8 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
         if (this.selectedDatabase) {
             this.showSection("schema", { loading:true });
             this.schemas = this.selectedDatabase.schemas();
-            this.schemas.bind("reset", this.updateSchemas, this);
-            this.schemas.fetch();
+            this.schemas.fetchIfNotLoaded();
+            this.schemas.onLoaded(this.updateSchemas, this);
         }
     },
 
@@ -161,13 +161,12 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
     },
 
     triggerSchemaSelected:function () {
-        var schemaValue = this.$('.schema select').val();
-        this.trigger("change", schemaValue);
+        this.trigger("change", this.ready());
     },
 
     ready:function () {
         var attrs = this.fieldValues();
-        return attrs.instance && (attrs.database || attrs.databaseName) && (attrs.schema || attrs.schemaName);
+        return !!(attrs.instance && (attrs.database || attrs.databaseName) && (attrs.schema || attrs.schemaName));
     },
 
     fieldValues:function () {
@@ -177,12 +176,12 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
         if (this.selectedDatabase) {
             attrs.database = this.selectedDatabase.get("id");
         } else {
-            attrs.databaseName = this.$(".database input.name").val();
+            attrs.databaseName = this.$(".database input.name:visible").val();
         }
         if (this.selectedSchema) {
             attrs.schema = this.selectedSchema.get("id");
         } else {
-            attrs.schemaName = this.$(".schema input.name").val();
+            attrs.schemaName = this.$(".schema input.name:visible").val();
         }
         return attrs;
     },
