@@ -46,6 +46,7 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
         if (this.resource) {
             ctx.entityType = this.resource.entityType;
             ctx.entityId = this.resource.entityId;
+            ctx.workspaceId = this.resource.get("workspace").id;
             ctx.displayEntityType = this.resource.metaType();
         }
 

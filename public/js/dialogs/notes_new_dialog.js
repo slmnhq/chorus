@@ -24,7 +24,8 @@ chorus.dialogs.NotesNew = chorus.dialogs.Base.extend({
 
         this.model = new chorus.models.Comment({
             entityType:this.options.launchElement.data("entity-type"),
-            entityId:this.options.launchElement.data("entity-id")
+            entityId:this.options.launchElement.data("entity-id"),
+            workspaceId: this.options.launchElement.data("workspace-id")
         });
         this.model.bind("saved", this.modelSaved, this);
         this.model.bind("fileUploadSuccess", this.saved, this);
@@ -33,7 +34,7 @@ chorus.dialogs.NotesNew = chorus.dialogs.Base.extend({
         this.model.bind("validationFailed", this.saveFailed, this);
         this.model.bind("fileUploadDone", this.uploadDone, this);
 
-        this.workspaceId = this.options.launchElement.data("workspace-id");
+        this.workspaceId = this.model.get("workspaceId");
     },
 
     cancelUpload:function () {
@@ -92,7 +93,7 @@ chorus.dialogs.NotesNew = chorus.dialogs.Base.extend({
         this.$(".attachment_links").addClass("disabled");
         this.$("button.submit").startLoading("notes.button.uploading");
         this.saving = true;
-        this.model.save({ body:this.$("textarea[name=body]").val().trim() });
+        this.model.save({ body: this.$("textarea[name=body]").val().trim() });
     },
 
     saved:function () {
