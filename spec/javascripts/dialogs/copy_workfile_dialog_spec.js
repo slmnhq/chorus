@@ -90,6 +90,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
             this.dialog.workfile = this.workfile;
             this.dialog.render();
 
+            spyOn(chorus, "toast");
             spyOn(this.dialog.picklistView, "selectedItem").andReturn(this.workspace);
             this.dialog.picklistView.trigger("item:selected", this.workspace);
             spyOn(chorus.router, "navigate")
@@ -132,6 +133,10 @@ describe("chorus.dialogs.CopyWorkfile", function() {
                 expect(this.dialog.closeModal).toHaveBeenCalled();
             });
 
+            it("pops toast", function() {
+                expect(chorus.toast).toHaveBeenCalledWith("workfile.copy_dialog.toast", {workfileTitle:"Workfile 10", workspaceNameTarget:"Workspace 2"});
+            });
+
             it("does not navigate", function() {
                 expect(chorus.router.navigate).not.toHaveBeenCalled();
             });
@@ -152,6 +157,10 @@ describe("chorus.dialogs.CopyWorkfile", function() {
             it("does not close the dialog", function() {
                 expect(this.dialog.closeModal).not.toHaveBeenCalled();
             })
+
+            it("does not pop toast", function() {
+                expect(chorus.toast).not.toHaveBeenCalled();
+            });
 
             it("displays the server error message", function() {
                 expect(this.dialog.$(".errors ul").text().trim()).toBe("Workspace already has a workfile with this name. Specify a different name.")

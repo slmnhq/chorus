@@ -60,6 +60,7 @@ chorus.dialogs.CopyWorkfile = chorus.dialogs.Base.extend({
             function (data) {
                 if (data.status == "ok") {
                     self.closeModal();
+                    chorus.toast("workfile.copy_dialog.toast", {workfileTitle:params.fileName, workspaceNameTarget:self.picklistView.selectedItem().get("name")});
                 } else {
                     self.serverErrors = data.message;
                     self.render();
