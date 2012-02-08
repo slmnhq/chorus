@@ -7,6 +7,10 @@ chorus.models.FrequencyTask = chorus.models.ChartTask.extend({
 
     beforeSave: function() {
         this._super("beforeSave");
-        this.set({ 'chart[yAxis]': this.get("yAxis") });
+        this.set({
+            'chart[yAxis]': this.get("yAxis"),
+            'chart[bins]': this.get("bins")
+        });
+
     }
 });

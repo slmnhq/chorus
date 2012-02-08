@@ -159,6 +159,24 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 y: 'value'
             }),
 
+           "Visualization: Frequency Plot" : new chorus.views.visualizations.Frequency({
+                model: new chorus.models.FrequencyTask({
+                    columns: [
+                        {name : "bucket", typeCategory: "STRING"},
+                        {name : "count", typeCategory: "WHOLE_NUMBER"}
+                    ],
+
+                    rows: [
+                        { bucket: "Five", count: 5 },
+                        { bucket: "Eight", count: 8 },
+                        { bucket: "Zero", count: 0 },
+                        { bucket: "One", count: 1 },
+                        { bucket: "Twenty", count: 20 }
+                    ],
+                    "chart[yAxis]": "Custom x Axis Title"
+                })
+            }),
+
             "Visualization: BoxPlot" : new chorus.views.visualizations.Boxplot({
                 model: new chorus.models.BoxplotTask({
                     columns: [

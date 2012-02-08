@@ -147,7 +147,9 @@
             }
 
             var xleft = chart.scales.x.range()[0];
-            var xright = chart.scales.x.range()[chart.scales.x.range().length-1]+ chart.scales.x.rangeBand();
+            var xright = chart.scales.x.range()[chart.scales.x.range().length - 1];
+                if (chart.scales.x.rangeBand) xright += chart.scales.x.rangeBand();
+
             if( options.axis_edge) {
             axis_edge
                 .attr("x1", xleft)
@@ -162,7 +164,9 @@
 
             if (options.ticks) {
                 var bandedOffset = chart.scales.y.rangeBand ? chart.scales.y.rangeBand() : 0;
-
+                var y1 = _.isEmpty(chart.scales.y.range()) ? 1 : chart.scales.y.range()[0];
+                var y2 = _.isEmpty(chart.scales.y.range()) ? 0 : chart.scales.y.range()[chart.scales.y.range().length - 1] + bandedOffset;
+                
                 ticks
                     .attr("x1", function(d) {
                     return scale(d.locator)
@@ -170,8 +174,8 @@
                     .attr("x2", function(d) {
                         return scale(d.locator)
                     })
-                    .attr("y1", chart.scales.y.range()[0])
-                    .attr("y2", chart.scales.y.range()[chart.scales.y.range().length - 1] + bandedOffset);
+                    .attr("y1", y1)
+                    .attr("y2", y2);
             } else {
                 ticks.remove();
             }

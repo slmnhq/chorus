@@ -12,7 +12,8 @@ chorus.views.DatasetVisualizationFrequencySidebar = chorus.views.DatasetVisualiz
         return {
             type: "frequency",
             name: this.model.get("objectName"),
-            yAxis: this.$(".category select option:selected").text()
+            yAxis: this.$(".category select option:selected").text(),
+            bins: this.$(".limiter .selected_value").text()
         }
     }
 });

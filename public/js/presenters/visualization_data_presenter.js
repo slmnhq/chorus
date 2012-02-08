@@ -29,13 +29,11 @@
         this.options = options;
     };
 
-    _.extend(ns.presenters.visualizations.Frequency.prototype, {
+    _.extend(chorus.presenters.visualizations.Frequency.prototype, {
         present: function() {
-            var frequencies = {};
-            _.each(this.task.get("rows"), function(row) {
-                frequencies[row.bucket] = row.count;
+            return _.map(this.task.get("rows"), function(row) {
+                return {bucket: row.bucket, count: row.count};
             });
-            return { frequencies : frequencies };
         }
     });
 

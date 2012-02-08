@@ -56,11 +56,7 @@ describe("chorus.presenters.visualizations", function() {
         });
 
         it("returns a hash of field-value to number of occurences", function() {
-            expect(this.data.frequencies).toEqual({
-                chupacabra : 321,
-                aardvark : 1024,
-                beluga : 573
-            });
+            expect(this.data.frequencies).toEqual(this.model.rows);
         });
     });
 

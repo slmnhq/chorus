@@ -8,6 +8,7 @@ describe("chorus.views.DatasetVisualizationFrequencySidebar", function() {
                 this.model = fixtures.datasetChorusView({objectName: "Foo"})
                 this.view = new chorus.views.DatasetVisualizationFrequencySidebar({collection: this.columns, model: this.model})
                 this.view.render();
+                this.view.$(".limiter .selected_value").text("3")
             })
 
             describe("category select box", function() {
@@ -23,6 +24,7 @@ describe("chorus.views.DatasetVisualizationFrequencySidebar", function() {
                     expect(options.name).toBe("Foo");
                     expect(options.type).toBe("frequency");
                     expect(options.yAxis).toBe("Sandwich");
+                    expect(options.bins).toBe("3");
                 })
             })
         })

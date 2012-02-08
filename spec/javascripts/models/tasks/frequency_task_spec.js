@@ -1,6 +1,7 @@
 describe("chorus.models.FrequencyTask", function() {
     beforeEach(function() {
         this.model = new chorus.models.FrequencyTask({
+            bins: 23,
             yAxis: "height",
             objectName: "users",
             sandboxId: '4',
@@ -36,5 +37,10 @@ describe("chorus.models.FrequencyTask", function() {
             var request = this.server.lastCreate();
             expect(request.params()['chart[yAxis]']).toBe("height");
         });
+
+        it("renames the 'bins' field to 'chart[bins]' as required by the api", function() {
+            var request = this.server.lastCreate();
+            expect(request.params()['chart[bins]']).toBe("23");
+        })
     });
 })
