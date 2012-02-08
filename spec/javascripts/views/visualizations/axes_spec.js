@@ -74,10 +74,11 @@ describe("chorus.views.visualizations.Axes", function() {
                 });
                 this.axis.render();
 
-                this.axisLine  = this.$el.find("line.axis");
-                this.ticks     = this.$el.find("line.tick");
+                this.axisLine = this.$el.find("line.axis");
+                this.ticks = this.$el.find("line.tick");
+                this.grids = this.$el.find("line.grid");
                 this.axisLabel = this.$el.find(".axis_label");
-                this.labels    = this.$el.find(".label");
+                this.labels = this.$el.find(".label");
             });
 
             describe("#requiredBottomSpace (used for drawing the y axis)", function() {
@@ -166,10 +167,10 @@ describe("chorus.views.visualizations.Axes", function() {
                     });
                     this.axis.render();
 
-                    this.axisLine  = this.$el.find("line.axis");
-                    this.ticks     = this.$el.find("line.tick");
+                    this.axisLine = this.$el.find("line.axis");
+                    this.ticks = this.$el.find("line.tick");
                     this.axisLabel = this.$el.find(".axis_label");
-                    this.labels    = this.$el.find(".label");
+                    this.labels = this.$el.find(".label");
                 });
 
                 itHasAReasonableLayout();
@@ -189,7 +190,7 @@ describe("chorus.views.visualizations.Axes", function() {
 
                 it("aligns the tops of the labels", function() {
                     var firstTopY = topY(this.labels[0]);
-                    _.each(this.labels, function(label){
+                    _.each(this.labels, function(label) {
                         expect(topY(label)).toBeWithinDeltaOf(firstTopY, 6);
                     });
                 });
@@ -204,25 +205,6 @@ describe("chorus.views.visualizations.Axes", function() {
                 this.minX = 1;
                 this.maxX = 21;
 
-                this.axis = new chorus.views.visualizations.XAxis({
-                    el: this.el,
-                    axisLabel: "numbers",
-                    scaleType: "numeric",
-                    minValue: this.minX,
-                    maxValue: this.maxX,
-                    ticks: true,
-                    paddingX: this.paddingX,
-                    paddingY: this.paddingY
-                });
-                this.axis.render();
-
-                this.axisLine  = this.$el.find("line.axis");
-                this.ticks     = this.$el.find("line.tick");
-                this.axisLabel = this.$el.find(".axis_label");
-                this.labels    = this.$el.find(".label");
-            });
-
-            beforeEach(function() {
                 this.addMatchers({
                     toBeUniformlyHorizontallySpaced: function() {
                         var elements = this.actual;
@@ -230,7 +212,7 @@ describe("chorus.views.visualizations.Axes", function() {
 
                         return _.all(elements, function(el, i) {
                             if (i === 0) return true;
-                            var previousElement = elements[i-1];
+                            var previousElement = elements[i - 1];
                             var distance = centerX(el) - centerX(previousElement)
                             return Math.abs(distance - standardDistance) < 1;
                         });
@@ -238,21 +220,76 @@ describe("chorus.views.visualizations.Axes", function() {
                 });
             });
 
-            itHasAReasonableLayout();
+            context("with grid lines", function() {
+                beforeEach(function() {
+                    this.axis = new chorus.views.visualizations.XAxis({
+                        el: this.el,
+                        axisLabel: "numbers",
+                        scaleType: "numeric",
+                        minValue: this.minX,
+                        maxValue: this.maxX,
+                        ticks: true,
+                        paddingX: this.paddingX,
+                        paddingY: this.paddingY,
+                        hasGrids: true
+                    });
+                    this.axis.render();
 
+                    this.axisLine = this.$el.find("line.axis");
+                    this.ticks = this.$el.find("line.tick");
+                    this.grids = this.$el.find("line.grid");
+                    this.axisLabel = this.$el.find(".axis_label");
+                    this.labels = this.$el.find(".label");
+                    this.hasGridLines = true;
+                });
+
+                itHasAReasonableLayout();
+                itDisplaysNumericalTicksCorrectly();
+            });
+
+            context("without grid lines", function() {
+                beforeEach(function() {
+                    this.axis = new chorus.views.visualizations.XAxis({
+                        el: this.el,
+                        axisLabel: "numbers",
+                        scaleType: "numeric",
+                        minValue: this.minX,
+                        maxValue: this.maxX,
+                        ticks: true,
+                        paddingX: this.paddingX,
+                        paddingY: this.paddingY
+                    });
+                    this.axis.render();
+
+                    this.axisLine = this.$el.find("line.axis");
+                    this.ticks = this.$el.find("line.tick");
+                    this.grids = this.$el.find("line.grid");
+                    this.axisLabel = this.$el.find(".axis_label");
+                    this.labels = this.$el.find(".label");
+                    this.hasGridLines = false;
+                });
+
+                itHasAReasonableLayout();
+                itDisplaysNumericalTicksCorrectly();
+            });
+
+
+
+        });
+
+        function itDisplaysNumericalTicksCorrectly() {
             it("generates uniformly spaced ticks in the range of the label values", function() {
                 expect(this.ticks.length).toBeGreaterThan(5);
                 expect(this.ticks.length).toBeLessThan(25);
 
                 expect(this.ticks).toBeUniformlyHorizontallySpaced();
             });
-        });
-
+        }
 
         function itDisplaysOrdinalLabelsCorrectly() {
             it("divides the width of the chart evenly into bands, " +
                 "and places each tick at the center of a band", function() {
-                var bandWidth = (this.width - 2*this.paddingX) / this.labelValues.length;
+                var bandWidth = (this.width - 2 * this.paddingX) / this.labelValues.length;
 
                 _.each(this.ticks, function(tick, i) {
                     var bandCenter = (i + 0.5) * bandWidth + this.paddingX;
@@ -309,8 +346,24 @@ describe("chorus.views.visualizations.Axes", function() {
 
                 it("draws the ticks in order from left to right", function() {
                     _.each(this.ticks, function(tick, i) {
-                        if (! this.ticks[i-1]) return;
-                        expect(leftX(tick)).toBeGreaterThan(leftX(this.ticks[i-1]));
+                        if (! this.ticks[i - 1]) return;
+                        expect(leftX(tick)).toBeGreaterThan(leftX(this.ticks[i - 1]));
+                    }, this);
+                });
+            });
+
+            describe("the axis grid lines", function() {
+                it("should respect hasGrid option", function() {
+                    if (this.hasGridLines) {
+                        expect(this.grids.length).toBeGreaterThan(2);
+                    } else {
+                        expect(this.grids.length).toBe(0);
+                    }
+                })
+                it("should draw grid lines extending from the top of the ticks to the top of the chart", function() {
+                    _.each(this.grids, function(gridLine) {
+                        expect(bottomY(gridLine)).toEqual(bottomY(this.axisLine));
+                        expect(topY(gridLine)).toBeLessThan(bottomY(this.axisLine));
                     }, this);
                 });
             });
@@ -325,8 +378,8 @@ describe("chorus.views.visualizations.Axes", function() {
 
                 it("draws the labels in order from left to right", function() {
                     _.each(this.labels, function(label, i) {
-                        if (! this.labels[i-1]) return;
-                        expect(leftX(label)).toBeGreaterThan(leftX(this.labels[i-1]));
+                        if (! this.labels[i - 1]) return;
+                        expect(leftX(label)).toBeGreaterThan(leftX(this.labels[i - 1]));
                     }, this);
                 });
             });
@@ -387,10 +440,10 @@ describe("chorus.views.visualizations.Axes", function() {
             });
             this.axis.render();
 
-            this.axisLine  = this.$el.find("line.axis");
-            this.ticks     = this.$el.find("line.tick");
+            this.axisLine = this.$el.find("line.axis");
+            this.ticks = this.$el.find("line.tick");
             this.axisLabel = this.$el.find(".axis_label");
-            this.labels    = this.$el.find(".label");
+            this.labels = this.$el.find(".label");
         });
 
         describe("#requiredLeftSpace (used for drawing the x axis)", function() {
@@ -542,8 +595,8 @@ describe("chorus.views.visualizations.Axes", function() {
             });
 
             it("divides the height of the chart evenly into bands, " +
-               "and places each tick at the center of a band", function() {
-                var bandHeight = (this.height - 2*this.paddingY) / 5;
+                "and places each tick at the center of a band", function() {
+                var bandHeight = (this.height - 2 * this.paddingY) / 5;
                 var bandCenters = _.map([0, 1, 2, 3, 4], function(i) {
                     return this.height - this.paddingY - ((i + 0.5) * bandHeight);
                 }, this);
@@ -629,10 +682,10 @@ describe("chorus.views.visualizations.Axes", function() {
 
             this.xAxisLine = this.$el.find("g.xaxis line.axis");
             this.yAxisLine = this.$el.find("g.yaxis line.axis");
-            this.xTicks    = this.$el.find("g.xaxis line.tick");
-            this.xTicks    = this.$el.find("g.yaxis line.tick");
-            this.xLabels   = this.$el.find("g.xaxis .label");
-            this.yLabels   = this.$el.find("g.yaxis .label");
+            this.xTicks = this.$el.find("g.xaxis line.tick");
+            this.xTicks = this.$el.find("g.yaxis line.tick");
+            this.xLabels = this.$el.find("g.xaxis .label");
+            this.yLabels = this.$el.find("g.yaxis .label");
         });
 
         describe("axis positioning", function() {

@@ -1,6 +1,7 @@
 chorus.views.visualizations.XAxis = function(options) {
     this._labels    = options.labels;
     this.axisLabel = options.axisLabel;
+    this.hasGrids = options.hasGrids;
     this.width     = options.el.attr("width");
     this.height    = options.el.attr("height");
     this.container = options.el;
@@ -184,6 +185,17 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
             .attr("x1", tickScale)
             .attr("x2", tickScale)
 
+        if(this.hasGrids) {
+            this.el.selectAll(".grid")
+                .data(this.labels()).enter()
+                .append("svg:line")
+                .attr("class", "grid")
+                .attr("y1", this.minY())
+                .attr("y2", tickTop)
+                .attr("x1", tickScale)
+                .attr("x2", tickScale)
+        }
+
         // draw main axis line
         this.el.append("svg:line")
             .attr("class", "axis")
@@ -322,7 +334,8 @@ chorus.views.visualizations.Axes = function(options) {
         maxValue: options.maxXValue,
         scaleType: options.xScaleType,
         labels: options.xLabels,
-        axisLabel: options.xAxisLabel
+        axisLabel: options.xAxisLabel,
+        hasGrids: options.hasXGrids
     });
 
     this.yAxis = new chorus.views.visualizations.YAxis({

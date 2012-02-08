@@ -34,6 +34,12 @@ svg.chart {
     stroke: #444;
   }
 
+  .xaxis line.grid{
+        stroke-dasharray: 1;
+        stroke-width: 1.0;
+        stroke: #aaa;
+  }
+
   .axis_edge line {
     stroke-width: 0.40;
     stroke: #444;
