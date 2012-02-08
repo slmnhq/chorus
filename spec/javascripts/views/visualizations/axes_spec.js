@@ -118,39 +118,38 @@ describe("chorus.views.visualizations.Axes", function() {
 
         describe("when the tick labels are short", function() {
             itHasAReasonableLayout();
+
+            it("centers each label on its corresponding tick mark", function() {
+                expect(leftX(this.ticks[0])).toBeWithinDeltaOf(centerX(this.labels[0]), 2);
+                expect(leftX(this.ticks[1])).toBeWithinDeltaOf(centerX(this.labels[1]), 2);
+                expect(leftX(this.ticks[2])).toBeWithinDeltaOf(centerX(this.labels[2]), 2);
+                expect(leftX(this.ticks[3])).toBeWithinDeltaOf(centerX(this.labels[3]), 2);
+                expect(leftX(this.ticks[4])).toBeWithinDeltaOf(centerX(this.labels[4]), 2);
+            });
         });
 
-        describe("when the tick labels are long", function() {
+        describe("when there are too many tick labels to fit horizontally within the width", function() {
             beforeEach(function() {
                 this.labelValues = [
-                    'Battle station 0',
-                    'Battle station 1',
-                    'Battle station 2',
-                    'Battle station 3',
-                    'Battle station 4',
-                    'Battle station 5',
-                    'Battle station 6',
-                    // 'Battle station 7',
-                    // 'Battle station 8',
-                    // 'Battle station 9',
-                    // 'Battle station 10',
-                    // 'Battle station 11',
-                    // 'Battle station 12',
-                    // 'Battle station 13',
-                    // 'Battle station 14',
-                    // 'Battle station 15',
-                    // 'Battle station 16',
-                    // 'Battle station 17',
-                    // 'Battle station 18',
-                    'Battle station 19'
+                    'one',
+                    'two',
+                    'three',
+                    'four',
+                    'five',
+                    'one hundred and six',
+                    'one hundred and seven',
+                    'one hundred and eight',
+                    'one hundred and nine',
+                    'one hundred and ten',
+                    'one hundred and eleven'
                 ];
                 this.paddingX = 35;
                 this.paddingY = 35;
 
-                this.$shortNameEl = this.$el;
-                this.shortNameLabels = this.labels;
+                this.$unrotatedEl = this.$el;
+                this.unrotatedLabels = this.labels;
 
-                this.el = d3.select(this.$shortNameEl.parent()[0])
+                this.el = d3.select(this.$unrotatedEl.parent()[0])
                     .append("svg")
                     .attr("width", this.width)
                     .attr("height", this.height);
@@ -189,11 +188,23 @@ describe("chorus.views.visualizations.Axes", function() {
             itHasAReasonableLayout();
 
             it("rotates the ticks", function() {
-                expect(height(this.labels)).toBeGreaterThan(height(this.shortNameLabels));
+                _.each(this.labels, function(label, i) {
+                    var unrotatedLabel = this.unrotatedLabels[i];
+                    if (!unrotatedLabel) return;
+                    expect(width(label)).toBeLessThan(width(unrotatedLabel));
+                    expect(height(label)).toBeGreaterThan(height(unrotatedLabel));
+                }, this);
             });
 
             it("draws the tick labels so that they don't overlap horizontally", function() {
                 expect(this.labels).not.toOverlapHorizontally();
+            });
+
+            it("aligns the top of each label", function() {
+                var firstTopY = topY(this.labels[0]);
+                _.each(this.labels, function(label){
+                    expect(topY(label)).toBeWithinDeltaOf(firstTopY, 6);
+                });
             });
         });
 
@@ -279,14 +290,6 @@ describe("chorus.views.visualizations.Axes", function() {
                     expect(leftX(this.labels[1])).toBeLessThan(leftX(this.labels[2]));
                     expect(leftX(this.labels[2])).toBeLessThan(leftX(this.labels[3]));
                     expect(leftX(this.labels[3])).toBeLessThan(leftX(this.labels[4]));
-                });
-
-                it("centers each label on its corresponding tick mark", function() {
-                    expect(leftX(this.ticks[0])).toBeWithinDeltaOf(centerX(this.labels[0]), 2);
-                    expect(leftX(this.ticks[1])).toBeWithinDeltaOf(centerX(this.labels[1]), 2);
-                    expect(leftX(this.ticks[2])).toBeWithinDeltaOf(centerX(this.labels[2]), 2);
-                    expect(leftX(this.ticks[3])).toBeWithinDeltaOf(centerX(this.labels[3]), 2);
-                    expect(leftX(this.ticks[4])).toBeWithinDeltaOf(centerX(this.labels[4]), 2);
                 });
             });
 

@@ -53,19 +53,21 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
     },
 
     rotateTickLabelsIfNeeded: function() {
-        var maxWidth = this.scale().rangeBand() / 2;
+        var bandWidth = this.scale().rangeBand() / 2;
         var tickLabels = this.el.selectAll(".label text");
         var needToRotate = _.any(tickLabels[0], function(label) {
-            return label.getBBox().width > maxWidth;
+            return label.getBBox().width > bandWidth;
         });
 
         if (needToRotate) {
+            var maxWidth = _.max(_.map(tickLabels[0], function(tickLabel){ return tickLabel.getBBox().width; }));
+
             tickLabels.attr("transform", function() {
                 var box = this.getBBox();
-                var centerX = box.x + box.width / 2;
+                var rightX = box.x + box.width;
                 var centerY = box.y + box.height / 2;
-                var rotation = "rotate(290 " + centerX + " " + centerY + ")";
-                var translation = "translate(0 " + (-0.5 * box.width) + ") ";
+                var translation = "translate(" + (-0.5 * box.width) + " " + (-0.98 * maxWidth) + ") ";
+                var rotation = "rotate(290 " + rightX + " " + centerY + ")";
                 return translation + rotation;
             });
         }
