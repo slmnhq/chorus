@@ -67,6 +67,7 @@
     .selected_columns {
         color: $color-text2;
         font-size: 12px;
+        margin-bottom: 20px;
 
         .empty_selection {
             padding: $dialog-padding;
@@ -104,10 +105,13 @@
 
             .dataset {
                 @include secondary-text-semibold;
-                @include ellipsis;
-
+                .label {
+                    display:inline-block;
+                }
                 .name {
+                    @include ellipsis;
                     @include font-menu;
+                    max-width: 180px;
                     display: inline-block;
                 }
             }
