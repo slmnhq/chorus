@@ -37,6 +37,10 @@ describe("chorus.views.DatasetListSidebar", function() {
                 it("fetches the activities for the dataset", function() {
                     expect(this.dataset.activities()).toHaveBeenFetched()
                 });
+                
+                it("prefers only the without_object type for the activity list", function() {
+                    expect(this.view.activityList.options.displayStyle).toEqual(['without_object']);
+                });
 
                 describe("when the activity fetch completes", function() {
                     beforeEach(function() {

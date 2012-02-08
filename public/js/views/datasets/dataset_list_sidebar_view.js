@@ -26,7 +26,7 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
             this.activityList = new chorus.views.ActivityList({
                 collection: activities,
                 additionalClass:"sidebar",
-                displayStyle:['without_object', 'without_workspace']
+                displayStyle:['without_object']
             });
         } else {
             delete this.statistics;
