@@ -198,7 +198,8 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
                         _.each(this.subviews, _.bind(function (property, selector) {
                             var view = this.getSubview(property);
                             if (view) {
-                                view.bind("rendered", this.recalculateScrolling, this)
+                                view.bind("rendered", function() { this.recalculateScrolling(el) }, this)
+                                view.bind("content:changed", function() { this.recalculateScrolling(el) }, this)
                             }
                         }, this));
                     }

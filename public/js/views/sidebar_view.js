@@ -34,5 +34,9 @@ chorus.views.Sidebar = chorus.views.Base.extend({
         $("#sidebar_wrapper .jump_to_top").toggleClass("clickable", api.getContentPositionY() > 10);
         event.preventDefault();
         return true;
+    },
+
+    recalculateScrolling : function() {
+        this._super("recalculateScrolling", [$(this.el).closest(".custom_scroll")])
     }
 }); 

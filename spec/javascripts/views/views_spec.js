@@ -951,7 +951,17 @@ describe("chorus.views.base", function () {
                     expect(this.view.recalculateScrolling).toHaveBeenCalled()
                 })
             })
+
+            describe("when a subview triggers content:changed", function() {
+                beforeEach(function () {
+                    this.view.recalculateScrolling.reset();
+                    this.view.subfoo.trigger("content:changed");
+                });
+
+                it("recalculates scrolling", function () {
+                    expect(this.view.recalculateScrolling).toHaveBeenCalled()
+                })
+            })
         })
     })
-
 })

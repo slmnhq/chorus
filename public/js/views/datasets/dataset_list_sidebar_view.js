@@ -28,6 +28,8 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
                 additionalClass:"sidebar",
                 displayStyle:['without_object']
             });
+
+            this.activityList.bind("content:changed", this.recalculateScrolling, this)
         } else {
             delete this.statistics;
             delete this.activityList;

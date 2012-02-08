@@ -23,7 +23,6 @@ describe("chorus.views.Sidebar", function() {
             expect(this.page.sidebar.setupScrolling).toHaveBeenCalled();
         })
 
-
         context("when a subview is re-rendered", function(){
             beforeEach(function() {
                 this.page.sidebar.fooView.render()
@@ -32,6 +31,17 @@ describe("chorus.views.Sidebar", function() {
             it("recalculates scrolling", function() {
                 expect(this.page.sidebar.recalculateScrolling).toHaveBeenCalled()
             })
+        })
+    })
+
+    describe("#recalculateScrolling", function() {
+        beforeEach(function() {
+            spyOn(chorus.views.Bare.prototype, "recalculateScrolling")
+            this.page.sidebar.recalculateScrolling();
+        });
+
+        it("calls super with the appropriate selector", function() {
+            expect(chorus.views.Bare.prototype.recalculateScrolling).toHaveBeenCalledWith($(this.page.sidebar.el).closest(".custom_scroll"))
         })
     })
 })
