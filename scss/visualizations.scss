@@ -1,82 +1,80 @@
 @import "_common.scss";
 
-.visualization {
-    > svg {
-        background: white;
-        height: 340px;
-        width: 925px;
+svg.chart {
+  background: white;
+  height: 340px;
+  width: 925px;
+
+  line {
+    stroke-width: 0.4;
+    stroke: red;
+  }
+
+  text {
+    font-size: 0.5em;
+  }
+  path {
+    fill: none;
+  }
+
+  .ytick, .xtick {
+    stroke-dasharray: 1;
+    stroke-width: 0.25;
+    stroke: #aaa;
+  }
+
+  .axis.west .grid line {
+    stroke-dasharray: 1;
+    stroke-width: 0.25;
+    stroke: #444;
+  }
+
+  .xaxis, .yaxis {
+    stroke-width: 0.40;
+    stroke: #444;
+  }
+
+  .axis_edge line {
+    stroke-width: 0.40;
+    stroke: #444;
+  }
+
+  .time_series path {
+    stroke-width: 0.6;
+    stroke: black;
+  }
+
+  text {
+    font-size: 12px;
+    font-weight: $semibold;
+    fill: $color-text2;
+  }
+
+  .box_plot, .boxplot, .histogram, .heatmap, .frequency {
+    .box rect {
+      fill: $chart-fill-color;
     }
 
-    line {
-        stroke-width: 0.4;
-        stroke: red;
+    .xaxis {
+      stroke-dasharray: 1;
+      stroke-width: 1.0;
+      stroke: #aaa;
     }
 
-    text {
-        font-size: 0.5em;
-        }
-    path {
-        fill: none;
+    .whisker {
+      stroke: black;
+      stroke-width: 1.0;
     }
 
-    .ytick, .xtick {
-        stroke-dasharray: 1;
-        stroke-width: 0.25;
-        stroke: #aaa;
+    .median {
+      stroke: black;
+      stroke-width: 1.0;
     }
+  }
 
-    .axis.west .grid line {
-        stroke-dasharray: 1;
-        stroke-width: 0.25;
-        stroke: #444;
+  .histogram {
+    rect.bar {
+      fill: $chart-fill-color;
     }
-
-    .xaxis, .yaxis {
-        stroke-width: 0.40;
-        stroke: #444;
-    }
-
-    .axis_edge line {
-        stroke-width: 0.40;
-        stroke: #444;
-    }
-
-    .time_series path {
-        stroke-width: 0.6;
-        stroke: black;
-    }
-
-    text {
-        font-size: 12px;
-        font-weight: $semibold;
-        fill: $color-text2;
-    }
-
-    .box_plot, .boxplot, .histogram, .heatmap, .frequency {
-        .box rect {
-            fill: $chart-fill-color;
-        }
-
-        .xaxis {
-            stroke-dasharray: 1;
-            stroke-width: 1.0;
-            stroke: #aaa;
-        }
-
-        .whisker {
-            stroke: black;
-            stroke-width: 1.0;
-        }
-
-        .median {
-            stroke: black;
-            stroke-width: 1.0;
-        }
-    }
-
-    .histogram {
-        rect.bar {
-            fill: $chart-fill-color;
-        }
-    }
+  }
 }
