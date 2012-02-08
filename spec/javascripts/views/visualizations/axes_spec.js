@@ -119,7 +119,7 @@ describe("chorus.views.visualizations.Axes", function() {
 
             describe("when the tick labels are short", function() {
                 itHasAReasonableLayout();
-                itPositionsTicksCorrectlyForOrdinalData();
+                itDisplaysOrdinalLabelsCorrectly();
 
                 it("centers each label on its corresponding tick mark", function() {
                     expect(leftX(this.ticks[0])).toBeWithinDeltaOf(centerX(this.labels[0]), 2);
@@ -173,7 +173,7 @@ describe("chorus.views.visualizations.Axes", function() {
                 });
 
                 itHasAReasonableLayout();
-                itPositionsTicksCorrectlyForOrdinalData();
+                itDisplaysOrdinalLabelsCorrectly();
 
                 it("rotates the labels", function() {
                     waits(100);
@@ -198,14 +198,18 @@ describe("chorus.views.visualizations.Axes", function() {
 
         describe("with a numeric scale", function() {
             beforeEach(function() {
-                this.labelValues = ['one', 'two', 'three', 'four', 'five'];
                 this.paddingX = 35;
                 this.paddingY = 35;
+                this.labelValues = [1, 2, 3, 5, 8, 13, 21]
+                this.minX = 1;
+                this.maxX = 21;
 
                 this.axis = new chorus.views.visualizations.XAxis({
                     el: this.el,
-                    labels: this.labelValues,
                     axisLabel: "numbers",
+                    scaleType: "numeric",
+                    minValue: this.minX,
+                    maxValue: this.maxX,
                     ticks: true,
                     paddingX: this.paddingX,
                     paddingY: this.paddingY
@@ -218,11 +222,34 @@ describe("chorus.views.visualizations.Axes", function() {
                 this.labels    = this.$el.find(".label");
             });
 
-            // itHasAReasonableLayout();
+            beforeEach(function() {
+                this.addMatchers({
+                    toBeUniformlyHorizontallySpaced: function() {
+                        var elements = this.actual;
+                        var standardDistance = centerX(elements[1]) - centerX(elements[0]);
+
+                        return _.all(elements, function(el, i) {
+                            if (i === 0) return true;
+                            var previousElement = elements[i-1];
+                            var distance = centerX(el) - centerX(previousElement)
+                            return Math.abs(distance - standardDistance) < 1;
+                        });
+                    }
+                });
+            });
+
+            itHasAReasonableLayout();
+
+            it("generates uniformly spaced ticks in the range of the label values", function() {
+                expect(this.ticks.length).toBeGreaterThan(5);
+                expect(this.ticks.length).toBeLessThan(25);
+
+                expect(this.ticks).toBeUniformlyHorizontallySpaced();
+            });
         });
 
 
-        function itPositionsTicksCorrectlyForOrdinalData() {
+        function itDisplaysOrdinalLabelsCorrectly() {
             it("divides the width of the chart evenly into bands, " +
                 "and places each tick at the center of a band", function() {
                 var bandWidth = (this.width - 2*this.paddingX) / this.labelValues.length;
@@ -230,6 +257,18 @@ describe("chorus.views.visualizations.Axes", function() {
                 _.each(this.ticks, function(tick, i) {
                     var bandCenter = (i + 0.5) * bandWidth + this.paddingX;
                     expect(leftX(tick)).toBeWithinDeltaOf(bandCenter, 10);
+                }, this);
+            });
+
+            it("includes a tick mark for each label", function() {
+                expect(this.ticks.length).toBe(this.labelValues.length);
+            });
+
+            it("renders each of the given labels", function() {
+                expect(this.labels.length).toBe(this.labelValues.length);
+
+                _.each(this.labels, function(label, i) {
+                    expect($(label).text()).toBe(this.labelValues[i].toString());
                 }, this);
             });
         }
@@ -251,8 +290,11 @@ describe("chorus.views.visualizations.Axes", function() {
             });
 
             describe("the axis tick marks", function() {
-                it("includes a vertical tick mark for each label", function() {
-                    expect(this.ticks.length).toBe(this.labelValues.length);
+                it("draws ticks", function() {
+                    expect(this.ticks.length).toBeGreaterThan(2);
+                });
+
+                it("draws them vertically", function() {
                     _.each(this.ticks, function(tick) {
                         expect(tick).toBeVertical();
                     });
@@ -274,13 +316,6 @@ describe("chorus.views.visualizations.Axes", function() {
             });
 
             describe("the tick labels", function() {
-                it("renders each of the given labels", function() {
-                    expect(this.labels.length).toBe(this.labelValues.length);
-
-                    _.each(this.labels, function(label, i) {
-                        expect($(label).text()).toBe(this.labelValues[i]);
-                    }, this);
-                });
 
                 it("places the labels below the ticks", function() {
                     _.each(this.labels, function(label, i) {
@@ -526,7 +561,7 @@ describe("chorus.views.visualizations.Axes", function() {
                 expect(this.labels.length).toBe(this.labelValues.length);
 
                 _.each(this.labels, function(label, i) {
-                    expect($(label).text()).toBe(this.labelValues[i]);
+                    expect($(label).text()).toBe(this.labelValues[i].toString());
                 }, this);
             });
 
@@ -630,6 +665,25 @@ describe("chorus.views.visualizations.Axes", function() {
                 expect(scales.x("three")).toEqual(this.axes.xAxis.scale()("three"));
                 expect(scales.y("february")).toEqual(this.axes.yAxis.scale()("february"));
             });
-        })
+        });
+
+        it("passes the axis options through to the axis objects", function() {
+            var axes = new chorus.views.visualizations.Axes({
+                el: this.el,
+                xScaleType: "numeric",
+                minXValue: 5,
+                maxXValue: 15,
+                yScaleType: "ordinal",
+                yLabels: ["bucket 1", "bucket 2", "bucket 3"],
+                paddingX: 30,
+                paddingY: 10
+            });
+
+            expect(axes.xAxis.scaleType).toBe("numeric");
+            expect(axes.yAxis.scaleType).toBe("ordinal");
+            expect(axes.xAxis.minValue).toBe(5);
+            expect(axes.xAxis.maxValue).toBe(15);
+            expect(axes.yAxis.labels).toEqual(["bucket 1", "bucket 2", "bucket 3"]);
+        });
     });
 });

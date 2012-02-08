@@ -1,23 +1,26 @@
 chorus.views.visualizations.XAxis = function(options) {
-    this.labels   = options.labels;
+    this._labels    = options.labels;
     this.axisLabel = options.axisLabel;
-    this.width    = options.el.attr("width");
-    this.height   = options.el.attr("height");
+    this.width     = options.el.attr("width");
+    this.height    = options.el.attr("height");
     this.container = options.el;
+    this.scaleType = options.scaleType;
+
+    this.minValue  = options.minValue;
+    this.maxValue  = options.maxValue;
 
     this.paddingX = options.paddingX || 20;
     this.paddingY = options.paddingY || 20;
     this.offsetX = options.offsetX   || 0;
     this.tickLength = options.tickLength || 5;
     this.labelSpacing = options.labelSpacing || 10;
-
 };
 
 _.extend(chorus.views.visualizations.XAxis.prototype, {
     requiredBottomSpace: function() {
         this.el = this.container.append("svg:g").attr("class", "xaxis");
         var testTickLabels = this.el.selectAll(".label")
-            .data(this.labels).enter()
+            .data(this.labels()).enter()
             .append("svg:g")
             .attr("class", "label")
             .append("svg:text")
@@ -47,13 +50,36 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
     },
 
     scale: function() {
-        return d3.scale.ordinal()
-            .domain(this.labels)
-            .rangeBands([this.paddingX + this.offsetX, this.width - this.paddingX]);
+        var range = [this.minX(), this.maxX()];
+        if (this.scaleType === "numeric") {
+            return d3.scale.linear()
+                .domain([this.minValue, this.maxValue])
+                .range(range);
+        } else {
+            return d3.scale.ordinal()
+                .domain(this.labels())
+                .rangeBands(range);
+        }
+    },
+
+    maxX: function() {
+        return this.width - this.paddingX;
+    },
+
+    minX: function() {
+        return this.paddingX + this.offsetX;
+    },
+
+    maxY: function() {
+        return this.height - this.paddingY;
+    },
+
+    minY: function() {
+        return this.paddingY;
     },
 
     rotateTickLabelsIfNeeded: function() {
-        var bandWidth = this.scale().rangeBand() / 2;
+        var bandWidth = (this.maxX() - this.minX()) / this.labels().length;
         var tickLabels = this.el.selectAll(".label text");
         var needToRotate = _.any(tickLabels[0], function(label) {
             return label.getBBox().width > bandWidth;
@@ -75,9 +101,26 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
         }
     },
 
+    tickScale: function() {
+        var scale = this.scale();
+        if (this.scaleType === "numeric") {
+            return scale;
+        } else {
+            return function(d) { return scale(d) + scale.rangeBand() / 2 };
+        }
+    },
+
+    labels: function() {
+        if (this.scaleType === "numeric") {
+            return this.scale().ticks(8);
+        } else {
+            return this._labels;
+        }
+    },
+
     render: function() {
         var scale = this.scale();
-        var centerScale = function(d) { return scale(d) + scale.rangeBand() / 2 };
+        var tickScale = this.tickScale();
 
         var self = this;
         this.el = this.container.append("svg:g").attr("class", "xaxis");
@@ -86,18 +129,18 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
         var axisLabel = this.el.append("svg:text")
             .text(this.axisLabel)
             .attr("x", 0)
-            .attr("y", this.height - this.paddingY)
+            .attr("y", this.maxY())
             .attr("class", "axis_label")
 
         // reposition axis label now that we know its width
         var axisLabelWidth = axisLabel[0][0].getBBox().width
-        var centerX = (scale.rangeExtent()[0] + scale.rangeExtent()[1]) / 2 - axisLabelWidth / 2;
+        var centerX = (this.minX() + this.maxX()) / 2 - axisLabelWidth / 2;
         this.el.select(".axis_label").attr("x", centerX)
 
         // draw tick labels
-        var tickLabelBottom = this.height - this.paddingY - this.labelSpacing - this.axisLabelHeight();
+        var tickLabelBottom = this.maxY() - this.labelSpacing - this.axisLabelHeight();
         var tickLabels = this.el.selectAll(".label")
-            .data(this.labels).enter()
+            .data(this.labels()).enter()
             .append("svg:g")
             .attr("class", "label")
             .append("svg:text")
@@ -110,7 +153,7 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
         // reposition labels now that we know their width
         tickLabels
             .attr("x", function(d) {
-                var left = centerScale(d);
+                var left = tickScale(d);
                 var width = this.getBBox().width;
                 return left - (width / 2);
             });
@@ -133,30 +176,32 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
 
         // draw ticks
         this.el.selectAll(".tick")
-            .data(this.labels).enter()
+            .data(this.labels()).enter()
             .append("svg:line")
             .attr("class", "tick")
             .attr("y1", tickTop)
             .attr("y2", tickBottom)
-            .attr("x1", centerScale)
-            .attr("x2", centerScale)
+            .attr("x1", tickScale)
+            .attr("x2", tickScale)
 
         // draw main axis line
         this.el.append("svg:line")
             .attr("class", "axis")
-            .attr("x1", this.paddingX + this.offsetX)
-            .attr("x2", this.width - this.paddingX)
+            .attr("x1", this.minX())
+            .attr("x2", this.maxX())
             .attr("y1", tickTop)
             .attr("y2", tickTop);
     }
 });
 
 chorus.views.visualizations.YAxis = function(options) {
-    this.container = options.el;
     this.labels   = options.labels;
     this.axisLabel = options.axisLabel;
     this.width    = options.el.attr("width");
     this.height   = options.el.attr("height");
+    this.container = options.el;
+    this.scaleType = options.scaleType;
+
     this.paddingX = options.paddingX || 20;
     this.paddingY = options.paddingY || 20;
     this.offsetY  = options.offsetY  || 0;
@@ -271,8 +316,23 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
 });
 
 chorus.views.visualizations.Axes = function(options) {
-    this.xAxis = new chorus.views.visualizations.XAxis({ el: options.el, labels: options.xLabels, axisLabel: options.xAxisLabel });
-    this.yAxis = new chorus.views.visualizations.YAxis({ el: options.el, labels: options.yLabels, axisLabel: options.yAxisLabel });
+    this.xAxis = new chorus.views.visualizations.XAxis({
+        el: options.el,
+        minValue: options.minXValue,
+        maxValue: options.maxXValue,
+        scaleType: options.xScaleType,
+        labels: options.xLabels,
+        axisLabel: options.xAxisLabel
+    });
+
+    this.yAxis = new chorus.views.visualizations.YAxis({
+        el: options.el,
+        minValue: options.minYValue,
+        maxValue: options.maxYValue,
+        scaleType: options.yScaleType,
+        labels: options.yLabels,
+        axisLabel: options.yAxisLabel
+    });
 }
 
 _.extend(chorus.views.visualizations.Axes.prototype, {
