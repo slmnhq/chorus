@@ -8,6 +8,7 @@ describe("chorus.views.DatasetList", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.view.render();
+            this.instance = this.collection.models[0].get('instance')
         });
 
         it("renders an item for each dataset", function() {
@@ -24,6 +25,24 @@ describe("chorus.views.DatasetList", function() {
             for (var i = 0; i < this.collection.length; i++) {
                 expect(this.view.$("a.name").eq(i).text().trim()).toBe(this.collection.models[i].get("objectName"));
             }
+        })
+
+        it("links the small instance breadcrumb to the BrowseDatasetDialog, set to instance", function() {
+            expect(this.view.$(".location a:eq(0)")).toHaveClass("dialog")
+            expect(this.view.$(".location a:eq(0)").attr("data-dialog")).toBe("BrowseDatasets")
+            expect(this.view.$(".location a:eq(0)").data("instance")).toEqual(this.instance);
+        })
+
+        it("links the small database breadcrumb to the BrowseDatasetDialog, set to database", function() {
+            expect(this.view.$(".location a:eq(1)")).toHaveClass("dialog")
+            expect(this.view.$(".location a:eq(1)").attr("data-dialog")).toBe("BrowseDatasets")
+            expect(this.view.$(".location a:eq(1)").data("instance")).toEqual(this.instance);
+            expect(this.view.$(".location a:eq(1)").data("databaseName")).toEqual(
+                this.collection.models[0].get('databaseName'));
+        })
+
+        it("links the small schema breadcrumb to the show URL of the schema", function() {
+            expect(this.view.$(".location a:eq(2)").attr('href')).toBe(this.collection.models[0].schema().showUrl())
         })
 
         it("displays an icon for each dataset", function() {
