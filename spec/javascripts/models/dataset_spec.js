@@ -43,18 +43,17 @@ describe("chorus.models.Dataset", function() {
                 this.collection.add(this.dataset);
             });
 
-            it("re-fetches its collection, because the last comment might have changed", function() {
+            it("re-fetches itself, because the last comment might have changed", function() {
                 this.dataset.trigger("invalidated");
-                expect(this.collection).toHaveBeenFetched();
+                expect(this.dataset).toHaveBeenFetched();
             });
         });
 
         describe("when the dataset has no collection", function() {
             it("does not fetch anything", function() {
                 var dataset = this.dataset;
-                expect(function() {
-                    dataset.trigger("invalidated");
-                }).not.toThrow();
+                dataset.trigger("invalidated");
+                expect(dataset).not.toHaveBeenFetched();
             });
         });
     });

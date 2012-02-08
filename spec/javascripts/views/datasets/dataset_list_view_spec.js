@@ -117,19 +117,4 @@ describe("chorus.views.DatasetList", function() {
             });
         });
     });
-
-    describe("event handling", function() {
-        describe("when the page model is invalidated", function() {
-            beforeEach(function() {
-                this.view.render();
-                spyOn(this.view.collection, "fetch")
-                this.view.$("li:eq(1)").click();
-                this.collection.at(1).trigger("invalidated")
-            })
-
-            it("re-fetches the collection", function() {
-                expect(this.view.collection.fetch).toHaveBeenCalled();
-            })
-        })
-    })
 });

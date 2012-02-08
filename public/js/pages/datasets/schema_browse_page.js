@@ -1,11 +1,13 @@
 (function() {
     var breadcrumbsView = chorus.views.ModelBoundBreadcrumbsView.extend({
         getLoadedCrumbs: function() {
+            var instance = { id: this.model.get('instanceId'), name: this.model.get('instanceName')}
             return [
                 {label: t("breadcrumbs.home"), url: "#/"},
                 {label: t("breadcrumbs.instances"), url: '#/instances'},
-                {label: this.model.get("instanceName"), url: "#"},
-                {label: this.model.get("databaseName"), url: "#"},
+                {label: this.model.get("instanceName"), dialog: "BrowseDatasets", data: { instance: instance} },
+                {label: this.model.get("databaseName"), dialog: "BrowseDatasets",
+                    data: { instance: instance, databaseName: this.model.get("databaseName")} },
                 {label: this.model.get("name")}
             ];
         }
