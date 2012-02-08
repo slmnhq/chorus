@@ -215,6 +215,13 @@ $medium-font: 14px;
     color: $color-text3;
 }
 
+@mixin secondary-text-semibold {
+    @include debugging-mixin;
+    font-size: 14px;
+    font-weight: $semibold;
+    color: $color-text3;
+}
+
 @mixin secondary-text-small {
     @include debugging-mixin;
     font-size: 12px;

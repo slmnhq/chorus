@@ -10,4 +10,116 @@
         }
     }
 
+    $fieldset-margin: 15px;
+    fieldset {
+        border: 1px solid $border-color;
+        padding: $fieldset-margin $dialog-padding $dialog-padding;
+        margin-right: $fieldset-margin;
+        position: relative;
+
+        legend {
+            @include heading-sidebar;
+        }
+
+        label {
+            @include font-content-details;
+            display: inline-block;
+        }
+
+        .labels {
+            margin-bottom: 4px;
+            vertical-align: middle;
+            line-height: 12px;
+            position: relative;
+            margin-right: 1px;
+        }
+
+        .field {
+            padding-top: 15px;
+            &:first-child {
+                padding-top: 0;
+            }
+        }
+
+        button {
+            $avail-width: $sidebar-width - $fieldset-margin - (2 * $fieldset-margin) - 2px;
+            position: absolute;
+            left: $avail-width/4;
+            right: $avail-width/4;
+
+            div[aria-role=progressbar]{
+                position: absolute;
+                right: -100px;
+                top: -13px;
+            }
+        }
+    }
+
+    .dataset_create_chorus_view_sidebar {
+        fieldset {
+            padding : 0;
+        }
+    }
+}
+
+.dataset_create_chorus_view_sidebar {
+
+    .selected_columns {
+        color: $color-text2;
+        font-size: 12px;
+
+        .empty_selection {
+            padding: $dialog-padding;
+            background-color: $activity-stream-comment-background-color;
+            margin: auto;
+
+            .double_lines {
+                border-top: 1px solid $border-color;
+                border-bottom: 1px solid $border-color;
+                height: 3px;
+                width: 25px;
+                display: inline-block;
+                vertical-align: middle;
+                margin: 0 0 0 5px;
+
+                &:first-child {
+                    margin: 0 5px 0 0;
+                }
+            }
+
+            .bottom {
+                display: inline-block;
+                margin: 8px 0;
+            }
+        }
+        .non_empty_selection {
+            margin: 8px;
+
+            .title {
+                font-size: 16px;
+                font-weight: $semibold;
+                display:inline-block;
+                margin-bottom: 8px;
+            }
+
+            .dataset {
+                @include secondary-text-semibold;
+                @include ellipsis;
+
+                .name {
+                    @include font-menu;
+                    display: inline-block;
+                }
+            }
+        }
+    }
+
+    button {
+        bottom: -15px;
+
+        &.disabled {
+           color: #D6DBE0;
+           border-color: #D6DBE0;
+        }
+    }
 }

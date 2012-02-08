@@ -1,48 +1,5 @@
 .dataset_visualization_sidebar {
-    $fieldset-margin: 15px;
     fieldset {
-        border: 1px solid $border-color;
-        padding: $fieldset-margin $dialog-padding $dialog-padding;
-        margin-right: $fieldset-margin;
-        position: relative;
-
-        legend {
-            @include heading-sidebar;
-        }
-
-        label {
-            @include font-content-details;
-            display: inline-block;
-        }
-
-        .labels {
-            margin-bottom: 4px;
-            vertical-align: middle;
-            line-height: 12px;
-            position: relative;
-            margin-right: 1px;
-        }
-
-        .field {
-            padding-top: 15px;
-            &:first-child {
-                padding-top: 0;
-            }
-        }
-
-        button {
-            $avail-width: $sidebar-width - $fieldset-margin - (2 * $fieldset-margin) - 2px;
-            position: absolute;
-            left: $avail-width/4;
-            right: $avail-width/4;
-
-            div[aria-role=progressbar]{
-                position: absolute;
-                right: -100px;
-                top: -13px;
-            }
-        }
-
         form label {
             margin-top: 8px;
         }
