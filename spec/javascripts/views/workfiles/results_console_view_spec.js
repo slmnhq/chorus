@@ -355,6 +355,16 @@ describe("chorus.views.ResultsConsoleView", function() {
                     })
                 });
 
+                describe("getDesiredDataTableHeight", function() {
+                    it("incorporates the footerSize passed to the view as a function", function() {
+                        var originalSize = this.view.getDesiredDataTableHeight();
+                        this.view.options.footerSize = function() {
+                            return 10;
+                        }
+                        expect(this.view.getDesiredDataTableHeight()).toBe(originalSize - 10);
+                    });
+                });
+
                 itCanExpandAndCollapseTheResults("minimized", "maximized");
             }
 
