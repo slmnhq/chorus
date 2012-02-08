@@ -7,7 +7,7 @@
             this.author = model.author();
             this.workspace = model.workspace();
             this.workfile = model.workfile();
-            this.noteObject = model.instance() || this.workfile || this.model.dataset() || this.workspace;
+            this.noteObject = model.noteworthy();
             this.activityType = model.get("type")
 
             this.presenter = this.defaultPresenter(this.model)

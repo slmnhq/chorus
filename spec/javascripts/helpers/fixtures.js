@@ -793,9 +793,11 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    table: {
+                    databaseObject: {
                         id: instanceId + '|dca_demo|public|__a_table_name',
-                        name: '__a_table_name'
+                        name: '__a_table_name',
+                        objectType: "BASE_TABLE",
+                        type: "databaseObject"
                     },
                     artifacts: [
                         {
@@ -833,45 +835,11 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    view: {
-                        id: instanceId + '|dca_demo|public|__a_table_name',
-                        name: '__a_table_name'
-                    },
-                    artifacts: [
-                        {
-                            entityId: "10101",
-                            entityType: "file",
-                            id: "10101",
-                            name: "something.sql",
-                            type: "SQL"
-                        },
-                        {
-                            entityId: "10102",
-                            entityType: "file",
-                            id: "10102",
-                            name: "something.txt",
-                            type: "TXT"
-                        }
-                    ]
-                }, overrides);
-                return new chorus.models.Activity(attrs);
-                var attrs = _.extend({
-                    author: fixtures.authorJson(),
-                    type: "NOTE",
-                    text: "How about that view.",
-                    timestamp: "2011-12-01 00:00:00",
-                    id: fixtures.nextId().toString(),
-                    workfileId: fixtures.nextId().toString(),
-                    comments: [
-                        {
-                            text: "sub-comment 1",
-                            author: fixtures.authorJson(),
-                            timestamp: "2011-12-15 12:34:56"
-                        }
-                    ],
-                    view: {
-                        id: viewId + '|dca_demo|public|__a_table_name',
-                        name: '__a_table_name'
+                    databaseObject: {
+                        id: instanceId + '|dca_demo|public|__a_view_name',
+                        name: '__a_view_name',
+                        objectType: "BASE_VIEW",
+                        type: "databaseObject"
                     },
                     artifacts: [
                         {
@@ -1701,7 +1669,6 @@ beforeEach(function() {
                 workspace: {id:fixtures.nextId(), name:"some_workspace"},
                 recentComment : fixtures.activities.NOTE_ON_DATASET()
             }, overrides);
-
         },
 
         datasetChorusView : function(overrides) {

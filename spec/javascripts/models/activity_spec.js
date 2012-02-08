@@ -1,12 +1,38 @@
 describe("chorus.models.Activity", function() {
     beforeEach(function() {
-        fixtures.model = 'Activity';
-        this.model = fixtures.modelFor("fetch")
+        this.model = fixtures.activity();
     });
+
+    describe("#noteworthy", function() {
+        it("shold return the instance when note is on an instance", function() {
+            this.model = fixtures.activities.NOTE_ON_INSTANCE();
+            expect(this.model.noteworthy()).toBeA(chorus.models.Instance);
+        })
+
+        it("should return the workfile when note is on a workfile", function() {
+            this.model = fixtures.activities.NOTE_ON_WORKFILE();
+            expect(this.model.noteworthy()).toBeA(chorus.models.Workfile);
+        })
+
+        it("should return the workspace when note is on a workspace", function() {
+            this.model = fixtures.activities.NOTE_ON_WORKSPACE();
+            expect(this.model.noteworthy()).toBeA(chorus.models.Workspace);
+        })
+
+        it("should return the dataset when note is on a table", function() {
+            this.model = fixtures.activities.NOTE_ON_DATASET_TABLE();
+            expect(this.model.noteworthy()).toBeA(chorus.models.Dataset);
+        })
+
+        it("should return the dataset when note is on a view", function() {
+            this.model = fixtures.activities.NOTE_ON_DATASET_VIEW();
+            expect(this.model.noteworthy()).toBeA(chorus.models.Dataset);
+        })
+    })
 
     describe("#author", function() {
         it("creates a user", function() {
-            expect(this.model.author().displayName()).toBe("EDC Admin");
+            expect(this.model.author()).toBeA(chorus.models.User);
         });
 
         it("returns the same instance when called multiple times", function() {
@@ -44,7 +70,7 @@ describe("chorus.models.Activity", function() {
         context("when the activity represents a note on a table", function() {
             beforeEach(function() {
                 this.model = fixtures.activities.NOTE_ON_DATASET_TABLE({
-                    table: {
+                    databaseObject: {
                         id: "10014|silverware|forks|shiny",
                         name: "shiny",
                         type: "SOURCE_TABLE",
@@ -74,7 +100,7 @@ describe("chorus.models.Activity", function() {
         context("when the activity represents a note on a view", function() {
             beforeEach(function() {
                 this.model = fixtures.activities.NOTE_ON_DATASET_VIEW({
-                    view: {
+                    databaseObject: {
                         id: "10014|silverware|forks|shiny",
                         name: "shiny"
                     },
