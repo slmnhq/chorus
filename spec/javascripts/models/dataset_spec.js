@@ -145,7 +145,8 @@ describe("chorus.models.Dataset", function() {
             this.dataset.set({sandboxId: "21"});
 
             this.task = this.dataset.makeFrequencyTask({
-                yAxis: "blindness_rate"
+                yAxis: "blindness_rate",
+                bins: "12"
             });
         })
 
@@ -161,6 +162,7 @@ describe("chorus.models.Dataset", function() {
             expect(this.task.get("workspaceId")).toBe("44");
             expect(this.task.get("datasetId")).toBe(this.dataset.entityId);
             expect(this.task.get("objectName")).toBe("japanese_teas");
+            expect(this.task.get("bins")).toBe("12")
         });
     })
 
