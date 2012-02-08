@@ -1804,7 +1804,7 @@ beforeEach(function() {
                     { bucket: 2, count: '1024' }
                 ]
             }, overrides);
-            return this.task(attributes);
+            return new chorus.models.FrequencyTask(attributes);
         },
 
         boxplotTaskWithResult: function(overrides) {
@@ -1826,7 +1826,7 @@ beforeEach(function() {
                     { min: 0, median: 2, max: 4, count: 720911, percentage: '72.1%', bucket: 'MALE', firstQuartile: 1, thirdQuartile:  3 }
                 ]
             }, overrides);
-            return this.task(attributes);
+            return new chorus.models.BoxplotTask(attributes);
         },
 
         heatmapTaskWithResult: function(overrides) {
@@ -1860,7 +1860,7 @@ beforeEach(function() {
                     { yLabel: "[113.6-155.4]", xLabel: "[5.4-7.2]", value: 39841, y: 3, x: 4 }
                 ]
             }, overrides);
-            return this.task(attributes);
+            return new chorus.models.HeatmapTask(attributes);
         },
 
         taskWithErrors: function(overrides) {

@@ -2,7 +2,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     className:"visualization",
 
     subviews:{
-        ".tabledata":"chartData"
+        ".tabledata": "tableData"
     },
 
     events:{
@@ -16,16 +16,21 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.type = this.options.chartOptions.type;
         this.title = t("visualization.title", {name:this.options.chartOptions.name});
 
-        this.chartData = new chorus.views.ResultsConsole({shuttle:false});
+        this.tableData = new chorus.views.ResultsConsole({shuttle:false});
     },
 
     postRender: function () {
+        this.drawTable();
         this.$('.chart_icon.' + this.type).addClass("selected");
     },
 
     onExecutionComplete: function () {
         this.launchModal();
         this.drawChart();
+    },
+
+    drawTable: function() {
+        this.tableData.trigger('file:executionCompleted', this.task);
     },
 
     drawChart: function () {

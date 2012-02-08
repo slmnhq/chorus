@@ -110,7 +110,7 @@ chorus.Mixins.SQLResults = {
     },
     
     errorMessage:function () {
-        var errors = this.getErrors();
+        var errors = this.getErrors() || {executeResult: 'success'};
         return (errors.executeResult !== 'success') && errors.message;
     }
 }
