@@ -386,6 +386,74 @@ describe("chorus.presenters.Activity", function() {
         itShouldHaveTheAuthorsIconAndUrl();
     });
 
+    context(".DATASET_CREATED", function() {
+        context("for a table", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.DATASET_CREATED();
+                this.dataset = this.model.dataset();
+                this.workspace = this.model.workspace();
+                this.presenter = new chorus.presenters.Activity(this.model)
+            });
+
+            it("should have the right workspaceName", function() {
+                expect(this.presenter.workspaceName).toBe(this.workspace.get("name"));
+            });
+
+            it("should have the right workspaceUrl", function() {
+                var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
+                expect(this.presenter.workspaceUrl).toBe(url);
+            });
+
+            it("should say 'table' in the header", function() {
+                expect(this.presenter.headerHtml).toContainTranslation("dataset.types.table");
+            });
+
+            it("should have the right objectName", function() {
+                expect(this.presenter.objectName).toBe(this.dataset.get("objectName"));
+            });
+
+            it("should have the right objectUrl", function() {
+                expect(this.presenter.objectUrl).toBe(this.dataset.showUrl());
+            });
+
+            itShouldHaveTheAuthorsIconAndUrl();
+        });
+
+        context("for a view", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.DATASET_CREATED();
+                this.model.get('databaseObject').type = "SOURCE_TABLE";
+                this.model.get('databaseObject').objectType = "VIEW";
+                this.dataset = this.model.dataset();
+                this.workspace = this.model.workspace();
+                this.presenter = new chorus.presenters.Activity(this.model)
+            });
+
+            it("should have the right workspaceName", function() {
+                expect(this.presenter.workspaceName).toBe(this.workspace.get("name"));
+            });
+
+            it("should have the right workspaceUrl", function() {
+                var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
+                expect(this.presenter.workspaceUrl).toBe(url);
+            });
+
+            it("should say 'view' in the header", function() {
+                expect(this.presenter.headerHtml).toContainTranslation("dataset.types.view");
+            });
+
+            it("should have the right objectName", function() {
+                expect(this.presenter.objectName).toBe(this.dataset.get("objectName"));
+            });
+
+            it("should have the right objectUrl", function() {
+                expect(this.presenter.objectUrl).toBe(this.dataset.showUrl());
+            });
+
+            itShouldHaveTheAuthorsIconAndUrl();
+        });
+    });
+
     context("headerHtml", function() {
         describe("#headerTranslationKey", function() {
             beforeEach(function() {

@@ -26,7 +26,7 @@ chorus.models.Activity = chorus.models.Base.extend({
     },
 
     dataset: function() {
-        var datasetField = this.get("table") || this.get("view");
+        var datasetField = this.get("table") || this.get("view") || this.get("databaseObject");
         if (datasetField) {
             // TODO Remove the || '' once this api story is done: https://www.pivotaltracker.com/story/show/24247257
             return new chorus.models.Dataset({
