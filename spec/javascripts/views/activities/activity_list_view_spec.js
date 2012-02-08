@@ -94,6 +94,36 @@ describe("chorus.views.ActivityList", function() {
                     expect(this.view.$(".comments li:eq(1)")).not.toHaveClass("more");
                     expect(this.view.$(".comments li:eq(2)")).toHaveClass("more");
                 })
+
+                describe("when the more link is clicked", function() {
+                    beforeEach(function() {
+                        spyOnEvent(this.view, "content:changed");
+                        this.view.$("li[data-activity-id=10000] .comments a.more").click();
+                    });
+
+                    it("adds the 'more' class to the comments section", function() {
+                        expect(this.view.$("li[data-activity-id=10000] .comments")).toHaveClass("more");
+                    })
+
+                    it("triggers a content:changed event", function() {
+                        expect("content:changed").toHaveBeenTriggeredOn(this.view);
+                    })
+
+                    describe("when the less link is clicked", function() {
+                        beforeEach(function() {
+                            resetBackboneEventSpies(this.view);
+                            this.view.$("li[data-activity-id=10000] .comments a.less").click();
+                        });
+
+                        it("removes the 'more' class to the comments section", function() {
+                            expect(this.view.$("li[data-activity-id=10000] .comments")).not.toHaveClass("more");
+                        })
+
+                        it("triggers a content:changed event", function() {
+                            expect("content:changed").toHaveBeenTriggeredOn(this.view);
+                        })
+                    })
+                })
             })
         })
 
