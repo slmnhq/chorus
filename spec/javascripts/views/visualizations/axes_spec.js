@@ -200,7 +200,6 @@ describe("chorus.views.visualizations.Axes", function() {
             beforeEach(function() {
                 this.paddingX = 35;
                 this.paddingY = 35;
-                this.labelValues = [1, 2, 3, 5, 8, 13, 21]
                 this.minX = 1;
                 this.maxX = 21;
 
@@ -372,133 +371,97 @@ describe("chorus.views.visualizations.Axes", function() {
     });
 
     describe("YAxis", function() {
-        beforeEach(function() {
-            this.labelValues = ['one', 'two', 'three', 'four', 'five'];
-            this.paddingX = 35;
-            this.paddingY = 35;
-
-            this.axis = new chorus.views.visualizations.YAxis({
-                el: this.el,
-                labels: this.labelValues,
-                axisLabel: "magic_numbers",
-                ticks: true,
-                paddingX: this.paddingX,
-                paddingY: this.paddingY
-            });
-            this.axis.render();
-
-            this.axisLine  = this.$el.find("line.axis");
-            this.ticks     = this.$el.find("line.tick");
-            this.axisLabel = this.$el.find(".axis_label");
-            this.labels    = this.$el.find(".label");
-        });
-
-        describe("#requiredLeftSpace (used for drawing the x axis)", function() {
+        describe("with an ordinal scale", function() {
             beforeEach(function() {
-                this.actualWidth = leftX(this.axisLine) - this.paddingX;
+                this.labelValues = ['one', 'two', 'three', 'four', 'five'];
+                this.paddingX = 35;
+                this.paddingY = 35;
 
-                this.newAxis = new chorus.views.visualizations.YAxis({
+                this.axis = new chorus.views.visualizations.YAxis({
                     el: this.el,
-                    labels: _.shuffle(this.labelValues),
+                    labels: this.labelValues,
                     axisLabel: "magic_numbers",
                     ticks: true,
                     paddingX: this.paddingX,
                     paddingY: this.paddingY
                 });
+                this.axis.render();
+
+                this.axisLine  = this.$el.find("line.axis");
+                this.ticks     = this.$el.find("line.tick");
+                this.axisLabel = this.$el.find(".axis_label");
+                this.labels    = this.$el.find(".label");
             });
 
-            it("returns the horizontal space required for the labels and ticks", function() {
-                expect(this.newAxis.requiredLeftSpace()).toEqual(this.actualWidth);
+            describe("#requiredLeftSpace (used for drawing the x axis)", function() {
+                beforeEach(function() {
+                    this.actualWidth = leftX(this.axisLine) - this.paddingX;
+
+                    this.newAxis = new chorus.views.visualizations.YAxis({
+                        el: this.el,
+                        labels: _.shuffle(this.labelValues),
+                        axisLabel: "magic_numbers",
+                        ticks: true,
+                        paddingX: this.paddingX,
+                        paddingY: this.paddingY
+                    });
+                });
+
+                it("returns the horizontal space required for the labels and ticks", function() {
+                    expect(this.newAxis.requiredLeftSpace()).toEqual(this.actualWidth);
+                });
+
+                it("does not alter the contents of the container", function() {
+                    this.newAxis.requiredLeftSpace();
+                    expect(this.$el.find(".label")).toEqual(this.labels);
+                });
             });
 
-            it("does not alter the contents of the container", function() {
-                this.newAxis.requiredLeftSpace();
-                expect(this.$el.find(".label")).toEqual(this.labels);
-            });
-        });
+            describe("#scale", function() {
+                it("returns a scale function with the correct domain and range", function() {
+                    var scale = this.axis.scale();
+                    var s = (this.height - 2 * this.paddingY) / 5
+                    var innerHeight = this.height - this.paddingY
 
-        describe("#scale", function() {
-            it("returns a scale function with the correct domain and range", function() {
-                var scale = this.axis.scale();
-                var s = (this.height - 2 * this.paddingY) / 5
-                var innerHeight = this.height - this.paddingY
-
-                expect(scale("one")).toBe(innerHeight - 0 * s);
-                expect(scale("two")).toBe(innerHeight - 1 * s);
-                expect(scale("three")).toBe(innerHeight - 2 * s);
-                expect(scale("four")).toBe(innerHeight - 3 * s);
-                expect(scale("five")).toBe(innerHeight - 4 * s);
-            });
-        });
-
-        describe("the axis label", function() {
-            it("should have the correct text", function() {
-                expect(this.axisLabel).toHaveText("magic_numbers")
+                    expect(scale("one")).toBe(innerHeight - 0 * s);
+                    expect(scale("two")).toBe(innerHeight - 1 * s);
+                    expect(scale("three")).toBe(innerHeight - 2 * s);
+                    expect(scale("four")).toBe(innerHeight - 3 * s);
+                    expect(scale("five")).toBe(innerHeight - 4 * s);
+                });
             });
 
-            it("should be centered along the axis", function() {
-                expect(centerY(this.axisLabel)).toBeWithinDeltaOf(centerY(this.axisLine), 2);
-            })
+            it("does not interfere with other elements in the svg container", function() {
+                this.$el.empty();
 
-            it("is to the left of the tick labels", function() {
-                expect(rightX(this.axisLabel)).toBeLessThan(leftX(this.labels[0]));
+                this.otherTick = $("<line class='tick'></line")
+                    .attr("x1", 101)
+                    .attr("x2", 102)
+                    .attr("y1", 103)
+                    .attr("y2", 104);
+                this.otherLabel = $("<text class='label'></text")
+                    .attr("x", 201)
+                    .attr("y", 203)
+                    .text("other labels need to stay");
+                this.otherAxisLine = $("<line class='axis'></line")
+                    .attr("x1", 301)
+                    .attr("x2", 302)
+                    .attr("y1", 303)
+                    .attr("y2", 304);
+
+                this.$el.append(this.otherTick);
+                this.$el.append(this.otherLabel);
+                this.$el.append(this.otherAxisLine);
+
+                this.axis.render();
+
+                expect(this.otherTick).toHaveAttr("x1", '101');
+                expect(this.otherLabel).toHaveAttr("x", '201');
+                expect(this.otherAxisLine).toHaveAttr("x1", '301');
             });
 
-            it("is oriented vertically", function() {
-                expect(height(this.axisLabel)).toBeGreaterThanOrEqualTo(width(this.axisLabel));
-            });
+            itHasAReasonableLayout();
 
-            it("is inside the padding", function() {
-                var leftPaddingMinusBoundingBoxError = this.paddingX - 5;
-                expect(leftX(this.axisLabel)).toBeGreaterThanOrEqualTo(leftPaddingMinusBoundingBoxError);
-            });
-        });
-
-        it("does not interfere with other elements in the svg container", function() {
-            this.$el.empty();
-
-            this.otherTick = $("<line class='tick'></line")
-                .attr("x1", 101)
-                .attr("x2", 102)
-                .attr("y1", 103)
-                .attr("y2", 104);
-            this.otherLabel = $("<text class='label'></text")
-                .attr("x", 201)
-                .attr("y", 203)
-                .text("other labels need to stay");
-            this.otherAxisLine = $("<line class='axis'></line")
-                .attr("x1", 301)
-                .attr("x2", 302)
-                .attr("y1", 303)
-                .attr("y2", 304);
-
-            this.$el.append(this.otherTick);
-            this.$el.append(this.otherLabel);
-            this.$el.append(this.otherAxisLine);
-
-            this.axis.render();
-
-            expect(this.otherTick).toHaveAttr("x1", '101');
-            expect(this.otherLabel).toHaveAttr("x", '201');
-            expect(this.otherAxisLine).toHaveAttr("x1", '301');
-        });
-
-        describe("the axis line", function() {
-            it("is rendered to the chart", function() {
-                expect(this.axisLine).toExist();
-            });
-
-            it("is vertical", function() {
-                expect(this.axisLine).toBeVertical();
-            });
-
-            it("goes across the left side of the chart", function() {
-                expect(topY(this.axisLine)).toEqual(this.paddingY);
-                expect(bottomY(this.axisLine)).toEqual(this.height - this.paddingY);
-            });
-        });
-
-        describe("the axis tick marks", function() {
             it("includes a horizontal tick mark for each label", function() {
                 expect(this.ticks.length).toBe(this.labelValues.length);
 
@@ -507,38 +470,12 @@ describe("chorus.views.visualizations.Axes", function() {
                 });
             });
 
-            it("draws the ticks extending left from the main axis line", function() {
-                expect(rightX(this.ticks[0])).toEqual(leftX(this.axisLine));
-                expect(rightX(this.ticks[1])).toEqual(leftX(this.axisLine));
-                expect(rightX(this.ticks[2])).toEqual(leftX(this.axisLine));
-                expect(rightX(this.ticks[3])).toEqual(leftX(this.axisLine));
-                expect(rightX(this.ticks[4])).toEqual(leftX(this.axisLine));
+            it("renders each of the given labels", function() {
+                expect(this.labels.length).toBe(this.labelValues.length);
 
-                expect(leftX(this.ticks[0])).toBeLessThan(leftX(this.axisLine));
-                expect(leftX(this.ticks[1])).toBeLessThan(leftX(this.axisLine));
-                expect(leftX(this.ticks[2])).toBeLessThan(leftX(this.axisLine));
-                expect(leftX(this.ticks[3])).toBeLessThan(leftX(this.axisLine));
-                expect(leftX(this.ticks[4])).toBeLessThan(leftX(this.axisLine));
-            });
-
-            it("draws the ticks in order from bottom to top", function() {
-                expect(topY(this.ticks[0])).toBeGreaterThan(topY(this.ticks[1]));
-                expect(topY(this.ticks[1])).toBeGreaterThan(topY(this.ticks[2]));
-                expect(topY(this.ticks[2])).toBeGreaterThan(topY(this.ticks[3]));
-                expect(topY(this.ticks[3])).toBeGreaterThan(topY(this.ticks[4]));
-            });
-
-            it("spaces the ticks evenly along the height of the chart area", function() {
-                var ys = this.ticks.map(function(i, tick) { return topY(tick) });
-
-                var distance = Math.abs(ys[1] - ys[0]);
-                var innerHeight = this.height - (2 * this.paddingY);
-
-                expect(Math.abs(ys[2] - ys[1])).toEqual(distance);
-                expect(Math.abs(ys[3] - ys[2])).toEqual(distance);
-                expect(Math.abs(ys[4] - ys[3])).toEqual(distance);
-
-                expect(distance).toBeBetween(innerHeight / 6, innerHeight / 5);
+                _.each(this.labels, function(label, i) {
+                    expect($(label).text()).toBe(this.labelValues[i].toString());
+                }, this);
             });
 
             it("divides the height of the chart evenly into bands, " +
@@ -554,59 +491,158 @@ describe("chorus.views.visualizations.Axes", function() {
                 expect(topY(this.ticks[3])).toBeWithinDeltaOf(bandCenters[3], 10);
                 expect(topY(this.ticks[4])).toBeWithinDeltaOf(bandCenters[4], 10);
             });
-        });
 
-        describe("the tick labels", function() {
-            it("renders each of the given labels", function() {
-                expect(this.labels.length).toBe(this.labelValues.length);
+            it("spaces the ticks evenly along the height of the chart area", function() {
+                var ys = this.ticks.map(function(i, tick) { return topY(tick) });
 
-                _.each(this.labels, function(label, i) {
-                    expect($(label).text()).toBe(this.labelValues[i].toString());
-                }, this);
-            });
+                var distance = Math.abs(ys[1] - ys[0]);
+                var innerHeight = this.height - (2 * this.paddingY);
 
-            it("places the labels to the left of the ticks", function() {
-                expect(rightX(this.labels[0])).toBeLessThan(leftX(this.ticks[0]));
-                expect(rightX(this.labels[1])).toBeLessThan(leftX(this.ticks[1]));
-                expect(rightX(this.labels[2])).toBeLessThan(leftX(this.ticks[2]));
-                expect(rightX(this.labels[3])).toBeLessThan(leftX(this.ticks[3]));
-                expect(rightX(this.labels[4])).toBeLessThan(leftX(this.ticks[4]));
-            });
+                expect(Math.abs(ys[2] - ys[1])).toBeCloseTo(distance);
+                expect(Math.abs(ys[3] - ys[2])).toBeCloseTo(distance);
+                expect(Math.abs(ys[4] - ys[3])).toBeCloseTo(distance);
 
-            it("draws the labels in order from bottom to top", function() {
-                expect(topY(this.labels[0])).toBeGreaterThan(topY(this.labels[1]));
-                expect(topY(this.labels[1])).toBeGreaterThan(topY(this.labels[2]));
-                expect(topY(this.labels[2])).toBeGreaterThan(topY(this.labels[3]));
-                expect(topY(this.labels[3])).toBeGreaterThan(topY(this.labels[4]));
-            });
-
-            it("centers each label on its corresponding tick mark", function() {
-                expect(centerY(this.labels[0])).toBeWithinDeltaOf(topY(this.ticks[0]), 2);
-                expect(centerY(this.labels[1])).toBeWithinDeltaOf(topY(this.ticks[1]), 2);
-                expect(centerY(this.labels[2])).toBeWithinDeltaOf(topY(this.ticks[2]), 2);
-                expect(centerY(this.labels[3])).toBeWithinDeltaOf(topY(this.ticks[3]), 2);
-                expect(centerY(this.labels[4])).toBeWithinDeltaOf(topY(this.ticks[4]), 2);
+                expect(distance).toBeBetween(innerHeight / 6, innerHeight / 5);
             });
         });
 
-        describe("the placement of the axis group", function() {
+        describe("with a numeric scale", function() {
             beforeEach(function() {
-                this.innerHeight = this.height - this.paddingY;
+                this.labelValues = ['one', 'two', 'three', 'four', 'five'];
+                this.paddingX = 35;
+                this.paddingY = 35;
+
+                this.minValue = 34;
+                this.maxValue = 111;
+
+                this.axis = new chorus.views.visualizations.YAxis({
+                    el: this.el,
+                    minValue: this.minValue,
+                    maxValue: this.maxValue,
+                    axisLabel: "magic_numbers",
+                    ticks: true,
+                    scaleType: "numeric",
+                    paddingX: this.paddingX,
+                    paddingY: this.paddingY
+                });
+                this.axis.render();
+
+                this.axisLine  = this.$el.find("line.axis");
+                this.ticks     = this.$el.find("line.tick");
+                this.axisLabel = this.$el.find(".axis_label");
+                this.labels    = this.$el.find(".label");
             });
 
-            it("draws the axis line inside the padding", function() {
-                expect(leftX(this.axisLine)).toBeGreaterThanOrEqualTo(this.paddingX);
-            });
-
-            it("draws the ticks inside the padding", function() {
-                expect(leftX(this.ticks[0])).toBeGreaterThanOrEqualTo(this.paddingX);
-            });
-
-            it("draws the labels inside the padding", function() {
-                var paddingMinusBoundingBoxError = this.paddingX - 5;
-                expect(leftX(this.labels[0])).toBeGreaterThanOrEqualTo(paddingMinusBoundingBoxError);
-            });
+            itHasAReasonableLayout();
         });
+
+        function itHasAReasonableLayout() {
+            describe("the axis label", function() {
+                it("should have the correct text", function() {
+                    expect(this.axisLabel).toHaveText("magic_numbers")
+                });
+
+                it("should be centered along the axis", function() {
+                    expect(centerY(this.axisLabel)).toBeWithinDeltaOf(centerY(this.axisLine), 2);
+                })
+
+                it("is to the left of the tick labels", function() {
+                    expect(rightX(this.axisLabel)).toBeLessThan(leftX(this.labels[0]));
+                });
+
+                it("is oriented vertically", function() {
+                    expect(height(this.axisLabel)).toBeGreaterThanOrEqualTo(width(this.axisLabel));
+                });
+
+                it("is inside the padding", function() {
+                    var leftPaddingMinusBoundingBoxError = this.paddingX - 5;
+                    expect(leftX(this.axisLabel)).toBeGreaterThanOrEqualTo(leftPaddingMinusBoundingBoxError);
+                });
+            });
+
+            describe("the axis line", function() {
+                it("is rendered to the chart", function() {
+                    expect(this.axisLine).toExist();
+                });
+
+                it("is vertical", function() {
+                    expect(this.axisLine).toBeVertical();
+                });
+
+                it("goes across the left side of the chart", function() {
+                    expect(topY(this.axisLine)).toEqual(this.paddingY);
+                    expect(bottomY(this.axisLine)).toEqual(this.height - this.paddingY);
+                });
+            });
+
+            describe("the axis tick marks", function() {
+                it("draws the ticks extending left from the main axis line", function() {
+                    expect(rightX(this.ticks[0])).toEqual(leftX(this.axisLine));
+                    expect(rightX(this.ticks[1])).toEqual(leftX(this.axisLine));
+                    expect(rightX(this.ticks[2])).toEqual(leftX(this.axisLine));
+                    expect(rightX(this.ticks[3])).toEqual(leftX(this.axisLine));
+                    expect(rightX(this.ticks[4])).toEqual(leftX(this.axisLine));
+
+                    expect(leftX(this.ticks[0])).toBeLessThan(leftX(this.axisLine));
+                    expect(leftX(this.ticks[1])).toBeLessThan(leftX(this.axisLine));
+                    expect(leftX(this.ticks[2])).toBeLessThan(leftX(this.axisLine));
+                    expect(leftX(this.ticks[3])).toBeLessThan(leftX(this.axisLine));
+                    expect(leftX(this.ticks[4])).toBeLessThan(leftX(this.axisLine));
+                });
+
+                it("draws the ticks in order from bottom to top", function() {
+                    expect(topY(this.ticks[0])).toBeGreaterThan(topY(this.ticks[1]));
+                    expect(topY(this.ticks[1])).toBeGreaterThan(topY(this.ticks[2]));
+                    expect(topY(this.ticks[2])).toBeGreaterThan(topY(this.ticks[3]));
+                    expect(topY(this.ticks[3])).toBeGreaterThan(topY(this.ticks[4]));
+                });
+
+            });
+
+            describe("the tick labels", function() {
+                it("places the labels to the left of the ticks", function() {
+                    expect(rightX(this.labels[0])).toBeLessThan(leftX(this.ticks[0]));
+                    expect(rightX(this.labels[1])).toBeLessThan(leftX(this.ticks[1]));
+                    expect(rightX(this.labels[2])).toBeLessThan(leftX(this.ticks[2]));
+                    expect(rightX(this.labels[3])).toBeLessThan(leftX(this.ticks[3]));
+                    expect(rightX(this.labels[4])).toBeLessThan(leftX(this.ticks[4]));
+                });
+
+                it("draws the labels in order from bottom to top", function() {
+                    expect(topY(this.labels[0])).toBeGreaterThan(topY(this.labels[1]));
+                    expect(topY(this.labels[1])).toBeGreaterThan(topY(this.labels[2]));
+                    expect(topY(this.labels[2])).toBeGreaterThan(topY(this.labels[3]));
+                    expect(topY(this.labels[3])).toBeGreaterThan(topY(this.labels[4]));
+                });
+
+                it("centers each label on its corresponding tick mark", function() {
+                    expect(centerY(this.labels[0])).toBeWithinDeltaOf(topY(this.ticks[0]), 2);
+                    expect(centerY(this.labels[1])).toBeWithinDeltaOf(topY(this.ticks[1]), 2);
+                    expect(centerY(this.labels[2])).toBeWithinDeltaOf(topY(this.ticks[2]), 2);
+                    expect(centerY(this.labels[3])).toBeWithinDeltaOf(topY(this.ticks[3]), 2);
+                    expect(centerY(this.labels[4])).toBeWithinDeltaOf(topY(this.ticks[4]), 2);
+                });
+            });
+
+            describe("the placement of the axis group", function() {
+                beforeEach(function() {
+                    this.innerHeight = this.height - this.paddingY;
+                });
+
+                it("draws the axis line inside the padding", function() {
+                    expect(leftX(this.axisLine)).toBeGreaterThanOrEqualTo(this.paddingX);
+                });
+
+                it("draws the ticks inside the padding", function() {
+                    expect(leftX(this.ticks[0])).toBeGreaterThanOrEqualTo(this.paddingX);
+                });
+
+                it("draws the labels inside the padding", function() {
+                    var paddingMinusBoundingBoxError = this.paddingX - 5;
+                    expect(leftX(this.labels[0])).toBeGreaterThanOrEqualTo(paddingMinusBoundingBoxError);
+                });
+            });
+        }
     });
 
     describe("Axes", function() {
@@ -683,7 +719,7 @@ describe("chorus.views.visualizations.Axes", function() {
             expect(axes.yAxis.scaleType).toBe("ordinal");
             expect(axes.xAxis.minValue).toBe(5);
             expect(axes.xAxis.maxValue).toBe(15);
-            expect(axes.yAxis.labels).toEqual(["bucket 1", "bucket 2", "bucket 3"]);
+            expect(axes.yAxis.labels()).toEqual(["bucket 1", "bucket 2", "bucket 3"]);
         });
     });
 });

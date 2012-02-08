@@ -195,12 +195,15 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
 });
 
 chorus.views.visualizations.YAxis = function(options) {
-    this.labels   = options.labels;
+    this._labels   = options.labels;
     this.axisLabel = options.axisLabel;
     this.width    = options.el.attr("width");
     this.height   = options.el.attr("height");
     this.container = options.el;
     this.scaleType = options.scaleType;
+
+    this.minValue = options.minValue;
+    this.maxValue = options.maxValue;
 
     this.paddingX = options.paddingX || 20;
     this.paddingY = options.paddingY || 20;
@@ -212,8 +215,8 @@ chorus.views.visualizations.YAxis = function(options) {
 _.extend(chorus.views.visualizations.YAxis.prototype, {
     requiredLeftSpace: function() {
         this.el = this.container.append("svg:g").attr("class", "yaxis");
-        var testLabels = this.el.selectAll(".label.test-origin-x")
-            .data(this.labels).enter()
+        var testLabels = this.el.selectAll(".label.test-origin-y")
+            .data(this.labels()).enter()
             .append("svg:text")
             .attr("class", "label")
             .text(function(d) {
@@ -240,17 +243,49 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
     },
 
     scale: function() {
-        return d3.scale.ordinal()
-            .domain(this.labels)
-            .rangeBands([this.height - this.paddingY - this.offsetY, this.paddingY]);
+        var range = [this.maxY(), this.minY()];
+        if (this.scaleType === "numeric") {
+            return d3.scale.linear()
+                .domain([this.minValue, this.maxValue])
+                .range(range)
+        } else {
+            return d3.scale.ordinal()
+                .domain(this.labels())
+                .rangeBands(range);
+        }
+    },
+
+    minY: function() {
+        return this.paddingY;
+    },
+
+    maxY: function() {
+        return this.height - this.paddingY - this.offsetY;
+    },
+
+    labels: function() {
+        if (this.scaleType === "numeric") {
+            return this.scale().ticks(8);
+        } else {
+            return this._labels;
+        }
+    },
+
+    tickScale: function() {
+        var scale = this.scale();
+        if (this.scaleType === "numeric") {
+            return scale;
+        } else {
+            return function(d) { return scale(d) + scale.rangeBand() / 2 };
+        }
     },
 
     render : function() {
         var self = this;
         this.el = this.container.append("svg:g").attr("class", "yaxis");
 
-        var scale = this.scale()
-        var centerScale = function(d) { return scale(d) + scale.rangeBand() / 2 };
+        var scale = this.scale();
+        var tickScale = this.tickScale();
 
         // draw axis label
         var axisLabelContainer = this.el.append("svg:g")
@@ -261,7 +296,7 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
             .text(this.axisLabel)
 
         // reposition axis label now that we know its height
-        var centerY = (scale.rangeExtent()[0] + scale.rangeExtent()[1]) / 2
+        var centerY = (this.minY() + this.maxY()) / 2
         var axisLabelBox    = axisLabel[0][0].getBBox();
         var axisLabelWidth  = axisLabelBox.width;
         var axisLabelHeight = axisLabelBox.height;
@@ -274,7 +309,7 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
 
         // draw labels
         this.el.selectAll(".label")
-            .data(this.labels).enter()
+            .data(this.labels()).enter()
             .append("svg:text")
             .attr("class", "label")
             .attr("y", 0)
@@ -287,7 +322,7 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
         this.el.selectAll(".label")
             .attr("x", tickLabelLeft)
             .attr("y", function(d) {
-                var scalePoint = centerScale(d);
+                var scalePoint = tickScale(d);
                 var height = this.getBBox().height;
                 return scalePoint + (height / 4);
             });
@@ -297,11 +332,11 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
 
         // draw ticks
         this.el.selectAll(".tick")
-            .data(this.labels).enter()
+            .data(this.labels()).enter()
             .append("svg:line")
             .attr("class", "tick")
-            .attr("y1", centerScale)
-            .attr("y2", centerScale)
+            .attr("y1", tickScale)
+            .attr("y2", tickScale)
             .attr("x1", tickLeft)
             .attr("x2", tickRight);
 
