@@ -9,7 +9,7 @@ describe("chorus.views.visualizations.Axes", function() {
         width = chorus.svgHelpers.width;
 
     beforeEach(function() {
-        var div = document.createElement("div");
+        var div = $("<div class='visualization heatmap'></div>")[0];
         this.width = 925;
         this.height = 340;
         this.el = d3.select(div)
@@ -17,7 +17,7 @@ describe("chorus.views.visualizations.Axes", function() {
             .attr("width", this.width)
             .attr("height", this.height);
         this.$el = $(this.el[0][0]);
-        $("#jasmine_content").append(this.$el);
+        $("#jasmine_content").append(div);
     });
 
     beforeEach(function() {
@@ -170,30 +170,18 @@ describe("chorus.views.visualizations.Axes", function() {
                 this.labels    = this.$el.find(".label");
             });
 
-            beforeEach(function() {
-                this.addMatchers({
-                    toOverlapHorizontally: function() {
-                        var leftXs  = this.actual.map(function(i, el)  { return leftX(el); });
-                        var rightXs = this.actual.map(function(i, el) { return rightX(el); });
-
-                        return _.any(leftXs, function(leftX, i) {
-                            if (i === 0) return false;
-                            var previousRightX = rightXs[i-1];
-                            return previousRightX > leftX;
-                        });
-                    }
-                });
-            });
-
             itHasAReasonableLayout();
 
             it("rotates the ticks", function() {
-                _.each(this.labels, function(label, i) {
-                    var unrotatedLabel = this.unrotatedLabels[i];
-                    if (!unrotatedLabel) return;
-                    expect(width(label)).toBeLessThan(width(unrotatedLabel));
-                    expect(height(label)).toBeGreaterThan(height(unrotatedLabel));
-                }, this);
+                waits(100);
+                runs(function() {
+                    _.each(this.labels, function(label, i) {
+                        var unrotatedLabel = this.unrotatedLabels[i];
+                        if (!unrotatedLabel) return;
+                        expect(width(label)).toBeLessThan(width(unrotatedLabel));
+                        expect(height(label)).toBeGreaterThan(height(unrotatedLabel));
+                    }, this);
+                });
             });
 
             it("aligns the tops of the labels", function() {

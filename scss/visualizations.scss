@@ -46,10 +46,13 @@
         stroke: black;
     }
 
-    .box_plot, .boxplot, .histogram, .heatmap, .frequency{
-        .plot rect {
-           fill: $chart-fill-color;
-        }
+    text {
+        font-size: 12px;
+        font-weight: $semibold;
+        fill: $color-text2;
+    }
+
+    .box_plot, .boxplot, .histogram, .heatmap, .frequency {
         .box rect {
             fill: $chart-fill-color;
         }
@@ -68,11 +71,6 @@
         .median {
             stroke: black;
             stroke-width: 1.0;
-        }
-        text {
-            font-size: 12px;
-            font-weight: $semibold;
-            fill: $color-text2;
         }
     }
 
