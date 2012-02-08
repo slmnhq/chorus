@@ -196,11 +196,7 @@ describe("chorus.views.visualizations.Axes", function() {
                 }, this);
             });
 
-            it("draws the tick labels so that they don't overlap horizontally", function() {
-                expect(this.labels).not.toOverlapHorizontally();
-            });
-
-            it("aligns the top of each label", function() {
+            it("aligns the tops of the labels", function() {
                 var firstTopY = topY(this.labels[0]);
                 _.each(this.labels, function(label){
                     expect(topY(label)).toBeWithinDeltaOf(firstTopY, 6);
@@ -227,32 +223,23 @@ describe("chorus.views.visualizations.Axes", function() {
             describe("the axis tick marks", function() {
                 it("includes a vertical tick mark for each label", function() {
                     expect(this.ticks.length).toBe(this.labelValues.length);
-                    expect(this.ticks.eq(0)).toBeVertical();
-                    expect(this.ticks.eq(1)).toBeVertical();
-                    expect(this.ticks.eq(2)).toBeVertical();
-                    expect(this.ticks.eq(3)).toBeVertical();
-                    expect(this.ticks.eq(4)).toBeVertical();
+                    _.each(this.ticks, function(tick) {
+                        expect(tick).toBeVertical();
+                    });
                 });
 
                 it("draws the ticks extending down from the main axis line", function() {
-                    expect(topY(this.ticks[0])).toEqual(topY(this.axisLine));
-                    expect(topY(this.ticks[1])).toEqual(topY(this.axisLine));
-                    expect(topY(this.ticks[2])).toEqual(topY(this.axisLine));
-                    expect(topY(this.ticks[3])).toEqual(topY(this.axisLine));
-                    expect(topY(this.ticks[4])).toEqual(topY(this.axisLine));
-
-                    expect(bottomY(this.ticks[0])).toBeGreaterThan(topY(this.axisLine));
-                    expect(bottomY(this.ticks[1])).toBeGreaterThan(topY(this.axisLine));
-                    expect(bottomY(this.ticks[2])).toBeGreaterThan(topY(this.axisLine));
-                    expect(bottomY(this.ticks[3])).toBeGreaterThan(topY(this.axisLine));
-                    expect(bottomY(this.ticks[4])).toBeGreaterThan(topY(this.axisLine));
+                    _.each(this.ticks, function(tick) {
+                        expect(topY(tick)).toEqual(topY(this.axisLine));
+                        expect(bottomY(tick)).toBeGreaterThan(topY(this.axisLine));
+                    }, this);
                 });
 
                 it("draws the ticks in order from left to right", function() {
-                    expect(leftX(this.ticks[0])).toBeLessThan(leftX(this.ticks[1]));
-                    expect(leftX(this.ticks[1])).toBeLessThan(leftX(this.ticks[2]));
-                    expect(leftX(this.ticks[2])).toBeLessThan(leftX(this.ticks[3]));
-                    expect(leftX(this.ticks[3])).toBeLessThan(leftX(this.ticks[4]));
+                    _.each(this.ticks, function(tick, i) {
+                        if (! this.ticks[i-1]) return;
+                        expect(leftX(tick)).toBeGreaterThan(leftX(this.ticks[i-1]));
+                    }, this);
                 });
 
                 it("divides the width of the chart evenly into bands, " +
@@ -270,26 +257,22 @@ describe("chorus.views.visualizations.Axes", function() {
                 it("renders each of the given labels", function() {
                     expect(this.labels.length).toBe(this.labelValues.length);
 
-                    expect(this.labels.eq(0).text()).toBe(this.labelValues[0]);
-                    expect(this.labels.eq(1).text()).toBe(this.labelValues[1]);
-                    expect(this.labels.eq(2).text()).toBe(this.labelValues[2]);
-                    expect(this.labels.eq(3).text()).toBe(this.labelValues[3]);
-                    expect(this.labels.eq(4).text()).toBe(this.labelValues[4]);
+                    _.each(this.labels, function(label, i) {
+                        expect($(label).text()).toBe(this.labelValues[i]);
+                    }, this);
                 });
 
                 it("places the labels below the ticks", function() {
-                    expect(topY(this.labels[0])).toBeGreaterThan(bottomY(this.ticks[0]));
-                    expect(topY(this.labels[1])).toBeGreaterThan(bottomY(this.ticks[1]));
-                    expect(topY(this.labels[2])).toBeGreaterThan(bottomY(this.ticks[2]));
-                    expect(topY(this.labels[3])).toBeGreaterThan(bottomY(this.ticks[3]));
-                    expect(topY(this.labels[4])).toBeGreaterThan(bottomY(this.ticks[4]));
+                    _.each(this.labels, function(label, i) {
+                        expect(topY(label)).toBeGreaterThan(bottomY(this.ticks[i]));
+                    }, this);
                 });
 
                 it("draws the labels in order from left to right", function() {
-                    expect(leftX(this.labels[0])).toBeLessThan(leftX(this.labels[1]));
-                    expect(leftX(this.labels[1])).toBeLessThan(leftX(this.labels[2]));
-                    expect(leftX(this.labels[2])).toBeLessThan(leftX(this.labels[3]));
-                    expect(leftX(this.labels[3])).toBeLessThan(leftX(this.labels[4]));
+                    _.each(this.labels, function(label, i) {
+                        if (! this.labels[i-1]) return;
+                        expect(leftX(label)).toBeGreaterThan(leftX(this.labels[i-1]));
+                    }, this);
                 });
             });
 
