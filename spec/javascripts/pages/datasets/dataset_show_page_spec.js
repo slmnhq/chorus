@@ -210,8 +210,11 @@ describe("chorus.pages.DatasetShowPage", function() {
 
             describe("when the cancel:sidebar event is triggered", function() {
                 beforeEach(function() {
+                    this.page.mainContent.contentDetails.trigger("transform:sidebar", "boxplot");
+                    expect(this.page.$('#sidebar .sidebar_content.secondary')).toHaveClass("dataset_visualization_boxplot_sidebar");
                     this.resizedSpy.reset();
-                    this.page.mainContent.contentDetails.trigger("cancel:sidebar");
+
+                    this.page.mainContent.contentDetails.trigger("cancel:sidebar", "boxplot");
                 });
 
                 it("triggers 'resized' on the page", function() {
@@ -222,6 +225,10 @@ describe("chorus.pages.DatasetShowPage", function() {
                     expect(this.page.$('#sidebar .sidebar_content.primary')).not.toHaveClass('hidden');
                     expect(this.page.$('#sidebar .sidebar_content.secondary')).toHaveClass('hidden');
                 });
+
+                it("removes all classes added when transform:sidebar is triggered", function() {
+                    expect(this.page.$('#sidebar .sidebar_content.secondary')).not.toHaveClass("dataset_visualization_boxplot_sidebar");
+                })
             });
         });
     })

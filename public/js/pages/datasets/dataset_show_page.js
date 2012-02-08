@@ -107,10 +107,16 @@
             this.trigger('resized');
         },
 
-        hideSidebar: function(chartType) {
+        hideSidebar: function(type) {
             this.$('.sidebar_content.primary').removeClass("hidden")
             this.$('.sidebar_content.secondary').addClass("hidden")
+            this.removeOldSecondaryClasses(type);
             this.trigger('resized');
+        },
+
+        removeOldSecondaryClasses: function(type) {
+            this.$('.sidebar_content.secondary').removeClass("dataset_visualization_" + type + "_sidebar");
+            this.$('.sidebar_content.secondary').removeClass("dataset_create_" + type + "_sidebar");
         }
     });
 })();
