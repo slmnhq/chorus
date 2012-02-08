@@ -56,6 +56,8 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
             this.$(".result_table").html(this.dataTable.el);
         }
 
+        this.$(".controls").removeClass("hidden");
+
         this.minimizeTable();
     },
 

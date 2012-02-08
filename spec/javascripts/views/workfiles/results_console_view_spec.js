@@ -87,7 +87,11 @@ describe("chorus.views.ResultsConsoleView", function() {
 
             it("sets the executing class", function() {
                 expect(this.view.$(".right")).toHaveClass("executing");
-            })
+            });
+
+            it("hides the control section", function() {
+                expect(this.view.$(".controls")).toHaveClass("hidden");
+            });
 
             it("sets a delay to start a spinner", function() {
                 expect(_.delay).toHaveBeenCalledWith(jasmine.any(Function), 250);
@@ -256,6 +260,10 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 it("renders only one data table", function() {
                     expect(this.view.$(".result_table .data_table").length).toBe(1);
+                });
+
+                it("shows the control section", function() {
+                    expect(this.view.$(".controls")).not.toHaveClass("hidden");
                 });
 
                 context("when another execution completed event occurs", function() {
