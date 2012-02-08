@@ -334,6 +334,14 @@
         }
     }
 
+    window.resetBackboneEventSpies = function(object) {
+        if(object._chorusEventSpies) {
+            _.each(object._chorusEventSpies, function(spy) {
+                spy.reset();
+            })
+        }
+    },
+
     window.setLoggedInUser = function(options) {
         chorus.session._user = new chorus.models.User(_.extend({
             userName: 'edcadmin'
