@@ -46,6 +46,17 @@ describe("NotesNewDialog", function() {
             expect(this.dialog.$('a.show_options').length).toBe(1);
             expect(this.dialog.$('a.show_options').text()).toMatchTranslation('notes.new_dialog.show_options');
         });
+
+        context("when a displayEntityType is available", function() {
+            beforeEach(function() {
+                this.launchElement.data("display-entity-type", "foo");
+                this.dialog.render();
+            });
+
+            it("shows the displayEntityType in the placeholder", function() {
+                expect(this.dialog.$("textarea[name=body]").attr("placeholder")).toBe(t("notes.placeholder", {noteSubject: "foo"}));
+            });
+        });
     });
 
     describe("show_options", function() {

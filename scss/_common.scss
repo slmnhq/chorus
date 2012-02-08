@@ -131,6 +131,7 @@ $medium-font: 14px;
 
 @mixin heading-sidebar {
     @include debugging-mixin;
+    @include ellipsis;
     font-size: 18px;
     font-weight: $semibold;
     color: $color-text1;

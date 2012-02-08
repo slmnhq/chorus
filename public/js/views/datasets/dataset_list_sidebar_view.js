@@ -26,7 +26,7 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
             this.activityList = new chorus.views.ActivityList({
                 collection: activities,
                 additionalClass:"sidebar",
-                displayStyle:['without_object', 'without_workspace']
+                displayStyle:['without_object']
             });
         } else {
             delete this.statistics;
@@ -38,12 +38,13 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
 
     additionalContext:function () {
         var ctx = {
-            typeString:this.datasetType(this.resource)
+            typeString: this.datasetType(this.resource)
         }
 
         if (this.resource) {
             ctx.entityType = this.resource.entityType;
             ctx.entityId = this.resource.entityId;
+            ctx.displayEntityType = this.resource.metaType();
         }
 
         if (this.statistics) {

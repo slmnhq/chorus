@@ -150,6 +150,16 @@
                 objectName:this.presenter.workspaceName,
                 header:{ objectName:this.presenter.workspaceName }
             }
+        },
+
+        DATASET_CREATED: function(model) {
+            return {
+                objectName: this.noteObject.get('objectName'),
+                objectUrl: this.noteObject.showUrl(),
+                header : {
+                    type: t(this.noteObject.tableOrViewTranslationKey())
+                }
+            }
         }
     });
 

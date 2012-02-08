@@ -1133,6 +1133,33 @@ beforeEach(function() {
                     ],
                     workspace: fixtures.workspaceJson()
                 });
+            },
+
+            "DATASET_CREATED" : function() {
+                return new chorus.models.Activity({
+                    author: fixtures.authorJson(),
+                    type: "DATASET_CREATED",
+                    timestamp: "2011-12-01 00:00:00",
+                    id : "10101",
+                    workspace : fixtures.workspaceJson(),
+                    comments: [
+                        {
+                            text: "sub-comment 1",
+                            author : fixtures.authorJson(),
+                            timestamp : "2011-12-15 12:34:56"
+                        }
+                    ],
+                    isPromoted: false,
+                    promoteCount: 0,
+                    databaseObject: {
+                        id: "10000|Analytics|analytics|BASE_TABLE|clv_data",
+                        name: "clv_data",
+                        objectName: "clv_data",
+                        objectType: "BASE_TABLE",
+                        type: "SOURCE_TABLE",
+                        workspaceId: "10000"
+                    }
+                });
             }
         },
 

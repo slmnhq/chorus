@@ -71,10 +71,20 @@ describe("chorus.views.SchemaPicker", function () {
 
             itShowsUnavailableTextWhenResponseIsEmptyFor('instance');
 
+            itSortsTheSelectOptionsAlphabetically('instance');
+
+            it("does not add Hadoop instances to the instance list", function () {
+                this.server.completeFetchAllFor(this.view.instances, [fixtures.instance(), fixtures.instance({instanceProvider: "Hadoop"}), fixtures.instance()]);
+                var options = this.view.$(".instance select option");
+                expect(options.length).toBe(3);
+                expect(options.eq(0).val()).toBeFalsy();
+                expect(options.eq(1).val()).toBe(this.view.instances.models[0].get("id"));
+                expect(options.eq(2).val()).toBe(this.view.instances.models[2].get("id"));
+            });
+
             context("when the instance list fetch completes", function () {
                 beforeEach(function () {
-                    this.view.instances.loaded = true;
-                    this.view.instances.reset([fixtures.instance(), fixtures.instance()]);
+                    this.server.completeFetchAllFor(this.view.instances, [fixtures.instance(), fixtures.instance()]);
                 });
 
                 itShowsSelect('instance');
@@ -84,16 +94,7 @@ describe("chorus.views.SchemaPicker", function () {
 
                 itDisplaysDefaultOptionFor('instance')
 
-                itSortsTheSelectOptionsAlphabetically('instance');
 
-                it("does not add Hadoop instances to the instance list", function () {
-                    this.view.instances.reset([fixtures.instance(), fixtures.instance({instanceProvider: "Hadoop"}), fixtures.instance()]);
-                    var options = this.view.$(".instance select option");
-                    expect(options.length).toBe(3);
-                    expect(options.eq(0).val()).toBeFalsy();
-                    expect(options.eq(1).val()).toBe(this.view.instances.models[0].get("id"));
-                    expect(options.eq(2).val()).toBe(this.view.instances.models[2].get("id"));
-                });
 
                 it("hides the loading placeholder", function () {
                     expect(this.view.$(".instance .loading_text")).toHaveClass("hidden")
@@ -107,12 +108,11 @@ describe("chorus.views.SchemaPicker", function () {
 
                     itDisplaysLoadingPlaceholderFor('database');
                     itHidesSection('schema');
-                    itTriggersTheChangeEvent();
+                    itTriggersTheChangeEvent(false);
 
                     context("when the response is empty for databases", function () {
                         beforeEach(function () {
-                            this.view.databases.loaded = true;
-                            this.view.databases.reset([]);
+                            this.server.completeFetchFor(this.view.databases, []);
                         });
 
                         itShowsUnavailable("database");
@@ -138,17 +138,17 @@ describe("chorus.views.SchemaPicker", function () {
                         expect(this.server.requests[1].url).toMatch("/edc/instance/" + this.selectedInstance.get('id') + "/database");
                     });
 
+                    itSortsTheSelectOptionsAlphabetically('database')
+
                     context("when the database list fetch completes", function () {
                         beforeEach(function () {
-                            this.view.databases.loaded = true;
-                            this.view.databases.reset([fixtures.database(), fixtures.database()]);
+                            this.server.completeFetchFor(this.view.databases, [fixtures.database(), fixtures.database()]);
                         });
 
                         itShowsSelect('database');
                         itPopulatesSelect('database');
                         itDisplaysDefaultOptionFor('database');
 
-                        itSortsTheSelectOptionsAlphabetically('database')
 
                         it("hides the loading placeholder", function () {
                             expect(this.view.$(".database .loading_text")).toHaveClass("hidden")
@@ -185,15 +185,15 @@ describe("chorus.views.SchemaPicker", function () {
                                 expect(this.view.$(".schema input.name").val()).toBe('public');
                             });
 
-                            itTriggersTheChangeEvent();
+                            itTriggersTheChangeEvent(false);
 
                             describe("typing into the database name field", function () {
                                 beforeEach(function () {
                                     this.view._chorusEventSpies["change"].reset();
-                                    this.view.$(".database input.name").trigger("textchange");
+                                    this.view.$(".database input.name").val("db!").trigger("textchange");
                                 })
 
-                                itTriggersTheChangeEvent();
+                                itTriggersTheChangeEvent(true);
                             })
 
                             context("clicking the cancel link", function () {
@@ -206,7 +206,7 @@ describe("chorus.views.SchemaPicker", function () {
                                     expect(this.view.$(".database .create_container")).toHaveClass("hidden");
                                 });
 
-                                itTriggersTheChangeEvent();
+                                itTriggersTheChangeEvent(false);
 
                                 it("hides the schema section", function () {
                                     expect(this.view.$(".schema")).toHaveClass("hidden");
@@ -241,7 +241,7 @@ describe("chorus.views.SchemaPicker", function () {
                             });
 
                             itDisplaysLoadingPlaceholderFor('schema');
-                            itTriggersTheChangeEvent();
+                            itTriggersTheChangeEvent(false);
 
                             it("fetches the list of schemas", function () {
                                 expect(this.server.requests[2].url).toMatch("/edc/instance/" + this.selectedInstance.get('id') + "/database/" + this.selectedDatabase.get("name") + "/schema");
@@ -249,17 +249,17 @@ describe("chorus.views.SchemaPicker", function () {
 
                             itShowsUnavailableTextWhenResponseIsEmptyFor('schema');
 
+                            itSortsTheSelectOptionsAlphabetically('schema');
+
                             context("when the schema list fetch completes", function () {
                                 beforeEach(function () {
-                                    this.view.schemas.loaded = true;
-                                    this.view.schemas.reset(fixtures.schema());
+                                    this.server.completeFetchFor(this.view.schemas, [fixtures.schema({name: 'SCHEMA!'})]);
                                 });
 
                                 itShowsSelect("schema");
                                 itPopulatesSelect("schema");
                                 itDisplaysDefaultOptionFor('schema')
 
-                                itSortsTheSelectOptionsAlphabetically('schema');
 
                                 it("hides the loading placeholder", function () {
                                     expect(this.view.$(".schema .loading_text")).toHaveClass("hidden")
@@ -295,20 +295,20 @@ describe("chorus.views.SchemaPicker", function () {
                                     describe("typing into the schema name field", function () {
                                         beforeEach(function () {
                                             this.view._chorusEventSpies["change"].reset();
-                                            this.view.$(".schema input.name").trigger("textchange");
+                                            this.view.$(".schema input.name").val('myschema').trigger("textchange");
                                         })
 
-                                        itTriggersTheChangeEvent();
+                                        itTriggersTheChangeEvent(true);
                                     })
 
-                                    itTriggersTheChangeEvent();
+                                    itTriggersTheChangeEvent(false);
 
                                     context("clicking the cancel link", function () {
                                         beforeEach(function () {
                                             this.view.$(".schema .cancel").click();
                                         });
 
-                                        itTriggersTheChangeEvent();
+                                        itTriggersTheChangeEvent(false);
 
                                         it("shows the schema selector", function () {
                                             expect(this.view.$(".schema .select_container")).not.toHaveClass("hidden")
@@ -344,7 +344,7 @@ describe("chorus.views.SchemaPicker", function () {
                                         this.selectedSchema = this.view.schemas.get(this.view.$('.schema select option:selected').val());
                                     });
 
-                                    itTriggersTheChangeEvent();
+                                    itTriggersTheChangeEvent(true);
 
                                     context("un-choosing a schema", function () {
                                         beforeEach(function () {
@@ -352,7 +352,7 @@ describe("chorus.views.SchemaPicker", function () {
                                             this.view.$(".schema select").prop("selectedIndex", 0).change();
                                         });
 
-                                        itTriggersTheChangeEvent();
+                                        itTriggersTheChangeEvent(false);
                                     });
 
                                     describe("clicking the 'new database' link", function () {
@@ -361,7 +361,7 @@ describe("chorus.views.SchemaPicker", function () {
                                             this.view.$(".database a.new").click();
                                         });
 
-                                        itTriggersTheChangeEvent();
+                                        itTriggersTheChangeEvent(false);
                                     });
 
                                     context("changing the database", function () {
@@ -371,7 +371,7 @@ describe("chorus.views.SchemaPicker", function () {
                                             select.change();
                                         });
 
-                                        itShouldResetSelect('schema');
+                                        itShouldResetSelect('schema', false);
 
                                         context("changing the instance", function () {
                                             beforeEach(function () {
@@ -380,8 +380,8 @@ describe("chorus.views.SchemaPicker", function () {
                                                 select.change();
                                             });
 
-                                            itShouldResetSelect('database');
-                                            itShouldResetSelect('schema');
+                                            itShouldResetSelect('database', false);
+                                            itShouldResetSelect('schema', false);
                                         });
                                     });
 
@@ -436,9 +436,9 @@ describe("chorus.views.SchemaPicker", function () {
                 this.instance = fixtures.instance();
                 this.view = new chorus.views.SchemaPicker({ instance: this.instance });
                 this.view.render();
-                this.view.databases.reset([ fixtures.database({ id: '5' }) ]);
+                this.server.completeFetchFor(this.view.databases, [ fixtures.database({ id: '5' }) ]);
                 this.view.$(".database select").val("5").change();
-                this.view.schemas.reset([ fixtures.schema({ id: '6' }) ]);
+                this.server.completeFetchFor(this.view.schemas, [ fixtures.schema({ id: '6' }) ]);
                 this.view.$(".schema select").val("6").change();
             });
 
@@ -454,16 +454,17 @@ describe("chorus.views.SchemaPicker", function () {
         context("with no instance provided", function () {
             beforeEach(function () {
                 this.view = new chorus.views.SchemaPicker({ allowCreate: true });
+                $('#jasmine_content').append(this.view.el);
                 this.view.render();
-                this.view.instances.reset([ fixtures.instance({ id: '4' }) ]);
+                this.server.completeFetchAllFor(this.view.instances, [ fixtures.instance({ id: '4' }) ]);
                 this.view.$(".instance select").val("4").change();
             });
 
             context("when an instance, database, and schema are selected from the dropdowns", function () {
                 beforeEach(function () {
-                    this.view.databases.reset([ fixtures.database({ id: '5' }) ]);
+                    this.server.completeFetchFor(this.view.databases, [ fixtures.database({ id: '5' }) ]);
                     this.view.$(".database select").val("5").change();
-                    this.view.schemas.reset([ fixtures.schema({ id: '6' }) ]);
+                    this.server.completeFetchFor(this.view.schemas, [ fixtures.schema({ id: '6' }) ]);
                     this.view.$(".schema select").val("6").change();
                 });
 
@@ -575,13 +576,13 @@ describe("chorus.views.SchemaPicker", function () {
         });
     }
 
-    function itShouldResetSelect(type) {
+    function itShouldResetSelect(type, changeArgument) {
         it("should reset " + type + " select", function () {
             expect(this.view.$('.' + type + ' select option:selected').val()).toBeFalsy();
             expect(this.view.$('.' + type + ' select option').length).toBe(1);
         });
 
-        itTriggersTheChangeEvent();
+        itTriggersTheChangeEvent(changeArgument);
     }
 
     function itHidesSection(type) {
@@ -615,8 +616,11 @@ describe("chorus.views.SchemaPicker", function () {
     function itShowsUnavailableTextWhenResponseIsEmptyFor(type) {
         context("when the response is empty for " + type, function () {
             beforeEach(function () {
-                this.view[type + 's'].loaded = true;
-                this.view[type + 's'].reset([]);
+                if(type == 'instance') {
+                    this.server.completeFetchAllFor(this.view[type + 's'], []);
+                } else {
+                    this.server.completeFetchFor(this.view[type + 's'], []);
+                }
             });
 
             itShowsUnavailable(type);
@@ -632,16 +636,24 @@ describe("chorus.views.SchemaPicker", function () {
         });
     }
 
-    function itTriggersTheChangeEvent() {
+    function itTriggersTheChangeEvent(expectedArg) {
         it("triggers the 'change' event on itself", function () {
-            expect("change").toHaveBeenTriggeredOn(this.view);
+            if(expectedArg === undefined) {
+                expect("change").toHaveBeenTriggeredOn(this.view);
+            } else {
+                expect("change").toHaveBeenTriggeredOn(this.view, [expectedArg]);
+            }
         });
     }
 
     function itSortsTheSelectOptionsAlphabetically(type) {
         it("sorts the select options alphabetically for " + type, function () {
-            this.view[type + "s"].loaded = true;
-            this.view[type + "s"].reset([fixtures[type]({name: "Zoo"}), fixtures[type]({name: "Aardvark"}), fixtures[type]({name: "bear"})]);
+
+            if (type == "instance") {
+                this.server.completeFetchAllFor(this.view[type + "s"], [fixtures[type]({name: "Zoo"}), fixtures[type]({name: "Aardvark"}), fixtures[type]({name: "bear"})]);
+            } else {
+                this.server.completeFetchFor(this.view[type + "s"], [fixtures[type]({name: "Zoo"}), fixtures[type]({name: "Aardvark"}), fixtures[type]({name: "bear"})]);
+            }
 
             expect(this.view.$("." + type + " select option:eq(1)").text()).toBe("Aardvark");
             expect(this.view.$("." + type + " select option:eq(2)").text()).toBe("bear");

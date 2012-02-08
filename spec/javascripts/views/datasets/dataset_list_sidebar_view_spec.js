@@ -21,6 +21,10 @@ describe("chorus.views.DatasetListSidebar", function() {
                     this.view.trigger("dataset:selected", this.dataset);
                 });
 
+                it("sets the note link's displayEntityType to the dataset's metatype", function() {
+                    expect(this.view.$("a.dialog").data("display-entity-type")).toBe(this.dataset.metaType());
+                });
+
                 it("displays the selected dataset name", function() {
                     expect(this.view.$(".name").text().trim()).toBe(this.dataset.get("objectName"))
                 });
@@ -36,6 +40,10 @@ describe("chorus.views.DatasetListSidebar", function() {
 
                 it("fetches the activities for the dataset", function() {
                     expect(this.dataset.activities()).toHaveBeenFetched()
+                });
+                
+                it("prefers only the without_object type for the activity list", function() {
+                    expect(this.view.activityList.options.displayStyle).toEqual(['without_object']);
                 });
 
                 describe("when the activity fetch completes", function() {

@@ -111,6 +111,10 @@ chorus.models.Dataset = chorus.models.Base.extend({
         return chorus.models.Dataset.metaTypeMap[this.get("objectType")] || "table";
     },
 
+    tableOrViewTranslationKey: function() {
+        return "dataset.types." + this.metaType();
+    },
+
     iconUrl:function () {
         return "/images/" + chorus.models.Dataset.iconMap[this.get("type")][this.get("objectType")]
     },

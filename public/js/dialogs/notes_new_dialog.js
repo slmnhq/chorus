@@ -120,7 +120,7 @@ chorus.dialogs.NotesNew = chorus.dialogs.Base.extend({
 
     additionalContext:function () {
         return {
-            entityType:this.model.get("entityType"),
+            displayEntityType:this.options.launchElement.data("displayEntityType") || this.model.get("entityType"),
             formUrl:this.model.url(),
             allowWorkfileAttachments:this.options.launchElement.data("allowWorkfileAttachments")
         };

@@ -21,9 +21,9 @@ describe("chorus.dialogs.BrowseDatasets", function () {
 
         context("after selecting database and schema", function() {
             beforeEach(function() {
-                this.view.schemaPicker.databases.reset([ fixtures.database({ id: '5' }), fixtures.database({ id: '6' }) ]);
+                this.server.completeFetchFor(this.view.schemaPicker.databases, [ fixtures.database({ id: '5' }), fixtures.database({ id: '6' }) ])
                 this.view.$(".database select").val("5").change();
-                this.view.schemaPicker.schemas.reset([ fixtures.schema({ id: '7' }) ]);
+                this.server.completeFetchFor(this.view.schemaPicker.schemas, [ fixtures.schema({ id: '7' }) ])
                 this.view.$(".schema select").val("7").change();
             });
 
