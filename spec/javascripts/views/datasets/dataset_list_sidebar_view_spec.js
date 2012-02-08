@@ -21,6 +21,10 @@ describe("chorus.views.DatasetListSidebar", function() {
                     this.view.trigger("dataset:selected", this.dataset);
                 });
 
+                it("sets the note link's displayEntityType to the dataset's metatype", function() {
+                    expect(this.view.$("a.dialog").data("display-entity-type")).toBe(this.dataset.metaType());
+                });
+
                 it("displays the selected dataset name", function() {
                     expect(this.view.$(".name").text().trim()).toBe(this.dataset.get("objectName"))
                 });
