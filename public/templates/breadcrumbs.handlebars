@@ -5,7 +5,11 @@
             <a href="{{url}}" title="{{label}}">{{label}}</a>
             <span class="spacer"/>
         {{else}}
-            <span class="slug" title="{{label}}">{{label}}</span>
+            {{#if dialog}}
+                <a href="#" class="dialog" title="{{label}}" data-dialog="{{{dialog}}}">{{label}}</a>
+            {{else}}
+                <span class="slug" title="{{label}}">{{label}}</span>
+            {{/if}}
         {{/if}}
     </li>
 {{/each}}

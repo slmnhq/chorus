@@ -1,7 +1,15 @@
 chorus.views.BreadcrumbsView = chorus.views.Base.extend({
     className:"breadcrumbs",
-    context:function () {
+    context: function () {
         return this.options;
+    },
+
+    postRender: function() {
+        _.each(this.options.breadcrumbs, function(breadcrumb, index){
+            if (breadcrumb.data) {
+                this.$('.breadcrumb').eq(index).find('a').data(breadcrumb.data);
+            }
+        }, this);
     }
 });
 
