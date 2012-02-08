@@ -41,18 +41,21 @@
             }
         }
 
-        button {
-            $avail-width: $sidebar-width - $fieldset-margin - (2 * $fieldset-margin) - 2px;
-            position: absolute;
-            left: $avail-width/4;
-            right: $avail-width/4;
+        .button_wrapper {
+            text-align: center;
 
-            div[aria-role=progressbar]{
-                position: absolute;
-                right: -100px;
-                top: -13px;
+            button {
+                margin-bottom: -43px;
+                
+                div[aria-role=progressbar]{
+                    margin-bottom: 5px;
+                    padding-left: 13px;
+                    display: inline-block;
+
+                }
             }
         }
+
     }
 
     .dataset_create_chorus_view_sidebar {
