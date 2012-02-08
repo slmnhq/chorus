@@ -16,10 +16,8 @@ chorus.models.Dataset = chorus.models.Base.extend({
         this.bind('invalidated', this.refetchAfterInvalidated, this);
     },
 
-    // once an api becomes available for fetching a single dataset,
-    // we should fetch only that model.
     refetchAfterInvalidated: function() {
-        this.collection && this.collection.fetch()
+        this.collection && this.fetch()
     },
 
     urlTemplate: "workspace/{{workspace.id}}/dataset/{{entityId}}",
