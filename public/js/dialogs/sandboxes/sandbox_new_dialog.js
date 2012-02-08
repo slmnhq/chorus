@@ -5,53 +5,16 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
     persistent: true,
 
     events: {
-        "click button.submit": "save",
-        "keyup input.name": "enableOrDisableSaveButton",
-        "paste input.name": "enableOrDisableSaveButton",
-        "click input[value='within_instance']": "showInstanceMode",
-        "click input[value='as_standalone']": "showStandaloneMode"
+        "click button.submit": "save"
     },
 
     subviews: {
-        "form > .instance_mode": "instanceMode",
-        "form > .standalone_mode": "standaloneMode"
+        "form > .instance_mode": "instanceMode"
     },
 
     setup: function() {
-        chorus.models.Instance.aurora().bind("loaded", this.fetchConfig, this);
-        chorus.models.Instance.aurora().fetch();
-    },
-
-    fetchConfig: function() {
-        this.config = chorus.models.Config.instance();
-        this.config.onLoaded(this.createSubViews, this);
-    },
-
-    createSubViews: function() {
-        this.setMaxSize();
         this.instanceMode = new chorus.views.SchemaPicker({allowCreate: true});
         this.instanceMode.bind("change", this.enableOrDisableSaveButton, this);
-
-        this.standaloneMode = new chorus.views.SandboxNewStandaloneMode();
-        this.render();
-    },
-
-    postRender: function() {
-        this.displayMaxSize();
-    },
-
-    additionalContext: function() {
-        return { configured: chorus.models.Instance.aurora().isInstalled() }
-    },
-
-    showInstanceMode: function() {
-        this.$(".instance_mode").removeClass("hidden");
-        this.$(".standalone_mode").addClass("hidden");
-    },
-
-    showStandaloneMode: function() {
-        this.$(".instance_mode").addClass("hidden");
-        this.$(".standalone_mode").removeClass("hidden");
     },
 
     makeModel: function() {
@@ -65,17 +28,11 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     save: function(e) {
         this.$("button.submit").startLoading("sandbox.adding_sandbox");
-        this.sandboxType = this.$("input:radio[name='sandbox_type']:checked").val();
-        var currentForm = (this.sandboxType === 'within_instance') ? this.instanceMode : this.standaloneMode;
-        this.model.save(currentForm.fieldValues());
+        this.model.save(this.instanceMode.fieldValues());
     },
 
     saved: function() {
-        if (this.sandboxType === 'within_instance') {
-            chorus.toast("sandbox.create.toast");
-        } else {
-            chorus.toast("sandbox.create.standalone.toast");
-        }
+        chorus.toast("sandbox.create.toast");
         this.pageModel.fetch();
         this.pageModel.trigger("invalidated");
         this.closeModal();
@@ -83,17 +40,6 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     saveFailed: function() {
         this.$("button.submit").stopLoading();
-    },
-
-    setMaxSize: function() {
-        this.model.maximumSize = this.config.get("provisionMaxSizeInGB");
-        this.displayMaxSize();
-    },
-
-    displayMaxSize: function() {
-        if (this.config && this.config.get("provisionMaxSizeInGB")) {
-            this.$(".max_size").text(t("sandbox.create_standalone_dialog.max_size", { size: this.config.get("provisionMaxSizeInGB")}));
-        }
     },
 
     enableOrDisableSaveButton: function(schemaVal) {

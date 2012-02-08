@@ -1,25 +1,6 @@
 <fieldset>
-    <legend>
-        <div>
-            <input type="radio" name="sandbox_type" value="within_instance" id="within_instance" checked="checked"/>
-            <label for="within_instance">{{t "sandbox.create.within_instance"}}</label>
-        </div>
-        <div>
-            <input type="radio" name="sandbox_type" value="as_standalone" id="as_standalone"
-            {{#unless configured}}
-                disabled="disabled"/>
-                <label for="as_standalone">{{t "sandbox.create.standalone.requires_data_director"}}
-            {{else}}
-                />
-                <label for="as_standalone">{{t "sandbox.create.as_standalone"}}
-            {{/unless}}
-            <img class="help" src="/images/more-info.png" data-text='{{t "sandbox.create.standalone_dialog.help_text"}}'/>
-            </label>
-        </div>
-    </legend>
     <form>
         <div class="instance_mode"></div>
-        <div class="standalone_mode hidden"></div>
     </form>
 </fieldset>
 <div class="modal_controls">

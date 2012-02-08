@@ -57,7 +57,6 @@
         'results_console',
         'run_file_in_schema',
         'sandbox_new',
-        'sandbox_new_standalone_mode',
         'schema_picker',
         'shuttle_widget',
         'sql_workfile_content',

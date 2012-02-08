@@ -17,15 +17,6 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
 
     makeModel:function () {
         this.model = this.model || new chorus.models.Instance();
-
-        chorus.models.Instance.aurora().fetch(); // check if aurora is installed or not
-        chorus.models.Instance.aurora().bind("change", this.render, this);
-    },
-
-    additionalContext:function () {
-        return {
-            auroraInstalled:chorus.models.Instance.aurora().isInstalled()
-        }
     },
 
     showFieldset:function (e) {
