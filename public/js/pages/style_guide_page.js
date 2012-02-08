@@ -153,10 +153,23 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 }})
             }),
 
-            "Visualization: Timeseries" : new chorus.views.visualizations.TimeseriesPlot({
-                model: this.task,
-                x: 'id',
-                y: 'value'
+            "Visualization: Timeseries" : new chorus.views.visualizations.Timeseries({
+                model: new chorus.models.TimeseriesTask({
+                    columns: [
+                        {name : "time", typeCategory: "DATE"},
+                        {name : "value", typeCategory: "WHOLE_NUMBER"}
+                    ],
+
+                    rows: [
+                        { time: "Monday", value: 5 },
+                        { time: "Tuesday", value: 8 },
+                        { time: "Wednesday", value: 0 },
+                        { time: "Thursday", value: 1 },
+                        { time: "Friday", value: 20 }
+                    ],
+                    "chart[xAxis]": "Day of the Week",
+                    "chart[yAxis]": "Parties"
+                })
             }),
 
            "Visualization: Frequency Plot" : new chorus.views.visualizations.Frequency({
