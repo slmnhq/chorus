@@ -20,6 +20,10 @@ describe("chorus.views.BreadcrumbView", function() {
             expect(this.view.$(".breadcrumb a").length).toBe(4)
         })
 
+        it("renders a triangle between each breadcrumb", function() {
+            expect(this.view.$(".spacer").length).toBe(4);
+        });
+
         it("renders links to breadcrumbs", function() {
             expect(this.view.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
             expect(this.view.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/foo");
