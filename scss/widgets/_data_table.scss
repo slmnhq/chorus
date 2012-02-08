@@ -21,14 +21,14 @@
     }
 
     .tbody {
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        padding-top: $header-line-height + 1px;
+        position: absolute;
+        top: $header-line-height + 1px;
+        bottom: 0;
+        left: 0;
+        right: 0;
         white-space: nowrap;
         z-index: $data-table-body-z-index;
 
-        height: 100%;
         overflow: auto;
         line-height: normal;
     }

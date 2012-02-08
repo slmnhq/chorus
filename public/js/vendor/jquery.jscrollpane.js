@@ -65,7 +65,7 @@
 				verticalDragPosition, horizontalDrag, dragMaxX, horizontalDragPosition,
 				verticalBar, verticalTrack, scrollbarWidth, verticalTrackHeight, verticalDragHeight, arrowUp, arrowDown,
 				horizontalBar, horizontalTrack, horizontalTrackWidth, horizontalDragWidth, arrowLeft, arrowRight,
-				reinitialiseInterval, originalPadding, originalPaddingTotalWidth, previousContentWidth, borderBoxHeight,
+				reinitialiseInterval, originalPadding, originalPaddingTotalWidth, previousContentWidth,
 				wasAtTop = true, wasAtLeft = true, wasAtBottom = false, wasAtRight = false,
 				originalElement = elem.clone(false, false).empty(),
 				mwEvent = $.fn.mwheelIntent ? 'mwheelIntent.jsp' : 'mousewheel.jsp';
@@ -76,13 +76,6 @@
 								elem.css('paddingLeft');
 			originalPaddingTotalWidth = (parseInt(elem.css('paddingLeft'), 10) || 0) +
 										(parseInt(elem.css('paddingRight'), 10) || 0);
-
-            if(elem.css('box-sizing') == 'border-box' || elem.css('-moz-box-sizing') == 'border-box') {
-                borderBoxHeight = (parseInt(elem.css('paddingTop'), 10) || 0) +
-                                             (parseInt(elem.css('paddingBottom'), 10) || 0);
-            } else {
-                borderBoxHeight = 0;
-            }
 
 			function initialise(s)
 			{
@@ -114,7 +107,7 @@
 					container = $('<div class="jspContainer" />')
 						.css({
 							'width': paneWidth + 'px',
-							'height': paneHeight + borderBoxHeight + 'px'
+							'height': paneHeight + 'px'
 						}
 					).append(pane).appendTo(elem);
 
@@ -145,7 +138,7 @@
 						paneHeight = elem.innerHeight();
 						container.css({
 							width: paneWidth + 'px',
-							height: paneHeight + borderBoxHeight + 'px'
+							height: paneHeight + 'px'
 						});
 					}
 
@@ -168,7 +161,7 @@
 				} else {
 					contentWidth = pane[0].scrollWidth;
 				}
-				contentHeight = pane[0].scrollHeight - borderBoxHeight;
+				contentHeight = pane[0].scrollHeight;
 				pane.css('overflow', '');
 
 				percentInViewH = contentWidth / paneWidth;
