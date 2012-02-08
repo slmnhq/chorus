@@ -1,44 +1,31 @@
 describe("chorus.presenters.visualizations", function() {
-    xdescribe("Timeseries", function() {
+    describe("Timeseries", function() {
         beforeEach(function() {
-            this.model = new chorus.models.SqlExecutionTask({
-                result: {
-                    columns: [{ name: "id" }, { name: "value" }, { name: "animal" }],
-                    rows: [
-                        { id: 1, value: 5, animal: "aardvark" },
-                        { id: 2, value: 10, animal: "aardvark" },
-                        { id: 3, value: 15, animal: "aardvark" },
-                        { id: 4, value: 20, animal: "aardvark" },
-                        { id: 5, value: 25, animal: "aardvark" }
-                    ]
-                }
+            this.model = fixtures.timeseriesTaskWithResult({
+                columns: [
+                    { name: "id" },
+                    { name: "value" },
+                    { name: "animal" }
+                ],
+                rows: [
+                    { time: '1', value: 321 },
+                    { time: '6', value: 1024 },
+                    { time: '5', value: 573 }
+                ]
             });
 
-            this.presenter = new chorus.presenters.visualizations.Timeseries(this.model, {
-                x: "id",
-                y: "value"
-            });
+            this.presenter = new chorus.presenters.visualizations.Timeseries(this.model);
 
             this.data = this.presenter.present();
         });
 
-        it("presents an array of pairs of values from the given x and y columns", function() {
-            expect(this.data.length).toBe(5);
-
-            expect(this.data[0]).toEqual({ x: 1, y: 5 });
-            expect(this.data[1]).toEqual({ x: 2, y: 10 });
-            expect(this.data[2]).toEqual({ x: 3, y: 15 });
-            expect(this.data[3]).toEqual({ x: 4, y: 20 });
-            expect(this.data[4]).toEqual({ x: 5, y: 25 });
+        it("presents an array of pairs of values from the given time and value columns", function() {
+            expect(this.data.length).toBe(3);
+            expect(this.data[0]).toEqual({ time: "1", value: 321 });
+            expect(this.data[1]).toEqual({ time: "6", value: 1024 });
+            expect(this.data[2]).toEqual({ time: "5", value: 573 });
         });
 
-        it("has minimum and maximum values for the x and y columns", function() {
-            expect(this.data.minX).toBe(1);
-            expect(this.data.minY).toBe(5);
-
-            expect(this.data.maxX).toBe(5);
-            expect(this.data.maxY).toBe(25);
-        });
     });
 
     describe("Frequency", function() {

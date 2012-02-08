@@ -7,12 +7,17 @@ chorus.views.DatasetVisualizationTimeSeriesSidebar = chorus.views.DatasetVisuali
     },
 
     chartOptions: function() {
+        var aggMap = {}
+        _.each(["sum", "min", "max", "avg", "count"], function(name){
+            aggMap[t("dataset.group."+name)] = name;
+        })
+
         return {
             type: "timeseries",
             name: this.model.get("objectName"),
             xAxis: this.$(".time select option:selected").text(),
             yAxis: this.$(".value select option:selected").text(),
-            aggregation: this.$(".value .selected_value").text(),
+            aggregation: aggMap[this.$(".value .selected_value").text()],
             timeInterval: this.$(".time .selected_value").text()
         }
     },
@@ -21,7 +26,7 @@ chorus.views.DatasetVisualizationTimeSeriesSidebar = chorus.views.DatasetVisuali
         return {
             numericColumnNames: this.numericColumnNames(),
             datetimeColumnNames: this.datetimeColumnNames(),
-            dataGroupingChoices: _.map(["sum", "min", "max", "average", "count"], function(name) {
+            dataGroupingChoices: _.map(["sum", "min", "max", "avg", "count"], function(name) {
                 return t("dataset.group." + name);
             }),
             dateTimeIntervals: _.map(["minute","hour","day","week","month","year"], function(name) {

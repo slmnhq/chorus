@@ -50,7 +50,7 @@ svg.chart {
     fill: $color-text2;
   }
 
-  .box_plot, .boxplot, .histogram, .heatmap, .frequency {
+  .box_plot, .boxplot, .histogram, .heatmap, .frequency, .timeseries {
     .box rect {
       fill: $chart-fill-color;
     }
@@ -69,6 +69,11 @@ svg.chart {
     .median {
       stroke: black;
       stroke-width: 1.0;
+    }
+
+    path.series {
+        stroke-width: 5.0;
+        stroke: $chart-fill-color;
     }
   }
 

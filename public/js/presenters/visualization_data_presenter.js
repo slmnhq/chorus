@@ -8,18 +8,8 @@
 
     _.extend(ns.presenters.visualizations.Timeseries.prototype, {
         present: function() {
-            var rows = this.task.get("rows");
-            var xs = _.pluck(rows, this.options.x);
-            var ys = _.pluck(rows, this.options.y);
-            var data = _.map(rows, function(_row, i) {
-                return { x: xs[i], y: ys[i] };
-            });
-
-            return _.extend(data, {
-                maxX : _.max(xs),
-                maxY : _.max(ys),
-                minX : _.min(xs),
-                minY : _.min(ys)
+            return _.map(this.task.get("rows"), function(row) {
+                return {time: row.time, value: row.value};
             });
         }
     });

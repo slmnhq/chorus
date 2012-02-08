@@ -1790,6 +1790,24 @@ beforeEach(function() {
             return this.task(overrides);
         },
 
+        timeseriesTaskWithResult: function(overrides) {
+            var attributes = _.extend({
+                objectName: "pirates",
+                yAxis: "num_hands",
+                xAxis: "per_year",
+
+                columns: [
+                    { name: "time", typeCategory: "DATE" },
+                    { name: "value",  typeCategory: "WHOLE_NUMBER" }
+                ],
+                rows: [
+                    { time: 1, value: '321' },
+                    { time: 2, value: '1024' }
+                ]
+            }, overrides);
+            return new chorus.models.TimeseriesTask(attributes);
+        },
+
         frequencyTaskWithResult: function(overrides) {
             var attributes = _.extend({
                 objectName: "pirates",

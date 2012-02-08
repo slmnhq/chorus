@@ -291,6 +291,7 @@
 
 
     chorus.chart.timeseries = function(canvas, data, config) {
+        canvas.attr("class", "timeseries");
         var chart = new Timeseries(canvas, data, config);
         chart.layout.render();
 
