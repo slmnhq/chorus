@@ -101,6 +101,14 @@ chorus.models.Dataset = chorus.models.Base.extend({
         });
     },
 
+    schema: function() {
+        return new chorus.models.Schema({
+            instanceId: this.get("instance").id,
+            databaseName: this.get("databaseName"),
+            name: this.get("schemaName")
+        });
+    },
+
     getEntityType : function() {
         return chorus.models.Dataset.entityTypeMap[this.get("type")] || "databaseObject"
     },

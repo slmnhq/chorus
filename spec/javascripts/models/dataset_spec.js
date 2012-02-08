@@ -274,6 +274,16 @@ describe("chorus.models.Dataset", function() {
         })
     })
 
+    describe("#schema", function() {
+        it("returns a new schema with the right attributes", function() {
+            var schema = this.dataset.schema();
+
+            expect(schema.get("instanceId")).toBe(this.dataset.get("instance").id);
+            expect(schema.get("databaseName")).toBe(this.dataset.get("databaseName"));
+            expect(schema.get("name")).toBe(this.dataset.get("schemaName"));
+        });
+    });
+
     describe("#lastComment", function() {
         beforeEach(function() {
             this.model = fixtures.datasetSandboxTable();
