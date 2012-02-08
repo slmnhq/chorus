@@ -46,7 +46,10 @@
         stroke: black;
     }
 
-    .box_plot, .boxplot, .histogram, .heatmap {
+    .box_plot, .boxplot, .histogram, .heatmap, .frequency{
+        .plot rect {
+           fill: $chart-fill-color;
+        }
         .box rect {
             fill: $chart-fill-color;
         }
