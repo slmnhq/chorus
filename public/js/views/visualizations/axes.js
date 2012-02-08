@@ -1,4 +1,4 @@
-chorus.views.visualizations.XAxis = function(options) {
+chorus.views.visualizations.Axis = function(options) {
     this._labels    = options.labels;
     this.axisLabel = options.axisLabel;
     this.width     = options.el.attr("width");
@@ -12,11 +12,60 @@ chorus.views.visualizations.XAxis = function(options) {
     this.paddingX = options.paddingX || 20;
     this.paddingY = options.paddingY || 20;
     this.offsetX = options.offsetX   || 0;
+    this.offsetY = options.offsetY   || 0;
     this.tickLength = options.tickLength || 5;
     this.labelSpacing = options.labelSpacing || 10;
 };
 
-_.extend(chorus.views.visualizations.XAxis.prototype, {
+chorus.views.visualizations.Axis.extend = chorus.views.Base.extend;
+_.extend(chorus.views.visualizations.Axis.prototype, {
+    maxX: function() {
+        return this.width - this.paddingX;
+    },
+
+    minX: function() {
+        return this.paddingX + this.offsetX;
+    },
+
+    maxY: function() {
+        return this.height - this.paddingY - this.offsetY;
+    },
+
+    minY: function() {
+        return this.paddingY;
+    },
+
+    labels: function() {
+        if (this.scaleType === "numeric") {
+            return this.scale().ticks(8);
+        } else {
+            return this._labels;
+        }
+    },
+
+    tickScale: function() {
+        var scale = this.scale();
+        if (this.scaleType === "numeric") {
+            return scale;
+        } else {
+            return function(d) { return scale(d) + scale.rangeBand() / 2 };
+        }
+    },
+
+    scale: function() {
+        if (this.scaleType === "numeric") {
+            return d3.scale.linear()
+                .domain([this.minValue, this.maxValue])
+                .range(this.range());
+        } else {
+            return d3.scale.ordinal()
+                .domain(this.labels())
+                .rangeBands(this.range());
+        }
+    }
+});
+
+chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
     requiredBottomSpace: function() {
         this.el = this.container.append("svg:g").attr("class", "xaxis");
         var testTickLabels = this.el.selectAll(".label")
@@ -49,33 +98,8 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
         return this.el.selectAll(".axis_label")[0][0].getBBox().height;
     },
 
-    scale: function() {
-        var range = [this.minX(), this.maxX()];
-        if (this.scaleType === "numeric") {
-            return d3.scale.linear()
-                .domain([this.minValue, this.maxValue])
-                .range(range);
-        } else {
-            return d3.scale.ordinal()
-                .domain(this.labels())
-                .rangeBands(range);
-        }
-    },
-
-    maxX: function() {
-        return this.width - this.paddingX;
-    },
-
-    minX: function() {
-        return this.paddingX + this.offsetX;
-    },
-
-    maxY: function() {
-        return this.height - this.paddingY;
-    },
-
-    minY: function() {
-        return this.paddingY;
+    range: function() {
+        return [this.minX(), this.maxX()];
     },
 
     rotateTickLabelsIfNeeded: function() {
@@ -98,23 +122,6 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
                 var rotation = "rotate(" + angle + " " + rightX + " " + centerY + ")";
                 return translation + rotation;
             });
-        }
-    },
-
-    tickScale: function() {
-        var scale = this.scale();
-        if (this.scaleType === "numeric") {
-            return scale;
-        } else {
-            return function(d) { return scale(d) + scale.rangeBand() / 2 };
-        }
-    },
-
-    labels: function() {
-        if (this.scaleType === "numeric") {
-            return this.scale().ticks(8);
-        } else {
-            return this._labels;
         }
     },
 
@@ -160,17 +167,6 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
 
         this.rotateTickLabelsIfNeeded();
 
-        // bounding boxes
-        // _.each(tickLabels[0], function(label) {
-        //     var box = $(label).parent()[0].getBBox();
-        //     this.el.append("svg:rect")
-        //         .attr("x", box.x)
-        //         .attr("y", box.y)
-        //         .attr("width", box.width)
-        //         .attr("height", box.height)
-        //         .style("fill", "none");
-        // }, this);
-
         var tickBottom = tickLabelBottom - this.tickLabelHeight() - this.labelSpacing;
         var tickTop    = tickBottom - this.tickLength;
 
@@ -194,28 +190,10 @@ _.extend(chorus.views.visualizations.XAxis.prototype, {
     }
 });
 
-chorus.views.visualizations.YAxis = function(options) {
-    this._labels   = options.labels;
-    this.axisLabel = options.axisLabel;
-    this.width    = options.el.attr("width");
-    this.height   = options.el.attr("height");
-    this.container = options.el;
-    this.scaleType = options.scaleType;
-
-    this.minValue = options.minValue;
-    this.maxValue = options.maxValue;
-
-    this.paddingX = options.paddingX || 20;
-    this.paddingY = options.paddingY || 20;
-    this.offsetY  = options.offsetY  || 0;
-    this.tickLength = options.tickLength || 10;
-    this.labelSpacing = options.labelSpacing || 10;
-};
-
-_.extend(chorus.views.visualizations.YAxis.prototype, {
+chorus.views.visualizations.YAxis = chorus.views.visualizations.Axis.extend({
     requiredLeftSpace: function() {
         this.el = this.container.append("svg:g").attr("class", "yaxis");
-        var testLabels = this.el.selectAll(".label.test-origin-y")
+        this.el.selectAll(".label.test-origin-y")
             .data(this.labels()).enter()
             .append("svg:text")
             .attr("class", "label")
@@ -228,11 +206,11 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
             .attr("x", 0)
             .attr("y", 0)
             .text(this.axisLabel)
+
         var axisLabelHeight  = testAxisLabel[0][0].getBBox().height;
         var width = axisLabelHeight + this.labelWidth() + 2*this.labelSpacing + this.tickLength;
 
-        testLabels.remove();
-        testAxisLabel.remove();
+        this.el.remove();
         return width;
     },
 
@@ -242,42 +220,8 @@ _.extend(chorus.views.visualizations.YAxis.prototype, {
         }))
     },
 
-    scale: function() {
-        var range = [this.maxY(), this.minY()];
-        if (this.scaleType === "numeric") {
-            return d3.scale.linear()
-                .domain([this.minValue, this.maxValue])
-                .range(range)
-        } else {
-            return d3.scale.ordinal()
-                .domain(this.labels())
-                .rangeBands(range);
-        }
-    },
-
-    minY: function() {
-        return this.paddingY;
-    },
-
-    maxY: function() {
-        return this.height - this.paddingY - this.offsetY;
-    },
-
-    labels: function() {
-        if (this.scaleType === "numeric") {
-            return this.scale().ticks(8);
-        } else {
-            return this._labels;
-        }
-    },
-
-    tickScale: function() {
-        var scale = this.scale();
-        if (this.scaleType === "numeric") {
-            return scale;
-        } else {
-            return function(d) { return scale(d) + scale.rangeBand() / 2 };
-        }
+    range: function() {
+        return [this.maxY(), this.minY()];
     },
 
     render : function() {
