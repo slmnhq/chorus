@@ -5,11 +5,9 @@
         content: none;
     }
 
-    .instance {
-        .title {
-            @include dialog-label;
-            margin-left: 15px;
-        }
+    .title {
+        @include dialog-label;
+        margin-left: 15px;
     }
 
     .schema_picker {

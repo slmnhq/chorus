@@ -28,6 +28,7 @@ describe("chorus.views.SchemaPicker", function () {
             beforeEach(function () {
                 this.instance = fixtures.instance();
                 this.database = fixtures.database({instanceId: this.instance.get("id")});
+                this.database.unset('id');
                 this.view = new chorus.views.SchemaPicker({ instance: this.instance, database: this.database });
                 this.view.render();
             });
@@ -45,6 +46,17 @@ describe("chorus.views.SchemaPicker", function () {
             it("fetches the schemas", function () {
                 expect(this.server.lastFetchFor(this.database.schemas())).toBeDefined();
             });
+
+            context("when the schema fetch completes", function() {
+                beforeEach(function() {
+                    spyOnEvent(this.view, 'change');
+                    this.server.completeFetchFor(this.database.schemas(), [fixtures.schema()]);
+                    this.view.$(".schema select").prop("selectedIndex", 1).change();
+                    $('#jasmine_content').append(this.view.el);
+                })
+
+                itTriggersTheChangeEvent(true);
+            })
         });
 
         context("when allowCreate is true", function () {

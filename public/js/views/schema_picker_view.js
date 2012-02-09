@@ -173,11 +173,15 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
         var attrs = {
             instance:this.selectedInstance && this.selectedInstance.get("id")
         };
-        if (this.selectedDatabase) {
+
+        if (this.selectedDatabase && this.selectedDatabase.get('id')) {
             attrs.database = this.selectedDatabase.get("id");
+        } else if(this.selectedDatabase && this.selectedDatabase.get("name")) {
+            attrs.databaseName = this.selectedDatabase.get('name');
         } else {
             attrs.databaseName = this.$(".database input.name:visible").val();
         }
+
         if (this.selectedSchema) {
             attrs.schema = this.selectedSchema.get("id");
         } else {
