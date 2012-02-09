@@ -98,11 +98,11 @@ describe("chorus.views.visualizations.BoxPlot", function() {
 
             it("aligns them horizontally with the boxes", function() {
                 _.each(this.minWhiskers, function(whisker, i) {
-                    expect(centerX(whisker)).toBeCloseTo(centerX(this.quartileRectangles[i]))
+                    expect(centerX(whisker)).toBeCloseTo(centerX(this.quartileRectangles[i]), 1);
                 }, this);
 
                 _.each(this.maxWhiskers, function(whisker, i) {
-                    expect(centerX(whisker)).toBeCloseTo(centerX(this.quartileRectangles[i]))
+                    expect(centerX(whisker)).toBeCloseTo(centerX(this.quartileRectangles[i]), 1);
                 }, this);
             });
 
@@ -133,7 +133,7 @@ describe("chorus.views.visualizations.BoxPlot", function() {
 
             it("draws them at the center of the boxes", function() {
                 _.each(this.midlines, function(line, i) {
-                    expect(centerX(line)).toBeCloseTo(centerX(this.quartileRectangles[i]));
+                    expect(centerX(line)).toBeCloseTo(centerX(this.quartileRectangles[i]), 1);
                 }, this);
             });
 
