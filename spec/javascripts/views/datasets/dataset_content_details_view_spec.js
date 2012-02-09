@@ -4,7 +4,9 @@ describe("chorus.views.DatasetContentDetails", function() {
             this.qtipMenu = stubQtip();
             this.collection = fixtures.databaseColumnSet();
             this.dataset = fixtures.datasetChorusView();
+
             this.view = new chorus.views.DatasetContentDetails({dataset: this.dataset, collection: this.collection});
+            this.server.completeFetchFor(this.dataset.statistics(), fixtures.datasetStatisticsView());
             this.view.render();
         });
 
@@ -23,6 +25,10 @@ describe("chorus.views.DatasetContentDetails", function() {
         it("hides the filters div", function() {
             expect(this.view.$(".filters")).toHaveClass("hidden");
         });
+
+        it("shows the SQL definition in the header", function() {
+            expect(this.view.$(".definition")).toContainText(this.dataset.statistics().get("definition"));
+        })
 
         context("when 'Preview Data' is clicked", function() {
             beforeEach(function() {

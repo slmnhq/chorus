@@ -197,6 +197,12 @@
             });
             markup = markup + '</ul></div></div>'
             return new Handlebars.SafeString(markup);
+        },
+
+        sql_definition: function(definition) {
+            var promptSpan = $('<span>').addClass('sql_prompt').text(t("dataset.content_details.sql_prompt")).outerHtml();
+            var sqlSpan = $('<span>').addClass('sql_content').text(definition || '').outerHtml();
+            return t("dataset.content_details.definition", {sql_prompt: promptSpan, sql: sqlSpan});
         }
 
     }

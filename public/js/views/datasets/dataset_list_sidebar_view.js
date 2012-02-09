@@ -18,8 +18,8 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
         this.resource = dataset;
         if (dataset) {
             this.statistics = dataset.statistics();
-            this.statistics.bindOnce("change", this.render, this);
-            this.statistics.fetch();
+            this.statistics.fetchIfNotLoaded();
+            this.statistics.onLoaded(this.render, this);
 
             var activities = dataset.activities();
             activities.fetch();

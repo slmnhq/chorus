@@ -204,6 +204,10 @@ describe("chorus.models.Dataset", function() {
             expect(this.datasetProperties).toBeA(chorus.models.DatasetStatistics)
         })
 
+        it("should memoize the result", function() {
+            expect(this.datasetProperties).toBe(this.dataset.statistics());
+        })
+
         it("sets the properties correctly", function() {
             expect(this.datasetProperties.get('instanceId')).toBe(this.dataset.get('instance').id)
             expect(this.datasetProperties.get('databaseName')).toBe(this.dataset.get("databaseName"))

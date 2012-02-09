@@ -113,7 +113,7 @@ describe("chorus.views.DatasetListSidebar", function() {
                             this.view = new chorus.views.DatasetListSidebar();
                             this.view.setDataset(this.dataset);
                             this.stats.set({ partitions: 0 });
-                            this.server.completeFetchFor(this.stats);
+                            this.view.render();
                         });
 
                         it("should not show the partitions pair", function() {
@@ -126,7 +126,7 @@ describe("chorus.views.DatasetListSidebar", function() {
                             this.view = new chorus.views.DatasetListSidebar();
                             this.view.setDataset(this.dataset)
                             this.stats.set({ lastAnalyzedTime: null, rows: 5837 });
-                            this.server.completeFetchFor(this.stats);
+                            this.view.render();
                         })
 
                         it("should not display the lastAnalyzedTime or row count", function() {

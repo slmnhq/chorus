@@ -91,14 +91,18 @@ chorus.models.Dataset = chorus.models.Base.extend({
     },
 
     statistics:function () {
-        return new chorus.models.DatasetStatistics({
-            instanceId: this.has("instance") ? this.get("instance").id : this.collection.attributes.instanceId,
-            databaseName:this.get("databaseName"),
-            schemaName:this.get("schemaName"),
-            type:this.get("type"),
-            objectType:this.get("objectType"),
-            objectName:this.get("objectName")
-        });
+        if (!this._statistics) {
+            this._statistics = new chorus.models.DatasetStatistics({
+                instanceId: this.has("instance") ? this.get("instance").id : this.collection.attributes.instanceId,
+                databaseName:this.get("databaseName"),
+                schemaName:this.get("schemaName"),
+                type:this.get("type"),
+                objectType:this.get("objectType"),
+                objectName:this.get("objectName")
+            });
+        }
+
+        return this._statistics;
     },
 
     schema: function() {

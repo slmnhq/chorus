@@ -41,6 +41,21 @@
 
     .definition {
 
+        .sql {
+            @include font-normal-alpha;
+            margin-left: 10px;
+            .sql_prompt {
+                margin-right: 5px;
+            }
+            .sql_content {
+                @include ellipsis;
+                display: inline-block;
+                width: 50%;
+                font-weight: $semibold;
+                color: $color-text1;
+            }
+        }
+
         button {
             margin-left: 0;
             color: $content-details-action-link-color;

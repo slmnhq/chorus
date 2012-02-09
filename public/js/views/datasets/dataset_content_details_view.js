@@ -22,6 +22,11 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.resultsConsole = new chorus.views.ResultsConsole({titleKey: "dataset.data_preview", enableClose: true});
         this.resultsConsole.bind("action:close", this.closeDataPreview, this);
         this.filterWizardView = new chorus.views.DatasetFilterWizard({collection : this.collection});
+
+        this.statistics = this.dataset.statistics();
+        this.statistics.fetchIfNotLoaded();
+
+        this.requiredResources.add(this.statistics);
     },
 
     dataPreview : function(e) {
@@ -126,5 +131,11 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         $(e.target).siblings('.title').addClass('hidden');
         var type = this.$('.selected').data('chart_type');
         $(e.target).siblings('.title.' + type).removeClass('hidden');
+    },
+
+    additionalContext: function() {
+        return {
+            definition: this.statistics.get("definition")
+        }
     }
 });
