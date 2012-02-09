@@ -19,7 +19,7 @@ chorus.views.visualizations.Axis = function(options) {
 };
 
 chorus.views.visualizations.Axis.extend = chorus.views.Base.extend;
-_.extend(chorus.views.visualizations.Axis.prototype, {
+_.extend(chorus.views.visualizations.Axis.prototype, chorus.Mixins.VisHelpers, {
     maxX: function() {
         return this.width - this.paddingX;
     },
@@ -147,15 +147,15 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
 
         // draw tick labels
         var tickLabelBottom = this.maxY() - this.labelSpacing - this.axisLabelHeight();
-        var tickLabels = this.el.selectAll(".label")
+        var tickLabels = this.el.append("svg:g").attr("class", "labels")
+            .selectAll(".label")
             .data(this.labels()).enter()
-            .append("svg:g")
-            .attr("class", "label")
             .append("svg:text")
+            .attr("class", "label")
             .attr("y", tickLabelBottom)
             .attr("x", 0)
             .text(function(d) {
-                return d
+                return self.labelFormat(d, 4)
             });
 
         // reposition labels now that we know their width
@@ -172,7 +172,7 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
         var tickTop    = tickBottom - this.tickLength;
 
         // draw ticks
-        this.el.selectAll(".tick")
+        this.el.append("svg:g").attr("class", "ticks").selectAll(".tick")
             .data(this.labels()).enter()
             .append("svg:line")
             .attr("class", "tick")
@@ -182,7 +182,7 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
             .attr("x2", tickScale)
 
         if(this.hasGrids) {
-            this.el.selectAll(".grid")
+            this.el.append("svg:g").attr("class", "grids").selectAll(".grid")
                 .data(this.labels().slice(1)).enter()
                 .append("svg:line")
                 .attr("class", "grid")
@@ -205,12 +205,13 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
 chorus.views.visualizations.YAxis = chorus.views.visualizations.Axis.extend({
     requiredLeftSpace: function() {
         this.el = this.container.append("svg:g").attr("class", "yaxis");
+        var self = this;
         this.el.selectAll(".label.test-origin-y")
             .data(this.labels()).enter()
             .append("svg:text")
             .attr("class", "label")
             .text(function(d) {
-                return d
+                return self.labelFormat(d, 4)
             });
         var testAxisLabel = this.el.append("svg:g")
             .attr("class", "axis_label")
