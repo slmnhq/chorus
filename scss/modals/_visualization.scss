@@ -7,7 +7,7 @@
     }
 }
 
-.visualization.dialog {
+.visualization {
     .dialog_content {
         padding: 0;
     }
@@ -50,8 +50,7 @@
             width: 45px;
             display: inline-block;
             background-repeat: no-repeat;
-            background-position-x: 5px;
-            background-position-y: 5px;
+            background-position: 50% 50%;
             border-left: 1px dotted $list-border-color;
 
             &.selected {
