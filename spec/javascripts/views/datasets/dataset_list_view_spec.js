@@ -87,7 +87,84 @@ describe("chorus.views.DatasetList", function() {
                 expect(this.view.$(".name_disabled")).toExist();
             });
 
-            xit("includes the 'found in workspace' information", function() {
+            context("when there is exactly 1 'found in' workspace", function() {
+                it("includes the 'found in workspace' information", function() {
+                    _.each(this.collection.models, function(model, index) {
+                        var workspaceName = model.get('workspaceUsed').workspaceList[0].name;
+                        expect(this.view.$(".found_in").eq(index).text()).toContainTranslation("dataset.found_in",
+                            { workspaceName: workspaceName });
+                    }, this)
+                });
+
+                it("should not indicate there are any other workspaces", function() {
+                    expect(this.view.$(".found_in .other")).not.toExist();
+                })
+            })
+
+            context("when there are exactly 2 'found in' workspaces", function() {
+                beforeEach(function() {
+                    this.collection.each(function(model) {
+                        var hash = model.get("workspaceUsed");
+                        hash.workspaceList = [fixtures.workspaceJson(), fixtures.workspaceJson()];
+                        hash.workspaceCount = 2;
+                    });
+                    this.view.render();
+                });
+
+                it("includes the 'found in workspace' information", function() {
+                    _.each(this.collection.models, function(model, index) {
+                        var workspaceName = model.get('workspaceUsed').workspaceList[0].name;
+                        expect(this.view.$(".found_in").eq(index).text()).toContainTranslation("dataset.found_in",
+                            { workspaceName: workspaceName });
+                    }, this)
+                });
+
+                it("should indicate there is 1 other workspace", function() {
+                    _.each(this.collection.models, function(model, index) {
+                        expect(this.view.$(".found_in .other").eq(index).text()).toContainTranslation("dataset.and_others.one");
+                    }, this)
+                })
+            })
+
+            context("when there are exactly 3 'found in' workspaces", function() {
+                beforeEach(function() {
+                    this.collection.each(function(model) {
+                        var hash = model.get("workspaceUsed");
+                        hash.workspaceList = [fixtures.workspaceJson(), fixtures.workspaceJson(), fixtures.workspaceJson()];
+                        hash.workspaceCount = 3;
+                    });
+                    this.view.render();
+                });
+
+                it("includes the 'found in workspace' information", function() {
+                    _.each(this.collection.models, function(model, index) {
+                        var workspaceName = model.get('workspaceUsed').workspaceList[0].name;
+                        expect(this.view.$(".found_in").eq(index).text()).toContainTranslation("dataset.found_in",
+                            { workspaceName: workspaceName });
+                    }, this)
+                });
+
+                it("should indicate there is 2 other workspaces", function() {
+                    _.each(this.collection.models, function(model, index) {
+                        expect(this.view.$(".found_in .other").eq(index).text()).toContainTranslation("dataset.and_others.other",
+                            {count: 2});
+                    }, this)
+                })
+            })
+
+            context("when there aren't any 'found in' workspaces", function() {
+                beforeEach(function() {
+                    this.collection.each(function(model) {
+                        var hash = model.get("workspaceUsed");
+                        hash.workspaceList = [];
+                        hash.workspaceCount = 0;
+                    });
+                    this.view.render();
+                });
+
+                it("does not render .found_in", function() {
+                    expect(this.view.$(".found_in")).not.toExist();
+                });
             });
         });
 

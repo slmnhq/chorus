@@ -174,7 +174,8 @@ chorus.models.Dataset = chorus.models.Base.extend({
             "BASE_TABLE":"source_table_large.png",
             "EXTERNAL_TABLE":"source_table_large.png",
             "MASTER_TABLE":"source_table_large.png",
-            "VIEW":"source_view_large.png"
+            "VIEW":"source_view_large.png",
+            "HDFS_EXTERNAL_TABLE": "source_table_large.png"
         },
 
         "SANDBOX_TABLE":{

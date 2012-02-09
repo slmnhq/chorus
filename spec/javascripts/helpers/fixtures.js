@@ -1667,7 +1667,11 @@ beforeEach(function() {
                 owner: {id:"InitialUser", userName:"edcadmin"},
                 schemaName: "some_schema",
                 workspace: {id:fixtures.nextId(), name:"some_workspace"},
-                recentComment : fixtures.activities.NOTE_ON_DATASET()
+                recentComment : fixtures.activities.NOTE_ON_DATASET(),
+                workspaceUsed : {
+                    workspaceCount: 1,
+                    workspaceList: [fixtures.workspaceJson()]
+                }
             }, overrides);
         },
 

@@ -34,10 +34,14 @@ chorus.views.DatasetList = chorus.views.Base.extend({
     },
 
     collectionModelContext:function (model) {
+        var workspace = model.get("workspaceUsed").workspaceList[0]
+        var otherWorkspaceCount = (model.get("workspaceUsed").workspaceCount || 1) - 1;
         var ctx = {
             iconImgUrl:model.iconUrl(),
             showUrl:model.showUrl(),
-            schemaShowUrl: model.schema().showUrl()
+            schemaShowUrl: model.schema().showUrl(),
+            foundInWorkspaceName: workspace && workspace.name,
+            otherWorkspaceCount : otherWorkspaceCount
         }
 
         var recentComment = model.lastComment();
