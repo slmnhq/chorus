@@ -10,10 +10,10 @@ describe("chorus.collections.DatabaseTableSet", function() {
     describe("#findByName", function() {
         beforeEach(function() {
             this.collection.reset([
-                fixtures.databaseTable({ name: "garbage" }),
-                fixtures.databaseTable({ name: "monsters" }),
-                fixtures.databaseTable({ name: "foods" }),
-                fixtures.databaseTable({ name: "beverages" })
+                fixtures.databaseTable({ objectName: "garbage" }),
+                fixtures.databaseTable({ objectName: "monsters" }),
+                fixtures.databaseTable({ objectName: "foods" }),
+                fixtures.databaseTable({ objectName: "beverages" })
             ]);
         });
 
@@ -34,8 +34,8 @@ describe("chorus.collections.DatabaseTableSet", function() {
         beforeEach(function() {
             this.collection.fetch();
             this.server.lastFetchFor(this.collection).succeed([
-                { name: "brian_the_table" },
-                { name: "rand_the_table" }
+                { objectName: "brian_the_table" },
+                { objectName: "rand_the_table" }
             ]);
         });
 

@@ -1417,7 +1417,7 @@ beforeEach(function() {
         databaseTable: function(overrides) {
             var id = this.nextId().toString();
             var attributes = _.extend({
-                name : "campaign_dim",
+                objectName : "campaign_dim",
                 rows : 500,
                 columns : 6,
                 onDiskSize : "64 kB",
@@ -1439,7 +1439,7 @@ beforeEach(function() {
         databaseView: function(overrides) {
             var id = this.nextId().toString();
             var attributes = _.extend({
-                name : "campaign_dim",
+                objectName : "campaign_dim",
                 rows : 500,
                 columns : 6,
                 onDiskSize : "64 kB",
