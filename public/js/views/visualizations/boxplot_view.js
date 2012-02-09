@@ -34,9 +34,8 @@ chorus.views.visualizations.Boxplot = chorus.views.Base.extend({
             .attr("class", "box");
 
         var scales = this.axes.scales();
-        scales.x.rangeBands(scales.x.rangeExtent(), 0.4);
-
-        var boxWidth =  scales.x.rangeBand();
+        var boxWidth = 0.4 * scales.x.rangeBand();
+        var centerScale = function(d) { return scales.x(d) + scales.x.rangeBand() / 2 };
 
         quartileRectangles(boxes);
         medianline(boxes);
@@ -51,7 +50,7 @@ chorus.views.visualizations.Boxplot = chorus.views.Base.extend({
                     return Math.abs(scales.y(d.thirdQuartile) - scales.y(d.firstQuartile))
                 })
                 .attr("x", function(d) {
-                    return scales.x(d.bucket) // + boxOffset
+                    return centerScale(d.bucket) - boxWidth / 2;
                 })
                 .attr("y", function(d) {
                     return scales.y(d.thirdQuartile)
@@ -63,10 +62,10 @@ chorus.views.visualizations.Boxplot = chorus.views.Base.extend({
                 .append("svg:line")
                 .attr("class", "midline")
                 .attr("x1", function(d) {
-                    return scales.x(d.bucket) + scales.x.rangeBand() / 2
+                    return centerScale(d.bucket);
                 })
                 .attr("x2", function(d) {
-                    return scales.x(d.bucket) + scales.x.rangeBand() / 2
+                    return centerScale(d.bucket);
                 })
                 .attr("y1", function(d) {
                     return scales.y(d.max)
@@ -81,10 +80,10 @@ chorus.views.visualizations.Boxplot = chorus.views.Base.extend({
                 .append("svg:line")
                 .attr("class", "median")
                 .attr("x1", function(d) {
-                    return scales.x(d.bucket);
+                    return centerScale(d.bucket) - boxWidth / 2;
                 })
                 .attr("x2", function(d) {
-                    return scales.x(d.bucket) + boxWidth;
+                    return centerScale(d.bucket) + boxWidth / 2;
                 })
                 .attr("y1", function(d) {
                     return scales.y(d.median);
@@ -99,10 +98,10 @@ chorus.views.visualizations.Boxplot = chorus.views.Base.extend({
                 .append("svg:line")
                 .attr("class", "whisker max")
                 .attr("x1", function(d) {
-                    return scales.x(d.bucket) + 0.25 * boxWidth;
+                    return centerScale(d.bucket) - boxWidth / 4;
                 })
                 .attr("x2", function(d) {
-                    return scales.x(d.bucket) + 0.75 * boxWidth;
+                    return centerScale(d.bucket) + boxWidth / 4;
                 })
                 .attr("y1", function(d) {
                     return scales.y(d.max);
@@ -115,10 +114,10 @@ chorus.views.visualizations.Boxplot = chorus.views.Base.extend({
                 .append("svg:line")
                 .attr("class", "whisker min")
                 .attr("x1", function(d) {
-                    return scales.x(d.bucket) + 0.25 * boxWidth;
+                    return centerScale(d.bucket) - boxWidth / 4;
                 })
                 .attr("x2", function(d) {
-                    return scales.x(d.bucket) + 0.75 * boxWidth;
+                    return centerScale(d.bucket) + boxWidth / 4;
                 })
                 .attr("y1", function(d) {
                     return scales.y(d.min);

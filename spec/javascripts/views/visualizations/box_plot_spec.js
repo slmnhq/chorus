@@ -67,6 +67,13 @@ describe("chorus.views.visualizations.BoxPlot", function() {
                     expect(leftX(rect)).toBeGreaterThan(rightX(this.quartileRectangles[i-1]) + 5);
                 }, this);
             });
+
+            it("centers the rectangles on the x axis ticks", function() {
+                var xTicks = this.view.$(".xaxis .tick");
+                _.each(this.quartileRectangles, function(rect, i) {
+                    expect(centerX(rect)).toBeCloseTo(centerX(xTicks[i]));
+                }, this);
+            });
         });
 
         describe("the median lines", function() {
@@ -152,8 +159,6 @@ describe("chorus.views.visualizations.BoxPlot", function() {
         xit("renders ytick lines by default", function() {
             expect(this.view.$(".axis.west .grid line").length).toBeGreaterThan(1);
         });
-
-
     })
 });
 
