@@ -450,7 +450,37 @@ describe("handlebars", function() {
                 var chooser = $(html);
                 expect(chooser).toHaveClass('foo');
             })
-        })
+        });
+
+        describe("renderTableData", function() {
+            beforeEach(function() {
+                this.template = "{{renderTableData x}}";
+            });
+
+            it("renders the string false for the boolean false", function() {
+                var context = {x: false};
+                var string = Handlebars.compile(this.template)(context);
+                expect(string).toBe("false");
+            });
+
+            it("renders the string 0 for the number 0", function() {
+                var context = {x: 0};
+                var string = Handlebars.compile(this.template)(context);
+                expect(string).toBe("0");
+            });
+
+            it("renders &nbsp; for null", function() {
+                var context = {x: null};
+                var string = Handlebars.compile(this.template)(context);
+                expect(string).toBe("&nbsp;");
+            });
+
+            it("renders NaN for NaN", function() {
+                var context = {x: NaN};
+                var string = Handlebars.compile(this.template)(context);
+                expect(string).toBe("NaN");
+            });
+        });
     });
 
     describe("partials", function() {
