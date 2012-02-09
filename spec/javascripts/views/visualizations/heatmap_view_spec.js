@@ -1,10 +1,10 @@
 describe("chorus.views.visualizations.Heatmap", function() {
-    var leftX = chorus.svgHelpers.leftX,
-        rightX = chorus.svgHelpers.rightX,
-        width = chorus.svgHelpers.width,
-        height = chorus.svgHelpers.height,
+    var leftX   = chorus.svgHelpers.leftX,
+        rightX  = chorus.svgHelpers.rightX,
+        width   = chorus.svgHelpers.width,
+        height  = chorus.svgHelpers.height,
         centerX = chorus.svgHelpers.centerX,
-        topY = chorus.svgHelpers.topY,
+        topY    = chorus.svgHelpers.topY,
         bottomY = chorus.svgHelpers.bottomY,
         centerY = chorus.svgHelpers.centerY;
 

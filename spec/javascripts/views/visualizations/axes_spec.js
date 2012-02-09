@@ -21,40 +21,7 @@ describe("chorus.views.visualizations.Axes", function() {
     });
 
     beforeEach(function() {
-        this.addMatchers({
-            toBeVertical: function() {
-                var y1 = topY(this.actual);
-                var y2 = bottomY(this.actual);
-                var x1 = leftX(this.actual);
-                var x2 = rightX(this.actual);
-
-                return y2 !== y1 && x1 === x2;
-            },
-
-            toBeHorizontal: function() {
-                var y1 = topY(this.actual);
-                var y2 = bottomY(this.actual);
-                var x1 = leftX(this.actual);
-                var x2 = rightX(this.actual);
-
-                return y2 === y1 && x1 !== x2;
-            },
-
-            toBeWithinDeltaOf: function(value, margin) {
-                if (!margin) margin = 0;
-                var lowerBound = value - margin;
-                var upperBound = value + margin;
-                return (this.actual >= lowerBound) && (this.actual <= upperBound)
-            },
-
-            toBeLessThanOrEqualTo: function(upperBound) {
-                return this.actual <= upperBound;
-            },
-
-            toBeGreaterThanOrEqualTo: function(upperBound) {
-                return this.actual >= upperBound;
-            }
-        });
+        this.addMatchers(chorus.svgHelpers.matchers);
     });
 
     describe("XAxis", function() {
@@ -271,9 +238,6 @@ describe("chorus.views.visualizations.Axes", function() {
                 itHasAReasonableLayout();
                 itDisplaysNumericalTicksCorrectly();
             });
-
-
-
         });
 
         function itDisplaysNumericalTicksCorrectly() {
@@ -344,10 +308,7 @@ describe("chorus.views.visualizations.Axes", function() {
                 });
 
                 it("draws the ticks in order from left to right", function() {
-                    _.each(this.ticks, function(tick, i) {
-                        if (! this.ticks[i - 1]) return;
-                        expect(leftX(tick)).toBeGreaterThan(leftX(this.ticks[i - 1]));
-                    }, this);
+                    expect(this.ticks).toBeOrderedLeftToRight();
                 });
             });
 
@@ -358,7 +319,8 @@ describe("chorus.views.visualizations.Axes", function() {
                     } else {
                         expect(this.grids.length).toBe(0);
                     }
-                })
+                });
+
                 it("should draw grid lines extending from the top of the ticks to the top of the chart", function() {
                     _.each(this.grids, function(gridLine) {
                         expect(bottomY(gridLine)).toEqual(bottomY(this.axisLine));
@@ -368,7 +330,6 @@ describe("chorus.views.visualizations.Axes", function() {
             });
 
             describe("the tick labels", function() {
-
                 it("places the labels below the ticks", function() {
                     _.each(this.labels, function(label, i) {
                         expect(topY(label)).toBeGreaterThan(bottomY(this.ticks[i]));
@@ -376,10 +337,7 @@ describe("chorus.views.visualizations.Axes", function() {
                 });
 
                 it("draws the labels in order from left to right", function() {
-                    _.each(this.labels, function(label, i) {
-                        if (! this.labels[i - 1]) return;
-                        expect(leftX(label)).toBeGreaterThan(leftX(this.labels[i - 1]));
-                    }, this);
+                    expect(this.labels).toBeOrderedLeftToRight();
                 });
             });
 
