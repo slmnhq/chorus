@@ -46,18 +46,21 @@
                     @include results-console-message;
                 }
 
+                .spinner {
+                  display: inline-block;
+                  width: 25px;
+
+                  div[aria-role=progressbar] {
+                      left: 13px;
+                      top: -3px;
+                  }
+                }
+
                 .task_loading {
                     @include results-console-message;
                     border-right: 1px solid $results-console-border-color;
                     padding-right: $padding-x;
-                    margin-left: 25px;
                     display: inline-block;
-
-                    div[aria-role=progressbar] {
-                        left: -65px;
-                        top: 5px;
-                        display: inline;
-                    }
                 }
 
                 .link {

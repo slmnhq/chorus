@@ -43,7 +43,7 @@ jQuery.fn.extend({
     },
 
     isLoading: function() {
-        return !!this.data("loading-original-text");
+        return this.eq(0).hasClass("is_loading")
     },
 
     outerHtml: function() {

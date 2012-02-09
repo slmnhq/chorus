@@ -237,6 +237,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
 
     saved:function () {
         this.instance.fetch();
+        this.$("a.save").stopLoading();
         this.render();
     },
 

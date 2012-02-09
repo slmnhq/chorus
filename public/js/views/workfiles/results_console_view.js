@@ -31,7 +31,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
     startSpinner: function() {
         delete this.spinnerTimer;
-        this.$(".task_loading").startLoading("results_console_view.executing")
+        this.$(".spinner").startLoading()
     },
 
     incrementElapsedTime: function() {
@@ -43,7 +43,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     executionCompleted: function(task) {
         this.cancelTimers()
         this.$(".right").removeClass("executing")
-        this.$(".task_loading").stopLoading()
+        this.$(".spinner").stopLoading()
 
         if (task.errorMessage()) {
             this.$(".errors").removeClass("hidden");

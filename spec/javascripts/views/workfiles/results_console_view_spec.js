@@ -227,7 +227,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 })
 
                 it("stops the spinner", function() {
-                    expect(this.view.$(".task_loading").isLoading()).toBeFalsy();
+                    expect(this.view.$(".spinner").isLoading()).toBeFalsy();
                 })
 
                 if (shouldCancelTimers) {
@@ -442,7 +442,7 @@ describe("chorus.views.ResultsConsoleView", function() {
         })
 
         it("starts the spinner", function() {
-            expect(this.view.$(".task_loading").isLoading()).toBeTruthy();
+            expect(this.view.$(".spinner").isLoading()).toBeTruthy();
         })
     })
 
