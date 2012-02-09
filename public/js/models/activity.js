@@ -26,7 +26,7 @@ chorus.models.Activity = chorus.models.Base.extend({
     },
 
     dataset: function() {
-        var datasetField = this.get("table") || this.get("view") || this.get("databaseObject");
+        var datasetField = this.get("table") || this.get("view") || this.get("chorusView") || this.get("databaseObject");
         if (datasetField) {
             return new chorus.models.Dataset({
                 id:   datasetField.id,

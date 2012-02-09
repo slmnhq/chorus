@@ -160,7 +160,9 @@ chorus.models.Dataset = chorus.models.Base.extend({
         "BASE_TABLE":"table",
         "VIEW":"view",
         "EXTERNAL_TABLE":"table",
-        "MASTER_TABLE":"table"
+        "MASTER_TABLE":"table",
+        "CHORUS_VIEW" : "view",
+        "QUERY" : "query"
     },
 
     entityTypeMap: {
@@ -171,7 +173,7 @@ chorus.models.Dataset = chorus.models.Base.extend({
 
     iconMap:{
         "CHORUS_VIEW":{
-            "":"view_large.png"
+            "QUERY":"view_large.png"
         },
 
         "SOURCE_TABLE":{

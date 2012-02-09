@@ -28,6 +28,11 @@ describe("chorus.models.Activity", function() {
             this.model = fixtures.activities.NOTE_ON_DATASET_VIEW();
             expect(this.model.noteworthy()).toBeA(chorus.models.Dataset);
         })
+
+        it("should return a dataset when the note is on a chorus view", function() {
+            this.model = fixtures.activities.NOTE_ON_CHORUS_VIEW();
+            expect(this.model.noteworthy()).toBeA(chorus.models.Dataset);
+        })
     })
 
     describe("#author", function() {

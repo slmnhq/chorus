@@ -218,12 +218,14 @@ describe("chorus.models.Dataset", function() {
         })
     })
 
-    describe("#meta_type", function() {
+    describe("#metaType", function() {
         var expectedTypeMap = {
             "BASE_TABLE" : "table",
             "VIEW" : "view",
+            "QUERY": "query",
             "EXTERNAL_TABLE" : "table",
-            "MASTER_TABLE" : "table"
+            "MASTER_TABLE" : "table",
+            "CHORUS_VIEW" : "view"
         }
 
         _.each(expectedTypeMap, function(str, type) {
@@ -250,7 +252,7 @@ describe("chorus.models.Dataset", function() {
     describe("iconFor", function() {
         var expectedMap = {
             "CHORUS_VIEW" : {
-                "" : "view_large.png"
+                "QUERY" : "view_large.png"
             },
 
             "SOURCE_TABLE" : {
