@@ -7,10 +7,6 @@ describe("chorus.pages.SchemaBrowsePage", function() {
     })
 
     describe("#initialize", function() {
-        it("fetches the schema", function() {
-            expect(this.server.lastFetchFor(this.schema)).not.toBeUndefined();
-        });
-
         it("fetches the instance", function() {
             expect(this.server.lastFetchFor(this.instance)).not.toBeUndefined();
         });
@@ -28,7 +24,6 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         context("after everything has been fetched", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.instance);
-                this.server.completeFetchFor(this.schema);
                 this.page.render();
             });
 

@@ -1,6 +1,6 @@
 chorus.models.Schema = chorus.models.Base.extend({
-    urlTemplate:"data/{{instanceId}}/database/{{databaseName}}/schema/{{name}}",
     showUrlTemplate:"instances/{{instanceId}}/database/{{databaseName}}/schema/{{name}}",
+    loaded: true,
 
     functions:function () {
         this._schemaFunctions = this._schemaFunctions || new chorus.collections.SchemaFunctionSet([], {

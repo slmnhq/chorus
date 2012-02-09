@@ -20,7 +20,6 @@
                 databaseName : databaseName,
                 name : schemaName
             });
-            this.schema.fetch();
 
             this.instance = new chorus.models.Instance({id: instanceId});
             this.instance.bindOnce("loaded", function() {
