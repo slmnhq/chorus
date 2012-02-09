@@ -45,6 +45,11 @@ describe("chorus.views.visualizations.BoxPlot", function() {
             expect(this.view.$('.yaxis .axis_label').text()).toBe("bar")
         })
 
+        it("has the Y grid lines", function() {
+            expect(this.view.$('.yaxis line.grid').length).toBeGreaterThan(0);
+            expect(this.view.$('.xaxis line.grid').length).toBe(0);
+        });
+
         describe("the quartile rectangles", function() {
             it("has one for each bucket", function() {
                 expect(this.quartileRectangles.length).toBe(3);

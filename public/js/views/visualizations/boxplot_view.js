@@ -20,6 +20,7 @@ chorus.views.visualizations.Boxplot = chorus.views.Base.extend({
             xLabels: _.pluck(data, 'bucket'),
             xAxisLabel: this.model.get("xAxis"),
             yAxisLabel: this.model.get("yAxis"),
+            hasYGrids: true,
             paddingX: 35,
             paddingY: 35
         });

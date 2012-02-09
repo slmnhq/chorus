@@ -547,6 +547,48 @@ describe("chorus.views.visualizations.Axes", function() {
             itHasAReasonableLayout();
         });
 
+        describe("with grid lines", function() {
+            beforeEach(function() {
+                this.labelValues = ['one', 'two', 'three', 'four', 'five'];
+                this.paddingX = 35;
+                this.paddingY = 35;
+
+                this.axis = new chorus.views.visualizations.YAxis({
+                    el: this.el,
+                    labels: this.labelValues,
+                    axisLabel: "magic_numbers",
+                    ticks: true,
+                    paddingX: this.paddingX,
+                    paddingY: this.paddingY,
+                    hasGrids: true
+                });
+                this.axis.render();
+
+                this.axisLine  = this.$el.find("line.axis");
+                this.ticks     = this.$el.find("line.tick");
+                this.axisLabel = this.$el.find(".axis_label");
+                this.labels    = this.$el.find(".label");
+                this.grids     = this.$el.find("line.grid");
+            });
+
+
+            it("should draw a grid line for every tick mark", function() {
+                expect(this.grids.length).toEqual(this.ticks.length);
+
+                _.each(this.grids, function(grid, i) {
+                    expect(grid).toBeHorizontal();
+                    expect(centerY(grid)).toEqual(centerY(this.ticks[i]));
+                }, this);
+            });
+
+            it("should draw grid lines extending horizontally across the chart", function() {
+                _.each(this.grids, function(grid, i) {
+                    expect(leftX(grid)).toEqual(leftX(this.axisLine));
+                    expect(rightX(grid)).toBeCloseTo(this.width - this.paddingX);
+                }, this);
+            });
+        });
+
         function itHasAReasonableLayout() {
             describe("the axis label", function() {
                 it("should have the correct text", function() {
