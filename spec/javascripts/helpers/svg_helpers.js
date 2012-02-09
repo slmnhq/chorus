@@ -84,6 +84,14 @@
                 if (!elements[i-1]) return true;
                 return leftX(el) > leftX(elements[i-1]);
             });
+        },
+
+        toBeOrderedTopToBottom: function() {
+            var elements = this.actual;
+            return _.all(elements, function(el, i) {
+                if (!elements[i-1]) return true;
+                return topY(el) < topY(elements[i-1]);
+            });
         }
     };
 
