@@ -1,0 +1,21 @@
+.sql_preview {
+    .dialog_content {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .container {
+        width: 845px;
+        min-height: 120px;
+        max-height: 430px;
+    }
+
+    .CodeMirror-scroll {
+        height: auto;
+        overflow: visible;
+    }
+
+    .CodeMirror-gutter {
+        background-color: $body-background-color;
+    }
+}
