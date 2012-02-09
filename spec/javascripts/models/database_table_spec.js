@@ -1,6 +1,6 @@
 describe("chorus.models.DatabaseTable", function() {
     beforeEach(function() {
-        this.model = new chorus.models.DatabaseTable({name: "Tabler", instanceId: "33", databaseName: "dataman", schemaName: "partyman"});
+        this.model = new chorus.models.DatabaseTable({objectName: "Tabler", instanceId: "33", databaseName: "dataman", schemaName: "partyman"});
     });
 
     it("should have the correct url template", function() {
@@ -21,14 +21,14 @@ describe("chorus.models.DatabaseTable", function() {
             expect(columns.attributes.instanceId).toBe(this.model.get("instanceId"));
             expect(columns.attributes.databaseName).toBe(this.model.get("databaseName"));
             expect(columns.attributes.schemaName).toBe(this.model.get("schemaName"));
-            expect(columns.attributes.tableName).toBe(this.model.get("name"));
+            expect(columns.attributes.tableName).toBe(this.model.get("objectName"));
         });
     });
 
     describe("#toText", function() {
         context("with lowercase names", function() {
             beforeEach(function() {
-                this.model.set({name: "tabler"})
+                this.model.set({objectName: "tabler"})
             });
             it("formats the string to put into the sql editor", function() {
                 expect(this.model.toText()).toBe('partyman.tabler');
@@ -36,7 +36,7 @@ describe("chorus.models.DatabaseTable", function() {
         });
         context("with uppercase names", function() {
             beforeEach(function() {
-                this.model.set({name: "Tabler", schemaName: "PartyMAN"});
+                this.model.set({objectName: "Tabler", schemaName: "PartyMAN"});
             });
             it("puts quotes around the uppercase names", function() {
                 expect(this.model.toText()).toBe('"PartyMAN"."Tabler"');

@@ -93,12 +93,12 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
             context("and some data was fetched", function() {
                 beforeEach(function() {
                     this.server.completeFetchAllFor(this.schema.views(), [
-                        fixtures.databaseView({name: "Data1"}),
-                        fixtures.databaseView({name: "zebra"})
+                        fixtures.databaseView({objectName: "Data1"}),
+                        fixtures.databaseView({objectName: "zebra"})
                     ]);
                     this.server.completeFetchAllFor(this.schema.tables(), [
-                        fixtures.databaseTable({name: "Data2"}),
-                        fixtures.databaseTable({name: "apple"})
+                        fixtures.databaseTable({objectName: "Data2"}),
+                        fixtures.databaseTable({objectName: "apple"})
                     ]);
                     this.view.render();
                 });

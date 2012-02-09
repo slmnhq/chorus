@@ -28,13 +28,13 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
             type = li.data("type"),
             name = li.data("name");
 
-        var dataset = this.collection.findWhere({ type:type, name:name });
+        var dataset = this.collection.findWhere({ type:type, objectName:name });
         this.trigger("datasetSelected", dataset);
     },
 
     additionalContext:function () {
         this.collection.models.sort(function (a, b) {
-            return naturalSort(a.get("name").toLowerCase(), b.get("name").toLowerCase());
+            return naturalSort(a.get("objectName").toLowerCase(), b.get("objectName").toLowerCase());
         });
 
         return this._super("additionalContext", arguments);
@@ -43,7 +43,7 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
     collectionModelContext:function (model) {
         return {
             type:model.get("type"),
-            name:model.get("name"),
+            name:model.get("objectName"),
             cid:model.cid
         }
     },

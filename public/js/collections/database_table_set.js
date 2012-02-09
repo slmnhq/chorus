@@ -4,7 +4,7 @@ chorus.collections.DatabaseTableSet = chorus.collections.Base.extend({
 
     findByName:function (name) {
         return this.find(function (table) {
-            return table.get("name") === name;
+            return table.get("objectName") === name;
         });
     },
 
