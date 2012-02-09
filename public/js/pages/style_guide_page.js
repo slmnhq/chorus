@@ -180,13 +180,13 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                     ],
 
                     rows: [
-                        { bucket: "Five", count: 5 },
+                        { bucket: "Twenty", count: 20 },
                         { bucket: "Eight", count: 8 },
-                        { bucket: "Zero", count: 0 },
+                        { bucket: "Five", count: 5 },
                         { bucket: "One", count: 1 },
-                        { bucket: "Twenty", count: 20 }
+                        { bucket: "Zero", count: 0 }
                     ],
-                    "chart[yAxis]": "Custom x Axis Title"
+                    "chart[yAxis]": "Custom y Axis Title"
                 })
             }),
 

@@ -20,8 +20,9 @@ chorus.views.visualizations.Frequency = chorus.views.Base.extend({
             xScaleType: "numeric",
             yLabels: buckets,
             xAxisLabel: "count",
-            yAxisLabel: this.model.get("yAxis"),
-            ticks: true
+            yAxisLabel: this.model.get("chart[yAxis]"),
+            ticks: true,
+            hasXGrids: true
         });
 
         if (!$el.isOnDom()) return;
@@ -42,6 +43,7 @@ chorus.views.visualizations.Frequency = chorus.views.Base.extend({
             .attr("width", function(row) {
                 return scales.x(row.count) - scales.x(0);
             });
+        this.axes.render();
 
         this.postRender();
     }

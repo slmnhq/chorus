@@ -183,7 +183,7 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
 
         if(this.hasGrids) {
             this.el.selectAll(".grid")
-                .data(this.labels()).enter()
+                .data(this.labels().slice(1)).enter()
                 .append("svg:line")
                 .attr("class", "grid")
                 .attr("y1", this.minY())
@@ -304,6 +304,7 @@ chorus.views.visualizations.YAxis = chorus.views.visualizations.Axis.extend({
             .attr("x1", tickRight)
             .attr("x2", tickRight);
     }
+
 });
 
 chorus.views.visualizations.Axes = function(options) {
@@ -338,5 +339,6 @@ _.extend(chorus.views.visualizations.Axes.prototype, {
 
         this.xAxis.render()
         this.yAxis.render()
+
     }
 })

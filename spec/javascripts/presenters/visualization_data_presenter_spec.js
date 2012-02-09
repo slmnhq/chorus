@@ -32,9 +32,9 @@ describe("chorus.presenters.visualizations", function() {
         beforeEach(function() {
             this.model = fixtures.frequencyTaskWithResult({
                 rows: [
-                    { bucket: 'chupacabra', count: 321 },
                     { bucket: 'aardvark', count: 1024 },
-                    { bucket: 'beluga', count: 573 }
+                    { bucket: 'beluga', count: 573 },
+                    { bucket: 'chupacabra', count: 321 }
                 ]
             });
 
@@ -42,8 +42,13 @@ describe("chorus.presenters.visualizations", function() {
             this.data = this.presenter.present();
         });
 
-        it("returns a hash of field-value to number of occurences", function() {
-            expect(this.data.frequencies).toEqual(this.model.rows);
+        it("returns a reversed array of bucket, count hashes", function() {
+            var reversed_rows = [
+                { bucket: 'chupacabra', count: 321 },
+                { bucket: 'beluga', count: 573 },
+                { bucket: 'aardvark', count: 1024 }
+            ];
+            expect(this.data).toEqual(reversed_rows);
         });
     });
 

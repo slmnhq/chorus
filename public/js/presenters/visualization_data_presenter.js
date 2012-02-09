@@ -23,7 +23,7 @@
         present: function() {
             return _.map(this.task.get("rows"), function(row) {
                 return {bucket: row.bucket, count: row.count};
-            });
+            }).reverse();
         }
     });
 
