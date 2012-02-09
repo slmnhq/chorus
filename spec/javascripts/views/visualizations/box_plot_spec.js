@@ -1,4 +1,13 @@
 describe("chorus.views.visualizations.BoxPlot", function() {
+    var leftX   = chorus.svgHelpers.leftX,
+        rightX  = chorus.svgHelpers.rightX,
+        width   = chorus.svgHelpers.width,
+        height  = chorus.svgHelpers.height,
+        centerX = chorus.svgHelpers.centerX,
+        topY    = chorus.svgHelpers.topY,
+        bottomY = chorus.svgHelpers.bottomY,
+        centerY = chorus.svgHelpers.centerY;
+
     beforeEach(function() {
         this.task = fixtures.boxplotTaskWithResult({
             rows: [
@@ -6,102 +15,145 @@ describe("chorus.views.visualizations.BoxPlot", function() {
                 { bucket: 'beluga',     min: 100, firstQuartile: 100, median: 250, thirdQuartile: 300, max: 400, percentage: "33.3%" },
                 { bucket: 'chupacabra', min: 10,  firstQuartile: 10,  median: 25,  thirdQuartile: 30,  max: 40,  percentage: "81.5%" }
             ],
-            "chart[xAxis]": "foo",
-            "chart[yAxis]": "bar" });
-
-        this.view = new chorus.views.visualizations.Boxplot({
-            model: this.task
+            xAxis: "foo",
+            yAxis: "bar"
         });
+
+        this.view = new chorus.views.visualizations.Boxplot({ model: this.task });
     });
 
     describe("#render", function() {
         beforeEach(function() {
+            $("#jasmine_content").append(this.view.el);
             this.view.render();
+
+            this.boxes = this.view.$("g.box");
+            this.quartileRectangles = this.boxes.find(".quartile");
+            this.medianLines = this.boxes.find("line.median");
+            this.minWhiskers = this.boxes.find("line.whisker.min")
+            this.maxWhiskers = this.boxes.find("line.whisker.max")
+            this.whiskers = this.boxes.find("line.whisker");
+            this.midlines = this.boxes.find("line.midline");
+        });
+
+        beforeEach(function() {
+            this.addMatchers(chorus.svgHelpers.matchers);
         });
 
         it("has the correct axis labels", function() {
-            expect(this.view.$('.axis.south .title text').text()).toBe("foo")
-            expect(this.view.$('.axis.west .title text').text()).toBe("bar")
+            expect(this.view.$('.xaxis .axis_label').text()).toBe("foo")
+            expect(this.view.$('.yaxis .axis_label').text()).toBe("bar")
         })
 
-        it("has one box for each bucket", function() {
-            expect(this.view.$("g.box").length).toBe(3);
-        });
+        describe("the quartile rectangles", function() {
+            it("has one for each bucket", function() {
+                expect(this.quartileRectangles.length).toBe(3);
+            });
 
-        it("renders no xtick lines by default", function() {
-            expect(this.view.$(".axis.south .grid line").length).toBe(0);
-        });
+            it("draws them in order from left to right", function() {
+                expect(this.quartileRectangles).toBeOrderedLeftToRight();
+            });
 
-        it("renders ytick lines by default", function() {
-            expect(this.view.$(".axis.west .grid line").length).toBeGreaterThan(1);
-        });
+            it("draws them with equal width", function() {
+                var standardWidth = width(this.quartileRectangles[0]);
+                _.each(this.quartileRectangles, function(rect) {
+                    expect(width(rect)).toEqual(standardWidth);
+                });
+            });
 
-        it("draws the median line", function() {
-            var $boxes = this.view.$("g.box");
-            $boxes.each(function(_idx, box){
-                var $box = $(box);
-                var $rect = $box.find("rect");
-                var width = parseFloat($rect.attr("width"));
-                var height = parseFloat($rect.attr("height"));
-                var x = parseFloat($rect.attr("x"));
-                var y = parseFloat($rect.attr("y"));
-
-                var $line = $box.find("line.median");
-                expect($line.attr("x1")).toBeCloseTo(x);
-                expect($line.attr("x2")).toBeCloseTo(x + width);
-
-                expect($line.attr("y2")).toBe($line.attr("y1"));
-                expect($line.attr("y2")).toBeGreaterThan(y);
-                expect($line.attr("y2")).toBeLessThan(y + height);
+            it("draws them with some padding in between", function() {
+                _.each(this.quartileRectangles, function(rect, i) {
+                    if (i === 0) return;
+                    expect(leftX(rect)).toBeGreaterThan(rightX(this.quartileRectangles[i-1]) + 5);
+                }, this);
             });
         });
 
-        describe("whiskers", function() {
-            it("aligns horizontally with the boxes", function() {
-                var $boxes = this.view.$("g.box");
-                $boxes.each(function(_idx, box){
-                    var $box = $(box);
-                    var $rect = $box.find("rect");
-                    var width = parseFloat($rect.attr("width"));
-                    var x = parseFloat($rect.attr("x"));
+        describe("the median lines", function() {
+            it("draws one for each bucket", function() {
+                expect(this.medianLines.length).toBe(3);
+            });
 
-                    var $line = $box.find("line.whisker.mid");
-                    expect($line.attr("x2")).toBe($line.attr("x1"));
-                    expect($line.attr("x2")).toBeCloseTo(x+0.5*width);
+            it("draws it inside the rectangle", function() {
+                _.each(this.medianLines, function(line, i) {
+                    var rect = this.quartileRectangles[i];
+
+                    expect(line).toBeHorizontal();
+
+                    expect(leftX(line)).toBeCloseTo(leftX(rect));
+                    expect(rightX(line)).toBeCloseTo(rightX(rect));
+
+                    expect(topY(line)).toBeGreaterThan(topY(rect));
+                    expect(bottomY(line)).toBeLessThan(bottomY(rect));
+                }, this);
+            });
+        });
+
+        describe("the whiskers", function() {
+            it("draws a minimum and a maximum whisker for each bucket", function() {
+                expect(this.maxWhiskers.length).toBe(3);
+                expect(this.minWhiskers.length).toBe(3);
+                expect(this.whiskers.length).toBe(6);
+            });
+
+            it("aligns them horizontally with the boxes", function() {
+                _.each(this.minWhiskers, function(whisker, i) {
+                    expect(centerX(whisker)).toBeCloseTo(centerX(this.quartileRectangles[i]))
+                }, this);
+
+                _.each(this.maxWhiskers, function(whisker, i) {
+                    expect(centerX(whisker)).toBeCloseTo(centerX(this.quartileRectangles[i]))
+                }, this);
+            });
+
+            it("draws them horizontally", function() {
+                _.each(this.whiskers, function(whisker, i) {
+                    expect(whisker).toBeHorizontal();
+                }, this);
+            });
+
+            it("draws them narrower than the boxes", function() {
+                var boxWidth = width(this.quartileRectangles[0]);
+                _.each(this.minWhiskers, function(whisker, i) {
+                    expect(width(whisker)).toBeLessThan(boxWidth);
+                }, this);
+            });
+        });
+
+        describe("the midlines", function() {
+            it("draws one for each bucket", function() {
+                expect(this.midlines.length).toBe(3);
+            });
+
+            it("draws them vertically", function() {
+                _.each(this.midlines, function(line) {
+                    expect(line).toBeVertical();
                 });
-            })
+            });
 
-            it("has horizontal tips", function() {
-                var $boxes = this.view.$("g.box");
-                $boxes.each(function(_idx, box){
-                    var $box = $(box);
-                    var $rect = $box.find("rect");
-                    var width = parseFloat($rect.attr("width"));
-                    var x = parseFloat($rect.attr("x"));
+            it("draws them at the center of the boxes", function() {
+                _.each(this.midlines, function(line, i) {
+                    expect(centerX(line)).toBeCloseTo(centerX(this.quartileRectangles[i]));
+                }, this);
+            });
 
-                    var $line_top = $box.find("line.whisker.top");
-                    var $line_bottom = $box.find("line.whisker.bottom");
-                    expect($line_top.attr("y2")).toBe($line_top.attr("y1"));
-                    expect($line_bottom.attr("y2")).toBe($line_bottom.attr("y1"));
-                });
-            })
+            it("draws them from the minimum whisker up to the maximum whisker", function() {
+                _.each(this.midlines, function(line, i) {
+                    expect(topY(line)).toEqual(topY(this.maxWhiskers[i]));
+                    expect(bottomY(line)).toEqual(bottomY(this.minWhiskers[i]));
+                }, this);
+            });
+        });
 
-            it("is thinner than the boxes", function() {
-                var $boxes = this.view.$("g.box");
-                $boxes.each(function(_idx, box){
-                    var $box = $(box);
-                    var $rect = $box.find("rect");
-                    var width = parseFloat($rect.attr("width"));
-                    var x = parseFloat($rect.attr("x"));
+        xit("renders no xtick lines by default", function() {
+            expect(this.view.$(".axis.south .grid line").length).toBe(0);
+        });
 
-                    var $line = $box.find("line.whisker.top, line.whisker.bottom");
-                    expect($line.attr("x1")).toBeLessThan($line.attr("x2"));
-                    expect($line.attr("x1")).toBeGreaterThan(x);
-                    expect($line.attr("x2")).toBeLessThan(x+width);
-                });
-            })
+        xit("renders ytick lines by default", function() {
+            expect(this.view.$(".axis.west .grid line").length).toBeGreaterThan(1);
+        });
 
-        })
+
     })
 });
 

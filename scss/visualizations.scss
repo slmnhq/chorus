@@ -10,9 +10,6 @@ svg.chart {
         stroke: #444;
     }
 
-    text {
-        font-size: 0.5em;
-    }
     path {
         fill: none;
     }
@@ -23,31 +20,9 @@ svg.chart {
         stroke: #aaa;
     }
 
-    .axis.west .grid line {
-        stroke-dasharray: 1;
-        stroke-width: 0.25;
-        stroke: #444;
-    }
-
-    .xaxis, .yaxis {
-        stroke-width: 0.40;
-        stroke: #444;
-    }
-
-    .xaxis line.grid{
-        stroke-dasharray: 1;
-        stroke-width: 1.0;
-        stroke: #aaa;
-    }
-
     .axis_edge line {
         stroke-width: 0.40;
         stroke: #444;
-    }
-
-    .time_series path {
-        stroke-width: 0.6;
-        stroke: black;
     }
 
     text {
@@ -56,29 +31,52 @@ svg.chart {
         fill: $color-text2;
     }
 
-    rect {
-      fill: $chart-fill-color;
+    .xaxis, .yaxis, .axis {
+        line {
+            stroke-width: 0.40;
+            stroke: #444;
+        }
+
+        .grid, .grid line {
+            stroke-dasharray: 1;
+            stroke-width: 0.25;
+            stroke: #444;
+        }
     }
 
-    .whisker {
-      stroke: black;
-      stroke-width: 1.0;
+    &.time_series path {
+        stroke-width: 0.6;
+        stroke: black;
     }
 
-    .median {
-      stroke: black;
-      stroke-width: 1.0;
+    &.boxplot {
+        .quartile {
+            fill: $chart-fill-color;
+        }
+
+        .midline, .whisker, .median {
+            stroke: black;
+            stroke-width: 1.0;
+        }
     }
 
-    path.series {
-        stroke-width: 5.0;
-        stroke: $chart-fill-color;
+    &.frequency {
+        rect {
+            fill: $chart-fill-color;
+        }
     }
 
+    &.timeseries {
+        path.series {
+            stroke-width: 5.0;
+            stroke: $chart-fill-color;
+        }
 
-  .histogram {
-    rect.bar {
-      fill: $chart-fill-color;
+
+        &.histogram {
+            rect.bar {
+                fill: $chart-fill-color;
+            }
+        }
     }
-  }
 }

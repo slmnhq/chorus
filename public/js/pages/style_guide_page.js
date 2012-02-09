@@ -192,6 +192,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
 
             "Visualization: BoxPlot" : new chorus.views.visualizations.Boxplot({
                 model: new chorus.models.BoxplotTask({
+                    xAxis: "test_coverage",
+                    yAxis: "speed",
                     columns: [
                         { name: "bucket",        typeCategory: "STRING" },
                         { name: "min",           typeCategory: "REAL_NUMBER" },

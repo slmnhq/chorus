@@ -18,7 +18,7 @@ chorus.views.visualizations.Timeseries = chorus.views.Base.extend({
 
         return d3.select(el)
             .append("svg:svg")
-            .attr("class", "chart")
+            .attr("class", "chart timeseries")
             .attr("width", this.plotWidth)
             .attr("height", this.plotHeight)
             .append("svg:g")
