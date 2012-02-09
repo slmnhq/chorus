@@ -1,27 +1,30 @@
 jQuery.fn.extend({
-    startLoading : function(translationKey) {
+    startLoading: function(translationKey) {
         this.each(function() {
             var el = $(this);
             if (el.isLoading()) return;
 
             var spinner = new Spinner({
-                    lines: 12,
-                    length: 3,
-                    width: 2,
-                    radius: 3,
-                    color: '#000',
-                    speed: 1,
-                    trail: 75,
-                    shadow: false
-                }).spin();
+                lines: 12,
+                length: 3,
+                width: 2,
+                radius: 3,
+                color: '#000',
+                speed: 1,
+                trail: 75,
+                shadow: false
+            }).spin();
 
             var originalText = el.text();
             var text = translationKey ? t(translationKey) : '';
             el.text(text).
                 append(spinner.el).
-                attr("disabled", "disabled").
                 data("loading-original-text", originalText).
                 addClass("is_loading");
+
+            if (el.is("button")) {
+                el.attr("disabled", "disabled");
+            }
         });
     },
 
@@ -29,7 +32,7 @@ jQuery.fn.extend({
         return jQuery.contains(document.body, this[0]);
     },
 
-    stopLoading : function() {
+    stopLoading: function() {
         this.each(function() {
             var el = $(this);
             if (!el.isLoading()) return;
@@ -39,7 +42,7 @@ jQuery.fn.extend({
         });
     },
 
-    isLoading : function() {
+    isLoading: function() {
         return !!this.data("loading-original-text");
     },
 

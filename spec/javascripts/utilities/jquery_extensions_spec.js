@@ -1,12 +1,14 @@
 describe("jquery extensions", function() {
-    describe("button extensions", function() {
+    describe("loading", function() {
         beforeEach(function() {
             var container = $("<div/>");
             _.times(5, function(i) {
                 container.append("<button>Original Text " + i + "</button>");
             });
+            container.append("<span>Original Span Text</span>")
             this.buttons = container.find("button");
             this.button = this.buttons.eq(0);
+            this.span = container.find("span").eq(0);
         });
 
         context("when #startLoading has not yet been called", function() {
@@ -24,26 +26,33 @@ describe("jquery extensions", function() {
             })
         });
 
-
         describe("startLoading", function() {
             beforeEach(function() {
                 this.buttons.startLoading("test.deer");
+                this.span.startLoading("test.deer")
             });
 
-            it("sets the button's text to the supplied translation key", function() {
+            it("sets the elements's text to the supplied translation key", function() {
                 expect(this.button.text()).toMatchTranslation("test.deer");
+                expect(this.span.text()).toMatchTranslation("test.deer")
             });
 
-            it("displays a spinner on the button", function() {
+            it("displays a spinner inside the element", function() {
                 expect(this.button.find("div[aria-role=progressbar]").length).toBe(1);
+                expect(this.span.find("div[aria-role=progressbar]").length).toBe(1);
             });
 
-            it("disables the button", function() {
+            it("disables buttons", function() {
                 expect(this.button.attr("disabled")).toBe("disabled");
             });
 
-            it("adds the is_loading class to the button", function() {
+            it("does not disable non-buttons", function() {
+                expect(this.span).not.toHaveAttr("disabled");
+            });
+
+            it("adds the is_loading class to the element", function() {
                 expect(this.button).toHaveClass("is_loading");
+                expect(this.span).toHaveClass("is_loading");
             });
 
             context("calling startLoading again", function() {
@@ -68,25 +77,29 @@ describe("jquery extensions", function() {
             describe("stopLoading", function() {
                 beforeEach(function() {
                     this.buttons.stopLoading();
+                    this.span.stopLoading();
                 });
 
-                it("sets each button's text to the original value", function() {
+                it("sets each elements's text to the original value", function() {
                     expect(this.buttons.eq(0).text()).toBe("Original Text 0");
                     expect(this.buttons.eq(1).text()).toBe("Original Text 1");
+                    expect(this.span.text()).toBe("Original Span Text");
                 });
 
-                it("removes the spinner from each button", function() {
+                it("removes the spinner from each element", function() {
                     expect(this.buttons.find("div[aria-role=progressbar]").length).toBe(0);
+                    expect(this.span.find("div[aria-role=progressbar]")).not.toExist();
                 });
 
-                it("enables the buttons", function() {
+                it("enables buttons", function() {
                     expect(this.buttons.eq(0)).not.toHaveAttr("disabled")
                     expect(this.buttons.eq(1)).not.toHaveAttr("disabled")
                 });
 
-                it("removes the loading class from the buttons", function() {
+                it("removes the loading class from the elements", function() {
                     expect(this.buttons.eq(0)).not.toHaveClass("loading");
                     expect(this.buttons.eq(1)).not.toHaveClass("loading");
+                    expect(this.span).not.toHaveClass("loading")
                 });
             });
         });
