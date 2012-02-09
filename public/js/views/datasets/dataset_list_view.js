@@ -41,8 +41,11 @@ chorus.views.DatasetList = chorus.views.Base.extend({
             iconImgUrl:model.iconUrl(),
             showUrl:model.showUrl(),
             schemaShowUrl: model.schema().showUrl(),
-            foundInWorkspaceName: workspace && workspace.name,
             otherWorkspaceCount : otherWorkspaceCount
+        };
+
+        if (workspace) {
+            ctx.foundInWorkspaceLink = chorus.helpers.linkTo(new chorus.models.Workspace(workspace).showUrl(), workspace.name);
         }
 
         var recentComment = model.lastComment();
