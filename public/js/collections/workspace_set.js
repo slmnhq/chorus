@@ -9,8 +9,8 @@ chorus.collections.WorkspaceSet = chorus.collections.Base.extend({
             params.active = true;
         }
 
-        if (this.attributes.user) {
-            params.user = this.attributes.user.get("id");
+        if (this.attributes.userId) {
+            params.user = this.attributes.userId;
         }
 
         if (this.attributes.showLatestComments) {
