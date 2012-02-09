@@ -150,8 +150,9 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
         var tickLabels = this.el.append("svg:g").attr("class", "labels")
             .selectAll(".label")
             .data(this.labels()).enter()
-            .append("svg:text")
+            .append("svg:g")
             .attr("class", "label")
+            .append("svg:text")
             .attr("y", tickLabelBottom)
             .attr("x", 0)
             .text(function(d) {
@@ -208,8 +209,9 @@ chorus.views.visualizations.YAxis = chorus.views.visualizations.Axis.extend({
         var self = this;
         this.el.selectAll(".label.test-origin-y")
             .data(this.labels()).enter()
-            .append("svg:text")
+            .append("svg:g")
             .attr("class", "label")
+            .append("svg:text")
             .text(function(d) {
                 return self.labelFormat(d, 4)
             });
