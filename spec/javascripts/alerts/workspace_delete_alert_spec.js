@@ -39,11 +39,15 @@ describe("WorkspaceDelete", function() {
         beforeEach(function() {
             spyOn(chorus.router, "navigate");
             spyOn(chorus, 'toast');
-            this.alert.model.trigger("destroy", this.alert.model);
+            this.name = this.model.get("name");
+//            this.alert.model.trigger("destroy", this.alert.model);
+            this.alert.model.destroy();
+            this.alert.model.clear();
+            this.server.lastDestroy().succeed();
         });
 
         it("displays a toast message", function() {
-            expect(chorus.toast).toHaveBeenCalledWith("workspace.delete.toast", {workspaceName: this.model.get("name")});
+            expect(chorus.toast).toHaveBeenCalledWith("workspace.delete.toast", {workspaceName: this.name});
         });
 
         it("navigates to the dashboard", function() {
