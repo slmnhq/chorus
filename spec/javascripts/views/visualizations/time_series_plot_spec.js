@@ -1,4 +1,13 @@
 describe("chorus.views.visualizations.Timeseries", function() {
+    var leftX   = chorus.svgHelpers.leftX,
+        rightX  = chorus.svgHelpers.rightX,
+        width   = chorus.svgHelpers.width,
+        height  = chorus.svgHelpers.height,
+        centerX = chorus.svgHelpers.centerX,
+        topY    = chorus.svgHelpers.topY,
+        bottomY = chorus.svgHelpers.bottomY,
+        centerY = chorus.svgHelpers.centerY;
+
     beforeEach(function() {
         this.task = new chorus.models.SqlExecutionTask({
             objectName: "desk_surface_quality",
@@ -11,12 +20,11 @@ describe("chorus.views.visualizations.Timeseries", function() {
             ],
             rows: [
                 { time: '2012-01-01', value: 321 },
-                { time: '2012-02-01', value: 124 },
+                { time: '2012-02-21', value: 124 },
                 { time: '2012-03-01', value: 321 },
                 { time: '2012-04-01', value: 321 },
                 { time: '2012-05-01', value: 421 },
-                { time: '2012-06-01', value: 621 },
-                { time: '2012-07-01', value: 524 },
+                { time: '2012-07-08', value: 524 },
                 { time: '2012-08-01', value: 824 },
                 { time: '2012-09-01', value: 924 },
                 { time: '2012-10-01', value: 724 }
@@ -32,6 +40,7 @@ describe("chorus.views.visualizations.Timeseries", function() {
             this.view.render();
 
             this.path = this.view.$("path");
+            this.xAxisLine = this.view.$(".xaxis line.axis");
             this.data = this.task.get("rows");
         });
 
@@ -56,8 +65,14 @@ describe("chorus.views.visualizations.Timeseries", function() {
             });
 
             xit("positions the points horizontally according to their time value", function() {
-                var times = _.pluck(this.data, "time");
+                var times = _.map(this.data, function(d) { return Date.parse(d.time) });
+                var deltaX = rightX(this.xAxisLine) - leftX(this.xAxisLine);
+                var deltaTime = _.last(times) - _.first(times);
+
                 _.each(this.xs, function(x, i) {
+                    var xRatio = (x - this.xs[0]) / deltaX;
+                    var timeRatio = (times[i] - times[0]) /  deltaTime;
+                    expect(xRatio).toBeCloseTo(timeRatio, 1);
                 }, this);
             });
 

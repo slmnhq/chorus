@@ -2,15 +2,16 @@ describe("chorus.presenters.visualizations", function() {
     describe("Timeseries", function() {
         beforeEach(function() {
             this.model = fixtures.timeseriesTaskWithResult({
-                columns: [
-                    { name: "id" },
-                    { name: "value" },
-                    { name: "animal" }
-                ],
                 rows: [
-                    { time: '1', value: 321 },
-                    { time: '6', value: 1024 },
-                    { time: '5', value: 573 }
+                    { time: '2012-01-01', value: 321 },
+                    { time: '2012-02-21', value: 124 },
+                    { time: '2012-03-01', value: 321 },
+                    { time: '2012-04-01', value: 321 },
+                    { time: '2012-05-01', value: 421 },
+                    { time: '2012-07-08', value: 524 },
+                    { time: '2012-08-01', value: 824 },
+                    { time: '2012-09-01', value: 924 },
+                    { time: '2012-10-01', value: 724 }
                 ]
             });
 
@@ -20,16 +21,21 @@ describe("chorus.presenters.visualizations", function() {
         });
 
         it("presents an array of pairs of values from the given time and value columns", function() {
-            expect(this.data.length).toBe(3);
-            expect(this.data[0]).toEqual({ time: "1", value: 321 });
-            expect(this.data[1]).toEqual({ time: "6", value: 1024 });
-            expect(this.data[2]).toEqual({ time: "5", value: 573 });
+            expect(this.data.length).toBe(9);
+            expect(this.data[0]).toEqual({ time: '2012-01-01', value: 321 });
+            expect(this.data[1]).toEqual({ time: '2012-02-21', value: 124 });
+            expect(this.data[2]).toEqual({ time: '2012-03-01', value: 321 });
         });
 
         it("should have a minY and a maxY", function() {
-            expect(this.data.minY).toBe(321)
-            expect(this.data.maxY).toBe(1024)
-        })
+            expect(this.data.minY).toBe(124);
+            expect(this.data.maxY).toBe(924);
+        });
+
+        it("should have a minX and a minY value", function() {
+            expect(this.data.minX).toBe("2012-01-01");
+            expect(this.data.maxX).toBe("2012-10-01");
+        });
     });
 
     describe("Frequency", function() {

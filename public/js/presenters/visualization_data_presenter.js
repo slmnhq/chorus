@@ -14,6 +14,8 @@
 
             rows.minY = _.min(_.pluck(rows, "value"))
             rows.maxY = _.max(_.pluck(rows, "value"))
+            rows.minX = _.first(_.pluck(rows, "time"));
+            rows.maxX = _.last(_.pluck(rows, "time"));
 
             return rows
         }

@@ -13,10 +13,11 @@ chorus.views.visualizations.Timeseries = chorus.views.Base.extend({
         this.axes = new chorus.views.visualizations.Axes({
             el: svg,
             yScaleType: "numeric",
-            xScaleType: "ordinal",
+            xScaleType: "time",
             maxYValue: data.maxY,
             minYValue: data.minY,
-            xLabels: _.pluck(data, 'time'),
+            minXValue: data.minX,
+            maxXValue: data.maxX,
             xAxisLabel: this.model.get("xAxis"),
             yAxisLabel: this.model.get("yAxis"),
             hasYGrids: true,
@@ -29,10 +30,10 @@ chorus.views.visualizations.Timeseries = chorus.views.Base.extend({
         this.axes.render();
 
         var scales = this.axes.scales();
-        var centerXScale = function(d) { return scales.x(d) + scales.x.rangeBand() / 2 };
+        // var centerXScale = function(d) { return scales.x(d) + scales.x.rangeBand() / 2 };
 
         var line = d3.svg.line()
-            .x(function(d) { return centerXScale(d.time);  })
+            .x(function(d) { return scales.x(Date.parse(d.time));  })
             .y(function(d) { return scales.y(d.value); });
 
         svg.append("svg:path")
