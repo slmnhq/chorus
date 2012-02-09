@@ -46,6 +46,22 @@ describe("chorus.views.DatasetListSidebar", function() {
                     expect(this.view.activityList.options.displayStyle).toEqual(['without_object']);
                 });
 
+                it("does not have a link to associate the dataset with a workspace", function() {
+                    expect(this.view.$('.actions .associate')).not.toExist();
+                });
+
+                context("when browsing a schema", function() {
+                    beforeEach(function() {
+                        this.view.options.browsingSchema = true;
+                        this.view.render();
+                    });
+
+                    it("has a link to associate the dataset with a workspace", function() {
+                        expect(this.view.$('.actions .associate')).toContainTranslation('actions.associate_with_workspace');
+                        expect(this.view.$('.actions .associate a').data('dialog')).toBe("AssociateWithWorkspace");
+                    });
+                });
+
                 describe("when the activity fetch completes", function() {
                     beforeEach(function() {
                         this.server.completeFetchFor(this.dataset.activities());

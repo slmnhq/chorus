@@ -1,48 +1,17 @@
-chorus.dialogs.CopyWorkfile = chorus.dialogs.Base.extend({
-    className:"copy_workfile",
+chorus.dialogs.CopyWorkfile = chorus.dialogs.PickWorkspace.extend({
     title:t("workfile.copy_dialog.title"),
+    buttonTitle: t("workfile.copy_dialog.copy_file"),
 
     persistent:true,
 
-    events:{
-        "click button.submit":"copyWorkfile"
-    },
-
-    additionalContext:function (ctx) {
-        return {
-            serverErrors:this.serverErrors
-        }
-    },
-
-    makeModel:function () {
-        this.collection = this.collection || new chorus.collections.WorkspaceSet([], {user:chorus.session.user()});
-        this.collection.fetchAll();
-        this.collection.bind("reset", this.render, this);
-    },
-
     setup:function () {
-        this.picklistView = new chorus.views.CollectionPicklist({ collection:this.collection });
-        this.picklistView.bind("item:selected", this.itemSelected, this);
+        this._super("setup");
         this.workfile = new chorus.models.Workfile({ id:this.options.launchElement.data("workfile-id"), workspaceId:this.options.launchElement.data("workspace-id") });
         this.workfile.fetch();
     },
 
-    postRender:function () {
-        this.picklistView.render();
-        this.$(".dialog_content .picklist").append(this.picklistView.el);
-        this.picklistView.delegateEvents();
-    },
 
-    itemSelected:function (item) {
-        if (item) {
-            this.$("button.submit").removeAttr("disabled");
-        }
-        else {
-            this.$("button.submit").attr("disabled", "disabled");
-        }
-    },
-
-    copyWorkfile:function () {
+    callback:function () {
         var self = this;
 
         var params = {

@@ -40,7 +40,8 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
 
     additionalContext:function () {
         var ctx = {
-            typeString: this.datasetType(this.resource)
+            typeString: this.datasetType(this.resource),
+            browsingSchema: this.options.browsingSchema
         }
 
         if (this.resource) {
