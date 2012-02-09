@@ -23,6 +23,7 @@ describe("chorus.views.visualizations.Histogram", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            $("#jasmine_content").append(this.view.el);
             this.view.render();
         })
 
@@ -30,46 +31,12 @@ describe("chorus.views.visualizations.Histogram", function() {
             expect(this.view.$(".bar").length).toBe(5);
         })
 
-        it("renders no xtick lines by default", function() {
-            expect(this.view.$(".axis.south .grid line").length).toBe(0);
-        });
-
-        it("renders ytick lines by default", function() {
-            expect(this.view.$(".axis.west .grid line").length).toBeGreaterThan(1);
-        });
-
-        it("renders the y axis edge", function() {
-            expect(this.view.$(".axis.west .axis_edge line")).toExist()
-            expect(this.view.$(".axis.west .axis_edge line").attr("y1")).toBeGreaterThan(this.view.$(".axis.west .axis_edge line").attr("y2"))
-
-        })
-
-        it("labels the y axis ticks", function(){
-            var labels = this.view.$(".axis.west .labels text")
-            expect(labels.length).toBeGreaterThan(2)
-            
-            _.each (labels, function(l){
-                expect(l.textContent <= 2000).toBeTruthy();
-                expect(l.textContent >= 0).toBeTruthy();
-            })
-        })
-
-        it("labels the x axis ticks", function(){
-            var labels = _.pluck(this.view.$(".axis.south .labels text"), "textContent")
-            var expectedLabels = _.pluck(this.task.get("rows"), "bin");
-            expect(labels).toEqual(expectedLabels);
-        })
-
         it ("labels the x axis", function(){
-            expect(this.view.$(".axis.south .title").text()).toBe("I am the x axis")
+            expect(this.view.$(".xaxis .axis_label").text()).toBe("I am the x axis")
         })
 
         it ("labels the y axis", function(){
-            expect(this.view.$(".axis.west .title").text()).toBe("count")
-        })
-
-        it("does not render the x axis edge", function() {
-            expect(this.view.$(".axis.south .axis_edge line")).not.toExist()
+            expect(this.view.$(".yaxis .axis_label").text()).toBe("count")
         })
 
         it("has correct heights on the bars", function() {
@@ -92,6 +59,12 @@ describe("chorus.views.visualizations.Histogram", function() {
             var bottoms = _.map($bars, function(bar) {
                 expect(parseFloat($(bar).attr("y"))+parseFloat($(bar).attr("height"))).toBeCloseTo(bottomY)
             })
+        })
+
+        it("draws the grid lines after the rectangles", function() {
+            var gridRect = this.view.$(".plot rect, line.grid");
+            expect($(gridRect[0]).attr("class")).toBe("bar")
+            expect($(gridRect[gridRect.length-1]).attr("class")).toBe("grid")
         })
 
     });

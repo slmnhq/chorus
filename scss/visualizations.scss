@@ -72,11 +72,11 @@ svg.chart {
             stroke: $chart-fill-color;
         }
 
+    }
 
-        &.histogram {
-            rect.bar {
-                fill: $chart-fill-color;
-            }
+    &.histogram {
+        rect.bar {
+            fill: $chart-fill-color;
         }
     }
 }
