@@ -44,15 +44,22 @@
         .sql {
             @include font-normal-alpha;
             margin-left: 10px;
+            vertical-align: middle;
+            display: inline-block;
+            max-width: 50%;
+
             .sql_prompt {
+                display: inline-block;
                 margin-right: 5px;
+                vertical-align: middle;
             }
+            
             .sql_content {
                 @include ellipsis;
                 display: inline-block;
-                max-width: 50%;
                 font-weight: $semibold;
                 color: $color-text1;
+                vertical-align: middle;
             }
         }
 
