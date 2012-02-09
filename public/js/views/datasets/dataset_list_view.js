@@ -36,7 +36,8 @@ chorus.views.DatasetList = chorus.views.Base.extend({
     collectionModelContext:function (model) {
         var ctx = {
             iconImgUrl:model.iconUrl(),
-            showUrl:model.showUrl()
+            showUrl:model.showUrl(),
+            schemaShowUrl: model.schema().showUrl()
         }
 
         var recentComment = model.lastComment();

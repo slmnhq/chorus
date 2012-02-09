@@ -1,4 +1,4 @@
-describe("NotesNewDialog", function() {
+describe("chorus.dialogs.NotesNewDialog", function() {
     beforeEach(function() {
         this.launchElement = $("<a data-entity-type='workfile' data-allow-workfile-attachments='true' data-entity-id='1' data-workspace-id='22'></a>")
         this.dialog = new chorus.dialogs.NotesNew({
@@ -508,6 +508,7 @@ describe("NotesNewDialog", function() {
 
         it("saves the data", function() {
             expect(this.dialog.model.get("body")).toBe("The body of a note")
+            expect(this.dialog.model.get("workspaceId")).toBe(22);
             expect(this.dialog.model.save).toHaveBeenCalled();
         });
 
