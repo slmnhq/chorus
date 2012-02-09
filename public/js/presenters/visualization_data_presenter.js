@@ -8,9 +8,14 @@
 
     _.extend(ns.presenters.visualizations.Timeseries.prototype, {
         present: function() {
-            return _.map(this.task.get("rows"), function(row) {
+            var rows = _.map(this.task.get("rows"), function(row) {
                 return {time: row.time, value: row.value};
             });
+
+            rows.minY = _.min(_.pluck(rows, "value"))
+            rows.maxY = _.max(_.pluck(rows, "value"))
+
+            return rows
         }
     });
 

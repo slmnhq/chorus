@@ -26,6 +26,10 @@ describe("chorus.presenters.visualizations", function() {
             expect(this.data[2]).toEqual({ time: "5", value: 573 });
         });
 
+        it("should have a minY and a maxY", function() {
+            expect(this.data.minY).toBe(321)
+            expect(this.data.maxY).toBe(1024)
+        })
     });
 
     describe("Frequency", function() {
