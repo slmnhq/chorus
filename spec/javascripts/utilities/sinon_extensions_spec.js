@@ -1,4 +1,17 @@
 describe("sinon extensions", function() {
+    describe("#lastFetchFor", function() {
+        context("when #fetchAll was called on a collection (setting a non-default 'rows' parameter)", function() {
+            beforeEach(function() {
+                this.collection = new chorus.collections.UserSet();
+                this.collection.fetchAll();
+            });
+
+            it("returns the request made by #fetchAll", function() {
+                expect(this.server.lastFetchFor(this.collection)).toBeDefined();
+            });
+        });
+    });
+
     describe("#completeFetchFor", function() {
         beforeEach(function() {
             this.model = new chorus.models.User({ id: '1' })
@@ -7,6 +20,7 @@ describe("sinon extensions", function() {
             this.model.fetch()
             this.collection.fetch()
         })
+
 
         context("it is called with a specified result", function(){
             beforeEach(function() {
