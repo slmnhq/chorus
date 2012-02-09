@@ -46,8 +46,8 @@ chorus.views.visualizations.Frequency = chorus.views.Base.extend({
             .attr("width", function(row) {
                 return scales.x(row.count) - scales.x(0);
             });
-        d3.select(".xaxis").remove()
-        d3.select(".yaxis").remove()
+        svg.select(".xaxis").remove()
+        svg.select(".yaxis").remove()
         this.axes.render();
 
         this.postRender();
