@@ -110,11 +110,22 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
     describe("#render", function(){
         beforeEach(function() {
+            this.spy = spyOn(chorus.views.DatabaseFunctionSidebarList.prototype, "forwardEvent").andCallThrough();
             this.page = new chorus.pages.WorkfileShowPage(this.workspaceId, this.workfileId);
             this.server.completeFetchFor(this.model);
             this.server.completeFetchFor(this.workspace);
             this.page.model.workspace().set({name: "Cool Workspace"});
             this.page.resourcesLoaded();
+        });
+
+        it("forward the events", function() {
+            expect(chorus.views.DatabaseFunctionSidebarList.prototype.forwardEvent).toHaveBeenCalled();
+        });
+
+        it("when the model has changed again does not forward the events again", function() {
+            chorus.views.DatabaseFunctionSidebarList.prototype.forwardEvent.reset();
+            this.page.modelChanged();
+            expect(chorus.views.DatabaseFunctionSidebarList.prototype.forwardEvent).not.toHaveBeenCalled();
         });
 
         it("it displays the workfile name in the content header", function() {

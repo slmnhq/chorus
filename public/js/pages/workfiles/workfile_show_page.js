@@ -64,12 +64,12 @@
                 this.mainContent.contentDetails.forwardEvent("file:runCurrent", this.mainContent.content);
                 this.mainContent.contentDetails.forwardEvent("file:runInSchema", this.mainContent.content);
                 this.mainContent.content.forwardEvent("file:executionCompleted", this.mainContent.contentDetails);
-            }
 
-            if (this.model && this.model.isSql()) {
-                this.sidebar.functionList.forwardEvent("file:insertText", this.mainContent.content);
-                this.sidebar.datasetList.forwardEvent("file:insertText", this.mainContent.content);
-                this.sidebar.columnList.forwardEvent("file:insertText", this.mainContent.content);
+                if (this.model && this.model.isSql()) {
+                    this.sidebar.functionList.forwardEvent("file:insertText", this.mainContent.content);
+                    this.sidebar.datasetList.forwardEvent("file:insertText", this.mainContent.content);
+                    this.sidebar.columnList.forwardEvent("file:insertText", this.mainContent.content);
+                }
             }
 
             this.render();
