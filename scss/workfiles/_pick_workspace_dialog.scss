@@ -2,6 +2,11 @@
 
 .pick_workspace {
 
+    .picklist {
+        min-width: 315px;
+        max-width: 600px;
+    }
+
     &.dialog .dialog_content {
         padding: 0;
     }
