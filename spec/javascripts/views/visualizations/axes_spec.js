@@ -12,6 +12,10 @@ describe("chorus.views.visualizations.Axes", function() {
         var div = $("<div class='visualization heatmap'></div>")[0];
         this.width = 925;
         this.height = 340;
+        this.paddingX = 35;
+        this.paddingY = 35;
+
+        this.axisLabelValue = "magic_numbers";
         this.el = d3.select(div)
             .append("svg")
             .attr("width", this.width)
@@ -25,16 +29,31 @@ describe("chorus.views.visualizations.Axes", function() {
     });
 
     describe("XAxis", function() {
+        beforeEach(function() {
+            this.addMatchers({
+                toBeUniformlyHorizontallySpaced: function() {
+                    var elements = this.actual;
+                    var standardDistance = centerX(elements[1]) - centerX(elements[0]);
+
+                    return _.all(elements, function(el, i) {
+                        if (i === 0) return true;
+                        var previousElement = elements[i - 1];
+                        var distance = centerX(el) - centerX(previousElement)
+                        return Math.abs(distance - standardDistance) < 10;
+                    });
+                }
+            });
+        });
+
         describe("with an ordinal scale", function() {
             beforeEach(function() {
                 this.labelValues = ['one', 'two', 'three', 'four', 'five'];
-                this.paddingX = 35;
-                this.paddingY = 35;
 
                 this.axis = new chorus.views.visualizations.XAxis({
                     el: this.el,
                     labels: this.labelValues,
-                    axisLabel: "numbers",
+                    axisLabel: this.axisLabelValue,
+                    scaleType: "ordinal",
                     ticks: true,
                     paddingX: this.paddingX,
                     paddingY: this.paddingY
@@ -55,7 +74,7 @@ describe("chorus.views.visualizations.Axes", function() {
                     this.newAxis = new chorus.views.visualizations.XAxis({
                         el: this.el,
                         labels: _.shuffle(this.labelValues),
-                        axisLabel: "numbers",
+                        axisLabel: this.axisLabelValue,
                         ticks: true,
                         paddingX: this.paddingX,
                         paddingY: this.paddingY
@@ -113,8 +132,6 @@ describe("chorus.views.visualizations.Axes", function() {
                         'one hundred and ten',
                         'one hundred and eleven'
                     ];
-                    this.paddingX = 35;
-                    this.paddingY = 35;
 
                     this.$unrotatedEl = this.$el;
                     this.unrotatedLabels = this.labels;
@@ -127,7 +144,7 @@ describe("chorus.views.visualizations.Axes", function() {
                     this.axis = new chorus.views.visualizations.XAxis({
                         el: this.el,
                         labels: this.labelValues,
-                        axisLabel: "numbers",
+                        axisLabel: this.axisLabelValue,
                         ticks: true,
                         paddingX: this.paddingX,
                         paddingY: this.paddingY
@@ -166,31 +183,15 @@ describe("chorus.views.visualizations.Axes", function() {
 
         describe("with a numeric scale", function() {
             beforeEach(function() {
-                this.paddingX = 35;
-                this.paddingY = 35;
                 this.minX = 1;
                 this.maxX = 21;
-
-                this.addMatchers({
-                    toBeUniformlyHorizontallySpaced: function() {
-                        var elements = this.actual;
-                        var standardDistance = centerX(elements[1]) - centerX(elements[0]);
-
-                        return _.all(elements, function(el, i) {
-                            if (i === 0) return true;
-                            var previousElement = elements[i - 1];
-                            var distance = centerX(el) - centerX(previousElement)
-                            return Math.abs(distance - standardDistance) < 1;
-                        });
-                    }
-                });
             });
 
             context("with grid lines", function() {
                 beforeEach(function() {
                     this.axis = new chorus.views.visualizations.XAxis({
                         el: this.el,
-                        axisLabel: "numbers",
+                        axisLabel: this.axisLabelValue,
                         scaleType: "numeric",
                         minValue: this.minX,
                         maxValue: this.maxX,
@@ -217,7 +218,7 @@ describe("chorus.views.visualizations.Axes", function() {
                 beforeEach(function() {
                     this.axis = new chorus.views.visualizations.XAxis({
                         el: this.el,
-                        axisLabel: "numbers",
+                        axisLabel: this.axisLabelValue,
                         scaleType: "numeric",
                         minValue: this.minX,
                         maxValue: this.maxX,
@@ -239,6 +240,42 @@ describe("chorus.views.visualizations.Axes", function() {
                 itDisplaysNumericalTicksCorrectly();
             });
         });
+
+        describe("with a time scale", function() {
+            beforeEach(function() {
+                this.minX = "2012-01-01";
+                this.maxX = "2012-11-01";
+                this.hasGridLines = false;
+
+                this.axis = new chorus.views.visualizations.XAxis({
+                    el: this.el,
+                    axisLabel: this.axisLabelValue,
+                    scaleType: "time",
+                    minValue: this.minX,
+                    maxValue: this.maxX,
+                    ticks: true,
+                    paddingX: this.paddingX,
+                    paddingY: this.paddingY,
+                    hasGrids: this.hasGridLines
+                });
+                this.axis.render();
+
+                this.axisLine = this.$el.find("line.axis");
+                this.ticks = this.$el.find("line.tick");
+                this.grids = this.$el.find("line.grid");
+                this.axisLabel = this.$el.find(".axis_label");
+                this.labels = this.$el.find(".label");
+            });
+
+            it("generates 8-12 uniformly spaced ticks in the range of the label values", function() {
+                expect(this.ticks.length).toBeGreaterThan(5);
+                expect(this.ticks.length).toBeLessThan(20);
+
+                expect(this.ticks).toBeUniformlyHorizontallySpaced();
+            });
+
+            itHasAReasonableLayout();
+        })
 
         function itDisplaysNumericalTicksCorrectly() {
             it("generates uniformly spaced ticks in the range of the label values", function() {
@@ -343,7 +380,7 @@ describe("chorus.views.visualizations.Axes", function() {
 
             describe("the axis label", function() {
                 it("should have the correct text", function() {
-                    expect(this.axisLabel).toHaveText("numbers")
+                    expect(this.axisLabel).toHaveText(this.axisLabelValue)
                 });
 
                 it("should be centered in the chart", function() {
@@ -385,13 +422,11 @@ describe("chorus.views.visualizations.Axes", function() {
         describe("with an ordinal scale", function() {
             beforeEach(function() {
                 this.labelValues = ['one', 'two', 'three', 'four', 'fivefivefivefivefivefive'];
-                this.paddingX = 35;
-                this.paddingY = 35;
 
                 this.axis = new chorus.views.visualizations.YAxis({
                     el: this.el,
                     labels: this.labelValues,
-                    axisLabel: "magic_numbers",
+                    axisLabel: this.axisLabelValue,
                     ticks: true,
                     paddingX: this.paddingX,
                     paddingY: this.paddingY
@@ -411,7 +446,7 @@ describe("chorus.views.visualizations.Axes", function() {
                     this.newAxis = new chorus.views.visualizations.YAxis({
                         el: this.el,
                         labels: _.shuffle(this.labelValues),
-                        axisLabel: "magic_numbers",
+                        axisLabel: this.axisLabelValue,
                         ticks: true,
                         paddingX: this.paddingX,
                         paddingY: this.paddingY
@@ -518,8 +553,6 @@ describe("chorus.views.visualizations.Axes", function() {
         describe("with a numeric scale", function() {
             beforeEach(function() {
                 this.labelValues = ['one', 'two', 'three', 'four', 'five'];
-                this.paddingX = 35;
-                this.paddingY = 35;
 
                 this.minValue = 34;
                 this.maxValue = 111;
@@ -528,7 +561,7 @@ describe("chorus.views.visualizations.Axes", function() {
                     el: this.el,
                     minValue: this.minValue,
                     maxValue: this.maxValue,
-                    axisLabel: "magic_numbers",
+                    axisLabel: this.axisLabelValue,
                     ticks: true,
                     scaleType: "numeric",
                     paddingX: this.paddingX,
@@ -548,13 +581,11 @@ describe("chorus.views.visualizations.Axes", function() {
         describe("with grid lines", function() {
             beforeEach(function() {
                 this.labelValues = ['one', 'two', 'three', 'four', 'five'];
-                this.paddingX = 35;
-                this.paddingY = 35;
 
                 this.axis = new chorus.views.visualizations.YAxis({
                     el: this.el,
                     labels: this.labelValues,
-                    axisLabel: "magic_numbers",
+                    axisLabel: this.axisLabelValue,
                     ticks: true,
                     paddingX: this.paddingX,
                     paddingY: this.paddingY,
@@ -590,7 +621,7 @@ describe("chorus.views.visualizations.Axes", function() {
         function itHasAReasonableLayout() {
             describe("the axis label", function() {
                 it("should have the correct text", function() {
-                    expect(this.axisLabel).toHaveText("magic_numbers")
+                    expect(this.axisLabel).toHaveText(this.axisLabelValue)
                 });
 
                 it("should be centered along the axis", function() {
@@ -700,8 +731,6 @@ describe("chorus.views.visualizations.Axes", function() {
         beforeEach(function() {
             this.xLabelValues = ['one', 'two', 'three', 'four', 'five'];
             this.yLabelValues = ['january', 'february', 'march', 'april', 'may'];
-            this.paddingX = 35;
-            this.paddingY = 35;
 
             this.axes = new chorus.views.visualizations.Axes({
                 el: this.el,
