@@ -15,13 +15,18 @@
         .name_disabled {
             color: $color-text2;
         }
-        .location {
+        .location, .found_in {
+          display: inline-block;
             padding-top: 4px;
             @include results-console-message;
             a {
                 font-size: 12px;
                 font-weight: $semibold;
             }
+        }
+
+        .found_in {
+          padding-left: 20px;
         }
 
         .comment {
