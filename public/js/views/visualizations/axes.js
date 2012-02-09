@@ -68,6 +68,7 @@ _.extend(chorus.views.visualizations.Axis.prototype, chorus.Mixins.VisHelpers, {
 
 chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
     requiredBottomSpace: function() {
+        var self = this
         this.el = this.container.append("svg:g").attr("class", "xaxis");
         var testTickLabels = this.el.selectAll(".label")
             .data(this.labels()).enter()
@@ -75,7 +76,7 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
             .attr("class", "label")
             .append("svg:text")
             .text(function(d) {
-                return d
+                return self.labelFormat(d, 4)
             });
 
         this.rotateTickLabelsIfNeeded();
@@ -275,8 +276,8 @@ chorus.views.visualizations.YAxis = chorus.views.visualizations.Axis.extend({
             .attr("y", 0)
             .attr("x", 0)
             .text(function(d) {
-                return d
-            });
+                return self.labelFormat(d, 4)
+            }).attr("title", function(d){return d;});
 
         // reposition labels now that we know their width
         this.el.selectAll(".label")

@@ -264,11 +264,11 @@ describe("chorus.views.visualizations.Axes", function() {
                 expect(this.ticks.length).toBe(this.labelValues.length);
             });
 
-            it("renders each of the given labels", function() {
+            it("renders each of the given labels, and formats them", function() {
                 expect(this.labels.length).toBe(this.labelValues.length);
 
                 _.each(this.labels, function(label, i) {
-                    expect($(label).text()).toBe(this.labelValues[i].toString());
+                    expect($(label).text()).toBe(this.axis.labelFormat(this.labelValues[i].toString()));
                 }, this);
             });
         }
@@ -384,7 +384,7 @@ describe("chorus.views.visualizations.Axes", function() {
     describe("YAxis", function() {
         describe("with an ordinal scale", function() {
             beforeEach(function() {
-                this.labelValues = ['one', 'two', 'three', 'four', 'five'];
+                this.labelValues = ['one', 'two', 'three', 'four', 'fivefivefivefivefivefive'];
                 this.paddingX = 35;
                 this.paddingY = 35;
 
@@ -398,10 +398,10 @@ describe("chorus.views.visualizations.Axes", function() {
                 });
                 this.axis.render();
 
-                this.axisLine  = this.$el.find("line.axis");
-                this.ticks     = this.$el.find("line.tick");
+                this.axisLine = this.$el.find("line.axis");
+                this.ticks = this.$el.find("line.tick");
                 this.axisLabel = this.$el.find(".axis_label");
-                this.labels    = this.$el.find(".label");
+                this.labels = this.$el.find(".label");
             });
 
             describe("#requiredLeftSpace (used for drawing the x axis)", function() {
@@ -434,11 +434,9 @@ describe("chorus.views.visualizations.Axes", function() {
                     var s = (this.height - 2 * this.paddingY) / 5
                     var innerHeight = this.height - this.paddingY
 
-                    expect(scale("one")).toBe(innerHeight - 0 * s);
-                    expect(scale("two")).toBe(innerHeight - 1 * s);
-                    expect(scale("three")).toBe(innerHeight - 2 * s);
-                    expect(scale("four")).toBe(innerHeight - 3 * s);
-                    expect(scale("five")).toBe(innerHeight - 4 * s);
+                    _.each(this.labelValues, function(label, i) {
+                        expect(scale(label)).toBe(innerHeight - i * s);
+                    })
                 });
             });
 
@@ -481,11 +479,11 @@ describe("chorus.views.visualizations.Axes", function() {
                 });
             });
 
-            it("renders each of the given labels", function() {
+            it("renders each of the given labels and formats them", function() {
                 expect(this.labels.length).toBe(this.labelValues.length);
 
                 _.each(this.labels, function(label, i) {
-                    expect($(label).text()).toBe(this.labelValues[i].toString());
+                    expect($(label).text()).toBe(this.axis.labelFormat(this.labelValues[i].toString()));
                 }, this);
             });
 
@@ -538,10 +536,10 @@ describe("chorus.views.visualizations.Axes", function() {
                 });
                 this.axis.render();
 
-                this.axisLine  = this.$el.find("line.axis");
-                this.ticks     = this.$el.find("line.tick");
+                this.axisLine = this.$el.find("line.axis");
+                this.ticks = this.$el.find("line.tick");
                 this.axisLabel = this.$el.find(".axis_label");
-                this.labels    = this.$el.find(".label");
+                this.labels = this.$el.find(".label");
             });
 
             itHasAReasonableLayout();
@@ -564,11 +562,11 @@ describe("chorus.views.visualizations.Axes", function() {
                 });
                 this.axis.render();
 
-                this.axisLine  = this.$el.find("line.axis");
-                this.ticks     = this.$el.find("line.tick");
+                this.axisLine = this.$el.find("line.axis");
+                this.ticks = this.$el.find("line.tick");
                 this.axisLabel = this.$el.find(".axis_label");
-                this.labels    = this.$el.find(".label");
-                this.grids     = this.$el.find("line.grid");
+                this.labels = this.$el.find(".label");
+                this.grids = this.$el.find("line.grid");
             });
 
 

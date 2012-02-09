@@ -467,6 +467,10 @@ describe("chorus.Mixins", function() {
             it("returns an exponential if given a number longer than spec", function() {
                 expect(this.hostView.labelFormat(123.2, 2)).toEqual("1.23e+2")
             })
+            it("returns an ellipsized string if given a long string", function() {
+                expect(this.hostView.labelFormat("abcdefghij", 4, 4)).toEqual("abcd...");
+            })
+
         })
     })
 
