@@ -53,8 +53,8 @@ chorus.views.visualizations.Histogram = chorus.views.Base.extend({
                 return scales.y(0) - scales.y(d.frequency)
             })
 
-        d3.select(".xaxis").remove()
-        d3.select(".yaxis").remove()
+        svg.select(".xaxis").remove()
+        svg.select(".yaxis").remove()
         this.axes.render();
    }
 
