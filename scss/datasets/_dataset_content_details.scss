@@ -50,7 +50,7 @@
             .sql_content {
                 @include ellipsis;
                 display: inline-block;
-                width: 50%;
+                max-width: 50%;
                 font-weight: $semibold;
                 color: $color-text1;
             }

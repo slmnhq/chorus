@@ -26,9 +26,26 @@ describe("chorus.views.DatasetContentDetails", function() {
             expect(this.view.$(".filters")).toHaveClass("hidden");
         });
 
-        it("shows the SQL definition in the header", function() {
-            expect(this.view.$(".definition")).toContainText(this.dataset.statistics().get("definition"));
-        })
+        describe("sql definition", function() {
+            it("shows the SQL definition in the header", function() {
+                expect(this.view.$(".sql_content")).toExist();
+                expect(this.view.$(".definition")).toContainText(this.dataset.statistics().get("definition"));
+            });
+
+            context("when there is no sql", function() {
+                beforeEach(function() {
+                    var dataset = fixtures.datasetSourceTable()
+                    this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection});
+                    this.server.completeFetchFor(dataset.statistics(), fixtures.datasetStatisticsTable());
+                    this.view.render();
+                });
+
+                it("does not show the SQL definition", function() {
+                    expect(this.view.$(".sql_content")).not.toExist();
+                })
+            });
+        });
+
 
         context("when 'Preview Data' is clicked", function() {
             beforeEach(function() {
