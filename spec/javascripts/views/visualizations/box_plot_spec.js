@@ -71,7 +71,7 @@ describe("chorus.views.visualizations.BoxPlot", function() {
             it("centers the rectangles on the x axis ticks", function() {
                 var xTicks = this.view.$(".xaxis .tick");
                 _.each(this.quartileRectangles, function(rect, i) {
-                    expect(centerX(rect)).toBeCloseTo(centerX(xTicks[i]));
+                    expect(centerX(rect)).toBeCloseTo(centerX(xTicks[i]), 1);
                 }, this);
             });
         });
@@ -87,8 +87,8 @@ describe("chorus.views.visualizations.BoxPlot", function() {
 
                     expect(line).toBeHorizontal();
 
-                    expect(leftX(line)).toBeCloseTo(leftX(rect));
-                    expect(rightX(line)).toBeCloseTo(rightX(rect));
+                    expect(leftX(line)).toBeCloseTo(leftX(rect), 1);
+                    expect(rightX(line)).toBeCloseTo(rightX(rect), 1);
 
                     expect(topY(line)).toBeGreaterThan(topY(rect));
                     expect(bottomY(line)).toBeLessThan(bottomY(rect));
