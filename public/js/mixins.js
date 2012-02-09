@@ -28,7 +28,7 @@ chorus.Mixins.Events = {
 
     onLoaded: function(callback, context) {
         if (this.loaded) {
-            callback.apply(context)
+            _.defer(_.bind(callback, context))
         } else {
             this.bind('loaded', callback, context)
         }
