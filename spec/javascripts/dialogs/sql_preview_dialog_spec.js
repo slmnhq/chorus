@@ -1,7 +1,8 @@
 describe("chorus.dialogs.SqlPreview", function() {
     describe("#render", function() {
         beforeEach(function() {
-            this.dialog = new chorus.dialogs.SqlPreview();
+            var launchElement = $("<a></a>");
+            this.dialog = new chorus.dialogs.SqlPreview({launchElement: launchElement});
             this.dialog.render();
         });
 

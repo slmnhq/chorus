@@ -1,7 +1,9 @@
 describe("chorus.views.CreateChorusViewSidebar", function() {
     beforeEach(function() {
         this.dataset = fixtures.datasetChorusView({name : "my_chorus"});
+        this.filters = {};
         this.view = new chorus.views.CreateChorusViewSidebar({model: this.dataset});
+        this.view.filters = this.filters;
     });
     describe("#render", function() {
         beforeEach(function() {
@@ -16,6 +18,10 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             expect(this.view.$("a.preview")).toHaveClass("dialog");
             expect(this.view.$("a.preview").data("dialog")).toBe("SqlPreview");
             expect(this.view.$("a.preview").text()).toContainTranslation("dataset.preview_sql");
+        });
+
+        it("adds the filters to the preview SQL link's data", function() {
+           expect(this.view.$("a.preview").data("filters")).toBe(this.filters);
         });
 
         context("when there is no filters or columns selected", function() {
