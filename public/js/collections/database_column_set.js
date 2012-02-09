@@ -6,6 +6,8 @@ chorus.collections.DatabaseColumnSet = chorus.collections.Base.extend({
             return "data/{{instanceId}}/database/{{databaseName}}/schema/{{schemaName}}/table/{{tableName}}/column";
         } else if (this.attributes.viewName) {
             return "data/{{instanceId}}/database/{{databaseName}}/schema/{{schemaName}}/view/{{viewName}}/column";
+        } else if (this.attributes.queryName) {
+            return "workspace/{{workspaceId}}/dataset/{{queryName}}/column";
         }
     },
 
@@ -15,5 +17,4 @@ chorus.collections.DatabaseColumnSet = chorus.collections.Base.extend({
         model.set({"parentName":this.attributes.tableName || this.attributes.viewName}, {silent:true});
         return model;
     }
-
 });

@@ -45,10 +45,15 @@
             var options = {
                 instanceId: this.instanceId,
                 databaseName: this.databaseName,
-                schemaName: this.schemaName
+                schemaName: this.schemaName,
+                workspaceId: this.workspace.get("id")
             };
 
-            options[this.dataset.metaType() + "Name"] = this.objectName;
+            if (this.dataset.metaType() == "query") {
+                options[this.dataset.metaType() + "Name"] = this.datasetId;
+            } else {
+                options[this.dataset.metaType() + "Name"] = this.objectName;
+            }
 
             this.columnSet = new chorus.collections.DatabaseColumnSet([], options);
             this.columnSet.bind("loaded", this.columnSetFetched, this);
