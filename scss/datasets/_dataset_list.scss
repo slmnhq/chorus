@@ -8,7 +8,11 @@
         @include recent-comment;
         overflow: hidden;
         padding-left: $padding-x;
-        
+
+        a.name {
+            display: block;
+        }
+
         .name {
             font-weight: $semibold;
         }
