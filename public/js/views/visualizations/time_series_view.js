@@ -3,28 +3,41 @@ chorus.views.visualizations.Timeseries = chorus.views.Base.extend({
         var $el = $(this.el);
         $el.addClass("visualization");
         var data = new chorus.presenters.visualizations.Timeseries(this.model).present();
-        chorus.chart.timeseries(
-            this.chartArea(this.el),
-            data,
-            { xAxisTitle: this.model.get("chart[xAxis]"),
-             yAxisTitle: this.model.get("chart[yAxis]")}
-        );
-        this.postRender();
-    },
 
-    chartArea : function(el) {
-        this.plotWidth = 925;
-        this.plotHeight = 340;
-
-        return d3.select(el)
-            .append("svg:svg")
+        var svg = d3.select(this.el)
+            .append("svg")
             .attr("class", "chart timeseries")
-            .attr("width", this.plotWidth)
-            .attr("height", this.plotHeight)
-            .append("svg:g")
-            .attr("class", "plot")
-            .attr("width", this.plotWidth)
-            .attr("height", this.plotHeight);
+            .attr("width", 925)
+            .attr("height", 340);
+
+        this.axes = new chorus.views.visualizations.Axes({
+            el: svg,
+            yScaleType: "numeric",
+            xScaleType: "ordinal",
+            maxYValue: data.maxY,
+            minYValue: data.minY,
+            xLabels: _.pluck(data, 'time'),
+            xAxisLabel: this.model.get("xAxis"),
+            yAxisLabel: this.model.get("yAxis"),
+            hasYGrids: true,
+            paddingX: 35,
+            paddingY: 35
+        });
+
+        if (!$el.isOnDom()) return;
+
+        this.axes.render();
+
+        var scales = this.axes.scales();
+        var centerXScale = function(d) { return scales.x(d) + scales.x.rangeBand() / 2 };
+
+        var line = d3.svg.line()
+            .x(function(d) { return centerXScale(d.time);  })
+            .y(function(d) { return scales.y(d.value); });
+
+        svg.append("svg:path")
+            .attr("class", "series")
+            .attr("d", line(data));
     }
 });
 

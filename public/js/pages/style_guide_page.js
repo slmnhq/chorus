@@ -153,43 +153,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 }})
             }),
 
-            "Visualization: Timeseries" : new chorus.views.visualizations.Timeseries({
-                model: new chorus.models.TimeseriesTask({
-                    columns: [
-                        {name : "time", typeCategory: "DATE"},
-                        {name : "value", typeCategory: "WHOLE_NUMBER"}
-                    ],
-
-                    rows: [
-                        { time: "Monday", value: 5 },
-                        { time: "Tuesday", value: 8 },
-                        { time: "Wednesday", value: 0 },
-                        { time: "Thursday", value: 1 },
-                        { time: "Friday", value: 20 }
-                    ],
-                    "chart[xAxis]": "Day of the Week",
-                    "chart[yAxis]": "Parties"
-                })
-            }),
-
-           "Visualization: Frequency Plot" : new chorus.views.visualizations.Frequency({
-                model: new chorus.models.FrequencyTask({
-                    columns: [
-                        {name : "bucket", typeCategory: "STRING"},
-                        {name : "count", typeCategory: "WHOLE_NUMBER"}
-                    ],
-
-                    rows: [
-                        { bucket: "Twenty", count: 20 },
-                        { bucket: "Eight", count: 8 },
-                        { bucket: "Five", count: 5 },
-                        { bucket: "One", count: 1 },
-                        { bucket: "Zero", count: 0 }
-                    ],
-                    "chart[yAxis]": "Custom y Axis Title"
-                })
-            }),
-
             "Visualization: BoxPlot" : new chorus.views.visualizations.Boxplot({
                 model: new chorus.models.BoxplotTask({
                     xAxis: "test_coverage",
@@ -212,6 +175,24 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                 }),
                 x: 'animal',
                 y: 'value'
+            }),
+
+           "Visualization: Frequency Plot" : new chorus.views.visualizations.Frequency({
+                model: new chorus.models.FrequencyTask({
+                    columns: [
+                        {name : "bucket", typeCategory: "STRING"},
+                        {name : "count", typeCategory: "WHOLE_NUMBER"}
+                    ],
+
+                    rows: [
+                        { bucket: "Twenty", count: 20 },
+                        { bucket: "Eight", count: 8 },
+                        { bucket: "Five", count: 5 },
+                        { bucket: "One", count: 1 },
+                        { bucket: "Zero", count: 0 }
+                    ],
+                    "chart[yAxis]": "Custom y Axis Title"
+                })
             }),
 
 
@@ -264,7 +245,32 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                         { yLabel: "[155.4-197.2]", xLabel: "[5.4-7.20000011110]", value: 40359, y: 4, x: 4 }
                     ]
                 })
+            }),
+
+            "Visualization: Timeseries" : new chorus.views.visualizations.Timeseries({
+                model: new chorus.models.TimeseriesTask({
+                    columns: [
+                        {name : "time", typeCategory: "DATE"},
+                        {name : "value", typeCategory: "WHOLE_NUMBER"}
+                    ],
+
+                    rows: [
+                        { time: '2012-01-01', value: 321 },
+                        { time: '2012-02-01', value: 124 },
+                        { time: '2012-03-01', value: 321 },
+                        { time: '2012-04-01', value: 321 },
+                        { time: '2012-05-01', value: 421 },
+                        { time: '2012-06-01', value: 621 },
+                        { time: '2012-07-01', value: 524 },
+                        { time: '2012-08-01', value: 824 },
+                        { time: '2012-09-01', value: 924 },
+                        { time: '2012-10-01', value: 724 }
+                    ],
+                    xAxis: "Day of the Week",
+                    yAxis: "Parties"
+                })
             })
+
         }
     },
 

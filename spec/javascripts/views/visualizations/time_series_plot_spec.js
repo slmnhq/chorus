@@ -1,55 +1,97 @@
-describe("chorus.views.visualizations.TimeseriesPlot", function() {
+describe("chorus.views.visualizations.Timeseries", function() {
     beforeEach(function() {
         this.task = new chorus.models.SqlExecutionTask({
-            result: {
-                columns: [{ name: "age" }, { name: "weight" }, { name: "animal" }],
-                rows: [
-                    { age: 1, weight:  5, animal: "aardvark" },
-                    { age: 2, weight:  10, animal: "aardvark" },
-                    { age: 3, weight:  12, animal: "aardvark" },
-                    { age: 9, weight:  45, animal: "aardvark" },
-                    { age: 10, weight: 40, animal: "aardvark" },
-                    { age: 11, weight: 48, animal: "aardvark" },
-                    { age: 14, weight: 42, animal: "aardvark" },
-                    { age: 20, weight: 20, animal: "aardvark" }
-                ]
-            }
+            objectName: "desk_surface_quality",
+            yAxis: "gum_mass",
+            xAxis: "observation_date",
+
+            columns: [
+                { name: "time", typeCategory: "DATE" },
+                { name: "value",  typeCategory: "WHOLE_NUMBER" }
+            ],
+            rows: [
+                { time: '2012-01-01', value: 321 },
+                { time: '2012-02-01', value: 124 },
+                { time: '2012-03-01', value: 321 },
+                { time: '2012-04-01', value: 321 },
+                { time: '2012-05-01', value: 421 },
+                { time: '2012-06-01', value: 621 },
+                { time: '2012-07-01', value: 524 },
+                { time: '2012-08-01', value: 824 },
+                { time: '2012-09-01', value: 924 },
+                { time: '2012-10-01', value: 724 }
+            ]
         });
 
-        this.view = new chorus.views.visualizations.TimeseriesPlot({
-            model: this.task,
-            x: "age",
-            y: "weight"
-        });
+        this.view = new chorus.views.visualizations.Timeseries({ model: this.task });
     });
 
-    xdescribe("#render", function() {
+    describe("#render", function() {
         beforeEach(function() {
+            $("#jasmine_content").append(this.view.el);
             this.view.render();
+
+            this.path = this.view.$("path");
+            this.data = this.task.get("rows");
         });
 
-        it("renders a single path representing the data", function() {
-            expect(this.view.$("path").length).toBe(1);
+        it("renders x and y axes with the correct labels", function() {
+            expect(this.view.$(".xaxis .axis_label")).toHaveText("observation_date");
+            expect(this.view.$(".yaxis .axis_label")).toHaveText("gum_mass");
         });
 
-        it("includes every point in the dataset on the path", function() {
-            // L is used in the path string to indicate a line segment;
-            // there should be (data.length -1) line segments.
-            var pathString = this.view.$("path").attr("d");
-            expect(pathString.match(/L/g).length).toBe(7);
-            expect(this.view.model.get("result").rows.length).toBe(8);
-        });
+        describe("the path", function() {
+            beforeEach(function() {
+                this.xs = pathXs(this.path);
+                this.ys = pathYs(this.path);
+            });
 
-        // d3 does not guarantee the number of ticks;
-        // it computes them based on what it deems appropriate
-        //
-        // https://github.com/mbostock/d3/wiki/Quantitative-Scales#wiki-linear_ticks
-        it("renders xtick lines by default", function() {
-            expect(this.view.$("line.xtick").length).toBeGreaterThan(1);
-        });
+            it("renders a single path representing the data", function() {
+                expect(this.path.length).toBe(1);
+            });
 
-        it("renders ytick lines by default", function() {
-            expect(this.view.$("line.ytick").length).toBeGreaterThan(1);
+            it("includes a point for every entry in the dataset", function() {
+                expect(this.xs.length).toBe(this.data.length);
+                expect(this.xs.length).toBe(this.data.length);
+            });
+
+            xit("positions the points horizontally according to their time value", function() {
+                var times = _.pluck(this.data, "time");
+                _.each(this.xs, function(x, i) {
+                }, this);
+            });
+
+            it("positions the points vertically according to their y value", function() {
+                var values = _.pluck(this.data, "value")
+
+                _.each(this.ys, function(y, i) {
+                    if (i === 0) return;
+
+                    if (values[i] > values[i-1]) {
+                        expect(y).toBeLessThan(this.ys[i-1])
+                    } else if (values[i] < values[i-1]) {
+                        expect(y).toBeGreaterThan(this.ys[i-1])
+                    } else {
+                        expect(y).toBe(this.ys[i-1])
+                    }
+                }, this);
+            });
         });
     });
+
+    function pathYs(path) {
+        var pointString = $(path).attr("d");
+        var pairs = pointString.replace(/M/, "").split("L");
+        return _.map(pairs, function(pair) {
+            return parseFloat(pair.split(",")[1]);
+        });
+    }
+
+    function pathXs(path) {
+        var pointString = $(path).attr("d");
+        var pairs = pointString.replace(/M/, "").split("L");
+        return _.map(pairs, function(pair) {
+            return parseFloat(pair.split(",")[0]);
+        });
+    }
 });
