@@ -59,6 +59,7 @@
         'sandbox_new',
         'schema_picker',
         'shuttle_widget',
+        'sql_preview',
         'sql_workfile_content',
         'sql_workfile_content_details',
         'sub_nav',

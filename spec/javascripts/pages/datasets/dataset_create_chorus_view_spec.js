@@ -11,6 +11,12 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             expect(this.view.$("legend").text().trim()).toMatchTranslation("dataset.chorusview.sidebar.title")
         });
 
+        it("displays the preview SQL link", function() {
+            expect(this.view.$("a.preview")).toExist();
+            expect(this.view.$("a.preview")).toHaveClass("dialog");
+            expect(this.view.$("a.preview").data("dialog")).toBe("SqlPreview");
+            expect(this.view.$("a.preview").text()).toContainTranslation("dataset.preview_sql");
+        });
 
         context("when there is no filters or columns selected", function() {
             it("hides the non-empty selection section and shows the empty selection section", function() {
