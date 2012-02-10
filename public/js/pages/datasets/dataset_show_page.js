@@ -32,13 +32,14 @@
 
         fetchColumnSet: function() {
             this.model = this.dataset = new chorus.models.Dataset({
+                id: this.datasetId,
                 instance: { id: this.instanceId },
                 databaseName: this.databaseName,
                 schemaName: this.schemaName,
-                type:this.datasetType.toUpperCase(),
+                type: this.datasetType.toUpperCase(),
                 objectType: this.objectType,
                 objectName: this.objectName,
-                workspace: { id: this.workspace.get("id") },
+                workspace: this.workspace,
                 sandboxId: this.workspace.sandbox().get("id")
             });
 

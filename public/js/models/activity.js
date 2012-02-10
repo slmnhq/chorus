@@ -27,13 +27,25 @@ chorus.models.Activity = chorus.models.Base.extend({
 
     dataset: function() {
         var datasetField = this.get("table") || this.get("view") || this.get("chorusView") || this.get("databaseObject");
-        if (datasetField) {
+        if (datasetField && this.get("workspace")) {
             return new chorus.models.Dataset({
                 id:   datasetField.id,
                 type: datasetField.type,
                 objectType: datasetField.objectType,
                 objectName: datasetField.name,
                 workspace: this.get("workspace")
+            });
+        }
+    },
+
+    databaseObject: function() {
+        var databaseObjectField = this.get("databaseObject");
+        if (databaseObjectField) {
+            return new chorus.models.DatabaseObject({
+                id: databaseObjectField.id,
+                type: databaseObjectField.type,
+                objectType: databaseObjectField.objectType,
+                objectName: databaseObjectField.name
             });
         }
     },
@@ -67,6 +79,6 @@ chorus.models.Activity = chorus.models.Base.extend({
     },
 
     noteworthy: function() {
-        return this.instance() || this.workfile() || this.dataset() || this.workspace();
+        return this.instance() || this.workfile() || this.dataset() || this.databaseObject() || this.workspace();
     }
 });

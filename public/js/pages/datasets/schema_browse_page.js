@@ -31,7 +31,7 @@
 
             this.breadcrumbs = new breadcrumbsView({model: this.schema});
 
-            this.collection = new chorus.collections.DatasetSet([], {instanceId: instanceId, databaseName: databaseName, schemaName:schemaName });
+            this.collection = new chorus.collections.DatabaseObjectSet([], {instanceId: instanceId, databaseName: databaseName, schemaName:schemaName });
             this.collection.sortAsc("objectName");
             this.collection.fetch();
 

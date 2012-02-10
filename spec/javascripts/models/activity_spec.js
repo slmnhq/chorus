@@ -33,6 +33,11 @@ describe("chorus.models.Activity", function() {
             this.model = fixtures.activities.NOTE_ON_CHORUS_VIEW();
             expect(this.model.noteworthy()).toBeA(chorus.models.Dataset);
         })
+
+        it("should return a databaseObject when the note is on a database table", function() {
+            this.model = fixtures.activities.NOTE_ON_DATABASE_TABLE();
+            expect(this.model.noteworthy()).toBeA(chorus.models.DatabaseObject);
+        })
     })
 
     describe("#author", function() {

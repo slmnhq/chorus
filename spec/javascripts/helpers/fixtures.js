@@ -785,7 +785,6 @@ beforeEach(function() {
                     text: "How about that view.",
                     timestamp: "2011-12-01 00:00:00",
                     id: fixtures.nextId().toString(),
-                    workfileId: fixtures.nextId().toString(),
                     comments: [
                         {
                             text: "sub-comment 1",
@@ -798,8 +797,7 @@ beforeEach(function() {
                         name: '__a_chorus_view_name',
                         objectName: "__a_chorus_view_name",
                         objectType: "QUERY",
-                        type: "CHORUS_VIEW",
-                        workspaceId: "10000"
+                        type: "CHORUS_VIEW"
                     },
                     artifacts: [
                         {
@@ -816,7 +814,8 @@ beforeEach(function() {
                             name: "something.txt",
                             type: "TXT"
                         }
-                    ]
+                    ],
+                    workspace: fixtures.nestedWorkspaceJson()
                 }, overrides);
                 return new chorus.models.Activity(attrs);
             },
@@ -829,7 +828,48 @@ beforeEach(function() {
                     text: "How about that view.",
                     timestamp: "2011-12-01 00:00:00",
                     id: fixtures.nextId().toString(),
-                    workfileId: fixtures.nextId().toString(),
+                    comments: [
+                        {
+                            text: "sub-comment 1",
+                            author: fixtures.authorJson(),
+                            timestamp: "2011-12-15 12:34:56"
+                        }
+                    ],
+                    databaseObject: {
+                        id: instanceId + '|dca_demo|public|__a_table_name',
+                        name: '__a_table_name',
+                        objectType: "BASE_TABLE",
+                        type: "databaseObject"
+                    },
+                    artifacts: [
+                        {
+                            entityId: "10101",
+                            entityType: "file",
+                            id: "10101",
+                            name: "something.sql",
+                            type: "SQL"
+                        },
+                        {
+                            entityId: "10102",
+                            entityType: "file",
+                            id: "10102",
+                            name: "something.txt",
+                            type: "TXT"
+                        }
+                    ],
+                    workspace: fixtures.nestedWorkspaceJson()
+                }, overrides);
+                return new chorus.models.Activity(attrs);
+            },
+
+            "NOTE_ON_DATABASE_TABLE": function(overrides) {
+                var instanceId = fixtures.nextId().toString();
+                var attrs = _.extend({
+                    author: fixtures.authorJson(),
+                    type: "NOTE",
+                    text: "How about that view.",
+                    timestamp: "2011-12-01 00:00:00",
+                    id: fixtures.nextId().toString(),
                     comments: [
                         {
                             text: "sub-comment 1",
@@ -871,7 +911,6 @@ beforeEach(function() {
                     text: "How about that view.",
                     timestamp: "2011-12-01 00:00:00",
                     id: fixtures.nextId().toString(),
-                    workfileId: fixtures.nextId().toString(),
                     comments: [
                         {
                             text: "sub-comment 1",
@@ -900,7 +939,8 @@ beforeEach(function() {
                             name: "something.txt",
                             type: "TXT"
                         }
-                    ]
+                    ],
+                    workspace: fixtures.nestedWorkspaceJson()
                 }, overrides);
                 return new chorus.models.Activity(attrs);
             },
@@ -1458,45 +1498,75 @@ beforeEach(function() {
             return new chorus.models.Schema(attributes);
         },
 
-        databaseTable: function(overrides) {
+        databaseObjectJson: function(overrides) {
             var id = this.nextId().toString();
-            var attributes = _.extend({
-                objectName : "campaign_dim",
+            return _.extend(this.tabularDataJson(), {
+                objectType: "BASE_TABLE",
                 rows : 500,
-                columns : 6,
+                columns : 3,
                 onDiskSize : "64 kB",
                 lastAnalyzedTime : "2012-01-18 13:43:31.70468",
-                imports : null,
                 masterTable : null,
                 partitions : 0,
                 hasData : true,
                 desc : null,
-                type : "table",
-                instanceId : this.nextId().toString(),
+                type : "SOURCE_TABLE",
                 databaseName : "database_name",
                 schemaName : "schema_name",
-                workspace : { id : this.nextId().toString(), name: "731 Market" }
+                workspaceUsed:
+                {
+                    workspaceCount: 0,
+                    workspaceList: [ ]
+                },
+                columnNames: [
+                    "col1",
+                    "col2",
+                    "col3"
+                ]
+            }, overrides);
+        },
+
+        databaseObject: function(overrides) {
+            var id = this.nextId().toString();
+            var attributes = _.extend(this.tabularDataJson(), this.databaseObjectJson(), overrides);
+            return new chorus.models.DatabaseObject(attributes);
+        },
+
+        databaseObjectAsTable: function(overrides) {
+            var id = this.nextId().toString();
+            var attributes = _.extend(this.databaseObjectJson(), {
+                objectType: "BASE_TABLE",
+                type : "SOURCE_TABLE"
+            }, overrides);
+            return new chorus.models.DatabaseObject(attributes);
+        },
+
+
+        databaseObjectAsView: function(overrides) {
+            var id = this.nextId().toString();
+            var attributes = _.extend(this.databaseObjectJson(), {
+                objectType: "VIEW",
+                type : "SOURCE_TABLE",
+                definition : "SELECT chorus_test_table.customer_id FROM ddemo.chorus_test_table;"
+            }, overrides);
+            return new chorus.models.DatabaseObject(attributes);
+        },
+
+        databaseTable: function(overrides) {
+            var id = this.nextId().toString();
+            var attributes = _.extend(this.databaseObjectJson(), {
+                objectType: "BASE_TABLE",
+                type : "SOURCE_TABLE"
             }, overrides);
             return new chorus.models.DatabaseTable(attributes);
         },
 
         databaseView: function(overrides) {
             var id = this.nextId().toString();
-            var attributes = _.extend({
-                objectName : "campaign_dim",
-                rows : 500,
-                columns : 6,
-                onDiskSize : "64 kB",
-                lastAnalyzedTime : "2012-01-18 13:43:31.70468",
-                imports : null,
-                masterTable : null,
-                partitions : 0,
-                hasData : true,
-                desc : null,
-                type : "view",
-                instanceId : this.nextId().toString(),
-                databaseName : "database_name",
-                schemaName : "schema_name"
+            var attributes = _.extend(this.databaseObjectJson(), {
+                objectType: "VIEW",
+                type : "SOURCE_TABLE",
+                definition : "SELECT chorus_test_table.customer_id FROM ddemo.chorus_test_table;"
             }, overrides);
             return new chorus.models.DatabaseView(attributes);
         },
@@ -1700,30 +1770,44 @@ beforeEach(function() {
             return new chorus.models.Sandbox(attributes);
         },
 
-        datasetCommonJson : function(overrides) {
+        tabularDataJson: function(overrides) {
             var id = fixtures.nextId();
             return _.extend({
                 databaseName: "dca_demo",
                 instance: {id:fixtures.nextId(), name:"some_instance"},
-                isDeleted: false,
-                modifiedBy: {id:"InitialUser", userName:"edcadmin"},
                 objectName : "Dataset" + id,
-                owner: {id:"InitialUser", userName:"edcadmin"},
                 schemaName: "some_schema",
-                workspace: {id:fixtures.nextId(), name:"some_workspace"},
                 recentComment : fixtures.activities.NOTE_ON_DATASET(),
-                workspaceUsed : {
+                commentCount: 1
+            }, overrides);
+        },
+
+        datasetCommonJson : function(overrides) {
+            var id = fixtures.nextId();
+            var attributes = _.extend(this.tabularDataJson(), {
+                isDeleted: false,
+                owner: {id: "InitialUser", userName: "edcadmin"},
+                modifiedBy: {id: "InitialUser", userName: "edcadmin"},
+                workspace: {id: fixtures.nextId(), name: "some_workspace"},
+                workspaceUsed: {
                     workspaceCount: 1,
                     workspaceList: [fixtures.workspaceJson()]
                 }
             }, overrides);
+            attributes.id = [
+                attributes.instance.id,
+                attributes.databaseName,
+                attributes.schemaName,
+                attributes.objectType,
+                attributes.objectName
+            ].join("|");
+            return attributes;
         },
 
         datasetChorusView : function(overrides) {
-            var attributes = _.extend(fixtures.datasetCommonJson(), {
+            var attributes = _.extend(fixtures.datasetCommonJson(overrides), {
                 createdStamp: "2012-01-24 12:25:46.994",
                 createdTxStamp: "2012-01-24 12:25:46.627",
-                id: fixtures.nextId().toString(),
                 lastUpdatedStamp: "2012-01-24 12:25:46.994",
                 lastUpdatedTxStamp: "2012-01-24 12:25:46.627",
                 objectType: "",
@@ -1734,7 +1818,7 @@ beforeEach(function() {
         },
 
         datasetStatisticsView : function(overrides) {
-            var attributes = _.extend(fixtures.datasetCommonJson(), {
+            var attributes = _.extend(fixtures.datasetCommonJson(overrides), {
                 createdStamp: "2012-01-24 12:25:11.077",
                 createdTxStamp: "2012-01-24 12:25:10.701",
                 id: fixtures.nextId().toString(),
@@ -1744,11 +1828,11 @@ beforeEach(function() {
                 type: "SOURCE_TABLE",
                 definition: "DROP TABLE users"
             }, overrides);
-            return new chorus.models.DatasetStatistics(attributes);
+            return new chorus.models.DatabaseObjectStatistics(attributes);
         },
 
         datasetStatisticsTable : function(overrides) {
-            var attributes = _.extend(fixtures.datasetCommonJson(), {
+            var attributes = _.extend(fixtures.datasetCommonJson(overrides), {
                 createdStamp: "2012-01-24 12:25:11.077",
                 createdTxStamp: "2012-01-24 12:25:10.701",
                 id: fixtures.nextId().toString(),
@@ -1757,14 +1841,13 @@ beforeEach(function() {
                 objectType: "BASE_TABLE",
                 type: "SOURCE_TABLE"
             }, overrides);
-            return new chorus.models.DatasetStatistics(attributes);
+            return new chorus.models.DatabaseObjectStatistics(attributes);
         },
 
         datasetSourceView : function(overrides) {
-            var attributes = _.extend(fixtures.datasetCommonJson(), {
+            var attributes = _.extend(fixtures.datasetCommonJson(overrides), {
                 createdStamp: "2012-01-24 12:25:11.077",
                 createdTxStamp: "2012-01-24 12:25:10.701",
-                id: fixtures.nextId().toString(),
                 lastUpdatedStamp: "2012-01-24 12:25:11.077",
                 lastUpdatedTxStamp: "2012-01-24 12:25:10.701",
                 objectType: "VIEW",
@@ -1774,10 +1857,9 @@ beforeEach(function() {
         },
 
         datasetSourceTable : function(overrides) {
-            var attributes = _.extend(fixtures.datasetCommonJson(), {
+            var attributes = _.extend(fixtures.datasetCommonJson(overrides), {
                 createdStamp: "2012-01-24 12:25:11.077",
                 createdTxStamp: "2012-01-24 12:25:10.701",
-                id: fixtures.nextId().toString(),
                 lastUpdatedStamp: "2012-01-24 12:25:11.077",
                 lastUpdatedTxStamp: "2012-01-24 12:25:10.701",
                 objectType: "BASE_TABLE",
@@ -1787,7 +1869,7 @@ beforeEach(function() {
         },
 
         datasetSandboxTable : function(overrides) {
-            var attributes = _.extend(fixtures.datasetCommonJson(), {
+            var attributes = _.extend(fixtures.datasetCommonJson(overrides), {
                 modifiedBy: {},
                 objectType: "BASE_TABLE",
                 owner: {},
@@ -1797,7 +1879,7 @@ beforeEach(function() {
         },
         
         datasetPreview: function(overrides) {
-            return new chorus.models.DatasetPreview(_.extend({
+            return new chorus.models.DatabaseObjectPreview(_.extend({
                 columns: [],
                 rows: []
             }, overrides));
@@ -1811,7 +1893,7 @@ beforeEach(function() {
         },
 
         datasetHadoopExternalTable : function(overrides) {
-            var attributes = _.extend(fixtures.datasetCommonJson(), {
+            var attributes = _.extend(fixtures.datasetCommonJson(overrides), {
                 modifiedBy: {},
                 objectType: "HDFS_EXTERNAL_TABLE",
                 owner: {},
@@ -1830,6 +1912,13 @@ beforeEach(function() {
                 returnType : "void"
             }, overrides);
             return new chorus.models.SchemaFunction(attributes);
+        },
+
+        tabularData: function(overrides) {
+            return new chorus.models.TabularData(this.tabularDataJson(_.extend({
+                objectType: "BASE_TABLE",
+                type: "SANDBOX_TABLE"
+            }, overrides)));
         },
 
         task: function(overrides) {

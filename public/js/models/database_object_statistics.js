@@ -1,4 +1,4 @@
-chorus.models.DatasetStatistics = chorus.models.Base.extend({
+chorus.models.DatabaseObjectStatistics = chorus.models.Base.extend({
     urlTemplate:function () {
         return "data/{{instanceId}}/database/{{databaseName}}/schema/{{schemaName}}"
     },

@@ -1,6 +1,6 @@
-describe("chorus.models.DatasetPreview", function() {
+describe("chorus.models.DatabaseObjectPreview", function() {
     beforeEach(function() {
-        this.model = new chorus.models.DatasetPreview({databaseName: "dataman", instanceId: "33", schemaName: "partyman"});
+        this.model = new chorus.models.DatabaseObjectPreview({databaseName: "dataman", instanceId: "33", schemaName: "partyman"});
     });
 
     context("with a table name", function() {

@@ -1,12 +1,12 @@
-describe("chorus.models.DatasetStatistics", function() {
+describe("chorus.models.DatabaseObjectStatistics", function() {
     describe("#url", function() {
         beforeEach(function() {
-            this.datasetStatistics = new chorus.models.DatasetStatistics()
+            this.databaseObjectStatistics = new chorus.models.DatabaseObjectStatistics()
         })
 
         describe("when it gets a table", function() {
             it("should show the table url", function(){
-                this.datasetStatistics.set({
+                this.databaseObjectStatistics.set({
                     instanceId: 1,
                     databaseName: "theDatabase",
                     schemaName: "theSchema",
@@ -15,13 +15,13 @@ describe("chorus.models.DatasetStatistics", function() {
                     objectName: "aName"
                 })
 
-                expect(this.datasetStatistics.url()).toMatchUrl("/edc/data/1/database/theDatabase/schema/theSchema?type=meta&filter=aName")
+                expect(this.databaseObjectStatistics.url()).toMatchUrl("/edc/data/1/database/theDatabase/schema/theSchema?type=meta&filter=aName")
             })
         })
 
         describe("when it gets a view", function() {
             it("should show the view url", function() {
-                this.datasetStatistics.set({
+                this.databaseObjectStatistics.set({
                     instanceId: 1,
                     databaseName: "theDatabase",
                     schemaName: "theSchema",
@@ -30,7 +30,7 @@ describe("chorus.models.DatasetStatistics", function() {
                     objectName: "anotherName"
                 })
 
-                expect(this.datasetStatistics.url()).toMatchUrl("/edc/data/1/database/theDatabase/schema/theSchema?type=meta&filter=anotherName")
+                expect(this.databaseObjectStatistics.url()).toMatchUrl("/edc/data/1/database/theDatabase/schema/theSchema?type=meta&filter=anotherName")
             })
         })
     })

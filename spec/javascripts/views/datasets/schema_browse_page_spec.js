@@ -2,7 +2,6 @@ describe("chorus.pages.SchemaBrowsePage", function() {
     beforeEach(function() {
         this.schema = fixtures.schema();
         this.instance = fixtures.instance({id: this.schema.get("instanceId")});
-//        spyOn(chorus.Modal.prototype, 'launchModal');
         this.page = new chorus.pages.SchemaBrowsePage(this.schema.get("instanceId"), this.schema.get("databaseName"), this.schema.get("name"));
     })
 
@@ -55,7 +54,7 @@ describe("chorus.pages.SchemaBrowsePage", function() {
             it("constructs the main content list correctly", function() {
                 expect(this.page.mainContent).toBeA(chorus.views.MainContentList);
                 expect(this.page.mainContent.collection).toBe(this.page.collection);
-                expect(this.page.mainContent.collection).toBeA(chorus.collections.DatasetSet);
+                expect(this.page.mainContent.collection).toBeA(chorus.collections.DatabaseObjectSet);
                 expect(this.page.mainContent.content.options.browsingSchema).toBe(true);
 
                 expect(this.page.$(this.page.mainContent.el).length).toBe(1);
