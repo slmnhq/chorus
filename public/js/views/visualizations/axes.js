@@ -80,7 +80,7 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
             .attr("class", "label")
             .append("svg:text")
             .text(function(d) {
-                return self.labelFormat(d, 4)
+                return self.labelFormat(d, 6)
             });
 
         this.rotateTickLabelsIfNeeded();
@@ -161,7 +161,7 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
             .attr("y", tickLabelBottom)
             .attr("x", 0)
             .text(function(d) {
-                return self.labelFormat(d, 4)
+                return self.labelFormat(d, 6)
             });
 
         // reposition labels now that we know their width
@@ -219,7 +219,7 @@ chorus.views.visualizations.YAxis = chorus.views.visualizations.Axis.extend({
             .attr("class", "label")
             .append("svg:text")
             .text(function(d) {
-                return self.labelFormat(d, 4)
+                return self.labelFormat(d, 6)
             });
         var testAxisLabel = this.el.append("svg:g")
             .attr("class", "axis_label")
@@ -280,7 +280,7 @@ chorus.views.visualizations.YAxis = chorus.views.visualizations.Axis.extend({
             .attr("y", 0)
             .attr("x", 0)
             .text(function(d) {
-                return self.labelFormat(d, 4)
+                return self.labelFormat(d, 6)
             }).attr("title", function(d){return d;});
 
         // reposition labels now that we know their width
