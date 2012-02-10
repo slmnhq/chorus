@@ -144,6 +144,14 @@ describe("chorus.models.TabularData", function() {
         })
     })
 
+    describe("the entity_type object attribute", function() {
+        it("is recalculated when the 'type' attribute is changed", function() {
+            expect(this.tabularData.entityType).toBe("databaseObject");
+            this.tabularData.set({ type: "CHORUS_VIEW" })
+            expect(this.tabularData.entityType).toBe("chorusView");
+        })
+    })
+
     describe("#preview", function() {
         context("with a table", function() {
             beforeEach(function() {

@@ -13,12 +13,17 @@ chorus.models.TabularData = chorus.models.Base.extend({
             ].join("|");
         }
 
-        this.entityType = this.getEntityType();
+        this.resetEntityType();
+        this.bind("change:type", this.resetEntityType, this);
         this.bind('invalidated', this.refetchAfterInvalidated, this);
     },
 
     getEntityType: function() {
         return this.constructor.entityTypeMap[this.get("type")] || "databaseObject"
+    },
+
+    resetEntityType: function() {
+        this.entityType = this.getEntityType();
     },
 
     metaType: function() {
