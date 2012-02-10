@@ -51,9 +51,14 @@ describe("chorus.pages.DatasetShowPage", function() {
                 this.server.completeFetchFor(this.workspace);
             })
 
+            it("constructs a dataset with the right id", function() {
+                expect(this.page.model).toBeA(chorus.models.Dataset);
+                expect(this.page.model.get("id")).toBe(this.datasetId);
+            });
+
             it("fetches the dataset", function() {
                 expect(this.server.lastFetch().url).toBe("/edc/workspace/" + this.workspace.get("id") + "/dataset/" + this.datasetId);
-            })
+            });
 
             describe("when the dataset fetch completes", function() {
                 beforeEach(function() {
