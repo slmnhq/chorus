@@ -6,7 +6,9 @@
 
     <div class="actions">
         <ul>
-            <li><a class="dialog" href="#" data-entity-id="{{entityId}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workfile-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+            {{#unless browsingSchema}}
+                <li><a class="dialog" href="#" data-entity-id="{{entityId}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workfile-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+            {{/unless}}
             <li class="dataset_preview"><a class="dialog dataset_preview" href="#" data-dialog="DatasetPreview">{{t "actions.dataset_preview"}}</a></li>
             {{#if browsingSchema}}
                 <li class="associate"><a class="dialog" href="#" data-dialog="AssociateWithWorkspace">{{t "actions.associate_with_workspace"}}</a></li>

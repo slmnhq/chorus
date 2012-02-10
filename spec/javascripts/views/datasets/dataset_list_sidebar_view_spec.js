@@ -50,6 +50,10 @@ describe("chorus.views.DatasetListSidebar", function() {
                     expect(this.view.$('.actions .associate')).not.toExist();
                 });
 
+                it("has the 'add a note' link", function() {
+                    expect(this.view.$("a.dialog[data-dialog=NotesNew]")).toExist();
+                })
+
                 context("when browsing a schema", function() {
                     beforeEach(function() {
                         this.view.options.browsingSchema = true;
@@ -60,6 +64,10 @@ describe("chorus.views.DatasetListSidebar", function() {
                         expect(this.view.$('.actions .associate')).toContainTranslation('actions.associate_with_workspace');
                         expect(this.view.$('.actions .associate a').data('dialog')).toBe("AssociateWithWorkspace");
                     });
+
+                    it("does not have the 'add a note' link", function() {
+                        expect(this.view.$("a.dialog[data-dialog=NotesNew]")).not.toExist();
+                    })
                 });
 
                 describe("when the activity fetch completes", function() {
