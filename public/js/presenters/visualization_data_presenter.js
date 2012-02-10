@@ -90,14 +90,9 @@
     _.extend(chorus.presenters.visualizations.Heatmap.prototype, {
         present: function() {
             var rows = _.clone(this.task.get("rows"));
-            var xs = _.map(rows, function(row) {
-                var numbers = row.xLabel.match(/[\d\.]+/g);
-                return _.map(numbers, parseFloat);
-            });
-            var ys = _.map(rows, function(row) {
-                var numbers = row.yLabel.match(/[\d\.]+/g);
-                return _.map(numbers, parseFloat);
-            });
+            
+            var xs = _.pluck(rows, 'xLabel');
+            var ys = _.pluck(rows, 'yLabel');
             var values = _.pluck(rows, 'value');
 
             rows.minX = _.min(_.flatten(xs));

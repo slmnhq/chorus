@@ -144,16 +144,16 @@ describe("chorus.presenters.visualizations", function() {
         beforeEach(function() {
             this.model = fixtures.heatmapTaskWithResult({
                 rows: [
-                    { yLabel: "[30-71.8]",     xLabel: "[0-1.8]",   value: 39541, y: 1, x: 1 },
-                    { yLabel: "[71.8-113.6]",  xLabel: "[0-1.8]",   value: 39873, y: 2, x: 1 },
-                    { yLabel: "[113.6-155.4]", xLabel: "[0-1.8]",   value: 39993, y: 3, x: 1 },
-                    { yLabel: "[155.4-197.2]", xLabel: "[0-1.8]",   value: 39596, y: 4, x: 1 },
-                    { yLabel: "[30-71.8]",     xLabel: "[1.8-3.6]", value: 39818, y: 1, x: 2 },
-                    { yLabel: "[71.8-113.6]",  xLabel: "[1.8-3.6]", value: 39838, y: 2, x: 2 },
-                    { yLabel: "[113.6-155.4]", xLabel: "[1.8-3.6]", value: 39911, y: 3, x: 2 },
-                    { yLabel: "[155.4-197.2]", xLabel: "[1.8-3.6]", value: 40757, y: 4, x: 2 },
-                    { yLabel: "[30-71.8]",     xLabel: "[3.6-5.4]", value: 39631, y: 1, x: 3 },
-                    { yLabel: "[71.8-113.6]",  xLabel: "[3.6-5.4]", value: 40174, y: 2, x: 3 },
+                    { yLabel: [30, 71.8],     xLabel: [0, 1.8],   value: 39541, y: 1, x: 1 },
+                    { yLabel: [71.8, 113.6],  xLabel: [0, 1.8],   value: 39873, y: 2, x: 1 },
+                    { yLabel: [113.6, 155.4], xLabel: [0, 1.8],   value: 39993, y: 3, x: 1 },
+                    { yLabel: [155.4, 197.2], xLabel: [0, 1.8],   value: 39596, y: 4, x: 1 },
+                    { yLabel: [30, 71.8],     xLabel: [1.8, 3.6], value: 39818, y: 1, x: 2 },
+                    { yLabel: [71.8, 113.6],  xLabel: [1.8, 3.6], value: 39838, y: 2, x: 2 },
+                    { yLabel: [113.6, 155.4], xLabel: [1.8, 3.6], value: 39911, y: 3, x: 2 },
+                    { yLabel: [155.4, 197.2], xLabel: [1.8, 3.6], value: 40757, y: 4, x: 2 },
+                    { yLabel: [30, 71.8],     xLabel: [3.6, 5.4], value: 39631, y: 1, x: 3 },
+                    { yLabel: [71.8, 113.6],  xLabel: [3.6, 5.4], value: 40174, y: 2, x: 3 },
                 ]
             });
 
@@ -162,8 +162,8 @@ describe("chorus.presenters.visualizations", function() {
         });
 
         it("returns the rows", function() {
-            expect(this.data[0]).toEqual({ yLabel: "[30-71.8]",     xLabel: "[0-1.8]",   value: 39541, y: 1, x: 1 });
-            expect(this.data[1]).toEqual({ yLabel: "[71.8-113.6]",  xLabel: "[0-1.8]",   value: 39873, y: 2, x: 1 });
+            expect(this.data[0]).toEqual({ yLabel: [30, 71.8],     xLabel: [0, 1.8],   value: 39541, y: 1, x: 1 });
+            expect(this.data[1]).toEqual({ yLabel: [71.8, 113.6],  xLabel: [0, 1.8],   value: 39873, y: 2, x: 1 });
         });
 
         it("sets the min and max x and y values", function() {

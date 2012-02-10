@@ -14,8 +14,12 @@ chorus.views.visualizations.Heatmap = chorus.views.Base.extend({
 
         this.axes = new chorus.views.visualizations.Axes({
             el: svg,
-            xLabels: xLabels,
-            yLabels: yLabels,
+            xScaleType: "numeric",
+            yScaleType: "numeric",
+            minXValue: _.min(xLabels[0]),
+            minYValue: _.min(yLabels[0]),
+            maxXValue: _.max(_.last(xLabels)),
+            maxYValue: _.max(_.last(yLabels)),
             xAxisLabel: this.model.get("xAxis"),
             yAxisLabel: this.model.get("yAxis"),
             ticks: true
@@ -31,10 +35,10 @@ chorus.views.visualizations.Heatmap = chorus.views.Base.extend({
         content.selectAll(".bin").data(data).enter()
             .append("svg:rect")
             .attr("class", "bin")
-            .attr("x", function(row) { return scales.x(row.xLabel) })
-            .attr("y", function(row) { return scales.y(row.yLabel) + scales.y.rangeBand() })
-            .attr("height", Math.abs(scales.y.rangeBand()))
-            .attr("width", scales.x.rangeBand())
+            .attr("x", function(row) { return scales.x(row.xLabel[0]) })
+            .attr("y", function(row) { return scales.y(row.yLabel[1]) })
+            .attr("height", function(row) {return Math.abs(scales.y(row.yLabel[1])-scales.y(row.yLabel[0]))-2})
+            .attr("width", function(row) {return Math.abs(scales.x(row.xLabel[1])-scales.x(row.xLabel[0]))-2})
             .style("fill", function(row, i) {
                 return fillScale(row.value);
             });
