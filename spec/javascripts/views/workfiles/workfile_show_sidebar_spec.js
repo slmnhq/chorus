@@ -210,8 +210,11 @@ describe("chorus.views.WorkfileShowSidebar", function() {
                 expect(this.view.$("a.updated_by").attr("href")).toBe("#/users/" + this.workfile.get("modifiedById"))
             })
 
-            it("displays a link to download the workfile", function() {
-                expect(this.view.$(".actions a.download")).toHaveAttr("href", "/edc/workspace/" + this.workfile.get('workspaceId') + "/workfile/" + this.workfile.get('id') + "/file/" + this.workfile.get('versionInfo').versionFileId + "?download=true")
+            it("displays a link to delete the workfile", function() {
+                var deleteLink = this.view.$(".actions a[data-alert=WorkfileDelete]");
+                expect(deleteLink).toExist();
+                expect(deleteLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"))
+                expect(deleteLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
             });
 
             it("displays a link to add a note", function() {
