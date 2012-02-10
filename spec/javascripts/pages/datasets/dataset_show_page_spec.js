@@ -140,26 +140,28 @@ describe("chorus.pages.DatasetShowPage", function() {
                 spyOn(this.page, 'render');
             });
 
-            it("triggers 'resized' on the page", function() {
-                this.page.mainContent.contentDetails.trigger("transform:sidebar", "boxplot");
-                expect('resized').toHaveBeenTriggeredOn(this.page);
-            });
+            context("for any valid type of plot", function() {
+                beforeEach(function() {
+                    this.page.mainContent.contentDetails.trigger("transform:sidebar", "boxplot");
+                });
 
-            it("should not re-render the page", function() {
-                this.page.mainContent.contentDetails.trigger("transform:sidebar", "boxplot");
-                expect(this.page.render).not.toHaveBeenCalled();
-            });
+                it("triggers 'resized' on the page", function() {
+                    expect('resized').toHaveBeenTriggeredOn(this.page);
+                });
 
-            it("should hide the original sidebar and shows the viz_sidebar", function() {
-                this.page.mainContent.contentDetails.trigger("transform:sidebar", "boxplot");
-                expect(this.page.$('#sidebar .sidebar_content.primary')).toHaveClass('hidden');
-                expect(this.page.$('#sidebar .sidebar_content.secondary')).not.toHaveClass('hidden');
-            });
+                it("should not re-render the page", function() {
+                    expect(this.page.render).not.toHaveBeenCalled();
+                });
 
-            it("should re-render the sidebar subview", function() {
-                this.page.mainContent.contentDetails.trigger("transform:sidebar", "boxplot");
-                expect(this.page.$('#sidebar .sidebar_content').get(1)).toBe(this.page.secondarySidebar.el);
-            });
+                it("should hide the original sidebar and shows the viz_sidebar", function() {
+                    expect(this.page.$('#sidebar .sidebar_content.primary')).toHaveClass('hidden');
+                    expect(this.page.$('#sidebar .sidebar_content.secondary')).not.toHaveClass('hidden');
+                });
+
+                it("should re-render the sidebar subview", function() {
+                    expect(this.page.$('#sidebar .sidebar_content').get(1)).toBe(this.page.secondarySidebar.el);
+                });
+            })
 
             context("for a boxplot", function() {
                 beforeEach(function() {
@@ -227,6 +229,10 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                 it("should swap out the sidebar for the chorus view sidebar", function() {
                     expect(this.page.secondarySidebar).toBeA(chorus.views.CreateChorusViewSidebar)
+                });
+
+                it("removes the current selection the column list", function() {
+                    expect(this.page.mainContent.content.$("li.selected").length).toBe(0);
                 });
 
                 describe("after cancelling", function() {

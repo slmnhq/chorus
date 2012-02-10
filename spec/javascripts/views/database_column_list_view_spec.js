@@ -68,6 +68,16 @@ describe("chorus.views.DatabaseColumnList", function() {
                 it("triggers the column:deselected event with the corresponding model as an argument", function(){
                     expect("column:deselected").toHaveBeenTriggeredOn(this.view, [this.collection.at(0)]);
                 });
+
+                describe("#delectAll", function() {
+                    beforeEach(function() {
+                        this.view.deselectAll();
+                    });
+
+                    it("should remove class selected from all list items", function() {
+                        expect(this.view.$("li.selected").length).toBe(0);
+                    })
+                })
             });
 
             context("with selectMulti true", function() {

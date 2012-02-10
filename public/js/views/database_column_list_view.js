@@ -3,7 +3,7 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
     className:"database_column_list",
     additionalClass:"list",
     events:{
-        "click li":"selectColumn",
+        "click li":"selectColumnClick",
     },
     selectMulti: false,
 
@@ -16,7 +16,7 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
     },
 
     postRender:function () {
-        this.$("li:eq(0)").click();
+        this.selectColumn(this.$("li:eq(0)"));
     },
 
     collectionModelContext:function (model) {
@@ -26,8 +26,15 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
         }
     },
 
-    selectColumn:function (e) {
-        var $selectedColumn = $(e.target).closest("li");
+    deselectAll: function() {
+        this.$("li").removeClass("selected");
+    },
+
+    selectColumnClick: function(e) {
+        this.selectColumn($(e.target).closest("li"));
+    },
+
+    selectColumn:function ($selectedColumn) {
         if(this.selectMulti) {
             if ($selectedColumn.is(".selected")){
                 this.trigger("column:deselected", this.collection.at(this.$("li").index($selectedColumn)));

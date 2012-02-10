@@ -120,6 +120,7 @@
                     this.secondarySidebar = new chorus.views.DatasetVisualizationTimeSeriesSidebar({model: this.model, collection: this.columnSet});
                     break;
                 case 'chorus_view':
+                    this.mainContent.content.deselectAll();
                     this.mainContent.content.selectMulti = true;
                     this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model : this.model});
                     this.secondarySidebar.bind("column:removed", this.forwardDeselectedToMain, this);
