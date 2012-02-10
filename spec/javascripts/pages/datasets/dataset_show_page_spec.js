@@ -231,7 +231,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                     expect(this.page.secondarySidebar).toBeA(chorus.views.CreateChorusViewSidebar)
                 });
 
-                it("removes the current selection the column list", function() {
+                it("removes the current selection from the column list", function() {
                     expect(this.page.mainContent.content.$("li.selected").length).toBe(0);
                 });
 
@@ -242,6 +242,38 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                     it("disables multi-select on the main content", function() {
                         expect(this.page.mainContent.content.selectMulti).toBeFalsy();
+                    });
+                });
+                
+                describe("clicking select all", function() {
+                    beforeEach(function() {
+                        this.selectSpy = jasmine.createSpy("column selected spy");
+                        this.page.mainContent.content.bind("column:selected", this.selectSpy);
+                        this.page.mainContent.contentDetails.$("a.select_all").click();
+                    });
+
+                    it("adds the selected class to each column li", function() {
+                        expect(this.page.mainContent.content.$("li.selected").length).toBe(this.page.mainContent.content.$("li").length);
+                    });
+
+                    it("triggers column:selected once for each li", function() {
+                        expect(this.selectSpy.callCount).toBe(this.page.mainContent.content.$("li.selected").length);
+                    });
+
+                    describe("clicking select none", function() {
+                        beforeEach(function() {
+                            this.deselectSpy = jasmine.createSpy("column deselected spy");
+                            this.page.mainContent.content.bind("column:deselected", this.deselectSpy);
+                            this.page.mainContent.contentDetails.$("a.select_none").click();
+                        });
+
+                        it("removes the selected class from each column li", function() {
+                            expect(this.page.mainContent.content.$("li.selected").length).toBe(0);
+                        });
+
+                        it("triggers column:deselected once for each li", function() {
+                            expect(this.deselectSpy.callCount).toBe(this.page.mainContent.content.$("li").length);
+                        });
                     });
                 });
                 

@@ -268,6 +268,28 @@ describe("chorus.views.DatasetContentDetails", function() {
                         expect(this.chorusViewSpy).toHaveBeenCalled();
                     })
 
+                    describe("clicking 'Select All'", function() {
+                        beforeEach(function() {
+                            spyOnEvent(this.view, "column:select_all");
+                            this.view.$(".select_all").click();
+                        })
+
+                        it("should trigger the column:select_all event", function() {
+                            expect("column:select_all").toHaveBeenTriggeredOn(this.view);
+                        });
+                    });
+
+                    describe("clicking 'Select None'", function() {
+                        beforeEach(function() {
+                            spyOnEvent(this.view, "column:select_none");
+                            this.view.$(".select_none").click();
+                        })
+
+                        it("should trigger the column:select_none event", function() {
+                            expect("column:select_none").toHaveBeenTriggeredOn(this.view);
+                        });
+                    });
+
                     describe("and the cancel link is clicked", function() {
                         beforeEach(function() {
                             

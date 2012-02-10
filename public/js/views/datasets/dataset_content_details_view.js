@@ -13,6 +13,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         "click .chart_icon" : "selectVisualization",
         "click .close_errors": "closeError",
         "click .view_error_details": "viewErrorDetails",
+        "click a.select_all" : "triggerSelectAll",
+        "click a.select_none" : "triggerSelectNone",
         "mouseenter .chart_icon" : "showTitle",
         "mouseleave .chart_icon" : "showSelectedTitle"
     },
@@ -57,6 +59,16 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
                 '.derive': _.bind(this.startCreateChorusViewWizard, this)
             }
         });
+    },
+
+    triggerSelectAll : function(e) {
+        e && e.preventDefault();
+        this.trigger("column:select_all");
+    },
+
+    triggerSelectNone : function(e) {
+        e && e.preventDefault();
+        this.trigger("column:select_none");
     },
 
     startVisualizationWizard : function() {

@@ -16,7 +16,7 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
     },
 
     postRender:function () {
-        this.selectColumn(this.$("li:eq(0)"));
+        this.toggleColumnSelection(this.$("li:eq(0)"));
     },
 
     collectionModelContext:function (model) {
@@ -27,20 +27,29 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
     },
 
     deselectAll: function() {
-        this.$("li").removeClass("selected");
+        _.each(this.$("li"), function(li) {
+            this.toggleColumnSelection($(li), false);
+        }, this);
+    },
+
+    selectAll : function() {
+        _.each(this.$("li"), function(li) {
+            this.toggleColumnSelection($(li), true);
+        }, this);
     },
 
     selectColumnClick: function(e) {
-        this.selectColumn($(e.target).closest("li"));
+        this.toggleColumnSelection($(e.target).closest("li"));
     },
 
-    selectColumn:function ($selectedColumn) {
-        if(this.selectMulti) {
-            if ($selectedColumn.is(".selected")){
-                this.trigger("column:deselected", this.collection.at(this.$("li").index($selectedColumn)));
-            } else {
+    toggleColumnSelection:function ($selectedColumn, forceState) {
+        if (this.selectMulti) {
+            var turnOn = (arguments.length == 2) ? forceState : !$selectedColumn.is(".selected");
+            if (turnOn) {
                 $selectedColumn.addClass("selected");
                 this.trigger("column:selected", this.collection.at(this.$("li").index($selectedColumn)));
+            } else {
+                this.trigger("column:deselected", this.collection.at(this.$("li").index($selectedColumn)));
             }
         } else {
             var $deselected = this.$("li.selected");
