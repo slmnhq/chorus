@@ -117,7 +117,7 @@ chorus.Mixins.SQLResults = {
 
 chorus.Mixins.VisHelpers = {
     labelFormat : function(label, maxLength) {
-        maxLength = maxLength || 6;
+        maxLength = maxLength || 6
 
         if ((typeof label == "number") && label.toString().length > maxLength){
             return label.toExponential(2)
