@@ -136,6 +136,7 @@
 
         hideSidebar: function(type) {
             this.mainContent.content.selectMulti = false;
+            this.mainContent.content.render();
             this.$('.sidebar_content.primary').removeClass("hidden")
             this.$('.sidebar_content.secondary').addClass("hidden")
             this.removeOldSecondaryClasses(type);

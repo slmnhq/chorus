@@ -62,6 +62,33 @@
         fieldset {
             padding : 0;
         }
+
+        a.remove {
+            float: right;
+            display: none;
+            @include secondary-text-small;
+        }
+
+        .name {
+            display: inline-block;
+            font-size: 14px;
+            font-weight: normal;
+            color: black;
+            padding-left: 15px;
+            max-width: 135px;
+            @include ellipsis;
+        }
+
+        .sidebar_row {
+            width: 100%;
+            @include after-clearfix;
+
+            &:hover {
+                .remove {
+                    display: inline-block;
+                }
+            }
+        }
     }
 }
 
@@ -110,6 +137,7 @@
                 @include secondary-text-semibold;
                 .label {
                     display:inline-block;
+                    padding-bottom: 10px;
                 }
                 .name {
                     @include ellipsis;

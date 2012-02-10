@@ -167,6 +167,22 @@
         font-size: 14px;
         color: $color-text1;
         font-weight: normal;
+
+        a.select_all, a.select_none {
+            font-size: 12px;
+            font-weight: $semibold;
+            margin-left: 10px;
+        }
+
+        a.select_all {
+            margin-right: 10px;
+        }
+
+        .select {
+            font-size: 12px;
+            font-weight: $semibold;
+            color: $color-text3;
+        }
     }
 
     .actions {

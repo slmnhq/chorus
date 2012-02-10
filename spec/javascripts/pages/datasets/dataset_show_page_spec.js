@@ -93,7 +93,7 @@ describe("chorus.pages.DatasetShowPage", function() {
             this.server.completeFetchFor(this.workspace);
             this.resizedSpy = spyOnEvent(this.page, 'resized');
             this.server.completeFetchFor(this.dataset);
-            this.server.lastFetch().succeed(this.columnSet.attributes, { page: "1", total: "1" })
+            this.server.completeFetchAllFor(this.columnSet, this.columnSet.models);
         })
 
         describe("breadcrumbs", function() {
@@ -237,11 +237,18 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                 describe("after cancelling", function() {
                     beforeEach(function() {
+                        this.page.mainContent.content.selectAll();
                         this.page.mainContent.contentDetails.trigger("cancel:sidebar", "boxplot");
                     });
 
                     it("disables multi-select on the main content", function() {
                         expect(this.page.mainContent.content.selectMulti).toBeFalsy();
+                    });
+
+                    it("selects only the first item", function() {
+                        expect(this.page.mainContent.content.$("li").length).toBe(2);
+                        expect(this.page.mainContent.content.$("li:eq(0)")).toHaveClass("selected");
+                        expect(this.page.mainContent.content.$("li:eq(1)")).not.toHaveClass("selected");
                     });
                 });
                 
