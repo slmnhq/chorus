@@ -79,8 +79,22 @@
             this.mainContent.contentDetails.bind("transform:sidebar", this.showSidebar, this);
             this.mainContent.contentDetails.bind("cancel:sidebar", this.hideSidebar, this);
 
-            this.render();
+            this.mainContent.content.bind("column:selected", this.forwardSelectedToSidebar, this);
+            this.mainContent.content.bind("column:deselected", this.forwardDeselectedToSidebar, this);
 
+            this.render();
+        },
+
+        forwardSelectedToSidebar : function(column) {
+            if (this.secondarySidebar) {
+                this.secondarySidebar.trigger("column:selected", column);
+            }
+        },
+
+        forwardDeselectedToSidebar : function(column) {
+            if (this.secondarySidebar) {
+                this.secondarySidebar.trigger("column:deselected", column);
+            }
         },
 
         showSidebar: function(type) {

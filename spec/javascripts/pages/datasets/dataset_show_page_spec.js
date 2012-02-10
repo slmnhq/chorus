@@ -219,6 +219,30 @@ describe("chorus.pages.DatasetShowPage", function() {
                         expect(this.page.mainContent.content.selectMulti).toBeFalsy();
                     });
                 });
+                
+                describe("when the column:selected event occurs", function() {
+                    beforeEach(function() {
+                        spyOnEvent(this.page.secondarySidebar, "column:selected");
+                        this.column = fixtures.databaseColumn();
+                        this.page.mainContent.content.trigger("column:selected", this.column);
+                    });
+                    
+                    it("triggers that event on the chorus view sidebar", function (){
+                        expect("column:selected").toHaveBeenTriggeredOn(this.page.secondarySidebar, [this.column]);
+                    });
+                });
+
+                describe("when the column:deselected event occurs", function() {
+                    beforeEach(function() {
+                        spyOnEvent(this.page.secondarySidebar, "column:deselected");
+                        this.column = fixtures.databaseColumn();
+                        this.page.mainContent.content.trigger("column:deselected", this.column);
+                    })
+
+                    it("triggers that event on the chorus view sidebar", function (){
+                        expect("column:deselected").toHaveBeenTriggeredOn(this.page.secondarySidebar, [this.column]);
+                    });
+                });
             });
 
 

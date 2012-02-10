@@ -68,10 +68,47 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             });
 
             it("displays the name of that column", function() {
-                expect(this.view.$(".selected_columns .empty_selection")).toHaveClass("hidden");
+                expect(this.view.$(".empty_selection")).toHaveClass("hidden");
                 expect(this.view.$(".non_empty_selection")).not.toHaveClass("hidden");
                 expect(this.view.$(".non_empty_selection .columns li").length).toBe(1)
                 expect(this.view.$(".non_empty_selection .columns li")).toContainText(this.databaseColumn.get("name"));
+            });
+
+            describe("selecting another column", function() {
+                beforeEach(function(){
+                    this.databaseColumn2 = fixtures.databaseColumn();
+                    this.view.trigger("column:selected", this.databaseColumn2);
+                });
+
+                it("adds that column too", function() {
+                    expect(this.view.$(".non_empty_selection .columns li").length).toBe(2)
+                    expect(this.view.$(".non_empty_selection .columns li")).toContainText(this.databaseColumn.get("name"));
+                    expect(this.view.$(".non_empty_selection .columns li")).toContainText(this.databaseColumn2.get("name"));
+                });
+
+                describe("deselecting one column", function() {
+                    beforeEach(function(){
+                        this.view.trigger("column:deselected", this.databaseColumn);
+                    });
+
+                    it("removes the name of that column", function() {
+                        expect(this.view.$(".empty_selection")).toHaveClass("hidden");
+                        expect(this.view.$(".non_empty_selection")).not.toHaveClass("hidden");
+                        expect(this.view.$(".non_empty_selection .columns li").length).toBe(1)
+                    });
+
+                    describe("deselecting the other column", function() {
+                        beforeEach(function(){
+                            this.view.trigger("column:deselected", this.databaseColumn2);
+                        });
+
+                        it("removes the name of that column, and displays the empty selection div", function() {
+                            expect(this.view.$(".empty_selection")).not.toHaveClass("hidden");
+                            expect(this.view.$(".non_empty_selection")).toHaveClass("hidden");
+                            expect(this.view.$(".non_empty_selection .columns li").length).toBe(0)
+                        });
+                    });
+                });
             });
         });
     })
