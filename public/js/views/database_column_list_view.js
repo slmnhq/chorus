@@ -26,12 +26,23 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
     },
 
     selectColumn:function (e) {
-        var selectedColumn = $(e.target).closest("li");
+        var $selectedColumn = $(e.target).closest("li");
         if(this.selectMulti) {
-            selectedColumn.toggleClass("selected");
+            if ($selectedColumn.is(".selected")){
+                $selectedColumn.removeClass("selected");
+                this.trigger("column:deselected", this.collection.at(this.$("li").index($selectedColumn)));
+            } else {
+                $selectedColumn.addClass("selected");
+                this.trigger("column:selected", this.collection.at(this.$("li").index($selectedColumn)));
+            }
         } else {
-            this.$("li").removeClass("selected");
-            selectedColumn.addClass("selected");
+            var $deselected = this.$("li.selected");
+            $deselected.removeClass("selected");
+            this.trigger("column:deselected", this.collection.at(this.$("li").index($deselected)));
+
+            $selectedColumn.addClass("selected");
+
+            this.trigger("column:selected", this.collection.at(this.$("li").index($selectedColumn)));
         }
     }
 });
