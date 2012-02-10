@@ -9,10 +9,6 @@
         overflow: hidden;
         padding-left: $padding-x;
 
-        a.name {
-            display: block;
-        }
-
         .name {
             font-weight: $semibold;
         }
@@ -20,7 +16,6 @@
             color: $color-text2;
         }
         .location, .found_in {
-          display: inline-block;
             padding-top: 4px;
             @include results-console-message;
             a {
