@@ -52,9 +52,9 @@ describe("chorus.views.visualizations.BoxPlot", function() {
 
         it("combines bucket names with percentages and ellipsizes", function() {
             var xlabels = this.view.$(".xaxis .label text")
-            expect(xlabels[0].textContent).toBe("chupac... (81%)")
+            expect(xlabels[0].textContent).toBe("chupa… (81%)")
             expect(xlabels[1].textContent).toBe("beluga (33%)")
-            expect(xlabels[2].textContent).toBe("aardva... (25%)")
+            expect(xlabels[2].textContent).toBe("aardv… (25%)")
         })
 
         describe("the quartile rectangles", function() {

@@ -88,14 +88,13 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
             .attr("class", "label")
             .append("svg:text")
 
-
         if (this.scaleType == "time") {
             testTickLabels.text(function(d) {
                 return self.timeFormat(d)
             })
         } else {
             testTickLabels.text(function(d) {
-                return self.labelFormat(d, 4)
+                return self.labelFormat(d)
             })
         }
 
@@ -177,14 +176,13 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
             .attr("y", tickLabelBottom)
             .attr("x", 0);
 
-
         if (this.scaleType == "time") {
             tickLabels.text(function(d) {
                 return self.timeFormat(d)
             });
         } else {
             tickLabels.text(function(d) {
-                return self.labelFormat(d, 4)
+                return self.labelFormat(d)
             });
         }
 
@@ -243,7 +241,7 @@ chorus.views.visualizations.YAxis = chorus.views.visualizations.Axis.extend({
             .attr("class", "label")
             .append("svg:text")
             .text(function(d) {
-                return self.labelFormat(d, 4)
+                return self.labelFormat(d)
             });
         var testAxisLabel = this.el.append("svg:g")
             .attr("class", "axis_label")
@@ -303,10 +301,10 @@ chorus.views.visualizations.YAxis = chorus.views.visualizations.Axis.extend({
             .attr("class", "label")
             .attr("y", 0)
             .attr("x", 0)
-            .text(
-            function(d) {
-                return self.labelFormat(d, 4)
-            }).attr("title", function(d) {return d;});
+            .text(function(d) {
+                return self.labelFormat(d)
+            })
+            .attr("title", function(d) { return d; });
 
         // reposition labels now that we know their width
         this.el.selectAll(".label")
