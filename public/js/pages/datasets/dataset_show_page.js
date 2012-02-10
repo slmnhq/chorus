@@ -89,11 +89,19 @@
                 this.secondarySidebar.trigger("column:deselected", column);
             }
         },
+        
+        forwardDeselectedToMain : function(column) {
+            this.mainContent.content.trigger("column:deselected", column);
+        },
 
         showSidebar: function(type) {
             this.$('.sidebar_content.primary').addClass("hidden")
             this.$('.sidebar_content.secondary').removeClass("hidden")
 
+            if (this.secondarySidebar) {
+                this.secondarySidebar.unbind("column:removed", this.forwardDeselectedToMain);
+            }
+            
             this.mainContent.content.selectMulti = false;
             switch (type) {
                 case 'boxplot':
@@ -114,6 +122,7 @@
                 case 'chorus_view':
                     this.mainContent.content.selectMulti = true;
                     this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model : this.model});
+                    this.secondarySidebar.bind("column:removed", this.forwardDeselectedToMain, this);
                     break;
             }
 

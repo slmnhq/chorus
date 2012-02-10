@@ -117,6 +117,18 @@ describe("chorus.pages.DatasetShowPage", function() {
             })
         });
 
+        describe("#showSidebar", function() {
+            beforeEach(function() {
+                this.page.secondarySidebar = new Backbone.View();
+                spyOn(this.page.secondarySidebar, "unbind");
+                this.page.showSidebar("foo");
+            });
+
+            it("should unbind the column:removed event from the sidebar", function() {
+                 expect(this.page.secondarySidebar.unbind).toHaveBeenCalledWith("column:removed", this.page.forwardDeselectedToMain);
+            });
+        });
+
         describe("when the transform:sidebar event is triggered", function() {
             beforeEach(function() {
                 this.page.render()
@@ -234,7 +246,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                     });
                 });
 
-                describe("when the column:deselected event occurs", function() {
+                describe("when the column:deselected event occurs on the page", function() {
                     beforeEach(function() {
                         spyOnEvent(this.page.secondarySidebar, "column:deselected");
                         this.column = fixtures.databaseColumn();
@@ -245,8 +257,19 @@ describe("chorus.pages.DatasetShowPage", function() {
                         expect("column:deselected").toHaveBeenTriggeredOn(this.page.secondarySidebar, [this.column]);
                     });
                 });
-            });
 
+                describe("when the column:removed event occurs on the sidebar", function() {
+                    beforeEach(function() {
+                        spyOnEvent(this.page.mainContent.content, "column:deselected");
+                        this.column = fixtures.databaseColumn();
+                        this.page.secondarySidebar.trigger("column:removed", this.column);
+                    });
+
+                    it("triggers the event on the main content", function() {
+                        expect("column:deselected").toHaveBeenTriggeredOn(this.page.mainContent.content, [this.column]);
+                    })
+                })
+            });
 
             describe("when the cancel:sidebar event is triggered", function() {
                 beforeEach(function() {

@@ -42,25 +42,6 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             });
         })
 
-        xcontext("when there are columns selected", function() {
-            beforeEach(function() {
-                this.view.collection = fixtures.databaseColumnSet();
-                this.view.render();
-            });
-
-            it("hides the empty selection section and shows the non-empty selection section", function() {
-                expect(this.view.$(".selected_columns .non_empty_selection")).not.toHaveClass("hidden");
-                expect(this.view.$(".selected_columns .empty_selection")).toHaveClass("hidden");
-            });
-
-            it("display selected column section", function() {
-                expect(this.view.$(".selected_columns .title").text().trim()).toMatchTranslation("dataset.chorusview.sidebar.selected_columns");
-            });
-            it("enables the create dataset button", function() {
-                expect(this.view.$("button")).not.toHaveClass("disabled");
-            });
-        })
-
         describe("column:selected event", function() {
             beforeEach(function(){
                 this.databaseColumn = fixtures.databaseColumn();
@@ -73,6 +54,11 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 expect(this.view.$(".non_empty_selection .columns li").length).toBe(1)
                 expect(this.view.$(".non_empty_selection .columns li")).toContainText(this.databaseColumn.get("name"));
             });
+
+            it("includes a remove link in the li", function() {
+                expect(this.view.$(".columns li a.remove")).toExist();
+                expect(this.view.$(".columns li a.remove").text().trim()).toMatchTranslation("dataset.chorusview.sidebar.remove");
+            })
 
             describe("selecting another column", function() {
                 beforeEach(function(){
@@ -111,5 +97,18 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 });
             });
         });
+
+        describe("clicking the 'Remove' link", function() {
+            beforeEach(function() {
+                spyOnEvent(this.view, "column:removed");
+                this.column = fixtures.databaseColumn();
+                this.view.trigger("column:selected", this.column);
+                this.view.$("a.remove").click();
+            })
+
+            it("should trigger the column:removed event", function() {
+                expect("column:removed").toHaveBeenTriggeredOn(this.view, [this.column]);
+            })
+        })
     })
 });
