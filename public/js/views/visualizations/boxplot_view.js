@@ -1,4 +1,4 @@
-chorus.views.visualizations.Boxplot = chorus.views.Base.extend({
+chorus.views.visualizations.Boxplot = chorus.views.Base.extend(_.extend(chorus.Mixins.VisHelpers, {
     render: function() {
         var $el = $(this.el);
         $el.addClass("visualization");
@@ -11,13 +11,24 @@ chorus.views.visualizations.Boxplot = chorus.views.Base.extend({
             .attr("width", 925)
             .attr("height", 340);
 
+
+        var buckets = _.pluck(data, "bucket")
+        var percentages = _.pluck(data, "percentage");
+        percentages = _.map(percentages, function(percent){
+            var num = percent.split("%")[0];
+            return (num.split(".")[0] + "%");
+        })
+
+        var xLabels = _.map(buckets, function(bucket, i){
+            return this.labelFormat(bucket, 4, 6) + " (" + percentages[i]+ ")";
+        }, this)
         this.axes = new chorus.views.visualizations.Axes({
             el: svg,
             yScaleType: "numeric",
             xScaleType: "ordinal",
             maxYValue: data.maxY,
             minYValue: data.minY,
-            xLabels: _.pluck(data, 'bucket'),
+            xLabels: xLabels,
             xAxisLabel: this.model.get("xAxis"),
             yAxisLabel: this.model.get("yAxis"),
             hasYGrids: true,
@@ -143,5 +154,5 @@ chorus.views.visualizations.Boxplot = chorus.views.Base.extend({
             .attr("width", this.plotWidth)
             .attr("height", this.plotHeight);
     }
-});
+}));
 

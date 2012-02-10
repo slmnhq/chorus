@@ -50,6 +50,13 @@ describe("chorus.views.visualizations.BoxPlot", function() {
             expect(this.view.$('.xaxis line.grid').length).toBe(0);
         });
 
+        it("combines bucket names with percentages and ellipsizes", function() {
+            var xlabels = this.view.$(".xaxis .label text")
+            expect(xlabels[0].textContent).toBe("chupac... (81%)")
+            expect(xlabels[1].textContent).toBe("beluga (33%)")
+            expect(xlabels[2].textContent).toBe("aardva... (25%)")
+        })
+
         describe("the quartile rectangles", function() {
             it("has one for each bucket", function() {
                 expect(this.quartileRectangles.length).toBe(3);
