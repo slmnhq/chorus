@@ -95,6 +95,11 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
                 }
             }
         });
+
+        chorus.page && chorus.page.sidebar.bind("scroll", _.bind(function() {
+            $(".hover").removeClass("hover");
+            this.closeQtip();
+        }, this));
     },
 
     schemaSelected:function (e) {
@@ -110,8 +115,8 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
         this.trigger("file:insertText", model.toText())
     },
 
-    closeQtip:function (e) {
-        $(e.currentTarget).trigger("mouseleave");
+    closeQtip:function () {
+        $("li:hover a").trigger("mouseleave");
     },
 
     contextClicked:function (e) {

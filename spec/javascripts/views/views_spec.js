@@ -1,4 +1,4 @@
-describe("chorus.views.base", function () {
+describe("chorus.views.Base", function () {
     describe("initialize", function () {
         describe("resourcesLoaded", function () {
             beforeEach(function () {
@@ -962,6 +962,17 @@ describe("chorus.views.base", function () {
                     expect(this.view.recalculateScrolling).toHaveBeenCalled()
                 })
             })
+
+            describe("when the element scrolls", function() {
+                beforeEach(function() {
+                    spyOnEvent(this.view, 'scroll');
+                    this.view.$(".foo").trigger("jsp-scroll-y");
+                });
+
+                it("triggers the 'scroll' event on itself", function() {
+                    expect('scroll').toHaveBeenTriggeredOn(this.view);
+                });
+            });
         })
     })
 })

@@ -180,6 +180,8 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
                 el.find('.jspVerticalBar').hide();
                 el.find('.jspHorizontalBar').hide();
 
+                el.bind("jsp-scroll-y", _.bind(function() { this.trigger("scroll"); }, this));
+
                 if (!alreadyInitialized) {
                     el.addClass("custom_scroll");
                     el.unbind('hover').hover(function () {

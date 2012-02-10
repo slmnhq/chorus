@@ -117,7 +117,21 @@ describe("chorus.views.DatabaseSidebarList", function() {
                 it("closes the open insert arrow", function() {
                     expect(this.view.closeQtip).toHaveBeenCalled();
                 })
-            })
+            });
+
+            context("when scrolling", function() {
+                beforeEach(function() {
+                    chorus.page = new chorus.pages.Base();
+                    chorus.page.sidebar = new chorus.views.Sidebar();
+
+                    this.view.render();
+                    chorus.page.sidebar.trigger("scroll");
+                });
+
+                it("closes the open insert arrow", function() {
+                    expect(this.view.closeQtip).toHaveBeenCalled();
+                });
+            });
         })
     });
 });
