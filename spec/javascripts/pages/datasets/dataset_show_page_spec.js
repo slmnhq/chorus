@@ -209,6 +209,16 @@ describe("chorus.pages.DatasetShowPage", function() {
                 it("should swap out the sidebar for the chorus view sidebar", function() {
                     expect(this.page.secondarySidebar).toBeA(chorus.views.CreateChorusViewSidebar)
                 });
+
+                describe("after cancelling", function() {
+                    beforeEach(function() {
+                        this.page.mainContent.contentDetails.trigger("cancel:sidebar", "boxplot");
+                    });
+
+                    it("disables multi-select on the main content", function() {
+                        expect(this.page.mainContent.content.selectMulti).toBeFalsy();
+                    });
+                });
             });
 
 
