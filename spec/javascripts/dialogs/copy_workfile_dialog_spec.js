@@ -80,6 +80,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
 
         describe("when the API is successful", function() {
             beforeEach(function() {
+                this.workfile.set({"fileName": "copied_filename.sql" })
                 this.server.lastCreate().succeed(this.workfile.attributes);
             })
 
