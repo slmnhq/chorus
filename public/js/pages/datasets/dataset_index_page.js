@@ -24,7 +24,19 @@
             this.mainContent = new chorus.views.MainContentList({
                 modelClass: "Dataset",
                 collection: this.collection,
-                model: this.workspace
+                model: this.workspace,
+                linkMenus: {
+                    type: {
+                        title: t("header.menu.filter.title"),
+                        options: [
+                            {data: "", text: t("dataset.header.menu.filter.all")},
+                            {data: "SOURCE_TABLE", text: t("dataset.types.SOURCE_TABLE.BASE_TABLE")},
+                            {data: "SANDBOX_TABLE", text: t("dataset.types.SANDBOX_TABLE.BASE_TABLE")},
+                            {data: "CHORUS_VIEW", text: t("dataset.types.CHORUS_VIEW.QUERY")}
+                        ],
+                        event: "filter"
+                    }
+                }
             });
 
             this.sidebar = new chorus.views.DatasetListSidebar();
@@ -33,6 +45,10 @@
             this.mainContent.content.bind("dataset:selected", function(dataset) {
                 this.model = dataset;
             }, this);
+            this.mainContent.contentHeader.bind("choice:filter", function(choice) {
+                this.collection.attributes.type = choice;
+                this.collection.fetch();
+            }, this)
         },
 
         workspaceLoaded: function() {

@@ -29,7 +29,7 @@
                     model:workspace,
                     linkMenus:{
                         type:{
-                            title:t("workfiles.header.menu.filter.title"),
+                            title:t("header.menu.filter.title"),
                             options:[
                                 {data:"", text:t("workfiles.header.menu.filter.all")},
                                 {data:"SQL", text:t("workfiles.header.menu.filter.sql")},

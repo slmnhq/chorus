@@ -84,6 +84,49 @@ describe("chorus.pages.DatasetIndexPage", function() {
             it("does not pop up the WorkspaceInstanceAccountDialog", function() {
                 expect(chorus.Modal.prototype.launchModal).not.toHaveBeenCalled();
             })
+
+            describe("filtering", function() {
+                beforeEach(function() {
+                    this.page.render();
+                    this.page.collection.type = undefined;
+                })
+
+                it("has options for filtering", function() {
+                    expect(this.page.$("ul[data-event=filter] li[data-type=]")).toExist();
+                    expect(this.page.$("ul[data-event=filter] li[data-type=SOURCE_TABLE]")).toExist();
+                    expect(this.page.$("ul[data-event=filter] li[data-type=CHORUS_VIEW]")).toExist();
+                    expect(this.page.$("ul[data-event=filter] li[data-type=SANDBOX_TABLE]")).toExist();
+                })
+
+                it("can filter the list by 'all'", function() {
+                    this.page.$("li[data-type=] a").click();
+                    expect(this.page.collection.attributes.type).toBe("");
+                    expect(this.page.collection.fetch).toHaveBeenCalled();
+                })
+
+                it("has can filter the list by 'SOURCE_TABLE'", function() {
+                    this.page.$("li[data-type=SOURCE_TABLE] a").click();
+                    expect(this.page.collection.attributes.type).toBe("SOURCE_TABLE");
+                    expect(this.page.collection.fetch).toHaveBeenCalled();
+                    expect(this.server.lastFetch().url).toContain("/edc/workspace/" + this.workspace.get("id") + "/dataset?type=SOURCE_TABLE");
+                })
+
+                it("has can filter the list by 'SANBOX_TABLE'", function() {
+                    this.page.$("li[data-type=SANDBOX_TABLE] a").click();
+                    expect(this.page.collection.attributes.type).toBe("SANDBOX_TABLE");
+                    expect(this.page.collection.fetch).toHaveBeenCalled();
+                    expect(this.server.lastFetch().url).toContain("/edc/workspace/" + this.workspace.get("id") + "/dataset?type=SANDBOX_TABLE");
+
+                })
+
+                it("has can filter the list by 'CHORUS_VIEW'", function() {
+                    this.page.$("li[data-type=CHORUS_VIEW] a").click();
+                    expect(this.page.collection.attributes.type).toBe("CHORUS_VIEW");
+                    expect(this.page.collection.fetch).toHaveBeenCalled();
+                    expect(this.server.lastFetch().url).toContain("/edc/workspace/" + this.workspace.get("id") + "/dataset?type=CHORUS_VIEW");
+
+                })
+            });
         });
 
     });
