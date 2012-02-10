@@ -255,11 +255,11 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                     ],
 
                     rows: [
-                        { time: '2012-01-01', value: 321 },
-                        { time: '2012-02-01', value: 124 },
-                        { time: '2012-03-01', value: 321 },
-                        { time: '2012-04-01', value: 321 },
-                        { time: '2012-05-01', value: 421 },
+                        { time: '2010-01-01', value: 321 },
+                        { time: '2010-02-01', value: 124 },
+                        { time: '2011-03-01', value: 321 },
+                        { time: '2011-04-01', value: 321 },
+                        { time: '2011-05-01', value: 421 },
                         { time: '2012-06-01', value: 621 },
                         { time: '2012-07-01', value: 524 },
                         { time: '2012-08-01', value: 824 },
@@ -274,7 +274,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                         { time: '2012-10-01', value: 724 }
                     ],
                     xAxis: "Day of the Week",
-                    yAxis: "Parties"
+                    yAxis: "Parties",
+                    timeType: "date"
                 })
             })
 

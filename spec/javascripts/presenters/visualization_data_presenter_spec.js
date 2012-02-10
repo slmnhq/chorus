@@ -11,7 +11,7 @@ describe("chorus.presenters.visualizations", function() {
                     { time: '2012-07-08', value: 524 },
                     { time: '2012-08-01', value: 824 },
                     { time: '2012-09-01', value: 924 },
-                    { time: '2012-10-01', value: 724 }
+                    { time: '2012-10-01', value: 724 },
                 ]
             });
 
@@ -36,6 +36,28 @@ describe("chorus.presenters.visualizations", function() {
             expect(this.data.minX).toBe("2012-01-01");
             expect(this.data.maxX).toBe("2012-10-01");
         });
+
+        describe("with time-only data", function() {
+            beforeEach(function() {
+                this.model = fixtures.timeseriesTaskWithResult({
+                    rows: [
+                        { time: '0000-00-00 01:02:03', value: 321 },
+                        { time: '2012-02-21 03:04:05', value: 124 }
+                    ]
+                });
+                this.presenter = new chorus.presenters.visualizations.Timeseries(this.model);
+                this.data = this.presenter.present();
+            })
+
+            it("should return a time that can be parsed by 'Date'", function() {
+                expect(Date.parse(this.data[0].time)).toBeTruthy();
+            });
+            it("should return the given a time", function() {
+                expect(this.data[0].time.slice(11)).toBe("01:02:03");
+            });
+
+        });
+
     });
 
     describe("Frequency", function() {

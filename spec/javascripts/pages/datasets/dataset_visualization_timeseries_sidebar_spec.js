@@ -35,6 +35,7 @@ describe("chorus.views.DatasetVisualizationTimeSeriesSidebar", function() {
                     expect(options.xAxis).toBe("Stopwatch");
                     expect(options.aggregation).toBe("sum");
                     expect(options.timeInterval).toBe("minute");
+                    expect(options.timeType).toBe("time");
                 })
             });
         })

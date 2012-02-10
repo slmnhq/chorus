@@ -10,6 +10,17 @@ chorus.views.visualizations.Timeseries = chorus.views.Base.extend({
             .attr("width", 925)
             .attr("height", 340);
 
+        var timeFormat;
+
+        if(this.model.get("timeType").toLowerCase() == "date") {
+            timeFormat = d3.time.format("%Y-%m-%d");
+        }
+        else if(this.model.get("timeType").toLowerCase() == "time") {
+            timeFormat = d3.time.format("%H:%M:%S");
+        } else {
+            timeFormat = d3.time.format("%Y-%m-%d %H:%M:%S")
+        }
+
         this.axes = new chorus.views.visualizations.Axes({
             el: svg,
             yScaleType: "numeric",
@@ -22,7 +33,9 @@ chorus.views.visualizations.Timeseries = chorus.views.Base.extend({
             yAxisLabel: this.model.get("yAxis"),
             hasYGrids: true,
             paddingX: 35,
-            paddingY: 35
+            paddingY: 35,
+            timeFormat: timeFormat,
+            timeType: this.model.get("timeType").toLowerCase()
         });
 
         if (!$el.isOnDom()) return;

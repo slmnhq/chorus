@@ -12,13 +12,19 @@ chorus.views.DatasetVisualizationTimeSeriesSidebar = chorus.views.DatasetVisuali
             aggMap[t("dataset.group."+name)] = name;
         })
 
+        var xAxis = this.$(".time select option:selected").text();
+        var timeColumn = (_.filter(this.columns, function(column){
+            return column.get("name") === xAxis;
+        }))[0];
+
         return {
             type: "timeseries",
             name: this.model.get("objectName"),
-            xAxis: this.$(".time select option:selected").text(),
+            xAxis: xAxis,
             yAxis: this.$(".value select option:selected").text(),
             aggregation: aggMap[this.$(".value .selected_value").text()],
-            timeInterval: this.$(".time .selected_value").text()
+            timeInterval: this.$(".time .selected_value").text(),
+            timeType: timeColumn.get("typeCategory").toLowerCase()
         }
     },
 

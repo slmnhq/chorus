@@ -160,7 +160,8 @@ describe("chorus.models.Dataset", function() {
                 xAxis: "years",
                 yAxis: "height_in_inches",
                 aggregation: "sum",
-                timeInterval: "minute"
+                timeInterval: "minute",
+                timeType: "datetime"
             });
         });
 
@@ -168,11 +169,14 @@ describe("chorus.models.Dataset", function() {
             expect(this.task).toBeA(chorus.models.TimeseriesTask);
         });
 
-        it("has the given y axis", function() {
+        it("has the given x axis", function() {
             expect(this.task.get("xAxis")).toBe("years");
-            expect(this.task.get("yAxis")).toBe("height_in_inches");
             expect(this.task.get("aggregation")).toBe("sum");
             expect(this.task.get("timeInterval")).toBe("minute");
+        });
+
+        it("has the given y axis", function() {
+            expect(this.task.get("yAxis")).toBe("height_in_inches");
         });
 
         it("has the right workspaceId, dataset id and objectName", function() {
@@ -180,5 +184,9 @@ describe("chorus.models.Dataset", function() {
             expect(this.task.get("datasetId")).toBe(this.dataset.entityId);
             expect(this.task.get("objectName")).toBe("japanese_teas");
         });
+
+        it("has the right timeType", function() {
+            expect(this.task.get("timeType")).toBe('datetime')
+        })
     });
 })

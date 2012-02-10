@@ -256,7 +256,9 @@ describe("chorus.views.visualizations.Axes", function() {
                     ticks: true,
                     paddingX: this.paddingX,
                     paddingY: this.paddingY,
-                    hasGrids: this.hasGridLines
+                    hasGrids: this.hasGridLines,
+                    timeType: "date",
+                    timeFormat: d3.time.format("%Y-%m-%d")
                 });
                 this.axis.render();
 
@@ -267,12 +269,16 @@ describe("chorus.views.visualizations.Axes", function() {
                 this.labels = this.$el.find(".label");
             });
 
-            it("generates 8-12 uniformly spaced ticks in the range of the label values", function() {
+            it("generates 8-12 uniformly spaced ticks in the range of the label values (unless datetime)", function() {
                 expect(this.ticks.length).toBeGreaterThan(5);
                 expect(this.ticks.length).toBeLessThan(20);
 
                 expect(this.ticks).toBeUniformlyHorizontallySpaced();
             });
+
+            it("formats the labels correctly", function() {
+                expect(this.labels[0].textContent).toBe("2012-01-01");
+            })
 
             itHasAReasonableLayout();
         })
@@ -784,6 +790,8 @@ describe("chorus.views.visualizations.Axes", function() {
         });
 
         it("passes the axis options through to the axis objects", function() {
+            var timeFormat = d3.time.format("%H:%M:%S")
+
             var axes = new chorus.views.visualizations.Axes({
                 el: this.el,
                 xScaleType: "numeric",
@@ -792,7 +800,9 @@ describe("chorus.views.visualizations.Axes", function() {
                 yScaleType: "ordinal",
                 yLabels: ["bucket 1", "bucket 2", "bucket 3"],
                 paddingX: 30,
-                paddingY: 10
+                paddingY: 10,
+                timeType: "date",
+                timeFormat: timeFormat
             });
 
             expect(axes.xAxis.scaleType).toBe("numeric");
@@ -800,6 +810,10 @@ describe("chorus.views.visualizations.Axes", function() {
             expect(axes.xAxis.minValue).toBe(5);
             expect(axes.xAxis.maxValue).toBe(15);
             expect(axes.yAxis.labels()).toEqual(["bucket 1", "bucket 2", "bucket 3"]);
+            expect(axes.xAxis.paddingX).toBe(30);
+            expect(axes.xAxis.paddingY).toBe(10);
+            expect(axes.xAxis.timeType).toBe("date");
+            expect(axes.xAxis.timeFormat).toEqual(timeFormat);
         });
     });
 });

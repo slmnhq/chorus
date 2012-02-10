@@ -9,7 +9,12 @@
     _.extend(ns.presenters.visualizations.Timeseries.prototype, {
         present: function() {
             var rows = _.map(this.task.get("rows"), function(row) {
-                return {time: row.time, value: row.value};
+                var value = row.value;
+                var time = row.time
+                if(!Date.parse(time)) {
+                    time = "2001-01-01 "+time.slice(11);
+                }
+                return {time: time, value: value};
             });
 
             rows.minY = _.min(_.pluck(rows, "value"))

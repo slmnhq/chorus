@@ -61,7 +61,8 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
             timeInterval: taskAttrs.timeInterval,
             objectName: this.get("objectName"),
             workspaceId: this.get("workspace").id,
-            datasetId: this.entityId
+            datasetId: this.entityId,
+            timeType: taskAttrs.timeType
         });
     },
 

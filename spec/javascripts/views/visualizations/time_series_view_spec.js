@@ -13,6 +13,7 @@ describe("chorus.views.visualizations.Timeseries", function() {
             objectName: "desk_surface_quality",
             yAxis: "gum_mass",
             xAxis: "observation_date",
+            timeType: "DATE",
 
             columns: [
                 { name: "time", typeCategory: "DATE" },
@@ -48,6 +49,11 @@ describe("chorus.views.visualizations.Timeseries", function() {
             expect(this.view.$(".xaxis .axis_label")).toHaveText("observation_date");
             expect(this.view.$(".yaxis .axis_label")).toHaveText("gum_mass");
         });
+
+        it("formats the times correctly", function() {
+            var labels = this.view.$(".label")
+            expect(labels[0].textContent).toBe("2012-01-01")
+        })
 
         describe("the path", function() {
             beforeEach(function() {
