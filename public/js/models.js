@@ -27,15 +27,23 @@ chorus.models = {
             return this._activities;
         },
 
+        dataStatusOk: function(data) {
+            return data.status == 'ok';
+        },
+
+        dataErrors: function(data) {
+            return data.message;
+        },
+
         parse: function(data) {
             if (data.status == "needlogin") {
                 chorus.session.trigger("needsLogin");
             }
-            if (data.status == "ok") {
+            if (this.dataStatusOk(data)) {
                 this.loaded = true;
                 return data.resource[0]
             } else {
-                this.serverErrors = data.message;
+                this.serverErrors = this.dataErrors(data);
             }
         },
 

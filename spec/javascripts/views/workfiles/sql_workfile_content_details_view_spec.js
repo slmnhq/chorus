@@ -142,7 +142,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
     });
 
     describe("event handling", function() {
-        describe("file:executionCompleted", function() {
+        describe("file:executionSucceeded", function() {
             beforeEach(function() {
                 spyOn(this.view, "render");
                 spyOnEvent(this.view.model, "change")
@@ -155,7 +155,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     schemaName: "louis"
                 }
 
-                this.view.trigger("file:executionCompleted", fixtures.task({ executionInfo : this.executionInfo }));
+                this.view.trigger("file:executionSucceeded", fixtures.task({ executionInfo : this.executionInfo }));
             })
 
             it("updates the execution info in the workfile", function() {

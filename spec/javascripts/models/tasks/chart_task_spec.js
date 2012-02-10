@@ -9,8 +9,8 @@ describe("chorus.models.ChartTask", function() {
         expect(this.model.get("taskType")).toBe("getChartData");
     });
 
-    it("sets the 'chart[type]' attribute based on the prototype's 'chartType' property", function(){
-       expect(this.model.get("chart[type]")).toBe("fantastic");
+    it("sets the 'chart[type]' attribute based on the prototype's 'chartType' property", function() {
+        expect(this.model.get("chart[type]")).toBe("fantastic");
     });
 
     it("honors the filters in the SELECT statement", function() {
@@ -20,10 +20,10 @@ describe("chorus.models.ChartTask", function() {
     });
 
     it("escapes unsafe object names", function() {
-        this.model.set({objectName : "DOG_BREEDs"});
+        this.model.set({objectName: "DOG_BREEDs"});
         this.model.save();
         expect(this.model.get("relation")).toEqual('SELECT * FROM "DOG_BREEDs"');
-    })  
+    })
 
     describe("creating the task", function() {
         beforeEach(function() {

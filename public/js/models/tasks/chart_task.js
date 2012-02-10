@@ -1,4 +1,4 @@
-chorus.models.ChartTask = chorus.models.Task.extend(_.extend({}, chorus.Mixins.SQLResults, {
+chorus.models.ChartTask = chorus.models.Task.extend({
     taskType: "getChartData",
 
     initialize: function(attrs) {
@@ -14,11 +14,7 @@ chorus.models.ChartTask = chorus.models.Task.extend(_.extend({}, chorus.Mixins.S
         this.set({ relation: relation });
     },
 
-    getErrors : function() {
-        return this.serverErrors
-    },
-
     getColumnLabel: function(columnName) {
         return this.columnLabels[columnName] ? t(this.columnLabels[columnName]) : columnName;
     }
-}));
+});

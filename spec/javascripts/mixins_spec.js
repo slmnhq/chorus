@@ -1,4 +1,41 @@
 describe("chorus.Mixins", function() {
+    var serverFailure = {
+        message: [
+            {
+                message: "Error!",
+                msgcode: null,
+                description: null,
+                severity: "error",
+                msgkey: null
+            }
+        ],
+        status: "fail",
+        resource: [ ]
+    };
+
+    var taskFailure = {
+        "message": [],
+        "status": "ok",
+        "resource": [
+            {
+                "state": "failed",
+                "result": {
+                    "message": "An error happened in the task",
+                    "executeResult": "failed"
+                }
+            }
+        ]
+    };
+
+    var taskSuccess = {
+        message: [],
+        resource: [
+            {
+                executeResult: "success"
+            }
+        ],
+        status: "ok"
+    };
 
     describe("Events", function() {
         describe("forwardEvent", function() {
@@ -225,102 +262,95 @@ describe("chorus.Mixins", function() {
 
     });
 
+    describe("dataStatusOk", function() {
+        beforeEach(function() {
+            this.hostModel = new (chorus.models.Base.extend(chorus.Mixins.SQLResults));
+        });
+
+        context("when there is a server failure", function() {
+            beforeEach(function() {
+                this.data = serverFailure;
+            });
+
+            it("returns false", function() {
+                expect(this.hostModel.dataStatusOk(this.data)).toBeFalsy();
+            })
+        });
+
+        context("when there is a task failure", function() {
+            beforeEach(function() {
+                this.data = taskFailure;
+            });
+
+            it("returns false", function() {
+                expect(this.hostModel.dataStatusOk(this.data)).toBeFalsy();
+            })
+        });
+
+        context("when the task succeeds", function() {
+            beforeEach(function() {
+                this.data = taskSuccess;
+            });
+
+            it("returns true", function() {
+                expect(this.hostModel.dataStatusOk(this.data)).toBeTruthy();
+            })
+        });
+    });
+
+    describe("dataErrors", function() {
+        beforeEach(function() {
+            this.hostModel = new (chorus.models.Base.extend(chorus.Mixins.SQLResults));
+        });
+
+        context("when there is a server failure", function() {
+            beforeEach(function() {
+                this.data = serverFailure;
+            });
+
+            it("returns the errors object", function() {
+                expect(this.hostModel.dataErrors(this.data)).toEqual(this.data.message)
+            })
+        });
+
+        context("when there is a task failure", function() {
+            beforeEach(function() {
+                this.data = taskFailure;
+            });
+
+            it("returns the errors object", function() {
+                expect(this.hostModel.dataErrors(this.data)).toEqual([this.data.resource[0].result]);
+            })
+        });
+    });
+
     describe("SQLResults", function() {
         describe("#errorMessage", function() {
-            context("when the host provides a custom getErrors function ", function() {
+            beforeEach(function() {
+                this.hostModel = chorus.models.Base.extend(_.extend({}, chorus.Mixins.SQLResults, {
+                }));
+            });
+
+            context("when the model has serverErrors", function() {
                 beforeEach(function() {
-                    this.hostModel = chorus.models.Base.extend(_.extend({}, chorus.Mixins.SQLResults, {
-                        getErrors: function() {
-                            return this.get("error");
-                        }
-                    }));
+                    this.host = new this.hostModel({});
+                    this.host.serverErrors = [
+                        {message: "Foo"}
+                    ]
                 });
 
-                context("when the execution fails", function() {
-                    beforeEach(function() {
-                        this.host = new this.hostModel({
-                            error: {
-                                executeResult: "error",
-                                message: "Foo"
-                            }
-                        });
-                    });
-
-                    it("returns the error message", function() {
-                        expect(this.host.errorMessage()).toBe("Foo");
-                    });
-                });
-
-                context("when the execution suceeds", function() {
-                    beforeEach(function() {
-                        this.host = new this.hostModel({
-                            error: {
-                                executeResult: "success",
-                                message: "Executed in 2 seconds"
-                            }
-                        });
-                    });
-
-                    it("returns the error message", function() {
-                        expect(this.host.errorMessage()).toBeFalsy();
-                    });
-                });
-
-                context("when there is no status or message in the response", function() {
-                    beforeEach(function() {
-                        this.host = new this.hostModel({
-                            error: {
-                            }
-                        });
-                    });
-
-                    it("returns the error message", function() {
-                        expect(this.host.errorMessage()).toBeFalsy();
-                    });
+                it("returns the error message", function() {
+                    expect(this.host.errorMessage()).toBe("Foo");
                 });
             });
 
-            context("when the host does not provide a custom getErrors function", function() {
+            context("when the model does not have serverErrors", function() {
                 beforeEach(function() {
-                    this.hostModel = chorus.models.Base.extend(_.extend({}, chorus.Mixins.SQLResults, {
-                    }));
+                    this.host = new this.hostModel();
                 });
 
-                context("when the execution fails", function() {
-                    beforeEach(function() {
-                        this.host = new this.hostModel({
-                            executeResult: "error",
-                            message: "Foo"
-                        });
-                    });
-
-                    it("returns the error message", function() {
-                        expect(this.host.errorMessage()).toBe("Foo");
-                    });
-                });
-
-                context("when the execution suceeds", function() {
-                    beforeEach(function() {
-                        this.host = new this.hostModel({
-                            executeResult: "success",
-                            message: "Executed in 2 seconds"
-                        });
-                    });
-
-                    it("returns the error message", function() {
-                        expect(this.host.errorMessage()).toBeFalsy();
-                    });
-                });
-
-                context("when there is no status or message in the response", function() {
-                    beforeEach(function() {
-                        this.host = new this.hostModel({
-                        });
-                    });
-
-                    it("returns the error message", function() {
-                        expect(this.host.errorMessage()).toBeFalsy();
-                    });
+                it("returns false", function() {
+                    expect(this.host.errorMessage()).toBeFalsy();
                 });
             });
         });

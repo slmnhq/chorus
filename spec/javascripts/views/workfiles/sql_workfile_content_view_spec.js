@@ -38,10 +38,16 @@ describe("chorus.views.SqlWorkfileContentView", function() {
             expect("file:executionStarted").toHaveBeenTriggeredOn(this.view.resultsConsole)
         })
 
-        it("forwards the file:executionCompleted event to the results console", function() {
-            spyOnEvent(this.view.resultsConsole, "file:executionCompleted");
-            this.view.trigger("file:executionCompleted", fixtures.taskWithResult());
-            expect("file:executionCompleted").toHaveBeenTriggeredOn(this.view.resultsConsole)
+        it("forwards the file:executionSucceeded event to the results console", function() {
+            spyOnEvent(this.view.resultsConsole, "file:executionSucceeded");
+            this.view.trigger("file:executionSucceeded", fixtures.taskWithResult());
+            expect("file:executionSucceeded").toHaveBeenTriggeredOn(this.view.resultsConsole)
+        })
+
+        it("forwards the file:executionFailed event to the results console", function() {
+            spyOnEvent(this.view.resultsConsole, "file:executionFailed");
+            this.view.trigger("file:executionFailed", fixtures.taskWithResult());
+            expect("file:executionFailed").toHaveBeenTriggeredOn(this.view.resultsConsole)
         })
 
         it("forwards file:saveCurrent events to the textContent subview", function() {
@@ -117,7 +123,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 describe("when the task completes successfully", function() {
                     beforeEach(function() {
                         this.completionSpy = jasmine.createSpy("executionCompleted")
-                        this.view.bind("file:executionCompleted", this.completionSpy);
+                        this.view.bind("file:executionSucceeded", this.completionSpy);
                         this.server.lastCreate().succeed([{
                             id : "10100",
                             state : "success",
@@ -127,7 +133,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         }]);
                     })
 
-                    it('triggers file:executionCompleted on the view', function() {
+                    it('triggers file:executionSucceeded on the view', function() {
                         expect(this.completionSpy).toHaveBeenCalledWith(jasmine.any(chorus.models.SqlExecutionTask));
                     })
 

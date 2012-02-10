@@ -63,7 +63,8 @@
                 this.mainContent.contentDetails.forwardEvent("file:createWorkfileNewVersion", this.mainContent.content);
                 this.mainContent.contentDetails.forwardEvent("file:runCurrent", this.mainContent.content);
                 this.mainContent.contentDetails.forwardEvent("file:runInSchema", this.mainContent.content);
-                this.mainContent.content.forwardEvent("file:executionCompleted", this.mainContent.contentDetails);
+                this.mainContent.content.forwardEvent("file:executionSucceeded", this.mainContent.contentDetails);
+                this.mainContent.content.forwardEvent("file:executionFailed", this.mainContent.contentDetails);
 
                 if (this.model && this.model.isSql()) {
                     this.sidebar.functionList.forwardEvent("file:insertText", this.mainContent.content);

@@ -45,10 +45,6 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$(".data_preview").addClass("hidden");
     },
 
-    onFetchComplete: function() {
-        this.resultsConsole.trigger("file:executionCompleted", this.preview);
-    },
-
     postRender:function () {
         var self = this;
         chorus.menu(this.$('.transform'), {

@@ -2,7 +2,7 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
     className:"sql_workfile_content_details",
 
     setup:function () {
-        this.bind("file:executionCompleted", this.executionCompleted, this);
+        this.bind("file:executionSucceeded", this.executionSucceeded, this);
     },
 
     postRender:function () {
@@ -42,7 +42,7 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
         }, this);
     },
 
-    executionCompleted:function (task) {
+    executionSucceeded:function (task) {
         this.model.set({executionInfo:task.get("executionInfo")}, {silent:true});
         this.render();
     }

@@ -12,14 +12,16 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
     setup: function() {
         this.bind("file:executionStarted", this.executionStarted, this)
-        this.bind("file:executionCompleted", this.executionCompleted, this)
+        this.bind("file:executionSucceeded", this.executionSucceeded, this)
+        this.bind("file:executionFailed", this.executionFailed, this)
     },
 
     execute: function(model) {
         this.model = model;
         model.fetchIfNotLoaded();
         this.executionStarted();
-        model.onLoaded(_.bind(this.executionCompleted, this, model));
+        model.onLoaded(_.bind(this.executionSucceeded, this, model));
+        model.bind("fetchFailed", _.bind(this.executionFailed, this, model));
     },
 
     executionStarted: function() {
@@ -40,25 +42,35 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.elapsedTimer = _.delay(_.bind(this.incrementElapsedTime, this), 1000)
     },
 
-    executionCompleted: function(task) {
+    hideSpinner: function() {
         this.cancelTimers()
         this.$(".right").removeClass("executing")
         this.$(".spinner").stopLoading()
-
-        if (task.errorMessage()) {
-            this.$(".errors").removeClass("hidden");
-            this.$(".result_content").addClass("hidden");
-            this.$(".message").empty();
-        } else {
-            this.dataTable = new chorus.views.TaskDataTable({shuttle: this.options.shuttle, model: task});
-            this.dataTable.render();
-            this.$(".result_content").removeClass("hidden");
-            this.$(".result_table").html(this.dataTable.el);
-        }
-
         this.$(".controls").removeClass("hidden");
-
         this.minimizeTable();
+    },
+
+    executionSucceeded: function(task) {
+        this.showResultTable(task)
+        this.hideSpinner()
+    },
+
+    showResultTable: function(task) {
+        this.dataTable = new chorus.views.TaskDataTable({shuttle: this.options.shuttle, model: task});
+        this.dataTable.render();
+        this.$(".result_content").removeClass("hidden");
+        this.$(".result_table").html(this.dataTable.el);
+    },
+
+    executionFailed: function(task) {
+        this.showErrors()
+        this.hideSpinner()
+    },
+
+    showErrors: function() {
+        this.$(".sql_errors").removeClass("hidden");
+        this.$(".result_content").addClass("hidden");
+        this.$(".message").empty();
     },
 
     cancelExecution: function(event) {
@@ -115,7 +127,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     footerSize: function() {
-        if(this.options.footerSize) {
+        if (this.options.footerSize) {
             return this.options.footerSize();
         }
         return 0;

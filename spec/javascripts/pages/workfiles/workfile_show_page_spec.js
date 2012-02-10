@@ -209,14 +209,25 @@ describe("chorus.pages.WorkfileShowPage", function() {
             })
         })
 
-        describe("when the content triggers file:executionCompleted", function() {
+        describe("when the content triggers file:executionSucceeded", function() {
             beforeEach(function() {
                 this.page.render();
-                spyOnEvent(this.page.mainContent.contentDetails, 'file:executionCompleted');
-                this.page.mainContent.content.trigger("file:executionCompleted", fixtures.taskWithResult());
+                spyOnEvent(this.page.mainContent.contentDetails, 'file:executionSucceeded');
+                this.page.mainContent.content.trigger("file:executionSucceeded", fixtures.taskWithResult());
             });
             it("should relay event to the contentDetails", function() {
-                expect('file:executionCompleted').toHaveBeenTriggeredOn(this.page.mainContent.contentDetails);
+                expect('file:executionSucceeded').toHaveBeenTriggeredOn(this.page.mainContent.contentDetails);
+            });
+        });
+
+        describe("when the content triggers file:executionFailed", function() {
+            beforeEach(function() {
+                this.page.render();
+                spyOnEvent(this.page.mainContent.contentDetails, 'file:executionFailed');
+                this.page.mainContent.content.trigger("file:executionFailed", fixtures.taskWithResult());
+            });
+            it("should relay event to the contentDetails", function() {
+                expect('file:executionFailed').toHaveBeenTriggeredOn(this.page.mainContent.contentDetails);
             });
         });
 

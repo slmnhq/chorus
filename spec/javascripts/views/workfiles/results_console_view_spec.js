@@ -141,7 +141,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 context("when the spinner has not yet been started", function() {
                     beforeEach(function() {
                         this.task = fixtures.taskWithResult();
-                        this.view.trigger("file:executionCompleted", this.task);
+                        this.view.trigger("file:executionSucceeded", this.task);
                     })
 
                     itRemovesExecutionUI(true);
@@ -153,7 +153,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                         delete this.view.spinnerTimer;
                         delete this.view.elapsedTimer;
                         this.task = fixtures.taskWithResult();
-                        this.view.trigger("file:executionCompleted", this.task);
+                        this.view.trigger("file:executionSucceeded", this.task);
                     })
 
                     itRemovesExecutionUI(false);
@@ -167,16 +167,16 @@ describe("chorus.views.ResultsConsoleView", function() {
                 context("and there was an execution error", function() {
                     beforeEach(function() {
                         this.task = fixtures.taskWithErrors();
-                        this.view.trigger("file:executionCompleted", this.task);
+                        this.view.trigger("file:executionFailed", this.task);
                     });
 
                     it("should show the error header", function() {
-                        expect(this.view.$('.errors')).not.toHaveClass('hidden');
+                        expect(this.view.$('.sql_errors')).not.toHaveClass('hidden');
                     })
 
                     it("should show 'View Details' and 'Close' links", function() {
-                        expect(this.view.$('.errors .view_details')).toExist();
-                        expect(this.view.$('.errors .close_errors')).toExist();
+                        expect(this.view.$('.sql_errors .view_details')).toExist();
+                        expect(this.view.$('.sql_errors .close_errors')).toExist();
                     })
 
                     it("does not display the result message", function() {
@@ -200,7 +200,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                     context("when the sql is executed again without errors", function() {
                         beforeEach(function() {
                             this.task = fixtures.taskWithResult();
-                            this.view.trigger("file:executionCompleted", this.task);
+                            this.view.trigger("file:executionSucceeded", this.task);
                         })
 
                         it("should show the execution content area", function() {
@@ -268,7 +268,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 context("when another execution completed event occurs", function() {
                     beforeEach(function() {
-                        this.view.trigger("file:executionCompleted", fixtures.taskWithResult());
+                        this.view.trigger("file:executionSucceeded", fixtures.taskWithResult());
                     });
 
                     it("still renders only one data table", function() {
@@ -469,7 +469,8 @@ describe("chorus.views.ResultsConsoleView", function() {
             this.executionModel = new chorus.models.Base();
             spyOn(this.executionModel, 'url').andReturn('super_great_thing');
             spyOn(this.view, 'executionStarted');
-            spyOn(this.view, 'executionCompleted');
+            spyOn(this.view, 'executionSucceeded');
+            spyOn(this.view, 'executionFailed');
             spyOn(this.executionModel, 'fetchIfNotLoaded').andCallThrough();
             this.view.execute(this.executionModel);
         });
@@ -482,13 +483,24 @@ describe("chorus.views.ResultsConsoleView", function() {
             expect(this.view.executionStarted).toHaveBeenCalled();
         });
 
-        context("when execution is finished", function() {
+        context("when execution is successful", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.executionModel);
             });
 
-            it("calls executionCompleted", function() {
-                expect(this.view.executionCompleted).toHaveBeenCalledWith(this.executionModel);
+            it("calls executionSucceeded", function() {
+                expect(this.view.executionSucceeded).toHaveBeenCalledWith(this.executionModel);
+            });
+        });
+
+        context("when execution fails", function() {
+            beforeEach(function() {
+                this.server.lastFetchFor(this.executionModel).fail([{message: "broke!"}]);
+            });
+
+            it("calls executionFailed", function() {
+                expect(this.view.executionFailed).toHaveBeenCalled();
+                expect(this.view.executionFailed.mostRecentCall.args[0]).toBe(this.executionModel);
             });
         });
     });

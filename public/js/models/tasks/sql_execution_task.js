@@ -1,4 +1,4 @@
-chorus.models.SqlExecutionTask = chorus.models.Task.extend(_.extend({}, chorus.Mixins.SQLResults, {
+chorus.models.SqlExecutionTask = chorus.models.Task.extend({
     taskType: "workfileSQLExecution",
 
     getRows : function() {
@@ -7,9 +7,5 @@ chorus.models.SqlExecutionTask = chorus.models.Task.extend(_.extend({}, chorus.M
 
     getColumns : function() {
         return this.get("result").columns;
-    },
-
-    getErrors : function() {
-        return this.get("result");
     }
-}));
+});

@@ -108,10 +108,29 @@ chorus.Mixins.SQLResults = {
             };
         });
     },
- 
+
+    dataStatusOk: function(data) {
+        if (data.status != "ok") return false;
+
+        if (data.resource && data.resource[0] && data.resource[0].state == "failed") {
+            return false
+        }
+
+        return true
+    },
+
+    dataErrors: function(data) {
+        if (data.message && data.message.length) {
+            return data.message
+        }
+
+        if (data.resource && data.resource[0] && data.resource[0].result) {
+            return [data.resource[0].result]
+        }
+    },
+    
     errorMessage:function () {
-        var errors = this.getErrors() || {executeResult: 'success'};
-        return (errors.executeResult !== 'success') && errors.message;
+        return this.serverErrors && this.serverErrors[0] && this.serverErrors[0].message;
     }
 }
 

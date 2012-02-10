@@ -42,11 +42,5 @@ describe("chorus.models.SqlExecutionTask", function() {
             })
         })
 
-        describe("#getErrors", function() {
-            it("returns the errors", function() {
-                expect(this.model.getErrors().executeResult).toEqual("failed");
-                expect(this.model.getErrors().message).toEqual("This is broken!");
-            });
-        });
     });
 });
