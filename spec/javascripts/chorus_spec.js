@@ -32,12 +32,12 @@ describe("chorus global", function() {
         });
 
         it("accepts a translation string with arguments", function() {
-            chorus.toast("test.with_param", {param : "Dennis"});
+            chorus.toast("test.with_param", {param: "Dennis"});
             expect($.jGrowl).toHaveBeenCalledWith("Dennis says hi", {life: 5000, sticky: false});
         });
 
         it("accepts toastOpts in the options hash", function() {
-            chorus.toast("test.with_param", { param: "Nobody", toastOpts : {sticky : true, foo: "bar"}});
+            chorus.toast("test.with_param", { param: "Nobody", toastOpts: {sticky: true, foo: "bar"}});
             expect($.jGrowl).toHaveBeenCalledWith("Nobody says hi", {life: 5000, sticky: true, foo: "bar"});
         });
     });
@@ -205,5 +205,38 @@ describe("chorus global", function() {
 
             });
         });
+    })
+
+    describe("#help", function() {
+        beforeEach(function() {
+            spyOn(window, "FMCOpenHelp")
+        });
+
+        context("when the current page has a helpId", function() {
+            beforeEach(function() {
+                chorus.page = {
+                    helpId: "foo"
+                }
+
+                chorus.help();
+            });
+
+            it("calls into the help system with the helpId", function() {
+                expect(window.FMCOpenHelp).toHaveBeenCalledWith("foo");
+            })
+        })
+
+        context("when the current page does not have a helpId", function() {
+            beforeEach(function() {
+                chorus.page = {
+                }
+
+                chorus.help();
+            });
+
+            it("calls into the help system with 'home'", function() {
+                expect(window.FMCOpenHelp).toHaveBeenCalledWith("home");
+            })
+        })
     })
 });

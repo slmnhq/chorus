@@ -147,6 +147,11 @@ window.Chorus = function() {
     self.triggerHotKey = function(keyChar) {
         $(document).trigger(chorus.hotKeyEvent(keyChar))
     }
+
+    self.help = function() {
+        var helpId = (chorus.page && chorus.page.helpId) || "home";
+        FMCOpenHelp(helpId);
+    }
 }
 
 window.chorus = window.chorus || new Chorus();
