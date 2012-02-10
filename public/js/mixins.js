@@ -108,7 +108,7 @@ chorus.Mixins.SQLResults = {
             };
         });
     },
-    
+
     errorMessage:function () {
         var errors = this.getErrors() || {executeResult: 'success'};
         return (errors.executeResult !== 'success') && errors.message;
@@ -116,21 +116,15 @@ chorus.Mixins.SQLResults = {
 }
 
 chorus.Mixins.VisHelpers = {
-    labelFormat : function(label, maxLength, maxChar) {
+    labelFormat : function(label, maxLength) {
         maxLength = maxLength || 6
-        maxChar = maxChar || 15
 
         if ((typeof label == "number") && label.toString().length > maxLength){
             return label.toExponential(2)
-        }else
-        {
-            if(label.toString().length > maxChar)
-            {
-                return label.toString().slice(0, maxChar)+"..."
-            }
-            else {
-                return label;
-            }
+        } else if (label.toString().length > maxLength) {
+            return label.toString().slice(0, maxLength) + "…"
+        } else {
+            return label;
         }
     }
 }

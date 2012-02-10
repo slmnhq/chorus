@@ -451,26 +451,31 @@ describe("chorus.Mixins", function() {
         describe("#labelFormat", function() {
             beforeEach(function() {
                 this.hostView = _.extend(chorus.views.visualizations.XAxis, chorus.Mixins.VisHelpers);
-            })
-            it("returns a string if given a string", function() {
-                expect(this.hostView.labelFormat("fooooooo", 6)).toBe("fooooooo", 6)
-            })
+            });
+
+            it("doesn't modify a string shorter than the specified max length", function() {
+                expect(this.hostView.labelFormat("foooo", 8)).toBe("foooo");
+            });
+
             it("returns a number if given a number", function() {
                 expect(this.hostView.labelFormat(13.45)).toEqual(13.45)
-            })
+            });
+
             it("returns a number if given a relatively long number", function() {
                 expect(this.hostView.labelFormat(12.678)).toEqual(12.678)
-            })
+            });
+
             it("returns an exponential if given a long number", function() {
                 expect(this.hostView.labelFormat(123245.67890)).toEqual("1.23e+5")
-            })
+            });
+
             it("returns an exponential if given a number longer than spec", function() {
                 expect(this.hostView.labelFormat(123.2, 2)).toEqual("1.23e+2")
-            })
-            it("returns an ellipsized string if given a long string", function() {
-                expect(this.hostView.labelFormat("abcdefghij", 4, 4)).toEqual("abcd...");
-            })
+            });
 
+            it("returns an ellipsized string if given a long string", function() {
+                expect(this.hostView.labelFormat("abcdefghij", 4)).toEqual("abcd…");
+            });
         })
     })
 

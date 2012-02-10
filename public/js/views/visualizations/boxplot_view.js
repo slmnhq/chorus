@@ -20,7 +20,7 @@ chorus.views.visualizations.Boxplot = chorus.views.Base.extend(_.extend(chorus.M
         })
 
         var xLabels = _.map(buckets, function(bucket, i){
-            return this.labelFormat(bucket, 4, 6) + " (" + percentages[i]+ ")";
+            return this.labelFormat(bucket, 6) + " (" + percentages[i]+ ")";
         }, this)
         this.axes = new chorus.views.visualizations.Axes({
             el: svg,
