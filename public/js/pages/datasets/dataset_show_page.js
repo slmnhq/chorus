@@ -85,6 +85,8 @@
         showSidebar: function(type) {
             this.$('.sidebar_content.primary').addClass("hidden")
             this.$('.sidebar_content.secondary').removeClass("hidden")
+
+            this.mainContent.content.selectMulti = false;
             switch (type) {
                 case 'boxplot':
                     this.secondarySidebar = new chorus.views.DatasetVisualizationBoxplotSidebar({model: this.model, collection: this.columnSet});
@@ -102,6 +104,7 @@
                     this.secondarySidebar = new chorus.views.DatasetVisualizationTimeSeriesSidebar({model: this.model, collection: this.columnSet});
                     break;
                 case 'chorus_view':
+                    this.mainContent.content.selectMulti = true;
                     this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model : this.model});
                     break;
             }

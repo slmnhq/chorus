@@ -253,6 +253,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                         expect(this.view.$(".chorus_view_info")).not.toHaveClass("hidden");
                         expect(this.view.$(".info_bar")).toHaveClass("hidden");
                         expect(this.view.$(".column_count")).toHaveClass("hidden");
+                        expect(this.view.$(".chorus_view_info").text()).toContainTranslation("workspaces.select");
                     });
 
                     it("should select the chorus view icon", function() {

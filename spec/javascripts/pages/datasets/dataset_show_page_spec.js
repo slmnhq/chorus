@@ -202,6 +202,10 @@ describe("chorus.pages.DatasetShowPage", function() {
                     this.page.mainContent.contentDetails.trigger("transform:sidebar", 'chorus_view');
                 });
 
+                it("enables multi-select on the main content", function() {
+                    expect(this.page.mainContent.content.selectMulti).toBeTruthy();
+                });
+
                 it("should swap out the sidebar for the chorus view sidebar", function() {
                     expect(this.page.secondarySidebar).toBeA(chorus.views.CreateChorusViewSidebar)
                 });

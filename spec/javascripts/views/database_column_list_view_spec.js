@@ -8,6 +8,10 @@ describe("chorus.views.DatabaseColumnList", function() {
             this.view.render();
         });
 
+        it("defaults to selectMulti false", function(){
+            expect(this.view.selectMulti).toBeFalsy();
+        });
+
         it("renders an item for each column", function() {
             expect(this.view.$("> li").length).toBe(this.collection.length);
         });
@@ -30,15 +34,41 @@ describe("chorus.views.DatabaseColumnList", function() {
         })
         
         describe("clicking on a list item", function() {
-            beforeEach(function() {
-                expect(this.view.$("li:eq(0)")).toHaveClass("selected");
-                this.view.$("li:eq(1)").click();
-            })
+            context("with selectMulti false", function() {
+                beforeEach(function() {
+                    expect(this.view.$("li:eq(0)")).toHaveClass("selected");
+                    this.view.$("li:eq(1)").click();
+                })
 
-            it("moves the selected class", function() {
-                expect(this.view.$("li:eq(0)")).not.toHaveClass("selected");
-                expect(this.view.$("li:eq(1)")).toHaveClass("selected");
-            })
+                it("moves the selected class", function() {
+                    expect(this.view.$("li:eq(0)")).not.toHaveClass("selected");
+                    expect(this.view.$("li:eq(1)")).toHaveClass("selected");
+                })
+            });
+
+            context("with selectMulti true", function() {
+                beforeEach(function() {
+                    this.view.selectMulti = true;
+                    expect(this.view.$("li:eq(0)")).toHaveClass("selected");
+                    this.view.$("li:eq(1)").click();
+                })
+
+                it("selects both", function() {
+                    expect(this.view.$("li:eq(0)")).toHaveClass("selected");
+                    expect(this.view.$("li:eq(1)")).toHaveClass("selected");
+                })
+
+                describe("deselecting", function() {
+                    it("can deselect everything", function() {
+                        this.view.$("li:eq(1)").click();
+                        expect(this.view.$("li:eq(0)")).toHaveClass("selected");
+                        expect(this.view.$("li:eq(1)")).not.toHaveClass("selected");
+
+                        this.view.$("li:eq(0)").click();
+                        expect(this.view.$("li:eq(0)")).not.toHaveClass("selected");
+                    });
+                });
+            });
         })
     });
 });
