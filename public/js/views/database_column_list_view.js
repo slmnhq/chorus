@@ -27,9 +27,13 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
     },
 
     deselectAll: function() {
-        _.each(this.$("li"), function(li) {
-            this.toggleColumnSelection($(li), false);
-        }, this);
+        if (this.selectMulti) {
+            _.each(this.$("li"), function(li) {
+                this.toggleColumnSelection($(li), false);
+            }, this);
+        } else {
+            this.toggleColumnSelection(this.$("li:eq(0)"));
+        }
     },
 
     selectAll : function() {

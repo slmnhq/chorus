@@ -69,13 +69,14 @@ describe("chorus.views.DatabaseColumnList", function() {
                     expect("column:deselected").toHaveBeenTriggeredOn(this.view, [this.collection.at(0)]);
                 });
 
-                describe("#delectAll", function() {
+                describe("#deselectAll", function() {
                     beforeEach(function() {
                         this.view.deselectAll();
                     });
 
-                    it("should remove class selected from all list items", function() {
-                        expect(this.view.$("li.selected").length).toBe(0);
+                    it("should remove class selected from all list items and select the first item", function() {
+                        expect(this.view.$("li.selected").length).toBe(1);
+                        expect(this.view.$("li:eq(0)")).toHaveClass("selected");
                     })
                 })
             });
