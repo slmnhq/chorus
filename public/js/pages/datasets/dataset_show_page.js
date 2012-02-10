@@ -5,15 +5,14 @@
                 {label: t("breadcrumbs.home"), url: "#/"},
                 {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
                 {label: this.model.displayShortName(), url: this.model.showUrl()},
-                {label: t("breadcrumbs.workspaces_data"), url: this.model.showUrl() + "/data"},
+                {label: t("breadcrumbs.workspaces_data"), url: this.model.showUrl() + "/datasets"},
                 {label: this.options.objectName}
             ];
         }
     });
 
     chorus.pages.DatasetShowPage = chorus.pages.Base.extend({
-        setup: function(workspaceId, datasetType, datasetId) {
-            this.datasetType = datasetType;
+        setup: function(workspaceId, datasetId) {
             this.datasetId = datasetId;
 
             var id = datasetId.split("|");
@@ -24,25 +23,19 @@
             this.objectName = id[4];
 
             this.workspace = new chorus.models.Workspace({id: workspaceId});
-            this.workspace.bind("loaded", this.fetchColumnSet, this);
+            this.workspace.bind("loaded", this.fetchDataSet, this);
             this.workspace.fetch();
 
             this.breadcrumbs = new breadcrumbsView({model: this.workspace, objectName: this.objectName});
         },
 
-        fetchColumnSet: function() {
-            this.model = this.dataset = new chorus.models.Dataset({
-                id: this.datasetId,
-                instance: { id: this.instanceId },
-                databaseName: this.databaseName,
-                schemaName: this.schemaName,
-                type: this.datasetType.toUpperCase(),
-                objectType: this.objectType,
-                objectName: this.objectName,
-                workspace: this.workspace,
-                sandboxId: this.workspace.sandbox().get("id")
-            });
+        fetchDataSet: function() {
+            this.model = this.dataset = new chorus.models.Dataset({ workspace: { id: this.workspace.get("id") }, entityId: this.datasetId });
+            this.dataset.bind("loaded", this.fetchColumnSet, this);
+            this.dataset.fetch();
+        },
 
+        fetchColumnSet: function() {
             var options = {
                 instanceId: this.instanceId,
                 databaseName: this.databaseName,

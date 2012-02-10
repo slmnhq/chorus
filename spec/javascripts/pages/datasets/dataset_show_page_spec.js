@@ -11,6 +11,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                 sandboxId: "99"
             }
         });
+
         this.columnSet = fixtures.databaseColumnSet([], {
             instanceId: this.workspace.get("sandboxInfo").instanceId,
             databaseName: this.workspace.get("sandboxInfo").databaseName,
@@ -26,7 +27,9 @@ describe("chorus.pages.DatasetShowPage", function() {
             this.columnSet.attributes.tableName
         ].join("|");
 
-        this.page = new chorus.pages.DatasetShowPage(this.workspace.get("id"), "SANDBOX_TABLE", this.datasetId);
+        this.dataset = fixtures.datasetSandboxTable({"id": this.datasetId, workspace: { id: this.workspace.get("id") }})
+
+        this.page = new chorus.pages.DatasetShowPage(this.workspace.get("id"), this.datasetId);
     })
 
     describe("#initialize", function() {
@@ -48,36 +51,34 @@ describe("chorus.pages.DatasetShowPage", function() {
                 this.server.completeFetchFor(this.workspace);
             })
 
-            it("fetches all of the columns", function() {
-                expect(chorus.collections.DatabaseColumnSet.prototype.fetchAll).toHaveBeenCalled();
+            it("fetches the dataset", function() {
+                expect(this.server.lastFetch().url).toBe("/edc/workspace/" + this.workspace.get("id") + "/dataset/" + this.datasetId);
             })
 
-            describe("when the columnSet fetch completes", function() {
+            describe("when the dataset fetch completes", function() {
                 beforeEach(function() {
-                    spyOn(this.page, "postRender");
-                    this.server.lastFetch().succeed(this.columnSet.attributes, { page: "1", total: "1" })
-                })
-
-                it("creates the sidebar", function() {
-                    expect(this.page.sidebar).toBeDefined();
-                    expect(this.page.sidebar.resource.get("instance").id).toBe("5");
-                    expect(this.page.sidebar.resource.get("databaseName")).toBe("db");
-                    expect(this.page.sidebar.resource.get("schemaName")).toBe("schema");
-                    expect(this.page.sidebar.resource.get("objectName")).toBe("table");
-                    expect(this.page.sidebar.resource.get("objectType")).toBe("BASE_TABLE");
-                    expect(this.page.sidebar.resource.get("type")).toBe("SANDBOX_TABLE");
-                })
-
-                it("renders", function() {
-                    expect(this.page.postRender).toHaveBeenCalled();
-                })
-
-                it("creates a model with the required attributes", function() {
-                    expect(this.page.model).toBeDefined();
-                    expect(this.page.model.get("workspace").id).toBe("2");
-                    expect(this.page.model.get("instance").id).toBe("5");
-                    expect(this.page.model.get("sandboxId")).toBe("99");
+                    this.server.completeFetchFor(this.dataset);
                 });
+
+                it("fetches all of the columns", function() {
+                    expect(chorus.collections.DatabaseColumnSet.prototype.fetchAll).toHaveBeenCalled();
+                })
+
+                describe("when the columnSet fetch completes", function() {
+                    beforeEach(function() {
+                        spyOn(this.page, "postRender");
+                        this.server.lastFetch().succeed(this.columnSet.attributes, { page: "1", total: "1" })
+                    })
+
+                    it("creates the sidebar", function() {
+                        expect(this.page.sidebar).toBeDefined();
+                        expect(this.page.sidebar.resource.get("id")).toBe(this.dataset.get("id"))
+                    })
+
+                    it("renders", function() {
+                        expect(this.page.postRender).toHaveBeenCalled();
+                    })
+                })
             })
         })
     });
@@ -86,6 +87,7 @@ describe("chorus.pages.DatasetShowPage", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace);
             this.resizedSpy = spyOnEvent(this.page, 'resized');
+            this.server.completeFetchFor(this.dataset);
             this.server.lastFetch().succeed(this.columnSet.attributes, { page: "1", total: "1" })
         })
 
@@ -106,7 +108,7 @@ describe("chorus.pages.DatasetShowPage", function() {
             });
 
             it("links to the workspace data tab for the fourth crumb", function() {
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3).attr("href")).toBe(this.workspace.showUrl() + "/data");
+                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3).attr("href")).toBe(this.workspace.showUrl() + "/datasets");
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3).text()).toBe(t("breadcrumbs.workspaces_data"));
             });
 
@@ -196,9 +198,9 @@ describe("chorus.pages.DatasetShowPage", function() {
                     expect(this.page.secondarySidebar.collection).toBe(this.page.columnSet);
                 });
             });
-            
+
             context("for a chorus view", function() {
-                 beforeEach(function() {
+                beforeEach(function() {
                     this.page.mainContent.contentDetails.trigger("transform:sidebar", 'chorus_view');
                 });
 

@@ -14,10 +14,10 @@
             ["/workspaces", "WorkspaceIndex"],
             ["/workspaces/:id", "WorkspaceSummary"],
             ["/workspaces/:workspaceId/workfiles", "WorkfileIndex"],
-            ["/workspaces/:workspaceId/:datasetType/:datasetId", "DatasetShow"],
+            ["/workspaces/:workspaceId/datasets/:datasetId", "DatasetShow"],
             ["/workspaces/:workspaceId/workfiles/:workfileId", "WorkfileShow"],
             ["/workspaces/:workspaceId/workfiles/:workfileId/versions/:versionId", "WorkfileShow"],
-            ["/workspaces/:workspaceId/data", "DatasetIndex"],
+            ["/workspaces/:workspaceId/datasets", "DatasetIndex"],
             ["/instances", "InstanceIndex"],
             ["/instances/:instanceId/database/:databaseName/schema/:schemaName", "SchemaBrowse"],
             ["/styleguide", "StyleGuide"]

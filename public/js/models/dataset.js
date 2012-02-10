@@ -5,7 +5,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
         return [
             "workspaces",
             this.get("workspace").id,
-            this.get("type").toLowerCase(),
+            "datasets",
             this.entityId
         ].join("/");
     },

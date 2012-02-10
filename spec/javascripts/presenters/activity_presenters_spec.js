@@ -26,7 +26,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectUrl", function() {
-            expect(this.presenter.objectUrl).toBe('#/workspaces/4/source_table/10014|silverware|forks|shiny');
+            expect(this.presenter.objectUrl).toBe('#/workspaces/4/datasets/10014|silverware|forks|shiny');
         });
     });
 
