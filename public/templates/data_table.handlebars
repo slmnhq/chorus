@@ -11,7 +11,7 @@
 <div class="tbody">
     {{#each columns}}<div class="column" data-type="{{type}}">
         {{#each values}}
-        <div class="td" title="{{{this}}}">{{#if this}}{{this}}{{else}}&nbsp;{{/if}}</div>
+        <div class="td" title="{{{this}}}">{{renderTableData this}}</div>
         {{/each}}
     </div>{{/each}}
 </div>

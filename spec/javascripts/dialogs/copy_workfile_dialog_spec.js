@@ -1,29 +1,44 @@
 describe("chorus.dialogs.CopyWorkfile", function() {
     beforeEach(function() {
-        this.launchElement = $("<a data-workspace-id='4' data-workfile-id='10'></a>")
+        this.workspaceId = '4';
+        this.workfileId = '10';
+        this.launchElement = $("<a data-workspace-id='" + this.workspaceId + "' data-workfile-id='" + this.workfileId + "'></a>")
+        this.workfile = fixtures.workfile({ id: this.workfileId, workspaceId: this.workspaceId });
+        this.workspace = fixtures.workspace({ id: this.workspaceId });
+        setLoggedInUser({id: 4003});
+        chorus.session.trigger("saved")
+        this.dialog = new chorus.dialogs.CopyWorkfile({launchElement : this.launchElement });
     });
 
     it("does not re-render when the model changes", function() {
-        var dialog = new chorus.dialogs.CopyWorkfile({launchElement : this.launchElement });
-        expect(dialog.persistent).toBeTruthy()
+        expect(this.dialog.persistent).toBeTruthy()
     })
 
     describe("#setup", function() {
-        beforeEach(function() {
-            setLoggedInUser({id: 4003});
-            chorus.session.trigger("saved")
-            this.dialog = new chorus.dialogs.CopyWorkfile({launchElement : this.launchElement });
-        })
-
         it("fetches the source workfile", function() {
             expect(this.server.requests[1].url).toBe("/edc/workspace/4/workfile/10")
         })
-    })
+    });
+
+    describe("after the workfile and workspaces are fetched", function() {
+        beforeEach(function() {
+            this.server.completeFetchFor(this.workfile);
+            this.server.completeFetchFor(chorus.session.user().workspaces(), [
+                fixtures.workspace({ name: "im_not_the_current_one'" }),
+                fixtures.workspace({ name: "me_neither" }),
+                fixtures.workspace({ name: "yes_im_the_current_one", id: this.workspaceId })
+            ]);
+        });
+
+        it("shows all of the user's workspaces except for the one that the workfile currently belongs to", function() {
+            expect(this.dialog.$('.collection_picklist li span.name')).toContainText("me_neither");
+            expect(this.dialog.$('.collection_picklist li span.name')).toContainText("im_not_the_current_one");
+            expect(this.dialog.$('.collection_picklist li span.name')).not.toContainText("yes_im_the_current_one");
+        });
+    });
 
     describe("clicking Copy File", function() {
         beforeEach(function() {
-            this.workspace = fixtures.workspace();
-            this.workfile = fixtures.workfile({workspaceId: this.workspace.get('id')});
             this.dialog = new chorus.dialogs.CopyWorkfile({launchElement : this.launchElement });
             this.dialog.workfile = this.workfile;
             this.dialog.render();
@@ -61,7 +76,8 @@ describe("chorus.dialogs.CopyWorkfile", function() {
             it("does not include the description in the API call", function() {
                 expect(_.last(this.server.requests).requestBody).not.toContain("description=my+workfile");
             })
-        })
+        });
+
         describe("when the API is successful", function() {
             beforeEach(function() {
                 this.server.lastCreate().succeed(this.workfile.attributes);
@@ -72,7 +88,10 @@ describe("chorus.dialogs.CopyWorkfile", function() {
             });
 
             it("pops toast", function() {
-                expect(chorus.toast).toHaveBeenCalledWith("workfile.copy_dialog.toast", {workfileTitle:"Workfile 10", workspaceNameTarget:"Workspace 2"});
+                expect(chorus.toast).toHaveBeenCalledWith("workfile.copy_dialog.toast", {
+                    workfileTitle: this.workfile.get("fileName"),
+                    workspaceNameTarget: this.workspace.get("name")
+                });
             });
 
             it("does not navigate", function() {

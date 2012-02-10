@@ -17,6 +17,29 @@ describe("chorus.views.TaskDataTable", function() {
         this.view = new chorus.views.TaskDataTable({ model: this.task });
     });
 
+    describe("falsy data", function() {
+        beforeEach(function() {
+            var row = this.task.get("result").rows[0];
+            row.id = 0;
+            row.city = false;
+            row.state = null;
+
+            this.view.render();
+        });
+
+        it("outputs a string 0 for a numeric 0", function() {
+            expect(this.view.$(".column:eq(0) div.td:eq(0)").text()).toBe("0");
+        });
+
+        it("outputs a string false for a boolean false", function() {
+            expect(this.view.$(".column:eq(1) div.td:eq(0)").text()).toBe("false");
+        });
+
+        it("outputs an HTML non-breaking space for a null", function() {
+            expect(this.view.$(".column:eq(2) div.td:eq(0)").html()).toBe("&nbsp;");
+        });
+    });
+
     describe("#render", function() {
         beforeEach(function() {
             stubDefer();

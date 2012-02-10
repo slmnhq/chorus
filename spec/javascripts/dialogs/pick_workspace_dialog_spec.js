@@ -1,20 +1,16 @@
 describe("chorus.dialogs.PickWorkspace", function() {
     beforeEach(function() {
+        setLoggedInUser({id: 4003});
+        chorus.session.trigger("saved")
         this.launchElement = $("<a></a>")
+        this.dialog = new chorus.dialogs.PickWorkspace({launchElement : this.launchElement});
     });
 
     it("does not re-render when the model changes", function() {
-        var dialog = new chorus.dialogs.PickWorkspace({launchElement : this.launchElement });
-        expect(dialog.persistent).toBeTruthy()
+        expect(this.dialog.persistent).toBeTruthy()
     })
 
     describe("#setup", function() {
-        beforeEach(function() {
-            setLoggedInUser({id: 4003});
-            chorus.session.trigger("saved")
-            this.dialog = new chorus.dialogs.PickWorkspace({launchElement : this.launchElement});
-        })
-
         it("fetches all the workspaces", function() {
             expect(this.server.requests[0].url).toBe("/edc/workspace/?user=4003&page=1&rows=1000");
         })
@@ -24,7 +20,7 @@ describe("chorus.dialogs.PickWorkspace", function() {
         })
 
         it("only gets the chorus.session.users()'s workspaces", function(){
-            expect(this.dialog.collection.attributes.user).toBe(chorus.session.user());
+            expect(this.dialog.collection.attributes.userId).toBe(chorus.session.user().get("id"));
         })
     })
 

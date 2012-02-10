@@ -261,8 +261,8 @@ chorus.collections = {
                     add : page != 1,
                     success : function(collection, resp) {
                         if (resp.status == "ok") {
-                            var total = parseInt(resp.pagination.total);
-                            var page = parseInt(resp.pagination.page);
+                            var total = resp.pagination ? parseInt(resp.pagination.total) : 1;
+                            var page = resp.pagination ? parseInt(resp.pagination.page) : 1;
                             if (page >= total) {
                                 collection.trigger("reset", collection);
                                 collection.trigger("loaded");

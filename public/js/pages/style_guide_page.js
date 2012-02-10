@@ -167,9 +167,9 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                         { name: "percentage",    typeCategory: "STRING" }
                     ],
                     rows: [
-                        { bucket: 'january',  min: 1,  firstQuartile: 5,  median: 8, thirdQuartile: 12,  max: 25,  percentage: "20%" },
-                        { bucket: 'february', min: 2, firstQuartile: 3, median: 5,  thirdQuartile: 7, max: 8, percentage: "40%" },
-                        { bucket: 'march',    min: 10, firstQuartile: 10, median: 25,  thirdQuartile: 30, max: 35, percentage: "10%" },
+                        { bucket: 'january',  min: 1,  firstQuartile: 5,  median: 8, thirdQuartile: 12,  max: 25,  percentage: "20.999%" },
+                        { bucket: 'february', min: 2, firstQuartile: 3, median: 5,  thirdQuartile: 7, max: 8, percentage: "40.3%" },
+                        { bucket: 'march',    min: 10, firstQuartile: 10, median: 25,  thirdQuartile: 30, max: 35, percentage: "10.12" },
                         { bucket: 'april',    min: 2,  firstQuartile: 3,  median: 8,   thirdQuartile: 9,  max: 15, percentage: "30%" }
                     ]
                 }),
@@ -264,6 +264,13 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                         { time: '2012-07-01', value: 524 },
                         { time: '2012-08-01', value: 824 },
                         { time: '2012-09-01', value: 924 },
+                        { time: '2012-09-02', value: 926 },
+                        { time: '2012-09-03', value: 927 },
+                        { time: '2012-09-04', value: 124 },
+                        { time: '2012-09-05', value: 224 },
+                        { time: '2012-09-06', value: 924 },
+                        { time: '2012-09-07', value: 524 },
+                        { time: '2012-09-08', value: 924 },
                         { time: '2012-10-01', value: 724 }
                     ],
                     xAxis: "Day of the Week",

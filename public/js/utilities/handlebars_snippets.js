@@ -206,6 +206,16 @@
             var promptSpan = $('<span>').addClass('sql_prompt').text(t("dataset.content_details.sql_prompt")).outerHtml();
             var sqlSpan = $('<span>').addClass('sql_content').text(definition || '').outerHtml();
             return t("dataset.content_details.definition", {sql_prompt: promptSpan, sql: sqlSpan});
+        },
+
+        renderTableData: function(tableData) {
+            if(tableData || tableData === 0 || isNaN(tableData)) {
+                return tableData
+            } else if(tableData === false) {
+                return "false";
+            } else {
+                return "&nbsp;";
+            }
         }
 
     }

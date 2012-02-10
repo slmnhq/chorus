@@ -10,6 +10,11 @@ chorus.dialogs.CopyWorkfile = chorus.dialogs.PickWorkspace.extend({
         this.workfile.fetch();
     },
 
+    workspacesFetched: function() {
+        var currentWorkspace = this.collection.get(this.workfile.get("workspaceId"));
+        this.collection.remove(currentWorkspace);
+        this._super("workspacesFetched", arguments);
+    },
 
     callback:function () {
         var self = this;

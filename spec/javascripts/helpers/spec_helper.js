@@ -216,7 +216,7 @@
                         this.message = function() {
                             if (call) {
                                 return [
-                                    "Expected event " + eventName + " to have been triggered on " + target + " with" + args + " but was triggered with " + call.args,
+                                    "Expected event " + eventName + " to have been triggered on " + target + " with" + args + " but was triggered with " + call.args + " (did you forget to call this matcher with an array of arguments?)",
                                     "Expected event " + eventName + " not to have been triggered on " + target + " with" + args + " but was triggered with " + call.args
                                 ];
                             } else {

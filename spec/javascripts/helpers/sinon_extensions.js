@@ -52,7 +52,9 @@ _.extend(sinon.fakeServer, {
         options = options || {};
         options.method = 'read';
         return _.last(_.filter(this.fetches(), function(potentialRequest) {
-           return (new URI(potentialRequest.url)).equals(model.url(options));
+            var uri      = new URI(potentialRequest.url).removeSearch("rows");
+            var modelUri = new URI(model.url(options)).removeSearch("rows");
+            return uri.equals(modelUri);
         }));
     },
 

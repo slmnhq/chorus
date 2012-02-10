@@ -5,8 +5,7 @@ chorus.models.User = chorus.models.Base.extend({
 
     workspaces:function () {
         if (!this._workspaces) {
-            this._workspaces = new chorus.collections.WorkspaceSet();
-            this._workspaces.urlTemplate = "workspace/?user=" + this.get("id");
+            this._workspaces = new chorus.collections.WorkspaceSet([], { userId: this.get("id") });
             this._workspaces.bind("reset", function () {
                 this.trigger("change");
             }, this);

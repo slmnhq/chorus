@@ -46,10 +46,15 @@
             var options = {
                 instanceId: this.instanceId,
                 databaseName: this.databaseName,
-                schemaName: this.schemaName
+                schemaName: this.schemaName,
+                workspaceId: this.workspace.get("id")
             };
 
-            options[this.dataset.metaType() + "Name"] = this.objectName;
+            if (this.dataset.metaType() == "query") {
+                options[this.dataset.metaType() + "Name"] = this.datasetId;
+            } else {
+                options[this.dataset.metaType() + "Name"] = this.objectName;
+            }
 
             this.columnSet = new chorus.collections.DatabaseColumnSet([], options);
             this.columnSet.bind("loaded", this.columnSetFetched, this);
@@ -81,6 +86,8 @@
         showSidebar: function(type) {
             this.$('.sidebar_content.primary').addClass("hidden")
             this.$('.sidebar_content.secondary').removeClass("hidden")
+
+            this.mainContent.content.selectMulti = false;
             switch (type) {
                 case 'boxplot':
                     this.secondarySidebar = new chorus.views.DatasetVisualizationBoxplotSidebar({model: this.model, collection: this.columnSet});
@@ -98,6 +105,7 @@
                     this.secondarySidebar = new chorus.views.DatasetVisualizationTimeSeriesSidebar({model: this.model, collection: this.columnSet});
                     break;
                 case 'chorus_view':
+                    this.mainContent.content.selectMulti = true;
                     this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model : this.model});
                     break;
             }

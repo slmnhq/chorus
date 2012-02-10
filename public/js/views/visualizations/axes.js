@@ -37,7 +37,7 @@ _.extend(chorus.views.visualizations.Axis.prototype, chorus.Mixins.VisHelpers, {
     },
 
     labels: function() {
-        if (this.scaleType === "numeric") {
+        if (this.scaleType === "numeric" || this.scaleType === "time") {
             return this.scale().ticks(8);
         } else {
             return this._labels;
@@ -46,7 +46,7 @@ _.extend(chorus.views.visualizations.Axis.prototype, chorus.Mixins.VisHelpers, {
 
     tickScale: function() {
         var scale = this.scale();
-        if (this.scaleType === "numeric") {
+        if (this.scaleType === "numeric" || this.scaleType === "time") {
             return scale;
         } else {
             return function(d) { return scale(d) + scale.rangeBand() / 2 };
@@ -54,7 +54,11 @@ _.extend(chorus.views.visualizations.Axis.prototype, chorus.Mixins.VisHelpers, {
     },
 
     scale: function() {
-        if (this.scaleType === "numeric") {
+        if (this.scaleType === "time") {
+            return d3.time.scale()
+                .domain([Date.parse(this.minValue), Date.parse(this.maxValue)])
+                .range(this.range());
+        } else if (this.scaleType === "numeric") {
             return d3.scale.linear()
                 .domain([this.minValue, this.maxValue])
                 .range(this.range());

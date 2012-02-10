@@ -18,7 +18,7 @@ describe("chorus.collections.WorkspaceSet", function() {
 
     context("with a userId", function(){
         it("sets the 'user' param", function() {
-            this.collection.attributes.user = new chorus.models.User({id: 199});
+            this.collection.attributes.userId = 199;
             expect(this.collection.url()).toMatchUrl("/edc/workspace/?user=199&page=1&rows=50");
         });
     })
@@ -32,7 +32,7 @@ describe("chorus.collections.WorkspaceSet", function() {
 
     context("with multiple paramaters", function(){
         it("it has correct Url when both are true", function() {
-            this.collection.attributes.user = new chorus.models.User({id: 20});
+            this.collection.attributes.userId = 20;
             this.collection.attributes.active = true;
             expect(this.collection.url()).toMatchUrl("/edc/workspace/?active=true&user=20&page=1&rows=50");
         });

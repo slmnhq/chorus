@@ -1,11 +1,11 @@
-(function () {
+(function() {
     var imageRegex = /^image\//;
     var textRegex = /^text\//;
 
     chorus.models.Workfile = chorus.models.Base.extend({
         entityType:"workfile",
 
-        urlTemplate:function () {
+        urlTemplate: function() {
             if (this.isLatestVersion()) {
                 return "workspace/{{workspaceId}}/workfile/{{id}}"
             } else {
@@ -13,7 +13,7 @@
             }
         },
 
-        showUrlTemplate:function () {
+        showUrlTemplate: function() {
             if (this.isLatestVersion()) {
                 return "workspaces/{{workspaceId}}/workfiles/{{id}}"
             } else {
@@ -21,26 +21,26 @@
             }
         },
 
-        showUrlForVersion:function (version) {
+        showUrlForVersion: function(version) {
             return "#/workspaces/" + this.get("workspaceId") + "/workfiles/" + this.get("id") + "/versions/" + version;
         },
 
-        initialize:function () {
+        initialize: function() {
             if (this.collection && this.collection.attributes.workspaceId) {
                 this.set({workspaceId:this.collection.attributes.workspaceId}, {silent:true});
             }
         },
 
-        workspace:function () {
+        workspace: function() {
             this._workspace = (this._workspace || new chorus.models.Workspace({ id:this.get("workspaceId")}))
             return this._workspace;
         },
 
-        sandbox:function () {
+        sandbox: function() {
             return this.workspace().sandbox()
         },
 
-        executionSchema:function () {
+        executionSchema: function() {
             var executionInfo = this.get("executionInfo");
             if (executionInfo && executionInfo.schemaName) {
                 return new chorus.models.Schema({
@@ -56,7 +56,7 @@
             }
         },
 
-        modifier:function () {
+        modifier: function() {
             return new chorus.models.User({
                 userName:this.get("modifiedBy"),
                 firstName:this.get("modifiedByFirstName"),
@@ -65,7 +65,7 @@
             })
         },
 
-        content:function (newContent, options) {
+        content: function(newContent, options) {
             if (arguments.length) {
                 this.get("versionInfo").content = newContent;
                 this.set({content:newContent}, options);
@@ -74,7 +74,7 @@
             }
         },
 
-        lastComment:function () {
+        lastComment: function() {
             var comments = this.get("recentComments");
             return comments && comments.length > 0 && new chorus.models.Comment({
                 body:comments[0].text,
@@ -83,23 +83,23 @@
             });
         },
 
-        createDraft:function () {
+        createDraft: function() {
             var draft = new chorus.models.Draft({workfileId:this.get("id"), workspaceId:this.get("workspaceId"), content:this.content()});
-            draft.bind("saved", function () {
+            draft.bind("saved", function() {
                 this.isDraft = true;
                 this.set({ hasDraft:true }, { silent:true });
             }, this);
             return draft;
         },
 
-        allVersions:function () {
+        allVersions: function() {
             return new chorus.collections.WorkfileVersionSet([], {
                 workspaceId:this.get("workspaceId"),
                 workfileId:this.get("id")
             });
         },
 
-        declareValidations:function (newAttrs) {
+        declareValidations: function(newAttrs) {
             this.require("fileName", newAttrs);
         },
 
@@ -107,43 +107,43 @@
             "fileName":"workfiles.validation.name"
         },
 
-        isImage:function () {
+        isImage: function() {
             var type = this.get("mimeType");
             return type && type.match(imageRegex);
         },
 
-        isSql:function () {
+        isSql: function() {
             var type = this.get("fileType");
             return type == "SQL";
         },
 
-        isText:function () {
+        isText: function() {
             var type = this.get("mimeType");
             return type && type.match(textRegex);
         },
 
-        downloadUrl:function () {
+        downloadUrl: function() {
             var url = URI(this.url())
             url.path(url.path() + "/file/" + this.get("versionInfo").versionFileId)
             url.addSearch({ download: "true" })
             return url.toString();
         },
 
-        workfilesUrl:function () {
+        workfilesUrl: function() {
             return "#/workspaces/" + this.get("workspaceId") + "/workfiles";
         },
 
-        canEdit:function () {
+        canEdit: function() {
             return this.isLatestVersion();
         },
 
-        isLatestVersion:function () {
+        isLatestVersion: function() {
             var versionNum = this.get('versionInfo') && this.get('versionInfo').versionNum;
             return (!versionNum || versionNum === this.get("latestVersionNum"))
         },
 
 
-        save:function (attrs, options) {
+        save: function(attrs, options) {
             if (this.canEdit()) {
                 options = options || {};
                 attrs = attrs || {};
@@ -158,7 +158,7 @@
             }
         },
 
-        saveAsNewVersion:function (attrs, options) {
+        saveAsNewVersion: function(attrs, options) {
             options = options || {};
 
             var overrides = {

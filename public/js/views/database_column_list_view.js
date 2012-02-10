@@ -5,6 +5,7 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
     events:{
         "click li":"selectColumn"
     },
+    selectMulti: false,
 
     setup:function () {
         this.collection.comparator = function (column) {
@@ -25,8 +26,23 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
     },
 
     selectColumn:function (e) {
-        this.$("li").removeClass("selected");
-        var selectedColumn = $(e.target).closest("li");
-        selectedColumn.addClass("selected");
+        var $selectedColumn = $(e.target).closest("li");
+        if(this.selectMulti) {
+            if ($selectedColumn.is(".selected")){
+                $selectedColumn.removeClass("selected");
+                this.trigger("column:deselected", this.collection.at(this.$("li").index($selectedColumn)));
+            } else {
+                $selectedColumn.addClass("selected");
+                this.trigger("column:selected", this.collection.at(this.$("li").index($selectedColumn)));
+            }
+        } else {
+            var $deselected = this.$("li.selected");
+            $deselected.removeClass("selected");
+            this.trigger("column:deselected", this.collection.at(this.$("li").index($deselected)));
+
+            $selectedColumn.addClass("selected");
+
+            this.trigger("column:selected", this.collection.at(this.$("li").index($selectedColumn)));
+        }
     }
 });

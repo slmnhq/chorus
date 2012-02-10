@@ -58,17 +58,16 @@
 
                 .task_loading {
                     @include results-console-message;
-                    border-right: 1px solid $results-console-border-color;
-                    padding-right: $padding-x;
                     display: inline-block;
                 }
 
-                .link {
+                .separator {
                     padding-left: $padding-x;
+                    padding-right: $padding-x;
+                }
 
-                    a {
-                        font-weight: normal;
-                    }
+                .cancel {
+                    font-weight: normal;
                 }
             }
 
