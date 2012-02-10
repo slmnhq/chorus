@@ -1879,7 +1879,7 @@ beforeEach(function() {
         },
         
         datasetPreview: function(overrides) {
-            return new chorus.models.DatabaseObjectPreview(_.extend({
+            return new chorus.models.TabularDataPreview(_.extend({
                 columns: [],
                 rows: []
             }, overrides));

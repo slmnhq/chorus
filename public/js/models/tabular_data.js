@@ -63,16 +63,21 @@ chorus.models.TabularData = chorus.models.Base.extend({
 
     preview: function() {
         if (!this._preview) {
-            this._preview = new chorus.models.DatabaseObjectPreview({
+            this._preview = new chorus.models.TabularDataPreview({
                 instanceId: this.get("instance").id,
                 databaseName: this.get("databaseName"),
                 schemaName: this.get("schemaName")
             });
+
             var objectName = this.get("objectName");
-            if (this.metaType() == "table") {
+            var metaType = this.metaType();
+
+            if (metaType == "table") {
                 this._preview.set({tableName: objectName}, {silent: true});
-            } else {
+            } else if(metaType == "view") {
                 this._preview.set({viewName: objectName}, {silent: true});
+            } else {
+                this._preview.set({datasetId: this.entityId, workspaceId: this.get("workspace").id}, {silent: true});
             }
         }
 

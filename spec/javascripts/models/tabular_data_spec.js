@@ -151,13 +151,7 @@ describe("chorus.models.TabularData", function() {
                 this.preview = this.tabularData.preview();
             });
 
-            it("should return a DatasetPreview", function() {
-                expect(this.preview).toBeA(chorus.models.DatabaseObjectPreview);
-            });
-
-            it("should memoize the database preview", function() {
-                expect(this.preview).toBe(this.tabularData.preview());
-            });
+            checkPreview();
 
             it("should return a database preview", function() {
                 expect(this.preview.get("instanceId")).toBe(this.tabularData.get("instance").id);
@@ -173,13 +167,7 @@ describe("chorus.models.TabularData", function() {
                 this.preview = this.tabularData.preview();
             });
 
-            it("should return a DatasetPreview", function() {
-                expect(this.preview).toBeA(chorus.models.DatabaseObjectPreview);
-            });
-
-            it("should memoize the database preview", function() {
-                expect(this.preview).toBe(this.tabularData.preview());
-            });
+            checkPreview();
 
             it("should return a database preview", function() {
                 expect(this.preview.get("instanceId")).toBe(this.tabularData.get("instance").id);
@@ -188,6 +176,30 @@ describe("chorus.models.TabularData", function() {
                 expect(this.preview.get("viewName")).toBe(this.tabularData.get("objectName"));
             });
         });
+
+        context("with a chorus view", function() {
+            beforeEach(function() {
+                this.tabularData.set({id: "2|dca_demo|some_schema|BASE_TABLE|Dataset1", objectType: "QUERY", objectName: "my_chorusview", workspace: {id:"234", name: "abc"}});
+                this.preview = this.tabularData.preview();
+            });
+
+            checkPreview();
+
+            it("should return a dataset preview", function() {
+                expect(this.preview.get("workspaceId")).toBe(this.tabularData.get("workspace").id);
+                expect(this.preview.get("datasetId")).toBe(this.tabularData.get("id"));
+            })
+        });
+
+        function checkPreview() {
+            it("should return a DatasetPreview", function() {
+                expect(this.preview).toBeA(chorus.models.TabularDataPreview);
+            });
+
+            it("should memoize the database preview", function() {
+                expect(this.preview).toBe(this.tabularData.preview());
+            });
+        }
     });
 
 })
