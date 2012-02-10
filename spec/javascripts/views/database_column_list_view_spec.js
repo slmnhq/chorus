@@ -32,6 +32,18 @@ describe("chorus.views.DatabaseColumnList", function() {
             expect(this.view.$("li:eq(0) .name")).toHaveText("column_name_1");
             expect(this.view.$("li:eq(1) .name")).toHaveText("column_name_2");
         })
+
+        describe("column:deselected", function() {
+           beforeEach(function(){
+               this.view.selectMulti = true;
+
+               this.view.trigger("column:deselected", this.collection.at(0));
+           });
+
+            it("deselects the column", function() {
+                expect(this.view.$("li.selected").length).toBe(0);
+            });
+        });
         
         describe("clicking on a list item", function() {
             beforeEach(function() {

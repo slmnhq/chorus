@@ -3,7 +3,7 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
     className:"database_column_list",
     additionalClass:"list",
     events:{
-        "click li":"selectColumn"
+        "click li":"selectColumn",
     },
     selectMulti: false,
 
@@ -12,6 +12,7 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
             return parseInt(column.get("ordinalPosition"))
         };
         this.collection.sort();
+        this.bind("column:deselected", this.deselectColumn, this);
     },
 
     postRender:function () {
@@ -29,7 +30,6 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
         var $selectedColumn = $(e.target).closest("li");
         if(this.selectMulti) {
             if ($selectedColumn.is(".selected")){
-                $selectedColumn.removeClass("selected");
                 this.trigger("column:deselected", this.collection.at(this.$("li").index($selectedColumn)));
             } else {
                 $selectedColumn.addClass("selected");
@@ -43,6 +43,12 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
             $selectedColumn.addClass("selected");
 
             this.trigger("column:selected", this.collection.at(this.$("li").index($selectedColumn)));
+        }
+    },
+
+    deselectColumn: function(model) {
+        if(this.selectMulti) {
+            this.$("li").eq(this.collection.indexOf(model)).removeClass("selected");
         }
     }
 });

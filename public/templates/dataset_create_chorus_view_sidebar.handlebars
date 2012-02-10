@@ -7,20 +7,17 @@
     </ul>
 
     <div class="selected_columns">
-        {{#if models}}
-            <div class="non_empty_selection">
-                <span class="title">{{t "dataset.chorusview.sidebar.selected_columns"}}</span>
-                <div class="dataset">
-                    <span class="label">{{t "dataset.statistics.dataset"}}:</span> <span class="name" title="{{objectName}}">{{objectName}}</span>
-                </div>
-                <div class="columns"></div>
+        <div class="non_empty_selection hidden">
+            <span class="title">{{t "dataset.chorusview.sidebar.selected_columns"}}</span>
+            <div class="dataset">
+                <span class="label">{{t "dataset.statistics.dataset"}}:</span> <span class="name" title="{{objectName}}">{{objectName}}</span>
             </div>
-        {{else}}
-            <div class="empty_selection">
-                <span class="top"><span class="double_lines"></span><label>{{t "dataset.chorusview.sidebar.empty_selection.title"}}</label><span class="double_lines"></span></span>
-                <span class="bottom">{{t "dataset.chorusview.sidebar.empty_selection.text"}}</span>
-            </div>
-        {{/if}}
+            <ul class="columns"></ul>
+        </div>
+        <div class="empty_selection">
+            <span class="top"><span class="double_lines"></span><label>{{t "dataset.chorusview.sidebar.empty_selection.title"}}</label><span class="double_lines"></span></span>
+            <span class="bottom">{{t "dataset.chorusview.sidebar.empty_selection.text"}}</span>
+        </div>
     </div>
     <button class="create {{#unless models}}disabled{{/unless}}">{{t "dataset.chorusview.sidebar.create_dataset"}}</button>
 </fieldset>
