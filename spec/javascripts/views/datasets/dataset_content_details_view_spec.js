@@ -3,7 +3,7 @@ describe("chorus.views.DatasetContentDetails", function() {
         beforeEach(function() {
             this.qtipMenu = stubQtip();
             this.collection = fixtures.databaseColumnSet();
-            this.dataset = fixtures.datasetChorusView();
+            this.dataset = fixtures.datasetSourceTable();
 
             this.view = new chorus.views.DatasetContentDetails({dataset: this.dataset, collection: this.collection});
             this.server.completeFetchFor(this.dataset.statistics(), fixtures.datasetStatisticsView());
@@ -27,23 +27,39 @@ describe("chorus.views.DatasetContentDetails", function() {
         });
 
         describe("sql definition", function() {
-            it("shows the SQL definition in the header", function() {
-                expect(this.view.$(".sql_content")).toExist();
-                expect(this.view.$(".definition")).toContainText(this.dataset.statistics().get("definition"));
-            });
-
-            context("when there is no sql", function() {
-                beforeEach(function() {
-                    var dataset = fixtures.datasetSourceTable()
-                    this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection});
-                    this.server.completeFetchFor(dataset.statistics(), fixtures.datasetStatisticsTable());
-                    this.view.render();
+            context("when the object is a databaseObject", function() {
+                it("shows the SQL definition in the header", function() {
+                    expect(this.view.$(".sql_content")).toExist();
+                    expect(this.view.$(".definition")).toContainText(this.dataset.statistics().get("definition"));
                 });
 
-                it("does not show the SQL definition", function() {
-                    expect(this.view.$(".sql_content")).not.toExist();
-                })
+                context("when there is no sql", function() {
+                    beforeEach(function() {
+                        var dataset = fixtures.datasetSourceTable()
+                        this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection});
+                        this.server.completeFetchFor(dataset.statistics(), fixtures.datasetStatisticsTable());
+                        this.view.render();
+                    });
+
+                    it("does not show the SQL definition", function() {
+                        expect(this.view.$(".sql_content")).not.toExist();
+                    })
+                });
             });
+
+            context("when the object is a CHORUS VIEW", function() {
+                beforeEach(function() {
+                    var dataset = fixtures.datasetChorusView();
+                    this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection});
+                    this.view.render();
+
+                });
+                it("shows the SQL definition in the header", function() {
+                    expect(this.view.$(".sql_content")).toExist();
+                    expect(this.view.$(".definition")).toContainText(this.view.dataset.get("query"));
+                });
+            });
+
         });
 
 

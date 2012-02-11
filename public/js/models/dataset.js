@@ -68,5 +68,9 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
 
     tableOrViewTranslationKey: function() {
         return "dataset.types." + this.metaType();
+    },
+
+    isChorusView: function() {
+        return this.get("type") === "CHORUS_VIEW";
     }
 });

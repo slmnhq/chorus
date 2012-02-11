@@ -143,7 +143,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            definition: this.statistics.get("definition")
+            definition: this.dataset.isChorusView() ? this.dataset.get("query") : this.statistics.get("definition")
         }
     },
 

@@ -1,16 +1,16 @@
 describe("chorus.models.Dataset", function() {
     beforeEach(function() {
         this.dataset = fixtures.datasetSourceView({
-            workspace : {
-                id : "44"
+            workspace: {
+                id: "44"
             },
-            instance : {
-                id : "45"
+            instance: {
+                id: "45"
             },
             databaseName: "whirling_tops",
             schemaName: "diamonds",
-            objectType : "foo",
-            objectName : "japanese_teas"
+            objectType: "foo",
+            objectName: "japanese_teas"
         });
     })
 
@@ -188,5 +188,23 @@ describe("chorus.models.Dataset", function() {
         it("has the right timeType", function() {
             expect(this.task.get("timeType")).toBe('datetime')
         })
+    });
+
+    describe("#isChorusView", function() {
+        context("when the dataset is a chorus view", function() {
+            beforeEach(function() {
+                this.dataset.set({type: "CHORUS_VIEW"});
+            });
+
+            it("should return true", function() {
+                expect(this.dataset.isChorusView()).toBeTruthy();
+            })
+        });
+
+        context("when the dataset is not a chorus view", function() {
+            it("should return false", function() {
+                expect(this.dataset.isChorusView()).toBeFalsy();
+            })
+        });
     });
 })
