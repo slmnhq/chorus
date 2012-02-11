@@ -156,6 +156,31 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             it("should return the concatenated sql string", function() {
                 expect(this.view.sql()).toBe("foo\nbar\nbaz");
             })
+        });
+
+        describe("clicking 'Create Dataset'", function() {
+            beforeEach(function() {
+                spyOn(this.view, "sql").andReturn("SELECT * FROM FOO");
+                this.view.$("button.create").click();
+            });
+
+            it("should create the chorus view", function() {
+                var workspaceId = this.dataset.get("workspace").id;
+                expect(this.server.lastCreate().url).toContain("/edc/workspace/" + workspaceId + "/dataset");
+
+                // placeholder - name doesn't have a way to be set from UI yet
+                var params = this.server.lastCreate().params();
+                delete params.objectName;
+                expect(params).toEqual({
+                    type: "CHORUS_VIEW",
+                    query: "SELECT * FROM FOO",
+                    instanceId: this.dataset.get("instance").id.toString(),
+                    databaseName: this.dataset.get("databaseName"),
+                    schemaName: this.dataset.get("schemaName"),
+                    objectType: "QUERY"
+                });
+                expect(this.server.lastCreate().method).toBe("POST");
+            });
         })
     });
 });

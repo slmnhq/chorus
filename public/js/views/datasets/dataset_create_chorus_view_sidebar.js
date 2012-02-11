@@ -2,6 +2,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
     className: "dataset_create_chorus_view_sidebar",
 
     events : {
+        "click button.create" : "createChorusView",
         "click a.remove" : "removeColumnClicked"
     },
 
@@ -40,6 +41,27 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         var model = $li.data("model");
 
         this.trigger("column:removed", model);
+    },
+
+    createChorusView : function() {
+        var params = {
+            type: "CHORUS_VIEW",
+            query: this.sql(),
+            instanceId: this.model.get("instance").id,
+            databaseName: this.model.get("databaseName"),
+            schemaName: this.model.get("schemaName"),
+            objectName: _.uniqueId("chorus_view_"),
+            objectType: "QUERY"
+        };
+
+        $.post("/edc/workspace/" + this.model.get("workspace").id + "/dataset", params,
+            function(data) {
+                if (data.status == "ok") {
+                    chorus.toast("dataset.chorusview.create_success");
+                } else {
+                    chorus.toast("dataset.chorusview.create_fail");
+                }
+            }, "json");
     },
 
     whereClause: function() {
