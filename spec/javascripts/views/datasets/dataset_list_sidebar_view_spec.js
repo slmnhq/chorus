@@ -57,7 +57,7 @@ describe("chorus.views.DatasetListSidebar", function() {
                 context("when browsing a schema", function() {
                     beforeEach(function() {
                         this.view.options.browsingSchema = true;
-                        this.view.render();
+                        this.view.trigger("dataset:selected", this.dataset);
                     });
 
                     it("has a link to associate the dataset with a workspace", function() {
@@ -68,6 +68,10 @@ describe("chorus.views.DatasetListSidebar", function() {
                     it("does not have the 'add a note' link", function() {
                         expect(this.view.$("a.dialog[data-dialog=NotesNew]")).not.toExist();
                     })
+
+                    it("prefers only the default type for the activity list", function() {
+                        expect(this.view.activityList.options.displayStyle).toEqual(['default']);
+                    });
                 });
 
                 describe("when the activity fetch completes", function() {

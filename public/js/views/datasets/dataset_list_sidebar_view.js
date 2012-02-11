@@ -26,7 +26,7 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
             this.activityList = new chorus.views.ActivityList({
                 collection: activities,
                 additionalClass:"sidebar",
-                displayStyle:['without_object']
+                displayStyle: this.options.browsingSchema ? ['default'] : ['without_object']
             });
 
             this.activityList.bind("content:changed", this.recalculateScrolling, this)
