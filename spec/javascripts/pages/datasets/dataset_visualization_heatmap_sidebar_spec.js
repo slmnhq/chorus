@@ -3,10 +3,16 @@ describe("chorus.views.DatasetVisualizationHeatmapSidebar", function() {
         context("with valid column data", function() {
             beforeEach(function() {
                 this.column1 = fixtures.databaseColumn({typeCategory: 'REAL_NUMBER', name: "Rotten Eggs"});
-                this.columns = fixtures.databaseColumnSet([this.column1]);
+                this.column2 = fixtures.databaseColumn({typeCategory: 'REAL_NUMBER', name: "Zesty Eggs"});
+                this.columns = fixtures.databaseColumnSet([this.column1, this.column2]);
 
                 this.model = fixtures.datasetChorusView({objectName: "Foo"});
                 this.view = new chorus.views.DatasetVisualizationHeatmapSidebar({model: this.model, collection: this.columns})
+
+                spyOn(chorus, 'styleSelect').andCallFake(_.bind(function() {
+                    this.styledSelected = this.view.$(".y_axis select").val()
+                }, this));
+
                 this.view.render();
             })
 
@@ -16,6 +22,22 @@ describe("chorus.views.DatasetVisualizationHeatmapSidebar", function() {
                 })
                 it("populates the Y axis box with numeric columns", function() {
                     expect(this.view.$(".y_axis select option").length).toBe(this.view.numericColumnNames().length);
+                })
+
+                it("pre-selects the first column in the X axis box select", function() {
+                    var selected = this.view.$(".x_axis select option:eq(0)")
+                    expect(selected.attr("selected")).toBe("selected");
+                })
+
+
+                it("pre-selects the second column in the Y axis box select", function() {
+                    var selected = this.view.$(".y_axis select option:eq(1)")
+                    expect(selected.attr("selected")).toBe("selected");
+                })
+
+                it("pre-selected the first option before styleSelect is called", function() {
+                    var selected = this.view.$(".y_axis select option:eq(1)")
+                    expect(this.styledSelected).toBe(selected.text());
                 })
             })
 
@@ -28,7 +50,7 @@ describe("chorus.views.DatasetVisualizationHeatmapSidebar", function() {
                     expect(options.name).toBe("Foo");
                     expect(options.type).toBe("heatmap");
                     expect(options.xAxis).toBe("Rotten Eggs");
-                    expect(options.yAxis).toBe("Rotten Eggs");
+                    expect(options.yAxis).toBe("Zesty Eggs");
                     expect(options.xBins).toBe("20");
                     expect(options.yBins).toBe("20");
                 })
