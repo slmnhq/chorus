@@ -98,10 +98,10 @@ describe("chorus.views.visualizations.Heatmap", function() {
 
                 _.each(this.bins, function(bin, i) {
                     var row = this.task.get('rows')[i]
-                    var x = row.x - 1
-                    var y = row.y - 1
-                    expect(leftX(bin)).toBeCloseTo(this.minX + x * binWidth, 1)
-                    expect(bottomY(bin)).toBeCloseTo(this.maxY -2 - y * binHeight, 1)
+                    var x = row.x - 1;
+                    var y = row.y - 1;
+                    expect(leftX(bin)).toBeCloseTo(this.minX + 1 + x * binWidth, 1);
+                    expect(bottomY(bin)).toBeCloseTo(this.maxY - 3 - y * binHeight, 1);
                 }, this);
             });
 
