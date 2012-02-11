@@ -56,6 +56,18 @@ describe("chorus.views.ResultsConsoleView", function() {
                 expect(this.view.$("a.close")).toExist();
             });
         });
+
+        context("when the expander arrow should be hidden", function() {
+            beforeEach(function() {
+                this.view.options.hideExpander = true;
+                this.view.render();
+            });
+
+            it("hides the expander", function() {
+                expect(this.view.$(".expander_button")).not.toExist();
+            });
+
+        })
     })
 
     describe("event handling", function() {
@@ -495,7 +507,9 @@ describe("chorus.views.ResultsConsoleView", function() {
 
         context("when execution fails", function() {
             beforeEach(function() {
-                this.server.lastFetchFor(this.executionModel).fail([{message: "broke!"}]);
+                this.server.lastFetchFor(this.executionModel).fail([
+                    {message: "broke!"}
+                ]);
             });
 
             it("calls executionFailed", function() {

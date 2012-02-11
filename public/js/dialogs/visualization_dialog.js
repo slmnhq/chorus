@@ -16,7 +16,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.type = this.options.chartOptions.type;
         this.title = t("visualization.title", {name:this.options.chartOptions.name});
 
-        this.tableData = new chorus.views.ResultsConsole({shuttle:false, footerSize: _.bind(this.footerSize, this)});
+        this.tableData = new chorus.views.ResultsConsole({shuttle:false, hideExpander:true, footerSize: _.bind(this.footerSize, this)});
     },
 
     footerSize: function() {
@@ -25,6 +25,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     postRender: function () {
         this.tableData.showResultTable(this.task);
+        this.tableData.$('.expander_button').remove();
         this.$('.chart_icon.' + this.type).addClass("selected");
     },
 

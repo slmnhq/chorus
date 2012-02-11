@@ -54,7 +54,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     showResultTable: function(task) {
-        this.dataTable = new chorus.views.TaskDataTable({shuttle: this.options.shuttle, model: task});
+        this.dataTable = new chorus.views.TaskDataTable({shuttle: this.options.shuttle, hideExpander: this.options.hideExpander, model: task});
         this.dataTable.render();
         this.$(".result_content").removeClass("hidden");
         this.$(".result_table").html(this.dataTable.el);
@@ -182,7 +182,8 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     additionalContext: function() {
         return {
             titleKey: this.options.titleKey || "results_console_view.title",
-            enableClose: this.options.enableClose
+            enableClose: this.options.enableClose,
+            expander: !(this.options.hideExpander)
         }
     }
 });
