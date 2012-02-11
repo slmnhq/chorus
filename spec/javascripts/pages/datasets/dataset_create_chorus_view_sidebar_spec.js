@@ -1,9 +1,7 @@
 describe("chorus.views.CreateChorusViewSidebar", function() {
     beforeEach(function() {
-        this.dataset = fixtures.datasetChorusView({name : "my_chorus"});
-        this.filters = {};
+        this.dataset = fixtures.datasetChorusView({objectName : "my_chorus"});
         this.view = new chorus.views.CreateChorusViewSidebar({model: this.dataset});
-        this.view.filters = this.filters;
     });
 
     describe("#render", function() {
@@ -21,8 +19,8 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             expect(this.view.$("a.preview").text()).toContainTranslation("dataset.preview_sql");
         });
 
-        it("adds the filters to the preview SQL link's data", function() {
-           expect(this.view.$("a.preview").data("filters")).toBe(this.filters);
+        it("adds a reference to the parent to the preview SQL link's data", function() {
+           expect(this.view.$("a.preview").data("parent")).toBe(this.view);
         });
 
         context("when there is no filters or columns selected", function() {
@@ -110,5 +108,54 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 expect("column:removed").toHaveBeenTriggeredOn(this.view, [this.column]);
             })
         })
-    })
+
+        describe("#whereClause", function() {
+            beforeEach(function() {
+                this.view.filters = { whereClause: function() {return "FOO"} }
+            })
+
+            it("creates a where clause from the supplied filters", function() {
+                expect(this.view.whereClause()).toBe("FOO");
+            });
+        });
+
+        describe("#selectClause", function() {
+            context("when no columns are selected", function() {
+                it("returns 'SELECT *'", function() {
+                    expect(this.view.selectClause()).toBe("SELECT *");
+                });
+            });
+
+            context("when two columns are selected", function() {
+                beforeEach(function() {
+                    this.column1 = fixtures.databaseColumn({name: "Foo"});
+                    this.column2 = fixtures.databaseColumn({name: "Bar"});
+                    this.view.trigger("column:selected", this.column1);
+                    this.view.trigger("column:selected", this.column2);
+                });
+
+                it("should build a select clause from the selected columns", function() {
+                    expect(this.view.selectClause()).toBe("SELECT Foo, Bar");
+                });
+            });
+        });
+
+        describe("#fromClause", function() {
+            it("should return the dataset name in the FROM clause", function() {
+                expect(this.view.fromClause()).toBe("FROM my_chorus");
+            });
+        });
+
+        describe("#sql", function() {
+            beforeEach(function() {
+                spyOn(this.view, "selectClause").andReturn("foo");
+                spyOn(this.view, "fromClause").andReturn("bar");
+                spyOn(this.view, "whereClause").andReturn("baz");
+            })
+
+            it("should return the concatenated sql string", function() {
+                expect(this.view.sql()).toBe("foo\nbar\nbaz");
+            })
+        })
+    });
 });

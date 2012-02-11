@@ -3,8 +3,8 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
     title: t("sql_preview.dialog.title"),
 
     additionalContext : function() {
-        var filters = this.options.launchElement.data("filters");
-        return { sql: filters && filters.whereClause() }
+        var parent = this.options.launchElement.data("parent");
+        return { sql: parent && parent.sql()}
     },
 
     postRender: function() {

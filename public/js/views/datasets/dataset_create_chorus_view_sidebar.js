@@ -6,7 +6,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
     },
 
     postRender : function() {
-        this.$("a.preview").data("filters", this.filters);
+        this.$("a.preview").data("parent", this);
         this.bind("column:selected", this.addColumn, this);
         this.bind("column:deselected", this.removeColumn, this);
     },
@@ -40,5 +40,25 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         var model = $li.data("model");
 
         this.trigger("column:removed", model);
+    },
+
+    whereClause: function() {
+        return this.filters.whereClause();
+    },
+
+    selectClause: function() {
+        var names = _.map(this.$(".columns li"), function(li) {
+            return $(li).data("model").get("name");
+        });
+
+        return "SELECT " + (names.length ? names.join(", ") : "*");
+    },
+
+    fromClause: function() {
+        return "FROM " + this.model.get("objectName");
+    },
+
+    sql : function() {
+        return [this.selectClause(), this.fromClause(), this.whereClause()].join("\n");
     }
 });
