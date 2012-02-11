@@ -249,4 +249,17 @@ describe("chorus.pages.Base", function() {
             })
         })
     })
+
+    describe("help", function() {
+        beforeEach(function() {
+            spyOn(chorus, "help");
+            this.page = new chorus.pages.Base();
+            this.page.render();
+            this.page.$("#help a").click();
+        });
+
+        it("shows the help system", function() {
+            expect(chorus.help).toHaveBeenCalled();
+        })
+    })
 })

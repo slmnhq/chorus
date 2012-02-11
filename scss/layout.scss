@@ -33,6 +33,27 @@
         padding-top: 50px;
     }
 
+    #help {
+      position: fixed;
+      right: 0;
+      top: 50px;
+      width: 45px;
+      height: $breadcrumbs-height;
+      z-index: $help-z-index;
+      background: transparent;
+      line-height: 32px;
+      vertical-align: middle;
+      
+      a {
+        color: white;
+        background: $link-color;
+        padding: 3px 5px;
+        @include border-radius(4px);
+        font-size: 12px;
+        font-weight: $semibold;
+      }
+    }
+
     #sidebar_wrapper {
         position: fixed;
         right: 0;

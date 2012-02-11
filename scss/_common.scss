@@ -21,6 +21,7 @@ $icon-image-height : 32px;
 $activity-gutter: 8px;
 $dialog-padding : 15px;
 $button-height : 26px;
+$breadcrumbs-height: 32px;
 
 // Colors
 //
@@ -104,6 +105,8 @@ $modal-tooltip-z-index: $dialog-z-index + 1;
 $toast-closing-z-index: $modal-tooltip-z-index + 1;
 $toast-z-index: $toast-closing-z-index + 1;
 $hidden-z-index: -100;
+
+$help-z-index: $header-z-index;
 
 //ie colors
 $ie-header-color: #c7c7c7;
