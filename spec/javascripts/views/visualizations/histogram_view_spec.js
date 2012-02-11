@@ -7,11 +7,11 @@ describe("chorus.views.visualizations.Histogram", function() {
             ],
 
             rows: [
-                { bin: "0-9", frequency: 5 },
-                { bin: "10-19", frequency: 8 },
-                { bin: "20-29", frequency: 0 },
-                { bin: "30-39", frequency: 1 },
-                { bin: "40-49", frequency: 2000 }
+                { bin: [0, 9], frequency: 5 },
+                { bin: [10, 19], frequency: 8 },
+                { bin: [20, 29], frequency: 0 },
+                { bin: [30, 39], frequency: 1 },
+                { bin: [40, 49], frequency: 2000 }
             ],
             "chart[xAxis]": "I am the x axis"
         });

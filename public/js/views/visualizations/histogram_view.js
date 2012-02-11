@@ -14,13 +14,15 @@ chorus.views.visualizations.Histogram = chorus.views.Base.extend({
             attr("width", 925).
             attr("height", 340);
 
+
         this.axes = new chorus.views.visualizations.Axes({
             el: svg,
             minYValue: 0,
             maxYValue: _.max(frequencies),
-            xScaleType: "ordinal",
+            xScaleType: "numeric",
+            minXValue: _.min(_.flatten(bins)),
+            maxXValue: _.max(_.flatten(bins)),
             yScaleType: "numeric",
-            xLabels: bins,
             yAxisLabel: "count",
             xAxisLabel: this.model.get("chart[xAxis]"),
             ticks: true,
@@ -34,8 +36,9 @@ chorus.views.visualizations.Histogram = chorus.views.Base.extend({
 
         var plot = svg.append("svg:g").attr("class", "plot");
 
-        var barWidth = scales.x.rangeBand() * 0.6;
-        var barOffset = scales.x.rangeBand() * 0.2;
+        var binWidth = Math.abs(scales.x(bins[0][1])-scales.x(bins[0][0]));
+        var barWidth = binWidth * 0.6;
+        var barOffset = binWidth * 0.2;
 
         plot
             .selectAll("rect")
@@ -43,7 +46,7 @@ chorus.views.visualizations.Histogram = chorus.views.Base.extend({
             .enter().append("svg:rect")
             .attr("class", "bar")
             .attr("x", function(d) {
-                return (scales.x(d.bin) + barOffset)
+                return (scales.x(d.bin[0]) + barOffset)
             })
             .attr("width", barWidth)
             .attr("y", function(d) {
