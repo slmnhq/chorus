@@ -1,5 +1,12 @@
 describe("chorus.pages.InstanceIndexPage", function() {
-    beforeEach(function() {
+    describe("#initialize", function() {
+        beforeEach(function() {
+            this.page = new chorus.pages.InstanceIndexPage();
+        })
+
+        it("has a helpId", function() {
+            expect(this.page.helpId).toBe("instances")
+        })
     })
 
     describe("#render", function() {
@@ -25,7 +32,7 @@ describe("chorus.pages.InstanceIndexPage", function() {
             expect(spy).toHaveBeenCalledWith("123");
         });
 
-        it("launches a new instance dialog", function(){
+        it("launches a new instance dialog", function() {
             stubModals();
             this.page.mainContent.contentDetails.$("button").click();
             expect(chorus.modal instanceof chorus.dialogs.InstancesNew).toBeTruthy();

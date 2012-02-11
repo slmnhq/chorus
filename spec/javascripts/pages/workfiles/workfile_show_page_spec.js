@@ -14,6 +14,10 @@ describe("chorus.pages.WorkfileShowPage", function() {
             this.page = new chorus.pages.WorkfileShowPage(this.workspaceId, this.workfileId);
         });
 
+        it("has a helpId", function() {
+            expect(this.page.helpId).toBe("workfile")
+        })
+
         it("instantiates and fetches a workfile with the given id", function() {
             var workfile = this.page.model;
             expect(workfile.get("id")).toBe(this.workfileId);

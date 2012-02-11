@@ -4,6 +4,10 @@ describe("chorus.pages.DashboardPage", function() {
         this.page = new chorus.pages.DashboardPage();
     });
 
+    it("has a helpId", function() {
+        expect(this.page.helpId).toBe("dashboard")
+    })
+
     describe("#setup", function() {
         it("sets chorus.session.user as the model", function() {
             expect(this.page.model).toBe(chorus.session.user())

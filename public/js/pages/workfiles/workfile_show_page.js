@@ -12,6 +12,8 @@
     });
 
     chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
+        helpId: "workfile",
+
         events:function () {
             var superClassEvents = this._super("events");
             return _.extend({}, superClassEvents, {

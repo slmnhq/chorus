@@ -2,6 +2,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
     crumbs:[
         { label:t("breadcrumbs.home") }
     ],
+    helpId: "dashboard",
 
     setup:function () {
         this.collection = this.workspaceSet = new chorus.collections.WorkspaceSet();

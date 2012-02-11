@@ -14,6 +14,8 @@
     });
 
     chorus.pages.SchemaBrowsePage = chorus.pages.Base.extend({
+        helpId: "schema",
+
         setup: function(instanceId, databaseName, schemaName) {
             this.schema = new chorus.models.Schema({
                 instanceId: instanceId,

@@ -32,6 +32,10 @@ describe("chorus.pages.DatasetShowPage", function() {
         this.page = new chorus.pages.DatasetShowPage(this.workspace.get("id"), this.datasetId);
     })
 
+    it("has a helpId", function() {
+        expect(this.page.helpId).toBe("dataset")
+    })
+
     describe("#initialize", function() {
         it("fetches the workspace", function() {
             expect(this.server.lastFetchFor(this.workspace)).toBeDefined();

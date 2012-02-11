@@ -12,6 +12,8 @@
     });
 
     chorus.pages.DatasetShowPage = chorus.pages.Base.extend({
+        helpId: "dataset",
+
         setup: function(workspaceId, datasetId) {
             this.datasetId = datasetId;
 

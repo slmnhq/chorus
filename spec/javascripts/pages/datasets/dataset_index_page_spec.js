@@ -5,6 +5,10 @@ describe("chorus.pages.DatasetIndexPage", function() {
         this.page = new chorus.pages.DatasetIndexPage(this.workspace.get("id"));
     })
 
+    it("has a helpId", function() {
+        expect(this.page.helpId).toBe("datasets")
+    })
+
     describe("#initialize", function() {
         it("fetches the model", function() {
             expect(this.server.lastFetchFor(this.workspace)).not.toBeUndefined();

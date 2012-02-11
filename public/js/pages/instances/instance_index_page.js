@@ -3,6 +3,7 @@ chorus.pages.InstanceIndexPage = chorus.pages.Base.extend({
         { label:t("breadcrumbs.home"), url:"#/" },
         { label:t("breadcrumbs.instances") }
     ],
+    helpId: "instances",
 
     setup:function () {
         this.collection = new chorus.collections.InstanceSet();

@@ -11,6 +11,10 @@ describe("chorus.pages.WorkspaceSummaryPage", function() {
         it("fetches the model", function() {
             expect(this.server.requests[0].url).toBe("/edc/workspace/4");
         })
+
+        it("has a helpId", function() {
+            expect(this.page.helpId).toBe("workspace_summary")
+        })
     });
 
     describe("#render", function() {

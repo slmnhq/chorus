@@ -5,6 +5,10 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         this.page = new chorus.pages.SchemaBrowsePage(this.schema.get("instanceId"), this.schema.get("databaseName"), this.schema.get("name"));
     })
 
+    it("has a helpId", function() {
+        expect(this.page.helpId).toBe("schema")
+    })
+
     describe("#initialize", function() {
         it("fetches the instance", function() {
             expect(this.server.lastFetchFor(this.instance)).not.toBeUndefined();

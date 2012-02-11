@@ -1,4 +1,6 @@
 chorus.pages.UserEditPage = chorus.pages.Base.extend({
+    helpId: "user_edit",
+
     crumbs:function () {
         return [
             { label:t("breadcrumbs.home"), url:"#/" },

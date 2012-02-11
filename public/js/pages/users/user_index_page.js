@@ -3,6 +3,7 @@ chorus.pages.UserIndexPage = chorus.pages.Base.extend({
         { label:t("breadcrumbs.home"), url:"#/" },
         { label:t("breadcrumbs.users") }
     ],
+    helpId: "users",
 
     setup:function () {
         this.collection = new chorus.collections.UserSet();

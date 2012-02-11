@@ -3,6 +3,7 @@ chorus.pages.WorkspaceIndexPage = chorus.pages.Base.extend({
         { label:t("breadcrumbs.home"), url:"#/" },
         { label:t("breadcrumbs.workspaces") }
     ],
+    helpId: "workspaces",
 
     setup:function () {
         this.collection = new chorus.collections.WorkspaceSet();

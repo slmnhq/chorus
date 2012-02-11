@@ -5,6 +5,10 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         this.page = new chorus.pages.WorkfileIndexPage(this.model.get('workspaceId'));
     })
 
+    it("has a helpId", function() {
+        expect(this.page.helpId).toBe("workfiles")
+    })
+
     describe("breadcrumbs", function() {
         beforeEach(function() {
             this.page.mainContent.model.set({name: "Cool Workspace"});

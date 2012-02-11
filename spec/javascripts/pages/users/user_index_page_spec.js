@@ -16,6 +16,10 @@ describe("chorus.pages.UserIndexPage", function() {
             expect(this.page.collection.sortIndex).toBe("lastName")
             expect(this.page.collection.sortOrder).toBe("asc");
         })
+
+        it("has a helpId", function() {
+            expect(this.page.helpId).toBe("users")
+        })
     })
 
     describe("#render", function() {

@@ -10,6 +10,8 @@
     });
 
     chorus.pages.WorkspaceSummaryPage = chorus.pages.Base.extend({
+        helpId: "workspace_summary",
+
         setup:function (workspaceId) {
             // chorus.router supplies arguments to setup
             this.model = new chorus.models.Workspace({id:workspaceId});

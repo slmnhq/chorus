@@ -9,6 +9,8 @@
         }
     })
     chorus.pages.UserShowPage = chorus.pages.Base.extend({
+        helpId: "user",
+
         setup:function (userId) {
             this.model = new chorus.models.User({id:userId});
             this.model.fetch();

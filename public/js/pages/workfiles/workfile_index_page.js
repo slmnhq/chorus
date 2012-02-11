@@ -11,6 +11,8 @@
     });
 
     chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
+        helpId: "workfiles",
+
         setup:function (workspaceId) {
             // chorus.router supplies arguments to setup
 

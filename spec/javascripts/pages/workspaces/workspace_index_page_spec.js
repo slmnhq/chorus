@@ -7,6 +7,16 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
         }); 
     });
 
+    describe("#initialize", function() {
+        beforeEach(function() {
+            this.page = new chorus.pages.WorkspaceIndexPage();
+        })
+
+        it("has a helpId", function() {
+            expect(this.page.helpId).toBe("workspaces")
+        })
+    })
+
     describe("#render", function() {
         beforeEach(function() {
             this.page = new chorus.pages.WorkspaceIndexPage();

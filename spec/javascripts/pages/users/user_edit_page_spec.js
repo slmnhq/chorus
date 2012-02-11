@@ -11,6 +11,10 @@ describe("chorus.pages.UserEditPage", function() {
         it("fetches the model automatically", function() {
             expect(this.server.requests[0].url).toBe("/edc/user/42");
         });
+
+        it("has a helpId", function() {
+            expect(this.view.helpId).toBe("user_edit")
+        })
     });
 
     describe("#render", function() {

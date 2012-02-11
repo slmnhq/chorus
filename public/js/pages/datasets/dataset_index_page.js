@@ -11,6 +11,8 @@
     });
 
     chorus.pages.DatasetIndexPage = chorus.pages.Base.extend({
+        helpId: "datasets",
+        
         setup: function(workspaceId) {
             this.workspace = new chorus.models.Workspace({id: workspaceId});
             this.workspace.onLoaded(this.workspaceLoaded, this);
