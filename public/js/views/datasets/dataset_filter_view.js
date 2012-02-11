@@ -42,17 +42,21 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         var $comparator = this.$("select.comparator");
         $comparator.empty();
 
+        var comparatorClasses = "string date numeric time";
         switch (type) {
             case "STRING":
             case "LONG_STRING":
-                $comparator.addClass("string").removeClass("numeric time");
+                $comparator.removeClass(comparatorClasses).addClass("string");
                 break;
             case "WHOLE_NUMBER":
             case "REAL_NUMBER":
-                $comparator.addClass("numeric").removeClass("string time");
+                $comparator.removeClass(comparatorClasses).addClass("numeric");
+                break;
+            case "DATE":
+                $comparator.removeClass(comparatorClasses).addClass("date");
                 break;
             case "TIME":
-                $comparator.addClass("time").removeClass("numeric string");
+                $comparator.removeClass(comparatorClasses).addClass("time");
                 break;
         }
 
@@ -85,6 +89,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         var comparator = map.comparators[$choice.val()];
         this.$(".filter_input").toggleClass("hidden", !comparator.usesInput);
         this.$(".time_input").toggleClass("hidden", !comparator.usesTimeInput);
+        this.$(".date_input").toggleClass("hidden", !comparator.usesDateInput)
 
         this.validateInput();
     },
@@ -107,7 +112,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         var columnName = this.$("select.column_filter").val();
         var $comparator = this.$("select.comparator");
         var $input = this.getInputField();
-        
+
         var map = this.getMap();
         return map.comparators[$comparator.val()].generate(columnName,  $input.val());
     },
@@ -119,6 +124,8 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
             return this.$(".filter_input");
         } else if (map == maps.time) {
             return this.$(".time_input");
+        } else if (map == maps.date) {
+            return this.$(".date_input");
         }
     },
 

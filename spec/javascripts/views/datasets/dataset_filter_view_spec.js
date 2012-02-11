@@ -184,6 +184,54 @@ describe("chorus.views.DatasetFilter", function() {
             });
         });
 
+        describe("columns with typeCategory: DATE", function() {
+            beforeEach(function () {
+                this.collection.models[0].set({ typeCategory : "DATE" });
+                this.view.render();
+
+                this.comparatorTypes = [
+                    "on",
+                    "null",
+                    "not_null",
+                    "before",
+                    "after"
+                ];
+
+                this.typesRequiringArgument = [
+                    "on",
+                    "before",
+                    "after"
+                ];
+
+                this.typesNotRequiringArgument = [
+                    "null",
+                    "not_null"
+                ];
+            });
+
+            it("adds a second select with all of the comparator options for date columns", function() {
+                expect(this.view.$("select.comparator")).toHaveClass("date");
+                _.each(this.comparatorTypes, function(comparatorType){
+                    expect(this.view.$("select.comparator option")).toContainTranslation("dataset.filter." + comparatorType);
+                }, this);
+            });
+
+            it("it shows the second input field when a comparator is selected that require an argument", function() {
+                _.each(this.typesRequiringArgument, function(comparatorType) {
+                    this.view.$(".comparator").val(comparatorType).change();
+                    expect(this.view.$("input.date_input")).not.toHaveClass("hidden");
+                }, this);
+            });
+
+            it("it hides the second input field when a comparator is selected that does *not* require a second argument", function() {
+                _.each(this.typesNotRequiringArgument, function(comparatorType) {
+                    this.view.$(".comparator").val(comparatorType).change();
+                    expect(this.view.$("input.date_input")).toHaveClass("hidden");
+                    expect(this.view.$("input.date_input")).toContainTranslation("dataset.filter.date_placeholder");
+                }, this);
+            });
+        });
+
         describe("#filterString", function() {
             beforeEach(function () {
                 this.collection.models[0].set({typeCategory:"STRING"});
