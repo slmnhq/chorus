@@ -2,9 +2,9 @@ chorus.views.DatasetVisualizationHeatmapSidebar = chorus.views.DatasetVisualizat
     className:"dataset_visualization_heatmap_sidebar",
 
     postRender:function () {
-        this._super('postRender');
-        this.$(".x_axis option:eq(1)").attr('selected', 'selected');
+        this.$(".x_axis option:eq(0)").attr('selected', 'selected');
         this.$(".y_axis option:eq(1)").attr('selected', 'selected');
+        this._super('postRender');
     },
 
     chartOptions: function() {

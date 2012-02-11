@@ -46,8 +46,6 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.cancelTimers()
         this.$(".right").removeClass("executing")
         this.$(".spinner").stopLoading()
-        this.$(".controls").removeClass("hidden");
-        this.minimizeTable();
     },
 
     executionSucceeded: function(task) {
@@ -60,6 +58,8 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.dataTable.render();
         this.$(".result_content").removeClass("hidden");
         this.$(".result_table").html(this.dataTable.el);
+        this.$(".controls").removeClass("hidden");
+        this.minimizeTable();
     },
 
     executionFailed: function(task) {
@@ -71,6 +71,8 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$(".sql_errors").removeClass("hidden");
         this.$(".result_content").addClass("hidden");
         this.$(".message").empty();
+        this.$(".controls").removeClass("hidden");
+        this.minimizeTable();
     },
 
     cancelExecution: function(event) {

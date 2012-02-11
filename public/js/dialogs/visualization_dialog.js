@@ -24,17 +24,14 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     postRender: function () {
-        this.drawTable();
+        this.tableData.showResultTable(this.task);
         this.$('.chart_icon.' + this.type).addClass("selected");
     },
 
     onExecutionComplete: function () {
         this.launchModal();
-        this.drawChart();
-    },
 
-    drawTable: function() {
-        this.tableData.trigger('file:executionSucceeded', this.task);
+        this.drawChart();
     },
 
     drawChart: function () {

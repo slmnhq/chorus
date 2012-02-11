@@ -29,6 +29,11 @@ chorus.views.visualizations.Heatmap = chorus.views.Base.extend({
 
         this.axes.render();
         var scales = this.axes.scales();
+        if(data.minValue === data.maxValue){
+            data.minValue -= 1;
+            data.maxValue += 1;
+        }
+
         var fillScale = d3.scale.linear().domain([data.minValue, data.maxValue]).range(["white", "steelblue"]);
 
         var content = svg.append("svg:g").attr("class", "content");
