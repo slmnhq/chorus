@@ -42,7 +42,7 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
             spyOn(this.view, "hideLoadingSpinner")
             stubModals();
             this.server.reset();
-            this.view.chartOptions = function() {return {type:'histogram'};};
+            this.view.chartOptions = function() {return {type: 'histogram'};};
             this.view.model = fixtures.datasetSourceTable();
             this.view.launchVisualizationDialog();
         })
@@ -99,4 +99,25 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
             })
         });
     })
-})
+
+    describe("errors", function() {
+        beforeEach(function() {
+            this.view.errorContainer = jasmine.createSpyObj("errorContainer", ['showError', 'closeError']);
+            this.view.task = {};
+        });
+
+        describe("onSqlError", function() {
+            it("passes the task and the alert class to showErrors on the errorContainer", function() {
+                this.view.onSqlError();
+                expect(this.view.errorContainer.showError).toHaveBeenCalledWith(this.view.task, chorus.alerts.VisualizationError);
+            });
+        });
+
+        describe("clearSqlErrors", function() {
+            it("passes the task and the alert class to showErrors on the errorContainer", function() {
+                this.view.clearSqlErrors();
+                expect(this.view.errorContainer.closeError).toHaveBeenCalled();
+            });
+        });
+    });
+});

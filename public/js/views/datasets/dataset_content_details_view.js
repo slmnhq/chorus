@@ -118,14 +118,14 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     },
 
     closeError: function(e) {
-        e.preventDefault();
-        this.$(".sql_errors").addClass("hidden");
+        e && e.preventDefault();
+        this.$(".dataset_errors").addClass("hidden");
     },
 
     viewErrorDetails: function(e) {
         e.preventDefault();
 
-        var alert = new chorus.alerts.ExecutionError({model: this.task});
+        var alert = new this.alertClass({model: this.taskWithErrors});
         alert.launchModal();
         $(".errors").addClass("hidden");
     },
@@ -145,5 +145,11 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         return {
             definition: this.statistics.get("definition")
         }
+    },
+
+    showError: function(task, alertClass) {
+        this.$('.dataset_errors').removeClass('hidden')
+        this.alertClass = alertClass
+        this.taskWithErrors = task
     }
 });

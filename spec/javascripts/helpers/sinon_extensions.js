@@ -48,18 +48,26 @@ _.extend(sinon.fakeServer, {
         return _.last(this.destroys());
     },
 
+    lastCreateFor: function(model) {
+        return _.last(_.filter(this.creates(), function(potentialRequest) {
+            var uri = new URI(potentialRequest.url);
+            var modelUri = new URI(model.url());
+            return uri.equals(modelUri);
+        }));
+    },
+
     lastFetchFor: function(model, options) {
         options = options || {};
         options.method = 'read';
         return _.last(_.filter(this.fetches(), function(potentialRequest) {
-            var uri      = new URI(potentialRequest.url).removeSearch("rows");
+            var uri = new URI(potentialRequest.url).removeSearch("rows");
             var modelUri = new URI(model.url(options)).removeSearch("rows");
             return uri.equals(modelUri);
         }));
     },
 
-    lastFetchAllFor : function(model, overrides) {
-        return this.lastFetchFor(model, _.extend({ rows : 1000}, overrides));
+    lastFetchAllFor: function(model, overrides) {
+        return this.lastFetchFor(model, _.extend({ rows: 1000}, overrides));
     },
 
     completeFetchFor: function(model, results, options, pagination) {
@@ -72,10 +80,25 @@ _.extend(sinon.fakeServer, {
         }
 
         var fetch = this.lastFetchFor(model, options)
-        if(fetch) {
+        if (fetch) {
             fetch.succeed(results, pagination);
         } else {
             throw "No fetch found for " + model.url() + ". Found fetches for: [" + _.pluck(this.fetches(), 'url').join(', ') + "]";
+        }
+    },
+
+    completeSaveFor: function(model, results) {
+        if (results) {
+            results = results.attributes ? results.attributes : results;
+        } else {
+            results = model.attributes;
+        }
+
+        var create = this.lastCreateFor(model);
+        if (create) {
+            create.succeed(results);
+        } else {
+            throw "No create found for " + model.url() + ". Found creates for: [" + _.pluck(this.creates(), 'url').join(', ') + "]";
         }
     },
 

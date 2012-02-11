@@ -338,6 +338,53 @@ describe("chorus.views.DatasetContentDetails", function() {
                 this.view.clearErrors();
                 expect(this.view.$(".sql_errors").html()).not.toBe("");
             })
+
+            describe("showError", function() {
+                beforeEach(function() {
+                    this.taskWithErrors = fixtures.taskWithErrors();
+                    this.alertClass = chorus.alerts.VisualizationError;
+                    this.view.showError(this.taskWithErrors, this.alertClass);
+                });
+
+                it("unhides .dataset_errors", function() {
+                    expect(this.view.$(".dataset_errors")).not.toHaveClass('hidden');
+                });
+
+                it("sets the alertClass correctly", function() {
+                    expect(this.view.alertClass).toBe(this.alertClass);
+                });
+
+                it("sets the task correctly", function() {
+                    expect(this.view.taskWithErrors).toBe(this.taskWithErrors);
+                });
+
+                describe("clicking view_error_details", function() {
+                    beforeEach(function() {
+                        stubModals()
+                        spyOn(chorus.Modal.prototype, 'launchModal');
+                        this.view.$('.view_error_details').click();
+                    });
+
+                    it("launches the alertClass with the task as the model", function() {
+                        expect(this.alertClass.prototype.launchModal).toHaveBeenCalled();
+                        $("#jasmine_content").append(this.view.el);
+                        expect(this.alertClass.prototype.launchModal.mostRecentCall.object).toBeA(this.alertClass);
+                        expect(this.alertClass.prototype.launchModal.mostRecentCall.object.model).toBe(this.taskWithErrors);
+                    });
+                });
+
+                describe("closeError", function() {
+                    beforeEach(function() {
+                        this.view.closeError();
+                    });
+
+                    it("hides the .sql_errors", function() {
+                        expect(this.view.$(".sql_errors")).toHaveClass('hidden');
+                    });
+                });
+
+
+            })
         })
     })
 });

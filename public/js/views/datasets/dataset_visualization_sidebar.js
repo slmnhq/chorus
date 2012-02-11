@@ -79,12 +79,11 @@
         },
 
         onSqlError: function() {
-            this.errorContainer.task = this.task;
-            this.errorContainer.$(".sql_errors").removeClass("hidden");
+            this.errorContainer.showError(this.task, chorus.alerts.VisualizationError)
         },
 
         clearSqlErrors: function() {
-            this.errorContainer.$(".sql_errors").addClass("hidden")
+            this.errorContainer.closeError()
         }
     });
 

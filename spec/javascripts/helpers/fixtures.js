@@ -2045,7 +2045,9 @@ beforeEach(function() {
                 hasResult: "false",
                 message: 'ERROR: syntax error at or near "where 1=1; drop table users;"  Position: line 1 column 1'
             }}, overrides);
-            return this.task(attributes);
+            var task = this.task(attributes);
+            task.serverErrors = task.result;
+            return task;
         },
 
         notificationJson : function(overrides) {
