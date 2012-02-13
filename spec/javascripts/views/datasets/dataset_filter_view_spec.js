@@ -362,13 +362,16 @@ describe("chorus.views.DatasetFilter", function() {
             });
 
             describe("with a date column", function() {
-                it("returns the value of the date filter input", function() {
+                it("returns the values of the date filter inputs", function() {
                     this.view.model = new chorus.models.DatasetFilterMaps.Date;
-                    expect(this.view.fieldValues()).toEqual({
-                        month: "12",
-                        day: "3",
-                        year: "04"
-                    });
+                    expect(this.view.fieldValues().month).toBe("12");
+                    expect(this.view.fieldValues().year).toBe("04");
+                    expect(this.view.fieldValues().day).toBe("3");
+                });
+
+                it("includes a 'value' field, which formats the year, month and day properly", function() {
+                    this.view.model = new chorus.models.DatasetFilterMaps.Date;
+                    expect(this.view.fieldValues().value).toBe("04/12/3");
                 });
             });
         })

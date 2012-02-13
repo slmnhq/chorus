@@ -127,10 +127,14 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
                 return { value: this.$(".filter.time input").val() };
                 break;
             case "Date":
+                var year  = this.$(".filter.date input[name='year']").val(),
+                    month = this.$(".filter.date input[name='month']").val(),
+                    day   = this.$(".filter.date input[name='day']").val();
                 return {
-                    year: this.$(".filter.date input[name='year']").val(),
-                    month: this.$(".filter.date input[name='month']").val(),
-                    day: this.$(".filter.date input[name='day']").val(),
+                    year: year,
+                    month: month,
+                    day: day,
+                    value: [year, month, day].join("/")
                 };
                 break;
             case "Numeric":
