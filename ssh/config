@@ -2,7 +2,7 @@ Host github.com
   User git
   IdentityFile /Users/pivotal/.ssh/id_github_current
 
-Host staging
+Host greenplum-staging
   HostName greenplum.sf.pivotallabs.com
   User greenplum
   IdentityFile /Users/pivotal/workspace/chorus/ofbiz/hot-deploy/client/ssh/id_staging
