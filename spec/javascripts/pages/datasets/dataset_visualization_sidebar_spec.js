@@ -8,7 +8,12 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
         this.column6 = fixtures.databaseColumn({typeCategory: "DATETIME", name: "the time & date"})
 
         this.columns = fixtures.databaseColumnSet([this.column1, this.column2, this.column3, this.column4, this.column5, this.column6]);
-        this.view = new chorus.views.DatasetVisualizationSidebar({collection: this.columns})
+        this.view = new chorus.views.DatasetVisualizationSidebar({collection: this.columns});
+        this.view.className = 'dataset_visualization_frequency_sidebar';
+        this.view.additionalContext = function() {
+            return {allColumnNames: ['col1', 'col2']};
+        }
+        this.view.chartOptions = chorus.views.DatasetVisualizationFrequencySidebar.prototype.chartOptions;
     });
 
     it("should not modify the collection order", function() {
@@ -33,71 +38,116 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
         })
     })
 
-    describe("Creating a Visualization", function() {
+    describe("#render", function() {
         beforeEach(function() {
-            spyOn(chorus.dialogs.Visualization.prototype, "onExecutionComplete");
-            spyOn(this.view, "onSqlError");
-            spyOn(this.view, "clearSqlErrors");
-            spyOn(this.view, "showLoadingSpinner")
-            spyOn(this.view, "hideLoadingSpinner")
-            stubModals();
-            this.server.reset();
-            this.view.chartOptions = function() {return {type: 'histogram'};};
-            this.view.model = fixtures.datasetSourceTable();
-            this.view.launchVisualizationDialog();
+            this.modalSpy = stubModals();
+            this.view.render();
         })
 
-        it("should clear the sql error bar", function() {
-            expect(this.view.clearSqlErrors).toHaveBeenCalled();
-        });
-
-        it("should call save on the task", function() {
-            expect(this.server.lastCreate()).toBeDefined();
-        });
-
-        it("should have a spinner", function() {
-            expect(this.view.showLoadingSpinner).toHaveBeenCalled()
+        it("has a create chart button", function() {
+            expect(this.view.$('button.create')).toExist();
         })
 
-        it("should disable the create button", function() {
-            expect(this.view.showLoadingSpinner).toHaveBeenCalled()
-        })
-
-        describe("when the save completes", function() {
+        describe("Creating a Visualization", function() {
             beforeEach(function() {
-                this.view.task.trigger("saved");
-            });
-
-            it("starts up the visualization dialog", function() {
-                expect(this.view.dialog.onExecutionComplete).toHaveBeenCalled();
-            });
-
-            it("should not have a spinner", function() {
-                expect(this.view.hideLoadingSpinner).toHaveBeenCalled()
+                spyOn(this.view, "clearSqlErrors");
+                spyOn(this.view, "onSqlError");
+                this.view.model = fixtures.datasetSourceTable();
+                this.view.$('button.create').click();
             })
 
-            it("should enable the create button", function() {
-                expect(this.view.hideLoadingSpinner).toHaveBeenCalled()
-            })
-        });
-
-        describe("when the save fails", function() {
-            beforeEach(function() {
-                this.view.task.trigger("saveFailed");
+            it("should clear the sql error bar", function() {
+                expect(this.view.clearSqlErrors).toHaveBeenCalled();
             });
 
-            it("displays the error DIV", function() {
-                expect(this.view.onSqlError).toHaveBeenCalled();
+            it("should have a spinner", function() {
+                expect(this.view.$("button.create")).toHaveSpinner();
+            })
+
+            it("should disable the create button", function() {
+                expect(this.view.$("button.create")).toBeDisabled();
+            })
+
+            it("should show the cancel button", function() {
+                expect(this.view.$("button.cancel")).not.toHaveClass('hidden');
+            })
+
+            describe("when the user clicks the cancel button", function() {
+                beforeEach(function() {
+                    spyOn(this.view.task, 'cancel').andCallThrough();
+                    this.view.$('button.cancel').click();
+                })
+                it("should remove the spinner from the create button", function() {
+                    expect(this.view.$('button.create')).not.toHaveSpinner()
+                })
+
+                it("should enable the create button", function() {
+                    expect(this.view.$("button.create")).not.toBeDisabled();
+                })
+
+                it("should hide the cancel button", function() {
+                    expect(this.view.$("button.cancel")).toHaveClass('hidden');
+                })
+
+                it("cancels the task", function() {
+                    expect(this.view.task.cancel).toHaveBeenCalled();
+                })
+
+                describe("when the cancel is successful", function() {
+                    beforeEach(function() {
+                        this.server.lastCreateFor(this.view.task).fail("The task is cancelled");
+                    })
+
+                    it("does not render errors", function() {
+                        expect(this.view.onSqlError).not.toHaveBeenCalled();
+                    })
+                })
+            })
+
+            describe("when the save completes", function() {
+                beforeEach(function() {
+                    this.server.completeSaveFor(this.view.task);
+                })
+
+                it("starts up the visualization dialog", function() {
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.Visualization);
+                });
+
+                it("should remove the spinner from the create button", function() {
+                    expect(this.view.$('button.create')).not.toHaveSpinner()
+                })
+
+                it("should enable the create button", function() {
+                    expect(this.view.$("button.create")).not.toBeDisabled();
+                })
+
+                it("should hide the cancel button", function() {
+                    expect(this.view.$("button.cancel")).toHaveClass('hidden');
+                })
+            })
+
+            describe("when the save fails", function() {
+                beforeEach(function() {
+                    this.server.lastCreateFor(this.view.task).fail("Boom!");
+                });
+
+                it("displays the error DIV", function() {
+                    expect(this.view.onSqlError).toHaveBeenCalled();
+                });
+
+                it("should remove the spinner from the create button", function() {
+                    expect(this.view.$('button.create')).not.toHaveSpinner()
+                })
+
+                it("should enable the create button", function() {
+                    expect(this.view.$("button.create")).not.toBeDisabled();
+                })
+
+                it("should hide the cancel button", function() {
+                    expect(this.view.$("button.cancel")).toHaveClass('hidden');
+                })
             });
-
-            it("should not have a spinner", function() {
-                expect(this.view.hideLoadingSpinner).toHaveBeenCalled()
-            })
-
-            it("should enable the create button", function() {
-                expect(this.view.hideLoadingSpinner).toHaveBeenCalled()
-            })
-        });
+        })
     })
 
     describe("errors", function() {

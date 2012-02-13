@@ -4,7 +4,8 @@
         additionalClass: "dataset_visualization_sidebar",
 
         events: {
-            "click button.create": "launchVisualizationDialog"
+            "click button.create": "launchVisualizationDialog",
+            "click button.cancel": "cancelVisualization"
         },
 
         setup: function() {
@@ -70,11 +71,20 @@
             dialog.task.save();
         },
 
+        cancelVisualization: function(e) {
+            e.preventDefault();
+            this.hideLoadingSpinner();
+            this.task.unbind("saveFailed");
+            this.task.cancel();
+        },
+
         showLoadingSpinner: function() {
             this.$("button.create").startLoading("visualization.creating");
+            this.$("button.cancel").removeClass('hidden');
         },
 
         hideLoadingSpinner: function() {
+            this.$("button.cancel").addClass('hidden');
             this.$("button.create").stopLoading();
         },
 

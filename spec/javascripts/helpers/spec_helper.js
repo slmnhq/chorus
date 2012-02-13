@@ -210,6 +210,27 @@
                     return this.env.contains_(this.actual.text(), text);
                 },
 
+                toHaveSpinner: function() {
+                    this.message = function() {
+                        return [
+                            'Expected "' + this.actual.selector + '" to have a spinner',
+                            'Expected "' + this.actual.selector + '" not to have a spinner'
+                        ]
+                    }
+                    return this.actual.find("div[aria-role=progressbar]").length
+                },
+
+                toHaveModal: function(modalClass) {
+                    var modalClassName = modalClass.prototype.className;
+                    this.message = function() {
+                        return [
+                            'Expected to have a modal with class ' + modalClassName,
+                            'Expected not to have a modal with class ' + modalClassName
+                        ]
+                    }
+                    return this.actual.mostRecentCall && this.actual.mostRecentCall.args && this.actual.mostRecentCall.args[0] && $(this.actual.mostRecentCall.args[0]).hasClass(modalClassName);
+                },
+
                 toHaveBeenTriggeredOn: function(target, args) {
                     var call, eventName = this.actual;
 
@@ -337,12 +358,12 @@
     }
 
     window.resetBackboneEventSpies = function(object) {
-        if(object._chorusEventSpies) {
+        if (object._chorusEventSpies) {
             _.each(object._chorusEventSpies, function(spy) {
                 spy.reset();
             })
         }
-    },
+    };
 
     window.setLoggedInUser = function(options) {
         chorus.session._user = new chorus.models.User(_.extend({
@@ -415,8 +436,18 @@
         return qtipElements[selector];
     }
 
-    if ( $.browser.msie && !window['con' + 'sole'] ) {
-      (function(F,i,r,e,b,u,g,L,I,T,E){if(F.getElementById(b))return;E=F[i+'NS']&&F.documentElement.namespaceURI;E=E?F[i+'NS'](E,'script'):F[i]('script');E[r]('id',b);E[r]('src',I+g+T);E[r](b,u);(F[e]('head')[0]||F[e]('body')[0]).appendChild(E);E=new Image;E[r]('src',I+L);})(document,'createElement','setAttribute','getElementsByTagName','FirebugLite','4','firebug-lite.js','releases/lite/latest/skin/xp/sprite.png','/firebug-lite/build/','#startOpened');
+    if ($.browser.msie && !window['con' + 'sole']) {
+        (function(F, i, r, e, b, u, g, L, I, T, E) {
+            if (F.getElementById(b))return;
+            E = F[i + 'NS'] && F.documentElement.namespaceURI;
+            E = E ? F[i + 'NS'](E, 'script') : F[i]('script');
+            E[r]('id', b);
+            E[r]('src', I + g + T);
+            E[r](b, u);
+            (F[e]('head')[0] || F[e]('body')[0]).appendChild(E);
+            E = new Image;
+            E[r]('src', I + L);
+        })(document, 'createElement', 'setAttribute', 'getElementsByTagName', 'FirebugLite', '4', 'firebug-lite.js', 'releases/lite/latest/skin/xp/sprite.png', '/firebug-lite/build/', '#startOpened');
     }
 
     // Don't change urls in specs
