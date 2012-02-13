@@ -16,9 +16,9 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         _.defer(function () {
             chorus.styleSelect($select);
             chorus.datePicker({
-                "%Y": self.$(".filter.date input.year"),
-                "%m": self.$(".filter.date input.month"),
-                "%d": self.$(".filter.date input.day")
+                "%Y": self.$(".filter.date input[name='year']"),
+                "%m": self.$(".filter.date input[name='month']"),
+                "%d": self.$(".filter.date input[name='day']")
             });
         });
 
@@ -116,34 +116,36 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
     filterString : function() {
         var columnName = this.$("select.column_filter").val();
         var $comparator = this.$("select.comparator");
-        var $input = this.getInputField();
+        var inputValue = this.fieldValues().value;
 
-        return this.model.comparators[$comparator.val()].generate(columnName,  $input.val());
+        return this.model.comparators[$comparator.val()].generate(columnName, inputValue);
     },
 
-    getInputField : function() {
-        var maps = chorus.models.DatasetFilterMaps;
-        if (this.model.type === "String" || this.model.type === "Numeric") {
-            return this.$(".filter.default input");
-        } else if (this.model.type === "Time") {
-            return this.$(".filter.time input");
-        } else if (this.model.type === "Date") {
-            return this.$(".filter.date input.year");
+    fieldValues: function() {
+        switch (this.model.type) {
+            case "Time":
+                return { value: this.$(".filter.time input").val() };
+                break;
+            case "Date":
+                return {
+                    year: this.$(".filter.date input[name='year']").val(),
+                    month: this.$(".filter.date input[name='month']").val(),
+                    day: this.$(".filter.date input[name='day']").val(),
+                };
+                break;
+            case "Numeric":
+            case "String":
+                return { value: this.$(".filter.default input").val() };
+                break;
         }
     },
 
     validateInput : function() {
-        var $input = this.getInputField()
-        var value = $input.val()
-
-        if (!this.model) {
-            return;
-        }
-
-        if (this.model.performValidation({ value: value })) {
+        if (!this.model) { return; }
+        if (this.model.performValidation(this.fieldValues())) {
             this.clearErrors();
         } else {
-            this.markInputAsInvalid($input, t(this.model.errorMessage), false)
+            this.showErrors(this.model);
         }
     }
 });

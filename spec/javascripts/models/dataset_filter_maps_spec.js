@@ -140,4 +140,25 @@ describe("chorus.models.DatasetFilterMaps.date", function() {
             });
         }
     }
+
+    it("marks dates as valid", function() {
+        expect(date.performValidation({ month: "02", day: "14", year: "2012" })).toBeTruthy();
+    });
+
+    it("marks anything else as invalid", function() {
+        expect(date.performValidation({ month: "hi", day: "14", year: "2012" })).toBeFalsy();
+        expect(date.performValidation({ month: "1", day: "&^", year: "2012" })).toBeFalsy();
+        expect(date.performValidation({ month: "1", day: "31", year: "google" })).toBeFalsy();
+    });
+
+    it("has the right error messages", function() {
+        date.performValidation({ month: "hi", day: "14", year: "2012" });
+        expect(date.errors.month).toMatchTranslation("dataset.filter.month_required");
+
+        expect(date.performValidation({ month: "1", day: "&^", year: "2012" })).toBeFalsy();
+        expect(date.errors.day).toMatchTranslation("dataset.filter.day_required");
+
+        expect(date.performValidation({ month: "1", day: "31", year: "google" })).toBeFalsy();
+        expect(date.errors.year).toMatchTranslation("dataset.filter.year_required");
+    });
 });
