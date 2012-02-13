@@ -122,7 +122,8 @@ describe("chorus.views.DatasetFilter", function() {
                     expect(this.view.model.performValidation).toHaveBeenCalledWith({
                         year: "2012",
                         month: "2",
-                        day: "14"
+                        day: "14",
+                        value: "2012/2/14"
                     });
                 });
 
