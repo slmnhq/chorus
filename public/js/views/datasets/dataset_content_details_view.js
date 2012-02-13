@@ -10,6 +10,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         "click .preview" : "dataPreview",
         "click .create_chart .cancel" : "cancelVisualization",
         "click .create_chorus_view .cancel" : "cancelChorusView",
+        "click .edit_chorus_view .cancel" : "cancelEditChorusView",
         "click .chart_icon" : "selectVisualization",
         "click .close_errors": "closeError",
         "click .view_error_details": "viewErrorDetails",
@@ -29,6 +30,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.statistics.fetchIfNotLoaded();
 
         this.requiredResources.add(this.statistics);
+
     },
 
     dataPreview : function(e) {
@@ -47,14 +49,24 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     postRender:function () {
         var self = this;
+        if (this.dataset.get("type") !== "CHORUS_VIEW") {
+            this.$(".transform_menu .edit").addClass("hidden");
+        }
+
         chorus.menu(this.$('.transform'), {
             content:this.$(".transform_options").html(),
             orientation:"left",
             contentEvents:{
                 '.visualize':_.bind(this.startVisualizationWizard, this),
-                '.derive': _.bind(this.startCreateChorusViewWizard, this)
+                '.derive': _.bind(this.startCreateChorusViewWizard, this),
+                '.edit': _.bind(this.startEditChorusViewWizard, this)
             }
         });
+
+        if (this.options.inEditChorusView) {
+            this.showEditChorusViewWizard();
+        }
+
     },
 
     triggerSelectAll : function(e) {
@@ -115,6 +127,31 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$(".filters").addClass("hidden");
         this.$('.column_count').removeClass("hidden")
         this.$('.chorus_view_info').addClass('hidden');
+    },
+
+    startEditChorusViewWizard: function(){
+        this.showEditChorusViewWizard();
+        this.trigger("dataset:edit");
+    },
+
+    showEditChorusViewWizard: function() {
+        this.$(".edit_chorus_view").removeClass("hidden");
+        this.$(".create_chorus_view").addClass("hidden");
+        this.$(".create_chart").addClass("hidden");
+        this.$(".definition").addClass("hidden");
+
+        this.$(".edit_chorus_view_info").removeClass("hidden");
+        this.$(".column_count").addClass("hidden");
+    },
+
+    cancelEditChorusView: function(e) {
+        e.preventDefault();
+        this.$(".edit_chorus_view").addClass("hidden");
+        this.$(".edit_chorus_view_info").addClass("hidden");
+        this.$(".column_count").removeClass("hidden");
+        this.$(".definition").removeClass("hidden");
+        this.trigger("cancel:sidebar");
+        this.trigger("dataset:cancelEdit")
     },
 
     closeError: function(e) {

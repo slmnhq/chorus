@@ -87,9 +87,30 @@ describe("chorus.pages.DatasetShowPage", function() {
                     it("renders", function() {
                         expect(this.page.postRender).toHaveBeenCalled();
                     })
+
+                    describe("when editing a chorus view", function() {
+                        beforeEach(function() {
+                            this.page.mainContent.contentDetails.trigger("dataset:edit");
+                        });
+
+                        it("sets the main content to DatasetEditChorusView", function() {
+                            expect(this.page.mainContent.content).toBeA(chorus.views.DatasetEditChorusView);
+                        });
+
+                        describe("when user cancel edit dataset and dataset:cancelEdit is triggered", function() {
+                            beforeEach(function() {
+                                this.page.mainContent.contentDetails.trigger("dataset:cancelEdit");
+                            });
+
+                            it("sets the main content back to MainContentList", function() {
+                                expect(this.page.mainContent).toBeA(chorus.views.MainContentList);
+                            })
+                        })
+                    });
                 })
             })
-        })
+        });
+
     });
 
     describe("#render", function() {
@@ -314,4 +335,5 @@ describe("chorus.pages.DatasetShowPage", function() {
             });
         });
     })
+
 });

@@ -5,6 +5,7 @@
         <ul class="transform_menu">
             <li><a href="#" class="visualize">{{t "dataset.content_details.visualize"}}</a></li>
             <li><a href="#" class="derive">{{t "dataset.content_details.derive"}}</a></li>
+            <li><a href="#" class="edit">{{t "dataset.content_details.edit"}}</a></li>
         </ul>
     </div>
     
@@ -34,6 +35,10 @@
      <span class="chorusview"><span class="triangle"></span></span>
      <span class="title">{{t "dataset.chorusview.title"}}</span>
 </div>
+<div class="edit_chorus_view hidden">
+     <a href="#" class="cancel">{{t "actions.cancel"}}</a>
+      <span class="create">{{t "dataset.content_details.edit_as_workfile"}}</span><span class="triangle_right"></span>
+</div>
 <div class="info_bar hidden">
 {{t "dataset.visualization.info_bar"}}
 </div>
@@ -48,6 +53,13 @@
     <a href="#" class="select_all">{{t "workspaces.select_all"}}</a>
     |
     <a href="#" class="select_none">{{t "workspaces.select_none"}}</a>
+</div>
+
+<div class="edit_chorus_view_info hidden">
+    <span class="left">{{t "dataset.content_details.edit_chorus_view.info"}}</span>
+    <div class="right">
+        <a href="#" class="preview">{{t "dataset.data_preview"}}</a>
+    </div>
 </div>
 
 <div class="dataset_errors hidden">

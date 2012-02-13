@@ -74,7 +74,41 @@
             this.sidebar.setDataset(this.dataset);
 
             this.mainContent.contentDetails.bind("transform:sidebar", this.showSidebar, this);
+            this.mainContent.contentDetails.bind("cancel:sidebar", this.hideSidebar, this);
+            this.mainContent.contentDetails.bind("column:select_all", this.mainContent.content.selectAll, this.mainContent.content);
+            this.mainContent.contentDetails.bind("column:select_none", this.mainContent.content.deselectAll, this.mainContent.content);
+            this.mainContent.contentDetails.bind("dataset:edit", this.editChorusView, this);
+            this.mainContent.content.bind("column:selected", this.forwardSelectedToSidebar, this);
+            this.mainContent.content.bind("column:deselected", this.forwardDeselectedToSidebar, this);
+
             this.render();
+        },
+
+        editChorusView: function() {
+            this.mainContent = new chorus.views.MainContentView({
+               content: new chorus.views.DatasetEditChorusView({model: this.dataset}),
+               contentDetails: new chorus.views.DatasetContentDetails({ dataset: this.dataset, collection: this.columnSet, inEditChorusView: true })
+            });
+
+            this.mainContent.contentDetails.bind("dataset:cancelEdit", this.columnSetFetched, this);
+
+            this.render();
+        },
+
+        forwardSelectedToSidebar : function(column) {
+            if (this.secondarySidebar) {
+                this.secondarySidebar.trigger("column:selected", column);
+            }
+        },
+
+        forwardDeselectedToSidebar : function(column) {
+            if (this.secondarySidebar) {
+                this.secondarySidebar.trigger("column:deselected", column);
+            }
+        },
+        
+        forwardDeselectedToMain : function(column) {
+            this.mainContent.content.trigger("column:deselected", column);
         },
 
         showSidebar: function(type) {

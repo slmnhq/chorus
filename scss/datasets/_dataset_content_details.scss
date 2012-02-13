@@ -10,7 +10,7 @@
 }
 
 .content_details .dataset_content_details {
-    .column_count {
+    .column_count,.edit_chorus_view_info {
         padding: 0 $padding-x;
         border-top: 1px solid #B2C7D6;
         background-color: #C4DCEB;
@@ -32,7 +32,7 @@
         }
     }
 
-    .definition, .create_chart, .create_chorus_view {
+    .definition, .create_chart, .create_chorus_view, .edit_chorus_view {
         height: 32px;
         line-height: 33px;
         border-bottom: 1px solid #8D9DA8;
@@ -88,12 +88,12 @@
         }
     }
 
-    .create_chart, .create_chorus_view {
+    .create_chart, .create_chorus_view, .edit_chorus_view {
         .create {
             @include create-bar-text;
             background-color: $content-details-create-background-color;
             display: inline-block;
-            width: 65px;
+            min-width: 65px;
             vertical-align: top;
             text-align: center;
         }
@@ -162,7 +162,12 @@
         @include chart_icon(chorusview);
     }
 
-    .info_bar, .chorus_view_info {
+    .edit_chorus_view {
+        .create {
+            width: 120px;
+        }
+    }
+    .info_bar, .chorus_view_info , .edit_chorus_view_info {
         background-color: $content-details-info-bar-background-color;
         padding: 0 $padding-x;
         font-size: 14px;
