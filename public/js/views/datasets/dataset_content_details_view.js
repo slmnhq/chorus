@@ -59,12 +59,12 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     triggerSelectAll : function(e) {
         e && e.preventDefault();
-        this.trigger("column:select_all");
+        chorus.PageEvents.broadcast("column:select_all");
     },
 
     triggerSelectNone : function(e) {
         e && e.preventDefault();
-        this.trigger("column:select_none");
+        chorus.PageEvents.broadcast("column:select_none");
     },
 
     startVisualizationWizard : function() {
@@ -92,7 +92,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$(".filters").addClass("hidden");
         this.$('.column_count').removeClass("hidden")
         this.$('.info_bar').addClass('hidden');
-        this.trigger("cancel:sidebar", $(e.target).data('type'));
+        chorus.PageEvents.broadcast('cancel:sidebar', $(e.target).data('type'));
     },
 
     startCreateChorusViewWizard: function() {
@@ -109,7 +109,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     cancelChorusView: function(e) {
         e.preventDefault();
-        this.trigger("cancel:sidebar", $(e.target).data('type'));
+        chorus.PageEvents.broadcast('cancel:sidebar', $(e.target).data('type'));
         this.$('.definition').removeClass("hidden")
         this.$('.create_chorus_view').addClass("hidden");
         this.$(".filters").addClass("hidden");

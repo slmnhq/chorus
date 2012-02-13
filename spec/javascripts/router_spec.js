@@ -2,7 +2,7 @@ describe("chorus.router", function() {
     describe("#navigate", function() {
         beforeEach(function() {
             spyOn(Backbone.history, "loadUrl");
-            spyOn(Backbone.history, "navigate")
+            spyOn(Backbone.history, "navigate");
         })
 
         it("sets chorus.pageOptions to the third argument", function() {
@@ -72,6 +72,7 @@ describe("chorus.router", function() {
             spyOn(window, "scroll");
             this.savedAuthCookie = $.cookie("authid")
             $.cookie("authid", "1234");
+            spyOn(chorus.PageEvents, "reset");
         });
 
         afterEach(function() {
@@ -96,6 +97,10 @@ describe("chorus.router", function() {
                 it("navigates to the dashboard", function() {
                     expect(chorus.pages.DashboardPage.prototype.initialize).toHaveBeenCalled();
                 });
+
+                it("calls reset on the PageEvents object", function() {
+                    expect(chorus.PageEvents.reset).toHaveBeenCalled();
+                });
             })
 
             context("when navigating to any page other than login", function() {
@@ -111,6 +116,10 @@ describe("chorus.router", function() {
                 it("navigates to the requested page", function() {
                     expect(chorus.pages.UserNewPage.prototype.initialize).toHaveBeenCalled();
                 })
+
+                it("calls reset on the PageEvents object", function() {
+                    expect(chorus.PageEvents.reset).toHaveBeenCalled();
+                });
 
                 it("sets the scroll position to (0,0)", function() {
                     this.chorus.router.navigate("/users/new", true);

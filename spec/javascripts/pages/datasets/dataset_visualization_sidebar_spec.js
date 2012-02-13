@@ -76,7 +76,7 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
 
             describe("cancel:sidebar", function() {
                 beforeEach(function() {
-                    this.view.trigger('cancel:sidebar');
+                    chorus.PageEvents.broadcast('cancel:sidebar');
                 })
 
                 it("cancels the task", function() {
@@ -176,7 +176,7 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
         context("not creating a visualization", function() {
 
             it("does not blow up when cancel:sidebar is triggered", function() {
-                this.view.trigger('cancel:sidebar');
+                chorus.PageEvents.broadcast('cancel:sidebar');
             })
         })
     })

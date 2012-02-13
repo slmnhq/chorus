@@ -17,7 +17,7 @@
             this.numericalColumns = filterColumns(['WHOLE_NUMBER', 'REAL_NUMBER'], this.columns)
             this.datetimeColumns = filterColumns(['DATE', 'TIME', "DATETIME"], this.columns);
 
-            this.bind("cancel:sidebar", this.cancelVisualization);
+            chorus.PageEvents.subscribe("cancel:sidebar", this.cancelVisualization, this);
 
             function filterColumns(types, columns) {
                 return _.filter(columns, function(col) {
@@ -54,7 +54,7 @@
         datetimeColumnNames: nameGetter("datetimeColumns"),
 
         launchVisualizationDialog: function(e) {
-            e && e.preventDefault();
+            e && e.preventDefault && e.preventDefault();
             this.clearSqlErrors();
             this.startVisualization()
 
@@ -74,7 +74,7 @@
         },
 
         cancelVisualization: function(e) {
-            e && e.preventDefault();
+            e && e.preventDefault && e.preventDefault();
             if (this.task) {
                 this.task.unbind("saveFailed");
                 this.task.cancel();

@@ -313,6 +313,7 @@
 
             spyOn($.fn, 'jGrowl');
 
+            chorus.PageEvents.reset();
             chorus.session.sandboxPermissionsCreated = {};
             setLoggedInUser();
         });
@@ -419,6 +420,7 @@
             spyOn($.fn, 'qtip').andCallFake(function() {
                 var jqueryObject = this;
                 var options = arguments[0] || {};
+                if (typeof options !== 'object') return;
 
                 _.any(qtipElements, function(fakeQtipEl, selector) {
                     if (!jqueryObject.is(selector)) return false;

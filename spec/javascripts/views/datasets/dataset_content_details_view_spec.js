@@ -166,7 +166,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                     context("and cancel is clicked", function() {
                         beforeEach(function() {
-                            spyOnEvent(this.view, "cancel:sidebar");
+                            spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
                             this.view.$('.create_chart .cancel').click();
                         });
 
@@ -186,7 +186,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                         it("triggers the cancel:sidebar event for the chart type", function() {
                             var chartType = this.view.$('.create_chart .chart_icon:eq(0)').data('chart_type');
-                            expect("cancel:sidebar").toHaveBeenTriggeredOn(this.view, [chartType]);
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('cancel:sidebar', chartType);
                         })
                     })
 
@@ -286,30 +286,29 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                     describe("clicking 'Select All'", function() {
                         beforeEach(function() {
-                            spyOnEvent(this.view, "column:select_all");
+                            spyOn(chorus.PageEvents, "broadcast");
                             this.view.$(".select_all").click();
                         })
 
                         it("should trigger the column:select_all event", function() {
-                            expect("column:select_all").toHaveBeenTriggeredOn(this.view);
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:select_all");
                         });
                     });
 
                     describe("clicking 'Select None'", function() {
                         beforeEach(function() {
-                            spyOnEvent(this.view, "column:select_none");
+                            spyOn(chorus.PageEvents, "broadcast");
                             this.view.$(".select_none").click();
                         })
 
                         it("should trigger the column:select_none event", function() {
-                            expect("column:select_none").toHaveBeenTriggeredOn(this.view);
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:select_none");
                         });
                     });
 
                     describe("and the cancel link is clicked", function() {
                         beforeEach(function() {
-                            
-                            this.cancelSpy = spyOnEvent(this.view, "cancel:sidebar");
+                            spyOn(chorus.PageEvents, "broadcast");
                             this.view.$(".create_chorus_view .cancel").click();
                         });
 
@@ -328,7 +327,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                         });
 
                         it("triggers 'cancel:sidebar'", function() {
-                            expect("cancel:sidebar").toHaveBeenTriggeredOn(this.view, ['chorus_view']);
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('cancel:sidebar', 'chorus_view');
                         })
                     });
                 })

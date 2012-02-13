@@ -66,12 +66,12 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
                 break;
         }
 
-        var map = this.getMap();
-        if (!map) {
+        this.model = this.makeMap();
+        if (!this.model) {
             return;
         }
 
-        _.each(map.comparators, function(value, key) {
+        _.each(this.model.comparators, function(value, key) {
             var el = $("<option/>").text(t("dataset.filter." + key)).attr("value", key);
             $comparator.append(el);
         });
@@ -87,12 +87,11 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         var $comparator = this.$("select.comparator");
         var $choice = $comparator.find("option:selected");
 
-        var map = this.getMap();
-        if (!map) {
+        if (!this.model) {
             return;
         }
 
-        var comparator = map.comparators[$choice.val()];
+        var comparator = this.model.comparators[$choice.val()];
         this.$(".filter.default").toggleClass("hidden", !comparator.usesInput);
         this.$(".filter.time").toggleClass("hidden", !comparator.usesTimeInput);
         this.$(".filter.date").toggleClass("hidden", !comparator.usesDateInput);
@@ -100,17 +99,17 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         this.validateInput();
     },
 
-    getMap: function() {
+    makeMap: function() {
         var $comparator = this.$("select.comparator");
 
         if ($comparator.is(".string")) {
-            return chorus.utilities.DatasetFilterMaps.string
+            return new chorus.models.DatasetFilterMaps.String
         } else if ($comparator.is(".numeric")) {
-            return chorus.utilities.DatasetFilterMaps.numeric
+            return new chorus.models.DatasetFilterMaps.Numeric
         } else if ($comparator.is(".time")) {
-            return chorus.utilities.DatasetFilterMaps.time
+            return new chorus.models.DatasetFilterMaps.Time
         } else if ($comparator.is(".date")) {
-            return chorus.utilities.DatasetFilterMaps.date
+            return new chorus.models.DatasetFilterMaps.Date
         }
     },
 
@@ -119,19 +118,17 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         var $comparator = this.$("select.comparator");
         var $input = this.getInputField();
 
-        var map = this.getMap();
-        return map.comparators[$comparator.val()].generate(columnName,  $input.val());
+        return this.model.comparators[$comparator.val()].generate(columnName,  $input.val());
     },
 
     getInputField : function() {
-        var map = this.getMap();
-        var maps = chorus.utilities.DatasetFilterMaps;
-        if (map == maps.string || map == maps.numeric) {
+        var maps = chorus.models.DatasetFilterMaps;
+        if (this.model.type === "String" || this.model.type === "Numeric") {
             return this.$(".filter.default input");
-        } else if (map == maps.time) {
+        } else if (this.model.type === "Time") {
             return this.$(".filter.time input");
-        } else if (map == maps.date) {
-            return this.$(".filter.date input");
+        } else if (this.model.type === "Date") {
+            return this.$(".filter.date input.year");
         }
     },
 
@@ -139,15 +136,14 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         var $input = this.getInputField()
         var value = $input.val()
 
-        var map = this.getMap();
-        if (!map) {
+        if (!this.model) {
             return;
         }
 
-        if (map.validate(value)) {
+        if (this.model.performValidation({ value: value })) {
             this.clearErrors();
         } else {
-            this.markInputAsInvalid($input, t(map.errorMessage), false)
+            this.markInputAsInvalid($input, t(this.model.errorMessage), false)
         }
     }
 });

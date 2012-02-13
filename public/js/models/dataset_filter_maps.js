@@ -1,7 +1,9 @@
 (function(){
-    chorus.utilities.DatasetFilterMaps = {};
+    chorus.models.DatasetFilterMaps = {};
 
-    chorus.utilities.DatasetFilterMaps.string = {
+    chorus.models.DatasetFilterMaps.String = chorus.models.Base.extend({
+        type: "String",
+
         comparators: {
             "equal":{usesInput:true, generate: makeGenerate("=") },
             "not_equal":{usesInput:true, generate: makeGenerate("!=") },
@@ -15,12 +17,15 @@
             "alpha_before":{usesInput:true, generate:makeGenerate("<") },
             "alpha_before_equal":{usesInput:true, generate:makeGenerate("<=") }
         },
-        validate: function(value) {
+
+        declareValidations: function(attrs) {
             return true
         }
-    };
+    });
 
-    chorus.utilities.DatasetFilterMaps.numeric = {
+    chorus.models.DatasetFilterMaps.Numeric = chorus.models.Base.extend({
+        type: "Numeric",
+
         comparators: {
             "equal": {usesInput: true, generate: makeGenerate("=") },
             "not_equal": {usesInput: true, generate: makeGenerate("!=") },
@@ -31,13 +36,17 @@
             "less": {usesInput: true, generate: makeGenerate("<") },
             "less_equal": {usesInput: true, generate: makeGenerate("<=") }
         },
-        validate: function(value) {
-            return value.match(/^[0-9,.]*$/);
-        },
-        errorMessage: "dataset.filter.number_required"
-    };
 
-    chorus.utilities.DatasetFilterMaps.time = {
+        declareValidations: function(attrs) {
+            this.requirePattern("value", /^[0-9,.]*$/, attrs);
+        },
+
+        errorMessage: "dataset.filter.number_required"
+    });
+
+    chorus.models.DatasetFilterMaps.Time = chorus.models.Base.extend({
+        type: "Time",
+
         comparators: {
             "equal": {usesTimeInput: true, generate: makeGenerate("=") },
             "before": {usesTimeInput: true, generate: makeGenerate("<") },
@@ -45,13 +54,17 @@
             "null": {usesTimeInput: false, generate: isNull },
             "not_null": {usesTimeInput: false, generate: isNotNull }
         },
-        validate: function(value) {
-            return value.match(/^[0-9:]*$/);
-        },
-        errorMessage: "dataset.filter.time_required"
-    };
 
-    chorus.utilities.DatasetFilterMaps.date = {
+        declareValidations: function(attrs) {
+            this.requirePattern("value", /^[0-9:]*$/, attrs);
+        },
+
+        errorMessage: "dataset.filter.time_required"
+    });
+
+    chorus.models.DatasetFilterMaps.Date = chorus.models.Base.extend({
+        type: "Date",
+
         comparators: {
             "on": {usesDateInput: true, generate: makeGenerate("=") },
             "before": {usesDateInput: true, generate: makeGenerate("<") },
@@ -59,10 +72,13 @@
             "null": {usesDateInput: false, generate: isNull },
             "not_null": {usesDateInput: false, generate: isNotNull }
         },
-        validate: function(value) {
+
+        performValidation: function(value) {
             return true
-        }
-    };
+        },
+
+        errorMessage: "dataset.filter.time_required"
+    });
 
     function isNull(columnName, inputValue){
         return qd(columnName) + " IS NULL";
