@@ -16,6 +16,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             this.dialog.render();
 
             spyOn(chorus, "toast");
+            spyOn(this.pageModel.activities(), "fetch");
             spyOn(this.dialog.picklistView, "selectedItem").andReturn(this.workspace);
             this.dialog.picklistView.trigger("item:selected", this.workspace);
             spyOn(chorus.router, "navigate")
@@ -52,6 +53,10 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
 
             it("does not navigate", function() {
                 expect(chorus.router.navigate).not.toHaveBeenCalled();
+            });
+
+            it("fetch the activities for the dataset", function() {
+                expect(this.pageModel.activities().fetch).toHaveBeenCalled();
             });
         })
 

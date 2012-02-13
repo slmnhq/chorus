@@ -17,6 +17,7 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
         $.post("/edc/workspace/" + this.picklistView.selectedItem().get("id") + "/dataset", params,
             function(data) {
                 if (data.status == "ok") {
+                    self.pageModel.activities().fetch();
                     self.closeModal();
                     chorus.toast("dataset.associate.toast", {datasetTitle: params.objectName, workspaceNameTarget: self.picklistView.selectedItem().get("name")});
                 } else {
