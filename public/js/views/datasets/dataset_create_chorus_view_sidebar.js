@@ -79,7 +79,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
 
     selectClause: function() {
         var names = _.map(this.$(".columns li"), function(li) {
-            return $(li).data("model").get("name");
+            return chorus.Mixins.dbHelpers.safePGName($(li).data("model").get("name"));
         });
 
         return "SELECT " + (names.length ? names.join(", ") : "*");

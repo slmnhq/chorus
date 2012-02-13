@@ -149,13 +149,13 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             context("when two columns are selected", function() {
                 beforeEach(function() {
                     this.column1 = fixtures.databaseColumn({name: "Foo"});
-                    this.column2 = fixtures.databaseColumn({name: "Bar"});
+                    this.column2 = fixtures.databaseColumn({name: "bar"});
                     chorus.PageEvents.broadcast("column:selected", this.column1);
                     chorus.PageEvents.broadcast("column:selected", this.column2);
                 });
 
                 it("should build a select clause from the selected columns", function() {
-                    expect(this.view.selectClause()).toBe("SELECT Foo, Bar");
+                    expect(this.view.selectClause()).toBe("SELECT \"Foo\", bar");
                 });
             });
         });
