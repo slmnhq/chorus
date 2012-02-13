@@ -134,7 +134,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
                     year: year,
                     month: month,
                     day: day,
-                    value: [year, month, day].join("/")
+                    value: ((year + month + day).length > 0) ? [year, month, day].join("/") : ""
                 };
                 break;
             case "Numeric":

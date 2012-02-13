@@ -362,16 +362,32 @@ describe("chorus.views.DatasetFilter", function() {
             });
 
             describe("with a date column", function() {
-                it("returns the values of the date filter inputs", function() {
+                beforeEach(function() {
                     this.view.model = new chorus.models.DatasetFilterMaps.Date;
+                });
+
+                it("returns the values of the date filter inputs", function() {
                     expect(this.view.fieldValues().month).toBe("12");
                     expect(this.view.fieldValues().year).toBe("04");
                     expect(this.view.fieldValues().day).toBe("3");
                 });
 
-                it("includes a 'value' field, which formats the year, month and day properly", function() {
-                    this.view.model = new chorus.models.DatasetFilterMaps.Date;
-                    expect(this.view.fieldValues().value).toBe("04/12/3");
+                describe("when the fields are populated", function() {
+                    it("includes a 'value' field, which formats the year, month and day properly", function() {
+                        expect(this.view.fieldValues().value).toBe("04/12/3");
+                    });
+                });
+
+                describe("when the fields are blank", function() {
+                    beforeEach(function() {
+                        this.view.$(".filter.date input[name='year']").val("");
+                        this.view.$(".filter.date input[name='month']").val("");
+                        this.view.$(".filter.date input[name='day']").val("");
+                    });
+
+                    it("includes a blank 'value' field", function() {
+                        expect(this.view.fieldValues().value).toBe("");
+                    });
                 });
             });
         })
