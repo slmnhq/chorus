@@ -15,8 +15,7 @@ chorus.views.visualizations.Boxplot = chorus.views.Base.extend(_.extend(chorus.M
         var buckets = _.pluck(data, "bucket")
         var percentages = _.pluck(data, "percentage");
         percentages = _.map(percentages, function(percent){
-            var num = percent.split("%")[0];
-            return (num.split(".")[0] + "%");
+            return parseInt(percent) + '%';
         })
 
         var xLabels = _.map(buckets, function(bucket, i){

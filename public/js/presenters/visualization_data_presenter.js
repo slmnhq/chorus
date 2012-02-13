@@ -59,7 +59,7 @@
             });
 
             var orderedBoxes = _.sortBy(boxes, function(box) {
-                return -1 * parseInt(box.percentage);
+                return -1 * parseFloat(box.percentage);
             });
 
             orderedBoxes.minY = _.min(_.pluck(orderedBoxes, "min"));
