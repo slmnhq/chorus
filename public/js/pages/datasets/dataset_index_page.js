@@ -32,9 +32,9 @@
                         title: t("header.menu.filter.title"),
                         options: [
                             {data: "", text: t("dataset.header.menu.filter.all")},
-                            {data: "SOURCE_TABLE", text: t("dataset.types.SOURCE_TABLE.BASE_TABLE")},
-                            {data: "SANDBOX_TABLE", text: t("dataset.types.SANDBOX_TABLE.BASE_TABLE")},
-                            {data: "CHORUS_VIEW", text: t("dataset.types.CHORUS_VIEW.QUERY")}
+                            {data: "SOURCE_TABLE", text: t("dataset.header.menu.filter.source")},
+                            {data: "CHORUS_VIEW", text: t("dataset.header.menu.filter.chorus_views")},
+                            {data: "SANDBOX_TABLE", text: t("dataset.header.menu.filter.sandbox")}
                         ],
                         event: "filter"
                     }
