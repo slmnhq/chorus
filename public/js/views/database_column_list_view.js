@@ -12,7 +12,10 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
             return parseInt(column.get("ordinalPosition"))
         };
         this.collection.sort();
-        this.bind("column:deselected", this.deselectColumn, this);
+        chorus.PageEvents.subscribe("column:removed", this.deselectColumn, this);
+        chorus.PageEvents.subscribe("column:deselected", this.deselectColumn, this);
+        chorus.PageEvents.subscribe("column:select_all", this.selectAll, this);
+        chorus.PageEvents.subscribe("column:select_none", this.selectNone, this);
     },
 
     postRender:function () {
@@ -26,7 +29,7 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
         }
     },
 
-    deselectAll: function() {
+    selectNone: function() {
         if (this.selectMulti) {
             _.each(this.$("li"), function(li) {
                 this.toggleColumnSelection($(li), false);
@@ -51,23 +54,22 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
             var turnOn = (arguments.length == 2) ? forceState : !$selectedColumn.is(".selected");
             if (turnOn) {
                 $selectedColumn.addClass("selected");
-                this.trigger("column:selected", this.collection.at(this.$("li").index($selectedColumn)));
+                chorus.PageEvents.broadcast("column:selected", [this.collection.at(this.$("li").index($selectedColumn))]);
             } else {
-                this.trigger("column:deselected", this.collection.at(this.$("li").index($selectedColumn)));
+                chorus.PageEvents.broadcast("column:deselected", [this.collection.at(this.$("li").index($selectedColumn))]);
             }
         } else {
             var $deselected = this.$("li.selected");
             $deselected.removeClass("selected");
-            this.trigger("column:deselected", this.collection.at(this.$("li").index($deselected)));
+            chorus.PageEvents.broadcast("column:deselected", [this.collection.at(this.$("li").index($deselected))]);
 
             $selectedColumn.addClass("selected");
-
-            this.trigger("column:selected", this.collection.at(this.$("li").index($selectedColumn)));
+            chorus.PageEvents.broadcast("column:selected", [this.collection.at(this.$("li").index($selectedColumn))]);
         }
     },
 
     deselectColumn: function(model) {
-        if(this.selectMulti) {
+        if (this.selectMulti) {
             this.$("li").eq(this.collection.indexOf(model)).removeClass("selected");
         }
     }

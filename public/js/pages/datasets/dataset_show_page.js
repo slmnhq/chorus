@@ -73,28 +73,7 @@
 
             this.mainContent.contentDetails.bind("transform:sidebar", this.showSidebar, this);
             this.mainContent.contentDetails.bind("cancel:sidebar", this.hideSidebar, this);
-            this.mainContent.contentDetails.bind("column:select_all", this.mainContent.content.selectAll, this.mainContent.content);
-            this.mainContent.contentDetails.bind("column:select_none", this.mainContent.content.deselectAll, this.mainContent.content);
-            this.mainContent.content.bind("column:selected", this.forwardSelectedToSidebar, this);
-            this.mainContent.content.bind("column:deselected", this.forwardDeselectedToSidebar, this);
-
             this.render();
-        },
-
-        forwardSelectedToSidebar : function(column) {
-            if (this.secondarySidebar) {
-                this.secondarySidebar.trigger("column:selected", column);
-            }
-        },
-
-        forwardDeselectedToSidebar : function(column) {
-            if (this.secondarySidebar) {
-                this.secondarySidebar.trigger("column:deselected", column);
-            }
-        },
-        
-        forwardDeselectedToMain : function(column) {
-            this.mainContent.content.trigger("column:deselected", column);
         },
 
         showSidebar: function(type) {
@@ -102,7 +81,8 @@
             this.$('.sidebar_content.secondary').removeClass("hidden")
 
             if (this.secondarySidebar) {
-                this.secondarySidebar.unbind("column:removed", this.forwardDeselectedToMain);
+                chorus.PageEvents.unsubscribe(this.secondarySidebar.selectedHandle);
+                chorus.PageEvents.unsubscribe(this.secondarySidebar.deselectedHandle);
             }
             
             this.mainContent.content.selectMulti = false;
@@ -124,9 +104,8 @@
                     break;
                 case 'chorus_view':
                     this.mainContent.content.selectMulti = true;
-                    this.mainContent.content.deselectAll();
+                    this.mainContent.content.selectNone();
                     this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model : this.model});
-                    this.secondarySidebar.bind("column:removed", this.forwardDeselectedToMain, this);
                     break;
             }
 
