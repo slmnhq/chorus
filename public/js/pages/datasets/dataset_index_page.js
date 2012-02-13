@@ -12,7 +12,7 @@
 
     chorus.pages.DatasetIndexPage = chorus.pages.Base.extend({
         helpId: "datasets",
-        
+
         setup: function(workspaceId) {
             this.workspace = new chorus.models.Workspace({id: workspaceId});
             this.workspace.onLoaded(this.workspaceLoaded, this);
@@ -54,10 +54,13 @@
         },
 
         workspaceLoaded: function() {
-            this.account = this.workspace.sandbox().instance().accountForCurrentUser();
-            this.account.onLoaded(this.checkAccount, this);
-            this.account.fetch();
-
+            if (this.workspace.sandbox()) {
+                this.account = this.workspace.sandbox().instance().accountForCurrentUser();
+                this.account.onLoaded(this.checkAccount, this);
+                this.account.fetch();
+            } else {
+                this.collection.fetch();
+            }
         },
 
         checkAccount: function() {
