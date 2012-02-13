@@ -17,6 +17,8 @@
             this.numericalColumns = filterColumns(['WHOLE_NUMBER', 'REAL_NUMBER'], this.columns)
             this.datetimeColumns = filterColumns(['DATE', 'TIME', "DATETIME"], this.columns);
 
+            this.bind("cancel:sidebar", this.cancelVisualization);
+
             function filterColumns(types, columns) {
                 return _.filter(columns, function(col) {
                     var category = col.get('typeCategory')
@@ -54,7 +56,7 @@
         launchVisualizationDialog: function(e) {
             e && e.preventDefault();
             this.clearSqlErrors();
-            this.showLoadingSpinner()
+            this.startVisualization()
 
             var dialog = new chorus.dialogs.Visualization({model: this.model, chartOptions: this.chartOptions(), filters: this.filters });
             this.dialog = dialog
@@ -65,27 +67,30 @@
             dialog.task.bindOnce("saved", dialog.onExecutionComplete, dialog);
             dialog.task.bindOnce("saveFailed", this.onSqlError, this)
 
-            dialog.task.bindOnce("saved", this.hideLoadingSpinner, this);
-            dialog.task.bindOnce("saveFailed", this.hideLoadingSpinner, this)
+            dialog.task.bindOnce("saved", this.cleanupVisualization, this);
+            dialog.task.bindOnce("saveFailed", this.cleanupVisualization, this)
 
             dialog.task.save();
         },
 
         cancelVisualization: function(e) {
-            e.preventDefault();
-            this.hideLoadingSpinner();
-            this.task.unbind("saveFailed");
-            this.task.cancel();
+            e && e.preventDefault();
+            if (this.task) {
+                this.task.unbind("saveFailed");
+                this.task.cancel();
+                this.cleanupVisualization();
+            }
         },
 
-        showLoadingSpinner: function() {
+        startVisualization: function() {
             this.$("button.create").startLoading("visualization.creating");
             this.$("button.cancel").removeClass('hidden');
         },
 
-        hideLoadingSpinner: function() {
+        cleanupVisualization: function() {
             this.$("button.cancel").addClass('hidden');
             this.$("button.create").stopLoading();
+            delete this.task;
         },
 
         onSqlError: function() {

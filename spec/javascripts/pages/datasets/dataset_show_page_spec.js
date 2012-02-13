@@ -327,10 +327,12 @@ describe("chorus.pages.DatasetShowPage", function() {
 
             describe("when the cancel:sidebar event is triggered", function() {
                 beforeEach(function() {
+                    this.callbackCount = this.page.mainContent.contentDetails._callbacks['cancel:sidebar'].length;
                     this.page.mainContent.contentDetails.trigger("transform:sidebar", "boxplot");
                     expect(this.page.$('#sidebar .sidebar_content.secondary')).toHaveClass("dataset_visualization_boxplot_sidebar");
                     this.resizedSpy.reset();
 
+                    spyOnEvent(this.page.secondarySidebar, 'cancel:sidebar');
                     this.page.mainContent.contentDetails.trigger("cancel:sidebar", "boxplot");
                 });
 
@@ -345,6 +347,10 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                 it("removes all classes added when transform:sidebar is triggered", function() {
                     expect(this.page.$('#sidebar .sidebar_content.secondary')).not.toHaveClass("dataset_visualization_boxplot_sidebar");
+                })
+
+                it("triggers the cancel:sidebar event on the sidebar", function() {
+                    expect("cancel:sidebar").toHaveBeenTriggeredOn(this.page.secondarySidebar);
                 })
             });
         });
