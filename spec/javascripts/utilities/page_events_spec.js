@@ -68,7 +68,7 @@ describe("chorus.PageEvents", function() {
 
         it("passes arguments when broadcast", function() {
             chorus.PageEvents.subscribe("foo", this.subscriber1.method, this.subscriber1);
-            chorus.PageEvents.broadcast("foo", ["Foo", "Bar"]);
+            chorus.PageEvents.broadcast("foo", "Foo", "Bar");
             expect(this.subscriber1.method).toHaveBeenCalled();
             expect(this.subscriber1.method.mostRecentCall.object).toBe(this.subscriber1);
             expect(this.subscriber1.method.mostRecentCall.args).toEqual(["Foo", "Bar"]);

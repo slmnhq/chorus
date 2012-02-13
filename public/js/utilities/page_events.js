@@ -35,14 +35,17 @@ chorus.utilities.PageEvents.prototype.hasSubscription = function(eventName, call
     })
 }
 
-chorus.utilities.PageEvents.prototype.broadcast = function(eventName, argsArray) {
+chorus.utilities.PageEvents.prototype.broadcast = function(eventName) {
     var list = this.subscriptions[eventName];
     if (!list) {
         return;
     }
 
+    var args = _.toArray(arguments);
+    args.shift();
+
     _.each(list, function(binding) {
-        binding.callback.apply(binding.context, argsArray);
+        binding.callback.apply(binding.context, args);
     });
 }
 

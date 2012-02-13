@@ -49,7 +49,7 @@ describe("chorus.views.DatabaseColumnList", function() {
            beforeEach(function(){
                this.view.selectMulti = true;
 
-               chorus.PageEvents.broadcast("column:deselected", [this.collection.at(0)]);
+               chorus.PageEvents.broadcast("column:deselected", this.collection.at(0));
            });
 
             it("deselects the column", function() {
@@ -74,11 +74,11 @@ describe("chorus.views.DatabaseColumnList", function() {
                 })
 
                 it("triggers the column:selected event with the corresponding model as an argument", function(){
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:selected", [this.collection.at(1)]);
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:selected", this.collection.at(1));
                 });
 
                 it("triggers the column:deselected event with the corresponding model as an argument", function(){
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:deselected", [this.collection.at(0)]);
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:deselected", this.collection.at(0));
                 });
 
                 describe("#selectNone", function() {
@@ -106,7 +106,7 @@ describe("chorus.views.DatabaseColumnList", function() {
                 });
 
                 it("triggers the column:selected event with the corresponding model as an argument", function() {
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:selected", [this.collection.at(1)]);
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:selected", this.collection.at(1));
                 });
 
                 describe("deselecting", function() {
@@ -123,7 +123,7 @@ describe("chorus.views.DatabaseColumnList", function() {
                     });
 
                     it("triggers the column:deselected event with the corresponding model as an argument", function(){
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:deselected", [this.collection.at(1)]);
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:deselected", this.collection.at(1));
                     });
                 });
             });

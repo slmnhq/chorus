@@ -44,7 +44,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         var model = $li.data("model");
 
         this.removeColumn(model);
-        chorus.PageEvents.broadcast("column:removed", [model]);
+        chorus.PageEvents.broadcast("column:removed", model);
     },
 
     createChorusView : function() {

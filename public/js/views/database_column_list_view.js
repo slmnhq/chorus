@@ -54,17 +54,17 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
             var turnOn = (arguments.length == 2) ? forceState : !$selectedColumn.is(".selected");
             if (turnOn) {
                 $selectedColumn.addClass("selected");
-                chorus.PageEvents.broadcast("column:selected", [this.collection.at(this.$("li").index($selectedColumn))]);
+                chorus.PageEvents.broadcast("column:selected", this.collection.at(this.$("li").index($selectedColumn)));
             } else {
-                chorus.PageEvents.broadcast("column:deselected", [this.collection.at(this.$("li").index($selectedColumn))]);
+                chorus.PageEvents.broadcast("column:deselected", this.collection.at(this.$("li").index($selectedColumn)));
             }
         } else {
             var $deselected = this.$("li.selected");
             $deselected.removeClass("selected");
-            chorus.PageEvents.broadcast("column:deselected", [this.collection.at(this.$("li").index($deselected))]);
+            chorus.PageEvents.broadcast("column:deselected", this.collection.at(this.$("li").index($deselected)));
 
             $selectedColumn.addClass("selected");
-            chorus.PageEvents.broadcast("column:selected", [this.collection.at(this.$("li").index($selectedColumn))]);
+            chorus.PageEvents.broadcast("column:selected", this.collection.at(this.$("li").index($selectedColumn)));
         }
     },
 
