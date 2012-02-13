@@ -313,6 +313,7 @@
 
             spyOn($.fn, 'jGrowl');
 
+            chorus.PageEvents.reset();
             chorus.session.sandboxPermissionsCreated = {};
             setLoggedInUser();
         });

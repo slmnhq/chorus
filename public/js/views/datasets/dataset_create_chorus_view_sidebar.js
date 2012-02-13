@@ -6,10 +6,13 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         "click a.remove" : "removeColumnClicked"
     },
 
+    setup : function() {
+        this.selectedHandle = chorus.PageEvents.subscribe("column:selected", this.addColumn, this);
+        this.deselectedHandle = chorus.PageEvents.subscribe("column:deselected", this.removeColumn, this);
+    },
+
     postRender : function() {
         this.$("a.preview").data("parent", this);
-        this.bind("column:selected", this.addColumn, this);
-        this.bind("column:deselected", this.removeColumn, this);
     },
 
     addColumn: function(model) {
@@ -40,7 +43,8 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         var $li = $(e.target).closest("li");
         var model = $li.data("model");
 
-        this.trigger("column:removed", model);
+        this.removeColumn(model);
+        chorus.PageEvents.broadcast("column:removed", model);
     },
 
     createChorusView : function() {

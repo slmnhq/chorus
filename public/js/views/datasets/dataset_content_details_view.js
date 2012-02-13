@@ -59,12 +59,12 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     triggerSelectAll : function(e) {
         e && e.preventDefault();
-        this.trigger("column:select_all");
+        chorus.PageEvents.broadcast("column:select_all");
     },
 
     triggerSelectNone : function(e) {
         e && e.preventDefault();
-        this.trigger("column:select_none");
+        chorus.PageEvents.broadcast("column:select_none");
     },
 
     startVisualizationWizard : function() {

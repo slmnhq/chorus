@@ -129,12 +129,13 @@ describe("chorus.pages.DatasetShowPage", function() {
         describe("#showSidebar", function() {
             beforeEach(function() {
                 this.page.secondarySidebar = new Backbone.View();
-                spyOn(this.page.secondarySidebar, "unbind");
+                this.originalSidebar = this.page.secondarySidebar;
+                spyOn(chorus.PageEvents, "unsubscribe");
                 this.page.showSidebar("foo");
             });
 
             it("should unbind the column:removed event from the sidebar", function() {
-                 expect(this.page.secondarySidebar.unbind).toHaveBeenCalledWith("column:removed", this.page.forwardDeselectedToMain);
+                expect(chorus.PageEvents.unsubscribe).toHaveBeenCalledWith(this.originalSidebar.selectedHandle);
             });
         });
 
@@ -259,7 +260,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                 describe("clicking select all", function() {
                     beforeEach(function() {
                         this.selectSpy = jasmine.createSpy("column selected spy");
-                        this.page.mainContent.content.bind("column:selected", this.selectSpy);
+                        chorus.PageEvents.subscribe("column:selected", this.selectSpy);
                         this.page.mainContent.contentDetails.$("a.select_all").click();
                     });
 
@@ -274,7 +275,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                     describe("clicking select none", function() {
                         beforeEach(function() {
                             this.deselectSpy = jasmine.createSpy("column deselected spy");
-                            this.page.mainContent.content.bind("column:deselected", this.deselectSpy);
+                            chorus.PageEvents.subscribe("column:deselected", this.deselectSpy);
                             this.page.mainContent.contentDetails.$("a.select_none").click();
                         });
 
@@ -287,42 +288,6 @@ describe("chorus.pages.DatasetShowPage", function() {
                         });
                     });
                 });
-                
-                describe("when the column:selected event occurs", function() {
-                    beforeEach(function() {
-                        spyOnEvent(this.page.secondarySidebar, "column:selected");
-                        this.column = fixtures.databaseColumn();
-                        this.page.mainContent.content.trigger("column:selected", this.column);
-                    });
-                    
-                    it("triggers that event on the chorus view sidebar", function (){
-                        expect("column:selected").toHaveBeenTriggeredOn(this.page.secondarySidebar, [this.column]);
-                    });
-                });
-
-                describe("when the column:deselected event occurs on the page", function() {
-                    beforeEach(function() {
-                        spyOnEvent(this.page.secondarySidebar, "column:deselected");
-                        this.column = fixtures.databaseColumn();
-                        this.page.mainContent.content.trigger("column:deselected", this.column);
-                    })
-
-                    it("triggers that event on the chorus view sidebar", function (){
-                        expect("column:deselected").toHaveBeenTriggeredOn(this.page.secondarySidebar, [this.column]);
-                    });
-                });
-
-                describe("when the column:removed event occurs on the sidebar", function() {
-                    beforeEach(function() {
-                        spyOnEvent(this.page.mainContent.content, "column:deselected");
-                        this.column = fixtures.databaseColumn();
-                        this.page.secondarySidebar.trigger("column:removed", this.column);
-                    });
-
-                    it("triggers the event on the main content", function() {
-                        expect("column:deselected").toHaveBeenTriggeredOn(this.page.mainContent.content, [this.column]);
-                    })
-                })
             });
 
             describe("when the cancel:sidebar event is triggered", function() {

@@ -43,7 +43,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
         describe("column:selected event", function() {
             beforeEach(function(){
                 this.databaseColumn = fixtures.databaseColumn();
-                this.view.trigger("column:selected", this.databaseColumn);
+                chorus.PageEvents.broadcast("column:selected", this.databaseColumn);
             });
 
             it("displays the name of that column", function() {
@@ -61,7 +61,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             describe("selecting another column", function() {
                 beforeEach(function(){
                     this.databaseColumn2 = fixtures.databaseColumn();
-                    this.view.trigger("column:selected", this.databaseColumn2);
+                    chorus.PageEvents.broadcast("column:selected", this.databaseColumn2);
                 });
 
                 it("adds that column too", function() {
@@ -72,7 +72,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
                 describe("deselecting one column", function() {
                     beforeEach(function(){
-                        this.view.trigger("column:deselected", this.databaseColumn);
+                        chorus.PageEvents.broadcast("column:deselected", this.databaseColumn);
                     });
 
                     it("removes the name of that column", function() {
@@ -83,7 +83,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
                     describe("deselecting the other column", function() {
                         beforeEach(function(){
-                            this.view.trigger("column:deselected", this.databaseColumn2);
+                            chorus.PageEvents.broadcast("column:deselected", this.databaseColumn2);
                         });
 
                         it("removes the name of that column, and displays the empty selection div", function() {
@@ -98,15 +98,21 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
         describe("clicking the 'Remove' link", function() {
             beforeEach(function() {
-                spyOnEvent(this.view, "column:removed");
-                this.column = fixtures.databaseColumn();
-                this.view.trigger("column:selected", this.column);
-                this.view.$("a.remove").click();
+                spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+                this.column1 = fixtures.databaseColumn();
+                chorus.PageEvents.broadcast("column:selected", this.column1);
+                this.column2 = fixtures.databaseColumn();
+                chorus.PageEvents.broadcast("column:selected", this.column2);
+                this.view.$("a.remove").eq(0).click();
             })
 
             it("should trigger the column:removed event", function() {
-                expect("column:removed").toHaveBeenTriggeredOn(this.view, [this.column]);
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:removed", this.column1);
             })
+
+            it("displays only the one remaining column", function() {
+                expect(this.view.$(".columns li").length).toBe(1);
+            });
         })
 
         describe("#whereClause", function() {
@@ -130,8 +136,8 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 beforeEach(function() {
                     this.column1 = fixtures.databaseColumn({name: "Foo"});
                     this.column2 = fixtures.databaseColumn({name: "Bar"});
-                    this.view.trigger("column:selected", this.column1);
-                    this.view.trigger("column:selected", this.column2);
+                    chorus.PageEvents.broadcast("column:selected", this.column1);
+                    chorus.PageEvents.broadcast("column:selected", this.column2);
                 });
 
                 it("should build a select clause from the selected columns", function() {
