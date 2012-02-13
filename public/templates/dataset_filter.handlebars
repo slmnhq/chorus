@@ -8,7 +8,19 @@
     {{/each}}
 </select>
 <select class="comparator"/>
-<input class="filter_input validatable hidden" type="text"/>
-<input class="time_input validatable hidden" type="text" placeholder="{{{t "dataset.filter.time_placeholder"}}}"/>
-<input class="date_input validatable hidden" type="text" placeholder="{{{t "dataset.filter.date_placeholder"}}}"/>
+
+<span class="filter default hidden">
+    <input class="validatable" type="text"/>
+</span>
+
+<span class="filter time hidden">
+    <input class="validatable" type="text" placeholder="{{{t "dataset.filter.time_placeholder"}}}"/>
+</span>
+
+<span class="filter date hidden">
+    <input class="validatable month" type="text" placeholder="{{{t "dataset.filter.date_placeholder.month"}}}"/>
+    <input class="validatable day" type="text" placeholder="{{{t "dataset.filter.date_placeholder.day"}}}"/>
+    <input class="validatable year" type="text" placeholder="{{{t "dataset.filter.date_placeholder.year"}}}"/>
+</span>
+
 <a href="#" class="remove"><img src="/images/remove_icon.png"/></a>

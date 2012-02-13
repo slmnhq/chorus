@@ -9,8 +9,10 @@ describe("chorus.views.DatasetFilter", function() {
             // styleSelect is deferred, but call it immediately for these tests
             spyOn(_, "defer").andCallFake(function(f){return f()});
             spyOn(chorus, "styleSelect");
+            spyOn(chorus, 'datePicker').andCallThrough();
 
             this.view.render();
+            $("#jasmine_content").append(this.view.el);
         });
 
         it("populates the filter's select options with the names of the columns", function() {
@@ -24,6 +26,15 @@ describe("chorus.views.DatasetFilter", function() {
 
         it("styles the select", function() {
             expect(chorus.styleSelect).toHaveBeenCalled();
+        });
+
+        it("creates a datepicker widget associated with the year, month and day input fields", function() {
+            expect(chorus.datePicker).toHaveBeenCalled();
+
+            var datePickerOptions = chorus.datePicker.mostRecentCall.args[0];
+            expect(datePickerOptions["%Y"]).toBe(this.view.$(".filter.date input.year"));
+            expect(datePickerOptions["%m"]).toBe(this.view.$(".filter.date input.month"));
+            expect(datePickerOptions["%d"]).toBe(this.view.$(".filter.date input.day"));
         });
 
         it("displays remove button", function() {
@@ -60,7 +71,7 @@ describe("chorus.views.DatasetFilter", function() {
                 spyOn(chorus.utilities.DatasetFilterMaps.numeric, "validate");
                 spyOn(this.view, "markInputAsInvalid");
                 
-                this.view.$("input.filter_input").val("123");
+                this.view.$(".filter.default input").val("123");
             });
             
             it("passes the input argument to the right method", function() {
@@ -119,12 +130,12 @@ describe("chorus.views.DatasetFilter", function() {
                     if (chorus.utilities.DatasetFilterMaps.string.comparators[key].usesInput){
                         it("correctly shows the input for " + key, function() {
                             this.view.$(".comparator").val(key).change();
-                            expect(this.view.$("input.filter_input")).not.toHaveClass("hidden");
+                            expect(this.view.$(".filter.default input")).toBeVisible();
                         });
                     } else {
                         it("correctly hides the input for " + key, function() {
                             this.view.$(".comparator").val(key).change();
-                            expect(this.view.$("input.filter_input")).toHaveClass("hidden");
+                            expect(this.view.$(".filter.default input")).toBeHidden();
                         });
                     }
                 });
@@ -137,7 +148,7 @@ describe("chorus.views.DatasetFilter", function() {
                 })
 
                 it("should show the input box", function() {
-                    expect(this.view.$('input.filter_input')).not.toHaveClass('hidden')
+                    expect(this.view.$('.filter.default')).not.toHaveClass('hidden')
                 })
             })
         });
@@ -172,12 +183,12 @@ describe("chorus.views.DatasetFilter", function() {
                     if (chorus.utilities.DatasetFilterMaps.numeric.comparators[key].usesInput){
                         it("correctly shows the input for " + key, function() {
                             this.view.$(".comparator").val(key).change();
-                            expect(this.view.$("input.filter_input")).not.toHaveClass("hidden");
+                            expect(this.view.$(".filter.default input")).toBeVisible();
                         });
                     } else {
                         it("correctly hides the input for " + key, function() {
                             this.view.$(".comparator").val(key).change();
-                            expect(this.view.$("input.filter_input")).toHaveClass("hidden");
+                            expect(this.view.$(".filter.default input")).toBeHidden();
                         });
                     }
                 });
@@ -216,19 +227,37 @@ describe("chorus.views.DatasetFilter", function() {
                 }, this);
             });
 
-            it("it shows the second input field when a comparator is selected that require an argument", function() {
-                _.each(this.typesRequiringArgument, function(comparatorType) {
-                    this.view.$(".comparator").val(comparatorType).change();
-                    expect(this.view.$("input.date_input")).not.toHaveClass("hidden");
-                }, this);
+            describe("when a comparator is selected that requires a second argument", function() {
+                it("it shows the second input field ", function() {
+                    _.each(this.typesRequiringArgument, function(comparatorType) {
+                        this.view.$(".comparator").val(comparatorType).change();
+                        expect(this.view.$(".filter.date")).not.toHaveClass("hidden");
+                        expect(this.view.$(".filter.date input.year").attr("placeholder")).toMatchTranslation("dataset.filter.date_placeholder.year");
+                        expect(this.view.$(".filter.date input.month").attr("placeholder")).toMatchTranslation("dataset.filter.date_placeholder.month");
+                        expect(this.view.$(".filter.date input.day").attr("placeholder")).toMatchTranslation("dataset.filter.date_placeholder.day");
+                    }, this);
+                });
+
+                it("shows the date picker icon next to the input field", function() {
+                    this.view.$(".comparator").val("on").change();
+                    expect(this.view.$("a.date-picker-control")).toBeVisible();
+                });
+
             });
 
-            it("it hides the second input field when a comparator is selected that does *not* require a second argument", function() {
-                _.each(this.typesNotRequiringArgument, function(comparatorType) {
-                    this.view.$(".comparator").val(comparatorType).change();
-                    expect(this.view.$("input.date_input")).toHaveClass("hidden");
-                    expect(this.view.$("input.date_input")).toContainTranslation("dataset.filter.date_placeholder");
-                }, this);
+            describe("when a comparator is selected that does *not* require a second argument", function() {
+                it("it hides the second input field ", function() {
+                    _.each(this.typesNotRequiringArgument, function(comparatorType) {
+                        this.view.$(".comparator").val(comparatorType).change();
+                        debugger;
+                        expect(this.view.$(".filter.date input")).toBeHidden();
+                    }, this);
+                });
+
+                it("hides the date picker icon", function() {
+                    this.view.$(".comparator").val("not_null").change();
+                    expect(this.view.$("a.date-picker-control")).toBeHidden();
+                });
             });
         });
 
@@ -238,7 +267,7 @@ describe("chorus.views.DatasetFilter", function() {
                 this.view.render();
 
                 this.view.$(".comparator").val("not_equal").change();
-                this.view.$(".filter_input").val("test")
+                this.view.$(".filter.default input").val("test")
                 spyOn(chorus.utilities.DatasetFilterMaps.string.comparators.not_equal, "generate");
                 this.view.filterString();
             });
@@ -249,18 +278,25 @@ describe("chorus.views.DatasetFilter", function() {
         });
 
         describe("#getInputField", function() {
-            it("returns .filter_input when you pick a string", function() {
+            it("returns the default filter input when you pick a string", function() {
                 spyOn(this.view, 'getMap').andReturn(chorus.utilities.DatasetFilterMaps.string)
-                expect(this.view.getInputField()).toBe(this.view.$(".filter_input"))
-            })
-            it("returns .filter_input when you pick a numeric", function() {
+                expect(this.view.getInputField()).toBe(this.view.$(".filter.default input"))
+            });
+
+            it("returns the default filter input when you pick a numeric", function() {
                 spyOn(this.view, 'getMap').andReturn(chorus.utilities.DatasetFilterMaps.numeric)
-                expect(this.view.getInputField()).toBe(this.view.$(".filter_input"))
-            })
-            it("returns .time_input when you pick a time", function() {
+                expect(this.view.getInputField()).toBe(this.view.$(".filter.default input"))
+            });
+
+            it("returns the time filter input when you pick a time", function() {
                 spyOn(this.view, 'getMap').andReturn(chorus.utilities.DatasetFilterMaps.time)
-                expect(this.view.getInputField()).toBe(this.view.$(".time_input"))
-            })
+                expect(this.view.getInputField()).toBe(this.view.$(".filter.time input"))
+            });
+
+            it("returns the date filter input when you pick a date", function() {
+                spyOn(this.view, 'getMap').andReturn(chorus.utilities.DatasetFilterMaps.date)
+                expect(this.view.getInputField()).toBe(this.view.$(".filter.date input"))
+            });
         })
     });
 });

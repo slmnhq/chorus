@@ -12,8 +12,14 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
 
     postRender:function () {
         var $select = this.$("select.column_filter");
+        var self = this;
         _.defer(function () {
             chorus.styleSelect($select);
+            chorus.datePicker({
+                "%Y": self.$(".filter.date input.year"),
+                "%m": self.$(".filter.date input.month"),
+                "%d": self.$(".filter.date input.day")
+            });
         });
 
         if (!$select.find("option").length) {
@@ -87,9 +93,9 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         }
 
         var comparator = map.comparators[$choice.val()];
-        this.$(".filter_input").toggleClass("hidden", !comparator.usesInput);
-        this.$(".time_input").toggleClass("hidden", !comparator.usesTimeInput);
-        this.$(".date_input").toggleClass("hidden", !comparator.usesDateInput)
+        this.$(".filter.default").toggleClass("hidden", !comparator.usesInput);
+        this.$(".filter.time").toggleClass("hidden", !comparator.usesTimeInput);
+        this.$(".filter.date").toggleClass("hidden", !comparator.usesDateInput);
 
         this.validateInput();
     },
@@ -121,11 +127,11 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         var map = this.getMap();
         var maps = chorus.utilities.DatasetFilterMaps;
         if (map == maps.string || map == maps.numeric) {
-            return this.$(".filter_input");
+            return this.$(".filter.default input");
         } else if (map == maps.time) {
-            return this.$(".time_input");
+            return this.$(".filter.time input");
         } else if (map == maps.date) {
-            return this.$(".date_input");
+            return this.$(".filter.date input");
         }
     },
 
