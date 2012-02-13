@@ -111,6 +111,18 @@ window.Chorus = function() {
         $element.selectmenu({change: changeFunction, positionOptions: {offset: "0 -1"}});
     }
 
+    self.datePicker = function(options) {
+        var formElementParams = {};
+
+        _.each(options, function(el, format) {
+            var uniqueId = _.uniqueId("date-picker");
+            el.attr("id", uniqueId);
+            formElementParams[uniqueId] = format;
+        });
+
+        datePickerController.createDatePicker({ formElements: formElementParams });
+    };
+
     self.placeholder = function(element) {
         $(element).placeholder();
     };

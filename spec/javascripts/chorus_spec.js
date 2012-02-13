@@ -107,6 +107,39 @@ describe("chorus global", function() {
         });
     });
 
+    describe("#datePicker(element)", function() {
+        beforeEach(function() {
+            spyOn(datePickerController, 'createDatePicker');
+            this.input1 = $("<input></input");
+            this.input2 = $("<input></input");
+            this.input3 = $("<input></input");
+            chorus.datePicker({
+                "%d": this.input1,
+                "%m": this.input2,
+                "%Y": this.input3
+            });
+
+            this.id1 = this.input1.attr("id"),
+            this.id2 = this.input2.attr("id"),
+            this.id3 = this.input3.attr("id");
+        });
+
+        it("gives the elements unique ids", function() {
+            expect(this.id1).toBeA("string");
+            expect(this.id2).toBeA("string");
+            expect(this.id3).toBeA("string");
+        });
+
+        it("calls datePickerController with the right unique ids and format strings", function() {
+            expect(datePickerController.createDatePicker).toHaveBeenCalled();
+
+            var datePickerParams = datePickerController.createDatePicker.mostRecentCall.args[0];
+            expect(datePickerParams.formElements[this.id1]).toBe("%d");
+            expect(datePickerParams.formElements[this.id2]).toBe("%m");
+            expect(datePickerParams.formElements[this.id3]).toBe("%Y");
+        });
+    });
+
     describe("fileIconUrl", function() {
         function verifyUrl(fileType, fileName) {
             expect(chorus.urlHelpers.fileIconUrl(fileType)).toBe("/images/workfiles/large/" + fileName + ".png");
