@@ -7,7 +7,6 @@ describe "popup menus - username" do
 
     page.find(".header .username a").click
     page.find(".menu.popup_username").should be_visible
-    page.find(".menu.popup_account").should_not be_visible
 
     page.find(".header .username a").click
     page.find(".menu.popup_username").should_not be_visible
