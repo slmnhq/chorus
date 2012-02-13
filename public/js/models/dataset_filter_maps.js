@@ -38,10 +38,8 @@
         },
 
         declareValidations: function(attrs) {
-            this.requirePattern("value", /^[0-9,.]*$/, attrs);
-        },
-
-        errorMessage: "dataset.filter.number_required"
+            this.requirePattern("value", /^[0-9,.]*$/, attrs, "dataset.filter.number_required");
+        }
     });
 
     chorus.models.DatasetFilterMaps.Time = chorus.models.Base.extend({
@@ -56,10 +54,8 @@
         },
 
         declareValidations: function(attrs) {
-            this.requirePattern("value", /^[0-9:]*$/, attrs);
-        },
-
-        errorMessage: "dataset.filter.time_required"
+            this.requirePattern("value", /^[0-9:]*$/, attrs, "dataset.filter.time_required");
+        }
     });
 
     chorus.models.DatasetFilterMaps.Date = chorus.models.Base.extend({
@@ -73,11 +69,11 @@
             "not_null": {usesDateInput: false, generate: isNotNull }
         },
 
-        performValidation: function(value) {
-            return true
-        },
-
-        errorMessage: "dataset.filter.time_required"
+        declareValidations: function(attrs) {
+            this.requirePattern("year",  /^[0-9]*$/, attrs, "dataset.filter.year_required");
+            this.requirePattern("month", /^[0-9]*$/, attrs, "dataset.filter.month_required");
+            this.requirePattern("day",   /^[0-9]*$/, attrs, "dataset.filter.day_required");
+        }
     });
 
     function isNull(columnName, inputValue){
