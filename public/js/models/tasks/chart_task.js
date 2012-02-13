@@ -7,10 +7,18 @@ chorus.models.ChartTask = chorus.models.Task.extend({
     },
 
     beforeSave: function() {
-        var relation = "SELECT * FROM " + this.safePGName(this.get("objectName"));
+        var relation = "SELECT * FROM ";
+
+        if (this.get("query")) {
+            relation += "(" + this.get("query") + ") AS " + this.safePGName(this.get("objectName"));
+        } else {
+            relation += this.safePGName(this.get("objectName"));
+        }
+
         if (this.get("filters")) {
             relation += " " + this.get("filters");
         }
+
         this.set({ relation: relation });
     },
 

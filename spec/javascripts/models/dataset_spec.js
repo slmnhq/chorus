@@ -193,11 +193,18 @@ describe("chorus.models.Dataset", function() {
     describe("#isChorusView", function() {
         context("when the dataset is a chorus view", function() {
             beforeEach(function() {
-                this.dataset.set({type: "CHORUS_VIEW"});
+                this.dataset.set({type: "CHORUS_VIEW", query: "SELECT * FROM whatever"});
             });
 
             it("should return true", function() {
                 expect(this.dataset.isChorusView()).toBeTruthy();
+            })
+
+            it("should have a query for every chart type", function() {
+                var types = ["Boxplot", "Frequency", "Timeseries", "Histogram", "Heatmap"]
+                _.each(types, function(type) {
+                    expect(this.dataset["make" + type + "Task"]({}).get("query")).toBe("SELECT * FROM whatever");
+                }, this);
             })
         });
 

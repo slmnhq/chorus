@@ -11,7 +11,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         this.bind("column:selected", this.addColumn, this);
         this.bind("column:deselected", this.removeColumn, this);
     },
-    
+
     addColumn: function(model) {
         this.$(".non_empty_selection").removeClass("hidden");
         this.$(".empty_selection").addClass("hidden");

@@ -39,4 +39,16 @@ describe("chorus.models.ChartTask", function() {
     it("mixes in SQLResults", function() {
         expect(this.model.columnOrientedData).toBeDefined();
     })
+
+    describe("it handles queries from chorus views", function() {
+        beforeEach(function() {
+            this.model.attributes['query'] = "SELECT * FROM chorus_view WHERE 1 > 0";
+            this.model.save();
+        });
+
+        it("constructs a correct API call", function() {
+            var request = this.server.lastCreate();
+            expect(request.params().relation).toBe("SELECT * FROM (SELECT * FROM chorus_view WHERE 1 > 0) AS dog_breeds")
+        })
+    })
 });

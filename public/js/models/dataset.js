@@ -15,6 +15,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
             xAxis: taskAttrs.xAxis,
             yAxis: taskAttrs.yAxis,
             objectName: this.get("objectName"),
+            query: this.get("query"),
             workspaceId: this.get("workspace").id,
             datasetId: this.entityId,
             bins : taskAttrs.bins
@@ -25,6 +26,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
         return new chorus.models.FrequencyTask({
             yAxis: taskAttrs.yAxis,
             objectName: this.get("objectName"),
+            query: this.get("query"),
             workspaceId: this.get("workspace").id,
             datasetId: this.entityId,
             bins: taskAttrs.bins
@@ -36,6 +38,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
             bins: taskAttrs.bins,
             xAxis: taskAttrs.xAxis,
             objectName: this.get("objectName"),
+            query: this.get("query"),
             workspaceId: this.get("workspace").id,
             datasetId: this.entityId
         });
@@ -48,6 +51,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
             xAxis: taskAttrs.xAxis,
             yAxis: taskAttrs.yAxis,
             objectName: this.get("objectName"),
+            query: this.get("query"),
             workspaceId: this.get("workspace").id,
             datasetId: this.entityId
         });
@@ -60,6 +64,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
             aggregation: taskAttrs.aggregation,
             timeInterval: taskAttrs.timeInterval,
             objectName: this.get("objectName"),
+            query: this.get("query"),
             workspaceId: this.get("workspace").id,
             datasetId: this.entityId,
             timeType: taskAttrs.timeType
