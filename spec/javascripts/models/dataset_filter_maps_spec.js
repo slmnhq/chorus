@@ -1,5 +1,6 @@
-describe("chorus.utilities.DatasetFilterMaps.string", function() {
-    var strings = chorus.utilities.DatasetFilterMaps.string;
+describe("chorus.models.DatasetFilterMaps.string", function() {
+    var strings = new chorus.models.DatasetFilterMaps.String;
+
     itReturnsTheRightClauseFor("equal", "column_name", "some_value", "\"column_name\" = 'some_value'")
     itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "\"column_name\" != 'some_value'")
     itReturnsTheRightClauseFor("like", "column_name", "some_value", "\"column_name\" LIKE 'some_value'")
@@ -25,15 +26,16 @@ describe("chorus.utilities.DatasetFilterMaps.string", function() {
     }
 
     it("marks all strings as valid", function() {
-        expect(strings.validate("")).toBeTruthy();
-        expect(strings.validate("2342gegrerger*(&^%")).toBeTruthy();
-        expect(strings.validate("';DROP TABLE users;--")).toBeTruthy();
-        expect(strings.validate("\n                    \t")).toBeTruthy();
+        expect(strings.performValidation({ value: "" })).toBeTruthy();
+        expect(strings.performValidation({ value: "2342gegrerger*(&^%" })).toBeTruthy();
+        expect(strings.performValidation({ value: "';DROP TABLE users;--" })).toBeTruthy();
+        expect(strings.performValidation({ value: "\n                    \t" })).toBeTruthy();
     })
 });
 
-describe("chorus.utilities.DatasetFilterMaps.numeric", function() {
-    var numericals = chorus.utilities.DatasetFilterMaps.numeric;
+describe("chorus.models.DatasetFilterMaps.numeric", function() {
+    var numericals = new chorus.models.DatasetFilterMaps.Numeric;
+
     itReturnsTheRightClauseFor("equal", "column_name", "some_value", "\"column_name\" = 'some_value'")
     itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "\"column_name\" != 'some_value'")
     itReturnsTheRightClauseFor("greater", "column_name", "some_value", "\"column_name\" > 'some_value'")
@@ -56,28 +58,29 @@ describe("chorus.utilities.DatasetFilterMaps.numeric", function() {
     }
 
     it("marks whole numbers as valid", function() {
-        expect(numericals.validate("1234")).toBeTruthy();
+        expect(numericals.performValidation({ value: "1234" })).toBeTruthy();
     })
 
     it("marks floating comma numbers as valid", function() {
-        expect(numericals.validate("4,5")).toBeTruthy();
+        expect(numericals.performValidation({ value: "4,5" })).toBeTruthy();
     })
 
     it("marks floating point numbers as valid", function() {
-        expect(numericals.validate("4.5")).toBeTruthy();
+        expect(numericals.performValidation({ value: "4.5" })).toBeTruthy();
     })
 
     it("marks non-numerical strings as invalid", function() {
-        expect(numericals.validate("I'm the string")).toBeFalsy();
+        expect(numericals.performValidation({ value: "I'm the string" })).toBeFalsy();
     })
 
     it("marks negative numbers as invalid", function() {
-        expect(numericals.validate("-1")).toBeFalsy();
+        expect(numericals.performValidation({ value: "-1" })).toBeFalsy();
     })
 });
 
-describe("chorus.utilities.DatasetFilterMaps.time", function() {
-    var time = chorus.utilities.DatasetFilterMaps.time;
+describe("chorus.models.DatasetFilterMaps.time", function() {
+    var time = new chorus.models.DatasetFilterMaps.Time;
+
     itReturnsTheRightClauseFor("equal", "column_name", "some_value", "\"column_name\" = 'some_value'")
     itReturnsTheRightClauseFor("before", "column_name", "some_value", "\"column_name\" < 'some_value'")
     itReturnsTheRightClauseFor("after", "column_name", "some_value", "\"column_name\" > 'some_value'")
@@ -97,28 +100,29 @@ describe("chorus.utilities.DatasetFilterMaps.time", function() {
     }
 
     it("marks times as valid", function() {
-        expect(time.validate("13")).toBeTruthy();
-        expect(time.validate("13:37")).toBeTruthy();
-        expect(time.validate("31:13:37")).toBeTruthy();
+        expect(time.performValidation({ value: "13" })).toBeTruthy();
+        expect(time.performValidation({ value: "13:37" })).toBeTruthy();
+        expect(time.performValidation({ value: "31:13:37" })).toBeTruthy();
     })
 
     it("marks weird, time-like stings as valid", function() {
-        expect(time.validate("13:")).toBeTruthy();
-        expect(time.validate("1:::37")).toBeTruthy();
-        expect(time.validate("::::::::")).toBeTruthy();
+        expect(time.performValidation({ value: "13:" })).toBeTruthy();
+        expect(time.performValidation({ value: "1:::37" })).toBeTruthy();
+        expect(time.performValidation({ value: "::::::::" })).toBeTruthy();
     })
 
     it("marks anything but times as invalid", function() {
-        expect(time.validate("4,5")).toBeFalsy();
-        expect(time.validate("Greetings")).toBeFalsy();
-        expect(time.validate("www.google.com")).toBeFalsy();
-        expect(time.validate("13.45")).toBeFalsy();
-        expect(time.validate("12am")).toBeFalsy();
+        expect(time.performValidation({ value: "4,5" })).toBeFalsy();
+        expect(time.performValidation({ value: "Greetings" })).toBeFalsy();
+        expect(time.performValidation({ value: "www.google.com" })).toBeFalsy();
+        expect(time.performValidation({ value: "13.45" })).toBeFalsy();
+        expect(time.performValidation({ value: "12am" })).toBeFalsy();
     })
 });
 
-describe("chorus.utilities.DatasetFilterMaps.date", function() {
-    var date = chorus.utilities.DatasetFilterMaps.date;
+describe("chorus.models.DatasetFilterMaps.date", function() {
+    var date = new chorus.models.DatasetFilterMaps.Date;
+
     itReturnsTheRightClauseFor("on", "column_name", "some_value", "\"column_name\" = 'some_value'")
     itReturnsTheRightClauseFor("before", "column_name", "some_value", "\"column_name\" < 'some_value'")
     itReturnsTheRightClauseFor("after", "column_name", "some_value", "\"column_name\" > 'some_value'")
