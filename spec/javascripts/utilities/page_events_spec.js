@@ -83,4 +83,32 @@ describe("chorus.PageEvents", function() {
             expect(spy).toHaveBeenCalled();
         });
     });
+
+    describe("#hasSubscription", function() {
+        beforeEach(function() {
+            chorus.PageEvents.reset();
+            this.subscriber = new chorus.models.Base();
+            this.subscriber.method = jasmine.createSpy();
+        });
+
+        it("returns false when the binding does not exist", function() {
+            expect(chorus.PageEvents.hasSubscription("foo", this.subscriber.method, this.subscriber)).toBeFalsy();
+        });
+
+        it("returns true when the binding exists", function() {
+            chorus.PageEvents.subscribe("foo", this.subscriber.method, this.subscriber);
+            expect(chorus.PageEvents.hasSubscription("foo", this.subscriber.method, this.subscriber)).toBeTruthy();
+        });
+
+        it("returns false when the context doesn't match", function() {
+            chorus.PageEvents.subscribe("foo", this.subscriber.method, this.subscriber);
+            expect(chorus.PageEvents.hasSubscription("foo", this.subscriber.method, {})).toBeFalsy();
+        });
+
+        it("returns false when the callback doesn't match", function() {
+            this.subscriber.otherMethod = function() {}
+            chorus.PageEvents.subscribe("foo", this.subscriber.method, this.subscriber);
+            expect(chorus.PageEvents.hasSubscription("foo", this.subscriber.otherMethod, this.subscriber)).toBeFalsy();
+        });
+    })
 });

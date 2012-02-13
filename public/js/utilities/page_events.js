@@ -26,12 +26,21 @@ chorus.utilities.PageEvents.prototype.unsubscribe = function(handle) {
     this.subscriptions[eventName] = _.without(this.subscriptions[eventName], fullHandle.binding);
 }
 
+// Really only used for tests
+chorus.utilities.PageEvents.prototype.hasSubscription = function(eventName, callback, context) {
+    var eventMatches = this.subscriptions[eventName];
+
+    return eventMatches && _.find(eventMatches, function(eventMatch) {
+        return eventMatch.callback == callback && eventMatch.context == context;
+    })
+}
+
 chorus.utilities.PageEvents.prototype.broadcast = function(eventName, argsArray) {
     var list = this.subscriptions[eventName];
     if (!list) {
         return;
     }
-    
+
     _.each(list, function(binding) {
         binding.callback.apply(binding.context, argsArray);
     });
