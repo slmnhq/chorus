@@ -72,5 +72,16 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
 
     isChorusView: function() {
         return this.get("type") === "CHORUS_VIEW";
+    },
+
+    statistics: function() {
+        var stats = this._super("statistics")
+
+        if (this.isChorusView() && !stats.datasetId) {
+            stats.set({ workspace: this.get("workspace")})
+            stats.datasetId = this.get("id")
+        }
+
+        return stats;
     }
 });

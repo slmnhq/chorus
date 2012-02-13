@@ -207,4 +207,20 @@ describe("chorus.models.Dataset", function() {
             })
         });
     });
+
+    describe("#statistics", function() {
+        context("for a chorus view", function() {
+            beforeEach(function() {
+                this.dataset.set({ type: "CHORUS_VIEW" })
+            });
+
+            it("sets the workspace info into the statistics object", function() {
+                expect(this.dataset.statistics().get("workspace")).toEqual(this.dataset.get("workspace"))
+            })
+
+            it("sets the dataset id onto the statistics object as 'datasetId'", function() {
+                expect(this.dataset.statistics().datasetId).toBe(this.dataset.get("id"))
+            })
+        })
+    })
 })

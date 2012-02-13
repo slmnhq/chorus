@@ -33,5 +33,25 @@ describe("chorus.models.DatabaseObjectStatistics", function() {
                 expect(this.databaseObjectStatistics.url()).toMatchUrl("/edc/data/1/database/theDatabase/schema/theSchema?type=meta&filter=anotherName")
             })
         })
+
+        describe("when it has a datasetId property", function() {
+            it("uses the dataset API", function() {
+                this.databaseObjectStatistics.set({
+                    instanceId: 1,
+                    databaseName: "theDatabase",
+                    schemaName: "theSchema",
+                    type: "CHORUS_VIEW",
+                    objectType: "",
+                    objectName: "anotherName",
+                    workspace: {
+                        id: 10010
+                    }
+                })
+
+                this.databaseObjectStatistics.datasetId = "composite|id"
+
+                expect(this.databaseObjectStatistics.url()).toMatchUrl("/edc/workspace/10010/dataset/composite|id")
+            })
+        })
     })
 })
