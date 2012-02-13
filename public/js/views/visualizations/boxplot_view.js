@@ -137,21 +137,6 @@ chorus.views.visualizations.Boxplot = chorus.views.Base.extend(_.extend(chorus.M
                     return scales.y(d.min);
                 });
         }
-    },
-
-    chartArea : function(el) {
-        this.plotWidth = 925;
-        this.plotHeight = 340;
-
-        return d3.select(el)
-            .append("svg:svg")
-            .attr("class", "chart")
-            .attr("width", this.plotWidth)
-            .attr("height", this.plotHeight)
-            .append("svg:g")
-            .attr("class", "plot")
-            .attr("width", this.plotWidth)
-            .attr("height", this.plotHeight);
     }
 }));
 
