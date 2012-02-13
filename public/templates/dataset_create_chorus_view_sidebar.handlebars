@@ -15,9 +15,12 @@
             <ul class="columns"></ul>
         </div>
         <div class="empty_selection">
-            <span class="top"><span class="double_lines"></span><label>{{t "dataset.chorusview.sidebar.empty_selection.title"}}</label><span class="double_lines"></span></span>
+            <span class="top"><label>{{t "dataset.chorusview.sidebar.empty_selection.title"}}</label></span>
             <span class="bottom">{{t "dataset.chorusview.sidebar.empty_selection.text"}}</span>
         </div>
     </div>
-    <button class="create {{#unless models}}disabled{{/unless}}">{{t "dataset.chorusview.sidebar.create_dataset"}}</button>
+
+    <div class="button_wrapper">
+        <button class="create" disabled="disabled">{{t "dataset.chorusview.sidebar.create_dataset"}}</button>
+    </div>
 </fieldset>

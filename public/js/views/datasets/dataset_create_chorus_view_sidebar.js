@@ -24,6 +24,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         $li.data("model", model);
 
         this.$(".non_empty_selection .columns").append($li);
+        this.$("button.create").prop("disabled", false);
     },
 
     removeColumn: function(model) {
@@ -35,6 +36,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         if (this.$(".columns li").length == 0) {
             this.$(".non_empty_selection").addClass("hidden");
             this.$(".empty_selection").removeClass("hidden");
+            this.$("button.create").prop("disabled", "disabled");
         }
     },
 
@@ -58,8 +60,11 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
             objectType: "QUERY"
         };
 
+        var button = this.$("button.create");
+        button.startLoading("loading");
         $.post("/edc/workspace/" + this.model.get("workspace").id + "/dataset", params,
             function(data) {
+                button.stopLoading();
                 if (data.status == "ok") {
                     chorus.toast("dataset.chorusview.create_success");
                 } else {
