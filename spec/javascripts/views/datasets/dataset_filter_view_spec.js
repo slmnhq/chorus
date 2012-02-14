@@ -1,13 +1,13 @@
 describe("chorus.views.DatasetFilter", function() {
-    beforeEach(function () {
+    beforeEach(function() {
         this.collection = fixtures.databaseColumnSet();
         this.view = new chorus.views.DatasetFilter({collection: this.collection});
     });
 
     describe("#render", function() {
-        beforeEach(function () {
+        beforeEach(function() {
             // styleSelect is deferred, but call it immediately for these tests
-            spyOn(_, "defer").andCallFake(function(f){return f()});
+            spyOn(_, "defer").andCallFake(function(f) {return f()});
             spyOn(chorus, "styleSelect");
             spyOn(chorus, 'datePicker').andCallThrough();
 
@@ -19,7 +19,7 @@ describe("chorus.views.DatasetFilter", function() {
             expect(this.view.$(".column_filter option").length).toBe(this.collection.length);
 
             var view = this.view;
-            this.collection.each(function(model){
+            this.collection.each(function(model) {
                 expect(view.$(".column_filter option")).toContainText(model.get("name"));
             });
         });
@@ -42,7 +42,7 @@ describe("chorus.views.DatasetFilter", function() {
         });
 
         describe("clicking on the remove button", function() {
-            beforeEach(function () {
+            beforeEach(function() {
                 spyOnEvent(this.view, "filterview:deleted");
                 this.view.$(".remove").click();
             });
@@ -53,8 +53,8 @@ describe("chorus.views.DatasetFilter", function() {
         });
 
         describe("columns with typeCategory: other", function() {
-            beforeEach(function () {
-                this.collection.models[1].set({typeCategory:"OTHER"});
+            beforeEach(function() {
+                this.collection.models[1].set({typeCategory: "OTHER"});
                 this.view.render();
             });
 
@@ -67,7 +67,7 @@ describe("chorus.views.DatasetFilter", function() {
         describe("#validateInput", function() {
             describe("with a numeric column", function() {
                 beforeEach(function() {
-                    this.collection.models[0].set({typeCategory:"REAL_NUMBER"});
+                    this.collection.models[0].set({typeCategory: "REAL_NUMBER"});
                     this.view.render();
                     spyOn(this.view.model, "performValidation").andCallThrough();
                     spyOn(this.view, "markInputAsInvalid");
@@ -101,7 +101,7 @@ describe("chorus.views.DatasetFilter", function() {
 
             describe("with a date column", function() {
                 beforeEach(function() {
-                    this.collection.models[0].set({ typeCategory : "DATE" });
+                    this.collection.models[0].set({ typeCategory: "DATE" });
                     this.view.render();
 
                     spyOn(this.view.model, "performValidation");
@@ -151,8 +151,8 @@ describe("chorus.views.DatasetFilter", function() {
         });
 
         describe("columns with typeCategory: STRING, LONG_STRING", function() {
-            beforeEach(function () {
-                this.collection.models[0].set({typeCategory:"STRING"});
+            beforeEach(function() {
+                this.collection.models[0].set({typeCategory: "STRING"});
                 this.view.render();
 
                 this.keys = [
@@ -173,14 +173,14 @@ describe("chorus.views.DatasetFilter", function() {
             it("adds a second select with the string options", function() {
                 var view = this.view;
 
-                _.each(this.keys, function(key){
+                _.each(this.keys, function(key) {
                     expect(view.$(".string option")).toContainTranslation("dataset.filter." + key);
                 });
             });
 
             describe("when choosing a comparator", function() {
-                _.each(_.keys(chorus.models.DatasetFilterMaps.String.prototype.comparators), function(key){
-                    if (chorus.models.DatasetFilterMaps.String.prototype.comparators[key].usesInput){
+                _.each(_.keys(chorus.models.DatasetFilterMaps.String.prototype.comparators), function(key) {
+                    if (chorus.models.DatasetFilterMaps.String.prototype.comparators[key].usesInput) {
                         it("correctly shows the input for " + key, function() {
                             this.view.$(".comparator").val(key).change();
                             expect(this.view.$(".filter.default input")).toBeVisible();
@@ -196,7 +196,8 @@ describe("chorus.views.DatasetFilter", function() {
 
             describe("when the input is hidden and a new column is chosen and the default option should show the input", function() {
                 beforeEach(function() {
-                    this.view.$('input.filter_input').addClass('hidden')
+                    this.view.$('select.comparator').prop("selectedIndex", 3).change();
+                    expect(this.view.$('.filter.default')).toHaveClass('hidden')
                     this.view.$('.column_filter').prop("selectedIndex", 1).change();
                 })
 
@@ -207,8 +208,8 @@ describe("chorus.views.DatasetFilter", function() {
         });
 
         describe("columns with typeCategory: WHOLE_NUMBER, REAL_NUMBER", function() {
-            beforeEach(function () {
-                this.collection.models[0].set({typeCategory:"REAL_NUMBER"});
+            beforeEach(function() {
+                this.collection.models[0].set({typeCategory: "REAL_NUMBER"});
                 this.view.render();
 
                 this.keys = [
@@ -226,14 +227,14 @@ describe("chorus.views.DatasetFilter", function() {
             it("adds a second select with the numeric options", function() {
                 var view = this.view;
 
-                _.each(this.keys, function(key){
+                _.each(this.keys, function(key) {
                     expect(view.$(".numeric option")).toContainTranslation("dataset.filter." + key);
                 });
             });
 
             describe("when choosing an option", function() {
-                _.each(_.keys(chorus.models.DatasetFilterMaps.Numeric.prototype.comparators), function(key){
-                    if (chorus.models.DatasetFilterMaps.Numeric.prototype.comparators[key].usesInput){
+                _.each(_.keys(chorus.models.DatasetFilterMaps.Numeric.prototype.comparators), function(key) {
+                    if (chorus.models.DatasetFilterMaps.Numeric.prototype.comparators[key].usesInput) {
                         it("correctly shows the input for " + key, function() {
                             this.view.$(".comparator").val(key).change();
                             expect(this.view.$(".filter.default input")).toBeVisible();
@@ -249,8 +250,8 @@ describe("chorus.views.DatasetFilter", function() {
         });
 
         describe("columns with typeCategory: DATE", function() {
-            beforeEach(function () {
-                this.collection.models[0].set({ typeCategory : "DATE" });
+            beforeEach(function() {
+                this.collection.models[0].set({ typeCategory: "DATE" });
                 this.view.render();
 
                 this.comparatorTypes = [
@@ -275,7 +276,7 @@ describe("chorus.views.DatasetFilter", function() {
 
             it("adds a second select with all of the comparator options for date columns", function() {
                 expect(this.view.$("select.comparator")).toHaveClass("date");
-                _.each(this.comparatorTypes, function(comparatorType){
+                _.each(this.comparatorTypes, function(comparatorType) {
                     expect(this.view.$("select.comparator option")).toContainTranslation("dataset.filter." + comparatorType);
                 }, this);
             });
@@ -313,9 +314,20 @@ describe("chorus.views.DatasetFilter", function() {
             });
         });
 
+        describe("columns with typeCategory: DATETIME", function() {
+            beforeEach(function() {
+                this.collection.models[0].set({ typeCategory: "DATETIME" });
+                this.view.render();
+            })
+
+            it("uses the String type", function() {
+                expect(this.view.model).toBeA(chorus.models.DatasetFilterMaps.String);
+            })
+        });
+
         describe("#filterString", function() {
-            beforeEach(function () {
-                this.collection.models[0].set({typeCategory:"STRING"});
+            beforeEach(function() {
+                this.collection.models[0].set({typeCategory: "STRING"});
                 this.view.render();
 
                 this.view.$(".comparator").val("not_equal").change();

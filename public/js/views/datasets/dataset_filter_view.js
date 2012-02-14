@@ -1,19 +1,19 @@
 chorus.views.DatasetFilter = chorus.views.Base.extend({
-    className:"dataset_filter",
-    tagName:"li",
+    className: "dataset_filter",
+    tagName: "li",
 
-    events:{
-        "click .remove":"removeSelf",
-        "change select.column_filter":"columnSelected",
-        "change select.comparator":"comparatorSelected",
-        "paste input.validatable":"validateInput",
-        "keyup input.validatable":"validateInput"
+    events: {
+        "click .remove": "removeSelf",
+        "change select.column_filter": "columnSelected",
+        "change select.comparator": "comparatorSelected",
+        "paste input.validatable": "validateInput",
+        "keyup input.validatable": "validateInput"
     },
 
-    postRender:function () {
+    postRender: function() {
         var $select = this.$("select.column_filter");
         var self = this;
-        _.defer(function () {
+        _.defer(function() {
             chorus.styleSelect($select);
             chorus.datePicker({
                 "%Y": self.$(".filter.date input[name='year']"),
@@ -30,13 +30,13 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         this.comparatorSelected();
     },
 
-    collectionModelContext:function (model) {
+    collectionModelContext: function(model) {
         return {
-            disable:model.get("typeCategory") == "OTHER"
+            disable: model.get("typeCategory") == "OTHER"
         }
     },
 
-    removeSelf:function (e) {
+    removeSelf: function(e) {
         e && e.preventDefault();
         this.trigger("filterview:deleted", this);
     },
@@ -52,6 +52,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         switch (type) {
             case "STRING":
             case "LONG_STRING":
+            case "DATETIME":
                 $comparator.addClass("string");
                 this.model = new chorus.models.DatasetFilterMaps.String
                 break;
@@ -77,14 +78,14 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
             $comparator.append(el);
         });
 
-        _.defer(function () {
+        _.defer(function() {
             chorus.styleSelect($comparator)
         });
 
         this.comparatorSelected();
     },
 
-    comparatorSelected:function () {
+    comparatorSelected: function() {
         var comparatorName = this.$("select.comparator option:selected").val();
         if (!this.model) { return; }
 
@@ -96,7 +97,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         this.validateInput();
     },
 
-    filterString : function() {
+    filterString: function() {
         var columnName = this.$("select.column_filter").val();
         var comparatorName = this.$("select.comparator").val();
         var inputValue = this.fieldValues().value;
@@ -110,9 +111,9 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
                 return { value: this.$(".filter.time input").val() };
                 break;
             case "Date":
-                var year  = this.$(".filter.date input[name='year']").val(),
+                var year = this.$(".filter.date input[name='year']").val(),
                     month = this.$(".filter.date input[name='month']").val(),
-                    day   = this.$(".filter.date input[name='day']").val();
+                    day = this.$(".filter.date input[name='day']").val();
                 return {
                     year: year,
                     month: month,
@@ -127,7 +128,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         }
     },
 
-    validateInput : function() {
+    validateInput: function() {
         if (!this.model) { return; }
         if (this.model.performValidation(this.fieldValues())) {
             this.clearErrors();
