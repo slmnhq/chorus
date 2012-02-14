@@ -5,46 +5,62 @@
         persistent: true,
 
         events : {
-            "click a.check_username": "checkUsername",
-            "submit form": "submitNewUser"
+            "submit form": "formSubmitted",
+            "click a.check_username": "checkUsernameClicked",
         },
 
         setup: function() {
             this.model.bind("saved", userSuccessfullySaved, this);
         },
 
-        checkUsername: function() {
+        checkUsernameClicked: function() {
+            this.checkUsername(this.ldapUsersFetched);
+        },
+
+        formSubmitted: function(e) {
+            e.preventDefault();
+            this.checkUsername(this.submitNewUser);
+        },
+
+        checkUsername: function(callback) {
             var username = this.$("input[name=userName]").val();
             this.collection = new chorus.collections.LdapUserSet([], { userName: username });
-            this.collection.bind("reset", this.ldapUsersFetched, this);
             this.collection.fetch();
+            this.collection.bind("reset", function() {
+                if (this.collection.models.length > 0) {
+                    callback.call(this);
+                } else {
+                    this.noLdapUserFound();
+                }
+            }, this);
         },
 
         ldapUsersFetched: function() {
             var model = this.collection.first();
-            if (model) {
-                this.$("input[name='firstName']").val(model.get("firstName"));
-                this.$("input[name='lastName']").val(model.get("lastName"));
-                this.$("input[name='emailAddress']").val(model.get("emailAddress"));
-                this.$("input[name='title']").val(model.get("title"));
-                this.$("input[name='ou']").val(model.get("ou"));
-            } else {
-                var alert = new chorus.alerts.NoLdapUser({ username: this.collection.attributes.userName });
-                alert.launchModal();
-            }
+            this.$("input[name='firstName']").val(model.get("firstName"));
+            this.$("input[name='lastName']").val(model.get("lastName"));
+            this.$("input[name='emailAddress']").val(model.get("emailAddress"));
+            this.$("input[name='title']").val(model.get("title"));
+            this.$("input[name='ou']").val(model.get("ou"));
         },
 
-        submitNewUser: function(e) {
-            e.preventDefault();
+        noLdapUserFound: function() {
+            var alert = new chorus.alerts.NoLdapUser({ username: this.collection.attributes.userName });
+            alert.launchModal();
+        },
 
+        submitNewUser: function() {
+            this.model.save(this.fieldValues(), { method: "create" });
+        },
+
+        fieldValues: function() {
             var updates = {};
             _.each(this.$("input"), function (i) {
                 var input = $(i);
                 updates[input.attr("name")] = input.val().trim();
             });
             updates.admin = this.$("input#admin-checkbox").prop("checked") || false;
-
-            this.model.save(updates, { method: "create" });
+            return updates;
         }
 
         // goBack: function() {

@@ -9,6 +9,50 @@ describe("chorus.views.UserNewLdap", function() {
                 this.view.render();
             });
 
+            describe("#fieldValues", function() {
+                beforeEach(function() {
+                    this.view.$("input[name=firstName]").val("Frankie");
+                    this.view.$("input[name=lastName]").val("Knuckles");
+                    this.view.$("input[name=userName]").val("frankie2002");
+                    this.view.$("input[name=emailAddress]").val("frankie_knuckles@nyclol.com");
+                    this.view.$("input[name=ou]").val("awesomeness dept");
+                    this.view.$("input[name=title]").val("fashion policeman");
+                    this.view.$("input[name=admin]").prop("checked", true);
+                });
+
+                it("includes the values of every input in the form", function() {
+                    expect(this.view.fieldValues()).toEqual({
+                        firstName: "Frankie",
+                        lastName: "Knuckles",
+                        userName: "frankie2002",
+                        emailAddress: "frankie_knuckles@nyclol.com",
+                        ou: "awesomeness dept",
+                        title: "fashion policeman",
+                        admin: true
+                    });
+                });
+
+                context("when the 'admin' box is checked", function() {
+                    it("sets the 'admin' field to true", function() {
+                        expect(this.view.fieldValues().admin).toBeTruthy();
+                    });
+                });
+
+                context("when the 'admin' box is unchecked", function() {
+                    it("sets the 'admin' field to false", function() {
+                        this.view.$("input[name=admin]").prop("checked", false);
+                        expect(this.view.fieldValues().admin).toBeFalsy();
+                    });
+                });
+
+                context("when there is whitespace surrounding an input value", function() {
+                    it("trims the whitespace before submission", function(){
+                        this.view.$("input[name=firstName]").val("     spaces     ");
+                        expect(this.view.fieldValues().firstName).toBe("spaces");
+                    });
+                });
+            });
+
             it("has a link to check whether the user is in the ldap database", function() {
                 expect(this.view.$("a.check_username")).toExist();
             });
@@ -72,78 +116,88 @@ describe("chorus.views.UserNewLdap", function() {
                     this.view.$("input[name=emailAddress]").val("frankie_knuckles@nyclol.com");
                     this.view.$("input[name=ou]").val("awesomeness dept");
                     this.view.$("input[name=admin]").prop("checked", true);
-                })
 
-                it("creates a user with the form's attributes", function() {
                     this.view.$("form").submit();
 
-                    expect(this.user.attributes["firstName"]).toBe("Frankie");
-                    expect(this.user.attributes["lastName"]).toBe("Knuckles");
-                    expect(this.user.attributes["userName"]).toBe("frankie2002");
-                    expect(this.user.attributes["emailAddress"]).toBe("frankie_knuckles@nyclol.com");
-                    expect(this.user.attributes["ou"]).toBe("awesomeness dept");
-                    expect(this.user.attributes["admin"]).toBe(true);
+                    this.ldapUsers = new chorus.collections.LdapUserSet([], { userName: "frankie2002" });
+                })
+
+                it("checks the LDAP username", function() {
+                    expect(this.ldapUsers).toHaveBeenFetched();
                 });
 
-                context("when the user form has admin unchecked", function() {
-                    beforeEach(function() {
-                        this.view.$("input[name=admin]").prop("checked", false);
-                    });
-
-                    it("sets the user attribute 'admin' to false", function() {
-                        this.view.$("form").submit();
-                        expect(this.user.attributes["admin"]).toBe(false);
-                    });
-                });
-
-                context("when the data is valid", function() {
-                    it("saves the user", function() {
-                        this.view.$("form").submit();
-                        expect(this.user).toHaveBeenCreated();
-                    });
-
-                    context("when user creation is successful", function() {
-                        it("redirects to user index", function() {
-                            spyOn(chorus.router, "navigate");
-                            this.server.completeSaveFor(this.user);
-                            expect(chorus.router.navigate).toHaveBeenCalledWith("/users", true);
-                        });
-                    });
-
-                    context("when user creation fails on the server", function() {
+                describe("when the server responds to the LDAP username check", function() {
+                    context("and the user exists", function() {
                         beforeEach(function() {
-                            this.view.model.serverErrors = [
-                                {message : "Hi there"}
-                            ];
-                            this.view.$("form").submit();
-                            this.view.model.trigger("saveFailed");
+                            spyOn(this.view, 'fieldValues').andCallThrough()
 
-                            this.view.render();
+                            this.server.completeFetchFor(this.ldapUsers, [
+                                fixtures.user({ userName: "frankie2002" })
+                            ]);
                         });
 
-                        it("doesn't redirect", function() {
-                            expect(this.view.$("form")).toExist();
+                        it("creates a user with the form's attributes", function() {
+                            expect(this.view.fieldValues).toHaveBeenCalled();
+
+                            expect(this.user.attributes["firstName"]).toBe("Frankie");
+                            expect(this.user.attributes["lastName"]).toBe("Knuckles");
+                            expect(this.user.attributes["userName"]).toBe("frankie2002");
+                            expect(this.user.attributes["emailAddress"]).toBe("frankie_knuckles@nyclol.com");
+                            expect(this.user.attributes["ou"]).toBe("awesomeness dept");
+                            expect(this.user.attributes["admin"]).toBe(true);
+                        });
+
+                        it("saves the user", function() {
+                            expect(this.user).toHaveBeenCreated();
+                        });
+
+                        context("when user creation is successful", function() {
+                            it("redirects to user index", function() {
+                                spyOn(chorus.router, "navigate");
+                                this.server.completeSaveFor(this.user);
+                                expect(chorus.router.navigate).toHaveBeenCalledWith("/users", true);
+                            });
+                        });
+
+                        context("when user creation fails on the server", function() {
+                            beforeEach(function() {
+                                this.view.model.serverErrors = [
+                                    {message : "Hi there"}
+                                ];
+                                this.view.$("form").submit();
+                                this.view.model.trigger("saveFailed");
+
+                                this.view.render();
+                            });
+
+                            it("doesn't redirect", function() {
+                                expect(this.view.$("form")).toExist();
+                            })
+
+                            it("retains the data already entered", function() {
+                                expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
+                                expect(this.view.$("input[name=lastName]").val()).toBe("Knuckles");
+                                expect(this.view.$("input[name=userName]").val()).toBe("frankie2002");
+                                expect(this.view.$("input[name=emailAddress]").val()).toBe("frankie_knuckles@nyclol.com");
+                                expect(this.view.$("input[name=ou]").val()).toBe("awesomeness dept");
+                                expect(this.view.$("input[name=admin]")).toBeChecked();
+                            });
                         })
-
-                        it("retains the data already entered", function() {
-                            expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
-                            expect(this.view.$("input[name=lastName]").val()).toBe("Knuckles");
-                            expect(this.view.$("input[name=userName]").val()).toBe("frankie2002");
-                            expect(this.view.$("input[name=emailAddress]").val()).toBe("frankie_knuckles@nyclol.com");
-                            expect(this.view.$("input[name=ou]").val()).toBe("awesomeness dept");
-                            expect(this.view.$("input[name=admin]")).toBeChecked();
-                        });
-                    })
-                });
-
-                context("when the form has extra whitespace around an input", function(){
-                    beforeEach(function(){
-                        this.view.$("input[name=firstName]").val("     spaces     ");
-                        this.view.$("form").submit();
                     });
 
-                    it("trims the whitespace before submission", function(){
-                        expect(this.user.attributes["firstName"]).toBe("spaces");
+                    context("and the user does not exist", function() {
+                        beforeEach(function() {
+                            this.modalSpy = stubModals();
+                            this.server.completeFetchFor(this.ldapUsers, []);
+                        });
+
+                        it("does not save the user", function() {
+                            expect(this.user).not.toHaveBeenCreated();
+                        });
+
+                        it("launches an alert dialog", function() {
+                            expect(this.modalSpy).toHaveModal(chorus.alerts.NoLdapUser);
+                        });
                     });
                 });
             });
