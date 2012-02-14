@@ -43,23 +43,6 @@ describe("chorus.views.DatasetEditChorusView", function() {
                 });
             });
 
-            describe("#editable", function() {
-                it("set the file to be editable", function() {
-                    this.view.model.canEdit = function() {
-                        return true;
-                    }
-                    this.view.render();
-                    expect(this.view.editor.getOption("readOnly")).toBe(false);
-                });
-                it("set the file to be not editable", function() {
-                    this.view.model.canEdit = function() {
-                        return false;
-                    }
-                    this.view.render();
-                    expect(this.view.editor.getOption("readOnly")).toBeFalsy();
-                });
-            });
-
             it("displays line numbers", function() {
                 expect(this.view.editor.getOption("lineNumbers")).toBe(true);
             });
@@ -76,18 +59,12 @@ describe("chorus.views.DatasetEditChorusView", function() {
 
         describe("#saveChanges", function() {
             beforeEach(function() {
-                this.view.$(".text_editor").text("select * from table_abc");
                 this.view.render();
 
+                this.view.editor.setValue("select * from table_abc");
                 spyOn(this.view.model, "save");
-//                this.view.editor.setCursor(0, 23);
                 this.view.trigger("dataset:saveEdit");
                 this.clock.tick(1000);
-            });
-
-            it("sets cursor at the correct position", function() {
-//                expect(this.view.editor.getCursor().ch).toBe(23);
-                expect(this.view.editor.getCursor().line).toBe(0);
             });
 
             it("saves the model", function() {
@@ -95,7 +72,7 @@ describe("chorus.views.DatasetEditChorusView", function() {
             });
 
             it("sets the query in the model", function() {
-//                expect(this.view.model.get("query")).toBe("select * from table_abc");
+                expect(this.view.model.get("query")).toBe("select * from table_abc");
             })
         });
     });
