@@ -192,8 +192,7 @@ describe("chorus.views.DatasetList", function() {
 
         describe("clicking an li", function() {
             beforeEach(function() {
-                this.selectedSpy = jasmine.createSpy("li selected");
-                this.view.bind("dataset:selected", this.selectedSpy);
+                spyOn(chorus.PageEvents, "broadcast").andCallThrough();
                 this.view.$("li").eq(1).click();
             });
 
@@ -202,8 +201,8 @@ describe("chorus.views.DatasetList", function() {
                 expect(this.view.$("li").eq(1)).toHaveClass("selected");
             });
 
-            it("triggers dataset:selected with an argument of the selected dataset", function() {
-                expect(this.selectedSpy).toHaveBeenCalledWith(this.collection.models[1]);
+            it("broadcasts dataset:selected with an argument of the selected dataset", function() {
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("dataset:selected", this.collection.models[1]);
             });
         });
     });

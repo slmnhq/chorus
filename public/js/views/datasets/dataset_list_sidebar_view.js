@@ -7,7 +7,7 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
     },
 
     setup:function () {
-        this.bind("dataset:selected", this.setDataset, this);
+        chorus.PageEvents.subscribe("dataset:selected", this.setDataset, this);
         this.tabControl = new chorus.views.TabControl([
             {name:'activity', selector:".activity_list"},
             {name:'statistics', selector:".statistics_detail"}
