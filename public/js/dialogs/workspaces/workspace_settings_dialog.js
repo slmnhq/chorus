@@ -9,12 +9,6 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.extend({
     },
 
     additionalContext:function () {
-        var ownerId = this.pageModel.get("ownerId")
-
-        var owner = this.pageModel.members().find(function (member) {
-            return member.get("id") == ownerId;
-        });
-
         var sandbox = this.pageModel.sandbox();
         var sandboxLocation = sandbox ?
             sandbox.get("instanceName") + ' / ' + sandbox.get("databaseName") + ' / ' + sandbox.get("schemaName")
@@ -24,19 +18,28 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.extend({
             imageUrl:this.pageModel.imageUrl(),
             hasImage:this.pageModel.hasImage(),
             members:this.pageModel.members().models,
-            permission:((this.pageModel.get("ownerId") == chorus.session.user().get("id")) || chorus.session.user().get("admin")),
-            ownerName:owner && owner.displayName(),
+            permission: this.hasPermission,
+            ownerName: this.owner && this.owner.displayName(),
+            ownerUrl: this.owner.showUrl(),
             sandboxLocation:sandboxLocation
         }
     },
 
     setup:function () {
+        var ownerId = this.pageModel.get("ownerId");
+        this.owner = this.pageModel.members().find(function (member) {
+            return member.get("id") == ownerId
+        });
+
+        this.hasPermission = (ownerId == chorus.session.user().get("id")) || chorus.session.user().get("admin");
         this.imageUpload = new chorus.views.ImageUpload({
             model:this.pageModel,
             addImageKey:"workspace.settings.image.add",
             changeImageKey:"workspace.settings.image.change",
-            spinnerSmall:true
+            spinnerSmall:true,
+            editable: this.hasPermission
         });
+
         this.pageModel.bind("saved", this.saved, this);
         this.model.members().sortAsc("lastName");
         this.model.members().fetch();

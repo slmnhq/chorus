@@ -14,6 +14,20 @@ describe("chorus.views.ImageUpload", function() {
             this.view.render();
         });
 
+        context("when the image is not editable", function() {
+            beforeEach(function() {
+                this.view.editable = false;
+                this.view.render();
+            });
+
+            it("does not display the change link", function() {
+                expect(this.view.$("a.action")).not.toExist();
+            });
+
+            it("disables the file input", function() {
+                expect(this.view.$("input[type=file]")).toBeDisabled();
+            });
+        });
 
         context("when the model does NOT have an image", function() {
             beforeEach(function() {

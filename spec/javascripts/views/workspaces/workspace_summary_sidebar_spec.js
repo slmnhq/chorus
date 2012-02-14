@@ -120,8 +120,8 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
                 this.view.render();
             });
 
-            it("does not have a link to edit workspace settings", function() {
-                expect(this.view.$("a[data-dialog=WorkspaceSettings]").length).toBe(0);
+            it("does have a link to edit workspace settings", function() {
+                expect(this.view.$("a[data-dialog=WorkspaceSettings]").text().trim()).toMatchTranslation("actions.view_workspace_settings");
             });
 
             it("does not have a link to delete the workspace", function() {

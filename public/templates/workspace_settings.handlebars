@@ -1,6 +1,10 @@
 <form>
     <label class="required">{{t "workspace.settings.name"}}</label>
-    <input type="text" name="name" maxlength="256" value="{{name}}" tabindex="1"/>
+    <input type="text" name="name" maxlength="256" value="{{name}}" tabindex="1"
+           {{#unless permission}}
+                disabled="disabled"
+            {{/unless}}
+            />
     <input type="checkbox" id="public_checkbox" name="isPublic"
         {{#if isPublic}}
             checked="checked"
@@ -12,7 +16,11 @@
     <label for="public_checkbox">{{t "workspace.settings.publicly_available"}}</label>
 
     <label>{{t "workspace.settings.summary"}}</label>
-    <textarea name="summary" rows="6" tabindex="2">{{summary}}</textarea>
+    <textarea name="summary" rows="6" tabindex="2"
+            {{#unless permission}}
+                disabled="disabled"
+            {{/unless}}
+            >{{summary}}</textarea>
 
     <label>Workspace Image</label>
 
@@ -35,7 +43,7 @@
         </select>
     {{else}}
         <label>{{ t "workspace.settings.workspace_owner"}}</label>
-        <div class="owner">{{ownerName}}</div>
+        <div class="owner"><a href="{{{ownerUrl}}}">{{ownerName}}</a></div>
     {{/if}}
 
     <div class="workspace_status">

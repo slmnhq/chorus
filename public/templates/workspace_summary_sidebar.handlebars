@@ -14,6 +14,8 @@
                 {{#unless hasSandbox}}
                     <li><a class="dialog" href="#" data-dialog="SandboxNew" data-workspace-id="{{id}}">{{t "sandbox.create_a_sandbox"}}</a></li>
                 {{/unless}}
+            {{else}}
+            <li><a class="dialog" href="#" data-dialog="WorkspaceSettings">{{t "actions.view_workspace_settings"}}</a></li>
             {{/if}}
             <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workspace" data-workspace-id="{{id}}" data-allow-workfile-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
         </ul>

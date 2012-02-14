@@ -6,7 +6,8 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
             imageUrl:this.model.imageUrl() + "&buster=" + (new Date().getTime()),
             hasImage:this.model.hasImage(),
             addImageKey:this.addImageKey,
-            changeImageKey:this.changeImageKey
+            changeImageKey:this.changeImageKey,
+            editable: this.editable
         }
     },
 
@@ -14,6 +15,7 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
         this.addImageKey = options.addImageKey;
         this.changeImageKey = options.changeImageKey;
         this.spinnerSmall = options.spinnerSmall;
+        this.editable = options.editable || !("editable" in options)
     },
 
     postRender:function () {
