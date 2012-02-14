@@ -76,6 +76,10 @@ describe("chorus.models.DatasetFilterMaps.numeric", function() {
     it("marks negative numbers as invalid", function() {
         expect(numericals.performValidation({ value: "-1" })).toBeFalsy();
     })
+
+    it("marks the empty field valid", function() {
+        expect(numericals.performValidation({ value: "" })).toBeTruthy();
+    })
 });
 
 describe("chorus.models.DatasetFilterMaps.time", function() {
@@ -117,6 +121,10 @@ describe("chorus.models.DatasetFilterMaps.time", function() {
         expect(time.performValidation({ value: "www.google.com" })).toBeFalsy();
         expect(time.performValidation({ value: "13.45" })).toBeFalsy();
         expect(time.performValidation({ value: "12am" })).toBeFalsy();
+    })
+
+    it("marks the empty field valid", function() {
+        expect(time.performValidation({ value: "" })).toBeTruthy();
     })
 });
 
@@ -161,4 +169,14 @@ describe("chorus.models.DatasetFilterMaps.date", function() {
         expect(date.performValidation({ month: "1", day: "31", year: "google" })).toBeFalsy();
         expect(date.errors.year).toMatchTranslation("dataset.filter.year_required");
     });
+
+    it("is not valid if there are empty and non-empty parts", function() {
+        expect(date.performValidation({  month: "", day: "14", year: "2012" })).toBeFalsy();
+        expect(date.performValidation({  month: "5", day: "", year: "2012" })).toBeFalsy();
+        expect(date.performValidation({  month: "5", day: "14", year: "" })).toBeFalsy();
+    })
+
+    it("is valid when all fields are empty", function() {
+        expect(date.performValidation({  month: "", day: "", year: "" })).toBeTruthy();
+    })
 });

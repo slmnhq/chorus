@@ -1,21 +1,21 @@
-(function(){
+(function() {
     chorus.models.DatasetFilterMaps = {};
 
     chorus.models.DatasetFilterMaps.String = chorus.models.Base.extend({
         type: "String",
 
         comparators: {
-            "equal":{usesInput:true, generate: makeGenerate("=") },
-            "not_equal":{usesInput:true, generate: makeGenerate("!=") },
-            "null":{usesInput:false, generate:isNull },
-            "not_null":{usesInput:false, generate:isNotNull },
-            "like":{usesInput:true, generate: makeGenerate("LIKE") },
-            "begin_with":{usesInput:true, generate:makeGenerate("=", {inputSuffix: '%'}) },
-            "end_with":{usesInput:true, generate:makeGenerate("=", {inputPrefix: '%'}) },
-            "alpha_after":{usesInput:true, generate:makeGenerate(">") },
-            "alpha_after_equal":{usesInput:true, generate:makeGenerate(">=") },
-            "alpha_before":{usesInput:true, generate:makeGenerate("<") },
-            "alpha_before_equal":{usesInput:true, generate:makeGenerate("<=") }
+            "equal": {usesInput: true, generate: makeGenerate("=") },
+            "not_equal": {usesInput: true, generate: makeGenerate("!=") },
+            "null": {usesInput: false, generate: isNull },
+            "not_null": {usesInput: false, generate: isNotNull },
+            "like": {usesInput: true, generate: makeGenerate("LIKE") },
+            "begin_with": {usesInput: true, generate: makeGenerate("=", {inputSuffix: '%'}) },
+            "end_with": {usesInput: true, generate: makeGenerate("=", {inputPrefix: '%'}) },
+            "alpha_after": {usesInput: true, generate: makeGenerate(">") },
+            "alpha_after_equal": {usesInput: true, generate: makeGenerate(">=") },
+            "alpha_before": {usesInput: true, generate: makeGenerate("<") },
+            "alpha_before_equal": {usesInput: true, generate: makeGenerate("<=") }
         },
 
         declareValidations: function(attrs) {
@@ -38,7 +38,7 @@
         },
 
         declareValidations: function(attrs) {
-            this.requirePattern("value", /^[0-9,.]*$/, attrs, "dataset.filter.number_required");
+            this.requirePattern("value", /^[0-9,.]*$/, attrs, "dataset.filter.number_required", "allowBlank");
         }
     });
 
@@ -54,7 +54,7 @@
         },
 
         declareValidations: function(attrs) {
-            this.requirePattern("value", /^[0-9:]*$/, attrs, "dataset.filter.time_required");
+            this.requirePattern("value", /^[0-9:]*$/, attrs, "dataset.filter.time_required", "allowBlank");
         }
     });
 
@@ -70,17 +70,19 @@
         },
 
         declareValidations: function(attrs) {
-            this.requirePattern("year",  /^[0-9]*$/, attrs, "dataset.filter.year_required");
+            if (attrs["year"] == "" && attrs["month"] == "" && attrs["day"] == "") return;
+
+            this.requirePattern("year", /^[0-9]*$/, attrs, "dataset.filter.year_required");
             this.requirePattern("month", /^[0-9]*$/, attrs, "dataset.filter.month_required");
-            this.requirePattern("day",   /^[0-9]*$/, attrs, "dataset.filter.day_required");
+            this.requirePattern("day", /^[0-9]*$/, attrs, "dataset.filter.day_required");
         }
     });
 
-    function isNull(columnName, inputValue){
+    function isNull(columnName, inputValue) {
         return qd(columnName) + " IS NULL";
     }
 
-    function isNotNull(columnName, inputValue){
+    function isNotNull(columnName, inputValue) {
         return qd(columnName) + " IS NOT NULL";
     }
 

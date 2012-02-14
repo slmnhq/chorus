@@ -69,7 +69,7 @@ describe("chorus.views.DatasetFilter", function() {
                 beforeEach(function() {
                     this.collection.models[0].set({typeCategory:"REAL_NUMBER"});
                     this.view.render();
-                    spyOn(this.view.model, "performValidation");
+                    spyOn(this.view.model, "performValidation").andCallThrough();
                     spyOn(this.view, "markInputAsInvalid");
 
                     this.view.$(".filter.default input").val("123");
@@ -82,8 +82,7 @@ describe("chorus.views.DatasetFilter", function() {
                 });
 
                 it("adds a qtip with invalid input", function() {
-                    this.view.model.performValidation.andReturn(false);
-
+                    this.view.$(".filter.default input").val("abc");
                     this.view.validateInput();
 
                     expect(this.view.markInputAsInvalid).toHaveBeenCalled();
@@ -94,8 +93,6 @@ describe("chorus.views.DatasetFilter", function() {
                 });
 
                 it("does not add a qtip with valid input", function() {
-                    this.view.model.performValidation.andReturn(true);
-
                     this.view.validateInput();
 
                     expect(this.view.markInputAsInvalid).not.toHaveBeenCalled();
