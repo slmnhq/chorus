@@ -120,6 +120,13 @@ $system-action-color: #7C7D7D;
         padding: 4px 0;
         font-size: 12px;
         padding-bottom: $text-padding-y;
+
+        .separator {
+            position: relative;
+            top: -1px;
+            color: $link-color;
+            margin: 0 8px;
+        }
     }
 }
 

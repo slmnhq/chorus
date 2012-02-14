@@ -28,7 +28,7 @@
         <div class="links">
             <a class="comment dialog" data-dialog="Comment" data-entity-type="{{entityType}}" data-entity-id="{{id}}" data-entity-title="{{entityTitle}}" href="#">{{t "activity_stream.comment"}}</a>
             {{#if isNote}}
-                <a class="promote" href="#">{{t "activity_stream.promote"}}</a>
+                <span class="separator">|</span> <a class="promote" href="#">{{t "activity_stream.promote"}}</a>
             {{/if}}
         </div>
     </div>
