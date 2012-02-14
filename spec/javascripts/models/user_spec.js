@@ -15,7 +15,7 @@ describe("chorus.models.User", function() {
 
     describe("#workspaces", function() {
         beforeEach(function() {
-            this.user = new models.User({userName: "dr_charlzz", id : "457"});
+            this.user = new models.User({userName: "dr_charlzz", id: "457"});
             this.workspaces = this.user.workspaces();
         });
 
@@ -70,7 +70,7 @@ describe("chorus.models.User", function() {
     describe("#destroy", function() {
         it("should make a delete request", function() {
             //testing that the idAttribute is set properly
-            this.model.set({ id : "27" });
+            this.model.set({ id: "27" });
             this.model.destroy();
             expect(this.server.requests[0].url).toBe(this.model.url());
         });
@@ -85,7 +85,7 @@ describe("chorus.models.User", function() {
 
         it("should return a truthy value for a valid user", function() {
             this.model.set(fixtures.modelFor('fetch'));
-            this.model.set({ password : "foo", passwordConfirmation : "foo" });
+            this.model.set({ password: "foo", passwordConfirmation: "foo" });
             expect(this.model.performValidation()).toBeTruthy();
         });
 
@@ -115,18 +115,46 @@ describe("chorus.models.User", function() {
 
             context("when there is a password confirmation", function() {
                 it("returns true", function() {
-                    this.model.set({ password : "secret", passwordConfirmation: "secret" });
+                    this.model.set({ password: "secret", passwordConfirmation: "secret" });
                     expect(this.model.performValidation()).toBeTruthy();
                 });
             });
 
             context("when there is no password confirmation", function() {
                 it("returns false", function() {
-                    this.model.set({ password : "secret" });
+                    this.model.set({ password: "secret" });
                     expect(this.model.performValidation()).toBeFalsy();
                 });
             });
         });
+
+        context("when the user is in LDAP", function() {
+            beforeEach(function() {
+                this.model = new chorus.models.User();
+                this.model.set({
+                    firstName: "bob",
+                    lastName: "jenkins",
+                    userName: "bobjenk",
+                    emailAddress: "bobj@raisetheroof.us"
+                });
+                this.model.ldap = true;
+            });
+
+            it("does not require the password", function() {
+                expect(this.model.performValidation()).toBeTruthy();
+            });
+
+            it("does still require the other stuff", function() {
+                this.model.set({
+                    firstName: null,
+                    lastName: "",
+                    userName: "",
+                    emailAddress: "bob@bob.com"
+                });
+                expect(this.model.performValidation()).toBeFalsy();
+            })
+
+        })
 
         context("when the user is already saved", function() {
             beforeEach(function() {
@@ -146,7 +174,7 @@ describe("chorus.models.User", function() {
 
             context("when the password has not changed", function() {
                 it("returns true", function() {
-                    expect(this.model.performValidation({ emailAddress : "bobjanky@coolpalace.us" })).toBeTruthy();
+                    expect(this.model.performValidation({ emailAddress: "bobjanky@coolpalace.us" })).toBeTruthy();
                 });
             });
 
@@ -160,7 +188,7 @@ describe("chorus.models.User", function() {
 
     describe("#imageUrl", function() {
         it("uses the right URL", function() {
-            var user = new models.User({userName: 'foo', id : "bar"});
+            var user = new models.User({userName: 'foo', id: "bar"});
             expect(user.imageUrl()).toBe("/edc/userimage/bar?size=original");
         });
 
@@ -179,7 +207,7 @@ describe("chorus.models.User", function() {
 
     describe("#displayName", function() {
         beforeEach(function() {
-            this.model.set({ firstName : "Danny", lastName : "Burkes" });
+            this.model.set({ firstName: "Danny", lastName: "Burkes" });
         })
 
         it("returns the full name", function() {

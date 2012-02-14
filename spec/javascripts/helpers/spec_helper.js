@@ -73,6 +73,7 @@
         'user_edit',
         'user_list',
         'user_new',
+        'user_new_ldap',
         'user_show',
         'user_show_sidebar',
         'validating',
