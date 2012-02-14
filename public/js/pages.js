@@ -38,14 +38,14 @@ chorus.pages.Base = chorus.pages.Bare.extend({
 
     createDialog: function(e) {
         e.preventDefault();
-        var button = $(e.target);
+        var button = $(e.target).closest("button, a");
         var dialog = new chorus.dialogs[button.data("dialog")]({ launchElement: button, pageModel: this.model, pageCollection: this.collection });
         dialog.launchModal();
     },
 
     createAlert: function(e) {
         e.preventDefault();
-        var launchElement = $(e.target);
+        var launchElement = $(e.target).closest("button, a");
         var alert = new chorus.alerts[launchElement.data("alert")]({launchElement: launchElement, pageModel: this.model, pageCollection: this.collection });
         alert.launchModal();
     },
