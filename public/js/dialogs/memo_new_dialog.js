@@ -19,7 +19,6 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.extend({
     },
 
     makeModel:function () {
-        debugger
         this._super("makeModel", arguments);
         
         this.model.bind("saved", this.modelSaved, this);
