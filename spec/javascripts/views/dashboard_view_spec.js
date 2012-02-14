@@ -41,10 +41,10 @@ describe("chorus.views.Dashboard", function(){
                 expect(this.view.$(".main_content.instance_list .content_header h1").text()).toMatchTranslation("header.browse_data");
             });
 
-            xit("has a 'browse all' link in the content details", function() {
-                var browseAllLink = this.view.$(".main_content.instance_list .content_details a[href='#/instances']");
-                expect(browseAllLink).toExist();
-                expect(browseAllLink.text()).toMatchTranslation("dashboard.instances.browse_all");
+            it("has a 'browse all' link in the content details", function() {
+                var browse_link = this.view.$(".dashboard_instance_list_content_details a")
+                expect(browse_link.text().trim()).toMatchTranslation("dashboard.instances.browse_all");
+                expect(browse_link.attr("href")).toBe("#/instances");
             });
         });
 

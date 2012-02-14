@@ -13,8 +13,8 @@ describe("chorus.views.DashboardInstanceList", function() {
         });
 
         it("displays the names of the instances", function() {
-            expect(this.view.$(".name span").eq(0).text()).toBe("Broccoli");
-            expect(this.view.$(".name span").eq(1).text()).toBe("Camels");
+            expect(this.view.$(".name").eq(0).text()).toBe("Broccoli");
+            expect(this.view.$(".name").eq(1).text()).toBe("Camels");
         });
 
         it("displays the icon for each instance", function() {

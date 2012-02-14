@@ -14,6 +14,7 @@
         'dashboard_workspace_list',
         'dashboard_instance_list',
         'dashboard_workspace_list_content_details',
+        'dashboard_instance_list_content_details',
         'data_table',
         'database_column_sidebar_list',
         'database_column_list',

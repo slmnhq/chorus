@@ -1,14 +1,12 @@
 {{#each models}}
     <li data-id="{{id}}">
         <span class="spacer left"/>
-        <a class="image" href="{{showUrl}}">
-            <img src="{{imageUrl}}"/>
-        </a>
+        <img src="{{imageUrl}}"/>
         <div class="text">
             <div class="main">
-                <a class="name" href="{{showUrl}}">
-                    <span title="{{name}}">{{name}}</span>
-                </a>
+                <span class="name" title="{{name}}">{{name}}</span>
+            </div>
+            <div class="browse">
                 <a href="#" class="dialog" data-dialog="BrowseDatasets">{{t "dashboard.instances.browse_datasets"}}</a>
             </div>
 

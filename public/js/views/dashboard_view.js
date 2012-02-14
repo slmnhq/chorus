@@ -12,7 +12,7 @@ chorus.views.Dashboard = chorus.views.Base.extend({
         this.instanceList = new chorus.views.MainContentView({
             collection: this.options.instanceSet,
             contentHeader: chorus.views.StaticTemplate("default_content_header", {title:t("header.browse_data")}),
-            contentDetails: new chorus.views.StaticTemplate("dashboard_workspace_list_content_details"),
+            contentDetails: new chorus.views.StaticTemplate("dashboard_instance_list_content_details"),
             content: new chorus.views.DashboardInstanceList({ collection: this.options.instanceSet })
         });
 

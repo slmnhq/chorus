@@ -15,10 +15,17 @@ div[data-page="Dashboard"] {
         display: none;
     }
 
-    .main_content.workspace_list {
+    .dashboard_sidebar {
         float: right;
         width: $workspace-list-width;
+    }
+
+    .main_content.workspace_list {
         font-weight: $semibold;
+
+        .content_header {
+            background: transparent;
+        }
 
         .dashboard_workspace_list {
             li {
@@ -55,17 +62,45 @@ div[data-page="Dashboard"] {
                 border-bottom:  $dotted-list-item-border;
             }
         }
+    }
 
-        .content_footer {
-            line-height : 27px;
-            color: $link-color;
-            border-top : none;
+    .main_content.instance_list {
+        .dashboard_instance_list {
 
-            a {
-                padding: 0 10px;
-                font-size: 12px;
-                font-weight: $semibold;
+            .main {
+                padding-bottom: 5px;
             }
+
+            .browse {
+                a {
+                    font-size: 13px;
+                    font-weight: normal;
+                }
+            }
+
+            .name {
+                font-size: 18px;
+                font-weight: $semibold;
+                color: $color-text2;
+            }
+
+            > li:last-child {
+                border-bottom:  $dotted-list-item-border;
+            }
+        }
+    }
+
+    .content_details {
+        line-height : 27px;
+        color: $link-color;
+        border-top : none;
+        border-bottom-style: dotted;
+        padding-top: 4px;
+
+        a {
+            padding: 0 10px;
+            font-size: 12px;
+            font-weight: $semibold;
         }
     }
 
