@@ -356,7 +356,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                 context("when the dataset is not a chorus view", function() {
                     it("should not display the edit chorus view link", function() {
                         this.view.$(".transform").click();
-                        expect(this.qtipMenu.find('.edit')).toHaveClass("hidden");
+                        expect(this.qtipMenu.find('.edit')).not.toExist();
                     })
                 })
 
@@ -367,6 +367,12 @@ describe("chorus.views.DatasetContentDetails", function() {
                         this.view.render();
                         this.view.$(".transform").click();
                     });
+
+                    it("does not display the derive chorus view link", function() {
+                        this.view.$(".transform").click();
+                        expect(this.qtipMenu.find(".derive")).not.toExist();
+                    })
+
                     context("and the edit chorus view as a workfile is clicked", function() {
                         beforeEach(function() {
                             this.chorusViewSpy = spyOnEvent(this.view, "transform:sidebar");

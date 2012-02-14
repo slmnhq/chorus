@@ -51,9 +51,6 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     postRender:function () {
         var self = this;
-        if (this.dataset.get("type") !== "CHORUS_VIEW") {
-            this.$(".transform_menu .edit").addClass("hidden");
-        }
 
         chorus.menu(this.$('.transform'), {
             content:this.$(".transform_options").html(),
@@ -186,7 +183,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            definition: this.dataset.isChorusView() ? this.dataset.get("query") : this.statistics.get("definition")
+            definition: this.dataset.isChorusView() ? this.dataset.get("query") : this.statistics.get("definition"),
+            isChorusView: this.dataset.isChorusView()
         }
     },
 

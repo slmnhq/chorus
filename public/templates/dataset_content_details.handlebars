@@ -4,8 +4,12 @@
     <div class="transform_options hidden">
         <ul class="transform_menu">
             <li><a href="#" class="visualize">{{t "dataset.content_details.visualize"}}</a></li>
-            <li><a href="#" class="derive">{{t "dataset.content_details.derive"}}</a></li>
-            <li><a href="#" class="edit">{{t "dataset.content_details.edit"}}</a></li>
+            {{#unless isChorusView}}
+                <li><a href="#" class="derive">{{t "dataset.content_details.derive"}}</a></li>
+            {{/unless}}
+            {{#if isChorusView}}
+                <li><a href="#" class="edit">{{t "dataset.content_details.edit"}}</a></li>
+            {{/if}}
         </ul>
     </div>
     
