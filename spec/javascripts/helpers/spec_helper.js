@@ -272,7 +272,7 @@
                     }
                 },
 
-                toMatchUrl: function(target) {
+                toMatchUrl: function(target, options) {
                     this.message = function() {
                         return [
                             "Expected url " + this.actual + " to be equivalent to url " + target,
@@ -280,7 +280,10 @@
                         ];
                     }
 
-                    return (new URI(this.actual)).equals(target);
+                    var paramsToIgnore = (options && options.paramsToIgnore) || [];
+                    var targetURI = new URI(target).removeSearch(paramsToIgnore);
+                    var actualURI = new URI(this.actual).removeSearch(paramsToIgnore);
+                    return (actualURI).equals(targetURI);
                 },
 
                 toHaveVisibleQtip: function() {

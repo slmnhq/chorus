@@ -49,6 +49,34 @@ describe("spec_helper", function() {
         });
     });
 
+    describe("#toMatchUrl", function() {
+        context("when *no* 'paramsToIgnore' option is passed", function() {
+            it("compares the urls, including all query parameters", function() {
+                expect("/foo?bar=1&baz=2").not.toMatchUrl("/foo?baz=2");
+
+                expect("/foo?bar=1&baz=2").toMatchUrl("/foo?baz=2&bar=1");
+            });
+        });
+
+        context("when a 'paramsToIgnore' option is passed", function() {
+            it("compares the urls, disregarding the given query parameters", function() {
+                expect("/foo?bar=1&baz=2&quux=3").not.toMatchUrl("/foo?baz=2", {
+                    paramsToIgnore: ["quux"]
+                });
+                expect("/foo?baz=2").not.toMatchUrl("/foo?bar=1&baz=2&quux=3", {
+                    paramsToIgnore: ["quux"]
+                });
+
+                expect("/foo?bar=1&baz=2&quux=3").toMatchUrl("/foo?baz=2", {
+                    paramsToIgnore: ["bar", "quux"]
+                });
+                expect("/foo?baz=2").toMatchUrl("/foo?bar=1&baz=2&quux=3", {
+                    paramsToIgnore: ["bar", "quux"]
+                });
+            });
+        });
+    });
+
     describe("#toHaveBeenCalledOn", function() {
         beforeEach(function() {
             this.model1 = fixtures.user()
