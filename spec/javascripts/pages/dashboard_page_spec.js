@@ -43,9 +43,9 @@ describe("chorus.pages.DashboardPage", function() {
     });
 
     context("#setup", function(){
-        it("passes the collection with through to the workspaceSet view view", function(){
+        it("passes the collection through to the workspaceSet view", function(){
             expect(this.page.mainContent.workspaceList.collection).toBe(this.page.workspaceSet);
-        })
+        });
 
         it("fetches active workspaces for the current user, including recent comments", function() {
             expect(this.page.workspaceSet.attributes.showLatestComments).toBeTruthy();
@@ -56,11 +56,13 @@ describe("chorus.pages.DashboardPage", function() {
             expect(this.page.workspaceSet.sortOrder).toBe("asc");
         })
 
-        xit("fetches the right url when the sesison changes", function(){
-//            partyConsole.log("there is a problem in testing the seams in login/fetch to triggering save")
-            chorus.session.set({id: 14})
-            chorus.session.trigger("saved")
-            //last request url should have user=14 in it
-        })
+        it("fetches all chorus instances", function() {
+            expect(this.page.instanceSet).toBeA(chorus.collections.InstanceSet);
+            expect(this.page.instanceSet).toHaveBeenFetched();
+        });
+
+        it("passes the instance set through to the instance list view", function() {
+            expect(this.page.mainContent.instanceList.collection).toBe(this.page.instanceSet);
+        });
     })
 });

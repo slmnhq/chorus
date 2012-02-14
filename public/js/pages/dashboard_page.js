@@ -10,9 +10,12 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
         this.workspaceSet.sortAsc("name");
         this.workspaceSet.fetch();
 
+        this.instanceSet = new chorus.collections.InstanceSet();
+        this.instanceSet.fetch();
+
         this.model = chorus.session.user();
 
-        this.mainContent = new chorus.views.Dashboard({collection:this.workspaceSet})
+        this.mainContent = new chorus.views.Dashboard({ collection: this.workspaceSet, instanceSet: this.instanceSet });
     },
 
     postRender:function () {
