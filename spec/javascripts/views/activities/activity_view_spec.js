@@ -1,5 +1,6 @@
 describe("chorus.views.Activity", function() {
     beforeEach(function() {
+        spyOn(chorus.views.Activity.prototype, "deleteActivity").andCallThrough();
         this.model = fixtures.activities.NOTE_ON_WORKSPACE();
         this.view = new chorus.views.Activity({ model: this.model });
     });
@@ -182,6 +183,30 @@ describe("chorus.views.Activity", function() {
 
             it("displays the timestamp", function() {
                 expect(this.view.$(".timestamp").text()).not.toBeEmpty();
+            });
+
+            context("when owned by the current user", function() {
+                beforeEach(function() {
+                    setLoggedInUser({name: "Lenny", lastName: "lalala", id: this.view.model.author().id});
+                    this.view.render();
+                });
+
+                it("displays a hidden delete link", function() {
+                    var deleteLink = this.view.$(".delete_link");
+                    expect(deleteLink).toExist();
+                    expect(deleteLink.text()).toContainTranslation("actions.delete")
+                    expect(deleteLink).toBeHidden();
+                });
+
+                // it("hovering displays the link", function() {
+                //     this.view.$(".delete_link").trigger("mouseover");
+                //     expect(this.view.$(".delete_link")).toBeVisible();
+                // });
+
+                it("clicking the link calls deleteActivity", function() {
+                    this.view.$(".delete_link").click();
+                    expect(this.view.deleteActivity).toHaveBeenCalled();
+                })
             });
 
             it("renders items for the sub-comments", function() {

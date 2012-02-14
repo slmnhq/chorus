@@ -4,6 +4,28 @@ describe("chorus.presenters.Activity", function() {
         this.model = fixtures.modelFor("fetch")
     });
 
+    context(".NOTE_ON_ANYTHING", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.NOTE_ON_DATASET_TABLE({});
+            this.presenter = new chorus.presenters.Activity(this.model);
+        });
+
+        it("sets the isOwner field to false", function() {
+            expect(this.presenter.isOwner).toBeFalsy();
+        });
+
+        context("when the logged in user owns the file", function() {
+            beforeEach(function() {
+                setLoggedInUser({name: "Lenny", lastName: "lalala", id: this.model.author().id});
+                this.presenter = new chorus.presenters.Activity(this.model);
+            });
+
+            it("sets the isOwner field to true", function() {
+                expect(this.presenter.isOwner).toBeTruthy();
+            });
+        })
+    });
+
     context(".NOTE_ON_TABLE", function() {
         beforeEach(function() {
             this.model = fixtures.activities.NOTE_ON_DATASET_TABLE({

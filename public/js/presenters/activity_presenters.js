@@ -38,7 +38,8 @@
                 workspaceUrl:this.workspace ? this.workspace.showUrl() : "no workspace URL for activity type: " + this.activityType,
                 iconSrc:this.author.imageUrl(),
                 iconHref:this.author.showUrl(),
-                iconClass:'profile'
+                iconClass:'profile',
+                isOwner: this.author.id == chorus.session.user().id
             };
         },
 

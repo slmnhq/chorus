@@ -1,4 +1,4 @@
-<div class="media activity_item">
+<div class="media activity_item {{type}}">
     <div class="icon">
         <a href="{{iconHref}}"><img src="{{iconSrc}}" class="{{iconClass}}" /></a>
     </div>
@@ -19,7 +19,12 @@
             </li>
         {{/each}}
         </ul>
-        <div class="timestamp">{{relativeTimestamp timestamp}}</div>
+        <div class="actions">
+            <span class="timestamp">{{relativeTimestamp timestamp}}</span>
+            {{#if isOwner}}
+                <a class="delete_link" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
+            {{/if}}
+        </div>
         <div class="links">
             <a class="comment dialog" data-dialog="Comment" data-entity-type="{{entityType}}" data-entity-id="{{id}}" data-entity-title="{{entityTitle}}" href="#">{{t "activity_stream.comment"}}</a>
         </div>
