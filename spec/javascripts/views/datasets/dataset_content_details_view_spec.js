@@ -26,6 +26,7 @@ describe("chorus.views.DatasetContentDetails", function() {
             expect(this.view.$(".filters")).toHaveClass("hidden");
         });
 
+
         it("hides the edit chorus view info bar", function() {
             expect(this.view.$(".edit_chorus_view_info")).toHaveClass("hidden");
         });
@@ -40,6 +41,10 @@ describe("chorus.views.DatasetContentDetails", function() {
                 expect(this.view.$(".edit_chorus_view_info")).not.toHaveClass("hidden");
             })
         })
+
+        it("subscribes to the action:closePreview broadcast", function() {
+            expect(chorus.PageEvents.hasSubscription("action:closePreview", this.view.closeDataPreview, this.view)).toBeTruthy();
+        });
 
         describe("sql definition", function() {
             context("when the object is a databaseObject", function() {

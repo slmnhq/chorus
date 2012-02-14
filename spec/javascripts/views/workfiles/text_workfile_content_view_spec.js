@@ -93,7 +93,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
                 context("and the user clicks insert on a function", function() {
                     beforeEach(function() {
                         spyOn(this.view.editor, 'replaceSelection')
-                        this.view.trigger("file:insertText", "my awesome function");
+                        chorus.PageEvents.broadcast("file:insertText", "my awesome function");
                     })
                     it("inserts the function", function() {
                         expect(this.view.editor.replaceSelection).toHaveBeenCalledWith("my awesome function");
@@ -237,7 +237,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
                 // Because view.saveChanges is bound in view.setup, it is difficult/impossible to spy on the proper function...
                 // so we'll spy on the side-effect of calling that function.
                 spyOn(this.view.model, "save").andCallThrough();
-                this.view.trigger("file:saveCurrent");
+                chorus.PageEvents.broadcast("file:saveCurrent");
             });
 
             it("calls saveChanges", function() {
@@ -302,7 +302,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
                 spyOn(this.view, "stopTimer");
                 spyOn(chorus.dialogs.WorkfileNewVersion.prototype, "launchModal");
-                this.view.trigger("file:createWorkfileNewVersion");
+                chorus.PageEvents.broadcast("file:createWorkfileNewVersion");
             });
 
             it("calls stops the auto save timer", function() {

@@ -100,20 +100,20 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 });
 
                 it("does nothing when the disabled span is clicked", function() {
-                    spyOnEvent(this.view, 'file:runCurrent');
+                    spyOn(chorus.PageEvents, "broadcast").andCallThrough();
                     this.qtipElement.find(".run_default").click();
-                    expect("file:runCurrent").not.toHaveBeenTriggeredOn(this.view);
+                    expect(chorus.PageEvents.broadcast).not.toHaveBeenCalled();
                 });
             });
 
             context("clicking on 'Run in sandbox'", function() {
                 beforeEach(function() {
-                    spyOnEvent(this.view, "file:runCurrent");
+                    spyOn(chorus.PageEvents, "broadcast").andCallThrough();
                     this.qtipElement.find('.run_default').click();
                 });
 
-                it("triggers the 'file:runCurrent' event on the view", function() {
-                    expect("file:runCurrent").toHaveBeenTriggeredOn(this.view);
+                it("broadcasts the 'file:runCurrent' event on the view", function() {
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runCurrent");
                 });
             })
 
@@ -126,17 +126,6 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 it("launches the RunFileInSchema dialog", function() {
                     expect(chorus.dialogs.RunFileInSchema.prototype.launchModal).toHaveBeenCalled();
                 })
-
-                describe("event handling", function() {
-                    beforeEach(function() {
-                        spyOnEvent(this.view, "file:runInSchema")
-                        this.view.dialog.trigger("run", { foo : "bar" });
-                    });
-
-                    it("triggers file:runInSchema on itself when the dialog triggers a run event", function() {
-                        expect("file:runInSchema").toHaveBeenTriggeredOn(this.view, [ { foo : "bar"}])
-                    })
-                });
             });
         })
     });
@@ -155,7 +144,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     schemaName: "louis"
                 }
 
-                this.view.trigger("file:executionSucceeded", fixtures.task({ executionInfo : this.executionInfo }));
+                chorus.PageEvents.broadcast("file:executionSucceeded", fixtures.task({ executionInfo : this.executionInfo }));
             })
 
             it("updates the execution info in the workfile", function() {

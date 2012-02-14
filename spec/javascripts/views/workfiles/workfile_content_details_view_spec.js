@@ -66,10 +66,24 @@ describe("WorkfileContentDetails", function() {
             expect(this.view.$(".save_options")).toHaveClass("hidden");
         });
 
+        context("menus", function() {
+            it("when replacing the current version, it should broadcast the file:saveCurrent event", function() {
+                spyOn(chorus.PageEvents, "broadcast");
+                this.view.replaceCurrentVersion();
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalled();
+            });
+
+            it("when creating a new version, it should broadcast the file:createWorkfileNewVersion event", function() {
+                spyOn(chorus.PageEvents, "broadcast");
+                this.view.workfileNewVersion();
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalled();
+            });
+        });
+
         context("when user is editing the file", function() {
             context("and the autosave event is fired", function() {
                 beforeEach(function() {
-                    this.view.trigger("autosaved");
+                    chorus.PageEvents.broadcast("file:autosaved");
                 });
 
                 it("should display the autosave text", function() {

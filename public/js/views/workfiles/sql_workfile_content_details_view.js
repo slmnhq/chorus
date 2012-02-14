@@ -2,7 +2,7 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
     className:"sql_workfile_content_details",
 
     setup:function () {
-        this.bind("file:executionSucceeded", this.executionSucceeded, this);
+        chorus.PageEvents.subscribe("file:executionSucceeded", this.executionSucceeded, this);
     },
 
     postRender:function () {
@@ -28,18 +28,12 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
     },
 
     runInExecutionSchema:function () {
-        this.trigger("file:runCurrent");
+        chorus.PageEvents.broadcast("file:runCurrent");
     },
 
     runOtherSchema:function () {
         this.dialog = new chorus.dialogs.RunFileInSchema({model:this.model});
         this.dialog.launchModal();
-
-        this.dialog.bind("run", function () {
-            var args = _.toArray(arguments);
-            args.unshift("file:runInSchema");
-            this.trigger.apply(this, args);
-        }, this);
     },
 
     executionSucceeded:function (task) {

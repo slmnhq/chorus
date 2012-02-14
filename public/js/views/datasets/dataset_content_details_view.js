@@ -22,9 +22,10 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     },
 
     setup: function() {
+        chorus.PageEvents.subscribe("action:closePreview", this.closeDataPreview, this);
+
         this.dataset = this.options.dataset;
         this.resultsConsole = new chorus.views.ResultsConsole({titleKey: "dataset.data_preview", enableClose: true});
-        this.resultsConsole.bind("action:close", this.closeDataPreview, this);
         this.filterWizardView = new chorus.views.DatasetFilterWizard({collection : this.collection});
 
         this.statistics = this.dataset.statistics();

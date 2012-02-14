@@ -20,15 +20,8 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
 
         this.textContent = new chorus.views.TextWorkfileContent({ model: this.model })
         this.resultsConsole = new chorus.views.ResultsConsole({ model: this.task });
-        this.bind("file:runCurrent", this.runInDefault, this);
-        this.bind("file:runInSchema", this.runInSchema, this);
-
-        this.forwardEvent("file:executionStarted", this.resultsConsole);
-        this.forwardEvent("file:executionSucceeded", this.resultsConsole);
-        this.forwardEvent("file:executionFailed", this.resultsConsole);
-        this.forwardEvent("file:saveCurrent", this.textContent);
-        this.forwardEvent("file:createWorkfileNewVersion", this.textContent);
-        this.forwardEvent("file:insertText", this.textContent);
+        chorus.PageEvents.subscribe("file:runCurrent", this.runInDefault, this);
+        chorus.PageEvents.subscribe("file:runInSchema", this.runInSchema, this);
     },
 
     runInSchema: function(options) {
@@ -59,18 +52,18 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
             }, { silent: true })
 
             this.task.save({}, { method: "create" });
-            this.trigger("file:executionStarted", this.task);
+            chorus.PageEvents.broadcast("file:executionStarted", this.task);
         }
 
     },
 
     executionSucceeded: function(task) {
         this.executing = false;
-        this.trigger("file:executionSucceeded", this.task);
+        chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
     },
 
     executionFailed: function(task) {
         this.executing = false;
-        this.trigger("file:executionFailed", this.task);
+        chorus.PageEvents.broadcast("file:executionFailed", this.task);
     }
 });
