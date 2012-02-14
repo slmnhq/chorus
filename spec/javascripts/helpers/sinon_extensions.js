@@ -145,7 +145,7 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
             JSON.stringify({
                 status: "fail",
                 resource: [],
-                message: message
+                message: message || "something went wrong!"
             })
         );
     },
