@@ -32,6 +32,8 @@ chorus.alerts.ModelDelete = chorus.alerts.Base.extend({
         "click button.submit":"deleteModel"
     }),
 
+    additionalClass: "error",
+
     persistent:true, //here for documentation, doesn't actually do anything as we've overwritten bindCallbacks
 
     bindCallbacks:function () {
@@ -47,6 +49,7 @@ chorus.alerts.ModelDelete = chorus.alerts.Base.extend({
     deleteModel:function (e) {
         e.preventDefault();
         this.model.destroy();
+        this.$("button.submit").startLoading("actions.deleting")
     },
 
     deleteMessageParams:$.noop,

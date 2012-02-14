@@ -98,7 +98,7 @@ describe("chorus.alerts", function() {
     });
 })
 
-describe("ModelDelete alert", function() {
+describe("chorus.alerts.ModelDelete", function() {
     beforeEach(function() {
         this.model = new chorus.models.User();
         this.alert = new chorus.alerts.ModelDelete({  model: this.model });
@@ -133,6 +133,10 @@ describe("ModelDelete alert", function() {
 
         it("deletes the model", function() {
             expect(this.alert.model.destroy).toHaveBeenCalled();
+        });
+
+        it("sets the delete button to the loading state", function() {
+            expect(this.alert.$("button.submit").isLoading()).toBeTruthy();
         });
 
         describe("when the model deletion is successful", function() {
@@ -181,6 +185,10 @@ describe("ModelDelete alert", function() {
             it("does not dismiss the dialog", function() {
                 expect("close.facebox").not.toHaveBeenTriggeredOn($(document));
             })
+
+            it("puts the button out of the loading state", function() {
+                expect(this.alert.$("button.submit").isLoading()).toBeFalsy();
+            });
         })
     })
 

@@ -232,9 +232,21 @@ describe("chorus.views.Activity", function() {
                         expect(chorus.modal.model.attributes.entityId).toBe(10000)
                         expect(chorus.modal.model.attributes.entityType).toBe("workspace")
                     });
+                });
 
-                    xit("destroys a model with the right entityId, entityType, and id", function() {
-                        expect(this.server.lastDestroy().url).toMatchUrl("/edc/comment/workspace/10000/" + this.view.model.id);
+                context("clicking delete note/comment trashcan icon", function() {
+                    beforeEach(function() {
+                        this.collection = new chorus.collections.ActivitySet([this.view.model], {entityType: "workspace", entityId: 10000});
+                        stubModals();
+                        this.view.$(".delete_link img").click();
+                    });
+
+                    it("launches a delete note confirm alert", function() {
+                        expect(chorus.modal).toBeA(chorus.alerts.DeleteNoteConfirmAlert);
+                        expect(chorus.modal.model).toBeA(chorus.models.Comment);
+                        expect(chorus.modal.model.id).toBe(this.model.id)
+                        expect(chorus.modal.model.attributes.entityId).toBe(10000)
+                        expect(chorus.modal.model.attributes.entityType).toBe("workspace")
                     });
                 });
             });

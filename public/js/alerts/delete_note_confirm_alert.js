@@ -4,7 +4,7 @@ chorus.alerts.DeleteNoteConfirmAlert = chorus.alerts.ModelDelete.extend({
     ok:t("notes.delete.alert.ok"),
     deleteMessage:"notes.delete.alert.delete_message",
 
-    makeModel:function () {
+    makeModel: function () {
         this._super("makeModel", arguments);
         var activity = this.options.launchElement.data("activity");
 
@@ -12,5 +12,10 @@ chorus.alerts.DeleteNoteConfirmAlert = chorus.alerts.ModelDelete.extend({
             entityType: activity.collection.attributes.entityType,
             entityId: activity.collection.attributes.entityId
         });
+    },
+
+    modelDeleted: function() {
+        this._super("modelDeleted")
+        this.options.pageModel.trigger("invalidated")
     }
 });
