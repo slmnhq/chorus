@@ -5,6 +5,8 @@ chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.extend({
     persistent:true,
 
     events:{
+        "keyup input[name=fileName]": "checkInput",
+        "paste input[name=fileName]": "checkInput",
         "submit form":"create"
     },
 
@@ -27,11 +29,17 @@ chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.extend({
             fileName:fileName ? fileName + ".sql" : ""
         })
 
+        this.$("button.submit").startLoading("actions.adding")
         this.resource.save({source:"empty"}, {url:$(e.target).attr("action")});
     },
 
     saved:function () {
         $(document).trigger("close.facebox");
         chorus.router.navigate(this.model.showUrl(), true);
+    },
+
+    checkInput: function() {
+        var hasText = this.$("input[name=fileName]").val().trim().length > 0;
+        this.$("button.submit").prop("disabled", hasText ? false : "disabled");
     }
 });
