@@ -47,6 +47,10 @@ describe("chorus.presenters.Activity", function() {
             expect(this.presenter.objectName).toBe('shiny');
         });
 
+        it("should have the 'isNote' property set to true", function() {
+            expect(this.presenter.isNote).toBeTruthy();
+        });
+
         it("should have the right objectUrl", function() {
             expect(this.presenter.objectUrl).toBe('#/workspaces/4/datasets/10014|silverware|forks|shiny');
         });
@@ -61,6 +65,10 @@ describe("chorus.presenters.Activity", function() {
 
         it("should have the right objectName", function() {
             expect(this.presenter.objectName).toBe(this.workspace.get("name"));
+        });
+
+        it("should have the 'isNote' property set to true", function() {
+            expect(this.presenter.isNote).toBeTruthy();
         });
 
         it("should have the right objectUrl", function() {
@@ -152,6 +160,10 @@ describe("chorus.presenters.Activity", function() {
             expect(this.presenter.objectUrl).toBe(url);
         });
 
+        it("should have the 'isNote' property set to false", function() {
+            expect(this.presenter.isNote).toBeFalsy();
+        });
+
         itShouldHaveTheAuthorsIconAndUrl();
     });
 
@@ -164,6 +176,10 @@ describe("chorus.presenters.Activity", function() {
 
         it("should have the right objectName", function() {
             expect(this.presenter.objectName).toBe(this.workspace.get("name"));
+        });
+
+        it("should have the 'isNote' property set to false", function() {
+            expect(this.presenter.isNote).toBeFalsy();
         });
 
         it("should have the right objectUrl", function() {

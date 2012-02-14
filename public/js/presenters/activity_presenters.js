@@ -39,7 +39,8 @@
                 iconSrc:this.author.imageUrl(),
                 iconHref:this.author.showUrl(),
                 iconClass:'profile',
-                isOwner: this.author.id == chorus.session.user().id
+                isOwner: this.author.id == chorus.session.user().id,
+                isNote: model.isNote()
             };
         },
 

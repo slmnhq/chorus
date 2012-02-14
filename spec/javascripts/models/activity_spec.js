@@ -40,6 +40,25 @@ describe("chorus.models.Activity", function() {
         })
     })
 
+    describe("#promoteToInsight", function() {
+        it("posts to the comment insight url", function() {
+            this.model.promoteToInsight();
+            expect(this.server.lastCreate().url).toBe("/edc/commentinsight/"+ this.model.get("id") + "/promote");
+        });
+    });
+
+    describe("#isNote", function() {
+        it("returns true for notes", function() {
+            this.model.set({ type: "NOTE" });
+            expect(this.model.isNote()).toBeTruthy();
+        });
+
+        it("returns false for non-notes", function() {
+            this.model.set({ type: "WORKSPACE_MAKE_PUBLIC" });
+            expect(this.model.isNote()).toBeFalsy();
+        });
+    });
+
     describe("#author", function() {
         it("creates a user", function() {
             expect(this.model.author()).toBeA(chorus.models.User);
