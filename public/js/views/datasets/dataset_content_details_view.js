@@ -11,6 +11,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         "click .create_chart .cancel" : "cancelVisualization",
         "click .create_chorus_view .cancel" : "cancelChorusView",
         "click .edit_chorus_view .cancel" : "cancelEditChorusView",
+        "click .edit_chorus_view .save" : "saveChorusView",
         "click .chart_icon" : "selectVisualization",
         "click .close_errors": "closeError",
         "click .view_error_details": "viewErrorDetails",
@@ -152,6 +153,10 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$(".definition").removeClass("hidden");
         this.trigger("cancel:sidebar");
         this.trigger("dataset:cancelEdit")
+    },
+
+    saveChorusView: function() {
+        this.trigger("dataset:saveEdit");
     },
 
     closeError: function(e) {

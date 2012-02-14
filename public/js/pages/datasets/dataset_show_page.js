@@ -91,6 +91,7 @@
             });
 
             this.mainContent.contentDetails.bind("dataset:cancelEdit", this.columnSetFetched, this);
+            this.mainContent.contentDetails.forwardEvent("dataset:saveEdit", this.mainContent.content, this);
 
             this.render();
         },

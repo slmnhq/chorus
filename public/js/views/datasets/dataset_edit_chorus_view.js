@@ -1,6 +1,10 @@
 chorus.views.DatasetEditChorusView = chorus.views.Base.extend({
     className: "dataset_edit_chorus_view",
 
+    setup: function() {
+        this.bind("dataset:saveEdit", this.saveModel);
+    },
+
     postRender:function () {
             var self = this;
             var opts = {
@@ -28,7 +32,13 @@ chorus.views.DatasetEditChorusView = chorus.views.Base.extend({
                 }
             }, this)
             );
+        },
 
+    saveModel: function() {
+        var query = this.editor.getValue()
 
-        }
+        this.model.set({query: query});
+        this.model.save();
+
+    }
 });

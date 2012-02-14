@@ -374,6 +374,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                             expect(this.view.$(".create_chorus_view")).toHaveClass("hidden");
                             expect(this.view.$(".create_chart")).toHaveClass("hidden");
                             expect(this.view.$(".definition")).toHaveClass("hidden");
+                            expect(this.view.$(".edit_chorus_view").find("button.save")).toExist();
                         });
 
                         it("shows the edit chorus view info bar", function() {
@@ -412,6 +413,16 @@ describe("chorus.views.DatasetContentDetails", function() {
                             it("triggers dataset:cancelEdit", function() {
                                 expect("dataset:cancelEdit").toHaveBeenTriggeredOn(this.view);
                             })
+                        })
+
+                        context("and 'Save and Return' is clicked", function() {
+                            beforeEach(function() {
+                                spyOnEvent(this.view, "dataset:saveEdit");
+                                this.view.$(".save").click();
+                            });
+                            it("triggers dataset:saveEdit", function() {
+                                expect("dataset:saveEdit").toHaveBeenTriggeredOn(this.view)
+                            });
                         })
                     });
                 })

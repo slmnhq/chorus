@@ -32,6 +32,16 @@
         }
     }
 
+    button {
+        margin-left: 0;
+        color: $content-details-action-link-color;
+        font-weight: $semibold;
+        font-size: 13px;
+        margin-top: 1px;
+        @include content-details-button($content-details-action-link-border-color);
+        float: right;
+    }
+
     .definition, .create_chart, .create_chorus_view, .edit_chorus_view {
         height: 32px;
         line-height: 33px;
@@ -62,19 +72,6 @@
                 vertical-align: middle;
                 width: 93%;
             }
-        }
-
-        button {
-            margin-left: 0;
-            color: $content-details-action-link-color;
-            font-weight: $semibold;
-            font-size: 13px;
-            margin-top: 1px;
-            @include content-details-button($content-details-action-link-border-color);
-        }
-
-        .transform {
-            float: right;
         }
 
         .down_arrow {
@@ -165,6 +162,9 @@
     .edit_chorus_view {
         .create {
             width: 120px;
+        }
+        .cancel {
+            margin-left: 15px;
         }
     }
     .info_bar, .chorus_view_info , .edit_chorus_view_info {

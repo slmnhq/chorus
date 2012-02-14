@@ -74,34 +74,29 @@ describe("chorus.views.DatasetEditChorusView", function() {
         });
 
 
-//        describe("#saveChanges", function() {
-//            beforeEach(function() {
-//                this.view.render();
-//
-//                spyOn(this.view.model, "save");
-//
-//                this.view.editText();
-//                this.view.editor.setCursor(0, 19);
-//                this.view.replaceCurrentVersion();
-//                this.clock.tick(1000);
-//            });
-//
-//            it("should still be in edit mode", function(){
-//                expect(this.view.$(".CodeMirror")).toHaveClass("editable");
-//            });
-//
-//            it("sets readonly to nocursor", function() {
-//                expect(this.view.editor.getOption("readOnly")).toBe(false);
-//            });
-//
-//            it("sets cursor at the correct position", function() {
-//                expect(this.view.editor.getCursor().ch).toBe(19);
-//                expect(this.view.editor.getCursor().line).toBe(0);
-//            });
-//
-//            it("saves the model", function() {
-//                expect(this.view.model.save).toHaveBeenCalled();
-//            });
-//        });
+        describe("#saveChanges", function() {
+            beforeEach(function() {
+                this.view.$(".text_editor").text("select * from table_abc");
+                this.view.render();
+
+                spyOn(this.view.model, "save");
+                this.view.editor.setCursor(0, 19);
+                this.view.trigger("dataset:saveEdit");
+                this.clock.tick(1000);
+            });
+
+            it("sets cursor at the correct position", function() {
+                expect(this.view.editor.getCursor().ch).toBe(19);
+                expect(this.view.editor.getCursor().line).toBe(0);
+            });
+
+            it("saves the model", function() {
+                expect(this.view.model.save).toHaveBeenCalled();
+            });
+
+            it("sets the query in the model", function() {
+                expect(this.view.model.get("query")).toBe("select * from table_abc");
+            })
+        });
     });
 });
