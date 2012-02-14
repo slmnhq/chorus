@@ -295,7 +295,11 @@
                 },
 
                 toHaveBeenFetched: function() {
-                    return this.spec.server.lastFetchFor(this.actual);
+                    return !!this.spec.server.lastFetchFor(this.actual);
+                },
+
+                toHaveBeenCreated: function() {
+                    return !!this.spec.server.lastCreateFor(this.actual);
                 }
             });
 
