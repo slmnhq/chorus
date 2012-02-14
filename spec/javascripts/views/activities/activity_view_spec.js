@@ -1,6 +1,5 @@
 describe("chorus.views.Activity", function() {
     beforeEach(function() {
-        spyOn(chorus.views.Activity.prototype, "deleteActivity").andCallThrough();
         this.model = fixtures.activities.NOTE_ON_WORKSPACE();
         this.view = new chorus.views.Activity({ model: this.model });
     });
@@ -220,7 +219,8 @@ describe("chorus.views.Activity", function() {
 
                 context("clicking delete note/comment", function() {
                     beforeEach(function() {
-                        this.collection = new chorus.collections.ActivitySet([this.view.model], {entityType: "workspace", entityId: 10000});
+                        this.collection.attributes.entityType = "workspace";
+                        this.collection.attributes.entityId = 10000;
                         stubModals();
                         this.view.$(".delete_link").click();
                     });
@@ -236,7 +236,8 @@ describe("chorus.views.Activity", function() {
 
                 context("clicking delete note/comment trashcan icon", function() {
                     beforeEach(function() {
-                        this.collection = new chorus.collections.ActivitySet([this.view.model], {entityType: "workspace", entityId: 10000});
+                        this.collection.attributes.entityType = "workspace";
+                        this.collection.attributes.entityId = 10000;
                         stubModals();
                         this.view.$(".delete_link img").click();
                     });
