@@ -4,5 +4,9 @@ chorus.alerts.NoLdapUser = chorus.alerts.Base.extend({
 
     setup: function() {
         this.title = t("users.ldap.none_found", { username: this.options.username });
+    },
+
+    postRender:function () {
+        this.$("button.submit").addClass("hidden");
     }
 });

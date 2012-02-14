@@ -15,5 +15,9 @@ describe("chorus.alerts.NoLdapUser", function() {
         it("has the right body", function() {
             expect(this.alert.$(".content p")).toContainTranslation("users.ldap.must_match");
         });
+
+        it("hides the submit button", function() {
+            expect(this.alert.$(".submit")).toHaveClass("hidden");
+        });
     });
 });

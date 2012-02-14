@@ -1,19 +1,22 @@
 (function() {
     chorus.views.UserNewLdap = chorus.views.Base.extend({
         className: "user_new_ldap",
+        additionalClass: "user_new",
 
         persistent: true,
 
         events : {
             "submit form": "formSubmitted",
             "click a.check_username": "checkUsernameClicked",
+            "click button.cancel": "goBack"
         },
 
         setup: function() {
             this.model.bind("saved", userSuccessfullySaved, this);
         },
 
-        checkUsernameClicked: function() {
+        checkUsernameClicked: function(e) {
+            e.preventDefault();
             this.checkUsername(this.ldapUsersFetched);
         },
 
@@ -25,7 +28,28 @@
         checkUsername: function(callback) {
             var username = this.$("input[name=userName]").val();
             this.collection = new chorus.collections.LdapUserSet([], { userName: username });
+
+            // stubbing out server's ldap response
+
+            // var self = this;
+            // _.defer(function() {
+            //     self.collection.reset([
+            //         new chorus.models.User({
+            //             userName: username,
+            //             firstName: "Charles",
+            //             lastName: "HTTP",
+            //             emailAddress: "i@reset.headers"
+            //         })
+            //     ]);
+            // });
+
+            // var self = this;
+            // _.defer(function() {
+            //     self.collection.reset([]);
+            // });
+
             this.collection.fetch();
+
             this.collection.bind("reset", function() {
                 if (this.collection.models.length > 0) {
                     callback.call(this);
@@ -61,11 +85,11 @@
             });
             updates.admin = this.$("input#admin-checkbox").prop("checked") || false;
             return updates;
-        }
+        },
 
-        // goBack: function() {
-        //     window.history.back();
-        // }
+        goBack: function() {
+             window.history.back();
+        }
     });
 
     function userSuccessfullySaved() {

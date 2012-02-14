@@ -55,6 +55,7 @@ describe("chorus.views.UserNewLdap", function() {
 
             it("has a link to check whether the user is in the ldap database", function() {
                 expect(this.view.$("a.check_username")).toExist();
+                expect(this.view.$("a.check_username").text()).toMatchTranslation("users.ldap.check_username");
             });
 
             it("doesn't re-render when the model fails to save", function() {
@@ -201,6 +202,22 @@ describe("chorus.views.UserNewLdap", function() {
                     });
                 });
             });
+
+
+            context("cancelling", function() {
+                beforeEach(function() {
+                    spyOn(window.history, "back");
+                    this.view.$("button.cancel").click();
+                })
+
+                it("does not save the user", function() {
+                    expect(this.user).not.toHaveBeenCreated();
+                })
+
+                it("navigates back", function() {
+                    expect(window.history.back).toHaveBeenCalled();
+                })
+            })
         });
 
         context("as a non admin", function() {
