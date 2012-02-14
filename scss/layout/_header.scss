@@ -6,7 +6,7 @@ $header-item-spacing : 2*$padding-x;
 
 .header {
     height: $header-height;
-    @include linear-gradient(color-stops(#eeeeee, #cccccc));
+    @include background-image(linear-gradient(color-stops(#eeeeee, #cccccc)));
     background-color: #eeeeee;
     vertical-align : middle;
     border-bottom: 1px solid $header-border-color;

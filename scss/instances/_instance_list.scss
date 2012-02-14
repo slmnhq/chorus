@@ -4,7 +4,7 @@
     .instance_provider .details{
         @include list-section-heading;
         padding: 5px 10px;
-        @include linear-gradient(color-stops(#ebeef2, #d7dfe9));
+        @include background-image(linear-gradient(#ebeef2, #d7dfe9));
         border-top: 1px solid #cbcbcb;
         border-bottom: 1px solid #a4a4a4;
     }
