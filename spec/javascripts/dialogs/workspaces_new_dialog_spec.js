@@ -15,12 +15,31 @@ describe("WorkspacesNewDialog", function() {
         it("has a new workspace form", function() {
             expect(this.dialog.$("form.new_workspace")).toExist();
         })
+
+        it("starts with the submit button disabled", function() {
+            expect(this.dialog.$("button.submit")).toBeDisabled();
+        });
+
+        describe("filling out workspace name", function() {
+            beforeEach(function() {
+                this.dialog.$("input[name=name]").val("An hero").keyup();
+            });
+
+            it("has enabled the submit button", function() {
+                expect(this.dialog.$("button.submit")).not.toBeDisabled()
+            })
+
+            it("disables the button when the name is cleared", function() {
+                this.dialog.$("input[name=name]").val("").keyup();
+                expect(this.dialog.$("button.submit")).toBeDisabled()
+            });
+        })
     });
 
     describe("submitting the form", function() {
         beforeEach(function() {
             this.dialog.render();
-            this.dialog.$("input[name=name]").val("   Super Dataland   ");
+            this.dialog.$("input[name=name]").val("   Super Dataland   ").keyup();
             this.dialog.$("input[type=checkbox][name=isPublic]").attr("checked", "checked");
             this.dialog.$("form.new_workspace").submit();
         })
@@ -41,6 +60,10 @@ describe("WorkspacesNewDialog", function() {
             this.dialog.$("form.new_workspace").submit();
             expect(this.dialog.resource.save).toHaveBeenCalled()
         })
+
+        it("puts the button in the loading state", function() {
+            expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+        });
 
         context("when workspace creation is successful", function() {
             beforeEach(function() {
