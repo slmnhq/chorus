@@ -94,7 +94,7 @@ $system-action-color: #7C7D7D;
     }
 
     .actions {
-        height: 13px;
+        height: 16px;
 
         .timestamp {
             @include secondary-text-small;
@@ -130,7 +130,11 @@ $system-action-color: #7C7D7D;
     }
 }
 
-li[data-activity-type=NOTE]:hover a.delete_link {
+li[data-activity-type=NOTE] .activity_content:hover a.delete_link {
+    display:inline;
+}
+
+.comment_content:hover a.delete_link {
     display:inline;
 }
 
