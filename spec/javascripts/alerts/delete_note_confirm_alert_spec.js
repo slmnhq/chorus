@@ -16,6 +16,10 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
             expect(this.server.lastDestroy().url).toMatchUrl("/edc/comment/workspace/10000/" + this.activity.id);
         });
 
+        it("sets the alert title correctly", function() {
+            expect(this.alert.title).toMatchTranslation("notes.delete.alert.title");
+        });
+
         describe("when the delete succeeds", function() {
             beforeEach(function() {
                 spyOnEvent(this.pageModel, "invalidated");
@@ -42,6 +46,10 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
 
         it("destroys a model with the right entityId, entityType, and id", function() {
             expect(this.server.lastDestroy().url).toMatchUrl("/edc/comment/workspace/10000/12345");
+        });
+
+        it("sets the alert title correctly", function() {
+            expect(this.alert.title).toMatchTranslation("comments.delete.alert.title");
         });
 
         describe("when the delete succeeds", function() {
