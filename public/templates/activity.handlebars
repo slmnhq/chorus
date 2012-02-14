@@ -1,4 +1,4 @@
-<div class="media activity_item {{type}}">
+<div class="media activity_item">
     <div class="icon">
         <a href="{{iconHref}}"><img src="{{iconSrc}}" class="{{iconClass}}" /></a>
     </div>
@@ -22,7 +22,7 @@
         <div class="actions">
             <span class="timestamp">{{relativeTimestamp timestamp}}</span>
             {{#if isOwner}}
-                <a class="delete_link" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
+                <a class="delete_link alert" data-alert="DeleteNoteConfirmAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
             {{/if}}
         </div>
         <div class="links">

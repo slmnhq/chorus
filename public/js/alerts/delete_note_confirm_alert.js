@@ -1,10 +1,16 @@
-chorus.alerts.DeleteNoteConfirmAlert = chorus.alerts.Base.extend({
-    text:t("instances.remove_shared_account.text"),
-    title:t("instances.remove_shared_account.title"),
-    ok:t("instances.remove_shared_account.remove"),
+chorus.alerts.DeleteNoteConfirmAlert = chorus.alerts.ModelDelete.extend({
+    text:t("notes.delete.alert.text"),
+    title:t("notes.delete.alert.title"),
+    ok:t("notes.delete.alert.ok"),
+    deleteMessage:"notes.delete.alert.delete_message",
 
-    confirmAlert:function () {
-        this.trigger("deleteNote");
-        $(document).trigger("close.facebox");
+    makeModel:function () {
+        this._super("makeModel", arguments);
+        var activity = this.options.launchElement.data("activity");
+
+        this.model = new chorus.models.Comment({ id: activity.id,
+            entityType: activity.collection.attributes.entityType,
+            entityId: activity.collection.attributes.entityId
+        });
     }
 });

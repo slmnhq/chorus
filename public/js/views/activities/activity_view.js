@@ -2,10 +2,6 @@ chorus.views.Activity = chorus.views.Base.extend({
     className:"activity",
     tagName:"li",
 
-    events:{
-        "click a.delete_link":"deleteActivity"
-    },
-
     subviews:{
         ".comment_list":"commentList"
     },
@@ -20,13 +16,18 @@ chorus.views.Activity = chorus.views.Base.extend({
 
     postRender:function () {
         $(this.el).attr("data-activity-type", this.model.get("type"));
-        $(this.el).attr("data-activity-id", this.model.get("id"))
+        $(this.el).attr("data-activity-id", this.model.get("id"));
+        this.$("a.delete_link").data("activity", this.model);
     },
 
     deleteActivity: function(e) {
         e && e.preventDefault();
-        console.log(this.model)
-        this.model.destroy();
-        this.model.clear();
+
+        var note = new chorus.models.Comment({ id: this.model.id,
+            entityType: this.model.collection.attributes.entityType,
+            entityId: this.model.collection.attributes.entityId
+        })
+
+        note.destroy();
     }
 });

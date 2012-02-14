@@ -14,13 +14,13 @@ describe("chorus.views.Activity", function() {
             });
 
             itShouldRenderAuthorDetails();
-            itShouldRenderObjectDetails({checkLink : true});
-            itShouldRenderWorkspaceDetails({checkLink : true});
+            itShouldRenderObjectDetails({checkLink: true});
+            itShouldRenderWorkspaceDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
 
             context("when only one member was added", function() {
                 beforeEach(function() {
-                    this.view.model.set({ user : [this.view.model.get("user")[0]] });
+                    this.view.model.set({ user: [this.view.model.get("user")[0]] });
                     this.presenter = new chorus.presenters.Activity(this.view.model)
                     this.view.render();
                 })
@@ -45,13 +45,13 @@ describe("chorus.views.Activity", function() {
             });
 
             itShouldRenderAuthorDetails();
-            itShouldRenderObjectDetails({checkLink : true});
-            itShouldRenderWorkspaceDetails({checkLink : true});
+            itShouldRenderObjectDetails({checkLink: true});
+            itShouldRenderWorkspaceDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
 
             context("when only one member was added", function() {
                 beforeEach(function() {
-                    this.view.model.set({ user : [this.view.model.get("user")[0]] });
+                    this.view.model.set({ user: [this.view.model.get("user")[0]] });
                     this.presenter = new chorus.presenters.Activity(this.view.model)
                     this.view.render();
                 })
@@ -76,7 +76,7 @@ describe("chorus.views.Activity", function() {
             });
 
             itShouldRenderAuthorDetails();
-            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderObjectDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
@@ -88,7 +88,7 @@ describe("chorus.views.Activity", function() {
             });
 
             itShouldRenderAuthorDetails();
-            itShouldRenderObjectDetails({checkLink : false});
+            itShouldRenderObjectDetails({checkLink: false});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
@@ -100,7 +100,7 @@ describe("chorus.views.Activity", function() {
             });
 
             itShouldRenderAuthorDetails();
-            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderObjectDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
@@ -113,7 +113,7 @@ describe("chorus.views.Activity", function() {
             });
 
             itShouldRenderAuthorDetails();
-            itShouldRenderObjectDetails({checkLink : false});
+            itShouldRenderObjectDetails({checkLink: false});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
@@ -125,7 +125,7 @@ describe("chorus.views.Activity", function() {
             });
 
             itShouldRenderAuthorDetails();
-            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderObjectDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
@@ -137,7 +137,7 @@ describe("chorus.views.Activity", function() {
             });
 
             itShouldRenderAuthorDetails();
-            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderObjectDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
@@ -149,7 +149,7 @@ describe("chorus.views.Activity", function() {
             });
 
             itShouldRenderAuthorDetails();
-            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderObjectDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
@@ -161,7 +161,7 @@ describe("chorus.views.Activity", function() {
             });
 
             itShouldRenderAuthorDetails();
-            itShouldRenderObjectDetails({checkLink : true});
+            itShouldRenderObjectDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         });
 
@@ -173,8 +173,8 @@ describe("chorus.views.Activity", function() {
             });
 
             itShouldRenderAuthorDetails();
-            itShouldRenderObjectDetails({checkLink : true});
-            itShouldRenderWorkspaceDetails({checkLink : true});
+            itShouldRenderObjectDetails({checkLink: true});
+            itShouldRenderWorkspaceDetails({checkLink: true});
             itShouldRenderACommentLink("comment", t("comments.title.NOTE"))
 
             it("displays the comment body", function() {
@@ -185,10 +185,18 @@ describe("chorus.views.Activity", function() {
                 expect(this.view.$(".timestamp").text()).not.toBeEmpty();
             });
 
+            it("does not display a delete link if user is not the owner", function() {
+                expect(this.view.$(".delete_link")).not.toExist();
+            })
+
             context("when owned by the current user", function() {
                 beforeEach(function() {
                     setLoggedInUser({name: "Lenny", lastName: "lalala", id: this.view.model.author().id});
-                    this.view.render();
+
+                    // put view in page for correct alert click handling
+                    this.page = new chorus.pages.Base();
+                    this.page.mainContent = this.view;
+                    this.page.render();
                 });
 
                 it("displays a hidden delete link", function() {
@@ -198,15 +206,25 @@ describe("chorus.views.Activity", function() {
                     expect(deleteLink).toBeHidden();
                 });
 
-                // it("hovering displays the link", function() {
-                //     this.view.$(".delete_link").trigger("mouseover");
-                //     expect(this.view.$(".delete_link")).toBeVisible();
-                // });
+                context("clicking delete note/comment", function() {
+                    beforeEach(function() {
+                        this.collection = new chorus.collections.ActivitySet([this.view.model], {entityType: "workspace", entityId: 10000});
+                        stubModals();
+                        this.view.$(".delete_link").click();
+                    });
 
-                it("clicking the link calls deleteActivity", function() {
-                    this.view.$(".delete_link").click();
-                    expect(this.view.deleteActivity).toHaveBeenCalled();
-                })
+                    it("launches a delete note confirm alert", function() {
+                        expect(chorus.modal).toBeA(chorus.alerts.DeleteNoteConfirmAlert);
+                        expect(chorus.modal.model).toBeA(chorus.models.Comment);
+                        expect(chorus.modal.model.id).toBe(this.model.id)
+                        expect(chorus.modal.model.attributes.entityId).toBe(10000)
+                        expect(chorus.modal.model.attributes.entityType).toBe("workspace")
+                    });
+
+                    xit("destroys a model with the right entityId, entityType, and id", function() {
+                        expect(this.server.lastDestroy().url).toMatchUrl("/edc/comment/workspace/10000/" + this.view.model.id);
+                    });
+                });
             });
 
             it("renders items for the sub-comments", function() {
@@ -233,9 +251,9 @@ describe("chorus.views.Activity", function() {
                 this.view.render();
             });
 
-            itShouldRenderVersionDetails({checkLink : true })
-            itShouldRenderObjectDetails({checkLink : true});
-            itShouldRenderWorkspaceDetails({checkLink : true});
+            itShouldRenderVersionDetails({checkLink: true })
+            itShouldRenderObjectDetails({checkLink: true});
+            itShouldRenderWorkspaceDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
         })
 
@@ -265,7 +283,9 @@ describe("chorus.views.Activity", function() {
         it("contains the author's url", function() {
             expect(this.view.$('a.author').attr('href')).toBe(this.view.model.author().showUrl());
         });
-    };
+    }
+
+    ;
 
     function itShouldRenderObjectDetails(options) {
         options || (options = {});
@@ -279,7 +299,9 @@ describe("chorus.views.Activity", function() {
                 expect(this.view.$('.activity_header a[href="' + this.presenter.objectUrl + '"]')).toExist();
             });
         }
-    };
+    }
+
+    ;
 
     function itShouldRenderWorkspaceDetails(options) {
         options || (options = {});
@@ -293,7 +315,9 @@ describe("chorus.views.Activity", function() {
                 expect(this.view.$('.activity_header a[href="' + this.presenter.workspaceUrl + '"]')).toExist();
             });
         }
-    };
+    }
+
+    ;
 
     function itShouldRenderVersionDetails(options) {
         options || (options = {});
@@ -307,7 +331,9 @@ describe("chorus.views.Activity", function() {
                 expect(this.view.$('.activity_header a[href="' + this.presenter.versionUrl + '"]')).toExist();
             });
         }
-    };
+    }
+
+    ;
 
     function itShouldRenderACommentLink(entityType, entityTitle) {
         it("sets the correct entityType on the comment dialog link", function() {
