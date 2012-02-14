@@ -41,6 +41,7 @@ src_files:
   - js/views/visualizations/visualization_view.js
   - js/views/**/*.js
   - js/dialogs/workspaces/pick_workspace_dialog.js
+  - js/dialogs/memo_new_dialog.js
   - js/models/tabular_data.js
   - js/models/tasks/task.js
   - js/models/tasks/chart_task.js

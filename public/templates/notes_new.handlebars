@@ -1,5 +1,5 @@
 <form action="{{formUrl}}">
-    <textarea class="required" name="body" placeholder="{{t "notes.placeholder" noteSubject=displayEntityType}}" tabindex="1" maxlength="256">{{body}}</textarea>
+    <textarea class="required" name="body" placeholder="{{{placeholder}}}" tabindex="1" maxlength="256">{{body}}</textarea>
 
     <div class="options_text">
         <a href="#" class="show_options">{{t "notes.new_dialog.show_options"}}</a> {{t "notes.new_dialog.show_options_details"}}
@@ -23,6 +23,6 @@
     <div class="modal_controls">
         <button type="button" class="cancel" tabindex=3>{{t "actions.cancel"}}</button>
         <button type="button" class="cancel_upload hidden" tabindex=3>{{t "notes.new_dialog.cancel_upload"}}</button>
-        <button type="submit" class="submit" tabindex=2>{{t "notes.button.create"}}</button>
+        <button type="submit" class="submit" tabindex=2>{{submitButton}}</button>
     </div>
 </form>
