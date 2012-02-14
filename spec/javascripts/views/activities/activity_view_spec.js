@@ -48,6 +48,7 @@ describe("chorus.views.Activity", function() {
             itShouldRenderObjectDetails({checkLink: true});
             itShouldRenderWorkspaceDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+            itShouldNotRenderAnInsightLink();
 
             context("when only one member was added", function() {
                 beforeEach(function() {
@@ -78,6 +79,7 @@ describe("chorus.views.Activity", function() {
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+            itShouldNotRenderAnInsightLink();
         });
 
         context("type: USER_DELETED", function() {
@@ -90,6 +92,7 @@ describe("chorus.views.Activity", function() {
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink: false});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+            itShouldNotRenderAnInsightLink();
         });
 
         context("type: INSTANCE_CREATED", function() {
@@ -102,6 +105,7 @@ describe("chorus.views.Activity", function() {
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+            itShouldNotRenderAnInsightLink();
         });
 
 
@@ -115,6 +119,7 @@ describe("chorus.views.Activity", function() {
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink: false});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+            itShouldNotRenderAnInsightLink();
         });
 
         context("type: WORKSPACE_MAKE_PRIVATE", function() {
@@ -127,6 +132,7 @@ describe("chorus.views.Activity", function() {
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+            itShouldNotRenderAnInsightLink();
         });
 
         context("type: WORKSPACE_MAKE_PUBLIC", function() {
@@ -139,6 +145,7 @@ describe("chorus.views.Activity", function() {
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+            itShouldNotRenderAnInsightLink();
         });
 
         context("type: WORKSPACE_ARCHIVED", function() {
@@ -151,6 +158,7 @@ describe("chorus.views.Activity", function() {
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+            itShouldNotRenderAnInsightLink();
         });
 
         context("type: WORKSPACE_UNARCHIVED", function() {
@@ -163,11 +171,15 @@ describe("chorus.views.Activity", function() {
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+            itShouldNotRenderAnInsightLink();
         });
 
         context("type: NOTE", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activities.NOTE_ON_WORKSPACE();
+                this.collection = new chorus.collections.ActivitySet();
+                this.collection.add(this.view.model);
+
                 this.presenter = new chorus.presenters.Activity(this.view.model)
                 this.view.render();
             });
@@ -230,6 +242,27 @@ describe("chorus.views.Activity", function() {
             it("renders items for the sub-comments", function() {
                 expect(this.model.get("comments").length).toBe(1);
                 expect(this.view.$(".comments li").length).toBe(1);
+            });
+
+            it("has a link to promote the note to an insight", function() {
+                expect(this.view.$(".links a.promote").text()).toMatchTranslation("activity_stream.promote");
+            });
+
+            describe("clicking the 'promote to insight' link", function() {
+                beforeEach(function() {
+                    this.view.$(".links a.promote").trigger("click");
+                });
+
+                it("posts to the comment insight api", function() {
+                    expect(this.server.lastCreate().url).toBe("/edc/commentinsight/" + this.view.model.get("id") + "/promote");
+                });
+
+                describe("when the post completes", function() {
+                    it("re-fetches the activity's collection", function() {
+                        this.server.lastCreate().succeed();
+                        expect(this.collection).toHaveBeenFetched();
+                    });
+                });
             });
         });
 
@@ -334,6 +367,12 @@ describe("chorus.views.Activity", function() {
     }
 
     ;
+
+    function itShouldNotRenderAnInsightLink() {
+        it("does *not* have a link to promote the activity to a comment", function() {
+            expect(this.view.$(".links a.promote")).not.toExist();
+        });
+    }
 
     function itShouldRenderACommentLink(entityType, entityTitle) {
         it("sets the correct entityType on the comment dialog link", function() {

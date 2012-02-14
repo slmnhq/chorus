@@ -2,6 +2,10 @@ chorus.views.Activity = chorus.views.Base.extend({
     className:"activity",
     tagName:"li",
 
+    events: {
+        "click a.promote": "promote"
+    },
+
     subviews:{
         ".comment_list":"commentList"
     },
@@ -12,6 +16,11 @@ chorus.views.Activity = chorus.views.Base.extend({
 
     setupSubviews:function () {
         this.commentList = new chorus.views.CommentList({ collection:this.model.comments() });
+    },
+
+    promote: function(e) {
+        e.preventDefault();
+        this.model.promoteToInsight();
     },
 
     postRender:function () {
