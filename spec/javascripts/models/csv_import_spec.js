@@ -1,6 +1,6 @@
 describe("chorus.models.CSVImport", function() {
-    context("with comma separators", function() {
-
+    
+    context("with comma delimiters", function() {
         beforeEach(function() {
             this.model = fixtures.csvImport({
                 lines: [
@@ -17,9 +17,29 @@ describe("chorus.models.CSVImport", function() {
         })
 
         itParsesCorrectly();
-    })
-    context("with tab separators", function() {
+    })    
+    
+    context("with space delimiters", function() {
+        beforeEach(function() {
+            this.model = fixtures.csvImport({
+                lines: [
+                    'col1 col2 col3',
+                    '"row1 val1" row1val2 row1val3',
+                    'row2val1 "row2 val2" row2val3'
+                ]
+            });
+            this.expectedColumns = [
+                {name: 'col1', values: ['row1 val1', 'row2val1']},
+                {name: 'col2', values: ['row1val2', 'row2 val2']},
+                {name: 'col3', values: ['row1val3', 'row2val3']}
+            ]
+            this.model.set({'delimiter': ' '});
+        })
 
+        itParsesCorrectly();
+    })
+    
+    context("with tab delimiters", function() {
         beforeEach(function() {
             this.model = fixtures.csvImport({
                 lines: [
@@ -38,6 +58,45 @@ describe("chorus.models.CSVImport", function() {
 
         itParsesCorrectly();
     })
+    
+    context("with quoted comma", function() {
+        beforeEach(function() {
+            this.model = fixtures.csvImport({
+                lines: [
+                    'col1,col2,col3',
+                    '"row1,val1",row1val2,row1val3',
+                    'row2val1,"row2,val2",row2val3'
+                ]
+            });
+            this.expectedColumns = [
+                {name: 'col1', values: ['row1,val1', 'row2val1']},
+                {name: 'col2', values: ['row1val2', 'row2,val2']},
+                {name: 'col3', values: ['row1val3', 'row2val3']}
+            ]
+        })
+
+        itParsesCorrectly();
+    })
+
+    context("with escaped quote", function() {
+        beforeEach(function() {
+            this.model = fixtures.csvImport({
+                lines: [
+                    'col1,col2,col3',
+                    '"row1""val1",row1val2,""""',
+                    'row2val1,"row2val2",row2val3'
+                ]
+            });
+            this.expectedColumns = [
+                {name: 'col1', values: ['row1"val1', 'row2val1']},
+                {name: 'col2', values: ['row1val2', 'row2val2']},
+                {name: 'col3', values: ['"', 'row2val3']}
+            ]
+        })
+
+        itParsesCorrectly();
+    })
+    
     function itParsesCorrectly() {
         describe("columnOrientedData", function() {
             beforeEach(function() {
@@ -53,7 +112,9 @@ describe("chorus.models.CSVImport", function() {
             })
 
             it("has the rows", function() {
-                expect(this.columns[0].values).toEqual(this.expectedColumns[0].values);
+                _.each(this.columns, _.bind(function(column, i) {
+                    expect(column.values).toEqual(this.expectedColumns[i].values)
+                }, this))
             })
 
         })
