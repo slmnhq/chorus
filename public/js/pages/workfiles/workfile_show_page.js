@@ -34,6 +34,10 @@
             this.model.workspace().fetch();
             this.requiredResources.push(this.model);
             this.requiredResources.push(this.model.workspace());
+
+            chorus.PageEvents.subscribe("file:autosaved", function () {
+                this.model && this.model.trigger("invalidated");
+            }, this);
         },
 
         resourcesLoaded:function () {
@@ -57,22 +61,6 @@
             if (!this.mainContent.contentDetails) {
                 this.mainContent.contentDetails = chorus.views.WorkfileContentDetails.buildFor(this.model);
                 this.mainContent.content = chorus.views.WorkfileContent.buildFor(this.model);
-                this.mainContent.content.forwardEvent("autosaved", this.mainContent.contentDetails);
-                this.mainContent.content.bind("autosaved", function () {
-                    this.model.trigger("invalidated");
-                }, this);
-                this.mainContent.contentDetails.forwardEvent("file:saveCurrent", this.mainContent.content);
-                this.mainContent.contentDetails.forwardEvent("file:createWorkfileNewVersion", this.mainContent.content);
-                this.mainContent.contentDetails.forwardEvent("file:runCurrent", this.mainContent.content);
-                this.mainContent.contentDetails.forwardEvent("file:runInSchema", this.mainContent.content);
-                this.mainContent.content.forwardEvent("file:executionSucceeded", this.mainContent.contentDetails);
-                this.mainContent.content.forwardEvent("file:executionFailed", this.mainContent.contentDetails);
-
-                if (this.model && this.model.isSql()) {
-                    this.sidebar.functionList.forwardEvent("file:insertText", this.mainContent.content);
-                    this.sidebar.datasetList.forwardEvent("file:insertText", this.mainContent.content);
-                    this.sidebar.columnList.forwardEvent("file:insertText", this.mainContent.content);
-                }
             }
 
             this.render();

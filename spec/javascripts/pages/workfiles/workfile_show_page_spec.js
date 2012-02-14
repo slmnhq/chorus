@@ -122,16 +122,6 @@ describe("chorus.pages.WorkfileShowPage", function() {
             this.page.resourcesLoaded();
         });
 
-        it("forward the events", function() {
-            expect(chorus.views.DatabaseFunctionSidebarList.prototype.forwardEvent).toHaveBeenCalled();
-        });
-
-        it("when the model has changed again does not forward the events again", function() {
-            chorus.views.DatabaseFunctionSidebarList.prototype.forwardEvent.reset();
-            this.page.modelChanged();
-            expect(chorus.views.DatabaseFunctionSidebarList.prototype.forwardEvent).not.toHaveBeenCalled();
-        });
-
         it("it displays the workfile name in the content header", function() {
             expect(this.page.mainContent.contentHeader.$("h1").text()).toBe(this.model.get('fileName'));
         });
@@ -140,98 +130,15 @@ describe("chorus.pages.WorkfileShowPage", function() {
             expect(this.page.mainContent.contentHeader.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl('sql'));
         });
 
-        describe("the workfile detail view raises file:save event", function() {
-            beforeEach(function() {
-                spyOnEvent(this.page.mainContent.content, 'file:saveCurrent');
-                this.page.mainContent.contentDetails.trigger("file:saveCurrent");
-            });
-
-            it("relays the event to the workfile content", function() {
-                expect('file:saveCurrent').toHaveBeenTriggeredOn(this.page.mainContent.content);
-            });
-        });
-
-        describe("the workfile detail view raises file:runCurrent event", function() {
-            beforeEach(function() {
-            this.page.model.workspace().set({
-                sandboxInfo : {
-                    databaseId: '3',
-                    databaseName: "db",
-                    instanceId: '2',
-                    instanceName: "instance",
-                    sandboxId: "10001",
-                    schemaId: '4',
-                    schemaName: "schema"
-                }});
-
-                spyOnEvent(this.page.mainContent.content, 'file:runCurrent');
-                this.page.mainContent.contentDetails.trigger("file:runCurrent");
-            });
-
-            it("relays the event to the workfile content", function() {
-                expect('file:runCurrent').toHaveBeenTriggeredOn(this.page.mainContent.content);
-            });
-        });
-
-        describe("the workfile detail view raises file:runInSchema event", function() {
-            beforeEach(function() {
-                spyOnEvent(this.page.mainContent.content, 'file:runInSchema');
-                this.page.mainContent.contentDetails.trigger("file:runInSchema", {
-                    instance: "4",
-                    database: "5",
-                    schema: "6"
-                });
-            });
-
-            it("relays the event to the workfile content", function() {
-                expect('file:runInSchema').toHaveBeenTriggeredOn(this.page.mainContent.content);
-            });
-        });
-
-        context("when the content triggers autosaved", function() {
+        context("when the content broadcasts file:autosaved", function() {
             beforeEach(function() {
                 this.page.render();
                 spyOnEvent(this.page.model, "invalidated");
-                this.page.mainContent.content.trigger("autosaved");
+                chorus.PageEvents.broadcast("file:autosaved");
             });
 
             it("triggers invalidated on the model", function() {
                 expect("invalidated").toHaveBeenTriggeredOn(this.page.model);
-            });
-        });
-
-        describe("when the sidebar triggers 'file:insertText'", function() {
-            beforeEach(function() {
-                this.page.render()
-                spyOnEvent(this.page.mainContent.content, 'file:insertText')
-                spyOn(this.page.model, 'isSql').andReturn(true)
-                this.page.sidebar.functionList.trigger("file:insertText", "");
-            })
-
-            it("should relay the event to textContent", function() {
-                expect('file:insertText').toHaveBeenTriggeredOn(this.page.mainContent.content)
-            })
-        })
-
-        describe("when the content triggers file:executionSucceeded", function() {
-            beforeEach(function() {
-                this.page.render();
-                spyOnEvent(this.page.mainContent.contentDetails, 'file:executionSucceeded');
-                this.page.mainContent.content.trigger("file:executionSucceeded", fixtures.taskWithResult());
-            });
-            it("should relay event to the contentDetails", function() {
-                expect('file:executionSucceeded').toHaveBeenTriggeredOn(this.page.mainContent.contentDetails);
-            });
-        });
-
-        describe("when the content triggers file:executionFailed", function() {
-            beforeEach(function() {
-                this.page.render();
-                spyOnEvent(this.page.mainContent.contentDetails, 'file:executionFailed');
-                this.page.mainContent.content.trigger("file:executionFailed", fixtures.taskWithResult());
-            });
-            it("should relay event to the contentDetails", function() {
-                expect('file:executionFailed').toHaveBeenTriggeredOn(this.page.mainContent.contentDetails);
             });
         });
 

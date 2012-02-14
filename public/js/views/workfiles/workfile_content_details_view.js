@@ -2,7 +2,7 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
         className:"workfile_content_details",
 
         setup:function () {
-            this.bind("autosaved", this.updateAutosaveText);
+            chorus.PageEvents.subscribe("file:autosaved", this.updateAutosaveText, this);
         },
 
         updateAutosaveText:function (args) {
@@ -26,12 +26,12 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
         },
 
         replaceCurrentVersion:function () {
-            this.trigger("file:saveCurrent");
+            chorus.PageEvents.broadcast("file:saveCurrent");
             this.updateAutosaveText("workfile.content_details.save");
         },
 
         workfileNewVersion:function () {
-            this.trigger("file:createWorkfileNewVersion");
+            chorus.PageEvents.broadcast("file:createWorkfileNewVersion");
         },
 
         formatTime:function (time) {

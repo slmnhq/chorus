@@ -57,7 +57,7 @@ chorus.dialogs.RunFileInSchema = chorus.dialogs.Base.extend({
             options = this.schemaPicker.fieldValues();
         }
 
-        this.trigger("run", options);
+        chorus.PageEvents.broadcast("file:runInSchema", options);
         this.closeModal();
     },
 

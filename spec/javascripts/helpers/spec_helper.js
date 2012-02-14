@@ -25,6 +25,7 @@
         'dataset_preview',
         'dataset_content_details',
         'dataset_create_chorus_view_sidebar',
+        'dataset_edit_chorus_view',
         'dataset_create_chorus_view_sidebar_column_row',
         'dataset_visualization_boxplot_sidebar',
         'dataset_visualization_frequency_sidebar',
@@ -313,6 +314,7 @@
 
             spyOn($.fn, 'jGrowl');
 
+            chorus.PageEvents.reset();
             chorus.session.sandboxPermissionsCreated = {};
             setLoggedInUser();
         });

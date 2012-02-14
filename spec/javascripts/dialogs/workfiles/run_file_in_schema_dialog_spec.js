@@ -155,17 +155,18 @@ describe("chorus.dialogs.RunFileInSchema", function () {
 
                     describe("and the Run File button is clicked", function () {
                         beforeEach(function () {
+                            spyOn(chorus.PageEvents, "broadcast").andCallThrough();
                             this.dialog.$("button.submit").click();
                         })
 
-                        it("triggers the run event", function () {
-                            expect("run").toHaveBeenTriggeredOn(this.dialog, [
+                        it("broadcasts the file:runInSchema event", function () {
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runInSchema",
                                 {
                                     instanceId:44,
                                     databaseId:55,
                                     schemaId:66
                                 }
-                            ]);
+                            );
                         })
 
                         it("closes the dialog", function () {
@@ -188,6 +189,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
 
                     context("and the schema picker is ready", function () {
                         beforeEach(function () {
+                            spyOn(chorus.PageEvents, "broadcast").andCallThrough();
                             spyOn(this.dialog.schemaPicker, "ready").andReturn(true);
                             this.dialog.$("input#another_schema").click();
                         })
@@ -201,14 +203,14 @@ describe("chorus.dialogs.RunFileInSchema", function () {
                                 this.dialog.$("button.submit").click();
                             })
 
-                            it("triggers the run event", function () {
-                                expect("run").toHaveBeenTriggeredOn(this.dialog, [
+                            it("broadcasts the file:runInSchema event", function () {
+                                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runInSchema",
                                     {
                                         instance:5,
                                         database:6,
                                         schema:7
                                     }
-                                ]);
+                                );
                             })
 
                             it("closes the dialog", function () {

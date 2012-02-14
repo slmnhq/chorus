@@ -75,17 +75,17 @@ describe("chorus.views.ResultsConsoleView", function() {
             this.view.render();
         })
 
-        describe("action:close", function() {
+        describe("clicking the close link", function() {
             beforeEach(function() {
                 this.view.options.enableClose = true;
                 this.view.render();
 
-                spyOnEvent(this.view, "action:close");
+                spyOn(chorus.PageEvents, "broadcast");
                 this.view.$("a.close").click();
             });
 
-            it("triggers the event", function() {
-                expect("action:close").toHaveBeenTriggeredOn(this.view);
+            it("broadcasts action:closePreview", function() {
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("action:closePreview");
             });
         });
 
@@ -94,7 +94,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 spyOn(_, "delay").andCallThrough();
                 spyOn(window, "clearTimeout");
 
-                this.view.trigger("file:executionStarted")
+                chorus.PageEvents.broadcast("file:executionStarted")
             })
 
             it("sets the executing class", function() {
@@ -153,7 +153,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 context("when the spinner has not yet been started", function() {
                     beforeEach(function() {
                         this.task = fixtures.taskWithResult();
-                        this.view.trigger("file:executionSucceeded", this.task);
+                        chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
                     })
 
                     itRemovesExecutionUI(true);
@@ -165,7 +165,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                         delete this.view.spinnerTimer;
                         delete this.view.elapsedTimer;
                         this.task = fixtures.taskWithResult();
-                        this.view.trigger("file:executionSucceeded", this.task);
+                        chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
                     })
 
                     itRemovesExecutionUI(false);
@@ -179,7 +179,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 context("and there was an execution error", function() {
                     beforeEach(function() {
                         this.task = fixtures.taskWithErrors();
-                        this.view.trigger("file:executionFailed", this.task);
+                        chorus.PageEvents.broadcast("file:executionFailed", this.task);
                     });
 
                     it("should show the error header", function() {
@@ -212,7 +212,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                     context("when the sql is executed again without errors", function() {
                         beforeEach(function() {
                             this.task = fixtures.taskWithResult();
-                            this.view.trigger("file:executionSucceeded", this.task);
+                            chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
                         })
 
                         it("should show the execution content area", function() {
@@ -280,7 +280,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 context("when another execution completed event occurs", function() {
                     beforeEach(function() {
-                        this.view.trigger("file:executionSucceeded", fixtures.taskWithResult());
+                        chorus.PageEvents.broadcast("file:executionSucceeded", fixtures.taskWithResult());
                     });
 
                     it("still renders only one data table", function() {

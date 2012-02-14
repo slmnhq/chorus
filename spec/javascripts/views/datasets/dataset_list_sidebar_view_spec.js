@@ -18,7 +18,7 @@ describe("chorus.views.DatasetListSidebar", function() {
             context("when a dataset is selected", function() {
                 beforeEach(function() {
                     this.dataset = fixtures.datasetSourceTable();
-                    this.view.trigger("dataset:selected", this.dataset);
+                    chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                 });
 
                 it("sets the note link's displayEntityType to the dataset's metatype", function() {
@@ -57,7 +57,7 @@ describe("chorus.views.DatasetListSidebar", function() {
                 context("when browsing a schema", function() {
                     beforeEach(function() {
                         this.view.options.browsingSchema = true;
-                        this.view.trigger("dataset:selected", this.dataset);
+                        chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                     });
 
                     it("has a link to associate the dataset with a workspace", function() {

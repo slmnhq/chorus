@@ -281,8 +281,7 @@ $medium-font: 14px;
 }
 
 @mixin tab-gradient {
- @include linear-gradient(color-stops($body-background-color, $tab-gradient-color));
-
+    @include background-image(linear-gradient($body-background-color, $tab-gradient-color));
 }
 
 @mixin recent-comment {

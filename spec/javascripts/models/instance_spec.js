@@ -11,6 +11,40 @@ describe("chorus.models.Instance", function() {
         expect(this.instance.url()).toBe("/edc/instance/" + this.instance.get('id'));
     });
 
+    describe("#stateIconUrl", function() {
+        it("returns the right url for 'fault' instances", function() {
+            this.instance.set({ state: "fault" });
+            expect(this.instance.stateIconUrl()).toBe("/images/instances/red.png");
+        });
+
+        it("returns the right url for online instances", function() {
+            this.instance.set({ state: "online" });
+            expect(this.instance.stateIconUrl()).toBe("/images/instances/green.png");
+        });
+
+        it("returns the right url for other instances", function() {
+            this.instance.set({ state: null });
+            expect(this.instance.stateIconUrl()).toBe("/images/instances/unknown.png");
+        });
+    });
+
+    describe("#providerIconUrl", function() {
+        it("returns the right url for greenplum instances", function() {
+            this.instance.set({ instanceProvider: "Greenplum Database" });
+            expect(this.instance.providerIconUrl()).toBe("/images/instances/greenplum_instance.png");
+        });
+
+        it("returns the right url for hadoop instances", function() {
+            this.instance.set({ instanceProvider: "Hadoop" });
+            expect(this.instance.providerIconUrl()).toBe("/images/instances/hadoop_instance.png");
+        });
+
+        it("returns the right url for other instances", function() {
+            this.instance.set({ instanceProvider: "Something Else" });
+            expect(this.instance.providerIconUrl()).toBe("/images/instances/other_instance.png");
+        });
+    });
+
     describe(".aurora", function() {
         beforeEach(function() {
             this.aurora = chorus.models.Instance.aurora();

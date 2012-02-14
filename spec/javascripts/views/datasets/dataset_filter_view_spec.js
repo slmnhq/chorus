@@ -32,9 +32,9 @@ describe("chorus.views.DatasetFilter", function() {
             expect(chorus.datePicker).toHaveBeenCalled();
 
             var datePickerOptions = chorus.datePicker.mostRecentCall.args[0];
-            expect(datePickerOptions["%Y"]).toBe(this.view.$(".filter.date input.year"));
-            expect(datePickerOptions["%m"]).toBe(this.view.$(".filter.date input.month"));
-            expect(datePickerOptions["%d"]).toBe(this.view.$(".filter.date input.day"));
+            expect(datePickerOptions["%Y"]).toBe(this.view.$(".filter.date input[name='year']"));
+            expect(datePickerOptions["%m"]).toBe(this.view.$(".filter.date input[name='month']"));
+            expect(datePickerOptions["%d"]).toBe(this.view.$(".filter.date input[name='day']"));
         });
 
         it("displays remove button", function() {
@@ -63,13 +63,13 @@ describe("chorus.views.DatasetFilter", function() {
                 expect(this.view.$(".column_filter option[value='" + this.collection.models[0].get("name") + "']")).not.toHaveAttr("disabled");
             });
         });
-        
-        xdescribe("#validateInput", function() {
+
+        describe("#validateInput", function() {
             describe("with a numeric column", function() {
                 beforeEach(function() {
                     this.collection.models[0].set({typeCategory:"REAL_NUMBER"});
                     this.view.render();
-                    spyOn(chorus.models.DatasetFilterMaps.Numeric.prototype, "performValidation");
+                    spyOn(this.view.model, "performValidation");
                     spyOn(this.view, "markInputAsInvalid");
 
                     this.view.$(".filter.default input").val("123");
@@ -77,11 +77,12 @@ describe("chorus.views.DatasetFilter", function() {
 
                 it("passes the input argument to the right method", function() {
                     this.view.validateInput();
-                    expect(chorus.models.DatasetFilterMaps.Numeric.prototype.performValidation).toHaveBeenCalledWith({ value: "123" });
+                    expect(this.view.model).toBeA(chorus.models.DatasetFilterMaps.Numeric);
+                    expect(this.view.model.performValidation).toHaveBeenCalledWith({ value: "123" });
                 });
 
                 it("adds a qtip with invalid input", function() {
-                    chorus.models.DatasetFilterMaps.Numeric.prototype.performValidation.andReturn(false);
+                    this.view.model.performValidation.andReturn(false);
 
                     this.view.validateInput();
 
@@ -93,7 +94,7 @@ describe("chorus.views.DatasetFilter", function() {
                 });
 
                 it("does not add a qtip with valid input", function() {
-                    chorus.models.DatasetFilterMaps.Numeric.prototype.performValidation.andReturn(true);
+                    this.view.model.performValidation.andReturn(true);
 
                     this.view.validateInput();
 
@@ -105,38 +106,45 @@ describe("chorus.views.DatasetFilter", function() {
                 beforeEach(function() {
                     this.collection.models[0].set({ typeCategory : "DATE" });
                     this.view.render();
-                    spyOn(chorus.models.DatasetFilterMaps.Date.prototype, "performValidation");
-                    spyOn(this.view, "markInputAsInvalid");
 
-                    this.view.$(".filter.default input.year").val("2012");
-                    this.view.$(".filter.default input.month").val("2");
-                    this.view.$(".filter.default input.day").val("14");
+                    spyOn(this.view.model, "performValidation");
+                    spyOn(this.view, "markInputAsInvalid").andCallThrough();
+
+                    this.view.$(".filter.date input[name='year']").val("2012");
+                    this.view.$(".filter.date input[name='month']").val("2");
+                    this.view.$(".filter.date input[name='day']").val("14");
                 });
 
                 it("passes the input argument to the right method", function() {
                     this.view.validateInput();
 
-                    expect(chorus.models.DatasetFilterMaps.Date.prototype.performValidation).toHaveBeenCalledWith({
+                    expect(this.view.model).toBeA(chorus.models.DatasetFilterMaps.Date);
+                    expect(this.view.model.performValidation).toHaveBeenCalledWith({
                         year: "2012",
                         month: "2",
-                        day: "14"
+                        day: "14",
+                        value: "2012/2/14"
                     });
                 });
 
                 it("adds a qtip with invalid input", function() {
-                    chorus.models.DatasetFilterMaps.Date.prototype.performValidation.andReturn(false);
+                    var qtipElement = stubQtip();
+
+                    this.view.model.performValidation.andCallFake(function() {
+                        this.errors = { month: "bad month" };
+                        return false;
+                    });
 
                     this.view.validateInput();
 
                     expect(this.view.markInputAsInvalid).toHaveBeenCalled();
                     var args = this.view.markInputAsInvalid.mostRecentCall.args;
-
-                    expect(args[0]).toBe(this.view.$(".filter.default input"));
-                    expect(args[1]).toMatchTranslation("dataset.filter.number_required");
+                    expect(args[0]).toBe(this.view.$(".filter.date input[name='month']"));
+                    expect(args[1]).toBe("bad month");
                 });
 
                 it("does not add a qtip with valid input", function() {
-                    chorus.models.DatasetFilterMaps.Date.prototype.performValidation.andReturn(true);
+                    this.view.model.performValidation.andReturn(true);
 
                     this.view.validateInput();
 
@@ -280,9 +288,9 @@ describe("chorus.views.DatasetFilter", function() {
                     _.each(this.typesRequiringArgument, function(comparatorType) {
                         this.view.$(".comparator").val(comparatorType).change();
                         expect(this.view.$(".filter.date")).not.toHaveClass("hidden");
-                        expect(this.view.$(".filter.date input.year").attr("placeholder")).toMatchTranslation("dataset.filter.date_placeholder.year");
-                        expect(this.view.$(".filter.date input.month").attr("placeholder")).toMatchTranslation("dataset.filter.date_placeholder.month");
-                        expect(this.view.$(".filter.date input.day").attr("placeholder")).toMatchTranslation("dataset.filter.date_placeholder.day");
+                        expect(this.view.$(".filter.date input[name='year']").attr("placeholder")).toMatchTranslation("dataset.filter.date_placeholder.year");
+                        expect(this.view.$(".filter.date input[name='month']").attr("placeholder")).toMatchTranslation("dataset.filter.date_placeholder.month");
+                        expect(this.view.$(".filter.date input[name='day']").attr("placeholder")).toMatchTranslation("dataset.filter.date_placeholder.day");
                     }, this);
                 });
 
@@ -297,7 +305,6 @@ describe("chorus.views.DatasetFilter", function() {
                 it("it hides the second input field ", function() {
                     _.each(this.typesNotRequiringArgument, function(comparatorType) {
                         this.view.$(".comparator").val(comparatorType).change();
-                        debugger;
                         expect(this.view.$(".filter.date input")).toBeHidden();
                     }, this);
                 });
@@ -325,25 +332,64 @@ describe("chorus.views.DatasetFilter", function() {
             });
         });
 
-        describe("#getInputField", function() {
-            it("returns the default filter input when you pick a string", function() {
-                this.view.model = new chorus.models.DatasetFilterMaps.String;
-                expect(this.view.getInputField()).toBe(this.view.$(".filter.default input"))
+        describe("#fieldValues", function() {
+            beforeEach(function() {
+                this.view.$(".filter.default input").val("123");
+                this.view.$(".filter.time input").val("12:34");
+                this.view.$(".filter.date input[name='year']").val("04");
+                this.view.$(".filter.date input[name='month']").val("12");
+                this.view.$(".filter.date input[name='day']").val("3");
             });
 
-            it("returns the default filter input when you pick a numeric", function() {
-                this.view.model = new chorus.models.DatasetFilterMaps.Numeric;
-                expect(this.view.getInputField()).toBe(this.view.$(".filter.default input"))
+            describe("with a string column", function() {
+                it("returns the value of the default filter input", function() {
+                    this.view.model = new chorus.models.DatasetFilterMaps.String;
+                    expect(this.view.fieldValues()).toEqual({ value: "123" });
+                });
             });
 
-            it("returns the time filter input when you pick a time", function() {
-                this.view.model = new chorus.models.DatasetFilterMaps.Time;
-                expect(this.view.getInputField()).toBe(".filter.time input")
+            describe("with a numeric column", function() {
+                it("returns the value of the default filter input", function() {
+                    this.view.model = new chorus.models.DatasetFilterMaps.Numeric;
+                    expect(this.view.fieldValues()).toEqual({ value: "123" });
+                });
             });
 
-            it("returns the date filter input when you pick a date", function() {
-                this.view.model = new chorus.models.DatasetFilterMaps.Date;
-                expect(this.view.getInputField()).toBe(".filter.date input.year");
+            describe("with a time column", function() {
+                it("returns the value of the time filter input", function() {
+                    this.view.model = new chorus.models.DatasetFilterMaps.Time;
+                    expect(this.view.fieldValues()).toEqual({ value: "12:34" });
+                });
+            });
+
+            describe("with a date column", function() {
+                beforeEach(function() {
+                    this.view.model = new chorus.models.DatasetFilterMaps.Date;
+                });
+
+                it("returns the values of the date filter inputs", function() {
+                    expect(this.view.fieldValues().month).toBe("12");
+                    expect(this.view.fieldValues().year).toBe("04");
+                    expect(this.view.fieldValues().day).toBe("3");
+                });
+
+                describe("when the fields are populated", function() {
+                    it("includes a 'value' field, which formats the year, month and day properly", function() {
+                        expect(this.view.fieldValues().value).toBe("04/12/3");
+                    });
+                });
+
+                describe("when the fields are blank", function() {
+                    beforeEach(function() {
+                        this.view.$(".filter.date input[name='year']").val("");
+                        this.view.$(".filter.date input[name='month']").val("");
+                        this.view.$(".filter.date input[name='day']").val("");
+                    });
+
+                    it("includes a blank 'value' field", function() {
+                        expect(this.view.fieldValues().value).toBe("");
+                    });
+                });
             });
         })
     });

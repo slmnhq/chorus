@@ -54,6 +54,8 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
                 spyOn(this.view, "onSqlError");
                 this.view.model = fixtures.datasetSourceTable();
                 this.view.$('button.create').click();
+                this.task = this.view.task;
+                spyOn(this.task, 'cancel').andCallThrough();
             })
 
             it("should clear the sql error bar", function() {
@@ -72,9 +74,18 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
                 expect(this.view.$("button.cancel")).not.toHaveClass('hidden');
             })
 
+            describe("cancel:sidebar", function() {
+                beforeEach(function() {
+                    chorus.PageEvents.broadcast('cancel:sidebar');
+                })
+
+                it("cancels the task", function() {
+                    expect(this.task.cancel).toHaveBeenCalled();
+                })
+            });
+
             describe("when the user clicks the cancel button", function() {
                 beforeEach(function() {
-                    spyOn(this.view.task, 'cancel').andCallThrough();
                     this.view.$('button.cancel').click();
                 })
                 it("should remove the spinner from the create button", function() {
@@ -90,16 +101,20 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
                 })
 
                 it("cancels the task", function() {
-                    expect(this.view.task.cancel).toHaveBeenCalled();
+                    expect(this.task.cancel).toHaveBeenCalled();
                 })
 
                 describe("when the cancel is successful", function() {
                     beforeEach(function() {
-                        this.server.lastCreateFor(this.view.task).fail("The task is cancelled");
+                        this.server.lastCreateFor(this.task).fail("The task is cancelled");
                     })
 
                     it("does not render errors", function() {
                         expect(this.view.onSqlError).not.toHaveBeenCalled();
+                    })
+
+                    it("unsets the task from the view", function() {
+                        expect(this.view.task).toBeUndefined();
                     })
                 })
             })
@@ -124,6 +139,10 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
                 it("should hide the cancel button", function() {
                     expect(this.view.$("button.cancel")).toHaveClass('hidden');
                 })
+
+                it("unsets the task from the view", function() {
+                    expect(this.view.task).toBeUndefined();
+                })
             })
 
             describe("when the save fails", function() {
@@ -146,7 +165,19 @@ describe("chorus.views.DatasetVisualizationSidebar", function() {
                 it("should hide the cancel button", function() {
                     expect(this.view.$("button.cancel")).toHaveClass('hidden');
                 })
+
+                it("unsets the task from the view", function() {
+                    expect(this.view.task).toBeUndefined();
+                })
             });
+        })
+
+
+        context("not creating a visualization", function() {
+
+            it("does not blow up when cancel:sidebar is triggered", function() {
+                chorus.PageEvents.broadcast('cancel:sidebar');
+            })
         })
     })
 

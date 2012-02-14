@@ -6,10 +6,13 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         "click a.remove" : "removeColumnClicked"
     },
 
+    setup : function() {
+        this.selectedHandle = chorus.PageEvents.subscribe("column:selected", this.addColumn, this);
+        this.deselectedHandle = chorus.PageEvents.subscribe("column:deselected", this.removeColumn, this);
+    },
+
     postRender : function() {
         this.$("a.preview").data("parent", this);
-        this.bind("column:selected", this.addColumn, this);
-        this.bind("column:deselected", this.removeColumn, this);
     },
 
     addColumn: function(model) {
@@ -21,6 +24,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         $li.data("model", model);
 
         this.$(".non_empty_selection .columns").append($li);
+        this.$("button.create").prop("disabled", false);
     },
 
     removeColumn: function(model) {
@@ -32,6 +36,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         if (this.$(".columns li").length == 0) {
             this.$(".non_empty_selection").addClass("hidden");
             this.$(".empty_selection").removeClass("hidden");
+            this.$("button.create").prop("disabled", "disabled");
         }
     },
 
@@ -40,7 +45,8 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         var $li = $(e.target).closest("li");
         var model = $li.data("model");
 
-        this.trigger("column:removed", model);
+        this.removeColumn(model);
+        chorus.PageEvents.broadcast("column:removed", model);
     },
 
     createChorusView : function() {
@@ -54,8 +60,11 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
             objectType: "QUERY"
         };
 
+        var button = this.$("button.create");
+        button.startLoading("loading");
         $.post("/edc/workspace/" + this.model.get("workspace").id + "/dataset", params,
             function(data) {
+                button.stopLoading();
                 if (data.status == "ok") {
                     chorus.toast("dataset.chorusview.create_success");
                 } else {
@@ -70,7 +79,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
 
     selectClause: function() {
         var names = _.map(this.$(".columns li"), function(li) {
-            return $(li).data("model").get("name");
+            return chorus.Mixins.dbHelpers.safePGName($(li).data("model").get("name"));
         });
 
         return "SELECT " + (names.length ? names.join(", ") : "*");

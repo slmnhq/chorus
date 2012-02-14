@@ -23,7 +23,11 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
            expect(this.view.$("a.preview").data("parent")).toBe(this.view);
         });
 
-        context("when there is no filters or columns selected", function() {
+        it("disables the create button by default", function() {
+            expect(this.view.$("button.create")).toBeDisabled();
+        });
+
+        context("when there are no filters or columns selected", function() {
             it("hides the non-empty selection section and shows the empty selection section", function() {
                 expect(this.view.$(".selected_columns .non_empty_selection")).toHaveClass("hidden");
                 expect(this.view.$(".selected_columns .empty_selection")).not.toHaveClass("hidden");
@@ -32,18 +36,20 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             it("display the default message title", function() {
                 expect(this.view.$(".selected_columns .empty_selection .top label").text().trim()).toMatchTranslation("dataset.chorusview.sidebar.empty_selection.title");
             })
+
             it("display the default message", function() {
                 expect(this.view.$(".selected_columns .empty_selection .bottom ").text().trim()).toMatchTranslation("dataset.chorusview.sidebar.empty_selection.text");
             })
+
             it("disabled the create dataset button", function() {
-                expect(this.view.$("button")).toHaveClass("disabled");
+                expect(this.view.$("button.create")).toBeDisabled();
             });
         })
 
         describe("column:selected event", function() {
             beforeEach(function(){
                 this.databaseColumn = fixtures.databaseColumn();
-                this.view.trigger("column:selected", this.databaseColumn);
+                chorus.PageEvents.broadcast("column:selected", this.databaseColumn);
             });
 
             it("displays the name of that column", function() {
@@ -58,10 +64,14 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 expect(this.view.$(".columns li a.remove").text().trim()).toMatchTranslation("dataset.chorusview.sidebar.remove");
             })
 
+            it("enables the create button", function() {
+                expect(this.view.$("button.create")).not.toBeDisabled();
+            });
+
             describe("selecting another column", function() {
                 beforeEach(function(){
                     this.databaseColumn2 = fixtures.databaseColumn();
-                    this.view.trigger("column:selected", this.databaseColumn2);
+                    chorus.PageEvents.broadcast("column:selected", this.databaseColumn2);
                 });
 
                 it("adds that column too", function() {
@@ -72,7 +82,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
                 describe("deselecting one column", function() {
                     beforeEach(function(){
-                        this.view.trigger("column:deselected", this.databaseColumn);
+                        chorus.PageEvents.broadcast("column:deselected", this.databaseColumn);
                     });
 
                     it("removes the name of that column", function() {
@@ -83,13 +93,17 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
                     describe("deselecting the other column", function() {
                         beforeEach(function(){
-                            this.view.trigger("column:deselected", this.databaseColumn2);
+                            chorus.PageEvents.broadcast("column:deselected", this.databaseColumn2);
                         });
 
                         it("removes the name of that column, and displays the empty selection div", function() {
                             expect(this.view.$(".empty_selection")).not.toHaveClass("hidden");
                             expect(this.view.$(".non_empty_selection")).toHaveClass("hidden");
                             expect(this.view.$(".non_empty_selection .columns li").length).toBe(0)
+                        });
+
+                        it("disables the create button", function() {
+                            expect(this.view.$("button.create")).toBeDisabled();
                         });
                     });
                 });
@@ -98,15 +112,21 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
         describe("clicking the 'Remove' link", function() {
             beforeEach(function() {
-                spyOnEvent(this.view, "column:removed");
-                this.column = fixtures.databaseColumn();
-                this.view.trigger("column:selected", this.column);
-                this.view.$("a.remove").click();
+                spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+                this.column1 = fixtures.databaseColumn();
+                chorus.PageEvents.broadcast("column:selected", this.column1);
+                this.column2 = fixtures.databaseColumn();
+                chorus.PageEvents.broadcast("column:selected", this.column2);
+                this.view.$("a.remove").eq(0).click();
             })
 
             it("should trigger the column:removed event", function() {
-                expect("column:removed").toHaveBeenTriggeredOn(this.view, [this.column]);
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:removed", this.column1);
             })
+
+            it("displays only the one remaining column", function() {
+                expect(this.view.$(".columns li").length).toBe(1);
+            });
         })
 
         describe("#whereClause", function() {
@@ -129,13 +149,13 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             context("when two columns are selected", function() {
                 beforeEach(function() {
                     this.column1 = fixtures.databaseColumn({name: "Foo"});
-                    this.column2 = fixtures.databaseColumn({name: "Bar"});
-                    this.view.trigger("column:selected", this.column1);
-                    this.view.trigger("column:selected", this.column2);
+                    this.column2 = fixtures.databaseColumn({name: "bar"});
+                    chorus.PageEvents.broadcast("column:selected", this.column1);
+                    chorus.PageEvents.broadcast("column:selected", this.column2);
                 });
 
                 it("should build a select clause from the selected columns", function() {
-                    expect(this.view.selectClause()).toBe("SELECT Foo, Bar");
+                    expect(this.view.selectClause()).toBe("SELECT \"Foo\", bar");
                 });
             });
         });
@@ -160,8 +180,13 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
         describe("clicking 'Create Dataset'", function() {
             beforeEach(function() {
+                chorus.PageEvents.broadcast("column:selected", fixtures.databaseColumn());
                 spyOn(this.view, "sql").andReturn("SELECT * FROM FOO");
                 this.view.$("button.create").click();
+            });
+
+            it("puts the create button in a loading state", function() {
+                expect(this.view.$("button.create").isLoading()).toBeTruthy();
             });
 
             it("should create the chorus view", function() {
@@ -180,6 +205,36 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                     objectType: "QUERY"
                 });
                 expect(this.server.lastCreate().method).toBe("POST");
+            });
+
+            context("after the request fails", function() {
+                beforeEach(function() {
+                    spyOn(chorus, 'toast');
+                    this.server.lastCreate().fail();
+                });
+
+                it("displays a toast", function() {
+                    expect(chorus.toast).toHaveBeenCalled();
+                });
+
+                it("removes the loading spinner from the button", function() {
+                    expect(this.view.$("button.create").isLoading()).toBeFalsy();
+                });
+            });
+
+            context("after the request completes successfully", function() {
+                beforeEach(function() {
+                    spyOn(chorus, 'toast');
+                    this.server.lastCreate().succeed();
+                });
+
+                it("displays a toast", function() {
+                    expect(chorus.toast).toHaveBeenCalled();
+                });
+
+                it("removes the loading spinner from the button", function() {
+                    expect(this.view.$("button.create").isLoading()).toBeFalsy();
+                });
             });
         })
     });

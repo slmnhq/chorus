@@ -46,8 +46,7 @@
 
             this.sidebar = new chorus.views.DatasetListSidebar({browsingSchema: true});
 
-            this.mainContent.content.forwardEvent("dataset:selected", this.sidebar);
-            this.mainContent.content.bind("dataset:selected", function(dataset) {
+            chorus.PageEvents.subscribe("dataset:selected", function(dataset) {
                 this.model = dataset;
             }, this);
         }

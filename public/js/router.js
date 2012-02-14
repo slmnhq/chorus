@@ -52,6 +52,7 @@
             return function () {
                 var args = arguments;
                 var navFunction = function () {
+                    chorus.PageEvents.reset();
                     if (className == "Login" && self.app.session.loggedIn()) {
                         self.navigate("/", true);
                     } else {
@@ -82,7 +83,6 @@
                     });
                 }
             };
-
         }
     }));
 

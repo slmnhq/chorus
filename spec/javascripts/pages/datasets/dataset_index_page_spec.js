@@ -182,14 +182,8 @@ describe("chorus.pages.DatasetIndexPage", function() {
             this.page.render();
 
             this.dataset = fixtures.datasetSourceTable();
-            var listView = this.page.mainContent.content;
-            spyOnEvent(this.page.sidebar, 'dataset:selected');
-            listView.trigger("dataset:selected", this.dataset);
+            chorus.PageEvents.broadcast("dataset:selected", this.dataset);
         })
-
-        it("triggers the event on the sidebar view", function() {
-            expect('dataset:selected').toHaveBeenTriggeredOn(this.page.sidebar, [ this.dataset ]);
-        });
 
         it("sets the selected dataset as its own model", function() {
             expect(this.page.model).toBe(this.dataset);

@@ -29,6 +29,8 @@
             this.workspace.fetch();
 
             this.breadcrumbs = new breadcrumbsView({model: this.workspace, objectName: this.objectName});
+
+            chorus.PageEvents.subscribe("cancel:sidebar", this.hideSidebar, this);
         },
 
         fetchDataSet: function() {
@@ -75,8 +77,21 @@
             this.mainContent.contentDetails.bind("cancel:sidebar", this.hideSidebar, this);
             this.mainContent.contentDetails.bind("column:select_all", this.mainContent.content.selectAll, this.mainContent.content);
             this.mainContent.contentDetails.bind("column:select_none", this.mainContent.content.deselectAll, this.mainContent.content);
+            this.mainContent.contentDetails.bind("dataset:edit", this.editChorusView, this);
             this.mainContent.content.bind("column:selected", this.forwardSelectedToSidebar, this);
             this.mainContent.content.bind("column:deselected", this.forwardDeselectedToSidebar, this);
+
+            this.render();
+        },
+
+        editChorusView: function() {
+            this.mainContent = new chorus.views.MainContentView({
+               content: new chorus.views.DatasetEditChorusView({model: this.dataset}),
+               contentDetails: new chorus.views.DatasetContentDetails({ dataset: this.dataset, collection: this.columnSet, inEditChorusView: true })
+            });
+
+            this.mainContent.contentDetails.bind("dataset:cancelEdit", this.columnSetFetched, this);
+            this.mainContent.contentDetails.forwardEvent("dataset:saveEdit", this.mainContent.content, this);
 
             this.render();
         },
@@ -102,9 +117,11 @@
             this.$('.sidebar_content.secondary').removeClass("hidden")
 
             if (this.secondarySidebar) {
-                this.secondarySidebar.unbind("column:removed", this.forwardDeselectedToMain);
+                chorus.PageEvents.unsubscribe(this.secondarySidebar.selectedHandle);
+                chorus.PageEvents.unsubscribe(this.secondarySidebar.deselectedHandle);
+                chorus.PageEvents.unsubscribe(this.secondarySidebar.cancelVisualization);
             }
-            
+
             this.mainContent.content.selectMulti = false;
             switch (type) {
                 case 'boxplot':
@@ -124,9 +141,8 @@
                     break;
                 case 'chorus_view':
                     this.mainContent.content.selectMulti = true;
-                    this.mainContent.content.deselectAll();
+                    this.mainContent.content.selectNone();
                     this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model : this.model});
-                    this.secondarySidebar.bind("column:removed", this.forwardDeselectedToMain, this);
                     break;
             }
 

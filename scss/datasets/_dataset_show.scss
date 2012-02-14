@@ -64,7 +64,7 @@
 
     .dataset_create_chorus_view_sidebar {
         fieldset {
-            padding : 0;
+            padding: 0 0 15px 0;
         }
 
         a.remove {
@@ -94,6 +94,12 @@
             }
         }
     }
+
+    .dataset_edit_chorus_view {
+        .CodeMirror {
+            background-color: white;
+        }
+    }
 }
 
 .dataset_create_chorus_view_sidebar {
@@ -101,26 +107,11 @@
     .selected_columns {
         color: $color-text2;
         font-size: 12px;
-        margin-bottom: 20px;
 
         .empty_selection {
             padding: $dialog-padding;
             background-color: $activity-stream-comment-background-color;
             margin: auto;
-
-            .double_lines {
-                border-top: 1px solid $border-color;
-                border-bottom: 1px solid $border-color;
-                height: 3px;
-                width: 25px;
-                display: inline-block;
-                vertical-align: middle;
-                margin: 0 0 0 5px;
-
-                &:first-child {
-                    margin: 0 5px 0 0;
-                }
-            }
 
             .bottom {
                 display: inline-block;

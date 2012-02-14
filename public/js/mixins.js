@@ -50,14 +50,8 @@ chorus.Mixins.Urls = {
 
 chorus.Mixins.dbHelpers = {
     safePGName: function(name) {
-        var doQuote = false;
-        if ((name !== name.toLowerCase())) {
-            doQuote = true;
-        }
-        if (name && name[0].match(/[^a-z]/)) {
-            doQuote = true;
-        }
-        return doQuote ? '"' + name + '"' : name;
+        var isSafe = name.match(/^[a-z_][a-zA-Z0-9_]*/);
+        return isSafe ? name : '"' + name + '"';
     }
 }
 

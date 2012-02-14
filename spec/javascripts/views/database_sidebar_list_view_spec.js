@@ -100,12 +100,12 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
             context("when clicking the insert arrow", function() {
                 beforeEach(function() {
-                    spyOnEvent(this.view, "file:insertText");
+                    spyOn(chorus.PageEvents, "broadcast").andCallThrough();
                     this.insertArrowQtip.find("a").click()
                 })
 
-                it("triggers a file:insertText with the string representation", function() {
-                    expect("file:insertText").toHaveBeenTriggeredOn(this.view, [this.view.collection.models[1].toText()]);
+                it("broadcasts a file:insertText with the string representation", function() {
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:insertText", this.view.collection.models[1].toText());
                 })
             })
 

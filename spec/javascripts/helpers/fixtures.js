@@ -1892,6 +1892,17 @@ beforeEach(function() {
             }, overrides));
         },
 
+        csvImport: function(overrides) {
+            var attributes = _.extend({
+                lines: [
+                    "col1,col2,col3",
+                    "val1,val2,val3"
+                ],
+                fileName: "/file.csv"
+            }, overrides)
+            return new chorus.models.CSVImport(attributes);
+        },
+
         datasetHadoopExternalTable : function(overrides) {
             var attributes = _.extend(fixtures.datasetCommonJson(overrides), {
                 modifiedBy: {},

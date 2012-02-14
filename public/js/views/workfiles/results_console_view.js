@@ -11,9 +11,9 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.bind("file:executionStarted", this.executionStarted, this)
-        this.bind("file:executionSucceeded", this.executionSucceeded, this)
-        this.bind("file:executionFailed", this.executionFailed, this)
+        chorus.PageEvents.subscribe("file:executionStarted", this.executionStarted, this);
+        chorus.PageEvents.subscribe("file:executionSucceeded", this.executionSucceeded, this);
+        chorus.PageEvents.subscribe("file:executionFailed", this.executionFailed, this);
     },
 
     execute: function(model) {
@@ -176,7 +176,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
     clickClose: function(e) {
         e && e.preventDefault();
-        this.trigger("action:close");
+        chorus.PageEvents.broadcast("action:closePreview");
     },
 
     additionalContext: function() {

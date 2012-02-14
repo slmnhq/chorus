@@ -27,60 +27,17 @@ describe("chorus.views.SqlWorkfileContentView", function() {
         })
     })
 
-    describe("event forwarding", function() {
-        beforeEach(function() {
-            stubModals();
-            this.view.render();
-        })
-        it("forwards the file:executionStarted event to the results console", function() {
-            spyOnEvent(this.view.resultsConsole, "file:executionStarted");
-            this.view.trigger("file:executionStarted");
-            expect("file:executionStarted").toHaveBeenTriggeredOn(this.view.resultsConsole)
-        })
-
-        it("forwards the file:executionSucceeded event to the results console", function() {
-            spyOnEvent(this.view.resultsConsole, "file:executionSucceeded");
-            this.view.trigger("file:executionSucceeded", fixtures.taskWithResult());
-            expect("file:executionSucceeded").toHaveBeenTriggeredOn(this.view.resultsConsole)
-        })
-
-        it("forwards the file:executionFailed event to the results console", function() {
-            spyOnEvent(this.view.resultsConsole, "file:executionFailed");
-            this.view.trigger("file:executionFailed", fixtures.taskWithResult());
-            expect("file:executionFailed").toHaveBeenTriggeredOn(this.view.resultsConsole)
-        })
-
-        it("forwards file:saveCurrent events to the textContent subview", function() {
-            spyOnEvent(this.view.textContent, "file:saveCurrent");
-            this.view.trigger("file:saveCurrent");
-            expect("file:saveCurrent").toHaveBeenTriggeredOn(this.view.textContent)
-        })
-
-        it("forwards file:createWorkfileNewVersion events to the textContent subview", function() {
-            spyOnEvent(this.view.textContent, "file:createWorkfileNewVersion");
-            this.view.trigger("file:createWorkfileNewVersion");
-            expect("file:createWorkfileNewVersion").toHaveBeenTriggeredOn(this.view.textContent);
-        });
-
-        it("forwards file:insertText events to the textContent subview", function() {
-            spyOnEvent(this.view.textContent, "file:insertText");
-            this.view.trigger("file:insertText", "");
-            expect("file:insertText").toHaveBeenTriggeredOn(this.view.textContent)
-        });
-    })
-
     describe("executing the workfile", function() {
         beforeEach(function() {
+            spyOn(chorus.PageEvents, "broadcast").andCallThrough();
             this.view.render();
             this.view.textContent.editor.setValue("select * from foos");
-            this.startedSpy = jasmine.createSpy("executionStarted")
-            this.view.bind("file:executionStarted", this.startedSpy);
         });
 
         context("when no execution is outstanding", function() {
             describe("running in another schema", function() {
                 beforeEach(function() {
-                    this.view.trigger("file:runInSchema", {
+                    chorus.PageEvents.broadcast("file:runInSchema", {
                         instanceId: '4',
                         databaseId: '5',
                         schemaId: '6'
@@ -99,7 +56,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
             describe("running in the default schema", function() {
                 beforeEach(function() {
-                    this.view.trigger("file:runCurrent");
+                    chorus.PageEvents.broadcast("file:runCurrent");
                 })
 
                 it("creates a task with the right parameters", function() {
@@ -116,14 +73,12 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     expect(this.server.lastCreate().url).toBe(this.view.task.url());
                 });
 
-                it("triggers file:executionStarted on the view", function() {
-                    expect(this.startedSpy).toHaveBeenCalledWith(jasmine.any(chorus.models.SqlExecutionTask));
+                it("broadcasts file:executionStarted", function() {
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionStarted", jasmine.any(chorus.models.SqlExecutionTask));
                 })
 
                 describe("when the task completes successfully", function() {
                     beforeEach(function() {
-                        this.completionSpy = jasmine.createSpy("executionCompleted")
-                        this.view.bind("file:executionSucceeded", this.completionSpy);
                         this.server.lastCreate().succeed([{
                             id : "10100",
                             state : "success",
@@ -133,13 +88,17 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         }]);
                     })
 
-                    it('triggers file:executionSucceeded on the view', function() {
-                        expect(this.completionSpy).toHaveBeenCalledWith(jasmine.any(chorus.models.SqlExecutionTask));
-                    })
+                    it("broadcasts file:executionSucceeded", function() {
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionSucceeded", jasmine.any(chorus.models.SqlExecutionTask));
+                    });
+
+                    it("sets the executing property to false", function() {
+                        expect(this.view.executing).toBeFalsy();
+                    });
 
                     describe("executing again", function() {
                         beforeEach(function() {
-                            this.view.trigger("file:runCurrent");
+                            chorus.PageEvents.broadcast("file:runCurrent");
                         })
 
                         it("executes the task again", function() {
@@ -147,13 +106,28 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         })
                     })
                 })
+
+                describe("when the task completion fails", function() {
+                    beforeEach(function() {
+                        this.server.lastCreate().fail();
+                    })
+
+                    it("broadcasts file:executionFailed", function() {
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionFailed", jasmine.any(chorus.models.SqlExecutionTask));
+                    });
+
+                    it("sets the executing property to false", function() {
+                        expect(this.view.executing).toBeFalsy();
+                    });
+                })
             });
 
             context("when an execution is already outstanding", function() {
                 beforeEach(function() {
-                    this.view.trigger("file:runCurrent");
-                    this.startedSpy.reset();
-                    this.view.trigger("file:runCurrent");
+                    chorus.PageEvents.broadcast("file:runCurrent");
+                    this.startedSpy = jasmine.createSpy();
+                    chorus.PageEvents.subscribe("file:executionStarted", this.startedSpy);
+                    chorus.PageEvents.broadcast("file:runCurrent");
                 })
 
                 it('does not start a new execution', function() {

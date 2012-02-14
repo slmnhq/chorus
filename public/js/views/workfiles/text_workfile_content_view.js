@@ -3,9 +3,9 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
     saveInterval:30000,
 
     setup:function () {
-        this.bind("file:saveCurrent", this.replaceCurrentVersion);
-        this.bind("file:createWorkfileNewVersion", this.createWorkfileNewVersion);
-        this.bind("file:insertText", this.insertText, this)
+        chorus.PageEvents.subscribe("file:saveCurrent", this.replaceCurrentVersion, this);
+        chorus.PageEvents.subscribe("file:createWorkfileNewVersion", this.createWorkfileNewVersion, this);
+        chorus.PageEvents.subscribe("file:insertText", this.insertText, this)
         this.model.bind("saveFailed", this.versionConflict, this)
     },
 
