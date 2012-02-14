@@ -12,7 +12,10 @@ describe("CommentList", function() {
             text : "No hate plz"
         });
         this.comment3 = fixtures.comment();
-        this.comments = new chorus.collections.CommentSet([this.comment1, this.comment2, this.comment3]);
+        this.comments = new chorus.collections.CommentSet([this.comment1, this.comment2, this.comment3], {
+            entityId: 10000,
+            entityType: "workspace"
+        });
         this.view = new chorus.views.CommentList({ collection: this.comments, initialLimit: 2 });
     });
 
@@ -89,5 +92,53 @@ describe("CommentList", function() {
                 expect(this.view.$("li.more")).not.toExist();
             });
         });
+
+        it("should not show the delete comment link if user does not own the comment", function() {
+            expect(this.view.$(".delete_link")).not.toExist();
+        })
+
+        context("when the user is owner of the comment", function() {
+            beforeEach(function() {
+                setLoggedInUser({name: "Lenny", lastName: "lalala", id: this.comment1.get("author").id});
+                this.view.render();
+
+                var commentId = this.view.$(".delete_link").data("commentId");
+                var comment = this.view.collection.get(commentId);
+
+                // put view in page for correct alert click handling
+                this.page = new chorus.pages.Base();
+                this.page.mainContent = this.view;
+                this.page.render();
+            });
+
+            it("shows the hidden delete comment link", function() {
+                var deleteLink = this.view.$(".delete_link");
+                expect(deleteLink).toExist();
+                expect(deleteLink.text()).toContainTranslation("actions.delete")
+                expect(deleteLink).toBeHidden();
+            })
+
+            it("puts the right data attributes on the delete link", function() {
+                var deleteLink = this.view.$(".delete_link");
+                expect(deleteLink.data("entityId")).toBe(10000);
+                expect(deleteLink.data("entityType")).toBe("workspace");
+                expect(deleteLink.data("commentId").toString()).toBe(this.comment1.id.toString());
+            });
+
+            describe("clicking the delete link", function() {
+                beforeEach(function() {
+                    stubModals()
+                    this.view.$(".delete_link").click();
+                });
+
+                it("launches a delete note confirm alert", function() {
+                    expect(chorus.modal).toBeA(chorus.alerts.DeleteNoteConfirmAlert);
+                    expect(chorus.modal.model).toBeA(chorus.models.Comment);
+                    expect(chorus.modal.model.id.toString()).toBe(this.comment1.id)
+                    expect(chorus.modal.model.attributes.entityId).toBe(10000)
+                    expect(chorus.modal.model.attributes.entityType).toBe("workspace")
+                });
+            });
+        })
     });
 });

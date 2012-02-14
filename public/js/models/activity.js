@@ -5,7 +5,12 @@ chorus.models.Activity = chorus.models.Base.extend({
     },
 
     comments:function () {
-        this._comments || (this._comments = new chorus.collections.CommentSet(this.get("comments")));
+        this._comments || (this._comments = new chorus.collections.CommentSet(
+            this.get("comments"), {
+                entityType: this.collection && this.collection.attributes.entityType,
+                entityId: this.collection && this.collection.attributes.entityId
+            }
+        ));
         return this._comments;
     },
 

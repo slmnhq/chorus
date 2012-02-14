@@ -269,6 +269,7 @@ describe("chorus.models.Activity", function() {
 
     describe("#comments", function() {
         beforeEach(function() {
+            this.activitySet = new chorus.collections.ActivitySet([this.model], {entityType: "workspace", entityId: 10000})
             this.model.set({
                 comments: [
                     {
@@ -295,6 +296,11 @@ describe("chorus.models.Activity", function() {
             expect(this.comments.models[0].get("text")).toBe(commentsJson[0].text);
             expect(this.comments.models[0].get("timestamp")).toBe(commentsJson[0].timestamp);
             expect(this.comments.models[0].author().get("firstName")).toBe(commentsJson[0].author.firstName);
+        });
+
+        it("sets the entityType and entityId as attributes of the CommentSet", function() {
+            expect(this.comments.attributes.entityType).toBe("workspace");
+            expect(this.comments.attributes.entityId).toBe(10000);
         });
     });
 

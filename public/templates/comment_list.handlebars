@@ -16,6 +16,17 @@
                 {{/if}}
                 <div class="actions">
                     <span class="timestamp">{{relativeTimestamp timestamp}}</span>
+                    {{#if isOwner}}
+                        <a class="delete_link alert"
+                           data-alert="DeleteNoteConfirmAlert"
+                           data-comment-id="{{id}}"
+                           data-entity-type="{{../../entityType}}"
+                           data-entity-id="{{../../entityId}}"
+                           href="#">
+                            {{t "actions.delete"}}
+                            <img src="images/trashcan.png"/>
+                        </a>
+                    {{/if}}
                 </div>
             </div>
         </li>
