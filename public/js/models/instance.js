@@ -1,117 +1,142 @@
-chorus.models.Instance = chorus.models.Base.extend({
-    urlTemplate:"instance/{{id}}",
-    showUrlTemplate:"instances/{{id}}",
-    entityType:"instance",
+(function() {
+    var imagePrefix = "/images/instances/";
 
-    declareValidations:function (newAttrs) {
-        this.require("name", newAttrs);
-        this.requirePattern("name", /^[a-zA-Z][a-zA-Z0-9_]*$/, newAttrs, "instance.validation.name_pattern");
+    var stateIconMap = {
+        "online": "green.png",
+        "fault": "red.png"
+    };
 
-        switch (newAttrs.provisionType) {
-            case "register" :
-                // validating existing Greenplum instance
-                this.require("host", newAttrs);
-                this.require("dbUserName", newAttrs);
-                this.require("dbPassword", newAttrs);
-                this.require("port", newAttrs);
-                this.require("maintenanceDb", newAttrs);
-                this.requirePattern("port", /^\d+$/, newAttrs);
-                break;
-            case "create" :
-                // validating create a new Greenplum instance
-                this.require("size", newAttrs);
-                this.requirePattern("size", /^\d+$/, newAttrs);
-                break;
-            default :
-        }
-    },
+    var providerIconMap = {
+        "Greenplum Database": "greenplum_instance.png",
+        "Hadoop": "hadoop_instance.png"
+    };
 
-    owner:function () {
-        return new chorus.models.User({
-            id:this.get("ownerId"),
-            userName:this.get("owner"),
-            fullName:this.get("ownerFullName")
-        })
-    },
+    chorus.models.Instance = chorus.models.Base.extend({
+        urlTemplate:"instance/{{id}}",
+        showUrlTemplate:"instances/{{id}}",
+        entityType:"instance",
 
-    isOwner:function (user) {
-        return this.owner().get("id") == user.get('id') && user instanceof chorus.models.User
-    },
+        declareValidations:function (newAttrs) {
+            this.require("name", newAttrs);
+            this.requirePattern("name", /^[a-zA-Z][a-zA-Z0-9_]*$/, newAttrs, "instance.validation.name_pattern");
 
-    databases:function () {
-        this._databases || (this._databases = new chorus.collections.DatabaseSet([], {instanceId:this.get("id")}));
-        return this._databases;
-    },
-
-    accounts:function () {
-        this._accounts || (this._accounts = new chorus.collections.InstanceAccountSet([], {instanceId:this.get("id")}));
-        return this._accounts;
-    },
-
-    accountForUser:function (user) {
-        return new chorus.models.InstanceAccount({ instanceId:this.get("id"), userName:user.get("userName") });
-    },
-
-    accountForCurrentUser:function () {
-        if (!this._accountForCurrentUser) {
-            this._accountForCurrentUser = this.accountForUser(chorus.session.user());
-            this._accountForCurrentUser.bind("destroy", function () {
-                delete this._accountForCurrentUser;
-                this.trigger("change");
-            }, this);
-        }
-        return this._accountForCurrentUser;
-    },
-
-    accountForOwner:function () {
-        var ownerId = this.get("ownerId");
-        return _.find(this.accounts().models, function (account) {
-            return account.get("user").id == ownerId
-        });
-    },
-
-    sharedAccount:function () {
-        var dbUserName = this.get("sharedAccount") && this.get("sharedAccount").dbUserName;
-        if (dbUserName) {
-            var sharedAccount = this.accounts().first();
-            if (!sharedAccount) {
-                sharedAccount = new chorus.models.InstanceAccount({ dbUserName:dbUserName, instanceId:this.get("id") });
-                this.accounts().add(sharedAccount);
+            switch (newAttrs.provisionType) {
+                case "register" :
+                    // validating existing Greenplum instance
+                    this.require("host", newAttrs);
+                    this.require("dbUserName", newAttrs);
+                    this.require("dbPassword", newAttrs);
+                    this.require("port", newAttrs);
+                    this.require("maintenanceDb", newAttrs);
+                    this.requirePattern("port", /^\d+$/, newAttrs);
+                    break;
+                case "create" :
+                    // validating create a new Greenplum instance
+                    this.require("size", newAttrs);
+                    this.requirePattern("size", /^\d+$/, newAttrs);
+                    break;
+                default :
             }
-            return sharedAccount;
+        },
+
+        stateIconUrl: function() {
+            var filename = stateIconMap[this.get("state")] || "unknown.png";
+            return imagePrefix + filename;
+        },
+
+        providerIconUrl: function() {
+            var filename = providerIconMap[this.get("instanceProvider")] || "other_instance.png";
+            return imagePrefix + filename;
+        },
+
+        owner:function () {
+            return new chorus.models.User({
+                id:this.get("ownerId"),
+                userName:this.get("owner"),
+                fullName:this.get("ownerFullName")
+            })
+        },
+
+        isOwner:function (user) {
+            return this.owner().get("id") == user.get('id') && user instanceof chorus.models.User
+        },
+
+        databases:function () {
+            this._databases || (this._databases = new chorus.collections.DatabaseSet([], {instanceId:this.get("id")}));
+            return this._databases;
+        },
+
+        accounts:function () {
+            this._accounts || (this._accounts = new chorus.collections.InstanceAccountSet([], {instanceId:this.get("id")}));
+            return this._accounts;
+        },
+
+        accountForUser:function (user) {
+            return new chorus.models.InstanceAccount({ instanceId:this.get("id"), userName:user.get("userName") });
+        },
+
+        accountForCurrentUser:function () {
+            if (!this._accountForCurrentUser) {
+                this._accountForCurrentUser = this.accountForUser(chorus.session.user());
+                this._accountForCurrentUser.bind("destroy", function () {
+                    delete this._accountForCurrentUser;
+                    this.trigger("change");
+                }, this);
+            }
+            return this._accountForCurrentUser;
+        },
+
+        accountForOwner:function () {
+            var ownerId = this.get("ownerId");
+            return _.find(this.accounts().models, function (account) {
+                return account.get("user").id == ownerId
+            });
+        },
+
+        sharedAccount:function () {
+            var dbUserName = this.get("sharedAccount") && this.get("sharedAccount").dbUserName;
+            if (dbUserName) {
+                var sharedAccount = this.accounts().first();
+                if (!sharedAccount) {
+                    sharedAccount = new chorus.models.InstanceAccount({ dbUserName:dbUserName, instanceId:this.get("id") });
+                    this.accounts().add(sharedAccount);
+                }
+                return sharedAccount;
+            }
+        },
+
+        attrToLabel:{
+            "dbUserName":"instances.dialog.database_account",
+            "dbPassword":"instances.dialog.database_password",
+            "name":"instances.dialog.instance_name",
+            "host":"instances.dialog.host",
+            "port":"instances.dialog.port",
+            "maintenanceDb":"instances.dialog.maintenanceDb",
+            "description":"instances.dialog.description",
+            "size":"instances.dialog.size"
+        },
+
+        isShared:function () {
+            return !(_.isEmpty(this.get('sharedAccount')));
+        },
+
+        usage:function () {
+            if (!this.instanceUsage) {
+                this.instanceUsage = new chorus.models.InstanceUsage({ instanceId:this.get('id')})
+            }
+            return this.instanceUsage
+        },
+
+        isGreenplum: function() {
+            return this.get('instanceProvider') == 'Greenplum Database'
         }
-    },
-
-    attrToLabel:{
-        "dbUserName":"instances.dialog.database_account",
-        "dbPassword":"instances.dialog.database_password",
-        "name":"instances.dialog.instance_name",
-        "host":"instances.dialog.host",
-        "port":"instances.dialog.port",
-        "maintenanceDb":"instances.dialog.maintenanceDb",
-        "description":"instances.dialog.description",
-        "size":"instances.dialog.size"
-    },
-
-    isShared:function () {
-        return !(_.isEmpty(this.get('sharedAccount')));
-    },
-
-    usage:function () {
-        if (!this.instanceUsage) {
-            this.instanceUsage = new chorus.models.InstanceUsage({ instanceId:this.get('id')})
+    }, {
+        aurora:function () {
+            if (!this._aurora) {
+                this._aurora = new chorus.models.Provisioning({provisionerPluginName:"A4CProvisioner", type:"install"});
+            }
+            return this._aurora;
         }
-        return this.instanceUsage
-    },
-
-    isGreenplum: function() {
-        return this.get('instanceProvider') == 'Greenplum Database'
-    }
-}, {
-    aurora:function () {
-        if (!this._aurora) {
-            this._aurora = new chorus.models.Provisioning({provisionerPluginName:"A4CProvisioner", type:"install"});
-        }
-        return this._aurora;
-    }
-});
+    });
+    
+})();
