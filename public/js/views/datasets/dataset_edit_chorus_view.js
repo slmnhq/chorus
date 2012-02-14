@@ -2,7 +2,8 @@ chorus.views.DatasetEditChorusView = chorus.views.Base.extend({
     className: "dataset_edit_chorus_view",
 
     setup: function() {
-        this.bind("dataset:saveEdit", this.saveModel);
+        this.bind("dataset:saveEdit", this.saveModel, this);
+        this.model.bind("saved", this.navigateToChorusViewShowPage, this);
     },
 
     postRender:function () {
@@ -35,10 +36,13 @@ chorus.views.DatasetEditChorusView = chorus.views.Base.extend({
         },
 
     saveModel: function() {
-        var query = this.editor.getValue()
+        var query = this.editor.getValue();
 
         this.model.set({query: query});
         this.model.save();
+    },
 
+    navigateToChorusViewShowPage: function() {
+        chorus.router.navigate( this.model.showUrl(), true);
     }
 });

@@ -30,6 +30,7 @@ describe("chorus.pages.DatasetShowPage", function() {
         this.dataset = fixtures.datasetSandboxTable({"id": this.datasetId, workspace: { id: this.workspace.get("id") }})
 
         this.page = new chorus.pages.DatasetShowPage(this.workspace.get("id"), this.datasetId);
+        spyOn(this.page, "fetchDataSet").andCallThrough();
     })
 
     it("has a helpId", function() {
@@ -99,11 +100,12 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                         describe("when user cancel edit dataset and dataset:cancelEdit is triggered", function() {
                             beforeEach(function() {
+                                this.page.fetchDataSet.reset();
                                 this.page.mainContent.contentDetails.trigger("dataset:cancelEdit");
                             });
 
-                            it("sets the main content back to MainContentList", function() {
-                                expect(this.page.mainContent).toBeA(chorus.views.MainContentList);
+                            it("fetches the dataset again", function() {
+                                expect(this.page.fetchDataSet).toHaveBeenCalled();
                             })
                         })
                     });

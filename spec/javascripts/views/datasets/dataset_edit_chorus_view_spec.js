@@ -47,11 +47,11 @@ describe("chorus.views.DatasetEditChorusView", function() {
                 expect(this.view.editor.getOption("lineNumbers")).toBe(true);
             });
 
-            it("displays the text file content", function() {
+            it("displays the query", function() {
                 expect(this.view.editor.getValue()).toBe(this.dataset.get("query"));
             });
 
-            it("uses the 'text/x-sql' mode for plain text files", function() {
+            it("uses the 'text/x-sql' mode", function() {
                 expect(this.view.editor.getOption("mode")).toBe("text/x-sql");
             });
         });
@@ -60,19 +60,41 @@ describe("chorus.views.DatasetEditChorusView", function() {
         describe("#saveChanges", function() {
             beforeEach(function() {
                 this.view.render();
-
+                spyOn(chorus.router, "navigate");
                 this.view.editor.setValue("select * from table_abc");
                 spyOn(this.view.model, "save");
                 this.view.trigger("dataset:saveEdit");
                 this.clock.tick(1000);
+
+            });
+            context("when save succeed", function() {
+                beforeEach(function() {
+                    this.view.model.trigger("saved");
+                });
+                it("saves the model", function() {
+                    expect(this.view.model.save).toHaveBeenCalled();
+                });
+
+                it("sets the query in the model", function() {
+                    expect(this.view.model.get("query")).toBe("select * from table_abc");
+                });
+
+                it("should return the user to the standard page view", function() {
+                    expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.model.showUrl(), true)
+                });
             });
 
-            it("saves the model", function() {
-                expect(this.view.model.save).toHaveBeenCalled();
-            });
-
-            it("sets the query in the model", function() {
-                expect(this.view.model.get("query")).toBe("select * from table_abc");
+            context("when save fails", function() {
+                beforeEach(function() {
+                    this.view.model.set({serverErrors: [
+                        { message: "SQL error!" }
+                    ]})
+                    this.view.model.trigger("saveFailed");
+                    this.view.render();
+                });
+                it("displays the error message", function() {
+                    expect(this.view.$(".errors ul li").text()).toBe("SQL error!");
+                })
             })
         });
     });
