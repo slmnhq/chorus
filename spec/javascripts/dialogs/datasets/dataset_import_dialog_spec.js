@@ -7,7 +7,8 @@ describe("chorus.dialogs.DatasetImport", function() {
 
     it("has a file picker", function() {
         expect(this.dialog.$("input[type=file]")).toExist();
-        expect(this.dialog.$(".file-wrapper a").text()).toMatchTranslation("dataset.import.select_file");
+        expect(this.dialog.$(".file-wrapper button")).not.toHaveClass("hidden");
+        expect(this.dialog.$(".file-wrapper button").text()).toMatchTranslation("dataset.import.select_file");
     });
 
     it("has the right title", function() {
@@ -22,6 +23,10 @@ describe("chorus.dialogs.DatasetImport", function() {
         expect(this.dialog.$("button.submit").text()).toMatchTranslation("dataset.import.upload_file");
     });
 
+    it("has a 'Change' link", function() {
+        expect(this.dialog.$(".file-wrapper a").text()).toMatchTranslation("actions.change");
+    });
+
     it("disables the 'Upload File' button by default", function() {
         expect(this.dialog.$("button.submit")).toBeDisabled();
     });
@@ -32,7 +37,15 @@ describe("chorus.dialogs.DatasetImport", function() {
 
     it("hides the import controls by default", function() {
         expect(this.dialog.$(".import_controls")).toHaveClass("hidden")
-    })
+    });
+
+    it("hides the file type img by default", function() {
+        expect(this.dialog.$(".file_details img")).toHaveClass("hidden")
+    });
+
+    it("hides the 'Change' link by default", function() {
+        expect(this.dialog.$(".file-wrapper a")).toHaveClass("hidden");
+    });
 
     context("when a file is chosen", function() {
         beforeEach(function() {
@@ -56,12 +69,21 @@ describe("chorus.dialogs.DatasetImport", function() {
         });
 
         it("displays the appropriate file icon", function() {
-            expect(this.dialog.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("csv", "medium"));
+            expect(this.dialog.$(".file_details img")).not.toHaveClass("hidden")
+            expect(this.dialog.$(".file_details img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("csv", "medium"));
         });
 
         it("should hide the 'No file Selected' text", function() {
             expect(this.dialog.$(".empty_selection")).toHaveClass("hidden");
+        });
+
+        it("hides the file select button", function() {
+            expect(this.dialog.$(".file-wrapper button")).toHaveClass("hidden");
         })
+
+        it("shows the 'Change' link", function() {
+            expect(this.dialog.$(".file-wrapper a")).not.toHaveClass("hidden");
+        });
 
         describe("import controls", function() {
             it("does not hide them", function() {
@@ -92,7 +114,6 @@ describe("chorus.dialogs.DatasetImport", function() {
             });
 
             describe("the default selection", function() {
-
                 it("selects the new table button by default", function() {
                     expect(this.dialog.$(".new_table input:radio").attr("checked")).toBeTruthy()
                 });
@@ -100,6 +121,42 @@ describe("chorus.dialogs.DatasetImport", function() {
                 it("shows the file name entry", function() {
                     expect(this.dialog.$(".new_table input:text")).toBeEnabled();
                     expect(this.dialog.$(".new_table input:text").val()).toBe("foo");
+                });
+
+                it("enables the table name input", function() {
+                    expect(this.dialog.$(".new_table input")).toBeEnabled();
+                });
+
+                it("disables the table name selector", function() {
+                    expect(this.dialog.$(".existing_table select")).toBeDisabled();
+                });
+            });
+
+            describe("selecting 'Import into existing table'", function() {
+                beforeEach(function() {
+                    this.dialog.$(".existing_table input:radio").change();
+                });
+
+                it("enables the table name selector", function() {
+                    expect(this.dialog.$(".existing_table select")).toBeEnabled();
+                });
+
+                it("disables the table name input", function() {
+                    expect(this.dialog.$(".new_table input")).toBeDisabled();
+                });
+
+                describe("and then selecting 'Import into new table", function() {
+                    beforeEach(function() {
+                        this.dialog.$(".new_table input:radio").change();
+                    });
+
+                    it("enables the table name input", function() {
+                        expect(this.dialog.$(".new_table input")).toBeEnabled();
+                    });
+
+                    it("disables the table name selector", function() {
+                        expect(this.dialog.$(".existing_table select")).toBeDisabled();
+                    });
                 });
             });
         });
