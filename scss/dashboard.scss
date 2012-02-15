@@ -11,6 +11,10 @@ div[data-page="Dashboard"] {
         @include after-clearfix();
     }
 
+    .content {
+        padding-right: 15px;
+    }
+
     .main_activity_list .heading {
         display: none;
     }
