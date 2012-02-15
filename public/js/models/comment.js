@@ -81,10 +81,11 @@ chorus.models.Comment = chorus.models.Activity.extend({
     saveFiles:function () {
         this.fileUploadErrors = 0;
         this.filesToBeSaved = this.files.length;
-        _.each(this.files, _.bind(function (file) {
+        _.each(this.files, function(file) {
             file.data.url = this.url({ isFile:true });
-            file.data.submit().done(_.bind(this.uploadSuccess, this, file))
+            file.data.submit()
+                .done(_.bind(this.uploadSuccess, this, file))
                 .fail(_.bind(this.uploadFailed, this, file));
-        }, this));
+        }, this);
     }
 });
