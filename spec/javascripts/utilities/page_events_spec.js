@@ -45,6 +45,9 @@ describe("chorus.PageEvents", function() {
             expect(this.subscriber1.method).toHaveBeenCalled();
             expect(this.subscriber2.method).not.toHaveBeenCalled();
             expect(this.subscriber1.method.mostRecentCall.object).toBe(this.subscriber1);
+
+            // subscriptionHandles is not intended for public consumption
+            expect(_.keys(chorus.PageEvents.subscriptionHandles).length).toBe(1);
         });
 
         it("handles resubscribing to an event", function() {

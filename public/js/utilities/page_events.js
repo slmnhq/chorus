@@ -22,6 +22,8 @@ chorus.utilities.PageEvents.prototype.unsubscribe = function(handle) {
         return;
     }
 
+    delete this.subscriptionHandles[handle];
+
     var eventName = fullHandle.eventName;
     this.subscriptions[eventName] = _.without(this.subscriptions[eventName], fullHandle.binding);
 }
