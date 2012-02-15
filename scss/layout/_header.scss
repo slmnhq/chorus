@@ -106,8 +106,8 @@ $header-item-spacing : 2*$padding-x;
                 }
 
                 span {
-                        display: inline-block;
-                        vertical-align: middle;
+                    display: inline-block;
+                    vertical-align: middle;
                 }
             }
         }
@@ -123,6 +123,16 @@ $header-item-spacing : 2*$padding-x;
 
         .menu.popup_account {
             right: 10px;
+            top: 42px;
+
+            .pointer {
+                right: 17px;
+                left: auto;
+            }
+        }
+
+        .menu.popup_notifications {
+            right: 3px;
             top: 42px;
 
             .pointer {

@@ -18,8 +18,16 @@
     </div>
     <div class="messages">
         <div class="notifications">
-            <a href="#" title="notifications">{{notificationCount}}</a>
+            <a href="#" title="notifications">{{notifications.length}}</a>
         </div>
+    </div>
+    <div class="menu hidden popup_notifications">
+        <div class="pointer"/>
+        <ul>
+            {{#each notifications}}
+                <li>Notification!</li>
+            {{/each}}
+        </ul>
     </div>
 </div>
 <div class="search">

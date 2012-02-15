@@ -180,6 +180,43 @@ describe("chorus.views.Header", function() {
                     expect(this.view.$(".menu.popup_username")).toHaveClass("hidden");
                 })
             })
-        })
+        });
+
+        describe("notifications", function() {
+            it("displays the notification link", function() {
+                expect(this.view.$(".notifications a")).toExist();
+            });
+
+            describe("when the notification count is clicked", function() {
+                beforeEach(function() {
+                    this.popupSpy = jasmine.createSpy();
+                    $(document).bind("chorus:menu:popup", this.popupSpy);
+                    this.view.$(".notifications a").click();
+                })
+
+                it("shows a popup menu", function() {
+                    expect(this.view.$(".menu.popup_notifications")).not.toHaveClass("hidden");
+                })
+
+                it("triggers chorus:menu:popup on the document", function() {
+                    expect(this.popupSpy).toHaveBeenCalled();
+                })
+
+                describe("and when clicked again", function() {
+                    beforeEach(function() {
+                        this.view.$(".notifications a").click();
+                    });
+                    it("becomes hidden again", function() {
+                        expect(this.view.$(".menu.popup_notifications")).toHaveClass("hidden");
+                    });
+                });
+
+                describe("the notification list", function() {
+                    it("renders an li for each unread notification", function() {
+                        expect(this.view.$(".popup_notifications li").length).toBe(2);
+                    });
+                });
+            });
+        });
     });
 });

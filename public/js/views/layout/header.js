@@ -2,7 +2,8 @@ chorus.views.Header = chorus.views.Base.extend({
     className:"header",
     events:{
         "click .username a":"togglePopupUsername",
-        "click .account a":"togglePopupAccount"
+        "click .account a":"togglePopupAccount",
+        "click .notifications a":"togglePopupNotifications"
     },
 
     setup:function () {
@@ -21,10 +22,25 @@ chorus.views.Header = chorus.views.Base.extend({
         var fullName = this.session.get("fullName") || ([firstName, lastName].join(' '));
 
         return _.extend(ctx, this.session.attributes, {
-            notificationCount: this.notifications.length,
+            notifications: this.notifications,
             displayName: (fullName.length > 20 ? (firstName + ' ' + lastName[0] + '.') : fullName),
             userUrl: user && user.showUrl()
         });
+    },
+
+    togglePopupNotifications: function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        var notificationsWasPoppedUp = !this.$(".menu.popup_notifications").hasClass("hidden");
+        this.dismissPopups();
+        this.triggerPopupEvent(e.target);
+
+        if(!notificationsWasPoppedUp) {
+            this.captureClicks();
+        }
+
+        this.$(".menu.popup_notifications").toggleClass("hidden", notificationsWasPoppedUp);
     },
 
     togglePopupUsername:function (e) {
