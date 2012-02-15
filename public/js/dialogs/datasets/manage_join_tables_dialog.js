@@ -8,6 +8,12 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
         this.collection.fetch();
     },
 
+    postRender: function() {
+        var originalId = this.pageModel.get("id");
+
+        this.collection.remove(this.collection.get(originalId));
+    },
+
     collectionModelContext: function(model) {
         return { iconUrl: model.iconUrl({ size: "small" }) };
     }

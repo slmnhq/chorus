@@ -1,6 +1,6 @@
 describe("chorus.dialogs.ManageJoinTables", function() {
     beforeEach(function() {
-        var dataset = fixtures.datasetSourceTable();
+        var dataset = fixtures.datasetSourceTable({id : "abc", name: "original" });
         this.schema = dataset.schema();
 
         this.dialog = new chorus.dialogs.ManageJoinTables({ pageModel: dataset });
@@ -21,7 +21,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 objectName: "cats",
                 columns: 21,
                 type: "SOURCE_TABLE",
-                objectType: "VIEW"
+                objectType: "VIEW",
             });
 
             this.databaseObject2 = fixtures.databaseObject({
@@ -31,7 +31,15 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 objectType: "BASE_TABLE"
             });
 
-            this.server.completeFetchFor(this.schema.databaseObjects(), [ this.databaseObject1, this.databaseObject2 ]);
+            this.databaseObject3 = fixtures.databaseObject({
+                objectName: "original",
+                columns: 22,
+                type: "SOURCE_TABLE",
+                objectType: "BASE_TABLE",
+                id: "abc"
+            });
+
+            this.server.completeFetchFor(this.schema.databaseObjects(), [ this.databaseObject1, this.databaseObject2, this.databaseObject3 ]);
         });
 
         it("shows the name of each table/view", function() {
@@ -50,5 +58,9 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             expect(icons.eq(0)).toHaveAttr("src", this.databaseObject1.iconUrl({ size: "small" }));
             expect(icons.eq(1)).toHaveAttr("src", this.databaseObject2.iconUrl({ size: "small" }));
         });
+
+        it("doesn't display original the table/view", function() {
+            expect(this.dialog.$(".name")).not.toContainText("original");
+        })
     });
 });
