@@ -108,7 +108,8 @@ window.Chorus = function() {
         var changeFunction = function() {
             $(element).trigger('change');
         }
-        $element.selectmenu({change: changeFunction, positionOptions: {offset: "0 -1"}});
+        var newOptions = _.extend({}, options, {change: changeFunction, positionOptions: {offset: "0 -1"}})
+        $element.selectmenu(newOptions);
     }
 
     self.datePicker = function(options) {

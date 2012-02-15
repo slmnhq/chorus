@@ -143,3 +143,18 @@
         }
     }
 }
+
+
+.dataset_number, .ui-selectmenu-menu li .dataset_number, .ui-selectmenu-status .dataset_number {
+    background-color: $dataset-number-background-color;
+    display: inline-block;
+    @include border-radius(5px);
+    color: white;
+    height: 8px;
+    line-height: 19px;
+    vertical-align: bottom;
+    padding: 0px 5px 9px;
+    margin-right: 5px;
+    font-size: 12px;
+    font-style: normal;
+}

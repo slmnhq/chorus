@@ -283,7 +283,7 @@ $.widget("ui.selectmenu", {
 			var opt = $(this);
 			selectOptionData.push({
 				value: opt.attr('value'),
-				text: self._formatText(opt.text()),
+				text: self._formatText(opt.text(), opt),
 				selected: opt.attr('selected'),
 				disabled: opt.attr('disabled'),
 				classes: opt.attr('class'),
