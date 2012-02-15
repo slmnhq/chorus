@@ -102,7 +102,7 @@ describe("chorus.views.InstanceList", function() {
                 beforeEach(function() {
                     this.newInstance = fixtures.instance({id: "1234567"});
                     spyOn(this.view.collection, "fetchAll");
-                    this.view.trigger("instance:added", "1234567");
+                    chorus.PageEvents.broadcast("instance:added", "1234567");
                 });
 
                 it("fetches the collection again", function() {
@@ -121,7 +121,7 @@ describe("chorus.views.InstanceList", function() {
             describe("clicking on an instance", function() {
                 beforeEach(function() {
                     this.eventSpy = jasmine.createSpy();
-                    this.view.bind("instance:selected", this.eventSpy);
+                    chorus.PageEvents.subscribe("instance:selected", this.eventSpy);
                     this.li2 = this.view.$('li:eq(1)');
                     this.li3 = this.view.$('li:eq(2)');
                     this.li2.click();

@@ -24,7 +24,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
             spyOn(chorus.views.Base.prototype, "render").andCallThrough();
             this.view = new chorus.views.InstanceListSidebar();
-            this.view.trigger("instance:selected", this.instance);
+            chorus.PageEvents.broadcast("instance:selected", this.instance);
             $('#jasmine_content').append(this.view.el);
         });
 

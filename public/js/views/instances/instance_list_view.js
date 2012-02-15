@@ -6,7 +6,7 @@ chorus.views.InstanceList = chorus.views.Base.extend({
     },
 
     setup:function () {
-        this.bind("instance:added", function (id) {
+        chorus.PageEvents.subscribe("instance:added", function (id) {
             this.collection.fetchAll();
             this.selectedInstanceId = id;
         }, this);
@@ -54,6 +54,6 @@ chorus.views.InstanceList = chorus.views.Base.extend({
         target.addClass("selected");
         var instance = target.data('model');
         this.selectedInstanceId = instance.get("id");
-        this.trigger("instance:selected", instance);
+        chorus.PageEvents.broadcast("instance:selected", instance);
     }
 });

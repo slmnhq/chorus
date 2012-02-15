@@ -17,10 +17,7 @@ chorus.pages.InstanceIndexPage = chorus.pages.Base.extend({
 
         this.sidebar = new chorus.views.InstanceListSidebar();
 
-        this.forwardEvent("instance:added", this.mainContent.content);
-
-        this.mainContent.content.forwardEvent("instance:selected", this.sidebar);
-        this.mainContent.content.bind("instance:selected", this.setModel, this);
+        chorus.PageEvents.subscribe("instance:selected", this.setModel, this);
     },
 
     setModel:function (instance) {
