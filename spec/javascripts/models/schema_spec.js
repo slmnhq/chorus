@@ -5,6 +5,23 @@ describe("chorus.models.Schema", function() {
             this.model = this.sandbox.schema();
         });
 
+        describe("#databaseObjects", function() {
+            it("should return a DataaseObjectSet", function() {
+                expect(this.model.databaseObjects()).toBeA(chorus.collections.DatabaseObjectSet);
+            });
+
+            it("should memoize the result", function() {
+                expect(this.model.databaseObjects()).toBe(this.model.databaseObjects());
+            });
+
+            it("should pass the instanceId, databaseName, and schemaName", function() {
+                var objects = this.model.databaseObjects();
+                expect(objects.attributes.instanceId).toBe(this.model.get('instanceId'));
+                expect(objects.attributes.databaseName).toBe(this.model.get('databaseName'));
+                expect(objects.attributes.schemaName).toBe(this.model.get('name'));
+            });
+        });
+
         describe("#tables", function() {
             it("should return a DataaseTableSet", function() {
                 var tableSet = this.model.tables();

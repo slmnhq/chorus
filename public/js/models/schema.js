@@ -13,6 +13,17 @@ chorus.models.Schema = chorus.models.Base.extend({
         return this._schemaFunctions;
     },
 
+    databaseObjects: function () {
+        if (!this._databaseObjects) {
+            this._databaseObjects = new chorus.collections.DatabaseObjectSet([], {
+                instanceId:this.get("instanceId"),
+                databaseName:this.get("databaseName"),
+                schemaName:this.get("name")
+            });
+        }
+        return this._databaseObjects;
+    },
+
     tables:function () {
         if (!this._tables) {
             this._tables = new chorus.collections.DatabaseTableSet([], {
