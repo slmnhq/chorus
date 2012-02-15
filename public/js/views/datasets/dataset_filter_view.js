@@ -31,7 +31,12 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
     },
 
     collectionModelContext: function(model) {
+        var quotedName = model.get("parentName") &&
+            model.get("name") &&
+            chorus.Mixins.dbHelpers.safePGName(model.get("parentName"), model.get("name"));
+
         return {
+            quotedName: quotedName,
             disable: model.get("typeCategory") == "OTHER"
         }
     },

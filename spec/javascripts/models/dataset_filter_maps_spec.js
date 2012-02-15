@@ -1,17 +1,17 @@
 describe("chorus.models.DatasetFilterMaps.string", function() {
     var strings = new chorus.models.DatasetFilterMaps.String;
 
-    itReturnsTheRightClauseFor("equal", "column_name", "some_value", "\"column_name\" = 'some_value'")
-    itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "\"column_name\" != 'some_value'")
-    itReturnsTheRightClauseFor("like", "column_name", "some_value", "\"column_name\" LIKE 'some_value'")
-    itReturnsTheRightClauseFor("begin_with", "column_name", "some_value", "\"column_name\" = 'some_value%'")
-    itReturnsTheRightClauseFor("end_with", "column_name", "some_value", "\"column_name\" = '%some_value'")
-    itReturnsTheRightClauseFor("alpha_after", "column_name", "some_value", "\"column_name\" > 'some_value'")
-    itReturnsTheRightClauseFor("alpha_after_equal", "column_name", "some_value", "\"column_name\" >= 'some_value'")
-    itReturnsTheRightClauseFor("alpha_before", "column_name", "some_value", "\"column_name\" < 'some_value'")
-    itReturnsTheRightClauseFor("alpha_before_equal", "column_name", "some_value", "\"column_name\" <= 'some_value'")
-    itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "\"column_name\" IS NOT NULL", true)
-    itReturnsTheRightClauseFor("null", "column_name", "some_value", "\"column_name\" IS NULL", true)
+    itReturnsTheRightClauseFor("equal", "column_name", "some_value", "column_name = 'some_value'")
+    itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "column_name != 'some_value'")
+    itReturnsTheRightClauseFor("like", "column_name", "some_value", "column_name LIKE 'some_value'")
+    itReturnsTheRightClauseFor("begin_with", "column_name", "some_value", "column_name = 'some_value%'")
+    itReturnsTheRightClauseFor("end_with", "column_name", "some_value", "column_name = '%some_value'")
+    itReturnsTheRightClauseFor("alpha_after", "column_name", "some_value", "column_name > 'some_value'")
+    itReturnsTheRightClauseFor("alpha_after_equal", "column_name", "some_value", "column_name >= 'some_value'")
+    itReturnsTheRightClauseFor("alpha_before", "column_name", "some_value", "column_name < 'some_value'")
+    itReturnsTheRightClauseFor("alpha_before_equal", "column_name", "some_value", "column_name <= 'some_value'")
+    itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "column_name IS NOT NULL", true)
+    itReturnsTheRightClauseFor("null", "column_name", "some_value", "column_name IS NULL", true)
 
     function itReturnsTheRightClauseFor(key, columnName, inputValue, expected, ignoreEmptyCase) {
         it("returns the right clause for " + key, function() {
@@ -36,14 +36,14 @@ describe("chorus.models.DatasetFilterMaps.string", function() {
 describe("chorus.models.DatasetFilterMaps.numeric", function() {
     var numericals = new chorus.models.DatasetFilterMaps.Numeric;
 
-    itReturnsTheRightClauseFor("equal", "column_name", "some_value", "\"column_name\" = 'some_value'")
-    itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "\"column_name\" != 'some_value'")
-    itReturnsTheRightClauseFor("greater", "column_name", "some_value", "\"column_name\" > 'some_value'")
-    itReturnsTheRightClauseFor("greater_equal", "column_name", "some_value", "\"column_name\" >= 'some_value'")
-    itReturnsTheRightClauseFor("less", "column_name", "some_value", "\"column_name\" < 'some_value'")
-    itReturnsTheRightClauseFor("less_equal", "column_name", "some_value", "\"column_name\" <= 'some_value'")
-    itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "\"column_name\" IS NOT NULL", true)
-    itReturnsTheRightClauseFor("null", "column_name", "some_value", "\"column_name\" IS NULL", true)
+    itReturnsTheRightClauseFor("equal", "column_name", "some_value", "column_name = 'some_value'")
+    itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "column_name != 'some_value'")
+    itReturnsTheRightClauseFor("greater", "column_name", "some_value", "column_name > 'some_value'")
+    itReturnsTheRightClauseFor("greater_equal", "column_name", "some_value", "column_name >= 'some_value'")
+    itReturnsTheRightClauseFor("less", "column_name", "some_value", "column_name < 'some_value'")
+    itReturnsTheRightClauseFor("less_equal", "column_name", "some_value", "column_name <= 'some_value'")
+    itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "column_name IS NOT NULL", true)
+    itReturnsTheRightClauseFor("null", "column_name", "some_value", "column_name IS NULL", true)
 
     function itReturnsTheRightClauseFor(key, columnName, inputValue, expected, ignoreEmptyCase) {
         it("returns the right clause for " + key, function() {
@@ -85,11 +85,11 @@ describe("chorus.models.DatasetFilterMaps.numeric", function() {
 describe("chorus.models.DatasetFilterMaps.time", function() {
     var time = new chorus.models.DatasetFilterMaps.Time;
 
-    itReturnsTheRightClauseFor("equal", "column_name", "some_value", "\"column_name\" = 'some_value'")
-    itReturnsTheRightClauseFor("before", "column_name", "some_value", "\"column_name\" < 'some_value'")
-    itReturnsTheRightClauseFor("after", "column_name", "some_value", "\"column_name\" > 'some_value'")
-    itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "\"column_name\" IS NOT NULL", true)
-    itReturnsTheRightClauseFor("null", "column_name", "some_value", "\"column_name\" IS NULL", true)
+    itReturnsTheRightClauseFor("equal", "column_name", "some_value", "column_name = 'some_value'")
+    itReturnsTheRightClauseFor("before", "column_name", "some_value", "column_name < 'some_value'")
+    itReturnsTheRightClauseFor("after", "column_name", "some_value", "column_name > 'some_value'")
+    itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "column_name IS NOT NULL", true)
+    itReturnsTheRightClauseFor("null", "column_name", "some_value", "column_name IS NULL", true)
 
     function itReturnsTheRightClauseFor(key, columnName, inputValue, expected, ignoreEmptyCase) {
         it("returns the right clause for " + key, function() {
@@ -131,11 +131,11 @@ describe("chorus.models.DatasetFilterMaps.time", function() {
 describe("chorus.models.DatasetFilterMaps.date", function() {
     var date = new chorus.models.DatasetFilterMaps.Date;
 
-    itReturnsTheRightClauseFor("on", "column_name", "some_value", "\"column_name\" = 'some_value'")
-    itReturnsTheRightClauseFor("before", "column_name", "some_value", "\"column_name\" < 'some_value'")
-    itReturnsTheRightClauseFor("after", "column_name", "some_value", "\"column_name\" > 'some_value'")
-    itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "\"column_name\" IS NOT NULL", true)
-    itReturnsTheRightClauseFor("null", "column_name", "some_value", "\"column_name\" IS NULL", true)
+    itReturnsTheRightClauseFor("on", "column_name", "some_value", "column_name = 'some_value'")
+    itReturnsTheRightClauseFor("before", "column_name", "some_value", "column_name < 'some_value'")
+    itReturnsTheRightClauseFor("after", "column_name", "some_value", "column_name > 'some_value'")
+    itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "column_name IS NOT NULL", true)
+    itReturnsTheRightClauseFor("null", "column_name", "some_value", "column_name IS NULL", true)
 
     function itReturnsTheRightClauseFor(key, columnName, inputValue, expected, ignoreEmptyCase) {
         it("returns the right clause for " + key, function() {

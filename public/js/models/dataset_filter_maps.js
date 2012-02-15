@@ -78,12 +78,12 @@
         }
     });
 
-    function isNull(columnName, inputValue) {
-        return qd(columnName) + " IS NULL";
+    function isNull(columnName, inputValue){
+        return columnName + " IS NULL";
     }
 
-    function isNotNull(columnName, inputValue) {
-        return qd(columnName) + " IS NOT NULL";
+    function isNotNull(columnName, inputValue){
+        return columnName + " IS NOT NULL";
     }
 
     function makeGenerate(comparator, options) {
@@ -94,14 +94,9 @@
         })
         return function(columnName, inputValue) {
             return inputValue ?
-                qd(columnName) + " " + comparator + " " + qs(options.inputPrefix + inputValue + options.inputSuffix) :
+                columnName + " " + comparator + " " + qs(options.inputPrefix + inputValue + options.inputSuffix) :
                 "";
         }
-    }
-
-    // quote double
-    function qd(string) {
-        return '"' + string + '"';
     }
 
     // quote single

@@ -49,9 +49,15 @@ chorus.Mixins.Urls = {
 };
 
 chorus.Mixins.dbHelpers = {
-    safePGName: function(name) {
-        var isSafe = name.match(/^[a-z_][a-zA-Z0-9_]*/);
-        return isSafe ? name : '"' + name + '"';
+    safePGName: function() {
+        function encode(name) {
+            var isSafe = name.match(/^[a-z_][a-zA-Z0-9_]*/);
+            return isSafe ? name : '"' + name + '"';
+        }
+
+        return _.map(arguments, function(arg) {
+            return encode(arg)
+        }).join('.')
     }
 }
 

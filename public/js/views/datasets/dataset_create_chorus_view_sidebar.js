@@ -78,15 +78,17 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
     },
 
     selectClause: function() {
-        var names = _.map(this.$(".columns li"), function(li) {
-            return chorus.Mixins.dbHelpers.safePGName($(li).data("model").get("name"));
-        });
+        var names = _.map(this.$(".columns li"), _.bind(function(li) {
+            return chorus.Mixins.dbHelpers.safePGName(
+                this.model.get("objectName"),
+                $(li).data("model").get("name"))
+        }, this));
 
         return "SELECT " + (names.length ? names.join(", ") : "*");
     },
 
     fromClause: function() {
-        return "FROM " + this.model.get("objectName");
+        return "FROM " + chorus.Mixins.dbHelpers.safePGName(this.model.get("objectName"));
     },
 
     sql : function() {

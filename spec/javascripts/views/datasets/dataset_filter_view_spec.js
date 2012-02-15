@@ -19,9 +19,11 @@ describe("chorus.views.DatasetFilter", function() {
             expect(this.view.$(".column_filter option").length).toBe(this.collection.length);
 
             var view = this.view;
-            this.collection.each(function(model) {
-                expect(view.$(".column_filter option")).toContainText(model.get("name"));
-            });
+            this.collection.each(function(model, index){
+                var option = view.$(".column_filter option:eq(" + index + ")");
+                expect(option).toContainText(model.get("name"));
+                expect(option).toHaveAttr("value", chorus.Mixins.dbHelpers.safePGName(this.collection.at(index).get("parentName"), model.get("name")));
+            }, this);
         });
 
         it("styles the select", function() {
@@ -59,8 +61,8 @@ describe("chorus.views.DatasetFilter", function() {
             });
 
             it("disables the option for the 'other' column", function() {
-                expect(this.view.$(".column_filter option[value='" + this.collection.models[1].get("name") + "']")).toHaveAttr("disabled");
-                expect(this.view.$(".column_filter option[value='" + this.collection.models[0].get("name") + "']")).not.toHaveAttr("disabled");
+                expect(this.view.$(".column_filter option:eq(1)")).toHaveAttr("disabled");
+                expect(this.view.$(".column_filter option:eq(0)")).not.toHaveAttr("disabled");
             });
         });
 
@@ -337,7 +339,9 @@ describe("chorus.views.DatasetFilter", function() {
             });
 
             it("calls the generate function of the correct filter type", function() {
-                expect(this.view.model.comparators.not_equal.generate).toHaveBeenCalledWith(this.collection.models[0].get("name"), "test");
+                var model = this.collection.at(0);
+                var qualifiedName = chorus.Mixins.dbHelpers.safePGName(model.get("parentName"), model.get("name"));
+                expect(this.view.model.comparators.not_equal.generate).toHaveBeenCalledWith(qualifiedName, "test");
             });
         });
 

@@ -1,6 +1,6 @@
 describe("chorus.views.CreateChorusViewSidebar", function() {
     beforeEach(function() {
-        this.dataset = fixtures.datasetChorusView({objectName : "my_chorus"});
+        this.dataset = fixtures.datasetSandboxTable({objectName : "My_table"});
         this.view = new chorus.views.CreateChorusViewSidebar({model: this.dataset});
     });
 
@@ -155,14 +155,14 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 });
 
                 it("should build a select clause from the selected columns", function() {
-                    expect(this.view.selectClause()).toBe("SELECT \"Foo\", bar");
+                    expect(this.view.selectClause()).toBe("SELECT \"My_table\".\"Foo\", \"My_table\".bar");
                 });
             });
         });
 
         describe("#fromClause", function() {
             it("should return the dataset name in the FROM clause", function() {
-                expect(this.view.fromClause()).toBe("FROM my_chorus");
+                expect(this.view.fromClause()).toBe("FROM \"My_table\"");
             });
         });
 
