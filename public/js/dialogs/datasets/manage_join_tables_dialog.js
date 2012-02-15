@@ -14,7 +14,11 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
         this.collection.remove(this.collection.get(originalId));
     },
 
+    additionalContext: function() {
+        return { canonicalName: this.model.canonicalName() }
+    },
+
     collectionModelContext: function(model) {
-        return { iconUrl: model.iconUrl({ size: "small" }) };
+        return { iconUrl: model.iconUrl({ size: "small" })};
     }
 });

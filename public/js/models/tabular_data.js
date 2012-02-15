@@ -44,7 +44,8 @@ chorus.models.TabularData = chorus.models.Base.extend({
         return new chorus.models.Schema({
             instanceId: this.get("instance").id,
             databaseName: this.get("databaseName"),
-            name: this.get("schemaName")
+            name: this.get("schemaName"),
+            instanceName: this.get("instance").name
         });
     },
 

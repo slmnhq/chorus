@@ -21,7 +21,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 objectName: "cats",
                 columns: 21,
                 type: "SOURCE_TABLE",
-                objectType: "VIEW",
+                objectType: "VIEW"
             });
 
             this.databaseObject2 = fixtures.databaseObject({
@@ -61,6 +61,10 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
         it("doesn't display original the table/view", function() {
             expect(this.dialog.$(".name")).not.toContainText("original");
+        })
+
+        it("shows the original table canonical name", function() {
+            expect(this.dialog.$(".canonical_name").text()).toBe(this.schema.canonicalName());
         })
     });
 });

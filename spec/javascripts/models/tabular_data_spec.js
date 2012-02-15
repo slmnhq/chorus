@@ -123,6 +123,7 @@ describe("chorus.models.TabularData", function() {
             expect(schema.get("instanceId")).toBe(this.tabularData.get("instance").id);
             expect(schema.get("databaseName")).toBe(this.tabularData.get("databaseName"));
             expect(schema.get("name")).toBe(this.tabularData.get("schemaName"));
+            expect(schema.get("instanceName")).toBe(this.tabularData.get("instance").name);
         });
     });
 
