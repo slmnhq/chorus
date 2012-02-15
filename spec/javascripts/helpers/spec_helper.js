@@ -56,6 +56,7 @@
         'logged_in_layout',
         'login',
         'main_content',
+        'manage_join_tables',
         'notes_new',
         'notes_new_file_attachment',
         'pick_workspace',

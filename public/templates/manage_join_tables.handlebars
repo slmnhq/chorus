@@ -1,1 +1,9 @@
-<div/>
+<ul>
+    {{#each models}}
+        <li>
+            <img class="icon" src="{{iconUrl}}"/>
+            <span class="name">{{objectName}}</span>
+            <span class="column_count">{{pluralize columns "dataset.manage_join_tables.column_count" count=columns}}
+        </li>
+    {{/each}}
+</ul>

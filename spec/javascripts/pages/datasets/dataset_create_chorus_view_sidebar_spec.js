@@ -23,6 +23,12 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
            expect(this.view.$("a.preview").data("parent")).toBe(this.view);
         });
 
+        it("has an 'add a join' link, which launches a 'manage join tables' dialog", function() {
+            var addJoinLink = this.view.$("a.add_join");
+            expect(addJoinLink.text()).toMatchTranslation("dataset.chorusview.sidebar.add_join");
+            expect(addJoinLink).toHaveData("dialog", "ManageJoinTables");
+        });
+
         it("disables the create button by default", function() {
             expect(this.view.$("button.create")).toBeDisabled();
         });
