@@ -497,6 +497,17 @@ describe("chorus.presenters.Activity", function() {
             this.keyPrefix = 'activity_stream.header.html.';
         });
 
+        describe("INSIGHT_CREATED", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.INSIGHT_CREATED();
+            });
+
+            it("uses the NOTE translation keys", function() {
+                var presenter = new chorus.presenters.Activity(this.model, {displayStyle: 'withoutWorkspace'});
+                expect(presenter._impl.headerTranslationKey()).toBe(this.keyPrefix + "NOTE.without_workspace");
+            });
+        });
+
         describe("#headerTranslationKey with workspace_created", function() {
             beforeEach(function() {
                 this.model = fixtures.activities.WORKSPACE_CREATED();
