@@ -6,29 +6,19 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
         "click li a":"datasetSelected"
     }),
 
-    fetchResourceAfterSchemaSelected:function (schema) {
-        this.resource = this.collection = new chorus.collections.Base();
-
-        this.tables = this.schema.tables();
-        this.views = this.schema.views();
-        this.tables.bind("reset", datasetFetchComplete, this);
-        this.views.bind("reset", datasetFetchComplete, this);
-        this.tables.fetchAll();
-        this.views.fetchAll();
-
-        function datasetFetchComplete(tableOrViewSet) {
-            this.collection.add(tableOrViewSet.models, {silent:true});
-            this.render();
-        }
+    fetchResourceAfterSchemaSelected: function() {
+        this.resource = this.collection = this.schema.databaseObjects();
+        this.collection.fetch();
+        this.collection.bind("reset", this.render, this);
     },
 
-    datasetSelected:function (e) {
+    datasetSelected: function (e) {
         e.preventDefault();
         var li = $(e.currentTarget).closest("li"),
             type = li.data("type"),
             name = li.data("name");
 
-        var dataset = this.collection.findWhere({ type:type, objectName:name });
+        var dataset = this.collection.findWhere({ type:type, objectName: name });
         this.trigger("datasetSelected", dataset);
     },
 
@@ -48,8 +38,8 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
         }
     },
 
-    displayLoadingSection:function () {
-        return !(this.tables && this.tables.loaded && this.views && this.views.loaded);
+    displayLoadingSection: function () {
+        return !(this.collection && this.collection.loaded);
     }
 });
 

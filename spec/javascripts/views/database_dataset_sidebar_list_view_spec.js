@@ -3,87 +3,50 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
         this.sandbox = fixtures.sandbox();
         this.schema = this.sandbox.schema();
 
-        spyOn(this.schema.views(), "fetchAll").andCallThrough();
-        spyOn(this.schema.tables(), "fetchAll").andCallThrough();
-
         this.view = new chorus.views.DatabaseDatasetSidebarList({sandbox: this.sandbox});
     });
 
-    it("should fetch the list of tables", function() {
-        expect(this.schema.tables().fetchAll).toHaveBeenCalled();
-    });
-
-    it("should fetch the list of views", function() {
-        expect(this.schema.views().fetchAll).toHaveBeenCalled();
-    });
-
-    context("when the table fetch completes", function() {
+    describe("when a schema is selected (which calls #fetchResourceAfterSchemaSelected)", function() {
         beforeEach(function() {
-            this.server.completeFetchAllFor(this.schema.tables(), [
-                fixtures.databaseTable(), fixtures.databaseTable()
-            ]);
+            this.schema2 = fixtures.schema();
+            this.view.schema = this.schema2;
+            this.view.fetchResourceAfterSchemaSelected();
         });
 
-        it("should set the list of tables in the collection", function() {
-            expect(this.view.collection.length).toBe(2);
-            expect(this.schema.tables().length).toBe(2);
-        });
-    });
-
-    context("when the view fetch completes", function() {
-        beforeEach(function() {
-            this.server.completeFetchAllFor(this.schema.views(), [
-                fixtures.databaseView(), fixtures.databaseView(), fixtures.databaseView()
-            ]);
+        it("should fetch the schema's tables and views", function() {
+            expect(this.schema2.databaseObjects()).toHaveBeenFetched();
         });
 
-        it("should set the list of views in the collection", function() {
-            expect(this.view.collection.length).toBe(3);
-            expect(this.schema.views().length).toBe(3);
+        describe("when the fetch for the tables and views completes", function() {
+            beforeEach(function() {
+                spyOn(this.view, 'postRender');
+                this.server.completeFetchFor(this.schema2.databaseObjects(), [
+                    fixtures.databaseObject({ objectType: "SANDBOX_TABLE" }),
+                    fixtures.databaseObject({ objectType: "VIEW"})
+                ]);
+            });
+
+            it("re-renders", function() {
+                expect(this.view.postRender).toHaveBeenCalled();
+            });
         });
     });
 
     describe("#render", function() {
-        context("before the tables or views have loaded", function() {
+        context("before the tables and views have loaded", function() {
             beforeEach(function() {
-                this.schema.views().loaded = false;
-                this.schema.tables().loaded = false;
+                this.schema.databaseObjects().loaded = false;
                 this.view.render();
             })
 
             it("should display a loading spinner", function() {
                 expect(this.view.$(".loading_section")).toExist();
             });
-        })
-
-        context("after only the table fetch completes", function() {
-            beforeEach(function() {
-                this.server.completeFetchAllFor(this.schema.tables(), [
-                    fixtures.databaseTable(), fixtures.databaseTable()
-                ]);
-            })
-
-            it("still displays a loading spinner", function() {
-                expect(this.view.$(".loading_section")).toExist();
-            });
         });
 
-        context("after only the view fetch completes", function() {
+        context("after the tables and views are loaded", function() {
             beforeEach(function() {
-                this.server.completeFetchAllFor(this.schema.views(), [
-                    fixtures.databaseView(), fixtures.databaseView()
-                ]);
-            });
-
-            it("still displays a loading spinner", function() {
-                expect(this.view.$(".loading_section")).toExist();
-            });
-        });
-
-        context("after both fetches have completed", function() {
-            beforeEach(function() {
-                this.schema.views().loaded = true;
-                this.schema.tables().loaded = true;
+                this.schema.databaseObjects().loaded = true;
             });
 
             it("doesn't display a loading spinner", function() {
@@ -92,16 +55,16 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
 
             context("and some data was fetched", function() {
                 beforeEach(function() {
-                    this.server.completeFetchAllFor(this.schema.views(), [
-                        fixtures.databaseView({objectName: "Data1"}),
-                        fixtures.databaseView({objectName: "zebra"})
+                    this.server.completeFetchFor(this.schema.databaseObjects(), [
+                        fixtures.databaseObject({ objectName: "Data1", objectType: "VIEW" }),
+                        fixtures.databaseObject({ objectName: "zebra", objectType: "VIEW"}),
+                        fixtures.databaseObject({ objectName: "Data2", objectType: "SANDBOX_TABLE" }),
+                        fixtures.databaseObject({ objectName: "apple", objectType: "SANDBOX_TABLE"})
                     ]);
-                    this.server.completeFetchAllFor(this.schema.tables(), [
-                        fixtures.databaseTable({objectName: "Data2"}),
-                        fixtures.databaseTable({objectName: "apple"})
-                    ]);
+
                     this.view.render();
                 });
+
                 jasmine.sharedExamples.DatabaseSidebarList();
 
                 it("should not display the loading spinner", function() {
@@ -125,7 +88,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
 
                 describe("user clicks a view in the list", function() {
                     beforeEach(function() {
-                        this.clickedView = this.schema.views().findByName("Data1");
+                        this.clickedView = this.schema.databaseObjects().findByName("Data1");
                         spyOnEvent(this.view, "datasetSelected");
                         this.view.$("li:contains('Data1') a").click();
                     });
@@ -137,7 +100,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
 
                 describe("user clicks on a table in the list", function() {
                     beforeEach(function() {
-                        this.clickedTable = this.schema.tables().findByName("Data2");
+                        this.clickedTable = this.schema.databaseObjects().findByName("Data2");
                         spyOnEvent(this.view, "datasetSelected");
                         this.view.$("li:contains('Data2') a").click();
                     });

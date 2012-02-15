@@ -15,7 +15,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
             this.schemas = this.sandbox.database().schemas();
             this.schema = this.sandbox.schema();
             this.schemas.fetch();
-            this.fetchResourceAfterSchemaSelected(this.schema);
+            this.fetchResourceAfterSchemaSelected();
         }
     },
 
@@ -105,7 +105,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
     schemaSelected:function (e) {
         var schemaId = $(e.target).data("id")
         this.schema = this.schemas.get(schemaId)
-        this.fetchResourceAfterSchemaSelected(this.schema);
+        this.fetchResourceAfterSchemaSelected();
         this.render();
     },
 
