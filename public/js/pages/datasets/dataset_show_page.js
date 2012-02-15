@@ -144,6 +144,9 @@
                     this.mainContent.content.selectNone();
                     this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model : this.model});
                     break;
+                case 'edit_chorus_view':
+                    this.secondarySidebar = new chorus.views.DatasetEditChorusViewSidebar({model: this.model});
+                    break;
             }
 
             this.secondarySidebar.filters = this.mainContent.contentDetails.filterWizardView;

@@ -450,6 +450,10 @@ describe("chorus.views.DatasetContentDetails", function() {
                             expect("dataset:edit").toHaveBeenTriggeredOn(this.view);
                         });
 
+                        it("triggers transform:sidebar", function() {
+                            expect(this.chorusViewSpy).toHaveBeenCalledWith("edit_chorus_view");
+                        });
+
                         context("and cancel is clicked", function() {
                             beforeEach(function() {
                                 spyOnEvent(this.view, "cancel:sidebar");

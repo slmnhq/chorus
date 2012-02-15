@@ -313,6 +313,16 @@ describe("chorus.pages.DatasetShowPage", function() {
                 });
             });
 
+            context("for a edit chorus view", function() {
+                beforeEach(function() {
+                    this.page.mainContent.contentDetails.trigger("transform:sidebar", 'edit_chorus_view');
+                });
+
+                it("should swap out the sidebar for the dataset edit chorus view sidebar", function() {
+                    expect(this.page.secondarySidebar).toBeA(chorus.views.DatasetEditChorusViewSidebar)
+                });
+            });
+
             describe("when the cancel:sidebar event is triggered", function() {
                 beforeEach(function() {
                     this.page.mainContent.contentDetails.trigger("transform:sidebar", "boxplot");

@@ -138,6 +138,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     },
 
     startEditChorusViewWizard: function(){
+        this.trigger("transform:sidebar", "edit_chorus_view");
         this.showEditChorusViewWizard();
         this.trigger("dataset:edit");
     },
