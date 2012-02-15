@@ -198,8 +198,9 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     expect(this.dialog.$("div.owner a").attr("href")).toBe(this.dialog.owner.showUrl());
                 });
 
-                it("disables the save workspace button", function() {
-                    expect(this.dialog.$("button.submit")).toBeDisabled()
+                it("removes the save button and changes the cancel text to close window", function() {
+                    expect(this.dialog.$("button.submit")).not.toExist();
+                    expect(this.dialog.$("button.cancel")).toContainTranslation("actions.close_window");
                 })
 
                 context("and the workspace is not archived", function() {
