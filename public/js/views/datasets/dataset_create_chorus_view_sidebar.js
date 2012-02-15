@@ -19,11 +19,14 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         this.$(".non_empty_selection").removeClass("hidden");
         this.$(".empty_selection").addClass("hidden");
 
-        var $li = $(chorus.helpers.renderTemplate("dataset_create_chorus_view_sidebar_column_row",
-            {cid: model.cid, name: model.get("name")}));
-        $li.data("model", model);
+        if (this.$(".columns li[data-cid='" + model.cid + "']").length === 0) {
+            var $li = $(chorus.helpers.renderTemplate("dataset_create_chorus_view_sidebar_column_row",
+                {cid: model.cid, name: model.get("name")}));
+            $li.data("model", model);
 
-        this.$(".non_empty_selection .columns").append($li);
+            this.$(".non_empty_selection .columns").append($li);
+        }
+
         this.$("button.create").prop("disabled", false);
     },
 

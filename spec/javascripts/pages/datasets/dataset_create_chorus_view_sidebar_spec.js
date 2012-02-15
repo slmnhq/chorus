@@ -110,6 +110,18 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             });
         });
 
+        describe("column:select all", function() {
+            beforeEach(function() {
+                var column1 = fixtures.databaseColumn();
+                chorus.PageEvents.broadcast("column:selected", column1);
+                chorus.PageEvents.broadcast("column:selected", column1);
+            });
+
+            it("should not show duplicate columns", function() {
+                expect(this.view.$(".non_empty_selection .columns li").length).toBe(1)
+            });
+        });
+
         describe("clicking the 'Remove' link", function() {
             beforeEach(function() {
                 spyOn(chorus.PageEvents, "broadcast").andCallThrough();
