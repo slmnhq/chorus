@@ -84,48 +84,97 @@ describe("chorus.views.DatasetContentDetails", function() {
 
 
         context("when 'Preview Data' is clicked", function() {
-            beforeEach(function() {
-                this.view.$(".column_count .preview").click();
-            })
-
-            it("should hide the column count bar", function() {
-                expect(this.view.$(".column_count")).toHaveClass("hidden");
-            })
-
-            it("should display the data preview bar", function() {
-                expect(this.view.$(".data_preview")).not.toHaveClass("hidden");
-            })
-
-            describe("data preview bar", function() {
-                it("should display a close button", function() {
-                    expect(this.view.$(".data_preview .close")).toExist();
+            context("when in default dataset page", function() {
+                beforeEach(function() {
+                    this.view.$(".column_count .preview").click();
                 })
 
-                context("when the close button is clicked", function() {
-                    beforeEach(function() {
-                        this.view.$(".data_preview .close").click();
+                it("should hide the column count bar", function() {
+                    expect(this.view.$(".column_count")).toHaveClass("hidden");
+                })
+
+                it("should display the data preview bar", function() {
+                    expect(this.view.$(".data_preview")).not.toHaveClass("hidden");
+                })
+
+                describe("data preview bar", function() {
+                    it("should display a close button", function() {
+                        expect(this.view.$(".data_preview .close")).toExist();
+                    })
+
+                    context("when the close button is clicked", function() {
+                        beforeEach(function() {
+                            this.view.$(".data_preview .close").click();
+                        });
+
+                        it("should hide the data preview bar", function() {
+                            expect(this.view.$(".data_preview")).toHaveClass("hidden");
+                        });
+
+                        it("should show the column count bar", function() {
+                            expect(this.view.$(".column_count")).not.toHaveClass("hidden");
+                        });
                     });
 
-                    it("should hide the data preview bar", function() {
-                        expect(this.view.$(".data_preview")).toHaveClass("hidden");
-                    });
+                    context("when the preview data button is clicked", function() {
+                        beforeEach(function() {
+                            spyOn(this.view.resultsConsole, "execute");
+                            this.view.$(".preview").click();
+                        });
 
-                    it("should show the column count bar", function() {
-                        expect(this.view.$(".column_count")).not.toHaveClass("hidden");
+                        it("should execute database preview model", function() {
+                            expect(this.view.resultsConsole.execute).toHaveBeenCalledWith(this.view.dataset.preview());
+                        });
                     });
+                })
+            });
+
+            context("when in editChorusView page", function() {
+                beforeEach(function() {
+                    this.view.options.inEditChorusView = true;
+                    this.view.render();
+                    this.view.$(".edit_chorus_view_info .preview").click();
                 });
 
-                context("when the preview data button is clicked", function() {
-                    beforeEach(function() {
-                        spyOn(this.view.resultsConsole, "execute");
-                        this.view.$(".preview").click();
+                it("should hide the edit chorus view bar", function() {
+                    expect(this.view.$(".edit_chorus_view_info")).toHaveClass("hidden");
+                });
+
+                it("should display the data preview bar", function() {
+                    expect(this.view.$(".data_preview")).not.toHaveClass("hidden");
+                });
+                describe("data preview bar", function() {
+                    it("should display a close button", function() {
+                        expect(this.view.$(".data_preview .close")).toExist();
+                    })
+
+                    context("when the close button is clicked", function() {
+                        beforeEach(function() {
+                            this.view.$(".data_preview .close").click();
+                        });
+
+                        it("should hide the data preview bar", function() {
+                            expect(this.view.$(".data_preview")).toHaveClass("hidden");
+                        });
+
+                        it("should show the column count bar", function() {
+                            expect(this.view.$(".edit_chorus_view_info")).not.toHaveClass("hidden");
+                        });
                     });
 
-                    it("should execute database preview model", function() {
-                        expect(this.view.resultsConsole.execute).toHaveBeenCalledWith(this.view.dataset.preview());
+                    context("when the preview data button is clicked", function() {
+                        beforeEach(function() {
+                            spyOn(this.view.resultsConsole, "execute");
+                            this.view.$(".edit_chorus_view_info .preview").click();
+                        });
+
+                        it("should execute database preview model", function() {
+                            expect(this.view.resultsConsole.execute).toHaveBeenCalledWith(this.view.dataset.preview(this.view.options.inEditChorusView),true);
+                        });
                     });
-                });
+                })
             })
+
         })
 
         describe("definition bar", function() {
@@ -363,6 +412,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                 context("when the dataset is a chorus view", function() {
                     beforeEach(function() {
                         var dataset = fixtures.datasetChorusView();
+                        dataset.initialQuery = "select * from abc";
                         this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection});
                         this.view.render();
                         this.view.$(".transform").click();
@@ -423,6 +473,10 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                             it("triggers dataset:cancelEdit", function() {
                                 expect("dataset:cancelEdit").toHaveBeenTriggeredOn(this.view);
+                            });
+
+                            it("resets the query to the initial query", function(){
+                                expect(this.view.dataset.get("query")).toBe("select * from abc")
                             })
                         })
 

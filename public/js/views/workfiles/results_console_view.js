@@ -16,12 +16,18 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         chorus.PageEvents.subscribe("file:executionFailed", this.executionFailed, this);
     },
 
-    execute: function(model) {
+    execute: function(model, isPostRequest) {
         this.model = model;
-        model.fetchIfNotLoaded();
+        if(isPostRequest) {
+            model.save();
+        } else {
+            model.fetchIfNotLoaded();
+        }
         this.executionStarted();
         model.onLoaded(_.bind(this.executionSucceeded, this, model));
+        model.bind("saved", _.bind(this.executionSucceeded, this, model));
         model.bind("fetchFailed", _.bind(this.executionFailed, this, model));
+        model.bind("saveFailed", _.bind(this.executionFailed, this, model));
     },
 
     executionStarted: function() {

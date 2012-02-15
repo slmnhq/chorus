@@ -39,14 +39,23 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         e.preventDefault();
 
         this.$(".column_count").addClass("hidden");
+        this.$(".edit_chorus_view_info").addClass("hidden");
         this.$(".data_preview").removeClass("hidden");
-
-        this.resultsConsole.execute(this.dataset.preview());
+        if(!this.options.inEditChorusView) {
+            this.resultsConsole.execute(this.dataset.preview());
+        } else {
+            this.resultsConsole.execute(this.dataset.preview(this.options.inEditChorusView), true);
+        }
     },
 
     closeDataPreview : function() {
-        this.$(".column_count").removeClass("hidden");
-        this.$(".data_preview").addClass("hidden");
+        if (!this.options.inEditChorusView) {
+            this.$(".column_count").removeClass("hidden");
+            this.$(".data_preview").addClass("hidden");
+        } else {
+            this.$(".edit_chorus_view_info").removeClass("hidden");
+            this.$(".data_preview").addClass("hidden");
+        }
     },
 
     postRender:function () {
@@ -150,7 +159,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$(".column_count").removeClass("hidden");
         this.$(".definition").removeClass("hidden");
         this.trigger("cancel:sidebar");
-        this.trigger("dataset:cancelEdit")
+        this.trigger("dataset:cancelEdit");
+        this.dataset.set({query : this.dataset.initialQuery});
     },
 
     saveChorusView: function() {

@@ -30,8 +30,18 @@ describe("chorus.models.TabularDataPreview", function() {
         })
     })
 
+    context("with a chorus view query", function() {
+        beforeEach(function() {
+            this.model.set({query: "select * from hello;", workspaceId: "12345"})
+        });
+        it("should have the correct url template", function() {
+            expect(this.model.url()).toBe("/edc/workspace/12345/dataset?type=preview")
+        });
+    })
+
     it("mixes in SQLResults", function() {
         expect(this.model.errorMessage).toBeDefined();
         expect(this.model.columnOrientedData).toBeDefined();
     })
+
 });

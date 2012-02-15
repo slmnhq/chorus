@@ -3,6 +3,7 @@ chorus.views.DatasetEditChorusView = chorus.views.Base.extend({
 
     setup: function() {
         this.bind("dataset:saveEdit", this.saveModel, this);
+        this.model.initialQuery = this.model.get("query");
         this.model.bind("saved", this.navigateToChorusViewShowPage, this);
     },
 
@@ -15,7 +16,8 @@ chorus.views.DatasetEditChorusView = chorus.views.Base.extend({
                 fixedGutter:true,
                 theme:"default",
                 lineWrapping:true,
-                extraKeys:{}
+                extraKeys:{},
+                onBlur: _.bind(this.updateQueryInModel, self)
             };
 
             _.defer(_.bind(function () {
@@ -33,7 +35,11 @@ chorus.views.DatasetEditChorusView = chorus.views.Base.extend({
                 }
             }, this)
             );
-        },
+    },
+
+    updateQueryInModel: function() {
+        this.model.set({query: this.editor.getValue()});
+    },
 
     saveModel: function() {
         var query = this.editor.getValue();

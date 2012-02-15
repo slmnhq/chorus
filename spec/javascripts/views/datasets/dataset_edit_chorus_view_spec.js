@@ -13,6 +13,12 @@ describe("chorus.views.DatasetEditChorusView", function() {
         spyOn(CodeMirror, "fromTextArea").andCallThrough();
     })
 
+    context ("#setup", function(){
+        it ("saves the initial query value", function(){
+            expect(this.view.model.initialQuery).toBe(this.view.model.get("query"));
+        })
+    })
+
     context("without defer stubbed out", function() {
         it("defers call to CodeMirror", function() {
             this.view.render();
@@ -29,6 +35,7 @@ describe("chorus.views.DatasetEditChorusView", function() {
 
         describe("#render", function() {
             beforeEach(function() {
+                spyOn(this.view,"updateQueryInModel").andCallThrough();
                 this.view.render();
             });
 
@@ -54,6 +61,14 @@ describe("chorus.views.DatasetEditChorusView", function() {
             it("uses the 'text/x-sql' mode", function() {
                 expect(this.view.editor.getOption("mode")).toBe("text/x-sql");
             });
+
+            it("set the query in the model when blur is received by the editor", function() {
+                this.view.editor.focus();
+                this.view.editor.setValue("select * from hello;")
+                $(this.view.$(".CodeMirror")[0].firstChild.firstChild).blur();
+                expect(this.view.updateQueryInModel).toHaveBeenCalled();
+                expect(this.view.model.get("query")).toBe("select * from hello;")
+            })
         });
 
 

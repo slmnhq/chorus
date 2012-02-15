@@ -495,14 +495,39 @@ describe("chorus.views.ResultsConsoleView", function() {
             expect(this.view.executionStarted).toHaveBeenCalled();
         });
 
-        context("when execution is successful", function() {
+        context("when isPostRequest is true", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.executionModel);
+                this.executionModel.fetchIfNotLoaded.reset();
+                spyOn(this.executionModel, "save").andCallThrough();
+                this.view.execute(this.executionModel, true);
             });
+            it("should make a post request", function() {
+                expect(this.executionModel.save).toHaveBeenCalled();
+                expect(this.executionModel.fetchIfNotLoaded).not.toHaveBeenCalled();
+            })
+        })
 
-            it("calls executionSucceeded", function() {
-                expect(this.view.executionSucceeded).toHaveBeenCalledWith(this.executionModel);
-            });
+        context("when execution is successful", function() {
+            context("when fetch returns successfully" , function() {
+                beforeEach(function() {
+                    this.server.completeFetchFor(this.executionModel);
+                });
+
+                it("calls executionSucceeded", function() {
+                    expect(this.view.executionSucceeded).toHaveBeenCalledWith(this.executionModel);
+                });
+            })
+
+            context("when save request returns successfully", function() {
+                beforeEach(function() {
+                    this.view.model.trigger("saved");
+                });
+
+                it("calls executionSucceeded", function() {
+                    expect(this.view.executionSucceeded).toHaveBeenCalledWith(this.executionModel);
+                });
+            })
+
         });
 
         context("when execution fails", function() {

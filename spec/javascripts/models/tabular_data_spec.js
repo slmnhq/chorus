@@ -199,6 +199,20 @@ describe("chorus.models.TabularData", function() {
             })
         });
 
+        context("with a chorus view query ( when editing a chorus view )", function() {
+            beforeEach(function() {
+                this.tabularData.set({workspace: {id: "111", name: "abc"} , query: "select * from hello_world"});
+                this.preview = this.tabularData.preview(true);
+            });
+
+            checkPreview();
+
+            it("should return a dataset query preview", function() {
+                expect(this.preview.get("query")).toBe("select * from hello_world");
+                expect(this.preview.get("workspaceId")).toBe("111");
+            });
+        })
+
         function checkPreview() {
             it("should return a DatasetPreview", function() {
                 expect(this.preview).toBeA(chorus.models.TabularDataPreview);
