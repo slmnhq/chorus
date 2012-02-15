@@ -54,6 +54,7 @@
         .sql {
             @include font-normal-alpha;
             margin-left: 10px;
+            white-space: nowrap;
             vertical-align: middle;
             display: inline-block;
             width: 50%;
