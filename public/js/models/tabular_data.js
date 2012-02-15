@@ -63,8 +63,10 @@ chorus.models.TabularData = chorus.models.Base.extend({
         return this._statistics;
     },
 
-    iconUrl: function() {
-        return "/images/" + this.constructor.iconMap[this.get("type")][this.get("objectType")]
+    iconUrl: function(options) {
+        var size = (options && options.size) || "large";
+        var name = this.constructor.iconMap[this.get("type")][this.get("objectType")];
+        return "/images/" + name + "_" + size + ".png";
     },
 
     lastComment: function() {
@@ -122,23 +124,23 @@ chorus.models.TabularData = chorus.models.Base.extend({
 
     iconMap: {
         "CHORUS_VIEW": {
-            "QUERY": "view_large.png"
+            "QUERY": "view"
         },
 
         "SOURCE_TABLE": {
-            "BASE_TABLE": "source_table_large.png",
-            "EXTERNAL_TABLE": "source_table_large.png",
-            "MASTER_TABLE": "source_table_large.png",
-            "VIEW": "source_view_large.png",
-            "HDFS_EXTERNAL_TABLE": "source_table_large.png"
+            "BASE_TABLE": "source_table",
+            "EXTERNAL_TABLE": "source_table",
+            "MASTER_TABLE": "source_table",
+            "VIEW": "source_view",
+            "HDFS_EXTERNAL_TABLE": "source_table"
         },
 
         "SANDBOX_TABLE": {
-            "BASE_TABLE": "table_large.png",
-            "EXTERNAL_TABLE": "table_large.png",
-            "MASTER_TABLE": "table_large.png",
-            "VIEW": "view_large.png",
-            "HDFS_EXTERNAL_TABLE": "table_large.png"
+            "BASE_TABLE": "table",
+            "EXTERNAL_TABLE": "table",
+            "MASTER_TABLE": "table",
+            "VIEW": "view",
+            "HDFS_EXTERNAL_TABLE": "table"
         }
     }
 });

@@ -9,6 +9,6 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     },
 
     collectionModelContext: function(model) {
-        return { iconUrl: model.iconUrl() };
+        return { iconUrl: model.iconUrl({ size: "small" }) };
     }
 });

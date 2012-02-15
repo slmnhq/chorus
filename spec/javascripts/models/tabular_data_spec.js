@@ -34,7 +34,7 @@ describe("chorus.models.TabularData", function() {
     })
 
     describe("iconFor", function() {
-        var expectedMap = {
+        var largeIconMap = {
             "CHORUS_VIEW": {
                 "QUERY": "view_large.png"
             },
@@ -53,15 +53,67 @@ describe("chorus.models.TabularData", function() {
                 "VIEW": "view_large.png",
                 "HDFS_EXTERNAL_TABLE": "table_large.png"
             }
-        }
+        };
 
-        _.each(expectedMap, function(subMap, type) {
-            _.each(subMap, function(filename, objectType) {
-                it("works for type " + type + " and objectType " + objectType, function() {
-                    expect(fixtures.tabularData({ type: type, objectType: objectType}).iconUrl()).toBe("/images/" + expectedMap[type][objectType]);
-                })
-            })
-        })
+        var smallIconMap = {
+            "CHORUS_VIEW": {
+                "QUERY": "view_small.png"
+            },
+
+            "SOURCE_TABLE": {
+                "BASE_TABLE": "source_table_small.png",
+                "EXTERNAL_TABLE": "source_table_small.png",
+                "MASTER_TABLE": "source_table_small.png",
+                "VIEW": "source_view_small.png"
+            },
+
+            "SANDBOX_TABLE": {
+                "BASE_TABLE": "table_small.png",
+                "EXTERNAL_TABLE": "table_small.png",
+                "MASTER_TABLE": "table_small.png",
+                "VIEW": "view_small.png",
+                "HDFS_EXTERNAL_TABLE": "table_small.png"
+            }
+        };
+
+        describe("when the 'size' option is set to 'small'", function() {
+            it("returns the small version of the icon of the appropriate type", function() {
+                _.each(smallIconMap, function(subMap, type) {
+                    _.each(subMap, function(filename, objectType) {
+
+                        var model = fixtures.tabularData({ type: type, objectType: objectType});
+                        expect(model.iconUrl({ size: "small" })).toBe("/images/" + filename);
+
+                    });
+                });
+            });
+        });
+
+        describe("when the 'size' option is set to 'large'", function() {
+            it("returns the large version of the icon of the appropriate type", function() {
+                _.each(largeIconMap, function(subMap, type) {
+                    _.each(subMap, function(filename, objectType) {
+
+                        var model = fixtures.tabularData({ type: type, objectType: objectType});
+                        expect(model.iconUrl({ size: "large" })).toBe("/images/" + filename);
+
+                    });
+                });
+            });
+        });
+
+        describe("when no 'size' option is given", function() {
+            it("returns the large version of the icon of the appropriate type", function() {
+                _.each(largeIconMap, function(subMap, type) {
+                    _.each(subMap, function(filename, objectType) {
+
+                        var model = fixtures.tabularData({ type: type, objectType: objectType});
+                        expect(model.iconUrl()).toBe("/images/" + filename);
+
+                    });
+                });
+            });
+        });
     })
 
     describe("#schema", function() {
@@ -225,4 +277,4 @@ describe("chorus.models.TabularData", function() {
             expect(this.instance).toBe(this.tabularData.instance());
         });
     });
-})
+});
