@@ -38,7 +38,13 @@
                         ],
                         event: "filter"
                     }
-                }
+                },
+                buttons: [
+                    {
+                        view: "DatasetImport",
+                        text: t("dataset.import")
+                    }
+                ]
             });
 
             this.sidebar = new chorus.views.DatasetListSidebar();

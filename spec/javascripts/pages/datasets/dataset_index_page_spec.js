@@ -1,7 +1,7 @@
 describe("chorus.pages.DatasetIndexPage", function() {
     beforeEach(function() {
+        this.modalSpy = stubModals();
         this.workspace = fixtures.workspace();
-        spyOn(chorus.Modal.prototype, 'launchModal');
         this.page = new chorus.pages.DatasetIndexPage(this.workspace.get("id"));
     })
 
@@ -79,8 +79,8 @@ describe("chorus.pages.DatasetIndexPage", function() {
                     expect('reset').toHaveBeenTriggeredOn(this.page.collection);
                 });
 
-                it("pops up the WorkspaceInstanceAccountDialog", function() {
-                    expect(chorus.Modal.prototype.launchModal).toHaveBeenCalled();
+                it("pops up a WorkspaceInstanceAccount dialog", function() {
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkspaceInstanceAccount);
                     expect(this.page.dialog.model).toBe(this.page.account);
                     expect(this.page.dialog.pageModel).toBe(this.page.workspace);
                 });
@@ -98,14 +98,14 @@ describe("chorus.pages.DatasetIndexPage", function() {
                 context('navigating to the page a second time', function() {
                     beforeEach(function() {
                         this.server.reset();
-                        chorus.Modal.prototype.launchModal.reset();
+                        this.modalSpy.reset();
                         this.page = new chorus.pages.DatasetIndexPage(this.workspace.get("id"));
                         this.server.completeFetchFor(this.workspace);
                         this.server.completeFetchFor(this.page.account, fixtures.emptyInstanceAccount())
                     });
 
                     it("should not pop up the WorkspaceInstanceAccountDialog", function() {
-                        expect(chorus.Modal.prototype.launchModal).not.toHaveBeenCalled();
+                        expect(this.modalSpy).not.toHaveBeenCalled();
                     });
 
                     it("fetches the datasets for the workspace", function() {
@@ -126,7 +126,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
                 });
 
                 it("does not pop up the WorkspaceInstanceAccountDialog", function() {
-                    expect(chorus.Modal.prototype.launchModal).not.toHaveBeenCalled();
+                    expect(this.modalSpy).not.toHaveBeenCalled();
                 })
 
                 describe("filtering", function() {
@@ -187,6 +187,26 @@ describe("chorus.pages.DatasetIndexPage", function() {
 
         it("sets the selected dataset as its own model", function() {
             expect(this.page.model).toBe(this.dataset);
+        });
+    });
+
+    describe("the 'import file' button", function() {
+        beforeEach(function() {
+            this.page.render();
+        });
+
+        it("has the right text", function() {
+            expect(this.page.$("button[data-dialog='DatasetImport']").text()).toMatchTranslation("dataset.import");
+        });
+
+        describe("when the is clicked", function() {
+            beforeEach(function() {
+                this.page.$("button[data-dialog='DatasetImport']").trigger("click");
+            });
+
+            it("launches an Import File dialog", function() {
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.DatasetImport);
+            });
         });
     });
 });
