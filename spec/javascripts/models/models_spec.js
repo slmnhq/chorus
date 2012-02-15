@@ -589,8 +589,8 @@ describe("chorus.models", function() {
             });
 
             it("uses a custom error message, if provided", function() {
-                this.model.require("foo", {foo: ""}, "test.deer");
-                expect(this.model.errors.foo).toMatchTranslation("test.deer")
+                this.model.require("foo", {foo: ""}, "test.mouse");
+                expect(this.model.errors.foo).toMatchTranslation("test.mouse")
             })
 
 
@@ -655,8 +655,8 @@ describe("chorus.models", function() {
             });
 
             it("uses a custom error message, if provided", function() {
-                this.model.requirePattern("foo", /hello/, {}, "test.deer");
-                expect(this.model.errors.foo).toMatchTranslation("test.deer")
+                this.model.requirePattern("foo", /hello/, {}, "test.mouse");
+                expect(this.model.errors.foo).toMatchTranslation("test.mouse")
             })
 
             context("model has attrToLabel set", function() {
@@ -740,8 +740,8 @@ describe("chorus.models", function() {
 
             it("uses a custom error message, if provided", function() {
                 this.model.set({foo: "bar", fooConfirmation: "bar"});
-                this.model.requireConfirmation("foo", {foo: "a", fooConfirmation: "b"}, "test.deer");
-                expect(this.model.errors.foo).toMatchTranslation("test.deer")
+                this.model.requireConfirmation("foo", {foo: "a", fooConfirmation: "b"}, "test.mouse");
+                expect(this.model.errors.foo).toMatchTranslation("test.mouse")
             })
 
             context("model has attrToLabel set", function() {
@@ -802,8 +802,8 @@ describe("chorus.models", function() {
 
             it("uses a custom error message, if provided", function() {
                 this.model.set({ foo: 11});
-                this.model.requireIntegerRange("foo", 5, 10, {}, "test.deer");
-                expect(this.model.errors.foo).toMatchTranslation("test.deer")
+                this.model.requireIntegerRange("foo", 5, 10, {}, "test.mouse");
+                expect(this.model.errors.foo).toMatchTranslation("test.mouse")
             })
         });
 

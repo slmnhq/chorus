@@ -37,12 +37,12 @@ describe("chorus.views.ResultsConsoleView", function() {
 
         context("with a title", function() {
             beforeEach(function() {
-                this.view.options.titleKey = "test.deer";
+                this.view.options.titleKey = "test.mouse";
                 this.view.render();
             });
 
             it("displays the supplied title", function() {
-                expect(this.view.$("h1").text().trim()).toMatchTranslation("test.deer")
+                expect(this.view.$("h1").text().trim()).toMatchTranslation("test.mouse")
             })
         });
 

@@ -332,23 +332,58 @@ describe("handlebars", function() {
         })
 
         describe("pluralize", function() {
-            it("uses the singular string if there is only one element", function() {
-                expect(Handlebars.helpers.pluralize([1], "breadcrumbs.home")).toBe(t("breadcrumbs.home"))
-            })
+            it("passes arguments through to the translate function", function() {
+                expect(Handlebars.helpers.pluralize(1, "test.mouse_with_param", { hash: { param: "James" }}))
+                    .toMatchTranslation("test.mouse_with_param", { param: "James" });
+                expect(Handlebars.helpers.pluralize(2, "test.mouse_with_param", { hash: { param: "Henry" }}))
+                    .toMatchTranslation("test.mouse_with_param_plural", { param: "Henry" });
+            });
 
-            context("when there is more than one element", function() {
-                context("and no plural string is present", function() {
-                    it("adds an 's' to the singular string", function() {
-                        expect(Handlebars.helpers.pluralize([1, 2], "breadcrumbs.home")).toBe(t("breadcrumbs.home") + "s")
-                    })
+            context("when the first argument is an array", function() {
+                it("uses the singular string if there is only one element", function() {
+                    expect(Handlebars.helpers.pluralize([1], "breadcrumbs.home"))
+                        .toMatchTranslation("breadcrumbs.home");
                 })
 
-                context("and a plural string is present", function() {
-                    it("uses the plural string", function() {
-                        expect(Handlebars.helpers.pluralize([1, 2], "test.deer")).toBe(t("test.deer_plural"))
+                context("when there is more than one element", function() {
+                    context("and no plural string is present", function() {
+                        it("adds an 's' to the singular string", function() {
+                            expect(Handlebars.helpers.pluralize([1, 2], "breadcrumbs.home"))
+                                .toBe(t("breadcrumbs.home") + "s")
+                        })
+                    })
+
+                    context("and a plural string is present", function() {
+                        it("uses the plural string", function() {
+                            expect(Handlebars.helpers.pluralize([1, 2], "test.mouse"))
+                                .toMatchTranslation("test.mouse_plural");
+                        })
                     })
                 })
-            })
+            });
+
+            context("when the first argument is a number", function() {
+                it("uses the singular string if the number is exactly one", function() {
+                    expect(Handlebars.helpers.pluralize(1, "breadcrumbs.home"))
+                        .toMatchTranslation("breadcrumbs.home");
+                })
+
+                context("when there is more than one element", function() {
+                    context("and no plural string is present", function() {
+                        it("adds an 's' to the singular string", function() {
+                            expect(Handlebars.helpers.pluralize(3, "breadcrumbs.home"))
+                                .toBe(t("breadcrumbs.home") + "s")
+                        })
+                    })
+
+                    context("and a plural string is present", function() {
+                        it("uses the plural string", function() {
+                            expect(Handlebars.helpers.pluralize(3, "test.mouse"))
+                                .toMatchTranslation("test.mouse_plural");
+                        })
+                    })
+                })
+            });
         })
 
         describe("fileIconUrl", function() {

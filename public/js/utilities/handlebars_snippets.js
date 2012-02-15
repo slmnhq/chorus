@@ -118,14 +118,15 @@
             return templates.userLinkTemplate({ url:user.showUrl(), name:user.displayName() });
         },
 
-        pluralize:function (collection, key) {
-            if (collection.length == 1) {
-                return t(key);
+        pluralize: function(numberOrArray, key, options) {
+            var hash = options && options.hash;
+            if (numberOrArray === 1 || numberOrArray.length === 1) {
+                return t(key, hash);
             } else {
                 if (I18n.lookup(key + "_plural")) {
-                    return t(key + "_plural");
+                    return t(key + "_plural", hash);
                 } else {
-                    return t(key) + "s";
+                    return t(key, hash) + "s";
                 }
             }
         },

@@ -27,8 +27,8 @@ describe("chorus global", function() {
         });
 
         it("accepts a translation string", function() {
-            chorus.toast("test.deer");
-            expect($.jGrowl).toHaveBeenCalledWith("Deer", {life: 5000, sticky: false});
+            chorus.toast("test.mouse");
+            expect($.jGrowl).toHaveBeenCalledWith(t("test.mouse"), {life: 5000, sticky: false});
         });
 
         it("accepts a translation string with arguments", function() {

@@ -28,13 +28,13 @@ describe("jquery extensions", function() {
 
         describe("startLoading", function() {
             beforeEach(function() {
-                this.buttons.startLoading("test.deer");
-                this.span.startLoading("test.deer")
+                this.buttons.startLoading("test.mouse");
+                this.span.startLoading("test.mouse")
             });
 
             it("sets the elements's text to the supplied translation key", function() {
-                expect(this.button.text()).toMatchTranslation("test.deer");
-                expect(this.span.text()).toMatchTranslation("test.deer")
+                expect(this.button.text()).toMatchTranslation("test.mouse");
+                expect(this.span.text()).toMatchTranslation("test.mouse")
             });
 
             it("displays a spinner inside the element", function() {
@@ -61,7 +61,7 @@ describe("jquery extensions", function() {
                 });
 
                 it("does not change the text", function() {
-                    expect(this.button.text()).toMatchTranslation("test.deer");
+                    expect(this.button.text()).toMatchTranslation("test.mouse");
                 });
 
                 it("does not add another spinner", function() {
