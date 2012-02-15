@@ -4,7 +4,7 @@ describe("chorus.dialogs.DatasetImport", function() {
         this.dialog.render();
     });
 
-    it("doesn't crash", function() {
-        expect(true).toBe(true);
+    it("has the right title", function() {
+        expect(this.dialog.$(".dialog_header h1").text()).toMatchTranslation("dataset.import");
     });
 });
