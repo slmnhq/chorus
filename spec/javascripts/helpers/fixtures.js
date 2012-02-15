@@ -1079,6 +1079,12 @@ beforeEach(function() {
                 })
             },
 
+            "INSIGHT_CREATED" : function() {
+                return new chorus.models.Activity(
+                    _.extend(this.NOTE_ON_DATASET_JSON(), {type: "INSIGHT_CREATED", isInsight: true})
+                );
+            },
+
             "USER_ADDED" : function() {
                 return new chorus.models.Activity({
                     author: fixtures.authorJson(),

@@ -107,7 +107,6 @@ describe("chorus.views.Activity", function() {
             itShouldNotRenderAnInsightLink();
         });
 
-
         context("type: WORKSPACE_DELETED", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activities.WORKSPACE_DELETED();
@@ -279,6 +278,26 @@ describe("chorus.views.Activity", function() {
             });
         });
 
+        context("type: INSIGHT_CREATED", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activities.INSIGHT_CREATED();
+                this.collection = new chorus.collections.ActivitySet();
+                this.collection.add(this.view.model);
+
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            it("should have a ribbon", function() {
+                expect(this.view.$(".insight_ribbon")).toExist();
+                expect(this.view.$(".insight_ribbon")).toContainTranslation("insight.title");
+            });
+
+            it("adds the insight class to the view's element", function() {
+                expect($(this.view.el)).toHaveClass("insight");
+            });
+        });
+
         context("type: WORKSPACE_ADD_SANDBOX", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activities.WORKSPACE_ADD_SANDBOX();
@@ -331,8 +350,6 @@ describe("chorus.views.Activity", function() {
         });
     }
 
-    ;
-
     function itShouldRenderObjectDetails(options) {
         options || (options = {});
 
@@ -346,8 +363,6 @@ describe("chorus.views.Activity", function() {
             });
         }
     }
-
-    ;
 
     function itShouldRenderWorkspaceDetails(options) {
         options || (options = {});
@@ -363,8 +378,6 @@ describe("chorus.views.Activity", function() {
         }
     }
 
-    ;
-
     function itShouldRenderVersionDetails(options) {
         options || (options = {});
 
@@ -378,8 +391,6 @@ describe("chorus.views.Activity", function() {
             });
         }
     }
-
-    ;
 
     function itShouldNotRenderAnInsightLink() {
         it("does *not* have a link to promote the activity to a comment", function() {

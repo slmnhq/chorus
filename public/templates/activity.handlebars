@@ -1,4 +1,10 @@
 <div class="media activity_item">
+    {{#if isInsight}}
+    <div class="insight_ribbon">
+        <span class="left" /><span class="center">{{t "insight.title"}}</span><span class="right" />
+    </div>
+    {{/if}}
+
     <div class="icon">
         <a href="{{iconHref}}"><img src="{{iconSrc}}" class="{{iconClass}}" /></a>
     </div>
