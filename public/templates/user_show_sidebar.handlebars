@@ -4,12 +4,12 @@
         <ul>
             <li><a href="#/users/{{id}}/edit" class="edit_user">{{t "actions.edit_profile"}}</a></li>
             {{#ifAdmin}}
-            <li><a href="#" class="alert delete_user" data-id="{{id}}" data-alert="UserDelete">{{t "actions.delete_user"}}</a></li>
+                <li><a href="#" class="alert delete_user" data-id="{{id}}" data-alert="UserDelete">{{t "actions.delete_user"}}</a></li>
             {{/ifAdmin}}
 
-            {{#ifCurrentUserNameIs userName}}
-            <li><a href="#" class="dialog change_password" data-username ="{{userName}}" data-dialog = "ChangePassword"> {{t "actions.change_password"}}</a></li>
-            {{/ifCurrentUserNameIs}}
+            {{#if changePasswordAvailable}}
+                <li><a href="#" class="dialog change_password" data-username ="{{userName}}" data-dialog = "ChangePassword"> {{t "actions.change_password"}}</a></li>
+            {{/if}}
         </ul>
     </div>
 {{/if}}

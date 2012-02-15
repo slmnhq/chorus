@@ -10,11 +10,17 @@ chorus.views.UserShowSidebar = chorus.views.Sidebar.extend({
         this.collection.fetch();
         this.collection.bind("changed", this.render, this);
         this.activityList = new chorus.views.ActivityList({ collection:this.collection, headingText:t("user.activity"), additionalClass:"sidebar" });
+
+        this.config = chorus.models.Config.instance();
+        this.requiredResources.push(this.config);
     },
 
     additionalContext:function () {
+        var userIsLoggedIn = this.model.get("userName") == chorus.session.user().get("userName");
+        var userIsAdmin = chorus.session.user().get("admin");
         return {
-            permission:((this.model.get("userName") == chorus.session.user().get("userName")) || chorus.session.user().get("admin"))
+            permission: userIsLoggedIn || userIsAdmin,
+            changePasswordAvailable: userIsLoggedIn && !this.config.isExternalAuth()
         }
     }
 });

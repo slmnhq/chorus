@@ -5,7 +5,7 @@ describe("chorus.models.Config", function() {
         expect(config.url()).toBe("/edc/config/");
     });
 
-    describe("instance", function() {
+    describe(".instance", function() {
         beforeEach(function() {
             spyOn(chorus.models.Config.prototype, 'fetch');
         });
@@ -23,4 +23,14 @@ describe("chorus.models.Config", function() {
             expect(chorus.models.Config.instance().fetch.callCount).toBe(1);
         });
     });
+
+    describe("#isExternalAuth", function() {
+        beforeEach(function() {
+            this.model = new chorus.models.Config({ externalAuth: true })
+        });
+
+        it("returns externalAuth", function() {
+            expect(this.model.isExternalAuth()).toBeTruthy();
+        })
+    })
 });

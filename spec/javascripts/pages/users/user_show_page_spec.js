@@ -64,29 +64,6 @@ describe("user_show_page", function(){
             it("sets the sidebar's model to the user", function(){
                 expect(this.view.sidebar.model).toBe(this.view.model);
             })
-
-            context("clicking on the delete user link", function(){
-                it("launches a delete user alert", function(){
-                    stubModals();
-                    this.view.sidebar.$("a.delete_user").click()
-                    expect(chorus.modal instanceof chorus.alerts.UserDelete).toBeTruthy();
-                    expect(chorus.modal.model.get("id")).toBe(42);
-                });
-            });
-
-            context("clicking on the change password link", function(){
-                beforeEach(function(){
-                    setLoggedInUser({userName: "edcadmin"})
-                    this.view.model.set({userName : "edcadmin"})
-                    this.view.render();
-                });
-
-                it("launches a change password dialog", function(){
-                    stubModals();
-                    this.view.sidebar.$("a.change_password").click()
-                    expect(chorus.modal instanceof chorus.dialogs.ChangePassword).toBeTruthy();
-                })
-            });
         })
     });
 });
