@@ -137,6 +137,12 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
             expect(this.view.$("a[data-dialog=NotesNew]").text().trim()).toMatchTranslation("actions.add_note");
             expect(this.view.$("a[data-dialog=NotesNew]").attr("data-entity-type")).toBe("workspace");
             expect(this.view.$("a[data-dialog=NotesNew]").attr("data-entity-id")).toBe(this.model.get("id"))
+            expect(this.view.$("a[data-dialog=NotesNew]").attr("data-workspace-id")).toBe(this.model.get("id"))
+        });
+
+        it("has a link to add an insight", function() {
+            expect(this.view.$("a[data-dialog=InsightsNew]").text().trim()).toMatchTranslation("actions.add_insight");
+            expect(this.view.$("a[data-dialog=InsightsNew]").attr("data-workspace-id")).toBe(this.model.get("id"))
         });
 
         describe("the members list", function() {
