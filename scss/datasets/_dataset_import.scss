@@ -8,7 +8,7 @@ $image-width: 35px;
 
     form {
         .file_details {
-            line-height: 35px;
+            line-height: $image-height;
             vertical-align: middle;
 
             span, label, input[type=file] {
@@ -20,28 +20,34 @@ $image-width: 35px;
                 vertical-align: middle;
             }
 
-            input[type=file] {
-                color: $link-color;
-                &:hover {
-                    cursor : pointer;
-                }
-            }
-
-            .empty_selection {
-                @include font-normal-alpha;
-                padding-left: 12px;
-            }
-
-            .file_name {
-                @include ellipsis;
-                display: inline-block;
-                color: $color-text3;
-                font-size: 14px;
-                margin-right: 10px;
-            }
-
             .file {
+                vertical-align: middle;
                 padding-left: $image-width + 4px;
+
+                .empty_selection {
+                    @include font-normal-alpha;
+                    padding-left: 12px;
+                }
+
+                .file-wrapper {
+                    padding-bottom: 1px;
+                }
+
+                .file_name {
+                    @include ellipsis;
+                    display: inline;
+                    color: $color-text3;
+                    font-size: 14px;
+                    margin-right: 10px;
+                }
+
+                input[type=file] {
+                    color: $link-color;
+                    &:hover {
+                        cursor : pointer;
+                    }
+                }
+
                 .choose {
                     @include font-content-details;
                     @include content-details-button($border-color);
@@ -50,10 +56,10 @@ $image-width: 35px;
         }
 
         .import_controls {
-            margin-left: 35px;
+            margin-left: $image-width;
 
             .row {
-                line-height: 35px;
+                line-height: $image-height;
                 vertical-align: middle;
 
                 .right {
@@ -62,11 +68,11 @@ $image-width: 35px;
                 }
 
                 input[type=text] {
-                    width: 205px;
+                    width: 195px;
                 }
 
                 select {
-                    width: 200px;
+                    width: 190px;
                 }
             }
         }
