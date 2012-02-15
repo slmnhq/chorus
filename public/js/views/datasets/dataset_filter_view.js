@@ -7,7 +7,8 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         "change select.column_filter": "columnSelected",
         "change select.comparator": "comparatorSelected",
         "paste input.validatable": "validateInput",
-        "keyup input.validatable": "validateInput"
+        "keyup input.validatable": "validateInput",
+        "blur input.validatable" : "validateInput"
     },
 
     postRender: function() {

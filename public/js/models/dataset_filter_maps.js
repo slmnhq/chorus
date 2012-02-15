@@ -72,9 +72,9 @@
         declareValidations: function(attrs) {
             if (attrs["year"] == "" && attrs["month"] == "" && attrs["day"] == "") return;
 
-            this.requirePattern("year", /^[0-9]*$/, attrs, "dataset.filter.year_required");
-            this.requirePattern("month", /^[0-9]*$/, attrs, "dataset.filter.month_required");
-            this.requirePattern("day", /^[0-9]*$/, attrs, "dataset.filter.day_required");
+            this.requirePattern("year", /^[0-9]{4}$/, attrs, "dataset.filter.year_required");
+            this.requirePattern("month", /^[0-9]{1,2}$/, attrs, "dataset.filter.month_required");
+            this.requirePattern("day", /^[0-9]{1,2}$/, attrs, "dataset.filter.day_required");
         }
     });
 
