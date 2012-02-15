@@ -227,6 +227,7 @@
                 },
 
                 toHaveModal: function(modalClass) {
+                    if (!modalClass) { throw "expected undefined modal class to have been launched."; }
                     var modalClassName = modalClass.prototype.className;
                     this.message = function() {
                         return [
