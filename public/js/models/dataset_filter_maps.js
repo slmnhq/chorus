@@ -42,6 +42,25 @@
         }
     });
 
+    chorus.models.DatasetFilterMaps.Timestamp = chorus.models.Base.extend({
+        type: "Timestamp",
+
+        comparators: {
+            "equal": {usesInput: true, generate: makeGenerate("=") },
+            "not_equal": {usesInput: true, generate: makeGenerate("!=") },
+            "null": {usesInput: false, generate: isNull },
+            "not_null": {usesInput: false, generate: isNotNull },
+            "greater": {usesInput: true, generate: makeGenerate(">") },
+            "greater_equal": {usesInput: true, generate: makeGenerate(">=") },
+            "less": {usesInput: true, generate: makeGenerate("<") },
+            "less_equal": {usesInput: true, generate: makeGenerate("<=") }
+        },
+
+        declareValidations: function(attrs) {
+            return true;
+        }
+    });
+
     chorus.models.DatasetFilterMaps.Time = chorus.models.Base.extend({
         type: "Time",
 
@@ -78,11 +97,11 @@
         }
     });
 
-    function isNull(columnName, inputValue){
+    function isNull(columnName, inputValue) {
         return columnName + " IS NULL";
     }
 
-    function isNotNull(columnName, inputValue){
+    function isNotNull(columnName, inputValue) {
         return columnName + " IS NOT NULL";
     }
 

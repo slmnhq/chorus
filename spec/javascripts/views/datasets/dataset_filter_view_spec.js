@@ -176,7 +176,7 @@ describe("chorus.views.DatasetFilter", function() {
                 var view = this.view;
 
                 _.each(this.keys, function(key) {
-                    expect(view.$(".string option")).toContainTranslation("dataset.filter." + key);
+                    expect(view.$("option")).toContainTranslation("dataset.filter." + key);
                 });
             });
 
@@ -230,7 +230,7 @@ describe("chorus.views.DatasetFilter", function() {
                 var view = this.view;
 
                 _.each(this.keys, function(key) {
-                    expect(view.$(".numeric option")).toContainTranslation("dataset.filter." + key);
+                    expect(view.$("option")).toContainTranslation("dataset.filter." + key);
                 });
             });
 
@@ -277,7 +277,6 @@ describe("chorus.views.DatasetFilter", function() {
             });
 
             it("adds a second select with all of the comparator options for date columns", function() {
-                expect(this.view.$("select.comparator")).toHaveClass("date");
                 _.each(this.comparatorTypes, function(comparatorType) {
                     expect(this.view.$("select.comparator option")).toContainTranslation("dataset.filter." + comparatorType);
                 }, this);
@@ -322,8 +321,8 @@ describe("chorus.views.DatasetFilter", function() {
                 this.view.render();
             })
 
-            it("uses the String type", function() {
-                expect(this.view.model).toBeA(chorus.models.DatasetFilterMaps.String);
+            it("uses the Timestamp type", function() {
+                expect(this.view.model).toBeA(chorus.models.DatasetFilterMaps.Timestamp);
             })
         });
 

@@ -1,182 +1,180 @@
-describe("chorus.models.DatasetFilterMaps.string", function() {
-    var strings = new chorus.models.DatasetFilterMaps.String;
+describe("chorus.models.DatasetFilterMaps", function() {
+    describe("String", function() {
+        beforeEach(function() {
+            this.datasetFilterMap = new chorus.models.DatasetFilterMaps.String;
+        })
 
-    itReturnsTheRightClauseFor("equal", "column_name", "some_value", "column_name = 'some_value'")
-    itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "column_name != 'some_value'")
-    itReturnsTheRightClauseFor("like", "column_name", "some_value", "column_name LIKE 'some_value'")
-    itReturnsTheRightClauseFor("begin_with", "column_name", "some_value", "column_name = 'some_value%'")
-    itReturnsTheRightClauseFor("end_with", "column_name", "some_value", "column_name = '%some_value'")
-    itReturnsTheRightClauseFor("alpha_after", "column_name", "some_value", "column_name > 'some_value'")
-    itReturnsTheRightClauseFor("alpha_after_equal", "column_name", "some_value", "column_name >= 'some_value'")
-    itReturnsTheRightClauseFor("alpha_before", "column_name", "some_value", "column_name < 'some_value'")
-    itReturnsTheRightClauseFor("alpha_before_equal", "column_name", "some_value", "column_name <= 'some_value'")
-    itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "column_name IS NOT NULL", true)
-    itReturnsTheRightClauseFor("null", "column_name", "some_value", "column_name IS NULL", true)
 
-    function itReturnsTheRightClauseFor(key, columnName, inputValue, expected, ignoreEmptyCase) {
-        it("returns the right clause for " + key, function() {
-            expect(strings.comparators[key].generate(columnName, inputValue)).toBe(expected);
-        });
+        itReturnsTheRightClauseFor("equal", "column_name", "some_value", "column_name = 'some_value'")
+        itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "column_name != 'some_value'")
+        itReturnsTheRightClauseFor("like", "column_name", "some_value", "column_name LIKE 'some_value'")
+        itReturnsTheRightClauseFor("begin_with", "column_name", "some_value", "column_name = 'some_value%'")
+        itReturnsTheRightClauseFor("end_with", "column_name", "some_value", "column_name = '%some_value'")
+        itReturnsTheRightClauseFor("alpha_after", "column_name", "some_value", "column_name > 'some_value'")
+        itReturnsTheRightClauseFor("alpha_after_equal", "column_name", "some_value", "column_name >= 'some_value'")
+        itReturnsTheRightClauseFor("alpha_before", "column_name", "some_value", "column_name < 'some_value'")
+        itReturnsTheRightClauseFor("alpha_before_equal", "column_name", "some_value", "column_name <= 'some_value'")
+        itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "column_name IS NOT NULL", true)
+        itReturnsTheRightClauseFor("null", "column_name", "some_value", "column_name IS NULL", true)
 
-        if (!ignoreEmptyCase) {
-            it("returns an empty string when input is empty for " + key, function() {
-                expect(strings.comparators[key].generate(columnName, "")).toBe("");
-            });
-        }
-    }
-
-    it("marks all strings as valid", function() {
-        expect(strings.performValidation({ value: "" })).toBeTruthy();
-        expect(strings.performValidation({ value: "2342gegrerger*(&^%" })).toBeTruthy();
-        expect(strings.performValidation({ value: "';DROP TABLE users;--" })).toBeTruthy();
-        expect(strings.performValidation({ value: "\n                    \t" })).toBeTruthy();
-    })
-});
-
-describe("chorus.models.DatasetFilterMaps.numeric", function() {
-    var numericals = new chorus.models.DatasetFilterMaps.Numeric;
-
-    itReturnsTheRightClauseFor("equal", "column_name", "some_value", "column_name = 'some_value'")
-    itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "column_name != 'some_value'")
-    itReturnsTheRightClauseFor("greater", "column_name", "some_value", "column_name > 'some_value'")
-    itReturnsTheRightClauseFor("greater_equal", "column_name", "some_value", "column_name >= 'some_value'")
-    itReturnsTheRightClauseFor("less", "column_name", "some_value", "column_name < 'some_value'")
-    itReturnsTheRightClauseFor("less_equal", "column_name", "some_value", "column_name <= 'some_value'")
-    itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "column_name IS NOT NULL", true)
-    itReturnsTheRightClauseFor("null", "column_name", "some_value", "column_name IS NULL", true)
-
-    function itReturnsTheRightClauseFor(key, columnName, inputValue, expected, ignoreEmptyCase) {
-        it("returns the right clause for " + key, function() {
-            expect(numericals.comparators[key].generate(columnName, inputValue)).toBe(expected);
-        });
-
-        if (!ignoreEmptyCase) {
-            it("returns an empty string when input is empty for " + key, function() {
-                expect(numericals.comparators[key].generate(columnName, "")).toBe("");
-            });
-        }
-    }
-
-    it("marks whole numbers as valid", function() {
-        expect(numericals.performValidation({ value: "1234" })).toBeTruthy();
-    })
-
-    it("marks floating comma numbers as valid", function() {
-        expect(numericals.performValidation({ value: "4,5" })).toBeTruthy();
-    })
-
-    it("marks floating point numbers as valid", function() {
-        expect(numericals.performValidation({ value: "4.5" })).toBeTruthy();
-    })
-
-    it("marks non-numerical strings as invalid", function() {
-        expect(numericals.performValidation({ value: "I'm the string" })).toBeFalsy();
-    })
-
-    it("marks negative numbers as invalid", function() {
-        expect(numericals.performValidation({ value: "-1" })).toBeFalsy();
-    })
-
-    it("marks the empty field valid", function() {
-        expect(numericals.performValidation({ value: "" })).toBeTruthy();
-    })
-});
-
-describe("chorus.models.DatasetFilterMaps.time", function() {
-    var time = new chorus.models.DatasetFilterMaps.Time;
-
-    itReturnsTheRightClauseFor("equal", "column_name", "some_value", "column_name = 'some_value'")
-    itReturnsTheRightClauseFor("before", "column_name", "some_value", "column_name < 'some_value'")
-    itReturnsTheRightClauseFor("after", "column_name", "some_value", "column_name > 'some_value'")
-    itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "column_name IS NOT NULL", true)
-    itReturnsTheRightClauseFor("null", "column_name", "some_value", "column_name IS NULL", true)
-
-    function itReturnsTheRightClauseFor(key, columnName, inputValue, expected, ignoreEmptyCase) {
-        it("returns the right clause for " + key, function() {
-            expect(time.comparators[key].generate(columnName, inputValue)).toBe(expected);
-        });
-
-        if (!ignoreEmptyCase) {
-            it("returns an empty string when input is empty for " + key, function() {
-                expect(time.comparators[key].generate(columnName, "")).toBe("");
-            });
-        }
-    }
-
-    it("marks times as valid", function() {
-        expect(time.performValidation({ value: "13" })).toBeTruthy();
-        expect(time.performValidation({ value: "13:37" })).toBeTruthy();
-        expect(time.performValidation({ value: "31:13:37" })).toBeTruthy();
-    })
-
-    it("marks weird, time-like stings as valid", function() {
-        expect(time.performValidation({ value: "13:" })).toBeTruthy();
-        expect(time.performValidation({ value: "1:::37" })).toBeTruthy();
-        expect(time.performValidation({ value: "::::::::" })).toBeTruthy();
-    })
-
-    it("marks anything but times as invalid", function() {
-        expect(time.performValidation({ value: "4,5" })).toBeFalsy();
-        expect(time.performValidation({ value: "Greetings" })).toBeFalsy();
-        expect(time.performValidation({ value: "www.google.com" })).toBeFalsy();
-        expect(time.performValidation({ value: "13.45" })).toBeFalsy();
-        expect(time.performValidation({ value: "12am" })).toBeFalsy();
-    })
-
-    it("marks the empty field valid", function() {
-        expect(time.performValidation({ value: "" })).toBeTruthy();
-    })
-});
-
-describe("chorus.models.DatasetFilterMaps.date", function() {
-    var date = new chorus.models.DatasetFilterMaps.Date;
-
-    itReturnsTheRightClauseFor("on", "column_name", "some_value", "column_name = 'some_value'")
-    itReturnsTheRightClauseFor("before", "column_name", "some_value", "column_name < 'some_value'")
-    itReturnsTheRightClauseFor("after", "column_name", "some_value", "column_name > 'some_value'")
-    itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "column_name IS NOT NULL", true)
-    itReturnsTheRightClauseFor("null", "column_name", "some_value", "column_name IS NULL", true)
-
-    function itReturnsTheRightClauseFor(key, columnName, inputValue, expected, ignoreEmptyCase) {
-        it("returns the right clause for " + key, function() {
-            expect(date.comparators[key].generate(columnName, inputValue)).toBe(expected);
-        });
-
-        if (!ignoreEmptyCase) {
-            it("returns an empty string when input is empty for " + key, function() {
-                expect(date.comparators[key].generate(columnName, "")).toBe("");
-            });
-        }
-    }
-
-    it("marks dates as valid", function() {
-        expect(date.performValidation({ month: "02", day: "14", year: "2012" })).toBeTruthy();
+        it("marks all strings as valid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "" })).toBeTruthy();
+            expect(this.datasetFilterMap.performValidation({ value: "2342gegrerger*(&^%" })).toBeTruthy();
+            expect(this.datasetFilterMap.performValidation({ value: "';DROP TABLE users;--" })).toBeTruthy();
+            expect(this.datasetFilterMap.performValidation({ value: "\n                    \t" })).toBeTruthy();
+        })
     });
 
-    it("marks anything else as invalid", function() {
-        expect(date.performValidation({ month: "hi", day: "14", year: "2012" })).toBeFalsy();
-        expect(date.performValidation({ month: "1", day: "&^", year: "2012" })).toBeFalsy();
-        expect(date.performValidation({ month: "1", day: "31", year: "google" })).toBeFalsy();
+    describe("Numeric", function() {
+        beforeEach(function() {
+            this.datasetFilterMap = new chorus.models.DatasetFilterMaps.Numeric;
+        })
+
+        itReturnsTheRightClauseFor("equal", "column_name", "some_value", "column_name = 'some_value'")
+        itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "column_name != 'some_value'")
+        itReturnsTheRightClauseFor("greater", "column_name", "some_value", "column_name > 'some_value'")
+        itReturnsTheRightClauseFor("greater_equal", "column_name", "some_value", "column_name >= 'some_value'")
+        itReturnsTheRightClauseFor("less", "column_name", "some_value", "column_name < 'some_value'")
+        itReturnsTheRightClauseFor("less_equal", "column_name", "some_value", "column_name <= 'some_value'")
+        itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "column_name IS NOT NULL", true)
+        itReturnsTheRightClauseFor("null", "column_name", "some_value", "column_name IS NULL", true)
+
+
+        it("marks whole numbers as valid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "1234" })).toBeTruthy();
+        })
+
+        it("marks floating comma numbers as valid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "4,5" })).toBeTruthy();
+        })
+
+        it("marks floating point numbers as valid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "4.5" })).toBeTruthy();
+        })
+
+        it("marks non-numerical strings as invalid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "I'm the string" })).toBeFalsy();
+        })
+
+        it("marks negative numbers as invalid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "-1" })).toBeFalsy();
+        })
+
+        it("marks the empty field valid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "" })).toBeTruthy();
+        })
     });
 
-    it("has the right error messages", function() {
-        date.performValidation({ month: "hi", day: "14", year: "2012" });
-        expect(date.errors.month).toMatchTranslation("dataset.filter.month_required");
+    describe("Timestamp", function() {
+        beforeEach(function() {
+            this.datasetFilterMap = new chorus.models.DatasetFilterMaps.Timestamp;
+        })
 
-        expect(date.performValidation({ month: "1", day: "&^", year: "2012" })).toBeFalsy();
-        expect(date.errors.day).toMatchTranslation("dataset.filter.day_required");
+        itReturnsTheRightClauseFor("equal", "column_name", "some_value", "column_name = 'some_value'")
+        itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "column_name != 'some_value'")
+        itReturnsTheRightClauseFor("greater", "column_name", "some_value", "column_name > 'some_value'")
+        itReturnsTheRightClauseFor("greater_equal", "column_name", "some_value", "column_name >= 'some_value'")
+        itReturnsTheRightClauseFor("less", "column_name", "some_value", "column_name < 'some_value'")
+        itReturnsTheRightClauseFor("less_equal", "column_name", "some_value", "column_name <= 'some_value'")
+        itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "column_name IS NOT NULL", true)
+        itReturnsTheRightClauseFor("null", "column_name", "some_value", "column_name IS NULL", true)
 
-        expect(date.performValidation({ month: "1", day: "31", year: "google" })).toBeFalsy();
-        expect(date.errors.year).toMatchTranslation("dataset.filter.year_required");
+        it("marks all values as valid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "" })).toBeTruthy();
+            expect(this.datasetFilterMap.performValidation({ value: "2342gegrerger*(&^%" })).toBeTruthy();
+            expect(this.datasetFilterMap.performValidation({ value: "';DROP TABLE users;--" })).toBeTruthy();
+            expect(this.datasetFilterMap.performValidation({ value: "\n                    \t" })).toBeTruthy();
+        })
     });
 
-    it("is not valid if there are empty and non-empty parts", function() {
-        expect(date.performValidation({  month: "", day: "14", year: "2012" })).toBeFalsy();
-        expect(date.performValidation({  month: "5", day: "", year: "2012" })).toBeFalsy();
-        expect(date.performValidation({  month: "5", day: "14", year: "" })).toBeFalsy();
-    })
+    describe("Time", function() {
+        beforeEach(function() {
+            this.datasetFilterMap = new chorus.models.DatasetFilterMaps.Time;
+        })
 
-    it("is valid when all fields are empty", function() {
-        expect(date.performValidation({  month: "", day: "", year: "" })).toBeTruthy();
-    })
+        itReturnsTheRightClauseFor("equal", "column_name", "some_value", "column_name = 'some_value'")
+        itReturnsTheRightClauseFor("before", "column_name", "some_value", "column_name < 'some_value'")
+        itReturnsTheRightClauseFor("after", "column_name", "some_value", "column_name > 'some_value'")
+        itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "column_name IS NOT NULL", true)
+        itReturnsTheRightClauseFor("null", "column_name", "some_value", "column_name IS NULL", true)
+
+        it("marks times as valid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "13" })).toBeTruthy();
+            expect(this.datasetFilterMap.performValidation({ value: "13:37" })).toBeTruthy();
+            expect(this.datasetFilterMap.performValidation({ value: "31:13:37" })).toBeTruthy();
+        })
+
+        it("marks weird, time-like stings as valid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "13:" })).toBeTruthy();
+            expect(this.datasetFilterMap.performValidation({ value: "1:::37" })).toBeTruthy();
+            expect(this.datasetFilterMap.performValidation({ value: "::::::::" })).toBeTruthy();
+        })
+
+        it("marks anything but times as invalid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "4,5" })).toBeFalsy();
+            expect(this.datasetFilterMap.performValidation({ value: "Greetings" })).toBeFalsy();
+            expect(this.datasetFilterMap.performValidation({ value: "www.google.com" })).toBeFalsy();
+            expect(this.datasetFilterMap.performValidation({ value: "13.45" })).toBeFalsy();
+            expect(this.datasetFilterMap.performValidation({ value: "12am" })).toBeFalsy();
+        })
+
+        it("marks the empty field valid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "" })).toBeTruthy();
+        })
+    });
+
+    describe("Date", function() {
+        beforeEach(function() {
+            this.datasetFilterMap = new chorus.models.DatasetFilterMaps.Date;
+        })
+
+        itReturnsTheRightClauseFor("on", "column_name", "some_value", "column_name = 'some_value'")
+        itReturnsTheRightClauseFor("before", "column_name", "some_value", "column_name < 'some_value'")
+        itReturnsTheRightClauseFor("after", "column_name", "some_value", "column_name > 'some_value'")
+        itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "column_name IS NOT NULL", true)
+        itReturnsTheRightClauseFor("null", "column_name", "some_value", "column_name IS NULL", true)
+
+        it("marks dates as valid", function() {
+            expect(this.datasetFilterMap.performValidation({ month: "02", day: "14", year: "2012" })).toBeTruthy();
+        });
+
+        it("marks anything else as invalid", function() {
+            expect(this.datasetFilterMap.performValidation({ month: "hi", day: "14", year: "2012" })).toBeFalsy();
+            expect(this.datasetFilterMap.performValidation({ month: "1", day: "&^", year: "2012" })).toBeFalsy();
+            expect(this.datasetFilterMap.performValidation({ month: "1", day: "31", year: "google" })).toBeFalsy();
+        });
+
+        it("has the right error messages", function() {
+            this.datasetFilterMap.performValidation({ month: "hi", day: "14", year: "2012" });
+            expect(this.datasetFilterMap.errors.month).toMatchTranslation("dataset.filter.month_required");
+
+            expect(this.datasetFilterMap.performValidation({ month: "1", day: "&^", year: "2012" })).toBeFalsy();
+            expect(this.datasetFilterMap.errors.day).toMatchTranslation("dataset.filter.day_required");
+
+            expect(this.datasetFilterMap.performValidation({ month: "1", day: "31", year: "google" })).toBeFalsy();
+            expect(this.datasetFilterMap.errors.year).toMatchTranslation("dataset.filter.year_required");
+        });
+
+        it("is not valid if there are empty and non-empty parts", function() {
+            expect(this.datasetFilterMap.performValidation({  month: "", day: "14", year: "2012" })).toBeFalsy();
+            expect(this.datasetFilterMap.performValidation({  month: "5", day: "", year: "2012" })).toBeFalsy();
+            expect(this.datasetFilterMap.performValidation({  month: "5", day: "14", year: "" })).toBeFalsy();
+        })
+
+        it("is valid when all fields are empty", function() {
+            expect(this.datasetFilterMap.performValidation({  month: "", day: "", year: "" })).toBeTruthy();
+        })
+    });
+
+    function itReturnsTheRightClauseFor(key, columnName, inputValue, expected, ignoreEmptyCase) {
+        it("returns the right clause for " + key, function() {
+            expect(this.datasetFilterMap.comparators[key].generate(columnName, inputValue)).toBe(expected);
+        });
+
+        if (!ignoreEmptyCase) {
+            it("returns an empty string when input is empty for " + key, function() {
+                expect(this.datasetFilterMap.comparators[key].generate(columnName, "")).toBe("");
+            });
+        }
+    }
 });

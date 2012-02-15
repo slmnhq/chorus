@@ -8,7 +8,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         "change select.comparator": "comparatorSelected",
         "paste input.validatable": "validateInput",
         "keyup input.validatable": "validateInput",
-        "blur input.validatable" : "validateInput"
+        "blur input.validatable": "validateInput"
     },
 
     postRender: function() {
@@ -53,27 +53,24 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
 
         var $comparator = this.$("select.comparator");
         $comparator.empty();
-        $comparator.removeClass("string date numeric time");
 
         switch (type) {
             case "STRING":
             case "LONG_STRING":
-            case "DATETIME":
-                $comparator.addClass("string");
                 this.model = new chorus.models.DatasetFilterMaps.String
                 break;
             case "WHOLE_NUMBER":
             case "REAL_NUMBER":
-                $comparator.addClass("numeric");
                 this.model = new chorus.models.DatasetFilterMaps.Numeric
                 break;
             case "DATE":
-                $comparator.addClass("date");
                 this.model = new chorus.models.DatasetFilterMaps.Date
                 break;
             case "TIME":
-                $comparator.addClass("time");
                 this.model = new chorus.models.DatasetFilterMaps.Time
+                break;
+            case "DATETIME":
+                this.model = new chorus.models.DatasetFilterMaps.Timestamp
                 break;
         }
 
@@ -127,8 +124,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
                     value: ((year + month + day).length > 0) ? [year, month, day].join("/") : ""
                 };
                 break;
-            case "Numeric":
-            case "String":
+            default:
                 return { value: this.$(".filter.default input").val() };
                 break;
         }
