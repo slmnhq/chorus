@@ -1,16 +1,5 @@
-chorus.models.Insight = chorus.models.Activity.extend({
-    urlTemplate: "insight/",
+chorus.models.Insight = chorus.models.Comment.extend({
     urlParams: function() {
-        return {
-            "workspaceId" : this.get("workspaceId")
-        }
-    },
-
-    beforeSave: function(attrs) {
-        this._super("beforeSave");
-        this.set({
-            'name': attrs.body,
-            'text': attrs.body
-        });
+        return _.extend(this._super('urlParams') || {}, { isInsight: true });
     }
 });

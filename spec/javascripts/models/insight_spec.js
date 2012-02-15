@@ -3,18 +3,11 @@ describe("chorus.models.Insight", function() {
         this.model = new chorus.models.Insight({workspaceId: 5});
     });
 
-    it("should have the correct url template", function() {
-        expect(this.model.url()).toBe("/edc/insight/?workspaceId=5");
+    it("should be a comment", function() {
+        expect(this.model).toBeA(chorus.models.Comment);
     });
 
-    describe("saving the model", function() {
-        beforeEach(function() {
-            this.model.save({body: "This is the body"});
-        });
-
-        it("renames the post parameters", function() {
-            var request = this.server.lastCreate();
-            expect(request.params()['text']).toBe("This is the body");
-        });
-    })
+    it("includes isInsight=true in its URL params", function() {
+        expect(this.model.urlParams().isInsight).toBe(true);
+    });
 });
