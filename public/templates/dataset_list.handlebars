@@ -1,27 +1,45 @@
 {{#each models}}
+    {{#if noCredentials}}
+    <li class="no_credentials">
+    {{else}}
     <li>
+    {{/if}}
         <span class="spacer left"></span>
         {{#if ../browsingSchema}}
             <div class="image"">
                 <img src="{{iconImgUrl}}"/>
             </div>
         {{else}}
-            <a class="image" href="{{showUrl}}">
-                 <img src="{{iconImgUrl}}"/>
-            </a>
+            {{#if noCredentials}}
+                <span class="image">
+                    <img src="{{iconImgUrl}}"/>
+                </span>
+            {{else}}
+                <a class="image" href="{{showUrl}}">
+                     <img src="{{iconImgUrl}}"/>
+                </a>
+            {{/if}}
         {{/if}}
 
         <div class="right">
             {{#if ../browsingSchema}}
                 <div class="name_disabled">{{objectName}}</div>
             {{else}}
-                <a href="{{showUrl}}" class="name">{{objectName}}</a>
+                {{#if noCredentials}}
+                    <span class="name">{{objectName}}</span>
+                {{else}}
+                    <a href="{{showUrl}}" class="name">{{objectName}}</a>
+                {{/if}}
             {{/if}}
             <div class="location">
                 {{t "dataset.from"}}
-                <a href="#" class="dialog instance" data-dialog="BrowseDatasets">{{instance.name}}</a>.{{! suppress whitespace
-                }}<a href="#" class="dialog database" data-dialog="BrowseDatasets" data-database-name="{{databaseName}}">{{databaseName}}</a>.{{! suppress whitespace
-                }}<a href="{{{schemaShowUrl}}}" class="schema">{{schemaName}}</a>
+                {{#if noCredentials}}
+                    {{instance.name}}.{{databaseName}}.{{schemaName}}
+                {{else}}
+                    <a href="#" class="dialog instance" data-dialog="BrowseDatasets">{{instance.name}}</a>.{{! suppress whitespace
+                    }}<a href="#" class="dialog database" data-dialog="BrowseDatasets" data-database-name="{{databaseName}}">{{databaseName}}</a>.{{! suppress whitespace
+                    }}<a href="{{{schemaShowUrl}}}" class="schema">{{schemaName}}</a>
+                {{/if}}
             </div>
             {{#if foundInWorkspaceLink}}
             <div class="found_in">

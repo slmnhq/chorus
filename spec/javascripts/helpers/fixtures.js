@@ -1786,6 +1786,7 @@ beforeEach(function() {
             var id = fixtures.nextId();
             var attributes = _.extend(this.tabularDataJson(), {
                 isDeleted: false,
+                hasCredentials: true,
                 owner: {id: "InitialUser", userName: "edcadmin"},
                 modifiedBy: {id: "InitialUser", userName: "edcadmin"},
                 workspace: {id: fixtures.nextId(), name: "some_workspace"},

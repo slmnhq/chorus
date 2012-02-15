@@ -10,6 +10,14 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
         ].join("/");
     },
 
+    iconUrl: function() {
+        var result = this._super("iconUrl");
+        if (this.get('hasCredentials') === false) {
+            result = result.replace(".png", "_locked.png");
+        }
+        return result;
+    },
+
     makeBoxplotTask: function(taskAttrs) {
         return new chorus.models.BoxplotTask({
             xAxis: taskAttrs.xAxis,

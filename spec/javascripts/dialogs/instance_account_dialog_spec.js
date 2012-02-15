@@ -48,4 +48,22 @@ describe("chorus.dialogs.InstanceAccount", function() {
             });
         });
     });
+            
+    describe("when options.reload=true", function() {
+        beforeEach(function() {
+            this.dialog.options.reload = true;
+            
+            spyOn(chorus.router, "reload");
+            this.dialog.$("input[name=dbUserName]").val("office");
+            this.dialog.$("input[name=dbPassword]").val("howard875huge");
+            this.dialog.$("form").submit();
+        });
+        
+        it("calls chorus.router.reload() after saving", function() {
+            expect(chorus.router.reload).not.toHaveBeenCalled();
+            this.server.completeSaveFor(this.dialog.model);
+            expect(chorus.router.reload).toHaveBeenCalled();
+        });
+    });
+    
 });

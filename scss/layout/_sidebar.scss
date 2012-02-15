@@ -33,7 +33,7 @@
         }
 
         li {
-            padding-bottom: 8px;
+            padding-bottom: 3px;
             margin-left: 10px;
         }
     }
@@ -61,6 +61,22 @@
             font-size: 12px;
             font-weight: $semibold;
             margin-left: 10px;
+        }
+    }
+
+    .notice {
+        a {
+            font-size: 12px;
+        }
+        font-size: 12px;
+        color: $color-text2;
+        padding: $dialog-padding;
+        background-color: $activity-stream-comment-background-color;
+        margin: auto;
+
+        .bottom {
+            display: inline-block;
+            margin: 8px 0;
         }
     }
 

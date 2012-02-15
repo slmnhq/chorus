@@ -1,8 +1,10 @@
 .dataset_list_sidebar {
     .info {
+        margin-bottom: 5px;
+
         .name {
             @include heading-sidebar;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         .type {
             @include secondary-text-small;

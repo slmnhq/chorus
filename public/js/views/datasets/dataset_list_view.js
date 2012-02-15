@@ -41,7 +41,8 @@ chorus.views.DatasetList = chorus.views.Base.extend({
             iconImgUrl:model.iconUrl(),
             showUrl:model.showUrl(),
             schemaShowUrl: model.schema().showUrl(),
-            otherWorkspaceCount : otherWorkspaceCount
+            otherWorkspaceCount : otherWorkspaceCount,
+            noCredentials: model.get('hasCredentials') === false
         };
 
         if (workspace) {

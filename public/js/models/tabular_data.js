@@ -30,6 +30,16 @@ chorus.models.TabularData = chorus.models.Base.extend({
         return this.constructor.metaTypeMap[this.get("objectType")] || "table";
     },
 
+    instance: function() {
+        if(!this._instance) {
+            this._instance = new chorus.models.Instance({
+                id: this.get("instance").id,
+                name: this.get("instance").name
+            });
+        }
+        return this._instance;
+    },
+
     schema: function() {
         return new chorus.models.Schema({
             instanceId: this.get("instance").id,

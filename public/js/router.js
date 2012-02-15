@@ -47,6 +47,10 @@
             }
         },
 
+        reload: function() {
+            this.navigate(Backbone.history.fragment);
+        },
+
         generateRouteCallback:function (className) {
             var self = this;
             return function () {

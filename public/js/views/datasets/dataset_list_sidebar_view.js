@@ -1,6 +1,10 @@
 chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
     className:"dataset_list_sidebar",
 
+    events: {
+        "click .no_credentials a.add_credentials": "launchAddCredentialsDialog"
+    },
+
     subviews:{
         '.activity_list':'activityList',
         '.tab_control':'tabControl'
@@ -47,6 +51,12 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
         if (this.resource) {
             ctx.entityType = this.resource.entityType;
             ctx.entityId = this.resource.entityId;
+
+            if (this.resource.get("hasCredentials") === false) {
+                ctx.noCredentials = true;
+                ctx.noCredentialsWarning = t("dataset.credentials.missing.body", {linkText: chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'})})
+            }
+
             if(this.resource.get("workspace")) {
                 ctx.workspaceId = this.resource.get("workspace").id;
             }
@@ -65,6 +75,11 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
         }
 
         return ctx;
+    },
+
+    launchAddCredentialsDialog: function(e) {
+        e && e.preventDefault();
+        new chorus.dialogs.InstanceAccount({pageModel:this.resource.instance(), title: t("instances.sidebar.add_credentials"), reload:true}).launchModal();
     },
 
     datasetType:function (dataset) {

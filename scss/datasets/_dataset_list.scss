@@ -34,4 +34,13 @@
         }
 
     }
+
+    .no_credentials {
+        .name {
+            color: $color-text3;
+        }
+        .location {
+            color: $color-text2;
+        }
+    }
 }

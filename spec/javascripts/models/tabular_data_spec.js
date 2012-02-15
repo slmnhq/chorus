@@ -10,20 +10,6 @@ describe("chorus.models.TabularData", function() {
         });
     });
 
-    //TODO: Remove after API story is done: https://www.pivotaltracker.com/story/show/24741875
-    context("when the tabularData is initialized with an instance, database and schema, but no id", function() {
-        it("initializes its 'entityId' correctly", function() {
-            this.tabularData = new chorus.models.TabularData({
-                instance: {id: '45'},
-                databaseName: 'whirling_tops',
-                schemaName: 'diamonds',
-                objectType: 'foo',
-                objectName: 'japanese_teas'
-            });
-            expect(this.tabularData.entityId).toBe("45|whirling_tops|diamonds|foo|japanese_teas");
-        });
-    });
-
     describe("#statistics", function() {
         beforeEach(function() {
             this.tabularDataProperties = this.tabularData.statistics()
@@ -224,4 +210,19 @@ describe("chorus.models.TabularData", function() {
         }
     });
 
+    describe("#instance", function() {
+        beforeEach(function() {
+            this.instance = this.tabularData.instance();
+        });
+
+        it("returns an instance with the right id and name", function() {
+            expect(this.instance).toBeA(chorus.models.Instance);
+            expect(this.instance.get("id")).toBe(this.tabularData.get("instance").id);
+            expect(this.instance.get("name")).toBe(this.tabularData.get("instance").name);
+        });
+
+        it("memoizes", function() {
+            expect(this.instance).toBe(this.tabularData.instance());
+        });
+    });
 })

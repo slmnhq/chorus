@@ -108,16 +108,6 @@
         color: $color-text2;
         font-size: 12px;
 
-        .empty_selection {
-            padding: $dialog-padding;
-            background-color: $activity-stream-comment-background-color;
-            margin: auto;
-
-            .bottom {
-                display: inline-block;
-                margin: 8px 0;
-            }
-        }
         .non_empty_selection {
             margin: 8px;
 

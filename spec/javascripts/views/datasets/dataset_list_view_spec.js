@@ -1,6 +1,10 @@
 describe("chorus.views.DatasetList", function() {
     beforeEach(function() {
-        this.collection = new chorus.collections.DatasetSet([fixtures.datasetChorusView(), fixtures.datasetSandboxTable(), fixtures.datasetSourceTable({recentComment: null })]);
+        this.collection = new chorus.collections.DatasetSet([
+            fixtures.datasetChorusView(),
+            fixtures.datasetSandboxTable(),
+            fixtures.datasetSourceTable({recentComment: null, hasCredentials: false})
+        ]);
         this.collection.loaded = true;
         this.view = new chorus.views.DatasetList({collection: this.collection});
     })
@@ -15,15 +19,25 @@ describe("chorus.views.DatasetList", function() {
             expect(this.view.$("> li").length).toBe(this.collection.length);
         });
 
+        it("renders items without credentials with a no_credentials class", function() {
+            expect(this.view.$('li.no_credentials').length).toBe(1);
+        })
+
         it("links the datasets to their show page", function() {
             _.each(this.collection.models, function(dataset, index) {
-                expect(this.view.$("li:eq(" + index + ") a.name")).toHaveAttr("href", this.collection.at(index).showUrl())
+                if (dataset.get('hasCredentials') !== false) {
+                    expect(this.view.$("li:eq(" + index + ") a.name")).toHaveAttr("href", this.collection.at(index).showUrl())
+                }
             }, this);
+        })
+
+        it("datasets without credentials should not have links", function() {
+            expect(this.view.$('li.no_credentials a').not(".found_in a")).not.toExist();
         })
 
         it("displays the datasets' names", function() {
             for (var i = 0; i < this.collection.length; i++) {
-                expect(this.view.$("a.name").eq(i).text().trim()).toBe(this.collection.models[i].get("objectName"));
+                expect(this.view.$(".name").eq(i).text().trim()).toBe(this.collection.models[i].get("objectName"));
             }
         })
 
@@ -166,9 +180,14 @@ describe("chorus.views.DatasetList", function() {
         it("displays the location of the dataset", function() {
             for (var i = 0; i < this.collection.length; i++) {
                 var model = this.collection.models[i];
-                expect(this.view.$("li .location").eq(i).find("a").eq(0).text()).toBe(model.get("instance").name);
-                expect(this.view.$("li .location").eq(i).find("a").eq(1).text()).toBe(model.get("databaseName"));
-                expect(this.view.$("li .location").eq(i).find("a").eq(2).text()).toBe(model.get("schemaName"));
+                if (model.get('hasCredentials') === false) {
+                    expect(this.view.$("li .location").eq(i)).toContainText(
+                        model.get("instance").name + '.' + model.get("databaseName") + '.' + model.get("schemaName"));
+                } else {
+                    expect(this.view.$("li .location").eq(i).find("a").eq(0).text()).toBe(model.get("instance").name);
+                    expect(this.view.$("li .location").eq(i).find("a").eq(1).text()).toBe(model.get("databaseName"));
+                    expect(this.view.$("li .location").eq(i).find("a").eq(2).text()).toBe(model.get("schemaName"));
+                }
             }
         })
 

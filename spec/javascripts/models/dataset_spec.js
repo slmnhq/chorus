@@ -230,4 +230,19 @@ describe("chorus.models.Dataset", function() {
             })
         })
     })
+
+    describe("#iconUrl", function() {
+        context("when the user does not have credentials", function() {
+            beforeEach(function() {
+                this.dataset = fixtures.datasetSourceView()
+                this.unlockedIconUrl = this.dataset.iconUrl();
+                this.dataset.set({hasCredentials: false});
+            });
+
+            it("has the locked version of the icon", function() {
+                var lockedIconUrl = this.dataset.iconUrl();
+                expect(lockedIconUrl).toBe(this.unlockedIconUrl.replace(".png", "_locked.png"));
+            });
+        })
+    })
 })

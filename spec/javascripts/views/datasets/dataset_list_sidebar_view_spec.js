@@ -38,6 +38,45 @@ describe("chorus.views.DatasetListSidebar", function() {
                     expect(this.view.$('.actions .dataset_preview')).toContainTranslation('actions.dataset_preview');
                 });
 
+                context("when hasCredentials is false for the dataset", function() {
+                    beforeEach(function() {
+                        this.dataset.set({hasCredentials: false})
+                        this.view.render();
+                    });
+
+                    it("does not show the preview data link", function() {
+                        expect(this.view.$('.actions .dataset_preview')).not.toExist();
+                    });
+
+                    it("shows a no-permissions message", function() {
+                        expect(this.view.$('.no_credentials')).toContainTranslation("dataset.credentials.missing.body", {linkText: t("dataset.credentials.missing.linkText")});
+                    });
+
+                    context("clicking on the link to add credentials", function() {
+                        beforeEach(function() {
+                            this.modalStub = stubModals();
+                            this.view.$('.no_credentials a.add_credentials').click();
+                        })
+
+                        it("launches the InstanceAccount dialog", function() {
+                            expect(this.modalStub).toHaveModal(chorus.dialogs.InstanceAccount);
+                        });
+
+                        context("saving the credentials", function() {
+                            beforeEach(function() {
+                                spyOn(chorus.router, "reload");
+                                chorus.modal.$('input').val('stuff');
+                                chorus.modal.$('form').submit();
+                                this.server.completeSaveFor(chorus.modal.model);
+                            })
+
+                            it("reloads the current page", function() {
+                                expect(chorus.router.reload).toHaveBeenCalled();
+                            })
+                        })
+                    })
+                })
+
                 it("fetches the activities for the dataset", function() {
                     expect(this.dataset.activities()).toHaveBeenFetched()
                 });

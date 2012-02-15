@@ -38,6 +38,15 @@ describe("chorus.router", function() {
         })
     });
 
+    describe("#reload", function() {
+        it("navigates to the current url fragment", function() {
+            Backbone.history.fragment = '/somewhere';
+            spyOn(chorus.router, 'navigate');
+            chorus.router.reload();
+            expect(chorus.router.navigate).toHaveBeenCalledWith(Backbone.history.fragment);
+        })
+    })
+
     describe(".initialize", function() {
         beforeEach(function() {
             this.chorus = new Chorus();
