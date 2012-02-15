@@ -198,6 +198,10 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     expect(this.dialog.$("div.owner a").attr("href")).toBe(this.dialog.owner.showUrl());
                 });
 
+                it("disables the save workspace button", function() {
+                    expect(this.dialog.$("button.submit")).toBeDisabled()
+                })
+
                 context("and the workspace is not archived", function() {
                     beforeEach(function() {
                         this.workspace.set({ active : true })

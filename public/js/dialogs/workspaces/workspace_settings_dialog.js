@@ -21,7 +21,8 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.extend({
             permission: this.hasPermission,
             ownerName: this.owner && this.owner.displayName(),
             ownerUrl: this.owner.showUrl(),
-            sandboxLocation:sandboxLocation
+            sandboxLocation:sandboxLocation,
+            disable : this.hasPermission ? "" : ' disabled="disabled" '
         }
     },
 

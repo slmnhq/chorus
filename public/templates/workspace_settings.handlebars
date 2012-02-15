@@ -1,26 +1,15 @@
 <form>
     <label class="required">{{t "workspace.settings.name"}}</label>
-    <input type="text" name="name" maxlength="256" value="{{name}}" tabindex="1"
-           {{#unless permission}}
-                disabled="disabled"
-            {{/unless}}
-            />
-    <input type="checkbox" id="public_checkbox" name="isPublic"
+    <input type="text" name="name" maxlength="256" value="{{name}}" tabindex="1" {{disable}}/>
+    <input type="checkbox" id="public_checkbox" name="isPublic" {{disable}}
         {{#if isPublic}}
             checked="checked"
         {{/if}}
-        {{#unless permission}}
-            disabled="disabled"
-        {{/unless}}
     />
     <label for="public_checkbox">{{t "workspace.settings.publicly_available"}}</label>
 
     <label>{{t "workspace.settings.summary"}}</label>
-    <textarea name="summary" rows="6" tabindex="2"
-            {{#unless permission}}
-                disabled="disabled"
-            {{/unless}}
-            >{{summary}}</textarea>
+    <textarea name="summary" rows="6" tabindex="2" {{disable}}>{{summary}}</textarea>
 
     <label>Workspace Image</label>
 
@@ -49,23 +38,17 @@
     <div class="workspace_status">
         <label>{{t "workspace.settings.status"}}</label>
         <div class="radio">
-            <input type="radio" id="workspace_active" name="status"
+            <input type="radio" id="workspace_active" name="status" {{disable}}
                 {{#if active}}
                     checked="checked"
                 {{/if}}
-                {{#unless permission}}
-                    disabled="disabled"
-                {{/unless}}
             />
             <label for="workspace_active"><span>{{t "workspace.settings.active"}}</span></label>
         </div>
         <div class="radio">
-            <input type="radio" id="workspace_archived" name="status"
+            <input type="radio" id="workspace_archived" name="status" {{disable}}
                 {{#unless active}}
                     checked="checked"
-                {{/unless}}
-                {{#unless permission}}
-                    disabled="disabled"
                 {{/unless}}
             />
             <label for="workspace_archived"><span>{{t "workspace.settings.archived"}}</span></label>
@@ -77,6 +60,6 @@
 
     <div class="modal_controls">
         <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
-        <button type="submit" class="submit" tabindex="99">{{t "actions.save_changes"}}</button>
+        <button type="submit" class="submit" {{disable}} tabindex="99">{{t "actions.save_changes"}}</button>
     </div>
 </form>
