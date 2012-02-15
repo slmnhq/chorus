@@ -42,7 +42,7 @@
                 buttons: [
                     {
                         view: "DatasetImport",
-                        text: t("dataset.import")
+                        text: t("dataset.import.title")
                     }
                 ]
             });

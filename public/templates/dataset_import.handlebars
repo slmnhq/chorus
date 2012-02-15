@@ -1,6 +1,36 @@
-<div/>
+<div class="file">
+    <img src="/images/workfiles/medium/plain.png"/>
+    <div class="file_name"/>
+    <span class="file-wrapper">
+        <a>{{t "dataset.import.select_file"}}</a>
+        <input type="file"/>
+    </span>
+    <span class="empty_selection">{{t "dataset.import.no_file_selected"}}</span>
+</div>
+
+<div class="import_controls hidden">
+    <div class="row new_table">
+        <label>{{t "dataset.import.new_table"}}</label>
+        <input type="radio" name="group" checked="true"/>
+        <input type="text"/>
+    </div>
+
+    <div class="row existing_table">
+        <label>{{t "dataset.import.existing_table"}}</label>
+        <input type="radio" name="group"/>
+        <select>
+            <option>Foo</option>
+            <option>Bar</option>
+        </select>
+    </div>
+
+    <div class="row workfile">
+        <label>{{t "dataset.import.workfile"}}</label>
+        <input type="radio" name="group"/>
+    </div>
+</div>
 
 <div class="modal_controls">
     <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
-    <button type="submit" class="submit" tabindex="99" disabled="disabled">{{t "dataset.upload_file"}}</button>
+    <button type="submit" class="submit" tabindex="99" disabled="disabled">{{t "dataset.import.upload_file"}}</button>
 </div>

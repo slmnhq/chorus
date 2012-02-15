@@ -196,7 +196,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
         });
 
         it("has the right text", function() {
-            expect(this.page.$("button[data-dialog='DatasetImport']").text()).toMatchTranslation("dataset.import");
+            expect(this.page.$("button[data-dialog='DatasetImport']").text()).toMatchTranslation("dataset.import.title");
         });
 
         describe("when the is clicked", function() {
