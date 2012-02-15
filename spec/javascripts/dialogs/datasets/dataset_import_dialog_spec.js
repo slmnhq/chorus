@@ -160,5 +160,16 @@ describe("chorus.dialogs.DatasetImport", function() {
                 });
             });
         });
+
+        describe("clicking 'Upload File'", function() {
+            beforeEach(function() {
+                this.dialog.$("form").submit();
+            });
+
+            it("should display a loading spinner", function() {
+                expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.uploading");
+                expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+            });
+        });
     });
 });

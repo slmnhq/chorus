@@ -3,7 +3,8 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     title: t("dataset.import.title"),
 
     events : {
-        "change input:radio": "onRadioSelect"
+        "change input:radio": "onRadioSelect",
+        "submit form": "uploadFile"
     },
 
     onRadioSelect: function(e) {
@@ -19,6 +20,11 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         }
 
         chorus.styleSelect(self.$("select"));
+    },
+
+    uploadFile: function(e) {
+        e && e.preventDefault();
+        this.$("button.submit").startLoading("actions.uploading");
     },
 
     postRender:function () {
