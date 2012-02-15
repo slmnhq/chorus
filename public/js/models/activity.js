@@ -100,6 +100,11 @@ chorus.models.Activity = chorus.models.Base.extend({
     },
 
     noteworthy: function() {
-        return this.instance() || this.workfile() || this.dataset() || this.databaseObject() || this.workspace();
+        return this.instance() ||
+            this.workfile() ||
+            this.dataset() ||
+            this.databaseObject() ||
+            (this.has("user") && new chorus.models.User(this.get("user")[0])) ||
+            this.workspace();
     }
 });

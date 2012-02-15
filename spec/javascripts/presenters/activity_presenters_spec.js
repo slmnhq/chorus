@@ -493,20 +493,58 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context("headerHtml", function() {
-        describe("#headerTranslationKey", function() {
+        beforeEach(function() {
+            this.keyPrefix = 'activity_stream.header.html.';
+        });
+
+        describe("#headerTranslationKey with workspace_created", function() {
             beforeEach(function() {
-                this.keyPrefix = 'activity_stream.header.html.';
-                this.model = fixtures.activities.NOTE_ON_WORKSPACE();
-                this.workspace = this.model.workspace();
+                this.model = fixtures.activities.WORKSPACE_CREATED();
             });
 
+            it("when displayStyle is a string it returns the default when it does not exist", function() {
+                this.presenter = new chorus.presenters.Activity(this.model, {displayStyle : 'without_object'});
+                var missingKey = this.keyPrefix + this.model.get('type') + '.without_object';
+                var expectedKey = this.keyPrefix + this.model.get('type') + '.without_workspace';
+                expect(I18n.lookup(missingKey)).toBeFalsy();
+                expect(I18n.lookup(expectedKey)).toBeTruthy();
+                expect(this.presenter._impl.headerTranslationKey()).toBe(expectedKey);
+            });
+        });
+
+        describe("#headerTranslationKey with note on workspace", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.NOTE_ON_WORKSPACE();
+            });
+
+            itGetsTheTranslationKeyCorrectly('without_workspace');
+
+        });
+
+        describe("#headerTranslationKey with note on workfile", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.NOTE_ON_WORKFILE();
+            });
+
+            itGetsTheTranslationKeyCorrectly('default');
+        });
+
+        describe("#headerTranslationKey with note on instance", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.NOTE_ON_INSTANCE();
+            });
+
+            itGetsTheTranslationKeyCorrectly('without_workspace');
+        });
+
+        function itGetsTheTranslationKeyCorrectly(expectedKeySuffix) {
             context("when displayStyle is not set", function() {
                 beforeEach(function() {
                     this.presenter = new chorus.presenters.Activity(this.model);
                 });
 
-                it("uses the default displayStyle", function() {
-                    var expectedKey = this.keyPrefix + this.model.get('type') + '.default';
+                it("uses the " + expectedKeySuffix + " displayStyle", function() {
+                    var expectedKey = this.keyPrefix + this.model.get('type') + '.' + expectedKeySuffix;
                     expect(I18n.lookup(expectedKey)).toBeTruthy();
                     expect(this.presenter._impl.headerTranslationKey()).toBe(expectedKey);
                 });
@@ -523,18 +561,9 @@ describe("chorus.presenters.Activity", function() {
                     expect(this.presenter._impl.headerTranslationKey()).toBe(expectedKey);
                 });
 
-                it("returns the default when it does not exists", function() {
-                    this.model.set({type: 'WORKSPACE_CREATED'});
-                    var missingKey = this.keyPrefix + this.model.get('type') + '.without_object';
-                    var expectedKey = this.keyPrefix + this.model.get('type') + '.default';
-                    expect(I18n.lookup(missingKey)).toBeFalsy();
-                    expect(I18n.lookup(expectedKey)).toBeTruthy();
-                    expect(this.presenter._impl.headerTranslationKey()).toBe(expectedKey);
-                });
-
                 it("uses type of DEFAULT when the model's type does not have a translation", function() {
-                    this.model.set({type: 'BANNANA'});
-                    var expectedKey = this.keyPrefix + 'DEFAULT.default';
+                    this.model.set({type: 'BANANA'});
+                    var expectedKey = this.keyPrefix + 'DEFAULT.' + expectedKeySuffix;
                     expect(this.presenter._impl.headerTranslationKey()).toBe(expectedKey);
                 });
             });
@@ -556,12 +585,12 @@ describe("chorus.presenters.Activity", function() {
 
                 it("falls back on default when none of them exist", function() {
                     this.presenter = new chorus.presenters.Activity(this.model, {displayStyle : ['banana', 'apple']});
-                    var expectedKey = this.keyPrefix + this.model.get('type') + '.default';
+                    var expectedKey = this.keyPrefix + this.model.get('type') + '.' + expectedKeySuffix;
                     expect(I18n.lookup(expectedKey)).toBeTruthy();
                     expect(this.presenter._impl.headerTranslationKey()).toBe(expectedKey);
                 });
             });
-        });
+        }
     });
 
     function itShouldHaveTheAuthorsIconAndUrl() {

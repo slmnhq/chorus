@@ -69,7 +69,7 @@
             if (!I18n.lookup(prefix + type)) {
                 type = 'DEFAULT';
             }
-            var styles = _.flatten([this.options.displayStyle, 'default']);
+            var styles = _.flatten([this.options.displayStyle, this.workspace && (this.workspace != this.noteObject) ? 'default' : 'without_workspace' ]);
 
             prefix = prefix + type + '.';
             return prefix + _.find(styles, function (style) {

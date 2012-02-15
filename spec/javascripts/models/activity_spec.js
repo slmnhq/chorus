@@ -38,6 +38,16 @@ describe("chorus.models.Activity", function() {
             this.model = fixtures.activities.NOTE_ON_DATABASE_TABLE();
             expect(this.model.noteworthy()).toBeA(chorus.models.DatabaseObject);
         })
+
+        it("should return a user when the activity is member_added", function() {
+            this.model = fixtures.activities.MEMBERS_ADDED();
+            expect(this.model.noteworthy()).toBeA(chorus.models.User);
+        })
+
+        it("should return a user when the activity is member_deleted", function() {
+            this.model = fixtures.activities.MEMBERS_DELETED();
+            expect(this.model.noteworthy()).toBeA(chorus.models.User);
+        })
     })
 
     describe("#promoteToInsight", function() {
