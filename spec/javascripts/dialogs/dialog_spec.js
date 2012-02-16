@@ -25,7 +25,7 @@ describe("chorus.views.Dialog", function() {
         })
 
         it("sets up input placeholders for older browsers", function() {
-            expect(chorus.placeholder).toHaveBeenCalledWith(this.dialog.$("input"));
+            expect(chorus.placeholder).toHaveBeenCalledWith(this.dialog.$("input[placeholder], textarea[placeholder]"));
         });
 
         context("with a function as the title", function() {

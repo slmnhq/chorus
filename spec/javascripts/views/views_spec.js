@@ -841,6 +841,19 @@ describe("chorus.views.Base", function () {
                 })
             });
         });
+
+        describe("placeholder", function() {
+            beforeEach(function() {
+                this.view = new chorus.views.Base();
+                this.view.className = "plain_text";
+                spyOn(chorus, 'placeholder');
+                this.view.render();
+            })
+
+            it("sets up input placeholders for older browsers", function() {
+                expect(chorus.placeholder).toHaveBeenCalledWith(this.view.$("input[placeholder], textarea[placeholder]"));
+            });
+        })
     });
 
     describe("chorus.views.Bare", function () {

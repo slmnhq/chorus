@@ -272,6 +272,12 @@ chorus.views.Base = chorus.views.Bare.extend({
         return ctx;
     },
 
+    render: function() {
+        var result = this._super('render', arguments);
+        chorus.placeholder(this.$("input[placeholder], textarea[placeholder]"));
+        return result;
+    },
+
     displayLoadingSection:function () {
         if (!this.useLoadingSection) {
             return false;
