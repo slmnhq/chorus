@@ -31,6 +31,10 @@ $image-width: 35px;
 
                 .file-wrapper {
                     padding-bottom: 1px;
+                    a {
+                       font-size: 12px;
+                       font-weight: $semibold;
+                    }
                 }
 
                 .file_name {
