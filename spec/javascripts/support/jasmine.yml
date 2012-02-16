@@ -35,6 +35,7 @@ src_files:
   - js/views/sidebar_view.js
   - js/views/datasets/dataset_visualization_sidebar.js
   - js/views/database_sidebar_list_view.js
+  - js/views/utilities/code_editor_view.js
   - js/views/workfiles/workfile_content_details_view.js
   - js/views/workfiles/workfile_content_view.js
   - js/views/workfiles/text_workfile_content_view.js

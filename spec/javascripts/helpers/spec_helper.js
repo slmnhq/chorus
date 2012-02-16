@@ -6,6 +6,7 @@
         'breadcrumbs',
         'browse_datasets',
         'change_password',
+        'code_editor_view',
         'collection_picklist',
         'comment',
         'comment_list',

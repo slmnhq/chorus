@@ -26,21 +26,8 @@ describe("chorus.views.DatasetEditChorusView", function() {
             this.view.render();
         });
 
-        it("defers call to CodeMirror", function() {
-            this.view.render();
-            expect(_.defer).toHaveBeenCalled();
-            expect(CodeMirror.fromTextArea).toHaveBeenCalled();
-        });
-
-        context("when deferred CodeMirror creation happens twice in one dom render", function() {
-            beforeEach(function() {
-                var deferredCodeMirror = _.defer.calls[0].args[0];
-                deferredCodeMirror();
-            });
-
-            it("only calls CodeMirror once", function() {
-                expect(CodeMirror.fromTextArea.callCount).toBe(1);
-            });
+        it("displays the query", function() {
+            expect(this.view.editor.getValue()).toBe(this.dataset.get("query"));
         });
 
         it("displays line numbers", function() {
@@ -61,7 +48,7 @@ describe("chorus.views.DatasetEditChorusView", function() {
             $(this.view.$(".CodeMirror")[0].firstChild.firstChild).blur();
             expect(this.view.updateQueryInModel).toHaveBeenCalled();
             expect(this.view.model.get("query")).toBe("select * from hello;")
-        })
+        });
     });
 
     describe("#saveChanges", function() {
