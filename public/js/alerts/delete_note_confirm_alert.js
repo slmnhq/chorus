@@ -19,7 +19,11 @@ chorus.alerts.DeleteNoteConfirmAlert = chorus.alerts.ModelDelete.extend({
                 entityType: model.collection.attributes.entityType,
                 entityId: model.collection.attributes.entityId
             });
-            this.setNote()
+            if (model.get("type") == "NOTE") {
+                this.setNote();
+            } else {
+                this.setInsight();
+            }
         }
     },
 
@@ -40,5 +44,12 @@ chorus.alerts.DeleteNoteConfirmAlert = chorus.alerts.ModelDelete.extend({
         this.title = t("notes.delete.alert.title")
         this.ok = t("notes.delete.alert.ok")
         this.deleteMessage = "notes.delete.alert.delete_message"
+    },
+
+    setInsight: function() {
+        this.text = t("insight.delete.alert.text")
+        this.title = t("insight.delete.alert.title")
+        this.ok = t("insight.delete.alert.ok")
+        this.deleteMessage = "insight.delete.alert.delete_message"
     }
 });

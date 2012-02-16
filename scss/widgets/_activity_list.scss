@@ -169,7 +169,8 @@ $system-action-color: #7C7D7D;
     }
 }
 
-li[data-activity-type=NOTE] .activity_content:hover a.delete_link {
+li[data-activity-type=NOTE] .activity_content:hover a.delete_link,
+li[data-activity-type=INSIGHT_CREATED] .activity_content:hover a.delete_link {
     display:inline;
 }
 
