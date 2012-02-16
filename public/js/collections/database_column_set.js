@@ -13,6 +13,7 @@ chorus.collections.DatabaseColumnSet = chorus.collections.Base.extend({
 
     _add:function (model, options) {
         model = this._super("_add", arguments);
+        model.tabularData = this.attributes.tabularData;
         model.set({"schemaName":this.attributes.schemaName}, {silent:true});
         model.set({"parentName":this.attributes.tableName || this.attributes.viewName}, {silent:true});
         return model;

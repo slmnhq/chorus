@@ -281,6 +281,10 @@ describe("chorus.models.TabularData", function() {
             expect(this.tabularData.columns()).toBeA(chorus.collections.DatabaseColumnSet);
         })
 
+        it("should have a reference back to the tabularData", function() {
+            expect(this.tabularData.columns().attributes.tabularData).toBe(this.tabularData);
+        })
+
         it("should pass the correct parameters to the DatabaseColumnSet", function() {
             var columns = this.tabularData.columns();
             expect(columns.attributes.instanceId).toBe(this.tabularData.get("instance").id);

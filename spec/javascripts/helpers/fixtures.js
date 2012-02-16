@@ -1870,6 +1870,17 @@ beforeEach(function() {
             return new chorus.models.Dataset(attributes);
         },
 
+        datasetSandboxView: function(overrides) {
+            var datasetCommonAttributes = _.extend({
+                modifiedBy: {},
+                objectType: "VIEW",
+                owner: {},
+                type: "SANDBOX_TABLE"
+            }, overrides)
+            var attributes = _.extend(fixtures.datasetCommonJson(datasetCommonAttributes), overrides);
+            return new chorus.models.Dataset(attributes);
+        },
+
         datasetPreview: function(overrides) {
             return new chorus.models.TabularDataPreview(_.extend({
                 columns: [],

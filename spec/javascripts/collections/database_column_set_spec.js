@@ -1,47 +1,76 @@
 describe("chorus.collections.DatabaseColumnSet", function() {
     describe("database table column", function() {
         beforeEach(function() {
-            this.collection = new chorus.collections.DatabaseColumnSet([], {instanceId : "2", databaseName : "db1", schemaName: "schema1", tableName: "table1"});
+            var table = fixtures.datasetSandboxTable({
+                instance: {
+                    id: '2',
+                    name: 'instance2'
+                },
+                databaseName: 'db1',
+                schemaName: 'schema1',
+                objectName: 'table1'
+            });
+            this.columns = table.columns();
         });
 
         it("has the correct urlTemplate", function() {
-            expect(this.collection.url()).toContain("/edc/data/2/database/db1/schema/schema1/table/table1/column");
+            expect(this.columns.url()).toContain("/edc/data/2/database/db1/schema/schema1/table/table1/column");
         })
 
         describe("add", function() {
             it("sets the schemaName and tableName (as parentName) on the added column", function() {
-                this.collection.add(fixtures.databaseColumn());
-                expect(this.collection.models[0].get('schemaName')).toBe('schema1');
-                expect(this.collection.models[0].get('parentName')).toBe('table1');
+                this.columns.add(fixtures.databaseColumn());
+                expect(this.columns.models[0].get('schemaName')).toBe('schema1');
+                expect(this.columns.models[0].get('parentName')).toBe('table1');
+            })
+
+            it("sets tabularData on the added column", function() {
+                this.columns.add(fixtures.databaseColumn());
+                expect(this.columns.models[0].tabularData).toBe(this.columns.attributes.tabularData);
             })
         });
     });
 
     describe("database view column", function() {
         beforeEach(function() {
-            this.collection = new chorus.collections.DatabaseColumnSet([], {instanceId : "2", databaseName : "db1", schemaName: "schema1", viewName: "view1"});
+            var view = fixtures.datasetSandboxView({
+                instance: {
+                    id: '2',
+                    name: 'instance2'
+                },
+                databaseName: 'db1',
+                schemaName: 'schema1',
+                objectName: 'view1'
+            })
+            this.columns = view.columns();
         });
 
         it("has the correct urlTemplate", function() {
-            expect(this.collection.url()).toContain("/edc/data/2/database/db1/schema/schema1/view/view1/column");
+            expect(this.columns.url()).toContain("/edc/data/2/database/db1/schema/schema1/view/view1/column");
         })
 
         describe("add", function() {
             it("sets the schemaName and viewName (as parentName) on the added column", function() {
-                this.collection.add(fixtures.databaseColumn());
-                expect(this.collection.models[0].get('schemaName')).toBe('schema1');
-                expect(this.collection.models[0].get('parentName')).toBe('view1');
+                this.columns.add(fixtures.databaseColumn());
+                expect(this.columns.models[0].get('schemaName')).toBe('schema1');
+                expect(this.columns.models[0].get('parentName')).toBe('view1');
             })
         });
     });
 
     describe("database chorus view column", function() {
         beforeEach(function() {
-            this.collection = new chorus.collections.DatabaseColumnSet([], {workspaceId: "10", queryName: "10000|dca_demo|ddemo|QUERY|chorus_view"});
+            var chrousView = fixtures.datasetChorusView({
+                workspace: {
+                    id: '10'
+                },
+                id: "10000|dca_demo|ddemo|QUERY|chorus_view"
+            })
+            this.columns = chrousView.columns();
         })
 
         it("has the correct urlTemplate", function() {
-            expect(this.collection.url()).toContain("/edc/workspace/10/dataset/10000|dca_demo|ddemo|QUERY|chorus_view/column");
+            expect(this.columns.url()).toContain("/edc/workspace/10/dataset/10000|dca_demo|ddemo|QUERY|chorus_view/column");
         })
     })
 });

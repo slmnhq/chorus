@@ -20,6 +20,7 @@ chorus.models.TabularData = chorus.models.Base.extend({
     columns:function () {
         if (!this._columns) {
             this._columns = new chorus.collections.DatabaseColumnSet([], {
+                tabularData: this,
                 instanceId:this.get("instance").id,
                 databaseName:this.get("databaseName"),
                 schemaName:this.get("schemaName")
