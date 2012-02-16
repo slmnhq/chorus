@@ -31,20 +31,33 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 objectType: "BASE_TABLE"
             });
 
-            this.databaseObject3 = fixtures.databaseObject({
+            this.originalDatabaseObject = fixtures.databaseObject({
                 objectName: "original",
-                columns: 22,
+                columns: 23,
                 type: "SOURCE_TABLE",
                 objectType: "BASE_TABLE",
                 id: "abc"
             });
 
-            this.server.completeFetchFor(this.schema.databaseObjects(), [ this.databaseObject1, this.databaseObject2, this.databaseObject3 ]);
+            this.databaseObject3 = fixtures.databaseObject({
+                objectName: "lions",
+                columns: 24,
+                type: "SOURCE_TABLE",
+                objectType: "VIEW"
+            });
+
+            this.server.completeFetchFor(this.schema.databaseObjects(), [
+                this.databaseObject1,
+                this.databaseObject2,
+                this.originalDatabaseObject,
+                this.databaseObject3
+            ]);
         });
 
         it("shows the name of each table/view", function() {
             expect(this.dialog.$(".name").eq(0)).toHaveText("cats");
             expect(this.dialog.$(".name").eq(1)).toHaveText("dogs");
+            expect(this.dialog.$(".name").eq(2)).toHaveText("lions");
         });
 
         it("shows the column count for each table/view", function() {
@@ -65,6 +78,31 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
         it("shows the original table canonical name", function() {
             expect(this.dialog.$(".canonical_name").text()).toBe(this.schema.canonicalName());
-        })
+        });
+
+        describe("when a table is clicked", function() {
+            beforeEach(function() {
+                this.lis = this.dialog.$("li");
+                this.lis.eq(1).trigger("click");
+            });
+
+            it("highlights the table", function() {
+                expect(this.lis.eq(0)).not.toHaveClass("selected");
+                expect(this.lis.eq(1)).toHaveClass("selected");
+                expect(this.lis.eq(2)).not.toHaveClass("selected");
+            });
+
+            describe("when another table is clicked", function() {
+                beforeEach(function() {
+                    this.lis.eq(2).trigger("click");
+                });
+
+                it("un-highlights the first table and highlights the table that was just clicked", function() {
+                    expect(this.lis.eq(0)).not.toHaveClass("selected");
+                    expect(this.lis.eq(1)).not.toHaveClass("selected");
+                    expect(this.lis.eq(2)).toHaveClass("selected");
+                });
+            });
+        });
     });
 });
