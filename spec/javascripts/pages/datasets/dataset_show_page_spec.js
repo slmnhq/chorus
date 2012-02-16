@@ -127,6 +127,10 @@ describe("chorus.pages.DatasetShowPage", function() {
             this.server.completeFetchAllFor(this.columnSet, [fixtures.databaseColumn(), fixtures.databaseColumn()]);
         })
 
+        it("sets the datasetNumber to 1", function() {
+            expect(this.page.dataset.datasetNumber).toBe(1);
+        });
+
         describe("breadcrumbs", function() {
             it("links to home for the first crumb", function() {
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).attr("href")).toBe("#/");

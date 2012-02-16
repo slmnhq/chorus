@@ -23,8 +23,13 @@ chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
         this.tagLastLi();
     },
 
+    resetFilters: function() {
+        this.filterViews = [];
+        this.render();
+    },
+
     addFilter : function() {
-        var filterView = new chorus.views.DatasetFilter({collection: this.collection});
+        var filterView = new chorus.views.DatasetFilter({collection: this.collection, showDatasetNumbers: this.options.showDatasetNumbers});
         filterView.render();
         filterView.owner = this;
 

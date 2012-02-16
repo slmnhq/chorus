@@ -633,9 +633,9 @@ $.widget("ui.selectmenu", {
 		}
 	},
 
-	_formatText: function(text) {
+	_formatText: function(text, opt) {
 		if (this.options.format) {
-			text = this.options.format(text);
+			text = this.options.format(text, opt);
 		} else if (this.options.escapeHtml) {
 			text = $('<div />').text(text).html();
 		}

@@ -15,7 +15,14 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         var $select = this.$("select.column_filter");
         var self = this;
         _.defer(function() {
-            chorus.styleSelect($select);
+            chorus.styleSelect($select, {format: function(text, option) {
+                var datasetNumber = $(option).data('datasetNumber');
+                if(datasetNumber && self.options.showDatasetNumbers) {
+                    return '<span class="dataset_number">'+datasetNumber+'</span>' + text;
+                } else {
+                    return text;
+                }
+            } });
             chorus.datePicker({
                 "%Y": self.$(".filter.date input[name='year']"),
                 "%m": self.$(".filter.date input[name='month']"),

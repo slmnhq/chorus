@@ -1,24 +1,24 @@
 chorus.views.DatasetContentDetails = chorus.views.Base.extend({
-    className:"dataset_content_details",
+    className: "dataset_content_details",
 
-    subviews : {
-        ".data_preview" : "resultsConsole",
-        ".filters" : "filterWizardView"
+    subviews: {
+        ".data_preview": "resultsConsole",
+        ".filters": "filterWizardView"
     },
 
-    events : {
-        "click .preview" : "dataPreview",
-        "click .create_chart .cancel" : "cancelVisualization",
-        "click .create_chorus_view .cancel" : "cancelChorusView",
-        "click .edit_chorus_view .cancel" : "cancelEditChorusView",
-        "click .edit_chorus_view .save" : "saveChorusView",
-        "click .chart_icon" : "selectVisualization",
+    events: {
+        "click .preview": "dataPreview",
+        "click .create_chart .cancel": "cancelVisualization",
+        "click .create_chorus_view .cancel": "cancelChorusView",
+        "click .edit_chorus_view .cancel": "cancelEditChorusView",
+        "click .edit_chorus_view .save": "saveChorusView",
+        "click .chart_icon": "selectVisualization",
         "click .close_errors": "closeError",
         "click .view_error_details": "viewErrorDetails",
-        "click a.select_all" : "triggerSelectAll",
-        "click a.select_none" : "triggerSelectNone",
-        "mouseenter .chart_icon" : "showTitle",
-        "mouseleave .chart_icon" : "showSelectedTitle"
+        "click a.select_all": "triggerSelectAll",
+        "click a.select_none": "triggerSelectNone",
+        "mouseenter .chart_icon": "showTitle",
+        "mouseleave .chart_icon": "showSelectedTitle"
     },
 
     setup: function() {
@@ -26,7 +26,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
         this.dataset = this.options.dataset;
         this.resultsConsole = new chorus.views.ResultsConsole({titleKey: "dataset.data_preview", enableClose: true});
-        this.filterWizardView = new chorus.views.DatasetFilterWizard({collection : this.collection});
+        this.filterWizardView = new chorus.views.DatasetFilterWizard({collection: this.collection});
 
         this.statistics = this.dataset.statistics();
         this.statistics.fetchIfNotLoaded();
@@ -35,20 +35,20 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     },
 
-    dataPreview : function(e) {
+    dataPreview: function(e) {
         e.preventDefault();
 
         this.$(".column_count").addClass("hidden");
         this.$(".edit_chorus_view_info").addClass("hidden");
         this.$(".data_preview").removeClass("hidden");
-        if(!this.options.inEditChorusView) {
+        if (!this.options.inEditChorusView) {
             this.resultsConsole.execute(this.dataset.preview());
         } else {
             this.resultsConsole.execute(this.dataset.preview(this.options.inEditChorusView), true);
         }
     },
 
-    closeDataPreview : function() {
+    closeDataPreview: function() {
         if (!this.options.inEditChorusView) {
             this.$(".column_count").removeClass("hidden");
             this.$(".data_preview").addClass("hidden");
@@ -58,14 +58,14 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         }
     },
 
-    postRender:function () {
+    postRender: function() {
         var self = this;
 
         chorus.menu(this.$('.transform'), {
-            content:this.$(".transform_options").html(),
-            orientation:"left",
-            contentEvents:{
-                '.visualize':_.bind(this.startVisualizationWizard, this),
+            content: this.$(".transform_options").html(),
+            orientation: "left",
+            contentEvents: {
+                '.visualize': _.bind(this.startVisualizationWizard, this),
                 '.derive': _.bind(this.startCreateChorusViewWizard, this),
                 '.edit': _.bind(this.startEditChorusViewWizard, this)
             }
@@ -77,24 +77,25 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     },
 
-    triggerSelectAll : function(e) {
+    triggerSelectAll: function(e) {
         e && e.preventDefault();
         chorus.PageEvents.broadcast("column:select_all");
     },
 
-    triggerSelectNone : function(e) {
+    triggerSelectNone: function(e) {
         e && e.preventDefault();
         chorus.PageEvents.broadcast("column:select_none");
     },
 
-    startVisualizationWizard : function() {
+    startVisualizationWizard: function() {
         this.$('.chart_icon:eq(0)').click();
         this.$('.column_count').addClass('hidden');
         this.$('.info_bar').removeClass('hidden');
         this.$('.definition').addClass("hidden")
         this.$('.create_chart').removeClass("hidden");
         this.$(".filters").removeClass("hidden");
-        this.filterWizardView.render();
+        this.filterWizardView.options.showDatasetNumbers = false;
+        this.filterWizardView.resetFilters();
     },
 
     selectVisualization: function(e) {
@@ -125,6 +126,9 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$('.chorus_view_info').removeClass("hidden");
         this.$('.column_count').addClass("hidden");
         this.$('.filters').removeClass("hidden");
+        this.filterWizardView.options.showDatasetNumbers = true;
+        this.filterWizardView.resetFilters();
+
     },
 
     cancelChorusView: function(e) {
@@ -137,7 +141,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$('.chorus_view_info').addClass('hidden');
     },
 
-    startEditChorusViewWizard: function(){
+    startEditChorusViewWizard: function() {
         this.trigger("transform:sidebar", "edit_chorus_view");
         this.showEditChorusViewWizard();
         this.trigger("dataset:edit");
@@ -161,7 +165,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$(".definition").removeClass("hidden");
         this.trigger("cancel:sidebar");
         this.trigger("dataset:cancelEdit");
-        this.dataset.set({query : this.dataset.initialQuery});
+        this.dataset.set({query: this.dataset.initialQuery});
     },
 
     saveChorusView: function() {

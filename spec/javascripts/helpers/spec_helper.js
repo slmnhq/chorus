@@ -456,6 +456,23 @@
         return qtipElements[selector];
     }
 
+    window.stubSelectMenu = function() {
+        var stubContainer = $('<div class="selectMenuStub"></div>');
+        $('#jasmine_content').append(stubContainer);
+
+        var selectmenu = $.fn.selectmenu;
+
+        spyOn($.fn, 'selectmenu').andCallFake(function() {
+            var jqueryObject = this;
+            var options = arguments[0] || {};
+            options.appendTo = stubContainer;
+            selectmenu.call(jqueryObject, options);
+            return true;
+        });
+
+        return stubContainer;
+    }
+
     if ($.browser.msie && !window['con' + 'sole']) {
         (function(F, i, r, e, b, u, g, L, I, T, E) {
             if (F.getElementById(b))return;

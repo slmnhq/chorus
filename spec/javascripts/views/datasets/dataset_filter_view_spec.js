@@ -1,14 +1,15 @@
 describe("chorus.views.DatasetFilter", function() {
     beforeEach(function() {
-        this.collection = fixtures.databaseColumnSet();
+        this.tabularData = fixtures.datasetSourceTable();
+        this.collection = fixtures.databaseColumnSet(null, {tabularData: this.tabularData});
         this.view = new chorus.views.DatasetFilter({collection: this.collection});
     });
 
     describe("#render", function() {
         beforeEach(function() {
-            // styleSelect is deferred, but call it immediately for these tests
-            spyOn(_, "defer").andCallFake(function(f) {return f()});
-            spyOn(chorus, "styleSelect");
+            stubDefer();
+            this.selectMenuStub = stubSelectMenu();
+            spyOn(chorus, "styleSelect").andCallThrough();
             spyOn(chorus, 'datePicker').andCallThrough();
 
             this.view.render();
@@ -42,6 +43,35 @@ describe("chorus.views.DatasetFilter", function() {
         it("displays remove button", function() {
             expect(this.view.$(".remove")).toExist();
         });
+
+        it("does not have the dataset_number", function() {
+            expect(this.selectMenuStub.find(".dataset_number")).not.toExist();
+        })
+
+        context("when the tabularData has a datasetNumber and the datasetNumbers option is enabled", function() {
+            beforeEach(function() {
+                this.tabularData.datasetNumber = 1;
+                this.view.options.showDatasetNumbers = true;
+                this.view.render();
+            });
+
+            it("has the dataset_number options", function() {
+                expect(this.selectMenuStub.find(".dataset_number")).toExist();
+                expect(this.selectMenuStub.find(".dataset_number")).toContainText(this.tabularData.datasetNumber);
+            });
+        })
+
+        context("when the tabularData has a datasetNumber and the datasetNumbers option is disabled", function() {
+            beforeEach(function() {
+                this.tabularData.datasetNumber = 1;
+                this.view.options.showDatasetNumbers = false;
+                this.view.render();
+            });
+
+            it("does not have the dataset_number", function() {
+                expect(this.selectMenuStub.find(".dataset_number")).not.toExist();
+            })
+        })
 
         describe("clicking on the remove button", function() {
             beforeEach(function() {

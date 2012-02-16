@@ -2,10 +2,11 @@ describe("chorus.views.DatasetContentDetails", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.qtipMenu = stubQtip();
-            this.collection = fixtures.databaseColumnSet();
             this.dataset = fixtures.datasetSourceTable();
+            this.collection = this.dataset.columns([fixtures.databaseColumn(), fixtures.databaseColumn()]);
 
             this.view = new chorus.views.DatasetContentDetails({dataset: this.dataset, collection: this.collection});
+            spyOn(this.view.filterWizardView, 'resetFilters').andCallThrough();
             this.server.completeFetchFor(this.dataset.statistics(), fixtures.datasetStatisticsView());
             this.view.render();
         });
@@ -204,6 +205,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                 context("and the visualize dataset link is clicked", function() {
                     beforeEach(function() {
+                        this.view.filterWizardView.resetFilters.reset();
                         this.view.$(".transform").click();
                         this.visualizeSpy = spyOnEvent(this.view, "transform:sidebar");
                         this.qtipMenu.find('.visualize').click();
@@ -230,6 +232,14 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                     it("shows the filters div", function () {
                         expect(this.view.$(".filters")).not.toHaveClass("hidden");
+                    });
+
+                    it("disables datasetNumbers on the filter wizard", function() {
+                        expect(this.view.filterWizardView.options.showDatasetNumbers).toBeFalsy();
+                    });
+
+                    it("resets filter wizard", function() {
+                        expect(this.view.filterWizardView.resetFilters).toHaveBeenCalled();
                     });
 
                     context("and cancel is clicked", function() {
@@ -324,6 +334,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                 context("and the derive a chorus view link is clicked", function() {
                     beforeEach(function() {
+                        this.view.filterWizardView.resetFilters.reset();
                         this.view.$(".transform").click();
                         this.chorusViewSpy = spyOnEvent(this.view, "transform:sidebar");
                         this.qtipMenu.find('.derive').click();
@@ -352,6 +363,14 @@ describe("chorus.views.DatasetContentDetails", function() {
                     it("triggers transform:sidebar", function() {
                         expect(this.chorusViewSpy).toHaveBeenCalled();
                     })
+
+                    it("enables datasetNumbers on the filter wizard", function() {
+                        expect(this.view.filterWizardView.options.showDatasetNumbers).toBeTruthy();
+                    });
+
+                    it("resets filter wizard", function() {
+                        expect(this.view.filterWizardView.resetFilters).toHaveBeenCalled();
+                    });
 
                     describe("clicking 'Select All'", function() {
                         beforeEach(function() {

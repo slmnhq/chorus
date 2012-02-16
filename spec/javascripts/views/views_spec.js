@@ -136,7 +136,7 @@ describe("chorus.views.Base", function () {
             });
 
             it("serializes the attributes of the model", function () {
-                expect(this.view.context()).toEqual({ bar:"foo" });
+                expect(this.view.context()).toEqual({ bar:"foo", resource: this.model });
             })
 
             describe("loaded:true", function () {
@@ -321,8 +321,8 @@ describe("chorus.views.Base", function () {
                 var modelContext = this.view.context().models;
                 expect(modelContext).not.toBeUndefined();
                 expect(modelContext.length).toBe(2);
-                expect(modelContext[0]).toEqual({ bar:"foo" });
-                expect(modelContext[1]).toEqual({ bro:"baz" });
+                expect(modelContext[0]).toEqual({ bar:"foo", model: this.collection.models[0] });
+                expect(modelContext[1]).toEqual({ bro:"baz", model: this.collection.models[1] });
             })
 
             context("when a collectionModelContext is defined", function () {

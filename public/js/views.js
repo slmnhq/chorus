@@ -258,10 +258,11 @@ chorus.views.Base = chorus.views.Bare.extend({
 
         if (this.resource) {
             ctx = _.clone(this.resource.attributes);
+            ctx.resource = this.resource;
             ctx.loaded = this.resource.loaded;
             if (this.collection) {
                 ctx.models = _.map(this.collection.models, function (model) {
-                    return _.extend(_.clone(model.attributes), self.collectionModelContext(model));
+                    return _.extend({model: model}, model.attributes, self.collectionModelContext(model));
                 });
             }
             if (this.resource.serverErrors) ctx.serverErrors = this.resource.serverErrors;

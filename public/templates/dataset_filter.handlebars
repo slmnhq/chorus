@@ -4,7 +4,7 @@
 </div>
 <select class="column_filter">
     {{#each models}}
-        <option value="{{quotedName}}" data-type-category="{{typeCategory}}" {{#if disable}}disabled="disabled"{{/if}}>{{name}}</option>
+        <option value="{{quotedName}}" data-dataset-number="{{model.tabularData.datasetNumber}}" data-type-category="{{typeCategory}}" {{#if disable}}disabled="disabled"{{/if}}>{{name}}</option>
     {{/each}}
 </select>
 <select class="comparator"/>

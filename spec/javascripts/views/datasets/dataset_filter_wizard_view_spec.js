@@ -1,6 +1,7 @@
 describe("chorus.views.DatasetFilterWizard", function() {
     beforeEach(function () {
-        this.collection = fixtures.databaseColumnSet();
+        this.dataset = fixtures.datasetSandboxTable();
+        this.collection = this.dataset.columns([fixtures.databaseColumn(), fixtures.databaseColumn()]);
         this.view = new chorus.views.DatasetFilterWizard({collection: this.collection});
     });
 
@@ -90,6 +91,13 @@ describe("chorus.views.DatasetFilterWizard", function() {
                 it("joins the individual filters' conditions", function() {
                     expect(this.view.whereClause()).toBe("WHERE foo = 1 AND bar = 2");
                 });
+            });
+
+            describe("resetting the wizard", function() {
+                it("resets back to the default filter", function() {
+                    this.view.resetFilters();
+                    expect(this.view.$('li.dataset_filter').length).toBe(1);
+                })
             });
 
             describe("removing the filter", function() {
