@@ -10,7 +10,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
         this.workspaceSet.sortAsc("name");
         this.workspaceSet.fetch();
 
-        this.instanceSet = new chorus.collections.InstanceSet();
+        this.instanceSet = new chorus.collections.InstanceSet([], {hasCredentials: true});
         this.instanceSet.fetch();
 
         this.model = chorus.session.user();

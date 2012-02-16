@@ -56,8 +56,9 @@ describe("chorus.pages.DashboardPage", function() {
             expect(this.page.workspaceSet.sortOrder).toBe("asc");
         })
 
-        it("fetches all chorus instances", function() {
+        it("fetches only the chorus instances where the user has permissions", function() {
             expect(this.page.instanceSet).toBeA(chorus.collections.InstanceSet);
+            expect(this.page.instanceSet.attributes.hasCredentials).toBe(true);
             expect(this.page.instanceSet).toHaveBeenFetched();
         });
 

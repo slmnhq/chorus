@@ -1,4 +1,8 @@
 chorus.collections.InstanceSet = chorus.collections.Base.extend({
     model:chorus.models.Instance,
-    urlTemplate:"instance/"
+    urlTemplate:"instance/",
+
+    urlParams: function() {
+        return _.extend(this._super('urlParams') || {}, {hasCredentials: this.attributes.hasCredentials});
+    }
 });
