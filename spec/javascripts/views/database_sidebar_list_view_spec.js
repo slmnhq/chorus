@@ -24,8 +24,8 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
     context("render", function() {
         beforeEach(function() {
-            var object0 = new chorus.models.DatabaseTable();
-            var object1 = new chorus.models.DatabaseTable();
+            var object0 = new chorus.models.DatabaseObject();
+            var object1 = new chorus.models.DatabaseObject();
             object0.cid = 'c44';
             object1.cid = 'c55';
 

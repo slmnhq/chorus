@@ -1,7 +1,6 @@
 chorus.models.DatabaseObject = chorus.models.TabularData.extend({
     urlTemplate: function() {
-        var instanceId = this.get("instanceId") || this.get("instance").id;
-        return "data/" + instanceId + "/database/{{databaseName}}/schema/{{schemaName}}/" + this.metaType() + "/{{objectName}}"
+        return "data/" + this.get("instance").id + "/database/{{databaseName}}/schema/{{schemaName}}/" + this.metaType() + "/{{objectName}}"
     },
 
     showUrlTemplate: "/",

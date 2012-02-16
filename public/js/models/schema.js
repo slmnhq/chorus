@@ -24,28 +24,6 @@ chorus.models.Schema = chorus.models.Base.extend({
         return this._databaseObjects;
     },
 
-    tables:function () {
-        if (!this._tables) {
-            this._tables = new chorus.collections.DatabaseTableSet([], {
-                instanceId:this.get("instanceId"),
-                databaseName:this.get("databaseName"),
-                schemaName:this.get("name")
-            });
-        }
-        return this._tables;
-    },
-
-    views:function () {
-        if (!this._views) {
-            this._views = new chorus.collections.DatabaseViewSet([], {
-                instanceId:this.get("instanceId"),
-                databaseName:this.get("databaseName"),
-                schemaName:this.get("name")
-            });
-        }
-        return this._views;
-    },
-
     canonicalName:function () {
         return [this.get("instanceName"), this.get("databaseName"), this.get("name")].join(".");
     },

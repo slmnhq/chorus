@@ -1542,33 +1542,13 @@ beforeEach(function() {
             return new chorus.models.DatabaseObject(attributes);
         },
 
-        databaseObjectAsTable: function(overrides) {
-            var id = this.nextId().toString();
-            var attributes = _.extend(this.databaseObjectJson(), {
-                objectType: "BASE_TABLE",
-                type : "SOURCE_TABLE"
-            }, overrides);
-            return new chorus.models.DatabaseObject(attributes);
-        },
-
-
-        databaseObjectAsView: function(overrides) {
-            var id = this.nextId().toString();
-            var attributes = _.extend(this.databaseObjectJson(), {
-                objectType: "VIEW",
-                type : "SOURCE_TABLE",
-                definition : "SELECT chorus_test_table.customer_id FROM ddemo.chorus_test_table;"
-            }, overrides);
-            return new chorus.models.DatabaseObject(attributes);
-        },
-
         databaseTable: function(overrides) {
             var id = this.nextId().toString();
             var attributes = _.extend(this.databaseObjectJson(), {
                 objectType: "BASE_TABLE",
                 type : "SOURCE_TABLE"
             }, overrides);
-            return new chorus.models.DatabaseTable(attributes);
+            return new chorus.models.DatabaseObject(attributes);
         },
 
         databaseView: function(overrides) {
@@ -1578,7 +1558,7 @@ beforeEach(function() {
                 type : "SOURCE_TABLE",
                 definition : "SELECT chorus_test_table.customer_id FROM ddemo.chorus_test_table;"
             }, overrides);
-            return new chorus.models.DatabaseView(attributes);
+            return new chorus.models.DatabaseObject(attributes);
         },
 
         databaseColumn: function(overrides) {
@@ -1588,18 +1568,6 @@ beforeEach(function() {
                 typeCategory : "WHOLE_NUMBER"
             }, overrides);
             return new chorus.models.DatabaseColumn(attributes);
-        },
-
-        databaseTableSet: function(models, overrides) {
-            var id = this.nextId().toString()
-            models = (models && (models.length > 0)) || [this.table(overrides), this.table(overrides)];
-            return new chorus.collections.DatabaseTableSet(models, overrides);
-        },
-
-        databaseViewSet: function(models, overrides) {
-            var id = this.nextId().toString()
-            models = (models && (models.length > 0)) || [this.databaseView(overrides), this.databaseView(overrides)];
-            return new chorus.collections.DatabaseViewSet(models, overrides);
         },
 
         databaseColumnSet: function(models, overrides) {

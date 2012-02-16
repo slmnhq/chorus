@@ -88,7 +88,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
 
                 describe("user clicks a view in the list", function() {
                     beforeEach(function() {
-                        this.clickedView = this.schema.databaseObjects().findByName("Data1");
+                        this.clickedView = this.schema.databaseObjects().findWhere({ objectName: "Data1" });
                         spyOnEvent(this.view, "datasetSelected");
                         this.view.$("li:contains('Data1') a").click();
                     });
@@ -100,7 +100,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
 
                 describe("user clicks on a table in the list", function() {
                     beforeEach(function() {
-                        this.clickedTable = this.schema.databaseObjects().findByName("Data2");
+                        this.clickedTable = this.schema.databaseObjects().findWhere({ objectName: "Data2" });
                         spyOnEvent(this.view, "datasetSelected");
                         this.view.$("li:contains('Data2') a").click();
                     });
