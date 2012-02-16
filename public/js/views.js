@@ -332,13 +332,15 @@ chorus.views.Base = chorus.views.Bare.extend({
     },
 
     clearErrors:function () {
+        this.clearPopupErrors();
+        this.$(".errors").empty();
+    },
+
+    clearPopupErrors: function() {
         var errors = this.$(".has_error");
-        // qtip('destroy') clears the form, removeData clears the objects -- need to call both
         errors.qtip("destroy");
         errors.removeData("qtip");
         errors.removeClass("has_error");
-
-        this.$(".errors").empty();
     }
 });
 

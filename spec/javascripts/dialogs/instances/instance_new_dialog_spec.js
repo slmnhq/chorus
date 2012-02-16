@@ -31,18 +31,32 @@ describe("chorus.dialogs.InstanceNew", function() {
                 expect(this.dialog.$("fieldset").not(".collapsed").length).toBe(1);
                 expect(this.dialog.$("input[type=radio]:checked").closest("fieldset")).not.toHaveClass("collapsed");
             });
+        });
 
-            it("enables the submit button", function() {
-                expect(this.dialog.$("button.submit")).not.toHaveAttr("disabled");
+        describe("filling out the form", function() {
+            beforeEach(function() {
+                this.dialog.$(".register_existing_greenplum input[type=radio]").attr('checked', true).change();
             });
 
-            xcontext("clicking another radio", function() {
-                it("has only one that is not collapsed", function() {
-                    this.dialog.$("input[type=radio]").eq(0).attr('checked', false).change();
-                    this.dialog.$("input[type=radio]").eq(2).attr('checked', true).change();
+            it("should disable the submit button by default", function() {
+                expect(this.dialog.$("button.submit")).toBeDisabled();
+            });
 
-                    expect(this.dialog.$("fieldset").not(".collapsed").length).toBe(1);
-                    expect(this.dialog.$("input[type=radio]:checked").closest("fieldset")).not.toHaveClass("collapsed");
+            context("after filling in the form", function() {
+                beforeEach(function() {
+                    this.dialog.$(".register_existing_greenplum input[name=name]").val("Instance_Name");
+                    this.dialog.$(".register_existing_greenplum textarea[name=description]").val("Instance Description");
+                    this.dialog.$(".register_existing_greenplum input[name=host]").val("foo.bar");
+                    this.dialog.$(".register_existing_greenplum input[name=port]").val("1234");
+                    this.dialog.$(".register_existing_greenplum input[name=dbUserName]").val("user");
+                    this.dialog.$(".register_existing_greenplum input[name=dbPassword]").val("my_password");
+                    this.dialog.$(".register_existing_greenplum input[name=maintenanceDb]").val("foo");
+
+                    this.dialog.$(".register_existing_greenplum input[name=name]").trigger("change");
+                });
+
+                it("should enable the submit button", function() {
+                    expect(this.dialog.$("button.submit")).toBeEnabled();
                 });
             });
         });
@@ -66,6 +80,8 @@ describe("chorus.dialogs.InstanceNew", function() {
                         this.dialog.$(".register_existing_greenplum input[name=dbUserName]").val("user");
                         this.dialog.$(".register_existing_greenplum input[name=dbPassword]").val("my_password");
                         this.dialog.$(".register_existing_greenplum input[name=maintenanceDb]").val("foo");
+
+                        this.dialog.$(".register_existing_greenplum input[name=name]").trigger("change");
 
                         spyOn(this.dialog.model, "save").andCallThrough();
                     });
@@ -96,13 +112,6 @@ describe("chorus.dialogs.InstanceNew", function() {
 
                 it("doesn't complete a save", function() {
                     expect(Backbone.Model.prototype.save).not.toHaveBeenCalled();
-                });
-
-                xit("clears the error when clicking on another radio", function() {
-                    this.dialog.$(".register_existing_greenplum input[type=radio]").attr('checked', true).change();
-
-                    expect(this.dialog.$(".has_error").length).toBe(0);
-
                 });
             });
 
