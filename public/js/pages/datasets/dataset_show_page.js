@@ -93,7 +93,7 @@
             this.mainContent.contentDetails.bind("dataset:cancelEdit", this.fetchDataSet, this);
             this.mainContent.contentDetails.forwardEvent("dataset:saveEdit", this.mainContent.content, this);
 
-            this.render();
+            this.renderSubview('mainContent');
         },
 
         forwardSelectedToSidebar : function(column) {
@@ -145,7 +145,7 @@
                     this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model : this.model});
                     break;
                 case 'edit_chorus_view':
-                    this.secondarySidebar = new chorus.views.DatasetEditChorusViewSidebar({model: this.model});
+                    this.secondarySidebar = new chorus.views.DatasetEditChorusViewSidebar({model: this.model, sandbox: this.workspace.sandbox()});
                     break;
             }
 

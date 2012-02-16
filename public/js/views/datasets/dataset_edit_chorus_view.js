@@ -5,6 +5,7 @@ chorus.views.DatasetEditChorusView = chorus.views.Base.extend({
         this.bind("dataset:saveEdit", this.saveModel, this);
         this.model.initialQuery = this.model.get("query");
         this.model.bind("saved", this.navigateToChorusViewShowPage, this);
+        chorus.PageEvents.subscribe("file:insertText", this.insertText, this)
     },
 
     postRender:function () {
@@ -35,6 +36,12 @@ chorus.views.DatasetEditChorusView = chorus.views.Base.extend({
                 }
             }, this)
             );
+    },
+
+    insertText: function(text){
+        this.editor.focus();
+        this.editor.replaceSelection(text)
+        this.editor.setCursor(this.editor.getCursor(false))
     },
 
     updateQueryInModel: function() {

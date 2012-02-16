@@ -64,7 +64,6 @@ describe("chorus.views.DatasetEditChorusView", function() {
         })
     });
 
-
     describe("#saveChanges", function() {
         beforeEach(function() {
             this.view.render();

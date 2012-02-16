@@ -91,11 +91,16 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                     describe("when editing a chorus view", function() {
                         beforeEach(function() {
+                            spyOn(this.page, 'render');
                             this.page.mainContent.contentDetails.trigger("dataset:edit");
                         });
 
                         it("sets the main content to DatasetEditChorusView", function() {
                             expect(this.page.mainContent.content).toBeA(chorus.views.DatasetEditChorusView);
+                        });
+
+                        it("should not re-render", function() {
+                            expect(this.page.render).not.toHaveBeenCalled();
                         });
 
                         describe("when user cancel edit dataset and dataset:cancelEdit is triggered", function() {
@@ -313,13 +318,17 @@ describe("chorus.pages.DatasetShowPage", function() {
                 });
             });
 
-            context("for a edit chorus view", function() {
+            context("for an edit chorus view", function() {
                 beforeEach(function() {
                     this.page.mainContent.contentDetails.trigger("transform:sidebar", 'edit_chorus_view');
                 });
 
                 it("should swap out the sidebar for the dataset edit chorus view sidebar", function() {
                     expect(this.page.secondarySidebar).toBeA(chorus.views.DatasetEditChorusViewSidebar)
+                });
+
+                it("should pass the workspace's sandbox to the sidebar", function() {
+                   expect(this.page.secondarySidebar.sandbox).toBe(this.page.workspace.sandbox());
                 });
             });
 
