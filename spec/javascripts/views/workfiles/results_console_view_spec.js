@@ -244,7 +244,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 if (shouldCancelTimers) {
                     it("cancels the spinner and elapsed time timers", function() {
-                        expect(window.clearTimeout.callCount).toBe(2);
+                        expect(window.clearTimeout.callCount >= 2).toBeTruthy();
                     })
                 } else {
                     it("does not cancel the spinner delay", function() {
