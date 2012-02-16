@@ -23,11 +23,11 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
                     return text;
                 }
             } });
-            chorus.datePicker({
-                "%Y": self.$(".filter.date input[name='year']"),
-                "%m": self.$(".filter.date input[name='month']"),
-                "%d": self.$(".filter.date input[name='day']")
-            });
+        });
+        chorus.datePicker({
+            "%Y": self.$(".filter.date input[name='year']"),
+            "%m": self.$(".filter.date input[name='month']"),
+            "%d": self.$(".filter.date input[name='day']")
         });
 
         if (!$select.find("option").length) {
