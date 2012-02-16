@@ -205,6 +205,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
             it("puts the create button in a loading state", function() {
                 expect(this.view.$("button.create").isLoading()).toBeTruthy();
+                expect(this.view.$("button.create").text().trim()).toMatchTranslation("actions.creating")
             });
 
             it("should create the chorus view", function() {
@@ -243,7 +244,9 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             context("after the request completes successfully", function() {
                 beforeEach(function() {
                     spyOn(chorus, 'toast');
-                    this.server.lastCreate().succeed();
+                    spyOn(chorus.router, "navigate");
+                    this.chorusView = fixtures.datasetChorusView();
+                    this.server.lastCreate().succeed(this.chorusView);
                 });
 
                 it("displays a toast", function() {
@@ -253,6 +256,10 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 it("removes the loading spinner from the button", function() {
                     expect(this.view.$("button.create").isLoading()).toBeFalsy();
                 });
+
+                it("navigates to the show page of the new chorus view", function() {
+                    expect(chorus.router.navigate).toHaveBeenCalledWith(this.chorusView.showUrl(), true);
+                })
             });
         })
     });

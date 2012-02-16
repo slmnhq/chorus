@@ -64,12 +64,14 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         };
 
         var button = this.$("button.create");
-        button.startLoading("loading");
+        button.startLoading("actions.creating");
         $.post("/edc/workspace/" + this.model.get("workspace").id + "/dataset", params,
             function(data) {
                 button.stopLoading();
                 if (data.status == "ok") {
                     chorus.toast("dataset.chorusview.create_success");
+                    var chorusView = new chorus.models.Dataset(data.resource[0])
+                    chorus.router.navigate(chorusView.showUrl(), true)
                 } else {
                     chorus.toast("dataset.chorusview.create_fail");
                 }
