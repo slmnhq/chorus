@@ -40,6 +40,11 @@
         margin-top: 1px;
         @include content-details-button($content-details-action-link-border-color);
         float: right;
+
+        &.preview {
+            float: none;
+            margin-left: 5px;
+        }
     }
 
     .definition, .create_chart, .create_chorus_view, .edit_chorus_view {
