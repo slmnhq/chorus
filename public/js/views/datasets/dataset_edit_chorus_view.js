@@ -24,7 +24,7 @@ chorus.views.DatasetEditChorusView = chorus.views.CodeEditorView.extend({
     },
 
     updateQueryInModel: function() {
-        this.model.set({query: this.editor.getValue()});
+        this.model.set({query: this.editor.getValue()}, {silent: true});
     },
 
     saveModel: function() {

@@ -42,12 +42,22 @@ describe("chorus.views.DatasetEditChorusView", function() {
             expect(this.view.editor.getOption("mode")).toBe("text/x-sql");
         });
 
-        it("set the query in the model when blur is received by the editor", function() {
-            this.view.editor.focus();
-            this.view.editor.setValue("select * from hello;")
-            $(this.view.$(".CodeMirror")[0].firstChild.firstChild).blur();
-            expect(this.view.updateQueryInModel).toHaveBeenCalled();
-            expect(this.view.model.get("query")).toBe("select * from hello;")
+        context("when blur is received by the editor", function() {
+            beforeEach(function() {
+                spyOn(this.view, "postRender");
+                this.view.editor.focus();
+                this.view.editor.setValue("select * from hello;")
+                $(this.view.$(".CodeMirror")[0].firstChild.firstChild).blur();
+            });
+
+            it("sets the query in the model", function() {
+                expect(this.view.updateQueryInModel).toHaveBeenCalled();
+                expect(this.view.model.get("query")).toBe("select * from hello;")
+            });
+
+            it("does not re-render", function() {
+                expect(this.view.postRender).not.toHaveBeenCalled();
+            });
         });
     });
 

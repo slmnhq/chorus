@@ -112,7 +112,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
     insertText:function (cid, e) {
         e && e.preventDefault();
         var model = this.collection.getByCid(cid)
-        chorus.PageEvents.broadcast("file:insertText", model.toText())
+        chorus.PageEvents.broadcast("file:insertText", model.toText());
     },
 
     closeQtip:function () {

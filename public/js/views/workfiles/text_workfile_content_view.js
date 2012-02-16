@@ -108,6 +108,6 @@ chorus.views.TextWorkfileContent = chorus.views.CodeEditorView.extend({
         this.dialog.model.bind("autosaved", function() {
             this.trigger("autosaved", "workfile.content_details.save");
         }, this);
-    },
+    }
 
 });
