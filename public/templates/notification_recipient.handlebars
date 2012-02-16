@@ -1,0 +1,11 @@
+<span class="title">{{t "notification_recipient.title"}}</span>
+
+<ul class="picked_users"/>
+
+<select class="users">
+{{#each models}}
+    <option value="{{id}}">{{displayNameFromPerson this}}</option>
+{{/each}}
+</select>
+
+<a class="add_user">{{t "notification_recipient.add_user"}}</a>

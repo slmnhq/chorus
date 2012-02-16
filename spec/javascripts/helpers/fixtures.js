@@ -2054,12 +2054,33 @@ beforeEach(function() {
             }, overrides);
         },
 
+        user: function(overrides) {
+            var id = fixtures.nextId();
+            return new chorus.models.User(_.extend({
+                admin: false,
+                createdStamp: "2012-01-24 17:21:02.597",
+                firstName: "user",
+                id: id,
+                isDeleted: false,
+                lastLogin: "2012-02-15 15:08:55",
+                lastName: id.toString(),
+                notes: null,
+                title: null,
+                userName: "u" + id
+            }));
+        },
+
+        userSet: function(models, modelOverrides, attrs) {
+            models = models || [fixtures.user(modelOverrides), fixtures.user(modelOverrides)];
+            return new chorus.collections.UserSet(models, attrs || {});
+        },
+
         notification : function(overrides) {
             return new chorus.models.Notification(this.notificationJson(overrides));
         },
 
         notificationSet: function(models, overrides) {
-            models = (models && (models.length > 0)) || [this.notification(overrides), this.notification(overrides)];
+            models = models || [this.notification(overrides), this.notification(overrides)];
             return new chorus.collections.NotificationSet(models, overrides);
         }
     });

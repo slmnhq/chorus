@@ -60,6 +60,7 @@
         'manage_join_tables',
         'notes_new',
         'notes_new_file_attachment',
+        'notification_recipient',
         'pick_workspace',
         'plain_text',
         'results_console',
