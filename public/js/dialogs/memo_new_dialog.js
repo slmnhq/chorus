@@ -9,6 +9,11 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.extend({
         "click .cancel_upload":"cancelUpload"
     },
 
+    setup : function() {
+        this.notifications = new chorus.views.NotificationRecipient();
+        this.subviews[".notification_recipients"] = "notifications";
+    },
+
     postRender:function () {
         this.$("input[type=file]").fileupload({
             add:_.bind(this.desktopFileChosen, this),
@@ -87,7 +92,10 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.extend({
         this.$(".attachment_links").addClass("disabled");
         this.$("button.submit").startLoading("notes.button.uploading");
         this.saving = true;
-        this.model.save({ body: this.$("textarea[name=body]").val().trim() });
+        this.model.save({
+            body: this.$("textarea[name=body]").val().trim(),
+            recipients: this.notifications.pickedUsers.join(",")
+        });
     },
 
     saved:function () {

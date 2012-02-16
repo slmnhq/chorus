@@ -1,11 +1,15 @@
 <span class="title">{{t "notification_recipient.title"}}</span>
 
-<ul class="picked_users"/>
+<div class="user_lists">
+    <ul class="picked_users"/>
 
-<select class="users">
-{{#each models}}
-    <option value="{{id}}">{{displayNameFromPerson this}}</option>
-{{/each}}
-</select>
+    <div class="dropdown">
+        <select class="users">
+            {{#each models}}
+            <option value="{{id}}">{{displayNameFromPerson this}}</option>
+            {{/each}}
+        </select>
+    </div>
 
-<a class="add_user">{{t "notification_recipient.add_user"}}</a>
+    <a class="add_user">{{t "notification_recipient.add_user"}}</a>
+</div>

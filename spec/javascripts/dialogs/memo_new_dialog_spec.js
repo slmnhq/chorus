@@ -38,6 +38,11 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             expect(this.dialog.$('a.show_options').length).toBe(1);
             expect(this.dialog.$('a.show_options').text()).toMatchTranslation('notes.new_dialog.show_options');
         });
+
+        it("should have a notification recipeients subview", function() {
+            expect(this.dialog.$(this.dialog.notifications.el)).toExist();
+            expect(this.dialog.notifications).toBeA(chorus.views.NotificationRecipient);
+        });
     });
 
     describe("show_options", function() {
@@ -484,6 +489,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             spyOn(this.dialog.model, "save").andCallThrough();
             spyOn(this.dialog, "closeModal");
             this.dialog.$("textarea[name=body]").val("The body of a note");
+            this.dialog.notifications.pickedUsers = ['1', '2'];
             this.dialog.$("form").trigger("submit");
         });
 
@@ -491,6 +497,10 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             expect(this.dialog.model.get("body")).toBe("The body of a note")
             expect(this.dialog.model.get("workspaceId")).toBe(22);
             expect(this.dialog.model.save).toHaveBeenCalled();
+        });
+
+        it("makes the right save request", function() {
+            expect(this.server.lastCreate().params().recipients).toBe("1,2");
         });
 
         it("starts a spinner", function() {

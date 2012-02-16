@@ -7,9 +7,10 @@
         min-height: 75px;
         resize: none;
     }
-    
+
     a {
         font-size: 12px;
+        font-weight: $semibold;
     }
 
     .options_area {
@@ -19,6 +20,7 @@
 
         .label {
             color: $color-text2;
+            font-weight: $semibold;
             width: 72px;
             display: inline-block;
         }
@@ -100,6 +102,40 @@
 
         a.workfile {
             vertical-align: bottom;
+        }
+    }
+
+    .notification_recipient {
+        margin-left: 8px;
+        margin-right: 8px;
+
+        .title {
+            @include font-content-details;
+        }
+
+        .add_user {
+            font-size: 12px;
+            font-weight: $semibold;
+        }
+
+        .user_lists {
+            margin-left: 80px;
+
+            .dropdown {
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+        }
+
+        .picked_users {
+            .name {
+                @include font-content-details;
+                line-height: 20px
+            }
+
+            .remove {
+                float: right;
+            }
         }
     }
 }

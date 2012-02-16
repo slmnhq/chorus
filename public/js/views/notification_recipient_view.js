@@ -6,10 +6,14 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
         "click .remove" : "onRemoveClicked"
     },
 
-    makeModel:function () {
+    makeModel: function() {
         this.pickedUsers = [];
         this.collection = new chorus.collections.UserSet();
         this.collection.fetchAll();
+    },
+
+    postRender: function() {
+        chorus.styleSelect(this.$("select"));
     },
 
     onAddUserClicked: function(e) {
