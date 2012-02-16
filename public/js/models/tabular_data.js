@@ -1,18 +1,5 @@
 chorus.models.TabularData = chorus.models.Base.extend({
     initialize: function() {
-        if (this.has("id")) {
-            this.entityId = this.get("id");
-        } else if (this.has("instance")) {
-            //TODO: Remove after API story is done: https://www.pivotaltracker.com/story/show/24741875
-            this.entityId = [
-                this.get("instance").id,
-                this.get("databaseName"),
-                this.get("schemaName"),
-                this.get("objectType"),
-                this.get("objectName")
-            ].join("|");
-        }
-
         this.resetEntityType();
         this.bind("change:type", this.resetEntityType, this);
         this.bind('invalidated', this.refetchAfterInvalidated, this);
@@ -111,7 +98,7 @@ chorus.models.TabularData = chorus.models.Base.extend({
         } else if (metaType == "view") {
             this._preview.set({viewName: objectName}, {silent: true});
         } else {
-            this._preview.set({datasetId: this.entityId, workspaceId: this.get("workspace").id}, {silent: true});
+            this._preview.set({datasetId: this.get("id"), workspaceId: this.get("workspace").id}, {silent: true});
         }
 
         return this._preview;

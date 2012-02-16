@@ -65,7 +65,7 @@ describe("chorus.models.Dataset", function() {
 
         it("has the right workspaceId, dataset id and objectName", function() {
             expect(this.task.get("workspaceId")).toBe("44");
-            expect(this.task.get("datasetId")).toBe(this.dataset.entityId);
+            expect(this.task.get("datasetId")).toBe(this.dataset.get("id"));
             expect(this.task.get("objectName")).toBe("japanese_teas");
         });
     });
@@ -91,7 +91,7 @@ describe("chorus.models.Dataset", function() {
 
         it("has the right workspaceId, dataset id and objectName", function() {
             expect(this.task.get("workspaceId")).toBe("44");
-            expect(this.task.get("datasetId")).toBe(this.dataset.entityId);
+            expect(this.task.get("datasetId")).toBe(this.dataset.get("id"));
             expect(this.task.get("objectName")).toBe("japanese_teas");
         });
     });
@@ -121,7 +121,7 @@ describe("chorus.models.Dataset", function() {
 
         it("has the right workspaceId, dataset id and objectName", function() {
             expect(this.task.get("workspaceId")).toBe("44");
-            expect(this.task.get("datasetId")).toBe(this.dataset.entityId);
+            expect(this.task.get("datasetId")).toBe(this.dataset.get("id"));
             expect(this.task.get("objectName")).toBe("japanese_teas");
         });
     });
@@ -146,7 +146,7 @@ describe("chorus.models.Dataset", function() {
 
         it("has the right workspaceId, dataset id and objectName", function() {
             expect(this.task.get("workspaceId")).toBe("44");
-            expect(this.task.get("datasetId")).toBe(this.dataset.entityId);
+            expect(this.task.get("datasetId")).toBe(this.dataset.get("id"));
             expect(this.task.get("objectName")).toBe("japanese_teas");
             expect(this.task.get("bins")).toBe("12")
         });
@@ -181,7 +181,7 @@ describe("chorus.models.Dataset", function() {
 
         it("has the right workspaceId, dataset id and objectName", function() {
             expect(this.task.get("workspaceId")).toBe("44");
-            expect(this.task.get("datasetId")).toBe(this.dataset.entityId);
+            expect(this.task.get("datasetId")).toBe(this.dataset.get("id"));
             expect(this.task.get("objectName")).toBe("japanese_teas");
         });
 

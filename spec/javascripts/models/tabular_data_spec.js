@@ -3,13 +3,6 @@ describe("chorus.models.TabularData", function() {
         this.tabularData = fixtures.tabularData();
     })
 
-    context("when the tabularData is initialized with an Id, but no instance, database or schema", function() {
-        it("aliases the id to 'entityId'", function() {
-            this.tabularData = new chorus.models.TabularData({ id: '45|whirling_tops|diamonds|foo|japanese_teas' });
-            expect(this.tabularData.entityId).toBe('45|whirling_tops|diamonds|foo|japanese_teas');
-        });
-    });
-
     describe("#statistics", function() {
         beforeEach(function() {
             this.tabularDataProperties = this.tabularData.statistics()

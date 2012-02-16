@@ -1,12 +1,12 @@
 chorus.models.Dataset = chorus.models.TabularData.extend({
-    urlTemplate: "workspace/{{workspace.id}}/dataset/{{entityId}}",
+    urlTemplate: "workspace/{{workspace.id}}/dataset/{{id}}",
 
     showUrlTemplate: function() {
         return [
             "workspaces",
             this.get("workspace").id,
             "datasets",
-            this.entityId
+            this.get("id")
         ].join("/");
     },
 
@@ -25,8 +25,8 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
             objectName: this.get("objectName"),
             query: this.get("query"),
             workspaceId: this.get("workspace").id,
-            datasetId: this.entityId,
-            bins: taskAttrs.bins
+            datasetId: this.get("id"),
+            bins : taskAttrs.bins
         });
     },
 
@@ -36,7 +36,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
             objectName: this.get("objectName"),
             query: this.get("query"),
             workspaceId: this.get("workspace").id,
-            datasetId: this.entityId,
+            datasetId: this.get("id"),
             bins: taskAttrs.bins
         });
     },
@@ -48,7 +48,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
             objectName: this.get("objectName"),
             query: this.get("query"),
             workspaceId: this.get("workspace").id,
-            datasetId: this.entityId
+            datasetId: this.get("id")
         });
     },
 
@@ -61,7 +61,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
             objectName: this.get("objectName"),
             query: this.get("query"),
             workspaceId: this.get("workspace").id,
-            datasetId: this.entityId
+            datasetId: this.get("id")
         });
     },
 
@@ -74,7 +74,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
             objectName: this.get("objectName"),
             query: this.get("query"),
             workspaceId: this.get("workspace").id,
-            datasetId: this.entityId,
+            datasetId: this.get("id"),
             timeType: taskAttrs.timeType
         });
     },
