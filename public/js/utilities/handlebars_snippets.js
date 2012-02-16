@@ -18,6 +18,15 @@
             }
         },
 
+        ifAdminOr:function (flag, block) {
+            var user = chorus && chorus.session && chorus.session.user();
+            if ((user && user.get("admin")) || flag) {
+                return block(this);
+            } else {
+                return block.inverse(this);
+            }
+        },
+
         ifCurrentUserNameIs:function (userName, block) {
             var user = chorus && chorus.session && chorus.session.user();
             if (user && user.get("userName") == userName) {

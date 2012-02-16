@@ -16,7 +16,7 @@
                 {{/if}}
                 <div class="actions">
                     <span class="timestamp">{{relativeTimestamp timestamp}}</span>
-                    {{#if isOwner}}
+                    {{#ifAdminOr isOwner}}
                         <a class="delete_link alert"
                            data-alert="DeleteNoteConfirmAlert"
                            data-comment-id="{{id}}"
@@ -26,7 +26,7 @@
                             {{t "actions.delete"}}
                             <img src="images/trashcan.png"/>
                         </a>
-                    {{/if}}
+                    {{/ifAdminOr}}
                 </div>
             </div>
         </li>

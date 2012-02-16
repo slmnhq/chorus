@@ -93,11 +93,37 @@ describe("CommentList", function() {
             });
         });
 
-        it("should not show the delete comment link if user does not own the comment", function() {
-            expect(this.view.$(".delete_link")).not.toExist();
+        context("when the current user is an admin", function() {
+            beforeEach(function() {
+                setLoggedInUser({admin: true});
+                this.view.render();
+            });
+
+            it("displays a delete link", function() {
+                expect(this.view.$(".delete_link")).toExist();
+            })
         })
 
-        context("when the user is owner of the comment", function() {
+        context("when the current user is not an admin", function() {
+            context("and is not the author of the note", function() {
+                it("does not display a delete link if user is not the owner", function() {
+                    expect(this.view.$(".delete_link")).not.toExist();
+                })
+            })
+
+            context("and is the author of the note", function() {
+                beforeEach(function() {
+                    setLoggedInUser({name: "Lenny", lastName: "lalala", id: this.comment1.get("author").id});
+                    this.view.render();
+                });
+
+                it("displays a delete link", function() {
+                    expect(this.view.$(".delete_link")).toExist();
+                })
+            })
+        })
+
+        context("when the delete link appears", function() {
             beforeEach(function() {
                 setLoggedInUser({name: "Lenny", lastName: "lalala", id: this.comment1.get("author").id});
                 this.view.render();

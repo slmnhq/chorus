@@ -195,11 +195,37 @@ describe("chorus.views.Activity", function() {
                 expect(this.view.$(".timestamp").text()).not.toBeEmpty();
             });
 
-            it("does not display a delete link if user is not the owner", function() {
-                expect(this.view.$(".delete_link")).not.toExist();
+            context("when the current user is an admin", function() {
+                beforeEach(function() {
+                    setLoggedInUser({admin: true});
+                    this.view.render();
+                });
+
+                it("displays a delete link", function() {
+                    expect(this.view.$(".delete_link")).toExist();
+                })
             })
 
-            context("when owned by the current user", function() {
+            context("when the current user is not an admin", function() {
+                context("and is not the author of the note", function() {
+                    it("does not display a delete link if user is not the owner", function() {
+                        expect(this.view.$(".delete_link")).not.toExist();
+                    })
+                })
+
+                context("and is the author of the note", function() {
+                    beforeEach(function() {
+                        setLoggedInUser({name: "Lenny", lastName: "lalala", id: this.view.model.author().id});
+                        this.view.render();
+                    });
+
+                    it("displays a delete link", function() {
+                        expect(this.view.$(".delete_link")).toExist();
+                    })
+                })
+            })
+
+            context("when the delete link appears", function() {
                 beforeEach(function() {
                     setLoggedInUser({name: "Lenny", lastName: "lalala", id: this.view.model.author().id});
 

@@ -27,9 +27,9 @@
         </ul>
         <div class="actions">
             <span class="timestamp">{{relativeTimestamp timestamp}}</span>
-            {{#if isOwner}}
+            {{#ifAdminOr isOwner}}
                 <a class="delete_link alert" data-alert="DeleteNoteConfirmAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
-            {{/if}}
+            {{/ifAdminOr}}
         </div>
         <div class="links">
             <a class="comment dialog" data-dialog="Comment" data-entity-type="{{entityType}}" data-entity-id="{{id}}" data-entity-title="{{entityTitle}}" href="#">{{t "activity_stream.comment"}}</a>
