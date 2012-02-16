@@ -19,7 +19,7 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     },
 
     tableClicked: function(e) {
-        var clickedLi = $(e.target);
+        var clickedLi = $(e.target).closest("li");
         this.$("li").removeClass("selected");
         clickedLi.addClass("selected");
     },
