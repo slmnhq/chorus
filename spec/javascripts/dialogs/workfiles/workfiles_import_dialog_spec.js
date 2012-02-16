@@ -193,6 +193,7 @@ describe("WorkfilesImportDialog", function() {
                 });
             });
         });
+
         context("when the Enter key is pressed", function() {
             beforeEach(function() {
                 this.dialog.$("form").submit();

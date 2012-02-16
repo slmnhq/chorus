@@ -1,7 +1,9 @@
 describe("chorus.dialogs.DatasetImport", function() {
     beforeEach(function() {
+        this.modalSpy = stubModals();
         spyOn($.fn, 'fileupload');
-        this.dialog = new chorus.dialogs.DatasetImport();
+        this.launchElement = $('<button data-workspaceid=​242>​Import File​</button>​');
+        this.dialog = new chorus.dialogs.DatasetImport({launchElement: this.launchElement});
         this.dialog.render();
     });
 
@@ -60,30 +62,33 @@ describe("chorus.dialogs.DatasetImport", function() {
             this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
         });
 
-        it("enables the upload button", function() {
-            expect(this.dialog.$("button.submit")).toBeEnabled();
-        });
+        describe("default settings", function() {
 
-        it("displays the chosen filename", function() {
-            expect(this.dialog.$(".file_name").text()).toBe("foo.csv");
-        });
+            it("enables the upload button", function() {
+                expect(this.dialog.$("button.submit")).toBeEnabled();
+            });
 
-        it("displays the appropriate file icon", function() {
-            expect(this.dialog.$(".file_details img")).not.toHaveClass("hidden")
-            expect(this.dialog.$(".file_details img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("csv", "medium"));
-        });
+            it("displays the chosen filename", function() {
+                expect(this.dialog.$(".file_name").text()).toBe("foo.csv");
+            });
 
-        it("should hide the 'No file Selected' text", function() {
-            expect(this.dialog.$(".empty_selection")).toHaveClass("hidden");
-        });
+            it("displays the appropriate file icon", function() {
+                expect(this.dialog.$(".file_details img")).not.toHaveClass("hidden")
+                expect(this.dialog.$(".file_details img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("csv", "medium"));
+            });
 
-        it("hides the file select button", function() {
-            expect(this.dialog.$(".file-wrapper button")).toHaveClass("hidden");
+            it("should hide the 'No file Selected' text", function() {
+                expect(this.dialog.$(".empty_selection")).toHaveClass("hidden");
+            });
+
+            it("hides the file select button", function() {
+                expect(this.dialog.$(".file-wrapper button")).toHaveClass("hidden");
+            })
+
+            it("shows the 'Change' link", function() {
+                expect(this.dialog.$(".file-wrapper a")).not.toHaveClass("hidden");
+            });
         })
-
-        it("shows the 'Change' link", function() {
-            expect(this.dialog.$(".file-wrapper a")).not.toHaveClass("hidden");
-        });
 
         describe("import controls", function() {
             it("does not hide them", function() {
@@ -169,6 +174,35 @@ describe("chorus.dialogs.DatasetImport", function() {
             it("should display a loading spinner", function() {
                 expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.uploading");
                 expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+            });
+
+            it("uploads the specified file", function() {
+                expect(this.dialog.uploadObj.url).toEqual("/edc/workspace/​242/csv/sample")
+                expect(this.dialog.uploadObj.submit).toHaveBeenCalled();
+            });
+
+            context("when upload succeeds", function() {
+                beforeEach(function() {
+                    this.data = {result: {
+                        resource: [fixtures.csvImport({lines: ["col1,col2,col3", "val1,val2,val3"]}).attributes],
+                        status: "ok"
+                    }};
+                    spyOn(chorus.dialogs.TableImportCSV.prototype, "setup").andCallThrough()
+                    this.fileUploadOptions.done(null, this.data)
+                });
+
+                it("stops the spinner", function() {
+                    expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                });
+
+                it("makes a CSV", function() {
+                    expect(this.dialog.csv.get('lines').length).toBe(2);
+                });
+
+                it("launches the import new table dialog", function() {
+                    expect(chorus.dialogs.TableImportCSV.prototype.setup).toHaveBeenCalledWith({csv: this.dialog.csv});
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.TableImportCSV);
+                });
             });
         });
     });

@@ -1,0 +1,12 @@
+.table_import_csv {
+
+    .data_table {
+        width: 800px;
+        height: 200px;
+        overflow: auto;
+
+        .tbody {
+            overflow: visible;
+        }
+    }
+}

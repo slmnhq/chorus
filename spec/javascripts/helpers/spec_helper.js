@@ -74,6 +74,7 @@
         'sql_workfile_content_details',
         'sub_nav',
         'tab_control',
+        'table_import_csv',
         'text_workfile_content',
         'truncated_text',
         'user_edit',

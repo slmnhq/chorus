@@ -1,0 +1,31 @@
+<div class="result_table">
+    <div class="data_table">
+        <div class="thead">
+            <div class="column_names">
+                {{#each columns}}<div class="th">
+                    <div class="name" title="{{{name}}}">
+                        <input type="text" value="{{{name}}}"/>
+                    </div>
+                </div>{{/each}}
+            </div>
+            <div class="data_types">
+                {{#each columns}}<div class="th">
+                    <div class="type">TYPE TODO</div>
+                </div>{{/each}}
+            </div>
+        </div>
+
+        <div class="tbody">
+            {{#each columns}}<div class="column">
+                {{#each values}}
+                <div class="td" title="{{{this}}}">{{renderTableData this}}</div>
+                {{/each}}
+            </div>{{/each}}
+        </div>
+    </div>
+</div>
+
+<div class="modal_controls">
+    <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
+    <button type="submit" class="submit" tabindex="99" disabled="disabled">{{t "dataset.import.table.submit"}}</button>
+</div>

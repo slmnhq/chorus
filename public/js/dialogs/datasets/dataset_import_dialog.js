@@ -25,7 +25,10 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     uploadFile: function(e) {
         e && e.preventDefault();
         this.$("button.submit").startLoading("actions.uploading");
+        this.uploadObj.url = "/edc/workspace/" + this.options.launchElement.data("workspaceid") + "/csv/sample"
+        this.request = this.uploadObj.submit();
     },
+
 
     postRender:function () {
         var self = this;
@@ -33,13 +36,14 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             change:fileChosen,
             add:fileChosen,
             done:uploadFinished,
-            dataType:"text"
+            dataType:"json"
         });
 
         function fileChosen(e, data) {
             self.$("button.submit").attr("disabled", false);
             self.$('.empty_selection').addClass('hidden');
 
+            self.uploadObj = data;
             var filename = data.files[0].name;
             var basename = _.first(filename.split('.'));
             var extension = _.last(filename.split('.'));
@@ -58,6 +62,12 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         }
 
         function uploadFinished(e, data) {
+            e && e.preventDefault();
+            self.$("button.submit").stopLoading();
+            self.csv = new chorus.models.CSVImport
+            self.csv.set(self.csv.parse(data.result));
+            var dialog = new chorus.dialogs.TableImportCSV({csv: self.csv});
+            dialog.launchModal();
         }
     }
 });

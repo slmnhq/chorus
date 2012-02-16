@@ -1,8 +1,0 @@
-{{#if loaded}}
-    <div class="count">
-        <span class="number">{{models.length}}</span> {{pluralize models.length "dataset.title"}}
-    </div>
-{{else}}
-    <div class="loading">{{t "loading"}}</div>
-{{/if}}
-<button class="dialog" data-dialog="DatasetImport">{{t "dataset.import.title"}}</button>

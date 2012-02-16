@@ -42,7 +42,8 @@
                 buttons: [
                     {
                         view: "DatasetImport",
-                        text: t("dataset.import.title")
+                        text: t("dataset.import.title"),
+                        dataAttributes : [ {name: 'workspaceId', value: workspaceId} ]
                     }
                 ]
             });
