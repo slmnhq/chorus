@@ -10,8 +10,28 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.extend({
     },
 
     setup : function() {
+        this.recipients = new chorus.views.LinkMenu({
+            options: [
+                {data: "none", text: t("notification_recipient.none")},
+                {data: "some", text: t("notification_recipient.some")}
+            ],
+            title: t("notification_recipient.title"),
+            event: "choice"
+        });
         this.notifications = new chorus.views.NotificationRecipient();
         this.subviews[".notification_recipients"] = "notifications";
+        this.subviews[".recipients_menu"] = "recipients";
+
+        this.recipients.bind("choice", this.onSelectRecipients, this);
+    },
+
+    onSelectRecipients: function(eventName, data) {
+        var shouldHide = (data == "none");
+        this.$(".notification_recipients").toggleClass("hidden", shouldHide);
+
+        if (!shouldHide) {
+            this.notifications.render();
+        }
     },
 
     postRender:function () {
@@ -88,13 +108,13 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.extend({
     },
 
     save:function (e) {
-        e.preventDefault();
+        e && e.preventDefault();
         this.$(".attachment_links").addClass("disabled");
         this.$("button.submit").startLoading("notes.button.uploading");
         this.saving = true;
         this.model.save({
             body: this.$("textarea[name=body]").val().trim(),
-            recipients: this.notifications.pickedUsers.join(",")
+            recipients: this.$(".notification_recipients").is(".hidden") ? "" : this.notifications.pickedUsers.join(",")
         });
     },
 

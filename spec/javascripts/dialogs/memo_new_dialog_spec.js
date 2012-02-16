@@ -39,9 +39,52 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             expect(this.dialog.$('a.show_options').text()).toMatchTranslation('notes.new_dialog.show_options');
         });
 
-        it("should have a notification recipeients subview", function() {
+        it("should have a notification recipients subview", function() {
             expect(this.dialog.$(this.dialog.notifications.el)).toExist();
             expect(this.dialog.notifications).toBeA(chorus.views.NotificationRecipient);
+        });
+
+        it("has a 'Send Notifications To' link", function() {
+            expect(this.dialog.$(".recipients_menu")).not.toHaveClass("hidden");
+        });
+
+        it("hides the notification content area by default", function() {
+            expect(this.dialog.$(".notification_recipients")).toHaveClass("hidden");
+        });
+
+        describe("selecting recipients", function() {
+            beforeEach(function() {
+                this.dialog.recipients.trigger("choice", "choice", "some");
+                this.dialog.$("textarea[name=body]").val("blah");
+            });
+
+            it("should display the notification content area", function() {
+                expect(this.dialog.$(".notification_recipients")).not.toHaveClass("hidden");
+            });
+
+            it("should include the recipients in the save request", function() {
+                this.dialog.notifications.pickedUsers = ["1", "2"];
+                this.dialog.save();
+
+                expect(this.server.lastCreate().params().recipients).toBe("1,2");
+            });
+
+            describe("selecting 'Nobody'", function() {
+                beforeEach(function() {
+                    this.dialog.recipients.trigger("choice", "choice", "none");
+                });
+
+                it("should hide the notification content area", function() {
+                    expect(this.dialog.$(".notification_recipients")).toHaveClass("hidden");
+                });
+
+                it("should not include the recipients in the save request", function() {
+                    this.dialog.notifications.pickedUsers = ["1", "2"];
+                    this.dialog.save();
+
+                    expect(this.server.lastCreate().params().recipients).toBeFalsy();
+                });
+            });
         });
     });
 
@@ -497,10 +540,6 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             expect(this.dialog.model.get("body")).toBe("The body of a note")
             expect(this.dialog.model.get("workspaceId")).toBe(22);
             expect(this.dialog.model.save).toHaveBeenCalled();
-        });
-
-        it("makes the right save request", function() {
-            expect(this.server.lastCreate().params().recipients).toBe("1,2");
         });
 
         it("starts a spinner", function() {

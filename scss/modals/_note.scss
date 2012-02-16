@@ -105,9 +105,14 @@
         }
     }
 
+    .link_menu {
+        padding-left: 8px;
+    }
+
     .notification_recipient {
-        margin-left: 8px;
+        margin-left: 5px;
         margin-right: 8px;
+        margin-top: 8px;
 
         .title {
             @include font-content-details;
@@ -129,13 +134,24 @@
 
         .picked_users {
             .name {
+                @include ellipsis;
                 @include font-content-details;
-                line-height: 20px
+                max-width: 200px;
+                display: inline-block;
             }
 
             .remove {
                 float: right;
             }
+
+            .name, .remove {
+                line-height: 20px;
+                vertical-align: middle;
+            }
+        }
+
+        select {
+            width: 200px;
         }
     }
 }
