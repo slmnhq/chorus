@@ -80,6 +80,10 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             expect(this.dialog.$(".canonical_name").text()).toBe(this.schema.canonicalName());
         });
 
+        it("has a 'done' button", function() {
+            expect(this.dialog.$("button.cancel").text()).toMatchTranslation("dataset.manage_join_tables.done");
+        });
+
         describe("when a table is clicked", function() {
             beforeEach(function() {
                 this.lis = this.dialog.$("li");
