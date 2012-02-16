@@ -10,7 +10,12 @@ describe("chorus.views.DatasetEditChorusView", function() {
         if ($.browser.msie) {
             spyOn(window.TextRange.prototype, 'select');
         }
-        spyOn(CodeMirror, "fromTextArea").andCallThrough();
+
+        var originalFromTextArea = CodeMirror.fromTextArea;
+        spyOn(CodeMirror, "fromTextArea").andCallFake(_.bind(function(textarea, opts) {
+            this.codeMirrorOptions = opts;
+            return originalFromTextArea(textarea, opts)
+        }, this))
         stubDefer()
     })
 
@@ -42,12 +47,15 @@ describe("chorus.views.DatasetEditChorusView", function() {
             expect(this.view.editor.getOption("mode")).toBe("text/x-sql");
         });
 
+        it("provides CodeMirror with an onBlur function", function() {
+            expect(this.codeMirrorOptions.onBlur).toBeDefined();
+        })
+
         context("when blur is received by the editor", function() {
             beforeEach(function() {
                 spyOn(this.view, "postRender");
-                this.view.editor.focus();
                 this.view.editor.setValue("select * from hello;")
-                $(this.view.$(".CodeMirror")[0].firstChild.firstChild).blur();
+                this.codeMirrorOptions.onBlur();
             });
 
             it("sets the query in the model", function() {
