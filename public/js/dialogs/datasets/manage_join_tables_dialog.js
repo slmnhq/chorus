@@ -4,7 +4,8 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     title: t("dataset.manage_join_tables.title"),
 
     events: {
-        "click li": "tableClicked"
+        "click li":     "tableClicked",
+        "click a.join": "joinLinkClicked"
     },
 
     setup: function() {
@@ -15,7 +16,6 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
 
     postRender: function() {
         var originalId = this.pageModel.get("id");
-
         this.collection.remove(this.collection.get(originalId));
     },
 
@@ -25,11 +25,22 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
         clickedLi.addClass("selected");
     },
 
+    joinLinkClicked: function(e) {
+        var clickedId = $(e.target).closest("li").attr("table_id")
+        var databaseObject = this.collection.findWhere({ id: clickedId });
+
+        var joinConfigurationDialog = new chorus.dialogs.JoinConfiguration({ destinationObject: databaseObject });
+        this.launchSubModal(joinConfigurationDialog);
+    },
+
     additionalContext: function() {
         return { canonicalName: this.model.canonicalName() }
     },
 
     collectionModelContext: function(model) {
-        return { iconUrl: model.iconUrl({ size: "small" })};
+        return {
+            isView:  model.metaType() == "view",
+            iconUrl: model.iconUrl({ size: "small" })
+        };
     }
 });

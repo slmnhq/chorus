@@ -1,0 +1,14 @@
+<div class="sub_header">
+    <span class="title">{{t "dataset.manage_join_tables.create_join_title" objectName=destinationObjectName}}</span>
+
+    <label>{{t "dataset.manage_join_tables.source_join_column"}}</label>
+    <select class="source_join_column">
+    </select>
+
+    <label>{{t "dataset.manage_join_tables.destination_join_column"}}</label>
+    <select class="destination_join_column">
+        {{#each destinationColumns}}
+            <option>{{name}}</option>
+        {{/each}}
+    </select>
+</div>

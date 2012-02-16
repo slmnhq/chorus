@@ -51,6 +51,7 @@
         'instances_new',
         'instance_permissions',
         'instance_usage',
+        'join_configuration',
         'link_menu',
         'list_content_details',
         'loading_section',

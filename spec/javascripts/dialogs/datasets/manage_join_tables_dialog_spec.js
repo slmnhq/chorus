@@ -1,10 +1,26 @@
 describe("chorus.dialogs.ManageJoinTables", function() {
     beforeEach(function() {
-        var dataset = fixtures.datasetSourceTable({id : "abc", name: "original" });
+        stubModals();
+        this.originalDatabaseObject = fixtures.databaseObject({
+            objectName: "original",
+            columns: 23,
+            type: "SOURCE_TABLE",
+            objectType: "BASE_TABLE",
+            id: "abc"
+        });
+        var dataset = fixtures.datasetSourceTable({
+            objectName: "original",
+            columns: 23,
+            type: "SOURCE_TABLE",
+            objectType: "BASE_TABLE",
+            id: "abc"
+        });
+
         this.schema = dataset.schema();
 
         this.dialog = new chorus.dialogs.ManageJoinTables({ pageModel: dataset });
         this.dialog.render();
+        $("#jasmine_content").append(this.dialog.el);
     });
 
     it("has the right title", function() {
@@ -15,35 +31,34 @@ describe("chorus.dialogs.ManageJoinTables", function() {
         expect(this.schema.databaseObjects()).toHaveBeenFetched();
     });
 
+    it("has a 'done' button", function() {
+        expect(this.dialog.$("button.cancel").text()).toMatchTranslation("dataset.manage_join_tables.done");
+    });
+
     describe("when the fetch of the tables and views completes", function() {
         beforeEach(function() {
             this.databaseObject1 = fixtures.databaseObject({
                 objectName: "cats",
                 columns: 21,
                 type: "SOURCE_TABLE",
-                objectType: "VIEW"
+                objectType: "VIEW",
+                id: "10000|dca_demo|ddemo|VIEW|cats"
             });
 
             this.databaseObject2 = fixtures.databaseObject({
                 objectName: "dogs",
                 columns: 22,
                 type: "SOURCE_TABLE",
-                objectType: "BASE_TABLE"
-            });
-
-            this.originalDatabaseObject = fixtures.databaseObject({
-                objectName: "original",
-                columns: 23,
-                type: "SOURCE_TABLE",
                 objectType: "BASE_TABLE",
-                id: "abc"
+                id: "10000|dca_demo|ddemo|BASE_TABLE|dogs"
             });
 
             this.databaseObject3 = fixtures.databaseObject({
                 objectName: "lions",
                 columns: 24,
                 type: "SOURCE_TABLE",
-                objectType: "VIEW"
+                objectType: "VIEW",
+                id: "10000|dca_demo|ddemo|VIEW|lions"
             });
 
             this.server.completeFetchFor(this.schema.databaseObjects(), [
@@ -80,10 +95,6 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             expect(this.dialog.$(".canonical_name").text()).toBe(this.schema.canonicalName());
         });
 
-        it("has a 'done' button", function() {
-            expect(this.dialog.$("button.cancel").text()).toMatchTranslation("dataset.manage_join_tables.done");
-        });
-
         describe("when a table is clicked", function() {
             beforeEach(function() {
                 this.lis = this.dialog.$("li");
@@ -106,6 +117,31 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                     expect(this.lis.eq(1)).not.toHaveClass("selected");
                     expect(this.lis.eq(2)).toHaveClass("selected");
                 });
+            });
+        });
+
+        it("has a 'join table'/'join view' link for every database object", function() {
+            var joinLinks = this.dialog.$("a.join");
+            expect(joinLinks.eq(0).text().trim()).toMatchTranslation("dataset.manage_join_tables.join_view");
+            expect(joinLinks.eq(1).text().trim()).toMatchTranslation("dataset.manage_join_tables.join_table");
+            expect(joinLinks.eq(2).text().trim()).toMatchTranslation("dataset.manage_join_tables.join_view");
+        });
+
+        describe("when a 'join table' link is clicked", function() {
+            beforeEach(function() {
+                spyOn(chorus.dialogs.JoinConfiguration.prototype, 'render').andCallThrough();
+                this.dialog.$("a.join").eq(2).trigger("click");
+            });
+
+            it("launches the 'join configuration' sub-dialog", function() {
+                expect(chorus.dialogs.JoinConfiguration.prototype.render).toHaveBeenCalled();
+            });
+
+            it("passes the right destination object to the JoinConfiguration dialog", function() {
+                var joinConfigurationDialog = chorus.dialogs.JoinConfiguration.prototype.render.mostRecentCall.object;
+
+                expect(joinConfigurationDialog.destinationObject).toBeA(chorus.models.DatabaseObject);
+                expect(joinConfigurationDialog.destinationObject.get("id")).toBe(this.databaseObject3.get("id"));
             });
         });
     });
