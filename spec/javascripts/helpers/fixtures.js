@@ -1320,7 +1320,12 @@ beforeEach(function() {
                 id : id,
                 userName : "user" + id,
                 firstName : "EDC" + id,
-                lastName : "Admin" + id
+                lastName : "Admin" + id,
+                createdStamp: "2012-01-24 17:21:02.597",
+                isDeleted: false,
+                lastLogin: "2012-02-15 15:08:55",
+                notes: null,
+                title: null
             }, overrides)
         },
 
@@ -2052,22 +2057,6 @@ beforeEach(function() {
                 recipient: "nancy",
                 isDeleted: false
             }, overrides);
-        },
-
-        user: function(overrides) {
-            var id = fixtures.nextId();
-            return new chorus.models.User(_.extend({
-                admin: false,
-                createdStamp: "2012-01-24 17:21:02.597",
-                firstName: "user",
-                id: id,
-                isDeleted: false,
-                lastLogin: "2012-02-15 15:08:55",
-                lastName: id.toString(),
-                notes: null,
-                title: null,
-                userName: "u" + id
-            }));
         },
 
         userSet: function(models, modelOverrides, attrs) {
