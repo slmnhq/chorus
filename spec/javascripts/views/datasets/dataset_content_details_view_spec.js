@@ -83,7 +83,7 @@ describe("chorus.views.DatasetContentDetails", function() {
         });
 
 
-        context("when 'Preview Data' is clicked", function() {
+        context("when 'Preview Data'/'Run' is clicked", function() {
             context("when in default dataset page", function() {
                 beforeEach(function() {
                     this.view.$(".column_count .preview").click();
@@ -133,7 +133,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                 beforeEach(function() {
                     this.view.options.inEditChorusView = true;
                     this.view.render();
-                    this.view.$(".edit_chorus_view_info .preview").click();
+                    this.view.$(".preview").click();
                 });
 
                 it("should hide the edit chorus view bar", function() {
@@ -165,7 +165,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                     context("when the preview data button is clicked", function() {
                         beforeEach(function() {
                             spyOn(this.view.resultsConsole, "execute");
-                            this.view.$(".edit_chorus_view_info .preview").click();
+                            this.view.$("button.preview").click();
                         });
 
                         it("should execute database preview model", function() {
@@ -443,7 +443,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                             expect(this.view.$(".info_bar")).toHaveClass("hidden");
                             expect(this.view.$(".column_count")).toHaveClass("hidden");
                             expect(this.view.$(".edit_chorus_view_info .left").text()).toContainTranslation("dataset.content_details.edit_chorus_view.info");
-                            expect(this.view.$(".edit_chorus_view_info .right").text()).toContainTranslation("dataset.data_preview");
+                            expect(this.view.$(".edit_chorus_view button.preview").text()).toContainTranslation("dataset.run_sql");
                         });
 
                         it("triggers dataset:edit", function() {
