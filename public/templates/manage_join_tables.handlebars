@@ -1,12 +1,23 @@
-<div class="subheader">
+<div class="sub_header">
     <span class="canonical_name">{{canonicalName}}</span>
 </div>
-<ul>
+<ul class="list">
     {{#each models}}
         <li>
-            <img class="icon" src="{{iconUrl}}"/>
-            <span class="name">{{objectName}}</span>
-            <span class="column_count">{{pluralize columns "dataset.manage_join_tables.column_count" count=columns}}
+            <span class="spacer left"/>
+
+            <img class="image" src="{{iconUrl}}"/>
+
+            <div class="text">
+                <div class="main">
+                    <span class="name">{{objectName}}</span>
+                </div>
+                <div class="details">
+                    <span class="column_count">{{pluralize columns "dataset.manage_join_tables.column_count" count=columns}}
+                </div>
+            </div>
+
+            <span class="spacer right"/>
         </li>
     {{/each}}
 </ul>

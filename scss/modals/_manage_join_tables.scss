@@ -1,0 +1,37 @@
+.manage_join_tables {
+    width: 480px;
+
+    .dialog_content {
+        padding: 0;
+    }
+
+    .sub_header {
+        padding: 4px 12px;
+        margin: 0;
+        height: 25px;
+        border-bottom: 1px solid $pagination-border-color;
+    }
+
+    .list li {
+        // height: 52px;
+        .name {
+            @include font-normal-alpha;
+        }
+
+        .column_count {
+            @include secondary-text-small;
+        }
+
+        &.selected {
+            background-color: $picklist-selected-background-color;
+            .spacer {
+                background-color: $picklist-selected-background-color;
+            }
+
+            .name, .column_count {
+                color: white;
+            }
+        }
+    }
+
+}
