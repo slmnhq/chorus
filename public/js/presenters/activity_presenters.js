@@ -47,11 +47,28 @@
         },
 
         defaultHeader: function() {
+            function objectType(object) {
+                if (object instanceof chorus.models.Instance) {
+                    return t("instances.title_lower");
+                } else if (object instanceof chorus.models.Workfile) {
+                    return t("workfiles.title_lower")
+                } else if (object instanceof chorus.models.Workspace) {
+                    return t("workspaces.title_lower")
+                }
+                else if (object instanceof chorus.models.Dataset) {
+                    return t("dataset.title_lower")
+                }
+            }
+
             var header = {
                 type: this.model.get("type"),
                 authorLink: chorus.helpers.linkTo(this.author.showUrl(), this.author.displayName(), { 'class': "author" }),
                 objectLink: chorus.helpers.linkTo(this.presenter.objectUrl, this.presenter.objectName),
                 workspaceLink: chorus.helpers.linkTo(this.presenter.workspaceUrl, this.presenter.workspaceName)
+            }
+
+            if (this.noteObject) {
+                header.objectType = objectType(this.noteObject)
             }
 
             if (this.presenter.versionName && this.presenter.versionUrl) {

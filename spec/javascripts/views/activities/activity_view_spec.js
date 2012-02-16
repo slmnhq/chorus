@@ -187,6 +187,10 @@ describe("chorus.views.Activity", function() {
             itShouldRenderWorkspaceDetails({checkLink: true});
             itShouldRenderACommentLink("comment", t("comments.title.NOTE"))
 
+            it("displays the object type", function() {
+                expect(this.view.$(".activity_header").text()).toMatch("commented on the workspace");
+            })
+
             it("displays the comment body", function() {
                 expect(this.view.$(".body").eq(0).text().trim()).toBe(this.view.model.get("text"));
             });

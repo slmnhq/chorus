@@ -54,6 +54,10 @@ describe("chorus.presenters.Activity", function() {
         it("should have the right objectUrl", function() {
             expect(this.presenter.objectUrl).toBe('#/workspaces/4/datasets/10014|silverware|forks|shiny');
         });
+
+        it("should have the right objectType", function() {
+            expect(this.presenter.header.objectType).toMatchTranslation("dataset.title_lower");
+        })
     });
 
     context(".NOTE_ON_WORKSPACE", function() {
@@ -75,6 +79,10 @@ describe("chorus.presenters.Activity", function() {
             var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
             expect(this.presenter.objectUrl).toBe(url);
         });
+
+        it("should have the right objectType", function() {
+            expect(this.presenter.header.objectType).toMatchTranslation("workspaces.title_lower");
+        })
 
         itShouldHaveFileAttachments();
         itShouldHaveTheAuthorsIconAndUrl();
@@ -106,6 +114,10 @@ describe("chorus.presenters.Activity", function() {
             expect(this.presenter.workspaceUrl).toBe(url);
         });
 
+        it("should have the right objectType", function() {
+            expect(this.presenter.header.objectType).toMatchTranslation("workfiles.title_lower");
+        })
+
         itShouldHaveFileAttachments();
         itShouldHaveTheAuthorsIconAndUrl();
     })
@@ -125,6 +137,10 @@ describe("chorus.presenters.Activity", function() {
             var url = new chorus.models.Instance({id: this.instance.get("id")}).showUrl();
             expect(this.presenter.objectUrl).toBe(url);
         });
+
+        it("should have the right objectType", function() {
+            expect(this.presenter.header.objectType).toMatchTranslation("instances.title_lower")
+        })
 
         itShouldHaveFileAttachments();
         itShouldHaveTheAuthorsIconAndUrl();

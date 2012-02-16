@@ -61,7 +61,7 @@ describe("CommentList", function() {
             });
 
             it("is correct for comments", function() {
-                expect(this.view.$('.comment_header:eq(2)').text()).toMatch('commented on a note');
+                expect(this.view.$('.comment_header:eq(2)').text()).toMatch('commented');
             });
         });
 
