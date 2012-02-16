@@ -278,4 +278,57 @@ describe("chorus.models.TabularData", function() {
             expect(this.instance).toBe(this.tabularData.instance());
         });
     });
+
+    describe("#columns", function() {
+        it("should memoize the result", function() {
+            expect(this.tabularData.columns()).toBe(this.tabularData.columns());
+        });
+
+        it("should return a DatabaseColumnSet", function() {
+            expect(this.tabularData.columns()).toBeA(chorus.collections.DatabaseColumnSet);
+        })
+
+        it("should pass the correct parameters to the DatabaseColumnSet", function() {
+            var columns = this.tabularData.columns();
+            expect(columns.attributes.instanceId).toBe(this.tabularData.get("instance").id);
+            expect(columns.attributes.databaseName).toBe(this.tabularData.get("databaseName"));
+            expect(columns.attributes.schemaName).toBe(this.tabularData.get("schemaName"));
+        });
+
+        context("when the object has a metaType of 'query'", function() {
+            beforeEach(function() {
+                spyOn(this.tabularData, 'metaType').andReturn('query');
+                this.tabularData.set({ id: "ID" });
+            });
+
+            it("has a queryName of the tabularData id", function() {
+                var columns = this.tabularData.columns();
+                expect(columns.attributes.queryName).toBe(this.tabularData.get('id'));
+            });
+        });
+
+        context("when the object is a table", function() {
+            beforeEach(function() {
+                this.tabularData.set({ objectType: "SOURCE_TABLE" });
+            });
+
+            it("passes its name to the column set as 'tableName'", function() {
+                var columns = this.tabularData.columns();
+                expect(columns.attributes.tableName).toBe(this.tabularData.get("objectName"));
+                expect(columns.attributes.viewName).toBeFalsy();
+            });
+        });
+
+        context("when the object is a view", function() {
+            beforeEach(function() {
+                this.tabularData.set({ objectType: "VIEW" });
+            });
+
+            it("passes its name to the column set as 'viewName'", function() {
+                var columns = this.tabularData.columns();
+                expect(columns.attributes.viewName).toBe(this.tabularData.get("objectName"));
+                expect(columns.attributes.tableName).toBeFalsy();
+            });
+        });
+    });
 });

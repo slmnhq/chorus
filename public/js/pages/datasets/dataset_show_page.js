@@ -40,20 +40,7 @@
         },
 
         fetchColumnSet: function() {
-            var options = {
-                instanceId: this.instanceId,
-                databaseName: this.databaseName,
-                schemaName: this.schemaName,
-                workspaceId: this.workspace.get("id")
-            };
-
-            if (this.dataset.metaType() == "query") {
-                options[this.dataset.metaType() + "Name"] = this.datasetId;
-            } else {
-                options[this.dataset.metaType() + "Name"] = this.objectName;
-            }
-
-            this.columnSet = new chorus.collections.DatabaseColumnSet([], options);
+            this.columnSet = this.dataset.columns();
             this.columnSet.bind("loaded", this.columnSetFetched, this);
             this.columnSet.fetchAll();
         },

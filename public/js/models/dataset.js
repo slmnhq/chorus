@@ -1,7 +1,7 @@
 chorus.models.Dataset = chorus.models.TabularData.extend({
     urlTemplate: "workspace/{{workspace.id}}/dataset/{{entityId}}",
 
-    showUrlTemplate:function () {
+    showUrlTemplate: function() {
         return [
             "workspaces",
             this.get("workspace").id,
@@ -26,7 +26,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
             query: this.get("query"),
             workspaceId: this.get("workspace").id,
             datasetId: this.entityId,
-            bins : taskAttrs.bins
+            bins: taskAttrs.bins
         });
     },
 
@@ -96,5 +96,11 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
         }
 
         return stats;
+    },
+
+    columns: function() {
+        var result = this._super('columns');
+        result.attributes.workspaceId = this.get("workspace").id;
+        return result;
     }
 });

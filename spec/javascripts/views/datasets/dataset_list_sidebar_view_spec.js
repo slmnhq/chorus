@@ -214,7 +214,7 @@ describe("chorus.views.DatasetListSidebar", function() {
             expect(this.view.datasetType(dataset)).toMatchTranslation("dataset.types.SANDBOX_TABLE.BASE_TABLE");
 
             dataset = fixtures.datasetChorusView();
-            expect(this.view.datasetType(dataset)).toMatchTranslation("dataset.types.CHORUS_VIEW");
+            expect(this.view.datasetType(dataset)).toMatchTranslation("dataset.types.CHORUS_VIEW.QUERY");
 
             dataset = fixtures.datasetSourceTable();
             expect(this.view.datasetType(dataset)).toMatchTranslation("dataset.types.SOURCE_TABLE.BASE_TABLE");

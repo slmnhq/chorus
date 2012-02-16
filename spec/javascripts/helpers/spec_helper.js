@@ -109,7 +109,7 @@
         runs(loadAllTemplates);
         waitsFor(function() {
             return allTemplatesLoaded;
-        }, "all templates to be loaded", 1000);
+        }, "all templates to be loaded", 5000);
 
         function loadAllTemplates() {
             var templateContainer = $("<div id='chorus_templates'/>");

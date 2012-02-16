@@ -30,6 +30,20 @@ chorus.models.TabularData = chorus.models.Base.extend({
         return this.constructor.metaTypeMap[this.get("objectType")] || "table";
     },
 
+    columns:function () {
+        if (!this._columns) {
+            this._columns = new chorus.collections.DatabaseColumnSet([], {
+                instanceId:this.get("instance").id,
+                databaseName:this.get("databaseName"),
+                schemaName:this.get("schemaName")
+            });
+
+            var objectNameField = this.metaType() + "Name";
+            this._columns.attributes[objectNameField] = (this.metaType() == "query") ? this.get("id") : this.get("objectName");
+        }
+        return this._columns;
+    },
+
     instance: function() {
         if(!this._instance) {
             this._instance = new chorus.models.Instance({

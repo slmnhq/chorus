@@ -89,45 +89,4 @@ describe("chorus.models.DatabaseObject", function() {
             });
         });
     });
-
-    describe("#columns", function() {
-        it("should memoize the result", function() {
-            expect(this.databaseObject.columns()).toBe(this.databaseObject.columns());
-        });
-
-        it("should return a DatabaseColumnSet", function() {
-            expect(this.databaseObject.columns()).toBeA(chorus.collections.DatabaseColumnSet);
-        })
-
-        it("should pass the correct parameters to the DatabaseColumnSet", function() {
-            var columns = this.databaseObject.columns();
-            expect(columns.attributes.instanceId).toBe(this.databaseObject.get("instanceId"));
-            expect(columns.attributes.databaseName).toBe(this.databaseObject.get("databaseName"));
-            expect(columns.attributes.schemaName).toBe(this.databaseObject.get("schemaName"));
-        });
-
-        context("when the object is a table", function() {
-            beforeEach(function() {
-                this.databaseObject.set({ objectType: "SOURCE_TABLE" });
-            });
-
-            it("passes its name to the column set as 'tableName'", function() {
-                var columns = this.databaseObject.columns();
-                expect(columns.attributes.tableName).toBe(this.databaseObject.get("objectName"));
-                expect(columns.attributes.viewName).toBeFalsy();
-            });
-        });
-
-        context("when the object is a view", function() {
-            beforeEach(function() {
-                this.databaseObject.set({ objectType: "VIEW" });
-            });
-
-            it("passes its name to the column set as 'viewName'", function() {
-                var columns = this.databaseObject.columns();
-                expect(columns.attributes.viewName).toBe(this.databaseObject.get("objectName"));
-                expect(columns.attributes.tableName).toBeFalsy();
-            });
-        });
-    });
 });

@@ -245,4 +245,10 @@ describe("chorus.models.Dataset", function() {
             });
         })
     })
+
+    describe("#columns", function() {
+        it("returns a DatabaseColumnSet with a workspaceId", function() {
+            expect((this.dataset).columns().attributes.workspaceId).toBe(this.dataset.get('workspace').id);
+        });
+    });
 })

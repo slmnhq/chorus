@@ -12,22 +12,21 @@ describe("chorus.pages.DatasetShowPage", function() {
             }
         });
 
-        this.columnSet = fixtures.databaseColumnSet([], {
-            instanceId: this.workspace.get("sandboxInfo").instanceId,
-            databaseName: this.workspace.get("sandboxInfo").databaseName,
-            schemaName: this.workspace.get("sandboxInfo").schemaName,
-            tableName: "table"
-        });
+        var sanboxInfo = this.workspace.get("sandboxInfo")
 
-        this.datasetId = [
-            this.workspace.get("sandboxInfo").instanceId,
-            this.workspace.get("sandboxInfo").databaseName,
-            this.workspace.get("sandboxInfo").schemaName,
-            "BASE_TABLE",
-            this.columnSet.attributes.tableName
-        ].join("|");
+        this.dataset = fixtures.datasetSandboxTable({
+            id: this.datasetId,
+            instance: { id: sanboxInfo.instanceId, name: sanboxInfo.instanceName},
+            databaseName: sanboxInfo.databaseName,
+            schemaName: sanboxInfo.schemaName,
+            objectName: 'tableName',
+            workspace: { id: this.workspace.get("id") }
+        })
 
-        this.dataset = fixtures.datasetSandboxTable({"id": this.datasetId, workspace: { id: this.workspace.get("id") }})
+        this.columnSet = this.dataset.columns();
+
+        this.datasetId = this.dataset.get('id');
+
 
         this.page = new chorus.pages.DatasetShowPage(this.workspace.get("id"), this.datasetId);
         spyOn(this.page, "fetchDataSet").andCallThrough();
@@ -47,7 +46,7 @@ describe("chorus.pages.DatasetShowPage", function() {
             expect(this.page.databaseName).toBe("db");
             expect(this.page.schemaName).toBe("schema");
             expect(this.page.objectType).toBe("BASE_TABLE");
-            expect(this.page.objectName).toBe("table");
+            expect(this.page.objectName).toBe("tableName");
         });
 
         describe("when the workspace fetch completes", function() {
@@ -125,7 +124,7 @@ describe("chorus.pages.DatasetShowPage", function() {
             this.server.completeFetchFor(this.workspace);
             this.resizedSpy = spyOnEvent(this.page, 'resized');
             this.server.completeFetchFor(this.dataset);
-            this.server.completeFetchAllFor(this.columnSet, this.columnSet.models);
+            this.server.completeFetchAllFor(this.columnSet, [fixtures.databaseColumn(), fixtures.databaseColumn()]);
         })
 
         describe("breadcrumbs", function() {
@@ -284,7 +283,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                         expect(this.page.mainContent.content.$("li:eq(1)")).not.toHaveClass("selected");
                     });
                 });
-                
+
                 describe("clicking select all", function() {
                     beforeEach(function() {
                         this.selectSpy = jasmine.createSpy("column selected spy");
