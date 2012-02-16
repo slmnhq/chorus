@@ -122,6 +122,8 @@
 
 .ui-selectmenu-menu li.ui-state-disabled a, .ui-state-disabled {
   cursor: default;
+  @include secondary-text-small;
+  font-style: italic;
 }
 
 a.ui-selectmenu-disabled {
