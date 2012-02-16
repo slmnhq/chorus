@@ -114,7 +114,7 @@
         },
 
         userProfileLink:function (user) {
-            templates.userLinkTemplate = templates.userLinkTemplate || Handlebars.compile("<a class='user' href='{{url}}'>{{name}}</a>");
+            templates.userLinkTemplate = templates.userLinkTemplate || Handlebars.compile('<a class="user" href="{{url}}">{{name}}</a>');
             return templates.userLinkTemplate({ url:user.showUrl(), name:user.displayName() });
         },
 

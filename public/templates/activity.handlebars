@@ -36,6 +36,9 @@
             {{#if isNote}}
                 <span class="separator">|</span> <a class="promote" href="#">{{t "activity_stream.promote"}}</a>
             {{/if}}
+            {{#if isInsight}}
+            <span class="separator">|</span> <span class="promoted_by">{{{t "insight.promoted_by" promoterLink=promoterLink relativeTimestamp=promotionTimestamp}}}</span>
+            {{/if}}
         </div>
     </div>
 </div>

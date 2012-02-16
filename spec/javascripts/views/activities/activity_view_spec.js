@@ -296,6 +296,13 @@ describe("chorus.views.Activity", function() {
             it("adds the insight class to the view's element", function() {
                 expect($(this.view.el)).toHaveClass("insight");
             });
+
+            it("should say who promoted it and when", function() {
+                expect(this.view.$(".promoted_by").html()).toMatchTranslation("insight.promoted_by", {
+                    promoterLink: chorus.helpers.userProfileLink(new chorus.models.User(this.view.model.get("promotionActioner"))),
+                    relativeTimestamp: chorus.helpers.relativeTimestamp(this.view.model.get("promotionTime"))
+                });
+            });
         });
 
         context("type: WORKSPACE_ADD_SANDBOX", function() {

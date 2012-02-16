@@ -163,6 +163,10 @@ $system-action-color: #7C7D7D;
             margin: 0 8px;
         }
     }
+
+    .promoted_by {
+        @include secondary-text-small;
+    }
 }
 
 li[data-activity-type=NOTE] .activity_content:hover a.delete_link {

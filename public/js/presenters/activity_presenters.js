@@ -40,6 +40,8 @@
                 iconHref: this.author.showUrl(),
                 iconClass: 'profile',
                 isOwner: this.author.id == chorus.session.user().id,
+                promoterLink: model.get("promotionActioner") ? chorus.helpers.userProfileLink(new chorus.models.User(model.get("promotionActioner"))) : null,
+                promotionTimestamp: model.get("promotionTime") ? chorus.helpers.relativeTimestamp(model.get("promotionTime")) : null,
                 isNote: model.isNote()
             };
         },

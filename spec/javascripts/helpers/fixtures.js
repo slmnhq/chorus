@@ -1081,8 +1081,12 @@ beforeEach(function() {
 
             "INSIGHT_CREATED" : function() {
                 return new chorus.models.Activity(
-                    _.extend(this.NOTE_ON_DATASET_JSON(), {type: "INSIGHT_CREATED", isInsight: true})
-                );
+                    _.extend(this.NOTE_ON_DATASET_JSON(), {
+                        type: "INSIGHT_CREATED",
+                        isInsight: true,
+                        promotionActioner: {id:10010, lastName:"1", firstName:"u"},
+                        promotionTime: "2012-02-14 12:34:56"
+                    }));
             },
 
             "USER_ADDED" : function() {
