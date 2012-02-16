@@ -1,33 +1,35 @@
 @import "../_common.scss";
 @import "compass/css3/gradient";
 
-$header-padding : 13px;
-$header-item-spacing : 2*$padding-x;
+$header-padding: 13px;
+$header-item-spacing: 2*$padding-x;
 
 .header {
     height: $header-height;
     @include background-image(linear-gradient(color-stops(#eeeeee, #cccccc)));
     background-color: #eeeeee;
-    vertical-align : middle;
+    vertical-align: middle;
     border-bottom: 1px solid $header-border-color;
     line-height: $header-height;
     vertical-align: middle;
 
-    html.ie8 & { background-color: $ie-header-color }
+    html.ie8 & {
+        background-color: $ie-header-color
+    }
 
     > div {
         vertical-align: middle;
 
         > div {
-            display : inline-block;
+            display: inline-block;
         }
     }
 
     .left {
-        float : left;
+        float: left;
 
         .logo {
-    	    padding: 0 14px;
+            padding: 0 14px;
 
             a {
                 img {
@@ -59,7 +61,6 @@ $header-item-spacing : 2*$padding-x;
         }
     }
 
-
     .search {
         overflow: hidden;
         padding: 0 0 0 $header-item-spacing;
@@ -69,17 +70,18 @@ $header-item-spacing : 2*$padding-x;
         input {
             padding: 4px;
             height: 26px;
-            line-height: 26px;
 
-             html.ie8 & { height: 17px; }
+            html.ie8 & {
+                height: 17px;
+            }
         }
     }
 
     .right {
         position: relative;
         float: right;
-        width : $sidebar-width + $padding-x;
-        text-align : right;
+        width: $sidebar-width + $padding-x;
+        text-align: right;
         .username {
             border-right: 1px solid $header-border-color;
 
