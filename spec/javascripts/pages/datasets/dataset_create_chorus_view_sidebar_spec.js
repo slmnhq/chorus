@@ -214,15 +214,14 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
                 // placeholder - name doesn't have a way to be set from UI yet
                 var params = this.server.lastCreate().params();
-                delete params.objectName;
-                expect(params).toEqual({
-                    type: "CHORUS_VIEW",
-                    query: "SELECT * FROM FOO",
-                    instanceId: this.dataset.get("instance").id.toString(),
-                    databaseName: this.dataset.get("databaseName"),
-                    schemaName: this.dataset.get("schemaName"),
-                    objectType: "QUERY"
-                });
+                expect(params.type).toBe("CHORUS_VIEW");
+                expect(params.query).toBe("SELECT * FROM FOO");
+                expect(params.instanceId).toBe(this.dataset.get("instance").id.toString());
+                expect(params.databaseName).toBe(this.dataset.get("databaseName"));
+                expect(params.schemaName).toBe(this.dataset.get("schemaName"));
+                expect(params.objectType).toBe("QUERY");
+
+
                 expect(this.server.lastCreate().method).toBe("POST");
             });
 

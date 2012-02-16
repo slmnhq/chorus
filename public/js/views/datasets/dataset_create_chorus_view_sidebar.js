@@ -53,29 +53,32 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
     },
 
     createChorusView : function() {
-        var params = {
+        var button = this.$("button.create");
+        button.startLoading("actions.creating");
+
+        var chorusView = new chorus.models.ChorusView({
             type: "CHORUS_VIEW",
             query: this.sql(),
             instanceId: this.model.get("instance").id,
             databaseName: this.model.get("databaseName"),
             schemaName: this.model.get("schemaName"),
             objectName: _.uniqueId("chorus_view_"),
+            workspace: this.model.get("workspace"),
             objectType: "QUERY"
-        };
+        });
 
-        var button = this.$("button.create");
-        button.startLoading("actions.creating");
-        $.post("/edc/workspace/" + this.model.get("workspace").id + "/dataset", params,
-            function(data) {
-                button.stopLoading();
-                if (data.status == "ok") {
-                    chorus.toast("dataset.chorusview.create_success");
-                    var chorusView = new chorus.models.Dataset(data.resource[0])
-                    chorus.router.navigate(chorusView.showUrl(), true)
-                } else {
-                    chorus.toast("dataset.chorusview.create_fail");
-                }
-            }, "json");
+        chorusView.bind("saved", function() {
+            button.stopLoading();
+            chorus.toast("dataset.chorusview.create_success");
+            chorus.router.navigate(chorusView.showUrl(), true)
+        });
+
+        chorusView.bind("saveFailed", function() {
+            button.stopLoading();
+            chorus.toast("dataset.chorusview.create_fail");
+        });
+
+        chorusView.save();
     },
 
     whereClause: function() {
