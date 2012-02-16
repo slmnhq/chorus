@@ -46,8 +46,8 @@
 
             button {
                 margin-bottom: -43px;
-                
-                div[aria-role=progressbar]{
+
+                div[aria-role=progressbar] {
                     margin-bottom: 5px;
                     padding-left: 13px;
                     display: inline-block;
@@ -55,44 +55,11 @@
                 }
 
                 &.cancel {
-                  margin-left: 5px;
+                    margin-left: 5px;
                 }
             }
         }
 
-    }
-
-    .dataset_create_chorus_view_sidebar {
-        fieldset {
-            padding: 0 0 15px 0;
-        }
-
-        a.remove {
-            float: right;
-            display: none;
-            @include secondary-text-small;
-        }
-
-        .name {
-            display: inline-block;
-            font-size: 14px;
-            font-weight: normal;
-            color: black;
-            padding-left: 15px;
-            max-width: 135px;
-            @include ellipsis;
-        }
-
-        .sidebar_row {
-            width: 100%;
-            @include after-clearfix;
-
-            &:hover {
-                .remove {
-                    display: inline-block;
-                }
-            }
-        }
     }
 
     .dataset_edit_chorus_view {
@@ -101,49 +68,6 @@
         }
     }
 }
-
-.dataset_create_chorus_view_sidebar {
-
-    .selected_columns {
-        color: $color-text2;
-        font-size: 12px;
-
-        .non_empty_selection {
-            margin: 8px;
-
-            .title {
-                font-size: 16px;
-                font-weight: $semibold;
-                display:inline-block;
-                margin-bottom: 8px;
-            }
-
-            .dataset {
-                @include secondary-text-semibold;
-                .label {
-                    display:inline-block;
-                    padding-bottom: 10px;
-                }
-                .name {
-                    @include ellipsis;
-                    @include font-menu;
-                    max-width: 180px;
-                    display: inline-block;
-                }
-            }
-        }
-    }
-
-    button {
-        bottom: -15px;
-
-        &.disabled {
-           color: #D6DBE0;
-           border-color: #D6DBE0;
-        }
-    }
-}
-
 
 .dataset_number, .ui-selectmenu-menu li .dataset_number, .ui-selectmenu-status .dataset_number {
     background-color: $dataset-number-background-color;
