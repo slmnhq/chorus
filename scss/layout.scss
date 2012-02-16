@@ -36,17 +36,33 @@
     #help {
       position: fixed;
       right: 0;
-      top: 50px;
       width: 45px;
-      height: $breadcrumbs-height;
       z-index: $help-z-index;
+
+      a {
+        background: $link-color;
+      }
+    }
+
+    #user_count {
+      position:absolute;
+      right: 50px;
+
+      a {
+        background:#3872A5;
+      }
+    }
+
+    .pill {
+      height: $breadcrumbs-height;
       background: transparent;
       line-height: 32px;
       vertical-align: middle;
-      
+      top: 50px;
+
+
       a {
         color: white;
-        background: $link-color;
         padding: 3px 5px;
         @include border-radius(4px);
         font-size: 12px;
