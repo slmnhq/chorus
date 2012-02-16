@@ -44,6 +44,7 @@ src_files:
   - js/dialogs/workspaces/pick_workspace_dialog.js
   - js/dialogs/memo_new_dialog.js
   - js/models/tabular_data.js
+  - js/models/dataset.js
   - js/models/tasks/task.js
   - js/models/tasks/chart_task.js
   - js/models/**/*.js

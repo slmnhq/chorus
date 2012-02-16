@@ -1801,6 +1801,12 @@ beforeEach(function() {
             return new chorus.models.Dataset(attributes);
         },
 
+        chorusView: function(overrides) {
+            var attributes = _.extend(fixtures.datasetCommonJson(overrides), {
+            }, overrides);
+            return new chorus.models.ChorusView(attributes);
+        },
+
         datasetStatisticsView : function(overrides) {
             var attributes = _.extend(fixtures.datasetCommonJson(overrides), {
                 createdStamp: "2012-01-24 12:25:11.077",
