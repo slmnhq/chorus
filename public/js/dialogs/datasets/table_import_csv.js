@@ -8,8 +8,12 @@ chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
         this.linkMenus = _.map(this.columnOrientedData, function(item) {
             return new chorus.views.LinkMenu({
                 options: [
+                    {data: "integer", text: "integer"},
+                    {data: "float", text: "float"},
                     {data: "text", text: "text"},
-                    {data: "float", text: "float"}
+                    {data: "date", text: "date"},
+                    {data: "time", text: "time"},
+                    {data: "timestamp", text: "timestamp"}
                 ],
                 title: '',
                 event: "setType",
@@ -22,7 +26,7 @@ chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
 
     onSelectType: function(data, linkMenu) {
         var $typeDiv = $(linkMenu.el).closest("div.type");
-        $typeDiv.removeClass("float text").addClass(data);
+        $typeDiv.removeClass("integer float text date time timestamp").addClass(data);
     },
 
     postRender : function() {
