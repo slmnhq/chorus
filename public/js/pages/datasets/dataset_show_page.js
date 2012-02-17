@@ -41,7 +41,7 @@
         },
 
         fetchColumnSet: function() {
-            this.columnSet = this.dataset.columns();
+            this.columnSet = this.dataset.columns({type: "meta"});
             this.columnSet.bind("loaded", this.columnSetFetched, this);
             this.columnSet.fetchAll();
         },

@@ -23,7 +23,7 @@ describe("chorus.pages.DatasetShowPage", function() {
             workspace: { id: this.workspace.get("id") }
         })
 
-        this.columnSet = this.dataset.columns();
+        this.columnSet = this.dataset.columns({type: "meta"});
 
         this.datasetId = this.dataset.get('id');
 
@@ -71,12 +71,13 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                 it("fetches all of the columns", function() {
                     expect(chorus.collections.DatabaseColumnSet.prototype.fetchAll).toHaveBeenCalled();
+                    expect(this.server.lastFetchAllFor(this.columnSet).params().type).toBe("meta");
                 })
 
                 describe("when the columnSet fetch completes", function() {
                     beforeEach(function() {
                         spyOn(this.page, "postRender");
-                        this.server.lastFetch().succeed(this.columnSet.attributes, { page: "1", total: "1" })
+                        this.server.lastFetchAllFor(this.columnSet).succeed(this.columnSet);
                     })
 
                     it("creates the sidebar", function() {

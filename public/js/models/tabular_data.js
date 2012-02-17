@@ -17,13 +17,14 @@ chorus.models.TabularData = chorus.models.Base.extend({
         return this.constructor.metaTypeMap[this.get("objectType")] || "table";
     },
 
-    columns:function () {
+    columns:function(options) {
         if (!this._columns) {
             this._columns = new chorus.collections.DatabaseColumnSet([], {
                 tabularData: this,
                 instanceId:this.get("instance").id,
                 databaseName:this.get("databaseName"),
-                schemaName:this.get("schemaName")
+                schemaName:this.get("schemaName"),
+                type: options && options.type
             });
 
             var objectNameField = this.metaType() + "Name";

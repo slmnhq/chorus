@@ -98,8 +98,8 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
         return stats;
     },
 
-    columns: function() {
-        var result = this._super('columns');
+    columns: function(options) {
+        var result = this._super('columns', arguments);
         result.attributes.workspaceId = this.get("workspace").id;
         return result;
     }

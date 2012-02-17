@@ -73,4 +73,26 @@ describe("chorus.collections.DatabaseColumnSet", function() {
             expect(this.columns.url()).toContain("/edc/workspace/10/dataset/10000|dca_demo|ddemo|QUERY|chorus_view/column");
         })
     })
+
+    describe("#urlParams", function() {
+        context("when type attribute is meta", function() {
+            beforeEach(function() {
+                this.columns = fixtures.datasetSandboxView().columns({type: "meta"});
+            });
+
+            it("should include the 'type' parameter in the url", function() {
+                expect(this.columns.urlParams().type).toBe("meta");
+            });
+        });
+
+        context("when type attribute is unspecified", function() {
+            beforeEach(function() {
+                this.columns = fixtures.datasetSandboxView().columns();
+            });
+
+            it("should not include the 'type' parameter in the url", function() {
+                expect(this.columns.urlParams().type).toBeFalsy();
+            });
+        });
+    });
 });

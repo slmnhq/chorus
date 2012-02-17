@@ -11,6 +11,12 @@ chorus.collections.DatabaseColumnSet = chorus.collections.Base.extend({
         }
     },
 
+    urlParams : function() {
+        return {
+            type: this.attributes.type
+        }
+    },
+
     _add:function (model, options) {
         model = this._super("_add", arguments);
         model.tabularData = this.attributes.tabularData;
