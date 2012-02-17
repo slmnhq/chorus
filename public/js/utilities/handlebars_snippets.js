@@ -226,8 +226,22 @@
             } else {
                 return "&nbsp;";
             }
-        }
+        },
 
+        percentage: function(value) {
+            var number = Math.pow(10, 2);
+            var result = Math.round(value * number) / number;
+            return result + "%";
+        },
+
+        round: function(value) {
+            if (value > .1) {
+                var number = Math.pow(10, 2);
+                return Math.round(value * number) / number;
+            }
+
+            return value;
+        }
     }
 
     _.each(chorus.helpers, function (helper, name) {

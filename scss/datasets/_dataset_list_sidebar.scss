@@ -29,7 +29,11 @@
             overflow: hidden; /*this is neccesary for alignment in firefox due to the overflow:hidden firefox bug*/
         }
 
-        .table_name {
+        .column_title {
+            margin-top: 15px;
+        }
+
+        .table_name, .column_name {
             display: inline-block;
             @include ellipsis;
             max-width: 200px;
@@ -38,7 +42,7 @@
             font-weight: $semibold;
         }
 
-        .statistics {
+        .statistics, .column_statistics {
             margin-top: 15px;
             margin-left: 15px;
         }

@@ -26,7 +26,7 @@
     <div class="tabbed_area">
         <div class="activity_list"></div>
         <div class="statistics_detail">
-            <h2>
+            <h2 class="dataset_title">
                 <div class='title'>{{t "dataset.statistics.dataset"}}:</div>
                 <div class="table_name">{{objectName}}</div>
             </h2>
@@ -79,24 +79,68 @@
                 {{/if}}
             {{/if}}
             {{#if column}}
+                <h2 class="column_title">
+                    <div class='title'>{{t "dataset.column_name"}}:</div>
+                    <div class="column_name">{{column.name}}</div>
+                </h2>
                 <div class="column_statistics">
-                    {{#if column.typeCategory}}
                     <div class="pair type_category">
                         <div class="key">{{t "dataset.column_statistics.type_category"}}</div>
                         <div class="value" title="{{{column.typeCategory}}}">{{{column.typeCategory}}}</div>
                     </div>
-                    {{/if}}
-                    {{#if column.type}}
                     <div class="pair type">
                         <div class="key">{{t "dataset.column_statistics.type"}}</div>
                         <div class="value" title="{{{column.type}}}">{{{column.type}}}</div>
                     </div>
-                    {{/if}}
-                    {{#if column.min}}
-                    <div class="pair min">
-                        <div class="key">{{t "dataset.column_statistics.size"}}</div>
-                        <div class="value" title="{{{column.min}}}">{{{column.min}}}</div>
-                    </div>
+                    {{#if statistics.lastAnalyzedTime}}
+                        {{#if column.min}}
+                        <div class="pair min">
+                            <div class="key">{{t "dataset.column_statistics.min"}}</div>
+                            <div class="value" title="{{{column.min}}}">{{{round column.min}}}</div>
+                        </div>
+                        {{/if}}
+                        {{#if column.median}}
+                        <div class="pair median">
+                            <div class="key">{{t "dataset.column_statistics.median"}}</div>
+                            <div class="value" title="{{{column.median}}}">{{{round column.median}}}</div>
+                        </div>
+                        {{/if}}
+                        {{#if column.avg}}
+                        <div class="pair avg">
+                            <div class="key">{{t "dataset.column_statistics.avg"}}</div>
+                            <div class="value" title="{{{column.avg}}}">{{{round column.avg}}}</div>
+                        </div>
+                        {{/if}}
+                        {{#if column.max}}
+                        <div class="pair max">
+                            <div class="key">{{t "dataset.column_statistics.max"}}</div>
+                            <div class="value" title="{{{column.max}}}">{{{round column.max}}}</div>
+                        </div>
+                        {{/if}}
+                        {{#if column.stdDeviation}}
+                        <div class="pair stddev">
+                            <div class="key">{{t "dataset.column_statistics.stddev"}}</div>
+                            <div class="value" title="{{{column.stdDeviation}}}">{{{round column.stdDeviation}}}</div>
+                        </div>
+                        {{/if}}
+                        {{#if column.distinctValue}}
+                        <div class="pair distinct">
+                            <div class="key">{{t "dataset.column_statistics.distinct"}}</div>
+                            <div class="value" title="{{{column.distinctValue}}}">{{{round column.distinctValue}}}</div>
+                        </div>
+                        {{/if}}
+                        {{#if column.commonValues}}
+                        <div class="pair common">
+                            <div class="key">{{t "dataset.column_statistics.common"}}</div>
+                            <div class="value" title="{{{column.commonValues}}}">{{{round column.commonValues}}}</div>
+                        </div>
+                        {{/if}}
+                        {{#if column.nullFraction}}
+                        <div class="pair pctnull">
+                            <div class="key">{{t "dataset.column_statistics.pctnull"}}</div>
+                            <div class="value" title="{{{column.nullFraction}}}">{{{percentage column.nullFraction}}}</div>
+                        </div>
+                        {{/if}}
                     {{/if}}
                 </div>
             {{/if}}

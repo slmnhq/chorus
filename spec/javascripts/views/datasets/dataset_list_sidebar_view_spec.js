@@ -205,35 +205,148 @@ describe("chorus.views.DatasetListSidebar", function() {
             });
         });
 
-        describe("column:selected event handling", function() {
+        describe("column statistics", function() {
             beforeEach(function() {
-                chorus.PageEvents.broadcast("dataset:selected", fixtures.datasetSourceTable());
-            });
-
-            context("when a column is selected", function() {
-                beforeEach(function() {
-                    this.column = fixtures.databaseColumn({
-                        avg: 719719.111,
-                        commonValues: [1, 0],
-                        distinctValue: 998710,
-                        max: "1199961.0",
-                        median: "725197.0",
-                        min: "200075.0",
-                        nullFraction: 0,
-                        ordinalPosition: 1,
-                        recentComment: null,
-                        stdDeviation: 309104.997,
-                        type: "int8",
-                        typeCategory: "WHOLE_NUMBER"
-                    });
-                    chorus.PageEvents.broadcast("column:selected", this.column);
-                    this.view.render();
+                this.dataset = fixtures.datasetSourceTable();
+                this.column = fixtures.databaseColumn({
+                    avg: 719719.111,
+                    commonValues: [1, 0],
+                    distinctValue: 998710,
+                    max: "1199961.0",
+                    median: "725197.0",
+                    min: "200075.0",
+                    nullFraction: 10.3678,
+                    stdDeviation: 309104.997,
+                    type: "int8",
+                    typeCategory: "WHOLE_NUMBER"
                 });
 
-                it("should show the statistics of the selected column", function() {
-                    expect(this.view.$(".column_statistics .type_category .value").text()).toBe(this.column.get("typeCategory"));
-                    expect(this.view.$(".column_statistics .type .value").text()).toBe(this.column.get("type"));
-                    expect(this.view.$(".column_statistics .min .value").text()).toBe(this.column.get("min"));
+                chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                this.view.statistics.set({lastAnalyzedTime: "2012-01-24 12:25:11.077"});
+                chorus.PageEvents.broadcast("column:selected", this.column);
+                this.view.render();
+            });
+
+            describe("statistics labels", function() {
+                it("should display the column name", function() {
+                    expect(this.view.$(".column_title .title").text()).toContainTranslation("dataset.column_name");
+                    expect(this.view.$(".column_title .column_name").text()).toBe(this.column.get("name"));
+                });
+
+                it("should display the column labels in the correct order", function() {
+                    expect(this.view.$(".column_statistics .pair").eq(0).find(".key")).toContainTranslation("dataset.column_statistics.type_category");
+                    expect(this.view.$(".column_statistics .pair").eq(1).find(".key")).toContainTranslation("dataset.column_statistics.type");
+                    expect(this.view.$(".column_statistics .pair").eq(2).find(".key")).toContainTranslation("dataset.column_statistics.min");
+                    expect(this.view.$(".column_statistics .pair").eq(3).find(".key")).toContainTranslation("dataset.column_statistics.median");
+                    expect(this.view.$(".column_statistics .pair").eq(4).find(".key")).toContainTranslation("dataset.column_statistics.avg");
+                    expect(this.view.$(".column_statistics .pair").eq(5).find(".key")).toContainTranslation("dataset.column_statistics.max");
+                    expect(this.view.$(".column_statistics .pair").eq(6).find(".key")).toContainTranslation("dataset.column_statistics.stddev");
+                    expect(this.view.$(".column_statistics .pair").eq(7).find(".key")).toContainTranslation("dataset.column_statistics.distinct");
+                    expect(this.view.$(".column_statistics .pair").eq(8).find(".key")).toContainTranslation("dataset.column_statistics.common");
+                    expect(this.view.$(".column_statistics .pair").eq(9).find(".key")).toContainTranslation("dataset.column_statistics.pctnull");
+                });
+            });
+
+            describe("statistics values", function() {
+                context("when the dataset has never been analyzed", function() {
+                    beforeEach(function() {
+                        this.view.statistics.set({
+                            lastAnalyzedTime: null
+                        });
+                        this.column.set({
+                            typeCategory: "WHOLE_NUMBER",
+                            type: "int8",
+                            max: "1199961.0",
+                            median: "725197.0",
+                            min: "200075.0"
+                        });
+                        this.view.render();
+                    });
+
+                    it("should only display the typeCategory and type", function() {
+                        expect(this.view.$(".column_statistics .pair").length).toBe(2);
+                        expect(this.view.$(".column_statistics .type_category .value")).toExist();
+                        expect(this.view.$(".column_statistics .type .value")).toExist();
+                    });
+                });
+
+                context("when statistics are available", function() {
+                    it("should display the statistics", function() {
+                        expect(this.view.$(".column_statistics .type_category .value").text()).toBe("WHOLE_NUMBER");
+                        expect(this.view.$(".column_statistics .type .value").text()).toBe("int8");
+                        expect(this.view.$(".column_statistics .min .value").text()).toBe("200075");
+                        expect(this.view.$(".column_statistics .median .value").text()).toBe("725197");
+                        expect(this.view.$(".column_statistics .avg .value").text()).toBe("719719.11");
+                        expect(this.view.$(".column_statistics .max .value").text()).toBe("1199961");
+                        expect(this.view.$(".column_statistics .stddev .value").text()).toBe("309105");
+                        expect(this.view.$(".column_statistics .distinct .value").text()).toBe("998710");
+                        expect(this.view.$(".column_statistics .common .value").text()).toBe("1,0");
+                        expect(this.view.$(".column_statistics .pctnull .value").text()).toBe("10.37%");
+                    });
+                });
+
+                context("when the min is not available", function() {
+                    it("should not display the min", function() {
+                        this.column.set({min: null});
+                        this.view.render();
+                        expect(this.view.$(".column_statistics .min")).not.toExist();
+                    });
+                });
+
+                context("when the median is not available", function() {
+                    it("should not display the median", function() {
+                        this.column.set({median: null});
+                        this.view.render();
+                        expect(this.view.$(".column_statistics .median")).not.toExist();
+                    });
+                });
+
+                context("when the avg is not available", function() {
+                    it("should not display the avg", function() {
+                        this.column.set({avg: null});
+                        this.view.render();
+                        expect(this.view.$(".column_statistics .avg")).not.toExist();
+                    });
+                });
+
+                context("when the max is not available", function() {
+                    it("should not display the max", function() {
+                        this.column.set({max: null});
+                        this.view.render();
+                        expect(this.view.$(".column_statistics .max")).not.toExist();
+                    });
+                });
+
+                context("when the stdDeviation is not available", function() {
+                    it("should not display the stdDeviation", function() {
+                        this.column.set({stdDeviation: null});
+                        this.view.render();
+                        expect(this.view.$(".column_statistics .stdDeviation")).not.toExist();
+                    });
+                });
+
+                context("when the distinctValue is not available", function() {
+                    it("should not display the distinctValue", function() {
+                        this.column.set({distinctValue: null});
+                        this.view.render();
+                        expect(this.view.$(".column_statistics .distinctValue")).not.toExist();
+                    });
+                });
+
+                context("when the commonValues is not available", function() {
+                    it("should not display the commonValues", function() {
+                        this.column.set({commonValues: null});
+                        this.view.render();
+                        expect(this.view.$(".column_statistics .commonValues")).not.toExist();
+                    });
+                });
+
+                context("when the nullFraction is not available", function() {
+                    it("should not display the nullFraction", function() {
+                        this.column.set({nullFraction: null});
+                        this.view.render();
+                        expect(this.view.$(".column_statistics .nullFraction")).not.toExist();
+                    });
                 });
             });
         });
