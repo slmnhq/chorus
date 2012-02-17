@@ -1,5 +1,5 @@
 describe("chorus.models.CSVImport", function() {
-    
+
     context("with comma delimiters", function() {
         beforeEach(function() {
             this.model = fixtures.csvImport({
@@ -10,15 +10,15 @@ describe("chorus.models.CSVImport", function() {
                 ]
             });
             this.expectedColumns = [
-                {name: 'col1', values: ['row1val1', 'row2val1']},
-                {name: 'col2', values: ['row1val2', 'row2val2']},
-                {name: 'col3', values: ['row1val3', 'row2val3']}
+                {name: 'col1', values: ['row1val1', 'row2val1'], type: 'text'},
+                {name: 'col2', values: ['row1val2', 'row2val2'], type: 'text'},
+                {name: 'col3', values: ['row1val3', 'row2val3'], type: 'text'}
             ]
         })
 
         itParsesCorrectly();
-    })    
-    
+    })
+
     context("with space delimiters", function() {
         beforeEach(function() {
             this.model = fixtures.csvImport({
@@ -29,16 +29,16 @@ describe("chorus.models.CSVImport", function() {
                 ]
             });
             this.expectedColumns = [
-                {name: 'col1', values: ['row1 val1', 'row2val1']},
-                {name: 'col2', values: ['row1val2', 'row2 val2']},
-                {name: 'col3', values: ['row1val3', 'row2val3']}
+                {name: 'col1', values: ['row1 val1', 'row2val1'], type: 'text'},
+                {name: 'col2', values: ['row1val2', 'row2 val2'], type: 'text'},
+                {name: 'col3', values: ['row1val3', 'row2val3'], type: 'text'}
             ]
             this.model.set({'delimiter': ' '});
         })
 
         itParsesCorrectly();
     })
-    
+
     context("with tab delimiters", function() {
         beforeEach(function() {
             this.model = fixtures.csvImport({
@@ -49,16 +49,16 @@ describe("chorus.models.CSVImport", function() {
                 ]
             });
             this.expectedColumns = [
-                {name: 'col1', values: ['row1val1', 'row2val1']},
-                {name: 'col2', values: ['row1val2', 'row2val2']},
-                {name: 'col3', values: ['row1val3', 'row2val3']}
+                {name: 'col1', values: ['row1val1', 'row2val1'], type: 'text'},
+                {name: 'col2', values: ['row1val2', 'row2val2'], type: 'text'},
+                {name: 'col3', values: ['row1val3', 'row2val3'], type: 'text'}
             ]
             this.model.set({'delimiter': '\t'});
         })
 
         itParsesCorrectly();
     })
-    
+
     context("with quoted comma", function() {
         beforeEach(function() {
             this.model = fixtures.csvImport({
@@ -69,9 +69,9 @@ describe("chorus.models.CSVImport", function() {
                 ]
             });
             this.expectedColumns = [
-                {name: 'col1', values: ['row1,val1', 'row2val1']},
-                {name: 'col2', values: ['row1val2', 'row2,val2']},
-                {name: 'col3', values: ['row1val3', 'row2val3']}
+                {name: 'col1', values: ['row1,val1', 'row2val1'], type: 'text'},
+                {name: 'col2', values: ['row1val2', 'row2,val2'], type: 'text'},
+                {name: 'col3', values: ['row1val3', 'row2val3'], type: 'text'}
             ]
         })
 
@@ -88,15 +88,34 @@ describe("chorus.models.CSVImport", function() {
                 ]
             });
             this.expectedColumns = [
-                {name: 'col1', values: ['row1"val1', 'row2val1']},
-                {name: 'col2', values: ['row1val2', 'row2val2']},
-                {name: 'col3', values: ['"', 'row2val3']}
+                {name: 'col1', values: ['row1"val1', 'row2val1'], type: 'text'},
+                {name: 'col2', values: ['row1val2', 'row2val2'], type: 'text'},
+                {name: 'col3', values: ['"', 'row2val3'], type: 'text'}
             ]
         })
 
         itParsesCorrectly();
     })
-    
+
+    context("datatypes", function() {
+        beforeEach(function() {
+            this.model = fixtures.csvImport({
+                lines: [
+                    'col1,col2,col3',
+                    'foo,2,3',
+                    'bar,2.1,sna'
+                ]
+            });
+            this.expectedColumns = [
+                {name: 'col1', values: ['foo', 'bar'], type: 'text'},
+                {name: 'col2', values: ['2', '2.1'], type: 'float'},
+                {name: 'col3', values: ['3', 'sna'], type: 'text'}
+            ]
+        });
+
+        itParsesCorrectly();
+    })
+
     function itParsesCorrectly() {
         describe("columnOrientedData", function() {
             beforeEach(function() {
@@ -113,7 +132,7 @@ describe("chorus.models.CSVImport", function() {
             })
 
             it("has the correct number of data types", function() {
-                expect(this.types).toEqual(["text", "text", "text"]);
+                expect(this.types).toEqual(_.pluck(this.expectedColumns, "type"));
 
             })
 

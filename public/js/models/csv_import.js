@@ -7,10 +7,15 @@ chorus.models.CSVImport = chorus.models.Base.extend({
         var column_names = rows.shift();
         return _.map(column_names, function(column_name, i) {
             var column_values = [];
+
+            type = "float";
             _.each(rows, function(row){
-                    column_values.push(row[i])
+                column_values.push(row[i])
+                if (type == "float" && isNaN(parseFloat(row[i]))) {
+                    type = "text";
+                }
             })
-            return {values: column_values, name: column_name, type: "text"};
+            return {values: column_values, name: column_name, type: type};
         });
     }
 });
