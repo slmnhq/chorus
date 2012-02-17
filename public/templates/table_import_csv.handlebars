@@ -1,6 +1,6 @@
 <div class="result_table">
     <div class="data_table">
-        <div class="thead">
+        <div class="thead list">
             <div class="column_names">
                 {{#each columns}}<div class="th">
                     <div class="name" title="{{{name}}}">
@@ -10,7 +10,12 @@
             </div>
             <div class="data_types">
                 {{#each columns}}<div class="th">
-                    <div class="type">TYPE TODO</div>
+                <div class="type numeric">
+                    <div class="type_name">
+                        <div class="type">{{type}}</div>
+                        <div class="arrow"/>
+                    </div>
+                </div>
                 </div>{{/each}}
             </div>
         </div>

@@ -2,11 +2,69 @@
 
     .data_table {
         width: 800px;
-        height: 200px;
+        height: 220px;
         overflow: auto;
 
         .tbody {
             overflow: visible;
+            top: 50px;
+        }
+
+        .column_names {
+            input {
+                height: 20px;
+            }
+        }
+
+        .data_types {
+            .th {
+                height: 17px;
+                line-height: 20px;
+                padding: 0;
+                width: 120px;
+            }
+
+            .type_name {
+                padding-left: 10px;
+                cursor: pointer;
+
+                div {
+                    display: inline-block;
+                    color: white;
+                }
+
+                .arrow {
+                    position: absolute;
+                    right: 10px;
+                    top: 6px;
+                    @include triangle(down, white, 8px, 8px);
+                }
+            }
+
+            .numeric {
+                background: url(/images/ribbons/label_datatype_dkblue2.png) repeat;
+            }
+
+            .string {
+                background: url(/images/ribbons/label_datatype_purple2.png) repeat;
+            }
+
+            .boolean {
+                background: url(/images/ribbons/label_datatype_black2.png) repeat;
+            }
+
+            .binary {
+                background: url(/images/ribbons/label_datatype_green2.png) repeat;
+            }
+
+            .date, .time, .date_time {
+                background: url(/images/ribbons/label_datatype_ltblue2.png) repeat;
+            }
+
+            .other {
+                color: $color-text2;
+                background: url(/images/ribbons/label_datatype_white2.png) repeat;
+            }
         }
     }
 }

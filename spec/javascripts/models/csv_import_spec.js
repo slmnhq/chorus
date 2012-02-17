@@ -101,6 +101,7 @@ describe("chorus.models.CSVImport", function() {
         describe("columnOrientedData", function() {
             beforeEach(function() {
                 this.columns = this.model.columnOrientedData();
+                this.types = _.pluck(this.columns, "type")
             })
 
             it("has the correct number of columns", function() {
@@ -109,6 +110,11 @@ describe("chorus.models.CSVImport", function() {
 
             it("has the column name", function() {
                 expect(this.columns[0].name).toBe(this.expectedColumns[0].name);
+            })
+
+            it("has the correct number of data types", function() {
+                expect(this.types).toEqual(["text", "text", "text"]);
+
             })
 
             it("has the rows", function() {

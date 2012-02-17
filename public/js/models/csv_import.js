@@ -10,7 +10,7 @@ chorus.models.CSVImport = chorus.models.Base.extend({
             _.each(rows, function(row){
                     column_values.push(row[i])
             })
-            return {values: column_values, name: column_name};
+            return {values: column_values, name: column_name, type: "text"};
         });
     }
 });
