@@ -70,7 +70,6 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
 
         $(this.el).html(this.template(evaluatedContext))
             .addClass(this.className)
-            .attr("title", this.options.title || this.title || "")
             .addClass(this.additionalClass || "");
         this.renderSubviews();
         this.postRender($(this.el));

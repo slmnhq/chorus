@@ -40,7 +40,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
             })
 
             it("has the right title", function () {
-                expect($(this.dialog.el).attr("title")).toMatchTranslation("workfile.run_in_schema.title")
+                expect(this.dialog.$(".dialog_header h1")).toContainTranslation("workfile.run_in_schema.title");
             });
 
             it("has a Run File button", function () {

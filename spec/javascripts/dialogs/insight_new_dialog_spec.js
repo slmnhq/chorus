@@ -21,7 +21,7 @@ describe("chorus.dialogs.InsightsNewDialog", function() {
 
     describe("#render", function() {
         it("has the right title", function() {
-            expect($(this.dialog.el).attr("title")).toMatchTranslation("insight.new_dialog.title");
+            expect(this.dialog.$(".dialog_header h1")).toContainTranslation("insight.new_dialog.title");
         });
 
         it("has the right placeholder", function() {

@@ -22,7 +22,7 @@ describe("chorus.dialogs.NotesNewDialog", function() {
 
     describe("#render", function() {
         it("has the right title", function() {
-            expect($(this.dialog.el).attr("title")).toBe(t("notes.new_dialog.title"));
+            expect(this.dialog.$(".dialog_header h1")).toContainTranslation("notes.new_dialog.title");
         });
 
         it("has the right placeholder", function() {

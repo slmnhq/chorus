@@ -27,7 +27,7 @@ describe("CommentDialog", function() {
         });
 
         it("has the right title", function() {
-            expect($(this.dialog.el).attr("title")).toBe(t("comments.new_dialog.title"));
+            expect(this.dialog.$(".dialog_header h1")).toContainTranslation("comments.new_dialog.title");
         });
 
         it("renders the body", function(){
