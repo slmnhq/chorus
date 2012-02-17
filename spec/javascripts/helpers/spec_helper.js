@@ -60,6 +60,7 @@
         'login',
         'main_content',
         'manage_join_tables',
+        'name_chorus_view',
         'notes_new',
         'notes_new_file_attachment',
         'notification_recipient',
