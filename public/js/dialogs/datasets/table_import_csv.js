@@ -6,6 +6,10 @@ chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
         this.csv = this.options.csv;
     },
 
+    postRender : function() {
+        this.setupScrolling(this.$(".data_table"));
+    },
+
     additionalContext: function() {
         var sandbox = chorus.page.workspace.sandbox();
         return {

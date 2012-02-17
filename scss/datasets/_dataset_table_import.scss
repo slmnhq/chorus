@@ -1,8 +1,27 @@
-.table_import_csv {
+.table_import_csv.dialog {
+
+    .dialog_content {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    .directions {
+        @include font-normal-alpha;
+        margin-left: 15px;
+        margin-bottom: 5px;
+        input {
+            display: inline-block;
+            width: 250px;
+
+        }
+    }
 
     .data_table {
-        width: 800px;
-        height: 220px;
+        border-top: 1px solid $list-border-color;
+        border-bottom: 1px solid $list-border-color;
+
+        width: 860px;
+        height: 225px;
         overflow: auto;
 
         .th:hover input {
@@ -18,60 +37,91 @@
             .field_name {
                 display: inline-block;
 
-                input {
-                    height: 20px;
-                }
             }
         }
 
         .data_types {
             .th {
-                height: 17px;
-                line-height: 20px;
+                height: 16px;
+                line-height: 16px;
                 padding: 0;
                 width: 120px;
             }
 
+            .type {
+                width: 120px;
+                height: 16px;
+            }
+
             .type_name {
-                padding-left: 10px;
                 cursor: pointer;
 
-                div {
-                    display: inline-block;
-                    color: white;
-                }
+                display: inline-block;
+                color: white;
 
                 .arrow {
                     position: absolute;
                     right: 10px;
-                    top: 6px;
+                    top: 5px;
                     @include triangle(down, white, 8px, 8px);
                 }
             }
 
-            .numeric {
-                background: url(/images/ribbons/label_datatype_dkblue2.png) repeat;
+            .left, .right {
+                width:2px;
+                height: 16px;
+                display: inline-block;
+                vertical-align: top;
             }
 
-            .string {
-                background: url(/images/ribbons/label_datatype_purple2.png) repeat;
+            .center {
+                width: 116px;
+                height: 16px;
+                display: inline-block;
+                vertical-align: top;
+                padding-left: 8px;
             }
 
-            .boolean {
-                background: url(/images/ribbons/label_datatype_black2.png) repeat;
+            .integer, .float {
+                .left {
+                    background: url(/images/datatypes/label_sm_datatype_dkblue1.png) no-repeat;
+                }
+
+                .center {
+                    background: url(/images/datatypes/label_sm_datatype_dkblue2.png) repeat;
+                }
+
+                .right {
+                    background: url(/images/datatypes/label_sm_datatype_dkblue3.png) no-repeat;
+                }
             }
 
-            .binary {
-                background: url(/images/ribbons/label_datatype_green2.png) repeat;
+            .text {
+                .left {
+                    background: url(/images/datatypes/label_sm_datatype_purple1.png) no-repeat;
+                }
+
+                .center {
+                    background: url(/images/datatypes/label_sm_datatype_purple2.png) repeat;
+                }
+
+                .right {
+                    background: url(/images/datatypes/label_sm_datatype_purple3.png) no-repeat;
+                }
             }
 
-            .date, .time, .date_time {
-                background: url(/images/ribbons/label_datatype_ltblue2.png) repeat;
-            }
+            .date, .time, .date_time, .timestamp {
+                .left {
+                    background: url(/images/datatypes/label_sm_datatype_ltblue1.png) no-repeat;
+                }
 
-            .other {
-                color: $color-text2;
-                background: url(/images/ribbons/label_datatype_white2.png) repeat;
+                .center {
+                    background: url(/images/datatypes/label_sm_datatype_ltblue2.png) repeat;
+                }
+
+                .right {
+                    background: url(/images/datatypes/label_sm_datatype_ltblue3.png) no-repeat;
+                }
             }
         }
     }

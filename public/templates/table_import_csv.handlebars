@@ -15,11 +15,11 @@
             </div>
             <div class="data_types">
                 {{#each columns}}<div class="th">
-                <div class="type numeric">
-                    <div class="type_name">
-                        <div class="type">{{type}}</div>
+                <div class="type {{type}}">
+                    <div class="left"/><div class="center type_name">
+                        {{type}}
                         <div class="arrow"/>
-                    </div>
+                    </div><div class="right"/>
                 </div>
                 </div>{{/each}}
             </div>
