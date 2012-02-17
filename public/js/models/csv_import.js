@@ -4,7 +4,7 @@ chorus.models.CSVImport = chorus.models.Base.extend({
         var parser = new CSV()
         parser.from(this.get("lines"), {delimiter: this.get("delimiter")});
         var rows = parser.lines;
-        var column_names = rows.shift();
+        var column_names = _.map(rows.shift(), chorus.models.CSVImport.normalizeForDatabase);
         return _.map(column_names, function(column_name, i) {
             var column_values = [];
 
@@ -17,5 +17,9 @@ chorus.models.CSVImport = chorus.models.Base.extend({
             })
             return {values: column_values, name: column_name, type: type};
         });
+    }
+}, {
+    normalizeForDatabase : function(str) {
+        return _.str.underscored(str.toLowerCase());
     }
 });
