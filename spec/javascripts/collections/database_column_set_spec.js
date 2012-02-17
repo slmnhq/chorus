@@ -18,15 +18,17 @@ describe("chorus.collections.DatabaseColumnSet", function() {
         })
 
         describe("add", function() {
-            it("sets the schemaName and tableName (as parentName) on the added column", function() {
-                this.columns.add(fixtures.databaseColumn());
-                expect(this.columns.models[0].get('schemaName')).toBe('schema1');
-                expect(this.columns.models[0].get('parentName')).toBe('table1');
-            })
-
             it("sets tabularData on the added column", function() {
                 this.columns.add(fixtures.databaseColumn());
                 expect(this.columns.models[0].tabularData).toBe(this.columns.attributes.tabularData);
+            })
+
+            it("calls initialize on the column", function() {
+                var column = fixtures.databaseColumn()
+                spyOn(column, 'initialize').andCallThrough();
+                this.columns.add(column);
+                expect(column.initialize).toHaveBeenCalled();
+                expect(column.get('schemaName')).toBe('schema1');
             })
         });
     });
