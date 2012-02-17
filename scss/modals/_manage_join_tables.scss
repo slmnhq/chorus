@@ -12,6 +12,10 @@
                 float: right;
                 height: 35px;
                 line-height: 35px;
+
+                a {
+                    font-size: 12px;
+                }
             }
             .name {
                 @include font-normal-alpha;
