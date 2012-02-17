@@ -55,7 +55,7 @@ describe("chorus.dialogs.DatasetImport", function() {
         beforeEach(function() {
             this.fileList = [
                 {
-                    name: 'foo.csv'
+                    name: 'foo Bar Baz.csv'
                 }
             ];
             expect($.fn.fileupload).toHaveBeenCalled();
@@ -71,7 +71,7 @@ describe("chorus.dialogs.DatasetImport", function() {
             });
 
             it("displays the chosen filename", function() {
-                expect(this.dialog.$(".file_name").text()).toBe("foo.csv");
+                expect(this.dialog.$(".file_name").text()).toBe("foo Bar Baz.csv");
             });
 
             it("displays the appropriate file icon", function() {
@@ -125,9 +125,9 @@ describe("chorus.dialogs.DatasetImport", function() {
                     expect(this.dialog.$(".new_table input:radio").attr("checked")).toBeTruthy()
                 });
 
-                it("shows the file name entry", function() {
+                it("shows the file name entry, in lowercase, with spaces converted to underscores", function() {
                     expect(this.dialog.$(".new_table input:text")).toBeEnabled();
-                    expect(this.dialog.$(".new_table input:text").val()).toBe("foo");
+                    expect(this.dialog.$(".new_table input:text").val()).toBe("foo_bar_baz");
                 });
 
                 it("enables the table name input", function() {
@@ -202,7 +202,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                 });
 
                 it("launches the import new table dialog", function() {
-                    expect(chorus.dialogs.TableImportCSV.prototype.setup).toHaveBeenCalledWith({csv: this.dialog.csv, tablename: "foo"});
+                    expect(chorus.dialogs.TableImportCSV.prototype.setup).toHaveBeenCalledWith({csv: this.dialog.csv, tablename: "foo_bar_baz"});
                     expect(this.modalSpy).toHaveModal(chorus.dialogs.TableImportCSV);
                 });
             });

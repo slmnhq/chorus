@@ -45,10 +45,11 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
 
             self.uploadObj = data;
             var filename = data.files[0].name;
-            var basename = _.first(filename.split('.'));
-            var extension = _.last(filename.split('.'));
+            var filenameComponents = filename.split('.');
+            var basename = _.first(filenameComponents);
+            var extension = _.last(filenameComponents);
             self.$(".file_name").text(filename);
-            self.$(".new_table input[type='text']").val(basename);
+            self.$(".new_table input[type='text']").val(basename.toLowerCase().replace(/ /g, '_'));
 
             self.$("img").removeClass("hidden");
             self.$("img").attr("src", chorus.urlHelpers.fileIconUrl(extension, "medium"));
