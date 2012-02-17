@@ -78,6 +78,28 @@
                     </div>
                 {{/if}}
             {{/if}}
+            {{#if column}}
+                <div class="column_statistics">
+                    {{#if column.typeCategory}}
+                    <div class="pair type_category">
+                        <div class="key">{{t "dataset.column_statistics.type_category"}}</div>
+                        <div class="value" title="{{{column.typeCategory}}}">{{{column.typeCategory}}}</div>
+                    </div>
+                    {{/if}}
+                    {{#if column.type}}
+                    <div class="pair type">
+                        <div class="key">{{t "dataset.column_statistics.type"}}</div>
+                        <div class="value" title="{{{column.type}}}">{{{column.type}}}</div>
+                    </div>
+                    {{/if}}
+                    {{#if column.min}}
+                    <div class="pair min">
+                        <div class="key">{{t "dataset.column_statistics.size"}}</div>
+                        <div class="value" title="{{{column.min}}}">{{{column.min}}}</div>
+                    </div>
+                    {{/if}}
+                </div>
+            {{/if}}
         </div>
     </div>
 {{/if}}

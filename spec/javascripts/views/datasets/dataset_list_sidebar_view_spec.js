@@ -204,7 +204,40 @@ describe("chorus.views.DatasetListSidebar", function() {
                 });
             });
         });
-    })
+
+        describe("column:selected event handling", function() {
+            beforeEach(function() {
+                chorus.PageEvents.broadcast("dataset:selected", fixtures.datasetSourceTable());
+            });
+
+            context("when a column is selected", function() {
+                beforeEach(function() {
+                    this.column = fixtures.databaseColumn({
+                        avg: 719719.111,
+                        commonValues: [1, 0],
+                        distinctValue: 998710,
+                        max: "1199961.0",
+                        median: "725197.0",
+                        min: "200075.0",
+                        nullFraction: 0,
+                        ordinalPosition: 1,
+                        recentComment: null,
+                        stdDeviation: 309104.997,
+                        type: "int8",
+                        typeCategory: "WHOLE_NUMBER"
+                    });
+                    chorus.PageEvents.broadcast("column:selected", this.column);
+                    this.view.render();
+                });
+
+                it("should show the statistics of the selected column", function() {
+                    expect(this.view.$(".column_statistics .type_category .value").text()).toBe(this.column.get("typeCategory"));
+                    expect(this.view.$(".column_statistics .type .value").text()).toBe(this.column.get("type"));
+                    expect(this.view.$(".column_statistics .min .value").text()).toBe(this.column.get("min"));
+                });
+            });
+        });
+    });
 
     describe("#datasetType", function() {
         it("uses a translation based on the type and objectType of the supplied dataset", function() {

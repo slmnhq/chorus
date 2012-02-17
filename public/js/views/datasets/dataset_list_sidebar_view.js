@@ -12,10 +12,21 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
 
     setup:function () {
         chorus.PageEvents.subscribe("dataset:selected", this.setDataset, this);
+        chorus.PageEvents.subscribe("column:selected", this.setColumn, this);
         this.tabControl = new chorus.views.TabControl([
             {name:'activity', selector:".activity_list"},
             {name:'statistics', selector:".statistics_detail"}
         ]);
+    },
+
+    setColumn : function(column){
+        if (column) {
+            this.selectedColumn = column;
+        } else {
+            delete this.selectedColumn;
+        }
+
+        this.render();
     },
 
     setDataset:function (dataset) {
@@ -71,6 +82,10 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
             if (ctx.statistics.columns === 0) {
                 ctx.statistics.columns = "0"
             }
+        }
+        
+        if (this.selectedColumn) {
+            ctx.column = this.selectedColumn.attributes;
         }
 
         return ctx;
