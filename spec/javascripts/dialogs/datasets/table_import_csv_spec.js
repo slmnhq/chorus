@@ -1,12 +1,19 @@
 describe("chorus.dialogs.TableImportCSV", function() {
     beforeEach(function() {
+        chorus.page = {};
+        this.sandbox = fixtures.sandbox({
+            schemaName: "mySchema",
+            databaseName: "myDatabase",
+            instanceName: "myInstance"
+        })
+        chorus.page.workspace = fixtures.workspace();
         this.csv = fixtures.csvImport({lines: [
             "col1,col2,col3,col4,col5",
             "val1.1,val1.2,val1.3,val1.4,val1.5",
             "val2.1,val2.2,val2.3,val2.4,val2.5",
             "val3.1,val3.2,val3.3,val3.4,val3.5"
         ]});
-        this.dialog = new chorus.dialogs.TableImportCSV({csv: this.csv});
+        this.dialog = new chorus.dialogs.TableImportCSV({csv: this.csv, tablename: "bar"});
         this.dialog.render();
     });
 
@@ -14,8 +21,16 @@ describe("chorus.dialogs.TableImportCSV", function() {
         expect(this.dialog.$('h1')).toContainTranslation("dataset.import.table.title");
     });
 
-    it("it has an import button", function() {
+    it("has an import button", function() {
         expect(this.dialog.$('button.submit')).toContainTranslation("dataset.import.table.submit");
+    });
+
+    it("has directions", function() {
+        var sandbox = chorus.page.workspace.sandbox();
+        expect(this.dialog.$('.directions').html().trim()).toEqual(t("dataset.import.table.directions",
+            _.extend(sandbox.attributes, {
+                tablename_input_field: '<input type="text" name="table_name" value="bar">'
+            })));
     });
 
     describe("the data table", function() {

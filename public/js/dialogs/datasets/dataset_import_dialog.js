@@ -66,7 +66,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             self.$("button.submit").stopLoading();
             self.csv = new chorus.models.CSVImport
             self.csv.set(self.csv.parse(data.result));
-            var dialog = new chorus.dialogs.TableImportCSV({csv: self.csv});
+            var dialog = new chorus.dialogs.TableImportCSV({csv: self.csv, tablename: self.$(".new_table input[type='text']").val()});
             dialog.launchModal();
         }
     }

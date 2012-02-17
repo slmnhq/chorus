@@ -5,14 +5,22 @@
         height: 220px;
         overflow: auto;
 
+        .th:hover input {
+            width: 100px;
+        }
+
         .tbody {
             overflow: visible;
             top: 50px;
         }
 
         .column_names {
-            input {
-                height: 20px;
+            .field_name {
+                display: inline-block;
+
+                input {
+                    height: 20px;
+                }
             }
         }
 

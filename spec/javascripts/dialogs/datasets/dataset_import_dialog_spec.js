@@ -1,5 +1,7 @@
 describe("chorus.dialogs.DatasetImport", function() {
     beforeEach(function() {
+        chorus.page = {};
+        chorus.page.workspace = fixtures.workspace({id:242});
         this.modalSpy = stubModals();
         spyOn($.fn, 'fileupload');
         this.launchElement = $('<button data-workspaceid=​242>​Import File​</button>​');
@@ -200,7 +202,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                 });
 
                 it("launches the import new table dialog", function() {
-                    expect(chorus.dialogs.TableImportCSV.prototype.setup).toHaveBeenCalledWith({csv: this.dialog.csv});
+                    expect(chorus.dialogs.TableImportCSV.prototype.setup).toHaveBeenCalledWith({csv: this.dialog.csv, tablename: "foo"});
                     expect(this.modalSpy).toHaveModal(chorus.dialogs.TableImportCSV);
                 });
             });
