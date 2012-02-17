@@ -26,6 +26,20 @@ describe("chorus.models.TabularData", function() {
         })
     })
 
+    describe("#deriveChorusView", function() {
+        beforeEach(function() {
+            this.chorusView = this.tabularData.deriveChorusView();
+        });
+
+        it("returns a chorus view", function() {
+            expect(this.chorusView).toBeA(chorus.models.ChorusView);
+        });
+
+        it("has the right 'sourceObject'", function() {
+            expect(this.chorusView.sourceObject).toBe(this.tabularData);
+        });
+    });
+
     describe("iconFor", function() {
         var largeIconMap = {
             "CHORUS_VIEW": {
