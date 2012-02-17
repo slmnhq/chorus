@@ -76,7 +76,11 @@ chorus.views.LinkMenu = chorus.views.Base.extend({
         var ul = $(e.target).closest("ul");
         this.options.chosen = $(e.target).text();
         this.dismissMenu();
-        this.trigger("choice", ul.data("event"), $(e.target).closest('li').data("type"));
+
+        var eventName = ul.data("event");
+        var pickedChoiceData = $(e.target).closest('li').data("type");
+        this.trigger("choice", eventName, pickedChoiceData);
+        chorus.PageEvents.broadcast("choice:" + eventName, pickedChoiceData, this);
         this.render();
     }
 })

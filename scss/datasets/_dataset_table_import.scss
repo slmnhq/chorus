@@ -1,5 +1,6 @@
 .table_import_csv.dialog {
 
+    $cell-width: 120px;
     .dialog_content {
         padding-left: 2px;
         padding-right: 2px;
@@ -45,16 +46,45 @@
                 height: 16px;
                 line-height: 16px;
                 padding: 0;
-                width: 120px;
+                width: $cell-width;
+                overflow: visible;
+
+                .link_menu {
+                    padding: 0;
+                    .chosen {
+                        padding: 0;
+                        color: white;
+                        border: none;
+                        width: $cell-width - 4px;
+                        display: inline-block;
+                        height: 16px;
+                    }
+                    .popup {
+                        padding-left: 8px;
+                        img {
+                            display: none;
+                        }
+                    }
+                    .popup_filter {
+                        right: 14px;
+                        width: 100px;
+                        min-width: 100px;
+                        max-width: 100px;
+
+                        .pointer {
+                            left: 47px;
+                        }
+                    }
+                }
             }
 
             .type {
-                width: 120px;
+                width: $cell-width;
                 height: 16px;
             }
 
             .type_name {
-                cursor: pointer;
+                /*cursor: pointer;*/
 
                 display: inline-block;
                 color: white;
@@ -68,18 +98,18 @@
             }
 
             .left, .right {
-                width:2px;
+                width: 2px;
                 height: 16px;
                 display: inline-block;
                 vertical-align: top;
             }
 
             .center {
-                width: 116px;
+                width: $cell-width - 4px;
                 height: 16px;
                 display: inline-block;
                 vertical-align: top;
-                padding-left: 8px;
+                padding-left: 0;
             }
 
             .integer, .float {

@@ -58,6 +58,12 @@ describe("chorus.dialogs.TableImportCSV", function() {
             expect(this.dialog.$(".data_table .tbody .column").length).toEqual(5);
         })
 
+        it("displays the provided types", function() {
+            _.each(this.dialog.$(".th .type"), function(th, index){
+                expect($(th).find(".chosen").text().trim()).toBe(this.csv.columnOrientedData()[index].type);
+            }, this);
+        });
+
         it("has the right data in each cell", function() {
             _.each(this.dialog.$(".data_table .tbody .column"), function(column, i) {
                 var cells = $(column).find(".td")
@@ -67,5 +73,19 @@ describe("chorus.dialogs.TableImportCSV", function() {
                 })
             });
         });
+
+        describe("selecting a new data type", function() {
+            beforeEach(function() {
+                this.$type = this.dialog.$(".th .type").eq(1)
+                this.$type.find(".chosen").click();
+
+                this.$type.find(".popup_filter li").eq(1).find("a").click();
+            })
+
+            it("changes the type of the column", function() {
+                expect(this.$type.find(".chosen")).toHaveText("float");
+                expect(this.$type).toHaveClass("float");
+            })
+        })
     });
 });
