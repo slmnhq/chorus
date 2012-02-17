@@ -62,11 +62,15 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                 expect(this.dialog.$(".notification_recipients")).not.toHaveClass("hidden");
             });
 
-            it("should include the recipients in the save request", function() {
-                this.dialog.notifications.pickedUsers = ["1", "2"];
-                this.dialog.save();
+            context("with selected recipients", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog.notifications, "getPickedUsers").andReturn(["1", "2"]);
+                    this.dialog.save();
+                });
 
-                expect(this.server.lastCreate().params().recipients).toBe("1,2");
+                it("should include the recipients in the save request", function() {
+                    expect(this.server.lastCreate().params().recipients).toBe("1,2");
+                });
             });
 
             describe("selecting 'Nobody'", function() {
@@ -78,11 +82,15 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                     expect(this.dialog.$(".notification_recipients")).toHaveClass("hidden");
                 });
 
-                it("should not include the recipients in the save request", function() {
-                    this.dialog.notifications.pickedUsers = ["1", "2"];
-                    this.dialog.save();
+                context("with a selected user", function() {
+                    beforeEach(function() {
+                        spyOn(this.dialog.notifications, "getPickedUsers").andReturn(["1", "2"]);
+                        this.dialog.save();
+                    });
 
-                    expect(this.server.lastCreate().params().recipients).toBeFalsy();
+                    it("should not include the recipients in the save request", function() {
+                        expect(this.server.lastCreate().params().recipients).toBeFalsy();
+                    });
                 });
             });
         });

@@ -19,8 +19,9 @@ describe("chorus.views.NotificationRecipient", function() {
             expect(this.view.$(".loading_spinner")).toExist();
         });
 
-        it("has 0 users in the picked_users list", function() {
+        it("does not have any items in the list", function() {
             expect(this.view.$(".picked_users li").length).toBe(0);
+            expect(this.view.getPickedUsers()).toEqual([]);
         });
 
         context("when the user fetch completes", function() {
@@ -52,6 +53,28 @@ describe("chorus.views.NotificationRecipient", function() {
 
                 itHasOnlyTheFirstUser();
 
+                context("adding the same user", function() {
+                    beforeEach(function() {
+                        this.view.$(".add_user").click();
+                    });
+
+                    itHasOnlyTheFirstUser();
+                });
+
+                context("calling render again", function() {
+                    beforeEach(function() {
+                        this.view.render();
+                    });
+
+                    it("doesn't have any names in the list", function() {
+                        expect(this.view.$(".picked_users li").length).toBe(0);
+                    });
+
+                    it("returns only the id of the current selection", function() {
+                        expect(this.view.getPickedUsers()).toEqual([this.view.$("select option:selected").val()]);
+                    });
+                });
+
                 context("adding another user", function() {
                     beforeEach(function() {
                         this.view.$("select").val(this.user2.id);
@@ -65,11 +88,14 @@ describe("chorus.views.NotificationRecipient", function() {
                     });
 
                     it("returns an array containing both selected users' IDs", function(){
-                        expect(this.view.pickedUsers).toEqual([this.user1.id.toString(), this.user2.id.toString()]);
+                        expect(this.view.getPickedUsers().length).toBe(2);
+                        expect(this.view.getPickedUsers()).toContain(this.user1.id.toString());
+                        expect(this.view.getPickedUsers()).toContain(this.user2.id.toString());
                     });
 
                     context("removing the new user", function() {
                         beforeEach(function() {
+                            this.view.$("select").val(this.user1.id);
                             this.view.$(".picked_users li:eq(1) .remove").click();
                         });
 
@@ -87,18 +113,20 @@ describe("chorus.views.NotificationRecipient", function() {
                     });
 
                     it("should remove the user's ID from the internal array", function() {
-                        expect(this.view.pickedUsers.length).toBe(0);
+                        expect(this.view.getPickedUsers().length).toBe(1);
+                        expect(this.view.getPickedUsers()).toContain(this.user1.id.toString());
                     });
                 });
 
                 function itHasOnlyTheFirstUser() {
-                    it("makes an entry with that user in the picked_users list", function() {
+                    it("has an entry with that user in the picked_users list", function() {
                         expect(this.view.$(".picked_users li").length).toBe(1);
                         expect(this.view.$(".picked_users li:eq(0) .name").text().trim()).toBe(this.user1.displayName());
                     });
 
                     it("returns an array containing only that user's ID", function(){
-                        expect(this.view.pickedUsers).toEqual([this.user1.id.toString()]);
+                        expect(this.view.getPickedUsers().length).toBe(1);
+                        expect(this.view.getPickedUsers()).toContain(this.user1.id.toString());
                     });
                 }
             });

@@ -114,7 +114,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.extend({
         this.saving = true;
         this.model.save({
             body: this.$("textarea[name=body]").val().trim(),
-            recipients: this.$(".notification_recipients").is(".hidden") ? "" : this.notifications.pickedUsers.join(",")
+            recipients: this.$(".notification_recipients").is(".hidden") ? "" : this.notifications.getPickedUsers().join(",")
         });
     },
 
