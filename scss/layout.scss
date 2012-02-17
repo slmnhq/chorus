@@ -6,6 +6,7 @@
 @import "layout/_main_content.scss";
 @import "layout/_sidebar.scss";
 @import "layout/_sub_nav.scss";
+@import "layout/_pills.scss";
 
 #page {
     min-width: $page-min-width;
@@ -31,42 +32,6 @@
 
     > .breadcrumbs {
         padding-top: 50px;
-    }
-
-    #help {
-      position: absolute;
-      right: 0;
-      width: 45px;
-
-      a {
-        background: $link-color;
-      }
-    }
-
-    #user_count {
-      position:absolute;
-      right: 50px;
-
-      a {
-        background:#3872A5;
-      }
-    }
-
-    .pill {
-      height: $breadcrumbs-height;
-      background: transparent;
-      line-height: 32px;
-      vertical-align: middle;
-      top: 50px;
-
-
-      a {
-        color: white;
-        padding: 3px 5px;
-        @include border-radius(4px);
-        font-size: 12px;
-        font-weight: $semibold;
-      }
     }
 
     #sidebar_wrapper {

@@ -1,0 +1,35 @@
+.pill {
+  height: $breadcrumbs-height;
+  background: transparent;
+  line-height: 32px;
+  vertical-align: middle;
+  top: 50px;
+
+  a {
+    color: white;
+    padding: 3px 5px;
+    @include border-radius(4px);
+    font-size: 12px;
+    font-weight: $semibold;
+  }
+}
+
+
+#user_count {
+  position:absolute;
+
+  a {
+    background:#3872A5;
+  }
+}
+
+#help {
+  position: absolute;
+  width: $help-pill-width;
+
+  a {
+    background: $link-color;
+  }
+}
+
+

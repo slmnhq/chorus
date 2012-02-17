@@ -11,6 +11,16 @@ div[data-page="Dashboard"] {
         @include after-clearfix();
     }
 
+    #help {
+      top: 50px;
+      right: $guts-padding;
+    }
+
+    #user_count {
+      top: 50px;
+      right: $help-pill-width + (2 * $guts-padding);
+    }
+
     .content {
         padding-right: 15px;
     }
