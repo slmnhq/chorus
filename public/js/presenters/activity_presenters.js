@@ -28,10 +28,15 @@
                 "NOTE": t("comments.title.NOTE")
             };
 
+            var activityTypeToEntityType = {
+                "NOTE" : "comment",
+                "INSIGHT_CREATED" : "insight"
+            }
+            var entityType = activityTypeToEntityType[this.activityType] || "activitystream";
             return {
                 body: model.get("text"),
                 entityTitle: entityTitles[this.activityType] || entityTitles["DEFAULT"],
-                entityType: this.activityType == "NOTE" ? "comment" : "activitystream",
+                entityType: entityType,
                 objectName: "don't know object name for activity type: " + this.activityType,
                 objectUrl: "/NEED/OBJECT/URL/FOR/TYPE/" + this.activityType,
                 workspaceName: this.workspace ? this.workspace.get("name") : "no workspace name for activity type: " + this.activityType,

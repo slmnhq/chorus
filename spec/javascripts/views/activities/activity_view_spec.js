@@ -334,6 +334,8 @@ describe("chorus.views.Activity", function() {
                 });
             });
 
+            itShouldRenderACommentLink("insight", t("comments.title.ACTIVITY"));
+
             context("when the current user in an admin", function() {
                 beforeEach(function() {
                     setLoggedInUser({admin: true});
