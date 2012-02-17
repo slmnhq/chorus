@@ -79,3 +79,8 @@ input[type=checkbox], input[type=radio] {
 img.disabled {
     @include opacity(0.25);
 }
+
+/* Prevent focus outline on scrollable elements */
+.jspScrollable:focus {
+    outline: none;
+}

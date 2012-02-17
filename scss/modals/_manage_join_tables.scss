@@ -6,6 +6,13 @@
         overflow: auto;
 
         li {
+            margin-right: 0;
+
+            .actions {
+                float: right;
+                height: 35px;
+                line-height: 35px;
+            }
             .name {
                 @include font-normal-alpha;
             }
@@ -20,7 +27,7 @@
                     background-color: $picklist-selected-background-color;
                 }
 
-                .name, .column_count {
+                .name, .column_count, a {
                     color: white;
                 }
             }
@@ -39,11 +46,11 @@
             margin-top: 15px;
             margin-bottom: 4px;
             display: block;
-            width: 326px; 
+            width: 326px;
         }
 
         select {
-            display: block; 
+            display: block;
             width: 326px;
         }
     }

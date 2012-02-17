@@ -2,12 +2,12 @@ chorus.dialogs.JoinConfiguration = chorus.dialogs.Base.extend({
     className: "join_configuration",
     additionalClass: "with_sub_header",
     title: t("dataset.manage_join_tables.title"),
+    useLoadingSection:true,
 
     setup: function() {
         this.destinationObject = this.options.destinationObject;
-        this.destinationObject.columns().fetch();
-
-        this.destinationObject.columns().bind("reset", this.render, this)
+        this.requiredResources.push(this.destinationObject.columns());
+        this.destinationObject.columns().fetchIfNotLoaded();
     },
 
     additionalContext: function() {

@@ -2,6 +2,7 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     className: "manage_join_tables",
     additionalClass: "with_sub_header",
     title: t("dataset.manage_join_tables.title"),
+    useLoadingSection:true,
 
     events: {
         "click li":     "tableClicked",
@@ -16,12 +17,13 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     setup: function() {
         this.schema = this.pageModel.schema();
         this.resource = this.collection = this.schema.databaseObjects();
-        this.collection.fetch();
+        this.collection.fetchIfNotLoaded();
     },
 
     postRender: function() {
         var originalId = this.pageModel.get("id");
         this.collection.remove(this.collection.get(originalId));
+        this.setupScrolling(this.$(".list"));
     },
 
     tableClicked: function(e) {
@@ -31,6 +33,7 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     },
 
     joinLinkClicked: function(e) {
+        e.preventDefault();
         var clickedId = $(e.target).closest("li").attr("table_id")
         var databaseObject = this.collection.findWhere({ id: clickedId });
 

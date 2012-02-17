@@ -6,6 +6,16 @@
         <li table_id="{{id}}">
             <span class="spacer left"/>
 
+            <div class="actions">
+                <a class="join" href="">
+                    {{#if isView}}
+                        {{t "dataset.manage_join_tables.join_view"}}
+                    {{else}}
+                        {{t "dataset.manage_join_tables.join_table"}}
+                    {{/if}}
+                </a>
+            </div>
+
             <img class="image" src="{{iconUrl}}"/>
 
             <div class="text">
@@ -14,17 +24,8 @@
                 </div>
                 <div class="details">
                     <span class="column_count">{{pluralize columns "dataset.manage_join_tables.column_count" count=columns}}</span>
-                    <a class="join">
-                        {{#if isView}}
-                            {{t "dataset.manage_join_tables.join_view"}}
-                        {{else}}
-                            {{t "dataset.manage_join_tables.join_table"}}
-                        {{/if}}
-                    </a>
                 </div>
             </div>
-
-            <span class="spacer right"/>
         </li>
     {{/each}}
 </ul>
