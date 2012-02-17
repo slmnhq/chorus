@@ -45,9 +45,6 @@ describe("chorus.views.Header", function() {
             expect(this.view.$(".logo a").attr("href")).toBe("#/");
         });
 
-        it("inserts the number of notifications into the markup", function() {
-            expect(this.view.$(".notifications a")).toHaveText("2")
-        })
         it("should have a search field", function() {
             expect(this.view.$(".search input[type=text]")).toExist();
         });
@@ -58,6 +55,31 @@ describe("chorus.views.Header", function() {
 
         it("clears requiredResources", function() {
             expect(this.view.requiredResources.length).toBe(0);
+        })
+
+        it("inserts the number of notifications into the markup", function() {
+            expect(this.view.$(".notifications").text().trim()).toBe("2")
+        })
+
+        context("when there are notifications", function() {
+            it("makes the notification count a link", function() {
+                expect(this.view.$(".notifications a")).toExist();
+            })
+        })
+
+        context("when there are no notifications", function() {
+            beforeEach(function() {
+                this.view.notifications.reset();
+                this.view.render();
+            });
+
+            it("does not make the notification count a link", function() {
+                expect(this.view.$(".notifications a")).not.toExist();
+            })
+
+            it("marks the notifications div with an empty class", function() {
+                expect(this.view.$(".notifications")).toHaveClass("empty");
+            })
         })
 
         describe("username", function() {

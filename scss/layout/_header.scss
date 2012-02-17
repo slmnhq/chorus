@@ -54,6 +54,11 @@ $header-item-spacing: 2*$padding-x;
             text-align: center;
             margin-left: 8px;
             min-width: 7px;
+            color: white;
+
+            &.empty {
+              background: $color-text2;
+            }
 
             a {
                 color: white;
