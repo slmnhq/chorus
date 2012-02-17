@@ -4,7 +4,7 @@ describe("chorus.models.DatabaseColumn", function() {
     });
 
     describe("#initialize", function() {
-        context("when there is tabularData", function() {
+        context("when there is not tabularData", function() {
             beforeEach(function() {
                 this.model.initialize();
             });
@@ -75,6 +75,17 @@ describe("chorus.models.DatabaseColumn", function() {
                     });
                 })
             })
+
+            describe("#quotedName", function() {
+                beforeEach(function() {
+                    this.model.set({typeCategory: "STRING"});
+                });
+
+                it("uses the safePGName helper", function() {
+                    expect(this.model.quotedName()).toBe(chorus.Mixins.dbHelpers.safePGName(this.model.get("parentName"), this.model.get("name")));
+                });
+            });
         });
     });
+
 });

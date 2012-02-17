@@ -2,6 +2,7 @@ describe("CommentList", function() {
     beforeEach(function() {
         this.comment1 = fixtures.noteComment({
             text : "Yes we can",
+            isInsight: true,
             author : {
                 firstName : "Barack",
                 lastName : "Obama",
@@ -44,6 +45,11 @@ describe("CommentList", function() {
 
         it("displays the profile image of each comment's author", function() {
             expect(this.listItems.eq(0).find("img").attr('src')).toBe(this.comment1.author().imageUrl({ size: "original" }));
+        });
+
+        it("displays the insight ribbon when appropriate", function() {
+            expect(this.listItems.eq(0).find(".insight_ribbon")).toExist();
+            expect(this.listItems.eq(1).find(".insight_ribbon")).not.toExist();
         });
 
         describe("header rendering", function() {

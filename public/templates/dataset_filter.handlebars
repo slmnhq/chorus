@@ -2,11 +2,9 @@
     <div class="brackets_top"></div>
     <div class="brackets_bottom"></div>
 </div>
-<select class="column_filter">
-    {{#each models}}
-        <option value="{{quotedName}}" data-dataset-number="{{model.tabularData.datasetNumber}}" data-type-category="{{typeCategory}}" {{#if disable}}disabled="disabled"{{/if}}>{{name}}</option>
-    {{/each}}
-</select>
+
+<div class="column_filter"></div>
+
 <select class="comparator"/>
 
 <span class="filter default hidden">

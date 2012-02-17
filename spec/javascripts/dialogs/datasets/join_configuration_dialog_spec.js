@@ -47,8 +47,12 @@ describe("chorus.dialogs.JoinConfiguration", function() {
                 expect(this.dialog.$('.sub_header .title').text()).toMatchTranslation("dataset.manage_join_tables.create_join_title", { objectName: "lions_den" })
             });
 
-            it("should have a 'source join column' select", function() {
-                expect(this.dialog.$('select.source_join_column')).toExist()
+            it("should have a sourceColumnSelect with the sourceObject's columns", function() {
+                expect(this.dialog.sourceColumnsSelect.collection).toBe(this.sourceTable.columns());
+            });
+
+            it("should have showDatasetNumbers on the source columns", function() {
+                expect(this.dialog.sourceColumnsSelect.options.showDatasetNumbers).toBeTruthy();
             });
 
             it("should have a 'destination join column' select", function() {
@@ -62,16 +66,6 @@ describe("chorus.dialogs.JoinConfiguration", function() {
                 expect(destinationOptions.eq(0).text()).toBe("destination_column_1");
                 expect(destinationOptions.eq(1).text()).toBe("destination_column_2");
                 expect(destinationOptions.eq(2).text()).toBe("destination_column_3");
-            });
-
-            it("should have an option in the source column select for all of the source dataset's columns", function() {
-                var sourceOptions = this.dialog.$("select.source_join_column option");
-
-                expect(sourceOptions.length).toBe(4);
-                expect(sourceOptions.eq(0).text()).toBe("source_column_1");
-                expect(sourceOptions.eq(1).text()).toBe("source_column_2");
-                expect(sourceOptions.eq(2).text()).toBe("source_column_3");
-                expect(sourceOptions.eq(3).text()).toBe("source_column_4");
             });
 
             it("should have a select for type of join", function() {

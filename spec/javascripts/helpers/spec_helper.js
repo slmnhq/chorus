@@ -10,6 +10,7 @@
         'collection_picklist',
         'comment',
         'comment_list',
+        'column_select',
         'dashboard',
         'dashboard_sidebar',
         'dashboard_workspace_list',

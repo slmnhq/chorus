@@ -3,6 +3,11 @@
         {{#eachWithMoreLink models initialLimit "activity_stream.comments.more" "activity_stream.comments.less"}}
         <li data-comment-id="{{id}}" class="{{moreClass}} activity_item comment media">
             <div class="icon">
+                {{#if isInsight}}
+                <div class="insight_ribbon">
+                    <div class="left"/><div class="center">Insight</div><div class="right"/>
+                </div>
+                {{/if}}
                 <a href="{{iconHref}}">
                     <img title="{{displayName}}" src="{{iconSrc}}"/>
                 </a>

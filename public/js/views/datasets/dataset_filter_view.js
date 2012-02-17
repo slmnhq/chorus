@@ -2,51 +2,39 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
     className: "dataset_filter",
     tagName: "li",
 
+    subviews: {
+        '.column_filter': 'columnFilter'
+    },
+
     events: {
         "click .remove": "removeSelf",
-        "change select.column_filter": "columnSelected",
         "change select.comparator": "comparatorSelected",
         "paste input.validatable": "validateInput",
         "keyup input.validatable": "validateInput",
         "blur input.validatable": "validateInput"
     },
 
-    postRender: function() {
-        var $select = this.$("select.column_filter");
-        var self = this;
-        _.defer(function() {
-            chorus.styleSelect($select, {format: function(text, option) {
-                var datasetNumber = $(option).data('datasetNumber');
-                if(datasetNumber && self.options.showDatasetNumbers) {
-                    return '<span class="dataset_number">'+datasetNumber+'</span>' + text;
-                } else {
-                    return text;
-                }
-            } });
+    setup: function() {
+        this.columnFilter = new chorus.views.ColumnSelect({
+            collection: this.collection,
+            showDatasetNumbers: this.options.showDatasetNumbers
         });
+        this.columnFilter.bind('columnSelected', this.columnSelected, this);
+    },
+
+    postRender: function() {
         chorus.datePicker({
-            "%Y": self.$(".filter.date input[name='year']"),
-            "%m": self.$(".filter.date input[name='month']"),
-            "%d": self.$(".filter.date input[name='day']")
+            "%Y": this.$(".filter.date input[name='year']"),
+            "%m": this.$(".filter.date input[name='month']"),
+            "%d": this.$(".filter.date input[name='day']")
         });
 
-        if (!$select.find("option").length) {
+        if (!this.collection.length) {
             return;
         }
 
         this.columnSelected();
         this.comparatorSelected();
-    },
-
-    collectionModelContext: function(model) {
-        var quotedName = model.get("parentName") &&
-            model.get("name") &&
-            chorus.Mixins.dbHelpers.safePGName(model.get("parentName"), model.get("name"));
-
-        return {
-            quotedName: quotedName,
-            disable: model.get("typeCategory") == "OTHER"
-        }
     },
 
     removeSelf: function(e) {
@@ -55,8 +43,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
     },
 
     columnSelected: function() {
-        var selected = this.$("select.column_filter option:selected");
-        var type = selected.data("typeCategory");
+        var type = this.columnFilter.getSelectedColumn().get('typeCategory');
 
         var $comparator = this.$("select.comparator");
         $comparator.empty();
@@ -108,7 +95,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
     },
 
     filterString: function() {
-        var columnName = this.$("select.column_filter").val();
+        var columnName = this.columnFilter.getSelectedColumn().quotedName();
         var comparatorName = this.$("select.comparator").val();
         var inputValue = this.fieldValues().value;
 
