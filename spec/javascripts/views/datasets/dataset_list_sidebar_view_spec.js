@@ -21,10 +21,6 @@ describe("chorus.views.DatasetListSidebar", function() {
                     chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                 });
 
-                it("sets the note link's displayEntityType to the dataset's metatype", function() {
-                    expect(this.view.$("a.dialog").data("display-entity-type")).toBe(this.dataset.metaType());
-                });
-
                 it("displays the selected dataset name", function() {
                     expect(this.view.$(".name").text().trim()).toBe(this.dataset.get("objectName"))
                 });
@@ -89,9 +85,13 @@ describe("chorus.views.DatasetListSidebar", function() {
                     expect(this.view.$('.actions .associate')).not.toExist();
                 });
 
-                it("has the 'add a note' link", function() {
-                    expect(this.view.$("a.dialog[data-dialog=NotesNew]")).toExist();
-                })
+                it("has the 'add a note' link with the correct data", function() {
+                    var notesNew = this.view.$("a.dialog[data-dialog=NotesNew]");
+
+                    expect(notesNew.data("entity-id")).toBe(this.dataset.get("id"));
+                    expect(notesNew.data("entity-type")).toBe(this.dataset.entityType);
+                    expect(notesNew.data("display-entity-type")).toBe(this.dataset.metaType());
+                });
 
                 context("when browsing a schema", function() {
                     beforeEach(function() {

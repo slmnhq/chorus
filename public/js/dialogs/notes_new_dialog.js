@@ -8,8 +8,9 @@ chorus.dialogs.NotesNew = chorus.dialogs.MemoNew.extend({
             entityId:this.options.launchElement.data("entity-id"),
             workspaceId: this.options.launchElement.data("workspace-id")
         });
+        var subject = this.options.launchElement.data("displayEntityType") || this.model.get("entityType");
         
-        this.placeholder = t("notes.placeholder", {noteSubject: this.options.launchElement.data("entity-type")});
+        this.placeholder = t("notes.placeholder", {noteSubject: subject});
         this._super("makeModel", arguments);
     }
 });

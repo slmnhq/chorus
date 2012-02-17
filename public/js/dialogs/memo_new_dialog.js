@@ -143,7 +143,6 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.extend({
 
     additionalContext:function () {
         return {
-            displayEntityType:this.options.launchElement.data("displayEntityType") || this.model.get("entityType"),
             formUrl:this.model.url(),
             placeholder: this.placeholder,
             submitButton: this.submitButton || "Submit",

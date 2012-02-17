@@ -50,7 +50,6 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
 
         if (this.resource) {
             ctx.entityType = this.resource.entityType;
-            ctx.entityId = this.resource.entityId;
 
             if (this.resource.get("hasCredentials") === false) {
                 ctx.noCredentials = true;
