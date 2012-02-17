@@ -10,7 +10,7 @@
 
     #help {
       top: 1px;
-      left: $sidebar-width - $help-pill-width - $guts-padding;
+      left: $sidebar-width - $help-pill-width - $guts-padding + $sidebar-padding-x;
     }
 
     .spacer {
