@@ -28,6 +28,12 @@ chorus.models.DatabaseColumn = chorus.models.Base.extend({
 
     humanType: function() {
         return chorus.models.DatabaseColumn.humanTypeMap[this.get("typeCategory")]
+    },
+
+    quotedName: function() {
+        return this.get("parentName") &&
+            this.get("name") &&
+            chorus.Mixins.dbHelpers.safePGName(this.get("parentName"), this.get("name"));
     }
 }, {
     humanTypeMap: {

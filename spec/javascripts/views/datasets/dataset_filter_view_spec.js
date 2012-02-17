@@ -51,7 +51,7 @@ describe("chorus.views.DatasetFilter", function() {
         context("when the tabularData has a datasetNumber and the datasetNumbers option is enabled", function() {
             beforeEach(function() {
                 this.tabularData.datasetNumber = 1;
-                this.view.options.showDatasetNumbers = true;
+                this.view = new chorus.views.DatasetFilter({collection: this.collection, showDatasetNumbers: true});
                 this.view.render();
             });
 
@@ -230,7 +230,7 @@ describe("chorus.views.DatasetFilter", function() {
                 beforeEach(function() {
                     this.view.$('select.comparator').prop("selectedIndex", 3).change();
                     expect(this.view.$('.filter.default')).toHaveClass('hidden')
-                    this.view.$('.column_filter').prop("selectedIndex", 1).change();
+                    this.view.$('.column_filter select').prop("selectedIndex", 1).change();
                 })
 
                 it("should show the input box", function() {
