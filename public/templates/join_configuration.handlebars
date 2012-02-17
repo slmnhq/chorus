@@ -1,5 +1,6 @@
 <div class="sub_header">
     <span class="title">{{t "dataset.manage_join_tables.create_join_title" objectName=destinationObjectName}}</span>
+</div>
 
     <label>{{t "dataset.manage_join_tables.source_join_column"}}</label>
     <select class="source_join_column">
@@ -14,4 +15,16 @@
             <option>{{name}}</option>
         {{/each}}
     </select>
+
+    <label>{{t "dataset.manage_join_tables.source_join_column"}}</label>
+    <select class="join_type">
+        <option>{{t "dataset.manage_join_tables.inner"}}</option>
+        <option>{{t "dataset.manage_join_tables.left"}}</option>
+        <option>{{t "dataset.manage_join_tables.right"}}</option>
+        <option>{{t "dataset.manage_join_tables.outer"}}</option>
+    </select>
+
+<div class="modal_controls">
+    <button class="cancel">{{t "actions.cancel"}}</button>
+    <button class="submit">{{t "actions.save_changes"}}</button>
 </div>

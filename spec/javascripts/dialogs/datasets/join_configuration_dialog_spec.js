@@ -73,6 +73,25 @@ describe("chorus.dialogs.JoinConfiguration", function() {
                 expect(sourceOptions.eq(2).text()).toBe("source_column_3");
                 expect(sourceOptions.eq(3).text()).toBe("source_column_4");
             });
+
+            it("should have a select for type of join", function() {
+                expect(this.dialog.$('select.join_type')).toExist()
+                var joinTypes = this.dialog.$('select.join_type option')
+
+                expect(joinTypes.length).toBe(4)
+                expect(joinTypes.eq(0).text()).toMatchTranslation("dataset.manage_join_tables.inner")
+                expect(joinTypes.eq(1).text()).toMatchTranslation("dataset.manage_join_tables.left")
+                expect(joinTypes.eq(2).text()).toMatchTranslation("dataset.manage_join_tables.right")
+                expect(joinTypes.eq(3).text()).toMatchTranslation("dataset.manage_join_tables.outer")
+            })
+
+            it("should have a save button", function() {
+                expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.save_changes")
+            })
+
+            it("should have a cancel button", function() {
+                expect(this.dialog.$("button.cancel").text()).toMatchTranslation("actions.cancel")
+            })
         });
     })
 });
