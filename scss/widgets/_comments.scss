@@ -45,4 +45,13 @@ $activity-gutter: 8px;
             display: none;
         }
     }
+    
+    .icon {
+        position: relative;
+
+        .insight_ribbon {
+            white-space: nowrap;
+            top: -18px;
+        }
+    }
 }
