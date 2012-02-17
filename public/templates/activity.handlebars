@@ -37,11 +37,13 @@
                 <span class="separator">|</span> <a class="promote" href="#">{{t "activity_stream.promote"}}</a>
             {{/if}}
                 {{#if isInsight}}
-                    {{#if isPublished}}
-                        <span class="separator">|</span> <a href="#" class="unpublish">{{{t "insight.unpublish.link"}}}</a>
-                    {{else}}
-                        <span class="separator">|</span> <a href="#" class="publish">{{{t "insight.publish.link"}}}</a>
-                    {{/if}}
+                    {{#ifAdminOr isOwner}}
+                        {{#if isPublished}}
+                            <span class="separator">|</span> <a href="#" class="unpublish">{{{t "insight.unpublish.link"}}}</a>
+                        {{else}}
+                            <span class="separator">|</span> <a href="#" class="publish">{{{t "insight.publish.link"}}}</a>
+                        {{/if}}
+                    {{/ifAdminOr}}
                 <span class="separator">|</span> <span class="promoted_by">{{{t "insight.promoted_by" promoterLink=promoterLink relativeTimestamp=promotionTimestamp}}}</span>
             {{/if}}
         </div>
