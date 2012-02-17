@@ -1,9 +1,21 @@
 describe("chorus.views.DatabaseColumnList", function() {
     describe("#render", function() {
         beforeEach(function() {
-            this.collection = fixtures.databaseColumnSet([], { comment : "column comment" });
-            this.collection.at(0).set({ name : "column_name_2", ordinalPosition : "2", typeCategory: "WHOLE_NUMBER", type: "int4" });
-            this.collection.at(1).set({ name : "column_name_1", ordinalPosition : "1", typeCategory: "BOOLEAN", type: "boolean" });
+            this.column1 = fixtures.databaseColumn({
+                name : "column_name_2",
+                ordinalPosition : "2",
+                typeCategory: "WHOLE_NUMBER",
+                type: "int4",
+                comment : "column comment"
+            });
+            this.column2 = fixtures.databaseColumn({
+                name : "column_name_1",
+                ordinalPosition : "1",
+                typeCategory: "BOOLEAN",
+                type: "boolean",
+                comment : "column comment"
+            });
+            this.collection = fixtures.databaseColumnSet([this.column1, this.column2]);
             this.view = new chorus.views.DatabaseColumnList({collection: this.collection});
             this.view.render();
         });

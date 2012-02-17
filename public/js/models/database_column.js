@@ -19,15 +19,15 @@ chorus.models.DatabaseColumn = chorus.models.Base.extend({
                 parentType: this.tabularData.metaType()
             });
         }
+
+        this.set({
+            typeClass: chorus.models.DatabaseColumn.humanTypeMap[this.get("typeCategory")]
+        });
     },
 
     toText: function() {
         return this.safePGName(this.get("schemaName")) + '.' + this.safePGName(this.get("parentName"))
             + '.' + this.safePGName(this.get("name"));
-    },
-
-    humanType: function() {
-        return chorus.models.DatabaseColumn.humanTypeMap[this.get("typeCategory")]
     },
 
     quotedName: function() {

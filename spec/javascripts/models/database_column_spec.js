@@ -1,6 +1,6 @@
 describe("chorus.models.DatabaseColumn", function() {
     beforeEach(function() {
-        this.model = new chorus.models.DatabaseColumn({name: "Col", type: 'varbit'});
+        this.model = new chorus.models.DatabaseColumn({name: "Col", typeCategory: "WHOLE_NUMBER", type: 'varbit'});
     });
 
     describe("#initialize", function() {
@@ -12,6 +12,10 @@ describe("chorus.models.DatabaseColumn", function() {
             it("does not blow up", function() {
                 expect(this.model.get('name')).toBe('Col');
             });
+
+            it("sets the typeClass property on the model", function() {
+                expect(this.model.get("typeClass")).toBe("numeric");
+            })
         });
 
         context("when there is tabularData", function() {
@@ -55,7 +59,7 @@ describe("chorus.models.DatabaseColumn", function() {
                 })
             })
 
-            describe("#humanType", function() {
+            describe("#typeClass", function() {
                 var expectedTypeMap = {
                     "WHOLE_NUMBER" : "numeric",
                     "REAL_NUMBER" : "numeric",
@@ -71,7 +75,7 @@ describe("chorus.models.DatabaseColumn", function() {
 
                 _.each(expectedTypeMap, function(str, type) {
                     it("works for " + type, function() {
-                        expect(new chorus.models.DatabaseColumn({ typeCategory : type }).humanType()).toBe(str)
+                        expect(new chorus.models.DatabaseColumn({ typeCategory : type }).get("typeClass")).toBe(str);
                     });
                 })
             })

@@ -73,6 +73,27 @@
             margin-right: 10px;
         }
 
+        .multiline {
+            margin-right: 10px;
+
+            .key {
+                border-bottom: $dotted-list-item-border;
+            }
+
+            .value {
+                display: block;
+                padding-left: 50%;
+                border-bottom: $dotted-list-item-border;
+
+                &:nth-child(2) {
+                    width: 47%;
+                    max-width: 120px;
+                    display: inline-block;
+                    padding-left: 0;
+                }
+            }
+        }
+
         .description {
             margin-top: 15px;
             margin-left: 15px;

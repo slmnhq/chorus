@@ -210,7 +210,7 @@ describe("chorus.views.DatasetListSidebar", function() {
                 this.dataset = fixtures.datasetSourceTable();
                 this.column = fixtures.databaseColumn({
                     avg: 719719.111,
-                    commonValues: [1, 0],
+                    commonValues: [46, 38],
                     distinctValue: 998710,
                     max: "1199961.0",
                     median: "725197.0",
@@ -242,8 +242,9 @@ describe("chorus.views.DatasetListSidebar", function() {
                     expect(this.view.$(".column_statistics .pair").eq(5).find(".key")).toContainTranslation("dataset.column_statistics.max");
                     expect(this.view.$(".column_statistics .pair").eq(6).find(".key")).toContainTranslation("dataset.column_statistics.stddev");
                     expect(this.view.$(".column_statistics .pair").eq(7).find(".key")).toContainTranslation("dataset.column_statistics.distinct");
-                    expect(this.view.$(".column_statistics .pair").eq(8).find(".key")).toContainTranslation("dataset.column_statistics.common");
-                    expect(this.view.$(".column_statistics .pair").eq(9).find(".key")).toContainTranslation("dataset.column_statistics.pctnull");
+                    expect(this.view.$(".column_statistics .pair").eq(8).find(".key")).toContainTranslation("dataset.column_statistics.pctnull");
+
+                    expect(this.view.$(".column_statistics .multiline").eq(0).find(".key")).toContainTranslation("dataset.column_statistics.common");
                 });
             });
 
@@ -272,7 +273,7 @@ describe("chorus.views.DatasetListSidebar", function() {
 
                 context("when statistics are available", function() {
                     it("should display the statistics", function() {
-                        expect(this.view.$(".column_statistics .type_category .value").text()).toBe("WHOLE_NUMBER");
+                        expect(this.view.$(".column_statistics .type_category .value").text()).toBe(this.column.get("typeClass"));
                         expect(this.view.$(".column_statistics .type .value").text()).toBe("int8");
                         expect(this.view.$(".column_statistics .min .value").text()).toBe("200075");
                         expect(this.view.$(".column_statistics .median .value").text()).toBe("725197");
@@ -280,8 +281,10 @@ describe("chorus.views.DatasetListSidebar", function() {
                         expect(this.view.$(".column_statistics .max .value").text()).toBe("1199961");
                         expect(this.view.$(".column_statistics .stddev .value").text()).toBe("309105");
                         expect(this.view.$(".column_statistics .distinct .value").text()).toBe("998710");
-                        expect(this.view.$(".column_statistics .common .value").text()).toBe("1,0");
                         expect(this.view.$(".column_statistics .pctnull .value").text()).toBe("10.37%");
+
+                        expect(this.view.$(".column_statistics .common .value").eq(0).text()).toBe("46");
+                        expect(this.view.$(".column_statistics .common .value").eq(1).text()).toBe("38");
                     });
                 });
 
@@ -335,7 +338,7 @@ describe("chorus.views.DatasetListSidebar", function() {
 
                 context("when the commonValues is not available", function() {
                     it("should not display the commonValues", function() {
-                        this.column.set({commonValues: null});
+                        this.column.set({commonValues: []});
                         this.view.render();
                         expect(this.view.$(".column_statistics .commonValues")).not.toExist();
                     });

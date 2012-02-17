@@ -86,7 +86,7 @@
                 <div class="column_statistics">
                     <div class="pair type_category">
                         <div class="key">{{t "dataset.column_statistics.type_category"}}</div>
-                        <div class="value" title="{{{column.typeCategory}}}">{{{column.typeCategory}}}</div>
+                        <div class="value" title="{{{column.typeClass}}}">{{{column.typeClass}}}</div>
                     </div>
                     <div class="pair type">
                         <div class="key">{{t "dataset.column_statistics.type"}}</div>
@@ -129,10 +129,12 @@
                             <div class="value" title="{{{column.distinctValue}}}">{{{round column.distinctValue}}}</div>
                         </div>
                         {{/if}}
-                        {{#if column.commonValues}}
-                        <div class="pair common">
+                        {{#if column.commonValues.length}}
+                        <div class="multiline common">
                             <div class="key">{{t "dataset.column_statistics.common"}}</div>
-                            <div class="value" title="{{{column.commonValues}}}">{{{round column.commonValues}}}</div>
+                            {{#each column.commonValues}}
+                                <div class="value" title="{{{this}}}">{{{round this}}}</div>
+                            {{/each}}
                         </div>
                         {{/if}}
                         {{#if column.nullFraction}}
