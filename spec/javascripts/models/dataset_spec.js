@@ -18,10 +18,22 @@ describe("chorus.models.Dataset", function() {
         expect(this.dataset.showUrl()).toBe("#/workspaces/44/datasets/45|whirling_tops|diamonds|foo|japanese_teas");
     });
 
-    it("has the right url", function() {
-        var url = encodeURI("/edc/workspace/44/dataset/45|whirling_tops|diamonds|foo|japanese_teas");
-        expect(this.dataset.url()).toMatchUrl(url);
+    context("when the object has an id", function() {
+        it("has the right url", function() {
+            var url = encodeURI("/edc/workspace/44/dataset/45|whirling_tops|diamonds|foo|japanese_teas");
+            expect(this.dataset.url()).toMatchUrl(url);
+        });
     });
+
+    context("when the object does not have an id", function() {
+        beforeEach(function() {
+            this.dataset.unset("id");
+        });
+
+        it("has the right url", function() {
+            expect(this.dataset.url()).toMatchUrl("/edc/workspace/44/dataset");
+        });
+    })
 
     describe("when the 'invalidated' event is triggered", function() {
         describe("when the dataset belongs to a collection", function() {

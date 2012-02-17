@@ -216,66 +216,26 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             beforeEach(function() {
                 chorus.PageEvents.broadcast("column:selected", fixtures.databaseColumn());
                 spyOn(this.view, "sql").andReturn("SELECT * FROM FOO");
+                this.launchModalSpy = jasmine.createSpy("launchModal")
+                spyOn(chorus.dialogs, "NameChorusView").andCallFake(_.bind(function(options) {
+                    this.chorusView = options.model;
+                    return {
+                        launchModal: this.launchModalSpy
+                    }
+                }, this));
                 this.view.$("button.create").click();
             });
 
-            it("puts the create button in a loading state", function() {
-                expect(this.view.$("button.create").isLoading()).toBeTruthy();
-                expect(this.view.$("button.create").text().trim()).toMatchTranslation("actions.creating")
-            });
-
-            it("should create the chorus view", function() {
-                var workspaceId = this.dataset.get("workspace").id;
-                expect(this.server.lastCreate().url).toContain("/edc/workspace/" + workspaceId + "/dataset");
-
-                // placeholder - name doesn't have a way to be set from UI yet
-                var params = this.server.lastCreate().params();
-                expect(params.type).toBe("CHORUS_VIEW");
-                expect(params.query).toBe("SELECT * FROM FOO");
-                expect(params.instanceId).toBe(this.dataset.get("instance").id.toString());
-                expect(params.databaseName).toBe(this.dataset.get("databaseName"));
-                expect(params.schemaName).toBe(this.dataset.get("schemaName"));
-                expect(params.objectType).toBe("QUERY");
-
-
-                expect(this.server.lastCreate().method).toBe("POST");
-            });
-
-            context("after the request fails", function() {
-                beforeEach(function() {
-                    spyOn(chorus, 'toast');
-                    this.server.lastCreate().fail();
-                });
-
-                it("displays a toast", function() {
-                    expect(chorus.toast).toHaveBeenCalled();
-                });
-
-                it("removes the loading spinner from the button", function() {
-                    expect(this.view.$("button.create").isLoading()).toBeFalsy();
-                });
-            });
-
-            context("after the request completes successfully", function() {
-                beforeEach(function() {
-                    spyOn(chorus, 'toast');
-                    spyOn(chorus.router, "navigate");
-                    this.chorusView = fixtures.datasetChorusView();
-                    this.server.lastCreate().succeed(this.chorusView);
-                });
-
-                it("displays a toast", function() {
-                    expect(chorus.toast).toHaveBeenCalled();
-                });
-
-                it("removes the loading spinner from the button", function() {
-                    expect(this.view.$("button.create").isLoading()).toBeFalsy();
-                });
-
-                it("navigates to the show page of the new chorus view", function() {
-                    expect(chorus.router.navigate).toHaveBeenCalledWith(this.chorusView.showUrl(), true);
-                })
-            });
+            it("constructs a ChorusView and reveals the naming dialog", function() {
+                expect(chorus.dialogs.NameChorusView).toHaveBeenCalled()
+                expect(this.launchModalSpy).toHaveBeenCalled();
+                expect(this.chorusView.get("type")).toBe("CHORUS_VIEW")
+                expect(this.chorusView.get("query")).toBe("SELECT * FROM FOO");
+                expect(this.chorusView.get("instanceId")).toBe(this.dataset.get("instance").id);
+                expect(this.chorusView.get("databaseName")).toBe(this.dataset.get("databaseName"));
+                expect(this.chorusView.get("schemaName")).toBe(this.dataset.get("schemaName"));
+                expect(this.chorusView.get("objectType")).toBe("QUERY");
+            })
         })
     });
 });

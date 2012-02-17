@@ -1,5 +1,17 @@
 chorus.models.Dataset = chorus.models.TabularData.extend({
-    urlTemplate: "workspace/{{workspace.id}}/dataset/{{id}}",
+    urlTemplate: function() {
+        var components = [
+            "workspace",
+            this.get("workspace").id,
+            "dataset"
+        ]
+
+        if (this.get("id")) {
+            components.push(this.get("id"))
+        }
+
+        return components.join("/");
+    },
 
     showUrlTemplate: function() {
         return [

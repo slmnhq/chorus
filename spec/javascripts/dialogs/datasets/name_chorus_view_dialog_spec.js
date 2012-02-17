@@ -15,7 +15,7 @@ describe("chorus.dialogs.NameChorusView", function() {
     })
 
     it("initializes the name", function() {
-        expect(this.dialog.$("input[name=name]").val()).toBe(this.chorusView.get("objectName"))
+        expect(this.dialog.$("input[name=objectName]").val()).toBe(this.chorusView.get("objectName"))
     })
 
     it("starts with the submit button enabled", function() {
@@ -25,7 +25,7 @@ describe("chorus.dialogs.NameChorusView", function() {
     describe("submit button disabling", function() {
         context("when the name is non-empty", function(){
             beforeEach(function() {
-                this.dialog.$("input[name=name]").val("whatever").keyup();
+                this.dialog.$("input[name=objectName]").val("whatever").keyup();
             });
 
             it("enables the submit button", function() {
@@ -35,7 +35,7 @@ describe("chorus.dialogs.NameChorusView", function() {
 
         context("when the name is empty", function() {
             beforeEach(function() {
-                this.dialog.$("input[name=name]").val("  ").keyup();
+                this.dialog.$("input[name=objectName]").val("  ").keyup();
             });
 
             it("disables the submit button", function() {
@@ -47,8 +47,8 @@ describe("chorus.dialogs.NameChorusView", function() {
     describe("creating the chorus view", function() {
         beforeEach(function() {
             spyOn(this.dialog.model, "save")
-            this.dialog.$("input[name=name]").val(" whatever  ").keyup();
-            this.dialog.$("button.submit").click();
+            this.dialog.$("input[name=objectName]").val(" whatever  ").keyup();
+            this.dialog.$("form").submit();
         });
 
         it("puts the button in the loading state", function() {
@@ -101,6 +101,10 @@ describe("chorus.dialogs.NameChorusView", function() {
 
             it("doesn't navigate", function() {
                 expect(chorus.router.navigate).not.toHaveBeenCalled();
+            })
+
+            it("stops loading", function() {
+                expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
             })
         })
     })

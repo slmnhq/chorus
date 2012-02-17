@@ -55,9 +55,6 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
     },
 
     createChorusView : function() {
-        var button = this.$("button.create");
-        button.startLoading("actions.creating");
-
         var chorusView = new chorus.models.ChorusView({
             type: "CHORUS_VIEW",
             query: this.sql(),
@@ -69,18 +66,8 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
             objectType: "QUERY"
         });
 
-        chorusView.bind("saved", function() {
-            button.stopLoading();
-            chorus.toast("dataset.chorusview.create_success");
-            chorus.router.navigate(chorusView.showUrl(), true)
-        });
-
-        chorusView.bind("saveFailed", function() {
-            button.stopLoading();
-            chorus.toast("dataset.chorusview.create_fail");
-        });
-
-        chorusView.save();
+        var dialog = new chorus.dialogs.NameChorusView({ model : chorusView });
+        dialog.launchModal();
     },
 
     whereClause: function() {
