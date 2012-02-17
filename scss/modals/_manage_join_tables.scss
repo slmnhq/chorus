@@ -26,5 +26,25 @@
             }
         }
     }
+}
 
+.join_configuration {
+    width: 480px;
+
+    .join_tables_content {
+        padding: 20px;
+        padding-top: 10px;
+
+        label {
+            margin-top: 15px;
+            margin-bottom: 4px;
+            display: block;
+            width: 326px; 
+        }
+
+        select {
+            display: block; 
+            width: 326px;
+        }
+    }
 }

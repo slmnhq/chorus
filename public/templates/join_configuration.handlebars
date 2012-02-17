@@ -2,6 +2,7 @@
     <span class="title">{{t "dataset.manage_join_tables.create_join_title" objectName=destinationObjectName}}</span>
 </div>
 
+<div class="join_tables_content">
     <label>{{t "dataset.manage_join_tables.source_join_column"}}</label>
     <select class="source_join_column">
         {{#each sourceColumns}}
@@ -23,6 +24,7 @@
         <option>{{t "dataset.manage_join_tables.right"}}</option>
         <option>{{t "dataset.manage_join_tables.outer"}}</option>
     </select>
+</div>
 
 <div class="modal_controls">
     <button class="cancel">{{t "actions.cancel"}}</button>

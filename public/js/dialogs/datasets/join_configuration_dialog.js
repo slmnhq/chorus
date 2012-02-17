@@ -24,5 +24,9 @@ chorus.dialogs.JoinConfiguration = chorus.dialogs.Base.extend({
             destinationColumns: destinationColumns,
             sourceColumns: sourceColumns
         }
+    },
+
+    postRender: function() {
+        chorus.styleSelect(this.$("select"));
     }
 });
