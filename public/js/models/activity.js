@@ -85,6 +85,32 @@ chorus.models.Activity = chorus.models.Base.extend({
         insight.save(null, { method: "create" });
     },
 
+    publish: function() {
+        var insight = new chorus.models.CommentInsight({
+            id: this.get("id"),
+            action: "publish"
+        });
+
+        insight.bind("saved", function() {
+            this.collection.fetch();
+        }, this);
+
+        insight.save(null, { method: "create" });
+    },
+
+    unpublish: function() {
+        var insight = new chorus.models.CommentInsight({
+            id: this.get("id"),
+            action: "unpublish"
+        });
+
+        insight.bind("saved", function() {
+            this.collection.fetch();
+        }, this);
+
+        insight.save(null, { method: "create" });
+    },
+
     attachments:function () {
         if (!this._attachments) {
             this._attachments = _.map(this.get("artifacts"), function (artifactJson) {
@@ -97,6 +123,10 @@ chorus.models.Activity = chorus.models.Base.extend({
 
     isNote: function() {
         return this.get("type") === "NOTE";
+    },
+
+    isPublished: function() {
+        return this.get("isPublished") === true;
     },
 
     noteworthy: function() {

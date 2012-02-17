@@ -3,7 +3,9 @@ chorus.views.Activity = chorus.views.Base.extend({
     tagName:"li",
 
     events: {
-        "click a.promote": "promote"
+        "click a.promote": "promote",
+        "click a.publish": "publish",
+        "click a.unpublish": "unpublish"
     },
 
     subviews:{
@@ -21,6 +23,18 @@ chorus.views.Activity = chorus.views.Base.extend({
     promote: function(e) {
         e.preventDefault();
         this.model.promoteToInsight();
+    },
+
+    publish: function(e) {
+        e.preventDefault();
+        var alert = new chorus.alerts.PublishInsight({model: this.model, publish: true});
+        alert.launchModal();
+    },
+
+    unpublish: function(e) {
+        e.preventDefault();
+        var alert = new chorus.alerts.PublishInsight({model: this.model, publish: false});
+        alert.launchModal();
     },
 
     postRender:function () {

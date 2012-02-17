@@ -333,6 +333,72 @@ describe("chorus.views.Activity", function() {
                     relativeTimestamp: chorus.helpers.relativeTimestamp(this.view.model.get("promotionTime"))
                 });
             });
+
+            context("when it is unpublished", function() {
+
+                it("should have a link to publish", function() {
+                    expect(this.view.$("a.publish")).toExist();
+                    expect(this.view.$("a.publish").text()).toMatchTranslation("insight.publish.link");
+                });
+
+                context("when the publish link is clicked", function() {
+                    beforeEach(function() {
+                        stubModals();
+                        spyOn(chorus.Modal.prototype, 'launchModal').andCallThrough();
+                        this.view.$("a.publish").click();
+                    });
+
+                    it("launches the confirmation alert", function() {
+                        expect(chorus.Modal.prototype.launchModal).toHaveBeenCalled();
+                    });
+
+                    context("when the publish completes", function() {
+                        beforeEach(function() {
+                            this.view.model.publish();
+                            this.server.lastCreate().succeed();
+                        });
+
+                        it("re-fetches the activity's collection", function() {
+                            expect(this.collection).toHaveBeenFetched();
+                        });
+                    });
+                });
+            });
+
+            context("when it is published", function() {
+                beforeEach(function() {
+                    this.view.model.set({isPublished: true});
+                    this.view.render();
+                });
+
+                it("should have a link to unpublish", function() {
+                    expect(this.view.$("a.unpublish")).toExist();
+                    expect(this.view.$("a.unpublish").text()).toMatchTranslation("insight.unpublish.link");
+                });
+
+                context("when the unpublish link is clicked", function() {
+                    beforeEach(function() {
+                        stubModals();
+                        spyOn(chorus.Modal.prototype, 'launchModal').andCallThrough();
+                        this.view.$("a.unpublish").click();
+                    });
+
+                    it("launches the confirmation alert", function() {
+                        expect(chorus.Modal.prototype.launchModal).toHaveBeenCalled();
+                    });
+
+                    context("when the unpublish completes", function() {
+                        beforeEach(function() {
+                            this.view.model.unpublish();
+                            this.server.lastCreate().succeed();
+                        });
+
+                        it("re-fetches the activity's collection", function() {
+                            expect(this.collection).toHaveBeenFetched();
+                        });
+                    });
+                });
+            });
         });
 
         context("type: WORKSPACE_ADD_SANDBOX", function() {

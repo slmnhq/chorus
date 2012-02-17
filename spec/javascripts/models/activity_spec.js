@@ -4,7 +4,7 @@ describe("chorus.models.Activity", function() {
     });
 
     describe("#noteworthy", function() {
-        it("shold return the instance when note is on an instance", function() {
+        it("should return the instance when note is on an instance", function() {
             this.model = fixtures.activities.NOTE_ON_INSTANCE();
             expect(this.model.noteworthy()).toBeA(chorus.models.Instance);
         })
@@ -57,6 +57,20 @@ describe("chorus.models.Activity", function() {
         });
     });
 
+    describe("#publish", function() {
+        it("posts to the comment insight url with the publish action", function() {
+            this.model.publish();
+            expect(this.server.lastCreate().url).toBe("/edc/commentinsight/"+ this.model.get("id") + "/publish");
+        });
+    });
+
+    describe("#unpublish", function() {
+        it("posts to the comment insight url with the unpublish action", function() {
+            this.model.unpublish();
+            expect(this.server.lastCreate().url).toBe("/edc/commentinsight/"+ this.model.get("id") + "/unpublish");
+        });
+    });
+
     describe("#isNote", function() {
         it("returns true for notes", function() {
             this.model.set({ type: "NOTE" });
@@ -67,6 +81,23 @@ describe("chorus.models.Activity", function() {
             this.model.set({ type: "WORKSPACE_MAKE_PUBLIC" });
             expect(this.model.isNote()).toBeFalsy();
         });
+    });
+
+    describe("#isPublished", function() {
+       it("returns true for insights that are published", function() {
+           this.model.set({isPublished: true});
+           expect(this.model.isPublished()).toBeTruthy();
+       });
+
+        it("returns false for insights that are not published", function() {
+           this.model.set({isPublished: false});
+           expect(this.model.isPublished()).toBeFalsy();
+       });
+
+        it("returns false for non-insights", function() {
+           this.model.set({isPublished: undefined});
+           expect(this.model.isPublished()).toBeFalsy();
+       });
     });
 
     describe("#author", function() {
