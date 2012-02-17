@@ -38,10 +38,6 @@ describe("chorus.dialogs.ManageJoinTables", function() {
         expect(this.schema.databaseObjects()).toHaveBeenFetched();
     });
 
-    it("has a 'done' button", function() {
-        expect(this.dialog.$("button.cancel").text()).toMatchTranslation("dataset.manage_join_tables.done");
-    });
-
     describe("when the fetch of the tables and views completes", function() {
         beforeEach(function() {
             this.databaseObject1 = fixtures.databaseObject({
@@ -74,6 +70,10 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 this.originalDatabaseObject,
                 this.databaseObject3
             ]);
+        });
+
+        it("has a 'done' button", function() {
+            expect(this.dialog.$("button.cancel").text()).toMatchTranslation("dataset.manage_join_tables.done");
         });
 
         it("shows the name of each table/view", function() {

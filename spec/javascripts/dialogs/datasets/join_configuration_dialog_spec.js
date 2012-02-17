@@ -30,10 +30,6 @@ describe("chorus.dialogs.JoinConfiguration", function() {
             expect(this.dialog.$("h1").text()).toMatchTranslation("dataset.manage_join_tables.title");
         });
 
-        it("should have a header", function() {
-            expect(this.dialog.$('.sub_header .title').text()).toMatchTranslation("dataset.manage_join_tables.create_join_title", { objectName: "lions_den" })
-        });
-
         it("fetches the columns in the destination table or view", function() {
             expect(this.destinationTable.columns()).toHaveBeenFetched();
         });
@@ -45,6 +41,10 @@ describe("chorus.dialogs.JoinConfiguration", function() {
                     fixtures.databaseColumn({ name: "destination_column_2" }),
                     fixtures.databaseColumn({ name: "destination_column_3" })
                 ]);
+            });
+
+            it("should have a header", function() {
+                expect(this.dialog.$('.sub_header .title').text()).toMatchTranslation("dataset.manage_join_tables.create_join_title", { objectName: "lions_den" })
             });
 
             it("should have a 'source join column' select", function() {
