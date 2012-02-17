@@ -99,14 +99,14 @@ describe("chorus.pages.Base", function() {
         it("creates a Sidebar view", function() {
             this.view.sidebar = stubView("VROOOOOOOOOM");
             this.view.render();
-            expect(this.view.$("#sidebar").text()).toBe("VROOOOOOOOOM")
+            expect(this.view.$("#sidebar .sidebar_content.primary").text()).toBe("VROOOOOOOOOM")
         });
 
         it("makes an empty sidebar when not provided with a sideBarContent function", function() {
             this.view.render();
             delete this.view.sidebar;
             this.view.render();
-            expect(this.view.$("#sidebar").text().length).toBe(0)
+            expect(this.view.$("#sidebar.sidebar_content.primary").text().length).toBe(0)
         });
     });
 
