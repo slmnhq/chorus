@@ -17,10 +17,17 @@ describe("chorus.dialogs.ManageJoinTables", function() {
         });
 
         this.schema = dataset.schema();
+        this.chorusView = dataset.deriveChorusView();
 
-        this.dialog = new chorus.dialogs.ManageJoinTables({ pageModel: dataset });
+        var launchElement = $("<a class='add_join'></a>").data("chorusView", this.chorusView);
+
+        this.dialog = new chorus.dialogs.ManageJoinTables({ pageModel: dataset, launchElement: launchElement });
         this.dialog.render();
         $("#jasmine_content").append(this.dialog.el);
+    });
+
+    it("retrieves the chorus view model from the launch element", function() {
+        expect(this.dialog.model).toBe(this.chorusView);
     });
 
     it("has the right title", function() {
@@ -137,8 +144,10 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 expect(chorus.dialogs.JoinConfiguration.prototype.render).toHaveBeenCalled();
             });
 
-            it("passes the right destination object to the JoinConfiguration dialog", function() {
+            it("passes the right chorus view and destination object to the JoinConfiguration dialog", function() {
                 var joinConfigurationDialog = chorus.dialogs.JoinConfiguration.prototype.render.mostRecentCall.object;
+
+                expect(joinConfigurationDialog.model).toBe(this.chorusView);
 
                 expect(joinConfigurationDialog.destinationObject).toBeA(chorus.models.DatabaseObject);
                 expect(joinConfigurationDialog.destinationObject.get("id")).toBe(this.databaseObject3.get("id"));

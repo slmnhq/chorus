@@ -3,6 +3,9 @@
 
     <label>{{t "dataset.manage_join_tables.source_join_column"}}</label>
     <select class="source_join_column">
+        {{#each sourceColumns}}
+            <option>{{name}}</option>
+        {{/each}}
     </select>
 
     <label>{{t "dataset.manage_join_tables.destination_join_column"}}</label>

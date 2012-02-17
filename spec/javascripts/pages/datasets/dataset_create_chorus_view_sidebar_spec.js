@@ -23,10 +23,26 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
            expect(this.view.$("a.preview").data("parent")).toBe(this.view);
         });
 
-        it("has an 'add a join' link, which launches a 'manage join tables' dialog", function() {
-            var addJoinLink = this.view.$("a.add_join");
-            expect(addJoinLink.text()).toMatchTranslation("dataset.chorusview.sidebar.add_join");
-            expect(addJoinLink).toHaveData("dialog", "ManageJoinTables");
+        describe("the 'add a join' link", function() {
+            var addJoinLink;
+
+            beforeEach(function() {
+                addJoinLink = this.view.$("a.add_join");
+            });
+
+            it("has the right text", function() {
+                expect(addJoinLink.text()).toMatchTranslation("dataset.chorusview.sidebar.add_join");
+            });
+
+            it("launches a 'manage join tables' dialog", function() {
+                expect(addJoinLink).toHaveData("dialog", "ManageJoinTables");
+            });
+
+            it("has a reference to a chorus view derived from the current dataset", function() {
+                var chorusView = addJoinLink.data("chorusView");
+                expect(chorusView).toBeA(chorus.models.ChorusView);
+                expect(chorusView.sourceObject).toBe(this.dataset);
+            });
         });
 
         it("disables the create button by default", function() {

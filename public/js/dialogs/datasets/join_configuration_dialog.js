@@ -11,13 +11,18 @@ chorus.dialogs.JoinConfiguration = chorus.dialogs.Base.extend({
     },
 
     additionalContext: function() {
-        var columns = this.destinationObject.columns().map(function(col) {
+        var sourceColumns = this.model.sourceObject.columns().map(function(col) {
+            return { name: col.get('name') }
+        })
+
+        var destinationColumns = this.destinationObject.columns().map(function(col) {
             return { name: col.get('name') }
         })
 
         return {
             destinationObjectName: this.destinationObject.get("objectName"),
-            destinationColumns: columns
+            destinationColumns: destinationColumns,
+            sourceColumns: sourceColumns
         }
     }
 });

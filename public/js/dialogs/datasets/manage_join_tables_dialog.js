@@ -8,9 +8,14 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
         "click a.join": "joinLinkClicked"
     },
 
+    makeModel: function() {
+        this._super("makeModel", arguments);
+        this.model = this.options.launchElement.data("chorusView")
+    },
+
     setup: function() {
-        this.model = this.pageModel.schema();
-        this.resource = this.collection = this.model.databaseObjects();
+        this.schema = this.pageModel.schema();
+        this.resource = this.collection = this.schema.databaseObjects();
         this.collection.fetch();
     },
 
@@ -29,12 +34,15 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
         var clickedId = $(e.target).closest("li").attr("table_id")
         var databaseObject = this.collection.findWhere({ id: clickedId });
 
-        var joinConfigurationDialog = new chorus.dialogs.JoinConfiguration({ destinationObject: databaseObject });
+        var joinConfigurationDialog = new chorus.dialogs.JoinConfiguration({
+            model: this.model,
+            destinationObject: databaseObject
+        });
         this.launchSubModal(joinConfigurationDialog);
     },
 
     additionalContext: function() {
-        return { canonicalName: this.model.canonicalName() }
+        return { canonicalName: this.schema.canonicalName() }
     },
 
     collectionModelContext: function(model) {

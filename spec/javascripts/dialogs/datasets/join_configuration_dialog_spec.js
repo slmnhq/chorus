@@ -1,9 +1,14 @@
 describe("chorus.dialogs.JoinConfiguration", function() {
     beforeEach(function() {
-        this.chorusView = fixtures.databaseObject({
-            objectType: "CHORUS_VIEW",
-            objectName: "bear_cave"
-        });
+        this.sourceTable = fixtures.databaseTable();
+        this.sourceTable.columns().reset([
+            fixtures.databaseColumn({ name: "source_column_1" }),
+            fixtures.databaseColumn({ name: "source_column_2" }),
+            fixtures.databaseColumn({ name: "source_column_3" }),
+            fixtures.databaseColumn({ name: "source_column_4" })
+        ]);
+
+        this.chorusView = this.sourceTable.deriveChorusView();
 
         this.destinationTable = fixtures.databaseObject({
             objectType: "SANDBOX_TABLE",
@@ -36,9 +41,9 @@ describe("chorus.dialogs.JoinConfiguration", function() {
         describe("when the fetch completes for the destination table's columns", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.destinationTable.columns(), [
-                    fixtures.databaseColumn({ name: "warmth" }),
-                    fixtures.databaseColumn({ name: "danger_level" }),
-                    fixtures.databaseColumn({ name: "num_skeletons" })
+                    fixtures.databaseColumn({ name: "destination_column_1" }),
+                    fixtures.databaseColumn({ name: "destination_column_2" }),
+                    fixtures.databaseColumn({ name: "destination_column_3" })
                 ]);
             });
 
@@ -54,9 +59,19 @@ describe("chorus.dialogs.JoinConfiguration", function() {
                 var destinationOptions = this.dialog.$("select.destination_join_column option");
 
                 expect(destinationOptions.length).toBe(3);
-                expect(destinationOptions.eq(0).text()).toBe("warmth");
-                expect(destinationOptions.eq(1).text()).toBe("danger_level");
-                expect(destinationOptions.eq(2).text()).toBe("num_skeletons");
+                expect(destinationOptions.eq(0).text()).toBe("destination_column_1");
+                expect(destinationOptions.eq(1).text()).toBe("destination_column_2");
+                expect(destinationOptions.eq(2).text()).toBe("destination_column_3");
+            });
+
+            it("should have an option in the source column select for all of the source dataset's columns", function() {
+                var sourceOptions = this.dialog.$("select.source_join_column option");
+
+                expect(sourceOptions.length).toBe(4);
+                expect(sourceOptions.eq(0).text()).toBe("source_column_1");
+                expect(sourceOptions.eq(1).text()).toBe("source_column_2");
+                expect(sourceOptions.eq(2).text()).toBe("source_column_3");
+                expect(sourceOptions.eq(3).text()).toBe("source_column_4");
             });
         });
     })

@@ -9,10 +9,12 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
     setup : function() {
         this.selectedHandle = chorus.PageEvents.subscribe("column:selected", this.addColumn, this);
         this.deselectedHandle = chorus.PageEvents.subscribe("column:deselected", this.removeColumn, this);
+        this.chorusView = this.model.deriveChorusView()
     },
 
     postRender : function() {
         this.$("a.preview").data("parent", this);
+        this.$("a.add_join").data("chorusView", this.chorusView)
     },
 
     addColumn: function(model) {
