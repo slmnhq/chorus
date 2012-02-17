@@ -11,7 +11,7 @@ chorus.models.CSVImport = chorus.models.Base.extend({
             type = "float";
             _.each(rows, function(row){
                 column_values.push(row[i])
-                if (type == "float" && isNaN(parseFloat(row[i]))) {
+                if (type == "float" && isNaN(+row[i])) {
                     type = "text";
                 }
             })

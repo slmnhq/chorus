@@ -101,15 +101,16 @@ describe("chorus.models.CSVImport", function() {
         beforeEach(function() {
             this.model = fixtures.csvImport({
                 lines: [
-                    'col1,col2,col3',
-                    'foo,2,3',
-                    'bar,2.1,sna'
+                    'col1,col2,col3,col4',
+                    'foo,2,3,1/2/3',
+                    'bar,2.1,sna,456'
                 ]
             });
             this.expectedColumns = [
                 {name: 'col1', values: ['foo', 'bar'], type: 'text'},
                 {name: 'col2', values: ['2', '2.1'], type: 'float'},
-                {name: 'col3', values: ['3', 'sna'], type: 'text'}
+                {name: 'col3', values: ['3', 'sna'], type: 'text'},
+                {name: 'col4', values: ['1/2/3', '456'], type: 'text'}
             ]
         });
 
