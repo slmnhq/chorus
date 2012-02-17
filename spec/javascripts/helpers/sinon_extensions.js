@@ -151,7 +151,13 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
     },
 
     params: function() {
-        var uri = new URI("?" + this.requestBody)
+        var uri;
+        if (this.requestBody) {
+            uri = new URI("?" + this.requestBody)
+        } else {
+            uri = new URI(this.url);
+        }
+
         return uri.search(true);
     },
 
