@@ -25,12 +25,17 @@ describe("chorus.dialogs.TableImportCSV", function() {
         expect(this.dialog.$('button.submit')).toContainTranslation("dataset.import.table.submit");
     });
 
-    xit("has directions", function() {
+    it("has directions", function() {
         var sandbox = chorus.page.workspace.sandbox();
-        expect(this.dialog.$('.directions').html().trim()).toEqual(t("dataset.import.table.directions",
-            _.extend(sandbox.attributes, {
-                tablename_input_field: '<input type="text" name="table_name" value="bar">'
-            })));
+        expect(this.dialog.$('.directions')).toContainTranslation("dataset.import.table.directions",
+            {
+                canonicalName: sandbox.schema().canonicalName(),
+                tablename_input_field: ''
+            });
+
+        expect(this.dialog.$(".directions input:text").val()).toBe("bar")
+
+        var inputfield = '<input type="text" name="table_name" value="bar">'
     });
 
     describe("the data table", function() {
