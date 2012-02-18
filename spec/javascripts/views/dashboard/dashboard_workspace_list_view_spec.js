@@ -40,8 +40,59 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                 this.view.render();
             });
 
-            it("displays the number of recent comments", function() {
-                expect(this.view.$("li:first-child .comment .count").text().trim()).toBe(t("dashboard.workspaces.recent_comments", {count: 1}))
+            context("when there are no insights", function() {
+                beforeEach(function() {
+                    this.workspace1.set({numberOfComment: 4, numberOfInsight: 0});
+                    this.view.render();
+                });
+
+                it("displays only the number of recent comments", function() {
+                    expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
+                        "dashboard.workspaces.recent_comments", {count: 4})
+                })
+            })
+
+            context("when there are no comments", function() {
+                beforeEach(function() {
+                    this.workspace1.set({numberOfComment: 0, numberOfInsight: 4});
+                    this.view.render();
+                });
+
+                it("displays only the number of recent insights", function() {
+                    expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
+                        "dashboard.workspaces.recent_insights", {count: 4})
+                })
+            })
+
+            context("when both insights and comments are available", function() {
+                beforeEach(function() {
+                    this.workspace1.set({numberOfComment: 3, numberOfInsight: 4});
+                    this.view.render();
+                });
+
+                it("displays both the number of recent insights and comments", function() {
+                    expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
+                        "dashboard.workspaces.recent_comments_and_insights", {
+                            recent_comments: t("dashboard.workspaces.recent_comments", {count: 3}),
+                            recent_insights: t("dashboard.workspaces.recent_insights", {count: 4})
+                    })
+                })
+            })
+
+            context("when there are no insights or comments", function() {
+                it("displays no insights or comments when 0", function() {
+                    this.workspace1.set({numComments: 0, numInsights: 0});
+                    this.view.render();
+                    expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
+                        "dashboard.workspaces.no_recent_comments_or_insights")
+                })
+
+                it("displays no insights or comments when null", function() {
+                    this.workspace1.set({numComments: null, numInsights: null});
+                    this.view.render();
+                    expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
+                        "dashboard.workspaces.no_recent_comments_or_insights")
+                })
             })
 
             it("displays the relative time of the most recent comment", function() {

@@ -14,7 +14,7 @@
             {{#if latestComment}}
                 <div class="comment">
                     <div class="count">
-                        {{t "dashboard.workspaces.recent_comments" count=numComments}}
+                        {{commentInsightCountString}}
                     </div>
                     <div class="recent">
                         {{t "dashboard.workspaces.most_recent"}} <span class="date">{{relativeTimestamp latestComment.timestamp}}</span> by <span class="author">{{latestComment.author}}</span>
