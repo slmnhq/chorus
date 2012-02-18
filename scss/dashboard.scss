@@ -104,6 +104,35 @@ div[data-page="Dashboard"] {
         }
     }
 
+    .content_header {
+        .menus {
+            margin-right: 10px;
+
+            .title {
+                @include font-content-details;
+            }
+            
+            a {
+                font-size: 12px;
+                font-weight: $semibold;
+
+                &.active {
+                    font-color: black;
+                    font-style: none;
+                }
+
+                &.all {
+                    padding-right: 5px;
+                }
+
+                &.insights {
+                    padding-left: 8px;
+                    border-left: 1px solid $link-color;
+                }
+            }
+        }
+    }
+
     .content_details {
         line-height : 27px;
         color: $link-color;

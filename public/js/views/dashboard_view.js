@@ -1,7 +1,16 @@
 chorus.views.Dashboard = chorus.views.Base.extend({
     className:"dashboard",
+    subviews: {
+        '.dashboard_main': "dashboardMain",
+        '.instance_list': "instanceList",
+        '.workspace_list': "workspaceList"
+    },
+    events: {
+        "click .all" : "onClickFilterAll",
+        "click .insight" : "onClickFilterInsight"
+    },
 
-    setup:function () {
+    setup: function() {
         this.workspaceList = new chorus.views.MainContentView({
             collection: this.collection,
             contentHeader:chorus.views.StaticTemplate("default_content_header", {title:t("header.my_workspaces")}),
@@ -24,16 +33,26 @@ chorus.views.Dashboard = chorus.views.Base.extend({
             additionalClass:"dashboard"
         });
 
+        this.insights = new chorus.models.CommentInsight({action: "count"});
+        this.insights.bind("loaded", this.onCommentCountFetchComplete, this);
+        this.insights.fetch();
+
         this.dashboardMain = new chorus.views.MainContentView({
-            contentHeader:chorus.views.StaticTemplate("default_content_header", {title:t("dashboard.activity")}),
+            contentHeader:chorus.views.StaticTemplate("dashboard_content_header", {title:t("dashboard.activity")}),
             content:this.activityList
         });
     },
 
-    subviews:{
-        '.dashboard_main': "dashboardMain",
-        '.instance_list': "instanceList",
-        '.workspace_list': "workspaceList"
+    onClickFilterAll: function() {
+
+    },
+
+    onClickFilterInsight: function() {
+
+    },
+
+    onCommentCountFetchComplete: function() {
+
     }
 });
 
