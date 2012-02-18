@@ -1,5 +1,6 @@
 describe("chorus.dialogs.TableImportCSV", function() {
     beforeEach(function() {
+
         chorus.page = {};
         this.sandbox = fixtures.sandbox({
             schemaName: "mySchema",
@@ -12,8 +13,10 @@ describe("chorus.dialogs.TableImportCSV", function() {
             "val1.1,val1.2,val1.3,val1.4,val1.5",
             "val2.1,val2.2,val2.3,val2.4,val2.5",
             "val3.1,val3.2,val3.3,val3.4,val3.5"
-        ]});
-        this.dialog = new chorus.dialogs.TableImportCSV({csv: this.csv, tablename: "FOO quux Bar"});
+        ],
+            toTable: "foo_quux_bar"
+        });
+        this.dialog = new chorus.dialogs.TableImportCSV({csv: this.csv});
         this.dialog.render();
     });
 
@@ -59,7 +62,7 @@ describe("chorus.dialogs.TableImportCSV", function() {
         })
 
         it("displays the provided types", function() {
-            _.each(this.dialog.$(".th .type"), function(th, index){
+            _.each(this.dialog.$(".th .type"), function(th, index) {
                 expect($(th).find(".chosen").text().trim()).toBe(this.csv.columnOrientedData()[index].type);
             }, this);
         });
@@ -69,7 +72,7 @@ describe("chorus.dialogs.TableImportCSV", function() {
                 var cells = $(column).find(".td")
                 expect(cells.length).toEqual(3);
                 _.each(cells, function(cell, j) {
-                    expect($(cell)).toContainText("val" + (j+1) + "." + (i+1));
+                    expect($(cell)).toContainText("val" + (j + 1) + "." + (i + 1));
                 })
             });
         });
@@ -88,4 +91,62 @@ describe("chorus.dialogs.TableImportCSV", function() {
             })
         })
     });
+
+    describe("clicking the import button", function() {
+        beforeEach(function() {
+            spyOn(this.dialog, "closeModal");
+            this.dialog.$("button.submit").click();
+        });
+
+        it("starts the spinner", function() {
+            expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+            expect(this.dialog.$("button.submit").text().trim()).toMatchTranslation("dataset.import.importing");
+        });
+
+        it("imports the file", function() {
+            expect(this.server.lastCreate().url).toBe(this.dialog.csv.url());
+            var params = this.server.lastCreate().params();
+            expect(params.fileName).toBe(this.dialog.csv.get("fileName"));
+            expect(params.toTable).toBe("foo_quux_bar");
+            expect(params.delimiter).toBe(",");
+
+            var expectedColumns = [];
+            _.each(this.dialog.csv.columnOrientedData(), function(item, i) {
+                expectedColumns.push({columnName: item.name, columnType: item.type, columnOrder: i + 1});
+            });
+
+            expect(JSON.parse(params.columnsDef)).toEqual(expectedColumns);
+        });
+
+        context("when the import succeeds", function() {
+            beforeEach(function() {
+                spyOn(chorus, 'toast');
+                this.server.lastCreateFor(this.dialog.csv).succeed();
+            });
+
+            it("closes the dialog and displays a toast", function() {
+                expect(this.dialog.closeModal).toHaveBeenCalled();
+                expect(chorus.toast).toHaveBeenCalledWith("dataset.import.success");
+            });
+        })
+
+        context("when the import fails", function() {
+            beforeEach(function() {
+                this.server.lastCreateFor(this.dialog.csv).fail([{message: "oops"}]);
+            });
+
+            it("displays the error", function() {
+                expect(this.dialog.$(".errors")).toContainText("oops");
+            });
+
+            it("re-enables the submit button", function() {
+                expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+            })
+        })
+
+        context("when the user clicks cancel", function() {
+
+        })
+
+    })
 });

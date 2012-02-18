@@ -1,4 +1,6 @@
 chorus.models.CSVImport = chorus.models.Base.extend({
+    urlTemplate: "workspace/{{workspaceId}}/csv/import",
+
 
     columnOrientedData: function() {
         var parser = new CSV()

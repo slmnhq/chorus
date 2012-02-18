@@ -1901,7 +1901,8 @@ beforeEach(function() {
                     "col1,col2,col3",
                     "val1,val2,val3"
                 ],
-                fileName: "/file.csv"
+                fileName: "/file.csv",
+                workspaceId: this.nextId().toString()
             }, overrides)
             return new chorus.models.CSVImport(attributes);
         },

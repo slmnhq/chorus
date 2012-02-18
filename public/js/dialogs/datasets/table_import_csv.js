@@ -2,8 +2,12 @@ chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
     className: "table_import_csv",
     title: t("dataset.import.table.title"),
 
+    events: {
+      "click button.submit": "startImport"
+    },
+
     setup: function() {
-        this.csv = this.options.csv;
+        this.resource = this.csv = this.options.csv;
         this.columnOrientedData = this.csv.columnOrientedData();
         this.linkMenus = _.map(this.columnOrientedData, function(item) {
             return new chorus.views.LinkMenu({
@@ -20,7 +24,7 @@ chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
                 chosen: item.type
             });
         })
-        this.tableName = chorus.models.CSVImport.normalizeForDatabase(this.options.tablename);
+        this.tableName = this.csv.get("toTable");
         chorus.PageEvents.subscribe("choice:setType", this.onSelectType, this);
     },
 
@@ -46,6 +50,39 @@ chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
                 tablename_input_field: "<input type='text' name='table_name' value='" + this.tableName + "'/>"
             })
         }
-    }
+    },
 
+    startImport: function() {
+        this.$('button.submit').startLoading("dataset.import.importing");
+        var $names = this.$(".column_names input:text");
+        var $types = this.$(".data_types .chosen");
+
+        var columnData = _.map($names, function(name, i) {
+            return {
+                columnName: chorus.Mixins.dbHelpers.safePGName($(name).val()),
+                columnType: $types.eq(i).text(),
+                columnOrder: i+1
+            }
+        })
+
+
+        this.csv.set({
+            toTable: chorus.models.CSVImport.normalizeForDatabase(this.$(".directions input:text").val()),
+            delimiter: ",",
+            columnsDef: JSON.stringify(columnData)
+        })
+
+        this.csv.bindOnce("saved", function(){
+            this.closeModal();
+            chorus.toast("dataset.import.success");
+        }, this);
+
+        this.csv.bindOnce("saveFailed", function() {
+            this.$("button.submit").stopLoading();
+        }, this);
+
+        this.$("button.submit").startLoading("dataset.import.importing");
+
+        this.csv.save();
+    }
 });

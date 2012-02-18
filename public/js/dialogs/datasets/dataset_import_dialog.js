@@ -2,7 +2,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     className: "dataset_import",
     title: t("dataset.import.title"),
 
-    events : {
+    events: {
         "change input:radio": "onRadioSelect",
         "submit form": "uploadFile"
     },
@@ -30,13 +30,13 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     },
 
 
-    postRender:function () {
+    postRender: function() {
         var self = this;
         this.$("input[type=file]").fileupload({
-            change:fileChosen,
-            add:fileChosen,
-            done:uploadFinished,
-            dataType:"json"
+            change: fileChosen,
+            add: fileChosen,
+            done: uploadFinished,
+            dataType: "json"
         });
 
         function fileChosen(e, data) {
@@ -65,9 +65,12 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         function uploadFinished(e, data) {
             e && e.preventDefault();
             self.$("button.submit").stopLoading();
-            self.csv = new chorus.models.CSVImport
+            self.csv = new chorus.models.CSVImport({
+                workspaceId: self.options.launchElement.data("workspaceid"),
+                toTable: chorus.models.CSVImport.normalizeForDatabase(self.$(".new_table input[type='text']").val())
+            });
             self.csv.set(self.csv.parse(data.result));
-            var dialog = new chorus.dialogs.TableImportCSV({csv: self.csv, tablename: self.$(".new_table input[type='text']").val()});
+            var dialog = new chorus.dialogs.TableImportCSV({csv: self.csv});
             dialog.launchModal();
         }
     }

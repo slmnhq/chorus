@@ -202,7 +202,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                 });
 
                 it("launches the import new table dialog", function() {
-                    expect(chorus.dialogs.TableImportCSV.prototype.setup).toHaveBeenCalledWith({csv: this.dialog.csv, tablename: "foo_bar_baz"});
+                    expect(chorus.dialogs.TableImportCSV.prototype.setup).toHaveBeenCalledWith({csv: this.dialog.csv});
                     expect(this.modalSpy).toHaveModal(chorus.dialogs.TableImportCSV);
                 });
             });
