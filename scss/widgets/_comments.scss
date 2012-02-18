@@ -1,6 +1,7 @@
 $activity-gutter: 8px;
 
 .comments {
+    margin-top: $activity-gutter;
     margin-bottom: $activity-gutter;
 
     > li {

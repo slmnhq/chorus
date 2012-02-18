@@ -56,37 +56,37 @@ $system-action-color: #7C7D7D;
     }
 
     .insight_ribbon {
-      padding:0;
-      position: absolute;
-      left: -15px;
-      top: -9px;
-      z-index: 10;
-      line-height: 11px;
-      height: 22px;
-
-      .left {
-        background:url(/images/ribbons/label_insight1.png) no-repeat;
-        width: 6px;
+        padding:0;
+        position: absolute;
+        left: -15px;
+        top: -9px;
+        z-index: 10;
+        line-height: 11px;
         height: 22px;
-        display: inline-block;
-      }
 
-      .center {
-        @include database-column-type;
-        background:url(/images/ribbons/label_insight2.png) repeat-x;
-        height: 14px;
-        display: inline-block;
-        padding: 4px 8px 4px 8px;
-        vertical-align: top;
-        text-transform: uppercase;
-      }
+        .left {
+            background:url(/images/ribbons/label_insight1.png) no-repeat;
+            width: 6px;
+            height: 22px;
+            display: inline-block;
+        }
 
-      .right {
-        background:url(/images/ribbons/label_insight3.png) no-repeat;
-        width: 8px;
-        height: 22px;
-        display: inline-block;
-      }
+        .center {
+            @include database-column-type;
+            background:url(/images/ribbons/label_insight2.png) repeat-x;
+            height: 14px;
+            display: inline-block;
+            padding: 4px 8px 4px 8px;
+            vertical-align: top;
+            text-transform: uppercase;
+        }
+
+        .right {
+            background:url(/images/ribbons/label_insight3.png) no-repeat;
+            width: 8px;
+            height: 22px;
+            display: inline-block;
+        }
     }
 }
 
@@ -206,8 +206,8 @@ li[data-activity-type=INSIGHT_CREATED] .activity_content:hover a.delete_link {
 
             &.insight {
               background: white;
-              border-right: 1px solid $list-border-color;
-              border-bottom: 1px solid $list-border-color;
+              border-right: 1px dotted $list-border-color;
+              border-bottom: 1px dotted $list-border-color;
               .activity_item {
                 padding-top: 12px;
               }
