@@ -28,6 +28,7 @@ chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
             imageUrl: model.defaultIconUrl(),
             showUrl: model.showUrl(),
             commentInsightCountString: commentInsightCountString,
+            insightCount: numInsights,
             latestComment: comments[0] && {
                 timestamp: comments[0].get("timestamp"),
                 author: comments[0].author().displayName()

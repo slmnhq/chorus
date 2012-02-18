@@ -1,6 +1,11 @@
 {{#each models}}
     <li data-id="{{id}}">
         <span class="spacer left"/>
+        {{#if insightCount}}
+            <div class="badge">
+                <div class="left"/><div class="center">{{insightCount}}</div><div class="right"/>
+            </div>
+        {{/if}}
         <a class="image" href="{{showUrl}}">
             <img src="{{imageUrl}}"/>
         </a>

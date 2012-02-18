@@ -36,6 +36,30 @@
             }
         }
 
+        .badge {
+            div {
+                display: inline-block;
+                @include secondary-text-small;
+                vertical-align: middle;
+                line-height: 14px;
+                color: white;
+            }
+            .left {
+                background: url(/images/ribbons/counter_orange_rec1.png) no-repeat;
+                width: 4px;
+                height: 14px;
+            }
+            .center {
+                background: url(/images/ribbons/counter_orange_2.png) repeat;
+                height: 14px;
+            }
+            .right {
+                background: url(/images/ribbons/counter_orange_rec3.png) no-repeat;
+                width: 4px;
+                height: 14px;
+            }
+
+        }
     }
 
 }

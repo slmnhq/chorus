@@ -1,11 +1,11 @@
 describe("chorus.views.DashboardWorkspaceList", function() {
-    beforeEach(function(){
+    beforeEach(function() {
         fixtures.model = "Workspace"
         this.workspace1 = fixtures.workspace({ name: "Broccoli", latestCommentList: [] });
         this.workspace2 = fixtures.workspace({ name: "Camels", latestCommentList: [] });
         this.collection = new chorus.collections.WorkspaceSet([this.workspace1, this.workspace2]);
         this.collection.loaded = true;
-        this.view = new chorus.views.DashboardWorkspaceList({collection : this.collection});
+        this.view = new chorus.views.DashboardWorkspaceList({collection: this.collection});
     });
 
     describe("#render", function() {
@@ -50,6 +50,10 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                     expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
                         "dashboard.workspaces.recent_comments", {count: 4})
                 })
+
+                it("doesn't display the badge", function() {
+                    expect(this.view.$("li:first-child .badge")).not.toExist();
+                });
             })
 
             context("when there are no comments", function() {
@@ -61,7 +65,11 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                 it("displays only the number of recent insights", function() {
                     expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
                         "dashboard.workspaces.recent_insights", {count: 4})
-                })
+                });
+
+                it("displays the badge", function() {
+                    expect(this.view.$("li:first-child .badge")).toExist();
+                });
             })
 
             context("when both insights and comments are available", function() {
@@ -75,8 +83,12 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                         "dashboard.workspaces.recent_comments_and_insights", {
                             recent_comments: t("dashboard.workspaces.recent_comments", {count: 3}),
                             recent_insights: t("dashboard.workspaces.recent_insights", {count: 4})
-                    })
-                })
+                        })
+                });
+
+                it("displays the badge", function() {
+                    expect(this.view.$("li:first-child .badge")).toExist();
+                });
             })
 
             context("when there are no insights or comments", function() {
@@ -92,7 +104,11 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                     this.view.render();
                     expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
                         "dashboard.workspaces.no_recent_comments_or_insights")
-                })
+                });
+
+                it("doesn't display the badge", function() {
+                    expect(this.view.$("li:first-child .badge")).not.toExist();
+                });
             })
 
             it("displays the relative time of the most recent comment", function() {
