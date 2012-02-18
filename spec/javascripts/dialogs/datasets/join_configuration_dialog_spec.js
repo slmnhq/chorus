@@ -55,17 +55,8 @@ describe("chorus.dialogs.JoinConfiguration", function() {
                 expect(this.dialog.sourceColumnsSelect.options.showDatasetNumbers).toBeTruthy();
             });
 
-            it("should have a 'destination join column' select", function() {
-                expect(this.dialog.$('select.destination_join_column')).toExist()
-            });
-
-            it("should have an option in the destination column select for every column fetched", function() {
-                var destinationOptions = this.dialog.$("select.destination_join_column option");
-
-                expect(destinationOptions.length).toBe(3);
-                expect(destinationOptions.eq(0).text()).toBe("destination_column_1");
-                expect(destinationOptions.eq(1).text()).toBe("destination_column_2");
-                expect(destinationOptions.eq(2).text()).toBe("destination_column_3");
+            it("should have a destinationColumnSelect with the destinationObject's columns", function() {
+                expect(this.dialog.destinationColumnsSelect.collection).toBe(this.destinationTable.columns());
             });
 
             it("should have a select for type of join", function() {
@@ -86,6 +77,25 @@ describe("chorus.dialogs.JoinConfiguration", function() {
             it("should have a cancel button", function() {
                 expect(this.dialog.$("button.cancel").text()).toMatchTranslation("actions.cancel")
             })
+
+            describe("adding the join", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog.model, 'addJoin');
+                    spyOn(this.dialog, 'closeModal');
+                    this.sourceColumn = this.dialog.sourceColumnsSelect.getSelectedColumn();
+                    this.destinationColumn = this.dialog.destinationColumnsSelect.getSelectedColumn();
+                    this.joinType = this.dialog.$('select.join_type').val();
+                    this.dialog.$("button.submit").click();
+                });
+
+                it("calls addJoin with the source column, destination column, and join type", function() {
+                    expect(this.dialog.model.addJoin).toHaveBeenCalledWith(this.sourceColumn, this.destinationColumn, this.joinType);
+                });
+
+                it("closes the dialog", function() {
+                    expect(this.dialog.closeModal).toHaveBeenCalled();
+                });
+            });
         });
     })
 });

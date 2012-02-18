@@ -8,17 +8,24 @@
     </ul>
 
     <div class="selected_columns">
-        <div class="non_empty_selection hidden">
-            <span class="title">{{t "dataset.chorusview.sidebar.selected_columns"}}</span>
-            <div class="dataset">
-                <span class="dataset_number">{{resource.datasetNumber}}</span><span class="label">{{t "dataset.statistics.dataset"}}:</span> <span class="name" title="{{objectName}}">{{objectName}}</span>
-            </div>
-            <ul class="columns"></ul>
+        <span class="title">{{t "dataset.chorusview.sidebar.selected_columns"}}</span>
+        <div class="dataset">
+            <span class="dataset_number">{{resource.datasetNumber}}</span><span class="label">{{t "dataset.statistics.dataset"}}:</span> <span class="name" title="{{objectName}}">{{objectName}}</span>
         </div>
-        <div class="empty_selection notice">
-            <span class="top"><label>{{t "dataset.chorusview.sidebar.empty_selection.title"}}</label></span>
-            <span class="bottom">{{t "dataset.chorusview.sidebar.empty_selection.text"}}</span>
-        </div>
+        {{#if columns.length}}
+            <ul class="columns">
+                {{#each columns}}
+                    <li data-cid='{{cid}}'>
+                        <div class="sidebar_row">
+                            <a href="#" class="remove">{{t "dataset.chorusview.sidebar.remove"}}</a>
+                            <div class="name" title="{{attributes.name}}">{{attributes.name}}</div>
+                        </div>
+                    </li>
+                {{/each}}
+            </ul>
+        {{else}}
+            <div class="no_columns_selected">{{t "dataset.chorusview.sidebar.no_columns_selected"}}</div>
+        {{/if}}
     </div>
 
     <div class="button_wrapper">

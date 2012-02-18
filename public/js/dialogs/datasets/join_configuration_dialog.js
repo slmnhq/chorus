@@ -5,28 +5,41 @@ chorus.dialogs.JoinConfiguration = chorus.dialogs.Base.extend({
     useLoadingSection:true,
 
     subviews: {
-        ".source_columns": "sourceColumnsSelect"
+        ".source_columns": "sourceColumnsSelect",
+        ".destination_columns": "destinationColumnsSelect"
+    },
+
+    events: {
+        "click button.submit": "addJoin"
     },
 
     setup: function() {
         this.destinationObject = this.options.destinationObject;
-        this.requiredResources.push(this.destinationObject.columns());
-        this.destinationObject.columns().fetchIfNotLoaded();
+        var destinationColumns = this.destinationObject.columns()
+        this.requiredResources.push(destinationColumns);
+        destinationColumns.fetchIfNotLoaded();
         this.sourceColumnsSelect = new chorus.views.ColumnSelect({collection: this.model.sourceObject.columns(), showDatasetNumbers: true})
+        this.destinationColumnsSelect = new chorus.views.ColumnSelect({collection: destinationColumns})
     },
 
     additionalContext: function() {
-        var destinationColumns = this.destinationObject.columns().map(function(col) {
-            return { name: col.get('name') }
-        })
-
         return {
-            destinationObjectName: this.destinationObject.get("objectName"),
-            destinationColumns: destinationColumns
+            destinationObjectName: this.destinationObject.get("objectName")
         }
     },
 
     postRender: function() {
-        chorus.styleSelect(this.$("select"));
+        _.defer(_.bind(function() {
+            chorus.styleSelect(this.$("select.join_type"));
+        }, this));
+    },
+
+    addJoin: function() {
+        this.model.addJoin(
+            this.sourceColumnsSelect.getSelectedColumn(),
+            this.destinationColumnsSelect.getSelectedColumn(),
+            this.$('select.join_type').val()
+        )
+        this.closeModal()
     }
 });

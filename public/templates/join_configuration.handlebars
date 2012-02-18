@@ -8,18 +8,15 @@
     <div class="source_columns"></div>
 
     <label>{{t "dataset.manage_join_tables.destination_join_column"}}</label>
-    <select class="destination_join_column">
-        {{#each destinationColumns}}
-            <option>{{name}}</option>
-        {{/each}}
-    </select>
+
+    <div class="destination_columns"></div>
 
     <label>{{t "dataset.manage_join_tables.join_type"}}</label>
     <select class="join_type">
-        <option>{{t "dataset.manage_join_tables.inner"}}</option>
-        <option>{{t "dataset.manage_join_tables.left"}}</option>
-        <option>{{t "dataset.manage_join_tables.right"}}</option>
-        <option>{{t "dataset.manage_join_tables.outer"}}</option>
+        <option value="inner">{{t "dataset.manage_join_tables.inner"}}</option>
+        <option value="left">{{t "dataset.manage_join_tables.left"}}</option>
+        <option value="right">{{t "dataset.manage_join_tables.right"}}</option>
+        <option value="outer">{{t "dataset.manage_join_tables.outer"}}</option>
     </select>
 </div>
 

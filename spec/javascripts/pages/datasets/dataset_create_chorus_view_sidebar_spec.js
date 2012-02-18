@@ -2,12 +2,14 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
     beforeEach(function() {
         this.dataset = fixtures.datasetSandboxTable({objectName : "My_table"});
         this.view = new chorus.views.CreateChorusViewSidebar({model: this.dataset});
+        this.chorusView = this.view.chorusView;
     });
 
     describe("#render", function() {
         beforeEach(function() {
             this.view.render();
         });
+
         it("displays correct title", function() {
             expect(this.view.$("legend").text().trim()).toMatchTranslation("dataset.chorusview.sidebar.title")
         });
@@ -50,21 +52,9 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
         });
 
         context("when there are no filters or columns selected", function() {
-            it("hides the non-empty selection section and shows the empty selection section", function() {
-                expect(this.view.$(".selected_columns .non_empty_selection")).toHaveClass("hidden");
-                expect(this.view.$(".selected_columns .empty_selection")).not.toHaveClass("hidden");
-            });
-
-            it("display the default message title", function() {
-                expect(this.view.$(".selected_columns .empty_selection .top label").text().trim()).toMatchTranslation("dataset.chorusview.sidebar.empty_selection.title");
-            })
-
-            it("display the default message", function() {
-                expect(this.view.$(".selected_columns .empty_selection .bottom ").text().trim()).toMatchTranslation("dataset.chorusview.sidebar.empty_selection.text");
-            })
-
-            it("disabled the create dataset button", function() {
-                expect(this.view.$("button.create")).toBeDisabled();
+            it("says 'no columns selected' beneath the table name", function() {
+                expect(this.view.$(".no_columns_selected")).not.toHaveClass("hidden");
+                expect(this.view.$(".no_columns_selected")).toContainTranslation('dataset.chorusview.sidebar.no_columns_selected');
             });
         })
 
@@ -75,10 +65,8 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             });
 
             it("displays the name of that column", function() {
-                expect(this.view.$(".empty_selection")).toHaveClass("hidden");
-                expect(this.view.$(".non_empty_selection")).not.toHaveClass("hidden");
-                expect(this.view.$(".non_empty_selection .columns li").length).toBe(1)
-                expect(this.view.$(".non_empty_selection .columns li")).toContainText(this.databaseColumn.get("name"));
+                expect(this.view.$(".columns li").length).toBe(1)
+                expect(this.view.$(".columns li")).toContainText(this.databaseColumn.get("name"));
             });
 
             it("includes a remove link in the li", function() {
@@ -97,9 +85,9 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 });
 
                 it("adds that column too", function() {
-                    expect(this.view.$(".non_empty_selection .columns li").length).toBe(2)
-                    expect(this.view.$(".non_empty_selection .columns li")).toContainText(this.databaseColumn.get("name"));
-                    expect(this.view.$(".non_empty_selection .columns li")).toContainText(this.databaseColumn2.get("name"));
+                    expect(this.view.$(".columns li").length).toBe(2)
+                    expect(this.view.$(".columns li")).toContainText(this.databaseColumn.get("name"));
+                    expect(this.view.$(".columns li")).toContainText(this.databaseColumn2.get("name"));
                 });
 
                 describe("deselecting one column", function() {
@@ -108,9 +96,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                     });
 
                     it("removes the name of that column", function() {
-                        expect(this.view.$(".empty_selection")).toHaveClass("hidden");
-                        expect(this.view.$(".non_empty_selection")).not.toHaveClass("hidden");
-                        expect(this.view.$(".non_empty_selection .columns li").length).toBe(1)
+                        expect(this.view.$(".columns li").length).toBe(1)
                     });
 
                     describe("deselecting the other column", function() {
@@ -118,10 +104,9 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                             chorus.PageEvents.broadcast("column:deselected", this.databaseColumn2);
                         });
 
-                        it("removes the name of that column, and displays the empty selection div", function() {
-                            expect(this.view.$(".empty_selection")).not.toHaveClass("hidden");
-                            expect(this.view.$(".non_empty_selection")).toHaveClass("hidden");
-                            expect(this.view.$(".non_empty_selection .columns li").length).toBe(0)
+                        it("removes the name of that column, and displays the no columns div", function() {
+                            expect(this.view.$(".no_columns_selected")).not.toHaveClass("hidden");
+                            expect(this.view.$(".columns li").length).toBe(0)
                         });
 
                         it("disables the create button", function() {
@@ -140,7 +125,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             });
 
             it("should not show duplicate columns", function() {
-                expect(this.view.$(".non_empty_selection .columns li").length).toBe(1)
+                expect(this.view.$(".columns li").length).toBe(1)
             });
         });
 
@@ -151,6 +136,8 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 chorus.PageEvents.broadcast("column:selected", this.column1);
                 this.column2 = fixtures.databaseColumn();
                 chorus.PageEvents.broadcast("column:selected", this.column2);
+                this.dataset.columns().reset([this.column1, this.column2])
+                this.view.render();
                 this.view.$("a.remove").eq(0).click();
             })
 

@@ -5,32 +5,30 @@
     .selected_columns {
         color: $color-text2;
         font-size: 12px;
+        padding: 8px;
 
-        .non_empty_selection {
-            margin: 8px;
 
-            .title {
-                font-size: 16px;
-                font-weight: $semibold;
+        .title {
+            font-size: 16px;
+            font-weight: $semibold;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .dataset {
+            margin-bottom: 10px;
+            @include secondary-text-semibold;
+            .label {
                 display: inline-block;
-                margin-bottom: 8px;
+                margin-right: 2px;
             }
-
-            .dataset {
-                margin-bottom: 10px;
-                @include secondary-text-semibold;
-                .label {
-                    display: inline-block;
-                    margin-right: 2px;
-                }
-                .name {
-                    @include ellipsis;
-                    max-width: 120px;
-                    display: inline-block;
-                    font-size: 14px;
-                    color: $color-text1;
-                    font-weight: $semibold;
-                }
+            .name {
+                @include ellipsis;
+                max-width: 120px;
+                display: inline-block;
+                font-size: 14px;
+                color: $color-text1;
+                font-weight: $semibold;
             }
         }
     }

@@ -28,8 +28,26 @@ describe("chorus.views.ColumnSelect", function() {
                 expect(this.view.$('option').length).toBe(4);
             });
 
-            it("disables columns with typeCategory 'OTHER'", function() {
-                expect(this.view.$('option:eq(3)')).toBeDisabled();
+            context("when disableOtherTypeCategory is set", function() {
+                beforeEach(function() {
+                    this.view.options.disableOtherTypeCategory = true;
+                    this.view.render();
+                });
+
+                it("disables columns with typeCategory 'OTHER'", function() {
+                    expect(this.view.$('option:eq(3)')).toBeDisabled();
+                });
+            });
+
+            context("when disableOtherTypeCategory is not set", function() {
+                beforeEach(function() {
+                    this.view.options.disableOtherTypeCategory = false;
+                    this.view.render();
+                });
+
+                it("does not disables columns with typeCategory 'OTHER'", function() {
+                    expect(this.view.$('option:eq(3)')).not.toBeDisabled();
+                });
             });
 
             context("with an option selected", function() {

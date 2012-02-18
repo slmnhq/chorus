@@ -1,24 +1,24 @@
 chorus.alerts.Base = chorus.Modal.extend({
-    className:"alert",
+    className: "alert",
 
-    events:{
-        "click button.cancel":"closeModal",
-        "click button.submit":"confirmAlert"
+    events: {
+        "click button.cancel": "closeModal",
+        "click button.submit": "confirmAlert"
     },
 
-    confirmAlert:$.noop,
+    confirmAlert: $.noop,
 
-    additionalContext:function (ctx) {
+    additionalContext: function(ctx) {
         return {
-            title:this.title,
-            text:this.text,
-            body:this.body,
-            ok:this.ok,
-            cancel:this.cancel || t("actions.cancel")
+            title: this.title,
+            text: this.text,
+            body: this.body,
+            ok: this.ok,
+            cancel: this.cancel || t("actions.cancel")
         }
     },
 
-    revealed:function () {
+    revealed: function() {
         $("#facebox").removeClass().addClass("alert_facebox");
         var cancelButton = this.$("button.cancel");
         if (cancelButton) {
@@ -28,33 +28,33 @@ chorus.alerts.Base = chorus.Modal.extend({
 })
 
 chorus.alerts.ModelDelete = chorus.alerts.Base.extend({
-    events:_.extend({}, chorus.alerts.Base.prototype.events, {
-        "click button.submit":"deleteModel"
+    events: _.extend({}, chorus.alerts.Base.prototype.events, {
+        "click button.submit": "deleteModel"
     }),
 
     additionalClass: "error",
 
-    persistent:true, //here for documentation, doesn't actually do anything as we've overwritten bindCallbacks
+    persistent: true, //here for documentation, doesn't actually do anything as we've overwritten bindCallbacks
 
-    bindCallbacks:function () {
+    bindCallbacks: function() {
         this.model.bind("destroy", this.modelDeleted, this);
         this.model.bind("destroyFailed", this.render, this);
     },
 
-    close:function () {
+    close: function() {
         this.model.unbind("destroy", this.modelDeleted);
         this.model.unbind("destroyFailed", this.render);
     },
 
-    deleteModel:function (e) {
+    deleteModel: function(e) {
         e.preventDefault();
         this.model.destroy();
         this.$("button.submit").startLoading("actions.deleting")
     },
 
-    deleteMessageParams:$.noop,
+    deleteMessageParams: $.noop,
 
-    modelDeleted:function () {
+    modelDeleted: function() {
         $(document).trigger("close.facebox");
         chorus.toast(this.deleteMessage, this.deleteMessageParams());
         if (this.redirectUrl) {

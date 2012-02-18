@@ -22,7 +22,7 @@ chorus.views.ColumnSelect = chorus.views.Base.extend({
     collectionModelContext: function(model) {
         return {
             quotedName: model.quotedName(),
-            disable: model.get("typeCategory") == "OTHER"
+            disable: model.get("typeCategory") == "OTHER" && this.options.disableOtherTypeCategory
         }
     },
 
