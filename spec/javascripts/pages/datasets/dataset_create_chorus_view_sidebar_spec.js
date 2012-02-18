@@ -1,6 +1,7 @@
 describe("chorus.views.CreateChorusViewSidebar", function() {
     beforeEach(function() {
         this.dataset = fixtures.datasetSandboxTable({objectName : "My_table"});
+        this.dataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn(), fixtures.databaseColumn()]);
         this.view = new chorus.views.CreateChorusViewSidebar({model: this.dataset});
         this.chorusView = this.view.chorusView;
     });
@@ -57,6 +58,19 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 expect(this.view.$(".no_columns_selected")).toContainTranslation('dataset.chorusview.sidebar.no_columns_selected');
             });
         })
+
+        context("when a join is added to the chorus view", function() {
+            beforeEach(function() {
+                this.otherDataset = fixtures.datasetSandboxTable();
+                this.otherDataset.columns().reset([fixtures.databaseColumn()]);
+                this.chorusView.addJoin(this.dataset.columns().models[0], this.otherDataset.columns().models[0], 'inner');
+            });
+
+            it("shows up in the sidebar", function() {
+                expect(this.view.$(".dataset").length).toBe(2);
+                expect(this.view.$(".dataset:eq(1) .name")).toContainText(this.otherDataset.get("objectName"));
+            })
+        });
 
         describe("column:selected event", function() {
             beforeEach(function(){
