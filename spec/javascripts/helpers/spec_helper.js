@@ -1,113 +1,4 @@
 (function() {
-    var templates = [
-        'activity',
-        'activity_list',
-        'alert',
-        'breadcrumbs',
-        'browse_datasets',
-        'change_password',
-        'code_editor_view',
-        'collection_picklist',
-        'comment',
-        'comment_list',
-        'column_select',
-        'dashboard',
-        'dashboard_sidebar',
-        'dashboard_workspace_list',
-        'dashboard_instance_list',
-        'dashboard_workspace_list_content_details',
-        'dashboard_instance_list_content_details',
-        'data_table',
-        'database_column_sidebar_list',
-        'database_column_list',
-        'database_function_sidebar_list',
-        'database_dataset_sidebar_list',
-        'dataset_filter',
-        'dataset_filter_wizard',
-        'dataset_list',
-        'dataset_list_sidebar',
-        'dataset_preview',
-        'dataset_content_details',
-        'dataset_create_chorus_view_sidebar',
-        'dataset_edit_chorus_view',
-        'dataset_edit_chorus_view_sidebar',
-        'dataset_create_chorus_view_sidebar_column_row',
-        'dataset_import',
-        'dataset_visualization_boxplot_sidebar',
-        'dataset_visualization_frequency_sidebar',
-        'dataset_visualization_histogram_sidebar',
-        'dataset_visualization_heatmap_sidebar',
-        'dataset_visualization_timeseries_sidebar',
-        'default_content_header',
-        'empty_data_warning',
-        'header',
-        'image_upload',
-        'image_workfile_content',
-        'instance_account',
-        'instance_index_content_details',
-        'instance_list',
-        'instance_list_sidebar',
-        'instance',
-        'instance_edit',
-        'instance_new',
-        'instance_permissions',
-        'instance_usage',
-        'join_configuration',
-        'link_menu',
-        'list_content_details',
-        'loading_section',
-        'logged_in_layout',
-        'login',
-        'main_content',
-        'manage_join_tables',
-        'name_chorus_view',
-        'notes_new',
-        'notes_new_file_attachment',
-        'notification_recipient',
-        'pick_workspace',
-        'plain_text',
-        'results_console',
-        'run_file_in_schema',
-        'sandbox_new',
-        'schema_picker',
-        'shuttle_widget',
-        'sql_preview',
-        'sql_workfile_content',
-        'sql_workfile_content_details',
-        'sub_nav',
-        'tab_control',
-        'table_import_csv',
-        'text_workfile_content',
-        'truncated_text',
-        'user_edit',
-        'user_list',
-        'user_new',
-        'user_new_ldap',
-        'user_show',
-        'user_show_sidebar',
-        'validating',
-        'visualization',
-        'workfile_content_details',
-        'workfile_header',
-        'workfile_list',
-        'workfile_list_sidebar',
-        'workfile_new_version',
-        'workfile_show_sidebar',
-        'workfile_version_list',
-        'workfiles_import',
-        'workfiles_sql_new',
-        'workfiles_attach',
-        'workspace_detail',
-        'workspace_edit_members',
-        'workspace_index_content_header',
-        'workspace_list',
-        'workspace_members_more',
-        'workspace_settings',
-        'workspace_summary_sidebar',
-        'workspaces_new'
-    ];
-
-
     var loadTemplatesOnce = _.once(function() {
         var allTemplatesLoaded = false;
 
@@ -118,24 +9,20 @@
 
         function loadAllTemplates() {
             var templateContainer = $("<div id='chorus_templates'/>");
-            var requests = _.map(templates, function(templateName) {
-                return $.ajax({
-                    async: true,
-                    cache: false,
-                    dataType: 'html',
-                    url: '/templates/' + templateName + '.handlebars',
-                    success: function(data) {
-                        templateContainer.append('<script id="' + templateName + '_template" type="x-handlebars-template">' + data + '</script>');
-                    },
-                    error: function(data) {
-                        alert("The template '" + templateName + "' does not exist. You need to remove it from the spec helper, bro.");
-                    }
-                });
-            });
-
-            $.when.apply($, requests).done(function() {
-                $("body").append(templateContainer);
-                allTemplatesLoaded = true;
+            $("body").append(templateContainer);
+            return $.ajax({
+                async: false,
+                cache: false,
+                dataType: 'html',
+                url: '/__templates',
+                success: function(data) {
+                    templateContainer.append(data);
+                    allTemplatesLoaded = true;
+                },
+                error: function(data) {
+                    alert("Sorry but I couldn't load the templates! Things will go REALLY poorly from here...");
+                    allTemplatesLoaded = true;
+                }
             });
         }
     });
@@ -160,7 +47,7 @@
                 var originalRight = $j.css("right");
 
                 $j.css("right", 0).append(el);
-                this.after(function(){
+                this.after(function() {
                     $j.css("right", originalRight);
                 });
             }
