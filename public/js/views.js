@@ -70,7 +70,8 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
 
         $(this.el).html(this.template(evaluatedContext))
             .addClass(this.className)
-            .addClass(this.additionalClass || "");
+            .addClass(this.additionalClass || "")
+            .attr("data-template", this.className);
         this.renderSubviews();
         this.postRender($(this.el));
         this.renderHelps();

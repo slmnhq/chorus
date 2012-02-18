@@ -218,6 +218,14 @@ describe("chorus.views.Base", function () {
                     expect("rendered").toHaveBeenTriggeredOn(this.view);
                 })
 
+                it("adds the className as a class name", function() {
+                    expect($(this.view.el)).toHaveClass("plain_text")
+                })
+
+                it("adds the className as a data-template", function() {
+                    expect($(this.view.el)).toHaveAttr("data-template", "plain_text")
+                })
+
                 describe("with subviews", function () {
                     beforeEach(function () {
                         this.view.template = function () {
