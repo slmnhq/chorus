@@ -49,9 +49,9 @@ chorus.dialogs.RunFileInSchema = chorus.dialogs.Base.extend({
         var options = {};
         if (this.$("#sandbox_schema").is(":checked")) {
             options = {
-                instanceId:this.workspace.sandbox().get("instanceId"),
-                databaseId:this.workspace.sandbox().get("databaseId"),
-                schemaId:this.workspace.sandbox().get("schemaId")
+                instance:this.workspace.sandbox().get("instanceId"),
+                database:this.workspace.sandbox().get("databaseId"),
+                schema:this.workspace.sandbox().get("schemaId")
             };
         } else {
             options = this.schemaPicker.fieldValues();

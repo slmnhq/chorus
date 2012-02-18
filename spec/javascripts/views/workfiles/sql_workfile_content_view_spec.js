@@ -38,9 +38,9 @@ describe("chorus.views.SqlWorkfileContentView", function() {
             describe("running in another schema", function() {
                 beforeEach(function() {
                     chorus.PageEvents.broadcast("file:runInSchema", {
-                        instanceId: '4',
-                        databaseId: '5',
-                        schemaId: '6'
+                        instance: '4',
+                        database: '5',
+                        schema: '6'
                     })
                 })
 

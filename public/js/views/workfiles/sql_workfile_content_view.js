@@ -30,9 +30,9 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
 
     runInDefault: function() {
         this.run({
-            instanceId: this.model.executionSchema().get('instanceId'),
-            databaseId: this.model.executionSchema().get('databaseId'),
-            schemaId: this.model.executionSchema().get('id')
+            instance: this.model.executionSchema().get('instanceId'),
+            database: this.model.executionSchema().get('databaseId'),
+            schema: this.model.executionSchema().get('id')
         })
     },
 
@@ -45,9 +45,9 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
                 taskType: "workfileSQLExecution",
                 sql: this.textContent.editor.getValue(),
                 entityId: this.model.get("id"),
-                schemaId: options.schemaId,
-                instanceId: options.instanceId,
-                databaseId: options.databaseId,
+                schemaId: options.schema,
+                instanceId: options.instance,
+                databaseId: options.database,
                 checkId: (new Date().getTime().toString())
             }, { silent: true })
 
