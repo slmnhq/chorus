@@ -58,6 +58,17 @@ describe("chorus.dialogs.InstanceNew", function() {
                 it("should enable the submit button", function() {
                     expect(this.dialog.$("button.submit")).toBeEnabled();
                 });
+
+                it("should return the values in fieldValues", function() {
+                    var values = this.dialog.fieldValues();
+                    expect(values.name).toBe("Instance_Name");
+                    expect(values.description).toBe("Instance Description");
+                    expect(values.host).toBe("foo.bar");
+                    expect(values.port).toBe("1234");
+                    expect(values.dbUserName).toBe("user");
+                    expect(values.dbPassword).toBe("my_password");
+                    expect(values.maintenanceDb).toBe("foo");
+                });
             });
         });
 

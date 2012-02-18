@@ -1,5 +1,5 @@
 chorus.dialogs.InstancesEdit = chorus.dialogs.Base.extend({
-    className:"instances_edit",
+    className:"instance_edit",
     title:t("instances.edit_dialog.title"),
     events:{
         "submit form":"save"
