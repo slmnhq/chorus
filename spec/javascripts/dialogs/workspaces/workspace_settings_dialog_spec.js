@@ -2,7 +2,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
     beforeEach(function() {
         this.launchElement = $("<a></a>");
         this.workspace = new chorus.models.Workspace({name: "my name", summary: "my summary", id: "457"});
-        this.workspace.set({ ownerId : '12' });
+        this.workspace.set({ ownerId: '12' });
         this.members = this.workspace.members();
         this.members.add([
             new chorus.models.User({ id: 11, firstName: "Mikey", lastName: "B" }),
@@ -10,7 +10,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             new chorus.models.User({ id: 13, firstName: "Richard", lastName: "G" })
         ]);
 
-        this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement : this.launchElement, pageModel : this.workspace });
+        this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
     });
 
     it("does not re-render when the model changes", function() {
@@ -19,7 +19,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
     describe("#setup", function() {
         beforeEach(function() {
-            this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement : this.launchElement, pageModel : this.workspace });
+            this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
         });
 
         it("fetches the workspace's members", function() {
@@ -34,8 +34,8 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            setLoggedInUser({ id : 11 });
-            this.workspace.set({ ownerId : 11})
+            setLoggedInUser({ id: 11 });
+            this.workspace.set({ ownerId: 11})
             this.dialog.render();
         });
 
@@ -59,9 +59,9 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             context("with a sandbox", function() {
                 beforeEach(function() {
                     this.workspace.set({ sandboxInfo: { databaseName: "Analytics",
-                                                        instanceName: "Gillette",
-                                                        sandboxId: "10070",
-                                                        schemaName: "analytics"} });
+                        instanceName: "Gillette",
+                        sandboxId: "10070",
+                        schemaName: "analytics"} });
                     this.dialog.render();
                 });
                 it("shows sandbox info", function() {
@@ -76,7 +76,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
         })
         context("when the workspace is public", function() {
             beforeEach(function() {
-                this.workspace.set({ isPublic : true })
+                this.workspace.set({ isPublic: true })
                 this.dialog.render();
             })
 
@@ -87,7 +87,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
         context("when the workspace is not public", function() {
             beforeEach(function() {
-                this.workspace.set({ isPublic : false })
+                this.workspace.set({ isPublic: false })
                 this.dialog.render();
             })
 
@@ -98,9 +98,9 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
         context("when the user is the owner of the workspace", function() {
             beforeEach(function() {
-                setLoggedInUser({ id : 11 });
-                this.workspace.set({ ownerId : 11})
-                this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement : this.launchElement, pageModel : this.workspace });
+                setLoggedInUser({ id: 11 });
+                this.workspace.set({ ownerId: 11})
+                this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
                 this.dialog.render();
             })
 
@@ -133,7 +133,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
             context("and the workspace is not archived", function() {
                 beforeEach(function() {
-                    this.workspace.set({ active : true })
+                    this.workspace.set({ active: true })
                     this.dialog.render();
                 })
 
@@ -145,11 +145,16 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     expect(archivedRadio).not.toBeDisabled();
                     expect(archivedRadio).not.toBeChecked();
                 })
+
+                it("shows the save button and cancel buttons", function() {
+                    expect(this.dialog.$("button.submit")).toExist();
+                    expect(this.dialog.$("button.cancel")).toContainTranslation("actions.cancel");
+                })
             })
 
             context("and the workspace is archived", function() {
                 beforeEach(function() {
-                    this.workspace.set({ active : false })
+                    this.workspace.set({ active: false })
                     this.dialog.render();
                 })
 
@@ -166,13 +171,13 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
         context("when the user is not the owner of the workspace", function() {
             beforeEach(function() {
-                this.workspace.set({ ownerId : 12})
+                this.workspace.set({ ownerId: 12})
             })
 
             context("and the user is not an admin", function() {
                 beforeEach(function() {
-                    setLoggedInUser({ id : 11, admin : false});
-                    this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement : this.launchElement, pageModel : this.workspace });
+                    setLoggedInUser({ id: 11, admin: false});
+                    this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
                     this.dialog.render();
                 })
 
@@ -205,7 +210,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 context("and the workspace is not archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ active : true })
+                        this.workspace.set({ active: true })
                         this.dialog.render();
                     })
 
@@ -221,7 +226,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 context("and the workspace is archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ active : false })
+                        this.workspace.set({ active: false })
                         this.dialog.render();
                     })
 
@@ -238,8 +243,8 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
             context("and the user is an admin", function() {
                 beforeEach(function() {
-                    setLoggedInUser({ id : 11, admin : true });
-                    this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement : this.launchElement, pageModel : this.workspace });
+                    setLoggedInUser({ id: 11, admin: true });
+                    this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
                     this.dialog.render();
                 })
 
@@ -272,7 +277,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 context("and the workspace is not archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ active : true })
+                        this.workspace.set({ active: true })
                         this.dialog.render();
                     })
 
@@ -284,11 +289,16 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                         expect(archivedRadio).not.toBeDisabled();
                         expect(archivedRadio).not.toBeChecked();
                     })
+
+                    it("shows the save button and cancel buttons", function() {
+                        expect(this.dialog.$("button.submit")).toExist();
+                        expect(this.dialog.$("button.cancel")).toContainTranslation("actions.cancel");
+                    })
                 })
 
                 context("and the workspace is archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ active : false })
+                        this.workspace.set({ active: false })
                         this.dialog.render();
                     })
 
@@ -454,7 +464,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                     context("when the owner select box is not present", function() {
                         beforeEach(function() {
-                            setLoggedInUser({ id : 11, admin : false});
+                            setLoggedInUser({ id: 11, admin: false});
                             this.dialog.render();
                             this.dialog.$("input[name=name]").val("my modified name");
                             this.dialog.$("textarea[name=summary]").val("my modified summary");
@@ -491,6 +501,8 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                         expect(this.dialog.pageModel.get("summary")).toBe("my summary");
                     })
                 })
+
+
             });
         })
     })

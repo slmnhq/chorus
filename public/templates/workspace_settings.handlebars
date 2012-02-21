@@ -59,8 +59,8 @@
     </div>
 
     <div class="modal_controls">
-        <button type="button" class="cancel" tabindex="100">{{#if hasPermission}}{{t "actions.cancel"}}{{else}}{{t "actions.close_window"}}{{/if}}</button>
-        {{#if hasPermission}}
+        <button type="button" class="cancel" tabindex="100">{{#if permission}}{{t "actions.cancel"}}{{else}}{{t "actions.close_window"}}{{/if}}</button>
+        {{#if permission}}
         <button type="submit" class="submit" {{{disable}}} tabindex="99">{{t "actions.save_changes"}}</button>
         {{/if}}
     </div>
