@@ -43,7 +43,7 @@
                     {
                         view: "DatasetImport",
                         text: t("dataset.import.title"),
-                        dataAttributes : [ {name: 'workspaceId', value: workspaceId} ]
+                        dataAttributes : [ {name: 'workspace-id', value: workspaceId} ]
                     }
                 ]
             });
@@ -62,6 +62,8 @@
 
         workspaceLoaded: function() {
             if (this.workspace.sandbox()) {
+                this.mainContent.options.buttons[0].dataAttributes.push({name: "canonical-name", value: this.workspace.sandbox().canonicalName()});
+                this.mainContent.contentDetails.render();
                 this.account = this.workspace.sandbox().instance().accountForCurrentUser();
                 this.account.onLoaded(this.checkAccount, this);
                 this.account.fetch();

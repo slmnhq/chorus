@@ -6,6 +6,12 @@ $image-width: 35px;
 .dataset_import {
     width: 440px;
 
+    .where {
+        @include font-menu;
+        padding-left: 15px;
+        padding-bottom: 5px;
+    }
+
     form {
         .file_details {
             line-height: $image-height;
@@ -22,7 +28,6 @@ $image-width: 35px;
 
             .file {
                 vertical-align: middle;
-                padding-left: $image-width + 4px;
 
                 .empty_selection {
                     @include font-normal-alpha;
@@ -34,6 +39,7 @@ $image-width: 35px;
                     a {
                        font-size: 12px;
                        font-weight: $semibold;
+                       margin-left: 10px;
                     }
                 }
 
@@ -42,7 +48,6 @@ $image-width: 35px;
                     display: inline;
                     color: $color-text3;
                     font-size: 14px;
-                    margin-right: 10px;
                 }
 
                 input[type=file] {

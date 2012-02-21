@@ -66,6 +66,31 @@ describe("chorus.pages.DatasetIndexPage", function() {
                 expect(this.server.lastFetchFor(this.account)).not.toBeUndefined();
             });
 
+            describe("the 'import file' button", function() {
+                beforeEach(function() {
+                    this.page.render();
+                });
+
+                it("has the right text", function() {
+                    expect(this.page.$("button[data-dialog='DatasetImport']").text()).toMatchTranslation("dataset.import.title");
+                });
+
+                it("has the right data attributes", function() {
+                    expect(this.page.$("button[data-dialog='DatasetImport']").data("workspaceId").toString()).toBe(this.workspace.id.toString());
+                    expect(this.page.$("button[data-dialog='DatasetImport']").data("canonicalName")).toBe(this.workspace.sandbox().canonicalName());
+                });
+
+                describe("when the button is clicked", function() {
+                    beforeEach(function() {
+                        this.page.$("button[data-dialog='DatasetImport']").click();
+                    });
+
+                    it("launches an Import File dialog", function() {
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.DatasetImport);
+                    });
+                });
+            });
+
             context("when the account loads and is empty", function() {
                 beforeEach(function() {
                     spyOnEvent(this.page.collection, 'reset');
@@ -187,26 +212,6 @@ describe("chorus.pages.DatasetIndexPage", function() {
 
         it("sets the selected dataset as its own model", function() {
             expect(this.page.model).toBe(this.dataset);
-        });
-    });
-
-    describe("the 'import file' button", function() {
-        beforeEach(function() {
-            this.page.render();
-        });
-
-        it("has the right text", function() {
-            expect(this.page.$("button[data-dialog='DatasetImport']").text()).toMatchTranslation("dataset.import.title");
-        });
-
-        describe("when the is clicked", function() {
-            beforeEach(function() {
-                this.page.$("button[data-dialog='DatasetImport']").trigger("click");
-            });
-
-            it("launches an Import File dialog", function() {
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.DatasetImport);
-            });
         });
     });
 });

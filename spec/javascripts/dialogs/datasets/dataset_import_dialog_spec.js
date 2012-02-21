@@ -5,6 +5,7 @@ describe("chorus.dialogs.DatasetImport", function() {
         this.modalSpy = stubModals();
         spyOn($.fn, 'fileupload');
         this.launchElement = $('<button data-workspaceid=​242>​Import File​</button>​');
+        this.launchElement.data("canonicalName", "FooBar");
         this.dialog = new chorus.dialogs.DatasetImport({launchElement: this.launchElement});
 
         spyOn(this.dialog, "modalClosed").andCallThrough();
@@ -20,6 +21,10 @@ describe("chorus.dialogs.DatasetImport", function() {
 
     it("has the right title", function() {
         expect(this.dialog.$(".dialog_header h1").text()).toMatchTranslation("dataset.import.title");
+    });
+
+    it("has text describing where the file should be imported", function() {
+        expect(this.dialog.$(".where")).toContainTranslation("dataset.import.where", {canonicalName: "FooBar"});
     });
 
     it("has a 'Cancel' button", function() {

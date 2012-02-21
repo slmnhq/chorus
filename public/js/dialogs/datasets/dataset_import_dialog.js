@@ -22,6 +22,12 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         chorus.styleSelect(self.$("select"));
     },
 
+    additionalContext : function() {
+        return {
+            canonicalName : this.options.launchElement.data("canonicalName")
+        }
+    },
+
     uploadFile: function(e) {
         e && e.preventDefault();
         this.$("button.submit").startLoading("actions.uploading");

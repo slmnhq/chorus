@@ -86,6 +86,10 @@
             });
 
             return this._database;
+        },
+
+        canonicalName : function() {
+            return this.schema().canonicalName();
         }
     });
 })();
