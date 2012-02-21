@@ -11,5 +11,5 @@
 	font-weight: 600;
 	font-style: normal;
     src: url('/fonts/mentone-semibol-webfont');
-    src: local("☺"), url("/fonts/mentone-semibol-webfont") format("woff"), url("/fonts/mentone-semibol-webfont.ttf") format("truetype");
+    src: local("☺"), url("/fonts/mentone-semibol-webfont.woff") format("woff"), url("/fonts/mentone-semibol-webfont.ttf") format("truetype");
 }
