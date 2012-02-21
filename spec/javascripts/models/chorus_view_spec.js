@@ -31,8 +31,8 @@ describe("chorus.models.ChorusView", function() {
             spyOnEvent(this.model, 'change');
             this.sourceColumn = this.sourceDataset.columns().models[0];
             this.destinationDataset = fixtures.datasetSandboxTable();
+            this.destinationDataset.columns().reset([fixtures.databaseColumn()]);
             this.destinationColumn = this.destinationDataset.columns().models[0];
-            this.destinationColumn = this.sourceDataset.columns().models[0];
             this.model.addJoin(this.sourceColumn, this.destinationColumn, 'inner');
         });
 
@@ -46,6 +46,15 @@ describe("chorus.models.ChorusView", function() {
 
         it("triggers change on the model", function() {
             expect('change').toHaveBeenTriggeredOn(this.model);
+        });
+
+        it("assigns the join the next datasetNumber", function() {
+            expect(this.destinationDataset.datasetNumber).toBe(2);
+            var thirdDataset = fixtures.datasetSandboxTable();
+            thirdDataset.columns().reset([fixtures.databaseColumn()]);
+            var thirdDestinationColumn = thirdDataset.columns().models[0];
+            this.model.addJoin(this.sourceColumn, thirdDestinationColumn, 'inner');
+            expect(thirdDataset.datasetNumber).toBe(3);
         });
     });
 
