@@ -133,7 +133,7 @@
                     this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model : this.model});
                     break;
                 case 'edit_chorus_view':
-                    this.secondarySidebar = new chorus.views.DatasetEditChorusViewSidebar({model: this.model, sandbox: this.workspace.sandbox()});
+                    this.secondarySidebar = new chorus.views.DatasetEditChorusViewSidebar({model: this.model});
                     break;
             }
 

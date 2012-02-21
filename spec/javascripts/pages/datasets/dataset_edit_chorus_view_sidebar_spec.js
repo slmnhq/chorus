@@ -1,8 +1,7 @@
 describe("chorus.views.DatasetEditChorusViewSidebar", function() {
     beforeEach(function() {
         this.dataset = fixtures.datasetChorusView();
-        this.sandbox = fixtures.sandbox();
-        this.view = new chorus.views.DatasetEditChorusViewSidebar({model: this.dataset, sandbox: this.sandbox});
+        this.view = new chorus.views.DatasetEditChorusViewSidebar({model: this.dataset });
         this.server.completeAllFetches();
     });
 
@@ -52,6 +51,10 @@ describe("chorus.views.DatasetEditChorusViewSidebar", function() {
 
             it("hides the column list view", function() {
                 expect(this.view.$(".database_column_list")).toHaveClass("hidden");
+            });
+
+            it("displays the correct schema", function() {
+                expect(this.view.$('.database_function_list .context').text()).toContain(this.dataset.get("schemaName"));
             });
 
             context("when a table is selected in the dataset list", function() {

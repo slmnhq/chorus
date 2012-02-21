@@ -1,6 +1,6 @@
 chorus.views.DatasetEditChorusViewSidebar = chorus.views.Sidebar.extend({
     className: "dataset_edit_chorus_view_sidebar",
-    useLoadingSection:true,
+    useLoadingSection: true,
 
     subviews: {
         '.activity_list': 'activityList',
@@ -9,7 +9,6 @@ chorus.views.DatasetEditChorusViewSidebar = chorus.views.Sidebar.extend({
 
 
     setup: function(options) {
-        this.sandbox = options.sandbox;
         this.collection = this.model.activities();
         this.collection.fetch();
         this.collection.bind("changed", this.render, this);
@@ -29,7 +28,12 @@ chorus.views.DatasetEditChorusViewSidebar = chorus.views.Sidebar.extend({
             {name: 'database_function_list'},
             {name: "datasets_and_columns"}
         ];
-        this.schema = this.sandbox.schema();
+
+        this.schema = new chorus.models.Schema({
+            instanceId: this.model.get('instance').id,
+            databaseName: this.model.get('databaseName'),
+            name: this.model.get('schemaName')
+        })
 
         this.functionList = new chorus.views.DatabaseFunctionSidebarList({schema: this.schema});
         this.datasetList = new chorus.views.DatabaseDatasetSidebarList({ schema: this.schema });
