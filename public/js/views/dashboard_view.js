@@ -5,10 +5,6 @@ chorus.views.Dashboard = chorus.views.Base.extend({
         '.instance_list': "instanceList",
         '.workspace_list': "workspaceList"
     },
-    events: {
-        "click .all" : "onClickFilterAll",
-        "click .insight" : "onClickFilterInsight"
-    },
 
     setup: function() {
         this.workspaceList = new chorus.views.MainContentView({
@@ -25,34 +21,32 @@ chorus.views.Dashboard = chorus.views.Base.extend({
             content: new chorus.views.DashboardInstanceList({ collection: this.options.instanceSet })
         });
 
-        var activities = chorus.session.user().activities('home');
-        activities.fetch();
-        this.activityList = new chorus.views.ActivityList({
-            collection:activities,
-            headingText:t("dashboard.activity"),
-            additionalClass:"dashboard"
-        });
+        this.activities = chorus.session.user().activities('home');
 
-        this.insights = new chorus.models.CommentInsight({action: "count"});
-        this.insights.bind("loaded", this.onCommentCountFetchComplete, this);
-        this.insights.fetch();
+        this.activities.fetch();
+        this.activityList = new chorus.views.ActivityList({
+            collection: this.activities,
+            headingText: t("dashboard.activity"),
+            additionalClass: "dashboard"
+        });
 
         this.dashboardMain = new chorus.views.MainContentView({
-            contentHeader:chorus.views.StaticTemplate("dashboard_content_header", {title:t("dashboard.activity")}),
-            content:this.activityList
+            contentHeader: new chorus.views.DashboardContentHeader(),
+            content: this.activityList
         });
+
+        this.dashboardMain.contentHeader.bind("filter:insights", this.onShowInsightsClicked, this);
+        this.dashboardMain.contentHeader.bind("filter:all", this.onShowActivityClicked, this);
     },
 
-    onClickFilterAll: function() {
-
+    onShowInsightsClicked: function() {
+        this.activities.attributes.insights = true;
+        this.activities.fetch();
     },
 
-    onClickFilterInsight: function() {
-
-    },
-
-    onCommentCountFetchComplete: function() {
-
+    onShowActivityClicked: function() {
+        this.activities.attributes.insights = false;
+        this.activities.fetch();
     }
 });
 

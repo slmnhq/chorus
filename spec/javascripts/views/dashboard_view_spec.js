@@ -6,46 +6,8 @@ describe("chorus.views.Dashboard", function(){
     });
 
     describe("#setup", function() {
-        beforeEach(function() {
-            this.insights = new chorus.models.CommentInsight({action: "count"});
-        });
-
         it("creates a 'home' activity list", function() {
             expect(this.view.activityList.collection.attributes.entityType).toBe("home")
-        });
-
-        it("fetches the number of insights", function() {
-            expect(this.server.lastFetchFor(this.insights)).toBeDefined();
-        });
-
-        context("when the fetch completes", function() {
-            beforeEach(function() {
-                this.server.completeFetchFor(this.insights);
-            });
-
-            xit("should display the number of insights", function() {
-                expect(this.view.$(".menus .count").text()).toBe(this.insights.get("count"));
-            });
-
-            describe("clicking on 'Insights'", function() {
-                beforeEach(function() {
-                    this.view.$(".menus .insights").click();
-                });
-
-                xit("should only display insights in the activity stream", function() {
-                    expect(this.server.lastFetch().url).toBe("/edc/commentinsight");
-                });
-            });
-
-            describe("clicking on 'All Activity'", function() {
-                beforeEach(function() {
-                    this.view.$(".menus .all").click();
-                });
-
-                it("should display all activity in the activity stream", function() {
-
-                });
-            });
         });
     })
 
@@ -55,20 +17,73 @@ describe("chorus.views.Dashboard", function(){
         });
 
         describe("the header", function() {
-            it("should have a filter menu", function() {
-                expect(this.view.$(".menus .title")).toContainTranslation("filter.show");
-                expect(this.view.$(".menus .all")).toContainTranslation("filter.all_activity");
-                expect(this.view.$(".menus .insights")).toContainTranslation("filter.only_insights");
+            describe("when the insight count fetch completes", function() {
+                beforeEach(function() {
+                    var insightCount = new chorus.models.CommentInsight({ action: "count" });
+                    this.server.completeFetchFor(insightCount);
+                });
+
+                context("when the 'All Activity' button is clicked ", function() {
+                    beforeEach(function() {
+                        this.activities = chorus.session.user().activities("home");
+                        this.view.$(".menus .all").click();
+                    });
+
+                    it("should fetch the activity stream (not just the insights)", function() {
+                        this.activities.attributes.insights = false;
+                        expect(this.activities).toHaveBeenFetched();
+                    });
+
+                    describe("when the fetch completes", function() {
+                        beforeEach(function() {
+                            expect(this.view.$("li.activity").length).toBe(0);
+
+                            this.server.completeFetchFor(this.activities, [
+                                fixtures.activities.NOTE_ON_WORKSPACE(),
+                                fixtures.activities.NOTE_ON_WORKSPACE(),
+                                fixtures.activities.NOTE_ON_WORKSPACE()
+                            ]);
+                        });
+
+                        it("re-renders the list", function() {
+                            expect(this.view.$("li.activity").length).toBe(3);
+                        });
+                    });
+                });
+
+                context("when the 'Insights' button is clicked", function() {
+                    beforeEach(function() {
+                        this.insights = new chorus.collections.ActivitySet([], { insights: true });
+                        this.view.$(".menus .insights").click();
+                    });
+
+                    it("should fetch the list of insights", function() {
+                        expect(this.insights).toHaveBeenFetched();
+                    });
+
+                    describe("when the fetch completes", function() {
+                        beforeEach(function() {
+                            expect(this.view.$("li.activity").length).toBe(0);
+
+                            this.server.completeFetchFor(this.insights, [
+                                fixtures.activities.INSIGHT_CREATED(),
+                                fixtures.activities.INSIGHT_CREATED(),
+                                fixtures.activities.INSIGHT_CREATED(),
+                                fixtures.activities.INSIGHT_CREATED()
+                            ]);
+                        });
+
+                        it("re-renders the list", function() {
+                            expect(this.view.$("li.activity").length).toBe(4);
+                        });
+                    });
+                });
             });
         });
 
         describe("the workspace list", function(){
             it("renders the workspace list with the right title", function() {
                 expect(this.view.$(".main_content.workspace_list .content_header h1").text()).toMatchTranslation("header.my_workspaces");
-            });
-
-            it("displays the dashboard title", function() {
-                expect(this.view.$(".main_content.dashboard_main .content_header h1").text()).toMatchTranslation("dashboard.activity");
             });
 
             it("has a create workspace link in the content details", function() {
