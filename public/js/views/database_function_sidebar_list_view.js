@@ -13,6 +13,10 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
         this.resource = this.collection = this.schema.functions();
         this.bindings.add(this.resource, "change reset add remove", this.render);
         this.collection.fetch();
+    },
+
+    displayLoadingSection: function () {
+        return this.sandbox && !(this.collection && this.collection.loaded);
     }
 });
 

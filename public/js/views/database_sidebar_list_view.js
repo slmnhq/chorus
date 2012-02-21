@@ -11,6 +11,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
 
     setup:function () {
         this.sandbox = this.options.sandbox;
+
         if (this.sandbox) {
             this.schemas = this.sandbox.database().schemas();
             this.schema = this.sandbox.schema();
@@ -21,10 +22,13 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
 
     additionalContext:function () {
         if (!this.sandbox) {
-            return {}
+            return {
+                schemaAssociated: false
+            }
         } else {
             return {
-                schemaName:this.schema.get("name"),
+                schemaAssociated: true,
+                schemaName: this.schema && this.schema.get("name"),
                 schemaLink:chorus.helpers.linkTo("#", this.schema.get('name')),
                 schemas:this.schemas.map(function (schema) {
                     return {

@@ -33,95 +33,118 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
     });
 
     describe("#render", function() {
-        context("before the tables and views have loaded", function() {
+        context("when there's no schema associated", function() {
             beforeEach(function() {
-                this.schema.databaseObjects().loaded = false;
+                this.view.sandbox = null;
                 this.view.render();
+            });
+
+            it("should display 'no database/schema associated' message", function() {
+                expect(this.view.$(".empty_selection")).toExist();
             })
 
-            it("should display a loading spinner", function() {
-                expect(this.view.$(".loading_section")).toExist();
-            });
+            it("should not display the loading section", function() {
+                expect(this.view.$(".loading_section")).not.toExist();
+            })
         });
 
-        context("after the tables and views are loaded", function() {
-            beforeEach(function() {
-                this.schema.databaseObjects().loaded = true;
-            });
-
-            it("doesn't display a loading spinner", function() {
-                expect(this.view.$(".loading_section")).not.toExist();
-            });
-
-            context("and some data was fetched", function() {
+        context("when there's sandbox/default schema associated", function() {
+            context("before the tables and views have loaded", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(this.schema.databaseObjects(), [
-                        fixtures.databaseObject({ objectName: "Data1", objectType: "VIEW" }),
-                        fixtures.databaseObject({ objectName: "zebra", objectType: "VIEW"}),
-                        fixtures.databaseObject({ objectName: "Data2", objectType: "SANDBOX_TABLE" }),
-                        fixtures.databaseObject({ objectName: "apple", objectType: "SANDBOX_TABLE"})
-                    ]);
-
+                    this.schema.databaseObjects().loaded = false;
                     this.view.render();
+                })
+
+                it("should not display the 'no database/schema associated' message", function() {
+                    expect(this.view.$(".empty_selection")).not.toExist();
                 });
 
-                jasmine.sharedExamples.DatabaseSidebarList();
+                it("should display a loading spinner", function() {
+                    expect(this.view.$(".loading_section")).toExist();
+                });
+            });
 
-                it("should not display the loading spinner", function() {
+            context("after the tables and views are loaded", function() {
+                beforeEach(function() {
+                    this.schema.databaseObjects().loaded = true;
+                });
+
+                it("doesn't display a loading spinner", function() {
                     expect(this.view.$(".loading_section")).not.toExist();
                 });
 
-                it("renders an li for each item in the collection", function() {
-                    expect(this.view.$("li").length).toBe(this.view.collection.length);
-                });
-
-                it("sorts the data by name", function() {
-                    expect(this.view.$("li").eq(0).text().trim()).toBe("apple");
-                    expect(this.view.$("li").eq(1).text().trim()).toBe("Data1");
-                    expect(this.view.$("li").eq(2).text().trim()).toBe("Data2");
-                    expect(this.view.$("li").eq(3).text().trim()).toBe("zebra");
-                });
-
-                it("should not display a message saying there are no tables/views", function() {
-                    expect(this.view.$('.none_found')).not.toExist();
-                });
-
-                describe("user clicks a view in the list", function() {
+                context("and some data was fetched", function() {
                     beforeEach(function() {
-                        this.clickedView = this.schema.databaseObjects().findWhere({ objectName: "Data1" });
-                        spyOnEvent(this.view, "datasetSelected");
-                        this.view.$("li:contains('Data1') a").click();
+                        this.server.completeFetchFor(this.schema.databaseObjects(), [
+                            fixtures.databaseObject({ objectName: "Data1", objectType: "VIEW" }),
+                            fixtures.databaseObject({ objectName: "zebra", objectType: "VIEW"}),
+                            fixtures.databaseObject({ objectName: "Data2", objectType: "SANDBOX_TABLE" }),
+                            fixtures.databaseObject({ objectName: "apple", objectType: "SANDBOX_TABLE"})
+                        ]);
+
+                        this.view.render();
                     });
 
-                    it("triggers a 'datasetSelected' event on itself, with the view", function() {
-                        expect("datasetSelected").toHaveBeenTriggeredOn(this.view, [this.clickedView]);
+                    jasmine.sharedExamples.DatabaseSidebarList();
+
+                    it("should not display the loading spinner", function() {
+                        expect(this.view.$(".loading_section")).not.toExist();
+                    });
+
+                    it("renders an li for each item in the collection", function() {
+                        expect(this.view.$("li").length).toBe(this.view.collection.length);
+                    });
+
+                    it("sorts the data by name", function() {
+                        expect(this.view.$("li").eq(0).text().trim()).toBe("apple");
+                        expect(this.view.$("li").eq(1).text().trim()).toBe("Data1");
+                        expect(this.view.$("li").eq(2).text().trim()).toBe("Data2");
+                        expect(this.view.$("li").eq(3).text().trim()).toBe("zebra");
+                    });
+
+                    it("should not display a message saying there are no tables/views", function() {
+                        expect(this.view.$('.none_found')).not.toExist();
+                    });
+
+                    describe("user clicks a view in the list", function() {
+                        beforeEach(function() {
+                            this.clickedView = this.schema.databaseObjects().findWhere({ objectName: "Data1" });
+                            spyOnEvent(this.view, "datasetSelected");
+                            this.view.$("li:contains('Data1') a").click();
+                        });
+
+                        it("triggers a 'datasetSelected' event on itself, with the view", function() {
+                            expect("datasetSelected").toHaveBeenTriggeredOn(this.view, [this.clickedView]);
+                        });
+                    });
+
+                    describe("user clicks on a table in the list", function() {
+                        beforeEach(function() {
+                            this.clickedTable = this.schema.databaseObjects().findWhere({ objectName: "Data2" });
+                            spyOnEvent(this.view, "datasetSelected");
+                            this.view.$("li:contains('Data2') a").click();
+                        });
+
+                        it("triggers a 'datasetSelected' event on itself, with the table", function() {
+                            expect("datasetSelected").toHaveBeenTriggeredOn(this.view, [this.clickedTable]);
+                        });
                     });
                 });
 
-                describe("user clicks on a table in the list", function() {
+                context("and no data was fetched", function() {
                     beforeEach(function() {
-                        this.clickedTable = this.schema.databaseObjects().findWhere({ objectName: "Data2" });
-                        spyOnEvent(this.view, "datasetSelected");
-                        this.view.$("li:contains('Data2') a").click();
+                        this.view.collection.models = [];
+                        this.view.render();
                     });
 
-                    it("triggers a 'datasetSelected' event on itself, with the table", function() {
-                        expect("datasetSelected").toHaveBeenTriggeredOn(this.view, [this.clickedTable]);
-                    });
+                    it("should display a message saying there are no tables/views", function() {
+                        expect(this.view.$('.none_found')).toExist();
+                        expect(this.view.$('.none_found').text().trim()).toMatchTranslation("schema.metadata.list.empty");
+                    })
                 });
             });
 
-            context("and no data was fetched", function() {
-                beforeEach(function() {
-                    this.view.collection.models = [];
-                    this.view.render();
-                });
-
-                it("should display a message saying there are no tables/views", function() {
-                    expect(this.view.$('.none_found')).toExist();
-                    expect(this.view.$('.none_found').text().trim()).toMatchTranslation("schema.metadata.list.empty");
-                })
-            });
         });
+
     });
 });

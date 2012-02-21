@@ -1,31 +1,38 @@
-<input class="search" placeholder='{{t "schema.metadata.list.hint.datasets"}}'/>
-<div class="context">{{{t "schema.functions.search_in" schemaLink=schemaLink}}}</div>
-{{#if models.length}}
-    <ul class="list">
-        {{#each models}}
-            <li data-name="{{name}}" data-type="{{type}}" data-cid="{{cid}}" title="{{name}}">
-                <span class="spacer left"/>
-                <img src="images/table_small.png">
-                <div class="name">
-                    <a href="#" title="{{name}}">{{name}}</a>
-                </div>
-                <span class="spacer right"/>
-            </li>
-        {{/each}}
-    </ul>
-{{else}}
-    <div class="none_found">{{t "schema.metadata.list.empty"}}</div>
-{{/if}}
+{{#if schemaAssociated}}
+    <input class="search" placeholder='{{t "schema.metadata.list.hint.datasets"}}'/>
+    <div class="context">{{{t "schema.functions.search_in" schemaLink=schemaLink}}}</div>
+    {{#if models.length}}
+        <ul class="list">
+            {{#each models}}
+                <li data-name="{{name}}" data-type="{{type}}" data-cid="{{cid}}" title="{{name}}">
+                    <span class="spacer left"/>
+                    <img src="images/table_small.png">
+                    <div class="name">
+                        <a href="#" title="{{name}}">{{name}}</a>
+                    </div>
+                    <span class="spacer right"/>
+                </li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <div class="none_found">{{t "schema.metadata.list.empty"}}</div>
+    {{/if}}
 
-<div class="schema_menu_container">
-    <ul class="schema_menu">
-        {{#each schemas}}
-            <li>
-                {{#if isCurrent}}
-                    <div class="check"></div>
-                {{/if}}
-                <a class="schema" data-id="{{id}}">{{name}}</a>
-            </li>
-        {{/each}}
-    </ul>
-</div>
+    <div class="schema_menu_container">
+        <ul class="schema_menu">
+            {{#each schemas}}
+                <li>
+                    {{#if isCurrent}}
+                        <div class="check"></div>
+                    {{/if}}
+                    <a class="schema" data-id="{{id}}">{{name}}</a>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+{{else}}
+    <div class="empty_selection notice">
+        <span class="top"><label>{{t "database.sidebar.no_schema.title"}}</label></span>
+        <span class="bottom">{{t "database.sidebar.no_schema.text"}}</span>
+    </div>
+{{/if}}

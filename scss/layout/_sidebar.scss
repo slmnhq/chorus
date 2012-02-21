@@ -168,6 +168,12 @@
                         border-bottom: 1px solid $list-border-color;
                     }
                 }
+
+                .empty_selection {
+                    .top {
+                        @include secondary-text-small-semibold;
+                    }
+                }
             }
 
             .database_column_list {
