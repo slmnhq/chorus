@@ -111,24 +111,23 @@ div[data-page="Dashboard"] {
             .title {
                 @include font-content-details;
             }
-            
+
             a {
                 font-size: 12px;
                 font-weight: $semibold;
+                border-bottom: 1px dotted $link-color;
 
                 &.active {
-                    font-color: black;
-                    font-style: none;
+                    color: black;
+                    border-bottom: none;
                 }
+            }
 
-                &.all {
-                    padding-right: 5px;
-                }
-
-                &.insights {
-                    padding-left: 8px;
-                    border-left: 1px solid $link-color;
-                }
+            .separator {
+                padding: 0 5px;
+                position: relative;
+                top: 2px;
+                color: $link-color;
             }
         }
     }
