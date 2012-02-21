@@ -17,7 +17,7 @@ a {
 body {
     color: $color-text1;
     background-color: $body-background-color;
-    font-family: Myriad Pro, Verdana;
+    font-family: Mentone, Verdana;
 }
 
 a.button, button, input[type=submit] {
@@ -34,7 +34,7 @@ a.button, button, input[type=submit] {
     vertical-align: middle;
     cursor : pointer;
     outline-color: $border-color;
-    font-family: Myriad Pro, Verdana;
+    font-family: Mentone, Verdana;
     &:disabled {
         color : $color-text4;
         cursor : initial;
@@ -52,7 +52,7 @@ input, textarea {
     width: 100%;
     font-size: 14px;
     padding: 3px;
-    font-family: Myriad Pro, Verdana;
+    font-family: Mentone, Verdana;
     @include borderbox;
 }
 
