@@ -3,6 +3,7 @@ describe("chorus.views.NotificationRecipient", function() {
         this.user1 = fixtures.user();
         this.user2 = fixtures.user();
         this.users = fixtures.userSet([this.user1, this.user2]);
+        this.users.sortAsc("firstName");
         this.view = new chorus.views.NotificationRecipient();
     });
 

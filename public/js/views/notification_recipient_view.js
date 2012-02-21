@@ -8,6 +8,7 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
 
     makeModel: function() {
         this.collection = new chorus.collections.UserSet();
+        this.collection.sortAsc("firstName");
         this.collection.fetchAll();
     },
 
