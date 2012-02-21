@@ -1,7 +1,7 @@
 describe("chorus.views.DatabaseSidebarList", function() {
-    context("when there is no sandbox", function() {
+    context("when there is no schema", function() {
         beforeEach(function() {
-            this.view = new chorus.views.DatabaseSidebarList({sandbox: undefined });
+            this.view = new chorus.views.DatabaseSidebarList({schema: undefined });
             this.view.className = "database_function_sidebar_list";
         })
 
@@ -29,13 +29,12 @@ describe("chorus.views.DatabaseSidebarList", function() {
             object0.cid = 'c44';
             object1.cid = 'c55';
 
-            this.sandbox = fixtures.sandbox({ schemaName: "righteous_tables" });
-            this.schema = this.sandbox.schema();
+            this.schema = fixtures.sandbox({ schemaName: "righteous_tables" }).schema();
             this.collection = new chorus.collections.Base([object0, object1]);
 
             spyOn(this.collection.models[0], 'toText').andReturn('object1');
             spyOn(this.collection.models[1], 'toText').andReturn('object2');
-            this.view = new chorus.views.DatabaseSidebarList({collection: this.collection, sandbox: this.sandbox });
+            this.view = new chorus.views.DatabaseSidebarList({collection: this.collection, schema: this.schema });
             this.view.className = "database_dataset_sidebar_list";
             this.schemaMenuQtip = stubQtip(".context a");
             this.insertArrowQtip = stubQtip("li");
@@ -45,7 +44,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
         context("after schemas have loaded", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.sandbox.database().schemas(), [
+                this.server.completeFetchFor(this.schema.database().schemas(), [
                     this.schema,
                     fixtures.schema({ name: "awesome_tables", id: "5" }),
                     fixtures.schema({ name: "orphaned_tables", id: "6" })

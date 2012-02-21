@@ -10,18 +10,16 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
     },
 
     setup:function () {
-        this.sandbox = this.options.sandbox;
-
-        if (this.sandbox) {
-            this.schemas = this.sandbox.database().schemas();
-            this.schema = this.sandbox.schema();
+        this.schema = this.options.schema;
+        if (this.schema) {
+            this.schemas = this.schema.database().schemas();
             this.schemas.fetch();
             this.fetchResourceAfterSchemaSelected();
         }
     },
 
     additionalContext:function () {
-        if (!this.sandbox) {
+        if (!this.schema) {
             return {
                 schemaAssociated: false
             }

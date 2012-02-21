@@ -79,4 +79,21 @@ describe("chorus.models.Schema", function() {
             expect(this.model.isEqual(other)).toBeFalsy();
         });
     });
+
+    describe("#database", function() {
+        beforeEach(function() {
+            this.model = fixtures.schema({instanceName : "instance", databaseName : "database", name : "schema"});
+            this.database = this.model.database();
+        });
+
+        it("returns a database with the right id and instanceId", function() {
+            expect(this.database).toBeA(chorus.models.Database);
+            expect(this.database.get("id")).toBe(this.model.get("databaseId"));
+            expect(this.database.get("instanceId")).toBe(this.model.get("instanceId"));
+        });
+
+        it("memoizes", function() {
+            expect(this.database).toBe(this.model.database());
+        });
+    });
 });

@@ -29,10 +29,11 @@ chorus.views.DatasetEditChorusViewSidebar = chorus.views.Sidebar.extend({
             {name: 'database_function_list'},
             {name: "datasets_and_columns"}
         ];
+        this.schema = this.sandbox.schema();
 
-        this.functionList = new chorus.views.DatabaseFunctionSidebarList({sandbox: this.sandbox});
-        this.datasetList = new chorus.views.DatabaseDatasetSidebarList({ sandbox: this.sandbox });
-        this.columnList = new chorus.views.DatabaseColumnSidebarList({ sandbox: this.sandbox });
+        this.functionList = new chorus.views.DatabaseFunctionSidebarList({schema: this.schema});
+        this.datasetList = new chorus.views.DatabaseDatasetSidebarList({ schema: this.schema });
+        this.columnList = new chorus.views.DatabaseColumnSidebarList({ schema: this.schema });
 
         this.datasetList.bind("datasetSelected", function(tableOrView) {
             this.columnList.trigger("datasetSelected", tableOrView);

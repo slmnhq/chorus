@@ -1,9 +1,8 @@
 describe("chorus.views.DatabaseFunctionSidebarList", function() {
     beforeEach(function() {
-        this.sandbox = fixtures.sandbox({ schemaName: "righteous_tables" });
-        this.schema = this.sandbox.schema();
+        this.schema = fixtures.sandbox({ schemaName: "righteous_tables" }).schema();
         spyOn(this.schema.functions(), "fetch").andCallThrough();
-        this.view = new chorus.views.DatabaseFunctionSidebarList({sandbox: this.sandbox});
+        this.view = new chorus.views.DatabaseFunctionSidebarList({schema: this.schema});
     });
 
     it("should fetch the functions for the sandbox", function() {
@@ -17,7 +16,7 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
     describe("render", function() {
         context("when there's no schema associated", function() {
             beforeEach(function() {
-                this.view.sandbox = null;
+                this.view.schema = null;
                 this.view.render();
             });
 
@@ -30,7 +29,7 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
             })
         });
 
-        context("when schema/sandbox is associated", function() {
+        context("when schema is associated", function() {
             beforeEach(function() {
                 this.menu = stubQtip(".context a");
                 this.view.render();
@@ -46,12 +45,12 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
             })
 
             it("fetches all of the schemas in the sandbox's database", function() {
-                expect(this.server.lastFetchFor(this.sandbox.database().schemas())).toBeTruthy();
+                expect(this.server.lastFetchFor(this.schema.database().schemas())).toBeTruthy();
             });
 
             context("after functions and schemas have loaded", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(this.sandbox.database().schemas(), [
+                    this.server.completeFetchFor(this.schema.database().schemas(), [
                         this.schema,
                         fixtures.schema({ name: "awesome_tables", id: "5" }),
                         fixtures.schema({ name: "orphaned_tables", id: "6" })

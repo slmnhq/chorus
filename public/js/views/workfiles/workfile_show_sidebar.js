@@ -40,9 +40,9 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
             tabs.push({name:'database_function_list'});
             tabs.push({name:"datasets_and_columns"});
 
-            this.functionList = new chorus.views.DatabaseFunctionSidebarList({ sandbox:this.model.workspace().sandbox() });
-            this.datasetList = new chorus.views.DatabaseDatasetSidebarList({ sandbox:this.model.workspace().sandbox() });
-            this.columnList = new chorus.views.DatabaseColumnSidebarList({ sandbox:this.model.workspace().sandbox() });
+            this.functionList = new chorus.views.DatabaseFunctionSidebarList({ schema: this.model.executionSchema() });
+            this.datasetList = new chorus.views.DatabaseDatasetSidebarList({ schema: this.model.executionSchema() });
+            this.columnList = new chorus.views.DatabaseColumnSidebarList({ schema: this.model.executionSchema() });
 
             this.datasetList.bind("datasetSelected", function (tableOrView) {
                 this.columnList.trigger("datasetSelected", tableOrView);

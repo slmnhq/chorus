@@ -39,7 +39,7 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
     },
 
     displayLoadingSection: function () {
-        return this.sandbox && !(this.collection && this.collection.loaded);
+        return this.schema && !(this.collection && this.collection.loaded);
     }
 });
 

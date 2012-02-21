@@ -16,7 +16,7 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
     },
 
     displayLoadingSection: function () {
-        return this.sandbox && !(this.collection && this.collection.loaded);
+        return this.schema && !(this.collection && this.collection.loaded);
     }
 });
 

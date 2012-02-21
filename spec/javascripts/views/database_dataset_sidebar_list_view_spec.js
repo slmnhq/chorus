@@ -1,9 +1,9 @@
 describe("chorus.views.DatabaseDatasetSidebarList", function() {
     beforeEach(function() {
-        this.sandbox = fixtures.sandbox();
-        this.schema = this.sandbox.schema();
+        var sandbox = fixtures.sandbox();
+        this.schema = sandbox.schema();
 
-        this.view = new chorus.views.DatabaseDatasetSidebarList({sandbox: this.sandbox});
+        this.view = new chorus.views.DatabaseDatasetSidebarList({schema: this.schema});
     });
 
     describe("when a schema is selected (which calls #fetchResourceAfterSchemaSelected)", function() {
@@ -35,7 +35,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
     describe("#render", function() {
         context("when there's no schema associated", function() {
             beforeEach(function() {
-                this.view.sandbox = null;
+                this.view.schema = null;
                 this.view.render();
             });
 
