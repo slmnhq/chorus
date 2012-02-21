@@ -342,4 +342,15 @@ describe("chorus.models.TabularData", function() {
             });
         });
     });
+
+    describe("#quotedName", function() {
+        beforeEach(function() {
+            this.tabularData.set({objectName: "My_Object"});
+        });
+
+        it("uses the safePGName helper", function() {
+            expect(this.tabularData.quotedName()).toBe(chorus.Mixins.dbHelpers.safePGName(this.tabularData.get("objectName")));
+        });
+    });
+
 });

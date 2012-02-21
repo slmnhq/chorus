@@ -27,9 +27,9 @@ chorus.models.TabularData = chorus.models.Base.extend({
         if (!this._columns) {
             this._columns = new chorus.collections.DatabaseColumnSet([], {
                 tabularData: this,
-                instanceId:this.get("instance").id,
-                databaseName:this.get("databaseName"),
-                schemaName:this.get("schemaName"),
+                instanceId: this.get("instance").id,
+                databaseName: this.get("databaseName"),
+                schemaName: this.get("schemaName"),
                 type: options && options.type
             });
 
@@ -40,7 +40,7 @@ chorus.models.TabularData = chorus.models.Base.extend({
     },
 
     instance: function() {
-        if(!this._instance) {
+        if (!this._instance) {
             this._instance = new chorus.models.Instance({
                 id: this.get("instance").id,
                 name: this.get("instance").name
@@ -114,6 +114,10 @@ chorus.models.TabularData = chorus.models.Base.extend({
 
     refetchAfterInvalidated: function() {
         this.collection && this.fetch()
+    },
+
+    quotedName: function() {
+        return this.safePGName(this.get("objectName"));
     }
 }, {
 

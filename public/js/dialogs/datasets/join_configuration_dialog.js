@@ -24,7 +24,8 @@ chorus.dialogs.JoinConfiguration = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
-            destinationObjectName: this.destinationObject.get("objectName")
+            destinationObjectName: this.destinationObject.get("objectName"),
+            joinMap: chorus.models.ChorusView.joinMap
         }
     },
 

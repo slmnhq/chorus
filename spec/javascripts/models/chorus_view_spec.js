@@ -30,10 +30,7 @@ describe("chorus.models.ChorusView", function() {
         beforeEach(function() {
             spyOnEvent(this.model, 'change');
             this.sourceColumn = this.sourceDataset.columns().models[0];
-            this.destinationDataset = fixtures.datasetSandboxTable();
-            this.destinationDataset.columns().reset([fixtures.databaseColumn()]);
-            this.destinationColumn = this.destinationDataset.columns().models[0];
-            this.model.addJoin(this.sourceColumn, this.destinationColumn, 'inner');
+            this.destinationColumn = addJoin(this, this.sourceColumn    );
         });
 
         it("saves the table", function() {
@@ -49,12 +46,9 @@ describe("chorus.models.ChorusView", function() {
         });
 
         it("assigns the join the next datasetNumber", function() {
-            expect(this.destinationDataset.datasetNumber).toBe(2);
-            var thirdDataset = fixtures.datasetSandboxTable();
-            thirdDataset.columns().reset([fixtures.databaseColumn()]);
-            var thirdDestinationColumn = thirdDataset.columns().models[0];
-            this.model.addJoin(this.sourceColumn, thirdDestinationColumn, 'inner');
-            expect(thirdDataset.datasetNumber).toBe(3);
+            expect(this.destinationColumn.tabularData.datasetNumber).toBe(2);
+            var thirdDestinationColumn = addJoin(this);
+            expect(thirdDestinationColumn.tabularData.datasetNumber).toBe(3);
         });
     });
 
@@ -121,5 +115,36 @@ describe("chorus.models.ChorusView", function() {
                 })
             })
         })
-    })
+    });
+
+    describe("fromClause", function() {
+        context("with only the base table", function() {
+            it("has the proper from clause", function() {
+                expect(this.model.fromClause()).toBe('FROM "' + this.sourceDataset.get('objectName') + '"');
+            });
+        });
+
+        context("with a table joined in", function() {
+            beforeEach(function() {
+                this.sourceColumn = this.sourceDataset.columns().models[0];
+                this.firstJoinedColumn = addJoin(this, this.sourceColumn);
+            })
+
+            it("has the second table joined in", function() {
+                var lines = this.model.fromClause().split('\n');
+                expect(lines[0]).toBe('FROM ' + this.sourceDataset.quotedName());
+                expect(lines[1]).toBe('\tINNER JOIN ' + this.firstJoinedColumn.tabularData.quotedName() + ' ON '
+                    + this.sourceColumn.quotedName() + " = " + this.firstJoinedColumn.quotedName());
+            })
+        })
+    });
+
+    function addJoin(self, sourceColumn) {
+        sourceColumn || (sourceColumn = self.sourceDataset.columns().models[0]);
+        var joinedDataset = fixtures.datasetSandboxTable();
+        joinedDataset.columns().reset([fixtures.databaseColumn()]);
+        var joinedColumn = joinedDataset.columns().models[0];
+        self.model.addJoin(sourceColumn, joinedColumn, 'inner');
+        return joinedColumn;
+    }
 });

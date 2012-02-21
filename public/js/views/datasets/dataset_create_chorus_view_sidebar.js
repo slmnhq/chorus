@@ -80,7 +80,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
     },
 
     fromClause: function() {
-        return "FROM " + chorus.Mixins.dbHelpers.safePGName(this.model.get("objectName"));
+        return this.chorusView.fromClause();
     },
 
     sql: function() {

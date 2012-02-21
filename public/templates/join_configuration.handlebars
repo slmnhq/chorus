@@ -13,10 +13,9 @@
 
     <label>{{t "dataset.manage_join_tables.join_type"}}</label>
     <select class="join_type">
-        <option value="inner">{{t "dataset.manage_join_tables.inner"}}</option>
-        <option value="left">{{t "dataset.manage_join_tables.left"}}</option>
-        <option value="right">{{t "dataset.manage_join_tables.right"}}</option>
-        <option value="outer">{{t "dataset.manage_join_tables.outer"}}</option>
+        {{#each joinMap}}
+            <option value="{{value}}">{{t text}}</option>
+        {{/each}}
     </select>
 </div>
 
