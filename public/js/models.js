@@ -58,7 +58,6 @@ chorus.models = {
                 if (success) success(model, resp, xhr);
             };
             this.serverErrors = undefined;
-
             if (this.performValidation(effectiveAttrs)) {
                 this.trigger("validated");
                 var attrsToSave = _.isEmpty(effectiveAttrs) ? undefined : effectiveAttrs;

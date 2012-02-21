@@ -22,7 +22,7 @@ describe("chorus.models.ChorusView", function() {
 
         it("enforces object name constraints", function() {
             this.model.performValidation();
-            expect(this.model.requirePattern).toHaveBeenCalledWith("objectName", /^[a-zA-Z][a-zA-Z0-9_]*/, undefined, "dataset.chorusview.validation.object_name_pattern");
+            expect(this.model.requirePattern).toHaveBeenCalledWith("objectName", /^[a-zA-Z][a-zA-Z0-9_]*$/, undefined, "dataset.chorusview.validation.object_name_pattern");
         })
     });
 

@@ -140,6 +140,13 @@
         loadTemplatesOnce();
         stubHotkeys();
 
+        regexEqualityTester = function(a, b) {
+            if(a instanceof RegExp && b instanceof RegExp) {
+                return a.toString() === b.toString();
+            }
+        }
+        jasmine.getEnv().addEqualityTester(regexEqualityTester);
+
         // loadTemplatesOnce does asynchronous ajax requests in a waitsFor
         runs(function() {
             this.server = sinon.fakeServer.create();
