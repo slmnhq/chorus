@@ -77,12 +77,16 @@
     });
 
     function pushModalBindings(modal) {
-        $(document).one("close.facebox", _.bind(modal.modalClosed, modal));
-        $(document).bind("keydown.facebox", _.bind(modal.keydownHandler, modal));
+        modal.boundModalClosed = _.bind(modal.modalClosed, modal);
+        modal.boundKeyDownHandler = _.bind(modal.keydownHandler, modal);
+        $(document).one("close.facebox", modal.boundModalClosed);
+        $(document).bind("keydown.facebox", modal.boundKeyDownHandler);
     }
 
     function popModalBindings(modal) {
-        $(document).unbind("close.facebox", _.bind(modal.modalClosed, modal));
-        $(document).unbind("keydown.facebox", _.bind(modal.keydownHandler, modal));
+        $(document).unbind("close.facebox", modal.boundModalClosed);
+        $(document).unbind("keydown.facebox", modal.boundKeyDownHandler);
+        delete modal.boundModalClosed;
+        delete modal.boundKeyDownHandler;
     }
 })();
