@@ -456,10 +456,12 @@ describe("chorus.presenters.Activity", function() {
         itShouldHaveTheAuthorsIconAndUrl();
     });
 
-    context(".DATASET_CREATED", function() {
+    context(".SOURCE_TABLE_CREATED", function() {
         context("for a table", function() {
             beforeEach(function() {
-                this.model = fixtures.activities.DATASET_CREATED();
+                this.model = fixtures.activities.SOURCE_TABLE_CREATED();
+                this.model.get('databaseObject').type = "SOURCE_TABLE";
+                this.model.get('databaseObject').objectType = "TABLE";
                 this.dataset = this.model.dataset();
                 this.workspace = this.model.workspace();
                 this.presenter = new chorus.presenters.Activity(this.model)
@@ -491,7 +493,7 @@ describe("chorus.presenters.Activity", function() {
 
         context("for a view", function() {
             beforeEach(function() {
-                this.model = fixtures.activities.DATASET_CREATED();
+                this.model = fixtures.activities.SOURCE_TABLE_CREATED();
                 this.model.get('databaseObject').type = "SOURCE_TABLE";
                 this.model.get('databaseObject').objectType = "VIEW";
                 this.dataset = this.model.dataset();

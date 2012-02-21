@@ -167,7 +167,7 @@
             }
         },
 
-        DATASET_CREATED: function(model) {
+        SOURCE_TABLE_CREATED: function(model) {
             return {
                 objectName: this.noteObject.get('objectName'),
                 objectUrl: this.noteObject.showUrl(),

@@ -1197,29 +1197,24 @@ beforeEach(function() {
                 });
             },
 
-            "DATASET_CREATED" : function() {
+            SOURCE_TABLE_CREATED : function() {
                 return new chorus.models.Activity({
                     author: fixtures.authorJson(),
-                    type: "DATASET_CREATED",
-                    timestamp: "2011-12-01 00:00:00",
-                    id : "10101",
-                    workspace : fixtures.workspaceJson(),
-                    comments: [
-                        {
-                            text: "sub-comment 1",
-                            author : fixtures.authorJson(),
-                            timestamp : "2011-12-15 12:34:56"
-                        }
-                    ],
-                    isPromoted: false,
-                    promoteCount: 0,
+                    comments: [],
                     databaseObject: {
-                        id: "10000|Analytics|analytics|BASE_TABLE|clv_data",
-                        name: "clv_data",
-                        objectName: "clv_data",
-                        objectType: "BASE_TABLE",
+                        id: "10000|Analytics|analytics|VIEW|__gp_fullname",
+                        name: "__gp_fullname",
+                        objectName: "__gp_fullname",
+                        objectType: "VIEW",
                         type: "SOURCE_TABLE",
                         workspaceId: "10000"
+                    },
+                    id: 10070,
+                    timestamp: "2012-02-21 12:29:39",
+                    type: "SOURCE_TABLE_CREATED",
+                    workspace: {
+                        id: "10000",
+                        name: "!!!!"
                     }
                 });
             }
