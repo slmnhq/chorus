@@ -1,4 +1,5 @@
 .table_import_csv.dialog {
+    width: 600px;
 
     $cell-width: 120px;
     .dialog_content {
@@ -21,7 +22,6 @@
         border-top: 1px solid $list-border-color;
         border-bottom: 1px solid $list-border-color;
 
-        width: 860px;
         height: 225px;
         overflow: auto;
 
