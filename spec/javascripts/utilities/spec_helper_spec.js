@@ -77,6 +77,31 @@ describe("spec_helper", function() {
         });
     });
 
+    describe("#toHaveUrlPath", function() {
+        it("should match against the path of the url", function() {
+            expect("/foo/bar").toHaveUrlPath("/foo/bar")
+        });
+
+        it("should ignore query parameters", function() {
+            expect("/foo/bar?option1=foo").toHaveUrlPath("/foo/bar")
+        });
+    });
+
+    describe("#toContainQueryParams", function() {
+        it("should match against the supplied query parameters", function() {
+            expect("/foo/bar?option1=hello&option2=world").toContainQueryParams({
+                option1 : "hello",
+                option2 : "world"
+            });
+        });
+
+        it("should match a subset of the parameters in the url", function() {
+            expect("/foo/bar?option1=hello&option2=world").toContainQueryParams({
+                option1 : "hello"
+            });
+        });
+    });
+
     describe("#toHaveBeenCalledOn", function() {
         beforeEach(function() {
             this.model1 = fixtures.user()

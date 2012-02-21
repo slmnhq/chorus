@@ -310,6 +310,20 @@
                     return (actualURI).equals(targetURI);
                 },
 
+                toContainQueryParams: function(queryParams) {
+                    var actualQueryParams = new URI(this.actual).query(true);
+                    var targetQueryParams = new URI("").addSearch(queryParams).query(true);
+
+                    return _.all(targetQueryParams, function(targetValue, targetKey) {
+                        return actualQueryParams[targetKey] === targetValue;
+                    });
+                },
+
+                toHaveUrlPath: function(targetPath) {
+                    var actualURI = new URI(this.actual);
+                    return actualURI.path() === targetPath;
+                },
+
                 toHaveVisibleQtip: function() {
                     return this.actual.find('.qtip').attr('aria-hidden') == 'false'
                 },
