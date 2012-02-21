@@ -30,7 +30,7 @@
 
             var activityTypeToEntityType = {
                 "NOTE" : "comment",
-                "INSIGHT_CREATED" : "insight"
+                "INSIGHT_CREATED" : "comment"
             }
             var entityType = activityTypeToEntityType[this.activityType] || "activitystream";
             return {

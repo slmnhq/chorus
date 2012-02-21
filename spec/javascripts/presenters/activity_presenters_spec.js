@@ -14,6 +14,10 @@ describe("chorus.presenters.Activity", function() {
             expect(this.presenter.isOwner).toBeFalsy();
         });
 
+        it("should have the correct entityType", function() {
+            expect(this.presenter.entityType).toBe("comment");
+        });
+
         context("when the logged in user owns the file", function() {
             beforeEach(function() {
                 setLoggedInUser({name: "Lenny", lastName: "lalala", id: this.model.author().id});
@@ -31,9 +35,9 @@ describe("chorus.presenters.Activity", function() {
             this.model = fixtures.activities.NOTE_ON_DATASET_TABLE({
                 table: {
                     id: "10014|silverware|forks|shiny",
-                    name : "shiny",
-                    type : "SOURCE_TABLE",
-                    objectType : "EXTERNAL_TABLE"
+                    name: "shiny",
+                    type: "SOURCE_TABLE",
+                    objectType: "EXTERNAL_TABLE"
                 },
                 workspace: {
                     id: '4',
@@ -101,7 +105,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectUrl", function() {
-            var url = new chorus.models.Workfile({id: this.workfile.get("id"), workspaceId : this.workspace.get("id")}).showUrl();
+            var url = new chorus.models.Workfile({id: this.workfile.get("id"), workspaceId: this.workspace.get("id")}).showUrl();
             expect(this.presenter.objectUrl).toBe(url);
         });
 
@@ -158,6 +162,18 @@ describe("chorus.presenters.Activity", function() {
 
         itShouldHaveFileAttachments();
         itShouldHaveTheAuthorsIconAndUrl();
+    })
+
+    context(".INSIGHT_CREATED", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.INSIGHT_CREATED();
+            this.workspace = this.model.workspace();
+            this.presenter = new chorus.presenters.Activity(this.model);
+        });
+
+        it("should have the correct entityType", function() {
+            expect(this.presenter.entityType).toBe("comment");
+        });
     })
 
     context(".INSTANCE_CREATED", function() {
@@ -355,7 +371,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectUrl", function() {
-            var url = new chorus.models.Workfile({id: this.workfile.get("id"), workspaceId : this.workspace.get("id"), versionInfo : { versionNum: 1 }, latestVersionNum : 2}).showUrl();
+            var url = new chorus.models.Workfile({id: this.workfile.get("id"), workspaceId: this.workspace.get("id"), versionInfo: { versionNum: 1 }, latestVersionNum: 2}).showUrl();
             expect(this.presenter.objectUrl).toBe(url);
         });
 
@@ -400,7 +416,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("has the right versionName", function() {
-            expect(this.presenter.versionName).toMatchTranslation("workfile.version_title", { versionNum : this.model.get('version') });
+            expect(this.presenter.versionName).toMatchTranslation("workfile.version_title", { versionNum: this.model.get('version') });
         })
 
         it("has the right versionUrl", function() {
@@ -530,7 +546,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("when displayStyle is a string it returns the default when it does not exist", function() {
-                this.presenter = new chorus.presenters.Activity(this.model, {displayStyle : 'without_object'});
+                this.presenter = new chorus.presenters.Activity(this.model, {displayStyle: 'without_object'});
                 var missingKey = this.keyPrefix + this.model.get('type') + '.without_object';
                 var expectedKey = this.keyPrefix + this.model.get('type') + '.without_workspace';
                 expect(I18n.lookup(missingKey)).toBeFalsy();
@@ -579,7 +595,7 @@ describe("chorus.presenters.Activity", function() {
 
             context("when displayStyle is a string", function() {
                 beforeEach(function() {
-                    this.presenter = new chorus.presenters.Activity(this.model, {displayStyle : 'without_object'});
+                    this.presenter = new chorus.presenters.Activity(this.model, {displayStyle: 'without_object'});
                 });
 
                 it("returns the displayStyle when it exists", function() {
@@ -597,21 +613,21 @@ describe("chorus.presenters.Activity", function() {
 
             context("when displayStyle is an array", function() {
                 it("returns the first key when it exists", function() {
-                    this.presenter = new chorus.presenters.Activity(this.model, {displayStyle : ['without_object', 'without_workspace']});
+                    this.presenter = new chorus.presenters.Activity(this.model, {displayStyle: ['without_object', 'without_workspace']});
                     var expectedKey = this.keyPrefix + this.model.get('type') + '.without_object';
                     expect(I18n.lookup(expectedKey)).toBeTruthy();
                     expect(this.presenter._impl.headerTranslationKey()).toBe(expectedKey);
                 });
 
                 it("falls back to the next match when the first key doesn't exist", function() {
-                    this.presenter = new chorus.presenters.Activity(this.model, {displayStyle : ['banana', 'without_object', 'without_workspace']});
+                    this.presenter = new chorus.presenters.Activity(this.model, {displayStyle: ['banana', 'without_object', 'without_workspace']});
                     var expectedKey = this.keyPrefix + this.model.get('type') + '.without_object';
                     expect(I18n.lookup(expectedKey)).toBeTruthy();
                     expect(this.presenter._impl.headerTranslationKey()).toBe(expectedKey);
                 });
 
                 it("falls back on default when none of them exist", function() {
-                    this.presenter = new chorus.presenters.Activity(this.model, {displayStyle : ['banana', 'apple']});
+                    this.presenter = new chorus.presenters.Activity(this.model, {displayStyle: ['banana', 'apple']});
                     var expectedKey = this.keyPrefix + this.model.get('type') + '.' + expectedKeySuffix;
                     expect(I18n.lookup(expectedKey)).toBeTruthy();
                     expect(this.presenter._impl.headerTranslationKey()).toBe(expectedKey);
