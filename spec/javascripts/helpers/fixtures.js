@@ -1217,6 +1217,28 @@ beforeEach(function() {
                         name: "!!!!"
                     }
                 });
+            },
+
+            CHORUS_VIEW_CREATED: function() {
+                return new chorus.models.Activity({
+                    author: fixtures.authorJson(),
+                    chorusView: {
+                        id: "10000|Analytics|analytics|QUERY|mythingy",
+                        name: "mythingy",
+                        objectName: "mythingy",
+                        objectType: "QUERY",
+                        type: "CHORUS_VIEW",
+                        workspaceId: "10000"
+                    },
+                    comments: [],
+                    id: 10072,
+                    timestamp: "2012-02-21 14:44:59",
+                    type: "CHORUS_VIEW_CREATED",
+                    workspace: {
+                        id: "10000",
+                        name: "!!!!"
+                    }
+                })
             }
         },
 

@@ -175,6 +175,16 @@
                     type: t(this.noteObject.tableOrViewTranslationKey())
                 }
             }
+        },
+
+        CHORUS_VIEW_CREATED: function(model) {
+            return {
+                objectName: this.noteObject.get('objectName'),
+                objectUrl: this.noteObject.showUrl(),
+                header: {
+                    tableName: "!!implement me when API changes!!"
+                }
+            };
         }
     });
 

@@ -526,6 +526,46 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context(".CHORUS_VIEW_CREATED", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.CHORUS_VIEW_CREATED();
+            this.dataset = this.model.dataset();
+            this.workspace = this.model.workspace();
+            this.presenter = new chorus.presenters.Activity(this.model)
+        });
+
+        it("should have the right workspaceName", function() {
+            expect(this.presenter.workspaceName).toBe(this.workspace.get("name"));
+        });
+
+        it("should have the right workspaceUrl", function() {
+            var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
+            expect(this.presenter.workspaceUrl).toBe(url);
+        });
+
+        it("should say 'table' in the header", function() {
+            expect(this.presenter.headerHtml).toContainTranslation("dataset.types.table");
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.dataset.get("objectName"));
+        });
+
+        it("should have the right objectUrl", function() {
+            expect(this.presenter.objectUrl).toBe(this.dataset.showUrl());
+        });
+
+        xit("should have the right tableName it was derived from", function() {
+            expect(this.presenter.tableName).toBe();
+        });
+
+        xit("should have the right tableUrl it was derived from", function() {
+            expect(this.presenter.tableUrl).toBe();
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
+
     context("headerHtml", function() {
         beforeEach(function() {
             this.keyPrefix = 'activity_stream.header.html.';
