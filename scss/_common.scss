@@ -283,7 +283,7 @@ $medium-font: 14px;
     margin-bottom: 2px;
 
     &[disabled=disabled] {
-        @include opacity(0.25);
+        @include opacity(0.5);
     }
     @include debugging-mixin;
 }

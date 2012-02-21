@@ -43,7 +43,9 @@
                     {
                         view: "DatasetImport",
                         text: t("dataset.import.title"),
-                        dataAttributes : [ {name: 'workspace-id', value: workspaceId} ]
+                        dataAttributes : [ {name: 'workspace-id', value: workspaceId} ],
+                        helpText: "Help me",
+                        disabled: true
                     }
                 ]
             });
@@ -62,7 +64,10 @@
 
         workspaceLoaded: function() {
             if (this.workspace.sandbox()) {
-                this.mainContent.options.buttons[0].dataAttributes.push({name: "canonical-name", value: this.workspace.sandbox().canonicalName()});
+                var targetButton = this.mainContent.options.buttons[0];
+                targetButton.dataAttributes.push({name: "canonical-name", value: this.workspace.sandbox().canonicalName()});
+                targetButton.disabled = false;
+                delete targetButton.helpText;
                 this.mainContent.contentDetails.render();
                 this.account = this.workspace.sandbox().instance().accountForCurrentUser();
                 this.account.onLoaded(this.checkAccount, this);

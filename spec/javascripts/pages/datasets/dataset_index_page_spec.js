@@ -51,6 +51,20 @@ describe("chorus.pages.DatasetIndexPage", function() {
                 expect(this.page.collection.length).toBe(2)
             })
         });
+
+        describe("this import file button", function() {
+            beforeEach(function() {
+                this.page.render();
+            })
+
+            it("is disabled", function() {
+                expect(this.page.mainContent.contentDetails.$("button")).toBeDisabled();
+            })
+
+            it("has a help icon", function() {
+                expect(this.page.mainContent.contentDetails.$('img.help')).toExist();
+            })
+        })
     });
 
     context("after the workspace has loaded", function() {

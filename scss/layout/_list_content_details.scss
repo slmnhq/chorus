@@ -29,7 +29,7 @@ $link-padding: 15px;
                     cursor: pointer;
 
                     span {
-                        color : $link-color;
+                        color: $link-color;
                         border-bottom: 1px dotted $link-color;
                     }
                 }
@@ -41,5 +41,10 @@ $link-padding: 15px;
         margin-left: 20px;
         @include font-content-details;
         @include content-details-button($border-color);
+    }
+
+    img.help {
+        vertical-align: middle;
+        margin-left: 4px;
     }
 }

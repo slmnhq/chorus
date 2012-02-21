@@ -36,7 +36,13 @@
         {{#each dataAttributes}}
             data-{{name}}="{{value}}"
         {{/each}}
+        {{#if disabled}}
+            disabled="disabled"
+        {{/if}}
         >{{text}}</button>
+        {{#if helpText}}
+            <img class="help" src="/images/more-info.png" data-text="{{{helpText}}}"/>
+        {{/if}}
     {{else}}
         {{#if url}}
             <a class="button" href="{{url}}">{{text}}</a>
