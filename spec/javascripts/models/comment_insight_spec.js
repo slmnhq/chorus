@@ -3,10 +3,6 @@ describe("chorus.models.CommentInsight", function() {
         this.model = new chorus.models.CommentInsight();
     });
 
-    it("should have the right url", function() {
-        expect(this.model.url()).toBe("/edc/commentinsight");
-    });
-
     context("with an id and action", function() {
         beforeEach(function() {
             this.model = new chorus.models.CommentInsight({ id: '41', action: "promote" });
@@ -17,13 +13,16 @@ describe("chorus.models.CommentInsight", function() {
         });
     });
 
-    context("when the action is 'count'", function() {
+    describe(".count", function() {
         beforeEach(function() {
-            this.model = new chorus.models.CommentInsight({action: "count"});
+            this.insightCount = chorus.models.CommentInsight.count();
         });
 
-        it("should have the correct url", function() {
-            expect(this.model.url()).toBe("/edc/commentinsight/count");
+        it("returns a model with the right URL", function() {
+            expect(this.insightCount).toBeA(chorus.models.Base);
+
+            this.insightCount.fetch();
+            expect(this.server.lastFetch().url).toBe("/edc/commentinsight/count");
         });
     });
 });

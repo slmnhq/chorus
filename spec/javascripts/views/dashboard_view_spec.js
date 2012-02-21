@@ -19,7 +19,7 @@ describe("chorus.views.Dashboard", function(){
         describe("the header", function() {
             describe("when the insight count fetch completes", function() {
                 beforeEach(function() {
-                    var insightCount = new chorus.models.CommentInsight({ action: "count" });
+                    var insightCount = chorus.models.CommentInsight.count();
                     this.server.completeFetchFor(insightCount);
                 });
 

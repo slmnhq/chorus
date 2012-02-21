@@ -39,30 +39,7 @@
         .badge {
             position:absolute;
             top: 5px;
-            div {
-                display: inline-block;
-                @include secondary-text-small;
-                vertical-align: middle;
-                line-height: 14px;
-                color: white;
-            }
-            .left {
-                background: url(/images/ribbons/counter_orange_round1.png) no-repeat;
-                width: 6px;
-                height: 14px;
-            }
-            .center {
-                background: url(/images/ribbons/counter_orange_2.png) repeat;
-                height: 14px;
-            }
-            .right {
-                background: url(/images/ribbons/counter_orange_round3.png) no-repeat;
-                width: 8px;
-                height: 14px;
-            }
-
         }
     }
-
 }
 

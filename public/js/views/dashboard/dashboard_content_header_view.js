@@ -7,13 +7,13 @@ chorus.views.DashboardContentHeader = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.insightCount = new chorus.models.CommentInsight({action: "count"});
+        this.insightCount = chorus.models.CommentInsight.count();
         this.requiredResources.add(this.insightCount);
         this.insightCount.fetch();
     },
 
     additionalContext: function() {
-        return { count: this.insightCount.get("count") };
+        return { count: this.insightCount.get("numberOfInsight") };
     },
 
     onAllClicked: function() {

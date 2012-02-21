@@ -5,20 +5,20 @@ describe("chorus.views.DashboardContentHeader", function() {
 
     describe("#setup", function() {
         beforeEach(function() {
-            this.insights = new chorus.models.CommentInsight({action: "count"});
+            this.insightCount = new chorus.models.CommentInsight.count();
         });
 
         it("fetches the number of insights", function() {
-            expect(this.server.lastFetchFor(this.insights)).toBeDefined();
+            expect(this.insightCount).toHaveBeenFetched();
         });
 
         context("when the fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.insights, { count: 5 });
+                this.server.completeFetchFor(this.insightCount, { numberOfInsight: 5 });
             });
 
             it("should display the number of insights", function() {
-                expect(this.view.$(".menus .count").text()).toBe('5');
+                expect(this.view.$(".menus .badge").text().trim()).toBe('5');
             });
         });
     });
