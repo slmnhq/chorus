@@ -8,7 +8,6 @@
             this.previousModal = chorus.modal;
             chorus.modal = this;
 
-            _.bindAll(this, 'modalClosed', 'keydownHandler');
             pushModalBindings(this);
         },
 
@@ -78,12 +77,12 @@
     });
 
     function pushModalBindings(modal) {
-        $(document).one("close.facebox", modal.modalClosed);
-        $(document).bind("keydown.facebox", modal.keydownHandler);
+        $(document).one("close.facebox", _.bind(modal.modalClosed, modal));
+        $(document).bind("keydown.facebox", _.bind(modal.keydownHandler, modal));
     }
 
     function popModalBindings(modal) {
-        $(document).unbind("close.facebox", modal.modalClosed);
-        $(document).unbind("keydown.facebox", modal.keydownHandler);
+        $(document).unbind("close.facebox", _.bind(modal.modalClosed, modal));
+        $(document).unbind("keydown.facebox", _.bind(modal.keydownHandler, modal));
     }
 })();

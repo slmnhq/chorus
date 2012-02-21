@@ -29,6 +29,13 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         this.request = this.uploadObj.submit();
     },
 
+    modalClosed : function() {
+        if (this.request) {
+            this.request.abort();
+        }
+
+        this._super("modalClosed");
+    },
 
     postRender: function() {
         var self = this;

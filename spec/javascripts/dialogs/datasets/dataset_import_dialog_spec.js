@@ -6,7 +6,10 @@ describe("chorus.dialogs.DatasetImport", function() {
         spyOn($.fn, 'fileupload');
         this.launchElement = $('<button data-workspaceid=​242>​Import File​</button>​');
         this.dialog = new chorus.dialogs.DatasetImport({launchElement: this.launchElement});
-        this.dialog.render();
+
+        spyOn(this.dialog, "modalClosed").andCallThrough();
+
+        this.dialog.launchModal();
     });
 
     it("has a file picker", function() {
@@ -206,6 +209,19 @@ describe("chorus.dialogs.DatasetImport", function() {
                     expect(this.modalSpy).toHaveModal(chorus.dialogs.TableImportCSV);
                 });
             });
+
+            context("when the user tries to close the dialog", function() {
+                beforeEach(function() {
+                    $(document).trigger("close.facebox");
+                })
+                it("cancels the upload", function() {
+                    expect(this.dialog.request.abort).toHaveBeenCalled();
+                })
+
+                it("closes the dialog", function() {
+                    expect(this.dialog.modalClosed).toHaveBeenCalled();
+                });
+            })
         });
     });
 });

@@ -3,7 +3,7 @@ describe("chorus.dialogs.NameChorusView", function() {
         stubModals();
         this.chorusView = fixtures.datasetChorusView();
         this.dialog = new chorus.dialogs.NameChorusView({ model: this.chorusView});
-        this.dialog.render();
+        this.dialog.launchModal();
     });
 
     it("has the right title", function() {
