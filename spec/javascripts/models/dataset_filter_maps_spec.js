@@ -65,6 +65,50 @@ describe("chorus.models.DatasetFilterMaps", function() {
         })
     });
 
+    describe("Other", function() {
+        beforeEach(function() {
+            this.datasetFilterMap = new chorus.models.DatasetFilterMaps.Other;
+        })
+
+        itReturnsTheRightClauseFor("equal", "column_name", "some_value", "column_name = 'some_value'")
+        itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "column_name != 'some_value'")
+        itReturnsTheRightClauseFor("greater", "column_name", "some_value", "column_name > 'some_value'")
+        itReturnsTheRightClauseFor("greater_equal", "column_name", "some_value", "column_name >= 'some_value'")
+        itReturnsTheRightClauseFor("less", "column_name", "some_value", "column_name < 'some_value'")
+        itReturnsTheRightClauseFor("less_equal", "column_name", "some_value", "column_name <= 'some_value'")
+        itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "column_name IS NOT NULL", true)
+        itReturnsTheRightClauseFor("null", "column_name", "some_value", "column_name IS NULL", true)
+
+
+        it("marks whole numbers as valid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "1234" })).toBeTruthy();
+        })
+
+        it("marks floating comma numbers as valid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "4,5" })).toBeTruthy();
+        })
+
+        it("marks floating point numbers as valid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "4.5" })).toBeTruthy();
+        })
+
+        it("marks non-numerical strings as valid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "I'm the string" })).toBeTruthy();
+        })
+
+        it("marks negative numbers as valid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "-1" })).toBeTruthy();
+        })
+
+        it("marks the empty field valid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "" })).toBeTruthy();
+        })
+
+        it("marks all kinds of random strings as valid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "#$%^&*(HGgfhweg" })).toBeTruthy();
+        })
+    });
+
     describe("Timestamp", function() {
         beforeEach(function() {
             this.datasetFilterMap = new chorus.models.DatasetFilterMaps.Timestamp;

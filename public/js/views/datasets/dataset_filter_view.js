@@ -18,7 +18,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         this.columnFilter = new chorus.views.ColumnSelect({
             collection: this.collection,
             showDatasetNumbers: this.options.showDatasetNumbers,
-            disableOtherTypeCategory: true
+            disableOtherTypeCategory: false
         });
         this.columnFilter.bind('columnSelected', this.columnSelected, this);
     },
@@ -66,6 +66,9 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
                 break;
             case "DATETIME":
                 this.model = new chorus.models.DatasetFilterMaps.Timestamp
+                break;
+            default:
+                this.model = new chorus.models.DatasetFilterMaps.Other
                 break;
         }
 
