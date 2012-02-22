@@ -2,7 +2,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
     beforeEach(function() {
         this.model = fixtures.workfile({ fileName: 'test.sql', content: "select * from foo" });
         this.model.workspace().set({
-            sandboxInfo : {
+            sandboxInfo: {
                 databaseId: '3',
                 databaseName: "db",
                 instanceId: '2',
@@ -11,7 +11,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 schemaId: '4',
                 schemaName: "schema"
             }});
-        this.view = new chorus.views.SqlWorkfileContentDetails({ model : this.model })
+        this.view = new chorus.views.SqlWorkfileContentDetails({ model: this.model })
         spyOn(this.view, 'runInExecutionSchema').andCallThrough();
         this.qtipElement = stubQtip()
     });
@@ -144,9 +144,34 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     schemaName: "louis"
                 }
 
-                chorus.PageEvents.broadcast("file:executionSucceeded", fixtures.task({ executionInfo : this.executionInfo }));
+                chorus.PageEvents.broadcast("file:executionSucceeded", fixtures.task({ executionInfo: this.executionInfo }));
             })
 
+            itUpdatesTheWorkfileForTheExecution();
+        })
+
+        describe("file:executionFailed", function() {
+            beforeEach(function() {
+                spyOn(this.view, "render");
+                spyOnEvent(this.view.model, "change")
+                this.executionInfo = {
+                    instanceId: '51',
+                    instanceName: "ned",
+                    databaseId: '52',
+                    databaseName: "rob",
+                    schemaId: '53',
+                    schemaName: "louis"
+                }
+
+                chorus.PageEvents.broadcast("file:executionFailed", fixtures.taskWithErrors(), { status: "ok", resource: [
+                    { executionInfo: this.executionInfo }
+                ] });
+            })
+
+            itUpdatesTheWorkfileForTheExecution();
+        })
+
+        function itUpdatesTheWorkfileForTheExecution() {
             it("updates the execution info in the workfile", function() {
                 expect(this.view.model.get("executionInfo")).toBe(this.executionInfo);
             })
@@ -158,6 +183,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             it("does not trigger change on the model", function() {
                 expect("change").not.toHaveBeenTriggeredOn(this.view.model);
             })
-        })
+        }
     });
-});
+})
+;

@@ -113,7 +113,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     })
 
                     it("broadcasts file:executionFailed", function() {
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionFailed", jasmine.any(chorus.models.SqlExecutionTask));
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionFailed", jasmine.any(chorus.models.SqlExecutionTask), jasmine.any(Object));
                     });
 
                     it("sets the executing property to false", function() {
