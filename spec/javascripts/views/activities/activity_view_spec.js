@@ -5,6 +5,7 @@ describe("chorus.views.Activity", function() {
     });
 
     describe("#render", function() {
+
         context("type: MEMBERS_ADDED", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activities.MEMBERS_ADDED();
@@ -186,6 +187,7 @@ describe("chorus.views.Activity", function() {
             itShouldRenderObjectDetails({checkLink: true});
             itShouldRenderWorkspaceDetails({checkLink: true});
             itShouldRenderACommentLink("comment", t("comments.title.NOTE"))
+            itRespectsTheSuppressLinksOption();
 
             it("displays the object type", function() {
                 expect(this.view.$(".activity_header").text()).toMatch("commented on the workspace");
@@ -291,6 +293,8 @@ describe("chorus.views.Activity", function() {
                 expect(this.view.$(".links a.promote").text()).toMatchTranslation("activity_stream.promote");
             });
 
+            itRespectsTheSuppressLinksOption();
+
             describe("clicking the 'promote to insight' link", function() {
                 beforeEach(function() {
                     this.view.$(".links a.promote").trigger("click");
@@ -344,6 +348,7 @@ describe("chorus.views.Activity", function() {
                 });
 
                 itShouldRenderPublishOrUnpublishLinks();
+                itRespectsTheSuppressLinksOption();
             });
 
             context("when the current user is the creator of the insight", function() {
@@ -353,6 +358,7 @@ describe("chorus.views.Activity", function() {
                 });
 
                 itShouldRenderPublishOrUnpublishLinks();
+                itRespectsTheSuppressLinksOption();
             });
 
             context("when the current user is not an admin or the creator of the insight", function() {
@@ -541,6 +547,22 @@ describe("chorus.views.Activity", function() {
                         expect(this.collection).toHaveBeenFetched();
                     });
                 });
+            });
+        });
+    }
+
+    function itRespectsTheSuppressLinksOption() {
+        context("when the 'suppressLinks' option is set to true", function() {
+            beforeEach(function() {
+                this.view.options.suppressLinks = true;
+                this.view.render();
+            });
+
+            it("does not include the 'promote', 'publish', 'unpublish' or 'comment' links", function() {
+                expect(this.view.$("a.promote")).not.toExist();
+                expect(this.view.$("a.comment")).not.toExist();
+                expect(this.view.$("a.publish")).not.toExist();
+                expect(this.view.$("a.unpublish")).not.toExist();
             });
         });
     }

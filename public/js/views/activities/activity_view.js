@@ -13,7 +13,10 @@ chorus.views.Activity = chorus.views.Base.extend({
     },
 
     context:function () {
-        return new chorus.presenters.Activity(this.model, this.options)
+        var presenter = new chorus.presenters.Activity(this.model, this.options)
+        return _.extend(presenter, {
+            suppressLinks: this.options.suppressLinks
+        });
     },
 
     setupSubviews:function () {
