@@ -132,10 +132,6 @@ describe("chorus.dialogs.Visualization", function() {
                 expect(this.dialog.$("button.close_dialog").text().trim()).toMatchTranslation("actions.close");
             });
 
-            it("has a link to filters with the filter count", function() {
-                expect(this.dialog.$("a.filter").text()).toMatchTranslation("visualization.show_filters", {count: 7});
-            });
-
             describe("the icon bar", function() {
                 it("should display the icons in the correct order", function() {
                     expect(this.dialog.$(".chart_icon").eq(0)).toHaveClass("frequency");
