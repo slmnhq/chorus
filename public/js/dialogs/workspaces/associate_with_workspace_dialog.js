@@ -14,6 +14,8 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
             objectType: this.pageModel.get("objectType")
         }
 
+        this.$("button.submit").startLoading("actions.associating");
+
         $.post("/edc/workspace/" + this.picklistView.selectedItem().get("id") + "/dataset", params,
             function(data) {
                 if (data.status == "ok") {

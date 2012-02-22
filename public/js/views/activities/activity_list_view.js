@@ -37,8 +37,12 @@ chorus.views.ActivityList = chorus.views.Base.extend({
     postRender:function () {
         $(this.el).addClass(this.options.additionalClass);
         var ul = this.$("ul");
-        this.collection.each(function (model) {
-            var view = new chorus.views.Activity({model:model, displayStyle:this.options.displayStyle});
+        this.collection.each(function(model) {
+            var view = new chorus.views.Activity({
+                model:model,
+                displayStyle: this.options.displayStyle,
+                isNotification: this.options.isNotification
+            });
             ul.append(view.render().el);
         }, this);
     }

@@ -5,6 +5,31 @@ describe("chorus.views.Activity", function() {
     });
 
     describe("#render", function() {
+        context("isNotification", function() {
+            beforeEach(function() {
+                this.presenter = new chorus.presenters.Activity(this.view.model);
+                this.view.model = fixtures.activities.NOTE_ON_WORKSPACE();
+                this.view.options.isNotification = true;
+                this.view.render();
+            });
+
+            it("should not render comments", function() {
+                expect(this.view.$(".comment_list")).not.toExist();
+            });
+
+            it("should not render the links", function() {
+                expect(this.view.$(".links")).not.toExist();
+            });
+
+            it("should not have a DeleteNoteConfirmAlert", function() {
+                expect(this.view.$("a[data-alert=DeleteNoteConfirmAlert]")).not.toExist();
+            });
+
+            it("should have a DeleteNotificationConfirmAlert", function() {
+                expect(this.view.$("a[data-alert=DeleteNotificationConfirmAlert]")).toExist();
+            });
+        });
+
         context("type: MEMBERS_ADDED", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activities.MEMBERS_ADDED();

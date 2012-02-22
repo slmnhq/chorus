@@ -97,6 +97,13 @@
         }
     });
 
+    chorus.models.DatasetFilterMaps.Other = chorus.models.DatasetFilterMaps.Numeric.extend({
+        type: "Other",
+
+        declareValidations: function(attrs) {
+        }
+    });
+
     function isNull(columnName, inputValue) {
         return columnName + " IS NULL";
     }

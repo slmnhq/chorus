@@ -50,6 +50,17 @@ describe("chorus.views.ActivityList", function() {
             });
         });
 
+        describe("the isNotification option", function() {
+            beforeEach(function() {
+                this.view.options.isNotification = true;
+                this.view.render();
+            });
+
+            it("passes the option through to the activity views so they don't render links", function() {
+                expect(this.view.$("li .links")).not.toExist();
+            });
+        });
+
         describe("comment rendering", function() {
             it("displays comments for each activity, if any", function() {
                 expect(this.view.$("li[data-activity-id=10000] .comments")).toExist();

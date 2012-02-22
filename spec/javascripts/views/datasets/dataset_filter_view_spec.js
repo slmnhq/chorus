@@ -84,14 +84,14 @@ describe("chorus.views.DatasetFilter", function() {
             });
         });
 
-        describe("columns with typeCategory: other", function() {
+        describe("columns with typeCategory: OTHER", function() {
             beforeEach(function() {
                 this.collection.models[1].set({typeCategory: "OTHER"});
                 this.view.render();
             });
 
-            it("disables the option for the 'other' column", function() {
-                expect(this.view.$(".column_filter option:eq(1)")).toHaveAttr("disabled");
+            it("does not disable the option for the 'other' column", function() {
+                expect(this.view.$(".column_filter option:eq(1)")).not.toHaveAttr("disabled");
                 expect(this.view.$(".column_filter option:eq(0)")).not.toHaveAttr("disabled");
             });
         });
