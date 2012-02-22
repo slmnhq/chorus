@@ -12,6 +12,7 @@
         },
 
         setup: function() {
+            this.model.ldap = true
             this.model.bind("saved", userSuccessfullySaved, this);
         },
 
@@ -31,22 +32,22 @@
 
             // stubbing out server's ldap response
 
-            // var self = this;
-            // _.defer(function() {
-            //     self.collection.reset([
-            //         new chorus.models.User({
-            //             userName: username,
-            //             firstName: "Charles",
-            //             lastName: "HTTP",
-            //             emailAddress: "i@reset.headers"
-            //         })
-            //     ]);
-            // });
-
-            // var self = this;
-            // _.defer(function() {
-            //     self.collection.reset([]);
-            // });
+//            var self = this;
+//            _.defer(function() {
+//                 self.collection.reset([
+//                     new chorus.models.User({
+//                         userName: username,
+//                         firstName: "Charles",
+//                         lastName: "HTTP",
+//                         emailAddress: "i@reset.headers"
+//                     })
+//                 ]);
+//            });
+//
+//            var self = this;
+//            _.defer(function() {
+//                 self.collection.reset([]);
+//            });
 
             this.collection.fetch();
 

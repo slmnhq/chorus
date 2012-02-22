@@ -4,9 +4,13 @@ describe("chorus.views.UserNewLdap", function() {
             beforeEach(function() {
                 setLoggedInUser({'admin': true});
                 this.user = new chorus.models.User()
-                this.user.ldap = true;
-                this.view = new chorus.views.UserNewLdap({ model : this.user });
+                this.view = new chorus.views.UserNewLdap({ model: this.user });
+                this.modalSpy = stubModals();
                 this.view.render();
+            });
+
+            it("is an LDAP user", function() {
+                expect(this.user.ldap).toBeTruthy();
             });
 
             describe("#fieldValues", function() {
@@ -46,7 +50,7 @@ describe("chorus.views.UserNewLdap", function() {
                 });
 
                 context("when there is whitespace surrounding an input value", function() {
-                    it("trims the whitespace before submission", function(){
+                    it("trims the whitespace before submission", function() {
                         this.view.$("input[name=firstName]").val("     spaces     ");
                         expect(this.view.fieldValues().firstName).toBe("spaces");
                     });
@@ -99,7 +103,6 @@ describe("chorus.views.UserNewLdap", function() {
 
                 context("when no user with the given username is found", function() {
                     beforeEach(function() {
-                        this.modalSpy = stubModals();
                         this.server.completeFetchFor(this.ldapUsers, []);
                     });
 
@@ -163,7 +166,7 @@ describe("chorus.views.UserNewLdap", function() {
                         context("when user creation fails on the server", function() {
                             beforeEach(function() {
                                 this.view.model.serverErrors = [
-                                    {message : "Hi there"}
+                                    {message: "Hi there"}
                                 ];
                                 this.view.$("form").submit();
                                 this.view.model.trigger("saveFailed");
@@ -188,7 +191,6 @@ describe("chorus.views.UserNewLdap", function() {
 
                     context("and the user does not exist", function() {
                         beforeEach(function() {
-                            this.modalSpy = stubModals();
                             this.server.completeFetchFor(this.ldapUsers, []);
                         });
 

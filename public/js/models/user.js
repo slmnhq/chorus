@@ -18,6 +18,7 @@ chorus.models.User = chorus.models.Base.extend({
         this.require('lastName', newAttrs);
         this.require('userName', newAttrs);
         this.requireValidEmailAddress('emailAddress', newAttrs);
+
         if(!this.ldap){
             this.requireConfirmationForChange('password', newAttrs);
         }
