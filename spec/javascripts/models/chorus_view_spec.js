@@ -101,6 +101,21 @@ describe("chorus.models.ChorusView", function() {
             it("adds the column to the column list of the join", function() {
                 expect(this.join.columns).toContain(this.joinedColumn);
             })
+            describe("removeColumn", function() {
+                beforeEach(function() {
+                    resetBackboneEventSpies(this.model);
+                    expect(this.join.columns.length).toBe(1)
+                    this.model.removeColumn(this.joinedColumn);
+                })
+
+                it("removes the column", function() {
+                    expect(this.join.columns.length).toBe(0)
+                })
+
+                it("triggers change on the model", function() {
+                    expect('change').toHaveBeenTriggeredOn(this.model);
+                })
+            })
         });
 
         describe("removeColumn", function() {

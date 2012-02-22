@@ -18,15 +18,8 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
     },
 
     addColumn: function(column) {
-        var columnList;
-        if (column.tabularData == this.sourceObject) {
-            columnList = this.sourceObjectColumns;
-        } else {
-            columnList = _.find(this.joins,
-                function(join) {
-                    return join.destinationColumn.tabularData == column.tabularData;
-                }).columns;
-        }
+        var columnList = this._columnListForDataset(column.tabularData);
+
         if (!_.contains(columnList, column)) {
             columnList.push(column)
             this.trigger("change")
@@ -34,15 +27,15 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
     },
 
     removeColumn: function(column) {
-        if (_.contains(this.sourceObjectColumns, column)) {
-            this.sourceObjectColumns = _.without(this.sourceObjectColumns, column)
+        var columnList = this._columnListForDataset(column.tabularData);
+        if (columnList.indexOf(column) != -1) {
+            columnList.splice(columnList.indexOf(column), 1);
             this.trigger("change")
         }
     },
 
     selectClause: function() {
-        var allColumns = this.sourceObjectColumns.concat(_.flatten(_.pluck(this.joins, "columns")));
-        var names = _.map(allColumns, function(column) {
+        var names = _.map(this._allColumns(), function(column) {
             return column.quotedName()
         });
 
@@ -59,9 +52,23 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
     },
 
     valid: function() {
-        return this.sourceObjectColumns.length > 0 || _.any(this.joins, function(join) {
-            return join.columns.length > 0;
+        return this._allColumns().length > 0;
+    },
+
+    _allColumns: function() {
+        return this.sourceObjectColumns.concat(_.flatten(_.pluck(this.joins, "columns")));
+    },
+
+    _columnListForDataset: function(dataset) {
+        if (dataset == this.sourceObject) {
+            return this.sourceObjectColumns;
+        }
+        var join = _.find(this.joins, function(join) {
+            return dataset == join.destinationColumn.tabularData;
         })
+        if (join) {
+            return join.columns;
+        }
     }
 }, {
     joinMap: [
