@@ -17,67 +17,20 @@ describe("chorus.views.Dashboard", function(){
         });
 
         describe("the header", function() {
-            describe("when the insight count fetch completes", function() {
-                beforeEach(function() {
-                    var insightCount = chorus.models.CommentInsight.count();
-                    this.server.completeFetchFor(insightCount);
-                });
+            var headerView;
 
-                context("when the 'All Activity' button is clicked ", function() {
-                    beforeEach(function() {
-                        this.activities = chorus.session.user().activities("home");
-                        this.view.$(".menus .all").click();
-                    });
+            beforeEach(function() {
+                headerView = this.view.dashboardMain.contentHeader;
+            });
 
-                    it("should fetch the activity stream (not just the insights)", function() {
-                        this.activities.attributes.insights = false;
-                        expect(this.activities).toHaveBeenFetched();
-                    });
+            it("has a DashboardContentHeader view", function() {
+                expect(headerView).toBeA(chorus.views.DashboardContentHeader);
+            });
 
-                    describe("when the fetch completes", function() {
-                        beforeEach(function() {
-                            expect(this.view.$("li.activity").length).toBe(0);
-
-                            this.server.completeFetchFor(this.activities, [
-                                fixtures.activities.NOTE_ON_WORKSPACE(),
-                                fixtures.activities.NOTE_ON_WORKSPACE(),
-                                fixtures.activities.NOTE_ON_WORKSPACE()
-                            ]);
-                        });
-
-                        it("re-renders the list", function() {
-                            expect(this.view.$("li.activity").length).toBe(3);
-                        });
-                    });
-                });
-
-                context("when the 'Insights' button is clicked", function() {
-                    beforeEach(function() {
-                        this.insights = new chorus.collections.ActivitySet([], { insights: true });
-                        this.view.$(".menus .insights").click();
-                    });
-
-                    it("should fetch the list of insights", function() {
-                        expect(this.insights).toHaveBeenFetched();
-                    });
-
-                    describe("when the fetch completes", function() {
-                        beforeEach(function() {
-                            expect(this.view.$("li.activity").length).toBe(0);
-
-                            this.server.completeFetchFor(this.insights, [
-                                fixtures.activities.INSIGHT_CREATED(),
-                                fixtures.activities.INSIGHT_CREATED(),
-                                fixtures.activities.INSIGHT_CREATED(),
-                                fixtures.activities.INSIGHT_CREATED()
-                            ]);
-                        });
-
-                        it("re-renders the list", function() {
-                            expect(this.view.$("li.activity").length).toBe(4);
-                        });
-                    });
-                });
+            it("passes the current user's activity set to the header", function() {
+                expect(headerView.collection).toBeA(chorus.collections.ActivitySet);
+                expect(headerView.collection.attributes.entityType).toBe("home");
+                expect(headerView.collection.attributes.entityId).toBe(chorus.session.user().get("id"));
             });
         });
 

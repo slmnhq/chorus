@@ -1,6 +1,7 @@
 describe("chorus.views.DashboardContentHeader", function() {
     beforeEach(function() {
-        this.view = new chorus.views.DashboardContentHeader();
+        this.collection = new chorus.collections.ActivitySet();
+        this.view = new chorus.views.DashboardContentHeader({ collection: this.collection });
     });
 
     describe("#setup", function() {
@@ -39,12 +40,13 @@ describe("chorus.views.DashboardContentHeader", function() {
 
                 describe("clicking on 'Insights'", function() {
                     beforeEach(function() {
-                        spyOnEvent(this.view, "filter:insights");
+                        spyOn(this.collection, "filterInsights");
+                        spyOn(this.collection, 'filterAll');
                         this.view.$(".menus .insights").click();
                     });
 
-                    it("triggers the 'filter:insights' event on itself", function() {
-                        expect("filter:insights").toHaveBeenTriggeredOn(this.view);
+                    it("calls 'filterInsights' on its collection", function() {
+                        expect(this.collection.filterInsights).toHaveBeenCalled();
                     });
 
                     it("displays the 'All Insights' option as active", function() {
@@ -58,12 +60,11 @@ describe("chorus.views.DashboardContentHeader", function() {
 
                     describe("clicking on 'All Activity'", function() {
                         beforeEach(function() {
-                            spyOnEvent(this.view, "filter:all");
                             this.view.$(".menus .all").click();
                         });
 
-                        it("triggers the filter:all event on itself", function() {
-                            expect("filter:all").toHaveBeenTriggeredOn(this.view);
+                        it("calls 'filterAll' on its collection", function() {
+                            expect(this.collection.filterAll).toHaveBeenCalled();
                         });
 
                         it("sets the 'All Activity' option to active", function() {

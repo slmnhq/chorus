@@ -20,13 +20,13 @@ chorus.views.DashboardContentHeader = chorus.views.Base.extend({
         this.$(".insights").removeClass("active");
         this.$(".all").addClass("active");
         this.$("h1").text(t("dashboard.title.activity"));
-        this.trigger("filter:all");
+        this.collection.filterAll();
     },
 
     onInsightsClicked: function() {
         this.$(".all").removeClass("active");
         this.$(".insights").addClass("active");
         this.$("h1").text(t("dashboard.title.insights"));
-        this.trigger("filter:insights");
+        this.collection.filterInsights();
     }
 });

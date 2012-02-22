@@ -31,12 +31,11 @@ chorus.views.Dashboard = chorus.views.Base.extend({
         });
 
         this.dashboardMain = new chorus.views.MainContentView({
-            contentHeader: new chorus.views.DashboardContentHeader(),
-            content: this.activityList
+            content: this.activityList,
+            contentHeader: new chorus.views.DashboardContentHeader({
+                collection: activities
+            })
         });
-
-        this.dashboardMain.contentHeader.bind("filter:insights", activities.filterInsights, activities);
-        this.dashboardMain.contentHeader.bind("filter:all",      activities.filterAll,      activities);
     }
 });
 
