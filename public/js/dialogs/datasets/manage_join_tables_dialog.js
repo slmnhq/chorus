@@ -6,7 +6,8 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
 
     events: {
         "click li":     "tableClicked",
-        "click a.join": "joinLinkClicked"
+        "click a.join": "joinLinkClicked",
+        "click a.preview_columns": "onClickPreviewColumns"
     },
 
     makeModel: function() {
@@ -42,6 +43,16 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
             destinationObject: databaseObject
         });
         this.launchSubModal(joinConfigurationDialog);
+    },
+
+    onClickPreviewColumns: function(e) {
+        e.preventDefault();
+
+        var clickedId = $(e.target).closest("li").attr("table_id")
+        var databaseObject = this.collection.findWhere({ id: clickedId });
+
+        var previewColumnsDialog = new chorus.dialogs.PreviewColumns({model: databaseObject});
+        this.launchSubModal(previewColumnsDialog);
     },
 
     additionalContext: function() {

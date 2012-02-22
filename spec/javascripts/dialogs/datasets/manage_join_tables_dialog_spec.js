@@ -134,6 +134,29 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             expect(joinLinks.eq(2).text().trim()).toMatchTranslation("dataset.manage_join_tables.join_view");
         });
 
+        it("has a 'preview columns' link for every dataset object", function() {
+            var links = this.dialog.$("a.preview_columns");
+            expect(links.length).toBe(3);
+            expect(links.eq(0).text()).toMatchTranslation("dataset.manage_join_tables.preview_columns");
+        });
+
+        describe("when a 'preview columns' link is clicked", function() {
+            beforeEach(function() {
+                spyOn(chorus.dialogs.PreviewColumns.prototype, 'render').andCallThrough();
+                this.dialog.$("a.preview_columns").eq(1).trigger("click");
+            });
+
+            it("launches the 'preview columns' sub-dialog", function() {
+                expect(chorus.dialogs.PreviewColumns.prototype.render).toHaveBeenCalled();
+            });
+
+            it("passes the right table or view to the 'preview columns' sub-dialog", function() {
+                var previewColumnsDialog = chorus.dialogs.PreviewColumns.prototype.render.mostRecentCall.object;
+                expect(previewColumnsDialog.model).toBeA(chorus.models.DatabaseObject);
+                expect(previewColumnsDialog.model.get("id")).toBe(this.databaseObject2.get("id"));
+            });
+        });
+
         describe("when a 'join table' link is clicked", function() {
             beforeEach(function() {
                 spyOn(chorus.dialogs.JoinConfiguration.prototype, 'render').andCallThrough();
