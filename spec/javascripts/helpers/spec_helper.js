@@ -308,7 +308,8 @@
 
     window.setLoggedInUser = function(options) {
         chorus.session._user = new chorus.models.User(_.extend({
-            userName: 'edcadmin'
+            userName: 'edcadmin',
+            id: "10000"
         }, options));
         chorus.session.set({id: chorus.session._user.get('id')});
     };
