@@ -38,6 +38,11 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             expect(_.last(this.server.requests).method).toBe("POST");
         })
 
+        it("starts loading", function() {
+            expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+            expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.associating");
+        })
+
         describe("when the API is successful", function() {
             beforeEach(function() {
                 this.server.lastCreate().succeed();
@@ -78,6 +83,10 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             it("does not pop toast", function() {
                 expect(chorus.toast).not.toHaveBeenCalled();
             });
+
+            it("stops loading", function() {
+                expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+            })
 
             it("displays the server error message", function() {
                 expect(this.dialog.$(".errors ul").text().trim()).toBe("Workspace already has a workfile with this name. Specify a different name.")
