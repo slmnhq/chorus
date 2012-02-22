@@ -44,7 +44,7 @@
                         view: "DatasetImport",
                         text: t("dataset.import.title"),
                         dataAttributes : [ {name: 'workspace-id', value: workspaceId} ],
-                        helpText: "Help me",
+                        helpText: t("dataset.import.need_sandbox", {hereLink: '<a class="dialog" href="#" data-dialog="SandboxNew" data-workspace-id="'+this.workspace.get("id")+'">'+t("actions.click_here")+'</a>'}),
                         disabled: true
                     }
                 ]

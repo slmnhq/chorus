@@ -74,23 +74,16 @@ describe("chorus.dialogs.SandboxNew", function() {
                     spyOn(this.dialog, 'closeModal');
                     spyOn(this.workspace, 'fetch');
                     spyOn(chorus, 'toast');
+                    spyOn(chorus.router, 'reload');
                     this.sandbox.trigger("saved");
                 });
 
-                it("fetches the page model (a workspace)", function() {
-                    expect(this.workspace.fetch).toHaveBeenCalled();
-                });
-
-                it("closes the dialog", function() {
-                    expect(this.dialog.closeModal).toHaveBeenCalled();
-                });
+                it("reloads the page", function() {
+                    expect(chorus.router.reload).toHaveBeenCalled();
+                })
 
                 it("shows a toast message", function() {
                     expect(chorus.toast).toHaveBeenCalledWith("sandbox.create.toast");
-                });
-
-                it("triggers the 'invalidated' event on the page model (a workspace)", function() {
-                    expect("invalidated").toHaveBeenTriggeredOn(this.workspace);
                 });
             });
         });

@@ -137,9 +137,14 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
         _.each(helpElements, function (element) {
             $(element).qtip({
                 content:$(element).data("text"),
-                show:'mouseover',
-                hide:'mouseout',
+                show: 'mouseover',
+                hide: {
+                    delay: 1000,
+                    fixed: true,
+                    event: 'mouseout'
+                },
                 position:{
+                    viewport: $(window),
                     my:"bottom center",
                     at:"top center"
                 },

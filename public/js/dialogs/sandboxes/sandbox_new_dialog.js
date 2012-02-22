@@ -33,9 +33,7 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     saved: function() {
         chorus.toast("sandbox.create.toast");
-        this.pageModel.fetch();
-        this.pageModel.trigger("invalidated");
-        this.closeModal();
+        chorus.router.reload();
     },
 
     saveFailed: function() {
