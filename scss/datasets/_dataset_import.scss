@@ -45,7 +45,8 @@ $image-width: 35px;
 
                 .file_name {
                     @include ellipsis;
-                    display: inline;
+                    display: inline-block;
+                    max-width: 315px;
                     color: $color-text3;
                     font-size: 14px;
                 }
@@ -77,11 +78,11 @@ $image-width: 35px;
                 }
 
                 input[type=text] {
-                    width: 195px;
+                    width: 192px;
                 }
 
                 select {
-                    width: 190px;
+                    width: 186px;
                 }
 
                 .ui-selectmenu-menu li.ui-state-disabled a, .ui-state-disabled {
