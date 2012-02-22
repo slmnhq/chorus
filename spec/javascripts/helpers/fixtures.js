@@ -1587,7 +1587,8 @@ beforeEach(function() {
             var id = this.nextId().toString();
             var attributes = _.extend({
                 name : "column_name_" + id,
-                typeCategory : "WHOLE_NUMBER"
+                typeCategory : "WHOLE_NUMBER",
+                ordinalPosition : this.nextId()
             }, overrides);
             return new chorus.models.DatabaseColumn(attributes);
         },

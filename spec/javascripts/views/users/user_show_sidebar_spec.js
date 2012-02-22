@@ -2,6 +2,7 @@ describe("chorus.views.UserShowSidebar", function() {
     beforeEach(function() {
         this.user = new chorus.models.User({userName: "bill", id: "42"})
         this.config = new chorus.models.Config({ externalAuth: false })
+        this.config.loaded = true;
         spyOn(chorus.models.Config, "instance").andReturn(this.config);
     });
 

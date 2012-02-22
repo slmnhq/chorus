@@ -91,5 +91,4 @@ describe("chorus.models.DatabaseColumn", function() {
             });
         });
     });
-
 });

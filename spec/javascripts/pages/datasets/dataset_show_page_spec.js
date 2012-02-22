@@ -80,6 +80,15 @@ describe("chorus.pages.DatasetShowPage", function() {
                         this.server.lastFetchAllFor(this.columnSet).succeed(this.columnSet);
                     })
 
+                    it("creates a new columnSet with the same data as the dataset's columnSet", function() {
+                        expect(this.page.columnSet.models).toEqual(this.page.dataset.columns().models);
+                        expect(this.page.columnSet).not.toEqual(this.page.dataset.columns());
+                    });
+
+                    it("does not modify the tabularData reference the existing columns have", function() {
+                        expect(this.page.columnSet.models[0].tabularData).toBe(this.page.dataset);
+                    });
+
                     it("creates the sidebar", function() {
                         expect(this.page.sidebar).toBeDefined();
                         expect(this.page.sidebar.resource.get("id")).toBe(this.dataset.get("id"))
@@ -126,6 +135,7 @@ describe("chorus.pages.DatasetShowPage", function() {
             this.resizedSpy = spyOnEvent(this.page, 'resized');
             this.server.completeFetchFor(this.dataset);
             this.server.completeFetchAllFor(this.columnSet, [fixtures.databaseColumn(), fixtures.databaseColumn()]);
+            this.server.completeFetchFor(this.dataset.statistics());
         })
 
         it("sets the datasetNumber to 1", function() {
@@ -275,7 +285,15 @@ describe("chorus.pages.DatasetShowPage", function() {
                 describe("after cancelling", function() {
                     beforeEach(function() {
                         this.page.mainContent.content.selectAll();
+                        var otherDataset = fixtures.datasetSandboxTable();
+                        var otherColumns = otherDataset.columns();
+                        otherColumns.reset(fixtures.databaseColumn());
+                        this.page.columnSet.add(otherColumns.models[0]);
                         chorus.PageEvents.broadcast('cancel:sidebar', 'boxplot');
+                    });
+
+                    it("restores the columnSet to the base set of columns from the dataset", function() {
+                        expect(this.page.columnSet.models).toEqual(this.page.dataset.columns().models);
                     });
 
                     it("disables multi-select on the main content", function() {

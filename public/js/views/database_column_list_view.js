@@ -3,15 +3,11 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
     className:"database_column_list",
     additionalClass:"list",
     events:{
-        "click li":"selectColumnClick",
+        "click li":"selectColumnClick"
     },
     selectMulti: false,
 
     setup:function () {
-        this.collection.comparator = function (column) {
-            return parseInt(column.get("ordinalPosition"))
-        };
-        this.collection.sort();
         chorus.PageEvents.subscribe("column:removed", this.deselectColumn, this);
         chorus.PageEvents.subscribe("column:deselected", this.deselectColumn, this);
         chorus.PageEvents.subscribe("column:select_all", this.selectAll, this);

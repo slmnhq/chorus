@@ -788,13 +788,31 @@ describe("chorus.views.Base", function () {
                     this.view.displayLoadingSection = function () {
                         return false;
                     }
-                    this.view.render();
                 });
 
-                it("renders the 'normal' template", function () {
-                    expect($(this.view.el).text()).toBe("Foo");
-                    expect(this.view.$('.loading_section').length).toBe(0)
-                });
+                context("when required resources are loaded", function() {
+                    beforeEach(function() {
+                        this.view.render();
+                    });
+
+                    it("renders the 'normal' template", function () {
+                        expect($(this.view.el).text()).toBe("Foo");
+                        expect(this.view.$('.loading_section').length).toBe(0)
+                    });
+                })
+
+                context("when required resources are not loaded", function() {
+                    beforeEach(function() {
+                        spyOn(this.view.requiredResources, 'allLoaded').andReturn(false);
+                        $(this.view.el).text('Old');
+                        this.view.render();
+                    });
+
+                    it("does not render", function() {
+                        expect($(this.view.el).text()).toBe("Old");
+                    });
+                })
+
             });
         });
     });

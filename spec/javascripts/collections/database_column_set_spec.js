@@ -97,4 +97,39 @@ describe("chorus.collections.DatabaseColumnSet", function() {
             });
         });
     });
+
+    describe("sorting", function() {
+        context("without dataset", function() {
+            beforeEach(function() {
+                this.columns = new chorus.collections.DatabaseColumnSet();
+                this.firstColumn = fixtures.databaseColumn({ordinalPosition: 1});
+                this.secondColumn = fixtures.databaseColumn({ordinalPosition: 2});
+                this.columns.add(this.secondColumn);
+                this.columns.add(this.firstColumn);
+            })
+            it("should be ordered by ordinalPosition", function() {
+                expect(this.columns.models).toEqual([this.firstColumn, this.secondColumn]);
+            });
+        });
+
+        context("with multiple dataset", function() {
+            beforeEach(function() {
+                this.columns = new chorus.collections.DatabaseColumnSet();
+                this.dataset1 = fixtures.datasetSandboxTable();
+                this.dataset1.datasetNumber = 1;
+                this.dataset1Columns = this.dataset1.columns();
+                this.dataset1Columns.reset([fixtures.databaseColumn({ordinalPosition: 1}), fixtures.databaseColumn({ordinalPosition: 2}), fixtures.databaseColumn({ordinalPosition: 3})]);
+                this.dataset2 = fixtures.datasetSandboxTable();
+                this.dataset2.datasetNumber = 2;
+                this.dataset2Columns = this.dataset2.columns()
+                this.dataset2Columns.reset([fixtures.databaseColumn({ordinalPosition: 1}), fixtures.databaseColumn({ordinalPosition: 2})]);
+                this.columns.add(this.dataset1Columns.models);
+                this.columns.add(this.dataset2Columns.models);
+            });
+
+            it("sorts first by datasetNumber, then by ordinalPosition", function() {
+                expect(_.pluck(this.columns.models, 'cid')).toEqual(_.pluck((this.dataset1Columns.models.concat(this.dataset2Columns.models)), 'cid'));
+            });
+        });
+    });
 });

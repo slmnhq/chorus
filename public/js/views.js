@@ -64,6 +64,9 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
 
         var evaluatedContext = {};
         if (!this.displayLoadingSection()) {
+            if(!this.requiredResources.allLoaded()) {
+                return this;
+            }
             // The only template rendered when loading section is displayed is the loading section itself, so no context is needed.
             evaluatedContext = _.isFunction(this.context) ? this.context() : this.context;
         }

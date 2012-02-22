@@ -32,7 +32,6 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.statistics.fetchIfNotLoaded();
 
         this.requiredResources.add(this.statistics);
-
     },
 
     dataPreview: function(e) {

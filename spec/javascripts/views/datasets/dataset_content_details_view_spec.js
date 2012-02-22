@@ -72,6 +72,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                 beforeEach(function() {
                     var dataset = fixtures.datasetChorusView();
                     this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection});
+                    this.server.completeFetchFor(dataset.statistics());
                     this.view.render();
 
                 });
@@ -433,6 +434,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                         var dataset = fixtures.datasetChorusView();
                         dataset.initialQuery = "select * from abc";
                         this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection});
+                        this.server.completeFetchFor(dataset.statistics());
                         this.view.render();
                         this.view.$(".transform").click();
                     });

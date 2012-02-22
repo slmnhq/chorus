@@ -47,7 +47,8 @@
         },
 
         columnSetFetched: function() {
-
+            this.columnSet = new chorus.collections.DatabaseColumnSet(this.columnSet.models);
+            this.columnSet.loaded = true;
             this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
             this.mainContent = new chorus.views.MainContentList({
                 modelClass: "DatabaseColumn",
@@ -94,10 +95,6 @@
             if (this.secondarySidebar) {
                 this.secondarySidebar.trigger("column:deselected", column);
             }
-        },
-        
-        forwardDeselectedToMain : function(column) {
-            this.mainContent.content.trigger("column:deselected", column);
         },
 
         showSidebar: function(type) {
@@ -146,6 +143,7 @@
         hideSidebar: function(type) {
             this.mainContent.content.selectMulti = false;
             this.mainContent.content.render();
+            this.columnSet.reset(this.dataset.columns().models);
             this.$('.sidebar_content.primary').removeClass("hidden")
             this.$('.sidebar_content.secondary').addClass("hidden")
             this.removeOldSecondaryClasses(type);
