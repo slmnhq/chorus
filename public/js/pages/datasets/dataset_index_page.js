@@ -56,6 +56,10 @@
                 this.model = dataset;
             }, this);
 
+            chorus.PageEvents.subscribe("csv_import:started", function() {
+                this.collection.fetch();
+            }, this)
+
             this.mainContent.contentHeader.bind("choice:filter", function(choice) {
                 this.collection.attributes.type = choice;
                 this.collection.fetch();

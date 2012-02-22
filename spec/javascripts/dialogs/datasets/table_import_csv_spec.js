@@ -180,15 +180,20 @@ describe("chorus.dialogs.TableImportCSV", function() {
             expect(JSON.parse(params.columnsDef)).toEqual(expectedColumns);
         });
 
-        context("when the import succeeds", function() {
+        context("when the post to import responds with success", function() {
             beforeEach(function() {
                 spyOn(chorus, 'toast');
+                spyOn(chorus.PageEvents, 'broadcast');
                 this.server.lastCreateFor(this.dialog.csv).succeed();
             });
 
             it("closes the dialog and displays a toast", function() {
                 expect(this.dialog.closeModal).toHaveBeenCalled();
-                expect(chorus.toast).toHaveBeenCalledWith("dataset.import.success");
+                expect(chorus.toast).toHaveBeenCalledWith("dataset.import.started");
+            });
+
+            it("triggers csv_import:started", function() {
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("csv_import:started");
             });
         })
 
@@ -207,10 +212,5 @@ describe("chorus.dialogs.TableImportCSV", function() {
                 expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
             })
         })
-
-        context("when the user clicks cancel", function() {
-
-        })
-
     })
 });

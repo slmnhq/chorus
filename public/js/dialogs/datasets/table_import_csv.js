@@ -45,7 +45,6 @@ chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
     },
 
     additionalContext: function() {
-        var sandbox = chorus.page.workspace.sandbox();
         return {
             columns: this.csv.columnOrientedData(),
             directions: t("dataset.import.table.directions", {
@@ -66,8 +65,6 @@ chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
                 columnOrder: i+1
             }
         })
-
-
         this.csv.set({
             toTable: chorus.models.CSVImport.normalizeForDatabase(this.$(".directions input:text").val()),
             delimiter: ",",
@@ -76,7 +73,8 @@ chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
 
         this.csv.bindOnce("saved", function(){
             this.closeModal();
-            chorus.toast("dataset.import.success");
+            chorus.toast("dataset.import.started");
+            chorus.PageEvents.broadcast("csv_import:started");
         }, this);
 
         this.csv.bindOnce("saveFailed", function() {

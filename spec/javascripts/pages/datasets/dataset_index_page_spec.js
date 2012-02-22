@@ -75,6 +75,11 @@ describe("chorus.pages.DatasetIndexPage", function() {
             this.account = this.workspace.sandbox().instance().accountForCurrentUser();
         });
 
+        it("fetches the collection when csv_import:started is triggered", function() {
+            chorus.PageEvents.broadcast("csv_import:started");
+            expect(this.page.collection.fetch).toHaveBeenCalled();
+        });
+
         context("it has a sandbox", function() {
 
             it("fetches the account for the current user", function() {
