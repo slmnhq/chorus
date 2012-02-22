@@ -136,7 +136,7 @@ describe("chorus.views.Base", function () {
             });
 
             it("serializes the attributes of the model", function () {
-                expect(this.view.context()).toEqual({ bar:"foo", resource: this.model });
+                expect(this.view.context()).toEqual({ bar:"foo", resource: this.model, view: this.view });
             })
 
             describe("loaded:true", function () {
