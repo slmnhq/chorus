@@ -77,8 +77,8 @@ describe("chorus.views.DatasetListSidebar", function() {
                     expect(this.dataset.activities()).toHaveBeenFetched()
                 });
                 
-                it("prefers only the without_object type for the activity list", function() {
-                    expect(this.view.activityList.options.displayStyle).toEqual(['without_object']);
+                it("prefers only the without_workspace type for the activity list", function() {
+                    expect(this.view.activityList.options.displayStyle).toEqual(['without_workspace ']);
                 });
 
                 it("does not have a link to associate the dataset with a workspace", function() {
