@@ -10,6 +10,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         this.selectedHandle = chorus.PageEvents.subscribe("column:selected", this.addColumn, this);
         this.deselectedHandle = chorus.PageEvents.subscribe("column:deselected", this.removeColumn, this);
         this.chorusView = this.model.deriveChorusView()
+        this.chorusView.aggregateColumnSet = this.options.aggregateColumnSet;
         this.chorusView.bind("change", this.render, this);
     },
 
@@ -20,9 +21,9 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
 
     additionalContext: function(ctx) {
         return {
-            columns: this.chorusView.columns,
+            columns: this.chorusView.sourceObjectColumns,
             joins: this.chorusView.joins,
-            valid: this.chorusView.columns.length > 0
+            valid: this.chorusView.valid()
         }
     },
 
@@ -70,21 +71,11 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         return this.filters.whereClause();
     },
 
-    selectClause: function() {
-        var names = _.map(this.chorusView.columns, _.bind(function(column) {
-            return chorus.Mixins.dbHelpers.safePGName(
-                this.model.get("objectName"),
-                column.get("name"))
-        }, this));
-
-        return "SELECT " + (names.length ? names.join(", ") : "*");
-    },
-
     fromClause: function() {
         return this.chorusView.fromClause();
     },
 
     sql: function() {
-        return [this.selectClause(), this.fromClause(), this.whereClause()].join("\n");
+        return [this.chorusView.selectClause(), this.chorusView.fromClause(), this.whereClause()].join("\n");
     }
 });

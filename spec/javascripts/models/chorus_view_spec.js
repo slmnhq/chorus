@@ -3,6 +3,7 @@ describe("chorus.models.ChorusView", function() {
         this.sourceDataset = fixtures.datasetSandboxTable();
         this.sourceDataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn(), fixtures.databaseColumn()])
         this.model = this.sourceDataset.deriveChorusView();
+        this.model.aggregateColumnSet = new chorus.collections.DatabaseColumnSet(this.sourceDataset.columns().models);
     });
 
     it("extends Dataset", function() {
@@ -30,7 +31,8 @@ describe("chorus.models.ChorusView", function() {
         beforeEach(function() {
             spyOnEvent(this.model, 'change');
             this.sourceColumn = this.sourceDataset.columns().models[0];
-            this.destinationColumn = addJoin(this, this.sourceColumn    );
+            this.destinationColumn = addJoin(this, this.sourceColumn);
+            this.destinationDataset = this.destinationColumn.tabularData;
         });
 
         it("saves the table", function() {
@@ -50,6 +52,13 @@ describe("chorus.models.ChorusView", function() {
             var thirdDestinationColumn = addJoin(this);
             expect(thirdDestinationColumn.tabularData.datasetNumber).toBe(3);
         });
+
+        it("adds the destination dataset's columns to the aggregate column set", function() {
+            expect(this.model.aggregateColumnSet.models).toContain(this.destinationColumn);
+            this.destinationDataset.columns().each(_.bind(function(column) {
+                expect(this.model.aggregateColumnSet.models).toContain(column);
+            }, this));
+        });
     });
 
     describe("addColumn", function() {
@@ -60,7 +69,7 @@ describe("chorus.models.ChorusView", function() {
         })
 
         it("has the column", function() {
-            expect(this.model.columns).toContain(this.column);
+            expect(this.model.sourceObjectColumns).toContain(this.column);
         })
 
         it("triggers change on the model", function() {
@@ -82,6 +91,18 @@ describe("chorus.models.ChorusView", function() {
             })
         })
 
+        context("for a column on a join", function() {
+            beforeEach(function() {
+                this.joinedColumn = addJoin(this, this.sourceColumn);
+                this.model.addColumn(this.joinedColumn);
+                this.join = this.model.joins[0];
+            });
+
+            it("adds the column to the column list of the join", function() {
+                expect(this.join.columns).toContain(this.joinedColumn);
+            })
+        });
+
         describe("removeColumn", function() {
             context("with a column that exists", function() {
 
@@ -91,7 +112,7 @@ describe("chorus.models.ChorusView", function() {
                 })
 
                 it("removes the column", function() {
-                    expect(this.model.columns.length).toBe(0);
+                    expect(this.model.sourceObjectColumns.length).toBe(0);
                 })
 
                 it("triggers change on the model", function() {
@@ -139,10 +160,77 @@ describe("chorus.models.ChorusView", function() {
         })
     });
 
+    describe("valid", function() {
+        context("when there are no columns selected", function() {
+            it("is not valid", function() {
+                expect(this.model.valid()).toBeFalsy();
+            })
+        })
+
+        context("when there are sourceDataset columns selected", function() {
+            beforeEach(function() {
+                this.model.addColumn(this.sourceDataset.columns().models[0]);
+            })
+
+            it("is valid", function() {
+                expect(this.model.valid()).toBeTruthy();
+            })
+        })
+
+        context("when there are join columns selected", function() {
+            beforeEach(function() {
+                var joinedColumn = addJoin(this);
+                this.model.addColumn(joinedColumn);
+            })
+
+            it("is valid", function() {
+                expect(this.model.valid()).toBeTruthy();
+            })
+        })
+    })
+
+    describe("#selectClause", function() {
+        context("when no columns are selected", function() {
+            it("returns 'SELECT *'", function() {
+                expect(this.model.selectClause()).toBe("SELECT *");
+            });
+        });
+
+        context("when two columns are selected", function() {
+            beforeEach(function() {
+                this.column1 = fixtures.databaseColumn({name: "Foo"});
+                this.column2 = fixtures.databaseColumn({name: "bar"});
+                this.sourceDataset.columns().reset([this.column1, this.column2]);
+                this.model.addColumn(this.column1);
+                this.model.addColumn(this.column2);
+            });
+
+            it("should build a select clause from the selected columns", function() {
+                var tableName = this.sourceDataset.quotedName();
+                expect(this.model.selectClause()).toBe('SELECT ' + tableName + '."Foo", ' + tableName + '.bar');
+            });
+
+            context("when selecting a joined column", function() {
+                beforeEach(function() {
+                    var joinedColumn = addJoin(this);
+                    joinedColumn.set({name: 'baz'});
+                    this.joinedDataset = joinedColumn.tabularData;
+                    this.model.addColumn(joinedColumn);
+                });
+
+                it("has the joined columns too", function() {
+                    var tableName = this.sourceDataset.quotedName();
+                    var joinedTableName = this.joinedDataset.quotedName();
+                    expect(this.model.selectClause()).toBe('SELECT ' + tableName + '."Foo", ' + tableName + '.bar, ' + joinedTableName + '.baz');
+                });
+            });
+        });
+    });
+
     function addJoin(self, sourceColumn) {
         sourceColumn || (sourceColumn = self.sourceDataset.columns().models[0]);
         var joinedDataset = fixtures.datasetSandboxTable();
-        joinedDataset.columns().reset([fixtures.databaseColumn()]);
+        joinedDataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn()]);
         var joinedColumn = joinedDataset.columns().models[0];
         self.model.addJoin(sourceColumn, joinedColumn, 'inner');
         return joinedColumn;

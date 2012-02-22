@@ -2,7 +2,7 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
     initialize: function() {
         this._super('initialize');
         this.joins = []
-        this.columns = []
+        this.sourceObjectColumns = []
     },
 
     declareValidations: function(newAttrs) {
@@ -11,23 +11,42 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
     },
 
     addJoin: function(sourceColumn, destinationColumn, joinType) {
-        this.joins.push({ sourceColumn: sourceColumn, destinationColumn: destinationColumn, joinType: joinType })
+        this.joins.push({ sourceColumn: sourceColumn, destinationColumn: destinationColumn, joinType: joinType, columns: [] })
         destinationColumn.tabularData.datasetNumber = this.joins.length + 1;
-        this.trigger("change")
+        this.trigger("change");
+        this.aggregateColumnSet.add(destinationColumn.tabularData.columns().models);
     },
 
     addColumn: function(column) {
-        if (!_.contains(this.columns, column)) {
-            this.columns.push(column)
+        var columnList;
+        if (column.tabularData == this.sourceObject) {
+            columnList = this.sourceObjectColumns;
+        } else {
+            columnList = _.find(this.joins,
+                function(join) {
+                    return join.destinationColumn.tabularData == column.tabularData;
+                }).columns;
+        }
+        if (!_.contains(columnList, column)) {
+            columnList.push(column)
             this.trigger("change")
         }
     },
 
     removeColumn: function(column) {
-        if (_.contains(this.columns, column)) {
-            this.columns = _.without(this.columns, column)
+        if (_.contains(this.sourceObjectColumns, column)) {
+            this.sourceObjectColumns = _.without(this.sourceObjectColumns, column)
             this.trigger("change")
         }
+    },
+
+    selectClause: function() {
+        var allColumns = this.sourceObjectColumns.concat(_.flatten(_.pluck(this.joins, "columns")));
+        var names = _.map(allColumns, function(column) {
+            return column.quotedName()
+        });
+
+        return "SELECT " + (names.length ? names.join(", ") : "*");
     },
 
     fromClause: function() {
@@ -37,6 +56,12 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
                 + " ON " + join.sourceColumn.quotedName() + ' = ' + join.destinationColumn.quotedName();
         }, this));
         return result;
+    },
+
+    valid: function() {
+        return this.sourceObjectColumns.length > 0 || _.any(this.joins, function(join) {
+            return join.columns.length > 0;
+        })
     }
 }, {
     joinMap: [
