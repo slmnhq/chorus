@@ -11,7 +11,7 @@
     <div class="actions">
         <ul>
             {{#unless browsingSchema}}
-                <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workfile-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+                <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workfile-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
             {{/unless}}
             {{#unless noCredentials}}
                 <li class="dataset_preview"><a class="dialog dataset_preview" href="#" data-dialog="DatasetPreview">{{t "actions.dataset_preview"}}</a></li>
