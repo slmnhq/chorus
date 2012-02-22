@@ -185,6 +185,13 @@
                     tableName: "!!implement me when API changes!!"
                 }
             };
+        },
+
+        DATASET_CHANGED_QUERY: function(model) {
+            return {
+                objectName: this.noteObject.get('objectName'),
+                objectUrl: this.noteObject.showUrl()
+            };
         }
     });
 
