@@ -9,9 +9,9 @@ chorus.views.ColumnSelect = chorus.views.Base.extend({
         var self = this;
         _.defer(function() {
             chorus.styleSelect(self.$('select'), {format: function(text, option) {
-                var datasetNumber = $(option).data('datasetNumber');
-                if (datasetNumber && self.options.showDatasetNumbers) {
-                    return '<span class="dataset_number">' + datasetNumber + '</span>' + text;
+                var aliasedName = $(option).data('aliasedName');
+                if (aliasedName && self.options.showAliasedName) {
+                    return '<span class="aliased_name">' + aliasedName + '</span>' + text;
                 } else {
                     return text;
                 }

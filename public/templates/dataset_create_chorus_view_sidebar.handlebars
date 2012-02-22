@@ -10,7 +10,7 @@
     <div class="selected_columns">
         <span class="title">{{t "dataset.chorusview.sidebar.selected_columns"}}</span>
         <div class="dataset">
-            <span class="dataset_number">{{resource.datasetNumber}}</span><span class="label">{{t "dataset.statistics.dataset"}}:</span>
+            <span class="aliased_name">{{resource.aliasedName}}</span><span class="label">{{t "dataset.statistics.dataset"}}:</span>
             <span class="name" title="{{objectName}}">{{objectName}}</span>
         </div>
 
@@ -31,7 +31,7 @@
 
         {{#each joins}}
             <div class="dataset">
-                <span class="dataset_number">{{destinationColumn.tabularData.datasetNumber}}</span><span class="label">{{t "dataset.statistics.dataset"}}:</span>
+                <span class="aliased_name">{{destinationColumn.tabularData.aliasedName}}</span><span class="label">{{t "dataset.statistics.dataset"}}:</span>
                 <span class="name" title="{{destinationColumn.tabularData.attributes.objectName}}">{{destinationColumn.tabularData.attributes.objectName}}</span>
             </div>
             <ul class="joins">

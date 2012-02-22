@@ -29,7 +29,7 @@ chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
     },
 
     addFilter : function() {
-        var filterView = new chorus.views.DatasetFilter({collection: this.collection, showDatasetNumbers: this.options.showDatasetNumbers});
+        var filterView = new chorus.views.DatasetFilter({collection: this.collection, showAliasedName: this.options.showAliasedName});
         filterView.render();
         filterView.owner = this;
 

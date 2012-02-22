@@ -1,5 +1,5 @@
 <select>
     {{#each models}}
-        <option value="{{quotedName}}" data-cid="{{model.cid}}" data-dataset-number="{{model.tabularData.datasetNumber}}" {{#if disable}}disabled="disabled"{{/if}}>{{name}}</option>
+        <option value="{{quotedName}}" data-cid="{{model.cid}}" data-aliased-name="{{model.tabularData.aliasedName}}" {{#if disable}}disabled="disabled"{{/if}}>{{name}}</option>
     {{/each}}
 </select>

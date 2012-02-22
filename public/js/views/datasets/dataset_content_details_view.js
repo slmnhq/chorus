@@ -94,7 +94,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$('.definition').addClass("hidden")
         this.$('.create_chart').removeClass("hidden");
         this.$(".filters").removeClass("hidden");
-        this.filterWizardView.options.showDatasetNumbers = false;
+        this.filterWizardView.options.showAliasedName = false;
         this.filterWizardView.resetFilters();
     },
 
@@ -126,7 +126,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$('.chorus_view_info').removeClass("hidden");
         this.$('.column_count').addClass("hidden");
         this.$('.filters').removeClass("hidden");
-        this.filterWizardView.options.showDatasetNumbers = true;
+        this.filterWizardView.options.showAliasedName = true;
         this.filterWizardView.resetFilters();
 
     },

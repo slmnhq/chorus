@@ -69,7 +69,7 @@
     }
 }
 
-.dataset_number, .ui-selectmenu-menu li .dataset_number, .ui-selectmenu-status .dataset_number {
+.aliased_name, .ui-selectmenu-menu li .aliased_name, .ui-selectmenu-status .aliased_name {
     background-color: $dataset-number-background-color;
     display: inline-block;
     @include border-radius(5px);
@@ -79,6 +79,7 @@
     vertical-align: bottom;
     padding: 0px 5px 9px;
     margin-right: 5px;
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: normal;
     font-style: normal;
 }

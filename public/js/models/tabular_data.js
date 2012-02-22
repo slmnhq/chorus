@@ -121,15 +121,20 @@ chorus.models.TabularData = chorus.models.Base.extend({
     },
 
     selectName: function() {
-        if(this.datasetNumber) {
-            return 't' + this.datasetNumber;
+        if(this.aliasedName) {
+            return this.aliasedName;
         }
         return this.quotedName();
     },
 
+    setDatasetNumber: function(number) {
+        this.datasetNumber = number;
+        this.aliasedName = String.fromCharCode(96 + this.datasetNumber);
+    },
+
     fromClause: function() {
         if(this.datasetNumber) {
-            return this.quotedName() + " AS t" + this.datasetNumber
+            return this.quotedName() + " AS " + this.aliasedName
         }
         return this.quotedName();
     }

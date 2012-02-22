@@ -44,32 +44,32 @@ describe("chorus.views.DatasetFilter", function() {
             expect(this.view.$(".remove")).toExist();
         });
 
-        it("does not have the dataset_number", function() {
-            expect(this.selectMenuStub.find(".dataset_number")).not.toExist();
+        it("does not have the aliased_name", function() {
+            expect(this.selectMenuStub.find(".aliased_name")).not.toExist();
         })
 
-        context("when the tabularData has a datasetNumber and the datasetNumbers option is enabled", function() {
+        context("when the tabularData has an aliasedName and the showAliasedName option is enabled", function() {
             beforeEach(function() {
-                this.tabularData.datasetNumber = 1;
-                this.view = new chorus.views.DatasetFilter({collection: this.collection, showDatasetNumbers: true});
+                this.tabularData.setDatasetNumber(1);
+                this.view = new chorus.views.DatasetFilter({collection: this.collection, showAliasedName: true});
                 this.view.render();
             });
 
-            it("has the dataset_number options", function() {
-                expect(this.selectMenuStub.find(".dataset_number")).toExist();
-                expect(this.selectMenuStub.find(".dataset_number")).toContainText(this.tabularData.datasetNumber);
+            it("has the aliased_name options", function() {
+                expect(this.selectMenuStub.find(".aliased_name")).toExist();
+                expect(this.selectMenuStub.find(".aliased_name")).toContainText(this.tabularData.aliasedName);
             });
         })
 
         context("when the tabularData has a datasetNumber and the datasetNumbers option is disabled", function() {
             beforeEach(function() {
-                this.tabularData.datasetNumber = 1;
-                this.view.options.showDatasetNumbers = false;
+                this.tabularData.setDatasetNumber(1);
+                this.view.options.showAliasedName = false;
                 this.view.render();
             });
 
-            it("does not have the dataset_number", function() {
-                expect(this.selectMenuStub.find(".dataset_number")).not.toExist();
+            it("does not have the aliased_name", function() {
+                expect(this.selectMenuStub.find(".aliased_name")).not.toExist();
             })
         })
 

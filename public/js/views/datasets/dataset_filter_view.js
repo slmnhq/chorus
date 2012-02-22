@@ -17,7 +17,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
     setup: function() {
         this.columnFilter = new chorus.views.ColumnSelect({
             collection: this.collection,
-            showDatasetNumbers: this.options.showDatasetNumbers,
+            showAliasedName: this.options.showAliasedName,
             disableOtherTypeCategory: true
         });
         this.columnFilter.bind('columnSelected', this.columnSelected, this);

@@ -362,11 +362,11 @@ describe("chorus.models.TabularData", function() {
 
         context("when a datasetNumber is set", function() {
             beforeEach(function() {
-                this.tabularData.datasetNumber = 1;
+                this.tabularData.setDatasetNumber(1);
             });
 
             it("returns the alias", function() {
-                expect(this.tabularData.selectName()).toBe("t1");
+                expect(this.tabularData.selectName()).toBe("a");
             });
         });
     });
@@ -380,13 +380,27 @@ describe("chorus.models.TabularData", function() {
 
         context("when a datasetNumber is set", function() {
             beforeEach(function() {
-                this.tabularData.datasetNumber = 1;
+                this.tabularData.setDatasetNumber(1);
             });
 
             it("returns the aliased from clause", function() {
-                expect(this.tabularData.fromClause()).toBe(this.tabularData.quotedName() + " AS t1");
+                expect(this.tabularData.fromClause()).toBe(this.tabularData.quotedName() + " AS a");
             });
         });
+    });
+
+    describe("#setDatasetNumber", function() {
+        beforeEach(function() {
+            this.tabularData.setDatasetNumber(4)
+        })
+
+        it("sets the datasetNumber", function() {
+            expect(this.tabularData.datasetNumber).toBe(4);
+        })
+
+        it("sets the aliasedName", function() {
+            expect(this.tabularData.aliasedName).toBe('d');
+        })
     })
 
 });

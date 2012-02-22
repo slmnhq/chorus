@@ -12,7 +12,7 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
 
     addJoin: function(sourceColumn, destinationColumn, joinType) {
         this.joins.push({ sourceColumn: sourceColumn, destinationColumn: destinationColumn, joinType: joinType, columns: [] })
-        destinationColumn.tabularData.datasetNumber = this.joins.length + 1;
+        destinationColumn.tabularData.setDatasetNumber(this.joins.length + 1);
         this.trigger("change");
         this.aggregateColumnSet.add(destinationColumn.tabularData.columns().models);
     },

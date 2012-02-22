@@ -13,15 +13,15 @@ describe("chorus.views.ColumnSelect", function() {
     });
 
     describe("#render", function() {
-        context("when the tabularData has a datasetNumber and the showDatasetNumbers option is disabled", function() {
+        context("when the tabularData has a datasetNumber and the showAliasedName option is disabled", function() {
             beforeEach(function() {
                 this.tabularData.datasetNumber = 1;
-                this.view.options.showDatasetNumbers = false;
+                this.view.options.showAliasedName = false;
                 this.view.render();
             });
 
-            it("does not have the dataset_number", function() {
-                expect(this.selectMenuStub.find(".dataset_number")).not.toExist();
+            it("does not have the aliased_name", function() {
+                expect(this.selectMenuStub.find(".aliased_name")).not.toExist();
             });
 
             it("has all the columns", function() {
@@ -69,26 +69,26 @@ describe("chorus.views.ColumnSelect", function() {
             });
         });
 
-        context("when the tabularData has no datasetNumber and the showDatasetNumbers option is enabled", function() {
+        context("when the tabularData has no datasetNumber and the showAliasedName option is enabled", function() {
             beforeEach(function() {
-                this.view.options.showDatasetNumbers = true;
+                this.view.options.showAliasedName = true;
                 this.view.render();
             });
 
-            it("does not have the dataset_number", function() {
-                expect(this.selectMenuStub.find(".dataset_number")).not.toExist();
+            it("does not have the aliased_name", function() {
+                expect(this.selectMenuStub.find(".aliased_name")).not.toExist();
             })
         });
 
-        context("when the tabularData has a datasetNumber and the showDatasetNumbers option is enabled", function() {
+        context("when the tabularData has a datasetNumber and the showAliasedName option is enabled", function() {
             beforeEach(function() {
-                this.tabularData.datasetNumber = 1;
-                this.view.options.showDatasetNumbers = true;
+                this.tabularData.setDatasetNumber(1);
+                this.view.options.showAliasedName = true;
                 this.view.render();
             });
 
-            it("has the dataset_number", function() {
-                expect(this.selectMenuStub.find(".dataset_number")).toExist();
+            it("has the aliased_name", function() {
+                expect(this.selectMenuStub.find(".aliased_name")).toExist();
             })
         });
     });

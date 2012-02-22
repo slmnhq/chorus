@@ -35,7 +35,7 @@
 
         fetchDataSet: function() {
             this.model = this.dataset = new chorus.models.Dataset({ workspace: { id: this.workspace.get("id") }, id: this.datasetId });
-            this.dataset.datasetNumber = 1;
+            this.dataset.setDatasetNumber(1);
             this.dataset.bind("loaded", this.fetchColumnSet, this);
             this.dataset.fetch();
         },

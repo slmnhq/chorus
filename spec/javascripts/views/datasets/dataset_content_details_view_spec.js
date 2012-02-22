@@ -236,7 +236,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                     });
 
                     it("disables datasetNumbers on the filter wizard", function() {
-                        expect(this.view.filterWizardView.options.showDatasetNumbers).toBeFalsy();
+                        expect(this.view.filterWizardView.options.showAliasedName).toBeFalsy();
                     });
 
                     it("resets filter wizard", function() {
@@ -366,7 +366,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                     })
 
                     it("enables datasetNumbers on the filter wizard", function() {
-                        expect(this.view.filterWizardView.options.showDatasetNumbers).toBeTruthy();
+                        expect(this.view.filterWizardView.options.showAliasedName).toBeTruthy();
                     });
 
                     it("resets filter wizard", function() {

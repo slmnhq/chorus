@@ -51,8 +51,8 @@ describe("chorus.dialogs.JoinConfiguration", function() {
                 expect(this.dialog.sourceColumnsSelect.collection).toBe(this.sourceTable.columns());
             });
 
-            it("should have showDatasetNumbers on the source columns", function() {
-                expect(this.dialog.sourceColumnsSelect.options.showDatasetNumbers).toBeTruthy();
+            it("should have showAliasedName on the source columns", function() {
+                expect(this.dialog.sourceColumnsSelect.options.showAliasedName).toBeTruthy();
             });
 
             it("should have a destinationColumnSelect with the destinationObject's columns", function() {
