@@ -18,7 +18,7 @@ chorus.dialogs.JoinConfiguration = chorus.dialogs.Base.extend({
         var destinationColumns = this.destinationObject.columns()
         this.requiredResources.push(destinationColumns);
         destinationColumns.fetchIfNotLoaded();
-        this.sourceColumnsSelect = new chorus.views.ColumnSelect({collection: this.model.sourceObject.columns(), showAliasedName: true})
+        this.sourceColumnsSelect = new chorus.views.ColumnSelect({collection: this.model.aggregateColumnSet, showAliasedName: true})
         this.destinationColumnsSelect = new chorus.views.ColumnSelect({collection: destinationColumns})
     },
 

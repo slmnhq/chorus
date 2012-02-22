@@ -9,6 +9,7 @@ describe("chorus.dialogs.JoinConfiguration", function() {
         ]);
 
         this.chorusView = this.sourceTable.deriveChorusView();
+        this.chorusView.aggregateColumnSet = new chorus.collections.DatabaseColumnSet();
 
         this.destinationTable = fixtures.databaseObject({
             objectType: "SANDBOX_TABLE",
@@ -47,8 +48,8 @@ describe("chorus.dialogs.JoinConfiguration", function() {
                 expect(this.dialog.$('.sub_header .title').text()).toMatchTranslation("dataset.manage_join_tables.create_join_title", { objectName: "lions_den" })
             });
 
-            it("should have a sourceColumnSelect with the sourceObject's columns", function() {
-                expect(this.dialog.sourceColumnsSelect.collection).toBe(this.sourceTable.columns());
+            it("should have a sourceColumnSelect with the aggregateColumnSet", function() {
+                expect(this.dialog.sourceColumnsSelect.collection).toBe(this.chorusView.aggregateColumnSet);
             });
 
             it("should have showAliasedName on the source columns", function() {
