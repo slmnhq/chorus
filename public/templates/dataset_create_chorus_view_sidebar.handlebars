@@ -8,6 +8,17 @@
     </ul>
 
     <div class="selected_columns">
+        {{#if joins.length}}
+            <div class="joins">
+                <span class="title">{{t "dataset.chorusview.sidebar.joins"}}</span>
+                {{#each joins}}
+                    <div class="join">
+                        <span class="aliased_name">{{sourceColumn.tabularData.aliasedName}}</span><span class="column" title="{{sourceColumn.attributes.name}}">{{sourceColumn.attributes.name}}</span> =
+                        <span class="aliased_name">{{destinationColumn.tabularData.aliasedName}}</span><span class="column" title="destinationColumn.attributes.name">{{destinationColumn.attributes.name}}</span>
+                    </div>
+                {{/each}}
+            </div>
+        {{/if}}
         <span class="title">{{t "dataset.chorusview.sidebar.selected_columns"}}</span>
         <div class="dataset">
             <span class="aliased_name">{{resource.aliasedName}}</span><span class="label">{{t "dataset.statistics.dataset"}}:</span>
@@ -34,9 +45,6 @@
                 <span class="aliased_name">{{destinationColumn.tabularData.aliasedName}}</span><span class="label">{{t "dataset.statistics.dataset"}}:</span>
                 <span class="name" title="{{destinationColumn.tabularData.attributes.objectName}}">{{destinationColumn.tabularData.attributes.objectName}}</span>
             </div>
-            <ul class="joins">
-
-            </ul>
             {{#if columns.length}}
                 <ul class="columns">
                     {{#each columns}}

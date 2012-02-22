@@ -1,14 +1,29 @@
 @import "_common.scss";
 
 .dataset_create_chorus_view_sidebar {
+    .joins {
+        margin-bottom: 20px;
+    }
+
+    .join {
+        margin-bottom: 5px;
+        .column {
+            @include ellipsis;
+            width: 60px;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: normal;
+            color: black;
+        }
+    }
 
     .selected_columns {
         color: $color-text2;
         font-size: 12px;
         padding: 8px;
 
-
         .title {
+            color: $color-text1;
             font-size: 16px;
             font-weight: $semibold;
             display: inline-block;
@@ -16,7 +31,7 @@
         }
 
         .dataset {
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             @include secondary-text-semibold;
             .label {
                 display: inline-block;
