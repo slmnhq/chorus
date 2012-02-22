@@ -18,19 +18,26 @@
         }
     }
 
+    .options {
+        height: 19px;
+        margin-bottom: 5px;
+        .header_options {
+            float: right;
+            margin-right: 15px;
+        }
+    }
+
     .data_table {
         border-top: 1px solid $list-border-color;
         border-bottom: 1px solid $list-border-color;
 
-        height: 225px;
-        overflow: auto;
+        min-height: 225px;
 
         .th:hover input {
             width: 100px;
         }
 
         .tbody {
-            overflow: visible;
             top: 50px;
         }
 

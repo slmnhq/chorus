@@ -1934,7 +1934,8 @@ beforeEach(function() {
                     "val1,val2,val3"
                 ],
                 fileName: "/file.csv",
-                workspaceId: this.nextId().toString()
+                workspaceId: this.nextId().toString(),
+                include_header: true
             }, overrides)
             return new chorus.models.CSVImport(attributes);
         },

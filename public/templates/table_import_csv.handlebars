@@ -1,7 +1,12 @@
 <div class="directions">
     {{{directions}}}
 </div>
-
+<div class="options">
+    <div class="header_options">
+        <input id="include_header" type="checkbox" {{#if include_header}}checked{{/if}}></input>
+        <label for="include_header">{{t "dataset.import.include_header"}}</label>
+    </div>
+</div>
 
 <div class="result_table">
     <div class="data_table">

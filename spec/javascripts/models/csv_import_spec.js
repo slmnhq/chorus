@@ -122,6 +122,26 @@ describe("chorus.models.CSVImport", function() {
         itParsesCorrectly();
     })
 
+    context("no header row", function() {
+        beforeEach(function() {
+            this.model = fixtures.csvImport({
+                include_header: false,
+                lines: [
+                    'foo,2,3,1/2/3',
+                    'bar,2.1,sna,456'
+                ]
+            });
+            this.expectedColumns = [
+                {name: 'column_1', values: ['foo', 'bar'], type: 'text'},
+                {name: 'column_2', values: ['2', '2.1'], type: 'float'},
+                {name: 'column_3', values: ['3', 'sna'], type: 'text'},
+                {name: 'column_4', values: ['1/2/3', '456'], type: 'text'}
+            ]
+        });
+
+        itParsesCorrectly();
+    })
+
     function itParsesCorrectly() {
         describe("columnOrientedData", function() {
             beforeEach(function() {

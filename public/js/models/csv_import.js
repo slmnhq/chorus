@@ -3,10 +3,19 @@ chorus.models.CSVImport = chorus.models.Base.extend({
 
 
     columnOrientedData: function() {
-        var parser = new CSV()
+        var parser = new CSV();
         parser.from(this.get("lines"), {delimiter: this.get("delimiter")});
         var rows = parser.lines;
-        var column_names = _.map(rows.shift(), chorus.models.CSVImport.normalizeForDatabase);
+
+        var column_names = [];
+        if(this.get("include_header")) {
+            column_names = _.map(rows.shift(), chorus.models.CSVImport.normalizeForDatabase);
+        } else {
+            column_names = _.map(rows[0], function(column, i){
+                return "column_"+(i+1);
+            });
+        }
+
         return _.map(column_names, function(column_name, i) {
             var column_values = [];
 

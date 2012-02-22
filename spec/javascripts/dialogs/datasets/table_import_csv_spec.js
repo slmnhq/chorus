@@ -1,6 +1,5 @@
 describe("chorus.dialogs.TableImportCSV", function() {
     beforeEach(function() {
-
         chorus.page = {};
         this.sandbox = fixtures.sandbox({
             schemaName: "mySchema",
@@ -39,6 +38,10 @@ describe("chorus.dialogs.TableImportCSV", function() {
         expect(this.dialog.$(".directions input:text").val()).toBe("foo_quux_bar");
     });
 
+    it("checked the include header row checkbox by default", function() {
+        expect(this.dialog.$("#include_header")).toBeChecked();
+    });
+
     describe("the data table", function() {
         it("has the right number of column names", function() {
             expect(this.dialog.$(".data_table .thead .column_names .th input:text").length).toEqual(5);
@@ -55,6 +58,12 @@ describe("chorus.dialogs.TableImportCSV", function() {
 
         it("has the right number of column data types", function() {
             expect(this.dialog.$(".data_table .thead .data_types .th").length).toEqual(5);
+        })
+
+        it("does not memoize the data types", function() {
+            this.oldLinkMenus = this.dialog.linkMenus
+            this.dialog.render();
+            expect(this.oldLinkMenus === this.dialog.linkMenus).toBeFalsy();
         })
 
         it("has the right number of data columns", function() {
@@ -91,6 +100,59 @@ describe("chorus.dialogs.TableImportCSV", function() {
             })
         })
     });
+
+    describe("unchecking the include header box", function() {
+        beforeEach(function() {
+            spyOn(this.dialog, "postRender").andCallThrough();
+            spyOn(this.dialog, "recalculateScrolling").andCallThrough();
+            this.dialog.$("#include_header").click();
+            this.dialog.$("#include_header").change();
+        })
+
+        it("sets header on the csv model", function() {
+            expect(this.dialog.csv.get("include_header")).toBeFalsy();
+        });
+
+        it("re-renders", function() {
+            expect(this.dialog.postRender).toHaveBeenCalled();
+        });
+
+        it("the box is unchecked", function() {
+            expect(this.dialog.$("#include_header").attr("checked")).toBeFalsy();
+        });
+
+        it("calls recalculate Scrolling", function() {
+            expect(this.dialog.recalculateScrolling).toHaveBeenCalled();
+        });
+
+        describe("rechecking the box", function() {
+            beforeEach(function() {
+                this.dialog.postRender.reset();
+                this.dialog.$("#include_header").click();
+                this.dialog.$("#include_header").change();
+            })
+            it("sets header on the csv model", function() {
+                expect(this.dialog.csv.get("include_header")).toBeTruthy();
+            })
+            it("re-renders", function() {
+                expect(this.dialog.postRender).toHaveBeenCalled();
+            })
+            it("the box is checked", function() {
+                expect(this.dialog.$("#include_header").attr("checked")).toBeTruthy();
+            })
+        })
+    });
+
+    describe("scrolling the data", function() {
+        beforeEach(function() {
+            spyOn(this.dialog, "adjustHeaderPosition").andCallThrough();
+            this.dialog.render();
+            this.dialog.$(".tbody").trigger("scroll");
+        });
+        it("sets the header position", function() {
+            expect(this.dialog.adjustHeaderPosition).toHaveBeenCalled();
+        });
+    })
 
     describe("clicking the import button", function() {
         beforeEach(function() {
@@ -132,7 +194,9 @@ describe("chorus.dialogs.TableImportCSV", function() {
 
         context("when the import fails", function() {
             beforeEach(function() {
-                this.server.lastCreateFor(this.dialog.csv).fail([{message: "oops"}]);
+                this.server.lastCreateFor(this.dialog.csv).fail([
+                    {message: "oops"}
+                ]);
             });
 
             it("displays the error", function() {
