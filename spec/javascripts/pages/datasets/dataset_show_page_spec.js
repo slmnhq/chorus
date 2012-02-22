@@ -267,11 +267,17 @@ describe("chorus.pages.DatasetShowPage", function() {
 
             context("for a chorus view", function() {
                 beforeEach(function() {
+                    spyOn(this.page.mainContent.content, 'render').andCallThrough();
                     this.page.mainContent.contentDetails.trigger("transform:sidebar", 'chorus_view');
                 });
 
                 it("enables multi-select on the main content", function() {
                     expect(this.page.mainContent.content.selectMulti).toBeTruthy();
+                });
+
+                it("enables showDatasetName on the main content", function() {
+                    expect(this.page.mainContent.content.showDatasetName).toBeTruthy();
+                    expect(this.page.mainContent.content.render).toHaveBeenCalled();
                 });
 
                 it("should swap out the sidebar for the chorus view sidebar", function() {
@@ -288,6 +294,7 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                 describe("after cancelling", function() {
                     beforeEach(function() {
+                        this.page.mainContent.content.render.reset();
                         this.page.mainContent.content.selectAll();
                         var otherColumn = fixtures.databaseColumn();
                         otherColumn.tabularData = this.page.model;
@@ -301,6 +308,11 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                     it("disables multi-select on the main content", function() {
                         expect(this.page.mainContent.content.selectMulti).toBeFalsy();
+                    });
+
+                    it("disables showDatasetName on the main content", function() {
+                        expect(this.page.mainContent.content.showDatasetName).toBeFalsy();
+                        expect(this.page.mainContent.content.render).toHaveBeenCalled();
                     });
 
                     it("selects only the first item", function() {

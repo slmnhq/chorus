@@ -15,6 +15,9 @@ describe("chorus.views.DatabaseColumnList", function() {
                 type: "boolean",
                 comment : "column comment"
             });
+            this.dataset = fixtures.datasetSandboxTable();
+            this.dataset.setDatasetNumber(1);
+            this.dataset.columns().reset([this.column1, this.column2]);
             this.collection = fixtures.databaseColumnSet([this.column1, this.column2]);
             this.view = new chorus.views.DatabaseColumnList({collection: this.collection});
             this.view.render();
@@ -68,7 +71,7 @@ describe("chorus.views.DatabaseColumnList", function() {
                 expect(this.view.$("li.selected").length).toBe(0);
             });
         });
-        
+
         describe("clicking on a list item", function() {
             beforeEach(function() {
                 spyOn(chorus.PageEvents, "broadcast").andCallThrough();
@@ -139,6 +142,30 @@ describe("chorus.views.DatabaseColumnList", function() {
                     });
                 });
             });
+        })
+
+        describe("showDatasetName", function() {
+            context("when enabled", function() {
+                beforeEach(function() {
+                    this.view.showDatasetName = true;
+                    this.view.render();
+                })
+
+                it("shows the dataset name", function() {
+                    expect(this.view.$("li:eq(0) .aliased_name")).toContainText(this.column1.tabularData.aliasedName);
+                })
+            })
+
+            context("when disabled", function() {
+                beforeEach(function() {
+                    this.view.showDatasetName = false;
+                    this.view.render();
+                })
+
+                it("does not show the dataset name", function() {
+                    expect(this.view.$("li:eq(0) .aliased_name")).not.toExist();
+                })
+            })
         })
     });
 });

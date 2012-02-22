@@ -126,6 +126,8 @@
                     break;
                 case 'chorus_view':
                     this.mainContent.content.selectMulti = true;
+                    this.mainContent.content.showDatasetName = true;
+                    this.mainContent.content.render();
                     this.mainContent.content.selectNone();
                     this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model: this.model, aggregateColumnSet: this.columnSet});
                     break;
@@ -142,6 +144,7 @@
 
         hideSidebar: function(type) {
             this.mainContent.content.selectMulti = false;
+            this.mainContent.content.showDatasetName = false;
             this.mainContent.content.render();
             this.columnSet.reset(this.dataset.columns().models);
             this.$('.sidebar_content.primary').removeClass("hidden")

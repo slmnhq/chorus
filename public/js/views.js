@@ -267,6 +267,7 @@ chorus.views.Base = chorus.views.Bare.extend({
         if (this.resource) {
             ctx = _.clone(this.resource.attributes);
             ctx.resource = this.resource;
+            ctx.view = self;
             ctx.loaded = this.resource.loaded;
             if (this.collection) {
                 ctx.models = _.map(this.collection.models, function (model) {
