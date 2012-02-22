@@ -153,6 +153,10 @@ $header-item-spacing: 2*$padding-x;
             a {
                 vertical-align: baseline;
                 color: $link-color;
+
+                &.delete_link {
+                    @include secondary-text-small;
+                }
             }
             
             li {
