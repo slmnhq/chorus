@@ -162,6 +162,15 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             it("displays only the one remaining column", function() {
                 expect(this.view.$(".columns li").length).toBe(1);
             });
+
+            it("doesn't disable the create button bc there is still a column", function() {
+                expect(this.view.$("button.create")).not.toBeDisabled();
+            });
+
+            it("disables the create button when the last column is removed", function() {
+                this.view.$("a.remove").eq(0).click();
+                expect(this.view.$("button.create")).toBeDisabled();
+            });
         })
 
         describe("#whereClause", function() {

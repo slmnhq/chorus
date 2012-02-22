@@ -41,6 +41,6 @@
     </div>
 
     <div class="button_wrapper">
-        <button class="create" disabled="disabled">{{t "dataset.chorusview.sidebar.create_chorus_view"}}</button>
+        <button class="create" {{#unless valid}}disabled="disabled"{{/unless}}>{{t "dataset.chorusview.sidebar.create_chorus_view"}}</button>
     </div>
 </fieldset>

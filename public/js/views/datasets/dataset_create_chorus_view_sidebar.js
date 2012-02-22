@@ -21,7 +21,8 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
     additionalContext: function(ctx) {
         return {
             columns: this.chorusView.columns,
-            joins: this.chorusView.joins
+            joins: this.chorusView.joins,
+            valid: this.chorusView.columns.length > 0
         }
     },
 
