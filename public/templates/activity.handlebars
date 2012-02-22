@@ -27,11 +27,15 @@
         </ul>
         <div class="actions">
             <span class="timestamp">{{relativeTimestamp timestamp}}</span>
-            {{#ifAdminOr isOwner}}
-                <a class="delete_link alert" data-alert="DeleteNoteConfirmAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
-            {{/ifAdminOr}}
+            {{#if isNotification}}
+                <a class="delete_link alert" data-alert="DeleteNotificationConfirmAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
+            {{else}}
+                {{#ifAdminOr isOwner}}
+                    <a class="delete_link alert" data-alert="DeleteNoteConfirmAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
+                {{/ifAdminOr}}
+            {{/if}}
         </div>
-        {{#unless suppressLinks}}
+        {{#unless isNotification}}
             <div class="links">
                 <a class="comment dialog" data-dialog="Comment" data-entity-type="{{entityType}}" data-entity-id="{{id}}" data-entity-title="{{entityTitle}}" href="#">{{t "activity_stream.comment"}}</a>
                 {{#if isNote}}
@@ -52,4 +56,6 @@
     </div>
 </div>
 
-<ul class="comment_list"></ul>
+{{#unless isNotification}}
+    <ul class="comment_list"></ul>
+{{/unless}}

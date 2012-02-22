@@ -41,7 +41,7 @@ chorus.views.ActivityList = chorus.views.Base.extend({
             var view = new chorus.views.Activity({
                 model:model,
                 displayStyle: this.options.displayStyle,
-                suppressLinks: this.options.suppressLinks
+                isNotification: this.options.isNotification
             });
             ul.append(view.render().el);
         }, this);

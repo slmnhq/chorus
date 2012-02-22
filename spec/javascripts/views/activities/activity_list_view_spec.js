@@ -50,9 +50,9 @@ describe("chorus.views.ActivityList", function() {
             });
         });
 
-        describe("the suppressLinks option", function() {
+        describe("the isNotification option", function() {
             beforeEach(function() {
-                this.view.options.suppressLinks = true;
+                this.view.options.isNotification = true;
                 this.view.render();
             });
 

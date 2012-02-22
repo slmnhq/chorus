@@ -36,7 +36,7 @@ chorus.views.Header = chorus.views.Base.extend({
         this.notificationList = new chorus.views.ActivityList({
             collection: this.notifications.activities(),
             suppressHeading: true,
-            suppressLinks: true
+            isNotification: true
         });
     },
 

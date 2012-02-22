@@ -15,7 +15,7 @@
             _.extend(this.presenter, this.extensions)
             this.presenter.header = _.extend(this.defaultHeader(), this.presenter.header) //presenter.header includes extensions.header
             this.presenter.headerHtml = this.headerHtml();
-
+            this.presenter.isNotification = options.isNotification;
 
             this.presenter._impl = this;
 
