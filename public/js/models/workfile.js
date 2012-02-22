@@ -124,7 +124,11 @@
 
         downloadUrl: function() {
             var url = URI(this.url())
-            url.path(url.path() + "/file/" + this.get("versionInfo").versionFileId)
+            var path = url.path() + "/file/";
+            if (this.get("versionInfo")) {
+                path += this.get("versionInfo").versionFileId;
+            }
+            url.path(path)
             url.addSearch({ download: "true" })
             return url.toString();
         },
@@ -167,6 +171,18 @@
             };
 
             return this._super("save", [attrs, _.extend(options, overrides)])
+        },
+
+        linkUrl: function(options) {
+            if (this.isText() || this.isImage()) {
+                if (options && options.version) {
+                    return this.showUrlForVersion(options.version);
+                } else {
+                    return this.showUrl();
+                }
+            } else {
+                return this.downloadUrl();
+            }
         }
     });
 })();

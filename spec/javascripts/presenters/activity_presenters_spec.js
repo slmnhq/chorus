@@ -363,6 +363,7 @@ describe("chorus.presenters.Activity", function() {
             this.model = fixtures.activities.WORKFILE_CREATED();
             this.workspace = this.model.workspace();
             this.workfile = this.model.workfile();
+            spyOn(this.workfile, "linkUrl").andReturn("frobble");
             this.presenter = new chorus.presenters.Activity(this.model)
         });
 
@@ -370,9 +371,9 @@ describe("chorus.presenters.Activity", function() {
             expect(this.presenter.objectName).toBe(this.workfile.get("name"));
         });
 
-        it("should have the right objectUrl", function() {
-            var url = new chorus.models.Workfile({id: this.workfile.get("id"), workspaceId: this.workspace.get("id"), versionInfo: { versionNum: 1 }, latestVersionNum: 2}).showUrl();
-            expect(this.presenter.objectUrl).toBe(url);
+        it("delegates to Workfile#linkUrl for the objectUrl", function() {
+            expect(this.workfile.linkUrl).toHaveBeenCalledWith({ version: 1 });
+            expect(this.presenter.objectUrl).toBe("frobble");
         });
 
         it("should have the right workspaceName", function() {
@@ -392,6 +393,7 @@ describe("chorus.presenters.Activity", function() {
             this.model = fixtures.activities.WORKFILE_UPGRADED_VERSION();
             this.workspace = this.model.workspace();
             this.workfile = this.model.workfile();
+            spyOn(this.workfile, "linkUrl").andReturn("frobble");
             this.presenter = new chorus.presenters.Activity(this.model)
         });
 
@@ -411,8 +413,9 @@ describe("chorus.presenters.Activity", function() {
             expect(this.presenter.objectName).toBe(this.workfile.get("name"));
         });
 
-        it("should have the right objectUrl", function() {
-            expect(this.presenter.objectUrl).toBe(this.workfile.showUrl());
+        it("delegates to Workfile#linkUrl for the objectUrl", function() {
+            expect(this.workfile.linkUrl).toHaveBeenCalled();
+            expect(this.presenter.objectUrl).toBe("frobble");
         });
 
         it("has the right versionName", function() {
