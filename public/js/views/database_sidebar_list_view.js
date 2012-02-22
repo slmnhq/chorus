@@ -125,7 +125,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
         if (!this.schema ||
             (executionSchema.instanceId != this.schema.get("instanceId")) ||
             (executionSchema.databaseName != this.schema.get("databaseName")) ||
-            (executionSchema.name != this.schema.get("name")))
+            (executionSchema.schemaName != this.schema.get("name")))
         {
             this.setSchema(new chorus.models.Schema(_.extend(executionSchema, { name: executionSchema.schemaName })))
         }

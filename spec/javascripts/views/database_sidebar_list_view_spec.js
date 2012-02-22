@@ -159,7 +159,11 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
                     context("when the execution schema is the same as the view's schema", function() {
                         beforeEach(function() {
-                            chorus.PageEvents.broadcast("workfile:executed", fixtures.workfile(), this.schema.attributes)
+                            this.executionSchema = _.clone(this.schema.attributes);
+                            this.executionSchema.schemaName = this.executionSchema.name;
+                            delete this.executionSchema.name;
+                            delete this.executionSchema.id;
+                            chorus.PageEvents.broadcast("workfile:executed", fixtures.workfile(), this.executionSchema)
                         });
 
                         it("does not fetch anything", function() {
