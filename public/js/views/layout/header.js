@@ -15,7 +15,21 @@ chorus.views.Header = chorus.views.Base.extend({
         this.session = chorus.session;
         this.notifications = new chorus.collections.NotificationSet();
         this.requiredResources.add([this.session, this.notifications]);
+
+        this.notificationList = new chorus.views.ActivityList({
+            collection: new chorus.collections.ActivitySet(),
+            suppressHeading: true,
+            isNotification: true
+        });
+
+        this.notifications.bind("reset", function() {
+            this.notificationList.collection.reset(this.notifications.activities().models);
+            this.notificationList.collection.loaded = true;
+            this.render();
+        }, this);
         this.notifications.fetchAll();
+
+        chorus.PageEvents.subscribe("notification:deleted", this.refreshNotifications, this);
     },
 
     additionalContext:function (ctx) {
@@ -32,12 +46,8 @@ chorus.views.Header = chorus.views.Base.extend({
         });
     },
 
-    resourcesLoaded: function() {
-        this.notificationList = new chorus.views.ActivityList({
-            collection: this.notifications.activities(),
-            suppressHeading: true,
-            isNotification: true
-        });
+    refreshNotifications : function() {
+        this.notifications.fetchAll();
     },
 
     togglePopupNotifications: function(e) {

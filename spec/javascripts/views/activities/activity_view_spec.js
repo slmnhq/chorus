@@ -25,8 +25,8 @@ describe("chorus.views.Activity", function() {
                 expect(this.view.$("a[data-alert=DeleteNoteConfirmAlert]")).not.toExist();
             });
 
-            it("should have a DeleteNotificationConfirmAlert", function() {
-                expect(this.view.$("a[data-alert=DeleteNotificationConfirmAlert]")).toExist();
+            it("should have a NotificationDeleteAlert", function() {
+                expect(this.view.$("a[data-alert=NotificationDeleteAlert]")).toExist();
             });
         });
 

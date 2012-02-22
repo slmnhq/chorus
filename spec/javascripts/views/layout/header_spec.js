@@ -250,6 +250,31 @@ describe("chorus.views.Header", function() {
                     });
                 });
             });
+
+            describe("when a notification:deleted event occurs", function() {
+                beforeEach(function() {
+                    this.server.reset();
+                    chorus.PageEvents.broadcast("notification:deleted");
+                });
+
+                it("should re-fetch the notifications", function() {
+                    expect(this.server.lastFetchAllFor(this.view.notifications)).toBeDefined();
+                });
+
+                context("when the fetch completes", function() {
+                    beforeEach(function() {
+                        this.server.completeFetchAllFor(this.view.notifications, [fixtures.notification()]);
+                    });
+
+                    it("should display the new notification count", function() {
+                        expect(this.view.$(".notifications a").text()).toBe("1");
+                    });
+
+                    it("should render the new notification list", function() {
+                        expect(this.view.$(".popup_notifications li").length).toBe(1);
+                    });
+                });
+            });
         });
     });
 });
