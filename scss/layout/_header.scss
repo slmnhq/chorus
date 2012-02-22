@@ -161,6 +161,14 @@ $header-item-spacing: 2*$padding-x;
                 &:last-child {
                     border-bottom: none;
                 }
+
+                &.insight {
+                    padding: 12px 0 5px;
+
+                    .activity_item {
+                        padding-top: 12px;
+                    }
+                }
             }
         }
     }
