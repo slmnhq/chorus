@@ -131,7 +131,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
     });
 
     describe("event handling", function() {
-        describe("file:executionSucceeded", function() {
+        describe("workfile:executed", function() {
             beforeEach(function() {
                 spyOn(this.view, "render");
                 spyOnEvent(this.view.model, "change")
@@ -144,34 +144,9 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     schemaName: "louis"
                 }
 
-                chorus.PageEvents.broadcast("file:executionSucceeded", fixtures.task({ executionInfo: this.executionInfo }));
-            })
+                chorus.PageEvents.broadcast("workfile:executed", this.model, this.executionInfo);
+            });
 
-            itUpdatesTheWorkfileForTheExecution();
-        })
-
-        describe("file:executionFailed", function() {
-            beforeEach(function() {
-                spyOn(this.view, "render");
-                spyOnEvent(this.view.model, "change")
-                this.executionInfo = {
-                    instanceId: '51',
-                    instanceName: "ned",
-                    databaseId: '52',
-                    databaseName: "rob",
-                    schemaId: '53',
-                    schemaName: "louis"
-                }
-
-                chorus.PageEvents.broadcast("file:executionFailed", fixtures.taskWithErrors(), { status: "ok", resource: [
-                    { executionInfo: this.executionInfo }
-                ] });
-            })
-
-            itUpdatesTheWorkfileForTheExecution();
-        })
-
-        function itUpdatesTheWorkfileForTheExecution() {
             it("updates the execution info in the workfile", function() {
                 expect(this.view.model.get("executionInfo")).toBe(this.executionInfo);
             })
@@ -183,7 +158,6 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             it("does not trigger change on the model", function() {
                 expect("change").not.toHaveBeenTriggeredOn(this.view.model);
             })
-        }
+        })
     });
-})
-;
+});

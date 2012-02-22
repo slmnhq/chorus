@@ -2,8 +2,7 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
     className: "sql_workfile_content_details",
 
     setup: function() {
-        chorus.PageEvents.subscribe("file:executionSucceeded", this.executionSucceeded, this);
-        chorus.PageEvents.subscribe("file:executionFailed", this.executionFailed, this);
+        chorus.PageEvents.subscribe("workfile:executed", this.workfileExecuted, this);
     },
 
     postRender: function() {
@@ -37,15 +36,7 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
         this.dialog.launchModal();
     },
 
-    executionSucceeded: function(task) {
-        this.executionCompleted(task.get("executionInfo"));
-    },
-
-    executionFailed: function(task, response) {
-        this.executionCompleted(response.resource[0].executionInfo);
-    },
-
-    executionCompleted: function(executionInfo) {
+    workfileExecuted: function(workfile, executionInfo) {
         this.model.set({executionInfo: executionInfo}, {silent: true});
         this.render();
     }

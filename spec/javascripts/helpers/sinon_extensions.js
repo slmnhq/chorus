@@ -138,13 +138,14 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
         );
     },
 
-    fail: function(message) {
+    fail: function(message, resource) {
+        resource || (resource = [])
         return this.respond(
             200,
             { 'Content-Type': 'application/json' },
             JSON.stringify({
                 status: "fail",
-                resource: [],
+                resource: resource,
                 message: message || "something went wrong!"
             })
         );

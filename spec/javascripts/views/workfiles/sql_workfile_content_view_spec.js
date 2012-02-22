@@ -56,6 +56,15 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
             describe("running in the default schema", function() {
                 beforeEach(function() {
+                    this.executionInfo = {
+                        instanceId: '4',
+                        instanceName: "ned",
+                        databaseId: '5',
+                        databaseName: "rob",
+                        schemaId: '6',
+                        schemaName: "louis"
+                    }
+
                     chorus.PageEvents.broadcast("file:runCurrent");
                 })
 
@@ -79,13 +88,16 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                 describe("when the task completes successfully", function() {
                     beforeEach(function() {
-                        this.server.lastCreate().succeed([{
-                            id : "10100",
-                            state : "success",
-                            result : {
-                                message : "hi there"
+                        this.server.lastCreate().succeed([
+                            {
+                                id: "10100",
+                                state: "success",
+                                result: {
+                                    message: "hi there",
+                                },
+                                executionInfo: this.executionInfo
                             }
-                        }]);
+                        ]);
                     })
 
                     it("broadcasts file:executionSucceeded", function() {
@@ -95,6 +107,10 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     it("sets the executing property to false", function() {
                         expect(this.view.executing).toBeFalsy();
                     });
+
+                    it("broadcasts workfile:executed", function() {
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:executed", this.workfile, this.executionInfo);
+                    })
 
                     describe("executing again", function() {
                         beforeEach(function() {
@@ -109,7 +125,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                 describe("when the task completion fails", function() {
                     beforeEach(function() {
-                        this.server.lastCreate().fail();
+                        this.server.lastCreate().fail("it broke", [ { executionInfo: this.executionInfo }]);
                     })
 
                     it("broadcasts file:executionFailed", function() {
@@ -119,6 +135,11 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     it("sets the executing property to false", function() {
                         expect(this.view.executing).toBeFalsy();
                     });
+
+                    it("broadcasts workfile:executed", function() {
+//                        expect(1).toBe(2);
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:executed", this.workfile, this.executionInfo);
+                    })
                 })
             });
 
