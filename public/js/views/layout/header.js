@@ -14,6 +14,19 @@ chorus.views.Header = chorus.views.Base.extend({
         this.notifications.fetchAll();
     },
 
+    resourcesLoaded : function() {
+        this.activityUl = $("<ul/>").addClass("activities");
+        this.notifications.each(function(notification) {
+            var activity = new chorus.models.Activity(notification.get("body"));
+            var view = new chorus.views.Activity({model:activity, isNotification: true});
+            this.activityUl.append(view.render().el);
+        }, this);
+    },
+
+    postRender: function() {
+        this.$(".popup_notifications").append(this.activityUl);
+    },
+
     additionalContext:function (ctx) {
         this.requiredResources.reset()
         var user = this.session.user();

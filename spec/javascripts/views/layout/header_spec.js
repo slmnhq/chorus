@@ -65,6 +65,10 @@ describe("chorus.views.Header", function() {
             it("makes the notification count a link", function() {
                 expect(this.view.$(".notifications a")).toExist();
             })
+
+            it("has an li for each notification", function() {
+                expect(this.view.$(".popup_notifications li").length).toBe(2);
+            })
         })
 
         context("when there are no notifications", function() {
