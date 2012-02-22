@@ -12,9 +12,15 @@
                 float: right;
                 height: 35px;
                 line-height: 35px;
+                padding-right: 10px;
 
                 a {
                     font-size: 12px;
+                }
+
+                .separator {
+                    color: $link-color;
+                    margin: 0 6px;
                 }
             }
             .name {
@@ -56,6 +62,52 @@
         select {
             display: block;
             width: 326px;
+        }
+    }
+}
+
+.preview_columns {
+    width: 480px;
+
+    .list_container {
+        max-height: 10 * 36px;
+        overflow-y: auto;
+    }
+
+    .list {
+        margin-right: 20px;
+        border-right: 1px solid $subheader-border-color-dark;
+    }
+
+    .sub_header {
+        .search {
+            float: right;
+            width: 250px;
+            vertical-align: middle;
+            margin-top: 5px;
+        }
+
+        .name {
+            display: inline-block;
+            max-width: 165px;
+            @include ellipsis;
+            @include font-content-details;
+        }
+    }
+
+    .text {
+        .name {
+            @include font-normal-alpha;
+        }
+
+        .comment {
+            @include secondary-text-small;
+        }
+    }
+
+    .modal_controls {
+        button.cancel {
+            float: left;
         }
     }
 }

@@ -24,7 +24,9 @@ describe("chorus.dialogs.PreviewColumns", function() {
         expect(searchOptions.input).toBe(".search");
         expect(searchOptions.list).toBe("ul.list");
         expect(searchOptions.selector).toBe(".name, .comment");
-    })
+
+        expect(search.attr("placeholder")).toMatchTranslation("dataset.manage_join_tables.find_a_column");
+    });
 
     it("fetches the table or view's columns", function() {
         expect(this.databaseObject.columns()).toHaveBeenFetched();

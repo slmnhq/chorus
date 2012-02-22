@@ -1,5 +1,6 @@
 chorus.dialogs.PreviewColumns = chorus.dialogs.Base.extend({
     className: "preview_columns",
+    additionalClass: "with_sub_header",
     title: t("dataset.manage_join_tables.title"),
 
     setup: function() {

@@ -1,29 +1,28 @@
 <div class="sub_header">
     <span class="name">{{objectName}}</span>
     <span class="column_count">({{count}})</span>
-    <input class="search"/>
+    <input class="search" placeholder='{{t "dataset.manage_join_tables.find_a_column"}}'/>
 </div>
 
-<ul class="list">
-    {{#each models}}
-        <li>
-            <span class="spacer left"/>
-
-            <div class="text">
-                <div class="main">
-                    <span class="name">{{name}}</span>
+<div class="list_container">
+    <ul class="database_column_list list">
+        {{#each models}}
+            <li>
+                <span class="spacer left"/>
+                <div class="text">
+                    <div class="main">
+                        <span class="name">{{name}}</span>
+                    </div>
+                    <div class="details">
+                        <span class="comment">{{recentComment}}</span>
+                    </div>
                 </div>
-                <div class="details">
-                    <span class="comment">{{recentComment}}</span>
-                </div>
-            </div>
-
-            <div class="type {{typeClass}}"><span class="left"/><span class="type_name">{{type}}</span><span class="right"/></div>
-
-            <span class="spacer right"/>
-        </li>
-    {{/each}}
-</ul>
+                <div class="type {{typeClass}}"><span class="left"/><span class="type_name">{{type}}</span><span class="right"/></div>
+                <span class="spacer right"/>
+            </li>
+        {{/each}}
+    </ul>
+</div>
 
 <div class="modal_controls">
     <button class="cancel">{{{t "actions.return_to_list"}}}</button>
