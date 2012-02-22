@@ -15,7 +15,6 @@ chorus.views.DatasetEditChorusViewSidebar = chorus.views.Sidebar.extend({
         this.activityList = new chorus.views.ActivityList({
             collection: this.collection,
             suppressHeading: true,
-            headingText: t("tabs.activity"),
             additionalClass: "sidebar",
             displayStyle: ['without_object', 'without_workspace']
         });

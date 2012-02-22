@@ -26,7 +26,7 @@ chorus.views.Dashboard = chorus.views.Base.extend({
         this.activities.fetch();
         this.activityList = new chorus.views.ActivityList({
             collection: this.activities,
-            headingText: t("dashboard.title.activity"),
+            suppressHeading: true,
             additionalClass: "dashboard"
         });
 
