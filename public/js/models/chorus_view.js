@@ -43,9 +43,9 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
     },
 
     fromClause: function() {
-        var result = "FROM " + this.safePGName(this.sourceObject.get("objectName"));
+        var result = "FROM " + this.sourceObject.fromClause();
         _.each(this.joins, _.bind(function(join) {
-            result += "\n\t" + this.constructor.joinSqlText(join.joinType) + " " + join.destinationColumn.tabularData.quotedName()
+            result += "\n\t" + this.constructor.joinSqlText(join.joinType) + " " + join.destinationColumn.tabularData.fromClause()
                 + " ON " + join.sourceColumn.quotedName() + ' = ' + join.destinationColumn.quotedName();
         }, this));
         return result;

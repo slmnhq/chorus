@@ -31,9 +31,9 @@ chorus.models.DatabaseColumn = chorus.models.Base.extend({
     },
 
     quotedName: function() {
-        return this.get("parentName") &&
+        return this.tabularData &&
             this.get("name") &&
-            this.safePGName(this.get("parentName"), this.get("name"));
+            this.safePGName(this.tabularData.selectName(), this.get("name"));
     }
 }, {
     humanTypeMap: {

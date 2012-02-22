@@ -169,7 +169,7 @@ describe("chorus.models.ChorusView", function() {
             it("has the second table joined in", function() {
                 var lines = this.model.fromClause().split('\n');
                 expect(lines[0]).toBe('FROM ' + this.sourceDataset.quotedName());
-                expect(lines[1]).toBe('\tINNER JOIN ' + this.firstJoinedColumn.tabularData.quotedName() + ' ON '
+                expect(lines[1]).toBe('\tINNER JOIN ' + this.firstJoinedColumn.tabularData.fromClause() + ' ON '
                     + this.sourceColumn.quotedName() + " = " + this.firstJoinedColumn.quotedName());
             })
         })
@@ -221,7 +221,7 @@ describe("chorus.models.ChorusView", function() {
             });
 
             it("should build a select clause from the selected columns", function() {
-                var tableName = this.sourceDataset.quotedName();
+                var tableName = this.sourceDataset.selectName();
                 expect(this.model.selectClause()).toBe('SELECT ' + tableName + '."Foo", ' + tableName + '.bar');
             });
 
@@ -234,8 +234,8 @@ describe("chorus.models.ChorusView", function() {
                 });
 
                 it("has the joined columns too", function() {
-                    var tableName = this.sourceDataset.quotedName();
-                    var joinedTableName = this.joinedDataset.quotedName();
+                    var tableName = this.sourceDataset.selectName();
+                    var joinedTableName = this.joinedDataset.selectName();
                     expect(this.model.selectClause()).toBe('SELECT ' + tableName + '."Foo", ' + tableName + '.bar, ' + joinedTableName + '.baz');
                 });
             });

@@ -118,6 +118,20 @@ chorus.models.TabularData = chorus.models.Base.extend({
 
     quotedName: function() {
         return this.safePGName(this.get("objectName"));
+    },
+
+    selectName: function() {
+        if(this.datasetNumber) {
+            return 't' + this.datasetNumber;
+        }
+        return this.quotedName();
+    },
+
+    fromClause: function() {
+        if(this.datasetNumber) {
+            return this.quotedName() + " AS t" + this.datasetNumber
+        }
+        return this.quotedName();
     }
 }, {
 

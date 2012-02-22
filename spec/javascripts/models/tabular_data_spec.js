@@ -353,4 +353,40 @@ describe("chorus.models.TabularData", function() {
         });
     });
 
+    describe("#selectName", function() {
+        context("when a datasetNumber is not set", function() {
+            it("returns the quotedName", function() {
+                expect(this.tabularData.selectName()).toBe(this.tabularData.quotedName());
+            });
+        });
+
+        context("when a datasetNumber is set", function() {
+            beforeEach(function() {
+                this.tabularData.datasetNumber = 1;
+            });
+
+            it("returns the alias", function() {
+                expect(this.tabularData.selectName()).toBe("t1");
+            });
+        });
+    });
+
+    describe("#fromClause", function() {
+        context("when a datasetNumber is not set", function() {
+            it("returns the quotedName", function() {
+                expect(this.tabularData.fromClause()).toBe(this.tabularData.quotedName());
+            });
+        });
+
+        context("when a datasetNumber is set", function() {
+            beforeEach(function() {
+                this.tabularData.datasetNumber = 1;
+            });
+
+            it("returns the aliased from clause", function() {
+                expect(this.tabularData.fromClause()).toBe(this.tabularData.quotedName() + " AS t1");
+            });
+        });
+    })
+
 });
