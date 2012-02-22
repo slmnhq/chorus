@@ -105,7 +105,7 @@ describe("chorus.dialogs.TableImportCSV", function() {
         beforeEach(function() {
             spyOn(this.dialog, "postRender").andCallThrough();
             spyOn(this.dialog, "recalculateScrolling").andCallThrough();
-            this.dialog.$("#include_header").click();
+            this.dialog.$("#include_header").removeAttr("checked");
             this.dialog.$("#include_header").change();
         })
 
@@ -128,7 +128,7 @@ describe("chorus.dialogs.TableImportCSV", function() {
         describe("rechecking the box", function() {
             beforeEach(function() {
                 this.dialog.postRender.reset();
-                this.dialog.$("#include_header").click();
+                this.dialog.$("#include_header").attr("checked", "checked");
                 this.dialog.$("#include_header").change();
             })
             it("sets header on the csv model", function() {
