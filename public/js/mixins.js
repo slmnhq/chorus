@@ -62,12 +62,12 @@ chorus.Mixins.dbHelpers = {
 }
 
 chorus.Mixins.Fetching = {
-    fetchIfNotLoaded: function() {
+    fetchIfNotLoaded: function(options) {
         if (this.loaded) {
             return;
         }
         if (!this.fetching) {
-            this.fetch();
+            this.fetch(options);
         }
     }
 }

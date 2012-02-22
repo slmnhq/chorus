@@ -26,6 +26,10 @@ describe("chorus.dialogs.ManageJoinTables", function() {
         $("#jasmine_content").append(this.dialog.el);
     });
 
+    it("sets urlParams rows=", function() {
+        expect(this.dialog.collection.urlParams().rows).toBe(9);
+    });
+
     it("retrieves the chorus view model from the launch element", function() {
         expect(this.dialog.model).toBe(this.chorusView);
     });
@@ -79,7 +83,8 @@ describe("chorus.dialogs.ManageJoinTables", function() {
         it("shows the name of each table/view", function() {
             expect(this.dialog.$(".name").eq(0)).toHaveText("cats");
             expect(this.dialog.$(".name").eq(1)).toHaveText("dogs");
-            expect(this.dialog.$(".name").eq(2)).toHaveText("lions");
+            expect(this.dialog.$(".name").eq(2)).toHaveText("original");
+            expect(this.dialog.$(".name").eq(3)).toHaveText("lions");
         });
 
         it("shows the column count for each table/view", function() {
@@ -94,8 +99,8 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             expect(icons.eq(1)).toHaveAttr("src", this.databaseObject2.iconUrl({ size: "small" }));
         });
 
-        it("doesn't display original the table/view", function() {
-            expect(this.dialog.$(".name")).not.toContainText("original");
+        it("disables the 'join table' link for the original table/view", function() {
+            expect(this.dialog.$(".actions").eq(2)).toHaveClass("original");
         })
 
         it("shows the original table canonical name", function() {
@@ -112,17 +117,19 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 expect(this.lis.eq(0)).not.toHaveClass("selected");
                 expect(this.lis.eq(1)).toHaveClass("selected");
                 expect(this.lis.eq(2)).not.toHaveClass("selected");
+                expect(this.lis.eq(3)).not.toHaveClass("selected");
             });
 
             describe("when another table is clicked", function() {
                 beforeEach(function() {
-                    this.lis.eq(2).trigger("click");
+                    this.lis.eq(3).trigger("click");
                 });
 
                 it("un-highlights the first table and highlights the table that was just clicked", function() {
                     expect(this.lis.eq(0)).not.toHaveClass("selected");
                     expect(this.lis.eq(1)).not.toHaveClass("selected");
-                    expect(this.lis.eq(2)).toHaveClass("selected");
+                    expect(this.lis.eq(2)).not.toHaveClass("selected");
+                    expect(this.lis.eq(3)).toHaveClass("selected");
                 });
             });
         });
@@ -131,12 +138,13 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             var joinLinks = this.dialog.$("a.join");
             expect(joinLinks.eq(0).text().trim()).toMatchTranslation("dataset.manage_join_tables.join_view");
             expect(joinLinks.eq(1).text().trim()).toMatchTranslation("dataset.manage_join_tables.join_table");
-            expect(joinLinks.eq(2).text().trim()).toMatchTranslation("dataset.manage_join_tables.join_view");
+            expect(joinLinks.eq(2).text().trim()).toMatchTranslation("dataset.manage_join_tables.join_table");
+            expect(joinLinks.eq(3).text().trim()).toMatchTranslation("dataset.manage_join_tables.join_view");
         });
 
         it("has a 'preview columns' link for every dataset object", function() {
             var links = this.dialog.$("a.preview_columns");
-            expect(links.length).toBe(3);
+            expect(links.length).toBe(4);
             expect(links.eq(0).text()).toMatchTranslation("dataset.manage_join_tables.preview_columns");
         });
 
@@ -160,7 +168,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
         describe("when a 'join table' link is clicked", function() {
             beforeEach(function() {
                 spyOn(chorus.dialogs.JoinConfiguration.prototype, 'render').andCallThrough();
-                this.dialog.$("a.join").eq(2).trigger("click");
+                this.dialog.$("a.join").eq(3).trigger("click");
             });
 
             it("launches the 'join configuration' sub-dialog", function() {
@@ -176,5 +184,32 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 expect(joinConfigurationDialog.destinationObject.get("id")).toBe(this.databaseObject3.get("id"));
             });
         });
+
+        it("when the original dataset's 'join table' link is clicked nothing happens", function() {
+            spyOn(chorus.dialogs.JoinConfiguration.prototype, 'render').andCallThrough();
+            this.dialog.$("a.join").eq(2).trigger("click");
+            expect(chorus.dialogs.JoinConfiguration.prototype.render).not.toHaveBeenCalled();
+        });
+
+        it("styles differently for the original dataset", function() {
+            expect(this.dialog.$("ul.list li .actions").eq(0)).not.toHaveClass("original");
+            expect(this.dialog.$("ul.list li .actions").eq(1)).not.toHaveClass("original");
+            expect(this.dialog.$("ul.list li .actions").eq(2)).toHaveClass("original");
+            expect(this.dialog.$("ul.list li .actions").eq(3)).not.toHaveClass("original");
+        });
+
+        describe("when there are many tables to join", function() {
+            it("shows pagination controls", function() {
+                expect(this.dialog.$(".list_content_details")).toBeHidden();
+                expect(this.dialog.$(".list_content_details .count .number")).toContainText("4");
+                expect(this.server.lastFetchFor(this.schema.databaseObjects()).url).toContain("rows=9")
+            })
+        });
+
+        describe("when a join table' link is clicked for the original table", function() {
+            it("should not launches the 'join configuration' sub-dialog", function() {
+
+            })
+        })
     });
 });

@@ -10,6 +10,10 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
         "click a.preview_columns": "onClickPreviewColumns"
     },
 
+    subviews: {
+        '.join_pagination': 'joinTablePaginator'
+    },
+
     makeModel: function() {
         this._super("makeModel", arguments);
         this.model = this.options.launchElement.data("chorusView")
@@ -18,12 +22,18 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     setup: function() {
         this.schema = this.pageModel.schema();
         this.resource = this.collection = this.schema.databaseObjects();
+
+        var urlParams = this.collection.urlParams;
+        this.collection.urlParams = function() {
+            return _.extend({rows: 9}, urlParams && urlParams());
+        };
+
         this.collection.fetchIfNotLoaded();
+
+        this.joinTablePaginator = new chorus.views.ListContentDetails({collection:this.collection, modelClass:"Dataset", hideIfNoPagination:true});
     },
 
     postRender: function() {
-        var originalId = this.pageModel.get("id");
-        this.collection.remove(this.collection.get(originalId));
         this.setupScrolling(this.$(".list"));
     },
 
@@ -37,6 +47,9 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
         e.preventDefault();
         var clickedId = $(e.target).closest("li").attr("table_id")
         var databaseObject = this.collection.findWhere({ id: clickedId });
+        if (databaseObject == this.collection.get(this.pageModel.get("id"))) {
+            return;
+        }
 
         var joinConfigurationDialog = new chorus.dialogs.JoinConfiguration({
             model: this.model,
@@ -62,7 +75,8 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     collectionModelContext: function(model) {
         return {
             isView:  model.metaType() == "view",
-            iconUrl: model.iconUrl({ size: "small" })
+            iconUrl: model.iconUrl({ size: "small" }),
+            original: model.id == this.pageModel.get("id")
         };
     }
 });

@@ -1,12 +1,17 @@
 <div class="sub_header">
     <span class="canonical_name">{{canonicalName}}</span>
 </div>
+<div class="join_pagination content_details"></div>
 <ul class="list">
     {{#each models}}
         <li table_id="{{id}}">
             <span class="spacer left"/>
 
-            <div class="actions">
+            <div class="actions
+                {{#if original}}
+                original
+                {{/if}}
+            ">
                 <a href="#" class="preview_columns">{{t "dataset.manage_join_tables.preview_columns"}}</a>
                 <span class="separator">|</span>
                 <a class="join" href="">

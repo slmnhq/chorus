@@ -1231,6 +1231,15 @@ describe("chorus.models", function() {
                     expect(this.resource.fetch).toHaveBeenCalled();
                 })
             });
+
+            context("fetching with options", function() {
+                beforeEach(function() {
+                    this.resource.fetchIfNotLoaded({rows: 10});
+                });
+                it("should pass options to fetch", function() {
+                    expect(this.resource.fetch.mostRecentCall.args[0].rows).toBe(10);
+                })
+            });
         })
     }
 });

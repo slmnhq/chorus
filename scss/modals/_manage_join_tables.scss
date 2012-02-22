@@ -1,11 +1,16 @@
 .manage_join_tables {
     width: 480px;
 
+    .list_content_details {
+        width: auto;
+    }
+
     .list {
         max-height: 500px;
         overflow: auto;
 
         li {
+            padding-right:10px;
             margin-right: 0;
 
             .actions {
@@ -40,6 +45,11 @@
                 .name, .column_count, a {
                     color: white;
                 }
+            }
+
+            .original a.join {
+                @include secondary-text-small;
+                cursor: not-allowed;
             }
         }
     }
