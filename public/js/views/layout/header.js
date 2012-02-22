@@ -6,6 +6,10 @@ chorus.views.Header = chorus.views.Base.extend({
         "click .notifications a":"togglePopupNotifications"
     },
 
+    subviews: {
+        ".popup_notifications ul": "notificationList"
+    },
+
     setup:function () {
         $(document).bind("chorus:menu:popup", _.bind(this.popupEventHandler, this))
         this.session = chorus.session;
@@ -25,6 +29,14 @@ chorus.views.Header = chorus.views.Base.extend({
             notifications: this.notifications,
             displayName: (fullName.length > 20 ? (firstName + ' ' + lastName[0] + '.') : fullName),
             userUrl: user && user.showUrl()
+        });
+    },
+
+    resourcesLoaded: function() {
+        this.notificationList = new chorus.views.ActivityList({
+            collection: this.notifications.activities(),
+            suppressHeading: true,
+            suppressLinks: true
         });
     },
 
