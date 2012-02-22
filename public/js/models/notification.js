@@ -8,6 +8,8 @@ chorus.models.Notification = chorus.models.Base.extend({
             activity.set({type : this.get("type")});
         }
 
+        activity.set({notificationId : this.id});
+
         return activity;
     }
 });

@@ -28,7 +28,7 @@
         <div class="actions">
             <span class="timestamp">{{relativeTimestamp timestamp}}</span>
             {{#if isNotification}}
-                <a class="delete_link alert" data-alert="DeleteNotificationConfirmAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
+                <a class="delete_link alert" data-alert="NotificationDeleteAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
             {{else}}
                 {{#ifAdminOr isOwner}}
                     <a class="delete_link alert" data-alert="DeleteNoteConfirmAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>

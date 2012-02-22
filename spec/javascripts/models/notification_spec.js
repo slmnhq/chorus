@@ -36,5 +36,9 @@ describe("chorus.models.Notification", function() {
             expect(this.activity.get("author").firstName).toBe("Colonel");
             expect(this.activity.get("author").lastName).toBe("Sanders");
         });
+
+        it("has a notificationId field", function() {
+            expect(this.activity.get("notificationId")).toBe(this.notification.get("id"));
+        })
     });
 })

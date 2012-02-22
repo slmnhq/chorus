@@ -2101,6 +2101,7 @@ beforeEach(function() {
         notificationJson: function(overrides) {
             var id = fixtures.nextId();
             return _.extend({
+                id: id,
                 content: "what an alert!",
                 operatorFullName: "Joe Bloggs",
                 operator: "joebloggs",
