@@ -24,5 +24,22 @@ describe("chorus.collections.ActivitySet", function() {
             });
         });
     });
+
+    describe("#filterInsights", function() {
+        it("re-fetches the collection using the insight API", function() {
+            this.collection.filterInsights();
+
+            expect(this.collection.url()).toHaveUrlPath("/edc/commentinsight/");
+            expect(this.collection).toHaveBeenFetched();
+        });
+    });
+
+    describe("#filterAll", function() {
+        it("re-fetches the collection using the normal activity stream API (not the insight API)", function() {
+            this.collection.filterAll();
+            expect(this.collection.url()).toHaveUrlPath("/edc/activitystream/workspace/45");
+            expect(this.collection).toHaveBeenFetched();
+        });
+    });
 });
 

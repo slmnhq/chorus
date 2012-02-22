@@ -21,11 +21,11 @@ chorus.views.Dashboard = chorus.views.Base.extend({
             content: new chorus.views.DashboardInstanceList({ collection: this.options.instanceSet })
         });
 
-        this.activities = chorus.session.user().activities('home');
+        var activities = chorus.session.user().activities('home');
 
-        this.activities.fetch();
+        activities.fetch();
         this.activityList = new chorus.views.ActivityList({
-            collection: this.activities,
+            collection: activities,
             suppressHeading: true,
             additionalClass: "dashboard"
         });
@@ -35,18 +35,8 @@ chorus.views.Dashboard = chorus.views.Base.extend({
             content: this.activityList
         });
 
-        this.dashboardMain.contentHeader.bind("filter:insights", this.onShowInsightsClicked, this);
-        this.dashboardMain.contentHeader.bind("filter:all", this.onShowActivityClicked, this);
-    },
-
-    onShowInsightsClicked: function() {
-        this.activities.attributes.insights = true;
-        this.activities.fetch();
-    },
-
-    onShowActivityClicked: function() {
-        this.activities.attributes.insights = false;
-        this.activities.fetch();
+        this.dashboardMain.contentHeader.bind("filter:insights", activities.filterInsights, activities);
+        this.dashboardMain.contentHeader.bind("filter:all",      activities.filterAll,      activities);
     }
 });
 
