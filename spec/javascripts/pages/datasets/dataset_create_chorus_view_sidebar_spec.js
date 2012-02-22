@@ -2,7 +2,9 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
     beforeEach(function() {
         this.dataset = fixtures.datasetSandboxTable({objectName : "My_table"});
         this.dataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn(), fixtures.databaseColumn()]);
-        this.view = new chorus.views.CreateChorusViewSidebar({model: this.dataset, aggregateColumnSet: new chorus.collections.DatabaseColumnSet});
+        var aggregateColumnSet = new chorus.collections.DatabaseColumnSet();
+        aggregateColumnSet.reset(this.dataset.columns().models);
+        this.view = new chorus.views.CreateChorusViewSidebar({model: this.dataset, aggregateColumnSet: aggregateColumnSet});
         this.chorusView = this.view.chorusView;
     });
 
@@ -151,9 +153,15 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
         describe("clicking the 'Remove' link", function() {
             beforeEach(function() {
                 spyOn(chorus.PageEvents, "broadcast").andCallThrough();
-                this.column1 = fixtures.databaseColumn();
-                this.column2 = fixtures.databaseColumn();
-                this.dataset.columns().reset([this.column1, this.column2])
+                this.column1 = this.dataset.columns().models[0];
+
+                this.joinedDataset = fixtures.datasetSandboxTable();
+                this.joinedColumns = this.joinedDataset.columns();
+                this.joinedColumns.reset([fixtures.databaseColumn(), fixtures.databaseColumn()]);
+                this.column2 = this.joinedColumns.models[0];
+
+                this.chorusView.addJoin(this.column1, this.column2, 'inner');
+
                 chorus.PageEvents.broadcast("column:selected", this.column1);
                 chorus.PageEvents.broadcast("column:selected", this.column2);
                 this.view.render();
@@ -176,6 +184,16 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 this.view.$("a.remove").eq(0).click();
                 expect(this.view.$("button.create")).toBeDisabled();
             });
+
+            context("clicking the 'Remove' link for a joined column", function() {
+                beforeEach(function() {
+                    this.view.$("a.remove").eq(0).click();
+                })
+
+                it("removes the column", function() {
+                    expect(this.view.$(".columns li").length).toBe(0);
+                });
+            })
         })
 
         describe("#whereClause", function() {
