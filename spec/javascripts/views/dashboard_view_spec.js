@@ -21,8 +21,8 @@ describe("chorus.views.Dashboard", function(){
                 this.headerView = this.view.dashboardMain.contentHeader;
             });
 
-            it("is a DashboardContentHeader view", function() {
-                expect(this.headerView).toBeA(chorus.views.DashboardContentHeader);
+            it("is an ActivityListHeader view", function() {
+                expect(this.headerView).toBeA(chorus.views.ActivityListHeader);
             });
 
             it("has the current user's activity set", function() {

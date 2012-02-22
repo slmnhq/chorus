@@ -1,7 +1,7 @@
-describe("chorus.views.DashboardContentHeader", function() {
+describe("chorus.views.ActivityListHeader", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.ActivitySet();
-        this.view = new chorus.views.DashboardContentHeader({ title: "the_title_i_passed", collection: this.collection });
+        this.view = new chorus.views.ActivityListHeader({ title: "the_title_i_passed", collection: this.collection });
     });
 
     describe("#setup", function() {

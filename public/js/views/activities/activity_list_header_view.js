@@ -1,5 +1,5 @@
-chorus.views.DashboardContentHeader = chorus.views.Base.extend({
-    className : "dashboard_content_header",
+chorus.views.ActivityListHeader = chorus.views.Base.extend({
+    className : "activity_list_header",
 
     events: {
         "click .all":     "onAllClicked",

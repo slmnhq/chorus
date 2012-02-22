@@ -32,7 +32,7 @@ chorus.views.Dashboard = chorus.views.Base.extend({
 
         this.dashboardMain = new chorus.views.MainContentView({
             content: this.activityList,
-            contentHeader: new chorus.views.DashboardContentHeader({
+            contentHeader: new chorus.views.ActivityListHeader({
                 collection: activities,
                 title: t("dashboard.title.activity")
             })
