@@ -64,7 +64,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     },
 
     saveSuccess:function () {
-        chorus.page.trigger("instance:added", this.model.get("id"));
+        chorus.PageEvents.broadcast("instance:added");
         this.closeModal();
     },
 

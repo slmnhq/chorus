@@ -146,9 +146,7 @@ describe("chorus.dialogs.InstanceNew", function() {
 
                     context("when save completes", function() {
                         beforeEach(function() {
-                            this.doneSpy = jasmine.createSpy("save done");
-                            chorus.page = new chorus.pages.Base();
-                            chorus.page.bind("instance:added", this.doneSpy);
+                            spyOn(chorus.PageEvents, 'broadcast');
                             spyOn(this.dialog, "closeModal");
 
                             this.dialog.model.set({id: "123"});
@@ -159,8 +157,8 @@ describe("chorus.dialogs.InstanceNew", function() {
                             expect(this.dialog.closeModal).toHaveBeenCalled();
                         });
 
-                        it("raises the instance:added event", function() {
-                            expect(this.doneSpy).toHaveBeenCalledWith("123");
+                        it("publishes the 'instance:added' page event", function() {
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("instance:added");
                         });
                     });
 
