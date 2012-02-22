@@ -75,8 +75,8 @@
 
         editChorusView: function() {
             this.mainContent = new chorus.views.MainContentView({
-               content: new chorus.views.DatasetEditChorusView({model: this.dataset}),
-               contentDetails: new chorus.views.DatasetContentDetails({ dataset: this.dataset, collection: this.columnSet, inEditChorusView: true })
+                content: new chorus.views.DatasetEditChorusView({model: this.dataset}),
+                contentDetails: new chorus.views.DatasetContentDetails({ dataset: this.dataset, collection: this.columnSet, inEditChorusView: true })
             });
 
             this.mainContent.contentDetails.bind("dataset:cancelEdit", this.fetchDataSet, this);
@@ -85,13 +85,13 @@
             this.renderSubview('mainContent');
         },
 
-        forwardSelectedToSidebar : function(column) {
+        forwardSelectedToSidebar: function(column) {
             if (this.secondarySidebar) {
                 this.secondarySidebar.trigger("column:selected", column);
             }
         },
 
-        forwardDeselectedToSidebar : function(column) {
+        forwardDeselectedToSidebar: function(column) {
             if (this.secondarySidebar) {
                 this.secondarySidebar.trigger("column:deselected", column);
             }
@@ -127,7 +127,7 @@
                 case 'chorus_view':
                     this.mainContent.content.selectMulti = true;
                     this.mainContent.content.selectNone();
-                    this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model : this.model});
+                    this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model: this.model, aggregateColumnSet: this.columnSet});
                     break;
                 case 'edit_chorus_view':
                     this.secondarySidebar = new chorus.views.DatasetEditChorusViewSidebar({model: this.model});

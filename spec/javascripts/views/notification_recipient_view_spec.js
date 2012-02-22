@@ -2,7 +2,9 @@ describe("chorus.views.NotificationRecipient", function() {
     beforeEach(function() {
         this.user1 = fixtures.user();
         this.user2 = fixtures.user();
-        this.users = fixtures.userSet([this.user1, this.user2]);
+        this.loggedInUser = fixtures.user();
+        setLoggedInUser({ id: this.loggedInUser.get("id") })
+        this.users = fixtures.userSet([this.user1, this.user2, this.loggedInUser]);
         this.users.sortAsc("firstName");
         this.view = new chorus.views.NotificationRecipient();
     });
@@ -34,9 +36,9 @@ describe("chorus.views.NotificationRecipient", function() {
                 expect(this.view.$(".add_user")).not.toHaveClass("hidden");
             });
 
-            it("should display a dropdown containing all the users", function() {
+            it("should display a dropdown containing all elligible recipients", function() {
                 expect(this.view.$("select")).not.toHaveClass("hidden");
-                expect(this.view.$("select option").length).toBe(this.users.length);
+                expect(this.view.$("select option").length).toBe(this.users.length - 1);
 
                 expect(this.view.$("select option:eq(0)").text()).toContain(this.user1.displayName());
                 expect(this.view.$("select option:eq(0)").val()).toContain(this.user1.get("id"));
@@ -46,6 +48,10 @@ describe("chorus.views.NotificationRecipient", function() {
 
                 expect(this.view.$("select").val()).toBe(this.user1.get("id").toString());
             });
+
+            it("does not display the logged in user as an elligible recipient", function() {
+                expect(this.view.$("option[value=" + this.loggedInUser.get("id") + "]")).not.toExist();
+            })
 
             context("when the add user link is clicked", function() {
                 beforeEach(function() {

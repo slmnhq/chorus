@@ -122,7 +122,7 @@ describe("chorus.models.Workfile", function() {
         context("when the workfile's workspace has been fetched", function() {
             beforeEach(function() {
                 spyOn(this.model, "workspace").andReturn(fixtures.workspace({
-                    sandboxInfo : {
+                    sandboxInfo: {
                         databaseId: 4,
                         databaseName: "db",
                         instanceId: 5,
@@ -198,7 +198,7 @@ describe("chorus.models.Workfile", function() {
             context("when the workfile is the most recent version", function() {
                 beforeEach(function() {
                     this.model.get('versionInfo').versionNum = 1;
-                    this.model.set({ latestVersionNum : 1 })
+                    this.model.set({ latestVersionNum: 1 })
                 })
 
                 it("does not include a version", function() {
@@ -209,7 +209,7 @@ describe("chorus.models.Workfile", function() {
             context("when the workfile is not the most recent version", function() {
                 beforeEach(function() {
                     this.model.get("versionInfo").versionNum = 6
-                    this.model.set({latestVersionNum : 9 })
+                    this.model.set({latestVersionNum: 9 })
                 })
 
                 it("includes a version", function() {
@@ -221,7 +221,7 @@ describe("chorus.models.Workfile", function() {
         describe("#showUrlForVersion", function() {
             beforeEach(function() {
                 this.model.get('versionInfo').versionNum = 1;
-                this.model.set({ latestVersionNum : 5 })
+                this.model.set({ latestVersionNum: 5 })
             })
 
             it("shows the initial workfile version's url", function() {
@@ -251,7 +251,7 @@ describe("chorus.models.Workfile", function() {
     describe("isImage", function() {
         context("when the workfile is an image", function() {
             beforeEach(function() {
-                this.model.set({ mimeType : "image/jpeg" });
+                this.model.set({ mimeType: "image/jpeg" });
             });
 
             it("returns true", function() {
@@ -261,7 +261,7 @@ describe("chorus.models.Workfile", function() {
 
         context("when the workfile is NOT an image", function() {
             beforeEach(function() {
-                this.model.set({ mimeType : "text/plain" });
+                this.model.set({ mimeType: "text/plain" });
             });
 
             it("returns false", function() {
@@ -342,7 +342,7 @@ describe("chorus.models.Workfile", function() {
     describe("isText", function() {
         context("when the workfile is a plain textfile", function() {
             beforeEach(function() {
-                this.model.set({ mimeType : "text/plain" });
+                this.model.set({ mimeType: "text/plain" });
             });
 
             it("returns true", function() {
@@ -352,7 +352,7 @@ describe("chorus.models.Workfile", function() {
 
         context("when the workfile is an html file", function() {
             beforeEach(function() {
-                this.model.set({ mimeType : "text/html" });
+                this.model.set({ mimeType: "text/html" });
             });
 
             it("returns true", function() {
@@ -362,7 +362,7 @@ describe("chorus.models.Workfile", function() {
 
         context("when the workfile is an sql file", function() {
             beforeEach(function() {
-                this.model.set({ mimeType : "text/x-sql" });
+                this.model.set({ mimeType: "text/x-sql" });
             });
 
             it("returns true", function() {
@@ -372,7 +372,7 @@ describe("chorus.models.Workfile", function() {
 
         context("when the workfile is NOT text", function() {
             beforeEach(function() {
-                this.model.set({ mimeType : "image/jpeg" });
+                this.model.set({ mimeType: "image/jpeg" });
             });
 
             it("returns false", function() {
@@ -398,7 +398,7 @@ describe("chorus.models.Workfile", function() {
         context("when the versionNum equals the latestVersionNum", function() {
             beforeEach(function() {
                 this.model.get('versionInfo').versionNum = 99
-                this.model.set({ latestVersionNum : 99 });
+                this.model.set({ latestVersionNum: 99 });
                 this.model.fetch();
             })
 
@@ -410,7 +410,7 @@ describe("chorus.models.Workfile", function() {
         context("when the versionNum is not equal to the latestVersionNum", function() {
             beforeEach(function() {
                 this.model.get('versionInfo').versionNum = 88;
-                this.model.set({ latestVersionNum : 99 });
+                this.model.set({ latestVersionNum: 99 });
                 this.model.fetch();
             })
 
@@ -424,7 +424,7 @@ describe("chorus.models.Workfile", function() {
         context("with an old version", function() {
             beforeEach(function() {
                 this.model.get('versionInfo').versionNum = 88
-                this.model.set({ latestVersionNum : 99 });
+                this.model.set({ latestVersionNum: 99 });
                 this.model.save();
             })
 
@@ -437,7 +437,7 @@ describe("chorus.models.Workfile", function() {
             beforeEach(function() {
                 this.model.get('versionInfo').versionNum = 99
                 this.model.get('versionInfo').lastUpdatedStamp = "THEVERSIONSTAMP"
-                this.model.set({ latestVersionNum : 99, lastUpdatedStamp: "THEWORKFILESTAMP"});
+                this.model.set({ latestVersionNum: 99, lastUpdatedStamp: "THEWORKFILESTAMP"});
             })
 
             context("replacing the current version", function() {
@@ -488,7 +488,7 @@ describe("chorus.models.Workfile", function() {
         context("with silent: true", function() {
             beforeEach(function() {
                 spyOnEvent(this.model, "change");
-                this.model.content("i am not old content", {silent : true})
+                this.model.content("i am not old content", {silent: true})
             });
 
             it("sets the content", function() {
@@ -506,6 +506,59 @@ describe("chorus.models.Workfile", function() {
         context("without an argument", function() {
             it("returns the content", function() {
                 expect(this.model.content()).toBe(this.model.get('versionInfo').content);
+            })
+        })
+    })
+
+    describe("#linkUrl", function() {
+        beforeEach(function() {
+            this.model.set({
+                versionInfo: {
+                    versionNum: 1,
+                    versionFileId: "foo"
+                },
+                latestVersionNum: 2
+            });
+        })
+
+        context("when the workfile is a text file", function() {
+            beforeEach(function() {
+                spyOn(this.model, "isText").andReturn(true);
+                spyOn(this.model, "isImage").andReturn(false);
+            });
+
+            it("returns the showUrl", function() {
+                expect(this.model.linkUrl()).toBe(this.model.showUrl());
+            })
+
+            it("accepts a version option", function() {
+                expect(this.model.linkUrl({ version: 4 })).toBe(this.model.showUrlForVersion(4))
+            })
+        })
+
+        context("when the workfile is an image file", function() {
+            beforeEach(function() {
+                spyOn(this.model, "isText").andReturn(false);
+                spyOn(this.model, "isImage").andReturn(true);
+            });
+
+            it("returns the showUrl", function() {
+                expect(this.model.linkUrl()).toBe(this.model.showUrl());
+            })
+
+            it("accepts a version option", function() {
+                expect(this.model.linkUrl({ version: 4 })).toBe(this.model.showUrlForVersion(4))
+            })
+        })
+
+        context("when the workfile neither a text file nor an image file", function() {
+            beforeEach(function() {
+                spyOn(this.model, "isText").andReturn(false);
+                spyOn(this.model, "isImage").andReturn(false);
+            });
+
+            it("returns the downloadUrl", function() {
+                expect(this.model.linkUrl()).toBe(this.model.downloadUrl());
             })
         })
     })

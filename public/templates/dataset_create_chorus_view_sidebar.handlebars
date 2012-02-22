@@ -37,6 +37,20 @@
             <ul class="joins">
 
             </ul>
+            {{#if columns.length}}
+                <ul class="columns">
+                    {{#each columns}}
+                        <li data-cid='{{cid}}'>
+                            <div class="sidebar_row">
+                                <a href="#" class="remove">{{t "dataset.chorusview.sidebar.remove"}}</a>
+                                <div class="name" title="{{attributes.name}}">{{attributes.name}}</div>
+                            </div>
+                        </li>
+                    {{/each}}
+                </ul>
+            {{else}}
+                <div class="no_columns_selected">{{t "dataset.chorusview.sidebar.no_columns_selected"}}</div>
+            {{/if}}
         {{/each}}
     </div>
 

@@ -11,23 +11,6 @@ describe("chorus.dialogs.PreviewColumns", function() {
         expect(this.dialog.title).toMatchTranslation("dataset.manage_join_tables.title");
     });
 
-    it("should have a 'Return to List' button", function() {
-        expect(this.dialog.$("button.cancel").html()).toMatchTranslation("actions.return_to_list");
-    });
-
-    it("displays a search bar", function() {
-        var search = this.dialog.$("input.search");
-        expect(search).toExist();
-
-        expect(chorus.search).toHaveBeenCalled();
-        var searchOptions = chorus.search.mostRecentCall.args[0];
-        expect(searchOptions.input).toBe(".search");
-        expect(searchOptions.list).toBe("ul.list");
-        expect(searchOptions.selector).toBe(".name, .comment");
-
-        expect(search.attr("placeholder")).toMatchTranslation("dataset.manage_join_tables.find_a_column");
-    });
-
     it("fetches the table or view's columns", function() {
         expect(this.databaseObject.columns()).toHaveBeenFetched();
     });
@@ -40,6 +23,23 @@ describe("chorus.dialogs.PreviewColumns", function() {
                 fixtures.databaseColumn({name: "Sloth", recentComment: "lazy", type: "int4" }),
                 fixtures.databaseColumn({name: "Penguin", recentComment: "Morgan Freeman", type: "time" })
             ]);
+        });
+
+        it("should have a 'Return to List' button", function() {
+            expect(this.dialog.$("button.cancel").html()).toMatchTranslation("actions.return_to_list");
+        });
+
+        it("displays a search bar", function() {
+            var search = this.dialog.$("input.search");
+            expect(search).toExist();
+
+            expect(chorus.search).toHaveBeenCalled();
+            var searchOptions = chorus.search.mostRecentCall.args[0];
+            expect(searchOptions.input).toBe(".search");
+            expect(searchOptions.list).toBe("ul.list");
+            expect(searchOptions.selector).toBe(".name, .comment");
+
+            expect(search.attr("placeholder")).toMatchTranslation("dataset.manage_join_tables.find_a_column");
         });
 
         it("displays the table's name and column count in the sub-header", function() {

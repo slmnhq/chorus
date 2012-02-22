@@ -114,14 +114,14 @@
         WORKFILE_CREATED: function(model) {
             return {
                 objectName: model.workfile().get("name"),
-                objectUrl: model.workfile().showUrlForVersion(1)
+                objectUrl: model.workfile().linkUrl({ version: 1})
             }
         },
 
         WORKFILE_UPGRADED_VERSION: function(model) {
             return {
                 objectName: model.workfile().get("name"),
-                objectUrl: model.workfile().showUrl(),
+                objectUrl: model.workfile().linkUrl(),
                 iconSrc: "/images/version_large.png",
                 iconHref: model.workfile().showUrl(),
                 iconClass: '',
@@ -184,6 +184,13 @@
                 header: {
                     tableName: "!!implement me when API changes!!"
                 }
+            };
+        },
+
+        DATASET_CHANGED_QUERY: function(model) {
+            return {
+                objectName: this.noteObject.get('objectName'),
+                objectUrl: this.noteObject.showUrl()
             };
         }
     });

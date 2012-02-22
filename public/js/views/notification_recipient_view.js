@@ -12,6 +12,10 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
         this.collection.fetchAll();
     },
 
+    preRender: function() {
+        this.collection.remove(chorus.session.user())
+    },
+
     postRender: function() {
         chorus.styleSelect(this.$("select"));
     },

@@ -282,13 +282,16 @@ describe("chorus.pages.DatasetShowPage", function() {
                     expect(this.page.mainContent.content.$("li.selected").length).toBe(0);
                 });
 
+                it("passes down the columnSet to the sidebar", function() {
+                    expect(this.page.secondarySidebar.options.aggregateColumnSet).toBe(this.page.columnSet);
+                });
+
                 describe("after cancelling", function() {
                     beforeEach(function() {
                         this.page.mainContent.content.selectAll();
-                        var otherDataset = fixtures.datasetSandboxTable();
-                        var otherColumns = otherDataset.columns();
-                        otherColumns.reset(fixtures.databaseColumn());
-                        this.page.columnSet.add(otherColumns.models[0]);
+                        var otherColumn = fixtures.databaseColumn();
+                        otherColumn.tabularData = this.page.model;
+                        this.page.columnSet.add(otherColumn);
                         chorus.PageEvents.broadcast('cancel:sidebar', 'boxplot');
                     });
 

@@ -6,25 +6,16 @@ chorus.views.Header = chorus.views.Base.extend({
         "click .notifications a":"togglePopupNotifications"
     },
 
+    subviews: {
+        ".popup_notifications ul": "notificationList"
+    },
+
     setup:function () {
         $(document).bind("chorus:menu:popup", _.bind(this.popupEventHandler, this))
         this.session = chorus.session;
         this.notifications = new chorus.collections.NotificationSet();
         this.requiredResources.add([this.session, this.notifications]);
         this.notifications.fetchAll();
-    },
-
-    resourcesLoaded : function() {
-        this.activityUl = $("<ul/>").addClass("activities");
-        this.notifications.each(function(notification) {
-            var activity = new chorus.models.Activity(notification.get("body"));
-            var view = new chorus.views.Activity({model:activity, isNotification: true});
-            this.activityUl.append(view.render().el);
-        }, this);
-    },
-
-    postRender: function() {
-        this.$(".popup_notifications").append(this.activityUl);
     },
 
     additionalContext:function (ctx) {
@@ -38,6 +29,14 @@ chorus.views.Header = chorus.views.Base.extend({
             notifications: this.notifications,
             displayName: (fullName.length > 20 ? (firstName + ' ' + lastName[0] + '.') : fullName),
             userUrl: user && user.showUrl()
+        });
+    },
+
+    resourcesLoaded: function() {
+        this.notificationList = new chorus.views.ActivityList({
+            collection: this.notifications.activities(),
+            suppressHeading: true,
+            isNotification: true
         });
     },
 

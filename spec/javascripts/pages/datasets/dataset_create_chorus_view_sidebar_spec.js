@@ -2,7 +2,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
     beforeEach(function() {
         this.dataset = fixtures.datasetSandboxTable({objectName : "My_table"});
         this.dataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn(), fixtures.databaseColumn()]);
-        this.view = new chorus.views.CreateChorusViewSidebar({model: this.dataset});
+        this.view = new chorus.views.CreateChorusViewSidebar({model: this.dataset, aggregateColumnSet: new chorus.collections.DatabaseColumnSet});
         this.chorusView = this.view.chorusView;
     });
 
@@ -24,6 +24,11 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
         it("adds a reference to the parent to the preview SQL link's data", function() {
            expect(this.view.$("a.preview").data("parent")).toBe(this.view);
+        });
+
+        it("gives a reference to the aggregateColumnSet to the chorus view", function() {
+            expect(this.chorusView.aggregateColumnSet).toBeDefined();
+            expect(this.chorusView.aggregateColumnSet).toBe(this.view.options.aggregateColumnSet);
         });
 
         describe("the 'add a join' link", function() {
@@ -74,7 +79,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
         describe("column:selected event", function() {
             beforeEach(function(){
-                this.databaseColumn = fixtures.databaseColumn();
+                this.databaseColumn = this.dataset.columns().models[0];
                 chorus.PageEvents.broadcast("column:selected", this.databaseColumn);
             });
 
@@ -94,7 +99,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
             describe("selecting another column", function() {
                 beforeEach(function(){
-                    this.databaseColumn2 = fixtures.databaseColumn();
+                    this.databaseColumn2 = this.dataset.columns().models[1];
                     chorus.PageEvents.broadcast("column:selected", this.databaseColumn2);
                 });
 
@@ -133,7 +138,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
         describe("column:select all", function() {
             beforeEach(function() {
-                var column1 = fixtures.databaseColumn();
+                var column1 = this.dataset.columns().models[0];
                 chorus.PageEvents.broadcast("column:selected", column1);
                 chorus.PageEvents.broadcast("column:selected", column1);
             });
@@ -147,10 +152,10 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             beforeEach(function() {
                 spyOn(chorus.PageEvents, "broadcast").andCallThrough();
                 this.column1 = fixtures.databaseColumn();
-                chorus.PageEvents.broadcast("column:selected", this.column1);
                 this.column2 = fixtures.databaseColumn();
-                chorus.PageEvents.broadcast("column:selected", this.column2);
                 this.dataset.columns().reset([this.column1, this.column2])
+                chorus.PageEvents.broadcast("column:selected", this.column1);
+                chorus.PageEvents.broadcast("column:selected", this.column2);
                 this.view.render();
                 this.view.$("a.remove").eq(0).click();
             })
@@ -183,37 +188,10 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             });
         });
 
-        describe("#selectClause", function() {
-            context("when no columns are selected", function() {
-                it("returns 'SELECT *'", function() {
-                    expect(this.view.selectClause()).toBe("SELECT *");
-                });
-            });
-
-            context("when two columns are selected", function() {
-                beforeEach(function() {
-                    this.column1 = fixtures.databaseColumn({name: "Foo"});
-                    this.column2 = fixtures.databaseColumn({name: "bar"});
-                    chorus.PageEvents.broadcast("column:selected", this.column1);
-                    chorus.PageEvents.broadcast("column:selected", this.column2);
-                });
-
-                it("should build a select clause from the selected columns", function() {
-                    expect(this.view.selectClause()).toBe("SELECT \"My_table\".\"Foo\", \"My_table\".bar");
-                });
-            });
-        });
-
-        describe("#fromClause", function() {
-            it("should return the dataset name in the FROM clause", function() {
-                expect(this.view.fromClause()).toBe("FROM \"My_table\"");
-            });
-        });
-
         describe("#sql", function() {
             beforeEach(function() {
-                spyOn(this.view, "selectClause").andReturn("foo");
-                spyOn(this.view, "fromClause").andReturn("bar");
+                spyOn(this.view.chorusView, "selectClause").andReturn("foo");
+                spyOn(this.view.chorusView, "fromClause").andReturn("bar");
                 spyOn(this.view, "whereClause").andReturn("baz");
             })
 
@@ -224,7 +202,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
         describe("clicking 'Create Dataset'", function() {
             beforeEach(function() {
-                chorus.PageEvents.broadcast("column:selected", fixtures.databaseColumn());
+                chorus.PageEvents.broadcast("column:selected", this.dataset.columns().models[0]);
                 spyOn(this.view, "sql").andReturn("SELECT * FROM FOO");
                 this.launchModalSpy = jasmine.createSpy("launchModal")
                 spyOn(chorus.dialogs, "NameChorusView").andCallFake(_.bind(function(options) {

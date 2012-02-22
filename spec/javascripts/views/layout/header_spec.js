@@ -65,10 +65,6 @@ describe("chorus.views.Header", function() {
             it("makes the notification count a link", function() {
                 expect(this.view.$(".notifications a")).toExist();
             })
-
-            it("has an li for each notification", function() {
-                expect(this.view.$(".popup_notifications li").length).toBe(2);
-            })
         })
 
         context("when there are no notifications", function() {
@@ -222,22 +218,33 @@ describe("chorus.views.Header", function() {
 
                 it("shows a popup menu", function() {
                     expect(this.view.$(".menu.popup_notifications")).not.toHaveClass("hidden");
-                })
+                    expect(this.view.$(".menu.popup_notifications .pointer")).toExist();
+                });
 
                 it("triggers chorus:menu:popup on the document", function() {
                     expect(this.popupSpy).toHaveBeenCalled();
-                })
+                });
 
                 describe("and when clicked again", function() {
                     beforeEach(function() {
                         this.view.$(".notifications a").click();
                     });
+
                     it("becomes hidden again", function() {
                         expect(this.view.$(".menu.popup_notifications")).toHaveClass("hidden");
                     });
                 });
 
                 describe("the notification list", function() {
+                    it("is an activity list", function() {
+                        expect(this.view.notificationList).toBeA(chorus.views.ActivityList);
+                        expect(this.view.$(".popup_notifications")).toContain(this.view.notificationList.el);
+                    });
+
+                    it("doesn't have the activity list heading", function() {
+                        expect(this.view.notificationList.options.suppressHeading).toBeTruthy();
+                    });
+
                     it("renders an li for each unread notification", function() {
                         expect(this.view.$(".popup_notifications li").length).toBe(2);
                     });
