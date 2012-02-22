@@ -12,6 +12,7 @@ describe("chorus.pages.InstanceIndexPage", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.page = new chorus.pages.InstanceIndexPage();
+            chorus.bindModalLaunchingClicks(this.page);
             this.page.collection.add(fixtures.instance());
             this.page.collection.add(fixtures.instance());
             this.page.render();

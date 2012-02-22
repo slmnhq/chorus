@@ -1,4 +1,4 @@
-describe("CommentList", function() {
+describe("chorus.views.CommentList", function() {
     beforeEach(function() {
         this.comment1 = fixtures.noteComment({
             text : "Yes we can",
@@ -139,6 +139,7 @@ describe("CommentList", function() {
 
                 // put view in page for correct alert click handling
                 this.page = new chorus.pages.Base();
+                chorus.bindModalLaunchingClicks(this.page);
                 this.page.mainContent = this.view;
                 this.page.render();
             });

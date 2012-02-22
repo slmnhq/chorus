@@ -115,6 +115,7 @@ describe("chorus.pages.Base", function() {
             beforeEach(function() {
                 this.view = new chorus.pages.Base();
                 this.view.mainContent = new Backbone.View();
+                chorus.bindModalLaunchingClicks(this.view);
 
                 var spy = this.fooDialogSpy = new chorus.dialogs.Base();
                 spyOn(spy, "launchModal");
@@ -155,6 +156,7 @@ describe("chorus.pages.Base", function() {
             beforeEach(function() {
                 this.view = new chorus.pages.Base();
                 this.view.mainContent = new Backbone.View();
+                chorus.bindModalLaunchingClicks(this.view);
 
                 var spy = this.fooDialogSpy = new chorus.dialogs.Base();
                 spyOn(spy, "launchModal");
@@ -194,6 +196,7 @@ describe("chorus.pages.Base", function() {
         beforeEach(function() {
             this.view = new chorus.pages.Base();
             this.view.mainContent = new Backbone.View();
+            chorus.bindModalLaunchingClicks(this.view);
 
             var spy = this.fooAlertSpy = new chorus.alerts.Base();
             spyOn(spy, "launchModal");
@@ -254,6 +257,7 @@ describe("chorus.pages.Base", function() {
         beforeEach(function() {
             spyOn(chorus, "help");
             this.page = new chorus.pages.Base();
+            chorus.bindModalLaunchingClicks(this.page);
             this.page.render();
             this.page.$("#help a").click();
         });

@@ -20,6 +20,7 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.page = new chorus.pages.WorkspaceIndexPage();
+            chorus.bindModalLaunchingClicks(this.page);
             this.page.render();
         })
 

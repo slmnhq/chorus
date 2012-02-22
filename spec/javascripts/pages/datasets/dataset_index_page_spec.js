@@ -3,6 +3,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
         this.modalSpy = stubModals();
         this.workspace = fixtures.workspace();
         this.page = new chorus.pages.DatasetIndexPage(this.workspace.get("id"));
+        chorus.bindModalLaunchingClicks(this.page);
     })
 
     it("has a helpId", function() {

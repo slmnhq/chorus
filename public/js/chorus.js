@@ -25,8 +25,23 @@ window.Chorus = function() {
 
         //bind global state events here
         self.session.bind("needsLogin", self.requireLogin);
+        self.bindModalLaunchingClicks();
 
         self.startHistory();
+    };
+
+    self.bindModalLaunchingClicks = function() {
+        var firstArg = arguments[0];
+        var target = arguments.length ? firstArg.el : document;
+        $(target).
+            on("click.chorus_modal", "button.dialog, a.dialog", null, function(e){ (firstArg || self.page).createDialog(e); }).
+            on("click.chorus_modal", "button.alert, a.alert", null, function(e){ (firstArg || self.page).createAlert(e); }).
+            on("click.chorus_modal", "#help a", null, function(e){ (firstArg || self.page).showHelp(e); });
+
+        if (window.jasmine) {
+            var spec = window.jasmine.getEnv().currentSpec;
+            spec && spec.after(function() {$(target).off("click.chorus_modal"); });
+        }
     };
 
     self.startHistory = function() {

@@ -13,13 +13,6 @@ chorus.pages.Bare = chorus.views.Bare.extend({
 chorus.pages.Base = chorus.pages.Bare.extend({
     className: "logged_in_layout",
 
-    events: {
-        "click button.dialog": "createDialog",
-        "click a.dialog": "createDialog",
-        "click a.alert": "createAlert",
-        "click #help a": "showHelp"
-    },
-
     subviews: {
         "#header": "header",
         "#main_content": "mainContent",
