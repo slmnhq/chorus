@@ -4,7 +4,7 @@ describe("chorus.dialogs.DatasetImport", function() {
         chorus.page.workspace = fixtures.workspace({id:242});
         this.modalSpy = stubModals();
         spyOn($.fn, 'fileupload');
-        this.launchElement = $('<button data-workspaceid=​242>​Import File​</button>​');
+        this.launchElement = $('<button data-workspace-id="242">Import File</button>');
         this.launchElement.data("canonicalName", "FooBar");
         this.dialog = new chorus.dialogs.DatasetImport({launchElement: this.launchElement});
 
@@ -187,7 +187,7 @@ describe("chorus.dialogs.DatasetImport", function() {
             });
 
             it("uploads the specified file", function() {
-                expect(this.dialog.uploadObj.url).toEqual("/edc/workspace/​242/csv/sample")
+                expect(this.dialog.uploadObj.url).toEqual("/edc/workspace/242/csv/sample")
                 expect(this.dialog.uploadObj.submit).toHaveBeenCalled();
             });
 
