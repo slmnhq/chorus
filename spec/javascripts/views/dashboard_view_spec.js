@@ -17,20 +17,22 @@ describe("chorus.views.Dashboard", function(){
         });
 
         describe("the header", function() {
-            var headerView;
-
             beforeEach(function() {
-                headerView = this.view.dashboardMain.contentHeader;
+                this.headerView = this.view.dashboardMain.contentHeader;
             });
 
-            it("has a DashboardContentHeader view", function() {
-                expect(headerView).toBeA(chorus.views.DashboardContentHeader);
+            it("is a DashboardContentHeader view", function() {
+                expect(this.headerView).toBeA(chorus.views.DashboardContentHeader);
             });
 
-            it("passes the current user's activity set to the header", function() {
-                expect(headerView.collection).toBeA(chorus.collections.ActivitySet);
-                expect(headerView.collection.attributes.entityType).toBe("home");
-                expect(headerView.collection.attributes.entityId).toBe(chorus.session.user().get("id"));
+            it("has the current user's activity set", function() {
+                expect(this.headerView.collection).toBeA(chorus.collections.ActivitySet);
+                expect(this.headerView.collection.attributes.entityType).toBe("home");
+                expect(this.headerView.collection.attributes.entityId).toBe(chorus.session.user().get("id"));
+            });
+
+            it("has the right title", function() {
+                expect(this.headerView.options.title).toMatchTranslation("dashboard.title.activity");
             });
         });
 

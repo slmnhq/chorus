@@ -1,7 +1,7 @@
 describe("chorus.views.DashboardContentHeader", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.ActivitySet();
-        this.view = new chorus.views.DashboardContentHeader({ collection: this.collection });
+        this.view = new chorus.views.DashboardContentHeader({ title: "the_title_i_passed", collection: this.collection });
     });
 
     describe("#setup", function() {
@@ -23,8 +23,8 @@ describe("chorus.views.DashboardContentHeader", function() {
             });
 
             describe("#render", function() {
-                it("displays the title", function() {
-                    expect(this.view.$("h1").text()).toMatchTranslation("dashboard.title.activity");
+                it("displays the given title", function() {
+                    expect(this.view.$("h1").text()).toBe("the_title_i_passed");
                 });
 
                 it("should have a filter menu", function() {

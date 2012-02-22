@@ -13,7 +13,10 @@ chorus.views.DashboardContentHeader = chorus.views.Base.extend({
     },
 
     additionalContext: function() {
-        return { count: this.insightCount.get("numberOfInsight") };
+        return {
+            title: this.options.title,
+            count: this.insightCount.get("numberOfInsight")
+        };
     },
 
     onAllClicked: function() {
