@@ -28,8 +28,15 @@
                     margin: 0 6px;
                 }
             }
-            .name {
-                @include font-normal-alpha;
+
+            .text {
+                .main {
+                    width: 220px;
+                    @include ellipsis;
+                    .name {
+                        @include font-normal-alpha;
+                    }
+                }
             }
 
             .column_count {
@@ -45,11 +52,15 @@
                 .name, .column_count, a {
                     color: white;
                 }
+
+                .original a.join {
+                    color: $color-text2;
+                }
             }
 
             .original a.join {
                 @include secondary-text-small;
-                cursor: not-allowed;
+                cursor: default;
             }
         }
     }
