@@ -91,7 +91,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
         describe("file:executionStarted", function() {
             beforeEach(function() {
-                spyOn(_, "delay").andCallThrough();
+                spyOn(_, "delay").andReturn("my_timer_id")
                 spyOn(window, "clearTimeout");
 
                 chorus.PageEvents.broadcast("file:executionStarted")
@@ -110,7 +110,7 @@ describe("chorus.views.ResultsConsoleView", function() {
             })
 
             it("saves the spinner timer id", function() {
-                expect(this.view.spinnerTimer).toBeDefined();
+                expect(this.view.spinnerTimer).toBe("my_timer_id")
             })
 
             it("starts tracking execution time", function() {
@@ -245,6 +245,10 @@ describe("chorus.views.ResultsConsoleView", function() {
                 if (shouldCancelTimers) {
                     it("cancels the spinner and elapsed time timers", function() {
                         expect(window.clearTimeout.callCount >= 2).toBeTruthy();
+                    })
+                } else {
+                    it("does not cancel the spinner delay", function() {
+                        expect(window.clearTimeout).not.toHaveBeenCalled();
                     })
                 }
 
