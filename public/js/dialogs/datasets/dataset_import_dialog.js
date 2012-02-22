@@ -79,7 +79,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             e && e.preventDefault();
             self.$("button.submit").stopLoading();
             self.csv = new chorus.models.CSVImport({
-                workspaceId: self.options.launchElement.data("workspaceid"),
+                workspaceId: self.options.launchElement.data("workspaceId"),
                 toTable: chorus.models.CSVImport.normalizeForDatabase(self.$(".new_table input[type='text']").val())
             });
             self.csv.set(self.csv.parse(data.result));
