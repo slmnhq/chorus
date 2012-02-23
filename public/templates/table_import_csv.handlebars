@@ -2,6 +2,26 @@
     {{{directions}}}
 </div>
 <div class="options">
+    <span class="delimiter">Delimiter</span>
+
+    <input type="radio" class="delimiter" id="delimiter_tab" name="delimiter" value="&#09;"/>
+    <label for="delimiter_tab">Tab</label>
+
+    <input type="radio" class="delimiter" id="delimiter_comma" name="delimiter" value=","/>
+    <label for="delimiter_comma">Comma</label>
+
+    <input type="radio" class="delimiter" id="delimiter_semicolon" name="delimiter" value=";"/>
+    <label for="delimiter_semicolon">Semicolon</label>
+
+    <input type="radio" class="delimiter" id="delimiter_space" name="delimiter" value=" "/>
+    <label for="delimiter_space">Space</label>
+
+    <input type="radio" class="delimiter" id="delimiter_other" name="delimiter" value="[[other]]"/>
+    <label for="delimiter_other">Other</label>
+
+    <input type="text" name="other_delimiter" />
+
+
     <div class="header_options">
         <input id="include_header" type="checkbox" {{#if include_header}}checked{{/if}}></input>
         <label for="include_header">{{t "dataset.import.include_header"}}</label>

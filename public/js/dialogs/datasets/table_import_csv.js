@@ -1,10 +1,12 @@
 chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
     className: "table_import_csv",
     title: t("dataset.import.table.title"),
+    delimiter: ',',
 
     events: {
       "click button.submit": "startImport",
-      "change #include_header": "refreshCSV"
+      "change #include_header": "refreshCSV",
+      "click input.delimiter": "setDelimiter"
     },
 
     setup: function() {
@@ -42,6 +44,9 @@ chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
         _.each(this.linkMenus, function(linkMenu, index){
             $dataTypes.find(".th").eq(index).find(".center").append(linkMenu.render().el);
         });
+
+        this.$("input.delimiter").removeAttr("checked");
+        this.$("input.delimiter[value='" + this.delimiter + "']").attr("checked", "true");
     },
 
     additionalContext: function() {
@@ -67,7 +72,7 @@ chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
         })
         this.csv.set({
             toTable: chorus.models.CSVImport.normalizeForDatabase(this.$(".directions input:text").val()),
-            delimiter: ",",
+            delimiter: this.delimiter,
             columnsDef: JSON.stringify(columnData)
         })
 
@@ -87,7 +92,7 @@ chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
     },
 
     refreshCSV : function() {
-        this.csv.set({include_header: !!(this.$("#include_header").attr("checked"))});
+        this.csv.set({include_header: !!(this.$("#include_header").attr("checked")), delimiter: this.delimiter});
         this.render();
         this.recalculateScrolling();
     },
@@ -99,5 +104,10 @@ chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
     scrollLeft: function() {
         var api = this.$(".tbody").data("jsp");
         return api && api.getContentPositionX();
+    },
+
+    setDelimiter: function(e) {
+        this.delimiter = e.target.value;
+        this.refreshCSV();
     }
 });

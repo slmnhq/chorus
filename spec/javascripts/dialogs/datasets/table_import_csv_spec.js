@@ -27,6 +27,42 @@ describe("chorus.dialogs.TableImportCSV", function() {
         expect(this.dialog.$('button.submit')).toContainTranslation("dataset.import.table.submit");
     });
 
+    it("has comma as the default separator", function() {
+        expect(this.dialog.$('input[@name=delimiter]:checked').val()).toBe(',');
+    });
+
+    describe("click the 'tab' separator", hasRightSeparator('\t'));
+    describe("click the 'comma' separator", hasRightSeparator(','));
+    describe("click the 'semicolon' separator", hasRightSeparator(';'));
+    describe("click the 'space' separator", hasRightSeparator(' '));
+
+    function hasRightSeparator(separator) {
+        return function() {
+            beforeEach(function() {
+                this.csv = fixtures.csvImport({lines: [
+                        "COL1" + separator + "col2" + separator + "col3" + separator + "col_4" + separator + "Col_5",
+                        "val1.1" + separator + "val1.2" + separator + "val1.3" + separator + "val1.4" + separator + "val1.5",
+                        "val2.1" + separator + "val2.2" + separator + "val2.3" + separator + "val2.4" + separator + "val2.5",
+                        "val3.1" + separator + "val3.2" + separator + "val3.3" + separator + "val3.4" + separator + "val3.5"
+                    ],
+                    toTable: "foo_quux_bar"
+                });
+                this.dialog = new chorus.dialogs.TableImportCSV({csv: this.csv});
+                this.dialog.render();
+    
+                this.dialog.$("input.delimiter[value='" + separator + "']").click();
+            });
+    
+            it("has " + separator + " as separator", function() {
+                expect(this.dialog.$('input.delimiter[checked]').val()).toBe(separator);
+            });
+    
+            it("reparses the file with " + separator + " as the separator", function() {
+                expect(this.dialog.$(".data_table .tbody .column").length).toEqual(5);
+            });
+        };
+    }
+
     it("has directions", function() {
         var sandbox = chorus.page.workspace.sandbox();
         expect(this.dialog.$('.directions')).toContainTranslation("dataset.import.table.directions",
