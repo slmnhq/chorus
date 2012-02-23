@@ -6,8 +6,6 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
 
     events:{
         "change input[type='radio']":"showFieldset",
-        "change input:not(:radio)" : "validate",
-        "keyup input:not(:radio)" : "validate",
         "click button.submit": "createInstance",
         "click a.close_errors": "clearServerErrors"
     },
@@ -26,6 +24,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         this.$("fieldset").addClass("collapsed");
         $(e.currentTarget).closest("fieldset").removeClass("collapsed");
         this.clearErrors();
+        this.$("button.submit").removeAttr("disabled")
     },
 
     createInstance:function (e) {
@@ -33,18 +32,6 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         this.$("button.submit").startLoading("instances.new_dialog.saving");
         this.$("button.cancel").attr("disabled", "disabled");
         this.model.save(this.fieldValues());
-    },
-
-    validate: function() {
-        this.clearPopupErrors();
-        var submit = this.$("button.submit");
-        this.model.performValidation(this.fieldValues());
-        this.model.isValid() ? submit.attr("disabled", false) : submit.attr("disabled", "disabled");
-
-        var errorCount = _.keys(this.model.errors).length;
-        if (errorCount == 1 && this.model.errors.port) {
-            this.showErrors();
-        }
     },
 
     fieldValues: function() {

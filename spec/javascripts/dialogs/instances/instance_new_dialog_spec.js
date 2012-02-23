@@ -18,7 +18,7 @@ describe("chorus.dialogs.InstanceNew", function() {
         });
 
         it("starts with the submit button disabled", function() {
-            expect(this.dialog.$("button.submit").attr("disabled")).toBe("disabled");
+            expect(this.dialog.$("button.submit")).toBeDisabled();
         });
 
         describe("selecting a radio button", function() {
@@ -38,8 +38,8 @@ describe("chorus.dialogs.InstanceNew", function() {
                 this.dialog.$(".register_existing_greenplum input[type=radio]").attr('checked', true).change();
             });
 
-            it("should disable the submit button by default", function() {
-                expect(this.dialog.$("button.submit")).toBeDisabled();
+            it("enables the submit button", function() {
+                expect(this.dialog.$("button.submit")).toBeEnabled();
             });
 
             context("after filling in the form", function() {
@@ -53,10 +53,6 @@ describe("chorus.dialogs.InstanceNew", function() {
                     this.dialog.$(".register_existing_greenplum input[name=maintenanceDb]").val("foo");
 
                     this.dialog.$(".register_existing_greenplum input[name=name]").trigger("change");
-                });
-
-                it("should enable the submit button", function() {
-                    expect(this.dialog.$("button.submit")).toBeEnabled();
                 });
 
                 it("should return the values in fieldValues", function() {
