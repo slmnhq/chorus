@@ -42,6 +42,7 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
         this.joins = _.reject(this.joins, function(join) {
             return join.destinationColumn.tabularData == dataset;
         })
+        this._reorderJoins();
 
         var columnsToRemove = this.aggregateColumnSet.select(function(column) {
             return column.tabularData == dataset;
@@ -76,6 +77,12 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
         return _.find(this.joins, function(join) {
             return join.destinationColumn.tabularData.cid == cid
         }).destinationColumn.tabularData;
+    },
+
+    _reorderJoins: function() {
+        _.each(this.joins, function(join, index) {
+            join.destinationColumn.tabularData.setDatasetNumber(index + 2);
+        });
     },
 
     _allColumns: function() {

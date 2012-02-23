@@ -62,12 +62,19 @@ describe("chorus.models.ChorusView", function() {
 
         describe("removeJoin", function() {
             beforeEach(function() {
+                addJoin(this);
                 this.changeEvent.reset();
                 this.model.removeJoin(this.destinationDataset);
             });
 
+            it("reorders existing joins", function() {
+                _.each(this.model.joins, function(join, index) {
+                    expect(join.destinationColumn.tabularData.datasetNumber).toBe(index + 2);
+                })
+            })
+
             it("removes the join", function() {
-                expect(this.model.joins.length).toBe(0);
+                expect(this.model.joins.length).toBe(1);
             });
 
             it("triggers change on the model", function() {
@@ -81,7 +88,6 @@ describe("chorus.models.ChorusView", function() {
             });
         });
     });
-
 
     describe("addColumn", function() {
         beforeEach(function() {
