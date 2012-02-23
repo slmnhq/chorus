@@ -25,10 +25,14 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
     typeSelected: function() {
         var disableExisting = this.$(".new_table input:radio").prop("checked");
-        this.$(".new_table input.name").prop("disabled", !disableExisting).closest("fieldset").toggleClass("disabled", !disableExisting);
-        this.$(".existing_table select").prop("disabled", disableExisting).closest("fieldset").toggleClass("disabled", disableExisting);
 
-        this.$("input[name=limit_num_rows]").prop("checked", false).change();
+        var $tableName = this.$(".new_table input.name");
+        $tableName.prop("disabled", !disableExisting);
+        $tableName.closest("fieldset").toggleClass("disabled", !disableExisting);
+
+        var $tableSelect = this.$(".existing_table select");
+        $tableSelect.prop("disabled", disableExisting);
+        $tableSelect.closest("fieldset").toggleClass("disabled", disableExisting);
     },
 
     additionalContext: function() {
@@ -43,13 +47,12 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     },
 
     onCheckboxChecked: function() {
-        var enabled = this.$("input[name=limit_num_rows]").prop("checked");
-        var $limitInput = this.$(".limit input:text");
+        var $fieldSet = this.$("fieldset").not(".disabled");
+        var enabled = $fieldSet.find("input[name=limit_num_rows]").prop("checked");
+        var $limitInput = $fieldSet.find(".limit input:text");
         $limitInput.prop("disabled", !enabled);
 
-        if (!enabled) {
-            $limitInput.val('');
-        }
+        this.onInputFieldChanged();
     },
 
     beginImport: function() {
@@ -59,10 +62,13 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
     getNewModelAttrs: function() {
         var updates = {};
-        _.each(this.$("input:text"), function (i) {
+        var $enabledFieldSet = this.$("fieldset").not(".disabled");
+        _.each($enabledFieldSet.find("input:text"), function (i) {
             var input = $(i);
             updates[input.attr("name")] = input.val().trim();
         });
+
+        updates.useLimitRows = $enabledFieldSet.find(".limit input:checkbox").prop("checked");
 
         return updates;
     }

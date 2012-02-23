@@ -56,10 +56,11 @@ describe("chorus.dialogs.ImportScheduler", function() {
             expect(this.dialog.$(".existing_table .names")).toBeEnabled();
         });
 
-        context("when 'Import into New Table' is checked", function() {
+        context("when 'Import into New Table' is checked and a valid name is entered", function() {
             beforeEach(function() {
                 this.dialog.$(".new_table input:radio").prop("checked", true).change();
                 this.dialog.$(".existing_table input:radio").prop("checked", false).change();
+                this.dialog.$(".new_table input.name").val("Foo").trigger("keyup");
             });
 
             it("should disable the 'Existing Table' dropdown", function() {
@@ -74,6 +75,28 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
                 it("should enable the limit text input", function() {
                     expect(this.dialog.$(".new_table .limit input:text")).toBeEnabled();
+                });
+
+                context("entering a valid row limit", function() {
+                    beforeEach(function() {
+                        this.dialog.$(".new_table .limit input:text").val("345").trigger("keyup");
+                    });
+
+                    it("should enable the submit button when a row limit is entered", function() {
+                        expect(this.dialog.$("button.submit")).toBeEnabled();
+                    });
+                });
+
+                context("entering an invalid row limit", function() {
+                    beforeEach(function() {
+                        this.dialog.$(".new_table .limit input:text").val("ddd").trigger("keyup");
+                    });
+
+                    it("should keep the submit enabled when the row limit is unchecked", function() {
+                        expect(this.dialog.$("button.submit")).toBeDisabled();
+                        this.dialog.$(".new_table .limit input:checkbox").prop("checked", false).change();
+                        expect(this.dialog.$("button.submit")).toBeEnabled();
+                    });
                 });
             });
 
