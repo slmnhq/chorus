@@ -1,10 +1,14 @@
 .workspace_show {
     .activity_list_header {
-        padding: 10px 16px;
+        padding: 10px 16px 20px;
 
         h1 {
             font-size: 24px;
             font-weight: $semibold;
+        }
+
+        .menus a {
+            font-size: 12px;
         }
     }
 }
