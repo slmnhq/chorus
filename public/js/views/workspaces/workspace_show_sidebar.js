@@ -1,5 +1,5 @@
-chorus.views.WorkspaceSummarySidebar = chorus.views.Sidebar.extend({
-    className:"workspace_summary_sidebar",
+chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
+    className:"workspace_show_sidebar",
 
     setup:function () {
         this.model.bind("image:change", this.render, this);

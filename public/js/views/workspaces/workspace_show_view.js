@@ -1,5 +1,5 @@
-chorus.views.WorkspaceDetail = chorus.views.Base.extend({
-    className:"workspace_detail",
+chorus.views.WorkspaceShow = chorus.views.Base.extend({
+    className: "workspace_show",
     useLoadingSection: true,
 
     subviews: {

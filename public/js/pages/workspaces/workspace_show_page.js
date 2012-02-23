@@ -9,7 +9,7 @@
         }
     });
 
-    chorus.pages.WorkspaceSummaryPage = chorus.pages.Base.extend({
+    chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
         helpId: "workspace_summary",
 
         setup:function (workspaceId) {
@@ -18,11 +18,11 @@
             this.model.fetch();
             this.breadcrumbs = new breadcrumbsView({model:this.model});
             this.subNav = new chorus.views.SubNav({workspace:this.model, tab:"summary"})
-            this.sidebar = new chorus.views.WorkspaceSummarySidebar({model:this.model});
+            this.sidebar = new chorus.views.WorkspaceShowSidebar({model:this.model});
 
             this.mainContent = new chorus.views.MainContentView({
                 model:this.model,
-                content:new chorus.views.WorkspaceDetail({model:this.model }),
+                content:new chorus.views.WorkspaceShow({model:this.model }),
                 contentHeader:new chorus.views.TruncatedText({model:this.model, attribute:"summary", characters:300, lines:2})
             });
         }

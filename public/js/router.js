@@ -12,7 +12,7 @@
             ["/users/:id/edit", "UserEdit"],
             ["/users/new", "UserNew"],
             ["/workspaces", "WorkspaceIndex"],
-            ["/workspaces/:id", "WorkspaceSummary"],
+            ["/workspaces/:id", "WorkspaceShow"],
             ["/workspaces/:workspaceId/workfiles", "WorkfileIndex"],
             ["/workspaces/:workspaceId/datasets/:datasetId", "DatasetShow"],
             ["/workspaces/:workspaceId/workfiles/:workfileId", "WorkfileShow"],

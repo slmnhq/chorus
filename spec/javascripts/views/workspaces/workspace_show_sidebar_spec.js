@@ -1,4 +1,4 @@
-describe("chorus.views.WorkspaceSummarySidebar", function() {
+describe("chorus.views.WorkspaceShowSidebar", function() {
     beforeEach(function() {
             this.model = fixtures.workspace({name: "A Cool Workspace", id: '123', iconId: '123'});
     });
@@ -7,7 +7,7 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
         beforeEach(function() {
             spyOn(this.model.members(), 'fetch');
             spyOn(this.model.members(), 'bind').andCallThrough();
-            this.view = new chorus.views.WorkspaceSummarySidebar({model: this.model});
+            this.view = new chorus.views.WorkspaceShowSidebar({model: this.model});
         });
 
         it("fetches the workspace's members", function() {
@@ -21,7 +21,7 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.view = new chorus.views.WorkspaceSummarySidebar({model: this.model});
+            this.view = new chorus.views.WorkspaceShowSidebar({model: this.model});
             this.view.render();
         });
 
@@ -205,7 +205,7 @@ describe("chorus.views.WorkspaceSummarySidebar", function() {
 
     describe("#post_render", function() {
         it("unhides the .after_image area after the .workspace_image loads", function() {
-            this.view = new chorus.views.WorkspaceSummarySidebar({model: this.model});
+            this.view = new chorus.views.WorkspaceShowSidebar({model: this.model});
             spyOn($.fn, 'removeClass');
             $('#jasmine_content').append(this.view.el);
             this.view.render();

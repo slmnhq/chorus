@@ -1,7 +1,7 @@
-describe("chorus.pages.WorkspaceSummaryPage", function() {
+describe("chorus.pages.WorkspaceShowPage", function() {
     describe("#initialize", function() {
         beforeEach(function() {
-            this.page = new chorus.pages.WorkspaceSummaryPage(4);
+            this.page = new chorus.pages.WorkspaceShowPage(4);
         })
 
         it("sets up the model properly", function() {
@@ -19,7 +19,7 @@ describe("chorus.pages.WorkspaceSummaryPage", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.page = new chorus.pages.WorkspaceSummaryPage(4);
+            this.page = new chorus.pages.WorkspaceShowPage(4);
         })
 
         context("while the model is loading", function(){

@@ -1,9 +1,9 @@
-describe("chorus.views.WorkspaceDetail", function() {
+describe("chorus.views.WorkspaceShow", function() {
     beforeEach(function() {
         fixtures.model = "Workspace";
         this.model = new chorus.models.Workspace({ id : 4 });
         this.model.fetch();
-        this.view = new chorus.views.WorkspaceDetail({ model : this.model });
+        this.view = new chorus.views.WorkspaceShow({ model : this.model });
         this.view.render();
     });
 
