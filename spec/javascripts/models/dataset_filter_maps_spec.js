@@ -5,7 +5,7 @@ describe("chorus.models.DatasetFilterMaps", function() {
         })
 
 
-        itReturnsTheRightClauseFor("equal", "column_name", "some_value", "column_name = 'some_value'")
+        itReturnsTheRightClauseFor("equal", "column_name", "some_v'alue", "column_name = 'some_v''alue'")
         itReturnsTheRightClauseFor("not_equal", "column_name", "some_value", "column_name != 'some_value'")
         itReturnsTheRightClauseFor("like", "column_name", "some_value", "column_name LIKE 'some_value'")
         itReturnsTheRightClauseFor("begin_with", "column_name", "some_value", "column_name LIKE 'some_value%'")

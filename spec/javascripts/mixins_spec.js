@@ -277,6 +277,12 @@ describe("chorus.Mixins", function() {
                 })
             })
         })
+
+        describe("pgsqlRealEscapeString", function() {
+            it("replaces single quotes with two single quotes", function() {
+                expect(chorus.Mixins.dbHelpers.sqlEscapeString("John's Father's Boat's Hull")).toBe("John''s Father''s Boat''s Hull");
+            });
+        });
     });
 
     describe("dataStatusOk", function() {

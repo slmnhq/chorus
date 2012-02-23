@@ -127,7 +127,7 @@
 
     // quote single
     function qs(string) {
-        return "'" + string + "'";
+        return "'" + chorus.Mixins.dbHelpers.sqlEscapeString(string) + "'";
     }
 })();
 
