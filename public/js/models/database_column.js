@@ -26,8 +26,7 @@ chorus.models.DatabaseColumn = chorus.models.Base.extend({
     },
 
     toText: function() {
-        return this.safePGName(this.get("schemaName")) + '.' + this.safePGName(this.get("parentName"))
-            + '.' + this.safePGName(this.get("name"));
+        return this.safePGName(this.get("name"));
     },
 
     quotedName: function() {

@@ -46,7 +46,7 @@ describe("chorus.models.DatabaseColumn", function() {
                         this.model.set({name: "col"})
                     })
                     it("formats the string to put into the sql editor", function() {
-                        expect(this.model.toText()).toBe('partyman.taaab.col');
+                        expect(this.model.toText()).toBe('col');
                     })
                 })
                 context("with uppercase names", function() {
@@ -54,7 +54,7 @@ describe("chorus.models.DatabaseColumn", function() {
                         this.model.set({name: "Col", schemaName: "PartyMAN", parentName: "TAAAB"});
                     })
                     it("puts quotes around the uppercase names", function() {
-                        expect(this.model.toText()).toBe('"PartyMAN"."TAAAB"."Col"');
+                        expect(this.model.toText()).toBe('"Col"');
                     })
                 })
             })
