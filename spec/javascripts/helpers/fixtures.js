@@ -1920,6 +1920,14 @@ beforeEach(function() {
             }, overrides));
         },
 
+        datasetImport: function(overrides) {
+            var attributes = _.extend({
+                workspaceId: this.nextId().toString(),
+                datasetId: this.datasetCommonJson().id
+            }, overrides);
+            return new chorus.models.DatasetImport(attributes);
+        },
+
         chartTask: function(overrides) {
             return new chorus.models.ChartTask(_.extend({
                 columns: [],
