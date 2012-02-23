@@ -1,6 +1,10 @@
 @import "../_common.scss";
 
 #sidebar {
+    &:focus {
+        outline: none;
+    }
+
     width: $sidebar-width;
     padding-left: $sidebar-padding-x;
     position: absolute;
