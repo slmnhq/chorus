@@ -124,13 +124,18 @@ describe("chorus.models.TabularData", function() {
     })
 
     describe("#schema", function() {
+        beforeEach(function() {
+            this.schema = this.tabularData.schema();
+        })
         it("returns a new schema with the right attributes", function() {
-            var schema = this.tabularData.schema();
+            expect(this.schema.get("instanceId")).toBe(this.tabularData.get("instance").id);
+            expect(this.schema.get("databaseName")).toBe(this.tabularData.get("databaseName"));
+            expect(this.schema.get("name")).toBe(this.tabularData.get("schemaName"));
+            expect(this.schema.get("instanceName")).toBe(this.tabularData.get("instance").name);
+        });
 
-            expect(schema.get("instanceId")).toBe(this.tabularData.get("instance").id);
-            expect(schema.get("databaseName")).toBe(this.tabularData.get("databaseName"));
-            expect(schema.get("name")).toBe(this.tabularData.get("schemaName"));
-            expect(schema.get("instanceName")).toBe(this.tabularData.get("instance").name);
+        it("memoizes", function() {
+            expect(this.schema).toBe(this.tabularData.schema());
         });
     });
 

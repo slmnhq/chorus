@@ -168,7 +168,10 @@ describe("chorus.dialogs.ManageJoinTables", function() {
         describe("when a 'join table' link is clicked", function() {
             beforeEach(function() {
                 spyOn(chorus.dialogs.JoinConfiguration.prototype, 'render').andCallThrough();
-                this.dialog.$("a.join").eq(3).trigger("click");
+                var link = this.dialog.$("a.join").eq(3)
+                link.trigger("click");
+                var clickedId = link.closest('li').data('cid')
+                this.selectedDataset = this.dialog.collection.getByCid(clickedId);
             });
 
             it("launches the 'join configuration' sub-dialog", function() {
@@ -182,6 +185,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
                 expect(joinConfigurationDialog.destinationObject).toBeA(chorus.models.DatabaseObject);
                 expect(joinConfigurationDialog.destinationObject.get("id")).toBe(this.databaseObject3.get("id"));
+                expect(joinConfigurationDialog.destinationObject).not.toBe(this.selectedDataset);
             });
         });
 

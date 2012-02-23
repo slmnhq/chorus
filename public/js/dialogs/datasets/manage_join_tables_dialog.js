@@ -45,15 +45,15 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
 
     joinLinkClicked: function(e) {
         e.preventDefault();
-        var clickedId = $(e.target).closest("li").attr("table_id")
-        var databaseObject = this.collection.findWhere({ id: clickedId });
+        var clickedId = $(e.target).closest("li").data("cid")
+        var databaseObject = this.collection.getByCid(clickedId);
         if (databaseObject == this.collection.get(this.pageModel.get("id"))) {
             return;
         }
 
         var joinConfigurationDialog = new chorus.dialogs.JoinConfiguration({
             model: this.model,
-            destinationObject: databaseObject
+            destinationObject: databaseObject.clone()
         });
         this.launchSubModal(joinConfigurationDialog);
     },
@@ -61,8 +61,8 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     onClickPreviewColumns: function(e) {
         e.preventDefault();
 
-        var clickedId = $(e.target).closest("li").attr("table_id")
-        var databaseObject = this.collection.findWhere({ id: clickedId });
+        var clickedId = $(e.target).closest("li").data("cid")
+        var databaseObject = this.collection.getByCid(clickedId);
 
         var previewColumnsDialog = new chorus.dialogs.PreviewColumns({model: databaseObject});
         this.launchSubModal(previewColumnsDialog);

@@ -50,12 +50,15 @@ chorus.models.TabularData = chorus.models.Base.extend({
     },
 
     schema: function() {
-        return new chorus.models.Schema({
-            instanceId: this.get("instance").id,
-            databaseName: this.get("databaseName"),
-            name: this.get("schemaName"),
-            instanceName: this.get("instance").name
-        });
+        if (!this._schema) {
+            this._schema = new chorus.models.Schema({
+                instanceId: this.get("instance").id,
+                databaseName: this.get("databaseName"),
+                name: this.get("schemaName"),
+                instanceName: this.get("instance").name
+            });
+        }
+        return this._schema;
     },
 
     statistics: function() {
@@ -121,7 +124,7 @@ chorus.models.TabularData = chorus.models.Base.extend({
     },
 
     selectName: function() {
-        if(this.aliasedName) {
+        if (this.aliasedName) {
             return this.aliasedName;
         }
         return this.quotedName();
@@ -133,7 +136,7 @@ chorus.models.TabularData = chorus.models.Base.extend({
     },
 
     fromClause: function() {
-        if(this.datasetNumber) {
+        if (this.datasetNumber) {
             return this.quotedName() + " AS " + this.aliasedName
         }
         return this.quotedName();
