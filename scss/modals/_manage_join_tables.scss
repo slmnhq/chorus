@@ -116,6 +116,10 @@
         }
     }
 
+    .column_count {
+        vertical-align: top;
+    }
+
     .text {
         .name {
             @include font-normal-alpha;
