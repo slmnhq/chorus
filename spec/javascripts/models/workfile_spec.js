@@ -187,7 +187,17 @@ describe("chorus.models.Workfile", function() {
 
     describe("#urls", function() {
         beforeEach(function() {
-            this.model = fixtures.workfile({id: 5, workspaceId: 10, versionInfo: {versionFileId: '12345'}});
+            this.model = fixtures.workfile({
+                id: 5,
+                workspaceId: 10,
+                versionInfo: {
+                    versionFileId: '12345'
+                },
+                hasDraft: false,
+                draftInfo: {
+                    draftFileId: "99999"
+                }
+            });
         });
 
         it("has the right backend URL", function() {
@@ -244,6 +254,16 @@ describe("chorus.models.Workfile", function() {
                 expect(this.model.downloadUrl()).toContain("?")
                 expect(this.model.downloadUrl()).toContain("download=true");
                 expect(this.model.downloadUrl()).toContain("iebuster=12345");
+            });
+        })
+
+        context("when the workfile is a draft", function() {
+            beforeEach(function() {
+                this.model.set({ hasDraft: true })
+            });
+
+            it("has the right download URL", function() {
+                expect(this.model.downloadUrl()).toBe("/edc/workspace/10/workfile/5/file/99999?download=true");
             });
         })
     });

@@ -125,7 +125,9 @@
         downloadUrl: function() {
             var url = URI(this.url())
             var path = url.path() + "/file/";
-            if (this.get("versionInfo")) {
+            if (this.get("hasDraft")) {
+                path += this.get("draftInfo").draftFileId;
+            } else if (this.get("versionInfo")) {
                 path += this.get("versionInfo").versionFileId;
             }
             url.path(path)
