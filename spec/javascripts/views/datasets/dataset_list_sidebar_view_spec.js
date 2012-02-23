@@ -78,7 +78,7 @@ describe("chorus.views.DatasetListSidebar", function() {
                 });
                 
                 it("prefers only the without_workspace type for the activity list", function() {
-                    expect(this.view.activityList.options.displayStyle).toEqual(['without_workspace ']);
+                    expect(this.view.activityList.options.displayStyle).toEqual(['without_workspace']);
                 });
 
                 it("does not have a link to associate the dataset with a workspace", function() {
