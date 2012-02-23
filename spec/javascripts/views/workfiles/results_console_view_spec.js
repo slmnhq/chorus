@@ -205,8 +205,8 @@ describe("chorus.views.ResultsConsoleView", function() {
                             this.view.$(".close_errors").click();
                         })
 
-                        it("should show the result content area", function() {
-                            expect(this.view.$(".result_content")).not.toHaveClass("hidden");
+                        it("should hide the sql_errors content", function() {
+                            expect(this.view.$(".sql_errors")).toHaveClass("hidden");
                         });
                     });
 

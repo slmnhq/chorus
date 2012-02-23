@@ -154,7 +154,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
     closeError: function(e) {
         e.preventDefault();
-        this.$(".result_content").removeClass("hidden");
+        this.$(".sql_errors").addClass("hidden");
     },
 
     viewDetails: function(e) {
