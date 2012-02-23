@@ -16,7 +16,6 @@ describe("chorus.dialogs.TableImportCSV", function() {
             toTable: "foo_quux_bar"
         });
         this.dialog = new chorus.dialogs.TableImportCSV({csv: this.csv});
-        spyOn(this.dialog, "focusOtherInputField");
         this.dialog.render();
     });
 
@@ -41,23 +40,23 @@ describe("chorus.dialogs.TableImportCSV", function() {
         return function() {
             beforeEach(function() {
                 this.csv = fixtures.csvImport({lines: [
-                        "COL1" + separator + "col2" + separator + "col3" + separator + "col_4" + separator + "Col_5",
-                        "val1.1" + separator + "val1.2" + separator + "val1.3" + separator + "val1.4" + separator + "val1.5",
-                        "val2.1" + separator + "val2.2" + separator + "val2.3" + separator + "val2.4" + separator + "val2.5",
-                        "val3.1" + separator + "val3.2" + separator + "val3.3" + separator + "val3.4" + separator + "val3.5"
-                    ],
+                    "COL1" + separator + "col2" + separator + "col3" + separator + "col_4" + separator + "Col_5",
+                    "val1.1" + separator + "val1.2" + separator + "val1.3" + separator + "val1.4" + separator + "val1.5",
+                    "val2.1" + separator + "val2.2" + separator + "val2.3" + separator + "val2.4" + separator + "val2.5",
+                    "val3.1" + separator + "val3.2" + separator + "val3.3" + separator + "val3.4" + separator + "val3.5"
+                ],
                     toTable: "foo_quux_bar"
                 });
                 this.dialog = new chorus.dialogs.TableImportCSV({csv: this.csv});
                 this.dialog.render();
-    
+
                 this.dialog.$("input.delimiter[value='" + separator + "']").click();
             });
-    
+
             it("has " + separator + " as separator", function() {
                 expect(this.dialog.$('input.delimiter[checked]').val()).toBe(separator);
             });
-    
+
             it("reparses the file with " + separator + " as the separator", function() {
                 expect(this.dialog.$(".data_table .tbody .column").length).toEqual(5);
             });
@@ -66,7 +65,7 @@ describe("chorus.dialogs.TableImportCSV", function() {
 
     describe("other delimiter input field", function() {
         beforeEach(function() {
-            this.otherField = this.dialog.$('input[name=other_delimiter]');
+            this.otherField = this.dialog.$('input[name=custom_delimiter]');
         });
 
         it("is empty on loading", function() {
@@ -76,7 +75,7 @@ describe("chorus.dialogs.TableImportCSV", function() {
         it("checks the Other radio button", function() {
             this.otherField.val("X");
             this.otherField.trigger("keyup");
-            expect(this.dialog.$('input.delimiter[type=radio]:checked').val()).toBeFalsy();
+            expect(this.dialog.$('input.delimiter[type=radio]:checked').val()).toBe("other");
         });
 
         it("retains its value after re-render", function() {
@@ -87,11 +86,40 @@ describe("chorus.dialogs.TableImportCSV", function() {
 
         describe("clicking on radio button Other", function() {
             beforeEach(function() {
+                spyOn($.fn, 'focus');
                 this.dialog.$("input#delimiter_other").click();
             });
 
             it("focuses the text field", function() {
-                expect(this.dialog.focusOtherInputField).toHaveBeenCalled();
+                expect($.fn.focus).toHaveBeenCalled();
+                expect($.fn.focus.mostRecentCall.object).toBe("input:text");
+            });
+
+            describe("entering 'z' as a separator", function() {
+                beforeEach(function() {
+                    this.csv = fixtures.csvImport({lines: [
+                        "COL1zcol2zcol3zcol_4zCol_5",
+                        "val1.1zval1.2zval1.3zval1.4zval1.5",
+                        "val2.1zval2.2zval2.3zval2.4zval2.5",
+                        "val3.1zval3.2zval3.3zval3.4zval3.5"
+                    ],
+                        toTable: "foo_quux_bar"
+                    });
+                    this.dialog = new chorus.dialogs.TableImportCSV({csv: this.csv});
+                    this.dialog.render();
+
+                    this.dialog.$("input#delimiter_other").click();
+                    this.dialog.$('input[name=custom_delimiter]').val("z");
+                    this.dialog.$('input[name=custom_delimiter]').trigger('keyup')
+                });
+
+                it("has z as separator", function() {
+                    expect(this.dialog.$('input.delimiter[checked]').val()).toBe('other');
+                });
+
+                it("reparses the file with z as the separator", function() {
+                    expect(this.dialog.$(".data_table .tbody .column").length).toEqual(5);
+                });
             });
         })
     });
@@ -282,4 +310,5 @@ describe("chorus.dialogs.TableImportCSV", function() {
             })
         })
     })
-});
+})
+;

@@ -1,14 +1,13 @@
 chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
     className: "table_import_csv",
     title: t("dataset.import.table.title"),
-//    useLoadingSection:true,
     delimiter: ',',
 
     events: {
       "click button.submit": "startImport",
         "change #include_header": "refreshCSV",
-        "keyup input.delimiter[name=other_delimiter]": "setOtherDelimiter",
-        "paste input.delimiter[name=other_delimiter]": "setOtherDelimiter",
+        "keyup input.delimiter[name=custom_delimiter]": "setOtherDelimiter",
+        "paste input.delimiter[name=custom_delimiter]": "setOtherDelimiter",
         "click input.delimiter[type=radio]": "setDelimiter",
         "click input#delimiter_other": "focusOtherInputField"
     },
@@ -50,13 +49,18 @@ chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
         });
 
         this.$("input.delimiter").removeAttr("checked");
-        this.$("input.delimiter[value='" + this.delimiter + "']").attr("checked", "true");
+        if(_.contains([",", "\t", ";", " "], this.delimiter)){
+            this.$("input.delimiter[value='" + this.delimiter + "']").attr("checked", "true");
+        } else {
+            this.$("input#delimiter_other").attr("checked", "true");
+        }
+
     },
 
     additionalContext: function() {
         return {
             columns: this.csv.columnOrientedData(),
-            delimiter: ",; \t".indexOf(this.delimiter) < 0 ? this.delimiter : '',
+            delimiter: this.other_delimiter ? this.delimiter : '',
             directions: t("dataset.import.table.directions", {
                tablename_input_field: "<input type='text' name='table_name' value='" + this.tableName + "'/>"
             })
@@ -112,12 +116,18 @@ chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
     },
 
     setDelimiter: function(e) {
-        this.delimiter = e.target.value || this.$("input[name=other_delimiter]").val();
+        if (e.target.value == "other") {
+            this.delimiter = this.$("input[name=custom_delimiter]").val();
+            this.other_delimiter = true;
+        } else {
+            this.delimiter = e.target.value;
+            this.other_delimiter = false;
+        }
         this.refreshCSV();
     },
 
     focusOtherInputField: function(e) {
-        this.$("input[name=other_delimiter]").focus();
+        this.$("input[name=custom_delimiter]").focus();
     },
 
     setOtherDelimiter: function() {
