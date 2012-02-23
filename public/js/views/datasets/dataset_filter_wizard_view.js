@@ -1,21 +1,22 @@
 chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
     className: "dataset_filter_wizard",
     persistent: true,
-    events : {
-        "click .add_filter" : "addFilterAndRender"
+    events: {
+        "click .add_filter": "addFilterAndRender"
     },
 
-    setup : function() {
+    setup: function() {
         this.filterViews = [];
+        this.collection.bind('remove', this.removeInvalidFilters, this);
     },
 
-    postRender : function() {
+    postRender: function() {
         var $ul = this.$(".filters");
         if (!this.filterViews.length) {
             this.addFilter();
         }
 
-        _.each(this.filterViews, function(filterView){
+        _.each(this.filterViews, function(filterView) {
             $ul.append(filterView.el);
             filterView.render();
             filterView.delegateEvents();
@@ -29,7 +30,7 @@ chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
         this.render();
     },
 
-    addFilter : function() {
+    addFilter: function() {
         var filterView = new chorus.views.DatasetFilter({collection: this.collection, showAliasedName: this.options.showAliasedName});
         filterView.render();
         filterView.owner = this;
@@ -38,20 +39,28 @@ chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
         this.filterViews.push(filterView);
     },
 
-    addFilterAndRender : function(e) {
+    addFilterAndRender: function(e) {
         e && e.preventDefault();
         this.addFilter();
         this.$(".filters").append(_.last(this.filterViews).el);
         this.tagLastLi();
     },
 
-    removeFilterView : function(view) {
+    removeFilterView: function(view) {
         this.filterViews = _.without(this.filterViews, view);
         $(view.el).remove();
         this.tagLastLi();
     },
 
-    tagLastLi : function() {
+    removeInvalidFilters: function() {
+        _.each(this.filterViews, _.bind(function(filterView) {
+            if(!filterView.valid()) {
+                this.removeFilterView(filterView);
+            }
+        }, this));
+    },
+
+    tagLastLi: function() {
         var $ul = this.$(".filters");
         $ul.find("li").removeClass("last");
         $ul.find("li:last-child").addClass("last");
@@ -65,7 +74,7 @@ chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
         return wheres
     },
 
-    whereClause : function() {
+    whereClause: function() {
         var wheres = this.filterStrings();
         return wheres.length ? ("WHERE " + wheres.join(" AND ")) : "";
     },

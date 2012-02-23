@@ -102,4 +102,33 @@ describe("chorus.views.ColumnSelect", function() {
             })
         });
     });
+
+    describe("valid", function() {
+        context("when there is no selected column", function() {
+            it('returns true', function() {
+                expect(this.view.valid()).toBeTruthy();
+            });
+        })
+
+        context("when the selectedColumn is in the collection", function() {
+            beforeEach(function() {
+                this.view.selectedColumn = this.columns.at(0);
+            });
+
+            it('returns true', function() {
+                expect(this.view.valid()).toBeTruthy();
+            });
+        })
+
+        context("when the selectedColumn is not in the collection", function() {
+            beforeEach(function() {
+                this.view.selectedColumn = this.columns.at(0);
+                this.columns.remove(this.view.selectedColumn);
+            });
+
+            it('returns false', function() {
+                expect(this.view.valid()).toBeFalsy();
+            });
+        })
+    })
 });

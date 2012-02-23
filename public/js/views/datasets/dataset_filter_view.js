@@ -136,5 +136,9 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         } else {
             this.showErrors(this.model);
         }
+    },
+
+    valid: function() {
+        return this.columnFilter.valid();
     }
 });

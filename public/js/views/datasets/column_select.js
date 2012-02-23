@@ -35,5 +35,12 @@ chorus.views.ColumnSelect = chorus.views.Base.extend({
     columnSelected: function() {
         this.selectedColumn = this.getSelectedColumn()
         this.trigger("columnSelected", this.selectedColumn)
+    },
+
+    valid: function() {
+        if(!this.selectedColumn) {
+            return true;
+        }
+        return this.collection.include(this.selectedColumn);
     }
 })

@@ -435,4 +435,26 @@ describe("chorus.views.DatasetFilter", function() {
             });
         })
     });
+
+    describe("#valid", function() {
+        context("when the columnFilter is valid", function() {
+            beforeEach(function() {
+                spyOn(this.view.columnFilter, 'valid').andReturn(true);
+            })
+
+            it("returns true", function() {
+                expect(this.view.valid()).toBeTruthy();
+            })
+        })
+
+        context("when the columnFilter is not valid", function() {
+            beforeEach(function() {
+                spyOn(this.view.columnFilter, 'valid').andReturn(false);
+            })
+
+            it("returns false", function() {
+                expect(this.view.valid()).toBeFalsy();
+            })
+        })
+    })
 });

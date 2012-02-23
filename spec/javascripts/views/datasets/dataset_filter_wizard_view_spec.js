@@ -1,12 +1,12 @@
 describe("chorus.views.DatasetFilterWizard", function() {
-    beforeEach(function () {
+    beforeEach(function() {
         this.dataset = fixtures.datasetSandboxTable();
-        this.collection = this.dataset.columns([fixtures.databaseColumn(), fixtures.databaseColumn()]);
+        this.collection = this.dataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn()]);
         this.view = new chorus.views.DatasetFilterWizard({collection: this.collection});
     });
 
     describe("#render", function() {
-        beforeEach(function () {
+        beforeEach(function() {
             this.view.render();
         });
 
@@ -23,7 +23,7 @@ describe("chorus.views.DatasetFilterWizard", function() {
         });
 
         describe("#whereClause", function() {
-            beforeEach(function () {
+            beforeEach(function() {
                 spyOn(this.view.filterViews[0], "filterString").andReturn("foo = 1");
             });
 
@@ -57,7 +57,7 @@ describe("chorus.views.DatasetFilterWizard", function() {
         })
 
         describe("removing the only filter", function() {
-            beforeEach(function () {
+            beforeEach(function() {
                 this.view.$(".remove").click();
             });
 
@@ -69,7 +69,7 @@ describe("chorus.views.DatasetFilterWizard", function() {
         });
 
         describe("clicking the add filter link", function() {
-            beforeEach(function () {
+            beforeEach(function() {
                 this.view.$("a.add_filter").click();
             });
 
@@ -83,7 +83,7 @@ describe("chorus.views.DatasetFilterWizard", function() {
             });
 
             describe("#whereClause", function() {
-                beforeEach(function () {
+                beforeEach(function() {
                     spyOn(this.view.filterViews[0], "filterString").andReturn("foo = 1");
                     spyOn(this.view.filterViews[1], "filterString").andReturn("bar = 2");
                 });
@@ -101,7 +101,7 @@ describe("chorus.views.DatasetFilterWizard", function() {
             });
 
             describe("removing the filter", function() {
-                beforeEach(function () {
+                beforeEach(function() {
                     this.oldView = this.view.filterViews[1];
                     this.view.$(".remove:eq(1)").click();
                 });
@@ -121,4 +121,20 @@ describe("chorus.views.DatasetFilterWizard", function() {
             });
         });
     });
+
+    describe("#removeInvalidFilters", function() {
+        beforeEach(function() {
+            this.view.render();
+            this.view.addFilter();
+            this.selectedColumn = this.collection.at(0);
+            this.view.filterViews[1].columnFilter.$('options[data-cid=' + this.selectedColumn.cid + ']').prop('selected', true);
+            this.view.filterViews[1].columnFilter.$('select').change();
+            this.collection.remove(this.selectedColumn);
+        })
+
+        it("removes the invalid filter", function() {
+            expect(this.view.filterViews.length).toBe(1);
+            expect(this.view.$('.column_filter select').get(0).selectedIndex).toBe(0);
+        })
+    })
 });
