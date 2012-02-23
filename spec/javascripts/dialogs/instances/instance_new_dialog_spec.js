@@ -21,28 +21,25 @@ describe("chorus.dialogs.InstanceNew", function() {
             expect(this.dialog.$("button.submit")).toBeDisabled();
         });
 
-        describe("selecting a radio button", function() {
+        describe("selecting the 'register an existing instance' radio button", function() {
             beforeEach(function() {
-                // Only setting attr("checked", true) doesn't raise change event.
-                this.dialog.$("input[type=radio]").eq(0).attr('checked', true).change();
+                this.dialog.$("input[type=radio]#register_existing_greenplum").attr('checked', true).change();
             });
 
-            it("removes the collapsed class from only that radio button", function() {
+            it("un-collapses the 'register an existing instance' fieldset", function() {
                 expect(this.dialog.$("fieldset").not(".collapsed").length).toBe(1);
-                expect(this.dialog.$("input[type=radio]:checked").closest("fieldset")).not.toHaveClass("collapsed");
-            });
-        });
-
-        describe("filling out the form", function() {
-            beforeEach(function() {
-                this.dialog.$(".register_existing_greenplum input[type=radio]").attr('checked', true).change();
+                expect(this.dialog.$("fieldset.register_existing_greenplum")).not.toHaveClass("collapsed");
             });
 
             it("enables the submit button", function() {
                 expect(this.dialog.$("button.submit")).toBeEnabled();
             });
 
-            context("after filling in the form", function() {
+            it("uses 'postgres' as the default database name", function() {
+                expect(this.dialog.$(".register_existing_greenplum input[name=maintenanceDb]").val()).toBe("postgres");
+            });
+
+            describe("filling out the form", function() {
                 beforeEach(function() {
                     this.dialog.$(".register_existing_greenplum input[name=name]").val("Instance_Name");
                     this.dialog.$(".register_existing_greenplum textarea[name=description]").val("Instance Description");
@@ -72,10 +69,6 @@ describe("chorus.dialogs.InstanceNew", function() {
             context("using register existing greenplum database", function() {
                 beforeEach(function() {
                     this.dialog.$(".register_existing_greenplum input[type=radio]").attr('checked', true).change();
-                });
-
-                it("uses 'postgres' as the default database name", function() {
-                    expect(this.dialog.$(".register_existing_greenplum input[name=maintenanceDb]").val()).toBe("postgres");
                 });
 
                 context("after filling in the form", function() {
