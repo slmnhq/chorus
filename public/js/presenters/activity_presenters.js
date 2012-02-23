@@ -97,6 +97,11 @@
             var styles = _.flatten([this.options.displayStyle, this.workspace && (this.workspace != this.noteObject) ? 'default' : 'without_workspace' ]);
 
             prefix = prefix + type + '.';
+
+            if (this.options.isNotification && type == "NOTE") {
+                return prefix + "notification";
+            }
+
             return prefix + _.find(styles, function(style) {
                 return I18n.lookup(prefix + style);
             });

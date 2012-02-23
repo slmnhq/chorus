@@ -639,6 +639,10 @@ describe("chorus.presenters.Activity", function() {
 
             itGetsTheTranslationKeyCorrectly('without_workspace');
 
+            it("uses the notification message when the 'isNotification' option is passed", function() {
+                this.presenter = new chorus.presenters.Activity(this.model, {isNotification: true});
+                expect(this.presenter._impl.headerTranslationKey()).toEqual("activity_stream.header.html.NOTE.notification");
+            });
         });
 
         describe("#headerTranslationKey with note on workfile", function() {
