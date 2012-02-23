@@ -1,25 +1,31 @@
 chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
-    className:"dataset_list_sidebar",
+    className: "dataset_list_sidebar",
 
     events: {
         "click .no_credentials a.add_credentials": "launchAddCredentialsDialog"
     },
 
-    subviews:{
-        '.activity_list':'activityList',
-        '.tab_control':'tabControl'
+    subviews: {
+        '.activity_list': 'activityList',
+        '.tab_control': 'tabControl'
     },
 
-    setup:function () {
+    setup: function() {
         chorus.PageEvents.subscribe("dataset:selected", this.setDataset, this);
         chorus.PageEvents.subscribe("column:selected", this.setColumn, this);
         this.tabControl = new chorus.views.TabControl([
-            {name:'activity', selector:".activity_list"},
-            {name:'statistics', selector:".statistics_detail"}
+            {name: 'activity', selector: ".activity_list"},
+            {name: 'statistics', selector: ".statistics_detail"}
         ]);
     },
 
-    setColumn : function(column){
+    render: function() {
+        if(!this.disabled) {
+            this._super("render", arguments);
+        }
+    },
+
+    setColumn: function(column) {
         if (column) {
             this.selectedColumn = column;
         } else {
@@ -29,7 +35,7 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
         this.render();
     },
 
-    setDataset:function (dataset) {
+    setDataset: function(dataset) {
         this.resource = dataset;
         if (dataset) {
             this.statistics = dataset.statistics();
@@ -40,7 +46,7 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
             activities.fetch();
             this.activityList = new chorus.views.ActivityList({
                 collection: activities,
-                additionalClass:"sidebar",
+                additionalClass: "sidebar",
                 displayStyle: this.options.browsingSchema ? ['default'] : ['without_workspace']
             });
 
@@ -53,7 +59,7 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
         this.render();
     },
 
-    additionalContext:function () {
+    additionalContext: function() {
         var ctx = {
             typeString: this.datasetType(this.resource),
             browsingSchema: this.options.browsingSchema
@@ -70,7 +76,7 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
                 ctx.noCredentialsWarning = t("dataset.credentials.missing.body", {linkText: chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'})})
             }
 
-            if(this.resource.get("workspace")) {
+            if (this.resource.get("workspace")) {
                 ctx.workspaceId = this.resource.get("workspace").id;
             }
             ctx.displayEntityType = this.resource.metaType();
@@ -86,7 +92,7 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
                 ctx.statistics.columns = "0"
             }
         }
-        
+
         if (this.selectedColumn) {
             ctx.column = this.selectedColumn.attributes;
         }
@@ -101,10 +107,10 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
 
     launchAddCredentialsDialog: function(e) {
         e && e.preventDefault();
-        new chorus.dialogs.InstanceAccount({pageModel:this.resource.instance(), title: t("instances.sidebar.add_credentials"), reload:true}).launchModal();
+        new chorus.dialogs.InstanceAccount({pageModel: this.resource.instance(), title: t("instances.sidebar.add_credentials"), reload: true}).launchModal();
     },
 
-    datasetType:function (dataset) {
+    datasetType: function(dataset) {
         if (!dataset) { return ""; }
 
         var keys = ["dataset.types", dataset.get("type")];

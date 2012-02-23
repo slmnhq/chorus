@@ -124,6 +124,7 @@
                     break;
                 case 'chorus_view':
                     this.dataset.setDatasetNumber(1);
+                    this.sidebar.disabled = true;
                     this.mainContent.content.selectMulti = true;
                     this.mainContent.content.showDatasetName = true;
                     this.mainContent.content.render();
@@ -145,6 +146,7 @@
 
         hideSidebar: function(type) {
             this.dataset.clearDatasetNumber();
+            this.sidebar.disabled = false;
             this.mainContent.content.selectMulti = false;
             this.mainContent.content.showDatasetName = false;
             this.secondarySidebar.cleanup();

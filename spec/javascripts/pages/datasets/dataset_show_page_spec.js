@@ -267,6 +267,10 @@ describe("chorus.pages.DatasetShowPage", function() {
                     this.page.mainContent.contentDetails.trigger("transform:sidebar", 'chorus_view');
                 });
 
+                it("disables the sidebar", function() {
+                    expect(this.page.sidebar.disabled).toBeTruthy();
+                })
+
                 it("sets the datasetNumber to 1", function() {
                     expect(this.page.dataset.datasetNumber).toBe(1);
                 });
@@ -301,6 +305,10 @@ describe("chorus.pages.DatasetShowPage", function() {
                         this.page.columnSet.add(otherColumn);
                         chorus.PageEvents.broadcast('cancel:sidebar', 'boxplot');
                     });
+
+                    it("enables the sidebar", function() {
+                        expect(this.page.sidebar.disabled).toBeFalsy();
+                    })
 
                     it("clears the datasetNumber", function() {
                         expect(this.page.dataset.datasetNumber).toBeUndefined();

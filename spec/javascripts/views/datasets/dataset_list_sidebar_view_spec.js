@@ -8,6 +8,18 @@ describe("chorus.views.DatasetListSidebar", function() {
             this.view.render();
         });
 
+        context("when it is disabled", function() {
+            beforeEach(function() {
+                this.view.disabled = true;
+                spyOn(this.view, 'template')
+                this.view.render();
+            });
+
+            it("does not actually render", function() {
+                expect(this.view.template).not.toHaveBeenCalled();
+            })
+        });
+
         context("when no dataset is selected", function() {
             it("does not render the info section", function() {
                 expect(this.view.$(".info")).not.toExist();
@@ -108,7 +120,7 @@ describe("chorus.views.DatasetListSidebar", function() {
                 it("fetches the activities for the dataset", function() {
                     expect(this.dataset.activities()).toHaveBeenFetched()
                 });
-                
+
                 it("prefers only the without_workspace type for the activity list", function() {
                     expect(this.view.activityList.options.displayStyle).toEqual(['without_workspace']);
                 });
