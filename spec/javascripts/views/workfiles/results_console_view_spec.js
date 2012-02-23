@@ -247,10 +247,6 @@ describe("chorus.views.ResultsConsoleView", function() {
                     it("cancels the spinner and elapsed time timers", function() {
                         expect(window.clearTimeout.callCount >= 2).toBeTruthy();
                     })
-                } else {
-                    it("does not cancel the spinner delay", function() {
-                        expect(window.clearTimeout).not.toHaveBeenCalled();
-                    })
                 }
 
                 it("clears timer ids", function() {
