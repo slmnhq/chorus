@@ -102,6 +102,26 @@ describe("chorus.models.CSVImport", function() {
         itParsesCorrectly();
     })
 
+    context("with empty values", function() {
+        beforeEach(function() {
+            this.model = fixtures.csvImport({
+                lines: [
+                    'col1,col2,col3',
+                    '"row1""val1",row1val2,',
+                    'row2val1,,row2val3'
+                ]
+            });
+
+            this.expectedColumns = [
+                {name: 'col1', values: ['row1"val1', 'row2val1'], type: 'text'},
+                {name: 'col2', values: ['row1val2', ''], type: 'text'},
+                {name: 'col3', values: ['', 'row2val3'], type: 'text'}
+            ]
+        });
+
+        itParsesCorrectly()
+    })
+
     context("datatypes", function() {
         beforeEach(function() {
             this.model = fixtures.csvImport({
