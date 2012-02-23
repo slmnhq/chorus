@@ -22,7 +22,8 @@ chorus.views.ColumnSelect = chorus.views.Base.extend({
     collectionModelContext: function(model) {
         return {
             quotedName: model.quotedName(),
-            disable: model.get("typeCategory") == "OTHER" && this.options.disableOtherTypeCategory
+            disable: model.get("typeCategory") == "OTHER" && this.options.disableOtherTypeCategory,
+            selected: model == this.selectedColumn
         }
     },
 
@@ -32,6 +33,7 @@ chorus.views.ColumnSelect = chorus.views.Base.extend({
     },
 
     columnSelected: function() {
-        this.trigger("columnSelected", this.getSelectedColumn())
+        this.selectedColumn = this.getSelectedColumn()
+        this.trigger("columnSelected", this.selectedColumn)
     }
 })

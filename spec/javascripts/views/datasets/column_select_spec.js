@@ -66,6 +66,16 @@ describe("chorus.views.ColumnSelect", function() {
                         expect(this.view.getSelectedColumn()).toBe(this.selectedColumn);
                     })
                 })
+
+                describe("rerender", function() {
+                    beforeEach(function() {
+                        this.view.render();
+                    })
+
+                    it("keeps the same column selected", function() {
+                        expect(this.view.$("select option[data-cid="+this.selectedColumn.cid+"]")).toBeSelected();
+                    })
+                })
             });
         });
 

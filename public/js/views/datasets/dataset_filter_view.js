@@ -1,6 +1,7 @@
 chorus.views.DatasetFilter = chorus.views.Base.extend({
     className: "dataset_filter",
     tagName: "li",
+    persistent: true,
 
     subviews: {
         '.column_filter': 'columnFilter'

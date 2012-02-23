@@ -1,5 +1,6 @@
 chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
     className: "dataset_filter_wizard",
+    persistent: true,
     events : {
         "click .add_filter" : "addFilterAndRender"
     },
