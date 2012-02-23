@@ -20,17 +20,28 @@ describe("chorus.dialogs.ImportScheduler", function() {
         expect(this.dialog.$("button.submit")).toBeDisabled();
     });
 
-    it("should have an import into new table radio button", function() {
+    it("should have an 'Import Into New Table' radio button", function() {
         expect(this.dialog.$(".new_table label")).toContainTranslation("import_now.new_table");
     });
 
-    it("should have an import into existing table radio button", function() {
-        expect(this.dialog.$(".existing_table label")).toContainTranslation("import_now.existing_table");
+    it("should have a 'Limit Rows' checkbox", function() {
+        expect(this.dialog.$(".new_table .limit label")).toContainTranslation("import_now.limit_rows");
+        expect(this.dialog.$(".new_table .limit input:checkbox")).toExist();
+        expect(this.dialog.$(".new_table .limit input:checkbox").prop("checked")).toBeFalsy();
+    });
+
+    it("should have a textfield for the 'Limit Rows' value", function() {
+        expect(this.dialog.$(".new_table .limit input:text")).toExist();
+        expect(this.dialog.$(".new_table .limit input:text")).toBeDisabled();
     });
 
     it("should have a text entry for new table name", function() {
         expect(this.dialog.$(".new_table .name")).toExist();
         expect(this.dialog.$(".new_table .name")).toBeEnabled();
+    });
+
+    it("should have an import into existing table radio button", function() {
+        expect(this.dialog.$(".existing_table label")).toContainTranslation("import_now.existing_table");
     });
 
     it("should have a dropdown selector for existing tables", function() {
@@ -49,6 +60,11 @@ describe("chorus.dialogs.ImportScheduler", function() {
             expect(this.dialog.$(".existing_table .names")).toBeEnabled();
         });
 
+        it("should have inputs for limiting the number of rows", function() {
+            expect(this.dialog.$(".existing_table .limit")).toExist();
+            expect(this.dialog.$(".new_table .limit")).not.toExist();
+        });
+
         context("when 'Import into New Table' is checked", function() {
             beforeEach(function() {
                 this.dialog.$(".new_table input:radio").prop("checked", true).change();
@@ -60,6 +76,56 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 expect(this.dialog.$(".existing_table .names")).toBeDisabled();
             });
 
+            it("should have inputs for limiting the number of rows", function() {
+                expect(this.dialog.$(".new_table .limit")).toExist();
+                expect(this.dialog.$(".existing_table .limit")).not.toExist();
+            });
+
+            context("checking the limit rows checkbox", function() {
+                beforeEach(function() {
+                    this.dialog.$(".new_table .limit input:checkbox").prop("checked", true).change();
+                });
+
+                it("should enable the limit text input", function() {
+                    expect(this.dialog.$(".new_table .limit input:text")).toBeEnabled();
+                });
+            })
+
+            context("when the inputs are filled with valid values", function() {
+                beforeEach(function() {
+                    this.dialog.$(".new_table input:text").val("good_table_name").trigger("keyup");
+                });
+
+                it("enables the submit button", function() {
+                    expect(this.dialog.$("button.submit")).toBeEnabled();
+                });
+
+                context("when the form is submitted", function() {
+                    beforeEach(function() {
+                        this.dialog.$("button.submit").click();
+                    });
+
+                    it("should save the model", function() {
+                        expect(this.server.lastCreateFor(this.dialog.model)).toBeDefined();
+                    });
+
+                    it("should put the submit button in the loading state", function() {
+                        expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+                        expect(this.dialog.$("button.submit")).toContainTranslation("import_now.importing");
+                    });
+
+                    context("and the save is successful", function() {
+                        beforeEach(function() {
+                            spyOn(chorus, "toast");
+                            this.dialog.model.trigger("saved");
+                        });
+
+                        it("should display a toast", function() {
+                            expect(chorus.toast).toHaveBeenCalledWith("import_now.success");
+                        });
+                    });
+                });
+            })
         });
     });
 });

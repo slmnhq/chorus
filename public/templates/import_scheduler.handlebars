@@ -3,8 +3,15 @@
 <div class="new_table">
     <input type="radio" name="imports" id="import_scheduler_new_table" checked="checked"/>
     <label for="import_scheduler_new_table">{{t "import_now.new_table"}}</label>
+    <input type="text" class="name" name="tableName"/>
 
-    <input type="text" class="name"/>
+    <div class="extra_inputs">
+        <div class="limit">
+            <input type="checkbox" name="limit_num_rows" id="import_scheduler_limit_rows"/>
+            <label for="import_scheduler_limit_rows">{{t "import_now.limit_rows"}}</label>
+            <input type="text" name="rowLimit" disabled="disabled"/>
+        </div>
+    </div>
 </div>
 
 <div class="existing_table">
@@ -12,6 +19,8 @@
     <label for="import_scheduler_existing_table">{{t "import_now.existing_table"}}</label>
 
     <select class="names" disabled="disabled"/>
+    <div class="extra_inputs">
+    </div>
 </div>
 
 <div class="modal_controls">
