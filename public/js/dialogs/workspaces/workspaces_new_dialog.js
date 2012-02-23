@@ -16,6 +16,7 @@ chorus.dialogs.WorkspacesNew = chorus.dialogs.Base.extend({
 
     setup:function () {
         this.resource.bind("saved", this.workspaceSaved, this);
+        this.resource.bind("saveFailed", function() {this.$("button.submit").stopLoading()}, this)
     },
 
     createWorkspace:function createWorkspace(e) {

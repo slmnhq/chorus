@@ -101,7 +101,11 @@ describe("WorkspacesNewDialog", function() {
 
             it("doesn't navigate", function() {
                 expect(chorus.router.navigate).not.toHaveBeenCalled();
-            })
+            });
+
+            it("stops the loading spinner on the button", function() {
+                expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+            });
         })
     })
 })
