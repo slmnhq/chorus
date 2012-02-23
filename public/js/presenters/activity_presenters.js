@@ -91,20 +91,23 @@
             var prefix = 'activity_stream.header.html.';
             var type = this.model.get("type");
             if (type == "INSIGHT_CREATED") type = "NOTE";
-            if (!I18n.lookup(prefix + type)) {
-                type = 'DEFAULT';
-            }
-            var styles = _.flatten([this.options.displayStyle, this.workspace && (this.workspace != this.noteObject) ? 'default' : 'without_workspace' ]);
-
+            if (!I18n.lookup(prefix + type)) type = 'DEFAULT';
             prefix = prefix + type + '.';
 
+            var style;
             if (this.options.isNotification && type == "NOTE") {
-                return prefix + "notification";
+                style = "notification";
+            } else {
+                var styles = _.flatten([
+                    this.options.displayStyle,
+                    this.workspace && (this.workspace != this.noteObject) ? 'default' : 'without_workspace'
+                ]);
+                style = _.find(styles, function(potentialStyle) {
+                    return I18n.lookup(prefix + potentialStyle);
+                });
             }
 
-            return prefix + _.find(styles, function(style) {
-                return I18n.lookup(prefix + style);
-            });
+            return prefix + style;
         },
 
         NOTE: showNote,
