@@ -1,12 +1,19 @@
 describe("chorus.dialogs.ImportScheduler", function() {
     beforeEach(function() {
-        this.dialog = new chorus.dialogs.ImportScheduler();
+        this.dataset = fixtures.datasetSourceTable();
+        this.launchElement = $("<a/>");
+        this.launchElement.data("dataset", this.dataset);
+        this.dialog = new chorus.dialogs.ImportScheduler({launchElement : this.launchElement});
         this.dialog.render();
     });
 
     it("should have the correct title", function() {
         expect(this.dialog.title).toMatchTranslation("import_now.title");
     });
+
+    it("should display the import destination", function() {
+        expect(this.dialog.$(".destination")).toContainTranslation("import_now.destination", {canonicalName: this.dataset.schema().canonicalName()})
+    })
 
     it("should have a 'Begin Import' button", function() {
         expect(this.dialog.$("button.submit")).toContainTranslation("import_now.begin");

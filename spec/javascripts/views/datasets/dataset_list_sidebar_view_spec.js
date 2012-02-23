@@ -43,6 +43,10 @@ describe("chorus.views.DatasetListSidebar", function() {
                         expect(this.view.$("a[data-dialog=ImportScheduler]")).toHaveClass("dialog");
                     });
 
+                    it("should have the dataset attached as data-dataset", function() {
+                        expect(this.view.$("a[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
+                    })
+
                     it("should be visible for source objects", function() {
                         _.each(["datasetSourceTable", "datasetSourceView", "datasetChorusView"], function(fixture) {
                             chorus.PageEvents.broadcast("dataset:selected", fixtures[fixture]());

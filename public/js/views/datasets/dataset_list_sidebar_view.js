@@ -94,6 +94,10 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
         return ctx;
     },
 
+    postRender: function() {
+        this.$("a.import_now").data("dataset", this.resource);
+    },
+
     launchAddCredentialsDialog: function(e) {
         e && e.preventDefault();
         new chorus.dialogs.InstanceAccount({pageModel:this.resource.instance(), title: t("instances.sidebar.add_credentials"), reload:true}).launchModal();
