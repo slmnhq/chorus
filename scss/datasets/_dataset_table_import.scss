@@ -1,5 +1,5 @@
 .table_import_csv.dialog {
-    width: 600px;
+    width: 620px;
 
     $cell-width: 120px;
     .dialog_content {
@@ -13,8 +13,7 @@
         margin-bottom: 5px;
         input {
             display: inline-block;
-            width: 250px;
-
+            width: 401px;
         }
     }
 
@@ -38,6 +37,7 @@
             font-size: 12px;
             font-weight: normal;
             color: $color-text2;
+            padding-right: 5px;
         }
 
         input[name=other_delimiter] {
