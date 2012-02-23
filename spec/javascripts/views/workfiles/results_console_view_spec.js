@@ -7,6 +7,8 @@ describe("chorus.views.ResultsConsoleView", function() {
             }
         });
         this.view = new chorus.views.ResultsConsole({model: this.model});
+        this.timerId = 1;
+        spyOn(_, "delay").andReturn(this.timerId++)
     })
 
     describe("#render", function() {
@@ -91,7 +93,6 @@ describe("chorus.views.ResultsConsoleView", function() {
 
         describe("file:executionStarted", function() {
             beforeEach(function() {
-                spyOn(_, "delay").andReturn("my_timer_id")
                 spyOn(window, "clearTimeout");
 
                 chorus.PageEvents.broadcast("file:executionStarted")
@@ -110,7 +111,7 @@ describe("chorus.views.ResultsConsoleView", function() {
             })
 
             it("saves the spinner timer id", function() {
-                expect(this.view.spinnerTimer).toBe("my_timer_id")
+                expect(this.view.spinnerTimer).toBeDefined();
             })
 
             it("starts tracking execution time", function() {
@@ -463,7 +464,6 @@ describe("chorus.views.ResultsConsoleView", function() {
             this.view.render();
             this.view.elapsedTimer = 22;
             this.view.elapsedTime = 40;
-            spyOn(_, "delay").andCallThrough();
             this.view.incrementElapsedTime();
         })
 
