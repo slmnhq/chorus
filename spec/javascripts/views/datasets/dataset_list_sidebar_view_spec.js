@@ -40,7 +40,7 @@ describe("chorus.views.DatasetListSidebar", function() {
                     });
 
                     it("should have the data-dialog attribute", function() {
-                        expect(this.view.$("a[data-dialog=ImportNow]")).toHaveClass("dialog");
+                        expect(this.view.$("a[data-dialog=ImportScheduler]")).toHaveClass("dialog");
                     });
 
                     it("should be visible for source objects", function() {

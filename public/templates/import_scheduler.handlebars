@@ -1,0 +1,18 @@
+<div class="new_table">
+    <input type="radio" name="imports" id="import_scheduler_new_table" checked="checked"/>
+    <label for="import_scheduler_new_table">{{t "import_now.new_table"}}</label>
+
+    <input type="text" class="name"/>
+</div>
+
+<div class="existing_table">
+    <input type="radio" name="imports" id="import_scheduler_existing_table"/>
+    <label for="import_scheduler_existing_table">{{t "import_now.existing_table"}}</label>
+
+    <select class="names" disabled="disabled"/>
+</div>
+
+<div class="modal_controls">
+    <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
+    <button type="submit" class="submit" disabled="disabled" tabindex="99">{{t "import_now.begin"}}</button>
+</div>
