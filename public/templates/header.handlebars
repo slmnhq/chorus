@@ -18,9 +18,7 @@
     </div>
     <div class="messages">
         {{#if notifications.length}}
-            <div class="notifications">
-                <a href="#" title="notifications">{{notifications.length}}</a>
-            </div>
+            <a href="#" class="notifications" title="notifications">{{notifications.length}}</a>
         {{else}}
             <div class="notifications empty">{{notifications.length}}</div>
         {{/if}}

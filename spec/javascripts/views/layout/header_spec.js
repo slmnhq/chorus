@@ -63,7 +63,7 @@ describe("chorus.views.Header", function() {
 
         context("when there are notifications", function() {
             it("makes the notification count a link", function() {
-                expect(this.view.$(".notifications a")).toExist();
+                expect(this.view.$("a.notifications")).toExist();
             })
         })
 
@@ -74,10 +74,10 @@ describe("chorus.views.Header", function() {
             });
 
             it("does not make the notification count a link", function() {
-                expect(this.view.$(".notifications a")).not.toExist();
+                expect(this.view.$("a.notifications")).not.toExist();
             })
 
-            it("marks the notifications div with an empty class", function() {
+            it("marks the notifications with an empty class", function() {
                 expect(this.view.$(".notifications")).toHaveClass("empty");
             })
         })
@@ -206,14 +206,14 @@ describe("chorus.views.Header", function() {
 
         describe("notifications", function() {
             it("displays the notification link", function() {
-                expect(this.view.$(".notifications a")).toExist();
+                expect(this.view.$("a.notifications")).toExist();
             });
 
             describe("when the notification count is clicked", function() {
                 beforeEach(function() {
                     this.popupSpy = jasmine.createSpy();
                     $(document).bind("chorus:menu:popup", this.popupSpy);
-                    this.view.$(".notifications a").click();
+                    this.view.$("a.notifications").click();
                 })
 
                 it("shows a popup menu", function() {
@@ -227,7 +227,7 @@ describe("chorus.views.Header", function() {
 
                 describe("and when clicked again", function() {
                     beforeEach(function() {
-                        this.view.$(".notifications a").click();
+                        this.view.$("a.notifications").click();
                     });
 
                     it("becomes hidden again", function() {
@@ -263,7 +263,7 @@ describe("chorus.views.Header", function() {
                     });
 
                     it("should display the new notification count", function() {
-                        expect(this.view.$(".notifications a").text()).toBe("1");
+                        expect(this.view.$("a.notifications").text()).toBe("1");
                     });
 
                     it("should render the new notification list", function() {

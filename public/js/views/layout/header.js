@@ -3,7 +3,7 @@ chorus.views.Header = chorus.views.Base.extend({
     events:{
         "click .username a":"togglePopupUsername",
         "click .account a":"togglePopupAccount",
-        "click .notifications a":"togglePopupNotifications"
+        "click a.notifications":"togglePopupNotifications"
     },
 
     subviews: {
