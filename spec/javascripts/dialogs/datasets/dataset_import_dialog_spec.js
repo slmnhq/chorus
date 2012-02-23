@@ -227,6 +227,31 @@ describe("chorus.dialogs.DatasetImport", function() {
                     expect(this.dialog.modalClosed).toHaveBeenCalled();
                 });
             })
+
+            context("when the upload fails", function() {
+                beforeEach(function() {
+                    this.data = {result: {
+                        resource: [],
+                        message: [{message: "You failed"}],
+                        status: "fail"
+                    },
+                        files: [{name: "myfile"}]
+                    };
+                    spyOn(chorus.dialogs.TableImportCSV.prototype, "setup").andCallThrough()
+                    this.fileUploadOptions.done(null, this.data)
+                });
+                it("does not launch the new table configuration dialog", function() {
+                    expect(this.modalSpy).not.toHaveModal(chorus.dialogs.TableImportCSV);
+                });
+                it("fills the error field", function() {
+                    expect(this.dialog.$(".errors ul")).toHaveText("You failed");
+                })
+                it("does not hide the import controls or change file link", function() {
+                    expect(this.dialog.$(".import_controls")).not.toHaveClass("hidden");
+                    expect(this.dialog.$(".file-wrapper a")).not.toHaveClass("hidden");
+                    expect(this.dialog.$(".file-wrapper button")).toHaveClass("hidden");
+                })
+            })
         });
     });
 });
