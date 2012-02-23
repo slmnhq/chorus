@@ -87,6 +87,28 @@ describe("chorus.models.ChorusView", function() {
                 }, this));
             });
         });
+
+        describe("removeJoin with a chain of joins", function() {
+            beforeEach(function() {
+                this.siblingJoinColumn = addJoin(this);
+                this.secondNestedJoinColumn = addJoin(this, this.destinationColumn);
+                this.thirdNestedJoinColumn = addJoin(this, this.secondNestedJoinColumn);
+                this.model.removeJoin(this.destinationDataset);
+            });
+
+            it("keeps unrelated joins", function() {
+                expect(_.any(this.model.joins, _.bind(function(join) {
+                    return join.destinationColumn == this.siblingJoinColumn;
+                }, this))).toBeTruthy();
+            });
+
+            it("removes joins dependent on the removed join", function() {
+                expect(_.any(this.model.joins, _.bind(function(join) {
+                    return join.destinationColumn == this.secondNestedJoinColumn ||
+                        join.destinationColumn == this.thirdNestedJoinColumn;
+                }, this))).toBeFalsy();
+            });
+        })
     });
 
     describe("addColumn", function() {
