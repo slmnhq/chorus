@@ -73,6 +73,7 @@ module Jasmine
     puts("Constructing custom Jasmine app from jasmine_config.rb")
     Rack::Builder.app do
       use Rack::Head
+      use Rack::ETag, "max-age=0, private, must-revalidate"
 
 
       map('/run.html')         { run Jasmine::Redirect.new('/') }
