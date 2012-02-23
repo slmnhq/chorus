@@ -17,7 +17,7 @@
             this.numericalColumns = filterColumns(['WHOLE_NUMBER', 'REAL_NUMBER'], this.columns)
             this.datetimeColumns = filterColumns(['DATE', 'TIME', "DATETIME"], this.columns);
 
-            chorus.PageEvents.subscribe("cancel:sidebar", this.cancelVisualization, this);
+            this.cancelVisualizationHandle = chorus.PageEvents.subscribe("cancel:sidebar", this.cancelVisualization, this);
 
             function filterColumns(types, columns) {
                 return _.filter(columns, function(col) {
@@ -25,6 +25,11 @@
                     return _.include(types, category)
                 })
             }
+        },
+
+        cleanup: function() {
+            this._super("cleanup");
+            chorus.PageEvents.unsubscribe(this.cancelVisualizationHandle);
         },
 
         postRender: function() {

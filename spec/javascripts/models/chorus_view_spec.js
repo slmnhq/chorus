@@ -65,6 +65,7 @@ describe("chorus.models.ChorusView", function() {
         beforeEach(function() {
             spyOnEvent(this.model, 'change');
             this.column = this.sourceDataset.columns().models[0];
+            spyOnEvent(this.column, 'change');
             this.model.addColumn(this.column);
         })
 
@@ -74,6 +75,14 @@ describe("chorus.models.ChorusView", function() {
 
         it("triggers change on the model", function() {
             expect('change').toHaveBeenTriggeredOn(this.model);
+        })
+
+        it("marks the column as selected", function() {
+            expect(this.column.selected).toBeTruthy();
+        })
+
+        it("triggers change on the column", function() {
+            expect('change').toHaveBeenTriggeredOn(this.column);
         })
 
         context("for a column already added", function() {
@@ -123,6 +132,7 @@ describe("chorus.models.ChorusView", function() {
 
                 beforeEach(function() {
                     resetBackboneEventSpies(this.model);
+                    resetBackboneEventSpies(this.column);
                     this.model.removeColumn(this.column);
                 })
 
@@ -132,6 +142,14 @@ describe("chorus.models.ChorusView", function() {
 
                 it("triggers change on the model", function() {
                     expect('change').toHaveBeenTriggeredOn(this.model);
+                })
+
+                it("marks the column as not selected", function() {
+                    expect(this.column.selected).toBeFalsy();
+                })
+
+                it("triggers change on the column", function() {
+                    expect('change').toHaveBeenTriggeredOn(this.column);
                 })
             })
 

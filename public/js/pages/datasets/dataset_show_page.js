@@ -102,9 +102,8 @@
             this.$('.sidebar_content.secondary').removeClass("hidden")
 
             if (this.secondarySidebar) {
-                chorus.PageEvents.unsubscribe(this.secondarySidebar.selectedHandle);
-                chorus.PageEvents.unsubscribe(this.secondarySidebar.deselectedHandle);
-                chorus.PageEvents.unsubscribe(this.secondarySidebar.cancelVisualization);
+                this.secondarySidebar.cleanup()
+                delete this.secondarySidebar;
             }
 
             this.mainContent.content.selectMulti = false;
@@ -136,15 +135,19 @@
                     break;
             }
 
-            this.secondarySidebar.filters = this.mainContent.contentDetails.filterWizardView;
-            this.secondarySidebar.errorContainer = this.mainContent.contentDetails;
-            this.renderSubview('secondarySidebar');
-            this.trigger('resized');
+            if(this.secondarySidebar) {
+                this.secondarySidebar.filters = this.mainContent.contentDetails.filterWizardView;
+                this.secondarySidebar.errorContainer = this.mainContent.contentDetails;
+                this.renderSubview('secondarySidebar');
+                this.trigger('resized');
+            }
         },
 
         hideSidebar: function(type) {
             this.mainContent.content.selectMulti = false;
             this.mainContent.content.showDatasetName = false;
+            this.secondarySidebar.cleanup();
+            delete this.secondarySidebar;
             this.mainContent.content.render();
             this.columnSet.reset(this.dataset.columns().models);
             this.$('.sidebar_content.primary').removeClass("hidden")

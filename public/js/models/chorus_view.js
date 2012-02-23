@@ -22,6 +22,8 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
 
         if (!_.contains(columnList, column)) {
             columnList.push(column)
+            column.selected = true;
+            column.trigger("change");
             this.trigger("change")
         }
     },
@@ -30,6 +32,8 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
         var columnList = this._columnListForDataset(column.tabularData);
         if (columnList.indexOf(column) != -1) {
             columnList.splice(columnList.indexOf(column), 1);
+            column.selected = false;
+            column.trigger("change");
             this.trigger("change")
         }
     },

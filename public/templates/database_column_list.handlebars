@@ -1,5 +1,5 @@
 {{#each models}}
-    <li>
+    <li {{#if model.selected}}class="selected"{{/if}} data-cid={{model.cid}}>
         <span class="spacer left"></span>
         <div class="text right">
             <div class="main">

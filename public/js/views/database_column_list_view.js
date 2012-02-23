@@ -15,7 +15,9 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
     },
 
     postRender:function () {
-        this.toggleColumnSelection(this.$("li:eq(0)"));
+        if(!this.selectMulti) {
+            this.toggleColumnSelection(this.$("li:eq(0)"));
+        }
     },
 
     collectionModelContext:function (model) {
@@ -48,11 +50,12 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
     toggleColumnSelection:function ($selectedColumn, forceState) {
         if (this.selectMulti) {
             var turnOn = (arguments.length == 2) ? forceState : !$selectedColumn.is(".selected");
+            var column = this.collection.getByCid($selectedColumn.data('cid'))
             if (turnOn) {
                 $selectedColumn.addClass("selected");
-                chorus.PageEvents.broadcast("column:selected", this.collection.at(this.$("li").index($selectedColumn)));
+                chorus.PageEvents.broadcast("column:selected", column);
             } else {
-                chorus.PageEvents.broadcast("column:deselected", this.collection.at(this.$("li").index($selectedColumn)));
+                chorus.PageEvents.broadcast("column:deselected", column);
             }
         } else {
             var $deselected = this.$("li.selected");

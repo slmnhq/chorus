@@ -14,6 +14,12 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         this.chorusView.bind("change", this.render, this);
     },
 
+    cleanup: function() {
+        this._super("cleanup");
+        chorus.PageEvents.unsubscribe(this.selectedHandle);
+        chorus.PageEvents.unsubscribe(this.deselectedHandle);
+    },
+
     postRender: function() {
         this.$("a.preview").data("parent", this);
         this.$("a.add_join").data("chorusView", this.chorusView)

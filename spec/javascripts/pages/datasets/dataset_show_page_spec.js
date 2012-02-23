@@ -170,14 +170,14 @@ describe("chorus.pages.DatasetShowPage", function() {
 
         describe("#showSidebar", function() {
             beforeEach(function() {
-                this.page.secondarySidebar = new Backbone.View();
+                this.page.secondarySidebar = new chorus.views.Base();
                 this.originalSidebar = this.page.secondarySidebar;
-                spyOn(chorus.PageEvents, "unsubscribe");
+                spyOn(this.originalSidebar, "cleanup");
                 this.page.showSidebar("foo");
             });
 
-            it("should unbind the column:removed event from the sidebar", function() {
-                expect(chorus.PageEvents.unsubscribe).toHaveBeenCalledWith(this.originalSidebar.selectedHandle);
+            it("calls cleanup on the old sidebar", function() {
+                expect(this.originalSidebar.cleanup).toHaveBeenCalledWith();
             });
         });
 

@@ -20,6 +20,7 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
     setupSubviews:$.noop,
     resourcesLoaded:$.noop,
     displayLoadingSection:$.noop,
+    cleanup:$.noop,
 
     beforeNavigateAway:function () {
         this.bindings.removeAll();
