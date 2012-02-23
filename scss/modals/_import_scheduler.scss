@@ -1,0 +1,58 @@
+.import_scheduler {
+    width: 500px;
+
+    fieldset.disabled {
+        border: none;
+        padding-bottom: 0;
+
+        .inputs {
+            display: none;
+        }
+    }
+
+    .destination {
+        padding-bottom: 10px;
+        @include results-console-message;
+    }
+
+    input[type=checkbox] {
+        margin-left: 20px;
+    }
+
+    .row {
+        line-height: 34px;
+        vertical-align: middle;
+    }
+
+    label {
+        display: inline-block;
+        min-width: 200px;
+        line-height: 20px;
+    }
+
+    label.main {
+        @include font-menu;
+    }
+
+    .new_table {
+        .name {
+            width: 206px;
+        }
+    }
+
+    .existing_table {
+        .names {
+            width: 200px;
+            display: inline-block;
+        }
+    }
+
+    .limit {
+        .row_limit {
+            float: right;
+            width: 120px;
+            margin-right: 6px;
+            @include after-clearfix;
+        }
+    }
+}

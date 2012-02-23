@@ -1,26 +1,43 @@
 <div class="destination">{{t "import_now.destination" canonicalName=canonicalName}}</div>
 
 <div class="new_table">
-    <input type="radio" name="imports" id="import_scheduler_new_table" checked="checked"/>
-    <label for="import_scheduler_new_table">{{t "import_now.new_table"}}</label>
-    <input type="text" class="name" name="tableName"/>
+    <fieldset>
+        <legend class="row">
+            <input type="radio" name="imports" id="import_scheduler_new_table" checked="checked"/>
+            <label class="main" for="import_scheduler_new_table">{{t "import_now.new_table"}}</label>
+            <input type="text" class="name" name="tableName"/>
+        </legend>
 
-    <div class="extra_inputs">
-        <div class="limit">
-            <input type="checkbox" name="limit_num_rows" id="import_scheduler_limit_rows"/>
-            <label for="import_scheduler_limit_rows">{{t "import_now.limit_rows"}}</label>
-            <input type="text" name="rowLimit" disabled="disabled"/>
+        <div class="inputs">
+            <div class="row limit">
+                <input type="checkbox" name="limit_num_rows" id="import_scheduler_limit_rows_new"/>
+                <label for="import_scheduler_limit_rows_new">{{t "import_now.limit_rows"}}</label>
+                <input class="row_limit" type="text" name="rowLimit" disabled="disabled"/>
+            </div>
         </div>
-    </div>
+    </fieldset>
 </div>
 
 <div class="existing_table">
-    <input type="radio" name="imports" id="import_scheduler_existing_table"/>
-    <label for="import_scheduler_existing_table">{{t "import_now.existing_table"}}</label>
+    <fieldset class="disabled">
+        <legend class="row">
+            <input type="radio" name="imports" id="import_scheduler_existing_table"/>
+            <label class="main" for="import_scheduler_existing_table">{{t "import_now.existing_table"}}</label>
+            <select class="names" disabled="disabled"/>
+        </legend>
 
-    <select class="names" disabled="disabled"/>
-    <div class="extra_inputs">
-    </div>
+        <div class="inputs">
+            <div class="row">
+                <input type="checkbox" name="truncate" id="import_scheduler_truncate"/>
+                <label for="import_scheduler_truncate">{{t "import_now.truncate"}}</label>
+            </div>
+            <div class="row limit">
+                <input type="checkbox" name="limit_num_rows" id="import_scheduler_limit_rows_existing"/>
+                <label for="import_scheduler_limit_rows_existing">{{t "import_now.limit_rows"}}</label>
+                <input class="row_limit" type="text" name="rowLimit" disabled="disabled"/>
+            </div>
+        </div>
+    </fieldset>
 </div>
 
 <div class="modal_controls">

@@ -26,17 +26,14 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
     it("should have a 'Limit Rows' checkbox", function() {
         expect(this.dialog.$(".new_table .limit label")).toContainTranslation("import_now.limit_rows");
-        expect(this.dialog.$(".new_table .limit input:checkbox")).toExist();
         expect(this.dialog.$(".new_table .limit input:checkbox").prop("checked")).toBeFalsy();
     });
 
     it("should have a textfield for the 'Limit Rows' value", function() {
-        expect(this.dialog.$(".new_table .limit input:text")).toExist();
         expect(this.dialog.$(".new_table .limit input:text")).toBeDisabled();
     });
 
     it("should have a text entry for new table name", function() {
-        expect(this.dialog.$(".new_table .name")).toExist();
         expect(this.dialog.$(".new_table .name")).toBeEnabled();
     });
 
@@ -45,7 +42,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
     });
 
     it("should have a dropdown selector for existing tables", function() {
-        expect(this.dialog.$(".existing_table .names")).toExist();
         expect(this.dialog.$(".existing_table .names")).toBeDisabled();
     });
 
@@ -60,11 +56,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
             expect(this.dialog.$(".existing_table .names")).toBeEnabled();
         });
 
-        it("should have inputs for limiting the number of rows", function() {
-            expect(this.dialog.$(".existing_table .limit")).toExist();
-            expect(this.dialog.$(".new_table .limit")).not.toExist();
-        });
-
         context("when 'Import into New Table' is checked", function() {
             beforeEach(function() {
                 this.dialog.$(".new_table input:radio").prop("checked", true).change();
@@ -76,11 +67,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 expect(this.dialog.$(".existing_table .names")).toBeDisabled();
             });
 
-            it("should have inputs for limiting the number of rows", function() {
-                expect(this.dialog.$(".new_table .limit")).toExist();
-                expect(this.dialog.$(".existing_table .limit")).not.toExist();
-            });
-
             context("checking the limit rows checkbox", function() {
                 beforeEach(function() {
                     this.dialog.$(".new_table .limit input:checkbox").prop("checked", true).change();
@@ -89,7 +75,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 it("should enable the limit text input", function() {
                     expect(this.dialog.$(".new_table .limit input:text")).toBeEnabled();
                 });
-            })
+            });
 
             context("when the inputs are filled with valid values", function() {
                 beforeEach(function() {

@@ -19,17 +19,14 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         });
     },
 
+    postRender: function() {
+        _.defer(_.bind(function(){chorus.styleSelect(this.$("select"))}, this));
+    },
+
     typeSelected: function() {
         var disableExisting = this.$(".new_table input:radio").prop("checked");
-        this.$(".new_table input.name").prop("disabled", !disableExisting);
-
-        this.$(".existing_table select").prop("disabled", disableExisting);
-
-        if (disableExisting) {
-            this.$(".new_table .extra_inputs").append(this.$(".existing_table .limit").detach());
-        } else {
-            this.$(".existing_table .extra_inputs").append(this.$(".new_table .limit").detach());
-        }
+        this.$(".new_table input.name").prop("disabled", !disableExisting).closest("fieldset").toggleClass("disabled", !disableExisting);
+        this.$(".existing_table select").prop("disabled", disableExisting).closest("fieldset").toggleClass("disabled", disableExisting);
 
         this.$("input[name=limit_num_rows]").prop("checked", false).change();
     },
