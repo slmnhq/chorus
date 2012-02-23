@@ -77,6 +77,30 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 expect(this.view.$(".dataset").length).toBe(2);
                 expect(this.view.$(".dataset:eq(1) .name")).toContainText(this.otherDataset.get("objectName"));
             })
+
+            context("removing the join", function() {
+                beforeEach(function() {
+                    stubModals()
+                    spyOn(this.chorusView, "removeJoin");
+                    this.view.$(".join .delete").click();
+                })
+
+                it("pops up an alert", function() {
+                    expect(chorus.modal).toBeA(chorus.alerts.RemoveJoinConfirmAlert);
+                    expect(chorus.modal.options.dataset).toBe(this.otherDataset);
+                    expect(chorus.modal.options.chorusView).toBe(this.chorusView);
+                })
+
+                context("confirming the dialog", function() {
+                    beforeEach(function() {
+                        chorus.modal.$('button.submit').click();
+                    })
+
+                    it("removes the join", function() {
+                        expect(this.chorusView.removeJoin).toHaveBeenCalledWith(this.otherDataset)
+                    })
+                })
+            })
         });
 
         describe("column:selected event", function() {

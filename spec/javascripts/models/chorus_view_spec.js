@@ -29,7 +29,7 @@ describe("chorus.models.ChorusView", function() {
 
     describe("addJoin", function() {
         beforeEach(function() {
-            spyOnEvent(this.model, 'change');
+            this.changeEvent = spyOnEvent(this.model, 'change');
             this.sourceColumn = this.sourceDataset.columns().models[0];
             this.destinationColumn = addJoin(this, this.sourceColumn);
             this.destinationDataset = this.destinationColumn.tabularData;
@@ -59,7 +59,29 @@ describe("chorus.models.ChorusView", function() {
                 expect(this.model.aggregateColumnSet.models).toContain(column);
             }, this));
         });
+
+        describe("removeJoin", function() {
+            beforeEach(function() {
+                this.changeEvent.reset();
+                this.model.removeJoin(this.destinationDataset);
+            });
+
+            it("removes the join", function() {
+                expect(this.model.joins.length).toBe(0);
+            });
+
+            it("triggers change on the model", function() {
+                expect('change').toHaveBeenTriggeredOn(this.model);
+            });
+
+            it("removes the destination dataset's columns from the aggregate column set", function() {
+                this.destinationDataset.columns().each(_.bind(function(column) {
+                    expect(this.model.aggregateColumnSet.models).not.toContain(column);
+                }, this));
+            });
+        });
     });
+
 
     describe("addColumn", function() {
         beforeEach(function() {

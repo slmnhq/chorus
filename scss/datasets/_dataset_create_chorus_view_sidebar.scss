@@ -15,6 +15,14 @@
             font-weight: normal;
             color: black;
         }
+
+        .delete {
+            visibility: hidden;
+            cursor: pointer;
+        }
+        &:hover .delete {
+            visibility: visible;
+        }
     }
 
     .selected_columns {

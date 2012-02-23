@@ -38,6 +38,19 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
         }
     },
 
+    removeJoin: function(dataset) {
+        this.joins = _.reject(this.joins, function(join) {
+            return join.destinationColumn.tabularData == dataset;
+        })
+
+        var columnsToRemove = this.aggregateColumnSet.select(function(column) {
+            return column.tabularData == dataset;
+        })
+        this.aggregateColumnSet.remove(columnsToRemove);
+
+        this.trigger("change");
+    },
+
     selectClause: function() {
         var names = _.map(this._allColumns(), function(column) {
             return column.quotedName()
@@ -57,6 +70,12 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
 
     valid: function() {
         return this._allColumns().length > 0;
+    },
+
+    getJoinDatasetByCid: function(cid) {
+        return _.find(this.joins, function(join) {
+            return join.destinationColumn.tabularData.cid == cid
+        }).destinationColumn.tabularData;
     },
 
     _allColumns: function() {

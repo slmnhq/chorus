@@ -12,9 +12,10 @@
             <div class="joins">
                 <span class="title">{{t "dataset.chorusview.sidebar.joins"}}</span>
                 {{#each joins}}
-                    <div class="join">
+                    <div class="join" data-cid={{destinationColumn.tabularData.cid}}>
                         <span class="aliased_name">{{sourceColumn.tabularData.aliasedName}}</span><span class="column" title="{{sourceColumn.attributes.name}}">{{sourceColumn.attributes.name}}</span> =
                         <span class="aliased_name">{{destinationColumn.tabularData.aliasedName}}</span><span class="column" title="destinationColumn.attributes.name">{{destinationColumn.attributes.name}}</span>
+                        <img class="delete" src="images/trashcan.png" />
                     </div>
                 {{/each}}
             </div>

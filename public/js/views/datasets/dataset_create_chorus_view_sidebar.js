@@ -3,7 +3,8 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
 
     events: {
         "click button.create": "createChorusView",
-        "click a.remove": "removeColumnClicked"
+        "click a.remove": "removeColumnClicked",
+        "click img.delete": "removeJoinClicked"
     },
 
     setup: function() {
@@ -52,6 +53,12 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         var column = this.chorusView.aggregateColumnSet.getByCid($li.data('cid'));
         this.removeColumn(column);
         chorus.PageEvents.broadcast("column:removed", column);
+    },
+
+    removeJoinClicked: function(e) {
+        var cid = $(e.target).closest("div.join").data("cid");
+        var dialog = new chorus.alerts.RemoveJoinConfirmAlert({dataset: this.chorusView.getJoinDatasetByCid(cid), chorusView: this.chorusView})
+        dialog.launchModal();
     },
 
     createChorusView: function() {
