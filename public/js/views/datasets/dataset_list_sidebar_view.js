@@ -63,7 +63,10 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
         if (this.resource) {
             ctx.entityType = this.resource.entityType;
 
+            ctx.isImportable = this.resource.get("type") != "SANDBOX_TABLE";
+
             if (this.resource.get("hasCredentials") === false) {
+                ctx.isImportable = false;
                 ctx.noCredentials = true;
                 ctx.noCredentialsWarning = t("dataset.credentials.missing.body", {linkText: chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'})})
             }

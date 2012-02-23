@@ -29,9 +29,33 @@ describe("chorus.views.DatasetListSidebar", function() {
                     expect(this.view.$(".type").text().trim()).toBe(this.view.datasetType(this.dataset));
                 });
 
-                it("displays the preview data link", function() {
+                it("displays the 'Preview Data' link", function() {
                     expect(this.view.$('.actions .dialog.dataset_preview').data('dialog')).toBe('DatasetPreview');
                     expect(this.view.$('.actions .dataset_preview')).toContainTranslation('actions.dataset_preview');
+                });
+
+                describe("the 'Import Now' link", function() {
+                    it("should have the right text", function() {
+                        expect(this.view.$(".actions .import_now")).toContainTranslation("actions.import_now");
+                    });
+
+                    it("should have the data-dialog attribute", function() {
+                        expect(this.view.$("a[data-dialog=ImportNow]")).toHaveClass("dialog");
+                    });
+
+                    it("should be visible for source objects", function() {
+                        _.each(["datasetSourceTable", "datasetSourceView", "datasetChorusView"], function(fixture) {
+                            chorus.PageEvents.broadcast("dataset:selected", fixtures[fixture]());
+                            expect(this.view.$(".actions .import_now")).toExist();
+                        }, this)
+                    });
+
+                    it("should not exist for sandbox tables/views", function() {
+                        _.each(["datasetSandboxTable", "datasetSandboxView"], function(fixture) {
+                            chorus.PageEvents.broadcast("dataset:selected", fixtures[fixture]());
+                            expect(this.view.$(".actions .import_now")).not.toExist();
+                        }, this)
+                    })
                 });
 
                 context("when hasCredentials is false for the dataset", function() {
@@ -42,6 +66,10 @@ describe("chorus.views.DatasetListSidebar", function() {
 
                     it("does not show the preview data link", function() {
                         expect(this.view.$('.actions .dataset_preview')).not.toExist();
+                    });
+
+                    it("does not have the 'Import Now' action", function() {
+                        expect(this.view.$(".actions .import_now")).not.toExist();
                     });
 
                     it("shows a no-permissions message", function() {
@@ -107,6 +135,10 @@ describe("chorus.views.DatasetListSidebar", function() {
                     it("does not have the 'add a note' link", function() {
                         expect(this.view.$("a.dialog[data-dialog=NotesNew]")).not.toExist();
                     })
+
+                    it("does not have the 'Import Now' action", function() {
+                        expect(this.view.$(".actions .import_now")).not.toExist();
+                    });
 
                     it("prefers only the default type for the activity list", function() {
                         expect(this.view.activityList.options.displayStyle).toEqual(['default']);
