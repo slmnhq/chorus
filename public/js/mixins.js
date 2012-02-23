@@ -73,6 +73,15 @@ chorus.Mixins.Fetching = {
         if (!this.fetching) {
             this.fetch(options);
         }
+    },
+
+    fetchAllIfNotLoaded: function() {
+        if (this.loaded) {
+            return;
+        }
+        if (!this.fetching) {
+            this.fetchAll();
+        }
     }
 }
 

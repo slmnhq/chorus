@@ -18,7 +18,7 @@ chorus.views.DatabaseColumnSidebarList = chorus.views.DatabaseSidebarList.extend
 
     setTableOrView:function (tableOrView) {
         this.resource = this.collection = tableOrView.columns();
-        this.collection.fetchAll();
+        this.collection.fetchAllIfNotLoaded();
         this.collection.bind("reset", this.render, this);
     },
 
