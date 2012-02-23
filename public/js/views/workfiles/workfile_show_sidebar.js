@@ -63,12 +63,11 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
     },
 
     postRender:function () {
-        this._super('postRender');
         var versionList = this.versionList.render();
         chorus.menu(this.$('a.version_list'), {
             content:$(versionList.el)
         });
-
+        this._super('postRender');
     },
 
     displayVersionList:function (e) {

@@ -24,6 +24,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
     postRender: function() {
         this.$("a.preview").data("parent", this);
         this.$("a.add_join").data("chorusView", this.chorusView)
+        this._super("postRender")
     },
 
     additionalContext: function(ctx) {

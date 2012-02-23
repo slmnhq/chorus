@@ -48,6 +48,8 @@
                     }
                 })
             })
+
+            this._super("postRender")
         },
 
         limiterSelected: function(e, api) {
