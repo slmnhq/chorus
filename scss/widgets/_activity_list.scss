@@ -52,25 +52,6 @@ $system-action-color: #7C7D7D;
 }
 
 .activity_list{
-    .heading {
-        padding: $big-gutter;
-        padding-bottom: $activity-gutter;
-    }
-
-    .order {
-        float: right;
-        line-height: 24px;
-        .most_recent {
-            @include font-normal-gamma;
-        }
-        .order_by {
-            @include font-content-details;
-        }
-    }
-
-    h1 {
-        @include heading-normal;
-    }
 
     .more_activities {
         font-size: 12px;
@@ -211,20 +192,12 @@ li[data-activity-type=INSIGHT_CREATED] .activity_content:hover a.delete_link {
     display:inline;
 }
 
-#sidebar .activity_list {
-    .heading {
-        padding-left: 0;
+#sidebar .activity_heading {
+    padding: 12px 0;
 
-        h1 {
-            font-size: 16px;
-            color: $color-text2;
-            padding-top: 12px;
-        }
-    }
-
-    .order {
-        display: none;
-    }
+    @include heading-sidebar;
+    color: $color-text2;
+    font-size: 16px;
 }
 
 .activity_list.workspace_detail, .activity_list.dashboard {

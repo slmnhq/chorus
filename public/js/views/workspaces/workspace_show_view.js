@@ -14,7 +14,6 @@ chorus.views.WorkspaceShow = chorus.views.Base.extend({
 
         this.activityList = new chorus.views.ActivityList({
             collection: this.collection,
-            suppressHeading: true,
             additionalClass: "workspace_detail",
             displayStyle: "without_workspace"
         });

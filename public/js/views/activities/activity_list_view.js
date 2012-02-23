@@ -20,17 +20,14 @@ chorus.views.ActivityList = chorus.views.Base.extend({
     },
 
     additionalContext:function () {
-        var ctx = {
-            headingText:this.options.headingText,
-            suppressHeading: this.options.suppressHeading
-        };
-
+        var ctx = {};
         if (this.collection.loaded && this.collection.pagination) {
             var page = parseInt(this.collection.pagination.page);
             var total = parseInt(this.collection.pagination.total);
             ctx.showMoreLink = total > page;
+        } else {
+            ctx.showMoreLink = false;
         }
-
         return ctx;
     },
 

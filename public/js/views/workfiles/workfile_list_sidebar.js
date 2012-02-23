@@ -20,7 +20,6 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
 
             this.activityList = new chorus.views.ActivityList({
                 collection:this.collection,
-                headingText:t("workfiles.sidebar.activity"),
                 additionalClass:"sidebar",
                 displayStyle:['without_object', 'without_workspace']
             });

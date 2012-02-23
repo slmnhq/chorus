@@ -18,7 +18,6 @@ chorus.views.Header = chorus.views.Base.extend({
 
         this.notificationList = new chorus.views.ActivityList({
             collection: new chorus.collections.ActivitySet(),
-            suppressHeading: true,
             isNotification: true
         });
 

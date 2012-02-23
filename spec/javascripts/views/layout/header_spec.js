@@ -241,10 +241,6 @@ describe("chorus.views.Header", function() {
                         expect(this.view.$(".popup_notifications")).toContain(this.view.notificationList.el);
                     });
 
-                    it("doesn't have the activity list heading", function() {
-                        expect(this.view.notificationList.options.suppressHeading).toBeTruthy();
-                    });
-
                     it("renders an li for each unread notification", function() {
                         expect(this.view.$(".popup_notifications li").length).toBe(2);
                     });

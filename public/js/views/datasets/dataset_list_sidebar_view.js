@@ -41,7 +41,6 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
             this.activityList = new chorus.views.ActivityList({
                 collection: activities,
                 additionalClass:"sidebar",
-                suppressHeading: true,
                 displayStyle: this.options.browsingSchema ? ['default'] : ['without_workspace']
             });
 

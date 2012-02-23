@@ -36,7 +36,6 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
         if (this.instance) {
             return new chorus.views.ActivityList({
                 collection:this.model.activities(),
-                suppressHeading: true,
                 displayStyle:'without_object'
             });
         }
