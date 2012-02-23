@@ -1,8 +1,9 @@
 describe("chorus.models.ChartTask", function() {
     beforeEach(function() {
+        this.dataset = fixtures.datasetSandboxTable({objectName: 'dog_breeds'});
         var chartSubclass = chorus.models.ChartTask.extend({});
         chartSubclass.prototype.chartType = "fantastic";
-        this.model = new chartSubclass({ objectName: "dog_breeds" });
+        this.model = new chartSubclass({ dataset: this.dataset });
     });
 
     it("has the right taskType", function() {
@@ -13,6 +14,11 @@ describe("chorus.models.ChartTask", function() {
         expect(this.model.get("chart[type]")).toBe("fantastic");
     });
 
+    it("sets workspaceId and datasetId", function() {
+        expect(this.model.get("workspaceId")).toBe(this.dataset.get("workspace").id);
+        expect(this.model.get("datasetId")).toBe(this.dataset.get("id"));
+    })
+
     it("honors the filters in the SELECT statement", function() {
         this.model.set({"filters": "WHERE ABC"});
         this.model.save();
@@ -20,7 +26,7 @@ describe("chorus.models.ChartTask", function() {
     });
 
     it("escapes unsafe object names", function() {
-        this.model.set({objectName: "DOG_BREEDs"});
+        this.dataset.set({objectName: "DOG_BREEDs"});
         this.model.save();
         expect(this.model.get("relation")).toEqual('SELECT * FROM "DOG_BREEDs"');
     })
@@ -42,7 +48,7 @@ describe("chorus.models.ChartTask", function() {
 
     describe("it handles queries from chorus views", function() {
         beforeEach(function() {
-            this.model.attributes['query'] = "SELECT * FROM chorus_view WHERE 1 > 0";
+            this.dataset.attributes['query'] = "SELECT * FROM chorus_view WHERE 1 > 0";
             this.model.save();
         });
 

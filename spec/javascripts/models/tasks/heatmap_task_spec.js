@@ -5,9 +5,7 @@ describe("chorus.models.HeatmapTask", function() {
             yAxis: "height",
             xBins: 5,
             yBins: 6,
-            objectName: "users",
-            sandboxId: '4',
-            workspaceId: '5'
+            dataset: fixtures.datasetSandboxTable({objectName: "users"})
         });
     });
 

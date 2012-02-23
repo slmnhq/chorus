@@ -5,9 +5,7 @@ describe("chorus.models.TimeseriesTask", function() {
             yAxis: "height",
             timeInterval: 'minute',
             aggregation: 'sum',
-            objectName: "users",
-            sandboxId: '4',
-            workspaceId: '5'
+            dataset: fixtures.datasetSandboxTable({objectName: "users"})
         });
     });
 

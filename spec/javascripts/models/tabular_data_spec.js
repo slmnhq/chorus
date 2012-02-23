@@ -392,6 +392,30 @@ describe("chorus.models.TabularData", function() {
                 expect(this.tabularData.fromClause()).toBe(this.tabularData.quotedName() + " AS a");
             });
         });
+
+        context("when the model has a 'query'", function() {
+            beforeEach(function() {
+                this.tabularData = fixtures.datasetChorusView();
+            })
+
+            context("when a datasetNumber is not set", function() {
+                it("returns the query aliased as the objectName", function() {
+                    var expectedFrom = "(" + this.tabularData.get('query') + ') AS ' + this.tabularData.quotedName();
+                    expect(this.tabularData.fromClause()).toBe(expectedFrom);
+                });
+            });
+
+            context("when a datasetNumber is set", function() {
+                beforeEach(function() {
+                    this.tabularData.setDatasetNumber(1);
+                });
+
+                it("returns the query aliased as the aliasedName", function() {
+                    var expectedFrom = "(" + this.tabularData.get('query') + ') AS ' + this.tabularData.aliasedName;
+                    expect(this.tabularData.fromClause()).toBe(expectedFrom);
+                });
+            });
+        });
     });
 
     describe("#setDatasetNumber", function() {

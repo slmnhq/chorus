@@ -34,10 +34,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
         return new chorus.models.BoxplotTask({
             xAxis: taskAttrs.xAxis,
             yAxis: taskAttrs.yAxis,
-            objectName: this.get("objectName"),
-            query: this.get("query"),
-            workspaceId: this.get("workspace").id,
-            datasetId: this.get("id"),
+            dataset: this,
             bins : taskAttrs.bins
         });
     },
@@ -45,10 +42,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
     makeFrequencyTask: function(taskAttrs) {
         return new chorus.models.FrequencyTask({
             yAxis: taskAttrs.yAxis,
-            objectName: this.get("objectName"),
-            query: this.get("query"),
-            workspaceId: this.get("workspace").id,
-            datasetId: this.get("id"),
+            dataset: this,
             bins: taskAttrs.bins
         });
     },
@@ -57,10 +51,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
         return new chorus.models.HistogramTask({
             bins: taskAttrs.bins,
             xAxis: taskAttrs.xAxis,
-            objectName: this.get("objectName"),
-            query: this.get("query"),
-            workspaceId: this.get("workspace").id,
-            datasetId: this.get("id")
+            dataset: this
         });
     },
 
@@ -70,10 +61,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
             yBins: taskAttrs.yBins,
             xAxis: taskAttrs.xAxis,
             yAxis: taskAttrs.yAxis,
-            objectName: this.get("objectName"),
-            query: this.get("query"),
-            workspaceId: this.get("workspace").id,
-            datasetId: this.get("id")
+            dataset: this
         });
     },
 
@@ -83,10 +71,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
             yAxis: taskAttrs.yAxis,
             aggregation: taskAttrs.aggregation,
             timeInterval: taskAttrs.timeInterval,
-            objectName: this.get("objectName"),
-            query: this.get("query"),
-            workspaceId: this.get("workspace").id,
-            datasetId: this.get("id"),
+            dataset: this,
             timeType: taskAttrs.timeType
         });
     },

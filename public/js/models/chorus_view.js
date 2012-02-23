@@ -51,7 +51,7 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
         this.trigger("change");
     },
 
-    selectClause: function() {
+    generateSelectClause: function() {
         var names = _.map(this._allColumns(), function(column) {
             return column.quotedName()
         });
@@ -59,7 +59,7 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
         return "SELECT " + (names.length ? names.join(", ") : "*");
     },
 
-    fromClause: function() {
+    generateFromClause: function() {
         var result = "FROM " + this.sourceObject.fromClause();
         _.each(this.joins, _.bind(function(join) {
             result += "\n\t" + this.constructor.joinSqlText(join.joinType) + " " + join.destinationColumn.tabularData.fromClause()

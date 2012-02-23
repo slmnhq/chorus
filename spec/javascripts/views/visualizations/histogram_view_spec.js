@@ -13,7 +13,8 @@ describe("chorus.views.visualizations.Histogram", function() {
                 { bin: [30, 39], frequency: 1 },
                 { bin: [40, 49], frequency: 2000 }
             ],
-            "chart[xAxis]": "I am the x axis"
+            "chart[xAxis]": "I am the x axis",
+            dataset: fixtures.datasetSandboxTable({objectName: "users"})
         });
 
         this.view = new chorus.views.visualizations.Histogram({

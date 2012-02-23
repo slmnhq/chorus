@@ -4,9 +4,7 @@ describe("chorus.models.BoxplotTask", function() {
             xAxis: "age",
             yAxis: "height",
             bins: "56",
-            objectName: "users",
-            sandboxId: '4',
-            workspaceId: '5'
+            dataset: fixtures.datasetSandboxTable({objectName: "users"})
         });
     });
 

@@ -135,11 +135,26 @@ chorus.models.TabularData = chorus.models.Base.extend({
         this.aliasedName = String.fromCharCode(96 + this.datasetNumber);
     },
 
-    fromClause: function() {
-        if (this.datasetNumber) {
-            return this.quotedName() + " AS " + this.aliasedName
+    fromClauseBody: function() {
+        if(this.has("query")) {
+            return "(" + this.get("query") + ")";
         }
         return this.quotedName();
+    },
+
+    alias: function() {
+        return this.aliasedName || this.quotedName();
+    },
+
+    aliased: function() {
+        return this.datasetNumber || this.has("query");
+    },
+
+    fromClause: function() {
+        if(this.aliased()) {
+            return this.fromClauseBody() + " AS " + this.alias();
+        }
+        return this.fromClauseBody();
     }
 }, {
 

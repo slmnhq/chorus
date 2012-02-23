@@ -232,8 +232,8 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
         describe("#sql", function() {
             beforeEach(function() {
-                spyOn(this.view.chorusView, "selectClause").andReturn("foo");
-                spyOn(this.view.chorusView, "fromClause").andReturn("bar");
+                spyOn(this.view.chorusView, "generateSelectClause").andReturn("foo");
+                spyOn(this.view.chorusView, "generateFromClause").andReturn("bar");
                 spyOn(this.view, "whereClause").andReturn("baz");
             })
 

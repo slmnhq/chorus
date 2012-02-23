@@ -193,10 +193,10 @@ describe("chorus.models.ChorusView", function() {
         })
     });
 
-    describe("fromClause", function() {
+    describe("generateFromClause", function() {
         context("with only the base table", function() {
             it("has the proper from clause", function() {
-                expect(this.model.fromClause()).toBe('FROM "' + this.sourceDataset.get('objectName') + '"');
+                expect(this.model.generateFromClause()).toBe('FROM "' + this.sourceDataset.get('objectName') + '"');
             });
         });
 
@@ -207,7 +207,7 @@ describe("chorus.models.ChorusView", function() {
             })
 
             it("has the second table joined in", function() {
-                var lines = this.model.fromClause().split('\n');
+                var lines = this.model.generateFromClause().split('\n');
                 expect(lines[0]).toBe('FROM ' + this.sourceDataset.quotedName());
                 expect(lines[1]).toBe('\tINNER JOIN ' + this.firstJoinedColumn.tabularData.fromClause() + ' ON '
                     + this.sourceColumn.quotedName() + " = " + this.firstJoinedColumn.quotedName());
@@ -244,10 +244,10 @@ describe("chorus.models.ChorusView", function() {
         })
     })
 
-    describe("#selectClause", function() {
+    describe("#generateSelectClause", function() {
         context("when no columns are selected", function() {
             it("returns 'SELECT *'", function() {
-                expect(this.model.selectClause()).toBe("SELECT *");
+                expect(this.model.generateSelectClause()).toBe("SELECT *");
             });
         });
 
@@ -262,7 +262,7 @@ describe("chorus.models.ChorusView", function() {
 
             it("should build a select clause from the selected columns", function() {
                 var tableName = this.sourceDataset.selectName();
-                expect(this.model.selectClause()).toBe('SELECT ' + tableName + '."Foo", ' + tableName + '.bar');
+                expect(this.model.generateSelectClause()).toBe('SELECT ' + tableName + '."Foo", ' + tableName + '.bar');
             });
 
             context("when selecting a joined column", function() {
@@ -276,7 +276,7 @@ describe("chorus.models.ChorusView", function() {
                 it("has the joined columns too", function() {
                     var tableName = this.sourceDataset.selectName();
                     var joinedTableName = this.joinedDataset.selectName();
-                    expect(this.model.selectClause()).toBe('SELECT ' + tableName + '."Foo", ' + tableName + '.bar, ' + joinedTableName + '.baz');
+                    expect(this.model.generateSelectClause()).toBe('SELECT ' + tableName + '."Foo", ' + tableName + '.bar, ' + joinedTableName + '.baz');
                 });
             });
         });

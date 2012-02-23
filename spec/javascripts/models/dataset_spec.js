@@ -75,10 +75,8 @@ describe("chorus.models.Dataset", function() {
             expect(this.task).toBeA(chorus.models.BoxplotTask);
         });
 
-        it("has the right workspaceId, dataset id and objectName", function() {
-            expect(this.task.get("workspaceId")).toBe("44");
-            expect(this.task.get("datasetId")).toBe(this.dataset.get("id"));
-            expect(this.task.get("objectName")).toBe("japanese_teas");
+        it("has the dataset", function() {
+            expect(this.task.dataset).toBe(this.dataset);
         });
     });
 
@@ -101,10 +99,8 @@ describe("chorus.models.Dataset", function() {
             expect(this.task.get("xAxis")).toBe("blindness_rate");
         });
 
-        it("has the right workspaceId, dataset id and objectName", function() {
-            expect(this.task.get("workspaceId")).toBe("44");
-            expect(this.task.get("datasetId")).toBe(this.dataset.get("id"));
-            expect(this.task.get("objectName")).toBe("japanese_teas");
+        it("has the dataset", function() {
+            expect(this.task.dataset).toBe(this.dataset);
         });
     });
 
@@ -131,10 +127,8 @@ describe("chorus.models.Dataset", function() {
             expect(this.task.get("yAxis")).toBe("blindness_rate");
         });
 
-        it("has the right workspaceId, dataset id and objectName", function() {
-            expect(this.task.get("workspaceId")).toBe("44");
-            expect(this.task.get("datasetId")).toBe(this.dataset.get("id"));
-            expect(this.task.get("objectName")).toBe("japanese_teas");
+        it("has the dataset", function() {
+            expect(this.task.dataset).toBe(this.dataset);
         });
     });
 
@@ -156,10 +150,8 @@ describe("chorus.models.Dataset", function() {
             expect(this.task.get("yAxis")).toBe("blindness_rate");
         });
 
-        it("has the right workspaceId, dataset id and objectName", function() {
-            expect(this.task.get("workspaceId")).toBe("44");
-            expect(this.task.get("datasetId")).toBe(this.dataset.get("id"));
-            expect(this.task.get("objectName")).toBe("japanese_teas");
+        it("has the dataset and bins", function() {
+            expect(this.task.dataset).toBe(this.dataset);
             expect(this.task.get("bins")).toBe("12")
         });
     })
@@ -191,10 +183,8 @@ describe("chorus.models.Dataset", function() {
             expect(this.task.get("yAxis")).toBe("height_in_inches");
         });
 
-        it("has the right workspaceId, dataset id and objectName", function() {
-            expect(this.task.get("workspaceId")).toBe("44");
-            expect(this.task.get("datasetId")).toBe(this.dataset.get("id"));
-            expect(this.task.get("objectName")).toBe("japanese_teas");
+        it("has the dataset", function() {
+            expect(this.task.dataset).toBe(this.dataset);
         });
 
         it("has the right timeType", function() {
@@ -210,13 +200,6 @@ describe("chorus.models.Dataset", function() {
 
             it("should return true", function() {
                 expect(this.dataset.isChorusView()).toBeTruthy();
-            })
-
-            it("should have a query for every chart type", function() {
-                var types = ["Boxplot", "Frequency", "Timeseries", "Histogram", "Heatmap"]
-                _.each(types, function(type) {
-                    expect(this.dataset["make" + type + "Task"]({}).get("query")).toBe("SELECT * FROM whatever");
-                }, this);
             })
         });
 

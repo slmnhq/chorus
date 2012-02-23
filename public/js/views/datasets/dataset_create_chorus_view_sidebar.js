@@ -84,11 +84,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         return this.filters.whereClause();
     },
 
-    fromClause: function() {
-        return this.chorusView.fromClause();
-    },
-
     sql: function() {
-        return [this.chorusView.selectClause(), this.chorusView.fromClause(), this.whereClause()].join("\n");
+        return [this.chorusView.generateSelectClause(), this.chorusView.generateFromClause(), this.whereClause()].join("\n");
     }
 });
