@@ -16,6 +16,7 @@ describe("chorus.dialogs.TableImportCSV", function() {
             toTable: "foo_quux_bar"
         });
         this.dialog = new chorus.dialogs.TableImportCSV({csv: this.csv});
+        spyOn(this.dialog, "focusOtherInputField");
         this.dialog.render();
     });
 
@@ -28,7 +29,7 @@ describe("chorus.dialogs.TableImportCSV", function() {
     });
 
     it("has comma as the default separator", function() {
-        expect(this.dialog.$('input[@name=delimiter]:checked').val()).toBe(',');
+        expect(this.dialog.$('input[name=delimiter]:checked').val()).toBe(',');
     });
 
     describe("click the 'tab' separator", hasRightSeparator('\t'));
@@ -62,6 +63,38 @@ describe("chorus.dialogs.TableImportCSV", function() {
             });
         };
     }
+
+    describe("other delimiter input field", function() {
+        beforeEach(function() {
+            this.otherField = this.dialog.$('input[name=other_delimiter]');
+        });
+
+        it("is empty on loading", function() {
+            expect(this.otherField.val()).toBe("");
+        });
+
+        it("checks the Other radio button", function() {
+            this.otherField.val("X");
+            this.otherField.trigger("keyup");
+            expect(this.dialog.$('input.delimiter[type=radio]:checked').val()).toBeFalsy();
+        });
+
+        it("retains its value after re-render", function() {
+            this.otherField.val("X");
+            this.otherField.trigger("keyup");
+            expect(this.otherField).toHaveValue("X");
+        });
+
+        describe("clicking on radio button Other", function() {
+            beforeEach(function() {
+                this.dialog.$("input#delimiter_other").click();
+            });
+
+            it("focuses the text field", function() {
+                expect(this.dialog.focusOtherInputField).toHaveBeenCalled();
+            });
+        })
+    });
 
     it("has directions", function() {
         var sandbox = chorus.page.workspace.sandbox();

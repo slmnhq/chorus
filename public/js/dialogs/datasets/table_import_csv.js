@@ -1,12 +1,16 @@
 chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
     className: "table_import_csv",
     title: t("dataset.import.table.title"),
+//    useLoadingSection:true,
     delimiter: ',',
 
     events: {
       "click button.submit": "startImport",
-      "change #include_header": "refreshCSV",
-      "click input.delimiter": "setDelimiter"
+        "change #include_header": "refreshCSV",
+        "keyup input.delimiter[name=other_delimiter]": "setOtherDelimiter",
+        "paste input.delimiter[name=other_delimiter]": "setOtherDelimiter",
+        "click input.delimiter[type=radio]": "setDelimiter",
+        "click input#delimiter_other": "focusOtherInputField"
     },
 
     setup: function() {
@@ -52,6 +56,7 @@ chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
     additionalContext: function() {
         return {
             columns: this.csv.columnOrientedData(),
+            delimiter: ",; \t".indexOf(this.delimiter) < 0 ? this.delimiter : '',
             directions: t("dataset.import.table.directions", {
                tablename_input_field: "<input type='text' name='table_name' value='" + this.tableName + "'/>"
             })
@@ -107,7 +112,18 @@ chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
     },
 
     setDelimiter: function(e) {
-        this.delimiter = e.target.value;
+        this.delimiter = e.target.value || this.$("input[name=other_delimiter]").val();
         this.refreshCSV();
+    },
+
+    focusOtherInputField: function(e) {
+        this.$("input[name=other_delimiter]").focus();
+    },
+
+    setOtherDelimiter: function() {
+        this.$("input.delimiter[type=radio]").removeAttr("checked");
+        var otherRadio = this.$("input#delimiter_other");
+        otherRadio.attr("checked", true)
+        otherRadio.click();
     }
 });
