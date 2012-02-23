@@ -25,12 +25,17 @@
         <legend class="row">
             <input type="radio" name="imports" id="import_scheduler_existing_table"/>
             <label class="main" for="import_scheduler_existing_table">{{t "import_now.existing_table"}}</label>
-            <select class="names" disabled="disabled" name="toTable"/>
+            <select class="names" disabled="disabled" name="toTable">
+                {{#each sandboxTables}}
+                    <option value="{{{this}}}">{{this}}</option>
+                {{/each}}
+            </select>
         </legend>
 
         <div class="inputs">
+            <input type="hidden" name="createTableIfNotExist" value="false"/>
             <div class="row">
-                <input type="checkbox" name="truncate" id="import_scheduler_truncate"/>
+                <input type="checkbox" class="truncate" name="truncate" id="import_scheduler_truncate"/>
                 <label for="import_scheduler_truncate">{{t "import_now.truncate"}}</label>
             </div>
             <div class="row limit">

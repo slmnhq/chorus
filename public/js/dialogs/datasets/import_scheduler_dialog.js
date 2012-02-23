@@ -1,12 +1,13 @@
 chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     className: "import_scheduler",
     title: t("import_now.title"),
+    useLoadingSection: true,
 
     persistent: true,
 
     events : {
-        "change input:radio" : "typeSelected",
-        "change input:checkbox" : "onCheckboxChecked",
+        "change input:radio" : "onDestinationChosen",
+        "change input:checkbox": "onCheckboxChecked",
         "keyup input:text": "onInputFieldChanged",
         "paste input:text": "onInputFieldChanged",
         "click button.submit": "beginImport"
@@ -14,7 +15,13 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
     makeModel: function() {
         this.dataset = this.options.launchElement.data("dataset");
-        this.model = new chorus.models.DatasetImport({datasetId: this.dataset.id, workspaceId: this.dataset.get("workspace").id});
+        var workspaceId = this.dataset.get("workspace").id;
+        this.model = new chorus.models.DatasetImport({datasetId: this.dataset.id, workspaceId: workspaceId});
+
+        this.sandboxTables = new chorus.collections.DatasetSet([], {workspaceId: workspaceId, type: "SANDBOX_TABLE"});
+        this.requiredResources.push(this.sandboxTables);
+        this.sandboxTables.sortAsc("objectName");
+        this.sandboxTables.fetchAll();
 
         this.model.bind("saved", function() {
             chorus.toast("import_now.success");
@@ -30,7 +37,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         _.defer(_.bind(function(){chorus.styleSelect(this.$("select"))}, this));
     },
 
-    typeSelected: function() {
+    onDestinationChosen: function() {
         var disableExisting = this.$(".new_table input:radio").prop("checked");
 
         var $tableName = this.$(".new_table input.name");
@@ -40,10 +47,14 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         var $tableSelect = this.$(".existing_table select");
         $tableSelect.prop("disabled", disableExisting);
         $tableSelect.closest("fieldset").toggleClass("disabled", disableExisting);
+
+        chorus.styleSelect($tableSelect);
+        this.onInputFieldChanged();
     },
 
     additionalContext: function() {
         return {
+            sandboxTables: this.sandboxTables.pluck("objectName"),
             canonicalName: this.dataset.schema().canonicalName()
         }
     },
@@ -63,17 +74,22 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     },
 
     beginImport: function() {
-        this.model.save(this.getNewModelAttrs());
         this.$("button.submit").startLoading("import_now.importing");
+        this.model.save(this.getNewModelAttrs());
     },
 
     getNewModelAttrs: function() {
         var updates = {};
         var $enabledFieldSet = this.$("fieldset").not(".disabled");
-        _.each($enabledFieldSet.find("input:text, input[type=hidden]"), function (i) {
+        _.each($enabledFieldSet.find("input:text, input[type=hidden], select"), function (i) {
             var input = $(i);
             updates[input.attr("name")] = input.val().trim();
         });
+
+        var $truncateCheckbox = $enabledFieldSet.find(".truncate");
+        if ($truncateCheckbox.length) {
+            updates.truncate = $truncateCheckbox.prop("checked") + "";
+        }
 
         updates.useLimitRows = $enabledFieldSet.find(".limit input:checkbox").prop("checked");
 
