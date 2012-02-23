@@ -135,6 +135,11 @@ chorus.models.TabularData = chorus.models.Base.extend({
         this.aliasedName = String.fromCharCode(96 + this.datasetNumber);
     },
 
+    clearDatasetNumber: function() {
+        delete this.datasetNumber;
+        delete this.aliasedName;
+    },
+
     fromClauseBody: function() {
         if(this.has("query")) {
             return "(" + this.get("query") + ")";

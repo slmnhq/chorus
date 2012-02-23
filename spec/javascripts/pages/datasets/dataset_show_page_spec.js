@@ -138,10 +138,6 @@ describe("chorus.pages.DatasetShowPage", function() {
             this.server.completeFetchFor(this.dataset.statistics());
         })
 
-        it("sets the datasetNumber to 1", function() {
-            expect(this.page.dataset.datasetNumber).toBe(1);
-        });
-
         describe("breadcrumbs", function() {
             it("links to home for the first crumb", function() {
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).attr("href")).toBe("#/");
@@ -271,6 +267,10 @@ describe("chorus.pages.DatasetShowPage", function() {
                     this.page.mainContent.contentDetails.trigger("transform:sidebar", 'chorus_view');
                 });
 
+                it("sets the datasetNumber to 1", function() {
+                    expect(this.page.dataset.datasetNumber).toBe(1);
+                });
+
                 it("enables multi-select on the main content", function() {
                     expect(this.page.mainContent.content.selectMulti).toBeTruthy();
                 });
@@ -300,6 +300,10 @@ describe("chorus.pages.DatasetShowPage", function() {
                         otherColumn.tabularData = this.page.model;
                         this.page.columnSet.add(otherColumn);
                         chorus.PageEvents.broadcast('cancel:sidebar', 'boxplot');
+                    });
+
+                    it("clears the datasetNumber", function() {
+                        expect(this.page.dataset.datasetNumber).toBeUndefined();
                     });
 
                     it("restores the columnSet to the base set of columns from the dataset", function() {

@@ -35,7 +35,6 @@
 
         fetchDataSet: function() {
             this.model = this.dataset = new chorus.models.Dataset({ workspace: { id: this.workspace.get("id") }, id: this.datasetId });
-            this.dataset.setDatasetNumber(1);
             this.dataset.bind("loaded", this.fetchColumnSet, this);
             this.dataset.fetch();
         },
@@ -124,6 +123,7 @@
                     this.secondarySidebar = new chorus.views.DatasetVisualizationTimeSeriesSidebar({model: this.model, collection: this.columnSet});
                     break;
                 case 'chorus_view':
+                    this.dataset.setDatasetNumber(1);
                     this.mainContent.content.selectMulti = true;
                     this.mainContent.content.showDatasetName = true;
                     this.mainContent.content.render();
@@ -144,6 +144,7 @@
         },
 
         hideSidebar: function(type) {
+            this.dataset.clearDatasetNumber();
             this.mainContent.content.selectMulti = false;
             this.mainContent.content.showDatasetName = false;
             this.secondarySidebar.cleanup();

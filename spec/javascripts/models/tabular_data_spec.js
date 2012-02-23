@@ -430,6 +430,21 @@ describe("chorus.models.TabularData", function() {
         it("sets the aliasedName", function() {
             expect(this.tabularData.aliasedName).toBe('d');
         })
+    });
+
+    describe("#clearDatasetNumber", function() {
+        beforeEach(function() {
+            this.tabularData.setDatasetNumber(4)
+            this.tabularData.clearDatasetNumber()
+        })
+
+        it("unsets the datasetNumber", function() {
+            expect(this.tabularData.datasetNumber).toBeUndefined();
+        })
+
+        it("unsets the aliasedName", function() {
+            expect(this.tabularData.aliasedName).toBeUndefined();
+        })
     })
 
 });
