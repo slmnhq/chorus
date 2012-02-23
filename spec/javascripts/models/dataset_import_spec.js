@@ -14,14 +14,18 @@ describe("chorus.models.DatasetImport", function() {
         context("when creating a new table", function() {
             beforeEach(function() {
                 this.attrs = {
-                    tableName: "Foo",
-                    rowLimit: "23"
+                    toTable: "Foo",
+                    rowLimit: "23",
+                    truncate: "true",
+                    createTableIfNotExist: "true"
                 };
             });
 
-            it("should require a table name", function() {
-                this.attrs.tableName = "";
-                expect(this.model.performValidation(this.attrs)).toBeFalsy();
+            _.each(["toTable", "truncate", "createTableIfNotExist"], function(attr) {
+                it("should require " + attr, function() {
+                    this.attrs[attr] = "";
+                    expect(this.model.performValidation(this.attrs)).toBeFalsy();
+                });
             });
 
             context("when useLimitRows is enabled", function() {

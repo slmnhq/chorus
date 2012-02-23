@@ -2,6 +2,8 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     className: "import_scheduler",
     title: t("import_now.title"),
 
+    persistent: true,
+
     events : {
         "change input:radio" : "typeSelected",
         "change input:checkbox" : "onCheckboxChecked",
@@ -12,11 +14,16 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
     makeModel: function() {
         this.dataset = this.options.launchElement.data("dataset");
-        this.model = new chorus.models.DatasetImport();
+        this.model = new chorus.models.DatasetImport({datasetId: this.dataset.id, workspaceId: this.dataset.get("workspace").id});
 
         this.model.bind("saved", function() {
-            chorus.toast("import_now.success")
-        });
+            chorus.toast("import_now.success");
+            this.closeModal();
+        }, this);
+
+        this.model.bind("saveFailed", function() {
+            this.$("button.submit").stopLoading();
+        }, this);
     },
 
     postRender: function() {
@@ -63,7 +70,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     getNewModelAttrs: function() {
         var updates = {};
         var $enabledFieldSet = this.$("fieldset").not(".disabled");
-        _.each($enabledFieldSet.find("input:text"), function (i) {
+        _.each($enabledFieldSet.find("input:text, input[type=hidden]"), function (i) {
             var input = $(i);
             updates[input.attr("name")] = input.val().trim();
         });

@@ -5,10 +5,12 @@
         <legend class="row">
             <input type="radio" name="imports" id="import_scheduler_new_table" checked="checked"/>
             <label class="main" for="import_scheduler_new_table">{{t "import_now.new_table"}}</label>
-            <input type="text" class="name" name="tableName"/>
+            <input type="text" class="name" name="toTable"/>
         </legend>
 
         <div class="inputs">
+            <input type="hidden" name="truncate" value="false"/>
+            <input type="hidden" name="createTableIfNotExist" value="true"/>
             <div class="row limit">
                 <input type="checkbox" name="limit_num_rows" id="import_scheduler_limit_rows_new"/>
                 <label for="import_scheduler_limit_rows_new">{{t "import_now.limit_rows"}}</label>
@@ -23,7 +25,7 @@
         <legend class="row">
             <input type="radio" name="imports" id="import_scheduler_existing_table"/>
             <label class="main" for="import_scheduler_existing_table">{{t "import_now.existing_table"}}</label>
-            <select class="names" disabled="disabled"/>
+            <select class="names" disabled="disabled" name="toTable"/>
         </legend>
 
         <div class="inputs">

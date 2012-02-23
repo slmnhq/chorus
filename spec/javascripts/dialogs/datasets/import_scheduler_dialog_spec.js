@@ -45,6 +45,11 @@ describe("chorus.dialogs.ImportScheduler", function() {
         expect(this.dialog.$(".existing_table .names")).toBeDisabled();
     });
 
+    it("should initialize its model with the correct datasetId and workspaceId", function() {
+        expect(this.dialog.model.get("datasetId")).toBe(this.dataset.get("id"));
+        expect(this.dialog.model.get("workspaceId")).toBe(this.dataset.get("workspace").id);
+    })
+
     context("when 'Import into Existing Table' is checked", function() {
         beforeEach(function() {
             this.dialog.$(".new_table input:radio").prop("checked", false);
@@ -102,7 +107,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
             context("when the inputs are filled with valid values", function() {
                 beforeEach(function() {
-                    this.dialog.$(".new_table input:text").val("good_table_name").trigger("keyup");
+                    this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
                 });
 
                 it("enables the submit button", function() {
@@ -126,11 +131,26 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     context("and the save is successful", function() {
                         beforeEach(function() {
                             spyOn(chorus, "toast");
+                            spyOn(this.dialog, "closeModal");
                             this.dialog.model.trigger("saved");
                         });
 
                         it("should display a toast", function() {
                             expect(chorus.toast).toHaveBeenCalledWith("import_now.success");
+                        });
+
+                        it("should close the dialog", function() {
+                            expect(this.dialog.closeModal).toHaveBeenCalled();
+                        });
+                    });
+
+                    context("and the save is not successful", function() {
+                        beforeEach(function() {
+                            this.server.lastCreate().fail();
+                        });
+
+                        it("should not display the loading spinner", function() {
+                            expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
                         });
                     });
                 });
