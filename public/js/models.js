@@ -41,6 +41,7 @@ chorus.models = {
             }
             if (this.dataStatusOk(data)) {
                 this.loaded = true;
+                this.serverErrors = undefined;
                 return data.resource[0]
             } else {
                 this.serverErrors = this.dataErrors(data);
@@ -57,7 +58,6 @@ chorus.models = {
                 model.trigger(savedEvent, model, resp, xhr);
                 if (success) success(model, resp, xhr);
             };
-            this.serverErrors = undefined;
             if (this.performValidation(effectiveAttrs)) {
                 this.trigger("validated");
                 var attrsToSave = _.isEmpty(effectiveAttrs) ? undefined : effectiveAttrs;

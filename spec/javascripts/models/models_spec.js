@@ -539,6 +539,18 @@ describe("chorus.models", function() {
                 this.model.parse({status: "needlogin"});
                 expect(chorus.session.trigger).toHaveBeenCalledWith("needsLogin");
             });
+
+            it("resets server errors when the status is ok", function() {
+                this.model.serverErrors = "error";
+                this.model.parse({ foo: "bar", resource: this.thing, status: 'ok'});
+                expect(this.model.serverErrors).not.toBeDefined();
+            })
+
+            it("populates serverErrors if there are errors", function() {
+                this.model.parse({ foo: "bar", resource: this.thing, status: 'fail', message: [{message: "baz"}]});
+                expect(this.model.serverErrors).toEqual([{message: "baz"}]);
+            })
+
         })
 
         describe("#require", function() {
