@@ -24,6 +24,3 @@ chorus.views.UserShowSidebar = chorus.views.Sidebar.extend({
         }
     }
 });
-
-chorus.alerts.UserDelete = chorus.alerts.Base.extend({
-})
