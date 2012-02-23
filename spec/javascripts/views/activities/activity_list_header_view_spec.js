@@ -1,7 +1,15 @@
 describe("chorus.views.ActivityListHeader", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.ActivitySet();
-        this.view = new chorus.views.ActivityListHeader({ title: "the_title_i_passed", collection: this.collection });
+        this.view = new chorus.views.ActivityListHeader({
+            allTitle: "the_all_title_i_passed",
+            insightsTitle: "the_insights_title_i_passed",
+            collection: this.collection
+        });
+    });
+
+    it("doesn't re-render when the activity list changes", function() {
+        expect(this.view.persistent).toBeTruthy();
     });
 
     describe("#setup", function() {
@@ -23,8 +31,8 @@ describe("chorus.views.ActivityListHeader", function() {
             });
 
             describe("#render", function() {
-                it("displays the given title", function() {
-                    expect(this.view.$("h1").text()).toBe("the_title_i_passed");
+                it("displays the title for 'all' mode by default", function() {
+                    expect(this.view.$("h1").text()).toBe("the_all_title_i_passed");
                 });
 
                 it("should have a filter menu", function() {
@@ -40,13 +48,12 @@ describe("chorus.views.ActivityListHeader", function() {
 
                 describe("clicking on 'Insights'", function() {
                     beforeEach(function() {
-                        spyOn(this.collection, "filterInsights");
-                        spyOn(this.collection, 'filterAll');
                         this.view.$(".menus .insights").click();
                     });
 
-                    it("calls 'filterInsights' on its collection", function() {
-                        expect(this.collection.filterInsights).toHaveBeenCalled();
+                    it("switches the activity set to 'insights' mode and re-fetches it", function() {
+                        expect(this.collection.attributes.insights).toBeTruthy();
+                        expect(this.collection).toHaveBeenFetched();
                     });
 
                     it("displays the 'All Insights' option as active", function() {
@@ -54,8 +61,8 @@ describe("chorus.views.ActivityListHeader", function() {
                         expect(this.view.$(".menus .all")).not.toHaveClass("active");
                     });
 
-                    it("changes the title to 'Insights'", function() {
-                        expect(this.view.$("h1").text()).toMatchTranslation("dashboard.title.insights");
+                    it("switches to the title for 'insights' mode", function() {
+                        expect(this.view.$("h1").text()).toBe("the_insights_title_i_passed");
                     });
 
                     describe("clicking on 'All Activity'", function() {
@@ -63,8 +70,9 @@ describe("chorus.views.ActivityListHeader", function() {
                             this.view.$(".menus .all").click();
                         });
 
-                        it("calls 'filterAll' on its collection", function() {
-                            expect(this.collection.filterAll).toHaveBeenCalled();
+                        it("switches the activity set to 'all' mode (not just insights) and re-fetches it", function() {
+                            expect(this.collection.attributes.insights).toBeFalsy();
+                            expect(this.collection).toHaveBeenFetched();
                         });
 
                         it("sets the 'All Activity' option to active", function() {
@@ -72,8 +80,8 @@ describe("chorus.views.ActivityListHeader", function() {
                             expect(this.view.$(".menus .insights")).not.toHaveClass("active");
                         });
 
-                        it("changes the title back to 'Recent Activity'", function() {
-                            expect(this.view.$("h1").text()).toMatchTranslation("dashboard.title.activity");
+                        it("switches back to the title for 'all' mode", function() {
+                            expect(this.view.$("h1").text()).toBe("the_all_title_i_passed");
                         });
                     });
                 });

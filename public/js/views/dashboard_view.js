@@ -34,7 +34,8 @@ chorus.views.Dashboard = chorus.views.Base.extend({
             content: this.activityList,
             contentHeader: new chorus.views.ActivityListHeader({
                 collection: activities,
-                title: t("dashboard.title.activity")
+                allTitle: t("dashboard.title.activity"),
+                insightsTitle: t("dashboard.title.insights")
             })
         });
     }

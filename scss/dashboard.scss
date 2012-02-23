@@ -104,38 +104,6 @@ div[data-page="Dashboard"] {
         }
     }
 
-    .content_header {
-        .menus {
-            margin-right: 10px;
-
-            .title {
-                @include font-content-details;
-            }
-
-            a {
-                font-size: 12px;
-                font-weight: $semibold;
-                border-bottom: 1px dotted $link-color;
-
-                &.active {
-                    color: black;
-                    border-bottom: none;
-                }
-            }
-
-            .separator {
-                padding: 0 5px;
-                position: relative;
-                top: 2px;
-                color: $link-color;
-            }
-
-            .badge {
-                display: inline-block;
-            }
-        }
-    }
-
     .content_details {
         line-height : 27px;
         color: $link-color;

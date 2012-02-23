@@ -31,8 +31,9 @@ describe("chorus.views.Dashboard", function(){
                 expect(this.headerView.collection.attributes.entityId).toBe(chorus.session.user().get("id"));
             });
 
-            it("has the right title", function() {
-                expect(this.headerView.options.title).toMatchTranslation("dashboard.title.activity");
+            it("has the right titles for both 'all' and 'insights' modes", function() {
+                expect(this.headerView.options.allTitle).toMatchTranslation("dashboard.title.activity");
+                expect(this.headerView.options.insightsTitle).toMatchTranslation("dashboard.title.insights");
             });
         });
 
