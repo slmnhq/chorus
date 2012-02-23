@@ -19,11 +19,30 @@
     }
 
     .options {
-        height: 19px;
+        height: 25px;
         margin-bottom: 5px;
+        padding: 0 15px;
+
         .header_options {
             float: right;
-            margin-right: 15px;
+            margin-top:6px;
+            display:inline-block;
+        }
+
+        span.delimiter {
+            @include font-normal-alpha;
+            color: black;
+        }
+
+        label.delimiter {
+            font-size: 12px;
+            font-weight: normal;
+            color: $color-text2;
+        }
+
+        input[name=other_delimiter] {
+            display:inline-block;
+            width:2em;
         }
     }
 
