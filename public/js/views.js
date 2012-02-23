@@ -29,7 +29,7 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
     bindHotkeys:function () {
         _.each(this.hotkeys || {}, _.bind(function (eventName, hotkey) {
             this.bindings.add($(document), "keydown", chorus.hotKeyMeta + '+' + hotkey, _.bind(function (event) {
-                this.trigger(eventName, event);
+                chorus.PageEvents.broadcast(eventName, event);
             }, this));
         }, this))
     },

@@ -120,11 +120,11 @@ describe("chorus.views.Base", function () {
             expect($.fn.bind).toHaveBeenCalledWith("keydown", "ctrl+r", jasmine.any(Function));
         })
 
-        it("triggers events on hotkeys", function () {
-            spyOnEvent(this.view, "my:event");
+        it("broadcasts events on hotkeys", function () {
+            spyOn(chorus.PageEvents, "broadcast")
             var ev = $.Event("keydown", { which:82, ctrlKey:true })
             $(document).trigger(ev);
-            expect("my:event").toHaveBeenTriggeredOn(this.view);
+            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("my:event", ev)
         })
     })
     describe("#context", function () {
