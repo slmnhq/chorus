@@ -2,8 +2,8 @@ describe("chorus.views.SearchWorkfileList", function() {
     beforeEach(function() {
         this.view = new chorus.views.SearchWorkfileList({
             workfileResults: {docs:[
-                {id: "1", workspaceId: "2"},
-                {id: "4", workspaceId: "3"}
+                {id: "1", workspace: {id: "2", name: "Test"}, fileType: "SQL"},
+                {id: "4", workspace: {id: "3", name: "Other"}, fileType: "txt"}
             ],
             numFound: "24"
             }
@@ -12,26 +12,90 @@ describe("chorus.views.SearchWorkfileList", function() {
         this.view.render()
     });
 
-    it("shows each model in the collection", function() {
-        expect(this.view.$('li').length).toBe(2);
-    });
-
-    it("has a link for each model in the collection", function() {
-        expect(this.view.$('li a').eq(0).attr('href')).toBe("#/workspaces/2/workfiles/1");
-        expect(this.view.$('li a').eq(1).attr('href')).toBe("#/workspaces/3/workfiles/4");
-    });
 
     describe("details bar", function() {
         it("has a title", function() {
             expect(this.view.$(".details .title")).toContainTranslation("workfiles.title");
         });
 
-        it("has a count", function() {
-            expect(this.view.$(".details .count")).toContainTranslation("search.count", {shown: "2", total: "24"});
+        context("has no additional results", function() {
+            beforeEach(function() {
+                this.view = new chorus.views.SearchWorkfileList({
+                    workfileResults: {docs: [
+                        {id: "1",  workspace: {id: "2", name: "Test"}},
+                        {id: "4", workspace: {id: "3", name: "Other"}}
+                    ],
+                        numFound: "2"
+                    }
+                });
+
+                this.view.render()
+            });
+
+            it("has a short count", function() {
+                expect(this.view.$(".details .count")).toContainTranslation("search.count_short", {shown: "2"});
+            });
+
+            it("has no showAll link", function() {
+                expect(this.view.$(".details a.show_all")).not.toExist();
+            })
+        })
+        
+        context("has additional results", function() {
+            it("has a long count", function() {
+                expect(this.view.$(".details .count")).toContainTranslation("search.count", {shown: "2", total: "24"});
+            });
+
+            it("has a showAll link", function() {
+                expect(this.view.$(".details a.show_all")).toContainTranslation("search.show_all")
+            })
+        })
+
+        context("has no results at all", function() {
+            beforeEach(function() {
+                this.view = new chorus.views.SearchWorkfileList({
+                    workfileResults: {docs: [],
+                        numFound: "0"
+                    }
+                });
+
+                this.view.render()
+            });
+
+            it("does not show the bar or the list", function() {
+                expect(this.view.$(".details")).not.toExist();
+                expect(this.view.$("ul")).not.toExist();
+            });
+        })
+    })
+
+    describe("list elements", function() {
+        it("there is one for each model in the collection", function() {
+                expect(this.view.$('li').length).toBe(2);
         });
 
-        it("has a showAll link", function() {
-            expect(this.view.$(".details a.show_all")).toContainTranslation("search.show_all")
+        it("includes the correct workspace file icon", function() {
+            expect($(this.view.$("li img.icon")[0]).attr("src")).toBe("/images/workfiles/large/sql.png");
+            expect($(this.view.$("li img.icon")[1]).attr("src")).toBe("/images/workfiles/large/txt.png");
+        });
+
+        it("has a link to the workfile for each workfile in the collection", function() {
+            expect(this.view.$('li a.name').eq(0).attr('href')).toBe("#/workspaces/2/workfiles/1");
+            expect(this.view.$('li a.name').eq(1).attr('href')).toBe("#/workspaces/3/workfiles/4");
+        });
+
+        it("shows which workspace each result was found in", function() {
+            expect(this.view.$("li .found_in_workspace:eq(0) a").attr('href')).toBe('#/workspaces/2');
+            expect(this.view.$("li .found_in_workspace:eq(1) a").attr('href')).toBe('#/workspaces/3');
+
+            expect(this.view.$('li .found_in_workspace').eq(0)).toContainTranslation(
+                "search.found_in_workspace",
+                {workspaceLink: "Test"}
+            )
+            expect(this.view.$('li .found_in_workspace').eq(1)).toContainTranslation(
+                "search.found_in_workspace",
+                {workspaceLink: "Other"}
+            )
         })
     })
 });
