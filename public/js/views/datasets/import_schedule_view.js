@@ -3,9 +3,20 @@ chorus.views.ImportSchedule = chorus.views.Base.extend({
 
     postRender: function() {
         chorus.datePicker({
-            "%Y": this.$(".date.year"),
-            "%m": this.$(".date.month"),
-            "%d": this.$(".date.day")
+            "%Y": this.$(".date.start input[name='year']"),
+            "%m": this.$(".date.start input[name='month']"),
+            "%d": this.$(".date.start input[name='day']")
+        });
+
+        chorus.datePicker({
+            "%Y": this.$(".date.end input[name='year']"),
+            "%m": this.$(".date.end input[name='month']"),
+            "%d": this.$(".date.end input[name='day']")
+        });
+
+        var $btn = this.$("a.date-picker-control");
+        $btn.bind("click", function() {
+            $(".date-picker").css("z-index", 20000);
         });
     },
 

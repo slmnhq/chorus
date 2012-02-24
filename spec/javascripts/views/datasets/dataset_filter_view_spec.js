@@ -333,9 +333,9 @@ describe("chorus.views.DatasetFilter", function() {
                     _.each(this.typesRequiringArgument, function(comparatorType) {
                         this.view.$(".comparator").val(comparatorType).change();
                         expect(this.view.$(".filter.date")).not.toHaveClass("hidden");
-                        expect(this.view.$(".filter.date input[name='year']").attr("placeholder")).toMatchTranslation("dataset.filter.date_placeholder.year");
-                        expect(this.view.$(".filter.date input[name='month']").attr("placeholder")).toMatchTranslation("dataset.filter.date_placeholder.month");
-                        expect(this.view.$(".filter.date input[name='day']").attr("placeholder")).toMatchTranslation("dataset.filter.date_placeholder.day");
+                        expect(this.view.$(".filter.date input[name='year']").attr("placeholder")).toMatchTranslation("datepicker.placeholder.year");
+                        expect(this.view.$(".filter.date input[name='month']").attr("placeholder")).toMatchTranslation("datepicker.placeholder.month");
+                        expect(this.view.$(".filter.date input[name='day']").attr("placeholder")).toMatchTranslation("datepicker.placeholder.day");
                     }, this);
                 });
 

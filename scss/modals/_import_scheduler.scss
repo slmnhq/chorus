@@ -55,4 +55,25 @@
             @include after-clearfix;
         }
     }
+
+    .date {
+        .label {
+            width: 150px;
+            @include font-menu;
+            display: inline-block;
+        }
+
+        input {
+            width: 50px;
+            display: inline-block;
+        }
+    }
+
+    .frequency {
+        width: 100px;
+    }
+
+    .hours, .ampm, .minutes {
+        width: 65px;
+    }
 }

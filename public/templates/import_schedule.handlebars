@@ -1,26 +1,38 @@
-<select name="scheduleFrequency" class="frequency">
-    <option value="DAILY">{{t "import_now.frequency.daily"}}</option>
-    <option value="WEEKLY" selected="selected">{{t "import_now.frequency.weekly"}}</option>
-    <option value="MONTHLY">{{t "import_now.frequency.monthly"}}</option>
-</select>
+<div class="row">
+    <select name="scheduleFrequency" class="frequency">
+        <option value="DAILY">{{t "import_now.frequency.daily"}}</option>
+        <option value="WEEKLY" selected="selected">{{t "import_now.frequency.weekly"}}</option>
+        <option value="MONTHLY">{{t "import_now.frequency.monthly"}}</option>
+    </select>
 
-<select class="hours">
-{{#each hours}}
-    <option value="{{this}}">{{this}}</option>
-{{/each}}
-</select>
+    <select class="hours">
+    {{#each hours}}
+        <option value="{{this}}">{{this}}</option>
+    {{/each}}
+    </select>
 
-<select class="ampm">
-    <option value="0">{{t "import_now.ampm.am"}}</option>
-    <option value="12">{{t "import_now.ampm.pm"}}</option>
-</select>
+    <select class="minutes">
+        {{#each minutes}}
+        <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
 
-<select class="minutes">
-{{#each minutes}}
-    <option value="{{this}}">{{this}}</option>
-{{/each}}
-</select>
+    <select class="ampm">
+        <option value="0">{{t "import_now.ampm.am"}}</option>
+        <option value="12">{{t "import_now.ampm.pm"}}</option>
+    </select>
+</div>
 
-<input type="text" class="date year"/>
-<input type="text" class="date month"/>
-<input type="text" class="date day"/>
+<div class="row date start">
+    <span class="label">{{t "import_now.start.label"}}</span>
+    <input type="text" name="month" placeholder='{{{t "datepicker.placeholder.month"}}}'/>
+    <input type="text" name="day" placeholder='{{{t "datepicker.placeholder.day"}}}'/>
+    <input type="text" name="year" placeholder='{{{t "datepicker.placeholder.year"}}}'/>
+</div>
+
+<div class="row date end">
+    <span class="label">{{t "import_now.end.label"}}</span>
+    <input type="text" name="month" placeholder='{{{t "datepicker.placeholder.month"}}}'/>
+    <input type="text" name="day" placeholder='{{{t "datepicker.placeholder.day"}}}'/>
+    <input type="text" name="year" placeholder='{{{t "datepicker.placeholder.year"}}}'/>
+</div>

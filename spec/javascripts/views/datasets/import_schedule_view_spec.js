@@ -28,5 +28,29 @@ describe("chorus.views.ImportSchedule", function() {
         expect(this.view.$(".ampm option").length).toBe(2);
         expect(this.view.$(".ampm").val()).toBe("0");
         expect(this.view.$(".ampm option:selected").text().trim()).toBe("AM");
-    })
+    });
+
+    describe("the start date picker", function() {
+        it("should have a label", function() {
+            expect(this.view.$(".date.start .label")).toContainTranslation("import_now.start.label");
+        });
+
+        it("should have the correct placeholder text", function() {
+            expect(this.view.$(".date.start input[name='month']").attr("placeholder")).toContainTranslation("datepicker.placeholder.month");
+            expect(this.view.$(".date.start input[name='day']").attr("placeholder")).toContainTranslation("datepicker.placeholder.day");
+            expect(this.view.$(".date.start input[name='year']").attr("placeholder")).toContainTranslation("datepicker.placeholder.year");
+        });
+    });
+
+    describe("the end date picker", function() {
+        it("should have a label", function() {
+            expect(this.view.$(".date.end .label")).toContainTranslation("import_now.end.label");
+        });
+
+        it("should have the correct placeholder text", function() {
+            expect(this.view.$(".date.end input[name='month']").attr("placeholder")).toContainTranslation("datepicker.placeholder.month");
+            expect(this.view.$(".date.end input[name='day']").attr("placeholder")).toContainTranslation("datepicker.placeholder.day");
+            expect(this.view.$(".date.end input[name='year']").attr("placeholder")).toContainTranslation("datepicker.placeholder.year");
+        });
+    });
 });
