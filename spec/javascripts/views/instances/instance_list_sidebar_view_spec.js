@@ -107,9 +107,13 @@ describe("chorus.views.InstanceListSidebar", function() {
                         this.view.render();
                     });
 
-                    it("does not display edit instance link", function() {
-                        expect(this.view.$(".actions .edit_instance")).not.toExist();
+                    it("does not display edit permissions link", function() {
+                        expect(this.view.$("a.dialog[data-dialog=InstancePermissions]")).not.toExist();
                     });
+
+                    it("does display the edit instance link", function() {
+                        expect(this.view.$(".actions .edit_instance")).toExist();
+                    })
                 })
 
                 context("when the instance failed to provision", function() {

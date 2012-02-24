@@ -25,6 +25,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
             isGreenplum: this.model.isGreenplum(),
             dbUserName:this.model.get('sharedAccount') && this.model.get('sharedAccount').dbUserName,
             userHasAccount:account && account.has("id"),
+            userCanEditPermissions:this.canEditPermissions(),
             userCanEditInstance:this.canEditInstance(),
             instanceAccountsCount:this.instance.accounts().length,
             workspaceCount:this.instance.usage().get('workspaces').length,
@@ -68,8 +69,11 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
         this.render();
     },
 
+    canEditPermissions: function() {
+        return !this.resource.isHadoop() && this.canEditInstance();
+    },
+
     canEditInstance:function () {
-        return !this.resource.isHadoop() &&
-            ((this.resource.owner().get("id") == chorus.session.user().get("id") ) || chorus.session.user().get("admin"));
+        return (this.resource.owner().get("id") == chorus.session.user().get("id") ) || chorus.session.user().get("admin");
     }
 });
