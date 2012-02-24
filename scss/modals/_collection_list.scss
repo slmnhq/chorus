@@ -12,8 +12,8 @@
             @include ellipsis;
 
             img {
-                width: $icon-image-width;
-                height: $icon-image-height;
+                max-width: $icon-image-width;
+                max-height: $icon-image-height;
                 vertical-align: middle;
                 padding-right: 4px;
             }
