@@ -32,18 +32,20 @@
     </form></div>
 </fieldset>
 
-{{! Hidden until Hadoop milestone }}
-<fieldset class="hidden collapsed register_existing_hadoop">
+<fieldset class="collapsed register_existing_hadoop">
     <legend>
         <input type="radio" name="instance_type" id="register_existing_hadoop"/>
         <label for="register_existing_hadoop">{{t "instances.new_dialog.register_existing_hadoop"}}</label>
-        <img src="/images/more-info.png" class="help" data-text='{{t "instances.new_dialog.register_existing_hadoop_help_text"}}'/>
+        <img src="/images/more-info.png" class="help" data-text='{{t "instances.new_dialog.register_existing_hadoop_help_text="}}'/>
     </legend>
     <div><form>
+        <input type="hidden" name="provisionType" value="registerHadoop" />
+        <input class="hidden" type="checkbox" name="shared" checked="checked"/>
+
         <label class="required">{{t "instances.dialog.instance_name"}}</label>
         <input type="text" name="name"/>
 
-        <label class="required">{{t "instances.dialog.description"}}</label>
+        <label>{{t "instances.dialog.description"}}</label>
         <textarea rows="3" name="description"/>
 
         <label class="required" name="host">{{t "instances.dialog.host"}} </label>
@@ -51,13 +53,10 @@
         <input type="text" name="host"/>
         <input type="text" name="port"/>
 
-        <label class="required" name="dbUserName">{{t "instances.dialog.database_account"}}</label>
-        <label class="required" name="dbPassword">{{t "instances.dialog.database_password"}}</label>
-        <input type="text" name="dbUserName" maxlength="256"/>
-        <input type="password" name="dbPassword" maxlength="256"/>
-
-        <input type="checkbox" name="is_community_account" id="is_community_account"/>
-        <label for="is_community_account">{{t "instances.dialog.is_community_account"}}</label>
+        <label class="required" name="userName">{{t "instances.dialog.hadoop_account"}}</label>
+        <label class="required" name="userGroups">{{t "instances.dialog.hadoop_group_list"}}</label>
+        <input type="text" name="userName" maxlength="255"/>
+        <input type="text" name="userGroups" maxlength="255"/>
     </form></div>
 </fieldset>
 

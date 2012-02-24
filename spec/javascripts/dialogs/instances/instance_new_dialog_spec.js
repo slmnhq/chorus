@@ -9,6 +9,12 @@ describe("chorus.dialogs.InstanceNew", function() {
             this.dialog.render();
         });
 
+        it("has radio buttons for 'register an existing instance' and 'register hadoop file system'", function() {
+            expect(this.dialog.$("input[type=radio]").length).toBe(2);
+            expect(this.dialog.$("label[for=register_existing_greenplum]").text()).toMatchTranslation("instances.new_dialog.register_existing_greenplum");
+            expect(this.dialog.$("label[for=register_existing_hadoop]").text()).toMatchTranslation("instances.new_dialog.register_existing_hadoop");
+        });
+
         it("starts with no radio buttons selected", function() {
             expect(this.dialog.$("input[type=radio]:checked").length).toBe(0);
         });
@@ -61,6 +67,51 @@ describe("chorus.dialogs.InstanceNew", function() {
                     expect(values.dbUserName).toBe("user");
                     expect(values.dbPassword).toBe("my_password");
                     expect(values.maintenanceDb).toBe("foo");
+                });
+            });
+        });
+
+        describe("selecting the 'register a hadoop file system' radio button", function() {
+            beforeEach(function() {
+                this.dialog.$("input[type=radio]#register_existing_hadoop").attr('checked', true).change();
+            });
+
+            it("un-collapses the 'register a hadoop file system' fieldset", function() {
+                expect(this.dialog.$("fieldset").not(".collapsed").length).toBe(1);
+                expect(this.dialog.$("fieldset.register_existing_hadoop")).not.toHaveClass("collapsed");
+            });
+
+            it("enables the submit button", function() {
+                expect(this.dialog.$("button.submit")).toBeEnabled();
+            });
+
+            describe("filling out the form", function() {
+                beforeEach(function() {
+                    var form = this.dialog.$(".register_existing_hadoop");
+                    form.find("input[name=name]").val("Instance_Name");
+                    form.find("textarea[name=description]").val("Instance Description");
+                    form.find("input[name=host]").val("foo.bar");
+                    form.find("input[name=port]").val("1234");
+                    form.find("input[name=userName]").val("user");
+                    form.find("input[name=userGroups]").val("hadoop");
+
+                    form.find("input[name=name]").trigger("change");
+                });
+
+                it("#fieldValues returns the values", function() {
+                    var values = this.dialog.fieldValues();
+                    expect(values.name).toBe("Instance_Name");
+                    expect(values.description).toBe("Instance Description");
+                    expect(values.host).toBe("foo.bar");
+                    expect(values.port).toBe("1234");
+                    expect(values.userName).toBe("user");
+                    expect(values.userGroups).toBe("hadoop");
+                });
+
+                it("#fieldValues should have the right values for 'provisionType' and 'shared'", function() {
+                    var values = this.dialog.fieldValues();
+                    expect(values.provisionType).toBe("registerHadoop");
+                    expect(values.shared).toBe("yes");
                 });
             });
         });

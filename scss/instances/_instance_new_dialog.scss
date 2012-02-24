@@ -13,6 +13,7 @@
         border: none;
         padding: 0 $dialog-padding;
         margin-left: 1px;
+        margin-bottom: 0;
     }
 
     fieldset {
@@ -21,6 +22,8 @@
         $account_width : 210px;
         $input-spacing : 12px;
         $size_width : 75px;
+
+        margin-bottom: $dialog-padding;
 
         label[name=host], input[name=host],
         label[name=maintenanceDb], input[name=maintenanceDb] {
@@ -33,7 +36,10 @@
         }
 
         label[name=dbUserName], input[name=dbUserName],
-        label[name=databaseName], input[name=databaseName] {
+        label[name=databaseName], input[name=databaseName],
+        label[name=userName], input[name=userName],
+        label[name=userGroups], input[name=userGroups]
+        {
             width: $account-width;
         }
 
@@ -46,7 +52,9 @@
         }
 
         label[name=dbPassword], input[name=dbPassword],
-        label[name=schemaName], input[name=schemaName] {
+        label[name=schemaName], input[name=schemaName],
+        label[name=userGroups], input[name=userGroups]
+        {
             width: $fieldset-width - $account_width - $dialog-padding - 4px;
             margin-left: $input-spacing;
         }

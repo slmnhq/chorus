@@ -1696,7 +1696,7 @@ beforeEach(function() {
                 owner: "edcadmin",
                 ownerId: this.nextId().toString(),
                 ownerFullName: "EDC Admin",
-                port: 8020,
+                port: "8020",
                 provisionName: null,
                 provisionType: null,
                 sharedAccount: {},

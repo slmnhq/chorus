@@ -35,6 +35,13 @@
                     this.require("size", newAttrs);
                     this.requirePattern("size", /^\d+$/, newAttrs);
                     break;
+                case "registerHadoop":
+                    this.require("host", newAttrs);
+                    this.require("port", newAttrs);
+                    this.require("userName", newAttrs);
+                    this.require("userGroups", newAttrs);
+                    this.requirePattern("port", /^\d+$/, newAttrs);
+                    break;
                 default :
             }
         },
@@ -108,6 +115,8 @@
         attrToLabel:{
             "dbUserName":"instances.dialog.database_account",
             "dbPassword":"instances.dialog.database_password",
+            "userName":"instances.dialog.hadoop_account",
+            "userGroups":"instances.dialog.hadoop_group_list",
             "name":"instances.dialog.instance_name",
             "host":"instances.dialog.host",
             "port":"instances.dialog.port",
