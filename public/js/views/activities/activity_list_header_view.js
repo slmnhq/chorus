@@ -20,6 +20,15 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
         };
     },
 
+    resourcesLoaded: function() {
+        this.collection.bind("reset", this.updateInsightCount, this)
+    },
+
+    updateInsightCount: function() {
+        this.insightCount.bindOnce("loaded", this.render, this);
+        this.insightCount.fetch();
+    },
+
     onAllClicked: function(e) {
         e.preventDefault();
 
