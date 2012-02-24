@@ -1,4 +1,4 @@
-describe("chorus.dialogs.TableImportCSV", function() {
+describe("chorus.dialogs.ExistingTableImportCSV", function() {
     beforeEach(function() {
         chorus.page = {};
         this.sandbox = fixtures.sandbox({
@@ -13,9 +13,9 @@ describe("chorus.dialogs.TableImportCSV", function() {
             "val2.1,val2.2,val2.3,val2.4,val2.5",
             "val3.1,val3.2,val3.3,val3.4,val3.5"
         ],
-            toTable: "foo_quux_bar"
+            toTable: "existingTable"
         });
-        this.dialog = new chorus.dialogs.TableImportCSV({csv: this.csv});
+        this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv});
         this.dialog.render();
     });
 
@@ -45,9 +45,9 @@ describe("chorus.dialogs.TableImportCSV", function() {
                     "val2.1" + separator + "val2.2" + separator + "val2.3" + separator + "val2.4" + separator + "val2.5",
                     "val3.1" + separator + "val3.2" + separator + "val3.3" + separator + "val3.4" + separator + "val3.5"
                 ],
-                    toTable: "foo_quux_bar"
+                    toTable: "existingTable"
                 });
-                this.dialog = new chorus.dialogs.TableImportCSV({csv: this.csv});
+                this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv});
                 this.dialog.render();
 
                 this.dialog.$("input.delimiter[value='" + separator + "']").click();
@@ -103,9 +103,9 @@ describe("chorus.dialogs.TableImportCSV", function() {
                         "val2.1zval2.2zval2.3zval2.4zval2.5",
                         "val3.1zval3.2zval3.3zval3.4zval3.5"
                     ],
-                        toTable: "foo_quux_bar"
+                        toTable: "existingTable"
                     });
-                    this.dialog = new chorus.dialogs.TableImportCSV({csv: this.csv});
+                    this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv});
                     this.dialog.render();
 
                     this.dialog.$("input#delimiter_other").click();
@@ -125,14 +125,10 @@ describe("chorus.dialogs.TableImportCSV", function() {
     });
 
     it("has directions", function() {
-        var sandbox = chorus.page.workspace.sandbox();
-        expect(this.dialog.$('.directions')).toContainTranslation("dataset.import.table.directions",
+        expect(this.dialog.$('.directions')).toContainTranslation("dataset.import.table.existing.directions",
             {
-                canonicalName: sandbox.schema().canonicalName(),
-                tablename_input_field: ''
+                toTable: "existingTable"
             });
-
-        expect(this.dialog.$(".directions input:text").val()).toBe("foo_quux_bar");
     });
 
     it("checked the include header row checkbox by default", function() {
@@ -141,27 +137,22 @@ describe("chorus.dialogs.TableImportCSV", function() {
 
     describe("the data table", function() {
         it("has the right number of column names", function() {
-            expect(this.dialog.$(".data_table .thead .column_names .th input:text").length).toEqual(5);
+            expect(this.dialog.$(".data_table .thead .column_names .th").length).toEqual(5);
         })
 
         it("converts the column names into db friendly format", function() {
-            var $inputs = this.dialog.$(".data_table .thead .column_names .th input:text");
-            expect($inputs.eq(0).val()).toBe("col1")
-            expect($inputs.eq(1).val()).toBe("col2")
-            expect($inputs.eq(2).val()).toBe("col3")
-            expect($inputs.eq(3).val()).toBe("col_4")
-            expect($inputs.eq(4).val()).toBe("col_5")
+            var $columnNames = this.dialog.$(".data_table .thead .column_names .th");
+            expect($columnNames.eq(0).text()).toBe("col1")
+            expect($columnNames.eq(1).text()).toBe("col2")
+            expect($columnNames.eq(2).text()).toBe("col3")
+            expect($columnNames.eq(3).text()).toBe("col_4")
+            expect($columnNames.eq(4).text()).toBe("col_5")
         })
 
-        it("has the right number of column data types", function() {
-            expect(this.dialog.$(".data_table .thead .data_types .th").length).toEqual(5);
+        it("has the right number of column column mapping headers", function() {
+            expect(this.dialog.$(".data_table .thead .column_mapping .th").length).toEqual(5);
         })
 
-        it("does not memoize the data types", function() {
-            this.oldLinkMenus = this.dialog.linkMenus
-            this.dialog.render();
-            expect(this.oldLinkMenus === this.dialog.linkMenus).toBeFalsy();
-        })
 
         it("has the right number of data columns", function() {
             expect(this.dialog.$(".data_table .tbody .column").length).toEqual(5);
@@ -183,17 +174,14 @@ describe("chorus.dialogs.TableImportCSV", function() {
             });
         });
 
-        describe("selecting a new data type", function() {
+        describe("selecting a destination column", function() {
             beforeEach(function() {
-                this.$type = this.dialog.$(".th .type").eq(1)
-                this.$type.find(".chosen").click();
-
-                this.$type.find(".popup_filter li").eq(1).find("a").click();
+                this.qtip = stubQtip();
+                this.dialog.$(".column_mapping .map:eq(1)").click();
             })
 
-            it("changes the type of the column", function() {
-                expect(this.$type.find(".chosen")).toHaveText("float");
-                expect(this.$type).toHaveClass("float");
+            xit("shows a qtip", function() {
+                expect(this.qtip).toHaveVisibleQtip()
             })
         })
     });
@@ -266,15 +254,8 @@ describe("chorus.dialogs.TableImportCSV", function() {
             expect(this.server.lastCreate().url).toBe(this.dialog.csv.url());
             var params = this.server.lastCreate().params();
             expect(params.fileName).toBe(this.dialog.csv.get("fileName"));
-            expect(params.toTable).toBe("foo_quux_bar");
+            expect(params.toTable).toBe("existingTable");
             expect(params.delimiter).toBe(",");
-
-            var expectedColumns = [];
-            _.each(this.dialog.csv.columnOrientedData(), function(item, i) {
-                expectedColumns.push({columnName: item.name, columnType: item.type, columnOrder: i + 1});
-            });
-
-            expect(JSON.parse(params.columnsDef)).toEqual(expectedColumns);
         });
 
         context("when the post to import responds with success", function() {

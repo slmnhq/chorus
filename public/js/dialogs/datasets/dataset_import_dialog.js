@@ -4,7 +4,8 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
 
     events: {
         "change input:radio": "onRadioSelect",
-        "submit form": "uploadFile"
+        "submit form": "uploadFile",
+        "change select": "onSelectChanged"
     },
 
     setup: function() {
@@ -19,24 +20,35 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         this.$(".existing_table .options").addClass('hidden');
         this.$(".existing_table .options input").attr("disabled", "disabled");
 
-        var target = $(e.currentTarget).val();
+        this.importTarget = $(e.currentTarget).val();
 
-        if (target == "new") {
+        if (this.importTarget == "new") {
             this.$(".new_table input:text").attr("disabled", false);
 
-        } else if (target == "existing") {
+        } else if (this.importTarget == "existing") {
             this.$(".existing_table select").attr("disabled", false);
             this.$(".existing_table .options").removeClass("hidden");
             this.$(".existing_table .options input").attr("disabled", false);
+            if(!this.$("select").val()) {
+                this.$("button.submit").attr("disabled", "disabled");
+            }
         }
         chorus.styleSelect(this.$("select"));
+    },
+
+    onSelectChanged: function(e) {
+        if($(e.currentTarget).val()) {
+            this.$("button.submit").attr("disabled", false);
+        } else {
+            this.$("button.submit").attr("disabled", "disabled");
+        }
     },
 
     onSandboxListLoaded: function() {
         this.$(".existing_table .spinner").stopLoading();
 
         var select = this.$(".existing_table select");
-        select.append($("<option/>").prop('value', '').text(t("selectbox.select_one")));
+        select.append($("<option/>").prop('value', '').prop('selected', 'selected').text(t("selectbox.select_one")));
 
         this.sandboxTables.each(function(model) {
             select.append($("<option/>").prop('value', model.get("objectName")).text(model.get("objectName")));
@@ -67,7 +79,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         this.csv.set({
             toTable: toTable,
             truncate: this.$(".existing_table input#truncate").is(':checked')
-        })
+        }, {silent: true})
 
         this.$("button.submit").startLoading("actions.uploading");
         this.uploadObj.url = "/edc/workspace/" + this.options.launchElement.data("workspaceId") + "/csv/sample"
@@ -88,6 +100,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         self.$(".existing_table .spinner").startLoading();
         this.sandboxTables.onLoaded(this.onSandboxListLoaded, this);
 
+        this.importTarget = "new"
 
         this.$("input[type=file]").fileupload({
             change: fileChosen,
@@ -122,13 +135,18 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             e && e.preventDefault();
             self.$("button.submit").stopLoading();
 
-            self.csv.set(self.csv.parse(data.result));
+            self.csv.set(self.csv.parse(data.result), {silent: true});
             if (self.csv.serverErrors) {
                 self.csv.trigger("saveFailed");
                 fileChosen(e, data);
             }
             else {
-                var dialog = new chorus.dialogs.TableImportCSV({csv: self.csv});
+                var dialog;
+                if(self.importTarget === "existing") {
+                    dialog = new chorus.dialogs.ExistingTableImportCSV({csv: self.csv});
+                 } else {
+                    dialog = new chorus.dialogs.NewTableImportCSV({csv: self.csv});
+                }
                 dialog.launchModal();
             }
         }

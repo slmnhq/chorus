@@ -1,5 +1,6 @@
-chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
-    className: "table_import_csv",
+chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
+    className: "new_table_import_csv",
+    additionalClass: "table_import_csv",
     title: t("dataset.import.table.title"),
     delimiter: ',',
 
@@ -61,7 +62,7 @@ chorus.dialogs.TableImportCSV = chorus.dialogs.Base.extend({
         return {
             columns: this.csv.columnOrientedData(),
             delimiter: this.other_delimiter ? this.delimiter : '',
-            directions: t("dataset.import.table.directions", {
+            directions: t("dataset.import.table.new.directions", {
                tablename_input_field: "<input type='text' name='table_name' value='" + this.tableName + "'/>"
             })
         }

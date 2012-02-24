@@ -149,9 +149,23 @@ describe("chorus.dialogs.DatasetImport", function() {
                 });
             });
 
+            it("should enable the upload file button when selecting existing table if table name is already selected", function() {
+                this.server.completeFetchFor(this.dialog.sandboxTables, this.collection);
+                this.selectedOption = this.dialog.$('option:eq(1)').val();
+                this.dialog.$("select").val(this.selectedOption).change();
+
+                this.dialog.$(".new_table input:radio").removeAttr('checked').change();
+                this.dialog.$(".existing_table input:radio").attr('checked', 'checked').change();
+                this.dialog.$("input:radio").val("existing");
+
+                expect(this.dialog.$('button.submit')).toBeEnabled();
+            });
+
             describe("selecting 'Import into existing table'", function() {
                 beforeEach(function() {
+                    this.dialog.$(".new_table input:radio").removeAttr('checked').change();
                     this.dialog.$(".existing_table input:radio").attr('checked', 'checked').change();
+                    this.dialog.$("input:radio").val("existing");
                 });
 
                 it("shows the truncate check box", function() {
@@ -190,6 +204,10 @@ describe("chorus.dialogs.DatasetImport", function() {
                         expect(this.dialog.$(".new_table input:text")).toBeDisabled();
                     });
 
+                    it("disables the upload button", function() {
+                        expect(this.dialog.$('button.submit')).toBeDisabled();
+                    });
+
                     it("loads a list of sandbox tables into the table name selector", function() {
                         expect(this.dialog.$(".existing_table select option").length).toBe(this.collection.length + 1);
 
@@ -201,9 +219,53 @@ describe("chorus.dialogs.DatasetImport", function() {
                         }, this);
                     });
 
+                    context("selecting an existing table", function() {
+                        beforeEach(function() {
+                            this.selectedOption = this.dialog.$('option:eq(1)').val();
+                            this.dialog.$("select").val(this.selectedOption).change();
+                        });
+
+                        it("should enable the upload file button", function() {
+                            expect(this.dialog.$('button.submit')).toBeEnabled();
+                        });
+
+                        it("should disable the upload button if the 'select one' option is chosen", function() {
+                            this.dialog.$("select").val('').change();
+                            expect(this.dialog.$("button.submit")).toBeDisabled();
+                        })
+
+                         context("clicking 'Upload File'", function() {
+                             beforeEach(function() {
+                                 this.dialog.$("form").submit();
+                             })
+
+                             it("should send the name of the existing table as the toTable", function() {
+                                expect(this.dialog.csv.get("toTable")).toBe(this.selectedOption);
+                            });
+
+                            context("when upload succeeds", function() {
+                                beforeEach(function() {
+                                    this.data = {result: {
+                                        resource: [fixtures.csvImport({lines: ["col1,col2,col3", "val1,val2,val3"]}).attributes],
+                                        status: "ok"
+                                    }};
+                                    spyOn(chorus.dialogs.ExistingTableImportCSV.prototype, "setup").andCallThrough()
+                                    this.fileUploadOptions.done(null, this.data)
+                                });
+
+                                it("launches the import to existing table dialog", function() {
+                                    expect(chorus.dialogs.ExistingTableImportCSV.prototype.setup).toHaveBeenCalledWith({csv: this.dialog.csv});
+                                    expect(this.modalSpy).toHaveModal(chorus.dialogs.ExistingTableImportCSV);
+                                });
+                            });
+                        });
+
+                    })
+
                     describe("and then selecting 'Import into new table", function() {
                         beforeEach(function() {
-                            this.dialog.$(".new_table input:radio").change();
+                            this.dialog.$("input:radio").val("new")
+                            this.dialog.$(".new_table input:radio").attr("checked", "checked").change();
                         });
 
                         it("enables the table name input", function() {
@@ -223,17 +285,6 @@ describe("chorus.dialogs.DatasetImport", function() {
                         });
                     });
 
-                    context("clicking 'Upload File'", function() {
-                        beforeEach(function() {
-                            this.selectedOption = this.dialog.$('option:eq(1)').val();
-                            this.dialog.$("select").val(this.selectedOption).change();
-                            this.dialog.$("form").submit();
-                        })
-
-                        it("should send the name of the existing table as the toTable", function() {
-                            expect(this.dialog.csv.get("toTable")).toBe(this.selectedOption);
-                        });
-                    });
                 })
             });
         });
@@ -261,7 +312,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                             resource: [fixtures.csvImport({lines: ["col1,col2,col3", "val1,val2,val3"]}).attributes],
                             status: "ok"
                         }};
-                        spyOn(chorus.dialogs.TableImportCSV.prototype, "setup").andCallThrough()
+                        spyOn(chorus.dialogs.NewTableImportCSV.prototype, "setup").andCallThrough()
                         this.fileUploadOptions.done(null, this.data)
                     });
 
@@ -274,8 +325,8 @@ describe("chorus.dialogs.DatasetImport", function() {
                     });
 
                     it("launches the import new table dialog", function() {
-                        expect(chorus.dialogs.TableImportCSV.prototype.setup).toHaveBeenCalledWith({csv: this.dialog.csv});
-                        expect(this.modalSpy).toHaveModal(chorus.dialogs.TableImportCSV);
+                        expect(chorus.dialogs.NewTableImportCSV.prototype.setup).toHaveBeenCalledWith({csv: this.dialog.csv});
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.NewTableImportCSV);
                     });
                 });
 
@@ -305,11 +356,11 @@ describe("chorus.dialogs.DatasetImport", function() {
                                 {name: "myfile"}
                             ]
                         };
-                        spyOn(chorus.dialogs.TableImportCSV.prototype, "setup").andCallThrough()
+                        spyOn(chorus.dialogs.NewTableImportCSV.prototype, "setup").andCallThrough()
                         this.fileUploadOptions.done(null, this.data)
                     });
                     it("does not launch the new table configuration dialog", function() {
-                        expect(this.modalSpy).not.toHaveModal(chorus.dialogs.TableImportCSV);
+                        expect(this.modalSpy).not.toHaveModal(chorus.dialogs.NewTableImportCSV);
                     });
                     it("fills the error field", function() {
                         expect(this.dialog.$(".errors ul")).toHaveText("You failed");
