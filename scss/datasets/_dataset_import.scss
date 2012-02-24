@@ -93,6 +93,22 @@ $image-width: 35px;
                     font-weight: normal;
                 }
             }
+
+            .existing_table {
+                .spinner.is_loading {
+                    display: inline-block;
+                    height: 5px;
+                    margin-left: 20px;
+                }
+
+                .options {
+                    padding-left: 20px;
+
+                    label {
+                        font-size: 12px;
+                    }
+                }
+            }
         }
 
         .errors {

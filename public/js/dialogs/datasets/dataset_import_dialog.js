@@ -7,24 +7,49 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         "submit form": "uploadFile"
     },
 
+    setup: function() {
+        var workspaceId = this.options.launchElement.data("workspace-id");
+        this.sandboxTables = new chorus.collections.DatasetSet([], {workspaceId: workspaceId, type: "SANDBOX_TABLE"});
+        this.sandboxTables.fetchAll();
+    },
+
     onRadioSelect: function(e) {
         this.$(".new_table input:text").attr("disabled", "disabled");
         this.$(".existing_table select").attr("disabled", "disabled");
+        this.$(".existing_table .options").addClass('hidden');
+        this.$(".existing_table .options input").attr("disabled", "disabled");
 
         var target = $(e.currentTarget).val();
+
         if (target == "new") {
             this.$(".new_table input:text").attr("disabled", false);
 
         } else if (target == "existing") {
             this.$(".existing_table select").attr("disabled", false);
+            this.$(".existing_table .options").removeClass("hidden");
+            this.$(".existing_table .options input").attr("disabled", false);
         }
+        chorus.styleSelect(this.$("select"));
+    },
+
+    onSandboxListLoaded: function() {
+        this.$(".existing_table .spinner").stopLoading();
+
+        var select = this.$(".existing_table select");
+        select.append($("<option/>").prop('value', '').text(t("selectbox.select_one")));
+
+        this.sandboxTables.each(function(model) {
+            select.append($("<option/>").prop('value', model.get("objectName")).text(model.get("objectName")));
+        });
+
+        this.$(".existing_table .select").removeClass("hidden");
 
         chorus.styleSelect(self.$("select"));
     },
 
-    additionalContext : function() {
+    additionalContext: function() {
         return {
-            canonicalName : this.options.launchElement.data("canonicalName")
+            canonicalName: this.options.launchElement.data("canonicalName")
         }
     },
 
@@ -37,12 +62,19 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
 
     uploadFile: function(e) {
         e && e.preventDefault();
+
+        var toTable = this.$('.new_table input:text').is(':disabled') ? this.$(".existing_table select").val() : chorus.models.CSVImport.normalizeForDatabase(this.$(".new_table input[type='text']").val())
+        this.csv.set({
+            toTable: toTable,
+            truncate: this.$(".existing_table input#truncate").is(':checked')
+        })
+
         this.$("button.submit").startLoading("actions.uploading");
         this.uploadObj.url = "/edc/workspace/" + this.options.launchElement.data("workspaceId") + "/csv/sample"
         this.request = this.uploadObj.submit();
     },
 
-    modalClosed : function() {
+    modalClosed: function() {
         if (this.request) {
             this.request.abort();
         }
@@ -52,6 +84,11 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
 
     postRender: function() {
         var self = this;
+
+        self.$(".existing_table .spinner").startLoading();
+        this.sandboxTables.onLoaded(this.onSandboxListLoaded, this);
+
+
         this.$("input[type=file]").fileupload({
             change: fileChosen,
             add: fileChosen,
@@ -79,16 +116,14 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             self.$(".file-wrapper a").removeClass("hidden");
             self.$(".file-wrapper button").addClass("hidden");
 
-            chorus.styleSelect(self.$("select"));
         }
 
         function uploadFinished(e, data) {
             e && e.preventDefault();
             self.$("button.submit").stopLoading();
 
-            self.csv.set({ toTable: chorus.models.CSVImport.normalizeForDatabase(self.$(".new_table input[type='text']").val()) })
             self.csv.set(self.csv.parse(data.result));
-            if(self.csv.serverErrors){
+            if (self.csv.serverErrors) {
                 self.csv.trigger("saveFailed");
                 fileChosen(e, data);
             }

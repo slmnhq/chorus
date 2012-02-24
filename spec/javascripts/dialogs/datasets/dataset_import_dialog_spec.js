@@ -1,11 +1,12 @@
 describe("chorus.dialogs.DatasetImport", function() {
     beforeEach(function() {
         chorus.page = {};
-        chorus.page.workspace = fixtures.workspace({id:242});
+        chorus.page.workspace = fixtures.workspace({id: 242});
         this.modalSpy = stubModals();
         spyOn($.fn, 'fileupload');
         this.launchElement = $('<button data-workspace-id="242">Import File</button>');
         this.launchElement.data("canonicalName", "FooBar");
+        this.collection = [fixtures.datasetSandboxTable({workspace: {id: 242}}), fixtures.datasetSandboxTable({workspace: {id: 242}})];
         this.dialog = new chorus.dialogs.DatasetImport({launchElement: this.launchElement});
 
         spyOn(this.dialog, "modalClosed").andCallThrough();
@@ -112,7 +113,7 @@ describe("chorus.dialogs.DatasetImport", function() {
 
             it("shows the 'import into an existing table' radio button", function() {
                 expect(this.dialog.$(".existing_table input:radio")).toExist();
-                expect(this.dialog.$(".existing_table label").text()).toMatchTranslation("dataset.import.existing_table");
+                expect(this.dialog.$(".existing_table label[for='existing']").text()).toMatchTranslation("dataset.import.existing_table");
             });
 
             it("shows the 'upload as workfile' radio button", function() {
@@ -122,6 +123,7 @@ describe("chorus.dialogs.DatasetImport", function() {
 
             it("shows the file name entry", function() {
                 expect(this.dialog.$(".new_table input:text")).toExist();
+                expect(this.dialog.$(".new_table input:text").val()).toBe('foo_bar_baz');
             });
 
             it("shows the table name select", function() {
@@ -149,109 +151,176 @@ describe("chorus.dialogs.DatasetImport", function() {
 
             describe("selecting 'Import into existing table'", function() {
                 beforeEach(function() {
-                    this.dialog.$(".existing_table input:radio").change();
+                    this.dialog.$(".existing_table input:radio").attr('checked', 'checked').change();
                 });
 
-                it("enables the table name selector", function() {
-                    expect(this.dialog.$(".existing_table select")).toBeEnabled();
+                it("shows the truncate check box", function() {
+                    expect(this.dialog.$(".existing_table .options")).not.toHaveClass("hidden");
+                    expect(this.dialog.$(".existing_table #truncate")).toBeEnabled();
                 });
 
-                it("disables the table name input", function() {
-                    expect(this.dialog.$(".new_table input")).toBeDisabled();
-                });
+                context("when fetch datasetTable has not completed", function() {
+                    it("displays the loading spinner", function() {
+                        expect(this.dialog.$(".existing_table .spinner").isLoading()).toBeTruthy();
+                    })
 
-                describe("and then selecting 'Import into new table", function() {
+                    it("hides the select box", function() {
+                        expect(this.dialog.$(".existing_table .select")).toHaveClass("hidden");
+                    })
+                })
+
+                context("when fetch has been completed", function() {
                     beforeEach(function() {
-                        this.dialog.$(".new_table input:radio").change();
+                        this.server.completeFetchFor(this.dialog.sandboxTables, this.collection);
                     });
 
-                    it("enables the table name input", function() {
-                        expect(this.dialog.$(".new_table input")).toBeEnabled();
+                    it("does not display loading spinner", function() {
+                        expect(this.dialog.$(".existing_table .spinner").isLoading()).toBeFalsy();
                     });
 
-                    it("disables the table name selector", function() {
-                        expect(this.dialog.$(".existing_table select")).toBeDisabled();
+                    it("shows the select box", function() {
+                        expect(this.dialog.$(".existing_table .select")).not.toHaveClass("hidden");
                     });
-                });
+
+                    it("enables the table name selector", function() {
+                        expect(this.dialog.$(".existing_table select.right")).toBeEnabled();
+                    });
+
+                    it("disables the table name input", function() {
+                        expect(this.dialog.$(".new_table input:text")).toBeDisabled();
+                    });
+
+                    it("loads a list of sandbox tables into the table name selector", function() {
+                        expect(this.dialog.$(".existing_table select option").length).toBe(this.collection.length + 1);
+
+                        var view = this.dialog;
+                        _.each(this.collection, function(model, index) {
+                            var option = view.$(".existing_table select option:eq(" + ( index + 1 ) + ")");
+                            expect(option).toContainText(model.get("objectName"));
+                            expect(option).toHaveAttr("value", model.get("objectName"));
+                        }, this);
+                    });
+
+                    describe("and then selecting 'Import into new table", function() {
+                        beforeEach(function() {
+                            this.dialog.$(".new_table input:radio").change();
+                        });
+
+                        it("enables the table name input", function() {
+                            expect(this.dialog.$(".new_table input")).toBeEnabled();
+                        });
+
+                        it("disables the table name selector", function() {
+                            expect(this.dialog.$(".existing_table select")).toBeDisabled();
+                        });
+
+                        it("disables the truncate checkbox", function() {
+                            expect(this.dialog.$(".existing_table .options input")).toBeDisabled();
+                        });
+
+                        it("hides the truncate option", function() {
+                            expect(this.dialog.$(".existing_table .options")).toHaveClass("hidden");
+                        });
+                    });
+
+                    context("clicking 'Upload File'", function() {
+                        beforeEach(function() {
+                            this.selectedOption = this.dialog.$('option:eq(1)').val();
+                            this.dialog.$("select").val(this.selectedOption).change();
+                            this.dialog.$("form").submit();
+                        })
+
+                        it("should send the name of the existing table as the toTable", function() {
+                            expect(this.dialog.csv.get("toTable")).toBe(this.selectedOption);
+                        });
+                    });
+                })
             });
         });
 
         describe("clicking 'Upload File'", function() {
-            beforeEach(function() {
-                this.dialog.$("form").submit();
-            });
 
-            it("should display a loading spinner", function() {
-                expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.uploading");
-                expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
-            });
-
-            it("uploads the specified file", function() {
-                expect(this.dialog.uploadObj.url).toEqual("/edc/workspace/242/csv/sample")
-                expect(this.dialog.uploadObj.submit).toHaveBeenCalled();
-            });
-
-            context("when upload succeeds", function() {
+            context("when all fields are valid", function() {
                 beforeEach(function() {
-                    this.data = {result: {
-                        resource: [fixtures.csvImport({lines: ["col1,col2,col3", "val1,val2,val3"]}).attributes],
-                        status: "ok"
-                    }};
-                    spyOn(chorus.dialogs.TableImportCSV.prototype, "setup").andCallThrough()
-                    this.fileUploadOptions.done(null, this.data)
+                    this.dialog.$("form").submit();
                 });
 
-                it("stops the spinner", function() {
-                    expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                it("should display a loading spinner", function() {
+                    expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.uploading");
+                    expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
                 });
 
-                it("makes a CSV", function() {
-                    expect(this.dialog.csv.get('lines').length).toBe(2);
+                it("uploads the specified file", function() {
+                    expect(this.dialog.uploadObj.url).toEqual("/edc/workspace/242/csv/sample")
+                    expect(this.dialog.uploadObj.submit).toHaveBeenCalled();
                 });
 
-                it("launches the import new table dialog", function() {
-                    expect(chorus.dialogs.TableImportCSV.prototype.setup).toHaveBeenCalledWith({csv: this.dialog.csv});
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.TableImportCSV);
+                context("when upload succeeds", function() {
+                    beforeEach(function() {
+                        this.data = {result: {
+                            resource: [fixtures.csvImport({lines: ["col1,col2,col3", "val1,val2,val3"]}).attributes],
+                            status: "ok"
+                        }};
+                        spyOn(chorus.dialogs.TableImportCSV.prototype, "setup").andCallThrough()
+                        this.fileUploadOptions.done(null, this.data)
+                    });
+
+                    it("stops the spinner", function() {
+                        expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                    });
+
+                    it("sets the lines in the CSV", function() {
+                        expect(this.dialog.csv.get('lines').length).toBe(2);
+                    });
+
+                    it("launches the import new table dialog", function() {
+                        expect(chorus.dialogs.TableImportCSV.prototype.setup).toHaveBeenCalledWith({csv: this.dialog.csv});
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.TableImportCSV);
+                    });
                 });
+
+                context("when the user tries to close the dialog", function() {
+                    beforeEach(function() {
+                        $(document).trigger("close.facebox");
+                    })
+                    it("cancels the upload", function() {
+                        expect(this.dialog.request.abort).toHaveBeenCalled();
+                    })
+
+                    it("closes the dialog", function() {
+                        expect(this.dialog.modalClosed).toHaveBeenCalled();
+                    });
+                })
+
+                context("when the upload fails", function() {
+                    beforeEach(function() {
+                        this.data = {result: {
+                            resource: [],
+                            message: [
+                                {message: "You failed"}
+                            ],
+                            status: "fail"
+                        },
+                            files: [
+                                {name: "myfile"}
+                            ]
+                        };
+                        spyOn(chorus.dialogs.TableImportCSV.prototype, "setup").andCallThrough()
+                        this.fileUploadOptions.done(null, this.data)
+                    });
+                    it("does not launch the new table configuration dialog", function() {
+                        expect(this.modalSpy).not.toHaveModal(chorus.dialogs.TableImportCSV);
+                    });
+                    it("fills the error field", function() {
+                        expect(this.dialog.$(".errors ul")).toHaveText("You failed");
+                    })
+                    it("does not hide the import controls or change file link", function() {
+                        expect(this.dialog.$(".import_controls")).not.toHaveClass("hidden");
+                        expect(this.dialog.$(".file-wrapper a")).not.toHaveClass("hidden");
+                        expect(this.dialog.$(".file-wrapper button")).toHaveClass("hidden");
+                    })
+                })
             });
-
-            context("when the user tries to close the dialog", function() {
-                beforeEach(function() {
-                    $(document).trigger("close.facebox");
-                })
-                it("cancels the upload", function() {
-                    expect(this.dialog.request.abort).toHaveBeenCalled();
-                })
-
-                it("closes the dialog", function() {
-                    expect(this.dialog.modalClosed).toHaveBeenCalled();
-                });
-            })
-
-            context("when the upload fails", function() {
-                beforeEach(function() {
-                    this.data = {result: {
-                        resource: [],
-                        message: [{message: "You failed"}],
-                        status: "fail"
-                    },
-                        files: [{name: "myfile"}]
-                    };
-                    spyOn(chorus.dialogs.TableImportCSV.prototype, "setup").andCallThrough()
-                    this.fileUploadOptions.done(null, this.data)
-                });
-                it("does not launch the new table configuration dialog", function() {
-                    expect(this.modalSpy).not.toHaveModal(chorus.dialogs.TableImportCSV);
-                });
-                it("fills the error field", function() {
-                    expect(this.dialog.$(".errors ul")).toHaveText("You failed");
-                })
-                it("does not hide the import controls or change file link", function() {
-                    expect(this.dialog.$(".import_controls")).not.toHaveClass("hidden");
-                    expect(this.dialog.$(".file-wrapper a")).not.toHaveClass("hidden");
-                    expect(this.dialog.$(".file-wrapper button")).toHaveClass("hidden");
-                })
-            })
         });
     });
 });
