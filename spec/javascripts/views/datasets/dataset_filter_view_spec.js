@@ -239,6 +239,22 @@ describe("chorus.views.DatasetFilter", function() {
             })
         });
 
+        describe("columns with typeCategory: BOOLEAN", function() {
+            beforeEach(function() {
+                this.collection.models[0].set({typeCategory: "BOOLEAN"});
+                this.view.render();
+                this.keys = _.keys(chorus.models.DatasetFilterMaps.Boolean.prototype.comparators);
+            });
+
+            it("adds a second select with the string options", function() {
+                var view = this.view;
+
+                _.each(this.keys, function(key) {
+                    expect(view.$("option")).toContainTranslation("dataset.filter." + key);
+                });
+            });
+        });
+
         describe("columns with typeCategory: WHOLE_NUMBER, REAL_NUMBER", function() {
             beforeEach(function() {
                 this.collection.models[0].set({typeCategory: "REAL_NUMBER"});

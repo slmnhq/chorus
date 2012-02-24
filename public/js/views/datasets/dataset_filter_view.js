@@ -55,6 +55,9 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
             case "LONG_STRING":
                 this.model = new chorus.models.DatasetFilterMaps.String
                 break;
+            case "BOOLEAN":
+                this.model = new chorus.models.DatasetFilterMaps.Boolean
+                break;
             case "WHOLE_NUMBER":
             case "REAL_NUMBER":
                 this.model = new chorus.models.DatasetFilterMaps.Numeric

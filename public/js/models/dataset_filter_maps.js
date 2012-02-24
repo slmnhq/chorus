@@ -23,6 +23,21 @@
         }
     });
 
+    chorus.models.DatasetFilterMaps.Boolean = chorus.models.Base.extend({
+        type: "Boolean",
+
+        comparators: {
+            "true": {usesInput: false, generate: isTrue },
+            "false": {usesInput: false, generate: isFalse },
+            "null": {usesInput: false, generate: isNull },
+            "not_null": {usesInput: false, generate: isNotNull }
+        },
+
+        declareValidations: function(attrs) {
+            return true
+        }
+    });
+
     chorus.models.DatasetFilterMaps.Numeric = chorus.models.Base.extend({
         type: "Numeric",
 
@@ -103,6 +118,14 @@
         declareValidations: function(attrs) {
         }
     });
+
+    function isTrue(columnName) {
+        return columnName + " = TRUE";
+    }
+
+    function isFalse(columnName) {
+        return columnName + " = FALSE";
+    }
 
     function isNull(columnName, inputValue) {
         return columnName + " IS NULL";

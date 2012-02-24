@@ -25,6 +25,17 @@ describe("chorus.models.DatasetFilterMaps", function() {
         })
     });
 
+    describe("Boolean", function() {
+        beforeEach(function() {
+            this.datasetFilterMap = new chorus.models.DatasetFilterMaps.Boolean;
+        })
+
+        itReturnsTheRightClauseFor("true", "column_name", "some_value", "column_name = TRUE", true)
+        itReturnsTheRightClauseFor("false", "column_name", "some_value", "column_name = FALSE", true)
+        itReturnsTheRightClauseFor("not_null", "column_name", "some_value", "column_name IS NOT NULL", true)
+        itReturnsTheRightClauseFor("null", "column_name", "some_value", "column_name IS NULL", true)
+    });
+
     describe("Numeric", function() {
         beforeEach(function() {
             this.datasetFilterMap = new chorus.models.DatasetFilterMaps.Numeric;
