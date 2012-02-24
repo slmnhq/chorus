@@ -47,9 +47,6 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
         e.preventDefault();
         var clickedId = $(e.target).closest("li").data("cid")
         var databaseObject = this.collection.getByCid(clickedId);
-        if (databaseObject == this.collection.get(this.pageModel.get("id"))) {
-            return;
-        }
 
         var joinConfigurationDialog = new chorus.dialogs.JoinConfiguration({
             model: this.model,
@@ -75,8 +72,7 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     collectionModelContext: function(model) {
         return {
             isView:  model.metaType() == "view",
-            iconUrl: model.iconUrl({ size: "small" }),
-            original: model.id == this.pageModel.get("id")
+            iconUrl: model.iconUrl({ size: "small" })
         };
     }
 });

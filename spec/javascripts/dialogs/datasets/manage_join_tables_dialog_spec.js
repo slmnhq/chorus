@@ -99,10 +99,6 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             expect(icons.eq(1)).toHaveAttr("src", this.databaseObject2.iconUrl({ size: "small" }));
         });
 
-        it("disables the 'join table' link for the original table/view", function() {
-            expect(this.dialog.$(".actions").eq(2)).toHaveClass("original");
-        })
-
         it("shows the original table canonical name", function() {
             expect(this.dialog.$(".canonical_name").text()).toBe(this.schema.canonicalName());
         });
@@ -189,19 +185,6 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             });
         });
 
-        it("when the original dataset's 'join table' link is clicked nothing happens", function() {
-            spyOn(chorus.dialogs.JoinConfiguration.prototype, 'render').andCallThrough();
-            this.dialog.$("a.join").eq(2).trigger("click");
-            expect(chorus.dialogs.JoinConfiguration.prototype.render).not.toHaveBeenCalled();
-        });
-
-        it("styles differently for the original dataset", function() {
-            expect(this.dialog.$("ul.list li .actions").eq(0)).not.toHaveClass("original");
-            expect(this.dialog.$("ul.list li .actions").eq(1)).not.toHaveClass("original");
-            expect(this.dialog.$("ul.list li .actions").eq(2)).toHaveClass("original");
-            expect(this.dialog.$("ul.list li .actions").eq(3)).not.toHaveClass("original");
-        });
-
         describe("when there are many tables to join", function() {
             it("shows pagination controls", function() {
                 expect(this.dialog.$(".list_content_details")).toBeHidden();
@@ -209,11 +192,5 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 expect(this.server.lastFetchFor(this.schema.databaseObjects()).url).toContain("rows=9")
             })
         });
-
-        describe("when a join table' link is clicked for the original table", function() {
-            it("should not launches the 'join configuration' sub-dialog", function() {
-
-            })
-        })
     });
 });
