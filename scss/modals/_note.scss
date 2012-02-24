@@ -1,7 +1,7 @@
 .notes_new{
 
     width: 380px;
-    
+
     textarea {
         min-width : 350px;
         min-height: 75px;
@@ -43,7 +43,7 @@
         }
     }
 
-    .file_details {
+    .file_details, .dataset_details {
         vertical-align: middle;
         line-height: 32px;
         img {
@@ -75,9 +75,9 @@
         }
     }
 
-    .file_name {
+    .name {
         display: inline-block;
-        width: 115px;
+        width: 170px;
         @include ellipsis;
         color: $color-text2;
         font-weight: $semibold;

@@ -8,11 +8,15 @@ chorus.collections.DatasetSet = chorus.collections.Base.extend({
         }
     },
 
-    urlParams: function(){
+    urlParams: function() {
         if (this.attributes.workspaceId){
             return {}
         } else {
             return {type: "meta"}
         }
+    },
+
+    comparator: function(dataset) {
+        return dataset.get("objectName").toUpperCase();
     }
 });

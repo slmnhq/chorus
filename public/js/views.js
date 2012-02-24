@@ -262,13 +262,12 @@ chorus.views.Base = chorus.views.Bare.extend({
     },
 
     context:function context() {
-        var ctx = {};
+        var ctx;
         var self = this;
 
         if (this.resource) {
             ctx = _.clone(this.resource.attributes);
             ctx.resource = this.resource;
-            ctx.view = self;
             ctx.loaded = this.resource.loaded;
             if (this.collection) {
                 ctx.models = _.map(this.collection.models, function (model) {
@@ -280,6 +279,8 @@ chorus.views.Base = chorus.views.Bare.extend({
         } else {
             ctx = this.additionalContext({})
         }
+
+        ctx.view = self;
         return ctx;
     },
 

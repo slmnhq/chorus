@@ -33,7 +33,7 @@ describe "creating a note on a workspace" do
       end
 
       it "displays the file's name" do
-          page.find(".file_name").should have_content("my_desktop_file_name")
+          page.find(".name").should have_content("my_desktop_file_name")
       end
 
       describe "creating the note with the file" do

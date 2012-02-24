@@ -9,7 +9,7 @@
             <li><a href="#" class="alert" data-alert="WorkfileDelete" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspaceId}}" data-workfile-name="{{workfile.fileName}}">{{t "actions.delete"}}</a></li>
             <li><a href="{{workfile.downloadUrl}}" class="download">{{t "actions.download"}}</a></li>
             {{#unless hideAddNoteLink}}
-                <li><a class="dialog" href="#" data-entity-id="{{workfile.id}}" data-entity-type="workfile" data-workspace-id={{workfile.workspaceId}} data-allow-workfile-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+                <li><a class="dialog" href="#" data-entity-id="{{workfile.id}}" data-entity-type="workfile" data-workspace-id={{workfile.workspaceId}} data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
             {{/unless}}
         </ul>
     </div>

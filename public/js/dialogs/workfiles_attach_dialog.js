@@ -1,48 +1,19 @@
-chorus.dialogs.WorkfilesAttach = chorus.dialogs.Base.extend({
-    className:"workfiles_attach",
+chorus.dialogs.WorkfilesAttach = chorus.dialogs.Attach.extend({
+    submitButtonTranslationKey: "workfiles.button.attach_file",
     title:t("workfiles.attach"),
-
-    events:{
-        "click li":"toggleSelection",
-        "click .submit":"submit"
-    },
+    collectionClass:chorus.collections.WorkfileSet,
+    selectedEvent: 'files:selected',
 
     makeModel:function () {
         this.collection = new chorus.collections.WorkfileSet([], {workspaceId:this.options.workspaceId || this.options.launchElement.data("workspace-id")});
         this.collection.fetchAll();
     },
 
-    toggleSelection:function (event) {
-        event.preventDefault();
-        $(event.target).closest("li").toggleClass("selected");
-        if (this.$('li.selected').length > 0) {
-            this.$('button.submit').removeAttr('disabled');
-        } else {
-            this.$('button.submit').attr('disabled', 'disabled');
+    collectionModelContext: function (model) {
+        return {
+            iconUrl: chorus.urlHelpers.fileIconUrl(model.get('fileType'), "medium"),
+            name: model.get("fileName")
         }
-
-    },
-
-    submit:function () {
-        var workfiles = _.map(this.$("li.selected"), function (li) {
-            var id = $(li).data("id");
-            return this.collection.get(id);
-        }, this);
-
-        this.selectedFiles = new chorus.collections.WorkfileSet(workfiles, { workspaceId:this.collection.get("workspaceId") });
-        this.trigger("files:selected", this.selectedFiles);
-        this.closeModal();
-    },
-
-    postRender:function () {
-        if (!this.options.selectedFiles) {
-            return;
-        }
-        _.each(this.$('li'), function (li) {
-            if (this.options.selectedFiles.get($(li).data('id'))) {
-                $(li).addClass('selected');
-            }
-        }, this);
     },
 
     additionalContext:function (ctx) {

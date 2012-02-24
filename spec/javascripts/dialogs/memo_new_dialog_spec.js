@@ -1,6 +1,6 @@
 describe("chorus.dialogs.MemoNewDialog", function() {
     beforeEach(function() {
-        this.launchElement = $("<a data-entity-type='workfile' data-allow-workfile-attachments='true' data-entity-id='1' data-workspace-id='22'></a>")
+        this.launchElement = $("<a data-entity-type='workfile' data-allow-workspace-attachments='true' data-entity-id='1' data-workspace-id='22'></a>")
         this.model = new chorus.models.Comment({
             entityType:this.launchElement.data("entity-type"),
             entityId:this.launchElement.data("entity-id"),
@@ -105,14 +105,16 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             expect(this.dialog.$('.options_area')).toBeVisible();
         });
 
-        it("renders the workfiles attachment link when the workfilesAttachment data is truthy", function() {
+        it("renders the workfiles attachment link and dataset attachment link when the allowWorkfileAttachments data is truthy", function() {
             expect(this.dialog.$("a.add_workfile")).toExist();
+            expect(this.dialog.$("a.add_dataset")).toExist();
         });
 
-        it("doesn't render the workfiles attachment link when the workfilesAttachment data is falsy", function() {
-            this.launchElement.data("allowWorkfileAttachments", false);
+        it("doesn't render the workfiles attachment link or the dataset attachment link when the allowWorkfileAttachments data is falsy", function() {
+            this.launchElement.data("allowWorkspaceAttachments", false);
             this.dialog.render();
             expect(this.dialog.$("a.add_workfile")).not.toExist();
+            expect(this.dialog.$("a.add_dataset")).not.toExist();
         });
 
         it("prevents default on click", function() {
@@ -152,7 +154,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                 });
 
                 it("displays the names of the workfiles", function() {
-                    var fileNames = this.dialog.$(".file_details .file_name");
+                    var fileNames = this.dialog.$(".file_details .name");
                     expect(fileNames.eq(0).text()).toBe("greed.sql");
                     expect(fileNames.eq(1).text()).toBe("generosity.cpp");
                 });
@@ -176,8 +178,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                     it("is populated with the previously selected workfiles", function() {
                         expect(chorus.dialogs.WorkfilesAttach.prototype.initialize).toHaveBeenCalled();
                         var options = chorus.dialogs.WorkfilesAttach.prototype.initialize.mostRecentCall.args[0];
-                        expect(options.selectedFiles.models[0].get('fileName')).toBe('greed.sql');
-                        expect(options.selectedFiles.models[1].get('fileName')).toBe('generosity.cpp');
+                        expect(options.selectedAttachments.models[0].get('fileName')).toBe('greed.sql');
+                        expect(options.selectedAttachments.models[1].get('fileName')).toBe('generosity.cpp');
                     });
                     context("when new files are selected", function() {
                         beforeEach(function() {
@@ -231,6 +233,102 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             });
         });
 
+        describe("when the 'attach dataset' link is clicked", function() {
+            beforeEach(function() {
+                this.dialog.$('.show_options').click();
+                this.fakeModal = stubModals();
+                this.dialog.launchSubModal.andCallThrough();
+                spyOn(chorus.dialogs.DatasetsAttach.prototype, 'render').andCallThrough();
+                this.dialog.$("a.add_dataset").click();
+            });
+
+            it("launches the dataset picker dialog", function() {
+                expect(this.fakeModal).toHaveBeenCalled();
+                expect(chorus.dialogs.DatasetsAttach.prototype.render).toHaveBeenCalled();
+
+                var modalElement = this.fakeModal.mostRecentCall.args[0];
+                var view = chorus.dialogs.DatasetsAttach.prototype.render.mostRecentCall.object;
+
+                expect(modalElement).toBe(view.el);
+                expect(view.options.workspaceId).toBe(22);
+            });
+
+            describe("when datasets are selected", function() {
+                beforeEach(function() {
+                    this.datasetSet = new chorus.collections.DatasetSet([
+                        fixtures.datasetSandboxTable({objectName: 'table1', id: '1'}),
+                        fixtures.datasetSandboxTable({objectName: 'table2', id: '2'})
+                    ]);
+                    this.datasetsDialog = chorus.dialogs.DatasetsAttach.prototype.render.mostRecentCall.object;
+                    this.datasetsDialog.trigger("datasets:selected", this.datasetSet);
+                });
+
+                it("displays the names of the datasets", function() {
+                    var datasetNames = this.dialog.$(".dataset_details .name");
+                    expect(datasetNames.eq(0).text()).toBe("table1");
+                    expect(datasetNames.eq(1).text()).toBe("table2");
+                });
+
+                it("displays the appropriate icons", function() {
+                    var datasetIcons = this.dialog.$(".dataset_details:visible img.icon");
+                    expect(datasetIcons.eq(0).attr("src")).toBe(this.datasetSet.at(0).iconUrl({size: 'small'}));
+                    expect(datasetIcons.eq(0).attr("src")).toBe(this.datasetSet.at(1).iconUrl({size: 'small'}));
+                });
+
+                it("stores the collection", function() {
+                    expect(this.dialog.model.datasets).toBe(this.datasetSet);
+                });
+
+                context("when the 'attach dataset' link is clicked again", function() {
+                    beforeEach(function() {
+                        spyOn(chorus.dialogs.DatasetsAttach.prototype, 'initialize').andCallThrough();
+                        this.dialog.$("a.add_dataset").click();
+                    });
+
+                    it("is populated with the previously selected datasets", function() {
+                        expect(chorus.dialogs.DatasetsAttach.prototype.initialize).toHaveBeenCalled();
+                        var options = chorus.dialogs.DatasetsAttach.prototype.initialize.mostRecentCall.args[0];
+                        expect(options.selectedAttachments.models[0].get('objectName')).toBe('table1');
+                        expect(options.selectedAttachments.models[1].get('objectName')).toBe('table2');
+                    });
+                    context("when new datasets are selected", function() {
+                        beforeEach(function() {
+                            this.datasetsDialog = chorus.dialogs.DatasetsAttach.prototype.render.mostRecentCall.object;
+                            this.datasetsDialog.trigger("datasets:selected", this.datasetSet);
+                        });
+
+                        it("clears any existing datasets", function() {
+                            expect(this.dialog.$(".dataset_details").length).toBe(2);
+                        });
+                    })
+                })
+
+                describe("when a dataset remove link is clicked", function() {
+                    it("removes only that dataset", function() {
+                        var table1Row = this.dialog.$(".dataset_details:contains('table1')")
+                        var table2Row = this.dialog.$(".dataset_details:contains('table2')")
+
+                        expect(table1Row).toExist();
+                        expect(table2Row).toExist();
+
+                        table2Row.find("a.remove").click();
+
+                        table1Row = this.dialog.$(".dataset_details:contains('table1')")
+                        table2Row = this.dialog.$(".dataset_details:contains('table2')")
+                        expect(table1Row).toExist();
+                        expect(table2Row).not.toExist();
+                    });
+
+                    it("removes only that dataset from the collection", function() {
+                        var table1Row = this.dialog.$(".dataset_details:contains('table1')")
+                        table1Row.find("a.remove").click();
+                        expect(this.dialog.model.datasets.get("1")).toBeUndefined();
+                        expect(this.dialog.model.datasets.get("2")).not.toBeUndefined();
+                    });
+                });
+            });
+        });
+
         context("when a desktop files have been chosen", function() {
             beforeEach(function() {
                 this.dialog.$('.show_options').click();
@@ -270,8 +368,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             });
 
             it("displays the chosen filenames", function() {
-                expect(this.dialog.$(".file_details .file_name:eq(0)").text()).toBe("foo.bar");
-                expect(this.dialog.$(".file_details .file_name:eq(1)").text()).toBe("baz.sql");
+                expect(this.dialog.$(".file_details .name:eq(0)").text()).toBe("foo.bar");
+                expect(this.dialog.$(".file_details .name:eq(1)").text()).toBe("baz.sql");
             });
 
             it("displays the appropriate file icons", function() {
@@ -347,8 +445,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                 });
 
                 it("does not remove the desktop files from the view", function() {
-                    expect(this.dialog.$(".file_details .file_name:eq(0)").text()).toBe("foo.bar");
-                    expect(this.dialog.$(".file_details .file_name:eq(1)").text()).toBe("baz.sql");
+                    expect(this.dialog.$(".file_details .name:eq(0)").text()).toBe("foo.bar");
+                    expect(this.dialog.$(".file_details .name:eq(1)").text()).toBe("baz.sql");
                 });
 
                 describe("initProgressBars", function() {
@@ -582,6 +680,11 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
         it("prevents workfiles from being selected", function() {
             this.dialog.$(".add_workfile").click();
+            expect(this.dialog.launchSubModal).not.toHaveBeenCalled();
+        })
+
+        it("prevents datasets from being selected", function() {
+            this.dialog.$(".add_dataset").click();
             expect(this.dialog.launchSubModal).not.toHaveBeenCalled();
         })
     });

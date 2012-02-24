@@ -23,7 +23,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
     },
 
     iconUrl: function() {
-        var result = this._super("iconUrl");
+        var result = this._super("iconUrl", arguments);
         if (this.get('hasCredentials') === false) {
             result = result.replace(".png", "_locked.png");
         }

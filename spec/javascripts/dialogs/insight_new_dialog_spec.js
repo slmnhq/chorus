@@ -1,6 +1,6 @@
 describe("chorus.dialogs.InsightsNewDialog", function() {
     beforeEach(function() {
-        this.launchElement = $("<a data-allow-workfile-attachments='true' data-workspace-id='22'></a>")
+        this.launchElement = $("<a data-allow-workspace-attachments='true' data-workspace-id='22'></a>")
         this.dialog = new chorus.dialogs.InsightsNew({
             launchElement : this.launchElement
         });

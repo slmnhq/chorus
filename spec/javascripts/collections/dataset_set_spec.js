@@ -14,4 +14,15 @@ describe("chorus.collections.DatasetSet", function() {
             })
         })
     });
+
+    describe("sorting", function() {
+        beforeEach(function() {
+            this.collection.add(fixtures.datasetSandboxTable({objectName: 'zTable'}))
+            this.collection.add(fixtures.datasetSandboxTable({objectName: 'aTable'}))
+        })
+
+        it("sorts by objectName", function() {
+            expect(this.collection.at(0).get("objectName")).toBe("aTable")
+        })
+    })
 });

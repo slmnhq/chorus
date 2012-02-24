@@ -57,6 +57,20 @@ describe("chorus.models.Comment", function() {
         });
     });
 
+    describe("saving the dataset attachments", function() {
+        it("assigns the 'datasetIds' field as a comma-separated list of dataset ids", function() {
+            this.model.datasets = new chorus.collections.DatasetSet([
+                fixtures.datasetSandboxTable({id: 'a'}),
+                fixtures.datasetSandboxTable({id: 'b'}),
+                fixtures.datasetSandboxTable({id: 'c'})
+            ]);
+
+            this.model.save();
+
+            expect(this.model.get("datasetIds")).toBe("a,b,c");
+        });
+    });
+
     describe("file upload handling", function() {
         beforeEach(function() {
             this.submitObject1 = createSubmitSpy();

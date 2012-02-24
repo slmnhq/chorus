@@ -12,9 +12,11 @@
                     <a>{{t "notes.new_dialog.desktop_file"}}</a>
                     <input type="file" name="fileToUpload[]" multiple="" />
                 </span>
-                {{#if allowWorkfileAttachments}}
+                {{#if allowWorkspaceAttachments}}
                 <span class="separator">|</span>
                 <a href="#" class="add_workfile">{{t "notes.new_dialog.work_file"}}</a>
+                <span class="separator">|</span>
+                <a href="#" class="add_dataset">{{t "notes.new_dialog.dataset"}}</a>
                 {{/if}}
             </span>
         </div>

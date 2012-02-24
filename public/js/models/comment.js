@@ -24,11 +24,10 @@ chorus.models.Comment = chorus.models.Activity.extend({
 
     beforeSave:function () {
         if (this.workfiles) {
-            var workfileIds = this.workfiles.map(
-                function (workfile) {
-                    return workfile.get("id");
-                }).join(",");
-            this.set({ workfileIds:workfileIds }, { silent:true });
+            this.set({ workfileIds:this.workfiles.pluck('id').join(',') }, { silent:true });
+        }
+        if (this.datasets) {
+            this.set({ datasetIds:this.datasets.pluck('id').join(',') }, { silent:true });
         }
     },
 
