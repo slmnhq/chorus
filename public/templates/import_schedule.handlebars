@@ -1,0 +1,22 @@
+<select name="scheduleFrequency" class="frequency">
+    <option value="DAILY">{{t "import_now.frequency.daily"}}</option>
+    <option value="WEEKLY" selected="selected">{{t "import_now.frequency.weekly"}}</option>
+    <option value="MONTHLY">{{t "import_now.frequency.monthly"}}</option>
+</select>
+
+<select class="hours">
+{{#each hours}}
+    <option value="{{this}}">{{this}}</option>
+{{/each}}
+</select>
+
+<select class="ampm">
+    <option value="0">{{t "import_now.ampm.am"}}</option>
+    <option value="12">{{t "import_now.ampm.pm"}}</option>
+</select>
+
+<select class="minutes">
+{{#each minutes}}
+    <option value="{{this}}">{{this}}</option>
+{{/each}}
+</select>
