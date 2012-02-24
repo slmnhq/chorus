@@ -21,11 +21,26 @@ chorus.views.ImportSchedule = chorus.views.Base.extend({
     },
 
     additionalContext: function() {
+        var now = new Date();
+        var later = new Date(now);
+        later.setMonth(now.getMonth() + 3);
+
         return {
             hours: _.range(1, 13),
             minutes: _.map(_.range(60), function(num) {
                 return _.lpad(num, 2, "0");
-            })
-        }
+            }),
+            start: {
+                month: now.getMonth() + 1,
+                day: now.getDate(),
+                year: now.getFullYear()
+            },
+
+            end: {
+                 month: later.getMonth() + 1,
+                 day: later.getDate(),
+                 year: later.getFullYear()
+             }
+         }
     }
 });

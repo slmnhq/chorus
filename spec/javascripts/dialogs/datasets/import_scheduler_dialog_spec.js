@@ -19,6 +19,16 @@ describe("chorus.dialogs.ImportScheduler", function() {
         it("should the right submit button text", function() {
             expect(this.dialog.submitText).toMatchTranslation("import_now.begin_schedule");
         });
+
+        context("when the fetch completes", function() {
+            beforeEach(function() {
+                this.server.completeFetchAllFor(this.dialog.sandboxTables, [fixtures.datasetSandboxTable(), fixtures.datasetSandboxTable()]);
+            });
+
+            it("should have a checkbox for scheduling an import", function() {
+                expect(this.dialog.$(".schedule_import label")).toContainTranslation("import_now.schedule_import");
+            });
+        });
     });
 
     describe("import now!", function() {

@@ -40,6 +40,13 @@ describe("chorus.views.ImportSchedule", function() {
             expect(this.view.$(".date.start input[name='day']").attr("placeholder")).toContainTranslation("datepicker.placeholder.day");
             expect(this.view.$(".date.start input[name='year']").attr("placeholder")).toContainTranslation("datepicker.placeholder.year");
         });
+
+        it("should have the default date set to today", function() {
+            var now = new Date();
+            expect(this.view.$(".date.start input[name='month']").val()).toBe((now.getMonth() + 1).toString());
+            expect(this.view.$(".date.start input[name='day']").val()).toBe((now.getDate()).toString());
+            expect(this.view.$(".date.start input[name='year']").val()).toBe((now.getFullYear()).toString());
+        });
     });
 
     describe("the end date picker", function() {
@@ -51,6 +58,14 @@ describe("chorus.views.ImportSchedule", function() {
             expect(this.view.$(".date.end input[name='month']").attr("placeholder")).toContainTranslation("datepicker.placeholder.month");
             expect(this.view.$(".date.end input[name='day']").attr("placeholder")).toContainTranslation("datepicker.placeholder.day");
             expect(this.view.$(".date.end input[name='year']").attr("placeholder")).toContainTranslation("datepicker.placeholder.year");
+        });
+
+        it("should have the default date set to three months from today", function() {
+            var now = new Date();
+            now.setMonth(now.getMonth() + 3);
+            expect(this.view.$(".date.end input[name='month']").val()).toBe((now.getMonth() + 1).toString());
+            expect(this.view.$(".date.end input[name='day']").val()).toBe((now.getDate()).toString());
+            expect(this.view.$(".date.end input[name='year']").val()).toBe((now.getFullYear()).toString());
         });
     });
 });

@@ -14,10 +14,8 @@
             <div class="row limit">
                 <input type="checkbox" name="limit_num_rows" id="import_scheduler_limit_rows_new"/>
                 <label for="import_scheduler_limit_rows_new">{{t "import_now.limit_rows"}}</label>
-                <input class="row_limit" type="text" name="rowLimit" disabled="disabled"/>
+                <input class="row_limit" type="text" name="rowLimit" disabled="disabled" value="500"/>
             </div>
-
-            <div class="schedule"/>
         </div>
     </fieldset>
 </div>
@@ -43,10 +41,17 @@
             <div class="row limit">
                 <input type="checkbox" name="limit_num_rows" id="import_scheduler_limit_rows_existing"/>
                 <label for="import_scheduler_limit_rows_existing">{{t "import_now.limit_rows"}}</label>
-                <input class="row_limit" type="text" name="rowLimit" disabled="disabled"/>
+                <input class="row_limit" type="text" name="rowLimit" disabled="disabled" value="500"/>
             </div>
 
-            <div class="schedule"/>
+            <div class="row schedule_import">
+                <input type="checkbox" name="schedule" id="import_scheduler_schedule"/>
+                <label for="import_scheduler_schedule">{{t "import_now.schedule_import"}}</label>
+            </div>
+
+            <div class="schedule_widget">
+                <div class="schedule"/>
+            </div>
         </div>
     </fieldset>
 </div>
