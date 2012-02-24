@@ -172,16 +172,30 @@ window.Chorus = function() {
         var input = options.input,
             list = options.list,
             selector = options.selector;
-        input.unbind("textchange").bind("textchange", _.bind(filterSearchList, this, input, list, selector));
-    }
+        input.unbind("textchange").bind("textchange", _.bind(filterSearchList, this, options));
+    };
 
-    function filterSearchList(input, list, selector) {
+    function filterSearchList(options) {
+        var input = options.input,
+            list = options.list,
+            selector = options.selector,
+            onFilter = options.onFilter,
+            afterFilter = options.afterFilter;
+
         var compare = input.val().toLowerCase();
         list.find("li").each(function() {
             var elToMatch = selector ? $(this).find(selector) : $(this);
             var matches = (elToMatch.text().toLowerCase().indexOf(compare) >= 0);
-            $(this).toggleClass("hidden", !matches);
+
+            if (matches) {
+                $(this).removeClass("hidden");
+            } else {
+                if (onFilter && !$(this).hasClass("hidden")) onFilter($(this));
+                $(this).addClass("hidden");
+            }
         });
+
+        if (afterFilter) afterFilter();
     }
 
     self.hotKeyMeta = BrowserDetect.OS == "Mac" ? "ctrl" : "alt";

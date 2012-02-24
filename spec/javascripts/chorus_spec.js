@@ -316,6 +316,43 @@ describe("chorus global", function() {
 
             });
         });
+
+        describe("callbacks", function() {
+            var onFilterSpy, afterFilterSpy;
+
+            beforeEach(function() {
+                onFilterSpy = jasmine.createSpy("onFilter").andCallFake(function() {
+                    expect(afterFilterSpy.callCount).toBe(0);
+                });
+
+                afterFilterSpy = jasmine.createSpy("afterFilter").andCallFake(function() {
+                    expect(onFilterSpy.callCount).toBe(2);
+                });
+
+                chorus.search({
+                    input: this.input,
+                    list: this.list,
+                    onFilter: onFilterSpy,
+                    afterFilter: afterFilterSpy
+                });
+            });
+
+            describe("when text is entered, and items are filtered out", function() {
+                beforeEach(function() {
+                    this.input.val("nit").trigger("textchange");
+                });
+
+                it("calls the 'onFilter' callback on each item that was filtered out", function() {
+                    expect(onFilterSpy.callCount).toBe(2);
+                    expect(onFilterSpy.calls[0].args[0]).toBe(this.list.find("li").eq(0));
+                    expect(onFilterSpy.calls[1].args[0]).toBe(this.list.find("li").eq(1));
+                });
+
+                it("calls the 'afterFilter' callback once, after filtering the items", function() {
+                    expect(afterFilterSpy.callCount).toBe(1);
+                });
+            });
+        });
     })
 
     describe("#help", function() {
