@@ -26,8 +26,12 @@
         },
 
         initialize: function() {
-            if (this.collection && this.collection.attributes.workspaceId) {
+            if (this.collection && this.collection.attributes && this.collection.attributes.workspaceId) {
                 this.set({workspaceId:this.collection.attributes.workspaceId}, {silent:true});
+            }
+
+            if (!this.get("workspaceId") && this.get("workspace") && this.get("workspace").id) {
+                this.set({workspaceId: this.get("workspace").id})
             }
         },
 

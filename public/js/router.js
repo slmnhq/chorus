@@ -7,6 +7,7 @@
             ["", "Dashboard"],
             ["/", "Dashboard"],
             ["/login", "Login"],
+            ["/search/:query", "SearchIndex"],
             ["/users", "UserIndex"],
             ["/users/:id", "UserShow"],
             ["/users/:id/edit", "UserEdit"],

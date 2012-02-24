@@ -2131,6 +2131,263 @@ beforeEach(function() {
         notificationSet: function(models, overrides) {
             models = models || [this.notification(overrides), this.notification(overrides)];
             return new chorus.collections.NotificationSet(models, overrides);
+        },
+
+        searchResultJson: function(overrides) {
+            return _.extend({
+                    "workfile": {
+                        "docs": [{
+                            "id": "10020",
+                            "isDeleted": false,
+                            "lastUpdate": "Tue Feb 21 10:53:48 PST 2012",
+                            "fileType": "SQL",
+                            "name": "<em>test<\/em>.sql",
+                            "entityType": "workfile",
+                            "owner": {
+                                "id": "InitialUser",
+                                "lastName": "Admin",
+                                "firstName": "EDC"
+                            },
+                            "workspace": {
+                                "id": "10050",
+                                "name": "Lenny & Corina"
+                            },
+                            "comments": []
+                        },
+                        {
+                            "id": "10040",
+                            "isDeleted": false,
+                            "lastUpdate": "Thu Feb 23 12:28:56 PST 2012",
+                            "fileType": "SQL",
+                            "name": "<em>test<\/em>.sql",
+                            "entityType": "workfile",
+                            "owner": {
+                                "id": "InitialUser",
+                                "lastName": "Admin",
+                                "firstName": "EDC"
+                            },
+                            "workspace": {
+                                "id": "10039",
+                                "name": "mine"
+                            },
+                            "comments": []
+                        }],
+                        "numFound": 2
+                    },
+                    "workspace": {
+                        "docs": [],
+                        "numFound": 0
+                    },
+                    "dataset": {
+                        "docs": [{
+                            "schemaName": "public",
+                            "parentType": "gpdb_10000_data_types",
+                            "objectType": "BASE_TABLE",
+                            "id": "10000|data_types|public|BASE_TABLE|a",
+                            "databaseName": "data_types",
+                            "objectName": "a",
+                            "isDeleted": false,
+                            "description": "This is a <em>test<\/em> of table description.",
+                            "entityType": "databaseObject",
+                            "instance": {
+                                "id": "10000",
+                                "name": "gillette"
+                            },
+                            "workspaces": [],
+                            "comments": []
+                        },
+                        {
+                            "schemaName": "public",
+                            "parentType": "gpdb_10000_data_types",
+                            "objectType": "BASE_TABLE",
+                            "id": "10000|data_types|public|BASE_TABLE|bigint",
+                            "databaseName": "data_types",
+                            "objectName": "bigint",
+                            "isDeleted": false,
+                            "description": "(Total 10) This is a <em>test<\/em> of long table description 1. This is a <em>test<\/em> of long table description 2",
+                            "entityType": "databaseObject",
+                            "instance": {
+                                "id": "10000",
+                                "name": "gillette"
+                            },
+                            "workspaces": [],
+                            "comments": []
+                        },
+                        {
+                            "schemaName": "analytics",
+                            "parentType": "gpdb_10000_Analytics",
+                            "objectType": "BASE_TABLE",
+                            "id": "10000|Analytics|analytics|BASE_TABLE|test1",
+                            "databaseName": "Analytics",
+                            "objectName": "test1",
+                            "isDeleted": false,
+                            "entityType": "databaseObject",
+                            "instance": {
+                                "id": "10000",
+                                "name": "gillette"
+                            },
+                            "workspaces": [{
+                                "id": "10000",
+                                "name": "danny",
+                                "compositeId": "10000|Analytics|analytics|BASE_TABLE|test1"
+                            }],
+                            "comments": []
+                        },
+                        {
+                            "schemaName": "analytics",
+                            "parentType": "gpdb_10000_Analytics",
+                            "objectType": "BASE_TABLE",
+                            "id": "10000|Analytics|analytics|BASE_TABLE|test2",
+                            "databaseName": "Analytics",
+                            "objectName": "test2",
+                            "isDeleted": false,
+                            "entityType": "databaseObject",
+                            "instance": {
+                                "id": "10000",
+                                "name": "gillette"
+                            },
+                            "workspaces": [{
+                                "id": "10000",
+                                "name": "danny",
+                                "compositeId": "10000|Analytics|analytics|BASE_TABLE|test2"
+                            }],
+                            "comments": []
+                        },
+                        {
+                            "schemaName": "analytics",
+                            "parentType": "gpdb_10000_Analytics",
+                            "objectType": "BASE_TABLE",
+                            "id": "10000|Analytics|analytics|BASE_TABLE|test3",
+                            "databaseName": "Analytics",
+                            "objectName": "test3",
+                            "isDeleted": false,
+                            "entityType": "databaseObject",
+                            "instance": {
+                                "id": "10000",
+                                "name": "gillette"
+                            },
+                            "workspaces": [{
+                                "id": "10000",
+                                "name": "danny",
+                                "compositeId": "10000|Analytics|analytics|BASE_TABLE|test3"
+                            }],
+                            "comments": []
+                        },
+                        {
+                            "schemaName": "analytics",
+                            "parentType": "gpdb_10000_Analytics",
+                            "objectType": "BASE_TABLE",
+                            "id": "10000|Analytics|analytics|BASE_TABLE|test4",
+                            "databaseName": "Analytics",
+                            "objectName": "test4",
+                            "isDeleted": false,
+                            "entityType": "databaseObject",
+                            "instance": {
+                                "id": "10000",
+                                "name": "gillette"
+                            },
+                            "workspaces": [{
+                                "id": "10000",
+                                "name": "danny",
+                                "compositeId": "10000|Analytics|analytics|BASE_TABLE|test4"
+                            }],
+                            "comments": []
+                        },
+                        {
+                            "schemaName": "analytics",
+                            "parentType": "gpdb_10000_Analytics",
+                            "objectType": "BASE_TABLE",
+                            "id": "10000|Analytics|analytics|BASE_TABLE|test5",
+                            "databaseName": "Analytics",
+                            "objectName": "test5",
+                            "isDeleted": false,
+                            "entityType": "databaseObject",
+                            "instance": {
+                                "id": "10000",
+                                "name": "gillette"
+                            },
+                            "workspaces": [{
+                                "id": "10000",
+                                "name": "danny",
+                                "compositeId": "10000|Analytics|analytics|BASE_TABLE|test5"
+                            }],
+                            "comments": []
+                        },
+                        {
+                            "schemaName": "analytics",
+                            "parentType": "gpdb_10000_Analytics",
+                            "objectType": "BASE_TABLE",
+                            "id": "10000|Analytics|analytics|BASE_TABLE|test6",
+                            "databaseName": "Analytics",
+                            "objectName": "test6",
+                            "isDeleted": false,
+                            "entityType": "databaseObject",
+                            "instance": {
+                                "id": "10000",
+                                "name": "gillette"
+                            },
+                            "workspaces": [{
+                                "id": "10000",
+                                "name": "danny",
+                                "compositeId": "10000|Analytics|analytics|BASE_TABLE|test6"
+                            }],
+                            "comments": []
+                        },
+                        {
+                            "schemaName": "analytics",
+                            "parentType": "gpdb_10000_Analytics",
+                            "objectType": "BASE_TABLE",
+                            "id": "10000|Analytics|analytics|BASE_TABLE|test",
+                            "databaseName": "Analytics",
+                            "objectName": "test",
+                            "isDeleted": false,
+                            "entityType": "databaseObject",
+                            "instance": {
+                                "id": "10000",
+                                "name": "gillette"
+                            },
+                            "workspaces": [{
+                                "id": "10000",
+                                "name": "danny",
+                                "compositeId": "10000|Analytics|analytics|BASE_TABLE|test"
+                            }],
+                            "comments": []
+                        },
+                        {
+                            "schemaName": "analytics",
+                            "parentType": "gpdb_10000_Analytics",
+                            "objectType": "BASE_TABLE",
+                            "id": "10000|Analytics|analytics|BASE_TABLE|test7",
+                            "databaseName": "Analytics",
+                            "objectName": "test7",
+                            "isDeleted": false,
+                            "entityType": "databaseObject",
+                            "instance": {
+                                "id": "10000",
+                                "name": "gillette"
+                            },
+                            "workspaces": [{
+                                "id": "10000",
+                                "name": "danny",
+                                "compositeId": "10000|Analytics|analytics|BASE_TABLE|test7"
+                            }],
+                            "comments": []
+                        }],
+                        "numFound": 39
+                    },
+                    "instance": {
+                        "docs": [],
+                        "numFound": 0
+                    },
+                    "user": {
+                        "docs": [],
+                        "numFound": 0
+                    }
+            }, overrides)
+        },
+
+        searchResult : function(overrides) {
+            return new chorus.models.SearchResult(this.searchResultJson(overrides))
         }
     })
     ;

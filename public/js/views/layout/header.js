@@ -3,7 +3,8 @@ chorus.views.Header = chorus.views.Base.extend({
     events:{
         "click .username a":"togglePopupUsername",
         "click .account a":"togglePopupAccount",
-        "click a.notifications":"togglePopupNotifications"
+        "click a.notifications":"togglePopupNotifications",
+        "submit .search form": "startSearch"
     },
 
     subviews: {
@@ -116,5 +117,10 @@ chorus.views.Header = chorus.views.Base.extend({
     dismissPopups:function () {
         this.releaseClicks();
         this.$(".menu").addClass("hidden");
+    },
+
+    startSearch: function(e) {
+        e.preventDefault();
+        chorus.router.navigate("/search/" + encodeURIComponent(encodeURIComponent(this.$(".search input:text").val())), true);
     }
 });
