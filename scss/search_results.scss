@@ -1,0 +1,24 @@
+@import "_common.scss";
+
+.search_result_list {
+    .details {
+        @include list-section-heading;
+        padding: 5px 10px;
+        @include background-image(linear-gradient(#ebeef2, #d7dfe9));
+        border-top: 1px solid #cbcbcb;
+        border-bottom: 1px solid #a4a4a4;
+        height: 20px;
+        line-height: 20px;
+        vertical-align: middle;
+        
+        .right {
+            float: right;
+            font-size: 12px;
+            
+            a {
+                font-size: 12px;
+                padding-left: 15px;
+            }
+        }
+    }
+}

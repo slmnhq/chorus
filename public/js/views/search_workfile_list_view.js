@@ -1,5 +1,6 @@
 chorus.views.SearchWorkfileList = chorus.views.Base.extend({
     className: "search_workfile_list",
+    additionalClass: "list",
 
     makeModel: function() {
         this.collection = new chorus.collections.WorkfileSet(this.options.workfileResults.docs);
