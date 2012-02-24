@@ -15,7 +15,7 @@ chorus.views.SearchWorkfileList = chorus.views.Base.extend({
     },
 
     collectionModelContext: function(model){
-        var workspace = new chorus.models.Workspace(model.get("workspace"));
+        var workspace = model.workspace()
 
         return {
             showUrl: model.showUrl(),

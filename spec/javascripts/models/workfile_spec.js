@@ -14,13 +14,30 @@ describe("chorus.models.Workfile", function() {
     });
 
     describe("#workspace", function() {
-        it("returns a workspace with the right id", function() {
+        it("returns a workspace", function() {
             expect(this.model.workspace()).toBeA(chorus.models.Workspace);
-            expect(this.model.workspace().get("id")).toBe("10000");
         });
 
         it("memoizes", function() {
             expect(this.model.workspace()).toBe(this.model.workspace());
+        });
+
+        context("when the workfile only has a workspaceId", function() {
+            it("returns a workspace with the right id", function() {
+                expect(this.model.workspace().get("id")).toBe("10000");
+            });
+        });
+
+        context("when the workfile has a nested workspace hash", function() {
+            beforeEach(function() {
+                this.model.unset("workspaceId");
+                this.model.set({ workspace: { id: "12", name: "my_workspace" } });
+            });
+
+            it("returns a workspace with that data", function() {
+                expect(this.model.workspace().get("id")).toBe("12");
+                expect(this.model.workspace().get("name")).toBe("my_workspace");
+            });
         });
     });
 

@@ -36,7 +36,8 @@
         },
 
         workspace: function() {
-            this._workspace = (this._workspace || new chorus.models.Workspace({ id:this.get("workspaceId")}))
+            var workspaceAttrs = this.get("workspace") || { id: this.get("workspaceId") };
+            this._workspace = (this._workspace || new chorus.models.Workspace(workspaceAttrs));
             return this._workspace;
         },
 
