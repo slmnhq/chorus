@@ -197,8 +197,8 @@ describe("chorus.dialogs.InstanceNew", function() {
                             expect(this.dialog.closeModal).toHaveBeenCalled();
                         });
 
-                        it("publishes the 'instance:added' page event", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("instance:added");
+                        it("publishes the 'instance:added' page event with the new instance's id", function() {
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("instance:added", "123");
                         });
                     });
 
