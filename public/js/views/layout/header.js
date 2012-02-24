@@ -12,7 +12,8 @@ chorus.views.Header = chorus.views.Base.extend({
     },
 
     setup:function () {
-        $(document).bind("chorus:menu:popup", _.bind(this.popupEventHandler, this))
+        this.popupEventName = "chorus:menu:popup." + this.cid;
+        $(document).bind(this.popupEventName, _.bind(this.popupEventHandler, this))
         this.session = chorus.session;
         this.notifications = new chorus.collections.NotificationSet();
         this.requiredResources.add([this.session, this.notifications]);
@@ -30,6 +31,11 @@ chorus.views.Header = chorus.views.Base.extend({
         this.notifications.fetchAll();
 
         chorus.PageEvents.subscribe("notification:deleted", this.refreshNotifications, this);
+    },
+
+    beforeNavigateAway: function() {
+        $(document).unbind(this.popupEventName);
+        this._super("beforeNavigateAway");
     },
 
     additionalContext:function (ctx) {

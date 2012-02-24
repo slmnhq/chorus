@@ -12,6 +12,7 @@ describe("chorus.views.Header", function() {
 
     describe("initialization", function() {
         beforeEach(function() {
+            chorus._navigated();
             this.view = new chorus.views.Header();
         })
 
@@ -25,6 +26,21 @@ describe("chorus.views.Header", function() {
 
         it("fetches the notifications", function() {
             expect(this.server.lastFetchAllFor(this.view.notifications)).toBeDefined();
+        });
+
+        it("binds to the document for menu popup", function() {
+            expect($(document).data("events")["chorus:menu:popup"]).toBeDefined();
+        })
+
+        describe("navigating away", function() {
+            beforeEach(function() {
+                this.oldChorusMenuPopupCount = $(document).data("events")["chorus:menu:popup"].length;
+                chorus._navigated();
+            });
+
+            it("should unbind from document", function() {
+                expect(($(document).data("events")["chorus:menu:popup"] || []).length).toBe(this.oldChorusMenuPopupCount - 1);
+            });
         });
     })
 
