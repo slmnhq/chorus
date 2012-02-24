@@ -1,4 +1,4 @@
-describe("WorkfilesAttach", function() {
+describe("chorus.dialogs.WorkfilesAttach", function() {
     beforeEach(function() {
         spyOn(chorus.collections.WorkfileSet.prototype, 'fetchAll');
         this.workfiles = fixtures.workfileSet();
@@ -62,8 +62,8 @@ describe("WorkfilesAttach", function() {
     describe("selecting files", function() {
         beforeEach(function() {
             this.dialog.render();
-            this.dialog.$("li a").eq(0).click();
-            this.dialog.$("li a").eq(1).click();
+            this.dialog.$("li").eq(0).click();
+            this.dialog.$("li").eq(1).click();
         });
 
         it("add class selected", function() {
@@ -77,7 +77,7 @@ describe("WorkfilesAttach", function() {
 
         context("clicking a previously selected workfile", function() {
             beforeEach(function() {
-                this.dialog.$("li a").eq(0).click();
+                this.dialog.$("li").eq(0).click();
             });
 
             it("removes class selected when user click previously selected workfile", function() {
@@ -87,7 +87,7 @@ describe("WorkfilesAttach", function() {
             it("disable the submit button if it was the last selected item", function() {
                 expect(this.dialog.$('li.selected').length).toBeGreaterThan(0);
                 expect(this.dialog.$('button.submit')).not.toBeDisabled();
-                this.dialog.$("li.selected a").click();
+                this.dialog.$("li.selected").click();
                 expect(this.dialog.$('li.selected').length).toBe(0);
                 expect(this.dialog.$('button.submit')).toBeDisabled();
             });
@@ -99,7 +99,7 @@ describe("WorkfilesAttach", function() {
         beforeEach(function() {
             this.dialog.collection = this.workfiles;
             this.dialog.render();
-            this.dialog.$("li a").eq(1).click();
+            this.dialog.$("li").eq(1).click();
         });
 
         it("populates the selectedFiles attribute", function() {

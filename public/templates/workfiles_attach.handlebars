@@ -6,10 +6,8 @@
     <ul>
     {{#each models}}
         <li title="{{fileName}}" data-id="{{id}}">
-            <a href="#">
-                <img src="{{fileIconUrl fileType "medium"}}"/>
-                <span class="name">{{fileName}}</span>
-            </a>
+            <img src="{{fileIconUrl fileType "medium"}}"/>
+            <span class="name">{{fileName}}</span>
         </li>
     {{/each}}
     </ul>

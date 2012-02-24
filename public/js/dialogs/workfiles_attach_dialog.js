@@ -3,7 +3,7 @@ chorus.dialogs.WorkfilesAttach = chorus.dialogs.Base.extend({
     title:t("workfiles.attach"),
 
     events:{
-        "click li a":"toggleSelection",
+        "click li":"toggleSelection",
         "click .submit":"submit"
     },
 
