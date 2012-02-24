@@ -66,12 +66,26 @@ describe("WorkfileListSidebar", function() {
                 expect(downloadLink.attr("href")).toBe(this.workfile.downloadUrl());
             })
 
-            it("displays a link add a note", function() {
-                var addLink = this.view.$(".actions a.dialog[data-dialog=NotesNew]");
-                expect(addLink).toExist();
-                expect(addLink).toHaveAttr("data-entity-type", "workfile");
-                expect(addLink).toHaveAttr("data-entity-id", this.workfile.get("id"));
-            });
+            context("when it is in a regular workfile list", function() {
+                it("displays a link 'add a note'", function() {
+                    var addLink = this.view.$(".actions a.dialog[data-dialog=NotesNew]");
+                    expect(addLink).toExist();
+                    expect(addLink).toHaveAttr("data-entity-type", "workfile");
+                    expect(addLink).toHaveAttr("data-entity-id", this.workfile.get("id"));
+                });
+            })
+
+            context("when it is in a search result workfile list", function() {
+                beforeEach(function() {
+                    this.view.options.hideAddNoteLink = true 
+                    this.view.render()
+                });
+
+                it("does not display a link 'add a note'", function() {
+                    var addLink = this.view.$(".actions a.dialog[data-dialog=NotesNew]");
+                    expect(addLink).not.toExist();
+                });
+            })
 
             it("displays the activity list", function() {
                 expect(this.view.$(".activity_list")).toExist();
