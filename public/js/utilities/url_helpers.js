@@ -25,7 +25,17 @@
         "rtf":"rtf",
         "txt":"txt",
         "sql":"sql",
-        "image":"plain"
+        "image":"img",
+        "yml":"yml",
+        "m":"m",
+        "pl":"pl",
+        "py":"py",
+        "sas":"sas",
+        "tsv":"tsv",
+        "gif":"img",
+        "png":"img",
+        "jpg":"img",
+        "jpeg":"img"
     }
 
     chorus.urlHelpers.fileIconUrl = function fileIconUrl(key, size) {
