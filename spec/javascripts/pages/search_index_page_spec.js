@@ -50,6 +50,10 @@ describe("chorus.pages.SearchIndexPage", function() {
                 it("shows that workfile in the sidebar", function() {
                     expect(this.page.sidebar.$(".fileName")).toHaveText("test.sql");
                 });
+
+                it("does not show the 'add a note' link in the sidebar", function() {
+                    expect(this.page.sidebar.$("a[data-dialog='NotesNew']")).not.toExist()
+                })
             });
         });
     });

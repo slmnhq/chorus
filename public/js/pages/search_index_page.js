@@ -22,9 +22,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
             content: new chorus.views.SearchResultList({ model: this.model })
         });
 
-        var workspace = new chorus.models.Workspace();
-        workspace.loaded = true;
-        this.sidebar = new chorus.views.WorkfileListSidebar({ model: workspace });
+        this.sidebar = new chorus.views.WorkfileListSidebar({ hideAddNoteLink: true });
 
         this.mainContent.content.bind("workfile:selected", function(workfile) {
             this.sidebar.setWorkfile(workfile);
