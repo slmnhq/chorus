@@ -18,18 +18,6 @@ chorus.dialogs.Comment = chorus.dialogs.Base.extend({
         this.entityTitle = this.options.launchElement.data("entity-title")
     },
 
-    postRender:function () {
-        this.$("textarea").limitMaxlength();
-        var self = this;
-        _.defer(function () {
-            self.$("textarea").elastic();
-
-            // Workaround elastic's blur making the form not submit (sometimes!!!)
-            //
-            self.$("textarea").unbind("blur");
-        });
-    },
-
     additionalContext:function () {
         return { entityTitle:this.entityTitle }
     },

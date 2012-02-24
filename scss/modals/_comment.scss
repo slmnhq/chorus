@@ -1,3 +1,7 @@
 .dialog.comment {
     width: 440px;
+
+    textarea {
+        min-height: 75px;
+    }
 }

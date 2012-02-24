@@ -1,6 +1,5 @@
 describe("CommentDialog", function() {
     beforeEach(function() {
-        this.clock = sinon.useFakeTimers();
         this.launchElement = $("<a data-entity-type='note' data-entity-id='1' data-entity-title='note'></a>")
         this.dialog = new chorus.dialogs.Comment({
             launchElement : this.launchElement,
@@ -39,19 +38,6 @@ describe("CommentDialog", function() {
         it("has the right placeholder", function() {
             expect(this.dialog.$("textarea[name=body]").attr("placeholder")).toBe(t("comments.placeholder", {commentSubject: "note"}));
         });
-
-        it("calls elastic on the textarea after the view is attached to the dom", function() {
-            spyOn($.fn, 'elastic');
-            this.dialog.render();
-
-            expect($.fn.elastic).not.toHaveBeenCalled();
-            this.clock.tick(500);
-            expect($.fn.elastic).toHaveBeenCalledOnSelector("textarea");
-        })
-
-        it("limits the length of the text area", function() {
-            expect($.fn.limitMaxlength).toHaveBeenCalled();
-        })
     });
 
     describe("submit", function() {
