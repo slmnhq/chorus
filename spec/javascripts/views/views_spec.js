@@ -415,7 +415,7 @@ describe("chorus.views.Base", function () {
                 beforeNavigateAway:navSpy
             });
             this.view = new klass();
-            chorus.router.trigger("leaving");
+            chorus._navigated();
         });
 
         it("calls the 'beforeNavigateAway' hook", function () {
@@ -424,13 +424,25 @@ describe("chorus.views.Base", function () {
 
         describe("when another navigation occurs (after this view is long gone)", function () {
             beforeEach(function () {
-                chorus.router.trigger("leaving");
+                chorus._navigated();
             });
 
             it("does not call the hook again", function () {
                 expect(this.view.beforeNavigateAway.callCount).toBe(1);
             });
         });
+
+        describe("the default implementation", function() {
+            beforeEach(function() {
+                spyOn($.fn, "remove");
+                this.view = new chorus.views.Base();
+                this.view.beforeNavigateAway();
+            });
+
+            it("calls $.fn.remove on its element", function() {
+                expect($.fn.remove.mostRecentCall.object.get(0)).toEqual(this.view.el);
+            })
+        })
     });
 
     describe("#showErrors", function () {

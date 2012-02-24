@@ -1,5 +1,6 @@
 describe("chorus.views.TextWorkfileContentView", function() {
     beforeEach(function() {
+        chorus._navigated();
         this.textfile = fixtures.textWorkfile();
         this.textfile.content("select * from foos where bar_id = 1;")
         this.view = new chorus.views.TextWorkfileContent({model: this.textfile});
@@ -272,7 +273,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
             context("when the file has been changed", function() {
                 beforeEach(function() {
                     this.view.editor.setValue("Foo, Bar, Baz, Quux");
-                    chorus.router.trigger("leaving");
+                    chorus._navigated();
                 });
 
                 it("saves a draft", function() {
@@ -282,7 +283,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
             context("when the file has not been changed", function() {
                 beforeEach(function() {
-                    chorus.router.trigger("leaving");
+                    chorus._navigated();
                 });
 
                 it("does not save the draft", function() {

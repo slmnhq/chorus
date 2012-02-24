@@ -3,8 +3,8 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
         this.preInitialize.apply(this, arguments);
 
         this.bindings = new chorus.BindingGroup(this);
-        chorus.router.bindOnce("leaving", this.beforeNavigateAway, this);
 
+        chorus.afterNavigate(_.bind(this.beforeNavigateAway, this));
         this.setup.apply(this, arguments);
         this.bindCallbacks()
         this.bindHotkeys()
@@ -24,6 +24,7 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
 
     beforeNavigateAway:function () {
         this.bindings.removeAll();
+        $(this.el).remove();
     },
 
     bindHotkeys:function () {
