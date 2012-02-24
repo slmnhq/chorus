@@ -171,7 +171,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                         });
 
                         it("should execute database preview model", function() {
-                            expect(this.view.resultsConsole.execute).toHaveBeenCalledWith(this.view.dataset.preview(this.view.options.inEditChorusView),true);
+                            expect(this.view.resultsConsole.execute).toHaveBeenCalledWith(this.view.dataset.preview(this.view.options.inEditChorusView), true);
                         });
                     });
                 })
@@ -184,339 +184,321 @@ describe("chorus.views.DatasetContentDetails", function() {
                 expect(this.view.$(".definition")).toExist();
             })
 
-            it("renders the 'Transform' button", function() {
-                expect(this.view.$("button.transform")).toExist();
-                expect(this.view.$("button.transform").text()).toMatchTranslation("dataset.content_details.transform");
+            it("renders the 'Visualize' button", function() {
+                expect(this.view.$("button.visualize")).toExist();
+                expect(this.view.$("button.visualize").text()).toMatchTranslation("dataset.content_details.visualize");
             })
 
             it("doesn't render the chorus view info bar", function() {
                 expect(this.view.$(".chorus_view_info")).toHaveClass("hidden");
             });
 
-            describe("the 'Transform' button is clicked", function() {
-                it("should show the qtip menu", function() {
-                    this.view.$(".transform").click();
-                    expect(this.qtipMenu).toHaveVisibleQtip()
+            context("and the visualize button is clicked", function() {
+                beforeEach(function() {
+                    this.view.filterWizardView.resetFilters.reset();
+                    this.visualizeSpy = spyOnEvent(this.view, "transform:sidebar");
+                    this.view.$("button.visualize").click();
                 })
 
-                it("should render the qtip content", function() {
-                    this.view.$(".transform").click();
-                    expect(this.qtipMenu).toContainTranslation("dataset.content_details.visualize")
+                it("selects the first chart type", function() {
+                    expect(this.view.$('.create_chart .chart_icon:eq(0)')).toHaveClass('selected');
                 });
 
-                context("and the visualize dataset link is clicked", function() {
+                it("triggers the transform:sidebar event for the first chart type", function() {
+                    var chartType = this.view.$('.create_chart .chart_icon:eq(0)').data('chart_type');
+                    expect("transform:sidebar").toHaveBeenTriggeredOn(this.view, [chartType]);
+                });
+
+                it("hides the definition bar and shows the create_chart bar", function() {
+                    expect(this.view.$('.definition')).toHaveClass('hidden');
+                    expect(this.view.$('.create_chart')).not.toHaveClass('hidden');
+                });
+
+                it("hides column_count and shows info_bar", function() {
+                    expect(this.view.$('.column_count')).toHaveClass('hidden');
+                    expect(this.view.$('.info_bar')).not.toHaveClass('hidden');
+                });
+
+                it("shows the filters div", function() {
+                    expect(this.view.$(".filters")).not.toHaveClass("hidden");
+                });
+
+                it("disables datasetNumbers on the filter wizard", function() {
+                    expect(this.view.filterWizardView.options.showAliasedName).toBeFalsy();
+                });
+
+                it("resets filter wizard", function() {
+                    expect(this.view.filterWizardView.resetFilters).toHaveBeenCalled();
+                });
+
+                context("and cancel is clicked", function() {
                     beforeEach(function() {
-                        this.view.filterWizardView.resetFilters.reset();
-                        this.view.$(".transform").click();
-                        this.visualizeSpy = spyOnEvent(this.view, "transform:sidebar");
-                        this.qtipMenu.find('.visualize').click();
+                        spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
+                        this.view.$('.create_chart .cancel').click();
+                    });
+
+                    it("shows the definition bar and hides the create_chart bar", function() {
+                        expect(this.view.$('.definition')).not.toHaveClass('hidden');
+                        expect(this.view.$('.create_chart')).toHaveClass('hidden');
+                    });
+
+                    it("hides the filters div", function() {
+                        expect(this.view.$(".filters")).toHaveClass("hidden");
+                    });
+
+                    it("shows the column_count and hides info_bar", function() {
+                        expect(this.view.$('.column_count')).not.toHaveClass('hidden');
+                        expect(this.view.$('.info_bar')).toHaveClass('hidden');
+                    });
+
+                    it("triggers the cancel:sidebar event for the chart type", function() {
+                        var chartType = this.view.$('.create_chart .chart_icon:eq(0)').data('chart_type');
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('cancel:sidebar', chartType);
+                    })
+                })
+
+                context("and a chart type is clicked", function() {
+                    beforeEach(function() {
+                        this.visualizeSpy.reset();
+                        var chartIcon = this.view.$('.create_chart .chart_icon:eq(3)').click();
+                        this.firstChartType = chartIcon.data('chart_type');
+                    });
+
+                    it("selects that icon", function() {
+                        expect(this.view.$('.create_chart .chart_icon.' + this.firstChartType)).toHaveClass('selected');
+                    });
+
+                    it("triggers the transform:sidebar event for the chart type", function() {
+                        expect("transform:sidebar").toHaveBeenTriggeredOn(this.view, [this.firstChartType]);
                     })
 
-                    it("selects the first chart type", function() {
-                        expect(this.view.$('.create_chart .chart_icon:eq(0)')).toHaveClass('selected');
+                    it("shows the title for that chart type", function() {
+                        var chartType =
+                            expect(this.view.$('.title.' + this.firstChartType)).not.toHaveClass('hidden');
+                    })
+
+                    context("and a different chart type is hovered over", function() {
+                        beforeEach(function() {
+                            var chartIcon = this.view.$('.create_chart .chart_icon:eq(2)');
+                            this.hoverChartType = chartIcon.data('chart_type');
+                            chartIcon.mouseenter();
+                        });
+
+                        it("shows the title for the hovered icon and hides the selected title", function() {
+                            expect(this.view.$('.title.' + this.hoverChartType)).not.toHaveClass('hidden');
+                            expect(this.view.$('.title.' + this.firstChartType)).toHaveClass('hidden');
+                        });
+
+                        context("and we stop hovering", function() {
+                            beforeEach(function() {
+                                var chartIcon = this.view.$('.create_chart .chart_icon:eq(2)');
+                                chartIcon.mouseleave();
+                            });
+
+                            it("shows the selected title for the hovered icon and hides the hovered title", function() {
+                                expect(this.view.$('.title.' + this.hoverChartType)).toHaveClass('hidden');
+                                expect(this.view.$('.title.' + this.firstChartType)).not.toHaveClass('hidden');
+                            });
+                        })
+                    })
+
+                    context("and a different chart type is clicked", function() {
+                        beforeEach(function() {
+                            var chartIcon = this.view.$('.create_chart .chart_icon:eq(1)').click();
+                            this.secondChartType = chartIcon.data('chart_type');
+                        });
+
+                        it("selects that icon", function() {
+                            expect(this.view.$('.create_chart .chart_icon:eq(0)')).not.toHaveClass('selected');
+                            expect(this.view.$('.create_chart .chart_icon:eq(1)')).toHaveClass('selected');
+                        });
+
+                        it("shows that title and hides the other visible ones", function() {
+                            expect(this.view.$('.title.' + this.secondChartType)).not.toHaveClass('hidden');
+                            expect(this.view.$('.title.' + this.firstChartType)).toHaveClass('hidden');
+                        })
+                    })
+                })
+            })
+
+            context("and the derive a chorus view button is clicked", function() {
+                beforeEach(function() {
+                    this.view.filterWizardView.resetFilters.reset();
+                    this.chorusViewSpy = spyOnEvent(this.view, "transform:sidebar");
+                    this.view.$('button.derive').click();
+                })
+                it("swap the green definition bar to Create Bar", function() {
+                    expect(this.view.$(".create_chorus_view")).not.toHaveClass("hidden");
+                    expect(this.view.$(".create_chart")).toHaveClass("hidden");
+                    expect(this.view.$(".definition")).toHaveClass("hidden");
+                });
+
+                it("shows the chorus view info bar", function() {
+                    expect(this.view.$(".chorus_view_info")).not.toHaveClass("hidden");
+                    expect(this.view.$(".info_bar")).toHaveClass("hidden");
+                    expect(this.view.$(".column_count")).toHaveClass("hidden");
+                    expect(this.view.$(".chorus_view_info").text()).toContainTranslation("workspaces.select");
+                });
+
+                it("should select the chorus view icon", function() {
+                    expect(this.view.$('.create_chorus_view .chorusview')).toHaveClass("selected");
+                });
+
+                it("shows the filter section", function() {
+                    expect(this.view.$(".filters")).not.toHaveClass("hidden")
+                });
+
+                it("triggers transform:sidebar", function() {
+                    expect(this.chorusViewSpy).toHaveBeenCalled();
+                })
+
+                it("enables datasetNumbers on the filter wizard", function() {
+                    expect(this.view.filterWizardView.options.showAliasedName).toBeTruthy();
+                });
+
+                it("resets filter wizard", function() {
+                    expect(this.view.filterWizardView.resetFilters).toHaveBeenCalled();
+                });
+
+                describe("clicking 'Select All'", function() {
+                    beforeEach(function() {
+                        spyOn(chorus.PageEvents, "broadcast");
+                        this.view.$(".select_all").click();
+                    })
+
+                    it("should trigger the column:select_all event", function() {
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:select_all");
+                    });
+                });
+
+                describe("clicking 'Select None'", function() {
+                    beforeEach(function() {
+                        spyOn(chorus.PageEvents, "broadcast");
+                        this.view.$(".select_none").click();
+                    })
+
+                    it("should trigger the column:select_none event", function() {
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:select_none");
+                    });
+                });
+
+                describe("and the cancel link is clicked", function() {
+                    beforeEach(function() {
+                        spyOn(chorus.PageEvents, "broadcast");
+                        this.cancelSpy = spyOnEvent(this.view, "cancel:sidebar");
+                        this.view.$(".create_chorus_view .cancel").click();
                     });
 
-                    it("triggers the transform:sidebar event for the first chart type", function() {
-                        var chartType = this.view.$('.create_chart .chart_icon:eq(0)').data('chart_type');
-                        expect("transform:sidebar").toHaveBeenTriggeredOn(this.view, [chartType]);
+                    it("swap the Create Bar to green definition bar", function() {
+                        expect(this.view.$(".create_chorus_view")).toHaveClass("hidden");
+                        expect(this.view.$(".definition")).not.toHaveClass("hidden");
+                    })
+
+                    it("hides the filters section", function() {
+                        expect(this.view.$(".filters")).toHaveClass("hidden")
                     });
 
-                    it("hides the definition bar and shows the create_chart bar", function() {
-                        expect(this.view.$('.definition')).toHaveClass('hidden');
-                        expect(this.view.$('.create_chart')).not.toHaveClass('hidden');
+                    it("shows the chorus view info bar", function() {
+                        expect(this.view.$(".chorus_view_info")).toHaveClass("hidden");
+                        expect(this.view.$(".column_count")).not.toHaveClass("hidden");
                     });
 
-                    it("hides column_count and shows info_bar", function() {
-                        expect(this.view.$('.column_count')).toHaveClass('hidden');
-                        expect(this.view.$('.info_bar')).not.toHaveClass('hidden');
+                    it("triggers 'cancel:sidebar'", function() {
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('cancel:sidebar', 'chorus_view');
+                    })
+                });
+            })
+
+            context("when the dataset is not a chorus view", function() {
+                it("should not display the edit chorus view button", function() {
+                    expect(this.view.$("button.edit")).not.toExist();
+                })
+            })
+
+            context("when the dataset is a chorus view", function() {
+                beforeEach(function() {
+                    var dataset = fixtures.datasetChorusView();
+                    dataset.initialQuery = "select * from abc";
+                    this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection});
+                    this.server.completeFetchFor(dataset.statistics());
+                    this.view.render();
+                });
+
+                it("does not display the derive chorus view button", function() {
+                    expect(this.view.$("button.derive")).not.toExist();
+                })
+
+                context("and the edit button is clicked", function() {
+                    beforeEach(function() {
+                        this.chorusViewSpy = spyOnEvent(this.view, "transform:sidebar");
+                        spyOnEvent(this.view, "dataset:edit");
+                        this.view.$("button.edit").click();
                     });
 
-                    it("shows the filters div", function () {
-                        expect(this.view.$(".filters")).not.toHaveClass("hidden");
+                    it("swap the green definition bar to Edit chorus view bar", function() {
+                        expect(this.view.$(".edit_chorus_view")).not.toHaveClass("hidden");
+                        expect(this.view.$(".create_chorus_view")).toHaveClass("hidden");
+                        expect(this.view.$(".create_chart")).toHaveClass("hidden");
+                        expect(this.view.$(".definition")).toHaveClass("hidden");
+                        expect(this.view.$(".edit_chorus_view").find("button.save")).toExist();
                     });
 
-                    it("disables datasetNumbers on the filter wizard", function() {
-                        expect(this.view.filterWizardView.options.showAliasedName).toBeFalsy();
+                    it("shows the edit chorus view info bar", function() {
+                        expect(this.view.$(".edit_chorus_view_info")).not.toHaveClass("hidden");
+                        expect(this.view.$(".info_bar")).toHaveClass("hidden");
+                        expect(this.view.$(".column_count")).toHaveClass("hidden");
+                        expect(this.view.$(".edit_chorus_view_info .left").text()).toContainTranslation("dataset.content_details.edit_chorus_view.info");
+                        expect(this.view.$(".edit_chorus_view button.preview").text()).toContainTranslation("dataset.run_sql");
                     });
 
-                    it("resets filter wizard", function() {
-                        expect(this.view.filterWizardView.resetFilters).toHaveBeenCalled();
+                    it("triggers dataset:edit", function() {
+                        expect("dataset:edit").toHaveBeenTriggeredOn(this.view);
+                    });
+
+                    it("triggers transform:sidebar", function() {
+                        expect(this.chorusViewSpy).toHaveBeenCalledWith("edit_chorus_view");
                     });
 
                     context("and cancel is clicked", function() {
                         beforeEach(function() {
-                            spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
-                            this.view.$('.create_chart .cancel').click();
+                            spyOnEvent(this.view, "cancel:sidebar");
+                            spyOnEvent(this.view, "dataset:cancelEdit");
+                            this.view.$('.edit_chorus_view .cancel').click();
                         });
 
                         it("shows the definition bar and hides the create_chart bar", function() {
                             expect(this.view.$('.definition')).not.toHaveClass('hidden');
-                            expect(this.view.$('.create_chart')).toHaveClass('hidden');
+                            expect(this.view.$('.edit_chorus_view')).toHaveClass('hidden');
                         });
 
-                        it("hides the filters div", function () {
-                            expect(this.view.$(".filters")).toHaveClass("hidden");
-                        });
-
-                        it("shows the column_count and hides info_bar", function(){
+                        it("shows the column_count and hides info_bar", function() {
                             expect(this.view.$('.column_count')).not.toHaveClass('hidden');
-                            expect(this.view.$('.info_bar')).toHaveClass('hidden');
-                        });
-
-                        it("triggers the cancel:sidebar event for the chart type", function() {
-                            var chartType = this.view.$('.create_chart .chart_icon:eq(0)').data('chart_type');
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('cancel:sidebar', chartType);
-                        })
-                    })
-
-                    context("and a chart type is clicked", function() {
-                        beforeEach(function() {
-                            this.visualizeSpy.reset();
-                            var chartIcon = this.view.$('.create_chart .chart_icon:eq(3)').click();
-                            this.firstChartType = chartIcon.data('chart_type');
-                        });
-
-                        it("selects that icon", function() {
-                            expect(this.view.$('.create_chart .chart_icon.' + this.firstChartType)).toHaveClass('selected');
-                        });
-
-                        it("triggers the transform:sidebar event for the chart type", function() {
-                            expect("transform:sidebar").toHaveBeenTriggeredOn(this.view, [this.firstChartType]);
-                        })
-
-                        it("shows the title for that chart type", function() {
-                            var chartType =
-                            expect(this.view.$('.title.'+this.firstChartType)).not.toHaveClass('hidden');
-                        })
-
-                        context("and a different chart type is hovered over", function() {
-                            beforeEach(function() {
-                                var chartIcon = this.view.$('.create_chart .chart_icon:eq(2)');
-                                this.hoverChartType = chartIcon.data('chart_type');
-                                chartIcon.mouseenter();
-                            });
-
-                            it("shows the title for the hovered icon and hides the selected title", function() {
-                                expect(this.view.$('.title.'+this.hoverChartType)).not.toHaveClass('hidden');
-                                expect(this.view.$('.title.'+this.firstChartType)).toHaveClass('hidden');
-                            });
-
-                            context("and we stop hovering", function() {
-                                beforeEach(function() {
-                                    var chartIcon = this.view.$('.create_chart .chart_icon:eq(2)');
-                                    chartIcon.mouseleave();
-                                });
-
-                                it("shows the selected title for the hovered icon and hides the hovered title", function() {
-                                    expect(this.view.$('.title.'+this.hoverChartType)).toHaveClass('hidden');
-                                    expect(this.view.$('.title.'+this.firstChartType)).not.toHaveClass('hidden');
-                                });
-                            })
-                        })
-
-                        context("and a different chart type is clicked", function() {
-                            beforeEach(function() {
-                                var chartIcon = this.view.$('.create_chart .chart_icon:eq(1)').click();
-                                this.secondChartType = chartIcon.data('chart_type');
-                            });
-
-                            it("selects that icon", function() {
-                                expect(this.view.$('.create_chart .chart_icon:eq(0)')).not.toHaveClass('selected');
-                                expect(this.view.$('.create_chart .chart_icon:eq(1)')).toHaveClass('selected');
-                            });
-
-                            it("shows that title and hides the other visible ones", function() {
-                                expect(this.view.$('.title.'+this.secondChartType)).not.toHaveClass('hidden');
-                                expect(this.view.$('.title.'+this.firstChartType)).toHaveClass('hidden');
-                            })
-                        })
-                    })
-                })
-
-                context("and the derive a chorus view link is clicked", function() {
-                    beforeEach(function() {
-                        this.view.filterWizardView.resetFilters.reset();
-                        this.view.$(".transform").click();
-                        this.chorusViewSpy = spyOnEvent(this.view, "transform:sidebar");
-                        this.qtipMenu.find('.derive').click();
-                    })
-                    it("swap the green definition bar to Create Bar", function() {
-                        expect(this.view.$(".create_chorus_view")).not.toHaveClass("hidden");
-                        expect(this.view.$(".create_chart")).toHaveClass("hidden");
-                        expect(this.view.$(".definition")).toHaveClass("hidden");
-                    });
-
-                    it("shows the chorus view info bar", function() {
-                        expect(this.view.$(".chorus_view_info")).not.toHaveClass("hidden");
-                        expect(this.view.$(".info_bar")).toHaveClass("hidden");
-                        expect(this.view.$(".column_count")).toHaveClass("hidden");
-                        expect(this.view.$(".chorus_view_info").text()).toContainTranslation("workspaces.select");
-                    });
-
-                    it("should select the chorus view icon", function() {
-                       expect(this.view.$('.create_chorus_view .chorusview')).toHaveClass("selected");
-                    });
-
-                    it("shows the filter section", function() {
-                        expect(this.view.$(".filters")).not.toHaveClass("hidden")
-                    });
-
-                    it("triggers transform:sidebar", function() {
-                        expect(this.chorusViewSpy).toHaveBeenCalled();
-                    })
-
-                    it("enables datasetNumbers on the filter wizard", function() {
-                        expect(this.view.filterWizardView.options.showAliasedName).toBeTruthy();
-                    });
-
-                    it("resets filter wizard", function() {
-                        expect(this.view.filterWizardView.resetFilters).toHaveBeenCalled();
-                    });
-
-                    describe("clicking 'Select All'", function() {
-                        beforeEach(function() {
-                            spyOn(chorus.PageEvents, "broadcast");
-                            this.view.$(".select_all").click();
-                        })
-
-                        it("should trigger the column:select_all event", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:select_all");
-                        });
-                    });
-
-                    describe("clicking 'Select None'", function() {
-                        beforeEach(function() {
-                            spyOn(chorus.PageEvents, "broadcast");
-                            this.view.$(".select_none").click();
-                        })
-
-                        it("should trigger the column:select_none event", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:select_none");
-                        });
-                    });
-
-                    describe("and the cancel link is clicked", function() {
-                        beforeEach(function() {
-                            spyOn(chorus.PageEvents, "broadcast");
-                            this.cancelSpy = spyOnEvent(this.view, "cancel:sidebar");
-                            this.view.$(".create_chorus_view .cancel").click();
-                        });
-
-                        it("swap the Create Bar to green definition bar", function() {
-                            expect(this.view.$(".create_chorus_view")).toHaveClass("hidden");
-                            expect(this.view.$(".definition")).not.toHaveClass("hidden");
-                        })
-
-                        it("hides the filters section", function() {
-                            expect(this.view.$(".filters")).toHaveClass("hidden")
-                        });
-
-                        it("shows the chorus view info bar", function() {
-                            expect(this.view.$(".chorus_view_info")).toHaveClass("hidden");
-                            expect(this.view.$(".column_count")).not.toHaveClass("hidden");
+                            expect(this.view.$('.edit_chorus_view_info')).toHaveClass('hidden');
                         });
 
                         it("triggers 'cancel:sidebar'", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('cancel:sidebar', 'chorus_view');
+                            expect("cancel:sidebar").toHaveBeenTriggeredOn(this.view);
+                        });
+
+                        it("triggers dataset:cancelEdit", function() {
+                            expect("dataset:cancelEdit").toHaveBeenTriggeredOn(this.view);
+                        });
+
+                        it("resets the query to the initial query", function() {
+                            expect(this.view.dataset.get("query")).toBe("select * from abc")
                         })
-                    });
-                })
-
-                context("when the dataset is not a chorus view", function() {
-                    it("should not display the edit chorus view link", function() {
-                        this.view.$(".transform").click();
-                        expect(this.qtipMenu.find('.edit')).not.toExist();
-                    })
-                })
-
-                context("when the dataset is a chorus view", function() {
-                    beforeEach(function() {
-                        var dataset = fixtures.datasetChorusView();
-                        dataset.initialQuery = "select * from abc";
-                        this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection});
-                        this.server.completeFetchFor(dataset.statistics());
-                        this.view.render();
-                        this.view.$(".transform").click();
-                    });
-
-                    it("does not display the derive chorus view link", function() {
-                        this.view.$(".transform").click();
-                        expect(this.qtipMenu.find(".derive")).not.toExist();
                     })
 
-                    context("and the edit chorus view as a workfile is clicked", function() {
+                    context("and 'Save and Return' is clicked", function() {
                         beforeEach(function() {
-                            this.chorusViewSpy = spyOnEvent(this.view, "transform:sidebar");
-                            spyOnEvent(this.view, "dataset:edit");
-                            this.qtipMenu.find('.edit').click();
+                            spyOnEvent(this.view, "dataset:saveEdit");
+                            this.view.$(".save").click();
                         });
-
-                        it("swap the green definition bar to Edit chorus view bar", function() {
-                            expect(this.view.$(".edit_chorus_view")).not.toHaveClass("hidden");
-                            expect(this.view.$(".create_chorus_view")).toHaveClass("hidden");
-                            expect(this.view.$(".create_chart")).toHaveClass("hidden");
-                            expect(this.view.$(".definition")).toHaveClass("hidden");
-                            expect(this.view.$(".edit_chorus_view").find("button.save")).toExist();
+                        it("triggers dataset:saveEdit", function() {
+                            expect("dataset:saveEdit").toHaveBeenTriggeredOn(this.view)
                         });
-
-                        it("shows the edit chorus view info bar", function() {
-                            expect(this.view.$(".edit_chorus_view_info")).not.toHaveClass("hidden");
-                            expect(this.view.$(".info_bar")).toHaveClass("hidden");
-                            expect(this.view.$(".column_count")).toHaveClass("hidden");
-                            expect(this.view.$(".edit_chorus_view_info .left").text()).toContainTranslation("dataset.content_details.edit_chorus_view.info");
-                            expect(this.view.$(".edit_chorus_view button.preview").text()).toContainTranslation("dataset.run_sql");
-                        });
-
-                        it("triggers dataset:edit", function() {
-                            expect("dataset:edit").toHaveBeenTriggeredOn(this.view);
-                        });
-
-                        it("triggers transform:sidebar", function() {
-                            expect(this.chorusViewSpy).toHaveBeenCalledWith("edit_chorus_view");
-                        });
-
-                        context("and cancel is clicked", function() {
-                            beforeEach(function() {
-                                spyOnEvent(this.view, "cancel:sidebar");
-                                spyOnEvent(this.view, "dataset:cancelEdit");
-                                this.view.$('.edit_chorus_view .cancel').click();
-                            });
-
-                            it("shows the definition bar and hides the create_chart bar", function() {
-                                expect(this.view.$('.definition')).not.toHaveClass('hidden');
-                                expect(this.view.$('.edit_chorus_view')).toHaveClass('hidden');
-                            });
-
-                            it("shows the column_count and hides info_bar", function() {
-                                expect(this.view.$('.column_count')).not.toHaveClass('hidden');
-                                expect(this.view.$('.edit_chorus_view_info')).toHaveClass('hidden');
-                            });
-
-                            it("triggers 'cancel:sidebar'", function() {
-                                expect("cancel:sidebar").toHaveBeenTriggeredOn(this.view);
-                            });
-
-                            it("triggers dataset:cancelEdit", function() {
-                                expect("dataset:cancelEdit").toHaveBeenTriggeredOn(this.view);
-                            });
-
-                            it("resets the query to the initial query", function(){
-                                expect(this.view.dataset.get("query")).toBe("select * from abc")
-                            })
-                        })
-
-                        context("and 'Save and Return' is clicked", function() {
-                            beforeEach(function() {
-                                spyOnEvent(this.view, "dataset:saveEdit");
-                                this.view.$(".save").click();
-                            });
-                            it("triggers dataset:saveEdit", function() {
-                                expect("dataset:saveEdit").toHaveBeenTriggeredOn(this.view)
-                            });
-                        })
-                    });
-                })
-
+                    })
+                });
             })
         })
 

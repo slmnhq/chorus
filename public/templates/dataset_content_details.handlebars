@@ -1,18 +1,12 @@
 <div class="definition">
     <span class="sql">{{{sql_definition definition}}}</span>
-    <button class="transform">{{t "dataset.content_details.transform"}}<span class="down_arrow"/></button>
-    <div class="transform_options hidden">
-        <ul class="transform_menu">
-            <li><a href="#" class="visualize">{{t "dataset.content_details.visualize"}}</a></li>
-            {{#unless isChorusView}}
-                <li><a href="#" class="derive">{{t "dataset.content_details.derive"}}</a></li>
-            {{/unless}}
-            {{#if isChorusView}}
-                <li><a href="#" class="edit">{{t "dataset.content_details.edit"}}</a></li>
-            {{/if}}
-        </ul>
-    </div>
-    
+    <button class="visualize">{{t "dataset.content_details.visualize"}}</button>
+    {{#unless isChorusView}}
+        <button class="derive">{{t "dataset.content_details.derive"}}</button>
+    {{/unless}}
+    {{#if isChorusView}}
+        <button class="edit">{{t "dataset.content_details.edit"}}</button>
+    {{/if}}
 </div>
 <div class="create_chart hidden">
     <a href="#" class="cancel">{{t "actions.cancel"}}</a>

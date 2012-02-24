@@ -19,7 +19,10 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         "click a.select_all": "triggerSelectAll",
         "click a.select_none": "triggerSelectNone",
         "mouseenter .chart_icon": "showTitle",
-        "mouseleave .chart_icon": "showSelectedTitle"
+        "mouseleave .chart_icon": "showSelectedTitle",
+        "click button.visualize": "startVisualizationWizard",
+        "click button.derive": "startCreateChorusViewWizard",
+        "click button.edit": "startEditChorusViewWizard"
     },
 
     setup: function() {
@@ -59,22 +62,9 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     },
 
     postRender: function() {
-        var self = this;
-
-        chorus.menu(this.$('.transform'), {
-            content: this.$(".transform_options").html(),
-            orientation: "left",
-            contentEvents: {
-                '.visualize': _.bind(this.startVisualizationWizard, this),
-                '.derive': _.bind(this.startCreateChorusViewWizard, this),
-                '.edit': _.bind(this.startEditChorusViewWizard, this)
-            }
-        });
-
         if (this.options.inEditChorusView) {
             this.showEditChorusViewWizard();
         }
-
     },
 
     triggerSelectAll: function(e) {
