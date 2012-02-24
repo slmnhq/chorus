@@ -188,6 +188,34 @@ describe("chorus global", function() {
         });
     });
 
+    describe("resizing the window", function() {
+        beforeEach(function () {
+            spyOn(_, "debounce").andCallFake(function(func) {
+                return func;
+            });
+            this.chorus.bindGlobalCallbacks();
+
+            this.page1 = new chorus.pages.Base();
+            this.page2 = new chorus.pages.Base();
+
+            this.chorus.page = new chorus.pages.Base();
+
+            spyOnEvent(this.page1, "resized")
+            spyOnEvent(this.page2, "resized")
+            spyOnEvent(this.chorus.page, "resized")
+            $(window).resize();
+        });
+
+        it("should not trigger resized on the anonymous pages, because those pages aren't the active page", function() {
+            expect("resized").not.toHaveBeenTriggeredOn(this.page1);
+            expect("resized").not.toHaveBeenTriggeredOn(this.page2);
+        })
+
+        it("should trigger resized on chorus.page", function() {
+            expect("resized").toHaveBeenTriggeredOn(this.chorus.page);
+        })
+    })
+
     describe("#search", function() {
         beforeEach(function() {
             this.input = $("<input></input>");

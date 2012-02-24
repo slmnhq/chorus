@@ -19,11 +19,6 @@ describe("chorus.pages.Base", function() {
         it("binds to change on chorus.user", function() {
             expect(chorus.user.bind).toHaveBeenCalledWith("change", this.view.render, this.view);
         })
-
-        it("binds to resize on the window", function() {
-            expect($.fn.bind.mostRecentCall.object[0]).toEqual(window);
-            expect($.fn.bind).toHaveBeenCalledWith("resize", jasmine.any(Function));
-        })
     })
 
     describe("#render", function() {
@@ -229,28 +224,6 @@ describe("chorus.pages.Base", function() {
 
             expect(this.fooAlertSpy.pageModel).toBe(this.view.model);
         });
-    })
-
-    describe("resize handling", function() {
-        context("when a window resize occurs", function() {
-            beforeEach(function () {
-                this.realSetTimeout = window.setTimeout;
-                window.setTimeout = function(fn, delay) {
-                    fn.call();
-                }
-                this.view = new chorus.pages.Base();
-                spyOnEvent(this.view, "resized")
-                $(window).resize();
-            });
-
-            afterEach(function() {
-                window.setTimeout = this.realSetTimeout;
-            })
-
-            it("triggers resized on the page", function() {
-                expect("resized").toHaveBeenTriggeredOn(this.view);
-            })
-        })
     })
 
     describe("help", function() {

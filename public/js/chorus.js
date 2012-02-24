@@ -25,10 +25,17 @@ window.Chorus = function() {
 
         //bind global state events here
         self.session.bind("needsLogin", self.requireLogin);
+        self.bindGlobalCallbacks();
         self.bindModalLaunchingClicks();
 
         self.startHistory();
     };
+
+    self.bindGlobalCallbacks = function() {
+        $(window).resize(_.debounce(function(){
+            self.page && self.page.trigger && self.page.trigger("resized");
+        }, 100));
+    }
 
     self.bindModalLaunchingClicks = function() {
         var firstArg = arguments[0];
