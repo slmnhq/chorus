@@ -66,9 +66,6 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
     },
 
     createChorusView: function() {
-        var button = this.$("button.create");
-        button.startLoading("actions.creating");
-
         var chorusView = new chorus.models.ChorusView({
             type: "CHORUS_VIEW",
             query: this.sql(),
