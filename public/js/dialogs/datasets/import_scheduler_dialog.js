@@ -1,8 +1,6 @@
 chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     className: "import_scheduler",
-    title: t("import_now.title"),
     useLoadingSection: true,
-
     persistent: true,
 
     events : {
@@ -11,6 +9,17 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         "keyup input:text": "onInputFieldChanged",
         "paste input:text": "onInputFieldChanged",
         "click button.submit": "beginImport"
+    },
+
+    setup: function() {
+        if (this.options.launchElement.data("use-schedule")) {
+            this.title = t("import_now.title_schedule");
+            this.submitText = t("import_now.begin_schedule")
+
+        } else {
+            this.title = t("import_now.title");
+            this.submitText = t("import_now.begin");
+        }
     },
 
     makeModel: function() {
@@ -55,7 +64,8 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     additionalContext: function() {
         return {
             sandboxTables: this.sandboxTables.pluck("objectName"),
-            canonicalName: this.dataset.schema().canonicalName()
+            canonicalName: this.dataset.schema().canonicalName(),
+            submitText: this.submitText
         }
     },
 

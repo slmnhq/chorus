@@ -46,17 +46,15 @@ describe("chorus.views.DatasetListSidebar", function() {
                     expect(this.view.$('.actions .dataset_preview')).toContainTranslation('actions.dataset_preview');
                 });
 
-                describe("the 'Import Now' link", function() {
-                    it("should have the right text", function() {
-                        expect(this.view.$(".actions .import_now")).toContainTranslation("actions.import_now");
-                    });
 
+                describe("the 'Import Now' and 'Create Schedule' links", function() {
                     it("should have the data-dialog attribute", function() {
                         expect(this.view.$("a[data-dialog=ImportScheduler]")).toHaveClass("dialog");
                     });
 
                     it("should have the dataset attached as data-dataset", function() {
-                        expect(this.view.$("a[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
+                        expect(this.view.$("a.import_now[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
+                        expect(this.view.$("a.create_schedule[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
                     })
 
                     it("should be visible for source objects", function() {
@@ -72,6 +70,22 @@ describe("chorus.views.DatasetListSidebar", function() {
                             expect(this.view.$(".actions .import_now")).not.toExist();
                         }, this)
                     })
+
+                    describe("the 'Import Now' link", function() {
+                        it("should have the right text", function() {
+                            expect(this.view.$(".actions .import_now")).toContainTranslation("actions.import_now");
+                        });
+                    });
+
+                    describe("the 'Create Import Schedule' link", function() {
+                        it("should have the right text", function() {
+                            expect(this.view.$(".actions .create_schedule")).toContainTranslation("actions.create_schedule");
+                        });
+
+                        it("should have a data-use-schedule", function() {
+                            expect(this.view.$("a.create_schedule[data-use-schedule=true]")).toExist();
+                        });
+                    });
                 });
 
                 context("when hasCredentials is false for the dataset", function() {
