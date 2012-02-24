@@ -69,6 +69,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
     },
 
     canEditInstance:function () {
-        return (this.resource.owner().get("id") == chorus.session.user().get("id") ) || chorus.session.user().get("admin");
+        return !this.resource.isHadoop() &&
+            ((this.resource.owner().get("id") == chorus.session.user().get("id") ) || chorus.session.user().get("admin"));
     }
 });

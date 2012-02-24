@@ -138,6 +138,10 @@
 
         isGreenplum: function() {
             return this.get('instanceProvider') == 'Greenplum Database'
+        },
+
+        isHadoop: function() {
+            return this.get("instanceProvider") == "Hadoop";
         }
     }, {
         aurora:function () {

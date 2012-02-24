@@ -1716,6 +1716,17 @@ beforeEach(function() {
             return instance;
         },
 
+        hadoopInstanceJson: function(overrides) {
+            return _.extend({
+                instanceProvider: "Hadoop",
+                provisionType: "registerHadoop"
+            }, overrides)
+        },
+
+        hadoopInstance: function(overrides) {
+            return this.instance(this.hadoopInstanceJson(overrides));
+        },
+
         emptyInstanceAccount: function(overrides) {
             var attributes = _.extend({
                 instanceId: "10020",

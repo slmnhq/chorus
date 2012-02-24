@@ -99,6 +99,19 @@ describe("chorus.views.InstanceListSidebar", function() {
                     expect(this.view.$(".actions .delete_instance")).not.toExist();
                 });
 
+                context("when the instance is a hadoop instance", function() {
+                    beforeEach(function() {
+                        setLoggedInUser({ userName : "benjamin", admin: false});
+                        this.instance.set({ownerId : chorus.session.user().get('id')});
+                        this.view.instance.set(fixtures.hadoopInstanceJson());
+                        this.view.render();
+                    });
+
+                    it("does not display edit instance link", function() {
+                        expect(this.view.$(".actions .edit_instance")).not.toExist();
+                    });
+                })
+
                 context("when the instance failed to provision", function() {
                     beforeEach(function() {
                         setLoggedInUser({ userName : "benjamin", admin: true});
@@ -135,7 +148,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 });
 
             });
-
+            
             context("when the fetched accounts triggers a 'reset' event", function() {
                 beforeEach(function() {
                     this.view.render.reset();
