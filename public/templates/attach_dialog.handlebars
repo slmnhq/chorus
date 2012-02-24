@@ -3,6 +3,7 @@
     <div class="sort_menu"/>
 </div>
 <div class="collection_list">
+{{#if models.length}}
     <ul>
     {{#each models}}
         <li title="{{name}}" data-id="{{id}}">
@@ -11,6 +12,11 @@
         </li>
     {{/each}}
     </ul>
+{{else}}
+    <div class="none">
+        {{t view.emptyListTranslationKey}}
+    </div>
+{{/if}}
 </div>
 <div class="modal_controls">
     <button type="button" class="cancel" tabindex="3">{{t "actions.cancel"}}</button>

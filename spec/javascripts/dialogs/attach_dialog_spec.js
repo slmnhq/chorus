@@ -3,6 +3,7 @@ describe("chorus.dialogs.Attach", function() {
         this.dialog = new chorus.dialogs.Attach({ workspaceId : "33" });
         this.dialog.collectionClass = chorus.collections.Base;
         this.dialog.submitButtonTranslationKey = "loading";
+        this.dialog.emptyListTranslationKey = "test.mouse";
         this.dialog.collection = this.dialog.resource = new chorus.collections.Base([fixtures.user(), fixtures.user()]);
     });
 
@@ -19,7 +20,14 @@ describe("chorus.dialogs.Attach", function() {
             expect(this.dialog.$("li").eq(0)).toHaveClass("selected");
             expect(this.dialog.$("li").eq(1)).toHaveClass("selected");
         });
-    })
+    });
+
+    it("when there are no attachable items", function() {
+        this.dialog.collection.reset();
+        this.dialog.render();
+
+        expect(this.dialog.$(".collection_list")).toContainTranslation("test.mouse");
+    });
 
     describe("render", function() {
         beforeEach(function() {

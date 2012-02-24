@@ -1,5 +1,6 @@
 chorus.dialogs.DatasetsAttach = chorus.dialogs.Attach.extend({
     submitButtonTranslationKey: "actions.dataset_attach",
+    emptyListTranslationKey: "dataset.none",
     title: t("dataset.attach"),
     collectionClass:chorus.collections.DatasetSet,
     selectedEvent: 'datasets:selected',

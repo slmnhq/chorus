@@ -1,5 +1,6 @@
 chorus.dialogs.WorkfilesAttach = chorus.dialogs.Attach.extend({
     submitButtonTranslationKey: "workfiles.button.attach_file",
+    emptyListTranslationKey: "workfiles.none",
     title:t("workfiles.attach"),
     collectionClass:chorus.collections.WorkfileSet,
     selectedEvent: 'files:selected',

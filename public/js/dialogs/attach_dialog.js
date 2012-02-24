@@ -1,5 +1,6 @@
 chorus.dialogs.Attach = chorus.dialogs.Base.extend({
     className: 'attach_dialog',
+    emptyListTranslationKey: "none",
 
     events:{
         "click li":"toggleSelection",
