@@ -59,7 +59,7 @@
   position: absolute;
   top: 0;
   display: none;
-  z-index: 1000000 !important;
+  z-index: $select-menu-z-index !important;
 }
 
 /* z-index: 1005 to make selectmenu work with dialog */
