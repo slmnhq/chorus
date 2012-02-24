@@ -51,3 +51,7 @@ jQuery.fn.extend({
         return div.append(this.clone()).html();
     }
 });
+
+jQuery.stripHtml = function(string) {
+    return $("<div>" + string + "</div>").text();
+};

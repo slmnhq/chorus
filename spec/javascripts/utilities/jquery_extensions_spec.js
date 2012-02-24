@@ -185,4 +185,10 @@ describe("jquery extensions", function() {
             expect($html).toHaveClass("author");
         });
     });
+
+    describe("#stripHtml", function() {
+        it("removes html tags from a string", function() {
+            expect($.stripHtml("Hello <span>how are</span> you")).toBe("Hello how are you")
+        });
+    });
 });
