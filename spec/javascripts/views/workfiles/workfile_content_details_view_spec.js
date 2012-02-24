@@ -1,6 +1,6 @@
 describe("WorkfileContentDetails", function() {
     beforeEach(function() {
-        this.model = new chorus.models.Workfile({});
+        this.model = fixtures.workfile();
     });
 
     describe(".buildFor", function() {
@@ -12,7 +12,7 @@ describe("WorkfileContentDetails", function() {
             });
 
             it("instantiates an ImageWorkfileContentDetails view with the given workfile", function() {
-                expect(chorus.views.ImageWorkfileContentDetails).toHaveBeenCalledWith({ model : this.model });
+                expect(chorus.views.ImageWorkfileContentDetails).toHaveBeenCalledWith({ model: this.model });
             });
         });
 
@@ -24,7 +24,7 @@ describe("WorkfileContentDetails", function() {
             });
 
             it("instantiates a SqlWorkfileContentDetails view with the given workfile", function() {
-                expect(chorus.views.SqlWorkfileContentDetails).toHaveBeenCalledWith({ model : this.model });
+                expect(chorus.views.SqlWorkfileContentDetails).toHaveBeenCalledWith({ model: this.model });
             });
         });
 
@@ -37,7 +37,7 @@ describe("WorkfileContentDetails", function() {
             });
 
             it("instantiates an WorkfileContentDetails view with the given workfile", function() {
-                expect(chorus.views.WorkfileContentDetails).toHaveBeenCalledWith({ model : this.model });
+                expect(chorus.views.WorkfileContentDetails).toHaveBeenCalledWith({ model: this.model });
             });
         });
     });
@@ -45,7 +45,7 @@ describe("WorkfileContentDetails", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.qtipMenu = stubQtip();
-            this.view = new chorus.views.WorkfileContentDetails({model : this.model});
+            this.view = new chorus.views.WorkfileContentDetails({model: this.model});
             this.view.render();
         });
 
@@ -102,21 +102,42 @@ describe("WorkfileContentDetails", function() {
                 });
             });
 
-            context("when user click on the 'save as file' button", function() {
-                beforeEach(function() {
-                    this.view.render();
-                    this.view.$(".save_as").click();
+            context("when the user clicks on the 'save as file' button", function() {
+                context("when the workfile is the most recent version", function() {
+                    beforeEach(function() {
+                        this.view.render();
+                        this.view.$(".save_as").click();
+                    });
+
+                    it("displays the tooltip", function() {
+                        expect(this.qtipMenu).toHaveVisibleQtip();
+                    });
+
+                    it("renders the menu links", function() {
+                        expect($("a.save_as_new", this.qtipMenu)).toExist();
+                        expect($("a.save_as_current", this.qtipMenu)).toExist();
+                        expect($("span.save_as_current.disabled", this.qtipMenu)).not.toExist();
+                    });
                 });
 
-                it("displays the tooltip", function() {
-                    expect(this.qtipMenu).toHaveVisibleQtip();
-                });
+                context("when the workfile is not the most recent version", function() {
+                    beforeEach(function() {
+                        this.view.model.set({ latestVersionNum: 2 })
+                        this.view.render();
+                        this.view.$(".save_as").click();
+                    });
 
-                it("renders the tooltip content", function() {
-                    expect(this.qtipMenu).toContainText("Save as new version");
-                    expect(this.qtipMenu).toContainText("Replace current version");
-                });
-            });
+                    it("displays the tooltip", function() {
+                        expect(this.qtipMenu).toHaveVisibleQtip();
+                    });
+
+                    it("renders the menu links", function() {
+                        expect($("a.save_as_new", this.qtipMenu)).toExist();
+                        expect($("a.save_as_current", this.qtipMenu)).not.toExist();
+                        expect($("span.save_as_current.disabled", this.qtipMenu)).toExist();
+                    });
+                })
+            })
         });
     });
 

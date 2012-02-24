@@ -88,6 +88,10 @@
             color: $color-text4;
         }
 
+        span.disabled {
+            color: $color-text4;
+        }
+
         .menu_shortcut {
             @include font-menu;
             color : $color-text4;

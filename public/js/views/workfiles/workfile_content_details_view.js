@@ -13,6 +13,12 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
             this.$("span.auto_save").text(t(text, {time:time}))
         },
 
+        additionalContext: function() {
+            return {
+                isLatestVersion: this.model.isLatestVersion()
+            }
+        },
+
         postRender:function () {
             var self = this;
             chorus.menu(this.$('.save_as'), {

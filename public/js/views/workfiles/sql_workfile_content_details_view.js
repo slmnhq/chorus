@@ -19,12 +19,14 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
     },
 
     additionalContext: function() {
+        var ctx = this._super("additionalContext");
+
         var executionSchema = this.model.executionSchema();
         var sandboxSchema = this.model.sandbox() && this.model.sandbox().schema()
-        return {
+        return _.extend(ctx, {
             schemaName: executionSchema && executionSchema.canonicalName(),
             executionSchemaIsSandbox: (executionSchema && sandboxSchema && executionSchema.isEqual(sandboxSchema))
-        };
+        });
     },
 
     runInExecutionSchema: function() {
