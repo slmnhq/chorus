@@ -6,24 +6,21 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
 
     setup: function(query) {
         query = decodeURIComponent(query);
-        this.model = this.search = new chorus.models.SearchResult({query: query});
-        this.search.fetch();
-        this.model.onLoaded(this.otherStuff, this);
+        this.model = new chorus.models.SearchResult({query: query});
+        this.requiredResources.add(this.model);
+        this.model.fetch();
     },
 
-    otherStuff: function() {
+    resourcesLoaded: function() {
         this.mainContent = new chorus.views.MainContentView({
-            contentHeader: new chorus.views.StaticTemplate("default_content_header",
-                {
-                    title: t("search.index.title",
-                        {
-                            query: this.model.displayShortName()
-                        }
-                    )}
-            ),
+            contentHeader: new chorus.views.StaticTemplate("default_content_header", {
+                title: t("search.index.title", {
+                    query: this.model.displayShortName()
+                })
+            }),
 
             content: new chorus.views.SearchResultList({searchResult: this.model})
-        })
+        });
 
         this.render()
     }
