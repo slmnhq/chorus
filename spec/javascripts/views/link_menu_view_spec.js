@@ -121,4 +121,26 @@ describe("chorus.views.LinkMenu", function() {
             })
         })
     });
+
+    describe("document binding", function() {
+        beforeEach(function() {
+            chorus._navigated();
+            this.view = new chorus.views.LinkMenu();
+        });
+
+        it("should have bound to document", function() {
+            expect($(document).data("events")["chorus:menu:popup"]).toBeDefined();
+        });
+
+        describe("navigating away", function() {
+            beforeEach(function() {
+                this.oldChorusMenuPopupCount = $(document).data("events")["chorus:menu:popup"].length;
+                chorus._navigated();
+            });
+
+            it("should unbind from document", function() {
+                expect(($(document).data("events")["chorus:menu:popup"] || []).length).toBe(this.oldChorusMenuPopupCount - 1);
+            });
+        });
+    })
 });

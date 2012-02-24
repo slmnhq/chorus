@@ -7,7 +7,8 @@ chorus.views.LinkMenu = chorus.views.Base.extend({
     },
 
     setup:function () {
-        $(document).bind("chorus:menu:popup", _.bind(this.popupEventHandler, this))
+        this.popupEventName = "chorus:menu:popup." + this.cid;
+        $(document).bind(this.popupEventName, _.bind(this.popupEventHandler, this));
     },
 
     context:function () {
@@ -41,6 +42,11 @@ chorus.views.LinkMenu = chorus.views.Base.extend({
         }
 
         this.poppingUp = false;
+    },
+
+    beforeNavigateAway: function() {
+        $(document).unbind(this.popupEventName);
+        this._super("beforeNavigateAway");
     },
 
     togglePopup:function () {
