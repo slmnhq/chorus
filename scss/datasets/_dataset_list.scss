@@ -18,9 +18,13 @@
         .location, .found_in {
             padding-top: 4px;
             @include results-console-message;
+            line-height: 16px;
+            vertical-align: top;
             a {
                 font-size: 12px;
                 font-weight: $semibold;
+                line-height: 16px;
+                vertical-align: top;
             }
         }
 
