@@ -21,6 +21,36 @@ describe("chorus global", function() {
         });
     });
 
+    describe("#afterNavigate", function() {
+        beforeEach(function() {
+            this.chorus.initialize();
+
+            this.spy1 = jasmine.createSpy();
+            this.spy2 = jasmine.createSpy();
+
+            this.chorus.afterNavigate(this.spy1);
+            this.chorus.afterNavigate(this.spy2);
+        });
+
+        it("calls the supplied functions after the router triggers leaving", function() {
+            expect(this.spy1).not.toHaveBeenCalled();
+            expect(this.spy2).not.toHaveBeenCalled();
+
+            this.chorus.router.trigger("leaving");
+
+            expect(this.spy1).toHaveBeenCalled();
+            expect(this.spy2).toHaveBeenCalled();
+
+            this.spy1.reset();
+            this.spy2.reset();
+
+            this.chorus.router.trigger("leaving");
+
+            expect(this.spy1).not.toHaveBeenCalled();
+            expect(this.spy2).not.toHaveBeenCalled();
+        })
+    })
+
     describe("#toast", function() {
         beforeEach(function() {
             spyOn($, 'jGrowl');

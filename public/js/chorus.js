@@ -10,6 +10,7 @@ window.Chorus = function() {
     self.features = {};
     self.utilities = {};
     self.locale = 'en';
+    self.cleanupFunctions = [];
 
     self.initialize = function() {
         // Check and prompt for Chrome Frame install if applicable
@@ -24,6 +25,7 @@ window.Chorus = function() {
         self.detectFeatures();
 
         //bind global state events here
+        self.router.bind("leaving", self._navigated);
         self.session.bind("needsLogin", self.requireLogin);
         self.bindGlobalCallbacks();
         self.bindModalLaunchingClicks();
@@ -68,6 +70,18 @@ window.Chorus = function() {
         var defaultOpts = {sticky: false, life: 5000};
         var toastOpts = _.extend(defaultOpts, options.toastOpts);
         $.jGrowl(t(message, options), toastOpts);
+    },
+
+    self.afterNavigate = function(func) {
+        self.cleanupFunctions.push(func);
+    },
+
+    self._navigated = function() {
+        _.each(self.cleanupFunctions, function(func){
+            func();
+        });
+
+        self.cleanupFunctions = [];
     }
 
     self.menu = function(menuElement, options) {
