@@ -20,6 +20,7 @@ window.Chorus = function() {
             });
         }
 
+        self.PageEvents = new chorus.utilities.PageEvents();
         self.session = new chorus.models.Session();
         self.router = new chorus.Router(self);
         self.detectFeatures();
@@ -77,6 +78,8 @@ window.Chorus = function() {
     },
 
     self._navigated = function() {
+        self.PageEvents.reset();
+
         _.each(self.cleanupFunctions, function(func){
             func();
         });

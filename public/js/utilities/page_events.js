@@ -50,5 +50,3 @@ chorus.utilities.PageEvents.prototype.broadcast = function(eventName) {
         binding.callback.apply(binding.context, args);
     });
 }
-
-chorus.PageEvents = new chorus.utilities.PageEvents();

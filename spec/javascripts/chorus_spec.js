@@ -30,6 +30,8 @@ describe("chorus global", function() {
 
             this.chorus.afterNavigate(this.spy1);
             this.chorus.afterNavigate(this.spy2);
+
+            spyOn(this.chorus.PageEvents, "reset");
         });
 
         it("calls the supplied functions after the router triggers leaving", function() {
@@ -48,6 +50,11 @@ describe("chorus global", function() {
 
             expect(this.spy1).not.toHaveBeenCalled();
             expect(this.spy2).not.toHaveBeenCalled();
+        })
+
+        it("calls chorus.PageEvents.reset after the router triggers leaving", function() {
+            this.chorus.router.trigger("leaving");
+            expect(this.chorus.PageEvents.reset).toHaveBeenCalled();
         })
     })
 
