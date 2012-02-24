@@ -35,7 +35,7 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
     },
 
     additionalContext:function () {
-        var ctx = {canUpdate:this.model.canUpdate()};
+        var ctx = { canUpdate: this.model && this.model.canUpdate() };
         if (this.workfile) {
             var attributes = _.extend({}, this.workfile.attributes);
             attributes.updatedBy = [this.workfile.attributes.modifiedByFirstName, this.workfile.attributes.modifiedByLastName].join(' ');

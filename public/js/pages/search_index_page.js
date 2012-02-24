@@ -19,9 +19,19 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
                 })
             }),
 
-            content: new chorus.views.SearchResultList({searchResult: this.model})
+            content: new chorus.views.SearchResultList({ model: this.model })
         });
 
-        this.render()
+        var workspace = new chorus.models.Workspace();
+        workspace.loaded = true;
+        this.sidebar = new chorus.views.WorkfileListSidebar({ model: workspace });
+
+        this.mainContent.content.bind("workfile:selected", function(workfile) {
+            this.sidebar.setWorkfile(workfile);
+        }, this);
+    },
+
+    postRender: function() {
+        this.$('li.result_item').eq(0).click()
     }
 });

@@ -1,12 +1,12 @@
 describe("chorus.views.SearchWorkfileList", function() {
     beforeEach(function() {
         this.view = new chorus.views.SearchWorkfileList({
-            workfileResults: {docs:[
+            collection: fixtures.workfileSet([
                 {id: "1", workspace: {id: "2", name: "Test"}, fileType: "SQL"},
                 {id: "4", workspace: {id: "3", name: "Other"}, fileType: "txt"}
-            ],
-            numFound: "24"
-            }
+            ]),
+
+            total: "24"
         });
 
         this.view.render()
@@ -21,12 +21,12 @@ describe("chorus.views.SearchWorkfileList", function() {
         context("has no additional results", function() {
             beforeEach(function() {
                 this.view = new chorus.views.SearchWorkfileList({
-                    workfileResults: {docs: [
+                    collection: fixtures.workfileSet([
                         {id: "1",  workspace: {id: "2", name: "Test"}},
                         {id: "4", workspace: {id: "3", name: "Other"}}
-                    ],
-                        numFound: "2"
-                    }
+                    ]),
+
+                    total: "2"
                 });
 
                 this.view.render()
@@ -40,7 +40,7 @@ describe("chorus.views.SearchWorkfileList", function() {
                 expect(this.view.$(".details a.show_all")).not.toExist();
             })
         })
-        
+
         context("has additional results", function() {
             it("has a long count", function() {
                 expect(this.view.$(".details .count")).toContainTranslation("search.count", {shown: "2", total: "24"});
@@ -54,9 +54,8 @@ describe("chorus.views.SearchWorkfileList", function() {
         context("has no results at all", function() {
             beforeEach(function() {
                 this.view = new chorus.views.SearchWorkfileList({
-                    workfileResults: {docs: [],
-                        numFound: "0"
-                    }
+                    collection: fixtures.workfileSet([]),
+                    total: "0"
                 });
 
                 this.view.render()
@@ -72,6 +71,11 @@ describe("chorus.views.SearchWorkfileList", function() {
     describe("list elements", function() {
         it("there is one for each model in the collection", function() {
                 expect(this.view.$('li').length).toBe(2);
+        });
+
+        it("has the right data-id attribute", function() {
+            expect(this.view.$("li").eq(0).data("id")).toBe(1);
+            expect(this.view.$("li").eq(1).data("id")).toBe(4);
         });
 
         it("includes the correct workspace file icon", function() {

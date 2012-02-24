@@ -2,15 +2,11 @@ chorus.views.SearchWorkfileList = chorus.views.Base.extend({
     className: "search_workfile_list",
     additionalClass: "list",
 
-    makeModel: function() {
-        this.collection = new chorus.collections.WorkfileSet(this.options.workfileResults.docs);
-    },
-
     additionalContext: function() {
         return {
             shown: this.collection.models.length,
-            total: this.options.workfileResults.numFound,
-            moreResults: (this.collection.models.length < this.options.workfileResults.numFound)
+            total: this.options.total,
+            moreResults: (this.collection.models.length < this.options.total)
         }
     },
 
