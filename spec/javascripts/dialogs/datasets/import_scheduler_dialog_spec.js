@@ -54,7 +54,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
             });
 
             it("should populate the table dropdown", function() {
-                expect(this.dialog.$(".existing_table select option").length).toBe(2);
+                expect(this.dialog.$(".existing_table .names option").length).toBe(2);
             });
 
             it("should display the import destination", function() {

@@ -3,6 +3,10 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     useLoadingSection: true,
     persistent: true,
 
+    subviews: {
+        ".schedule" : "scheduleView"
+    },
+
     events : {
         "change input:radio" : "onDestinationChosen",
         "change input:checkbox": "onCheckboxChecked",
@@ -12,6 +16,8 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     },
 
     setup: function() {
+        this.scheduleView = new chorus.views.ImportSchedule();
+
         if (this.options.launchElement.data("use-schedule")) {
             this.title = t("import_now.title_schedule");
             this.submitText = t("import_now.begin_schedule")
