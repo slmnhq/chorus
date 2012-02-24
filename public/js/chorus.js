@@ -85,6 +85,8 @@ window.Chorus = function() {
     }
 
     self.menu = function(menuElement, options) {
+        self.afterNavigate(function(){$(menuElement).remove();});
+
         var qtipArgs = {
             content: options.content,
             show: {
@@ -134,7 +136,6 @@ window.Chorus = function() {
         });
 
         menuElement.qtip(qtipArgs);
-
     }
 
     self.styleSelect = function(element, options) {

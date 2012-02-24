@@ -83,6 +83,7 @@ describe("chorus global", function() {
 
     describe("#menu", function() {
         beforeEach(function() {
+            chorus._navigated();
             this.qtipElement = stubQtip();
             this.element = $("<div></div>");
             this.eventSpy = jasmine.createSpy();
@@ -135,6 +136,18 @@ describe("chorus global", function() {
                 }
             });
         });
+
+        context("after navigating away", function() {
+            beforeEach(function() {
+                spyOn($.fn, 'remove');
+
+                chorus._navigated();
+            });
+
+            it("calls $.fn.remove on the menu element", function() {
+                expect($.fn.remove.mostRecentCall.object.get(0)).toEqual(this.element.get(0));
+            })
+        })
     });
 
     describe("#datePicker(element)", function() {
