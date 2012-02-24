@@ -13,7 +13,12 @@ chorus.views.CollectionPicklist = chorus.views.Base.extend({
     },
 
     postRender:function () {
-        this.$("input").unbind("textchange").bind("textchange", _.bind(this.searchItems, this));
+        chorus.search({
+            input: this.$("input"),
+            list: this.$(".items ul"),
+            onFilter: this.deselectItem,
+            afterFilter: _.bind(this.afterFilter, this)
+        });
     },
 
     collectionModelContext:function (model) {
@@ -23,16 +28,11 @@ chorus.views.CollectionPicklist = chorus.views.Base.extend({
         }
     },
 
-    searchItems:function (e) {
-        var self = this;
-        var compare = this.$("input").val().toLowerCase();
-        this.$("li").removeClass("filtered");
-        this.collection.each(function (item, index) {
-            if (item.displayName().toLowerCase().indexOf(compare) == -1) {
-                self.$("li:eq(" + index + ")").addClass("filtered").removeClass("selected");
-            }
-        })
+    deselectItem: function(el) {
+        el.removeClass("selected");
+    },
 
+    afterFilter: function() {
         if (this.$("li.selected").length == 0) {
             this.trigger("item:selected", undefined);
         }

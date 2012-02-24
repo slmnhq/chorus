@@ -12,17 +12,6 @@ $list-border-width: 1px;
         margin: 0;
         height: 25px;
         border-bottom: 1px solid $pagination-border-color;
-        
-        input[type=text] {
-            margin: 0;
-            @include border-radius(12px);
-            font-size: 14px;
-            padding: 2px 4px 0px 29px;
-            background: url("/images/search-icon.png") no-repeat 9px 3px;
-            outline: none;
-            background-color: white;
-            border-color: $subheader-border-color;
-        }
     }
 
     .items {
@@ -35,10 +24,6 @@ $list-border-width: 1px;
                     .name {
                         color: white;
                     }
-                }
-
-                &.filtered {
-                    display: none;
                 }
             }
         }

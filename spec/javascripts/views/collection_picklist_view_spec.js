@@ -139,9 +139,9 @@ describe("chorus.views.CollectionPicklist", function() {
             })
 
             it("hides items not containing that character", function() {
-                expect(this.view.$("li:eq(0)")).toHaveClass("filtered");
-                expect(this.view.$("li:eq(1)")).not.toHaveClass("filtered");
-                expect(this.view.$("li:eq(2)")).not.toHaveClass("filtered");
+                expect(this.view.$("li:eq(0)")).toHaveClass("hidden");
+                expect(this.view.$("li:eq(1)")).not.toHaveClass("hidden");
+                expect(this.view.$("li:eq(2)")).not.toHaveClass("hidden");
             })
 
             describe("typing another character", function() {
@@ -153,9 +153,9 @@ describe("chorus.views.CollectionPicklist", function() {
                 })
 
                 it("hides items not containing the adjacent character sequence", function() {
-                    expect(this.view.$("li:eq(0)")).toHaveClass("filtered");
-                    expect(this.view.$("li:eq(1)")).toHaveClass("filtered");
-                    expect(this.view.$("li:eq(2)")).not.toHaveClass("filtered");
+                    expect(this.view.$("li:eq(0)")).toHaveClass("hidden");
+                    expect(this.view.$("li:eq(1)")).toHaveClass("hidden");
+                    expect(this.view.$("li:eq(2)")).not.toHaveClass("hidden");
                 })
 
                 it("triggers item:selected with undefined", function() {
@@ -169,9 +169,9 @@ describe("chorus.views.CollectionPicklist", function() {
                     })
 
                     it("hides items not containing that character", function() {
-                        expect(this.view.$("li:eq(0)")).toHaveClass("filtered");
-                        expect(this.view.$("li:eq(1)")).not.toHaveClass("filtered");
-                        expect(this.view.$("li:eq(2)")).not.toHaveClass("filtered");
+                        expect(this.view.$("li:eq(0)")).toHaveClass("hidden");
+                        expect(this.view.$("li:eq(1)")).not.toHaveClass("hidden");
+                        expect(this.view.$("li:eq(2)")).not.toHaveClass("hidden");
                     })
                 })
             })
