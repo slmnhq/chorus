@@ -97,11 +97,10 @@
     }
 
     .sub_header {
-        .search {
+        .chorus_search_container {
             float: right;
             width: 250px;
-            vertical-align: middle;
-            margin-top: 5px;
+            display: inline-block;
         }
 
         .name {

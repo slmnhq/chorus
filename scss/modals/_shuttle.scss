@@ -19,9 +19,8 @@ $shuttle-width: 720px;
             left: 0;
             border-right: 1px solid $list-border-color;
 
-            input[type=text] {
+            .chorus_search_container {
                 width: 70%;
-                margin: 0 12px;
             }
         }
 

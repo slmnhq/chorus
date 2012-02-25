@@ -300,10 +300,17 @@ describe("chorus global", function() {
         beforeEach(function() {
             this.input = $("<input></input>");
             this.list = $("<ul></ul>");
+            this.container = $("<div></div>").append(this.input);
+
             _.each(["joseph", "max", "nitin"], function(name) {
                 $("<li></li>").append('<div class="name">' + name + '</div>').append('<div>add</div>').appendTo(this.list);
             }, this);
 
+        });
+
+        it("adds the 'chorus_search' class to the input", function() {
+            chorus.search({ input: this.input, list: this.list });
+            expect(this.input).toHaveClass("chorus_search");
         });
 
         context("with a selector", function() {
@@ -344,6 +351,36 @@ describe("chorus global", function() {
                     expect(this.list.find("li").eq(2)).not.toHaveClass("hidden");
                 });
 
+            });
+        });
+
+        describe("the 'x'", function() {
+            beforeEach(function() {
+                chorus.search({ input: this.input, list: this.list});
+                this.input.val("nit").trigger("textchange");
+
+                this.clearLink = this.container.find("a.chorus_search_clear");
+            });
+
+            it("adds a little 'x' to the right of the search input", function() {
+                expect(this.clearLink).toExist();
+                expect(this.clearLink.find("img").attr("src")).toBe("/images/icon_clear_search.png");
+            });
+
+            describe("when the 'x' is clicked", function() {
+                beforeEach(function() {
+                    this.clearLink.click();
+                });
+
+                it("clears the search text", function() {
+                    expect(this.input.val()).toBe("");
+                });
+
+                it("updates the list, removing any filtering", function() {
+                    expect(this.list.find("li").eq(0)).not.toHaveClass("hidden");
+                    expect(this.list.find("li").eq(1)).not.toHaveClass("hidden");
+                    expect(this.list.find("li").eq(2)).not.toHaveClass("hidden");
+                });
             });
         });
 

@@ -182,6 +182,17 @@ window.Chorus = function() {
             list = options.list,
             selector = options.selector;
         input.unbind("textchange").bind("textchange", _.bind(filterSearchList, this, options));
+        input.addClass('chorus_search')
+
+        var clearLink = $("<a class='chorus_search_clear' href='#'><img src='/images/icon_clear_search.png'></a>").bind('click', function(e) {
+            e.preventDefault();
+            input.val("").trigger('textchange');
+        });
+
+        var container = $("<div class='chorus_search_container'></div>");
+        container.css({ display: input.css("display") });
+        container.insertAfter(input);
+        container.append(input).append(clearLink);
     };
 
     function filterSearchList(options) {
