@@ -14,8 +14,8 @@ window.Chorus = function() {
 
     self.initialize = function() {
         // Check and prompt for Chrome Frame install if applicable
-        if(!window.jasmine && BrowserDetect.browser == "Explorer" && BrowserDetect.version <= "8") {
-             CFInstall.check({
+        if (!window.jasmine && BrowserDetect.browser == "Explorer" && BrowserDetect.version <= "8") {
+            CFInstall.check({
                 mode: "overlay"
             });
         }
@@ -35,7 +35,7 @@ window.Chorus = function() {
     };
 
     self.bindGlobalCallbacks = function() {
-        $(window).resize(_.debounce(function(){
+        $(window).resize(_.debounce(function() {
             self.page && self.page.trigger && self.page.trigger("resized");
         }, 100));
     }
@@ -44,9 +44,11 @@ window.Chorus = function() {
         var firstArg = arguments[0];
         var target = arguments.length ? firstArg.el : document;
         $(target).
-            on("click.chorus_modal", "button.dialog, a.dialog", null, function(e){ (firstArg || self.page).createDialog(e); }).
-            on("click.chorus_modal", "button.alert, a.alert", null, function(e){ (firstArg || self.page).createAlert(e); }).
-            on("click.chorus_modal", "#help a", null, function(e){ (firstArg || self.page).showHelp(e); });
+            on("click.chorus_modal", "button.dialog, a.dialog", null,
+            function(e) { (firstArg || self.page).createDialog(e); }).
+            on("click.chorus_modal", "button.alert, a.alert", null,
+            function(e) { (firstArg || self.page).createAlert(e); }).
+            on("click.chorus_modal", "#help a", null, function(e) { (firstArg || self.page).showHelp(e); });
 
         if (window.jasmine) {
             var spec = window.jasmine.getEnv().currentSpec;
@@ -73,22 +75,29 @@ window.Chorus = function() {
         $.jGrowl(t(message, options), toastOpts);
     },
 
-    self.afterNavigate = function(func) {
-        self.cleanupFunctions.push(func);
-    },
+        self.afterNavigate = function(func) {
+            self.cleanupFunctions.push(func);
+        },
 
-    self._navigated = function() {
-        self.PageEvents.reset();
+        self._navigated = function() {
+            self.PageEvents.reset();
 
-        _.each(self.cleanupFunctions, function(func){
-            func();
-        });
+            _.each(self.cleanupFunctions, function(func) {
+                func();
+            });
 
-        self.cleanupFunctions = [];
-    }
+            self.cleanupFunctions = [];
+        }
 
     self.menu = function(menuElement, options) {
-        self.afterNavigate(function(){$(menuElement).remove();});
+        self.afterNavigate(function() {$(menuElement).remove();});
+
+        var classes = "tooltip-white"
+        if (menuElement.length) {
+            if ($(menuElement).closest(".dialog").length) {
+                classes += " tooltip-modal";
+            }
+        }
 
         var qtipArgs = {
             content: options.content,
@@ -102,7 +111,7 @@ window.Chorus = function() {
                 at: "bottom center"
             },
             style: {
-                classes: "tooltip-white",
+                classes: classes,
                 tip: {
                     mimic: "top center",
                     width: 20,
@@ -119,7 +128,7 @@ window.Chorus = function() {
             qtipArgs.style.tip.offset = 40;
         }
 
-        if(options.contentEvents) {
+        if (options.contentEvents) {
             qtipArgs.events = {};
             qtipArgs.events.render = function(event, api) {
                 _.each(options.contentEvents, function(callback, selector) {
@@ -143,7 +152,7 @@ window.Chorus = function() {
 
     self.styleSelect = function(element, options) {
         var $element = $(element);
-        if($element.data('selectmenu')){$element.selectmenu("destroy");}
+        if ($element.data('selectmenu')) {$element.selectmenu("destroy");}
 
         var changeFunction = function() {
             $(element).trigger('change');
@@ -201,7 +210,7 @@ window.Chorus = function() {
     self.hotKeyMeta = BrowserDetect.OS == "Mac" ? "ctrl" : "alt";
 
     self.hotKeyEvent = function(keyChar) {
-        var ev = $.Event("keydown", { which : keyChar.toUpperCase().charCodeAt(0)});
+        var ev = $.Event("keydown", { which: keyChar.toUpperCase().charCodeAt(0)});
         if (chorus.hotKeyMeta == "ctrl") {
             ev.ctrlKey = true;
         } else if (chorus.hotKeyMeta == "alt") {

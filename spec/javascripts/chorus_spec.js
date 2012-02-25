@@ -89,72 +89,102 @@ describe("chorus global", function() {
     });
 
     describe("#menu", function() {
-        beforeEach(function() {
-            chorus._navigated();
-            this.qtipElement = stubQtip();
-            this.element = $("<div></div>");
-            this.eventSpy = jasmine.createSpy();
-            chorus.menu(this.element, {
-                content: "menu content<a class='test_link'></a>",
-                contentEvents: {
-                    '.test_link': this.eventSpy
-                }
-            });
-            this.qtipArgs = $.fn.qtip.mostRecentCall.args[0];
-        })
-
-        it("calls qtip on the given element", function() {
-            expect($.fn.qtip.mostRecentCall.object.get(0)).toEqual(this.element.get(0));
-        })
-
-        it("passes down the given content", function() {
-            expect(this.qtipArgs.content).toEqual("menu content<a class='test_link'></a>");
-        })
-
-        it("sets up the events on the contents", function() {
-            this.element.click();
-            this.qtipElement.find('.test_link').click()
-            expect(this.eventSpy).toHaveBeenCalledWith(jasmine.any(jQuery.Event), this.element.data('qtip'));
-        })
-
-        context("event handling", function() {
+        context("when the menu is in a modal", function() {
             beforeEach(function() {
-                this.element.click();
+                chorus._navigated();
+                this.qtipElement = stubQtip();
+                this.element = $("<div class='dialog'></div>");
+                this.eventSpy = jasmine.createSpy();
+                chorus.menu(this.element, {
+                    content: "menu content<a class='test_link'></a>",
+                    contentEvents: {
+                        '.test_link': this.eventSpy
+                    }
+                });
+                this.qtipArgs = $.fn.qtip.mostRecentCall.args[0];
             })
 
-            it("closes the qtip", function() {
-                expect(this.qtipElement).toHaveVisibleQtip();
-                this.qtipElement.find('.test_link').click()
-                expect(this.qtipElement).not.toHaveVisibleQtip();
-            });
-        })
-
-        it("sets up our menu styling", function() {
-            expect(this.qtipArgs.show.event).toEqual('click');
-            expect(this.qtipArgs.hide).toEqual('unfocus');
-            expect(this.qtipArgs.position.my).toEqual("top center")
-            expect(this.qtipArgs.position.at).toEqual("bottom center")
-            expect(this.qtipArgs.style).toEqual({
-                classes: "tooltip-white",
-                tip: {
-                    mimic: "top center",
-                    width: 20,
-                    height: 15
-                }
+            it("should have the tooltip-modal class", function() {
+                expect(this.qtipArgs.style).toEqual({
+                    classes: "tooltip-white tooltip-modal",
+                    tip: {
+                        mimic: "top center",
+                        width: 20,
+                        height: 15
+                    }
+                });
             });
         });
 
-        context("after navigating away", function() {
+        context("when the menu is not in a modal", function() {
             beforeEach(function() {
-                spyOn($.fn, 'remove');
-
                 chorus._navigated();
+                this.qtipElement = stubQtip();
+                this.element = $("<div></div>");
+                this.eventSpy = jasmine.createSpy();
+                chorus.menu(this.element, {
+                    content: "menu content<a class='test_link'></a>",
+                    contentEvents: {
+                        '.test_link': this.eventSpy
+                    }
+                });
+                this.qtipArgs = $.fn.qtip.mostRecentCall.args[0];
+            })
+
+            it("calls qtip on the given element", function() {
+                expect($.fn.qtip.mostRecentCall.object.get(0)).toEqual(this.element.get(0));
+            })
+
+            it("passes down the given content", function() {
+                expect(this.qtipArgs.content).toEqual("menu content<a class='test_link'></a>");
+            })
+
+            it("sets up the events on the contents", function() {
+                this.element.click();
+                this.qtipElement.find('.test_link').click()
+                expect(this.eventSpy).toHaveBeenCalledWith(jasmine.any(jQuery.Event), this.element.data('qtip'));
+            })
+
+            context("event handling", function() {
+                beforeEach(function() {
+                    this.element.click();
+                })
+
+                it("closes the qtip", function() {
+                    expect(this.qtipElement).toHaveVisibleQtip();
+                    this.qtipElement.find('.test_link').click()
+                    expect(this.qtipElement).not.toHaveVisibleQtip();
+                });
+            })
+
+            it("sets up our menu styling", function() {
+                expect(this.qtipArgs.show.event).toEqual('click');
+                expect(this.qtipArgs.hide).toEqual('unfocus');
+                expect(this.qtipArgs.position.my).toEqual("top center")
+                expect(this.qtipArgs.position.at).toEqual("bottom center")
+                expect(this.qtipArgs.style).toEqual({
+                    classes: "tooltip-white",
+                    tip: {
+                        mimic: "top center",
+                        width: 20,
+                        height: 15
+                    }
+                });
             });
 
-            it("calls $.fn.remove on the menu element", function() {
-                expect($.fn.remove.mostRecentCall.object.get(0)).toEqual(this.element.get(0));
+            context("after navigating away", function() {
+                beforeEach(function() {
+                    spyOn($.fn, 'remove');
+
+                    chorus._navigated();
+                });
+
+                it("calls $.fn.remove on the menu element", function() {
+                    expect($.fn.remove.mostRecentCall.object.get(0)).toEqual(this.element.get(0));
+                })
             })
-        })
+        });
+
     });
 
     describe("#datePicker(element)", function() {
@@ -170,8 +200,8 @@ describe("chorus global", function() {
             });
 
             this.id1 = this.input1.attr("id"),
-            this.id2 = this.input2.attr("id"),
-            this.id3 = this.input3.attr("id");
+                this.id2 = this.input2.attr("id"),
+                this.id3 = this.input3.attr("id");
         });
 
         it("gives the elements unique ids", function() {
@@ -239,7 +269,7 @@ describe("chorus global", function() {
     });
 
     describe("resizing the window", function() {
-        beforeEach(function () {
+        beforeEach(function() {
             spyOn(_, "debounce").andCallFake(function(func) {
                 return func;
             });
