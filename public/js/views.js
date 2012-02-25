@@ -28,11 +28,18 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
     },
 
     bindHotkeys:function () {
-        _.each(this.hotkeys || {}, _.bind(function (eventName, hotkey) {
-            this.bindings.add($(document), "keydown", chorus.hotKeyMeta + '+' + hotkey, _.bind(function (event) {
+        var keydownEventName = "keydown." + this.cide;
+        _.each(this.hotkeys, _.bind(function (eventName, hotkey) {
+            this.bindings.add($(document), keydownEventName, chorus.hotKeyMeta + '+' + hotkey, function (event) {
                 chorus.PageEvents.broadcast(eventName, event);
-            }, this));
-        }, this))
+            });
+        }, this));
+
+        if (this.hotkeys) {
+            chorus.afterNavigate(function() {
+                $(document).unbind(keydownEventName);
+            });
+        }
     },
 
     context:{},

@@ -98,6 +98,7 @@ describe("chorus.views.Base", function () {
 
     describe("hotkey bindings", function () {
         beforeEach(function () {
+            chorus._navigated();
             unstubHotkeys();
             this.oldHotKeyMeta = chorus.hotKeyMeta;
             chorus.hotKeyMeta = 'ctrl';
@@ -117,7 +118,7 @@ describe("chorus.views.Base", function () {
         })
 
         it("binds hotkeys", function () {
-            expect($.fn.bind).toHaveBeenCalledWith("keydown", "ctrl+r", jasmine.any(Function));
+            expect($(document).data("events").keydown).toBeDefined();
         })
 
         it("broadcasts events on hotkeys", function () {
@@ -126,6 +127,17 @@ describe("chorus.views.Base", function () {
             $(document).trigger(ev);
             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("my:event", ev)
         })
+
+        describe("navigating away", function() {
+            beforeEach(function() {
+                this.oldKeydownCount = $(document).data("events").keydown.length;
+                chorus._navigated();
+            });
+
+            it("should unbind from document", function() {
+                expect(($(document).data("events").keydown || []).length).toBe(this.oldKeydownCount - 1);
+            });
+        });
     })
     describe("#context", function () {
 
