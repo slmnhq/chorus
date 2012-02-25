@@ -15,7 +15,7 @@ chorus.views.SearchWorkfileList = chorus.views.Base.extend({
 
         return {
             showUrl: model.showUrl(),
-            iconUrl: model.get("fileType") && chorus.urlHelpers.fileIconUrl(model.get("fileType")),
+            iconUrl: model.iconUrl(),
             workspaceLink: "<a href='"+workspace.showUrl()+"'>"+workspace.get('name')+"</a>"
         }
     }

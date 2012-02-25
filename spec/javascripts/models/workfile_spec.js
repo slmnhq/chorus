@@ -599,4 +599,57 @@ describe("chorus.models.Workfile", function() {
             })
         })
     })
+
+    describe("#hasOwnPage", function() {
+        context("when the workfile is an image", function() {
+            beforeEach(function() {
+                spyOn(this.model, 'isImage').andReturn(true)
+                spyOn(this.model, 'isText').andReturn(false)
+            })
+
+            it("returns true", function() {
+                expect(this.model.hasOwnPage()).toBeTruthy();
+            })
+        })
+
+        context("when the workfile is a text", function() {
+            beforeEach(function() {
+                spyOn(this.model, 'isImage').andReturn(false)
+                spyOn(this.model, 'isText').andReturn(true)
+            })
+
+            it("returns true", function() {
+                expect(this.model.hasOwnPage()).toBeTruthy();
+            })
+        })
+
+        context("when the workfile is a neither image or text", function() {
+            beforeEach(function() {
+                spyOn(this.model, 'isImage').andReturn(false)
+                spyOn(this.model, 'isText').andReturn(false)
+            })
+
+            it("returns false", function() {
+                expect(this.model.hasOwnPage()).toBeFalsy();
+            })
+        })
+    })
+
+    describe("#iconUrl", function() {
+        it("proxies to fileIconUrl helper", function() {
+            var url = this.model.iconUrl({size: 'medium'});
+            expect(url).toBe(chorus.urlHelpers.fileIconUrl(this.model.get('fileType'), 'medium'));
+        })
+
+        it("defaults to large size", function() {
+            var url = this.model.iconUrl();
+            expect(url).toBe(chorus.urlHelpers.fileIconUrl(this.model.get('fileType', 'large')));
+        })
+
+        it("uses type when fileType is not available", function() {
+            this.model.unset("fileType");
+            this.model.attributes.type = 'SQL';
+            expect(this.model.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('SQL', 'large'));
+        })
+    });
 });

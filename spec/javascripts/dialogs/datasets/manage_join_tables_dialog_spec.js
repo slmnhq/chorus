@@ -93,10 +93,10 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             expect(columnCounts.eq(1).text().trim()).toMatchTranslation("dataset.manage_join_tables.column_count_plural", { count: 22 });
         });
 
-        it("shows the small dataset icon for each table/view", function() {
+        it("shows the medium dataset icon for each table/view", function() {
             var icons = this.dialog.$("img.image");
-            expect(icons.eq(0)).toHaveAttr("src", this.databaseObject1.iconUrl({ size: "small" }));
-            expect(icons.eq(1)).toHaveAttr("src", this.databaseObject2.iconUrl({ size: "small" }));
+            expect(icons.eq(0)).toHaveAttr("src", this.databaseObject1.iconUrl({ size: "medium" }));
+            expect(icons.eq(1)).toHaveAttr("src", this.databaseObject2.iconUrl({ size: "medium" }));
         });
 
         it("shows the original table canonical name", function() {

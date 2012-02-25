@@ -71,7 +71,7 @@
         className:"workfile_header",
         additionalContext:function () {
             return {
-                iconUrl:this.model.get("fileType") && chorus.urlHelpers.fileIconUrl(this.model.get("fileType"))
+                iconUrl:this.model.iconUrl()
             };
         }
     });

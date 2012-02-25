@@ -62,34 +62,34 @@ describe("chorus.models.TabularData", function() {
             }
         };
 
-        var smallIconMap = {
+        var mediumIconMap = {
             "CHORUS_VIEW": {
-                "QUERY": "view_small.png"
+                "QUERY": "view_medium.png"
             },
 
             "SOURCE_TABLE": {
-                "BASE_TABLE": "source_table_small.png",
-                "EXTERNAL_TABLE": "source_table_small.png",
-                "MASTER_TABLE": "source_table_small.png",
-                "VIEW": "source_view_small.png"
+                "BASE_TABLE": "source_table_medium.png",
+                "EXTERNAL_TABLE": "source_table_medium.png",
+                "MASTER_TABLE": "source_table_medium.png",
+                "VIEW": "source_view_medium.png"
             },
 
             "SANDBOX_TABLE": {
-                "BASE_TABLE": "table_small.png",
-                "EXTERNAL_TABLE": "table_small.png",
-                "MASTER_TABLE": "table_small.png",
-                "VIEW": "view_small.png",
-                "HDFS_EXTERNAL_TABLE": "table_small.png"
+                "BASE_TABLE": "table_medium.png",
+                "EXTERNAL_TABLE": "table_medium.png",
+                "MASTER_TABLE": "table_medium.png",
+                "VIEW": "view_medium.png",
+                "HDFS_EXTERNAL_TABLE": "table_medium.png"
             }
         };
 
-        describe("when the 'size' option is set to 'small'", function() {
-            it("returns the small version of the icon of the appropriate type", function() {
-                _.each(smallIconMap, function(subMap, type) {
+        describe("when the 'size' option is set to 'medium'", function() {
+            it("returns the medium version of the icon of the appropriate type", function() {
+                _.each(mediumIconMap, function(subMap, type) {
                     _.each(subMap, function(filename, objectType) {
 
                         var model = fixtures.tabularData({ type: type, objectType: objectType});
-                        expect(model.iconUrl({ size: "small" })).toBe("/images/" + filename);
+                        expect(model.iconUrl({ size: "medium" })).toBe("/images/" + filename);
 
                     });
                 });

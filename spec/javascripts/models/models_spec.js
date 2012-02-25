@@ -1,4 +1,4 @@
-describe("chorus.models", function() {
+describe("chorus.models.Abstract", function() {
     describe("Base", function() {
         beforeEach(function() {
             this.model = new chorus.models.Base({ id: "foo"});
@@ -824,6 +824,13 @@ describe("chorus.models", function() {
                 this.resource = fixtures.user();
             });
             fetchIfNotLoadedSpecs();
+        })
+
+        describe("hasOwnPage", function() {
+            it("returns false", function() {
+                var model = new chorus.models.Base()
+                expect(model.hasOwnPage()).toBeFalsy();
+            })
         })
     });
 

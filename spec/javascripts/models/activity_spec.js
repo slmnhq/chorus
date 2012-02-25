@@ -325,7 +325,7 @@ describe("chorus.models.Activity", function() {
         });
 
         it("returns a CommentSet", function() {
-            expect(this.comments instanceof chorus.collections.CommentSet).toBeTruthy();
+            expect(this.comments).toBeA(chorus.collections.CommentSet);
         });
 
         it("memoizes", function() {
@@ -348,14 +348,15 @@ describe("chorus.models.Activity", function() {
     describe("#attachments", function() {
         beforeEach(function() {
             this.model.set({
-                artifacts: [fixtures.workfile({ entityType: "workfile" }).attributes, fixtures.artifact().attributes]
+                artifacts: [fixtures.workfile({ entityType: "workfile" }).attributes, fixtures.artifact().attributes, fixtures.datasetArtifactJson()]
             });
             this.attachments = this.model.attachments();
         });
 
-        it("returns an array of file models (Workfiles and Artifacts)", function() {
-            expect(this.attachments[0] instanceof chorus.models.Workfile).toBeTruthy();
-            expect(this.attachments[1] instanceof chorus.models.Artifact).toBeTruthy();
+        it("returns an array of file models (Workfiles, Artifacts, and Datasets)", function() {
+            expect(this.attachments[0]).toBeA(chorus.models.Workfile)
+            expect(this.attachments[1]).toBeA(chorus.models.Artifact)
+//            expect(this.attachments[2]).toBeA(chorus.models.Dataset)
         });
 
         it("memoizes", function() {

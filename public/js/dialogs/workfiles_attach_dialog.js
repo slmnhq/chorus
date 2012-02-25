@@ -12,7 +12,7 @@ chorus.dialogs.WorkfilesAttach = chorus.dialogs.Attach.extend({
 
     collectionModelContext: function (model) {
         return {
-            iconUrl: chorus.urlHelpers.fileIconUrl(model.get('fileType'), "medium"),
+            iconUrl: model.iconUrl({size:"medium"}),
             name: model.get("fileName")
         }
     },

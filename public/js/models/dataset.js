@@ -16,7 +16,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
     showUrlTemplate: function() {
         return [
             "workspaces",
-            this.get("workspace").id,
+            this.get("workspaceId") || this.get("workspace").id,
             "datasets",
             this.get("id")
         ].join("/");
@@ -99,5 +99,9 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
         var result = this._super('columns', arguments);
         result.attributes.workspaceId = this.get("workspace").id;
         return result;
+    },
+
+    hasOwnPage: function() {
+        return true;
     }
 });

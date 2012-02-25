@@ -72,7 +72,7 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     collectionModelContext: function(model) {
         return {
             isView:  model.metaType() == "view",
-            iconUrl: model.iconUrl({ size: "small" })
+            iconUrl: model.iconUrl({ size: "medium" })
         };
     }
 });

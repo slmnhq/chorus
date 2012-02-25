@@ -246,4 +246,10 @@ describe("chorus.models.Dataset", function() {
             expect((this.dataset).columns().attributes.workspaceId).toBe(this.dataset.get('workspace').id);
         });
     });
+
+    describe("#hasOwnPage", function() {
+        it("returns true", function() {
+            expect(this.dataset.hasOwnPage()).toBeTruthy();
+        })
+    })
 })

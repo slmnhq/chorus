@@ -1683,6 +1683,16 @@ beforeEach(function() {
             return new chorus.models.Artifact(attributes);
         },
 
+        datasetArtifactJson: function(overrides) {
+            return _.extend({
+                id: this.nextId().toString(),
+                entityType: "databaseObject",
+                objectType: "BASE_TABLE",
+                type: "databaseObject",
+                workspaceId: this.nextId().toString()
+            }, overrides);
+        },
+
         instance: function(overrides) {
             var attributes = _.extend(this.instanceJson(), {
                 description: "description for jasmine",

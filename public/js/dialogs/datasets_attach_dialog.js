@@ -12,7 +12,7 @@ chorus.dialogs.DatasetsAttach = chorus.dialogs.Attach.extend({
 
     collectionModelContext: function (model) {
         return {
-            iconUrl: model.iconUrl({size: 'small'}),
+            iconUrl: model.iconUrl({size: 'medium'}),
             name: model.get("objectName")
         }
     }

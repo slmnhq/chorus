@@ -153,7 +153,6 @@
             return (!versionNum || versionNum === this.get("latestVersionNum"))
         },
 
-
         save: function(attrs, options) {
             if (this.canEdit()) {
                 options = options || {};
@@ -190,6 +189,18 @@
             } else {
                 return this.downloadUrl();
             }
+        },
+
+        iconUrl: function(options) {
+            var fileExtension = this.get("fileType") || this.get('type');
+            return chorus.urlHelpers.fileIconUrl(fileExtension, options && options.size);
+        },
+
+        hasOwnPage: function() {
+            if(this.isImage() || this.isText()) {
+                return true;
+            }
+            return false;
         }
     });
 })();

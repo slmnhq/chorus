@@ -1,11 +1,10 @@
 chorus.presenters.Artifact = chorus.presenters.Base.extend({
-    present:function (model, options) {
-        var modelHasOwnPage = model instanceof chorus.models.Workfile && (model.isImage() || model.isText());
-        var url = modelHasOwnPage ? model.showUrl() : model.downloadUrl();
-
+    present: function(model, options) {
+        var url = model.hasOwnPage() ? model.showUrl() : model.downloadUrl();
+        var iconSize = (options && options.iconSize) || "medium";
         return {
-            url:url,
-            iconSrc:chorus.urlHelpers.fileIconUrl(model.get("type") || model.get("fileType"), options.iconSize || 'medium')
+            url: url,
+            iconSrc: model.iconUrl({size: iconSize})
         }
     }
 });

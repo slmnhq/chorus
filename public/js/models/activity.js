@@ -1,10 +1,10 @@
 chorus.models.Activity = chorus.models.Base.extend({
-    author:function () {
+    author: function() {
         this._author = this._author || new chorus.models.User(this.get("author"));
         return this._author;
     },
 
-    comments:function () {
+    comments: function() {
         this._comments || (this._comments = new chorus.collections.CommentSet(
             this.get("comments"), {
                 entityType: this.collection && this.collection.attributes.entityType,
@@ -14,7 +14,7 @@ chorus.models.Activity = chorus.models.Base.extend({
         return this._comments;
     },
 
-    instance:function () {
+    instance: function() {
         if (this.get("instance")) {
             this._instance || (this._instance = new chorus.models.Instance(this.get("instance")));
         }
@@ -22,7 +22,7 @@ chorus.models.Activity = chorus.models.Base.extend({
         return this._instance;
     },
 
-    workspace:function () {
+    workspace: function() {
         if (this.get("workspace")) {
             this._workspace || (this._workspace = new chorus.models.Workspace(this.get("workspace")));
         }
@@ -34,7 +34,7 @@ chorus.models.Activity = chorus.models.Base.extend({
         var datasetField = this.get("table") || this.get("view") || this.get("chorusView") || this.get("databaseObject");
         if (datasetField && this.get("workspace")) {
             return new chorus.models.Dataset({
-                id:   datasetField.id,
+                id: datasetField.id,
                 type: datasetField.type,
                 objectType: datasetField.objectType,
                 objectName: datasetField.name,
@@ -55,17 +55,17 @@ chorus.models.Activity = chorus.models.Base.extend({
         }
     },
 
-    workfile:function () {
+    workfile: function() {
         if (this.get("workfile")) {
             if (!this._workfile) {
                 this._workfile = new chorus.models.Workfile(this.get("workfile"));
-                this._workfile.set({workfileId:this._workfile.get("id")})
+                this._workfile.set({workfileId: this._workfile.get("id")})
                 if (this.get("version")) {
-                    this._workfile.set({versionNum:this.get("version")})
+                    this._workfile.set({versionNum: this.get("version")})
                 }
 
                 if (this.workspace() && this.workspace().get("id")) {
-                    this._workfile.set({ workspaceId:this.workspace().get("id") });
+                    this._workfile.set({ workspaceId: this.workspace().get("id") });
                 }
             }
         }
@@ -111,10 +111,22 @@ chorus.models.Activity = chorus.models.Base.extend({
         insight.save(null, { method: "create" });
     },
 
-    attachments:function () {
+    attachments: function() {
         if (!this._attachments) {
-            this._attachments = _.map(this.get("artifacts"), function (artifactJson) {
-                var klass = (artifactJson.entityType == "workfile") ? chorus.models.Workfile : chorus.models.Artifact;
+            this._attachments = _.map(this.get("artifacts"), function(artifactJson) {
+                var klass;
+                switch (artifactJson.entityType) {
+                    case 'workfile':
+                        klass = chorus.models.Workfile;
+                        break;
+                      // There is a corresponding line commented out in the test
+//                    case 'databaseObject':
+//                        klass = chorus.models.Dataset;
+//                        break;
+                    default:
+                        klass = chorus.models.Artifact;
+                        break;
+                }
                 return new klass(artifactJson);
             });
         }

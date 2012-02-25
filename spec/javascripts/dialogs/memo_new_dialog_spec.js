@@ -271,8 +271,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
                 it("displays the appropriate icons", function() {
                     var datasetIcons = this.dialog.$(".dataset_details:visible img.icon");
-                    expect(datasetIcons.eq(0).attr("src")).toBe(this.datasetSet.at(0).iconUrl({size: 'small'}));
-                    expect(datasetIcons.eq(0).attr("src")).toBe(this.datasetSet.at(1).iconUrl({size: 'small'}));
+                    expect(datasetIcons.eq(0).attr("src")).toBe(this.datasetSet.at(0).iconUrl({size: 'medium'}));
+                    expect(datasetIcons.eq(0).attr("src")).toBe(this.datasetSet.at(1).iconUrl({size: 'medium'}));
                 });
 
                 it("stores the collection", function() {
