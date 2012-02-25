@@ -216,12 +216,14 @@ describe("chorus.dialogs.DatasetImport", function() {
                             var option = view.$(".existing_table select option:eq(" + ( index + 1 ) + ")");
                             expect(option).toContainText(model.get("objectName"));
                             expect(option).toHaveAttr("value", model.get("objectName"));
+                            expect(option.data("id")).toBe(model.id);
                         }, this);
                     });
 
                     context("selecting an existing table", function() {
                         beforeEach(function() {
                             this.selectedOption = this.dialog.$('option:eq(1)').val();
+                            this.selectedId = this.dialog.$("option:eq(1)").data("id");
                             this.dialog.$("select").val(this.selectedOption).change();
                         });
 
@@ -234,12 +236,12 @@ describe("chorus.dialogs.DatasetImport", function() {
                             expect(this.dialog.$("button.submit")).toBeDisabled();
                         })
 
-                         context("clicking 'Upload File'", function() {
-                             beforeEach(function() {
-                                 this.dialog.$("form").submit();
-                             })
+                        context("clicking 'Upload File'", function() {
+                            beforeEach(function() {
+                                this.dialog.$("form").submit();
+                            })
 
-                             it("should send the name of the existing table as the toTable", function() {
+                            it("should send the name of the existing table as the toTable", function() {
                                 expect(this.dialog.csv.get("toTable")).toBe(this.selectedOption);
                             });
 
@@ -254,7 +256,11 @@ describe("chorus.dialogs.DatasetImport", function() {
                                 });
 
                                 it("launches the import to existing table dialog", function() {
-                                    expect(chorus.dialogs.ExistingTableImportCSV.prototype.setup).toHaveBeenCalledWith({csv: this.dialog.csv});
+                                    expect(chorus.dialogs.ExistingTableImportCSV.prototype.setup).toHaveBeenCalledWith(
+                                        {
+                                            csv: this.dialog.csv,
+                                            datasetId: this.selectedId
+                                        });
                                     expect(this.modalSpy).toHaveModal(chorus.dialogs.ExistingTableImportCSV);
                                 });
                             });

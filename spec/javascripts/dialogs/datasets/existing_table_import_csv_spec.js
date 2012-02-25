@@ -15,7 +15,19 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         ],
             toTable: "existingTable"
         });
-        this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv});
+        this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv, datasetId: "dat-id"});
+        this.columns = [
+            {name: "col1", typeCategory: "WHOLE_NUMBER"},
+            {name: "col2", typeCategory: "STRING"},
+            {name: "col3", typeCategory: "WHOLE_NUMBER"}
+        ]
+        this.dataset = fixtures.datasetSandboxTable({
+            id: "dat-id",
+            workspace: {id: this.csv.get("workspaceId")},
+            columnNames: this.columns
+        });
+        this.server.completeFetchFor(this.dataset);
+        this.qtip = stubQtip();
         this.dialog.render();
     });
 
@@ -30,6 +42,10 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     it("has comma as the default separator", function() {
         expect(this.dialog.$('input[name=delimiter]:checked').val()).toBe(',');
     });
+
+    xit("fetches the dataset columns", function() {
+        expect(this.server.lastFetchFor(this.dataset)).toBeDefined();
+    })
 
     describe("click the 'tab' separator", hasRightSeparator('\t'));
     describe("click the 'comma' separator", hasRightSeparator(','));
@@ -47,7 +63,8 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 ],
                     toTable: "existingTable"
                 });
-                this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv});
+                this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv, datasetId: "dat-id"});
+                this.server.completeFetchFor(this.dataset);
                 this.dialog.render();
 
                 this.dialog.$("input.delimiter[value='" + separator + "']").click();
@@ -105,7 +122,8 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                     ],
                         toTable: "existingTable"
                     });
-                    this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv});
+                    this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv, datasetId: "dat-id"});
+                    this.server.completeFetchFor(this.dataset);
                     this.dialog.render();
 
                     this.dialog.$("input#delimiter_other").click();
@@ -174,15 +192,29 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             });
         });
 
+        it("has 'map to...' for each column mapping", function() {
+            expect(this.dialog.$(".data_table .column_mapping .map").length).toEqual(5);
+            _.each(this.dialog.$(".column_mapping .map"), function(el) {
+                expect($(el).text()).toContainTranslation("dataset.import.table.existing.map_to");
+                expect($(el).find("a").text()).toContainTranslation("dataset.import.table.existing.select_one");
+            });
+        })
+
         describe("selecting a destination column", function() {
             beforeEach(function() {
-                this.qtip = stubQtip();
                 this.dialog.$(".column_mapping .map:eq(1)").click();
             })
 
-            xit("shows a qtip", function() {
+            it("shows a qtip", function() {
                 expect(this.qtip).toHaveVisibleQtip()
-            })
+            });
+
+            it("populates the qtip with the columns", function() {
+                expect(this.qtip.find(".ui-tooltip-content li").length).toBe(3);
+                _.each(this.qtip.find(".ui-tooltip-content li"), function(el, index) {
+                    expect($(el).text()).toBe("col" + (index + 1));
+                });
+            });
         })
     });
 

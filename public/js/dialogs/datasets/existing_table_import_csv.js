@@ -17,6 +17,9 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         this.resource = this.csv = this.options.csv;
         this.tableName = this.csv.get("toTable");
         chorus.PageEvents.subscribe("choice:setType", this.onSelectType, this);
+        this.dataset = new chorus.models.Dataset({ workspace: {id: this.csv.get("workspaceId")}, id: this.options.datasetId })
+//        this.requiredResources.add(this.dataset);
+        this.dataset.fetch();
     },
 
     onSelectType: function(data, linkMenu) {
@@ -28,9 +31,14 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         this.$(".tbody").unbind("scroll.follow_header");
         this.$(".tbody").bind("scroll.follow_header", _.bind(this.adjustHeaderPosition, this));
         this.setupScrolling(this.$(".tbody"));
-
+        
+        var content = $("<ul></ul>");
+        _.each(this.dataset.get("columnNames"), function(column) {
+            content.append($("<li>").append(column.name));
+        });
         chorus.menu(this.$(".column_mapping .map"), {
-            content: "something"
+            content: content,
+            style: {classes: "tooltip-on-modal"}
 //            contentEvents: {
 //                'a.schema': _.bind(this.schemaSelected, this)
 //            }

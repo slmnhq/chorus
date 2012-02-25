@@ -29,7 +29,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             this.$(".existing_table select").attr("disabled", false);
             this.$(".existing_table .options").removeClass("hidden");
             this.$(".existing_table .options input").attr("disabled", false);
-            if(!this.$("select").val()) {
+            if (!this.$("select").val()) {
                 this.$("button.submit").attr("disabled", "disabled");
             }
         }
@@ -37,7 +37,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     },
 
     onSelectChanged: function(e) {
-        if($(e.currentTarget).val()) {
+        if ($(e.currentTarget).val()) {
             this.$("button.submit").attr("disabled", false);
         } else {
             this.$("button.submit").attr("disabled", "disabled");
@@ -50,11 +50,17 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         var select = this.$(".existing_table select");
         select.append($("<option/>").prop('value', '').prop('selected', 'selected').text(t("selectbox.select_one")));
 
+        this.tableMap = {};
+
         this.sandboxTables.each(function(model) {
-            select.append($("<option/>").prop('value', model.get("objectName")).text(model.get("objectName")));
-        });
+            select.append($("<option/>").prop('value', model.get("objectName")).data("id", model.id).
+                text(model.get("objectName")));
+
+            this.tableMap[model.get("objectName")] = model.get("id");
+        }, this);
 
         this.$(".existing_table .select").removeClass("hidden");
+
 
         chorus.styleSelect(self.$("select"));
     },
@@ -74,6 +80,10 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
 
     uploadFile: function(e) {
         e && e.preventDefault();
+
+        if (this.importTarget === "existing") {
+            this.datasetId = this.tableMap[this.$('select').val()]
+        }
 
         var toTable = this.$('.new_table input:text').is(':disabled') ? this.$(".existing_table select").val() : chorus.models.CSVImport.normalizeForDatabase(this.$(".new_table input[type='text']").val())
         this.csv.set({
@@ -142,9 +152,9 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             }
             else {
                 var dialog;
-                if(self.importTarget === "existing") {
-                    dialog = new chorus.dialogs.ExistingTableImportCSV({csv: self.csv});
-                 } else {
+                if (self.importTarget === "existing") {
+                    dialog = new chorus.dialogs.ExistingTableImportCSV({csv: self.csv, datasetId: self.datasetId});
+                } else {
                     dialog = new chorus.dialogs.NewTableImportCSV({csv: self.csv});
                 }
                 dialog.launchModal();
