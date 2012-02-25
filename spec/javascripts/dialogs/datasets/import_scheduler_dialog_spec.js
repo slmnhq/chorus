@@ -116,6 +116,28 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     expect(this.dialog.$("button.submit")).toBeEnabled();
                 });
 
+                describe("checking the import on a schedule checkbox", function() {
+                    beforeEach(function() {
+                        spyOn(this.dialog.scheduleView, "enable");
+                        this.dialog.$(".existing_table input[name='schedule']").prop("checked", true).change();
+                    });
+
+                    it("should enable the schedule view", function() {
+                        expect(this.dialog.scheduleView.enable).toHaveBeenCalled();
+                    });
+
+                    context("when the schedule view is enabled", function() {
+                        beforeEach(function() {
+                            spyOn(this.dialog.scheduleView, "disable");
+                            this.dialog.$(".existing_table input[name='schedule']").prop("checked", false).change();
+                        });
+
+                        it("should disable the schedule view", function() {
+                            expect(this.dialog.scheduleView.disable).toHaveBeenCalled();
+                        });
+                    });
+                });
+
                 context("and the form is submitted", function() {
                     beforeEach(function() {
                         this.dialog.$(".existing_table .truncate").prop("checked", true).change();

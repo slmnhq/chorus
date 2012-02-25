@@ -1,23 +1,39 @@
 <div class="row">
-    <select name="scheduleFrequency" class="frequency">
+    <select name="scheduleFrequency" class="frequency"
+        {{#unless enable}}
+            disabled="disabled"
+        {{/unless}}
+        >
         <option value="DAILY">{{t "import_now.frequency.daily"}}</option>
         <option value="WEEKLY" selected="selected">{{t "import_now.frequency.weekly"}}</option>
         <option value="MONTHLY">{{t "import_now.frequency.monthly"}}</option>
     </select>
 
-    <select class="hours">
+    <select class="hours"
+        {{#unless enable}}
+            disabled="disabled"
+        {{/unless}}
+        >
     {{#each hours}}
         <option value="{{this}}">{{this}}</option>
     {{/each}}
     </select>
 
-    <select class="minutes">
-        {{#each minutes}}
+    <select class="minutes"
+        {{#unless enable}}
+            disabled="disabled"
+        {{/unless}}
+        >
+    {{#each minutes}}
         <option value="{{this}}">{{this}}</option>
-        {{/each}}
+    {{/each}}
     </select>
 
-    <select class="ampm">
+    <select class="ampm"
+        {{#unless enable}}
+            disabled="disabled"
+        {{/unless}}
+        >
         <option value="0">{{t "import_now.ampm.am"}}</option>
         <option value="12">{{t "import_now.ampm.pm"}}</option>
     </select>
@@ -25,14 +41,39 @@
 
 <div class="row date start">
     <span class="label">{{t "import_now.start.label"}}</span>
-    <input type="text" name="month" placeholder='{{{t "datepicker.placeholder.month"}}}' value="{{{start.month}}}"/>
-    <input type="text" name="day" placeholder='{{{t "datepicker.placeholder.day"}}}' value="{{{start.day}}}"/>
-    <input type="text" name="year" placeholder='{{{t "datepicker.placeholder.year"}}}' value="{{{start.year}}}"/>
+    <input type="text" name="month" placeholder='{{{t "datepicker.placeholder.month"}}}' value="{{{start.month}}}"
+            {{#unless enable}}
+                disabled="disabled"
+            {{/unless}}
+            />
+
+    <input type="text" name="day" placeholder='{{{t "datepicker.placeholder.day"}}}' value="{{{start.day}}}"
+            {{#unless enable}}
+                disabled="disabled"
+            {{/unless}}
+            />
+    <input type="text" name="year" placeholder='{{{t "datepicker.placeholder.year"}}}' value="{{{start.year}}}"
+            {{#unless enable}}
+                disabled="disabled"
+            {{/unless}}
+            />
 </div>
 
 <div class="row date end">
     <span class="label">{{t "import_now.end.label"}}</span>
-    <input type="text" name="month" placeholder='{{{t "datepicker.placeholder.month"}}}' value="{{{end.month}}}"/>
-    <input type="text" name="day" placeholder='{{{t "datepicker.placeholder.day"}}}' value="{{{end.day}}}"/>
-    <input type="text" name="year" placeholder='{{{t "datepicker.placeholder.year"}}}' value="{{{end.year}}}"/>
+    <input type="text" name="month" placeholder='{{{t "datepicker.placeholder.month"}}}' value="{{{end.month}}}"
+            {{#unless enable}}
+                disabled="disabled"
+            {{/unless}}
+            />
+    <input type="text" name="day" placeholder='{{{t "datepicker.placeholder.day"}}}' value="{{{end.day}}}"
+            {{#unless enable}}
+                disabled="disabled"
+            {{/unless}}
+            />
+    <input type="text" name="year" placeholder='{{{t "datepicker.placeholder.year"}}}' value="{{{end.year}}}"
+            {{#unless enable}}
+                disabled="disabled"
+            {{/unless}}
+            />
 </div>

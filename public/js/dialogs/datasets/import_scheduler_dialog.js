@@ -8,15 +8,15 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     },
 
     events : {
-        "change input:radio" : "onDestinationChosen",
-        "change input:checkbox": "onCheckboxChecked",
+        "change input:radio": "onDestinationChosen",
+        "change input:checkbox": "onCheckboxClicked",
         "keyup input:text": "onInputFieldChanged",
         "paste input:text": "onInputFieldChanged",
         "click button.submit": "beginImport"
     },
 
     setup: function() {
-        this.scheduleView = new chorus.views.ImportSchedule();
+        this.scheduleView = new chorus.views.ImportSchedule({enable: false});
 
         if (this.options.launchElement.data("use-schedule")) {
             this.title = t("import_now.title_schedule");
@@ -49,7 +49,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     },
 
     postRender: function() {
-        _.defer(_.bind(function(){chorus.styleSelect(this.$("select"))}, this));
+        _.defer(_.bind(function(){chorus.styleSelect(this.$("select.names"))}, this));
     },
 
     onDestinationChosen: function() {
@@ -63,7 +63,6 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         $tableSelect.prop("disabled", disableExisting);
         $tableSelect.closest("fieldset").toggleClass("disabled", disableExisting);
 
-        chorus.styleSelect($tableSelect);
         this.onInputFieldChanged();
     },
 
@@ -80,11 +79,15 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         this.$("button.submit").prop("disabled", !this.model.isValid());
     },
 
-    onCheckboxChecked: function() {
+    onCheckboxClicked: function(e) {
         var $fieldSet = this.$("fieldset").not(".disabled");
         var enabled = $fieldSet.find("input[name=limit_num_rows]").prop("checked");
         var $limitInput = $fieldSet.find(".limit input:text");
         $limitInput.prop("disabled", !enabled);
+
+        if ($(e.target).is("input[name='schedule']")) {
+            $(e.target).prop("checked") ? this.scheduleView.enable() : this.scheduleView.disable();
+        }
 
         this.onInputFieldChanged();
     },
