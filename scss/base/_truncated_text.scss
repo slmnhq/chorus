@@ -7,7 +7,6 @@
         overflow: hidden;
 
         .text_content {
-            color: $color-text4;
             .truncated {
                 display: none;
             }
@@ -15,22 +14,11 @@
             .entire_text {
                 @include after-clearfix;
                 white-space: pre-wrap;
-                color: $color-text4;
 
                 .text {
                     white-space: pre-wrap;
                     overflow: hidden;
                 }
-            }
-        }
-
-        .links {
-            .less {
-                display: none;
-            }
-
-            .more {
-                display: inline;
             }
         }
 
@@ -49,16 +37,6 @@
                         width: auto;
                         display: inline;
                     }
-                }
-            }
-
-            .links {
-                .less {
-                    display: inline;
-                }
-
-                .more {
-                    display: none;
                 }
             }
         }
