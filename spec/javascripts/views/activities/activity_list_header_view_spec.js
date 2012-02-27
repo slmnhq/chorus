@@ -28,19 +28,37 @@ describe("chorus.views.ActivityListHeader", function() {
             });
 
             describe("#render", function() {
-                it("displays the title for 'all' mode by default", function() {
-                    expect(this.view.$("h1").text()).toBe("the_all_title_i_passed");
+                context("when insights mode is false", function() {
+                    it("displays the title for 'all' mode by default", function() {
+                        expect(this.view.$("h1").text()).toBe("the_all_title_i_passed");
+                    });
+
+                    it("displays the 'All Activity' link as active", function() {
+                        expect(this.view.$(".menus .all")).toHaveClass("active");
+                        expect(this.view.$(".menus .insights")).not.toHaveClass("active");
+                    });
+                });
+
+                context("when insights mode is true", function() {
+                    beforeEach(function() {
+                        this.view.collection.attributes.insights = true;
+                        this.view.render();
+                    });
+
+                    it("displays the title for 'insights' mode by default", function() {
+                        expect(this.view.$("h1").text()).toBe("the_insights_title_i_passed");
+                    });
+
+                    it("displays the 'Insights' link as active", function() {
+                        expect(this.view.$(".menus .all")).not.toHaveClass("active");
+                        expect(this.view.$(".menus .insights")).toHaveClass("active");
+                    });
                 });
 
                 it("should have a filter menu", function() {
                     expect(this.view.$(".menus .title")).toContainTranslation("filter.show");
                     expect(this.view.$(".menus .all")).toContainTranslation("filter.all_activity");
                     expect(this.view.$(".menus .insights")).toContainTranslation("filter.only_insights");
-                });
-
-                it("displays the 'All Activity' link as active", function() {
-                    expect(this.view.$(".menus .all")).toHaveClass("active");
-                    expect(this.view.$(".menus .insights")).not.toHaveClass("active");
                 });
 
                 describe("clicking on 'Insights'", function() {
