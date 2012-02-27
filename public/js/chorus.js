@@ -170,7 +170,7 @@ window.Chorus = function() {
             formElementParams[uniqueId] = format;
         });
 
-        datePickerController.createDatePicker({ formElements: formElementParams });
+        datePickerController.createDatePicker({ formElements: formElementParams, dragDisabled: true });
     };
 
     self.placeholder = function(element) {

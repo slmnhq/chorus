@@ -217,6 +217,7 @@ describe("chorus global", function() {
             expect(datePickerParams.formElements[this.id1]).toBe("%d");
             expect(datePickerParams.formElements[this.id2]).toBe("%m");
             expect(datePickerParams.formElements[this.id3]).toBe("%Y");
+            expect(datePickerParams.dragDisabled).toBeTruthy();
         });
     });
 
