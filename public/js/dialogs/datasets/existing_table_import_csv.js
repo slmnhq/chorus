@@ -28,16 +28,24 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         this.$(".tbody").bind("scroll.follow_header", _.bind(this.adjustHeaderPosition, this));
         this.setupScrolling(this.$(".tbody"));
 
-        var self = this
-        _.each(this.$(".column_mapping .map"), function(map) {
+        this.$(".column_mapping .map").qtip("destroy");
+        this.$(".column_mapping .map").removeData("qtip");
+        var self = this;
+        _.each(this.$(".column_mapping .map"), function(map, i) {
             var content = $("<ul></ul>");
             _.each(self.dataset.get("columnNames"), function(column) {
-                content.append($("<li>").append($('<a class="name" href="#">' + column.name + '</a>'+
-                "<span class='type'>"+chorus.models.DatabaseColumn.humanTypeMap[column.typeCategory]+"</span>")));
+                var check = $('<div class="check_wrapper"><span class="check hidden"></span></div>')
+                if(column.name === self.destinations[i]) {
+                    check.removeClass("hidden");
+                }
+                content.append($("<li>").append($(check.outerHtml() +
+                    '<a class="name" href="#">' + column.name + '</a>'+
+                '<span class="type">'+chorus.models.DatabaseColumn.humanTypeMap[column.typeCategory]+'</span>')));
             });
+
             chorus.menu($(map), {
                 content: content,
-                style: {classes: "tooltip-on-modal"},
+                classes: "table_import_csv",
                 contentEvents: {
                     'a.name': _.bind(self.columnSelected, self)
                 }
@@ -54,11 +62,12 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
 
     columnSelected: function(e, api) {
         e.preventDefault();
+        $(e.target).closest("ul").find(".check").addClass("hidden");
+        $(e.target).siblings(".check_wrapper").find(".check").removeClass("hidden");
         api.elements.target.find("a").text($(e.target).text());
-        var dest = _.map(this.$(".column_mapping .map a"), function(link){
+        this.destinations = _.map(this.$(".column_mapping .map a"), function(link){
            return $(link).text();
         })
-        this.destinations = dest;
     },
 
     additionalContext: function() {

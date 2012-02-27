@@ -24,8 +24,8 @@
 
         .header_options {
             float: right;
-            margin-top:6px;
-            display:inline-block;
+            margin-top: 6px;
+            display: inline-block;
         }
 
         span.delimiter {
@@ -41,8 +41,8 @@
         }
 
         input[name=custom_delimiter] {
-            display:inline-block;
-            width:2em;
+            display: inline-block;
+            width: 2em;
         }
     }
 
@@ -114,7 +114,7 @@
             }
 
             .type_name {
-                /*cursor: pointer;*/
+            /*cursor: pointer;*/
 
                 display: inline-block;
                 color: white;
@@ -189,5 +189,21 @@
     .modal_controls {
         padding-right: 10px;
         padding-bottom: 5px;
+    }
+}
+
+.table_import_csv {
+    .check_wrapper {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        margin: 0 3px;
+
+        .check {
+            background-image: url("/images/check.png");
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+        }
     }
 }
