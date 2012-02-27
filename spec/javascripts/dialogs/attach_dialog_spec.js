@@ -19,6 +19,7 @@ describe("chorus.dialogs.Attach", function() {
         });
 
         it("renders them as selected", function() {
+            debugger
             expect(this.dialog.$("li").eq(0)).toHaveClass("selected");
             expect(this.dialog.$("li").eq(1)).toHaveClass("selected");
         });
