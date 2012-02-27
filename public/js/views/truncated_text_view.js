@@ -28,7 +28,7 @@ chorus.views.TruncatedText = chorus.views.Base.extend({
     toggleMore:function (e) {
         e.preventDefault();
         this.isExpanded = !this.isExpanded;
-        this.$("> div").toggleClass("more", this.isExpanded);
+        this.$(".text_container").toggleClass("more", this.isExpanded);
     },
 
     truncate:function truncate(text, characters, lines) {

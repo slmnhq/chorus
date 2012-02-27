@@ -1,4 +1,3 @@
-
 describe("chorus.views.TruncatedText", function() {
     beforeEach(function() {
         fixtures.model = "Workspace"
@@ -173,7 +172,7 @@ describe("chorus.views.TruncatedText", function() {
             })
 
             it("adds the 'more' class to the surrounding div", function() {
-                expect(this.view.$("> div")).toHaveClass("more");
+                expect(this.view.$(".text_container")).toHaveClass("more");
             })
 
             describe("clicking 'read less'", function() {
@@ -182,7 +181,7 @@ describe("chorus.views.TruncatedText", function() {
                 })
 
                 it("removes the 'more' class from the surrounding div", function() {
-                    expect(this.view.$("> div")).not.toHaveClass("more");
+                    expect(this.view.$(".text_container")).not.toHaveClass("more");
                 })
 
                 context("when the view re-renders", function() {
@@ -191,7 +190,7 @@ describe("chorus.views.TruncatedText", function() {
                     });
 
                     it("still does not have the 'more' class on the surrounding div", function() {
-                        expect(this.view.$("> div")).not.toHaveClass("more");
+                        expect(this.view.$(".text_container")).not.toHaveClass("more");
                     });
                 });
             })
@@ -202,7 +201,7 @@ describe("chorus.views.TruncatedText", function() {
                 });
 
                 it("retains the more class on the surrounding div", function() {
-                    expect(this.view.$("> div")).toHaveClass("more");
+                    expect(this.view.$(".text_container")).toHaveClass("more");
                 });
             });
         })
