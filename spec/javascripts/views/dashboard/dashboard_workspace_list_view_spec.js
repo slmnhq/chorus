@@ -137,4 +137,20 @@ describe("chorus.views.DashboardWorkspaceList", function() {
             });
         })
     });
+
+    describe("event handling", function() {
+        beforeEach(function() {
+            this.view.render();
+        });
+
+        describe("insight:promoted", function() {
+            beforeEach(function() {
+                chorus.PageEvents.broadcast("insight:promoted");
+            });
+
+            it("re-fetches the collection", function() {
+                expect(this.server.lastFetchFor(this.view.collection)).toBeDefined();
+            });
+        });
+    });
 });

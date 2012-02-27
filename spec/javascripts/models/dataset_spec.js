@@ -247,6 +247,24 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
+    describe("#deriveChorusView", function() {
+        beforeEach(function() {
+            this.chorusView = this.dataset.deriveChorusView();
+        });
+
+        it("returns a chorus view", function() {
+            expect(this.chorusView).toBeA(chorus.models.ChorusView);
+        });
+
+        it("has the right 'sourceObject'", function() {
+            expect(this.chorusView.sourceObject).toBe(this.dataset);
+        });
+
+        it('sets the sourceObjectId', function() {
+            expect(this.chorusView.get('sourceObjectId')).toBe(this.dataset.get('id'));
+        });
+    });
+
     describe("#hasOwnPage", function() {
         it("returns true", function() {
             expect(this.dataset.hasOwnPage()).toBeTruthy();

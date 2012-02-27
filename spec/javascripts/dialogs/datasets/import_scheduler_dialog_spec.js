@@ -1,4 +1,4 @@
-describe("chorus.dialogs.ImportScheduler", function() {
+    describe("chorus.dialogs.ImportScheduler", function() {
     beforeEach(function() {
         this.dataset = fixtures.datasetSourceTable();
         this.launchElement = $("<a/>");
@@ -10,6 +10,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
             this.launchElement.attr("data-use-schedule", "true");
             this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
             this.dialog.render();
+        });
+
+        it("should set executeAfterSave to be false on the DatasetImport", function() {
+            expect(this.dialog.model.executeAfterSave).toBeFalsy();
         });
 
         it("should have the correct title", function() {
@@ -35,6 +39,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
         beforeEach(function() {
             this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
             this.dialog.render();
+        });
+
+        it("should set executeAfterSave to be true on the DatasetImport", function() {
+            expect(this.dialog.model.executeAfterSave).toBeTruthy();
         });
 
         it("should have the correct title", function() {

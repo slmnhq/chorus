@@ -1,4 +1,8 @@
 chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
+    constructor: function BareView() {
+        chorus.views.Bare.__super__.constructor.apply(this, arguments);
+    },
+
     initialize:function initialize() {
         this.preInitialize.apply(this, arguments);
 
@@ -248,6 +252,10 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
 }));
 
 chorus.views.Base = chorus.views.Bare.extend({
+    constructor: function View() {
+        chorus.views.Base.__super__.constructor.apply(this, arguments);
+    },
+
     makeModel:$.noop,
     collectionModelContext:$.noop,
     additionalContext:function () {

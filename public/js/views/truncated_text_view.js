@@ -7,43 +7,59 @@ chorus.views.TruncatedText = chorus.views.Base.extend({
     },
 
     additionalContext:function () {
-        var ctx = {isExpanded:this.isExpanded};
         var originalText = this.model.get(this.options.attribute);
-        var pieces = this.truncate(originalText, this.options.characters, this.options.lines);
-        var displayText = pieces[0];
-        var truncatedText = pieces[1];
+        if (this.isExpanded) {
+            var displayText = originalText;
+        } else {
+            var displayText = this.truncate(originalText, this.options.characters, this.options.lines);
+        }
 
-        var wasTruncated = !!pieces[1];
-
-        _.extend(ctx, {
-            displayText:displayText,
-            truncatedText:truncatedText,
-            doTruncate:wasTruncated
-        });
-
-        // scope our additional context to avoid any possible conflicts with model attributes
-        return { truncateContext:ctx }
+        return {
+            truncateContext: {
+                text: displayText,
+                isExpanded: this.isExpanded
+            }
+        }
     },
 
-    toggleMore:function (e) {
+    toggleMore: function(e) {
         e.preventDefault();
         this.isExpanded = !this.isExpanded;
-        this.$("> div").toggleClass("more", this.isExpanded);
+
+        this.render();
+        if (this.isExpanded) {
+            this.$("a.more").addClass("hidden");
+            this.$("a.less").removeClass("hidden");
+        } else {
+            this.$("a.more").removeClass("hidden");
+            this.$("a.less").addClass("hidden");
+        }
     },
 
     truncate:function truncate(text, characters, lines) {
+
         if (!text) {
-            return ['', ''];
+            return '';
         }
 
         var index = characters;
         if (lines) {
-            var lineIndex = text.split('\n').slice(0, lines).join('\n').length;
-            index = Math.min(index, lineIndex);
+            index = Math.min(index, text.split('\n').slice(0, lines).join('\n').length);
         }
 
-        return [text.substring(0, index), text.substring(index)];
-    }
+        var c;
+        for (var i = index - 1; i > 0; i--) {
+            c = text[i];
 
+            if (c == "<") {
+                index = i;
+                break;
+            } else if (c == ">") {
+                break;
+            }
+        }
+
+        return text.substring(0, index);
+    }
 });
 

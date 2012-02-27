@@ -92,7 +92,8 @@ window.Chorus = function() {
     self.menu = function(menuElement, options) {
         self.afterNavigate(function() {$(menuElement).remove();});
 
-        var classes = "tooltip-white"
+        options = options || {};
+        var classes = ((options.classes || "") + " tooltip-white").trim();
         if (menuElement.length) {
             if ($(menuElement).closest(".dialog").length) {
                 classes += " tooltip-modal";

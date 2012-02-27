@@ -209,12 +209,61 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 expect(this.qtip).toHaveVisibleQtip()
             });
 
-            it("populates the qtip with the columns", function() {
+            it("populates the qtip with the columns and column types", function() {
                 expect(this.qtip.find(".ui-tooltip-content li").length).toBe(3);
+                var self = this;
                 _.each(this.qtip.find(".ui-tooltip-content li"), function(el, index) {
-                    expect($(el).text()).toBe("col" + (index + 1));
+                    expect($(el).find("a").text()).toContain("col" + (index + 1));
+                    var type = chorus.models.DatabaseColumn.humanTypeMap[self.columns[index].typeCategory];
+                    expect($(el).find(".type").text()).toContain(type);
                 });
             });
+
+            context("actually choosing the column", function() {
+                beforeEach(function() {
+                    this.qtip.find(".qtip:eq(0) .ui-tooltip-content li:eq(1) a").click();
+                })
+                it("names the correct destination column", function() {
+                    expect(this.dialog.$(".column_mapping .map:eq(0) a").text()).toMatchTranslation("dataset.import.table.existing.select_one");
+                    expect(this.dialog.$(".column_mapping .map:eq(1) a").text()).toBe("col2");
+                });
+                it("marks the column as selected", function() {
+                    this.dialog.$(".column_mapping .map:eq(1)").click();
+                    expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(0) .check")).toHaveClass("hidden");
+                    expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) .check")).not.toHaveClass("hidden");
+                })
+
+                context("when choosing another destination column for the same source column", function() {
+                    beforeEach(function() {
+                        this.qtip.find(".qtip:last .ui-tooltip-content li:eq(0) a").click();
+                    })
+                    it("names the correct destination column", function() {
+                        expect(this.dialog.$(".column_mapping .map:eq(0) a").text()).toMatchTranslation("dataset.import.table.existing.select_one");
+                        expect(this.dialog.$(".column_mapping .map:eq(1) a").text()).toBe("col1");
+                    });
+
+                    it("marks the column as selected", function() {
+                        this.dialog.$(".column_mapping .map:eq(1)").click();
+                        expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(0) .check")).not.toHaveClass("hidden");
+                        expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) .check")).toHaveClass("hidden");
+                    })
+                });
+
+                context("when mapping another source column", function() {
+                    beforeEach(function() {
+                        this.dialog.$(".column_mapping .map:eq(0)").click();
+                        this.qtip.find(".qtip:last .ui-tooltip-content li:eq(0) a").click();
+                    });
+
+                    it("names the correct destination column", function() {
+                        expect(this.dialog.$(".column_mapping .map:eq(0) a").text()).toBe("col1");
+                        expect(this.dialog.$(".column_mapping .map:eq(1) a").text()).toBe("col2");
+                    });
+                });
+
+
+            })
+
         })
     });
 

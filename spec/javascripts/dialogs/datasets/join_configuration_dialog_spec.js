@@ -1,6 +1,6 @@
 describe("chorus.dialogs.JoinConfiguration", function() {
     beforeEach(function() {
-        this.sourceTable = fixtures.databaseTable();
+        this.sourceTable = fixtures.datasetSandboxTable();
         this.sourceTable.columns().reset([
             fixtures.databaseColumn({ name: "source_column_1" }),
             fixtures.databaseColumn({ name: "source_column_2" }),

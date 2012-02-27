@@ -17,11 +17,11 @@ describe("chorus.models.DatasetImport", function() {
                     toTable: "Foo",
                     rowLimit: "23",
                     truncate: "true",
-                    createTableIfNotExist: "true"
+                    isNewTable: "true"
                 };
             });
 
-            _.each(["toTable", "truncate", "createTableIfNotExist"], function(attr) {
+            _.each(["toTable", "truncate", "isNewTable"], function(attr) {
                 it("should require " + attr, function() {
                     this.attrs[attr] = "";
                     expect(this.model.performValidation(this.attrs)).toBeFalsy();
@@ -50,5 +50,42 @@ describe("chorus.models.DatasetImport", function() {
                 });
             });
         });
+    });
+
+    describe("saved", function() {
+        beforeEach(function() {
+            this.model.set({
+                toTable: 'newTable',
+                truncate: 'false',
+                isNewTable: 'true'
+            });
+        })
+        context("when executeAfterSave is true", function() {
+            beforeEach(function() {
+                this.model.executeAfterSave = true;
+                this.model.save();
+                this.server.completeSaveFor(this.model);
+            });
+
+            it("saves a ImportTask", function() {
+                var task = this.model.importTask;
+                expect(task).toBeA(chorus.models.ImportTask);
+                expect(task.get("workspaceId")).toBe(this.model.get("workspaceId"));
+                expect(task.get("sourceId")).toBe(this.model.get("datasetId"));
+                expect(this.server.lastCreateFor(task)).toBeDefined();
+            });
+        });
+
+        context("when executeAfterSave is false", function() {
+            beforeEach(function() {
+                this.model.executeAfterSave = false;
+                this.model.save();
+                this.server.completeSaveFor(this.model);
+            });
+
+            it("does not create an ImportTask", function() {
+                expect(this.model.importTask).toBeUndefined();
+            })
+        })
     });
 });

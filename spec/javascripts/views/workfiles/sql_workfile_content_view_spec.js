@@ -93,7 +93,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                                 id: "10100",
                                 state: "success",
                                 result: {
-                                    message: "hi there",
+                                    message: "hi there"
                                 },
                                 executionInfo: this.executionInfo
                             }

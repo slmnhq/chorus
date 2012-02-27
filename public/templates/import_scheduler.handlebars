@@ -10,7 +10,7 @@
 
         <div class="inputs">
             <input type="hidden" name="truncate" value="false"/>
-            <input type="hidden" name="createTableIfNotExist" value="true"/>
+            <input type="hidden" name="isNewTable" value="true"/>
             <div class="row limit">
                 <input type="checkbox" name="limit_num_rows" id="import_scheduler_limit_rows_new"/>
                 <label for="import_scheduler_limit_rows_new">{{t "import_now.limit_rows"}}</label>
@@ -33,7 +33,7 @@
         </legend>
 
         <div class="inputs">
-            <input type="hidden" name="createTableIfNotExist" value="false"/>
+            <input type="hidden" name="isNewTable" value="false"/>
             <div class="row">
                 <input type="checkbox" class="truncate" name="truncate" id="import_scheduler_truncate"/>
                 <label for="import_scheduler_truncate">{{t "import_now.truncate"}}</label>

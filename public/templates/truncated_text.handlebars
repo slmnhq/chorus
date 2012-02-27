@@ -1,18 +1,16 @@
 {{#if loaded}}
     {{#with truncateContext}}
-        {{#if doTruncate}}
-        <div class="text_container{{#if isExpanded}} more{{/if}}">
-            <div class="text_content">
-                <div class="entire_text"><div class="text">{{displayText}}</div><div class="truncated">{{truncatedText}}</div></div>
-            </div>
+        {{#if text}}
+        <div class="styled_text">
+            <div class="text_container">
+                <div class="text_content">{{{text}}}</div>
 
-            <span class="links">
-                <a class="more" href="#">{{t "truncated_text.more"}}</a>
-                <a class="less" href="#">{{t "truncated_text.less"}}</a>
-            </span>
+                <span class="links">
+                    <a class="more" href="#">{{t "truncated_text.more"}}</a>
+                    <a class="less hidden" href="#">{{t "truncated_text.less"}}</a>
+                </span>
+            </div>
         </div>
-        {{else}}
-            <span class="entire_text">{{displayText}}</span>
         {{/if}}
     {{/with}}
 {{/if}}

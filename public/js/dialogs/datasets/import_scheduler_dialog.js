@@ -4,28 +4,15 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     persistent: true,
 
     subviews: {
-        ".schedule" : "scheduleView"
+        ".schedule": "scheduleView"
     },
 
-    events : {
+    events: {
         "change input:radio": "onDestinationChosen",
         "change input:checkbox": "onCheckboxClicked",
         "keyup input:text": "onInputFieldChanged",
         "paste input:text": "onInputFieldChanged",
         "click button.submit": "beginImport"
-    },
-
-    setup: function() {
-        this.scheduleView = new chorus.views.ImportSchedule({enable: false});
-
-        if (this.options.launchElement.data("use-schedule")) {
-            this.title = t("import_now.title_schedule");
-            this.submitText = t("import_now.begin_schedule")
-
-        } else {
-            this.title = t("import_now.title");
-            this.submitText = t("import_now.begin");
-        }
     },
 
     makeModel: function() {
@@ -48,8 +35,22 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         }, this);
     },
 
+    setup: function() {
+        this.scheduleView = new chorus.views.ImportSchedule({enable: false});
+
+        if (this.options.launchElement.data("useSchedule")) {
+            this.title = t("import_now.title_schedule");
+            this.submitText = t("import_now.begin_schedule")
+
+        } else {
+            this.title = t("import_now.title");
+            this.submitText = t("import_now.begin");
+            this.model.executeAfterSave = true;
+        }
+    },
+
     postRender: function() {
-        _.defer(_.bind(function(){chorus.styleSelect(this.$("select.names"))}, this));
+        _.defer(_.bind(function() {chorus.styleSelect(this.$("select.names"))}, this));
     },
 
     onDestinationChosen: function() {
@@ -63,6 +64,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         $tableSelect.prop("disabled", disableExisting);
         $tableSelect.closest("fieldset").toggleClass("disabled", disableExisting);
 
+        chorus.styleSelect(this.$("select.names"));
         this.onInputFieldChanged();
     },
 
@@ -100,7 +102,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     getNewModelAttrs: function() {
         var updates = {};
         var $enabledFieldSet = this.$("fieldset").not(".disabled");
-        _.each($enabledFieldSet.find("input:text, input[type=hidden], select"), function (i) {
+        _.each($enabledFieldSet.find("input:text, input[type=hidden], select"), function(i) {
             var input = $(i);
             updates[input.attr("name")] = input.val() && input.val().trim();
         });

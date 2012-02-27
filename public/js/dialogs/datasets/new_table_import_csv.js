@@ -17,6 +17,19 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         this.resource = this.csv = this.options.csv;
         this.tableName = this.csv.get("toTable");
         chorus.PageEvents.subscribe("choice:setType", this.onSelectType, this);
+
+        this.csv.bind("saved", this.saved, this);
+        this.csv.bind("saveFailed", this.saveFailed, this);
+    },
+
+    saved: function() {
+        this.closeModal();
+        chorus.toast("dataset.import.started");
+        chorus.PageEvents.broadcast("csv_import:started");
+    },
+
+    saveFailed: function() {
+        this.$("button.submit").stopLoading();
     },
 
     onSelectType: function(data, linkMenu) {
@@ -85,16 +98,6 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             delimiter: this.delimiter,
             columnsDef: JSON.stringify(columnData)
         })
-
-        this.csv.bindOnce("saved", function(){
-            this.closeModal();
-            chorus.toast("dataset.import.started");
-            chorus.PageEvents.broadcast("csv_import:started");
-        }, this);
-
-        this.csv.bindOnce("saveFailed", function() {
-            this.$("button.submit").stopLoading();
-        }, this);
 
         this.$("button.submit").startLoading("dataset.import.importing");
 

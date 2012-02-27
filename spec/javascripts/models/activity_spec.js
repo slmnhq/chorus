@@ -51,9 +51,19 @@ describe("chorus.models.Activity", function() {
     })
 
     describe("#promoteToInsight", function() {
+        beforeEach(function() {
+            this.success = jasmine.createSpy("success");
+            this.model.collection = new chorus.collections.ActivitySet();
+            this.model.promoteToInsight({ success: this.success });
+        });
+
         it("posts to the comment insight url", function() {
-            this.model.promoteToInsight();
             expect(this.server.lastCreate().url).toBe("/edc/commentinsight/"+ this.model.get("id") + "/promote");
+        });
+
+        it("calls the success function", function() {
+            this.server.lastCreate().succeed();
+            expect(this.success).toHaveBeenCalledWith(this.model);
         });
     });
 
@@ -194,6 +204,16 @@ describe("chorus.models.Activity", function() {
             });
         });
     });
+
+    describe("#sourceDataset", function() {
+        it("creates a dataset out of the sourceObject", function() {
+            var activity = fixtures.activities.CHORUS_VIEW_CREATED();
+            var dataset = activity.sourceDataset();
+            expect(dataset.get('id')).toBe(activity.get('sourceObject').id)
+            expect(dataset.get('objectName')).toBe(activity.get('sourceObject').name)
+            expect(dataset.get('workspace').id).toBe(activity.get('workspace').id)
+        })
+    })
 
     describe("#workspace", function() {
         context("with an workspace", function() {

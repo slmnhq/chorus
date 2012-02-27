@@ -17,12 +17,6 @@ chorus.models.TabularData = chorus.models.Base.extend({
         return this.constructor.metaTypeMap[this.get("objectType")] || "table";
     },
 
-    deriveChorusView: function() {
-        var chorusView = new chorus.models.ChorusView();
-        chorusView.sourceObject = this;
-        return chorusView;
-    },
-
     columns: function(options) {
         if (!this._columns) {
             this._columns = new chorus.collections.DatabaseColumnSet([], {

@@ -534,6 +534,7 @@ describe("chorus.presenters.Activity", function() {
             this.model = fixtures.activities.CHORUS_VIEW_CREATED();
             this.dataset = this.model.dataset();
             this.workspace = this.model.workspace();
+            this.sourceObject = this.model.sourceDataset();
             this.presenter = new chorus.presenters.Activity(this.model)
         });
 
@@ -558,12 +559,12 @@ describe("chorus.presenters.Activity", function() {
             expect(this.presenter.objectUrl).toBe(this.dataset.showUrl());
         });
 
-        xit("should have the right tableName it was derived from", function() {
-            expect(this.presenter.tableName).toBe();
+        it("should have the right tableName it was derived from", function() {
+            expect(this.presenter.tableName).toBe(this.sourceObject.get('objectName'));
         });
 
-        xit("should have the right tableUrl it was derived from", function() {
-            expect(this.presenter.tableUrl).toBe();
+        it("should have the right tableUrl it was derived from", function() {
+            expect(this.presenter.tableUrl).toBe(this.sourceObject.showUrl());
         });
 
         itShouldHaveTheAuthorsIconAndUrl();

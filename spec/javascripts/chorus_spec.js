@@ -124,6 +124,7 @@ describe("chorus global", function() {
                 this.eventSpy = jasmine.createSpy();
                 chorus.menu(this.element, {
                     content: "menu content<a class='test_link'></a>",
+                    classes: "myClass",
                     contentEvents: {
                         '.test_link': this.eventSpy
                     }
@@ -163,7 +164,7 @@ describe("chorus global", function() {
                 expect(this.qtipArgs.position.my).toEqual("top center")
                 expect(this.qtipArgs.position.at).toEqual("bottom center")
                 expect(this.qtipArgs.style).toEqual({
-                    classes: "tooltip-white",
+                    classes: "myClass tooltip-white",
                     tip: {
                         mimic: "top center",
                         width: 20,
@@ -189,6 +190,7 @@ describe("chorus global", function() {
 
     describe("#datePicker(element)", function() {
         beforeEach(function() {
+            stubDefer();
             spyOn(datePickerController, 'createDatePicker');
             this.input1 = $("<input></input");
             this.input2 = $("<input></input");
