@@ -354,7 +354,7 @@ chorus.views.Base = chorus.views.Bare.extend({
             position:{
                 my:"left center",
                 at:"right center",
-                container:self.el
+                container:this.el
             }
         });
     },

@@ -1,8 +1,4 @@
 chorus.alerts.PublishInsight = chorus.alerts.Base.extend({
-    text: this.text,
-    title:this.title,
-    ok:this.ok,
-
     setup: function(options){
         this.publish = options.publish;
         this.text = this.publish ? t("insight.publish.alert.body") : t("insight.unpublish.alert.body")

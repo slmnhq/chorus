@@ -31,7 +31,7 @@
         loadTemplatesOnce();
         stubHotkeys();
 
-        regexEqualityTester = function(a, b) {
+        var regexEqualityTester = function(a, b) {
             if(a instanceof RegExp && b instanceof RegExp) {
                 return a.toString() === b.toString();
             }

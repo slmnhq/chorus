@@ -51,7 +51,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
             }
         });
 
-        this.$("li a").click(this.closeQtip);
+        this.$("ul").on("click.database_sidebar_list", "li a", null, this.closeQtip);
         this.$("li").qtip({
             content: "<a>" + t('database.sidebar.insert') + "</a>",
             events: {

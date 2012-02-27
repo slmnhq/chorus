@@ -6,7 +6,7 @@
         var canvas = chart.canvas;
 
         this.render = function render() { // private
-            attrs = this.renderOptions;
+            var attrs = this.renderOptions;
 
             var axisGroup = canvas
                 .append("svg:g")
