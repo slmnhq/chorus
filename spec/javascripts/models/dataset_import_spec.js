@@ -57,7 +57,7 @@ describe("chorus.models.DatasetImport", function() {
             this.model.set({
                 toTable: 'newTable',
                 truncate: 'false',
-                createTableIfNotExist: 'true'
+                isNewTable: 'true'
             });
         })
         context("when executeAfterSave is true", function() {

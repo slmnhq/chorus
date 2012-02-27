@@ -51,9 +51,19 @@ describe("chorus.models.Activity", function() {
     })
 
     describe("#promoteToInsight", function() {
+        beforeEach(function() {
+            this.success = jasmine.createSpy("success");
+            this.model.collection = new chorus.collections.ActivitySet();
+            this.model.promoteToInsight({ success: this.success });
+        });
+
         it("posts to the comment insight url", function() {
-            this.model.promoteToInsight();
             expect(this.server.lastCreate().url).toBe("/edc/commentinsight/"+ this.model.get("id") + "/promote");
+        });
+
+        it("calls the success function", function() {
+            this.server.lastCreate().succeed();
+            expect(this.success).toHaveBeenCalledWith(this.model);
         });
     });
 

@@ -4,6 +4,14 @@ chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
     additionalClass: "list",
     useLoadingSection: true,
 
+    setup: function() {
+        chorus.PageEvents.subscribe("insight:promoted", this.fetchWorkspaces, this);
+    },
+
+    fetchWorkspaces: function() {
+        this.collection.fetch();
+    },
+
     collectionModelContext: function(model) {
         var comments = model.comments().models;
         var numComments = model.get("numberOfComment");

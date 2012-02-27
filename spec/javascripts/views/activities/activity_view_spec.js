@@ -326,9 +326,17 @@ describe("chorus.views.Activity", function() {
                 });
 
                 describe("when the post completes", function() {
-                    it("re-fetches the activity's collection", function() {
+                    beforeEach(function() {
+                        spyOn(chorus.PageEvents, "broadcast");
                         this.server.lastCreate().succeed();
+                    });
+
+                    it("re-fetches the activity's collection", function() {
                         expect(this.collection).toHaveBeenFetched();
+                    });
+
+                    it("broadcasts the insight:promoted page event", function() {
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("insight:promoted", this.view.model);
                     });
                 });
             });

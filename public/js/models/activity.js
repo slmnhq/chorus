@@ -82,13 +82,16 @@ chorus.models.Activity = chorus.models.Base.extend({
         return this._workfile;
     },
 
-    promoteToInsight: function() {
+    promoteToInsight: function(options) {
         var insight = new chorus.models.CommentInsight({
             id: this.get("id"),
             action: "promote"
         });
         insight.bind("saved", function() {
             this.collection.fetch();
+            if (options && options.success) {
+                options.success(this);
+            }
         }, this);
 
         insight.save(null, { method: "create" });

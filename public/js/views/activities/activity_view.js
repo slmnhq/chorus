@@ -25,7 +25,11 @@ chorus.views.Activity = chorus.views.Base.extend({
 
     promote: function(e) {
         e.preventDefault();
-        this.model.promoteToInsight();
+        this.model.promoteToInsight({
+            success: _.bind(function() {
+                chorus.PageEvents.broadcast("insight:promoted", this.model)
+            }, this)
+        });
     },
 
     publish: function(e) {
