@@ -189,6 +189,7 @@ describe("chorus global", function() {
 
     describe("#datePicker(element)", function() {
         beforeEach(function() {
+            stubDefer();
             spyOn(datePickerController, 'createDatePicker');
             this.input1 = $("<input></input");
             this.input2 = $("<input></input");
