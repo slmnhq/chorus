@@ -5,6 +5,11 @@ describe("chorus.models.Abstract", function() {
             this.model.urlTemplate = "my_items/{{id}}";
         });
 
+        it("has the right constructor name (for console output)", function() {
+            var model = new chorus.models.Base();
+            expect(model.constructor.name).toBe("Model");
+        });
+
         describe("#url", function() {
 
             context("when the model's urlTemplate is a function", function() {
@@ -838,7 +843,12 @@ describe("chorus.models.Abstract", function() {
         beforeEach(function() {
             this.collection = new chorus.collections.Base([], { foo: "bar" });
             this.collection.urlTemplate = "bar/{{foo}}";
-        })
+        });
+
+        it("has the right constructor name (for console output)", function() {
+            var collection = new chorus.collections.Base();
+            expect(collection.constructor.name).toBe("Collection");
+        });
 
         describe("#url", function() {
             context("when the collection has pagination information from the server", function() {

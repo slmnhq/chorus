@@ -1,5 +1,9 @@
 chorus.models = {
     Base: Backbone.Model.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, chorus.Mixins.dbHelpers, chorus.Mixins.Fetching, {
+        constructor: function Model() {
+            chorus.models.Base.__super__.constructor.apply(this, arguments);
+        },
+
         url: function(options) {
             var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
             var context = _.extend({}, this.attributes, { entityId: this.entityId, entityType: this.entityType })
@@ -192,6 +196,10 @@ chorus.models = {
 
 chorus.collections = {
     Base: Backbone.Collection.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, chorus.Mixins.Fetching, {
+        constructor: function Collection() {
+            chorus.collections.Base.__super__.constructor.apply(this, arguments);
+        },
+
         initialize: function(models, options) {
             this.attributes = options || {};
             this.setup(arguments);

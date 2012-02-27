@@ -1,5 +1,9 @@
 (function () {
     chorus.Modal = chorus.views.Base.extend({
+        constructor: function Modal() {
+            chorus.Modal.__super__.constructor.apply(this, arguments);
+        },
+
         launchModal:function () {
             this.render();
             $(document).one('reveal.facebox', _.bind(this.revealed, this));

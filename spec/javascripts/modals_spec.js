@@ -7,6 +7,11 @@ describe("chorus.Modal", function() {
         stubModals();
     });
 
+    it("has the right constructor name (for console output)", function() {
+        var modal = new chorus.Modal();
+        expect(modal.constructor.name).toBe("Modal");
+    });
+
     describe("intialization", function() {
         context("when a model option is provided", function() {
             it("sets the model on the view", function() {
