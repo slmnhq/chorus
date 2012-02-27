@@ -17,11 +17,11 @@ describe("chorus.models.DatasetImport", function() {
                     toTable: "Foo",
                     rowLimit: "23",
                     truncate: "true",
-                    createTableIfNotExist: "true"
+                    isNewTable: "true"
                 };
             });
 
-            _.each(["toTable", "truncate", "createTableIfNotExist"], function(attr) {
+            _.each(["toTable", "truncate", "isNewTable"], function(attr) {
                 it("should require " + attr, function() {
                     this.attrs[attr] = "";
                     expect(this.model.performValidation(this.attrs)).toBeFalsy();
