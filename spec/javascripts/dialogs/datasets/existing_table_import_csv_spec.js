@@ -215,6 +215,41 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                     expect($(el).text()).toBe("col" + (index + 1));
                 });
             });
+
+            context("actually choosing the column", function() {
+                beforeEach(function() {
+                    this.qtip.find(".qtip:eq(0) .ui-tooltip-content li:eq(1) a").click();
+                })
+                it("marks the column as selected", function() {
+                    expect(this.dialog.$(".column_mapping .map:eq(0) a").text()).toMatchTranslation("dataset.import.table.existing.select_one");
+                    expect(this.dialog.$(".column_mapping .map:eq(1) a").text()).toBe("col2");
+                });
+
+                context("when choosing another destination column for the same source column", function() {
+                    beforeEach(function() {
+                        this.qtip.find(".qtip:eq(0) .ui-tooltip-content li:eq(0) a").click();
+                    })
+                    it("marks the column as selected", function() {
+                        expect(this.dialog.$(".column_mapping .map:eq(0) a").text()).toMatchTranslation("dataset.import.table.existing.select_one");
+                        expect(this.dialog.$(".column_mapping .map:eq(1) a").text()).toBe("col1");
+                    });
+                });
+
+                context("when mapping another source column", function() {
+                    beforeEach(function() {
+                        this.dialog.$(".column_mapping .map:eq(0)").click();
+                        this.qtip.find(".qtip:eq(1) .ui-tooltip-content li:eq(0) a").click();
+                    });
+
+                    it("marks the column as selected", function() {
+                        expect(this.dialog.$(".column_mapping .map:eq(0) a").text()).toBe("col1");
+                        expect(this.dialog.$(".column_mapping .map:eq(1) a").text()).toBe("col2");
+                    });
+                });
+
+
+            })
+
         })
     });
 

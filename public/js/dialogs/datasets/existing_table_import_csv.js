@@ -18,38 +18,42 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         this.tableName = this.csv.get("toTable");
         chorus.PageEvents.subscribe("choice:setType", this.onSelectType, this);
         this.dataset = new chorus.models.Dataset({ workspace: {id: this.csv.get("workspaceId")}, id: this.options.datasetId })
-//        this.requiredResources.add(this.dataset);
+        this.requiredResources.add(this.dataset);
         this.dataset.fetch();
-    },
-
-    onSelectType: function(data, linkMenu) {
-        var $typeDiv = $(linkMenu.el).closest("div.type");
-        $typeDiv.removeClass("integer float text date time timestamp").addClass(data);
     },
 
     postRender: function() {
         this.$(".tbody").unbind("scroll.follow_header");
         this.$(".tbody").bind("scroll.follow_header", _.bind(this.adjustHeaderPosition, this));
         this.setupScrolling(this.$(".tbody"));
-        
-        var content = $("<ul></ul>");
-        _.each(this.dataset.get("columnNames"), function(column) {
-            content.append($("<li>").append(column.name));
-        });
-        chorus.menu(this.$(".column_mapping .map"), {
-            content: content,
-            style: {classes: "tooltip-on-modal"}
-//            contentEvents: {
-//                'a.schema': _.bind(this.schemaSelected, this)
-//            }
-        });
 
-        this.$("input.delimiter").removeAttr("checked");
-        if (_.contains([",", "\t", ";", " "], this.delimiter)) {
-            this.$("input.delimiter[value='" + this.delimiter + "']").attr("checked", "true");
+        var self = this
+        _.each(this.$(".column_mapping .map"), function(map) {
+            var content = $("<ul></ul>");
+            _.each(self.dataset.get("columnNames"), function(column) {
+                content.append($("<li>").append($('<a class="name" href="#">' + column.name + '</a>')));
+            });
+            chorus.menu($(map), {
+                content: content,
+                style: {classes: "tooltip-on-modal"},
+                contentEvents: {
+                    'a.name': self.columnSelected
+                }
+            });
+        })
+
+        self.$("input.delimiter").removeAttr("checked");
+        if (_.contains([",", "\t", ";", " "], self.delimiter)) {
+            self.$("input.delimiter[value='" + self.delimiter + "']").attr("checked", "true");
         } else {
-            this.$("input#delimiter_other").attr("checked", "true");
+            self.$("input#delimiter_other").attr("checked", "true");
         }
+    },
+
+    columnSelected: function(e, api) {
+        e.preventDefault();
+        api.elements.target.find("a").text($(e.target).text());
+
 
     },
 
