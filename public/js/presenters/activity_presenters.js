@@ -80,6 +80,10 @@
                 header.versionLink = chorus.helpers.linkTo(this.presenter.versionUrl, this.presenter.versionName)
             }
 
+            if (this.presenter.tableName && this.presenter.tableUrl) {
+                header.tableLink = chorus.helpers.linkTo(this.presenter.tableUrl, this.presenter.tableName);
+            }
+
             return header;
         },
 
@@ -189,9 +193,8 @@
             return {
                 objectName: this.noteObject.get('objectName'),
                 objectUrl: this.noteObject.showUrl(),
-                header: {
-                    tableName: "!!implement me when API changes!!"
-                }
+                tableName: model.sourceDataset().get("objectName"),
+                tableUrl: model.sourceDataset().showUrl()
             };
         },
 

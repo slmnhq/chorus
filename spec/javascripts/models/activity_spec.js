@@ -195,6 +195,16 @@ describe("chorus.models.Activity", function() {
         });
     });
 
+    describe("#sourceDataset", function() {
+        it("creates a dataset out of the sourceObject", function() {
+            var activity = fixtures.activities.CHORUS_VIEW_CREATED();
+            var dataset = activity.sourceDataset();
+            expect(dataset.get('id')).toBe(activity.get('sourceObject').id)
+            expect(dataset.get('objectName')).toBe(activity.get('sourceObject').name)
+            expect(dataset.get('workspace').id).toBe(activity.get('workspace').id)
+        })
+    })
+
     describe("#workspace", function() {
         context("with an workspace", function() {
             beforeEach(function() {

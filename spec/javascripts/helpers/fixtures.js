@@ -1229,6 +1229,10 @@ beforeEach(function() {
                     workspace: {
                         id: "10000",
                         name: "!!!!"
+                    },
+                    sourceObject: {
+                        id: '10000|Something|SomethingElse|QUERY|firstTHing',
+                        name: 'my_source_object'
                     }
                 })
             },

@@ -74,6 +74,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
             schemaName: this.model.get("schemaName"),
             objectName: _.uniqueId("chorus_view_"),
             workspace: this.model.get("workspace"),
+            sourceObjectId: this.chorusView.get("sourceObjectId"),
             objectType: "QUERY"
         });
 

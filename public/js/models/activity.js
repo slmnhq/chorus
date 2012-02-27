@@ -43,6 +43,15 @@ chorus.models.Activity = chorus.models.Base.extend({
         }
     },
 
+    sourceDataset: function() {
+        var sourceObject = this.get("sourceObject")
+        return new chorus.models.Dataset({
+            id: sourceObject.id,
+            objectName: sourceObject.name,
+            workspace: this.get('workspace')
+        })
+    },
+
     databaseObject: function() {
         var databaseObjectField = this.get("databaseObject");
         if (databaseObjectField) {
