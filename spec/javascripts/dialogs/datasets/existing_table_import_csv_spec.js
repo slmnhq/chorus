@@ -209,10 +209,13 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 expect(this.qtip).toHaveVisibleQtip()
             });
 
-            it("populates the qtip with the columns", function() {
+            it("populates the qtip with the columns and column types", function() {
                 expect(this.qtip.find(".ui-tooltip-content li").length).toBe(3);
+                var self = this;
                 _.each(this.qtip.find(".ui-tooltip-content li"), function(el, index) {
-                    expect($(el).text()).toBe("col" + (index + 1));
+                    expect($(el).find("a").text()).toContain("col" + (index + 1));
+                    var type = chorus.models.DatabaseColumn.humanTypeMap[self.columns[index].typeCategory];
+                    expect($(el).find(".type").text()).toContain(type);
                 });
             });
 

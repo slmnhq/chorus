@@ -20,6 +20,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         this.dataset = new chorus.models.Dataset({ workspace: {id: this.csv.get("workspaceId")}, id: this.options.datasetId })
         this.requiredResources.add(this.dataset);
         this.dataset.fetch();
+        this.destinations = [];
     },
 
     postRender: function() {
@@ -31,13 +32,14 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         _.each(this.$(".column_mapping .map"), function(map) {
             var content = $("<ul></ul>");
             _.each(self.dataset.get("columnNames"), function(column) {
-                content.append($("<li>").append($('<a class="name" href="#">' + column.name + '</a>')));
+                content.append($("<li>").append($('<a class="name" href="#">' + column.name + '</a>'+
+                "<span class='type'>"+chorus.models.DatabaseColumn.humanTypeMap[column.typeCategory]+"</span>")));
             });
             chorus.menu($(map), {
                 content: content,
                 style: {classes: "tooltip-on-modal"},
                 contentEvents: {
-                    'a.name': self.columnSelected
+                    'a.name': _.bind(self.columnSelected, self)
                 }
             });
         })
@@ -53,13 +55,25 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     columnSelected: function(e, api) {
         e.preventDefault();
         api.elements.target.find("a").text($(e.target).text());
-
-
+        var dest = _.map(this.$(".column_mapping .map a"), function(link){
+           return $(link).text();
+        })
+        this.destinations = dest;
     },
 
     additionalContext: function() {
+        var self = this;
+
+        var columns = this.csv.columnOrientedData();
+        columns = _.map(columns, function(column, index){
+            if(index >= self.destinations.length){
+                self.destinations.push(t("dataset.import.table.existing.select_one"));
+            }
+            return _.extend(column, {destination: self.destinations[index]});
+        })
+
         return {
-            columns: this.csv.columnOrientedData(),
+            columns: columns,
             delimiter: this.other_delimiter ? this.delimiter : '',
             directions: t("dataset.import.table.existing.directions", {
                 toTable: this.csv.get("toTable")
