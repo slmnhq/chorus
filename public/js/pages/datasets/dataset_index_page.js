@@ -16,6 +16,7 @@
         setup: function(workspaceId) {
             this.workspace = new chorus.models.Workspace({id: workspaceId});
             this.workspace.onLoaded(this.workspaceLoaded, this);
+            this.requiredResources.add(this.workspace);
             this.workspace.fetch();
             this.breadcrumbs = new breadcrumbsView({model: this.workspace});
 

@@ -14,6 +14,11 @@ describe("chorus.pages.DatasetIndexPage", function() {
         it("fetches the model", function() {
             expect(this.server.lastFetchFor(this.workspace)).not.toBeUndefined();
         });
+
+        it("declares required resources", function() {
+            expect(this.page.requiredResources.length).toBe(1);
+            expect(this.page.requiredResources.at(0)).toBe(this.page.workspace);
+        });
     });
 
     context("it does not have a sandbox", function() {
