@@ -1,4 +1,5 @@
 chorus.views.ActivityListHeader = chorus.views.Base.extend({
+    constructorName: "ActivityListHeaderView",
     className : "activity_list_header",
     persistent: true,
 

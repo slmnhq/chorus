@@ -1,4 +1,5 @@
 chorus.models.Config = chorus.models.Base.extend({
+    constructorName: "Config",
     urlTemplate:"config/",
 
     isExternalAuth: function() {

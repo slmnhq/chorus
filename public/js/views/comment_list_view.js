@@ -1,4 +1,5 @@
 chorus.views.CommentList = chorus.views.Base.extend({
+    constructorName: "CommentListView",
     className:"comment_list",
 
     setup:function () {

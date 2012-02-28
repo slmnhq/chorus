@@ -1,4 +1,5 @@
 chorus.models.Session = chorus.models.Base.extend({
+    constructorName: "Session",
     urlTemplate:"auth/login/",
 
     initialize:function () {

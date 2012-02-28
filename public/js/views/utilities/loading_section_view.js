@@ -1,4 +1,5 @@
 chorus.views.LoadingSection = chorus.views.Base.extend({
+    constructorName: "LoadingSectionView",
     className:"loading_section",
 
     postRender:function () {

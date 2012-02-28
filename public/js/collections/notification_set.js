@@ -1,4 +1,5 @@
 chorus.collections.NotificationSet = chorus.collections.Base.extend({
+    constructorName: "NotificationSet",
     model: chorus.models.Notification,
     urlTemplate : "notification",
 

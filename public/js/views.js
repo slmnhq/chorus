@@ -369,6 +369,7 @@ chorus.views.Base = chorus.views.Bare.extend({
 });
 
 chorus.views.MainContentView = chorus.views.Base.extend({
+    constructorName: "MainContentView",
     className:"main_content",
 
     setup:function (options) {

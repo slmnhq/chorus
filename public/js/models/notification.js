@@ -1,4 +1,5 @@
 chorus.models.Notification = chorus.models.Base.extend({
+    constructorName: "Notification",
     urlTemplate:"notification/{{id}}",
 
     activity: function() {

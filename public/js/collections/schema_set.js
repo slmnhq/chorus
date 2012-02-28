@@ -1,4 +1,5 @@
 chorus.collections.SchemaSet = chorus.collections.Base.extend({
+    constructorName: "SchemaSet",
     model:chorus.models.Schema,
     urlTemplate:"instance/{{instanceId}}/database/{{databaseName}}/schema",
 

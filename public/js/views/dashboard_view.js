@@ -1,4 +1,5 @@
 chorus.views.Dashboard = chorus.views.Base.extend({
+    constructorName: "DashboardView",
     className:"dashboard",
     subviews: {
         '.dashboard_main': "dashboardMain",

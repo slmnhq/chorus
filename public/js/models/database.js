@@ -1,4 +1,5 @@
 chorus.models.Database = chorus.models.Base.extend({
+    constructorName: "Database",
     schemas:function () {
         if(!this._schemas) {
             this._schemas = new chorus.collections.SchemaSet([], {

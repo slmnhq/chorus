@@ -1,4 +1,5 @@
 chorus.collections.ActivitySet = chorus.collections.Base.extend({
+    constructorName: "ActivitySet",
     model:chorus.models.Activity,
 
     urlTemplate: function() {

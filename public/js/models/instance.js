@@ -12,6 +12,7 @@
     };
 
     chorus.models.Instance = chorus.models.Base.extend({
+        constructorName: "Instance",
         urlTemplate:"instance/{{id}}",
         showUrlTemplate:"instances/{{id}}",
         entityType:"instance",
