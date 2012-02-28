@@ -38,7 +38,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         $tbody.bind("scroll.follow_header", _.bind(this.adjustHeaderPosition, this));
         $tbody.scrollTop(this.scrollPosY)
         $tbody.scrollLeft(this.scrollPosX);
-        $tbody.css({ "left": -this.scrollPosX });
+        this.$(".thead").css({ "left": -this.scrollPosX });
 
         this.setupScrolling(this.$(".tbody"));
 
