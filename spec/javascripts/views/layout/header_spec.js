@@ -205,6 +205,10 @@ describe("chorus.views.Header", function() {
                 it("has a link to 'sign out'", function() {
                     expect(this.view.$(".menu.popup_username a[href='#/logout']").text()).toBe(t("header.sign_out"));
                 });
+
+                it("has a link to the workspaces list", function() {
+                    expect(this.view.$(".menu.popup_username a[href='#/workspaces']").text()).toBe(t("header.workspaces"));
+                });
             });
 
             describe("chorus:menu:popup handling", function() {
