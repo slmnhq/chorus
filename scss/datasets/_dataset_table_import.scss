@@ -67,6 +67,8 @@
         .column_names {
             .field_name {
                 display: inline-block;
+                width: 95%;
+                @include ellipsis;
 
             }
         }
@@ -81,12 +83,18 @@
                     font-size: 12px;
                     font-weight: $semibold;
                     width: $cell-width - 68px;
+                    &.selection_conflict {
+                        color: #cc0000;
+                    }
                 }
                 .arrow {
                     position: absolute;
                     right: 10px;
                     top: 14px;
                     @include triangle(down, $link-color, 4px, 4px);
+                    &.selection_conflict {
+                        @include triangle(down, #cc0000, 4px, 4px);
+                    }
                 }
             }
         }
@@ -241,6 +249,18 @@
 
             &:hover {
                 text-decoration: underline;
+            }
+
+            &.unselected {
+                color: $color-text1;
+            }
+
+            &.selected {
+                color: $color-text2;
+            }
+
+            &.selection_conflict {
+                color: #cc0000;
             }
         }
         .type {

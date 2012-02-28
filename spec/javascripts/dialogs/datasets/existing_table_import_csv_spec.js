@@ -197,6 +197,8 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             _.each(this.dialog.$(".column_mapping .map"), function(el) {
                 expect($(el).text()).toContainTranslation("dataset.import.table.existing.map_to");
                 expect($(el).find("a").text()).toContainTranslation("dataset.import.table.existing.select_one");
+                expect($(el).find("a")).toHaveClass("selection_conflict");
+                expect($(el).find(".arrow")).toHaveClass("selection_conflict");
             });
         })
 
@@ -209,7 +211,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 expect(this.qtip).toHaveVisibleQtip()
             });
 
-            it("populates the qtip with the columns and column types", function() {
+            it("populates the qtip with the destination columns and column types", function() {
                 expect(this.qtip.find(".ui-tooltip-content li").length).toBe(3);
                 var self = this;
                 _.each(this.qtip.find(".ui-tooltip-content li"), function(el, index) {
@@ -219,46 +221,107 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 });
             });
 
-            context("actually choosing the column", function() {
+            context("actually choosing the destination column", function() {
                 beforeEach(function() {
                     this.qtip.find(".qtip:eq(0) .ui-tooltip-content li:eq(1) a").click();
+                    this.dialog.$(".column_mapping .map:eq(1)").click(); //Just to get it in the dom
                 })
                 it("names the correct destination column", function() {
                     expect(this.dialog.$(".column_mapping .map:eq(0) a").text()).toMatchTranslation("dataset.import.table.existing.select_one");
+                    expect(this.dialog.$(".column_mapping .map:eq(0) a")).not.toHaveClass("selected");
+                    expect(this.dialog.$(".column_mapping .map:eq(0) a")).toHaveClass("selection_conflict");
+
                     expect(this.dialog.$(".column_mapping .map:eq(1) a").text()).toBe("col2");
+                    expect(this.dialog.$(".column_mapping .map:eq(1) a")).toHaveClass("selected");
+                    expect(this.dialog.$(".column_mapping .map:eq(1) a")).not.toHaveClass("selection_conflict");
                 });
+
                 it("marks the column as selected", function() {
-                    this.dialog.$(".column_mapping .map:eq(1)").click();
                     expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(0) .check")).toHaveClass("hidden");
                     expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) .check")).not.toHaveClass("hidden");
+                })
+                it("updates the count in the selected destination column (for all qtips)", function() {
+                    expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) .name").text()).toBe("col2 (1)")
+                    expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) .name")).toHaveClass("selected");
+                })
+
+                context("choosing the same destination column again", function() {
+                    beforeEach(function() {
+                        this.qtip.find(".qtip:eq(0) .ui-tooltip-content li:eq(1) a").click();
+                    })
+                    it("names the correct destination column", function() {
+                        expect(this.dialog.$(".column_mapping .map:eq(0) a").text()).toMatchTranslation("dataset.import.table.existing.select_one");
+                        expect(this.dialog.$(".column_mapping .map:eq(0) a")).not.toHaveClass("selected");
+                        expect(this.dialog.$(".column_mapping .map:eq(0) a")).toHaveClass("selection_conflict");
+
+                        expect(this.dialog.$(".column_mapping .map:eq(1) a").text()).toBe("col2");
+                        expect(this.dialog.$(".column_mapping .map:eq(1) a")).toHaveClass("selected");
+                        expect(this.dialog.$(".column_mapping .map:eq(1) a")).not.toHaveClass("selection_conflict");
+                    });
+
+                    it("does not double-count the column", function() {
+                        this.dialog.$(".column_mapping .map:eq(1)").click(); //Just to get it in the dom
+                        expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) .name").text()).toBe("col2 (1)");
+                        expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) .name")).toHaveClass("selected");
+
+                    })
                 })
 
                 context("when choosing another destination column for the same source column", function() {
                     beforeEach(function() {
+                        this.dialog.$(".column_mapping .map:eq(1)").click();
                         this.qtip.find(".qtip:last .ui-tooltip-content li:eq(0) a").click();
                     })
                     it("names the correct destination column", function() {
                         expect(this.dialog.$(".column_mapping .map:eq(0) a").text()).toMatchTranslation("dataset.import.table.existing.select_one");
                         expect(this.dialog.$(".column_mapping .map:eq(1) a").text()).toBe("col1");
+                        expect(this.dialog.$(".column_mapping .map:eq(1) a")).toHaveClass("selected");
+                        expect(this.dialog.$(".column_mapping .map:eq(1) a")).not.toHaveClass("selection_conflict");
+
                     });
 
                     it("marks the column as selected", function() {
                         this.dialog.$(".column_mapping .map:eq(1)").click();
                         expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(0) .check")).not.toHaveClass("hidden");
                         expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) .check")).toHaveClass("hidden");
+                    });
+
+                    it("updates the count in the selected destination column (for all qtips)", function() {
+                        this.dialog.$(".column_mapping .map:eq(1)").click();
+                        expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(0) .name").text()).toBe("col1 (1)");
+                        expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(0) .name")).toHaveClass("selected");
+
+                        expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) .name").text()).toBe("col2");
+                        expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) .name")).toHaveClass("unselected");
+
                     })
                 });
 
                 context("when mapping another source column", function() {
                     beforeEach(function() {
                         this.dialog.$(".column_mapping .map:eq(0)").click();
-                        this.qtip.find(".qtip:last .ui-tooltip-content li:eq(0) a").click();
+                        this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) a").click();
                     });
 
                     it("names the correct destination column", function() {
-                        expect(this.dialog.$(".column_mapping .map:eq(0) a").text()).toBe("col1");
+                        expect(this.dialog.$(".column_mapping .map:eq(0) a").text()).toBe("col2");
+                        expect(this.dialog.$(".column_mapping .map:eq(0) a")).not.toHaveClass("selected");
+                        expect(this.dialog.$(".column_mapping .map:eq(0) a")).toHaveClass("selection_conflict");
+
                         expect(this.dialog.$(".column_mapping .map:eq(1) a").text()).toBe("col2");
+                        expect(this.dialog.$(".column_mapping .map:eq(1) a")).not.toHaveClass("selected");
+                        expect(this.dialog.$(".column_mapping .map:eq(1) a")).toHaveClass("selection_conflict");
+
                     });
+
+                    it("updates the count in the selected destination column (for all qtips)", function() {
+                        this.dialog.$(".column_mapping .map:eq(0)").click();
+                        expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(0) .name").text()).toBe("col1")
+                        expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(0) .name")).toHaveClass("unselected");
+                        expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) .name").text()).toBe("col2 (2)")
+                        expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) .name")).toHaveClass("selection_conflict");
+                    })
+
                 });
 
 

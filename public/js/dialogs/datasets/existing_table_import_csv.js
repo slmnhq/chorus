@@ -34,13 +34,24 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         _.each(this.$(".column_mapping .map"), function(map, i) {
             var content = $("<ul></ul>");
             _.each(self.dataset.get("columnNames"), function(column) {
-                var check = $('<div class="check_wrapper"><span class="check hidden"></span></div>')
-                if(column.name === self.destinations[i]) {
-                    check.removeClass("hidden");
+                var check_wrapper = $('<div class="check_wrapper"><span class="check hidden"></span></div>')
+                if (column.name === self.destinations[i].name) {
+                    check_wrapper.find(".check").removeClass("hidden");
                 }
-                content.append($("<li>").append($(check.outerHtml() +
-                    '<a class="name" href="#">' + column.name + '</a>'+
-                '<span class="type">'+chorus.models.DatabaseColumn.humanTypeMap[column.typeCategory]+'</span>')));
+                var count = (_.filter(self.destinations, function(destination) {
+                    return destination.name === column.name
+                })).length;
+                var count_text = "";
+
+                var selected_status = "unselected";
+                if (count) {
+                    selected_status = count > 1 ? "selection_conflict" : "selected";
+                    count_text = " (" + count + ")";
+                }
+
+                content.append($("<li>").append($(check_wrapper.outerHtml() +
+                    '<a class="name ' + selected_status + '" href="#" title="' + column.name + '">' + column.name + count_text + '</a>' +
+                    '<span class="type">' + chorus.models.DatabaseColumn.humanTypeMap[column.typeCategory] + '</span>')));
             });
 
             chorus.menu($(map), {
@@ -62,24 +73,36 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
 
     columnSelected: function(e, api) {
         e.preventDefault();
-        $(e.target).closest("ul").find(".check").addClass("hidden");
-        $(e.target).siblings(".check_wrapper").find(".check").removeClass("hidden");
-        api.elements.target.find("a").text($(e.target).text());
-        this.destinations = _.map(this.$(".column_mapping .map a"), function(link){
-           return $(link).text();
+        var qtip_launch_link = api.elements.target.find("a");
+        qtip_launch_link.text($(e.target).attr("title"));
+        this.destinations = _.map(this.$(".column_mapping .map a"), function(link) {
+            return {name: $(link).text()};
+        });
+
+        var self = this;
+
+        this.destinations = _.map(this.destinations, function(destination) {
+            var count = (_.filter(self.destinations, function(destination_loop) {
+                return destination.name === destination_loop.name
+            })).length;
+            return _.extend(destination, {count: count});
         })
+
+        this.render();
     },
 
     additionalContext: function() {
         var self = this;
 
         var columns = this.csv.columnOrientedData();
-        columns = _.map(columns, function(column, index){
-            if(index >= self.destinations.length){
-                self.destinations.push(t("dataset.import.table.existing.select_one"));
+        columns = _.map(columns, function(column, index) {
+            if (index >= self.destinations.length) {
+                self.destinations.push({name: t("dataset.import.table.existing.select_one"), count: 0});
             }
-            return _.extend(column, {destination: self.destinations[index]});
-        })
+            var selected_status = (self.destinations[index].count == 1) ? "selected": "selection_conflict";
+
+            return _.extend(column, {destination: self.destinations[index].name, selected_status: selected_status});
+        });
 
         return {
             columns: columns,
