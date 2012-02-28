@@ -33,14 +33,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
 
     postRender: function() {
 
-        var $tbody = this.$(".tbody");
-        $tbody.unbind("scroll.follow_header");
-        $tbody.bind("scroll.follow_header", _.bind(this.adjustHeaderPosition, this));
-        $tbody.scrollTop(this.scrollPosY)
-        $tbody.scrollLeft(this.scrollPosX);
-        this.$(".thead").css({ "left": -this.scrollPosX });
-
-        this.setupScrolling(this.$(".tbody"));
+        this.handleScrolling();
 
         this.cleanUpQtip();
 
@@ -48,24 +41,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         _.each(this.$(".column_mapping .map"), function(map, i) {
             var content = $("<ul></ul>");
             _.each(self.dataset.get("columnNames"), function(column) {
-                var check_wrapper = $('<div class="check_wrapper"><span class="check hidden"></span></div>')
-                if (column.name === self.destinations[i].name) {
-                    check_wrapper.find(".check").removeClass("hidden");
-                }
-                var frequency = (_.filter(self.destinations, function(destination) {
-                    return destination.name === column.name
-                })).length;
-                var frequency_text = "";
-
-                var selected_status = "unselected";
-                if (frequency) {
-                    selected_status = frequency > 1 ? "selection_conflict" : "selected";
-                    frequency_text = " (" + frequency + ")";
-                }
-
-                content.append($("<li>").append($(check_wrapper.outerHtml() +
-                    '<a class="name ' + selected_status + '" href="#" title="' + column.name + '">' + column.name + frequency_text + '</a>' +
-                    '<span class="type">' + chorus.models.DatabaseColumn.humanTypeMap[column.typeCategory] + '</span>')));
+                content.append(_.bind(self.createQtipContent, self, column, self.destinations[i].name));
             });
 
             chorus.menu($(map), {
@@ -205,5 +181,38 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     cleanUpQtip: function() {
         this.$(".column_mapping .map").qtip("destroy");
         this.$(".column_mapping .map").removeData("qtip");
+    },
+
+    handleScrolling: function() {
+        var $tbody = this.$(".tbody");
+        $tbody.unbind("scroll.follow_header");
+        $tbody.bind("scroll.follow_header", _.bind(this.adjustHeaderPosition, this));
+        $tbody.scrollTop(this.scrollPosY)
+        $tbody.scrollLeft(this.scrollPosX);
+        this.$(".thead").css({ "left": -this.scrollPosX });
+
+        this.setupScrolling(this.$(".tbody"));
+    },
+
+    createQtipContent: function(column, selectedName) {
+        var check_wrapper = $('<div class="check_wrapper"><span class="check hidden"></span></div>')
+
+        if (column.name === selectedName) {
+            check_wrapper.find(".check").removeClass("hidden");
+        }
+        var frequency = (_.filter(this.destinations, function(destination) {
+            return destination.name === column.name
+        })).length;
+        var frequency_text = "";
+
+        var selected_status = "unselected";
+        if (frequency) {
+            selected_status = frequency > 1 ? "selection_conflict" : "selected";
+            frequency_text = " (" + frequency + ")";
+        }
+
+        return ($("<li>").append($(check_wrapper.outerHtml() +
+            '<a class="name ' + selected_status + '" href="#" title="' + column.name + '">' + column.name + frequency_text + '</a>' +
+            '<span class="type">' + chorus.models.DatabaseColumn.humanTypeMap[column.typeCategory] + '</span>')));
     }
 });
