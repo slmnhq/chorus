@@ -1,7 +1,7 @@
 .cleditorMain {border:1px solid #999; padding:0 1px 1px; background-color:white}
 .cleditorMain iframe {border:none; margin:0; padding:0}
 .cleditorMain textarea {border:none; margin:0; padding:0; overflow-y:scroll; font:10pt Arial,Verdana; resize:none; outline:none /* webkit grip focus */}
-.cleditorToolbar {background: url('/images/cleditor/toolbar.gif') repeat}
+.cleditorToolbar {display: none; background: url('/images/cleditor/toolbar.gif') repeat}
 .cleditorGroup {float:left; height:26px}
 .cleditorButton {float:left; width:24px; height:24px; margin:1px 0 1px 0; background: url('/images/cleditor/buttons.gif')}
 .cleditorDisabled {opacity:0.3; filter:alpha(opacity=30)}

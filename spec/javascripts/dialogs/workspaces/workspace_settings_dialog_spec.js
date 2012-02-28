@@ -55,6 +55,104 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             expect(this.dialog.$(".archived_text").text().trim()).toMatchTranslation("workspace.settings.archived_description");
         });
 
+        describe("toolbar commands", function() {
+            context("the 'Bold' link", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog, "onClickToolbarBold");
+                    this.dialog.render();
+                });
+
+                it("should have the correct text", function() {
+                    expect(this.dialog.$("a.bold")).toContainTranslation("workspace.settings.toolbar.bold");
+                });
+
+                it("executes the right function", function() {
+                    this.dialog.$("a.bold").click();
+                    expect(this.dialog.onClickToolbarBold).toHaveBeenCalled();
+                });
+            });
+
+            context("the 'Italic' link", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog, "onClickToolbarItalic");
+                    this.dialog.render();
+                });
+
+                it("should have the correct text", function() {
+                    expect(this.dialog.$("a.italic")).toContainTranslation("workspace.settings.toolbar.italic");
+                });
+
+                it("executes the right function", function() {
+                    this.dialog.$("a.italic").click();
+                    expect(this.dialog.onClickToolbarItalic).toHaveBeenCalled();
+                })
+            });
+
+            context("the 'Bullets' link", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog, "onClickToolbarBullets");
+                    this.dialog.render();
+                });
+
+                it("should have the correct text", function() {
+                    expect(this.dialog.$("a.bullets")).toContainTranslation("workspace.settings.toolbar.bullets");
+                });
+
+                it("executes the right function when", function() {
+                    this.dialog.$("a.bullets").click();
+                    expect(this.dialog.onClickToolbarBullets).toHaveBeenCalled();
+                })
+            });
+
+            context("the 'Numbers' link", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog, "onClickToolbarNumbers");
+                    this.dialog.render();
+                });
+
+                it("should have the correct text", function() {
+                    expect(this.dialog.$("a.numbers")).toContainTranslation("workspace.settings.toolbar.numbers");
+                });
+
+                it("executes the right function", function() {
+                    this.dialog.$("a.numbers").click();
+                    expect(this.dialog.onClickToolbarNumbers).toHaveBeenCalled();
+                });
+            });
+
+            context("the 'Link' link", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog, "onClickToolbarLink");
+                    this.dialog.render();
+                });
+
+                it("should have a the correct text", function() {
+                    expect(this.dialog.$("a.link")).toContainTranslation("workspace.settings.toolbar.link");
+                });
+
+                it("executes the right function", function() {
+                    this.dialog.$("a.link").click();
+                    expect(this.dialog.onClickToolbarLink).toHaveBeenCalled();
+                });
+            });
+
+            context("the 'Unlink' link", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog, "onClickToolbarUnlink");
+                    this.dialog.render();
+                });
+
+                it("should have the correct text", function() {
+                    expect(this.dialog.$("a.unlink")).toContainTranslation("workspace.settings.toolbar.unlink");
+                });
+
+                it("executes the right function", function() {
+                    this.dialog.$("a.unlink").click();
+                    expect(this.dialog.onClickToolbarUnlink).toHaveBeenCalled();
+                });
+            });
+        });
+
         describe("sandbox location", function() {
             context("with a sandbox", function() {
                 beforeEach(function() {

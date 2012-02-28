@@ -5,7 +5,13 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.extend({
 
     events:{
         "submit form":"updateWorkspace",
-        "click button.submit":"updateWorkspace"
+        "click button.submit":"updateWorkspace",
+        "click a.bold": "onClickToolbarBold",
+        "click a.italic": "onClickToolbarItalic",
+        "click a.bullets": "onClickToolbarBullets",
+        "click a.numbers": "onClickToolbarNumbers",
+        "click a.link": "onClickToolbarLink",
+        "click a.unlink": "onClickToolbarUnlink"
     },
 
     additionalContext:function () {
@@ -61,6 +67,37 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.extend({
         _.defer(function() {
             $("textarea[name=summary]").cleditor({controls: "bold italic | bullets numbering | link unlink"});
         });
+    },
+
+    onClickToolbarBold: function(e) {
+        e && e.preventDefault();
+        this.$(".cleditorButton[title='Bold']").click();
+    },
+
+    onClickToolbarItalic: function(e) {
+        e && e.preventDefault();
+        this.$(".cleditorButton[title='Italic']").click();
+    },
+
+    onClickToolbarBullets: function(e) {
+        e && e.preventDefault();
+        this.$(".cleditorButton[title='Bullets']").click();
+    },
+
+    onClickToolbarNumbers: function(e) {
+        e && e.preventDefault();
+        this.$(".cleditorButton[title='Numbering']").click();
+    },
+
+    onClickToolbarLink: function(e) {
+        e && e.preventDefault();
+        this.$(".cleditorButton[title='Insert Hyperlink']").click();
+        e.stopImmediatePropagation();
+    },
+
+    onClickToolbarUnlink: function(e) {
+        e && e.preventDefault();
+        this.$(".cleditorButton[title='Remove Hyperlink']").click();
     },
 
     updateWorkspace:function (e) {

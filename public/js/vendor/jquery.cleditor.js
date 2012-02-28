@@ -22,8 +22,8 @@
 
     // Define the defaults used for all new cleditor instances
     defaultOptions: {
-      width:        500, // width not including margins, borders or padding
-      height:       250, // height not including margins, borders or padding
+      width:        545, // width not including margins, borders or padding
+      height:       80, // height not including margins, borders or padding
       controls:     // controls to add to the toolbar
                     "bold italic underline strikethrough subscript superscript | font size " +
                     "style | color highlight removeformat | bullets numbering | outdent " +
@@ -896,7 +896,7 @@
       $toolbar.height(hgt);
 
       // Resize the iframe
-      hgt = (/%/.test("" + options.height) ? $main.height() : parseInt(options.height)) - hgt;
+      hgt = (/%/.test("" + options.height) ? $main.height() : parseInt(options.height));
       $frame.width(wid).height(hgt);
 
       // Resize the textarea. IE6 textareas have a 1px top
@@ -1026,18 +1026,22 @@
     var offset, left, top, $popup = $(popup);
 
     // Determine the popup location
-    if (button) {
-      var $button = $(button);
-      offset = $button.offset();
-      left = --offset.left;
-      top = offset.top + $button.height();
-    }
-    else {
-      var $toolbar = editor.$toolbar;
-      offset = $toolbar.offset();
-      left = Math.floor(($toolbar.width() - $popup.width()) / 2) + offset.left;
-      top = offset.top + $toolbar.height() - 2;
-    }
+//    if (button) {
+//      var $button = $(button);
+//      offset = $button.offset();
+//      left = --offset.left;
+//      top = offset.top + $button.height();
+//    }
+//    else {
+//      var $toolbar = editor.$toolbar;
+//      offset = $toolbar.offset();
+//      left = Math.floor(($toolbar.width() - $popup.width()) / 2) + offset.left;
+//      top = offset.top + $toolbar.height() - 2;
+//    }
+
+    var frame = editor.$frame;
+    left = frame.offset().left + frame.width() / 2;
+    top = frame.offset().top;
 
     // Position and show the popup
     hidePopups();

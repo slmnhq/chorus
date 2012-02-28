@@ -6,7 +6,7 @@ $image-width : 230px;
 
 .workspace_settings {
     input[name=name] {
-        width: 430px;
+        width: 400px;
         display: inline;
     }
 
@@ -97,4 +97,15 @@ $image-width : 230px;
         width: 435px;
     }
 
+    .toolbar {
+        float: right;
+        margin-right: 5px;
+        font-size: 12px;
+        color: $link-color;
+
+        a {
+            font-size: 12px;
+            padding: 0px 2px;
+        }
+    }
 }
