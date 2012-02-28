@@ -15,7 +15,7 @@
         border-top: 1px solid #B2C7D6;
         background-color: #C4DCEB;
 
-        .count {
+        .count, .explore {
             @include font-normal-alpha;
         }
 
@@ -30,6 +30,15 @@
 
         .preview {
         }
+    }
+
+    input.search {
+        display: inline-block;
+    }
+
+    .chorus_search_container {
+        width: 40%;
+        margin: 0 8px;
     }
 
     button {

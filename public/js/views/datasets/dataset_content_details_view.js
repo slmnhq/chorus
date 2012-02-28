@@ -65,6 +65,13 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         if (this.options.inEditChorusView) {
             this.showEditChorusViewWizard();
         }
+
+        if (this.options.columnList) {
+            chorus.search({
+                input: this.$("input.search"),
+                list: $(this.options.columnList.el)
+            });
+        }
     },
 
     triggerSelectAll: function(e) {

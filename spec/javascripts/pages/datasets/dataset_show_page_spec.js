@@ -131,6 +131,7 @@ describe("chorus.pages.DatasetShowPage", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            spyOn(chorus, "search");
             this.server.completeFetchFor(this.workspace);
             this.resizedSpy = spyOnEvent(this.page, 'resized');
             this.server.completeFetchFor(this.dataset);
@@ -162,6 +163,18 @@ describe("chorus.pages.DatasetShowPage", function() {
             it("displays the object name for the fifth crumb", function() {
                 expect(this.page.$("#breadcrumbs .breadcrumb .slug").text()).toBe(this.columnSet.attributes.tableName);
             })
+        });
+
+        it("has a search field in the content details that filters the column list", function() {
+            var searchInput = this.page.mainContent.contentDetails.$("input.search"),
+            columnList = $(this.page.mainContent.content.el);
+
+            expect(searchInput).toExist();
+            expect(chorus.search).toHaveBeenCalled();
+            var searchOptions = chorus.search.mostRecentCall.args[0];
+
+            expect(searchOptions.input).toBe(searchInput);
+            expect(searchOptions.list).toBe(columnList);
         });
 
         describe("#showSidebar", function() {

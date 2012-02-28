@@ -58,6 +58,7 @@
                 contentDetails: new chorus.views.DatasetContentDetails({ dataset: this.dataset, collection: this.columnSet })
             });
 
+            this.mainContent.contentDetails.options.columnList = this.mainContent.content;
             this.sidebar = new chorus.views.DatasetListSidebar();
             this.sidebar.setDataset(this.dataset);
 
