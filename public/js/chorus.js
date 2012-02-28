@@ -183,12 +183,12 @@ window.Chorus = function chorus$Global() {
             list = options.list,
             selector = options.selector;
 
-        input.unbind("textchange").bind("textchange", _.bind(filterSearchList, this, options));
+        input.unbind("textchange").bind("textchange", _.bind(onTextChange, this, options));
         input.addClass("chorus_search")
         input.each(function(i, el) {
             var $el = $(el);
             var clearLink = $("<a href='#'/>")
-                .addClass("chorus_search_clear")
+                .addClass("chorus_search_clear hidden")
                 .append("<img src='/images/icon_clear_search.png'></a>")
                 .bind('click', function(e) {
                     e.preventDefault();
@@ -202,15 +202,16 @@ window.Chorus = function chorus$Global() {
         });
     };
 
-    function filterSearchList(options, e) {
-        var input = options.input,
-            list = options.list,
+    function onTextChange(options, e) {
+        var list = options.list,
             selector = options.selector,
             onFilter = options.onFilter,
             afterFilter = options.afterFilter,
-            changedInput = $(e.target);
+            changedInput = $(e.target),
+            clearLink = changedInput.siblings(".chorus_search_clear");
 
         var compare = changedInput.val().toLowerCase();
+        clearLink.toggleClass("hidden", compare.length === 0);
         list.find("li").each(function() {
             var elToMatch = selector ? $(this).find(selector) : $(this);
             var matches = (elToMatch.text().toLowerCase().indexOf(compare) >= 0);

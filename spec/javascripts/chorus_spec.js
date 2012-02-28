@@ -363,23 +363,38 @@ describe("chorus global", function() {
         describe("the 'x'", function() {
             beforeEach(function() {
                 chorus.search({ input: this.input1, list: this.list});
-                this.input1.val("nit").trigger("textchange");
 
                 this.clearLink = this.container.find("a.chorus_search_clear");
             });
 
             it("adds a little 'x' to the right of the search input", function() {
+                this.input1.val("nit").trigger("textchange");
                 expect(this.clearLink).toExist();
                 expect(this.clearLink.find("img").attr("src")).toBe("/images/icon_clear_search.png");
             });
 
+            it("hides the 'x' when the input is blank", function() {
+                expect(this.clearLink).toHaveClass("hidden");
+
+                this.input1.val("foo").trigger("textchange");
+                expect(this.clearLink).not.toHaveClass("hidden");
+
+                this.input1.val("").trigger("textchange");
+                expect(this.clearLink).toHaveClass("hidden");
+            });
+
             describe("when the 'x' is clicked", function() {
                 beforeEach(function() {
+                    this.input1.val("nit").trigger("textchange");
                     this.clearLink.click();
                 });
 
                 it("clears the search text", function() {
                     expect(this.input1.val()).toBe("");
+                });
+
+                it("hides the 'x'", function() {
+                    expect(this.clearLink).toHaveClass("hidden");
                 });
 
                 it("updates the list, removing any filtering", function() {
