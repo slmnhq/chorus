@@ -68,8 +68,9 @@
         },
 
         workspaceLoaded: function() {
+            var targetButton = this.mainContent.options.buttons[0];
+
             if (this.workspace.sandbox()) {
-                var targetButton = this.mainContent.options.buttons[0];
                 targetButton.dataAttributes.push({name: "canonical-name", value: this.workspace.sandbox().canonicalName()});
                 targetButton.disabled = false;
                 delete targetButton.helpText;
@@ -78,6 +79,15 @@
                 this.account.onLoaded(this.checkAccount, this);
                 this.account.fetch();
             } else {
+                var loggedInUser = chorus.session.user();
+
+                if (loggedInUser.get("id") != this.workspace.get("ownerId") &&
+                    !loggedInUser.get("admin"))
+                {
+                    targetButton.helpText = t("dataset.import.need_sandbox_no_permissions");
+                    this.mainContent.contentDetails.render();
+                }
+
                 this.collection.fetch();
             }
         },

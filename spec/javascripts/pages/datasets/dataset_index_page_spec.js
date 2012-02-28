@@ -1,7 +1,7 @@
-describe("chorus.pages.DatasetIndexPage", function() {
+ describe("chorus.pages.DatasetIndexPage", function() {
     beforeEach(function() {
         this.modalSpy = stubModals();
-        this.workspace = fixtures.workspace();
+        this.workspace = fixtures.workspace({ id: 9999 });
         this.page = new chorus.pages.DatasetIndexPage(this.workspace.get("id"));
         chorus.bindModalLaunchingClicks(this.page);
     })
@@ -24,53 +24,89 @@ describe("chorus.pages.DatasetIndexPage", function() {
     context("it does not have a sandbox", function() {
         beforeEach(function() {
             this.workspace.attributes.sandboxInfo = null;
-            this.server.completeFetchFor(this.workspace);
         });
 
-        it("still fetches the dataset collection", function() {
-            expect(this.workspace.sandbox()).toBeUndefined();
-            expect(this.server.lastFetchFor(this.page.collection)).toBeDefined();
-        })
-
-        describe("when the fetch returns no items", function() {
+        context("and the user is an admin", function() {
             beforeEach(function() {
-                this.datasets = [
-                ];
-                this.server.lastFetchFor(this.page.collection).succeed(this.datasets);
-            })
+                setLoggedInUser({ id: 11, admin: true});
+                this.server.completeFetchFor(this.workspace);
+            });
 
-            it("has no items", function() {
-                expect(this.page.collection.length).toBe(0)
-            })
+            itHandlesTheWorkspaceResponse(t("dataset.import.need_sandbox", {
+                hereLink: '<a class="dialog" href="#" data-dialog="SandboxNew" data-workspace-id="9999">' + t("actions.click_here") + '</a>'
+            }))
         });
 
-        describe("when the fetch returns two items", function() {
+        context("and the user is the workspace owner", function() {
             beforeEach(function() {
-                this.datasets = [
-                    fixtures.datasetSourceTable(),
-                    fixtures.datasetSourceView()
-                ];
-                this.server.lastFetchFor(this.page.collection).succeed(this.datasets);
-            })
+                setLoggedInUser({ id: this.workspace.get("ownerId"), admin: false});
+                this.server.completeFetchFor(this.workspace);
+            });
 
-            it("has two items", function() {
-                expect(this.page.collection.length).toBe(2)
-            })
+            itHandlesTheWorkspaceResponse(t("dataset.import.need_sandbox", {
+                hereLink: '<a class="dialog" href="#" data-dialog="SandboxNew" data-workspace-id="9999">' + t("actions.click_here") + '</a>'
+            }))
         });
 
-        describe("this import file button", function() {
+        context("and the user is neither an admin nor the workspace owner", function() {
             beforeEach(function() {
-                this.page.render();
+                setLoggedInUser({ id: "888", admin: false});
+                this.server.completeFetchFor(this.workspace);
+            });
+
+            itHandlesTheWorkspaceResponse(t("dataset.import.need_sandbox_no_permissions"))
+        });
+
+        function itHandlesTheWorkspaceResponse(helpText) {
+            it("fetches the dataset collection", function() {
+                expect(this.workspace.sandbox()).toBeUndefined();
+                expect(this.server.lastFetchFor(this.page.collection)).toBeDefined();
             })
 
-            it("is disabled", function() {
-                expect(this.page.mainContent.contentDetails.$("button")).toBeDisabled();
-            })
+            describe("when the fetch returns no items", function() {
+                beforeEach(function() {
+                    this.datasets = [
+                    ];
+                    this.server.lastFetchFor(this.page.collection).succeed(this.datasets);
+                })
 
-            it("has a help icon", function() {
-                expect(this.page.mainContent.contentDetails.$('img.help')).toExist();
+                it("has no items", function() {
+                    expect(this.page.collection.length).toBe(0)
+                })
+            });
+
+            describe("when the fetch returns two items", function() {
+                beforeEach(function() {
+                    this.datasets = [
+                        fixtures.datasetSourceTable(),
+                        fixtures.datasetSourceView()
+                    ];
+                    this.server.lastFetchFor(this.page.collection).succeed(this.datasets);
+                })
+
+                it("has two items", function() {
+                    expect(this.page.collection.length).toBe(2)
+                })
+            });
+
+            describe("the import file button", function() {
+                beforeEach(function() {
+                    this.page.render();
+                })
+
+                it("is disabled", function() {
+                    expect(this.page.mainContent.contentDetails.$("button")).toBeDisabled();
+                })
+
+                it("has a help icon", function() {
+                    expect(this.page.mainContent.contentDetails.$('img.help')).toExist();
+                })
+
+                it("has the correct help text", function() {
+                    expect(this.page.mainContent.contentDetails.$("img.help").attr("data-text")).toBe(helpText);
+                })
             })
-        })
+        }
     });
 
     context("after the workspace has loaded", function() {
