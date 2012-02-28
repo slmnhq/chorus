@@ -2,12 +2,12 @@ describe("chorus.views.DatasetContentDetails", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.qtipMenu = stubQtip();
-            this.dataset = fixtures.datasetSourceTable();
-            this.collection = this.dataset.columns([fixtures.databaseColumn(), fixtures.databaseColumn()]);
+            this.tabularData = fixtures.datasetSourceTable();
+            this.collection = this.tabularData.columns([fixtures.databaseColumn(), fixtures.databaseColumn()]);
 
-            this.view = new chorus.views.DatasetContentDetails({dataset: this.dataset, collection: this.collection});
+            this.view = new chorus.views.DatasetContentDetails({tabularData: this.tabularData, collection: this.collection});
             spyOn(this.view.filterWizardView, 'resetFilters').andCallThrough();
-            this.server.completeFetchFor(this.dataset.statistics(), fixtures.datasetStatisticsView());
+            this.server.completeFetchFor(this.tabularData.statistics(), fixtures.datasetStatisticsView());
             this.view.render();
         });
 
@@ -51,14 +51,14 @@ describe("chorus.views.DatasetContentDetails", function() {
             context("when the object is a databaseObject", function() {
                 it("shows the SQL definition in the header", function() {
                     expect(this.view.$(".sql_content")).toExist();
-                    expect(this.view.$(".definition")).toContainText(this.dataset.statistics().get("definition"));
+                    expect(this.view.$(".definition")).toContainText(this.tabularData.statistics().get("definition"));
                 });
 
                 context("when there is no sql", function() {
                     beforeEach(function() {
-                        var dataset = fixtures.datasetSourceTable()
-                        this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection});
-                        this.server.completeFetchFor(dataset.statistics(), fixtures.datasetStatisticsTable());
+                        var tabularData = fixtures.datasetSourceTable()
+                        this.view = new chorus.views.DatasetContentDetails({tabularData: tabularData, collection: this.collection});
+                        this.server.completeFetchFor(tabularData.statistics(), fixtures.datasetStatisticsTable());
                         this.view.render();
                     });
 
@@ -70,15 +70,15 @@ describe("chorus.views.DatasetContentDetails", function() {
 
             context("when the object is a CHORUS VIEW", function() {
                 beforeEach(function() {
-                    var dataset = fixtures.datasetChorusView();
-                    this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection});
-                    this.server.completeFetchFor(dataset.statistics());
+                    var tabularData = fixtures.datasetChorusView();
+                    this.view = new chorus.views.DatasetContentDetails({tabularData: tabularData, collection: this.collection});
+                    this.server.completeFetchFor(tabularData.statistics());
                     this.view.render();
 
                 });
                 it("shows the SQL definition in the header", function() {
                     expect(this.view.$(".sql_content")).toExist();
-                    expect(this.view.$(".definition")).toContainText(this.view.dataset.get("query"));
+                    expect(this.view.$(".definition")).toContainText(this.view.tabularData.get("query"));
                 });
             });
 
@@ -125,7 +125,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                         });
 
                         it("should execute database preview model", function() {
-                            expect(this.view.resultsConsole.execute).toHaveBeenCalledWith(this.view.dataset.preview());
+                            expect(this.view.resultsConsole.execute).toHaveBeenCalledWith(this.view.tabularData.preview());
                         });
                     });
                 })
@@ -171,7 +171,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                         });
 
                         it("should execute database preview model", function() {
-                            expect(this.view.resultsConsole.execute).toHaveBeenCalledWith(this.view.dataset.preview(this.view.options.inEditChorusView), true);
+                            expect(this.view.resultsConsole.execute).toHaveBeenCalledWith(this.view.tabularData.preview(this.view.options.inEditChorusView), true);
                         });
                     });
                 })
@@ -409,18 +409,18 @@ describe("chorus.views.DatasetContentDetails", function() {
                 });
             })
 
-            context("when the dataset is not a chorus view", function() {
+            context("when the tabularData is not a chorus view", function() {
                 it("should not display the edit chorus view button", function() {
                     expect(this.view.$("button.edit")).not.toExist();
                 })
             })
 
-            context("when the dataset is a chorus view", function() {
+            context("when the tabularData is a chorus view", function() {
                 beforeEach(function() {
-                    var dataset = fixtures.datasetChorusView();
-                    dataset.initialQuery = "select * from abc";
-                    this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection});
-                    this.server.completeFetchFor(dataset.statistics());
+                    var tabularData = fixtures.datasetChorusView();
+                    tabularData.initialQuery = "select * from abc";
+                    this.view = new chorus.views.DatasetContentDetails({tabularData: tabularData, collection: this.collection});
+                    this.server.completeFetchFor(tabularData.statistics());
                     this.view.render();
                 });
 
@@ -461,7 +461,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                     context("and cancel is clicked", function() {
                         beforeEach(function() {
-                            spyOnEvent(this.view, "cancel:sidebar");
+                            spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
                             spyOnEvent(this.view, "dataset:cancelEdit");
                             this.view.$('.edit_chorus_view .cancel').click();
                         });
@@ -477,7 +477,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                         });
 
                         it("triggers 'cancel:sidebar'", function() {
-                            expect("cancel:sidebar").toHaveBeenTriggeredOn(this.view);
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('cancel:sidebar', 'chorus_view');
                         });
 
                         it("triggers dataset:cancelEdit", function() {
@@ -485,7 +485,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                         });
 
                         it("resets the query to the initial query", function() {
-                            expect(this.view.dataset.get("query")).toBe("select * from abc")
+                            expect(this.view.tabularData.get("query")).toBe("select * from abc")
                         })
                     })
 

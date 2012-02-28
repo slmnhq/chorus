@@ -11,8 +11,13 @@
         }
     });
 
-    chorus.pages.DatasetShowPage = chorus.pages.Base.extend({
+    chorus.pages.DatasetShowPage = chorus.pages.DatabaseObjectShowPage.extend({
         helpId: "dataset",
+        hideDeriveChorusView: false,
+
+        title: function() {
+            return this.objectName
+        },
 
         setup: function(workspaceId, datasetId) {
             this.datasetId = datasetId;
@@ -29,54 +34,32 @@
             this.workspace.fetch();
 
             this.breadcrumbs = new breadcrumbsView({model: this.workspace, objectName: this.objectName});
-
-            chorus.PageEvents.subscribe("cancel:sidebar", this.hideSidebar, this);
         },
 
         fetchDataSet: function() {
-            this.model = this.dataset = new chorus.models.Dataset({ workspace: { id: this.workspace.get("id") }, id: this.datasetId });
-            this.dataset.bind("loaded", this.fetchColumnSet, this);
-            this.dataset.fetch();
+            this.model = this.tabularData = new chorus.models.Dataset({ workspace: { id: this.workspace.get("id") }, id: this.datasetId });
+            this.tabularData.bind("loaded", this.fetchColumnSet, this);
+            this.tabularData.fetch();
         },
 
         fetchColumnSet: function() {
-            this.columnSet = this.dataset.columns({type: "meta"});
+            this.columnSet = this.tabularData.columns({type: "meta"});
             this.columnSet.bind("loaded", this.columnSetFetched, this);
             this.columnSet.fetchAll();
         },
 
         columnSetFetched: function() {
-            this.columnSet = new chorus.collections.DatabaseColumnSet(this.columnSet.models);
-            this.columnSet.loaded = true;
             this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
-            this.mainContent = new chorus.views.MainContentList({
-                modelClass: "DatabaseColumn",
-                collection: this.columnSet,
-                model: this.workspace,
-                title: this.objectName,
-                imageUrl: this.dataset.iconUrl(),
-                contentDetails: new chorus.views.DatasetContentDetails({ dataset: this.dataset, collection: this.columnSet })
-            });
 
-            this.mainContent.contentDetails.options.columnList = this.mainContent.content;
-            this.sidebar = new chorus.views.DatasetListSidebar();
-            this.sidebar.setDataset(this.dataset);
+            this._super('columnSetFetched');
 
-            this.mainContent.contentDetails.bind("transform:sidebar", this.showSidebar, this);
-            this.mainContent.contentDetails.bind("cancel:sidebar", this.hideSidebar, this);
-            this.mainContent.contentDetails.bind("column:select_all", this.mainContent.content.selectAll, this.mainContent.content);
-            this.mainContent.contentDetails.bind("column:select_none", this.mainContent.content.deselectAll, this.mainContent.content);
             this.mainContent.contentDetails.bind("dataset:edit", this.editChorusView, this);
-            this.mainContent.content.bind("column:selected", this.forwardSelectedToSidebar, this);
-            this.mainContent.content.bind("column:deselected", this.forwardDeselectedToSidebar, this);
-
-            this.render();
         },
 
         editChorusView: function() {
             this.mainContent = new chorus.views.MainContentView({
-                content: new chorus.views.DatasetEditChorusView({model: this.dataset}),
-                contentDetails: new chorus.views.DatasetContentDetails({ dataset: this.dataset, collection: this.columnSet, inEditChorusView: true })
+                content: new chorus.views.DatasetEditChorusView({model: this.tabularData}),
+                contentDetails: new chorus.views.DatasetContentDetails({ tabularData: this.tabularData, collection: this.columnSet, inEditChorusView: true })
             });
 
             this.mainContent.contentDetails.bind("dataset:cancelEdit", this.fetchDataSet, this);
@@ -85,46 +68,10 @@
             this.renderSubview('mainContent');
         },
 
-        forwardSelectedToSidebar: function(column) {
-            if (this.secondarySidebar) {
-                this.secondarySidebar.trigger("column:selected", column);
-            }
-        },
-
-        forwardDeselectedToSidebar: function(column) {
-            if (this.secondarySidebar) {
-                this.secondarySidebar.trigger("column:deselected", column);
-            }
-        },
-
-        showSidebar: function(type) {
-            this.$('.sidebar_content.primary').addClass("hidden")
-            this.$('.sidebar_content.secondary').removeClass("hidden")
-
-            if (this.secondarySidebar) {
-                this.secondarySidebar.cleanup()
-                delete this.secondarySidebar;
-            }
-
-            this.mainContent.content.selectMulti = false;
+        constructSidebarForType: function(type) {
             switch (type) {
-                case 'boxplot':
-                    this.secondarySidebar = new chorus.views.DatasetVisualizationBoxplotSidebar({model: this.model, collection: this.columnSet});
-                    break;
-                case 'frequency':
-                    this.secondarySidebar = new chorus.views.DatasetVisualizationFrequencySidebar({model: this.model, collection: this.columnSet});
-                    break;
-                case 'histogram':
-                    this.secondarySidebar = new chorus.views.DatasetVisualizationHistogramSidebar({model: this.model, collection: this.columnSet});
-                    break;
-                case 'heatmap':
-                    this.secondarySidebar = new chorus.views.DatasetVisualizationHeatmapSidebar({model: this.model, collection: this.columnSet});
-                    break;
-                case 'timeseries':
-                    this.secondarySidebar = new chorus.views.DatasetVisualizationTimeSeriesSidebar({model: this.model, collection: this.columnSet});
-                    break;
                 case 'chorus_view':
-                    this.dataset.setDatasetNumber(1);
+                    this.tabularData.setDatasetNumber(1);
                     this.sidebar.disabled = true;
                     this.mainContent.content.selectMulti = true;
                     this.mainContent.content.showDatasetName = true;
@@ -135,29 +82,17 @@
                 case 'edit_chorus_view':
                     this.secondarySidebar = new chorus.views.DatasetEditChorusViewSidebar({model: this.model});
                     break;
-            }
-
-            if(this.secondarySidebar) {
-                this.secondarySidebar.filters = this.mainContent.contentDetails.filterWizardView;
-                this.secondarySidebar.errorContainer = this.mainContent.contentDetails;
-                this.renderSubview('secondarySidebar');
-                this.trigger('resized');
+                default:
+                    this._super('constructSidebarForType', arguments);
             }
         },
 
         hideSidebar: function(type) {
-            this.dataset.clearDatasetNumber();
-            this.sidebar.disabled = false;
+            this.tabularData.clearDatasetNumber();
+            this.columnSet.reset(this.tabularData.columns().models);
             this.mainContent.content.selectMulti = false;
             this.mainContent.content.showDatasetName = false;
-            this.secondarySidebar.cleanup();
-            delete this.secondarySidebar;
-            this.mainContent.content.render();
-            this.columnSet.reset(this.dataset.columns().models);
-            this.$('.sidebar_content.primary').removeClass("hidden")
-            this.$('.sidebar_content.secondary').addClass("hidden")
-            this.removeOldSecondaryClasses(type);
-            this.trigger('resized');
+            this._super('hideSidebar', arguments);
         },
 
         removeOldSecondaryClasses: function(type) {

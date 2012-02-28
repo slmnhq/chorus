@@ -27,7 +27,6 @@ describe("chorus.pages.DatasetShowPage", function() {
 
         this.datasetId = this.dataset.get('id');
 
-
         this.page = new chorus.pages.DatasetShowPage(this.workspace.get("id"), this.datasetId);
         spyOn(this.page, "fetchDataSet").andCallThrough();
     })
@@ -37,10 +36,6 @@ describe("chorus.pages.DatasetShowPage", function() {
     })
 
     describe("#initialize", function() {
-        it("fetches the workspace", function() {
-            expect(this.server.lastFetchFor(this.workspace)).toBeDefined();
-        });
-
         it("parses the datasetId", function() {
             expect(this.page.instanceId).toBe("5");
             expect(this.page.databaseName).toBe("db");
@@ -49,9 +44,8 @@ describe("chorus.pages.DatasetShowPage", function() {
             expect(this.page.objectName).toBe("tableName");
         });
 
-        describe("when the workspace fetch completes", function() {
+        context("when the workspace fetch completes", function() {
             beforeEach(function() {
-                spyOn(chorus.collections.DatabaseColumnSet.prototype, "fetchAll").andCallThrough();
                 this.server.completeFetchFor(this.workspace);
             })
 
@@ -60,43 +54,24 @@ describe("chorus.pages.DatasetShowPage", function() {
                 expect(this.page.model.get("id")).toBe(this.datasetId);
             });
 
-            it("fetches the dataset", function() {
-                expect(this.server.lastFetch().url).toBe("/edc/workspace/" + this.workspace.get("id") + "/dataset/" + this.datasetId);
-            });
-
-            describe("when the dataset fetch completes", function() {
+            context("when the dataset fetch completes", function() {
                 beforeEach(function() {
                     this.server.completeFetchFor(this.dataset);
                 });
 
-                it("fetches all of the columns", function() {
-                    expect(chorus.collections.DatabaseColumnSet.prototype.fetchAll).toHaveBeenCalled();
-                    expect(this.server.lastFetchAllFor(this.columnSet).params().type).toBe("meta");
-                })
-
                 describe("when the columnSet fetch completes", function() {
                     beforeEach(function() {
-                        spyOn(this.page, "postRender");
                         this.server.lastFetchAllFor(this.columnSet).succeed(this.columnSet);
                     })
 
                     it("creates a new columnSet with the same data as the dataset's columnSet", function() {
-                        expect(this.page.columnSet.models).toEqual(this.page.dataset.columns().models);
-                        expect(this.page.columnSet).not.toEqual(this.page.dataset.columns());
+                        expect(this.page.columnSet.models).toEqual(this.page.tabularData.columns().models);
+                        expect(this.page.columnSet).not.toEqual(this.page.tabularData.columns());
                     });
 
                     it("does not modify the tabularData reference the existing columns have", function() {
-                        expect(this.page.columnSet.models[0].tabularData).toBe(this.page.dataset);
+                        expect(this.page.columnSet.models[0].tabularData).toBe(this.page.tabularData);
                     });
-
-                    it("creates the sidebar", function() {
-                        expect(this.page.sidebar).toBeDefined();
-                        expect(this.page.sidebar.resource.get("id")).toBe(this.dataset.get("id"))
-                    })
-
-                    it("renders", function() {
-                        expect(this.page.postRender).toHaveBeenCalled();
-                    })
 
                     describe("when editing a chorus view", function() {
                         beforeEach(function() {
@@ -131,7 +106,6 @@ describe("chorus.pages.DatasetShowPage", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            spyOn(chorus, "search");
             this.server.completeFetchFor(this.workspace);
             this.resizedSpy = spyOnEvent(this.page, 'resized');
             this.server.completeFetchFor(this.dataset);
@@ -165,113 +139,16 @@ describe("chorus.pages.DatasetShowPage", function() {
             })
         });
 
-        it("has a search field in the content details that filters the column list", function() {
-            var searchInput = this.page.mainContent.contentDetails.$("input.search"),
-            columnList = $(this.page.mainContent.content.el);
-
-            expect(searchInput).toExist();
-            expect(chorus.search).toHaveBeenCalled();
-            var searchOptions = chorus.search.mostRecentCall.args[0];
-
-            expect(searchOptions.input).toBe(searchInput);
-            expect(searchOptions.list).toBe(columnList);
-        });
-
-        describe("#showSidebar", function() {
-            beforeEach(function() {
-                this.page.secondarySidebar = new chorus.views.Base();
-                this.originalSidebar = this.page.secondarySidebar;
-                spyOn(this.originalSidebar, "cleanup");
-                this.page.showSidebar("foo");
-            });
-
-            it("calls cleanup on the old sidebar", function() {
-                expect(this.originalSidebar.cleanup).toHaveBeenCalledWith();
-            });
-        });
+        describe("#contentDetails", function() {
+            it("has a Derive Chorus View button", function() {
+                expect(this.page.$(".derive")).toExist();
+            })
+        })
 
         describe("when the transform:sidebar event is triggered", function() {
             beforeEach(function() {
                 this.page.render()
                 spyOn(this.page, 'render');
-            });
-
-            context("for any valid type of plot", function() {
-                beforeEach(function() {
-                    this.page.mainContent.contentDetails.trigger("transform:sidebar", "boxplot");
-                });
-
-                it("triggers 'resized' on the page", function() {
-                    expect('resized').toHaveBeenTriggeredOn(this.page);
-                });
-
-                it("should not re-render the page", function() {
-                    expect(this.page.render).not.toHaveBeenCalled();
-                });
-
-                it("should hide the original sidebar and shows the viz_sidebar", function() {
-                    expect(this.page.$('#sidebar .sidebar_content.primary')).toHaveClass('hidden');
-                    expect(this.page.$('#sidebar .sidebar_content.secondary')).not.toHaveClass('hidden');
-                });
-
-                it("should re-render the sidebar subview", function() {
-                    expect(this.page.$('#sidebar .sidebar_content').get(1)).toBe(this.page.secondarySidebar.el);
-                });
-            })
-
-            context("for a boxplot", function() {
-                beforeEach(function() {
-                    this.page.mainContent.contentDetails.trigger("transform:sidebar", 'boxplot');
-                });
-
-                it("should swap out the sidebar for the boxplot sidebar", function() {
-                    expect(this.page.secondarySidebar).toBeA(chorus.views.DatasetVisualizationBoxplotSidebar)
-                    expect(this.page.secondarySidebar.collection).toBe(this.page.columnSet);
-                });
-            });
-
-            context("for a frequency chart", function() {
-                beforeEach(function() {
-                    this.page.mainContent.contentDetails.trigger("transform:sidebar", 'frequency');
-                });
-
-                it("should swap out the sidebar for the frequency sidebar", function() {
-                    expect(this.page.secondarySidebar).toBeA(chorus.views.DatasetVisualizationFrequencySidebar)
-                    expect(this.page.secondarySidebar.collection).toBe(this.page.columnSet);
-                });
-            });
-
-            context("for a histogram chart", function() {
-                beforeEach(function() {
-                    this.page.mainContent.contentDetails.trigger("transform:sidebar", 'histogram');
-                });
-
-                it("should swap out the sidebar for the histogram sidebar", function() {
-                    expect(this.page.secondarySidebar).toBeA(chorus.views.DatasetVisualizationHistogramSidebar)
-                    expect(this.page.secondarySidebar.collection).toBe(this.page.columnSet);
-                });
-            });
-
-            context("for a heatmap chart", function() {
-                beforeEach(function() {
-                    this.page.mainContent.contentDetails.trigger("transform:sidebar", 'heatmap');
-                });
-
-                it("should swap out the sidebar for the heatmap sidebar", function() {
-                    expect(this.page.secondarySidebar).toBeA(chorus.views.DatasetVisualizationHeatmapSidebar)
-                    expect(this.page.secondarySidebar.collection).toBe(this.page.columnSet);
-                });
-            });
-
-            context("for a time series chart", function() {
-                beforeEach(function() {
-                    this.page.mainContent.contentDetails.trigger("transform:sidebar", 'timeseries');
-                });
-
-                it("should swap out the sidebar for the time series sidebar", function() {
-                    expect(this.page.secondarySidebar).toBeA(chorus.views.DatasetVisualizationTimeSeriesSidebar)
-                    expect(this.page.secondarySidebar.collection).toBe(this.page.columnSet);
-                });
             });
 
             context("for a chorus view", function() {
@@ -285,7 +162,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                 })
 
                 it("sets the datasetNumber to 1", function() {
-                    expect(this.page.dataset.datasetNumber).toBe(1);
+                    expect(this.page.tabularData.datasetNumber).toBe(1);
                 });
 
                 it("enables multi-select on the main content", function() {
@@ -316,7 +193,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                         var otherColumn = fixtures.databaseColumn();
                         otherColumn.tabularData = this.page.model;
                         this.page.columnSet.add(otherColumn);
-                        chorus.PageEvents.broadcast('cancel:sidebar', 'boxplot');
+                        chorus.PageEvents.broadcast('cancel:sidebar', 'chorus_view');
                     });
 
                     it("enables the sidebar", function() {
@@ -324,11 +201,11 @@ describe("chorus.pages.DatasetShowPage", function() {
                     })
 
                     it("clears the datasetNumber", function() {
-                        expect(this.page.dataset.datasetNumber).toBeUndefined();
+                        expect(this.page.tabularData.datasetNumber).toBeUndefined();
                     });
 
                     it("restores the columnSet to the base set of columns from the dataset", function() {
-                        expect(this.page.columnSet.models).toEqual(this.page.dataset.columns().models);
+                        expect(this.page.columnSet.models).toEqual(this.page.tabularData.columns().models);
                     });
 
                     it("disables multi-select on the main content", function() {

@@ -1,9 +1,9 @@
 <div class="definition">
     <span class="sql">{{{sql_definition definition}}}</span>
     <button class="visualize">{{t "dataset.content_details.visualize"}}</button>
-    {{#unless isChorusView}}
+    {{#if showDerive}}
         <button class="derive">{{t "dataset.content_details.derive"}}</button>
-    {{/unless}}
+    {{/if}}
     {{#if isChorusView}}
         <button class="edit">{{t "dataset.content_details.edit"}}</button>
     {{/if}}

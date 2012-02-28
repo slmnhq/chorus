@@ -47,6 +47,50 @@ describe("chorus.models.DatabaseObject", function() {
         });
     });
 
+    describe("showUrl", function() {
+        context("when it is a table", function() {
+            beforeEach(function() {
+                this.databaseObject = fixtures.databaseTable();
+            });
+
+            it("has the correct api", function() {
+                var pieces = [
+                    "#/instances",
+                    this.databaseObject.get('instance').id,
+                    "database",
+                    this.databaseObject.get("databaseName"),
+                    "schema",
+                    this.databaseObject.get('schemaName'),
+                    'table',
+                    this.databaseObject.get('objectName')
+                ]
+                var url = encodeURI(pieces.join('/'));
+                expect(this.databaseObject.showUrl()).toMatchUrl(url);
+            });
+        });
+
+        context("when it is a view", function() {
+            beforeEach(function() {
+                this.databaseObject = fixtures.databaseView();
+            });
+
+            it("uses the view exploration api", function() {
+                var pieces = [
+                    "#/instances",
+                    this.databaseObject.get('instance').id,
+                    "database",
+                    this.databaseObject.get("databaseName"),
+                    "schema",
+                    this.databaseObject.get('schemaName'),
+                    'view',
+                    this.databaseObject.get('objectName')
+                ]
+                var url = encodeURI(pieces.join('/'));
+                expect(this.databaseObject.showUrl()).toMatchUrl(url);
+            });
+        });
+    })
+
     describe("when the 'invalidated' event is triggered", function() {
         describe("when the databaseObject belongs to a collection", function() {
             beforeEach(function() {
@@ -87,6 +131,12 @@ describe("chorus.models.DatabaseObject", function() {
             it("puts quotes around the uppercase names", function() {
                 expect(this.databaseObject.toText()).toBe('"PartyMAN"."Tabler"');
             });
+        });
+    });
+
+    describe("#isChorusView", function() {
+        it("is always false", function() {
+            expect(this.databaseObject.isChorusView()).toBeFalsy();
         });
     });
 });

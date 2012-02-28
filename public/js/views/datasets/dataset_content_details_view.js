@@ -28,11 +28,11 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     setup: function() {
         chorus.PageEvents.subscribe("action:closePreview", this.closeDataPreview, this);
 
-        this.dataset = this.options.dataset;
+        this.tabularData = this.options.tabularData;
         this.resultsConsole = new chorus.views.ResultsConsole({titleKey: "dataset.data_preview", enableClose: true});
         this.filterWizardView = new chorus.views.DatasetFilterWizard({collection: this.collection});
 
-        this.statistics = this.dataset.statistics();
+        this.statistics = this.tabularData.statistics();
         this.statistics.fetchIfNotLoaded();
 
         this.requiredResources.add(this.statistics);
@@ -45,9 +45,9 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$(".edit_chorus_view_info").addClass("hidden");
         this.$(".data_preview").removeClass("hidden");
         if (!this.options.inEditChorusView) {
-            this.resultsConsole.execute(this.dataset.preview());
+            this.resultsConsole.execute(this.tabularData.preview());
         } else {
-            this.resultsConsole.execute(this.dataset.preview(this.options.inEditChorusView), true);
+            this.resultsConsole.execute(this.tabularData.preview(this.options.inEditChorusView), true);
         }
     },
 
@@ -115,7 +115,6 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     startCreateChorusViewWizard: function() {
         this.trigger("transform:sidebar", "chorus_view");
-        this.$(".cancel").data("type", "chorus_view");
         this.$('.chorusview').addClass("selected");
         this.$('.definition').addClass("hidden")
         this.$('.create_chart').addClass("hidden");
@@ -130,7 +129,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     cancelChorusView: function(e) {
         e.preventDefault();
-        chorus.PageEvents.broadcast('cancel:sidebar', $(e.target).data('type'));
+        chorus.PageEvents.broadcast('cancel:sidebar', 'chorus_view');
         this.$('.definition').removeClass("hidden")
         this.$('.create_chorus_view').addClass("hidden");
         this.$(".filters").addClass("hidden");
@@ -160,9 +159,9 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$(".edit_chorus_view_info").addClass("hidden");
         this.$(".column_count").removeClass("hidden");
         this.$(".definition").removeClass("hidden");
-        this.trigger("cancel:sidebar");
+        chorus.PageEvents.broadcast('cancel:sidebar', 'chorus_view');
         this.trigger("dataset:cancelEdit");
-        this.dataset.set({query: this.dataset.initialQuery});
+        this.tabularData.set({query: this.tabularData.initialQuery});
     },
 
     saveChorusView: function() {
@@ -195,8 +194,9 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            definition: this.dataset.isChorusView() ? this.dataset.get("query") : this.statistics.get("definition"),
-            isChorusView: this.dataset.isChorusView()
+            definition: this.tabularData.isChorusView() ? this.tabularData.get("query") : this.statistics.get("definition"),
+            isChorusView: this.tabularData.isChorusView(),
+            showDerive: !this.tabularData.isChorusView() && !this.options.hideDeriveChorusView
         }
     },
 
