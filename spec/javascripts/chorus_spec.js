@@ -301,9 +301,12 @@ describe("chorus global", function() {
 
     describe("#search", function() {
         beforeEach(function() {
-            this.input = $("<input></input>");
+            this.input1 = $("<input></input>");
+            this.input2 = $("<input></input>");
             this.list = $("<ul></ul>");
-            this.container = $("<div></div>").append(this.input);
+            this.container = $("<div></div>")
+                .append(this.input1)
+                .append(this.input2);
 
             _.each(["joseph", "max", "nitin"], function(name) {
                 $("<li></li>").append('<div class="name">' + name + '</div>').append('<div>add</div>').appendTo(this.list);
@@ -312,18 +315,18 @@ describe("chorus global", function() {
         });
 
         it("adds the 'chorus_search' class to the input", function() {
-            chorus.search({ input: this.input, list: this.list });
-            expect(this.input).toHaveClass("chorus_search");
+            chorus.search({ input: this.input1, list: this.list });
+            expect(this.input1).toHaveClass("chorus_search");
         });
 
         context("with a selector", function() {
             beforeEach(function() {
-                chorus.search({ input: this.input, list: this.list, selector: ".name" });
+                chorus.search({ input: this.input1, list: this.list, selector: ".name" });
             })
 
             describe("when text is entered in the search input", function() {
                 it("hides elements in the list that do not contain the search string", function() {
-                    this.input.val("nit").trigger("textchange");
+                    this.input1.val("nit").trigger("textchange");
 
                     expect(this.list.find("li").eq(0)).toHaveClass("hidden");
                     expect(this.list.find("li").eq(1)).toHaveClass("hidden");
@@ -331,7 +334,7 @@ describe("chorus global", function() {
                 });
 
                 it("only searches text within the selector", function() {
-                    this.input.val("add").trigger("textchange");
+                    this.input1.val("add").trigger("textchange");
 
                     expect(this.list.find("li").eq(0)).toHaveClass("hidden");
                     expect(this.list.find("li").eq(1)).toHaveClass("hidden");
@@ -342,12 +345,12 @@ describe("chorus global", function() {
 
         context("without a selector", function() {
             beforeEach(function() {
-                chorus.search({ input: this.input, list: this.list});
+                chorus.search({ input: this.input1, list: this.list});
             })
 
             describe("when text is entered in the search input", function() {
                 it("hides elements in the list that do not contain the search string", function() {
-                    this.input.val("nit").trigger("textchange");
+                    this.input1.val("nit").trigger("textchange");
 
                     expect(this.list.find("li").eq(0)).toHaveClass("hidden");
                     expect(this.list.find("li").eq(1)).toHaveClass("hidden");
@@ -359,8 +362,8 @@ describe("chorus global", function() {
 
         describe("the 'x'", function() {
             beforeEach(function() {
-                chorus.search({ input: this.input, list: this.list});
-                this.input.val("nit").trigger("textchange");
+                chorus.search({ input: this.input1, list: this.list});
+                this.input1.val("nit").trigger("textchange");
 
                 this.clearLink = this.container.find("a.chorus_search_clear");
             });
@@ -376,7 +379,7 @@ describe("chorus global", function() {
                 });
 
                 it("clears the search text", function() {
-                    expect(this.input.val()).toBe("");
+                    expect(this.input1.val()).toBe("");
                 });
 
                 it("updates the list, removing any filtering", function() {
@@ -384,6 +387,25 @@ describe("chorus global", function() {
                     expect(this.list.find("li").eq(1)).not.toHaveClass("hidden");
                     expect(this.list.find("li").eq(2)).not.toHaveClass("hidden");
                 });
+            });
+        });
+
+        describe("when there is more than one element in the 'input' jquery array", function() {
+            beforeEach(function() {
+                chorus.search({ input: this.container.find("input"), list: this.list});
+                this.wrapperDivs = this.container.find(".chorus_search_container");
+            });
+
+            it("wraps each input in a separate div", function() {
+                expect(this.wrapperDivs.length).toBe(2);
+                expect(this.wrapperDivs.eq(0)).toContain(this.input1);
+                expect(this.wrapperDivs.eq(1)).toContain(this.input2);
+            });
+
+            it("gives each input its own 'x' button", function() {
+                expect(this.wrapperDivs.length).toBe(2);
+                expect(this.wrapperDivs.eq(0)).toContain(".chorus_search_clear");
+                expect(this.wrapperDivs.eq(1)).toContain(".chorus_search_clear");
             });
         });
 
@@ -400,7 +422,7 @@ describe("chorus global", function() {
                 });
 
                 chorus.search({
-                    input: this.input,
+                    input: this.input1,
                     list: this.list,
                     onFilter: onFilterSpy,
                     afterFilter: afterFilterSpy
@@ -409,7 +431,7 @@ describe("chorus global", function() {
 
             describe("when text is entered, and items are filtered out", function() {
                 beforeEach(function() {
-                    this.input.val("nit").trigger("textchange");
+                    this.input1.val("nit").trigger("textchange");
                 });
 
                 it("calls the 'onFilter' callback on each item that was filtered out", function() {
