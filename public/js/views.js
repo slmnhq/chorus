@@ -2,9 +2,8 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
     constructorName: "View",
 
     initialize:function initialize() {
-        this.preInitialize.apply(this, arguments);
-
         this.bindings = new chorus.BindingGroup(this);
+        this.preInitialize.apply(this, arguments);
 
         chorus.afterNavigate(_.bind(this.beforeNavigateAway, this));
         this.setup.apply(this, arguments);

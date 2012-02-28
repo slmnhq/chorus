@@ -13,7 +13,7 @@
 
         setup: function() {
             this.model.ldap = true
-            this.model.bind("saved", userSuccessfullySaved, this);
+            this.bindings.add(this.model, "saved", userSuccessfullySaved);
         },
 
         postRender: function() {
@@ -55,13 +55,13 @@
 
             this.collection.fetch();
 
-            this.collection.bind("reset", function() {
+            this.bindings.add(this.collection, "reset", function() {
                 if (this.collection.models.length > 0) {
                     callback.call(this);
                 } else {
                     this.noLdapUserFound();
                 }
-            }, this);
+            });
         },
 
         ldapUsersFetched: function() {

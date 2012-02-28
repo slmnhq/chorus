@@ -18,8 +18,8 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         this.tableName = this.csv.get("toTable");
         chorus.PageEvents.subscribe("choice:setType", this.onSelectType, this);
 
-        this.csv.bind("saved", this.saved, this);
-        this.csv.bind("saveFailed", this.saveFailed, this);
+        this.bindings.add(this.csv, "saved", this.saved);
+        this.bindings.add(this.csv, "saveFailed", this.saveFailed);
     },
 
     saved: function() {

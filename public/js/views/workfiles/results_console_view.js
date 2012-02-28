@@ -25,9 +25,9 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         }
         this.executionStarted();
         model.onLoaded(_.bind(this.executionSucceeded, this, model));
-        model.bind("saved", _.bind(this.executionSucceeded, this, model));
-        model.bind("fetchFailed", _.bind(this.executionFailed, this, model));
-        model.bind("saveFailed", _.bind(this.executionFailed, this, model));
+        this.bindings.add(model, "saved", _.bind(this.executionSucceeded, this, model));
+        this.bindings.add(model, "fetchFailed", _.bind(this.executionFailed, this, model));
+        this.bindings.add(model, "saveFailed", _.bind(this.executionFailed, this, model));
     },
 
     executionStarted: function() {

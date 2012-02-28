@@ -6,7 +6,7 @@ chorus.views.TextWorkfileContent = chorus.views.CodeEditorView.extend({
         this._super("setup");
         chorus.PageEvents.subscribe("file:saveCurrent", this.replaceCurrentVersion, this);
         chorus.PageEvents.subscribe("file:createWorkfileNewVersion", this.createWorkfileNewVersion, this);
-        this.model.bind("saveFailed", this.versionConflict, this)
+        this.bindings.add(this.model, "saveFailed", this.versionConflict)
     },
 
     versionConflict: function() {
@@ -104,10 +104,10 @@ chorus.views.TextWorkfileContent = chorus.views.CodeEditorView.extend({
 
         this.dialog = new chorus.dialogs.WorkfileNewVersion({ launchElement: this, pageModel: this.model, pageCollection: this.collection });
         this.dialog.launchModal(); // we need to manually create the dialog instead of using data-dialog because qtip is not part of page
-        this.dialog.model.bind("change", this.render, this);
-        this.dialog.model.bind("autosaved", function() {
+        this.bindings.add(this.dialog.model, "change", this.render);
+        this.bindings.add(this.dialog.model, "autosaved", function() {
             this.trigger("autosaved", "workfile.content_details.save");
-        }, this);
+        });
     }
 
 });

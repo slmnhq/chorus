@@ -41,7 +41,7 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.extend({
             editable: this.hasPermission
         });
 
-        this.pageModel.bind("saved", this.saved, this);
+        this.bindings.add(this.pageModel, "saved", this.saved);
         this.model.members().sortAsc("lastName");
         this.model.members().fetch();
 

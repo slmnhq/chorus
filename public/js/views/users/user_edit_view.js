@@ -12,7 +12,7 @@
         },
 
         setup:function () {
-            this.model.bind("saved", userSuccessfullySaved, this);
+            this.bindings.add(this.model, "saved", userSuccessfullySaved);
             this.imageUpload = new chorus.views.ImageUpload({ model:this.model, changeImageKey:"users.edit_photo" });
         },
 

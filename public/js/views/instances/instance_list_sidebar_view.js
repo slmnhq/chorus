@@ -43,29 +43,28 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
     },
 
     setInstance:function (instance) {
-        this.requiredResources.reset();
-
         this.resource = this.instance = this.model = instance;
+        var account = this.instance.accountForCurrentUser();
+        var instanceUsage = this.instance.usage();
 
         this.instance.activities().fetch();
-        this.requiredResources.push(this.instance)
         this.instance.fetchIfNotLoaded();
-
         this.instance.accounts().fetch();
-        this.requiredResources.push(this.instance.accounts())
-        this.instance.accounts().bind("reset", this.render, this);
-
-        var account = this.instance.accountForCurrentUser();
-        this.requiredResources.push(account)
-        account.bind("change", this.render, this);
-        account.bind("fetchFailed", this.render, this);
         account.fetch();
-
-        var instanceUsage = this.instance.usage();
         instanceUsage.fetchIfNotLoaded();
+
+        this.requiredResources.reset();
+        this.requiredResources.push(this.instance)
+        this.requiredResources.push(this.instance.accounts())
+        this.requiredResources.push(account)
         this.requiredResources.push(instanceUsage)
 
-        this.resource.bind("change", this.render, this);
+        this.bindings.removeAll();
+        this.bindings.add(this.instance.accounts(), "reset", this.render);
+        this.bindings.add(account, "change", this.render);
+        this.bindings.add(account, "fetchFailed", this.render);
+        this.bindings.add(this.resource, "change", this.render);
+
         this.render();
     },
 

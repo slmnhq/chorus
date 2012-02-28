@@ -11,9 +11,9 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     },
 
     setup:function () {
-        this.model.bind("saved", this.saveSuccess, this);
-        this.model.bind("saveFailed", this.saveFailed, this);
-        this.model.bind("validationFailed", this.saveFailed, this);
+        this.bindings.add(this.model, "saved", this.saveSuccess);
+        this.bindings.add(this.model, "saveFailed", this.saveFailed);
+        this.bindings.add(this.model, "validationFailed", this.saveFailed);
     },
 
     makeModel:function () {

@@ -7,7 +7,7 @@ chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
 
     setup: function() {
         this.filterViews = [];
-        this.collection.bind('remove', this.removeInvalidFilters, this);
+        this.bindings.add(this.collection, 'remove', this.removeInvalidFilters);
     },
 
     postRender: function() {

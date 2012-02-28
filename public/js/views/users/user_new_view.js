@@ -10,7 +10,7 @@
         persistent:true,
 
         setup:function () {
-            this.model.bind("saved", userSuccessfullySaved, this);
+            this.bindings.add(this.model, "saved", userSuccessfullySaved);
         },
 
         makeModel:function () {

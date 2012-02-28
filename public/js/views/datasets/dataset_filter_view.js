@@ -21,7 +21,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
             showAliasedName: this.options.showAliasedName,
             disableOtherTypeCategory: false
         });
-        this.columnFilter.bind('columnSelected', this.columnSelected, this);
+        this.bindings.add(this.columnFilter, "columnSelected", this.columnSelected);
     },
 
     postRender: function() {

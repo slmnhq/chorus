@@ -10,7 +10,7 @@ chorus.views.ShuttleWidget = chorus.views.Base.extend({
 
     setup:function () {
         this.selectionSource = this.options.selectionSource;
-        this.selectionSource.bind("reset", this.render, this);
+        this.bindings.add(this.selectionSource, "reset", this.render);
         this.nonRemovableModels = this.options.nonRemovable;
     },
 

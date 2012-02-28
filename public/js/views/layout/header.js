@@ -23,11 +23,11 @@ chorus.views.Header = chorus.views.Base.extend({
             isNotification: true
         });
 
-        this.notifications.bind("reset", function() {
+        this.bindings.add(this.notifications, "reset", function() {
             this.notificationList.collection.reset(this.notifications.activities().models);
             this.notificationList.collection.loaded = true;
             this.render();
-        }, this);
+        });
         this.notifications.fetchAll();
 
         chorus.PageEvents.subscribe("notification:deleted", this.refreshNotifications, this);

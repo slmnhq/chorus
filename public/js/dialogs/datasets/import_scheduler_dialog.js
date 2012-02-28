@@ -25,14 +25,14 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         this.sandboxTables.sortAsc("objectName");
         this.sandboxTables.fetchAll();
 
-        this.model.bind("saved", function() {
+        this.bindings.add(this.model, "saved", function() {
             chorus.toast("import_now.success");
             this.closeModal();
-        }, this);
+        });
 
-        this.model.bind("saveFailed", function() {
+        this.bindings.add(this.model, "saveFailed", function() {
             this.$("button.submit").stopLoading();
-        }, this);
+        });
     },
 
     setup: function() {

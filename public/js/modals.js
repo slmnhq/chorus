@@ -50,6 +50,7 @@
 
         modalClosed:function () {
             if (this == chorus.modal) {
+                this.bindings.removeAll();
                 this.unbindPageModelCallbacks();
                 this.close();
                 $("#facebox").remove();

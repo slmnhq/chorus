@@ -15,8 +15,8 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
 
         this.task = new chorus.models.SqlExecutionTask({ });
 
-        this.task.bind("saved", this.executionSucceeded, this);
-        this.task.bind("saveFailed", this.executionFailed, this);
+        this.bindings.add(this.task, "saved", this.executionSucceeded);
+        this.bindings.add(this.task, "saveFailed", this.executionFailed);
 
         this.textContent = new chorus.views.TextWorkfileContent({ model: this.model })
         this.resultsConsole = new chorus.views.ResultsConsole({ model: this.task });

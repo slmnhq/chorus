@@ -8,7 +8,7 @@ chorus.views.UserShowSidebar = chorus.views.Sidebar.extend({
     setup:function () {
         this.collection = this.model.activities();
         this.collection.fetch();
-        this.collection.bind("changed", this.render, this);
+        this.bindings.add(this.collection, "changed", this.render);
         this.activityList = new chorus.views.ActivityList({ collection:this.collection, additionalClass:"sidebar" });
 
         this.config = chorus.models.Config.instance();

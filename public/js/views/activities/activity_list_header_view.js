@@ -29,7 +29,7 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
     },
 
     resourcesLoaded: function() {
-        this.collection.bind("reset", this.updateInsightCount, this)
+        this.bindings.add(this.collection, "reset", this.updateInsightCount);
     },
 
     updateInsightCount: function() {

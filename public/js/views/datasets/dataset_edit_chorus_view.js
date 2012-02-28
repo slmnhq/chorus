@@ -5,7 +5,7 @@ chorus.views.DatasetEditChorusView = chorus.views.CodeEditorView.extend({
         this._super("setup");
         this.bind("dataset:saveEdit", this.saveModel, this);
         this.model.initialQuery = this.model.get("query");
-        this.model.bind("saved", this.navigateToChorusViewShowPage, this);
+        this.bindings.add(this.model, "saved", this.navigateToChorusViewShowPage);
     },
 
     postRender:function () {

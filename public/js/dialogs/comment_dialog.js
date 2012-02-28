@@ -13,7 +13,7 @@ chorus.dialogs.Comment = chorus.dialogs.Base.extend({
             entityType:this.options.launchElement.data("entity-type"),
             entityId:this.options.launchElement.data("entity-id")
         });
-        this.model.bind("saved", this.saved, this);
+        this.bindings.add(this.model, "saved", this.saved);
 
         this.entityTitle = this.options.launchElement.data("entity-title")
     },

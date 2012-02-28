@@ -9,13 +9,13 @@ chorus.dialogs.InstancesEdit = chorus.dialogs.Base.extend({
 
         this.users = new chorus.collections.UserSet();
         this.fetchUserSet();
-        this.users.bind("reset", this.render, this);
+        this.bindings.add(this.users, "reset", this.render);
     },
 
     setup:function () {
-        this.model.bind("saved", this.saveSuccess, this);
-        this.model.bind("saveFailed", this.saveFailed, this);
-        this.model.bind("validationFailed", this.saveFailed, this);
+        this.bindings.add(this.model, "saved", this.saveSuccess);
+        this.bindings.add(this.model, "saveFailed", this.saveFailed);
+        this.bindings.add(this.model, "validationFailed", this.saveFailed);
     },
 
     additionalContext:function () {
@@ -24,13 +24,6 @@ chorus.dialogs.InstancesEdit = chorus.dialogs.Base.extend({
             provisionedInstance:this.options.pageModel.get("provisionType") == "create",
             users:this.users.models
         }
-    },
-
-    closeModal:function () {
-        this.model.unbind("saved", this.saveSuccess);
-        this.model.unbind("saveFailed", this.saveFailed);
-        this.model.unbind("validationFailed", this.saveFailed);
-        this._super("closeModal", arguments);
     },
 
     save:function (e) {
@@ -66,10 +59,10 @@ chorus.dialogs.InstancesEdit = chorus.dialogs.Base.extend({
         } else {
             this.accounts = this.accounts || new chorus.collections.InstanceAccountSet({}, { instanceId:this.model.get("id") });
             this.accounts.fetchAll();
-            this.accounts.bind("reset", function () {
+            this.bindings.add(this.accounts, "reset", function () {
                 this.users.add(this.accounts.users());
                 this.users.trigger("reset");
-            }, this);
+            });
         }
     }
 });

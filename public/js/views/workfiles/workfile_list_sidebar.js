@@ -12,11 +12,11 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
         this.workfile = workfile;
         if (this.workfile) {
             this.collection = this.workfile.activities();
-            this.collection.bind("reset", this.render, this)
+            this.bindings.add(this.collection, "reset", this.render);
             this.collection.fetch();
 
-            this.collection.bind("changed", this.render, this);
-            this.workfile.bind("changed", this.render, this);
+            this.bindings.add(this.collection, "changed", this.render);
+            this.bindings.add(this.workfile, "changed", this.render);
 
             this.activityList = new chorus.views.ActivityList({
                 collection:this.collection,

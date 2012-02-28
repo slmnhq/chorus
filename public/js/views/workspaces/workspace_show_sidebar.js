@@ -2,9 +2,9 @@ chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
     className:"workspace_show_sidebar",
 
     setup:function () {
-        this.model.bind("image:change", this.render, this);
+        this.bindings.add(this.model, "image:change", this.render);
         this.model.members().fetch();
-        this.model.members().bind("reset", this.render, this);
+        this.bindings.add(this.model.members(), "reset", this.render);
     },
 
     numMembers:24,

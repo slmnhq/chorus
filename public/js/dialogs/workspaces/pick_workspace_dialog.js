@@ -18,7 +18,7 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.Base.extend({
         this.pageModel = this.options.pageModel;
         this.collection = this.collection || chorus.session.user().workspaces();
         this.collection.fetchAll();
-        this.collection.bind("reset", this.workspacesFetched, this);
+        this.bindings.add(this.collection, "reset", this.workspacesFetched);
     },
 
     workspacesFetched: function() {

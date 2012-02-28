@@ -47,12 +47,12 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.extend({
     makeModel: function() {
         this._super("makeModel", arguments);
 
-        this.model.bind("saved", this.modelSaved, this);
-        this.model.bind("fileUploadSuccess", this.saved, this);
-        this.model.bind("fileUploadFailed", this.saveFailed, this);
-        this.model.bind("saveFailed", this.saveFailed, this);
-        this.model.bind("validationFailed", this.saveFailed, this);
-        this.model.bind("fileUploadDone", this.uploadDone, this);
+        this.bindings.add(this.model, "saved", this.modelSaved);
+        this.bindings.add(this.model, "fileUploadSuccess", this.saved);
+        this.bindings.add(this.model, "fileUploadFailed", this.saveFailed);
+        this.bindings.add(this.model, "saveFailed", this.saveFailed);
+        this.bindings.add(this.model, "validationFailed", this.saveFailed);
+        this.bindings.add(this.model, "fileUploadDone", this.uploadDone);
 
         this.workspaceId = this.model.get("workspaceId");
     },

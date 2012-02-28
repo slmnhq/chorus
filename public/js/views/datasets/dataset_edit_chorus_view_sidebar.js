@@ -11,12 +11,13 @@ chorus.views.DatasetEditChorusViewSidebar = chorus.views.Sidebar.extend({
     setup: function(options) {
         this.collection = this.model.activities();
         this.collection.fetch();
-        this.collection.bind("changed", this.render, this);
         this.activityList = new chorus.views.ActivityList({
             collection: this.collection,
             additionalClass: "sidebar",
             displayStyle: ['without_object', 'without_workspace']
         });
+
+        this.bindings.add(this.collection, "changed", this.render);
         this.requiredResources.push(this.model);
     },
 

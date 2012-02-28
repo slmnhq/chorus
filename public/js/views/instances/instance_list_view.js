@@ -10,9 +10,9 @@ chorus.views.InstanceList = chorus.views.Base.extend({
             this.collection.fetchAll();
             this.selectedInstanceId = id;
         }, this);
-        this.collection.bind("remove", function () {
+        this.bindings.add(this.collection, "remove", function () {
             this.$('.instance_provider li:first').click();
-        }, this);
+        });
     },
 
     postRender:function () {

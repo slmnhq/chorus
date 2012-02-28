@@ -22,16 +22,16 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         this.instance = this.model;
 
         this.users = new chorus.collections.UserSet();
-        this.users.bind("reset", this.populateSelect, this);
+        this.bindings.add(this.users, "reset", this.populateSelect);
         this.users.sortAsc("firstName");
         this.users.fetchAll();
         this.collection = this.instance.accounts();
 
-        this.collection.bind("reset", this.render, this);
-        this.collection.bind("add", this.render, this);
-        this.collection.bind("saved", this.saved, this);
-        this.collection.bind("saveFailed", this.saveFailed, this);
-        this.collection.bind("validationFailed", this.saveFailed, this);
+        this.bindings.add(this.collection, "reset", this.render);
+        this.bindings.add(this.collection, "add", this.render);
+        this.bindings.add(this.collection, "saved", this.saved);
+        this.bindings.add(this.collection, "saveFailed", this.saveFailed);
+        this.bindings.add(this.collection, "validationFailed", this.saveFailed);
 
     },
 
@@ -127,12 +127,12 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
 
     saveOwner:function (user) {
         this.instance.save({ ownerId:user.get("id") });
-        this.instance.bind("saveFailed", this.showErrors, this);
-        this.instance.bind("saved", function () {
+        this.bindings.add(this.instance, "saveFailed", this.showErrors);
+        this.bindings.add(this.instance, "saved", function () {
             chorus.toast("instances.confirm_change_owner.toast");
             this.instance.trigger("invalidated");
             this.closeModal();
-        }, this);
+        });
     },
 
     newAccount:function (e) {
@@ -204,12 +204,12 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         var li = $(event.target).closest("li");
         li.find("a.save").startLoading("instances.permissions.saving")
 
-        this.account.bind("validationFailed", function () {
+        this.bindings.add(this.account, "validationFailed", function () {
             this.showErrors(this.account)
-        }, this);
-        this.account.bind("saveFailed", function () {
+        });
+        this.bindings.add(this.account, "saveFailed", function () {
             this.showErrors(this.account)
-        }, this);
+        });
         this.account.save({
             userId:li.find("select").val(),
             dbUserName:li.find("input[name=dbUserName]").val(),
@@ -255,8 +255,9 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     confirmRemoveSharedAccount:function () {
         var sharedAccount = this.instance.sharedAccount();
 
-        sharedAccount.bind("saved", displaySuccessToast, this);
-        sharedAccount.bind("saveFailed", displayFailureToast, this);
+        var localGroup = new chorus.BindingGroup(this);
+        localGroup.add(sharedAccount, "saved", displaySuccessToast);
+        localGroup.add(sharedAccount, "saveFailed", displayFailureToast);
 
         var id = sharedAccount.get("id")
         sharedAccount.clear({silent:true});
@@ -266,14 +267,12 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
             chorus.toast("instances.shared_account_removed");
             this.instance.unset("sharedAccount");
             this.render();
-            sharedAccount.unbind("saved", displaySuccessToast);
-            sharedAccount.unbind("saveFailed", displayFailureToast);
+            localGroup.removeAll();
         }
 
         function displayFailureToast() {
             chorus.toast("instances.shared_account_remove_failed");
-            sharedAccount.unbind("saved", displaySuccessToast);
-            sharedAccount.unbind("saveFailed", displayFailureToast);
+            localGroup.removeAll();
         }
     },
 
@@ -286,8 +285,10 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
 
     confirmAddSharedAccount:function () {
         var account = this.instance.accountForOwner();
-        account.bind("saved", displaySuccessToast, this);
-        account.bind("saveFailed", displayFailureToast);
+
+        var localGroup = new chorus.BindingGroup(this);
+        localGroup.add(account, "saved", displaySuccessToast);
+        localGroup.add(account, "saveFailed", displayFailureToast);
 
         var id = account.get("id")
         account.clear({silent:true});
@@ -297,14 +298,12 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
             chorus.toast("instances.shared_account_added");
             this.instance.unset("sharedAccount");
             this.render();
-            account.unbind("saved", displaySuccessToast);
-            account.unbind("saveFailed", displayFailureToast);
+            localGroup.removeAll();
         }
 
         function displayFailureToast() {
             chorus.toast("instances.shared_account_add_failed");
-            account.unbind("saved", displaySuccessToast);
-            account.unbind("saveFailed", displayFailureToast);
+            localGroup.removeAll();
         }
     }
 });

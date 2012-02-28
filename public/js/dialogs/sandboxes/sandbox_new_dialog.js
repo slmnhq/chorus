@@ -21,9 +21,9 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         this._super("makeModel", arguments);
         var workspaceId = this.options.launchElement.data("workspaceId");
         this.model = new chorus.models.Sandbox({ workspaceId: workspaceId });
-        this.model.bind("saved", this.saved, this);
-        this.model.bind("saveFailed", this.saveFailed, this);
-        this.model.bind("validationFailed", this.saveFailed, this);
+        this.bindings.add(this.model, "saved", this.saved);
+        this.bindings.add(this.model, "saveFailed", this.saveFailed);
+        this.bindings.add(this.model, "validationFailed", this.saveFailed);
     },
 
     save: function(e) {

@@ -7,7 +7,7 @@ chorus.views.Login = chorus.views.Base.extend({
     persistent:true,
 
     setup:function () {
-        this.model.bind("saved", this.navigateToDashboard)
+        this.bindings.add(this.model, "saved", this.navigateToDashboard);
     },
 
     postRender : function() {
