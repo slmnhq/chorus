@@ -17,6 +17,6 @@ chorus.collections.DatasetSet = chorus.collections.Base.extend({
     },
 
     comparator: function(dataset) {
-        return dataset.get("objectName").toUpperCase();
+        return dataset.get("objectName").toLowerCase();
     }
 });
