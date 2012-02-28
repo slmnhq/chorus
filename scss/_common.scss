@@ -1,4 +1,5 @@
-
+// Do not put any css rules into this file.  This file is only for declaration of variables and mixins
+//
 @import "compass/utilities";
 @import "compass/css3";
 @import "compass/css3/opacity";
@@ -334,29 +335,4 @@ $medium-font: 14px;
 		border-top: $height/2 solid transparent;
 		border-bottom: $height/2 solid transparent;
 	}
-}
-
-.badge {
-    div {
-        display: inline-block;
-        @include secondary-text-small;
-        font-weight: $semibold;
-        vertical-align: middle;
-        line-height: 14px;
-        color: white;
-    }
-    .left {
-        background: url(/images/ribbons/counter_orange_round1.png) no-repeat;
-        width: 6px;
-        height: 14px;
-    }
-    .center {
-        background: url(/images/ribbons/counter_orange_2.png) repeat;
-        height: 14px;
-    }
-    .right {
-        background: url(/images/ribbons/counter_orange_round3.png) no-repeat;
-        width: 8px;
-        height: 14px;
-    }
 }
