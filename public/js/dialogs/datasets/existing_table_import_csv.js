@@ -34,8 +34,11 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     postRender: function() {
 
         this.handleScrolling();
-
         this.cleanUpQtip();
+
+        if(this.dataset.loaded){
+            this.validateColumns();
+        }
 
         var self = this;
         _.each(this.$(".column_mapping .map"), function(map, i) {
@@ -214,5 +217,16 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         return ($("<li>").append($(check_wrapper.outerHtml() +
             '<a class="name ' + selected_status + '" href="#" title="' + column.name + '">' + column.name + frequency_text + '</a>' +
             '<span class="type">' + chorus.models.DatabaseColumn.humanTypeMap[column.typeCategory] + '</span>')));
+    },
+
+    validateColumns: function() {
+        var sourceColumnsNum = this.csv.columnOrientedData().length;
+        var destinationColumnsNum = this.dataset.get("columnNames").length
+        if( destinationColumnsNum < sourceColumnsNum) {
+            this.resource.serverErrors = [{ message: t("dataset.import.table.too_many_source_columns")}];
+            this.resource.trigger("validationFailed");
+        } else {
+            this.resource.serverErrors = [];
+        }
     }
 });
