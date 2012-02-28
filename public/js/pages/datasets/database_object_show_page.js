@@ -59,7 +59,7 @@
                 contentDetails: new chorus.views.DatasetContentDetails({ tabularData: this.tabularData, collection: this.columnSet, hideDeriveChorusView: this.hideDeriveChorusView })
             });
 
-            this.mainContent.contentDetails.options.columnList = this.mainContent.content;
+            this.mainContent.contentDetails.options.$columnList = $(this.mainContent.content.el);
             this.sidebar = new chorus.views.DatasetListSidebar();
             this.sidebar.setDataset(this.tabularData);
 

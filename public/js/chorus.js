@@ -182,9 +182,9 @@ window.Chorus = function chorus$Global() {
         var input = options.input,
             list = options.list,
             selector = options.selector;
+
         input.unbind("textchange").bind("textchange", _.bind(filterSearchList, this, options));
         input.addClass("chorus_search")
-
         input.each(function(i, el) {
             var $el = $(el);
             var clearLink = $("<a href='#'/>")
@@ -202,14 +202,15 @@ window.Chorus = function chorus$Global() {
         });
     };
 
-    function filterSearchList(options) {
+    function filterSearchList(options, e) {
         var input = options.input,
             list = options.list,
             selector = options.selector,
             onFilter = options.onFilter,
-            afterFilter = options.afterFilter;
+            afterFilter = options.afterFilter,
+            changedInput = $(e.target);
 
-        var compare = input.val().toLowerCase();
+        var compare = changedInput.val().toLowerCase();
         list.find("li").each(function() {
             var elToMatch = selector ? $(this).find(selector) : $(this);
             var matches = (elToMatch.text().toLowerCase().indexOf(compare) >= 0);

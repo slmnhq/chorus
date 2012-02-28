@@ -66,10 +66,10 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
             this.showEditChorusViewWizard();
         }
 
-        if (this.options.columnList) {
+        if (this.options.$columnList) {
             chorus.search({
                 input: this.$("input.search"),
-                list: $(this.options.columnList.el)
+                list: this.options.$columnList
             });
         }
     },
@@ -125,6 +125,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.filterWizardView.options.showAliasedName = true;
         this.filterWizardView.resetFilters();
 
+        this.$(".chorus_view_info input.search").trigger("textchange");
     },
 
     cancelChorusView: function(e) {
@@ -135,6 +136,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$(".filters").addClass("hidden");
         this.$('.column_count').removeClass("hidden")
         this.$('.chorus_view_info').addClass('hidden');
+
+        this.$(".column_count input.search").trigger("textchange");
     },
 
     startEditChorusViewWizard: function() {

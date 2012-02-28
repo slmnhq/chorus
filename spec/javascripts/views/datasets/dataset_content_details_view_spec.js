@@ -1,14 +1,21 @@
 describe("chorus.views.DatasetContentDetails", function() {
     describe("#render", function() {
         beforeEach(function() {
+            this.$columnList = $("<ul/>");
             this.qtipMenu = stubQtip();
             this.tabularData = fixtures.datasetSourceTable();
             this.collection = this.tabularData.columns([fixtures.databaseColumn(), fixtures.databaseColumn()]);
 
-            this.view = new chorus.views.DatasetContentDetails({tabularData: this.tabularData, collection: this.collection});
+            this.view = new chorus.views.DatasetContentDetails({
+                tabularData: this.tabularData,
+                collection: this.collection,
+                $columnList: this.$columnList
+            });
             spyOn(this.view.filterWizardView, 'resetFilters').andCallThrough();
+            spyOn(chorus, "search");
             this.server.completeFetchFor(this.tabularData.statistics(), fixtures.datasetStatisticsView());
             this.view.render();
+            $("#jasmine_content").append(this.view.el);
         });
 
         it("puts the dataset filter subview in the filters div", function() {
@@ -32,16 +39,28 @@ describe("chorus.views.DatasetContentDetails", function() {
             expect(this.view.$(".edit_chorus_view_info")).toHaveClass("hidden");
         });
 
+        it("has a search field in the content details that filters the column list", function() {
+            var searchInput = this.view.$("input.search:visible");
+
+            expect(searchInput).toExist();
+            expect(chorus.search).toHaveBeenCalled();
+            var searchOptions = chorus.search.mostRecentCall.args[0];
+
+            expect(searchOptions.input).toBe(searchInput);
+            expect(searchOptions.list).toBe(this.$columnList);
+        });
+
         context("when in Edit Chorus View mode", function() {
             beforeEach(function() {
                 this.view.options.inEditChorusView = true;
                 this.view.render();
             });
+
             it("shows the definition and informational bar for Edit Chorus View", function() {
                 expect(this.view.$(".edit_chorus_view")).not.toHaveClass("hidden");
                 expect(this.view.$(".edit_chorus_view_info")).not.toHaveClass("hidden");
-            })
-        })
+            });
+        });
 
         it("subscribes to the action:closePreview broadcast", function() {
             expect(chorus.PageEvents.hasSubscription("action:closePreview", this.view.closeDataPreview, this.view)).toBeTruthy();
@@ -81,9 +100,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                     expect(this.view.$(".definition")).toContainText(this.view.tabularData.get("query"));
                 });
             });
-
         });
-
 
         context("when 'Preview Data'/'Run' is clicked", function() {
             context("when in default dataset page", function() {
@@ -176,7 +193,6 @@ describe("chorus.views.DatasetContentDetails", function() {
                     });
                 })
             })
-
         })
 
         describe("definition bar", function() {
@@ -325,8 +341,12 @@ describe("chorus.views.DatasetContentDetails", function() {
                 beforeEach(function() {
                     this.view.filterWizardView.resetFilters.reset();
                     this.chorusViewSpy = spyOnEvent(this.view, "transform:sidebar");
+                    spyOnEvent(".column_count input.search", "textchange");
+                    spyOnEvent(".chorus_view_info input.search", "textchange");
+
                     this.view.$('button.derive').click();
                 })
+
                 it("swap the green definition bar to Create Bar", function() {
                     expect(this.view.$(".create_chorus_view")).not.toHaveClass("hidden");
                     expect(this.view.$(".create_chart")).toHaveClass("hidden");
@@ -338,6 +358,22 @@ describe("chorus.views.DatasetContentDetails", function() {
                     expect(this.view.$(".info_bar")).toHaveClass("hidden");
                     expect(this.view.$(".column_count")).toHaveClass("hidden");
                     expect(this.view.$(".chorus_view_info").text()).toContainTranslation("workspaces.select");
+                });
+
+                it("triggers the 'textchange' event on the newly visible search input", function() {
+                    expect("textchange").not.toHaveBeenTriggeredOn(".column_count input.search");
+                    expect("textchange").toHaveBeenTriggeredOn(".chorus_view_info input.search");
+                });
+
+                it("has a search field in the content details that filters the column list", function() {
+                    var searchInput = this.view.$("input.search:visible");
+
+                    expect(searchInput).toExist();
+                    expect(chorus.search).toHaveBeenCalled();
+                    var searchOptions = chorus.search.mostRecentCall.args[0];
+
+                    expect(searchOptions.input).toBe(searchInput);
+                    expect(searchOptions.list).toBe(this.$columnList);
                 });
 
                 it("should select the chorus view icon", function() {
@@ -385,6 +421,10 @@ describe("chorus.views.DatasetContentDetails", function() {
                 describe("and the cancel link is clicked", function() {
                     beforeEach(function() {
                         spyOn(chorus.PageEvents, "broadcast");
+                        jasmine.JQuery.events.cleanUp();
+                        spyOnEvent(".column_count input.search", "textchange");
+                        spyOnEvent(".chorus_view_info input.search", "textchange");
+
                         this.cancelSpy = spyOnEvent(this.view, "cancel:sidebar");
                         this.view.$(".create_chorus_view .cancel").click();
                     });
@@ -401,6 +441,11 @@ describe("chorus.views.DatasetContentDetails", function() {
                     it("shows the chorus view info bar", function() {
                         expect(this.view.$(".chorus_view_info")).toHaveClass("hidden");
                         expect(this.view.$(".column_count")).not.toHaveClass("hidden");
+                    });
+
+                    it("triggers the 'textchange' event on the newly visible search input", function() {
+                        expect("textchange").toHaveBeenTriggeredOn(".column_count input.search");
+                        expect("textchange").not.toHaveBeenTriggeredOn(".chorus_view_info input.search");
                     });
 
                     it("triggers 'cancel:sidebar'", function() {

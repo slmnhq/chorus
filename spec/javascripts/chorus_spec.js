@@ -402,6 +402,26 @@ describe("chorus global", function() {
                 expect(this.wrapperDivs.eq(1)).toContain(this.input2);
             });
 
+            it("uses the text from the most recently changed input to filter the list", function() {
+                this.input1.val("ma").trigger("textchange");
+
+                expect(this.list.find("li").eq(0)).toHaveClass("hidden");
+                expect(this.list.find("li").eq(1)).not.toHaveClass("hidden");
+                expect(this.list.find("li").eq(2)).toHaveClass("hidden");
+
+                this.input2.val("jo").trigger("textchange");
+
+                expect(this.list.find("li").eq(0)).not.toHaveClass("hidden");
+                expect(this.list.find("li").eq(1)).toHaveClass("hidden");
+                expect(this.list.find("li").eq(2)).toHaveClass("hidden");
+
+                this.input1.val("nit").trigger("textchange");
+
+                expect(this.list.find("li").eq(0)).toHaveClass("hidden");
+                expect(this.list.find("li").eq(1)).toHaveClass("hidden");
+                expect(this.list.find("li").eq(2)).not.toHaveClass("hidden");
+            });
+
             it("gives each input its own 'x' button", function() {
                 expect(this.wrapperDivs.length).toBe(2);
                 expect(this.wrapperDivs.eq(0)).toContain(".chorus_search_clear");
