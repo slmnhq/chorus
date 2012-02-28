@@ -14,6 +14,7 @@ chorus.dialogs.Base = chorus.Modal.extend({
 
         header.html($("<h1/>").text(this.title))
         content.html(this.template(this.context()));
+        content.attr("data-template", this.className);
 
         $(this.el).
             empty().
