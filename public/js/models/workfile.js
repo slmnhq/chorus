@@ -3,6 +3,7 @@
     var textRegex = /^text\//;
 
     chorus.models.Workfile = chorus.models.Base.extend({
+        constructorName: "Workfile",
         entityType:"workfile",
 
         urlTemplate: function() {

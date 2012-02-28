@@ -73,21 +73,21 @@ window.Chorus = function chorus$Global() {
         var defaultOpts = {sticky: false, life: 5000};
         var toastOpts = _.extend(defaultOpts, options.toastOpts);
         $.jGrowl(t(message, options), toastOpts);
-    },
+    }
 
-        self.afterNavigate = function(func) {
-            self.cleanupFunctions.push(func);
-        },
+    self.afterNavigate = function(func) {
+        self.cleanupFunctions.push(func);
+    }
 
-        self._navigated = function() {
-            self.PageEvents.reset();
+    self._navigated = function() {
+        self.PageEvents.reset();
 
-            _.each(self.cleanupFunctions, function(func) {
-                func();
-            });
+        _.each(self.cleanupFunctions, function(func) {
+            func();
+        });
 
-            self.cleanupFunctions = [];
-        }
+        self.cleanupFunctions = [];
+    }
 
     self.menu = function(menuElement, options) {
         self.afterNavigate(function() {$(menuElement).remove();});

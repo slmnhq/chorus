@@ -13,7 +13,6 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
     setup:function () {
         this.collection = this.model.activities();
         this.collection.fetch();
-        this.collection.bind("changed", this.render, this);
         this.activityList = new chorus.views.ActivityList({
             collection:this.collection,
             additionalClass:"sidebar",
@@ -23,8 +22,11 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
         this.allVersions = this.model.allVersions();
         this.versionList = new chorus.views.WorkfileVersionList({collection:this.allVersions});
         this.allVersions.fetch();
-        this.model.bind("invalidated", this.allVersions.fetch, this.allVersions);
-        this.allVersions.bind("changed", this.render, this);
+
+        this.bindings.add(this.collection, "changed", this.render, this);
+        this.bindings.add(this.model, "invalidated", this.allVersions.fetch, this.allVersions);
+        this.bindings.add(this.allVersions, "changed", this.render);
+
         this.requiredResources.push(this.model);
         this.requiredResources.push(this.model.workspace());
     },

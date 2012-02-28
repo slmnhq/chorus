@@ -57,5 +57,27 @@ describe("chorus.RequiredResources", function() {
         });
     });
 
+    describe("#cleanup", function() {
+        beforeEach(function() {
+            spyOn(this.model, "unbind");
+            this.requiredResources.add(this.model);
+
+            spyOn(this.requiredResources, "unbind");
+            this.requiredResources.cleanUp()
+        });
+
+        it("unbinds the individual resources", function() {
+            expect(this.model.unbind).toHaveBeenCalled();
+        });
+
+        it("empties the collection", function() {
+            expect(this.requiredResources.length).toBe(0);
+        });
+
+        it("unbinds the whole collection", function() {
+            expect(this.requiredResources.unbind).toHaveBeenCalled();
+        });
+    });
+
 });
 

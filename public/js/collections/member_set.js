@@ -1,4 +1,5 @@
 chorus.collections.MemberSet = chorus.collections.Base.extend({
+    constructorName: "MemberSet",
     model:chorus.models.User,
     urlTemplate:"workspace/{{workspaceId}}/member",
 

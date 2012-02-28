@@ -14,6 +14,12 @@ chorus.RequiredResources = chorus.collections.Base.extend({
 
     _prepareModel:function (obj) {
         return obj;
+    },
+
+    cleanUp: function() {
+        this.unbind();
+        this.each(function(resource) { resource.unbind() });
+        this.reset([], { silent: true });
     }
 });
 

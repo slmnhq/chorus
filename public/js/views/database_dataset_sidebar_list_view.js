@@ -9,7 +9,7 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
     fetchResourceAfterSchemaSelected: function() {
         this.resource = this.collection = this.schema.databaseObjects();
         this.collection.fetchAllIfNotLoaded();
-        this.collection.bind("reset", this.render, this);
+        this.bindings.add(this.collection, "reset", this.render);
     },
 
     datasetSelected: function (e) {

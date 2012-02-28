@@ -25,12 +25,14 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
     cleanup:$.noop,
 
     beforeNavigateAway:function () {
+        this.unbind();
         this.bindings.removeAll();
+        this.requiredResources.cleanUp();
         $(this.el).remove();
     },
 
     bindHotkeys:function () {
-        var keydownEventName = "keydown." + this.cide;
+        var keydownEventName = "keydown." + this.cid;
         _.each(this.hotkeys, _.bind(function (eventName, hotkey) {
             this.bindings.add($(document), keydownEventName, chorus.hotKeyMeta + '+' + hotkey, function (event) {
                 chorus.PageEvents.broadcast(eventName, event);

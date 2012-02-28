@@ -451,14 +451,23 @@ describe("chorus.views.Base", function () {
 
         describe("the default implementation", function() {
             beforeEach(function() {
-                spyOn($.fn, "remove");
                 this.view = new chorus.views.Base();
+                spyOn($.fn, "remove");
+                spyOn(this.view.requiredResources, 'cleanUp');
+                spyOn(this.view.bindings, 'removeAll');
+                spyOn(this.view, 'unbind');
                 this.view.beforeNavigateAway();
             });
 
             it("calls $.fn.remove on its element", function() {
                 expect($.fn.remove.mostRecentCall.object.get(0)).toEqual(this.view.el);
             })
+
+            it("removes its backbone event bindings", function() {
+                expect(this.view.unbind).toHaveBeenCalled();
+                expect(this.view.requiredResources.cleanUp).toHaveBeenCalled();
+                expect(this.view.bindings.removeAll).toHaveBeenCalled();
+            });
         })
     });
 
