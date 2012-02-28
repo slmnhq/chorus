@@ -2,6 +2,7 @@ describe("chorus.views.UserNewLdap", function() {
     describe("#render", function() {
         context("as an admin", function() {
             beforeEach(function() {
+                spyOn($.fn, "limitMaxlength")
                 setLoggedInUser({'admin': true});
                 this.user = new chorus.models.User()
                 this.view = new chorus.views.UserNewLdap({ model: this.user });
@@ -13,6 +14,10 @@ describe("chorus.views.UserNewLdap", function() {
                 expect(this.user.ldap).toBeTruthy();
             });
 
+            it("limits the length of the notes field", function() {
+                expect($.fn.limitMaxlength).toHaveBeenCalledOnSelector("textarea");
+            })
+
             describe("#fieldValues", function() {
                 beforeEach(function() {
                     this.view.$("input[name=firstName]").val("Frankie");
@@ -22,6 +27,7 @@ describe("chorus.views.UserNewLdap", function() {
                     this.view.$("input[name=ou]").val("awesomeness dept");
                     this.view.$("input[name=title]").val("fashion policeman");
                     this.view.$("input[name=admin]").prop("checked", true);
+                    this.view.$("textarea[name=notes]").val("some notes");
                 });
 
                 it("includes the values of every input in the form", function() {
@@ -32,7 +38,8 @@ describe("chorus.views.UserNewLdap", function() {
                         emailAddress: "frankie_knuckles@nyclol.com",
                         ou: "awesomeness dept",
                         title: "fashion policeman",
-                        admin: true
+                        admin: true,
+                        notes: "some notes"
                     });
                 });
 
@@ -53,6 +60,13 @@ describe("chorus.views.UserNewLdap", function() {
                     it("trims the whitespace before submission", function() {
                         this.view.$("input[name=firstName]").val("     spaces     ");
                         expect(this.view.fieldValues().firstName).toBe("spaces");
+                    });
+                });
+
+                context("when there is whitespace surrounding a textarea value", function() {
+                    it("does not trim the whitespace", function() {
+                        this.view.$("textarea[name=notes]").val("     spaces     ");
+                        expect(this.view.fieldValues().notes).toBe("     spaces     ");
                     });
                 });
             });

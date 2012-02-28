@@ -16,6 +16,10 @@
             this.model.bind("saved", userSuccessfullySaved, this);
         },
 
+        postRender: function() {
+            this.$("textarea").limitMaxlength();
+        },
+
         checkUsernameClicked: function(e) {
             e.preventDefault();
             this.checkUsername(this.ldapUsersFetched);
@@ -80,9 +84,13 @@
 
         fieldValues: function() {
             var updates = {};
-            _.each(this.$("input"), function (i) {
+            _.each(this.$("input, textarea"), function (i) {
                 var input = $(i);
-                updates[input.attr("name")] = input.val().trim();
+                var val = input.val();
+                if (input.is("input")) {
+                    val = val.trim();
+                }
+                updates[input.attr("name")] = val;
             });
             updates.admin = this.$("input#admin-checkbox").prop("checked") || false;
             return updates;
