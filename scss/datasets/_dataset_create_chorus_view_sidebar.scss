@@ -48,7 +48,6 @@
             .name {
                 @include ellipsis;
                 max-width: 115px;
-                display: inline-block;
                 font-size: 14px;
                 line-height: 19px;
                 color: $color-text1;
