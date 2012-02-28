@@ -170,11 +170,15 @@ $system-action-color: #7C7D7D;
         font-size: 12px;
         padding-bottom: $text-padding-y;
 
+        a {
+            font-size: 12px;
+        }
+
         .separator {
             position: relative;
             top: -1px;
             color: $link-color;
-            margin: 0 8px;
+            margin: 0 2px;
         }
     }
 
