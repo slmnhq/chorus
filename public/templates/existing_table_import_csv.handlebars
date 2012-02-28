@@ -31,18 +31,12 @@
     <div class="data_table">
         <div class="thead list">
             <div class="column_names">
-                {{#each columns}}
-                    <div class="th"><div class="field_name" title="{{{name}}}">{{name}}</div></div>
-                {{/each}}
+                {{#each columns}}<div class="th"><div class="field_name" title="{{{name}}}">{{name}}</div></div>{{/each}}
             </div>
             <div class="column_mapping">
-                {{#each columns}}<div class="th">
-                    <div class="map">
-                        {{t "dataset.import.table.existing.map_to"}}
-                        <a href="#">{{destination}}</a>
-                        <div class="arrow"/>
-                    </div>
-                </div>{{/each}}
+                {{#each columns}}<div class="th"><div class="map">{{t "dataset.import.table.existing.map_to"}}
+                <a href="#">{{destination}}</a>
+                <div class="arrow"/></div></div>{{/each}}
             </div>
         </div>
 

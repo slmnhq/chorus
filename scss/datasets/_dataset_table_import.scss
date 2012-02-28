@@ -1,7 +1,7 @@
 .table_import_csv.dialog {
     width: 640px;
 
-    $cell-width: 120px;
+    $cell-width: 150px;
     .dialog_content {
         padding-left: 2px;
         padding-right: 2px;
@@ -19,7 +19,7 @@
 
     .options {
         height: 25px;
-        margin-bottom: 5px;
+        margin-bottom: 10px;
         padding: 0 15px;
 
         .header_options {
@@ -47,13 +47,17 @@
     }
 
     .data_table {
+
+        .th, .td {
+            width: $cell-width - 20px;
+        }
         border-top: 1px solid $list-border-color;
         border-bottom: 1px solid $list-border-color;
 
         min-height: 225px;
 
         .th:hover input {
-            width: 100px;
+            width: $cell-width - 20px;
         }
 
         .tbody {
@@ -64,6 +68,26 @@
             .field_name {
                 display: inline-block;
 
+            }
+        }
+
+        .column_mapping {
+            .map {
+                width: $cell-width;
+                @include font-content-details;
+                a {
+                    @include ellipsis;
+                    display: inline-block;
+                    font-size: 12px;
+                    font-weight: $semibold;
+                    width: $cell-width - 68px;
+                }
+                .arrow {
+                    position: absolute;
+                    right: 10px;
+                    top: 14px;
+                    @include triangle(down, $link-color, 4px, 4px);
+                }
             }
         }
 
@@ -192,7 +216,7 @@
     }
 }
 
-.table_import_csv {
+.table_import_csv.qtip {
     .check_wrapper {
         display: inline-block;
         width: 10px;
@@ -206,4 +230,23 @@
             height: 10px;
         }
     }
+    li {
+        a.name {
+            @include font-menu;
+            vertical-align: baseline;
+            @include ellipsis;
+            width: 250px;
+            display: inline-block;
+            height: 16px;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+        .type {
+            @include secondary-text-small;
+            float: right;
+        }
+    }
+
 }
