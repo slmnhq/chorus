@@ -1,4 +1,4 @@
-(function () {
+(function() {
     chorus.Modal = chorus.views.Base.extend({
         constructorName: "Modal",
 
@@ -18,8 +18,6 @@
                 this.pageModel = options.pageModel;
                 this.model = this.model || this.pageModel;
             }
-
-            this.bindPageModelCallbacks();
         },
 
         closeModal:function () {
@@ -51,7 +49,6 @@
         modalClosed:function () {
             if (this == chorus.modal) {
                 this.bindings.removeAll();
-                this.unbindPageModelCallbacks();
                 this.close();
                 $("#facebox").remove();
                 $.facebox.settings.inited = false;
@@ -74,9 +71,7 @@
         },
 
         close:$.noop,
-        revealed:$.noop,
-        bindPageModelCallbacks:$.noop,
-        unbindPageModelCallbacks:$.noop
+        revealed:$.noop
     });
 
     function pushModalBindings(modal) {
