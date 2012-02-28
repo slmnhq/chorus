@@ -1,5 +1,9 @@
 (function() {
     chorus.Router = Backbone.Router.extend(_.extend({}, chorus.Mixins.Events, {
+        constructor: function chorus$Router() {
+            Backbone.Router.apply(this, arguments);
+        },
+
         maps:[
             // routes are evaluated in LIFO format, so adding a match-all route first will act as a fallback properly
             // (as long as `maps` is evaluated in order)
@@ -95,12 +99,12 @@
     // apply arbitrary number of arguments to constructor (for routes with parameters)
     // code taken from http://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible/1608546#1608546
     function applyConstructor(constructor, args) {
-        function F() {
+        function chorus$Page() {
             return constructor.apply(this, args);
         }
 
-        F.prototype = constructor.prototype;
-        return new F;
+        chorus$Page.prototype = constructor.prototype;
+        return new chorus$Page;
     }
 })();
 

@@ -1,4 +1,5 @@
 chorus.views.Activity = chorus.views.Base.extend({
+    constructorName: "ActivityView",
     className:"activity",
     tagName:"li",
 

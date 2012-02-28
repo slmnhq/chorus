@@ -1,4 +1,4 @@
-chorus.utilities.PageEvents = function() {
+chorus.utilities.PageEvents = function chorus$PageEvents() {
     this.reset();
 }
 

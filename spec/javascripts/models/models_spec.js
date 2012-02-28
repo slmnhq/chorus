@@ -6,8 +6,9 @@ describe("chorus.models.Abstract", function() {
         });
 
         it("has the right constructor name (for console output)", function() {
-            var model = new chorus.models.Base();
-            expect(model.constructor.name).toBe("Model");
+            var klass = chorus.models.Base.extend({});
+            var instance = new klass();
+            expect(instance.constructor.name).toBe("chorus$Model");
         });
 
         describe("#url", function() {
@@ -846,8 +847,9 @@ describe("chorus.models.Abstract", function() {
         });
 
         it("has the right constructor name (for console output)", function() {
-            var collection = new chorus.collections.Base();
-            expect(collection.constructor.name).toBe("Collection");
+            var subclass = chorus.collections.Base.extend({});
+            var instance = new subclass;
+            expect(instance.constructor.name).toBe("chorus$Collection");
         });
 
         describe("#url", function() {

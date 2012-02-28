@@ -8,8 +8,8 @@ describe("chorus.Modal", function() {
     });
 
     it("has the right constructor name (for console output)", function() {
-        var modal = new chorus.Modal();
-        expect(modal.constructor.name).toBe("Modal");
+        var modal = new (chorus.Modal.extend({}));
+        expect(modal.constructor.name).toBe("chorus$Modal");
     });
 
     describe("intialization", function() {

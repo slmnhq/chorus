@@ -1,4 +1,6 @@
 chorus.models.Activity = chorus.models.Base.extend({
+    constructorName: "Activity",
+
     author: function() {
         this._author = this._author || new chorus.models.User(this.get("author"));
         return this._author;

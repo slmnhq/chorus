@@ -1,4 +1,6 @@
 chorus.RequiredResources = chorus.collections.Base.extend({
+    constructorName: "RequiredResources",
+
     allLoaded:function () {
         return _.all(this.models, function (resource) {
             return resource.loaded;

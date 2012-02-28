@@ -1,4 +1,4 @@
-chorus.BindingGroup = function (defaultContext) {
+chorus.BindingGroup = function chorus$BindingGroup(defaultContext) {
     this.defaultContext = defaultContext;
     this.bindings = [];
 };

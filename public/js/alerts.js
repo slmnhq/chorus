@@ -1,4 +1,5 @@
 chorus.alerts.Base = chorus.Modal.extend({
+    constructorName: "Alert",
     className: "alert",
 
     events: {

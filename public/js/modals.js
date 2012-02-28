@@ -1,8 +1,6 @@
 (function () {
     chorus.Modal = chorus.views.Base.extend({
-        constructor: function Modal() {
-            chorus.Modal.__super__.constructor.apply(this, arguments);
-        },
+        constructorName: "Modal",
 
         launchModal:function () {
             this.render();

@@ -5,9 +5,7 @@ chorus.pages.Bare = chorus.views.Bare.extend({
 });
 
 chorus.pages.Base = chorus.pages.Bare.extend({
-    constructor: function Page() {
-        chorus.pages.Base.__super__.constructor.apply(this, arguments);
-    },
+    constructorName: "Page",
 
     className: "logged_in_layout",
 

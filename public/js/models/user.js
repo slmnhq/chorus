@@ -1,4 +1,6 @@
 chorus.models.User = chorus.models.Base.extend({
+    constructorName: "User",
+
     urlTemplate:"user/{{id}}",
     showUrlTemplate:"users/{{id}}",
     entityType:"user",

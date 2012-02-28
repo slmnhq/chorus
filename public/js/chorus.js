@@ -1,4 +1,4 @@
-window.Chorus = function() {
+window.Chorus = function chorus$Global() {
     var self = this;
     self.models = {};
     self.views = {};
@@ -239,6 +239,23 @@ window.Chorus = function() {
     self.help = function() {
         var helpId = (chorus.page && chorus.page.helpId) || "home";
         FMCOpenHelp(helpId);
+    }
+
+    self.namedConstructor = function(ctor, name) {
+        return eval("(function " + name + "() { " +
+            "return ctor.apply(this, arguments); " +
+        "})");
+    };
+
+    self.classExtend = function(protoProps, classProps) {
+        var constructorName = protoProps.constructorName || this.prototype.constructorName;
+        if (constructorName) {
+
+            // this line should be removed in production, to avoid use of `eval`
+            _.extend(protoProps, { constructor: self.namedConstructor(this, "chorus$" + constructorName) });
+
+        }
+        return Backbone.Model.extend.call(this, protoProps, classProps);
     }
 }
 

@@ -1,4 +1,5 @@
 chorus.views.ActivityList = chorus.views.Base.extend({
+    constructorName: "ActivityListView",
     className:"activity_list",
     useLoadingSection:true,
 

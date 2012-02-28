@@ -1,4 +1,6 @@
 chorus.dialogs.Base = chorus.Modal.extend({
+    constructorName: "Dialog",
+
     render:function render() {
         this.preRender();
 
