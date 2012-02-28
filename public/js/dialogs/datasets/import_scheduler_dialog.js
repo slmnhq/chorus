@@ -42,6 +42,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
             this.title = t("import_now.title_schedule");
             this.submitText = t("import_now.begin_schedule")
 
+            this.showSchedule = true;
         } else {
             this.title = t("import_now.title");
             this.submitText = t("import_now.begin");
@@ -72,6 +73,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         return {
             sandboxTables: this.sandboxTables.pluck("objectName"),
             canonicalName: this.dataset.schema().canonicalName(),
+            showSchedule: this.showSchedule,
             submitText: this.submitText
         }
     },

@@ -1,4 +1,4 @@
-    describe("chorus.dialogs.ImportScheduler", function() {
+describe("chorus.dialogs.ImportScheduler", function() {
     beforeEach(function() {
         this.dataset = fixtures.datasetSourceTable();
         this.launchElement = $("<a/>");
@@ -12,18 +12,6 @@
             this.dialog.render();
         });
 
-        it("should set executeAfterSave to be false on the DatasetImport", function() {
-            expect(this.dialog.model.executeAfterSave).toBeFalsy();
-        });
-
-        it("should have the correct title", function() {
-            expect(this.dialog.title).toMatchTranslation("import_now.title_schedule");
-        });
-
-        it("should the right submit button text", function() {
-            expect(this.dialog.submitText).toMatchTranslation("import_now.begin_schedule");
-        });
-
         context("when the fetch completes", function() {
             beforeEach(function() {
                 this.server.completeFetchAllFor(this.dialog.sandboxTables, [fixtures.datasetSandboxTable(), fixtures.datasetSandboxTable()]);
@@ -32,6 +20,45 @@
             it("should have a checkbox for scheduling an import", function() {
                 expect(this.dialog.$(".schedule_import label")).toContainTranslation("import_now.schedule_import");
             });
+
+            it("should set executeAfterSave to be false on the DatasetImport", function() {
+                expect(this.dialog.model.executeAfterSave).toBeFalsy();
+            });
+
+            it("should have the correct title", function() {
+                expect(this.dialog.title).toMatchTranslation("import_now.title_schedule");
+            });
+
+            it("should have the right submit button text", function() {
+                expect(this.dialog.submitText).toMatchTranslation("import_now.begin_schedule");
+            });
+
+            it("should show the schedule controls", function() {
+                expect(this.dialog.$(".schedule_import")).toExist();
+                expect(this.dialog.$(".schedule_widget")).toExist();
+            });
+
+            describe("checking the import on a schedule checkbox", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog.scheduleView, "enable").andCallThrough();
+                    this.dialog.$(".existing_table input[name='schedule']").prop("checked", true).change();
+                });
+
+                it("should enable the schedule view", function() {
+                    expect(this.dialog.scheduleView.enable).toHaveBeenCalled();
+                });
+
+                context("when the schedule view is enabled", function() {
+                    beforeEach(function() {
+                        spyOn(this.dialog.scheduleView, "disable");
+                        this.dialog.$(".existing_table input[name='schedule']").prop("checked", false).change();
+                    });
+
+                    it("should disable the schedule view", function() {
+                        expect(this.dialog.scheduleView.disable).toHaveBeenCalled();
+                    });
+                });
+            });
         });
     });
 
@@ -39,6 +66,11 @@
         beforeEach(function() {
             this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
             this.dialog.render();
+        });
+
+        it("should hide the schedule controls", function() {
+            expect(this.dialog.$(".schedule_import")).not.toExist();
+            expect(this.dialog.$(".schedule_widget")).not.toExist();
         });
 
         it("should set executeAfterSave to be true on the DatasetImport", function() {
@@ -122,28 +154,6 @@
 
                 it("should enable the submit button", function() {
                     expect(this.dialog.$("button.submit")).toBeEnabled();
-                });
-
-                describe("checking the import on a schedule checkbox", function() {
-                    beforeEach(function() {
-                        spyOn(this.dialog.scheduleView, "enable");
-                        this.dialog.$(".existing_table input[name='schedule']").prop("checked", true).change();
-                    });
-
-                    it("should enable the schedule view", function() {
-                        expect(this.dialog.scheduleView.enable).toHaveBeenCalled();
-                    });
-
-                    context("when the schedule view is enabled", function() {
-                        beforeEach(function() {
-                            spyOn(this.dialog.scheduleView, "disable");
-                            this.dialog.$(".existing_table input[name='schedule']").prop("checked", false).change();
-                        });
-
-                        it("should disable the schedule view", function() {
-                            expect(this.dialog.scheduleView.disable).toHaveBeenCalled();
-                        });
-                    });
                 });
 
                 context("and the form is submitted", function() {
