@@ -9,6 +9,7 @@
 
     .directions {
         @include font-normal-alpha;
+        display: inline-block;
         margin-left: 15px;
         margin-bottom: 5px;
         input {
@@ -75,14 +76,22 @@
 
         .column_mapping {
             .map {
-                width: $cell-width;
+                height: 32px;
+                width: $cell-width -20px;
                 @include font-content-details;
+                vertical-align: middle;
+                span {
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+
                 a {
                     @include ellipsis;
                     display: inline-block;
                     font-size: 12px;
                     font-weight: $semibold;
                     width: $cell-width - 68px;
+                    vertical-align: middle;
                     &.selection_conflict {
                         color: #cc0000;
                     }
@@ -146,8 +155,6 @@
             }
 
             .type_name {
-            /*cursor: pointer;*/
-
                 display: inline-block;
                 color: white;
 
@@ -221,6 +228,28 @@
     .modal_controls {
         padding-right: 10px;
         padding-bottom: 5px;
+    }
+}
+
+.existing_table_import_csv.table_import_csv {
+    .directions {
+        @include ellipsis;
+        max-width: 450px;
+        vertical-align: middle;
+        padding-bottom: 2px;
+    }
+
+    .progress {
+        display: inline-block;
+        @include results-console;
+        vertical-align: middle;
+        margin-bottom: 5px;
+        padding-bottom: 2px;
+    }
+    .data_table {
+        .tbody {
+            top: 66px;
+        }
     }
 }
 

@@ -1,6 +1,7 @@
 <div class="directions">
-    {{{directions}}}
+    {{{directions}}}:
 </div>
+<div class="progress">{{t "dataset.import.table.progress" count=count total=total}}</div>
 <div class="options">
     <div class="header_options">
         <input id="include_header" type="checkbox" {{#if include_header}}checked{{/if}}></input>
@@ -34,7 +35,7 @@
                 {{#each columns}}<div class="th"><div class="field_name" title="{{{name}}}">{{name}}</div></div>{{/each}}
             </div>
             <div class="column_mapping">
-                {{#each columns}}<div class="th"><div class="map">{{t "dataset.import.table.existing.map_to"}}
+                {{#each columns}}<div class="th"><div class="map"><span>{{t "dataset.import.table.existing.map_to"}}</span>
                 <a href="#" class="{{selected_status}}">{{destination}}</a>
                 <div class="arrow {{selected_status}}"/></div></div>{{/each}}
             </div>

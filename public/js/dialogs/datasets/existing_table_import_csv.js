@@ -23,13 +23,27 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         this.destinations = [];
     },
 
+    render: function() {
+        var api = this.$(".tbody").data("jsp");
+        this.scrollPosX = api ? api.getContentPositionX() : 0;
+        this.scrollPosY = api ? api.getContentPositionY() : 0;
+
+        this._super("render", arguments);
+    },
+
     postRender: function() {
-        this.$(".tbody").unbind("scroll.follow_header");
-        this.$(".tbody").bind("scroll.follow_header", _.bind(this.adjustHeaderPosition, this));
+
+        var $tbody = this.$(".tbody");
+        $tbody.unbind("scroll.follow_header");
+        $tbody.bind("scroll.follow_header", _.bind(this.adjustHeaderPosition, this));
+        $tbody.scrollTop(this.scrollPosY)
+        $tbody.scrollLeft(this.scrollPosX);
+        $tbody.css({ "left": -this.scrollPosX });
+
         this.setupScrolling(this.$(".tbody"));
 
-        this.$(".column_mapping .map").qtip("destroy");
-        this.$(".column_mapping .map").removeData("qtip");
+        this.cleanUpQtip();
+
         var self = this;
         _.each(this.$(".column_mapping .map"), function(map, i) {
             var content = $("<ul></ul>");
@@ -38,19 +52,19 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
                 if (column.name === self.destinations[i].name) {
                     check_wrapper.find(".check").removeClass("hidden");
                 }
-                var count = (_.filter(self.destinations, function(destination) {
+                var frequency = (_.filter(self.destinations, function(destination) {
                     return destination.name === column.name
                 })).length;
-                var count_text = "";
+                var frequency_text = "";
 
                 var selected_status = "unselected";
-                if (count) {
-                    selected_status = count > 1 ? "selection_conflict" : "selected";
-                    count_text = " (" + count + ")";
+                if (frequency) {
+                    selected_status = frequency > 1 ? "selection_conflict" : "selected";
+                    frequency_text = " (" + frequency + ")";
                 }
 
                 content.append($("<li>").append($(check_wrapper.outerHtml() +
-                    '<a class="name ' + selected_status + '" href="#" title="' + column.name + '">' + column.name + count_text + '</a>' +
+                    '<a class="name ' + selected_status + '" href="#" title="' + column.name + '">' + column.name + frequency_text + '</a>' +
                     '<span class="type">' + chorus.models.DatabaseColumn.humanTypeMap[column.typeCategory] + '</span>')));
             });
 
@@ -58,7 +72,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
                 content: content,
                 classes: "table_import_csv",
                 contentEvents: {
-                    'a.name': _.bind(self.columnSelected, self)
+                    'a.name': _.bind(self.destinationColumnSelected, self)
                 }
             });
         })
@@ -71,7 +85,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         }
     },
 
-    columnSelected: function(e, api) {
+    destinationColumnSelected: function(e, api) {
         e.preventDefault();
         var qtip_launch_link = api.elements.target.find("a");
         qtip_launch_link.text($(e.target).attr("title"));
@@ -82,10 +96,11 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         var self = this;
 
         this.destinations = _.map(this.destinations, function(destination) {
-            var count = (_.filter(self.destinations, function(destination_loop) {
-                return destination.name === destination_loop.name
+            var frequency = (_.filter(self.destinations, function(destination_loop) {
+                return (destination.name != t("dataset.import.table.existing.select_one")) &&
+                    ( destination.name === destination_loop.name)
             })).length;
-            return _.extend(destination, {count: count});
+            return _.extend(destination, {frequency: frequency});
         })
 
         this.render();
@@ -97,9 +112,9 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         var columns = this.csv.columnOrientedData();
         columns = _.map(columns, function(column, index) {
             if (index >= self.destinations.length) {
-                self.destinations.push({name: t("dataset.import.table.existing.select_one"), count: 0});
+                self.destinations.push({name: t("dataset.import.table.existing.select_one"), frequency: 0});
             }
-            var selected_status = (self.destinations[index].count == 1) ? "selected": "selection_conflict";
+            var selected_status = (self.destinations[index].frequency == 1) ? "selected" : "selection_conflict";
 
             return _.extend(column, {destination: self.destinations[index].name, selected_status: selected_status});
         });
@@ -109,7 +124,12 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
             delimiter: this.other_delimiter ? this.delimiter : '',
             directions: t("dataset.import.table.existing.directions", {
                 toTable: this.csv.get("toTable")
-            })
+            }),
+            count: (_.filter(self.destinations, function(destination) {
+                    return destination.name != t("dataset.import.table.existing.select_one")
+                }
+            )).length,
+            total: columns.length
         }
     },
 
@@ -180,5 +200,10 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         var otherRadio = this.$("input#delimiter_other");
         otherRadio.attr("checked", true)
         otherRadio.click();
+    },
+
+    cleanUpQtip: function() {
+        this.$(".column_mapping .map").qtip("destroy");
+        this.$(".column_mapping .map").removeData("qtip");
     }
 });

@@ -11,7 +11,8 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             "COL1,col2, col3 ,col 4,Col_5",
             "val1.1,val1.2,val1.3,val1.4,val1.5",
             "val2.1,val2.2,val2.3,val2.4,val2.5",
-            "val3.1,val3.2,val3.3,val3.4,val3.5"
+            "val3.1,val3.2,val3.3,val3.4,val3.5",
+            "val4.1,val4.2,val4.3,val4.4,val4.5"
         ],
             toTable: "existingTable"
         });
@@ -19,7 +20,9 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         this.columns = [
             {name: "col1", typeCategory: "WHOLE_NUMBER"},
             {name: "col2", typeCategory: "STRING"},
-            {name: "col3", typeCategory: "WHOLE_NUMBER"}
+            {name: "col3", typeCategory: "WHOLE_NUMBER"},
+            {name: "col4", typeCategory: "WHOLE_NUMBER"},
+            {name: "col5", typeCategory: "WHOLE_NUMBER"}
         ]
         this.dataset = fixtures.datasetSandboxTable({
             id: "dat-id",
@@ -28,6 +31,8 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         });
         this.server.completeFetchFor(this.dataset);
         this.qtip = stubQtip();
+        stubDefer();
+        $('#jasmine_content').append(this.dialog.el);
         this.dialog.render();
     });
 
@@ -149,6 +154,10 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             });
     });
 
+    it("has a progress tracker", function() {
+        expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 0, total: 5});
+    })
+
     it("checked the include header row checkbox by default", function() {
         expect(this.dialog.$("#include_header")).toBeChecked();
     });
@@ -185,7 +194,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         it("has the right data in each cell", function() {
             _.each(this.dialog.$(".data_table .tbody .column"), function(column, i) {
                 var cells = $(column).find(".td")
-                expect(cells.length).toEqual(3);
+                expect(cells.length).toEqual(4);
                 _.each(cells, function(cell, j) {
                     expect($(cell)).toContainText("val" + (j + 1) + "." + (i + 1));
                 })
@@ -212,7 +221,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             });
 
             it("populates the qtip with the destination columns and column types", function() {
-                expect(this.qtip.find(".ui-tooltip-content li").length).toBe(3);
+                expect(this.qtip.find(".ui-tooltip-content li").length).toBe(5);
                 var self = this;
                 _.each(this.qtip.find(".ui-tooltip-content li"), function(el, index) {
                     expect($(el).find("a").text()).toContain("col" + (index + 1));
@@ -240,9 +249,14 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                     expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(0) .check")).toHaveClass("hidden");
                     expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) .check")).not.toHaveClass("hidden");
                 })
+
                 it("updates the count in the selected destination column (for all qtips)", function() {
                     expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) .name").text()).toBe("col2 (1)")
                     expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) .name")).toHaveClass("selected");
+                })
+
+                it("updates the progress tracker", function() {
+                    expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 1, total: 5});
                 })
 
                 context("choosing the same destination column again", function() {
@@ -263,7 +277,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                         this.dialog.$(".column_mapping .map:eq(1)").click(); //Just to get it in the dom
                         expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) .name").text()).toBe("col2 (1)");
                         expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) .name")).toHaveClass("selected");
-
+                        expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 1, total: 5});
                     })
                 })
 
@@ -322,9 +336,28 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                         expect(this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) .name")).toHaveClass("selection_conflict");
                     })
 
+                    it("updates the progress tracker", function() {
+                        expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 2, total: 5});
+                    })
+
+
                 });
 
-
+                context("when all source columns but one are mapped", function() {
+                    beforeEach(function() {
+                        for (var i = 0; i < 4; i++) {
+                            this.dialog.$(".column_mapping .map:eq(" + i + ")").click();
+                            this.qtip.find(".qtip:last .ui-tooltip-content li:eq(" + i + ") a").click();
+                        }
+                    });
+                    it("the last unselected column map is still displayed with red", function() {
+                        expect(this.dialog.$(".column_mapping .map:eq(0) a")).toHaveClass("selected");
+                        expect(this.dialog.$(".column_mapping .map:eq(1) a")).toHaveClass("selected");
+                        expect(this.dialog.$(".column_mapping .map:eq(2) a")).toHaveClass("selected");
+                        expect(this.dialog.$(".column_mapping .map:eq(3) a")).toHaveClass("selected");
+                        expect(this.dialog.$(".column_mapping .map:eq(4) a")).toHaveClass("selection_conflict");
+                    });
+                });
             })
 
         })
@@ -381,6 +414,19 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         it("sets the header position", function() {
             expect(this.dialog.adjustHeaderPosition).toHaveBeenCalled();
         });
+
+        context("scroll position after the page re-renders", function() {
+            beforeEach(function() {
+                var api = this.dialog.$(".tbody").data("jsp");
+                api.scrollTo(5, 2);
+                this.dialog.render();
+            });
+            it("maintain the previous scroll position", function() {
+                var api = this.dialog.$(".tbody").data("jsp");
+                expect(api.getContentPositionX()).toBe(5);
+                expect(api.getContentPositionY()).toBe(2);
+            })
+        })
     })
 
     describe("clicking the import button", function() {
@@ -435,5 +481,5 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             })
         })
     })
-})
-;
+
+});
