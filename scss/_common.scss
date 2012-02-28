@@ -140,6 +140,7 @@ $medium-font: 14px;
     @include debugging-mixin;
     @include ellipsis;
     font-size: 18px;
+    line-height: 24px;
     font-weight: $semibold;
     color: $color-text1;
 }
