@@ -3,7 +3,7 @@ describe("chorus.views.userEdit", function() {
         setLoggedInUser({'userName': 'edcadmin'})
         fixtures.model = 'User';
         this.user = new chorus.models.User()
-        this.view = new chorus.views.UserEdit({model : this.user});
+        this.view = new chorus.views.UserEdit({model: this.user});
         this.view.model.set(fixtures.jsonFor('fetch').resource[0]);
         this.view.model.loaded = true;
     })
@@ -20,22 +20,24 @@ describe("chorus.views.userEdit", function() {
         context("when editing yourself", function() {
             context("as an admin", function() {
                 beforeEach(function() {
-
+                    spyOn($.fn, "limitMaxlength")
                     setLoggedInUser({'admin': true});
                     this.view.render();
                 });
 
-                context("load the form with proper values", function() {
-                    it("load a user with the forms attributes", function() {
-                        expect(this.view.$("input[name=firstName]").val()).toBe("EDC");
-                        expect(this.view.$("input[name=lastName]").val()).toBe("Admin");
-                        expect(this.view.$("span[name=userName]").text()).toBe("edcadmin");
-                        expect(this.view.$("input[name=emailAddress]").val()).toBe("edcadmin@example.com");
-                        expect(this.view.$("input[name=title]").val()).toBe("");
-                        expect(this.view.$("textarea[name=notes]").text()).toBe("");
-                        expect(this.view.$("input[name=ou]").val()).toBe("");
-                        expect(this.view.$("input[name=admin]").prop("checked")).toBe(true);
-                    })
+                it("initializes the form from the model", function() {
+                    expect(this.view.$("input[name=firstName]").val()).toBe("EDC");
+                    expect(this.view.$("input[name=lastName]").val()).toBe("Admin");
+                    expect(this.view.$("span[name=userName]").text()).toBe("edcadmin");
+                    expect(this.view.$("input[name=emailAddress]").val()).toBe("edcadmin@example.com");
+                    expect(this.view.$("input[name=title]").val()).toBe("");
+                    expect(this.view.$("textarea[name=notes]").text()).toBe("");
+                    expect(this.view.$("input[name=ou]").val()).toBe("");
+                    expect(this.view.$("input[name=admin]").prop("checked")).toBe(true);
+                })
+
+                it("limits the length of the notes field", function() {
+                    expect($.fn.limitMaxlength).toHaveBeenCalledOnSelector("textarea");
                 })
 
                 context("submitting the form", function() {
@@ -90,7 +92,7 @@ describe("chorus.views.userEdit", function() {
                     context("when user creation fails on the server", function() {
                         beforeEach(function() {
                             this.view.model.serverErrors = [
-                                {message : "Hi there"}
+                                {message: "Hi there"}
                             ];
                             this.view.model.trigger("saveFailed")
                         });
@@ -177,11 +179,11 @@ describe("chorus.views.userEdit", function() {
             beforeEach(function() {
                 fixtures.model = 'User';
                 this.user = new chorus.models.User()
-                this.view = new chorus.views.UserEdit({model : this.user});
+                this.view = new chorus.views.UserEdit({model: this.user});
                 this.view.model.set(fixtures.jsonFor('fetch').resource[0]);
 
                 this.view.model.loaded = true;
-                setLoggedInUser({'userName' : 'notedcadmin', 'admin': false})
+                setLoggedInUser({'userName': 'notedcadmin', 'admin': false})
                 this.view.render();
             })
             it("renders the admin-only warning", function() {
@@ -190,7 +192,7 @@ describe("chorus.views.userEdit", function() {
 
             context("as an admin", function() {
                 beforeEach(function() {
-                    setLoggedInUser({'userName' : 'notedcadmin', 'admin': true})
+                    setLoggedInUser({'userName': 'notedcadmin', 'admin': true})
                     this.view.render();
                 })
                 it("gives you permission to edit the user", function() {

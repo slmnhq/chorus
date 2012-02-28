@@ -21,7 +21,6 @@ describe("CommentDialog", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            spyOn($.fn, "limitMaxlength");
             this.dialog.render();
         });
 

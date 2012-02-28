@@ -2,11 +2,16 @@ describe("chorus.views.userNew", function() {
     describe("#render", function() {
         context("as an admin", function() {
             beforeEach(function() {
+                spyOn($.fn, "limitMaxlength")
                 setLoggedInUser({'admin': true});
                 this.user = new chorus.models.User()
                 this.view = new chorus.views.UserNew({model : this.user});
                 this.view.render();
             });
+
+            it("limits the length of the notes field", function() {
+                expect($.fn.limitMaxlength).toHaveBeenCalledOnSelector("textarea");
+            })
 
             context("submitting the form", function() {
                 beforeEach(function() {
@@ -18,6 +23,7 @@ describe("chorus.views.userNew", function() {
                     this.view.$("input[name=passwordConfirmation]").val("whoaomg");
                     this.view.$("input[name=ou]").val("awesomeness dept");
                     this.view.$("input[name=admin]").prop("checked", true);
+                    this.view.$("textarea[name=notes]").val("some notes");
                 })
 
                 it("creates a user with the forms attributes", function() {
@@ -30,6 +36,19 @@ describe("chorus.views.userNew", function() {
                     expect(this.user.attributes["passwordConfirmation"]).toBe("whoaomg");
                     expect(this.user.attributes["ou"]).toBe("awesomeness dept");
                     expect(this.user.attributes["admin"]).toBe(true);
+                    expect(this.user.get("notes")).toBe("some notes");
+                });
+
+                it("trims text inputs", function() {
+                    this.view.$("input[name=userName]").val("   foo   ")
+                    this.view.$("form").submit();
+                    expect(this.user.get("userName")).toBe("foo");
+                });
+
+                it("does not trim text areas", function() {
+                    this.view.$("textarea[name=notes]").val("   foo   ")
+                    this.view.$("form").submit();
+                    expect(this.user.get("notes")).toBe("   foo   ");
                 });
 
                 context("when the user form has admin unchecked", function() {
@@ -105,18 +124,6 @@ describe("chorus.views.userNew", function() {
                         expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
                     });
                 });
-
-                context("the form has extra whitespace around an input", function(){
-                    beforeEach(function(){
-                        this.view.$("input[name=firstName]").val("     spaces     ");
-                        this.view.$("form").submit();
-                    });
-
-                    it("trims the whitespace before submission", function(){
-                        expect(this.user.attributes["firstName"]).toBe("spaces");
-                    });
-                });
-
             });
 
             context("cancelling", function() {

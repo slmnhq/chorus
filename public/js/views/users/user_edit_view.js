@@ -11,15 +11,19 @@
             '.edit_photo':"imageUpload"
         },
 
+        setup:function () {
+            this.model.bind("saved", userSuccessfullySaved, this);
+            this.imageUpload = new chorus.views.ImageUpload({ model:this.model, changeImageKey:"users.edit_photo" });
+        },
+
         additionalContext:function () {
             return {
                 permission:((this.model.get("userName") == chorus.session.user().get("userName")) || chorus.session.user().get("admin"))
             }
         },
 
-        setup:function () {
-            this.model.bind("saved", userSuccessfullySaved, this);
-            this.imageUpload = new chorus.views.ImageUpload({ model:this.model, changeImageKey:"users.edit_photo" });
+        postRender: function() {
+            this.$("textarea").limitMaxlength();
         },
 
         saveEditUser:function saveEditUser(e) {
