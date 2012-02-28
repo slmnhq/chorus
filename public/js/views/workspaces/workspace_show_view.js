@@ -21,7 +21,8 @@ chorus.views.WorkspaceShow = chorus.views.Base.extend({
         this.activityListHeader = new chorus.views.ActivityListHeader({
             collection: this.collection,
             allTitle: t("workspace.activity"),
-            insightsTitle: t("workspace.insights")
+            insightsTitle: t("workspace.insights"),
+            workspace: this.model
         });
     }
 });

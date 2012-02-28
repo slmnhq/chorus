@@ -4,9 +4,9 @@ describe("chorus.views.ActivityListHeader", function() {
         this.view = new chorus.views.ActivityListHeader({
             allTitle: "the_all_title_i_passed",
             insightsTitle: "the_insights_title_i_passed",
-            collection: this.collection
+            collection: this.collection,
+            workspace: fixtures.workspace()
         });
-        this.insightCount = new chorus.models.CommentInsight.count();
     });
 
     it("doesn't re-render when the activity list changes", function() {
@@ -15,12 +15,16 @@ describe("chorus.views.ActivityListHeader", function() {
 
     describe("#setup", function() {
         it("fetches the number of insights", function() {
-            expect(this.insightCount).toHaveBeenFetched();
+            expect(this.view.insightCount).toHaveBeenFetched();
+        });
+
+        it("configures the insight count for that workspace", function() {
+            expect(this.view.insightCount.url()).toContainQueryParams({ workspaceId: this.view.options.workspace.get("id") })
         });
 
         context("when the fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.insightCount, { numberOfInsight: 5 });
+                this.server.completeFetchFor(this.view.insightCount, { numberOfInsight: 5 });
             });
 
             it("should display the number of insights", function() {
@@ -68,6 +72,7 @@ describe("chorus.views.ActivityListHeader", function() {
 
                     it("switches the activity set to 'insights' mode and re-fetches it", function() {
                         expect(this.collection.attributes.insights).toBeTruthy();
+                        expect(this.collection.attributes.workspace).toBeDefined();
                         expect(this.collection).toHaveBeenFetched();
                     });
 
@@ -87,6 +92,7 @@ describe("chorus.views.ActivityListHeader", function() {
 
                         it("switches the activity set to 'all' mode (not just insights) and re-fetches it", function() {
                             expect(this.collection.attributes.insights).toBeFalsy();
+                            expect(this.collection.attributes.workspace).not.toBeDefined();
                             expect(this.collection).toHaveBeenFetched();
                         });
 
@@ -106,18 +112,18 @@ describe("chorus.views.ActivityListHeader", function() {
 
     describe("when the activity list is reset", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.insightCount, { numberOfInsight: 5 });
+            this.server.completeFetchFor(this.view.insightCount, { numberOfInsight: 5 });
             this.server.reset();
             this.view.collection.trigger("reset");
         });
 
         it("fetches the insight count", function() {
-            expect(this.insightCount).toHaveBeenFetched();
+            expect(this.view.insightCount).toHaveBeenFetched();
         })
 
         context("when the fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.insightCount, { numberOfInsight: 4 });
+                this.server.completeFetchFor(this.view.insightCount, { numberOfInsight: 4 });
             });
 
             it("should display the number of insights", function() {

@@ -15,14 +15,18 @@ describe("chorus.models.CommentInsight", function() {
 
     describe(".count", function() {
         beforeEach(function() {
-            this.insightCount = chorus.models.CommentInsight.count();
+            this.insightCount = chorus.models.CommentInsight.count({ urlParams: { foo: "bar" }});
         });
 
         it("returns a model with the right URL", function() {
             expect(this.insightCount).toBeA(chorus.models.Base);
 
             this.insightCount.fetch();
-            expect(this.server.lastFetch().url).toBe("/edc/commentinsight/count");
+            expect(this.server.lastFetch().url).toHaveUrlPath("/edc/commentinsight/count");
         });
+
+        it("includes urlParams, if provided", function() {
+            expect(this.insightCount.url()).toContainQueryParams({ foo: "bar"})
+        })
     });
 });

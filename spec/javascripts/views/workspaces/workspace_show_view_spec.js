@@ -36,6 +36,10 @@ describe("chorus.views.WorkspaceShow", function() {
                     expect(this.header.collection).toBe(this.model.activities());
                 });
 
+                it("has the workspace", function() {
+                    expect(this.header.options.workspace).toBe(this.model);
+                })
+
                 describe("when the fetch for the number of insights completes", function() {
                     beforeEach(function() {
                         this.server.lastFetch().succeed();

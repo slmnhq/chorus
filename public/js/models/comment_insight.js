@@ -3,9 +3,11 @@ chorus.models.CommentInsight = chorus.models.Base.extend({
         return "commentinsight/{{id}}/{{action}}";
     }
 }, {
-    count: function() {
+    count: function(options) {
+        options || (options = {});
         var count = new chorus.models.Base();
         count.urlTemplate = "commentinsight/count";
+        count.urlParams = options.urlParams;
         return count;
     }
 });

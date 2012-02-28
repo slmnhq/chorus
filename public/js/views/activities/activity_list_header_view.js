@@ -8,7 +8,11 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.insightCount = chorus.models.CommentInsight.count();
+        var options = {}
+        if (this.options.workspace) {
+            options.urlParams = { workspaceId: this.options.workspace.get("id") };
+        }
+        this.insightCount = chorus.models.CommentInsight.count(options);
         this.requiredResources.add(this.insightCount);
         this.insightCount.fetch();
     },
@@ -45,6 +49,7 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
         this.$("h1").text(this.options.allTitle);
 
         this.collection.attributes.insights = false;
+        delete this.collection.attributes.workspace;
         this.collection.fetch();
     },
 
@@ -56,6 +61,7 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
         this.$("h1").text(this.options.insightsTitle);
 
         this.collection.attributes.insights = true;
+        this.collection.attributes.workspace = this.options.workspace;
         this.collection.fetch();
     }
 });

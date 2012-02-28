@@ -7,5 +7,13 @@ chorus.collections.ActivitySet = chorus.collections.Base.extend({
         } else {
             return "activitystream/{{entityType}}/{{entityId}}"
         }
+    },
+
+    urlParams: function() {
+        if (this.attributes.insights && this.attributes.workspace) {
+            return { workspaceId: this.attributes.workspace.get("id") }
+        } else {
+            return {};
+        }
     }
 });
