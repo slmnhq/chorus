@@ -18,7 +18,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
             });
 
             it("should have a checkbox for scheduling an import", function() {
-                expect(this.dialog.$(".schedule_import label")).toContainTranslation("import_now.schedule_import");
+                expect(this.dialog.$(".schedule_import label")).toContainTranslation("import.schedule_import");
             });
 
             it("should set executeAfterSave to be false on the DatasetImport", function() {
@@ -26,11 +26,11 @@ describe("chorus.dialogs.ImportScheduler", function() {
             });
 
             it("should have the correct title", function() {
-                expect(this.dialog.title).toMatchTranslation("import_now.title_schedule");
+                expect(this.dialog.title).toMatchTranslation("import.title_schedule");
             });
 
             it("should have the right submit button text", function() {
-                expect(this.dialog.submitText).toMatchTranslation("import_now.begin_schedule");
+                expect(this.dialog.submitText).toMatchTranslation("import.begin_schedule");
             });
 
             it("should show the schedule controls", function() {
@@ -58,6 +58,53 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         expect(this.dialog.scheduleView.disable).toHaveBeenCalled();
                     });
                 });
+
+                context("when 'Import into Existing Table' is checked", function() {
+                    beforeEach(function() {
+                        this.dialog.$(".new_table input:radio").prop("checked", false);
+                        this.dialog.$(".existing_table input:radio").prop("checked", true).change();
+                    });
+
+                    context("when all the fields are filled out and the form is submitted", function() {
+                        beforeEach(function() {
+                            this.dialog.$("input:checked[name='truncate']").prop("checked", false).change();
+
+                            this.dialog.$("select[name='toTable'] option").eq(0).attr("selected", true);
+
+                            this.dialog.$("input[name='limit_num_rows']").prop("checked", true)
+                            this.dialog.$("input[name='rowLimit']").val(123);
+
+                            this.dialog.$(".start input[name='year']").val("2012");
+                            this.dialog.$(".start input[name='month']").val("02");
+                            this.dialog.$(".start input[name='day']").val("29");
+
+                            this.dialog.$(".end input[name='year']").val("2012");
+                            this.dialog.$(".end input[name='month']").val("03");
+                            this.dialog.$(".end input[name='day']").val("21");
+
+                            this.dialog.$("select.ampm option").val("12");
+                            this.dialog.$("select.hours option").val("12");
+                            this.dialog.$("select.minutes option").val("09");
+
+                            expect(this.dialog.$("button.submit")).toBeEnabled();
+
+                            this.dialog.$("button.submit").click();
+                        });
+
+                        it("should put the values in the correct API form fields", function() {
+                            var params = this.server.lastCreate().params()
+                            expect(params.truncate).toBe("false");
+
+                            expect(params.scheduleInterval).toBe("1");
+                            expect(params.scheduleDays).toBe("1:2");
+
+                            expect(params.sampleCount).toBe("123");
+
+                            expect(params.scheduleStartTime).toBe("2012-02-29 00:09:00.0");
+                            expect(params.scheduleEndTime).toBe("2012-03-21")
+                        });
+                    });
+                });
             });
         });
     });
@@ -78,11 +125,11 @@ describe("chorus.dialogs.ImportScheduler", function() {
         });
 
         it("should have the correct title", function() {
-            expect(this.dialog.title).toMatchTranslation("import_now.title");
+            expect(this.dialog.title).toMatchTranslation("import.title");
         });
 
         it("should the right submit button text", function() {
-            expect(this.dialog.submitText).toMatchTranslation("import_now.begin");
+            expect(this.dialog.submitText).toMatchTranslation("import.begin");
         });
 
         it("should initialize its model with the correct datasetId and workspaceId", function() {
@@ -108,20 +155,20 @@ describe("chorus.dialogs.ImportScheduler", function() {
             });
 
             it("should display the import destination", function() {
-                expect(this.dialog.$(".destination")).toContainTranslation("import_now.destination", {canonicalName: this.dataset.schema().canonicalName()})
+                expect(this.dialog.$(".destination")).toContainTranslation("import.destination", {canonicalName: this.dataset.schema().canonicalName()})
             })
 
             it("should have a 'Begin Import' button", function() {
-                expect(this.dialog.$("button.submit")).toContainTranslation("import_now.begin");
+                expect(this.dialog.$("button.submit")).toContainTranslation("import.begin");
                 expect(this.dialog.$("button.submit")).toBeDisabled();
             });
 
             it("should have an 'Import Into New Table' radio button", function() {
-                expect(this.dialog.$(".new_table label")).toContainTranslation("import_now.new_table");
+                expect(this.dialog.$(".new_table label")).toContainTranslation("import.new_table");
             });
 
             it("should have a 'Limit Rows' checkbox", function() {
-                expect(this.dialog.$(".new_table .limit label")).toContainTranslation("import_now.limit_rows");
+                expect(this.dialog.$(".new_table .limit label")).toContainTranslation("import.limit_rows");
                 expect(this.dialog.$(".new_table .limit input:checkbox").prop("checked")).toBeFalsy();
             });
 
@@ -134,7 +181,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
             });
 
             it("should have an import into existing table radio button", function() {
-                expect(this.dialog.$(".existing_table label")).toContainTranslation("import_now.existing_table");
+                expect(this.dialog.$(".existing_table label")).toContainTranslation("import.existing_table");
             });
 
             it("should have a dropdown selector for existing tables", function() {
@@ -231,7 +278,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
                             it("should put the submit button in the loading state", function() {
                                 expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
-                                expect(this.dialog.$("button.submit")).toContainTranslation("import_now.importing");
+                                expect(this.dialog.$("button.submit")).toContainTranslation("import.importing");
                             });
 
                             context("and the save is successful", function() {
@@ -242,7 +289,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                                 });
 
                                 it("should display a toast", function() {
-                                    expect(chorus.toast).toHaveBeenCalledWith("import_now.success");
+                                    expect(chorus.toast).toHaveBeenCalledWith("import.success");
                                 });
 
                                 it("should close the dialog", function() {
@@ -260,9 +307,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
                                 });
                             });
                         });
-                    })
+                    });
                 });
             });
         });
-    })
+    });
 });

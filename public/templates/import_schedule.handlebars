@@ -4,9 +4,9 @@
             disabled="disabled"
         {{/unless}}
         >
-        <option value="DAILY">{{t "import_now.frequency.daily"}}</option>
-        <option value="WEEKLY" selected="selected">{{t "import_now.frequency.weekly"}}</option>
-        <option value="MONTHLY">{{t "import_now.frequency.monthly"}}</option>
+        <option value="DAILY">{{t "import.frequency.daily"}}</option>
+        <option value="WEEKLY" selected="selected">{{t "import.frequency.weekly"}}</option>
+        <option value="MONTHLY">{{t "import.frequency.monthly"}}</option>
     </select>
 
     <select class="hours"
@@ -34,13 +34,13 @@
             disabled="disabled"
         {{/unless}}
         >
-        <option value="0">{{t "import_now.ampm.am"}}</option>
-        <option value="12">{{t "import_now.ampm.pm"}}</option>
+        <option value="0">{{t "import.ampm.am"}}</option>
+        <option value="12">{{t "import.ampm.pm"}}</option>
     </select>
 </div>
 
 <div class="row date start">
-    <span class="label">{{t "import_now.start.label"}}</span>
+    <span class="label">{{t "import.start.label"}}</span>
     <input type="text" name="month" placeholder='{{{t "datepicker.placeholder.month"}}}' value="{{{start.month}}}"
             {{#unless enable}}
                 disabled="disabled"
@@ -60,7 +60,7 @@
 </div>
 
 <div class="row date end">
-    <span class="label">{{t "import_now.end.label"}}</span>
+    <span class="label">{{t "import.end.label"}}</span>
     <input type="text" name="month" placeholder='{{{t "datepicker.placeholder.month"}}}' value="{{{end.month}}}"
             {{#unless enable}}
                 disabled="disabled"

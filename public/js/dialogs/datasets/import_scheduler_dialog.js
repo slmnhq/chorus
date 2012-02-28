@@ -26,7 +26,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         this.sandboxTables.fetchAll();
 
         this.bindings.add(this.model, "saved", function() {
-            chorus.toast("import_now.success");
+            chorus.toast("import.success");
             this.closeModal();
         });
 
@@ -39,13 +39,13 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         this.scheduleView = new chorus.views.ImportSchedule({enable: false});
 
         if (this.options.launchElement.data("useSchedule")) {
-            this.title = t("import_now.title_schedule");
-            this.submitText = t("import_now.begin_schedule")
+            this.title = t("import.title_schedule");
+            this.submitText = t("import.begin_schedule")
 
             this.showSchedule = true;
         } else {
-            this.title = t("import_now.title");
-            this.submitText = t("import_now.begin");
+            this.title = t("import.title");
+            this.submitText = t("import.begin");
             this.model.executeAfterSave = true;
         }
     },
@@ -97,7 +97,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     },
 
     beginImport: function() {
-        this.$("button.submit").startLoading("import_now.importing");
+        this.$("button.submit").startLoading("import.importing");
         this.model.save(this.getNewModelAttrs());
     },
 
@@ -115,6 +115,29 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         }
 
         updates.useLimitRows = $enabledFieldSet.find(".limit input:checkbox").prop("checked");
+        if (updates.useLimitRows) {
+            updates.sampleCount = $enabledFieldSet.find("input[name='rowLimit']").val();
+        }
+
+        if ($enabledFieldSet.find("input:checkbox[name='schedule']").prop("checked")) {
+            function makeDateFromFields(prefix) {
+                return [
+                    $enabledFieldSet.find("." + prefix + " input[name='year']").val(),
+                    $enabledFieldSet.find("." + prefix + " input[name='month']").val(),
+                    $enabledFieldSet.find("." + prefix + " input[name='day']").val()
+                ].join("-");
+            }
+
+            updates.scheduleStartTime =  makeDateFromFields("start") + " "
+                + _.string.lpad("" + ((parseInt($enabledFieldSet.find("select.ampm").val()) + parseInt($enabledFieldSet.find("select.hours").val())) % 24), 2, "0")
+                + ":"
+                + _.string.lpad("" + $enabledFieldSet.find("select.minutes").val(), 2, "0")
+                + ":00.0";
+            updates.scheduleEndTime = makeDateFromFields("end");
+        }
+
+        updates.scheduleInterval = $enabledFieldSet.find("input[name='scheduleInterval']").val() || "1";
+        updates.scheduleDays = "1:2"; // ignored but required; API will be fixed at some point
 
         return updates;
     }

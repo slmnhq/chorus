@@ -5,9 +5,9 @@ describe("chorus.views.ImportSchedule", function() {
     });
 
     it("should have a select with daily, weekly, monthly as options", function() {
-        expect(this.view.$(".frequency option[value=DAILY]")).toContainTranslation("import_now.frequency.daily");
-        expect(this.view.$(".frequency option[value=WEEKLY]")).toContainTranslation("import_now.frequency.weekly");
-        expect(this.view.$(".frequency option[value=MONTHLY]")).toContainTranslation("import_now.frequency.monthly");
+        expect(this.view.$(".frequency option[value=DAILY]")).toContainTranslation("import.frequency.daily");
+        expect(this.view.$(".frequency option[value=WEEKLY]")).toContainTranslation("import.frequency.weekly");
+        expect(this.view.$(".frequency option[value=MONTHLY]")).toContainTranslation("import.frequency.monthly");
 
         expect(this.view.$(".frequency").val()).toBe("WEEKLY");
     });
@@ -59,7 +59,7 @@ describe("chorus.views.ImportSchedule", function() {
 
     describe("the start date picker", function() {
         it("should have a label", function() {
-            expect(this.view.$(".date.start .label")).toContainTranslation("import_now.start.label");
+            expect(this.view.$(".date.start .label")).toContainTranslation("import.start.label");
         });
 
         it("should have the correct placeholder text", function() {
@@ -78,7 +78,7 @@ describe("chorus.views.ImportSchedule", function() {
 
     describe("the end date picker", function() {
         it("should have a label", function() {
-            expect(this.view.$(".date.end .label")).toContainTranslation("import_now.end.label");
+            expect(this.view.$(".date.end .label")).toContainTranslation("import.end.label");
         });
 
         it("should have the correct placeholder text", function() {

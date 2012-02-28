@@ -1,10 +1,10 @@
-<div class="destination">{{t "import_now.destination" canonicalName=canonicalName}}</div>
+<div class="destination">{{t "import.destination" canonicalName=canonicalName}}</div>
 
 <div class="new_table">
     <fieldset>
         <legend class="row">
             <input type="radio" name="imports" id="import_scheduler_new_table" checked="checked"/>
-            <label class="main" for="import_scheduler_new_table">{{t "import_now.new_table"}}</label>
+            <label class="main" for="import_scheduler_new_table">{{t "import.new_table"}}</label>
             <input type="text" class="name" name="toTable"/>
         </legend>
 
@@ -13,7 +13,7 @@
             <input type="hidden" name="isNewTable" value="true"/>
             <div class="row limit">
                 <input type="checkbox" name="limit_num_rows" id="import_scheduler_limit_rows_new"/>
-                <label for="import_scheduler_limit_rows_new">{{t "import_now.limit_rows"}}</label>
+                <label for="import_scheduler_limit_rows_new">{{t "import.limit_rows"}}</label>
                 <input class="row_limit" type="text" name="rowLimit" disabled="disabled" value="500"/>
             </div>
         </div>
@@ -24,7 +24,7 @@
     <fieldset class="disabled">
         <legend class="row">
             <input type="radio" name="imports" id="import_scheduler_existing_table"/>
-            <label class="main" for="import_scheduler_existing_table">{{t "import_now.existing_table"}}</label>
+            <label class="main" for="import_scheduler_existing_table">{{t "import.existing_table"}}</label>
             <select class="names" disabled="disabled" name="toTable">
                 {{#each sandboxTables}}
                     <option value="{{{this}}}">{{this}}</option>
@@ -36,18 +36,18 @@
             <input type="hidden" name="isNewTable" value="false"/>
             <div class="row">
                 <input type="checkbox" class="truncate" name="truncate" id="import_scheduler_truncate"/>
-                <label for="import_scheduler_truncate">{{t "import_now.truncate"}}</label>
+                <label for="import_scheduler_truncate">{{t "import.truncate"}}</label>
             </div>
             <div class="row limit">
                 <input type="checkbox" name="limit_num_rows" id="import_scheduler_limit_rows_existing"/>
-                <label for="import_scheduler_limit_rows_existing">{{t "import_now.limit_rows"}}</label>
+                <label for="import_scheduler_limit_rows_existing">{{t "import.limit_rows"}}</label>
                 <input class="row_limit" type="text" name="rowLimit" disabled="disabled" value="500"/>
             </div>
 
             <!--{{#if showSchedule}}-->
             <div class="row schedule_import">
                 <input type="checkbox" name="schedule" id="import_scheduler_schedule""/>
-                <label for="import_scheduler_schedule">{{t "import_now.schedule_import"}}</label>
+                <label for="import_scheduler_schedule">{{t "import.schedule_import"}}</label>
             </div>
 
             <div class="schedule_widget">
