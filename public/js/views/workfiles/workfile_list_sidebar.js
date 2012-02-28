@@ -37,9 +37,10 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
     additionalContext:function () {
         var ctx = { canUpdate: this.model && this.model.canUpdate() , hideAddNoteLink: this.options.hideAddNoteLink };
         if (this.workfile) {
+            var modifier = this.workfile.modifier();
             var attributes = _.extend({}, this.workfile.attributes);
-            attributes.updatedBy = [this.workfile.attributes.modifiedByFirstName, this.workfile.attributes.modifiedByLastName].join(' ');
-            attributes.modifierUrl = this.workfile.modifier().showUrl();
+            attributes.updatedBy = modifier.displayShortName();
+            attributes.modifierUrl = modifier.showUrl();
             attributes.downloadUrl = this.workfile.downloadUrl();
             ctx.workfile = attributes;
         }

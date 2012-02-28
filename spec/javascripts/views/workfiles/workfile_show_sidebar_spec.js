@@ -202,12 +202,11 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             });
 
             it("displays the name of the person who updated the workfile", function() {
-                var updaterName = this.workfile.get("modifiedByFirstName") + " " + this.workfile.get("modifiedByLastName");
-                expect(this.view.$(".updated_by").text().trim()).toBe(updaterName);
+                expect(this.view.$(".updated_by").text().trim()).toBe(this.workfile.modifier().displayShortName());
             });
 
             it("links to the profile page of the modifier", function() {
-                expect(this.view.$("a.updated_by").attr("href")).toBe("#/users/" + this.workfile.get("modifiedById"))
+                expect(this.view.$("a.updated_by").attr("href")).toBe("#/users/" + this.workfile.get("modifiedBy").id);
             })
 
             it("displays a link to delete the workfile", function() {

@@ -63,10 +63,10 @@
 
         modifier: function() {
             return new chorus.models.User({
-                userName:this.get("modifiedBy"),
-                firstName:this.get("modifiedByFirstName"),
-                lastName:this.get("modifiedByLastName"),
-                id:this.get("modifiedById")
+                userName:this.get("modifiedBy").userName,
+                firstName:this.get("modifiedBy").firstName,
+                lastName:this.get("modifiedBy").lastName,
+                id:this.get("modifiedBy").id
             })
         },
 

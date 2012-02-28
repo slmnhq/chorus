@@ -75,10 +75,11 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
     },
 
     additionalContext:function (ctx) {
+        var modifier = this.model.modifier();
         return {
-            updatedBy:[this.model.get("modifiedByFirstName"), this.model.get("modifiedByLastName")].join(' '),
-            modifierUrl:this.model.modifier().showUrl(),
-            downloadUrl:this.model.downloadUrl()
+            updatedBy: modifier.displayShortName(),
+            modifierUrl: modifier.showUrl(),
+            downloadUrl: this.model.downloadUrl()
         }
     }
 });

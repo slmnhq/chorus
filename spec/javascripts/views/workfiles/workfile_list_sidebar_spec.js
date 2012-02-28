@@ -24,7 +24,9 @@ describe("WorkfileListSidebar", function() {
     describe("workfile:selected event handling", function() {
         context("when a workfile is selected", function() {
             beforeEach(function() {
-                this.workfile = fixtures.sqlWorkfile({lastUpdatedStamp: "2011-11-22 10:46:03.152"});
+                this.workfile = fixtures.sqlWorkfile({
+                    lastUpdatedStamp: "2011-11-22 10:46:03.152"
+                });
                 this.view.trigger("workfile:selected", this.workfile);
             })
 
@@ -37,12 +39,12 @@ describe("WorkfileListSidebar", function() {
             });
 
             it("displays the name of the person who updated the workfile", function() {
-                var updaterName = this.workfile.get("modifiedByFirstName") + " " + this.workfile.get("modifiedByLastName");
+                var updaterName = this.workfile.get("modifiedBy").firstName + " " + this.workfile.get("modifiedBy").lastName;
                 expect(this.view.$(".updated_by").text().trim()).toBe(updaterName);
             });
 
             it("links to the profile page of the modifier", function() {
-                expect(this.view.$("a.updated_by").attr("href")).toBe("#/users/" + this.workfile.get("modifiedById"))
+                expect(this.view.$("a.updated_by").attr("href")).toBe("#/users/" + this.workfile.get("modifiedBy").id);
             })
 
             it("displays a link to delete the workfile", function() {

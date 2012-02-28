@@ -1445,10 +1445,7 @@ beforeEach(function() {
                 },
                 hasDraft: false,
                 isDeleted: false,
-                modifiedByFirstName: modifiedByUser.firstName,
-                modifiedByLastName: modifiedByUser.lastName,
-                modifiedById: modifiedByUser.id,
-                modifiedBy: modifiedByUser.userName,
+                modifiedBy: modifiedByUser,
                 owner: ownerUser.userName,
                 ownerId: ownerUser.id,
                 workspaceId: this.nextId().toString(),
@@ -2178,6 +2175,12 @@ beforeEach(function() {
                             "fileType": "SQL",
                             "name": "<em>test<\/em>.sql",
                             "entityType": "workfile",
+                            "modifiedBy": {
+                                "id": "422",
+                                "firstName": "John",
+                                "lastName": "Smith",
+                                "userName": "johnny192"
+                            },
                             "owner": {
                                 "id": "InitialUser",
                                 "lastName": "Admin",
@@ -2196,6 +2199,12 @@ beforeEach(function() {
                             "fileType": "SQL",
                             "name": "<em>test<\/em>.sql",
                             "entityType": "workfile",
+                            "modifiedBy": {
+                                "id": "422",
+                                "firstName": "John",
+                                "lastName": "Smith",
+                                "userName": "johnny192"
+                            },
                             "owner": {
                                 "id": "InitialUser",
                                 "lastName": "Admin",
