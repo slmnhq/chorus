@@ -1687,12 +1687,22 @@ beforeEach(function() {
             return new chorus.models.Artifact(attributes);
         },
 
+        chorusViewArtifactJson: function(overrides) {
+            return _.extend({
+                id: this.nextId().toString(),
+                entityType: "chorusView",
+                objectType: "QUERY",
+                type: "CHORUS_VIEW",
+                workspaceId: this.nextId().toString()
+            }, overrides);
+        },
+
         datasetArtifactJson: function(overrides) {
             return _.extend({
                 id: this.nextId().toString(),
                 entityType: "databaseObject",
                 objectType: "BASE_TABLE",
-                type: "databaseObject",
+                type: "SANDBOX_TABLE",
                 workspaceId: this.nextId().toString()
             }, overrides);
         },

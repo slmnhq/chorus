@@ -16,4 +16,18 @@ describe("chorus.presenters.Artifact", function() {
             expect(presenter.url).toBe(model.downloadUrl());
         });
     });
+
+    describe("name", function() {
+        it("uses objectName if available", function() {
+            var model = fixtures.datasetSandboxTable();
+            var presenter = new chorus.presenters.Artifact(model);
+            expect(presenter.name).toBe(model.get('objectName'));
+        })
+
+        it("uses nothing otherwise", function() {
+            var model = fixtures.workfile();
+            var presenter = new chorus.presenters.Artifact(model);
+            expect(presenter.name).toBeUndefined();
+        })
+    })
 });

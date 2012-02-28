@@ -368,7 +368,7 @@ describe("chorus.models.Activity", function() {
     describe("#attachments", function() {
         beforeEach(function() {
             this.model.set({
-                artifacts: [fixtures.workfile({ entityType: "workfile" }).attributes, fixtures.artifact().attributes, fixtures.datasetArtifactJson()]
+                artifacts: [fixtures.workfile({ entityType: "workfile" }).attributes, fixtures.artifact().attributes, fixtures.datasetArtifactJson(), fixtures.chorusViewArtifactJson()]
             });
             this.attachments = this.model.attachments();
         });
@@ -376,7 +376,8 @@ describe("chorus.models.Activity", function() {
         it("returns an array of file models (Workfiles, Artifacts, and Datasets)", function() {
             expect(this.attachments[0]).toBeA(chorus.models.Workfile)
             expect(this.attachments[1]).toBeA(chorus.models.Artifact)
-//            expect(this.attachments[2]).toBeA(chorus.models.Dataset)
+            expect(this.attachments[2]).toBeA(chorus.models.Dataset)
+            expect(this.attachments[3]).toBeA(chorus.models.Dataset)
         });
 
         it("memoizes", function() {

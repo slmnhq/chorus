@@ -131,10 +131,10 @@ chorus.models.Activity = chorus.models.Base.extend({
                     case 'workfile':
                         klass = chorus.models.Workfile;
                         break;
-                      // There is a corresponding line commented out in the test
-//                    case 'databaseObject':
-//                        klass = chorus.models.Dataset;
-//                        break;
+                    case 'chorusView':
+                    case 'databaseObject':
+                        klass = chorus.models.Dataset;
+                        break;
                     default:
                         klass = chorus.models.Artifact;
                         break;
