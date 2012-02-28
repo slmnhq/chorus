@@ -30,6 +30,8 @@ describe "workspace settings dialog" do
             @toolbar.should have_selector(".cleditorButton[title='Italic']")
             @toolbar.should have_selector(".cleditorButton[title='Bullets']")
             @toolbar.should have_selector(".cleditorButton[title='Numbering']")
+            @toolbar.should have_selector(".cleditorButton[title='Insert Hyperlink']")
+            @toolbar.should have_selector(".cleditorButton[title='Remove Hyperlink']")
 
             @toolbar.should_not have_selector(".cleditorButton[title='Underline']")
             @toolbar.should_not have_selector(".cleditorButton[title='Print']")
