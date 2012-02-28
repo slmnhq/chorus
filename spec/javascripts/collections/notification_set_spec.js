@@ -1,10 +1,10 @@
 describe("chorus.collections.NotificationSet", function() {
     beforeEach(function() {
         this.collection = fixtures.notificationSet([
-            fixtures.notification({ body: { id: "101", type: "NOTE" } }),
-            fixtures.notification({ body: { id: "102", type: "WORKSPACE_CREATED" } }),
-            fixtures.notification({ body: { id: "103", type: "MEMBERS_ADDED" } }),
-            fixtures.notification({ body: { id: "104", type: "INSTANCE_CREATED" } })
+            fixtures.notification({ id: "101", type: "NOTE" }),
+            fixtures.notification({ id: "102", type: "WORKSPACE_CREATED" }),
+            fixtures.notification({ id: "103", type: "MEMBERS_ADDED" }),
+            fixtures.notification({ id: "104", type: "INSTANCE_CREATED" })
         ]);
     });
 

@@ -358,6 +358,25 @@ describe("chorus.presenters.Activity", function() {
         itShouldHaveTheAuthorsIconAndUrl();
     });
 
+    context(".BE_MEMBER", function() {
+        beforeEach(function() {
+            this.model = fixtures.notifications.BE_MEMBER().activity();
+            this.author = this.model.author();
+            this.workspace = this.model.workspace();
+            this.presenter = new chorus.presenters.Activity(this.model);
+        });
+
+        it("should have the right workspace name", function() {
+            expect(this.presenter.objectName).toBe(this.workspace.get("name"));
+        });
+
+        it("should have the right link to the workspace", function() {
+            expect(this.presenter.objectUrl).toBe(this.workspace.showUrl());
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
+
     context(".WORKFILE_CREATED", function() {
         beforeEach(function() {
             this.model = fixtures.activities.WORKFILE_CREATED();
@@ -660,6 +679,17 @@ describe("chorus.presenters.Activity", function() {
             });
 
             itGetsTheTranslationKeyCorrectly('without_workspace');
+        });
+
+        describe("#headerTranslationKey with a BE_MEMBER notifiction", function() {
+            beforeEach(function() {
+                this.model = fixtures.notifications.BE_MEMBER().activity();
+                this.presenter = new chorus.presenters.Activity(this.model, {isNotification: true});
+            });
+
+            it("should return the correct notification translation key", function() {
+                expect(this.presenter._impl.headerTranslationKey()).toEqual("activity_stream.header.html.BE_MEMBER.notification");
+            });
         });
 
         function itGetsTheTranslationKeyCorrectly(expectedKeySuffix) {

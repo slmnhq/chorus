@@ -3,14 +3,9 @@ chorus.models.Notification = chorus.models.Base.extend({
     urlTemplate:"notification/{{id}}",
 
     activity: function() {
-        var activity = new chorus.models.Activity(this.get("body"));
-        // push type into activity until we are properly rendering system activity notifications
-        if (!activity.has("type")) {
-            activity.set({type : this.get("type")});
+        if (!this._activity) {
+            this._activity = new chorus.models.Activity(this.attributes);
         }
-
-        activity.set({notificationId : this.id});
-
-        return activity;
+        return this._activity;
     }
 });

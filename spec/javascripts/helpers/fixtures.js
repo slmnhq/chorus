@@ -561,6 +561,18 @@ beforeEach(function() {
             return this.currentId++;
         },
 
+        notifications: {
+            "BE_MEMBER": function(overrides) {
+                return new chorus.models.Notification(_.extend({
+                    author: fixtures.authorJson(),
+                    id: "10000",
+                    timestamp: "2012-02-28 11:51:42.14",
+                    type: "BE_MEMBER",
+                    workspace: fixtures.workspaceJson()
+                }, overrides));
+            }
+        },
+
         activities: {
             "MEMBERS_ADDED": function() {
                 return new chorus.models.Activity({

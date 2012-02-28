@@ -1,22 +1,23 @@
 @import "../_common.scss";
 
 $text-padding-y: 4px;
-$big-gutter : (2 * $activity-gutter);
+$big-gutter: (2 * $activity-gutter);
 $media-gutter: 10px;
 
 $system-action-color: #7C7D7D;
 
 .media, .media > .bd {
-    overflow:hidden;
-}
-.media > .icon {
-    float:left;
-    margin-right: $activity-gutter;
-}
-.media > .icon img{
-    display:block;
+    overflow: hidden;
 }
 
+.media > .icon {
+    float: left;
+    margin-right: $activity-gutter;
+}
+
+.media > .icon img {
+    display: block;
+}
 
 .activity_list_header {
     .menus {
@@ -51,7 +52,7 @@ $system-action-color: #7C7D7D;
     }
 }
 
-.activity_list{
+.activity_list {
 
     .more_activities {
         font-size: 12px;
@@ -61,8 +62,8 @@ $system-action-color: #7C7D7D;
 
 .activity_item {
     padding: $activity-gutter;
-    position:relative;
-    overflow:visible;
+    position: relative;
+    overflow: visible;
 
     img {
         width: $icon-image-width;
@@ -70,7 +71,7 @@ $system-action-color: #7C7D7D;
     }
 
     .insight_ribbon {
-        padding:0;
+        padding: 0;
         position: absolute;
         left: -15px;
         top: -9px;
@@ -79,7 +80,7 @@ $system-action-color: #7C7D7D;
         height: 22px;
 
         .left {
-            background:url(/images/ribbons/label_insight1.png) no-repeat;
+            background: url(/images/ribbons/label_insight1.png) no-repeat;
             width: 6px;
             height: 22px;
             display: inline-block;
@@ -87,7 +88,7 @@ $system-action-color: #7C7D7D;
 
         .center {
             @include database-column-type;
-            background:url(/images/ribbons/label_insight2.png) repeat-x;
+            background: url(/images/ribbons/label_insight2.png) repeat-x;
             height: 14px;
             display: inline-block;
             padding: 2px 8px 2px 8px;
@@ -96,7 +97,7 @@ $system-action-color: #7C7D7D;
         }
 
         .right {
-            background:url(/images/ribbons/label_insight3.png) no-repeat;
+            background: url(/images/ribbons/label_insight3.png) no-repeat;
             width: 8px;
             height: 22px;
             display: inline-block;
@@ -106,10 +107,9 @@ $system-action-color: #7C7D7D;
 
 .comment_list {
     .comments {
-        background : $shaded-background-color;
+        background: $shaded-background-color;
     }
 }
-
 
 .activity_content, .comment_content {
     ul.attachments {
@@ -159,7 +159,7 @@ $system-action-color: #7C7D7D;
             img {
                 height: 12px;
                 width: 12px;
-                margin-bottom:4px;
+                margin-bottom: 4px;
                 vertical-align: middle;
             }
         }
@@ -187,13 +187,14 @@ $system-action-color: #7C7D7D;
     }
 }
 
+.popup_notifications li:hover .activity_content a.delete_link,
 li[data-activity-type=NOTE] .activity_content:hover a.delete_link,
 li[data-activity-type=INSIGHT_CREATED] .activity_content:hover a.delete_link {
-    display:inline;
+    display: inline;
 }
 
 .comment_content:hover a.delete_link {
-    display:inline;
+    display: inline;
 }
 
 #sidebar .activity_heading {
@@ -215,12 +216,12 @@ li[data-activity-type=INSIGHT_CREATED] .activity_content:hover a.delete_link {
             padding: 0 $activity-gutter;
 
             &.insight {
-              background: white;
-              border-right: 1px dotted $list-border-color;
-              border-bottom: 1px dotted $list-border-color;
-              .activity_item {
-                padding-top: 12px;
-              }
+                background: white;
+                border-right: 1px dotted $list-border-color;
+                border-bottom: 1px dotted $list-border-color;
+                .activity_item {
+                    padding-top: 12px;
+                }
             }
         }
     }
@@ -234,12 +235,12 @@ li[data-activity-type=INSIGHT_CREATED] .activity_content:hover a.delete_link {
     }
 }
 
-#sidebar .activity_list  {
+#sidebar .activity_list {
     li.insight {
-          background: white;
-          .insight_ribbon {
+        background: white;
+        .insight_ribbon {
             left: -5px;
-          }
+        }
     }
     li[data-activity-type=WORKSPACE_CREATED],
     li[data-activity-type=WORKSPACE_DELETED],
