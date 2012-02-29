@@ -19,6 +19,35 @@ chorus.views.ImportSchedule = chorus.views.Base.extend({
         }, this));
     },
 
+    fieldValues: function() {
+        var startTime = new Date();
+        var endTime   = new Date();
+
+        startTime.set({
+            year:   parseInt(this.$(".start input[name='year']").val(), 10),
+            month:  parseInt(this.$(".start input[name='month']").val(), 10) - 1,
+            day:    parseInt(this.$(".start input[name='day']").val(), 10),
+            hour:   parseInt(this.$("select.hours").val(), 10),
+            minute: parseInt(this.$("select.minutes").val(), 10)
+        });
+
+        var isPM = this.$("select.ampm").val() === "PM";
+        if (isPM && startTime.getHours() < 12) startTime.addHours(12);
+        if (!isPM && startTime.getHours() === 12) startTime.addHours(-12);
+
+        endTime.set({
+            year:   parseInt(this.$(".end input[name='year']").val()),
+            month:  parseInt(this.$(".end input[name='month']").val()) - 1,
+            day:    parseInt(this.$(".end input[name='day']").val())
+        });
+
+        return {
+            scheduleStartTime : startTime.toString("yyyy-MM-dd HH:mm" + ":00.0"),
+            scheduleEndTime   : endTime.toString("yyyy-MM-dd"),
+            scheduleFrequency : this.$("select.frequency").val()
+        }
+    },
+
     additionalContext: function() {
         var now = new Date();
         var later = new Date(now);

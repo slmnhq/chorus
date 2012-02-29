@@ -4,6 +4,49 @@ describe("chorus.views.ImportSchedule", function() {
         this.view.render();
     });
 
+    describe("#fieldValues", function() {
+        beforeEach(function() {
+            this.view.$(".start input[name='year']").val("2012");
+            this.view.$(".start input[name='month']").val("02");
+            this.view.$(".start input[name='day']").val("29");
+
+            this.view.$(".end input[name='year']").val("2012");
+            this.view.$(".end input[name='month']").val("03");
+            this.view.$(".end input[name='day']").val("21");
+
+            this.view.$("select.ampm option").val("PM");
+            this.view.$("select.hours option").val("1");
+            this.view.$("select.minutes option").val("09");
+
+            this.view.$("select.frequency option").val("HOURLY");
+
+            this.attrs = this.view.fieldValues();
+        });
+
+        it("returns a properly formatted start time and end time", function() {
+            expect(this.attrs.scheduleStartTime).toBe("2012-02-29 13:09:00.0");
+            expect(this.attrs.scheduleEndTime).toBe("2012-03-21")
+        });
+
+        it("handles the case of '12 pm' correctly", function() {
+            this.view.$("select.ampm option").val("PM");
+            this.view.$("select.hours option").val("12");
+
+            expect(this.view.fieldValues().scheduleStartTime).toBe("2012-02-29 12:09:00.0");
+        });
+
+        it("handles the case of '12 am' correctly", function() {
+            this.view.$("select.ampm option").val("AM");
+            this.view.$("select.hours option").val("12");
+
+            expect(this.view.fieldValues().scheduleStartTime).toBe("2012-02-29 00:09:00.0");
+        });
+
+        it("has the right frequency value", function() {
+            expect(this.attrs.scheduleFrequency).toBe("HOURLY");
+        });
+    });
+
     it("should have a select with daily, weekly, monthly as options", function() {
         expect(this.view.$(".frequency option[value=DAILY]")).toContainTranslation("import.frequency.daily");
         expect(this.view.$(".frequency option[value=WEEKLY]")).toContainTranslation("import.frequency.weekly");
@@ -26,7 +69,7 @@ describe("chorus.views.ImportSchedule", function() {
 
     it("should have AM/PM picker", function() {
         expect(this.view.$(".ampm option").length).toBe(2);
-        expect(this.view.$(".ampm").val()).toBe("0");
+        expect(this.view.$(".ampm").val()).toBe("AM");
         expect(this.view.$(".ampm option:selected").text().trim()).toBe("AM");
     });
 

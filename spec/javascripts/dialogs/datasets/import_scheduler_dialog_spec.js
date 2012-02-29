@@ -120,7 +120,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                             this.dialog.$(".end input[name='month']").val("03");
                             this.dialog.$(".end input[name='day']").val("21");
 
-                            this.dialog.$("select.ampm option").val("12");
+                            this.dialog.$("select.ampm option").val("PM");
                             this.dialog.$("select.hours option").val("12");
                             this.dialog.$("select.minutes option").val("09");
 
@@ -132,13 +132,8 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         it("should put the values in the correct API form fields", function() {
                             var params = this.server.lastCreate().params()
                             expect(params.truncate).toBe("false");
-
-                            expect(params.scheduleInterval).toBe("1");
-                            expect(params.scheduleDays).toBe("1:2");
-
                             expect(params.sampleCount).toBe("123");
-
-                            expect(params.scheduleStartTime).toBe("2012-02-29 00:09:00.0");
+                            expect(params.scheduleStartTime).toBe("2012-02-29 12:09:00.0");
                             expect(params.scheduleEndTime).toBe("2012-03-21")
                         });
                     });
@@ -149,7 +144,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
     describe("editing an existing schedule", function() {
         beforeEach(function() {
-            this.import = fixtures.datasetImport({ id: '12' });
+            this.import = fixtures.datasetImport({
+                id: '12',
+                truncate: true
+            });
             this.launchElement.addClass("edit_schedule");
             this.launchElement.data("import", this.import);
             this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
