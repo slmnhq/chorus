@@ -23,6 +23,12 @@ chorus.views.ModelBoundBreadcrumbsView = chorus.views.BreadcrumbsView.extend({
         return []
     },
     context:function () {
-        return { breadcrumbs:this.model.loaded ? this.getLoadedCrumbs() : this.getLoadingCrumbs() };
+        var breadcrumbs;
+        if(this.model && !this.model.loaded) {
+            breadcrumbs = this.getLoadingCrumbs();
+        } else {
+            breadcrumbs = this.getLoadedCrumbs();
+        }
+        return { breadcrumbs: breadcrumbs };
     }
 });

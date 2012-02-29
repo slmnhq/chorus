@@ -1,12 +1,17 @@
 (function() {
     var breadcrumbsView = chorus.views.ModelBoundBreadcrumbsView.extend({
+        makeModel: function() {
+            this.requiredResources.push(this.options.workspace);
+            this.requiredResources.push(this.options.tabularData);
+        },
+
         getLoadedCrumbs: function() {
             return [
                 {label: t("breadcrumbs.home"), url: "#/"},
                 {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
-                {label: this.model.displayShortName(), url: this.model.showUrl()},
-                {label: t("breadcrumbs.workspaces_data"), url: this.model.showUrl() + "/datasets"},
-                {label: this.options.objectName}
+                {label: this.options.workspace.displayShortName(), url: this.options.workspace.showUrl()},
+                {label: t("breadcrumbs.workspaces_data"), url: this.options.workspace.showUrl() + "/datasets"},
+                {label: this.options.tabularData.get('objectName')}
             ];
         }
     });
@@ -17,29 +22,20 @@
         hideDeriveChorusView: false,
         sidebarOptions: {browsingSchema: false},
 
-        title: function() {
-            return this.objectName
-        },
-
         setup: function(workspaceId, datasetId) {
+            this.workspaceId = workspaceId;
             this.datasetId = datasetId;
 
-            var id = datasetId.split("|");
-            this.instanceId = id[0];
-            this.databaseName = id[1];
-            this.schemaName = id[2];
-            this.objectType = id[3];
-            this.objectName = id[4];
-
             this.workspace = new chorus.models.Workspace({id: workspaceId});
-            this.workspace.bind("loaded", this.fetchDataSet, this);
             this.workspace.fetch();
+            this.fetchDataSet();
 
-            this.breadcrumbs = new breadcrumbsView({model: this.workspace, objectName: this.objectName});
+            this.breadcrumbs = new breadcrumbsView({workspace: this.workspace, tabularData: this.tabularData});
         },
 
+
         fetchDataSet: function() {
-            this.model = this.tabularData = new chorus.models.Dataset({ workspace: { id: this.workspace.get("id") }, id: this.datasetId });
+            this.model = this.tabularData = new chorus.models.Dataset({ workspace: { id: this.workspaceId }, id: this.datasetId });
             this.tabularData.bind("loaded", this.fetchColumnSet, this);
             this.tabularData.fetch();
         },

@@ -36,14 +36,6 @@ describe("chorus.pages.DatasetShowPage", function() {
     })
 
     describe("#initialize", function() {
-        it("parses the datasetId", function() {
-            expect(this.page.instanceId).toBe("5");
-            expect(this.page.databaseName).toBe("db");
-            expect(this.page.schemaName).toBe("schema");
-            expect(this.page.objectType).toBe("BASE_TABLE");
-            expect(this.page.objectName).toBe("tableName");
-        });
-
         context("when the workspace fetch completes", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.workspace);
