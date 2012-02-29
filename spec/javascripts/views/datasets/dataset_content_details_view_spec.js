@@ -548,6 +548,10 @@ describe("chorus.views.DatasetContentDetails", function() {
         })
 
         describe("column count bar", function() {
+            beforeEach(function() {
+                this.column = fixtures.databaseColumn();
+            });
+
             it("renders", function() {
                 expect(this.view.$(".column_count")).toExist();
             })
@@ -555,7 +559,20 @@ describe("chorus.views.DatasetContentDetails", function() {
             it("renders the column count", function() {
                 expect(this.view.$(".column_count .count").text().trim()).toMatchTranslation("dataset.column_count", { count: this.collection.models.length })
             })
-        })
+
+            it("re-renders the column count when a column is added", function() {
+                var count = this.view.collection.length;
+                this.view.collection.add(this.column);
+                expect(this.view.$(".column_count .count").text().trim()).toMatchTranslation("dataset.column_count", { count: count + 1 })
+            });
+
+            it("re-renders the column count when a column is removed", function() {
+                this.view.collection.add(this.column);
+                var count = this.view.collection.length;
+                this.view.collection.remove(this.column);
+                expect(this.view.$(".column_count .count").text().trim()).toMatchTranslation("dataset.column_count", { count: count - 1 })
+            });
+        });
 
         describe("sql errors bar", function() {
             it("renders, hidden", function() {
