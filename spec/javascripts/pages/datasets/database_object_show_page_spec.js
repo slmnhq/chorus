@@ -32,6 +32,10 @@ describe("chorus.pages.DatabaseObjectShowPage", function() {
                     expect(this.page.sidebar.resource).toBe(this.page.tabularData);
                 })
 
+                it("sets sidebar browsingSchema to true", function() {
+                    expect(this.page.sidebar.options.browsingSchema).toBeTruthy();
+                })
+
                 it("sets the main content as persistent", function() {
                     expect(this.page.mainContent.persistent).toBeTruthy();
                 })

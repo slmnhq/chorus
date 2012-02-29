@@ -5,31 +5,21 @@
     <li>
     {{/if}}
         <span class="spacer left"></span>
-        {{#if ../browsingSchema}}
-            <div class="image"">
+        {{#if noCredentials}}
+            <span class="image">
                 <img src="{{iconImgUrl}}"/>
-            </div>
+            </span>
         {{else}}
-            {{#if noCredentials}}
-                <span class="image">
-                    <img src="{{iconImgUrl}}"/>
-                </span>
-            {{else}}
-                <a class="image" href="{{showUrl}}">
-                     <img src="{{iconImgUrl}}"/>
-                </a>
-            {{/if}}
+            <a class="image" href="{{showUrl}}">
+                 <img src="{{iconImgUrl}}"/>
+            </a>
         {{/if}}
 
         <div class="right">
-            {{#if ../browsingSchema}}
-                <div class="name_disabled">{{objectName}}</div>
+            {{#if noCredentials}}
+                <span class="name">{{objectName}}</span>
             {{else}}
-                {{#if noCredentials}}
-                    <span class="name">{{objectName}}</span>
-                {{else}}
-                    <a href="{{showUrl}}" class="name">{{objectName}}</a>
-                {{/if}}
+                <a href="{{showUrl}}" class="name">{{objectName}}</a>
             {{/if}}
             <div class="location">
                 {{t "dataset.from"}}

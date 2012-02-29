@@ -113,6 +113,12 @@ describe("chorus.pages.DatasetShowPage", function() {
             this.server.completeFetchFor(this.dataset.statistics());
         })
 
+        describe("sidebar", function() {
+            it("sets sidebar browsingSchema to false", function() {
+                expect(this.page.sidebar.options.browsingSchema).toBeFalsy();
+            })
+        })
+
         describe("breadcrumbs", function() {
             it("links to home for the first crumb", function() {
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).attr("href")).toBe("#/");

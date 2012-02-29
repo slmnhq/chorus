@@ -25,6 +25,7 @@
             ["/workspaces/:workspaceId/datasets", "DatasetIndex"],
             ["/instances", "InstanceIndex"],
             ["/instances/:instanceId/database/:databaseName/schema/:schemaName", "SchemaBrowse"],
+            ["/instances/:instanceId/database/:databaseName/schema/:schemaName/:metaType/:objectName", "DatabaseObjectShow"],
             ["/styleguide", "StyleGuide"]
         ],
 

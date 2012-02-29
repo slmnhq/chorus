@@ -79,103 +79,79 @@ describe("chorus.views.DatasetList", function() {
             expect(this.view.$(".name_disabled")).not.toExist();
         });
 
-        context("when browsingSchema is true", function() {
+        context("when there is exactly 1 'found in' workspace", function() {
+            itIncludesTheFoundInWorkspaceInformation();
+
+            it("should not indicate there are any other workspaces", function() {
+                expect(this.view.$(".found_in .other")).not.toExist();
+            })
+        })
+
+        context("when there are exactly 2 'found in' workspaces", function() {
             beforeEach(function() {
-                this.view.options.browsingSchema = true;
+                this.collection.each(function(model) {
+                    var hash = model.get("workspaceUsed");
+                    hash.workspaceList = [fixtures.workspaceJson(), fixtures.workspaceJson()];
+                    hash.workspaceCount = 2;
+                });
                 this.view.render();
             });
 
-            it("does not link the datasets' names", function() {
-                expect(this.view.$("a.name")).not.toExist();
-            });
+            itIncludesTheFoundInWorkspaceInformation();
 
-            it("does not link the datasets' image", function() {
-                expect(this.view.$("a img")).not.toExist();
-            });
-
-            it("does include the datasets' image", function() {
-                expect(this.view.$("div.image img")).toExist();
-            });
-
-            it("does renders the disabled names", function() {
-                expect(this.view.$(".name_disabled")).toExist();
-            });
-
-            context("when there is exactly 1 'found in' workspace", function() {
-                itIncludesTheFoundInWorkspaceInformation();
-
-                it("should not indicate there are any other workspaces", function() {
-                    expect(this.view.$(".found_in .other")).not.toExist();
-                })
+            it("should indicate there is 1 other workspace", function() {
+                _.each(this.collection.models, function(model, index) {
+                    expect(this.view.$(".found_in .other").eq(index).text()).toContainTranslation("dataset.and_others.one");
+                }, this)
             })
+        })
 
-            context("when there are exactly 2 'found in' workspaces", function() {
-                beforeEach(function() {
-                    this.collection.each(function(model) {
-                        var hash = model.get("workspaceUsed");
-                        hash.workspaceList = [fixtures.workspaceJson(), fixtures.workspaceJson()];
-                        hash.workspaceCount = 2;
-                    });
-                    this.view.render();
+        context("when there are exactly 3 'found in' workspaces", function() {
+            beforeEach(function() {
+                this.collection.each(function(model) {
+                    var hash = model.get("workspaceUsed");
+                    hash.workspaceList = [fixtures.workspaceJson(), fixtures.workspaceJson(), fixtures.workspaceJson()];
+                    hash.workspaceCount = 3;
                 });
-
-                itIncludesTheFoundInWorkspaceInformation();
-
-                it("should indicate there is 1 other workspace", function() {
-                    _.each(this.collection.models, function(model, index) {
-                        expect(this.view.$(".found_in .other").eq(index).text()).toContainTranslation("dataset.and_others.one");
-                    }, this)
-                })
-            })
-
-            context("when there are exactly 3 'found in' workspaces", function() {
-                beforeEach(function() {
-                    this.collection.each(function(model) {
-                        var hash = model.get("workspaceUsed");
-                        hash.workspaceList = [fixtures.workspaceJson(), fixtures.workspaceJson(), fixtures.workspaceJson()];
-                        hash.workspaceCount = 3;
-                    });
-                    this.view.render();
-                });
-
-                itIncludesTheFoundInWorkspaceInformation();
-
-                it("should indicate there is 2 other workspaces", function() {
-                    _.each(this.collection.models, function(model, index) {
-                        expect(this.view.$(".found_in .other").eq(index).text()).toContainTranslation("dataset.and_others.other",
-                            {count: 2});
-                    }, this)
-                })
-            })
-
-            context("when there aren't any 'found in' workspaces", function() {
-                beforeEach(function() {
-                    this.collection.each(function(model) {
-                        var hash = model.get("workspaceUsed");
-                        hash.workspaceList = [];
-                        hash.workspaceCount = 0;
-                    });
-                    this.view.render();
-                });
-
-                it("does not render .found_in", function() {
-                    expect(this.view.$(".found_in")).not.toExist();
-                });
+                this.view.render();
             });
 
-            function itIncludesTheFoundInWorkspaceInformation() {
-                it("includes the 'found in workspace' information", function() {
-                    _.each(this.collection.models, function(model, index) {
-                        var workspace = new chorus.models.Workspace(model.get("workspaceUsed").workspaceList[0]);
-                        var workspaceLink = chorus.helpers.linkTo(workspace.showUrl(), workspace.get('name'));
-                        expect(this.view.$(".found_in").eq(index).html()).toContainTranslation("dataset.found_in",
-                            { workspaceLink: workspaceLink });
-                        expect(this.view.$(".found_in a").eq(index).attr("href")).toMatchUrl(workspace.showUrl());
-                    }, this)
+            itIncludesTheFoundInWorkspaceInformation();
+
+            it("should indicate there is 2 other workspaces", function() {
+                _.each(this.collection.models, function(model, index) {
+                    expect(this.view.$(".found_in .other").eq(index).text()).toContainTranslation("dataset.and_others.other",
+                        {count: 2});
+                }, this)
+            })
+        })
+
+        context("when there aren't any 'found in' workspaces", function() {
+            beforeEach(function() {
+                this.collection.each(function(model) {
+                    var hash = model.get("workspaceUsed");
+                    hash.workspaceList = [];
+                    hash.workspaceCount = 0;
                 });
-            }
+                this.view.render();
+            });
+
+            it("does not render .found_in", function() {
+                expect(this.view.$(".found_in")).not.toExist();
+            });
         });
 
+        function itIncludesTheFoundInWorkspaceInformation() {
+            it("includes the 'found in workspace' information", function() {
+                _.each(this.collection.models, function(model, index) {
+                    var workspace = new chorus.models.Workspace(model.get("workspaceUsed").workspaceList[0]);
+                    var workspaceLink = chorus.helpers.linkTo(workspace.showUrl(), workspace.get('name'));
+                    expect(this.view.$(".found_in").eq(index).html()).toContainTranslation("dataset.found_in",
+                        { workspaceLink: workspaceLink });
+                    expect(this.view.$(".found_in a").eq(index).attr("href")).toMatchUrl(workspace.showUrl());
+                }, this)
+            });
+        }
 
         it("displays the location of the dataset", function() {
             for (var i = 0; i < this.collection.length; i++) {

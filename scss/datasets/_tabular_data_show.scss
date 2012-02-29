@@ -1,0 +1,88 @@
+#page {
+    .tabular_data_show {
+        .content_details {
+            padding: 0;
+            height: auto;
+        }
+
+        #sidebar {
+            li.dataset_preview {
+                display: none;
+            }
+        }
+
+        $fieldset-margin: 15px;
+        fieldset {
+            border: 1px solid $border-color;
+            padding: $fieldset-margin $dialog-padding $dialog-padding;
+            margin-right: $fieldset-margin;
+            margin-bottom: $fieldset-margin;
+            position: relative;
+
+            legend {
+                @include heading-sidebar;
+            }
+
+            label {
+                @include font-content-details;
+                display: inline-block;
+            }
+
+            .labels {
+                margin-bottom: 4px;
+                vertical-align: middle;
+                line-height: 12px;
+                position: relative;
+                margin-right: 1px;
+            }
+
+            .field {
+                padding-top: 15px;
+                &:first-child {
+                    padding-top: 0;
+                }
+            }
+
+            .button_wrapper {
+                text-align: center;
+
+                button {
+                    margin-bottom: -43px;
+
+                    div[aria-role=progressbar] {
+                        margin-bottom: 5px;
+                        padding-left: 13px;
+                        display: inline-block;
+
+                    }
+
+                    &.cancel {
+                        margin-left: 5px;
+                    }
+                }
+            }
+
+        }
+
+        .dataset_edit_chorus_view {
+            .CodeMirror {
+                background-color: white;
+            }
+        }
+    }
+}
+
+.aliased_name, .ui-selectmenu-menu li .aliased_name, .ui-selectmenu-status .aliased_name {
+    background-color: $dataset-number-background-color;
+    display: inline-block;
+    @include border-radius(5px);
+    color: white;
+    height: 8px;
+    line-height: 19px;
+    vertical-align: bottom;
+    padding: 0px 5px 9px;
+    margin-right: 5px;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+}

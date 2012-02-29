@@ -15,6 +15,8 @@
     chorus.pages.DatabaseObjectShowPage = chorus.pages.Base.extend({
         helpId: "databaseObject",
         hideDeriveChorusView: true,
+        additionalClass: 'tabular_data_show',
+        sidebarOptions: {browsingSchema: true},
 
         title: function() {
             return this.tabularData.get('objectName')
@@ -35,11 +37,14 @@
             this.model.fetch();
 
             this.columnSet = this.tabularData.columns({type: "meta"});
-            this.columnSet.bind("loaded", this.columnSetFetched, this);
             this.columnSet.fetchAll();
             this.requiredResources.push(this.columnSet);
 
             this.breadcrumbs = new breadcrumbsView({model: this.tabularData});
+        },
+
+        resourcesLoaded: function() {
+            this.columnSetFetched();
         },
 
         bindCallbacks: function() {
@@ -60,7 +65,7 @@
             });
 
             this.mainContent.contentDetails.options.$columnList = $(this.mainContent.content.el);
-            this.sidebar = new chorus.views.DatasetListSidebar();
+            this.sidebar = new chorus.views.DatasetListSidebar(this.sidebarOptions);
             this.sidebar.setDataset(this.tabularData);
 
             this.mainContent.contentDetails.bind("transform:sidebar", this.showSidebar, this);

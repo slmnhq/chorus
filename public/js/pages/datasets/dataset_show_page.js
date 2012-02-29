@@ -14,6 +14,7 @@
     chorus.pages.DatasetShowPage = chorus.pages.DatabaseObjectShowPage.extend({
         helpId: "dataset",
         hideDeriveChorusView: false,
+        sidebarOptions: {browsingSchema: false},
 
         title: function() {
             return this.objectName

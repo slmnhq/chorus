@@ -29,10 +29,6 @@ chorus.views.DatasetList = chorus.views.Base.extend({
         this.collection.fetch();
     },
 
-    additionalContext:function(){
-        return {browsingSchema: this.options.browsingSchema};
-    },
-
     collectionModelContext:function (model) {
         var workspaceUsed = model.get("workspaceUsed");
         var workspace = workspaceUsed && workspaceUsed.workspaceList[0]

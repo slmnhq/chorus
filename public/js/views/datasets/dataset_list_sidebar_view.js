@@ -35,14 +35,14 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
         this.render();
     },
 
-    setDataset: function(dataset) {
-        this.resource = dataset;
-        if (dataset) {
-            this.statistics = dataset.statistics();
+    setDataset: function(tabularData) {
+        this.resource = tabularData;
+        if (tabularData) {
+            this.statistics = tabularData.statistics();
             this.statistics.fetchIfNotLoaded();
             this.statistics.onLoaded(this.render, this);
 
-            var activities = dataset.activities();
+            var activities = tabularData.activities();
             activities.fetch();
             this.activityList = new chorus.views.ActivityList({
                 collection: activities,
@@ -111,11 +111,11 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
         new chorus.dialogs.InstanceAccount({pageModel: this.resource.instance(), title: t("instances.sidebar.add_credentials"), reload: true}).launchModal();
     },
 
-    datasetType: function(dataset) {
-        if (!dataset) { return ""; }
+    datasetType: function(tabularData) {
+        if (!tabularData) { return ""; }
 
-        var keys = ["dataset.types", dataset.get("type")];
-        if (dataset.get("objectType")) { keys.push(dataset.get("objectType")); }
+        var keys = ["dataset.types", tabularData.get("type")];
+        if (tabularData.get("objectType")) { keys.push(tabularData.get("objectType")); }
         var key = keys.join(".");
         return t(key);
     }

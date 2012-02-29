@@ -61,7 +61,7 @@ describe("chorus.models.DatabaseObject", function() {
                     this.databaseObject.get("databaseName"),
                     "schema",
                     this.databaseObject.get('schemaName'),
-                    'table',
+                    this.databaseObject.get('objectType'),
                     this.databaseObject.get('objectName')
                 ]
                 var url = encodeURI(pieces.join('/'));
@@ -82,7 +82,7 @@ describe("chorus.models.DatabaseObject", function() {
                     this.databaseObject.get("databaseName"),
                     "schema",
                     this.databaseObject.get('schemaName'),
-                    'view',
+                    this.databaseObject.get('objectType'),
                     this.databaseObject.get('objectName')
                 ]
                 var url = encodeURI(pieces.join('/'));
