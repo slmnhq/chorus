@@ -53,8 +53,8 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
 
             this.activityList.bind("content:changed", this.recalculateScrolling, this)
 
-            if (dataset.isImportable()) {
-                this.importConfiguration = dataset.getImport();
+            if (tabularData.isImportable()) {
+                this.importConfiguration = tabularData.getImport();
                 this.importConfiguration.onLoaded(this.render, this);
                 this.importConfiguration.fetch();
             }
