@@ -2455,6 +2455,19 @@ beforeEach(function() {
 
         searchResult : function(overrides) {
             return new chorus.models.SearchResult(this.searchResultJson(overrides))
+        },
+
+        typeAheadSearchResult: function(overrides) {
+            var normalJson = this.searchResultJson(overrides);
+
+            var newJson = {typeAhead: {docs: [], numFound: 0}}
+
+            _.each(["workfile", "workspace", "dataset", "instance", "user"], function(type){
+                newJson.typeAhead.docs = newJson.typeAhead.docs.concat(normalJson[type].docs);
+                newJson.typeAhead.numFound += normalJson[type].numFound;
+            });
+
+            return new chorus.models.TypeAheadSearchResult(newJson);
         }
     })
     ;
