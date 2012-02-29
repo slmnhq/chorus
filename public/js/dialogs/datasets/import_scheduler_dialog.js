@@ -63,6 +63,12 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         _.defer(_.bind(function() {chorus.styleSelect(this.$("select.names"))}, this));
     },
 
+    resourcesLoaded: function() {
+        this.sandboxTables.models = _.filter(this.sandboxTables.models, _.bind(function(table) {
+            return _.include(["BASE_TABLE", "MASTER_TABLE"], table.get("objectType"));
+        }, this));
+    },
+
     onDestinationChosen: function() {
         var disableExisting = this.$(".new_table input:radio").prop("checked");
 

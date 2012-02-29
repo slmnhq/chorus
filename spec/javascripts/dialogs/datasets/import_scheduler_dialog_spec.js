@@ -52,7 +52,13 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
         context("when the fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchAllFor(this.dialog.sandboxTables, [fixtures.datasetSandboxTable(), fixtures.datasetSandboxTable()]);
+                this.server.completeFetchAllFor(this.dialog.sandboxTables, [
+                    fixtures.datasetSandboxTable(),
+                    fixtures.datasetSandboxTable(),
+                    fixtures.datasetSandboxView(),
+                    fixtures.datasetExternalTable(),
+                    fixtures.datasetHadoopExternalTable()
+                ]);
             });
 
             it("should have a checkbox for scheduling an import", function() {
@@ -74,6 +80,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
             it("should show the schedule controls", function() {
                 expect(this.dialog.$(".schedule_import")).toExist();
                 expect(this.dialog.$(".schedule_widget")).toExist();
+            });
+
+            it("should not include views, external tables, or Hadoop tables in the dropdown", function() {
+                expect(this.dialog.$(".existing_table .names option").length).toBe(2);
             });
 
             describe("checking the import on a schedule checkbox", function() {
