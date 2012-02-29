@@ -4,7 +4,7 @@ describe("chorus.models.Instance", function() {
     });
 
     it("has a valid showUrl", function() {
-        expect(this.instance.showUrl()).toBe("#/instances/" + this.instance.get('id'));
+        expect(this.instance.showUrl()).toBe("#/instances");
     });
 
     it("has a valid url", function() {

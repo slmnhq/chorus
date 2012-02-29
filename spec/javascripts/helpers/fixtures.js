@@ -1737,6 +1737,7 @@ beforeEach(function() {
                 instanceVersion: null,
                 isDeleted: false,
                 lastCheck: null,
+                id: this.nextId().toString(),
                 owner: "edcadmin",
                 ownerId: this.nextId().toString(),
                 ownerFullName: "EDC Admin",
