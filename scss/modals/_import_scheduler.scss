@@ -14,6 +14,10 @@
         }
     }
 
+    legend {
+        margin-bottom: 5px;
+    }
+
     .destination {
         padding-bottom: 10px;
         @include results-console-message;
