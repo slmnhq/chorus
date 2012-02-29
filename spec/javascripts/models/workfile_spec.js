@@ -6,7 +6,6 @@ describe("chorus.models.Workfile", function() {
     describe("#modifier", function() {
         it("returns a partially constructed user, based on the workfile's modifier attribute", function() {
             var modifier = this.model.modifier();
-            expect(modifier.get("userName")).toBe(this.model.get("modifiedBy").userName);
             expect(modifier.get("firstName")).toBe(this.model.get("modifiedBy").firstName);
             expect(modifier.get("lastName")).toBe(this.model.get("modifiedBy").lastName);
             expect(modifier.get("id")).toBe(this.model.get("modifiedBy").id);
