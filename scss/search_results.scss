@@ -55,6 +55,10 @@
                     vertical-align: baseline;
                 }
             }
+
+            .description_content {
+                @include font-normal-alpha;
+            }
         }
 
         .comments, .moreComments {

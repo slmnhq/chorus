@@ -10,7 +10,9 @@ describe("chorus.views.SearchWorkfileList", function() {
                         {"lastUpdatedStamp": "2012-02-28 14:09:56", "isPublished": false, "id": "10003", "workspaceId": "10000", "isInsight": true, "content": "Nice <em>cool<\/em> insight", "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}}
                     ]
                 },
-                {id: "4", workspace: {id: "3", name: "Other"}, fileType: "txt"}
+                {id: "4", workspace: {id: "3", name: "Other"}, fileType: "txt",
+                    description: "this is a <EM>cool</EM> file description",
+                }
             ]),
             total: "24"
         });
@@ -107,6 +109,11 @@ describe("chorus.views.SearchWorkfileList", function() {
                 {workspaceLink: "Other"}
             )
         })
+
+        it("shows matching description if any", function() {
+            expect(this.view.$("li .description .description_content").eq(0)).toBeEmpty();
+            expect(this.view.$("li .description .description_content").eq(1)).toContainText("this is a cool file description");
+        });
 
         it("shows associated comments/notes/insights", function() {
             expect(this.view.$('li .comments').eq(0).find('.comment').length).toBe(3);
