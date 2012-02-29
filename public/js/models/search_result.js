@@ -15,7 +15,9 @@ chorus.models.SearchResult = chorus.models.Base.extend({
     workfiles: function() {
         var workfiles = _.map(this.get("workfile").docs, function(workfileJson) {
             workfileJson.fileName = $.stripHtml(workfileJson.name);
-            return new chorus.models.Workfile(workfileJson);
+            var workfile = new chorus.models.Workfile(workfileJson);
+            workfile.comments = new chorus.collections.ActivitySet(workfileJson.comments);
+            return workfile;
         });
         return new chorus.collections.WorkfileSet(workfiles);
     }

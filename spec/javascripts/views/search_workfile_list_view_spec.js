@@ -2,10 +2,16 @@ describe("chorus.views.SearchWorkfileList", function() {
     beforeEach(function() {
         this.view = new chorus.views.SearchWorkfileList({
             collection: fixtures.workfileSet([
-                {id: "1", workspace: {id: "2", name: "Test"}, fileType: "SQL"},
+                {id: "1", workspace: {id: "2", name: "Test"}, fileType: "SQL",
+                    comments: [
+                        {"lastUpdatedStamp": "2012-02-28 14:07:34", "isPublished": false, "id": "10000", "workspaceId": "10000", "isInsight": false, "content": "nice <em>cool<\/em> file", "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
+                        {"lastUpdatedStamp": "2012-02-28 14:07:46", "isPublished": false, "id": "10001", "workspaceId": "10000", "isInsight": false, "content": "nice <em>cool<\/em> comment", "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
+                        {"lastUpdatedStamp": "2012-02-28 14:09:56", "isPublished": false, "id": "10002", "workspaceId": "10000", "isInsight": true, "content": "Nice <em>cool<\/em> insight", "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
+                        {"lastUpdatedStamp": "2012-02-28 14:09:56", "isPublished": false, "id": "10003", "workspaceId": "10000", "isInsight": true, "content": "Nice <em>cool<\/em> insight", "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}}
+                    ]
+                },
                 {id: "4", workspace: {id: "3", name: "Other"}, fileType: "txt"}
             ]),
-
             total: "24"
         });
 
@@ -101,5 +107,20 @@ describe("chorus.views.SearchWorkfileList", function() {
                 {workspaceLink: "Other"}
             )
         })
-    })
+
+        it("shows associated comments/notes/insights", function() {
+            expect(this.view.$('li .comments').eq(0).find('.comment').length).toBe(3);
+            expect(this.view.$('li .comments').eq(1).find('.comment').length).toBe(0);
+
+            expect(this.view.$('li .comments .hasMore')).toContainTranslation("search.comments_more", {count: 1});
+
+            expect(this.view.$('li .comments').eq(0).find('.comment .comment_type').eq(0)).toContainTranslation("activity_stream.comment");
+            expect(this.view.$('li .comments').eq(0).find('.comment .comment_type').eq(1)).toContainTranslation("activity_stream.comment");
+            expect(this.view.$('li .comments').eq(0).find('.comment .comment_type').eq(2)).toContainTranslation("insight.title");
+
+            expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(0).html()).toContain(this.view.collection.models[0].get("comments")[0].content);
+            expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(1).html()).toContain(this.view.collection.models[0].get("comments")[1].content);
+            expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(2).html()).toContain(this.view.collection.models[0].get("comments")[2].content);
+        });
+    });
 });

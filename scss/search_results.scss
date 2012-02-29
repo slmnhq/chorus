@@ -28,7 +28,7 @@
         }
 
         img {
-            vertical-align: middle;
+            vertical-align: top;
         }
 
         .description {
@@ -53,6 +53,26 @@
                     line-height: 12px;
                     font-weight: $semibold;
                     vertical-align: baseline;
+                }
+            }
+        }
+
+        .comments {
+            @include font-content-details;
+
+            .comment {
+                padding: 3px 0;
+
+                .comment_type {
+                    padding-right: 5px;
+                }
+
+                .comment_content {
+                    @include font-normal-alpha;
+
+                    em {
+                        background: yellow;
+                    }
                 }
             }
         }
