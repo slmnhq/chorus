@@ -42,7 +42,7 @@
             }
 
             .found_in_workspace {
-                padding-top: 5px;
+                padding: 5px 0;
                 font-size: 12px;
                 color: $color-text2;
                 line-height: 12px;
@@ -57,8 +57,9 @@
             }
         }
 
-        .comments {
+        .comments, .moreComments {
             @include font-content-details;
+            margin: 0;
 
             .comment {
                 padding: 3px 0;

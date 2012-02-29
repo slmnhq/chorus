@@ -112,7 +112,7 @@ describe("chorus.views.SearchWorkfileList", function() {
             expect(this.view.$('li .comments').eq(0).find('.comment').length).toBe(3);
             expect(this.view.$('li .comments').eq(1).find('.comment').length).toBe(0);
 
-            expect(this.view.$('li .comments .hasMore')).toContainTranslation("search.comments_more", {count: 1});
+            expect(this.view.$('li .comments').eq(0).find('.hasMore a.hasMoreLink')).toContainTranslation("search.comments_more", {count: 1});
 
             expect(this.view.$('li .comments').eq(0).find('.comment .comment_type').eq(0)).toContainTranslation("activity_stream.comment");
             expect(this.view.$('li .comments').eq(0).find('.comment .comment_type').eq(1)).toContainTranslation("activity_stream.comment");
@@ -122,5 +122,23 @@ describe("chorus.views.SearchWorkfileList", function() {
             expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(1).html()).toContain(this.view.collection.models[0].get("comments")[1].content);
             expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(2).html()).toContain(this.view.collection.models[0].get("comments")[2].content);
         });
+
+        it("shows the rest of the comments/notes/insights when the user clicks the link", function() {
+            expect(this.view.$('li').eq(0).find('.moreComments')).toHaveClass("hidden");
+
+            this.view.$('li .comments').eq(0).find('.hasMore a.hasMoreLink').click();
+            expect(this.view.$('li .comments').eq(0).find('.hasMore a.hasMoreLink')).toHaveClass("hidden");
+
+            expect(this.view.$('li').eq(0).find('.moreComments')).not.toHaveClass("hidden");
+        });
+
+        it("hides the rest of the comments/notes/insights when the user clicks the 'less' link", function() {
+            this.view.$('li .comments').eq(0).find('.hasMore a.hasMoreLink').click();
+            this.view.$('li .comments').eq(0).find('a.lessComments').click();
+
+            expect(this.view.$('li').eq(0).find('.moreComments')).not.toHaveClass("hidden");
+            expect(this.view.$('li .comments').eq(0).find('.hasMore a.hasMoreLink')).toHaveClass("hidden");
+        });
+
     });
 });
