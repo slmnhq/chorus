@@ -82,6 +82,46 @@ $header-item-spacing: 2*$padding-x;
         }
     }
 
+    .type_ahead_result {
+        position: absolute;
+        top: 38px;
+        left: 327px;
+        right: $sidebar-width + 10px;
+        background: white;
+        border: 1px solid $type-ahead-result-border-color;
+        padding: 1px 10px 5px;
+        line-height: 16px;
+        vertical-align: middle;
+
+        ul li {
+            position: relative;
+            padding: 2px 0;
+            a {
+                @include font-menu;
+                display: inline-block;
+                line-height: 16px;
+                
+                em {
+                    @include results-console;
+                    background: yellow;
+                }
+                
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+
+            .type {
+                display: inline-block;
+                @include results-console-message;
+                position: absolute;
+                right: 0;
+                top: 5px;
+                text-align: right;
+            }
+        }
+    }
+
     .right {
         position: relative;
         float: right;
