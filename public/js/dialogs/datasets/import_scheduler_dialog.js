@@ -78,6 +78,10 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         }
 
         this.$("select[name='toTable']").val(model.get("toTable"));
+        if (model.get("sampleCount")) {
+            this.$("input[name='limit_num_rows']").attr("checked", "checked");
+            this.$("input[name='rowLimit']").val(model.get("sampleCount"));
+        }
     },
 
     resourcesLoaded: function() {

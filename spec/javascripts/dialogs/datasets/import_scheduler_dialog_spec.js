@@ -188,6 +188,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
             this.import = fixtures.datasetImport({
                 id: '12',
                 truncate: true,
+                sampleCount: 200,
                 scheduleInfo: {
                     startTime: "2013-02-21 13:30:00.0",
                     endTime: "2013-05-27",
@@ -241,6 +242,11 @@ describe("chorus.dialogs.ImportScheduler", function() {
             it("pre-populates the destination table and truncation fields with the import's settings", function() {
                 expect(this.dialog.$("select[name='toTable']").val()).toBe("my_table");
                 expect(this.dialog.$(".truncate")).toBeChecked();
+            });
+
+            it("pre-populates the row limit", function() {
+                expect(this.dialog.$("input[name='limit_num_rows']")).toBeChecked();
+                expect(this.dialog.$("input[name='rowLimit']").val()).toBe("200");
             });
         });
     });
