@@ -19,11 +19,11 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         });
         this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv, datasetId: "dat-id"});
         this.columns = [
-            {name: "col1", typeCategory: "WHOLE_NUMBER"},
-            {name: "col2", typeCategory: "STRING"},
-            {name: "col3", typeCategory: "WHOLE_NUMBER"},
-            {name: "col4", typeCategory: "WHOLE_NUMBER"},
-            {name: "col5", typeCategory: "WHOLE_NUMBER"}
+            {name: "col1", typeCategory: "WHOLE_NUMBER", ordinalPosition: "3"},
+            {name: "col2", typeCategory: "STRING", ordinalPosition: "4"},
+            {name: "col3", typeCategory: "WHOLE_NUMBER", ordinalPosition: "1"},
+            {name: "col4", typeCategory: "WHOLE_NUMBER", ordinalPosition: "2"},
+            {name: "col5", typeCategory: "WHOLE_NUMBER", ordinalPosition: "5"}
         ]
         this.dataset = fixtures.datasetSandboxTable({
             id: "dat-id",
@@ -33,7 +33,6 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         this.server.completeFetchFor(this.dataset);
         this.qtip = stubQtip();
         stubDefer();
-        $('#jasmine_content').append(this.dialog.el);
         this.dialog.render();
     });
 
@@ -45,13 +44,13 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         expect(this.dialog.$('button.submit')).toContainTranslation("dataset.import.table.submit");
     });
 
+    it("has the import button disabled by default", function() {
+        expect(this.dialog.$('button.submit')).toBeDisabled();
+    })
+
     it("has comma as the default separator", function() {
         expect(this.dialog.$('input[name=delimiter]:checked').val()).toBe(',');
     });
-
-    xit("fetches the dataset columns", function() {
-        expect(this.server.lastFetchFor(this.dataset)).toBeDefined();
-    })
 
     describe("click the 'tab' separator", hasRightSeparator('\t'));
     describe("click the 'comma' separator", hasRightSeparator(','));
@@ -181,7 +180,6 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             expect(this.dialog.$(".data_table .thead .column_mapping .th").length).toEqual(5);
         })
 
-
         it("has the right number of data columns", function() {
             expect(this.dialog.$(".data_table .tbody .column").length).toEqual(5);
         })
@@ -258,6 +256,10 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
                 it("updates the progress tracker", function() {
                     expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 1, total: 5});
+                })
+
+                it("keeps the import button disabled", function() {
+                    expect(this.dialog.$('button.submit')).toBeDisabled();
                 })
 
                 context("choosing the same destination column again", function() {
@@ -409,6 +411,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     describe("scrolling the data", function() {
         beforeEach(function() {
             spyOn(this.dialog, "adjustHeaderPosition").andCallThrough();
+            $('#jasmine_content').append(this.dialog.el);
             this.dialog.render();
             this.dialog.$(".tbody").trigger("scroll");
         });
@@ -430,75 +433,93 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         })
     })
 
-    describe("clicking the import button", function() {
+    describe("mapping all columns", function() {
         beforeEach(function() {
             spyOn(this.dialog, "closeModal");
             this.expectedColumnsMap = []
             for (var i = 0; i < 5; i++) {
                 this.dialog.$(".column_mapping .map:eq(" + i + ")").click();
-                this.qtip.find(".qtip:last .ui-tooltip-content li:eq(" + (4-i) + ") a").click();
-                this.expectedColumnsMap.push({sourceOrder: (i+1), targetOrder: (5-i)})
+                this.qtip.find(".qtip:last .ui-tooltip-content li:eq(" + (i) + ") a").click();
+                this.expectedColumnsMap.push({sourceOrder: (i + 1), targetOrder: this.columns[i].ordinalPosition})
             }
-
-            this.dialog.$("button.submit").click();
         });
 
-        it("starts the spinner", function() {
-            expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
-            expect(this.dialog.$("button.submit").text().trim()).toMatchTranslation("dataset.import.importing");
-        });
-
-        it("imports the file", function() {
-            expect(this.server.lastCreate().url).toBe(this.dialog.csv.url());
-            var params = this.server.lastCreate().params();
-            expect(params.fileName).toBe(this.dialog.csv.get("fileName"));
-            expect(params.toTable).toBe("existingTable");
-            expect(params.delimiter).toBe(",");
-            expect(params.type).toBe("existingTable");
-            expect(params.hasHeader).toBe('true');
-            expect(params.truncate).toBe('true');
-            expect(JSON.parse(params.columnsMap)).toEqual(this.expectedColumnsMap);
-
-        });
-
-        context("when the post to import responds with success", function() {
-            beforeEach(function() {
-                spyOn(chorus, 'toast');
-                spyOn(chorus.router, "navigate");
-                spyOn(chorus.PageEvents, 'broadcast');
-                this.server.lastCreateFor(this.dialog.csv).succeed();
-            });
-
-            it("closes the dialog and displays a toast", function() {
-                expect(this.dialog.closeModal).toHaveBeenCalled();
-                expect(chorus.toast).toHaveBeenCalledWith("dataset.import.started");
-            });
-
-            it("triggers csv_import:started", function() {
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("csv_import:started");
-            });
-
-            it("should navigate to the destination sandbox table", function() {
-                expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.dataset.showUrl(), true)
-            });
+        it("enables the import button", function() {
+            expect(this.dialog.$('button.submit')).toBeEnabled();
         })
 
-        context("when the import fails", function() {
+        describe("clicking the import button", function() {
             beforeEach(function() {
-                this.server.lastCreateFor(this.dialog.csv).fail([
-                    {message: "oops"}
-                ]);
+                this.dialog.$("button.submit").click();
             });
 
-            it("displays the error", function() {
-                expect(this.dialog.$(".errors")).toContainText("oops");
+            it("starts the spinner", function() {
+                expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+                expect(this.dialog.$("button.submit").text().trim()).toMatchTranslation("dataset.import.importing");
             });
 
-            it("re-enables the submit button", function() {
-                expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+            it("imports the file", function() {
+                expect(this.server.lastCreate().url).toBe(this.dialog.csv.url());
+                var params = this.server.lastCreate().params();
+                expect(params.fileName).toBe(this.dialog.csv.get("fileName"));
+                expect(params.toTable).toBe("existingTable");
+                expect(params.delimiter).toBe(",");
+                expect(params.type).toBe("existingTable");
+                expect(params.hasHeader).toBe('true');
+                expect(params.truncate).toBe('true');
+                expect(JSON.parse(params.columnsMap)).toEqual(this.expectedColumnsMap);
+
+            });
+
+            context("when the post to import responds with success", function() {
+                beforeEach(function() {
+                    spyOn(chorus, 'toast');
+                    spyOn(chorus.router, "navigate");
+                    spyOn(chorus.PageEvents, 'broadcast');
+                    this.server.lastCreateFor(this.dialog.csv).succeed();
+                });
+
+                it("closes the dialog and displays a toast", function() {
+                    expect(this.dialog.closeModal).toHaveBeenCalled();
+                    expect(chorus.toast).toHaveBeenCalledWith("dataset.import.started");
+                });
+
+                it("triggers csv_import:started", function() {
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("csv_import:started");
+                });
+
+                it("should navigate to the destination sandbox table", function() {
+                    expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.dataset.showUrl(), true)
+                });
+            })
+
+            context("when the import fails", function() {
+                beforeEach(function() {
+                    this.server.lastCreateFor(this.dialog.csv).fail([
+                        {message: "oops"}
+                    ]);
+                });
+
+                it("displays the error", function() {
+                    expect(this.dialog.$(".errors")).toContainText("oops");
+                });
+
+                it("re-enables the submit button", function() {
+                    expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                })
             })
         })
-    })
+
+        describe("and then double mapping a destination column", function() {
+            beforeEach(function() {
+                this.dialog.$(".column_mapping .map:eq(0)").click();
+                this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) a").click();
+            })
+            it("disables the import button", function() {
+                expect(this.dialog.$('button.submit')).toBeDisabled();
+            })
+        })
+    });
 
     describe("more source columns than destination columns", function() {
         beforeEach(function() {
@@ -509,7 +530,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         it("displays error message", function() {
             expect(this.dialog.$(".errors").text()).toContainTranslation("dataset.import.table.too_many_source_columns");
         });
-        
+
         context("and then selecting a column", function() {
             beforeEach(function() {
                 this.dialog.$(".column_mapping .map:eq(1)").click();

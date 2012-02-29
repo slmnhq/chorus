@@ -254,6 +254,9 @@
 }
 
 .table_import_csv.qtip {
+    max-height: 500px;
+    overflow: auto;
+
     .check_wrapper {
         display: inline-block;
         width: 10px;

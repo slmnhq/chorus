@@ -51,7 +51,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         this.handleScrolling();
         this.cleanUpQtip();
 
-        if(this.dataset.loaded){
+        if (this.dataset.loaded) {
             this.validateColumns();
         }
 
@@ -82,6 +82,11 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         } else {
             self.$("input#delimiter_other").attr("checked", "true");
         }
+
+        var invalidMapping = _.any(this.destinations, function(destination) {
+            return destination.frequency != 1;
+        });
+        this.$("button.submit").attr("disabled", invalidMapping);
     },
 
     destinationColumnSelected: function(e, api) {
@@ -137,9 +142,13 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         var self = this;
 
         var columnData = _.map(this.destinations, function(destination, i) {
+            var column = _.find(self.dataset.get("columnNames"), function(column) {
+                return column.name === destination.name;
+            });
+
             return {
-                sourceOrder: i+1,
-                targetOrder: _.indexOf(_.pluck(self.dataset.get("columnNames"), "name"), destination.name)+1
+                sourceOrder: i + 1,
+                targetOrder: column ? column.ordinalPosition : 0
             }
         })
         this.csv.set({
@@ -232,11 +241,14 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     validateColumns: function() {
         var sourceColumnsNum = this.csv.columnOrientedData().length;
         var destinationColumnsNum = this.dataset.get("columnNames").length
-        if( destinationColumnsNum < sourceColumnsNum) {
-            this.resource.serverErrors = [{ message: t("dataset.import.table.too_many_source_columns")}];
+        if (destinationColumnsNum < sourceColumnsNum) {
+            this.resource.serverErrors = [
+                { message: t("dataset.import.table.too_many_source_columns")}
+            ];
             this.resource.trigger("validationFailed");
         } else {
             this.resource.serverErrors = undefined;
         }
     }
-});
+})
+;
