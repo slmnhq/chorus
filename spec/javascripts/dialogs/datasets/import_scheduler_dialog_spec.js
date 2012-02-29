@@ -175,6 +175,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                             expect(params.sampleCount).toBe("123");
                             expect(params.scheduleStartTime).toBe("2012-02-29 12:09:00.0");
                             expect(params.scheduleEndTime).toBe("2012-03-21")
+                            expect(params.scheduleDays).toBe("1:2");
                         });
                     });
                 });

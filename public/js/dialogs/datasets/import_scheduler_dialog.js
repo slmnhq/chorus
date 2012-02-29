@@ -156,6 +156,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         if ($enabledFieldSet.find("input:checkbox[name='schedule']").prop("checked")) {
             _.extend(updates, this.scheduleView.fieldValues());
             updates.importType = "schedule"
+            updates.scheduleDays = "1:2";
         } else {
             updates.importType = "oneTime"
         }
