@@ -167,8 +167,18 @@ describe("chorus.presenters.Activity", function() {
     context(".INSIGHT_CREATED", function() {
         beforeEach(function() {
             this.model = fixtures.activities.INSIGHT_CREATED();
-            this.workspace = this.model.workspace();
             this.presenter = new chorus.presenters.Activity(this.model);
+        });
+
+        it("should have the correct entityType", function() {
+            expect(this.presenter.entityType).toBe("comment");
+        });
+    })
+
+    context(".RECEIVE_NOTE", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.RECEIVE_NOTE();
+            this.presenter = new chorus.presenters.Activity(this.model, {isNotification: true});
         });
 
         it("should have the correct entityType", function() {
@@ -637,6 +647,17 @@ describe("chorus.presenters.Activity", function() {
             });
         });
 
+        describe("RECEIVE_NOTE", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.RECEIVE_NOTE();
+            });
+
+            it("uses the NOTE translation keys", function() {
+                var presenter = new chorus.presenters.Activity(this.model, {isNotification: true});
+                expect(presenter._impl.headerTranslationKey()).toBe(this.keyPrefix + "NOTE.notification.without_workspace");
+            });
+        });
+
         describe("#headerTranslationKey with workspace_created", function() {
             beforeEach(function() {
                 this.model = fixtures.activities.WORKSPACE_CREATED();
@@ -661,7 +682,7 @@ describe("chorus.presenters.Activity", function() {
 
             it("uses the notification message when the 'isNotification' option is passed", function() {
                 this.presenter = new chorus.presenters.Activity(this.model, {isNotification: true});
-                expect(this.presenter._impl.headerTranslationKey()).toEqual("activity_stream.header.html.NOTE.notification");
+                expect(this.presenter._impl.headerTranslationKey()).toEqual("activity_stream.header.html.NOTE.notification.without_workspace");
             });
         });
 
@@ -688,7 +709,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should return the correct notification translation key", function() {
-                expect(this.presenter._impl.headerTranslationKey()).toEqual("activity_stream.header.html.BE_MEMBER.notification");
+                expect(this.presenter._impl.headerTranslationKey()).toEqual("activity_stream.header.html.BE_MEMBER.notification.without_workspace");
             });
         });
 

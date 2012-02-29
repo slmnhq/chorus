@@ -1083,6 +1083,17 @@ beforeEach(function() {
                 })
             },
 
+            "RECEIVE_NOTE": function() {
+                return new chorus.models.Activity(
+                    _.extend(this.NOTE_ON_WORKSPACE(), {
+                        type: "RECEIVE_NOTE",
+                        isInsight: true,
+                        isPublished: false,
+                        promotionActioner: fixtures.authorJson(),
+                        promotionTime: "2012-02-29 09:38:04"
+                    }));
+            },
+
             "INSIGHT_CREATED": function() {
                 return new chorus.models.Activity(
                     _.extend(this.NOTE_ON_DATASET_JSON(), {

@@ -30,7 +30,8 @@
 
             var activityTypeToEntityType = {
                 "NOTE" : "comment",
-                "INSIGHT_CREATED" : "comment"
+                "INSIGHT_CREATED" : "comment",
+                "RECEIVE_NOTE" : "comment"
             }
             var entityType = activityTypeToEntityType[this.activityType] || "activitystream";
 
@@ -103,28 +104,26 @@
         headerTranslationKey: function() {
             var prefix = 'activity_stream.header.html.';
             var type = this.model.get("type");
-            if (type == "INSIGHT_CREATED") type = "NOTE";
+            if (_.include(["RECEIVE_NOTE", "INSIGHT_CREATED"], type)) type = "NOTE";
             if (!I18n.lookup(prefix + type)) type = 'DEFAULT';
             prefix = prefix + type + '.';
 
-            var style;
-            if (this.options.isNotification) {
-                style = "notification";
-            } else {
-                var styles = _.flatten([
-                    this.options.displayStyle,
-                    this.workspace && (this.workspace != this.noteObject) ? 'default' : 'without_workspace'
-                ]);
-                style = _.find(styles, function(potentialStyle) {
-                    return I18n.lookup(prefix + potentialStyle);
-                });
-            }
+            if (this.options.isNotification) prefix += "notification.";
+
+            var styles = _.flatten([
+                this.options.displayStyle,
+                this.workspace && (this.workspace != this.noteObject) ? 'default' : 'without_workspace'
+            ]);
+            var style = _.find(styles, function(potentialStyle) {
+                return I18n.lookup(prefix + potentialStyle);
+            });
 
             return prefix + style;
         },
 
         NOTE: showNote,
         INSIGHT_CREATED: showNote,
+        RECEIVE_NOTE: showNote,
 
         WORKSPACE_CREATED: workspaceIsObject,
         WORKSPACE_MAKE_PRIVATE: workspaceIsObject,
