@@ -9,7 +9,8 @@ chorus.views.Header = chorus.views.Base.extend({
     },
 
     subviews: {
-        ".popup_notifications ul": "notificationList"
+        ".popup_notifications ul": "notificationList",
+        ".type_ahead_result": "typeAheadView"
     },
 
     setup:function () {
@@ -18,6 +19,8 @@ chorus.views.Header = chorus.views.Base.extend({
         this.session = chorus.session;
         this.notifications = new chorus.collections.NotificationSet();
         this.requiredResources.add([this.session, this.notifications]);
+
+        this.typeAheadView = new chorus.views.TypeAheadSearch();
 
         this.notificationList = new chorus.views.ActivityList({
             collection: new chorus.collections.ActivitySet(),
@@ -32,6 +35,16 @@ chorus.views.Header = chorus.views.Base.extend({
         this.notifications.fetchAll();
 
         chorus.PageEvents.subscribe("notification:deleted", this.refreshNotifications, this);
+    },
+
+    postRender: function() {
+        this.$(".search input").unbind("textchange").bind("textchange", _.bind(this.displayResult, this));
+    },
+
+    displayResult: function() {
+        var query = this.$(".search input").val();
+        this.typeAheadView.searchFor(query);
+        this.$(".type_ahead_result").toggleClass("hidden", query.length === 0);
     },
 
     beforeNavigateAway: function() {

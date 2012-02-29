@@ -9,7 +9,8 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
 
     context: function() {
         var ctx = {query: this.model.get("query")};
-        ctx.results = _.map(_.first(this.model.get("typeAhead").docs, 5), function(result) {
+        var docs = this.model.has("typeAhead")? _.first(this.model.get("typeAhead").docs, 5) : [];
+        ctx.results = _.map(docs, function(result) {
             var name, url;
 
             switch (result.entityType) {

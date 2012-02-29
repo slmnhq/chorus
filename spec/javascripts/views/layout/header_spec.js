@@ -61,20 +61,38 @@ describe("chorus.views.Header", function() {
             expect(this.view.$(".logo a").attr("href")).toBe("#/");
         });
 
-        it("should have a search field", function() {
-            expect(this.view.$(".search input[type=text]")).toExist();
-        });
-
-        it("should have a link to the dashboard", function() {
-            expect(this.view.$(".logo a").attr("href")).toBe("#/");
-        });
-
         it("clears requiredResources", function() {
             expect(this.view.requiredResources.length).toBe(0);
         })
 
         it("inserts the number of notifications into the markup", function() {
             expect(this.view.$(".notifications").text().trim()).toBe("2")
+        })
+
+        it("should have a hidden type ahead search view", function() {
+            expect(this.view.$(this.view.typeAheadView.el)).toExist();
+            expect($(this.view.typeAheadView.el)).toHaveClass("hidden");
+        });
+
+        describe("typing in the search bar", function() {
+            beforeEach(function() {
+                spyOn(this.view.typeAheadView, "searchFor");
+                this.view.$(".search input:text").val("test").trigger("textchange");
+            });
+
+            it("should display the type ahead search view", function() {
+                expect(this.view.$(this.view.typeAheadView.el)).toExist();
+                expect($(this.view.typeAheadView.el)).not.toHaveClass("hidden");
+            });
+
+            it("sets the query in the typeAhead view", function() {
+                expect(this.view.typeAheadView.searchFor).toHaveBeenCalledWith("test");
+            });
+
+            it("hides the search results if the input is empty", function() {
+                this.view.$(".search input:text").val("").trigger("textchange");
+                expect($(this.view.typeAheadView.el)).toHaveClass("hidden");
+            })
         })
 
         context("when there are notifications", function() {
