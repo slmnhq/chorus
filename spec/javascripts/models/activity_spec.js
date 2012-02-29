@@ -58,7 +58,7 @@ describe("chorus.models.Activity", function() {
         });
 
         it("posts to the comment insight url", function() {
-            expect(this.server.lastCreate().url).toBe("/edc/commentinsight/"+ this.model.get("id") + "/promote");
+            expect(this.server.lastCreate().url).toBe("/edc/commentinsight/" + this.model.get("id") + "/promote");
         });
 
         it("calls the success function", function() {
@@ -70,14 +70,14 @@ describe("chorus.models.Activity", function() {
     describe("#publish", function() {
         it("posts to the comment insight url with the publish action", function() {
             this.model.publish();
-            expect(this.server.lastCreate().url).toBe("/edc/commentinsight/"+ this.model.get("id") + "/publish");
+            expect(this.server.lastCreate().url).toBe("/edc/commentinsight/" + this.model.get("id") + "/publish");
         });
     });
 
     describe("#unpublish", function() {
         it("posts to the comment insight url with the unpublish action", function() {
             this.model.unpublish();
-            expect(this.server.lastCreate().url).toBe("/edc/commentinsight/"+ this.model.get("id") + "/unpublish");
+            expect(this.server.lastCreate().url).toBe("/edc/commentinsight/" + this.model.get("id") + "/unpublish");
         });
     });
 
@@ -94,29 +94,41 @@ describe("chorus.models.Activity", function() {
     });
 
     describe("#isPublished", function() {
-       it("returns true for insights that are published", function() {
-           this.model.set({isPublished: true});
-           expect(this.model.isPublished()).toBeTruthy();
-       });
+        it("returns true for insights that are published", function() {
+            this.model.set({isPublished: true});
+            expect(this.model.isPublished()).toBeTruthy();
+        });
 
         it("returns false for insights that are not published", function() {
-           this.model.set({isPublished: false});
-           expect(this.model.isPublished()).toBeFalsy();
-       });
+            this.model.set({isPublished: false});
+            expect(this.model.isPublished()).toBeFalsy();
+        });
 
         it("returns false for non-insights", function() {
-           this.model.set({isPublished: undefined});
-           expect(this.model.isPublished()).toBeFalsy();
-       });
+            this.model.set({isPublished: undefined});
+            expect(this.model.isPublished()).toBeFalsy();
+        });
     });
 
     describe("#author", function() {
-        it("creates a user", function() {
-            expect(this.model.author()).toBeA(chorus.models.User);
+        context("when author information is present", function() {
+            it("creates a user", function() {
+                expect(this.model.author()).toBeA(chorus.models.User);
+            });
+
+            it("returns the same instance when called multiple times", function() {
+                expect(this.model.author()).toBe(this.model.author());
+            });
         });
 
-        it("returns the same instance when called multiple times", function() {
-            expect(this.model.author()).toBe(this.model.author());
+        context("when author information is not present", function() {
+            beforeEach(function() {
+                this.model.unset("author");
+            });
+
+            it("returns undefined", function() {
+                expect(this.model.author()).toBeUndefined();
+            });
         });
     });
 
@@ -248,8 +260,8 @@ describe("chorus.models.Activity", function() {
                     this.model = fixtures.activity({
                         workspace: fixtures.workspaceJson(),
                         workfile: {
-                            id : 10001,
-                            name : "my_workfile"
+                            id: 10001,
+                            name: "my_workfile"
                         },
                         version: "5"
                     })
@@ -284,8 +296,8 @@ describe("chorus.models.Activity", function() {
                 beforeEach(function() {
                     this.model = fixtures.activity({
                         workfile: {
-                            id : 10001,
-                            name : "my_workfile"
+                            id: 10001,
+                            name: "my_workfile"
                         },
                         version: "5"
                     })
@@ -335,8 +347,8 @@ describe("chorus.models.Activity", function() {
                 comments: [
                     {
                         text: "I'm cold.'",
-                        author : fixtures.authorJson(),
-                        timestamp : "2011-12-15 12:34:56"
+                        author: fixtures.authorJson(),
+                        timestamp: "2011-12-15 12:34:56"
                     }
                 ]
             });

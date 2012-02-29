@@ -748,6 +748,19 @@ describe("chorus.presenters.Activity", function() {
         }
     });
 
+    context("when no author information is present", function() {
+        beforeEach(function() {
+            this.model.unset("author");
+            this.presenter = new chorus.presenters.Activity(this.model);
+        });
+
+        it("does not set the author-related keys", function() {
+            expect(this.presenter.author).toBeUndefined(); 
+            expect(this.presenter.iconSrc).toBeUndefined(); 
+            expect(this.presenter.iconHref).toBeUndefined(); 
+            expect(this.presenter.header.authorLink).toBeUndefined(); 
+        });
+    });
     function itShouldHaveTheAuthorsIconAndUrl() {
         it("should have the author's icon", function() {
             expect(this.presenter.iconSrc).toBe(this.model.author().imageUrl());

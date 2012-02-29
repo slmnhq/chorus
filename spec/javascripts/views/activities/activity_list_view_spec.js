@@ -77,7 +77,12 @@ describe("chorus.views.ActivityList", function() {
             context("when there are three or more comments", function() {
                 beforeEach(function() {
                     var comments = this.collection.at(0).comments();
-                    comments.add(new chorus.models.Comment({ text: 'I love you all' }));
+                    comments.add(new chorus.models.Comment({
+                        author: {
+                            id: 10101
+                        },
+                        text: 'I love you all'
+                    }));
                     this.view.render();
                 })
 

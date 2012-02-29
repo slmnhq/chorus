@@ -33,7 +33,8 @@
                 "INSIGHT_CREATED" : "comment"
             }
             var entityType = activityTypeToEntityType[this.activityType] || "activitystream";
-            return {
+
+            var obj = {
                 body: model.get("text"),
                 entityTitle: entityTitles[this.activityType] || entityTitles["DEFAULT"],
                 entityType: entityType,
@@ -41,14 +42,19 @@
                 objectUrl: "/NEED/OBJECT/URL/FOR/TYPE/" + this.activityType,
                 workspaceName: this.workspace ? this.workspace.get("name") : "no workspace name for activity type: " + this.activityType,
                 workspaceUrl: this.workspace ? this.workspace.showUrl() : "no workspace URL for activity type: " + this.activityType,
-                iconSrc: this.author.imageUrl(),
-                iconHref: this.author.showUrl(),
                 iconClass: 'profile',
-                isOwner: this.author.id == chorus.session.user().id,
                 promoterLink: model.get("promotionActioner") ? chorus.helpers.userProfileLink(new chorus.models.User(model.get("promotionActioner"))) : null,
                 promotionTimestamp: model.get("promotionTime") ? chorus.helpers.relativeTimestamp(model.get("promotionTime")) : null,
                 isNote: model.isNote()
             };
+
+            if (this.author) {
+                obj.iconSrc = this.author.imageUrl();
+                obj.iconHref = this.author.showUrl();
+                obj.isOwner = this.author.id == chorus.session.user().id;
+            }
+
+            return obj;
         },
 
         defaultHeader: function() {
@@ -67,9 +73,12 @@
 
             var header = {
                 type: this.model.get("type"),
-                authorLink: chorus.helpers.linkTo(this.author.showUrl(), this.author.displayName(), { 'class': "author" }),
                 objectLink: chorus.helpers.linkTo(this.presenter.objectUrl, this.presenter.objectName),
                 workspaceLink: chorus.helpers.linkTo(this.presenter.workspaceUrl, this.presenter.workspaceName)
+            }
+
+            if (this.author) {
+                header.authorLink = chorus.helpers.linkTo(this.author.showUrl(), this.author.displayName(), { 'class': "author" })
             }
 
             if (this.noteObject) {
