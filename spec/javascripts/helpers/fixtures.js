@@ -2458,17 +2458,85 @@ beforeEach(function() {
             return new chorus.models.SearchResult(this.searchResultJson(overrides))
         },
 
+        typeAheadSearchResultJson: function(overrides) {
+            return _.extend({
+                "typeAhead": {
+                    "docs": [
+                        {
+                            "id" : "InitialUser",
+                            "isDeleted" : false,
+                            "lastUpdatedStamp" : "2012-02-29 11:05:26",
+                            "admin" : true,
+                            "name" : "edcadmin",
+                            "lastName" : "Admin",
+                            "emailAddress" : "edcadmin@example.com",
+                            "content" : "Cool person",
+                            "firstName" : "<em>EDC</em>",
+                            "entityType" : "user",
+                            "owner" :
+                            {
+
+                            },
+                            "comments" :
+                            [
+
+                            ]
+                        },
+                        {
+                            "id" : "10010",
+                            "isDeleted" : false,
+                            "lastUpdatedStamp" : "2012-02-29 09:36:01",
+                            "fileType" : "SQL",
+                            "name" : "<em>edc</em>_query.sql",
+                            "entityType" : "workfile",
+                            "owner" :
+                            {
+                                "id" : "InitialUser",
+                                "lastName" : "Admin",
+                                "firstName" : "EDC"
+                            },
+                            "modifiedBy" :
+                            {
+                                "id" : "InitialUser",
+                                "lastName" : "Admin",
+                                "firstName" : "EDC"
+                            },
+                            "workspace" :
+                            {
+                                "id" : "10000",
+                                "name" : "ws"
+                            },
+                            "comments" :
+                            [
+
+                            ]
+                        },
+                        {
+                            "id" : "10000",
+                            "isDeleted" : false,
+                            "lastUpdatedStamp" : "2012-02-24 16:08:32",
+                            "isPublic" : false,
+                            "name" : "<em>ws</em>",
+                            "entityType" : "workspace",
+                            "owner" :
+                            {
+                                "id" : "InitialUser",
+                                "lastName" : "Admin",
+                                "firstName" : "EDC"
+                            },
+                            "comments" :
+                            [
+
+                            ]
+                        }
+                    ],
+                    "numFound": 3
+                }
+            }, overrides)
+        },
+
         typeAheadSearchResult: function(overrides) {
-            var normalJson = this.searchResultJson(overrides);
-
-            var newJson = {typeAhead: {docs: [], numFound: 0}}
-
-            _.each(["workfile", "workspace", "dataset", "instance", "user"], function(type){
-                newJson.typeAhead.docs = newJson.typeAhead.docs.concat(normalJson[type].docs);
-                newJson.typeAhead.numFound += normalJson[type].numFound;
-            });
-
-            return new chorus.models.TypeAheadSearchResult(newJson);
+            return new chorus.models.TypeAheadSearchResult(fixtures.typeAheadSearchResultJson(overrides));
         }
     })
     ;
