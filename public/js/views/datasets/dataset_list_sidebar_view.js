@@ -113,6 +113,7 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
 
     postRender: function() {
         this.$("a.create_schedule, a.edit_schedule, a.import_now").data("dataset", this.resource);
+        this.$("a.edit_schedule").data("import", this.importConfiguration);
         this._super("postRender");
     },
 

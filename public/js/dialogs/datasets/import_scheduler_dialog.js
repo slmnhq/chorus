@@ -18,7 +18,12 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     makeModel: function() {
         this.dataset = this.options.launchElement.data("dataset");
         var workspaceId = this.dataset.get("workspace").id;
-        this.model = new chorus.models.DatasetImport({datasetId: this.dataset.id, workspaceId: workspaceId});
+
+        if (this.options.launchElement.data("import")) {
+            this.model = this.options.launchElement.data("import");
+        } else {
+            this.model = new chorus.models.DatasetImport({datasetId: this.dataset.id, workspaceId: workspaceId});
+        }
 
         this.sandboxTables = new chorus.collections.DatasetSet([], {workspaceId: workspaceId, type: "SANDBOX_TABLE"});
         this.requiredResources.push(this.sandboxTables);
@@ -37,12 +42,16 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
     setup: function() {
         this.scheduleView = new chorus.views.ImportSchedule({enable: false});
+        this.import = this.options.launchElement.data("import");
 
-        if (this.options.launchElement.data("useSchedule")) {
+        if (this.options.launchElement.data("createSchedule")) {
             this.title = t("import.title_schedule");
             this.submitText = t("import.begin_schedule")
 
             this.showSchedule = true;
+        } else if (this.model.has("id")) {
+            this.title = t("import.title_edit_schedule");
+            this.submitText = t("actions.save_changes");
         } else {
             this.title = t("import.title");
             this.submitText = t("import.begin");

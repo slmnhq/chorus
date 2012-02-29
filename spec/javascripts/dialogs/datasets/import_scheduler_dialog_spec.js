@@ -5,9 +5,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
         this.launchElement.data("dataset", this.dataset);
     });
 
-    describe("importing on a schedule", function() {
+    describe("creating a new schedule", function() {
         beforeEach(function() {
-            this.launchElement.attr("data-use-schedule", "true");
+            this.launchElement.attr("data-create-schedule", "true");
             this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
             this.dialog.render();
         });
@@ -105,6 +105,32 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         });
                     });
                 });
+            });
+        });
+    });
+
+    describe("editing an existing schedule", function() {
+        beforeEach(function() {
+            this.import = fixtures.datasetImport({ id: '12' });
+            this.launchElement.data("import", this.import);
+            this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+            this.dialog.render();
+        });
+
+        describe("when the sandbox table fetch completes", function() {
+            beforeEach(function() {
+                this.server.completeFetchAllFor(this.dialog.sandboxTables, [
+                    fixtures.datasetSandboxTable(),
+                    fixtures.datasetSandboxTable()
+                ]);
+            });
+
+            it("has the right title", function() {
+                expect(this.dialog.title).toMatchTranslation("import.title_edit_schedule");
+            });
+
+            it("has a submit button with the right text", function() {
+                expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.save_changes");
             });
         });
     });

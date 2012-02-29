@@ -86,7 +86,7 @@ describe("chorus.views.DatasetListSidebar", function() {
 
                             it("has a 'create import schedule' link", function() {
                                 expect(this.view.$(".actions .create_schedule")).toContainTranslation("actions.create_schedule");
-                                expect(this.view.$("a.create_schedule[data-use-schedule=true]")).toExist();
+                                expect(this.view.$("a.create_schedule[data-create-schedule=true]")).toExist();
                             });
 
                             it("should have the dataset attached as data-dataset", function() {
@@ -110,7 +110,12 @@ describe("chorus.views.DatasetListSidebar", function() {
 
                             it("has an 'edit import schedule' link", function() {
                                 expect(this.view.$(".actions .edit_schedule")).toContainTranslation("actions.edit_schedule");
-                                expect(this.view.$("a.edit_schedule[data-use-schedule=true]")).toExist();
+                                expect(this.view.$("a.edit_schedule")).toExist();
+                            });
+
+                            it("attaches the import object to the 'edit schedule' link", function() {
+                                expect(this.view.$("a.edit_schedule").data("import")).toBeA(chorus.models.DatasetImport);
+                                expect(this.view.$("a.edit_schedule").data("import").get("datasetId")).toBe(this.dataset.id);
                             });
 
                             it("should have the dataset attached as data-dataset", function() {
