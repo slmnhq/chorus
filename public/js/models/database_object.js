@@ -2,16 +2,6 @@ chorus.models.DatabaseObject = chorus.models.TabularData.extend({
 
     initialize: function() {
         this._super('initialize', arguments);
-        //TODO: Remove me after https://www.pivotaltracker.com/story/show/25670355 is done.
-        this.bind("change", function() {
-            this.entityId = [
-                this.attributes.instance.id,
-                this.attributes.databaseName,
-                this.attributes.schemaName,
-                this.attributes.objectType,
-                this.attributes.objectName
-            ].join('|');
-        })
     },
 
     urlTemplate: function() {
