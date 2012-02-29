@@ -1,6 +1,8 @@
 describe("chorus.pages.DatabaseObjectShowPage", function() {
     beforeEach(function() {
         this.databaseObject = fixtures.databaseTable();
+        this.databaseObject.get('workspaceUsed').workspaceCount = 1;
+        this.databaseObject.get('workspaceUsed').workspaceList = [fixtures.nestedWorkspaceJson()];
         this.columnSet = this.databaseObject.columns({type: "meta"});
 
         var a = this.databaseObject.attributes
@@ -53,6 +55,9 @@ describe("chorus.pages.DatabaseObjectShowPage", function() {
             this.server.completeFetchFor(this.databaseObject.statistics());
         })
 
+        it("has a custom header with the workspace usage", function() {
+            expect(this.page.$('.content_header .found_in')).toExist();
+        })
 
         it("has a search field in the content details that filters the column list", function() {
             var searchInput = this.page.mainContent.contentDetails.$("input.search"),

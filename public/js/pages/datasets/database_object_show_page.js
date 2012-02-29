@@ -12,6 +12,13 @@
         }
     });
 
+    var headerView = chorus.views.ListHeaderView.extend({
+        postRender: function() {
+            this._super('postRender', arguments);
+            this.$('.menus').after(chorus.helpers.usedInWorkspaces(this.model.get("workspaceUsed")));
+        }
+    })
+
     chorus.pages.DatabaseObjectShowPage = chorus.pages.Base.extend({
         constructorName: "DatabaseObjectShowPage",
         helpId: "databaseObject",
@@ -56,12 +63,12 @@
         columnSetFetched: function() {
             this.columnSet = new chorus.collections.DatabaseColumnSet(this.columnSet.models);
             this.columnSet.loaded = true;
+            var customHeaderView = new headerView({model: this.tabularData, title: this.title(), imageUrl: this.tabularData.iconUrl()});
             this.mainContent = new chorus.views.MainContentList({
                 modelClass: "DatabaseColumn",
                 collection: this.columnSet,
                 persistent: true,
-                title: this.title(),
-                imageUrl: this.tabularData.iconUrl(),
+                contentHeader: customHeaderView,
                 contentDetails: new chorus.views.DatasetContentDetails({ tabularData: this.tabularData, collection: this.columnSet, hideDeriveChorusView: this.hideDeriveChorusView })
             });
 
@@ -102,7 +109,7 @@
             this.mainContent.content.selectMulti = false;
             this.constructSidebarForType(type);
 
-            if(this.secondarySidebar) {
+            if (this.secondarySidebar) {
                 this.secondarySidebar.filters = this.mainContent.contentDetails.filterWizardView;
                 this.secondarySidebar.errorContainer = this.mainContent.contentDetails;
                 this.renderSubview('secondarySidebar');

@@ -1,7 +1,7 @@
 chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
     constructorName: "View",
 
-    initialize:function initialize() {
+    initialize: function initialize() {
         this.bindings = new chorus.BindingGroup(this);
         this.preInitialize.apply(this, arguments);
 
@@ -13,27 +13,27 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
         this.verifyResourcesLoaded(true);
     },
 
-    preInitialize:$.noop,
-    setup:$.noop,
-    postRender:$.noop,
-    bindCallbacks:$.noop,
-    preRender:$.noop,
-    setupSubviews:$.noop,
-    resourcesLoaded:$.noop,
-    displayLoadingSection:$.noop,
-    cleanup:$.noop,
+    preInitialize: $.noop,
+    setup: $.noop,
+    postRender: $.noop,
+    bindCallbacks: $.noop,
+    preRender: $.noop,
+    setupSubviews: $.noop,
+    resourcesLoaded: $.noop,
+    displayLoadingSection: $.noop,
+    cleanup: $.noop,
 
-    beforeNavigateAway:function () {
+    beforeNavigateAway: function() {
         this.unbind();
         this.bindings.removeAll();
         this.requiredResources.cleanUp();
         $(this.el).remove();
     },
 
-    bindHotkeys:function () {
+    bindHotkeys: function() {
         var keydownEventName = "keydown." + this.cid;
-        _.each(this.hotkeys, _.bind(function (eventName, hotkey) {
-            this.bindings.add($(document), keydownEventName, chorus.hotKeyMeta + '+' + hotkey, function (event) {
+        _.each(this.hotkeys, _.bind(function(eventName, hotkey) {
+            this.bindings.add($(document), keydownEventName, chorus.hotKeyMeta + '+' + hotkey, function(event) {
                 chorus.PageEvents.broadcast(eventName, event);
             });
         }, this));
@@ -45,20 +45,20 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
         }
     },
 
-    context:{},
-    subviews:{},
+    context: {},
+    subviews: {},
 
-    _configure:function (options) {
+    _configure: function(options) {
         this._super('_configure', arguments);
 
         this.requiredResources = new chorus.RequiredResources();
-        this.requiredResources.bind('add', function (resource) {
+        this.requiredResources.bind('add', function(resource) {
             resource.bindOnce('loaded', this.verifyResourcesLoaded, this);
         }, this);
         this.requiredResources.reset(options.requiredResources);
     },
 
-    verifyResourcesLoaded:function (preventRender) {
+    verifyResourcesLoaded: function(preventRender) {
         if (this.requiredResources.length == 0) {
             return;
         }
@@ -71,12 +71,12 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
         }
     },
 
-    render:function render() {
+    render: function render() {
         this.preRender();
 
         var evaluatedContext = {};
         if (!this.displayLoadingSection()) {
-            if(!this.requiredResources.allLoaded()) {
+            if (!this.requiredResources.allLoaded()) {
                 return this;
             }
             // The only template rendered when loading section is displayed is the loading section itself, so no context is needed.
@@ -94,25 +94,25 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
         return this;
     },
 
-    renderSubviews:function () {
+    renderSubviews: function() {
         this.setupSubviews();
         var subviews;
         if (this.displayLoadingSection()) {
-            subviews = {".loading_section":"makeLoadingSectionView"};
+            subviews = {".loading_section": "makeLoadingSectionView"};
         } else {
             subviews = this.subviews
         }
 
-        _.each(subviews, _.bind(function (property, selector) {
+        _.each(subviews, _.bind(function(property, selector) {
             this.renderSubview(property, selector)
         }, this));
     },
 
-    renderSubview:function (property, selector) {
+    renderSubview: function(property, selector) {
         var view = this.getSubview(property);
         if (view) {
             if (!selector) {
-                _.each(this.subviews, function (value, key) {
+                _.each(this.subviews, function(value, key) {
                     if (value == property) {
                         selector = key;
                     }
@@ -132,11 +132,11 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
         }
     },
 
-    getSubview:function (property) {
+    getSubview: function(property) {
         return _.isFunction(this[property]) ? this[property]() : this[property];
     },
 
-    renderHelps:function () {
+    renderHelps: function() {
         var classes;
         var helpElements = this.$(".help");
         if (helpElements.length) {
@@ -146,32 +146,32 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
                 classes = "tooltip-help";
             }
         }
-        _.each(helpElements, function (element) {
+        _.each(helpElements, function(element) {
             $(element).qtip({
-                content:$(element).data("text"),
+                content: $(element).data("text"),
                 show: 'mouseover',
                 hide: {
                     delay: 1000,
                     fixed: true,
                     event: 'mouseout'
                 },
-                position:{
+                position: {
                     viewport: $(window),
-                    my:"bottom center",
-                    at:"top center"
+                    my: "bottom center",
+                    at: "top center"
                 },
-                style:{
-                    classes:classes,
-                    tip:{
-                        width:20,
-                        height:13
+                style: {
+                    classes: classes,
+                    tip: {
+                        width: 20,
+                        height: 13
                     }
                 }
             });
         });
     },
 
-    template:function template(context) {
+    template: function template(context) {
         if (this.displayLoadingSection()) {
             return '<div class="loading_section"/>';
         } else {
@@ -179,17 +179,17 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
         }
     },
 
-    makeLoadingSectionView:function () {
+    makeLoadingSectionView: function() {
         var opts = _.extend({}, this.loadingSectionOptions());
         return new chorus.views.LoadingSection(opts);
     },
 
-    loadingSectionOptions:function () {
-        return { delay:125 };
+    loadingSectionOptions: function() {
+        return { delay: 125 };
     },
 
-    setupScrolling:function (selector_or_element, options) {
-        _.defer(_.bind(function () {
+    setupScrolling: function(selector_or_element, options) {
+        _.defer(_.bind(function() {
             var el = this.$(selector_or_element);
 
             if (el.length > 0) {
@@ -204,9 +204,9 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
 
                 if (!alreadyInitialized) {
                     el.addClass("custom_scroll");
-                    el.unbind('hover').hover(function () {
+                    el.unbind('hover').hover(function() {
                         el.find('.jspVerticalBar, .jspHorizontalBar').fadeIn(150)
-                    }, function () {
+                    }, function() {
                         el.find('.jspVerticalBar, .jspHorizontalBar').fadeOut(150)
                     });
 
@@ -217,7 +217,7 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
                     }
 
                     if (this.subviews) {
-                        _.each(this.subviews, _.bind(function (property, selector) {
+                        _.each(this.subviews, _.bind(function(property, selector) {
                             var view = this.getSubview(property);
                             if (view) {
                                 view.bind("rendered", function() { this.recalculateScrolling(el) }, this)
@@ -230,11 +230,11 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
         }, this))
     },
 
-    onMouseWheel:function (event, d) {
+    onMouseWheel: function(event, d) {
         event.preventDefault();
     },
 
-    recalculateScrolling : function(el) {
+    recalculateScrolling: function(el) {
         var elements = el ? [el] : this.$(".custom_scroll");
         _.each(elements, function(el) {
             el = $(el)
@@ -252,18 +252,18 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
 chorus.views.Bare.extend = chorus.classExtend;
 
 chorus.views.Base = chorus.views.Bare.extend({
-    makeModel:$.noop,
-    collectionModelContext:$.noop,
-    additionalContext:function () {
+    makeModel: $.noop,
+    collectionModelContext: $.noop,
+    additionalContext: function() {
         return {}
     },
 
-    preInitialize:function () {
+    preInitialize: function() {
         this.makeModel.apply(this, arguments);
         this.resource = this.model || this.collection;
     },
 
-    bindCallbacks:function () {
+    bindCallbacks: function() {
         if (this.resource) {
             this.bindings.add(this.resource, "saveFailed validationFailed", this.showErrors);
             this.bindings.add(this.resource, "validated", this.clearErrors);
@@ -273,7 +273,7 @@ chorus.views.Base = chorus.views.Bare.extend({
         }
     },
 
-    context:function context() {
+    context: function context() {
         var ctx;
         var self = this;
 
@@ -282,7 +282,7 @@ chorus.views.Base = chorus.views.Bare.extend({
             ctx.resource = this.resource;
             ctx.loaded = this.resource.loaded;
             if (this.collection) {
-                ctx.models = _.map(this.collection.models, function (model) {
+                ctx.models = _.map(this.collection.models, function(model) {
                     return _.extend({model: model}, model.attributes, self.collectionModelContext(model));
                 });
             }
@@ -302,7 +302,7 @@ chorus.views.Base = chorus.views.Bare.extend({
         return result;
     },
 
-    displayLoadingSection:function () {
+    displayLoadingSection: function() {
         if (!this.useLoadingSection) {
             return false;
         }
@@ -313,7 +313,7 @@ chorus.views.Base = chorus.views.Bare.extend({
         }
     },
 
-    showErrors:function (model) {
+    showErrors: function(model) {
         var self = this;
 
         var isModal = $(this.el).closest(".dialog").length;
@@ -323,7 +323,7 @@ chorus.views.Base = chorus.views.Bare.extend({
         if (!model) {
             model = this.resource
         }
-        _.each(model.errors, function (val, key) {
+        _.each(model.errors, function(val, key) {
             var $input = self.$("input[name=" + key + "], form textarea[name=" + key + "]");
             self.markInputAsInvalid($input, val, isModal);
         });
@@ -331,31 +331,31 @@ chorus.views.Base = chorus.views.Bare.extend({
         this.$(".errors").replaceWith(Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context(), Handlebars.helpers, Handlebars.partials));
     },
 
-    markInputAsInvalid : function($input, message, isModal) {
+    markInputAsInvalid: function($input, message, isModal) {
         var classes = isModal ? "tooltip-error tooltip-modal" : "tooltip-error";
         $input.addClass("has_error");
         $input.qtip({
-            content:{
+            content: {
                 text: message
             },
-            show:'mouseover focus',
-            hide:'mouseout blur',
-            style:{
-                classes:classes,
-                tip:{
-                    width:12,
-                    height:12
+            show: 'mouseover focus',
+            hide: 'mouseout blur',
+            style: {
+                classes: classes,
+                tip: {
+                    width: 12,
+                    height: 12
                 }
             },
-            position:{
-                my:"left center",
-                at:"right center",
-                container:this.el
+            position: {
+                my: "left center",
+                at: "right center",
+                container: this.el
             }
         });
     },
 
-    clearErrors:function () {
+    clearErrors: function() {
         this.clearPopupErrors();
         this.$(".errors").empty();
     },
@@ -370,9 +370,9 @@ chorus.views.Base = chorus.views.Bare.extend({
 
 chorus.views.MainContentView = chorus.views.Base.extend({
     constructorName: "MainContentView",
-    className:"main_content",
+    className: "main_content",
 
-    setup:function (options) {
+    setup: function(options) {
         options = options || {}
         this.contentHeader = this.contentHeader || options.contentHeader;
         this.contentDetails = this.contentDetails || options.contentDetails;
@@ -380,15 +380,15 @@ chorus.views.MainContentView = chorus.views.Base.extend({
         this.contentFooter = this.contentFooter || options.contentFooter;
     },
 
-    subviews:{
+    subviews: {
         //todo get rid of the unnecessary div, css changes galore!
-        ".content_header > div":"contentHeader",
-        ".content_details > div":"contentDetails",
-        ".content > div":"content",
-        ".content_footer > div":"contentFooter"
+        ".content_header > div": "contentHeader",
+        ".content_details > div": "contentDetails",
+        ".content > div": "content",
+        ".content_footer > div": "contentFooter"
     },
 
-    postRender:function () {
+    postRender: function() {
         if (!this.contentDetails) this.$(".content_details").addClass("hidden");
         if (!this.content)        this.$(".content").addClass("hidden");
         if (!this.contentFooter)  this.$(".content_footer").addClass("hidden");
@@ -396,19 +396,19 @@ chorus.views.MainContentView = chorus.views.Base.extend({
 });
 
 chorus.views.ListHeaderView = chorus.views.Base.extend({
-    className:"default_content_header",
-    context:function () {
+    className: "default_content_header",
+    context: function() {
         return this.options
     },
-    postRender:function () {
+    postRender: function() {
         var self = this;
         if (this.options.linkMenus) {
-            _.each(_.keys(this.options.linkMenus), function (key) {
+            _.each(_.keys(this.options.linkMenus), function(key) {
                 var menu = new chorus.views.LinkMenu(self.options.linkMenus[key]);
                 self.$(".menus").append(
                     menu.render().el
                 )
-                menu.bind("choice", function (eventType, choice) {
+                menu.bind("choice", function(eventType, choice) {
                     self.trigger("choice:" + eventType, choice);
                 })
             })
@@ -417,11 +417,13 @@ chorus.views.ListHeaderView = chorus.views.Base.extend({
 })
 
 chorus.views.MainContentList = chorus.views.MainContentView.extend({
-    setup:function (options) {
+    setup: function(options) {
         var modelClass = options.modelClass
         var collection = this.collection;
-        this.content = new chorus.views[modelClass + "List"](_.extend({collection:collection}, options.contentOptions));
-        this.contentHeader = new chorus.views.ListHeaderView({title:options.title || (modelClass + "s"), linkMenus:options.linkMenus, imageUrl:options.imageUrl})
+        this.content = new chorus.views[modelClass + "List"](_.extend({collection: collection}, options.contentOptions));
+
+        this.contentHeader = options.contentHeader || new chorus.views.ListHeaderView({title: options.title || (modelClass + "s"), linkMenus: options.linkMenus, imageUrl: options.imageUrl})
+
         if (options.hasOwnProperty('persistent')) {
             this.persistent = options.persistent;
         }
@@ -429,9 +431,9 @@ chorus.views.MainContentList = chorus.views.MainContentView.extend({
         if (options.contentDetails) {
             this.contentDetails = options.contentDetails;
         } else {
-            this.contentDetails = new chorus.views.ListContentDetails({collection:collection, modelClass:modelClass, buttons:options.buttons});
-            this.contentFooter = new chorus.views.ListContentDetails({collection:collection, modelClass:modelClass, hideCounts:true, hideIfNoPagination:true})
+            this.contentDetails = new chorus.views.ListContentDetails({collection: collection, modelClass: modelClass, buttons: options.buttons});
+            this.contentFooter = new chorus.views.ListContentDetails({collection: collection, modelClass: modelClass, hideCounts: true, hideIfNoPagination: true})
         }
     },
-    additionalClass:"main_content_list"
+    additionalClass: "main_content_list"
 });

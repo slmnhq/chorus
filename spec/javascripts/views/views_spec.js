@@ -697,6 +697,17 @@ describe("chorus.views.Base", function() {
                     expect(this.view.persistent).toBeTruthy();
                 })
             })
+
+            context("when contentHeader is provided", function() {
+                beforeEach(function() {
+                    this.contentHeader = stubView();
+                    this.view = new chorus.views.MainContentList({ contentHeader: this.contentHeader, collection: this.collection, modelClass: "Workfile" });
+                });
+
+                it("uses the provided view", function() {
+                    expect(this.view.contentHeader).toBe(this.contentHeader);
+                })
+            })
         })
     })
 
