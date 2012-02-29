@@ -1,9 +1,18 @@
 describe("chorus.views.DatasetList", function() {
     beforeEach(function() {
+        var table = fixtures.databaseTable({objectName: 'yyy'});
+        table.get("workspaceUsed").workspaceCount = 3;
+        table.get("workspaceUsed").workspaceList = [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()];
+        var view = fixtures.databaseView({objectName: 'zzz'})
+        view.get("workspaceUsed").workspaceCount = 2;
+        view.get("workspaceUsed").workspaceList = [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()];
+
         this.collection = new chorus.collections.DatasetSet([
             fixtures.datasetChorusView(),
             fixtures.datasetSandboxTable(),
-            fixtures.datasetSourceTable({recentComment: null, hasCredentials: false})
+            fixtures.datasetSourceTable({recentComment: null, hasCredentials: false}),
+            table,
+            view
         ]);
         this.collection.loaded = true;
         this.view = new chorus.views.DatasetList({collection: this.collection});
@@ -11,6 +20,7 @@ describe("chorus.views.DatasetList", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            this.qtipSpy = stubQtip();
             this.view.render();
             this.instance = this.collection.models[0].get('instance')
         });
@@ -26,7 +36,7 @@ describe("chorus.views.DatasetList", function() {
         it("links the datasets to their show page", function() {
             _.each(this.collection.models, function(dataset, index) {
                 if (dataset.get('hasCredentials') !== false) {
-                    expect(this.view.$("li:eq(" + index + ") a.name")).toHaveAttr("href", this.collection.at(index).showUrl())
+                    expect(this.view.$("> li:eq(" + index + ") a.name")).toHaveAttr("href", this.collection.at(index).showUrl())
                 }
             }, this);
         })
@@ -60,7 +70,7 @@ describe("chorus.views.DatasetList", function() {
         })
 
         it("displays an icon for each dataset", function() {
-            expect(this.view.$("li img").length).toBe(3);
+            expect(this.view.$("li img").length).toBe(5);
             for (var i = 0; i < this.collection.length; i++) {
                 var model = this.collection.models[i];
                 expect(this.view.$("li img").eq(i).attr("src")).toBe(model.iconUrl());
@@ -91,6 +101,25 @@ describe("chorus.views.DatasetList", function() {
                     expect(this.view.$("li .location").eq(i).find("a").eq(2).text()).toBe(model.get("schemaName"));
                 }
             }
+        })
+
+        describe("workspace usage", function() {
+            it("is rendered", function() {
+                expect(this.view.$('.found_in:eq(3)')).toExist();
+            })
+
+            it("qtip-ifies the other_menu", function() {
+                expect(this.qtipSpy).not.toHaveVisibleQtip();
+                this.view.$('.found_in:eq(3) .open_other_menu').click()
+                expect(this.qtipSpy).toHaveVisibleQtip();
+                expect(this.qtipSpy.find('li').length).toBe(2);
+            })
+
+            it("associates the menu with the correct dataset", function() {
+                this.view.$('.found_in:eq(4) .open_other_menu').click()
+                expect(this.qtipSpy).toHaveVisibleQtip();
+                expect(this.qtipSpy.find('li').length).toBe(1);
+            })
         })
 
         context("when no item was previously selected", function() {

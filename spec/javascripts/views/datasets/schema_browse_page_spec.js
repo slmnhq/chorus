@@ -63,7 +63,7 @@ describe("chorus.pages.SchemaBrowsePage", function() {
                 expect(this.page.$(this.page.mainContent.el).length).toBe(1);
             });
 
-            it("creates the collection with the right options", function(){
+            it("creates the collection with the right options", function() {
                 expect(this.page.collection.attributes.instanceId).toBe(this.schema.get("instanceId"))
                 expect(this.page.collection.attributes.databaseName).toBe(this.schema.get("databaseName"))
                 expect(this.page.collection.attributes.schemaName).toBe(this.schema.get("name"))
@@ -71,8 +71,8 @@ describe("chorus.pages.SchemaBrowsePage", function() {
 
             context("with some items in the dataset", function() {
                 beforeEach(function() {
-                    this.page.collection.add(fixtures.datasetChorusView());
-                    this.page.collection.add(fixtures.datasetSourceTable());
+                    this.page.collection.add(fixtures.databaseTable());
+                    this.page.collection.add(fixtures.databaseView());
                     this.page.render();
                 });
 
@@ -86,6 +86,7 @@ describe("chorus.pages.SchemaBrowsePage", function() {
                     expect(this.page.$(".dataset_list li").eq(0)).not.toHaveClass("selected");
                     expect(this.page.$(".dataset_list li").eq(1)).toHaveClass("selected");
                 });
+
             });
         });
     });

@@ -103,7 +103,8 @@ window.Chorus = function chorus$Global() {
         var qtipArgs = {
             content: options.content,
             show: {
-                event: 'click'
+                event: 'click',
+                delay: 0
             },
             hide: 'unfocus',
             position: {

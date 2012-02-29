@@ -1,38 +1,45 @@
 chorus.views.DatasetList = chorus.views.Base.extend({
-    tagName:"ul",
-    className:"dataset_list",
-    additionalClass:"list",
-    events:{
-        "click li":"selectDatasetByClick"
+    tagName: "ul",
+    className: "dataset_list",
+    additionalClass: "list",
+    events: {
+        "click li": "selectDatasetByClick"
     },
 
-    preRender : function() {
+    preRender: function() {
         var selectedLi = this.$("li.selected");
         if (selectedLi.length > 0) {
             this.selectedIndex = selectedLi.index(selectedLi.parentNode)
         }
     },
 
-    postRender:function () {
+    postRender: function() {
         var lis = this.$("li");
 
-        _.each(this.collection.models, function (model, index) {
+        _.each(this.collection.models, function(model, index) {
             var $li = lis.eq(index);
             $li.data("dataset", model);
             $li.find("a.instance, a.database").data("instance", model.get("instance"));
         });
 
         this.selectDataset(lis.eq(this.selectedIndex || 0));
+
+        this.$('.found_in .open_other_menu').each(function() {
+            var $el = $(this);
+            chorus.menu($el, {
+                content: $el.parent().find('.other_menu')
+            });
+        })
     },
 
-    refetchCollection : function() {
+    refetchCollection: function() {
         this.collection.fetch();
     },
 
-    collectionModelContext:function (model) {
+    collectionModelContext: function(model) {
         var ctx = {
-            iconImgUrl:model.iconUrl(),
-            showUrl:model.showUrl(),
+            iconImgUrl: model.iconUrl(),
+            showUrl: model.showUrl(),
             schemaShowUrl: model.schema().showUrl(),
             noCredentials: model.get('hasCredentials') === false
         };
@@ -42,9 +49,9 @@ chorus.views.DatasetList = chorus.views.Base.extend({
             var date = Date.parseFromApi(recentComment.get("commentCreatedStamp"))
 
             ctx.lastComment = {
-                body:recentComment.get("body"),
-                creator:recentComment.author(),
-                on:date && date.toString("MMM d")
+                body: recentComment.get("body"),
+                creator: recentComment.author(),
+                on: date && date.toString("MMM d")
             }
 
             ctx.otherCommentCount = parseInt(model.get("commentCount")) - 1;
@@ -53,7 +60,7 @@ chorus.views.DatasetList = chorus.views.Base.extend({
         return ctx;
     },
 
-    selectDataset:function ($li) {
+    selectDataset: function($li) {
         this.$("li").removeClass("selected");
         $li.addClass("selected");
 
@@ -61,7 +68,7 @@ chorus.views.DatasetList = chorus.views.Base.extend({
         chorus.PageEvents.broadcast("dataset:selected", this.selectedDataset);
     },
 
-    selectDatasetByClick : function(e) {
+    selectDatasetByClick: function(e) {
         this.selectDataset($(e.target).closest("li"));
     }
 });

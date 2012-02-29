@@ -1,8 +1,8 @@
 describe("chorus.pages.DatabaseObjectShowPage", function() {
     beforeEach(function() {
         this.databaseObject = fixtures.databaseTable();
-        this.databaseObject.get('workspaceUsed').workspaceCount = 1;
-        this.databaseObject.get('workspaceUsed').workspaceList = [fixtures.nestedWorkspaceJson()];
+        this.databaseObject.get('workspaceUsed').workspaceCount = 3;
+        this.databaseObject.get('workspaceUsed').workspaceList = [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()];
         this.columnSet = this.databaseObject.columns({type: "meta"});
 
         var a = this.databaseObject.attributes
@@ -45,23 +45,31 @@ describe("chorus.pages.DatabaseObjectShowPage", function() {
         })
     });
 
-
     describe("#render", function() {
         beforeEach(function() {
             spyOn(chorus, "search");
+            this.qtipSpy = stubQtip();
             this.resizedSpy = spyOnEvent(this.page, 'resized');
             this.server.completeFetchFor(this.databaseObject);
             this.server.completeFetchAllFor(this.columnSet, [fixtures.databaseColumn(), fixtures.databaseColumn()]);
             this.server.completeFetchFor(this.databaseObject.statistics());
         })
 
-        it("has a custom header with the workspace usage", function() {
-            expect(this.page.$('.content_header .found_in')).toExist();
+        describe("workspace usage", function() {
+            it("is in the custom header", function() {
+                expect(this.page.$('.content_header .found_in')).toExist();
+            })
+
+            it("qtip-ifies the other_menu", function() {
+                this.page.$('.content_header .found_in .open_other_menu').click()
+                expect(this.qtipSpy).toHaveVisibleQtip();
+                expect(this.qtipSpy.find('li').length).toBe(2);
+            })
         })
 
         it("has a search field in the content details that filters the column list", function() {
             var searchInput = this.page.mainContent.contentDetails.$("input.search"),
-            columnList = $(this.page.mainContent.content.el);
+                columnList = $(this.page.mainContent.content.el);
 
             expect(searchInput).toExist();
             expect(chorus.search).toHaveBeenCalled();
@@ -223,7 +231,6 @@ describe("chorus.pages.DatabaseObjectShowPage", function() {
                 })
             });
         });
-
     });
 
 });

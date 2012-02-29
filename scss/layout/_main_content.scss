@@ -29,22 +29,7 @@
     }
 
     .found_in {
-        font-size: 12px;
-        color: $color-text2;
         margin-bottom: 7px;
-        a {
-            font-size: inherit;
-            font-weight: $semibold;
-        }
-
-        .open_other_menu {
-            @include menu-triangle;
-            border-bottom: 1px dotted $link-color;
-        }
-
-        .other_menu {
-            display: none;
-        }
     }
 }
 

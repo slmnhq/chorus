@@ -60,6 +60,12 @@
             chorus.PageEvents.subscribe("cancel:sidebar", this.hideSidebar, this);
         },
 
+        postRender: function() {
+            chorus.menu(this.$('.found_in .open_other_menu'), {
+                content: this.$('.found_in .other_menu')
+            });
+        },
+
         columnSetFetched: function() {
             this.columnSet = new chorus.collections.DatabaseColumnSet(this.columnSet.models);
             this.columnSet.loaded = true;
