@@ -30,20 +30,12 @@ chorus.views.DatasetList = chorus.views.Base.extend({
     },
 
     collectionModelContext:function (model) {
-        var workspaceUsed = model.get("workspaceUsed");
-        var workspace = workspaceUsed && workspaceUsed.workspaceList[0]
-        var otherWorkspaceCount = ((workspaceUsed && workspaceUsed.workspaceCount) || 1) - 1;
         var ctx = {
             iconImgUrl:model.iconUrl(),
             showUrl:model.showUrl(),
             schemaShowUrl: model.schema().showUrl(),
-            otherWorkspaceCount : otherWorkspaceCount,
             noCredentials: model.get('hasCredentials') === false
         };
-
-        if (workspace) {
-            ctx.foundInWorkspaceLink = chorus.helpers.linkTo(new chorus.models.Workspace(workspace).showUrl(), workspace.name);
-        }
 
         var recentComment = model.lastComment();
         if (recentComment) {

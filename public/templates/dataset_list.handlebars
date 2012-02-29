@@ -31,12 +31,7 @@
                     }}<a href="{{{schemaShowUrl}}}" class="schema">{{schemaName}}</a>
                 {{/if}}
             </div>
-            {{#if foundInWorkspaceLink}}
-            <div class="found_in">
-                {{{t "dataset.found_in" workspaceLink=foundInWorkspaceLink}}}
-                {{#if otherWorkspaceCount}}<span class="other">{{t "dataset.and_others" count=otherWorkspaceCount}}</span>{{/if}}
-            </div>
-            {{/if}}
+            {{{usedInWorkspaces workspaceUsed}}}
             {{#if lastComment}}
                 <div class="comment">
                     <div class="body">

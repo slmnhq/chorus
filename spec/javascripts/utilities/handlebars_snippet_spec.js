@@ -583,6 +583,78 @@ describe("handlebars", function() {
                 expect(string).toBe("10.49");
             });
         });
+
+        describe("usedInWorkspaces", function() {
+            context("when there aren't any 'found in' workspaces", function() {
+                beforeEach(function() {
+                    this.workspaceUsed = {
+                        workspaceList: [],
+                        workspaceCount: 0
+                    }
+                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceUsed);
+                });
+
+                it("does not render .found_in", function() {
+                    expect(this.result).toBeFalsy();
+                });
+            });
+
+            context("when there is exactly 1 'found in' workspace", function() {
+                beforeEach(function() {
+                    this.workspaceUsed = {
+                        workspaceList: [fixtures.nestedWorkspaceJson()],
+                        workspaceCount: 1
+                    }
+                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceUsed);
+                });
+                itIncludesTheFoundInWorkspaceInformation();
+
+                it("should not indicate there are any other workspaces", function() {
+                    expect($(this.result).find('.other')).not.toExist();
+                })
+            })
+
+            context("when there are exactly 2 'found in' workspaces", function() {
+                beforeEach(function() {
+                    this.workspaceUsed = {
+                        workspaceList: [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()],
+                        workspaceCount: 2
+                    }
+                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceUsed);
+                });
+
+                itIncludesTheFoundInWorkspaceInformation();
+
+                it("should indicate there is 1 other workspace", function() {
+                    expect($(this.result).find(".other")).toContainTranslation("dataset.and_others.one");
+                })
+            })
+
+            context("when there are exactly 3 'found in' workspaces", function() {
+                beforeEach(function() {
+                    this.workspaceUsed = {
+                        workspaceList: [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()],
+                        workspaceCount: 3
+                    }
+                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceUsed);
+                });
+
+                itIncludesTheFoundInWorkspaceInformation();
+
+                it("should indicate there is 2 other workspaces", function() {
+                    expect($(this.result).find(".other")).toContainTranslation("dataset.and_others.other", {count: 2});
+                })
+            })
+
+            function itIncludesTheFoundInWorkspaceInformation() {
+                it("includes the 'found in workspace' information", function() {
+                    var workspace = new chorus.models.Workspace(this.workspaceUsed.workspaceList[0]);
+                    var workspaceLink = chorus.helpers.linkTo(workspace.showUrl(), workspace.get('name'));
+                    expect($(this.result).html()).toContainTranslation("dataset.found_in", { workspaceLink: workspaceLink });
+                    expect($(this.result).find("a").attr("href")).toMatchUrl(workspace.showUrl());
+                });
+            }
+        });
     });
 
     describe("partials", function() {

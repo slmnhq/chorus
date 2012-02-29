@@ -242,6 +242,21 @@
             }
 
             return value;
+        },
+
+        usedInWorkspaces: function (workspacesUsed) {
+            if (workspacesUsed.workspaceCount == 0) { return ""; }
+            var primaryWorkspace = new chorus.models.Workspace(workspacesUsed.workspaceList[0])
+            var primaryLink = chorus.helpers.linkTo(primaryWorkspace.showUrl(), primaryWorkspace.get('name'));
+
+            var result = $("<div></div>")
+                .addClass('found_in')
+                .append(t('dataset.found_in', {workspaceLink: primaryLink}))
+
+            if (workspacesUsed.workspaceCount > 1) {
+                result.append($('<span class="other"></span>').text(" " + t('dataset.and_others', {count: workspacesUsed.workspaceCount - 1})));
+            }
+            return result.outerHtml()
         }
     }
 
