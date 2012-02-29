@@ -47,6 +47,38 @@ describe("chorus.views.ImportSchedule", function() {
         });
     });
 
+    describe("#setFieldValues(model)", function() {
+        beforeEach(function() {
+            var importModel = fixtures.datasetImport({
+                id: '12',
+                truncate: true,
+                scheduleStartTime: "2013-02-21 13:30:00.0",
+                scheduleEndTime: "2013-05-27",
+                scheduleFrequency: "HOURLY"
+            });
+            this.view.setFieldValues(importModel);
+        });
+
+        it("selects the right frequency", function() {
+            expect(this.view.$(".frequency").val()).toBe("HOURLY");
+        });
+
+        it("selects the right start date", function() {
+            expect(this.view.$(".start input[name='year']").val()).toBe("2013");
+            expect(this.view.$(".start input[name='month']").val()).toBe("2");
+            expect(this.view.$(".start input[name='day']").val()).toBe("21");
+            expect(this.view.$("select.hours").val()).toBe("1");
+            expect(this.view.$("select.minutes").val()).toBe("30");
+            expect(this.view.$("select.ampm").val()).toBe("PM");
+        });
+
+        it("selects the right end date", function() {
+            expect(this.view.$(".end input[name='year']").val()).toBe("2013");
+            expect(this.view.$(".end input[name='month']").val()).toBe("5");
+            expect(this.view.$(".end input[name='day']").val()).toBe("27");
+        });
+    });
+
     it("should have a select with daily, weekly, monthly as options", function() {
         expect(this.view.$(".frequency option[value=DAILY]")).toContainTranslation("import.frequency.daily");
         expect(this.view.$(".frequency option[value=WEEKLY]")).toContainTranslation("import.frequency.weekly");

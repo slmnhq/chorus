@@ -48,6 +48,23 @@ chorus.views.ImportSchedule = chorus.views.Base.extend({
         }
     },
 
+    setFieldValues: function(model) {
+        var startTime = Date.parse(model.startTime());
+        this.$(".start input[name='year']").val(startTime.toString("yyyy"));
+        this.$(".start input[name='month']").val(startTime.toString("M"));
+        this.$(".start input[name='day']").val(startTime.toString("dd"));
+        this.$("select.hours").val(startTime.toString("h"));
+        this.$("select.minutes").val(startTime.toString("mm"));
+        this.$("select.ampm").val((startTime.getHours() > 12) ? "PM" : "AM");
+
+        var endTime = Date.parse(model.endTime());
+        this.$(".end input[name='year']").val(endTime.toString("yyyy"));
+        this.$(".end input[name='month']").val(endTime.toString("M"));
+        this.$(".end input[name='day']").val(endTime.toString("dd"));
+
+        this.$(".frequency option").val(model.get("scheduleFrequency"));
+    },
+
     additionalContext: function() {
         var now = new Date();
         var later = new Date(now);

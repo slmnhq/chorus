@@ -160,7 +160,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
         beforeEach(function() {
             this.import = fixtures.datasetImport({
                 id: '12',
-                truncate: true
+                truncate: true,
+                scheduleStartTime: "2013-02-21 13:30:00.0",
+                scheduleEndTime: "2013-05-27",
+                scheduleFrequency: "HOURLY"
             });
             this.launchElement.addClass("edit_schedule");
             this.launchElement.data("import", this.import);
@@ -182,6 +185,24 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
             it("has a submit button with the right text", function() {
                 expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.save_changes");
+            });
+
+            it("has the 'schedule' checkbox checked by default", function() {
+                expect(this.dialog.$("input[name='schedule']").attr("checked")).toBeTruthy();
+            });
+
+            it("pre-populates the schedule fields with the import's settings", function() {
+                expect(this.dialog.$(".start input[name='year']").val()).toBe("2013");
+                expect(this.dialog.$(".start input[name='month']").val()).toBe("2");
+                expect(this.dialog.$(".start input[name='day']").val()).toBe("21");
+
+                expect(this.dialog.$(".hours").val()).toBe("1");
+                expect(this.dialog.$(".minutes").val()).toBe("30");
+                expect(this.dialog.$(".ampm").val()).toBe("PM");
+
+                expect(this.dialog.$(".end input[name='year']").val()).toBe("2013");
+                expect(this.dialog.$(".end input[name='month']").val()).toBe("5");
+                expect(this.dialog.$(".end input[name='day']").val()).toBe("27");
             });
         });
     });

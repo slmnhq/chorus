@@ -41,7 +41,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     },
 
     setup: function() {
-        this.scheduleView = new chorus.views.ImportSchedule({enable: false});
+        this.scheduleView = new chorus.views.ImportSchedule({ enable: false });
         this.import = this.options.launchElement.data("import");
         var launchElement = this.options.launchElement;
 
@@ -52,6 +52,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         } else if (launchElement.hasClass("edit_schedule")) {
             this.title = t("import.title_edit_schedule");
             this.submitText = t("actions.save_changes");
+            this.showSchedule = true;
         } else {
             this.title = t("import.title");
             this.submitText = t("import.begin");
@@ -60,6 +61,11 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     },
 
     postRender: function() {
+        if (this.import) {
+            this.$("input[name='schedule']").attr("checked", "checked");
+            this.scheduleView.setFieldValues(this.import);
+        }
+
         _.defer(_.bind(function() {chorus.styleSelect(this.$("select.names"))}, this));
     },
 
