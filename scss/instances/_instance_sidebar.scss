@@ -39,6 +39,8 @@
     .configuration_detail {
         dl {
             padding-right: 8px;
+            font-size: 14px;
+            line-height: 19px;
         }
 
         dt {
@@ -48,9 +50,8 @@
         }
 
         dd {
-            font-size: 14px;
             float: right;
-            width: 145px;
+            width: 142px;
             text-align: right;
             @include ellipsis;
         }
