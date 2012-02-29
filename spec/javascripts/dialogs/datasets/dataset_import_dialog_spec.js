@@ -6,11 +6,18 @@ describe("chorus.dialogs.DatasetImport", function() {
         spyOn($.fn, 'fileupload');
         this.launchElement = $('<button data-workspace-id="242">Import File</button>');
         this.launchElement.data("canonicalName", "FooBar");
-        this.collection = [fixtures.datasetSandboxTable({workspace: {id: 242}}), fixtures.datasetSandboxTable({workspace: {id: 242}})];
+        this.validDatasets = [
+            fixtures.datasetSandboxTable({workspace: {id: 242}}),
+            fixtures.datasetSandboxTable({workspace: {id: 243}})
+        ];
+        this.invalidDatasets = [
+            fixtures.datasetExternalTable(),
+            fixtures.datasetSandboxView(),
+            fixtures.datasetHadoopExternalTable()
+        ];
+        this.collection = this.validDatasets.concat(this.invalidDatasets);
         this.dialog = new chorus.dialogs.DatasetImport({launchElement: this.launchElement});
-
         spyOn(this.dialog, "modalClosed").andCallThrough();
-
         this.dialog.launchModal();
     });
 
@@ -188,6 +195,10 @@ describe("chorus.dialogs.DatasetImport", function() {
                         this.server.completeFetchFor(this.dialog.sandboxTables, this.collection);
                     });
 
+                    it("filters out views, external tables, and Hadoop tables", function() {
+                        expect(this.dialog.$(".existing_table .select option").length).toBe(3);
+                    });
+
                     it("does not display loading spinner", function() {
                         expect(this.dialog.$(".existing_table .spinner").isLoading()).toBeFalsy();
                     });
@@ -209,10 +220,10 @@ describe("chorus.dialogs.DatasetImport", function() {
                     });
 
                     it("loads a list of sandbox tables into the table name selector", function() {
-                        expect(this.dialog.$(".existing_table select option").length).toBe(this.collection.length + 1);
+                        expect(this.dialog.$(".existing_table select option").length).toBe(this.validDatasets.length + 1);
 
                         var view = this.dialog;
-                        _.each(this.collection, function(model, index) {
+                        _.each(this.validDatasets, function(model, index) {
                             var option = view.$(".existing_table select option:eq(" + ( index + 1 ) + ")");
                             expect(option).toContainText(model.get("objectName"));
                             expect(option).toHaveAttr("value", model.get("objectName"));

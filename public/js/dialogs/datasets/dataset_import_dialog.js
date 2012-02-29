@@ -11,7 +11,14 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     setup: function() {
         var workspaceId = this.options.launchElement.data("workspace-id");
         this.sandboxTables = new chorus.collections.DatasetSet([], {workspaceId: workspaceId, type: "SANDBOX_TABLE"});
+        this.sandboxTables.bind("loaded", this.filterTables, this);
         this.sandboxTables.fetchAll();
+    },
+
+    filterTables: function() {
+        this.sandboxTables.models = _.filter(this.sandboxTables.models, _.bind(function(table) {
+            return _.include(["BASE_TABLE", "MASTER_TABLE"], table.get("objectType"));
+        }, this));
     },
 
     onRadioSelect: function(e) {
