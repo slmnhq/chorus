@@ -26,6 +26,14 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
         }
     },
 
+    frequency: function() {
+        if (this.get("scheduleInfo")) {
+            return this.get("scheduleInfo").frequency;
+        } else if (this.get("scheduleFrequency")) {
+            return this.get("scheduleFrequency");
+        }
+    },
+
     endTime: function() {
         if (this.get("scheduleInfo")) {
             return this.get("scheduleInfo").endTime;
