@@ -30,7 +30,17 @@
             return this.tabularData.get('objectName')
         },
 
-        setup: function(instanceId, databaseName, schemaName, objectType, objectName) {
+        setup: function() {
+            this.makeModel.apply(this, arguments)
+            this.fetchTabularData();
+            this.makeBreadcrumbs();
+        },
+
+        makeBreadcrumbs: function() {
+            this.breadcrumbs = new breadcrumbsView({model: this.tabularData});
+        },
+
+        makeModel: function(instanceId, databaseName, schemaName, objectType, objectName) {
             this.model = this.tabularData = new chorus.models.DatabaseObject({
                 instance: {
                     id: instanceId
@@ -39,20 +49,18 @@
                 schemaName: schemaName,
                 objectType: objectType,
                 objectName: objectName
-            });
-            this.requiredResources.push(this.model);
-
-            this.model.fetch();
-
-            this.columnSet = this.tabularData.columns({type: "meta"});
-            this.columnSet.fetchAll();
-            this.requiredResources.push(this.columnSet);
-
-            this.breadcrumbs = new breadcrumbsView({model: this.tabularData});
+            })
         },
 
-        resourcesLoaded: function() {
-            this.columnSetFetched();
+        fetchTabularData: function() {
+            this.tabularData.bindOnce("loaded", this.fetchColumnSet, this);
+            this.tabularData.fetch();
+        },
+
+        fetchColumnSet: function() {
+            this.columnSet = this.tabularData.columns({type: "meta"});
+            this.columnSet.bind("loaded", this.columnSetFetched, this);
+            this.columnSet.fetchAll();
         },
 
         bindCallbacks: function() {

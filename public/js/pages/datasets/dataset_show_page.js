@@ -22,28 +22,14 @@
         hideDeriveChorusView: false,
         sidebarOptions: {browsingSchema: false},
 
-        setup: function(workspaceId, datasetId) {
-            this.workspaceId = workspaceId;
-            this.datasetId = datasetId;
-
-            this.workspace = new chorus.models.Workspace({id: workspaceId});
-            this.workspace.fetch();
-            this.fetchDataSet();
-
+        makeBreadcrumbs: function() {
             this.breadcrumbs = new breadcrumbsView({workspace: this.workspace, tabularData: this.tabularData});
         },
 
-
-        fetchDataSet: function() {
-            this.model = this.tabularData = new chorus.models.Dataset({ workspace: { id: this.workspaceId }, id: this.datasetId });
-            this.tabularData.bind("loaded", this.fetchColumnSet, this);
-            this.tabularData.fetch();
-        },
-
-        fetchColumnSet: function() {
-            this.columnSet = this.tabularData.columns({type: "meta"});
-            this.columnSet.bind("loaded", this.columnSetFetched, this);
-            this.columnSet.fetchAll();
+        makeModel: function(workspaceId, datasetId) {
+            this.workspace = new chorus.models.Workspace({id: workspaceId});
+            this.workspace.fetch();
+            this.model = this.tabularData = new chorus.models.Dataset({ workspace: { id: workspaceId }, id: datasetId })
         },
 
         columnSetFetched: function() {
@@ -60,7 +46,7 @@
                 contentDetails: new chorus.views.DatasetContentDetails({ tabularData: this.tabularData, collection: this.columnSet, inEditChorusView: true })
             });
 
-            this.mainContent.contentDetails.bind("dataset:cancelEdit", this.fetchDataSet, this);
+            this.mainContent.contentDetails.bind("dataset:cancelEdit", this.fetchTabularData, this);
             this.mainContent.contentDetails.forwardEvent("dataset:saveEdit", this.mainContent.content, this);
 
             this.renderSubview('mainContent');
