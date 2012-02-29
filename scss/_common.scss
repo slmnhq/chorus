@@ -122,6 +122,9 @@ $semibold: 600;
 // Font size
 $medium-font: 14px;
 
+$summary-font-size: 14px;
+$summary-line-height: 19px;
+
 // Mixins
 
 // Un-comment these lines to find text that isn't styled with a mixin
@@ -244,6 +247,12 @@ $medium-font: 14px;
     font-size: 12px;
     font-weight: $semibold;
     color: $color-text3;
+}
+
+@mixin summary-text {
+    @include debugging-mixin;
+    font-size: $summary-font-size;
+    line-height: $summary-line-height;
 }
 
 @mixin create-bar-text {

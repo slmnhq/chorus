@@ -17,12 +17,10 @@ chorus.views.WorkspaceList = chorus.views.Base.extend({
     },
 
     postRender: function() {
-        var i = 0;
-        var $summary = this.$('li .summary');
-        this.collection.each(function(model) {
+        this.collection.each(function(model, index) {
             model.loaded = true;
-            var text = new chorus.views.TruncatedText({model:model, attribute:"summary", characters:300, lines:2})
-            $summary.eq(i++).append(text.render().el);
-        });
+            this.summaryView = new chorus.views.TruncatedText({model:model, attribute:"summary"})
+            this.renderSubview("summaryView", this.$(".summary:eq(" + index + ")"))
+        }, this);
     }
 });

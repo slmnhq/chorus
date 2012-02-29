@@ -58,7 +58,21 @@
 
         div.summary {
             color: $color-text4;
-            font-size: 14px;
+            @include summary-text;
+
+            .styled_text {
+                height: auto;
+                max-height: $summary-line-height * 2;
+            }
+            .links a {
+                font-size: 13px;
+            }
+
+            &.expanded {
+                .styled_text {
+                    max-height: none;
+                }
+            }
         }
 
         .name span {

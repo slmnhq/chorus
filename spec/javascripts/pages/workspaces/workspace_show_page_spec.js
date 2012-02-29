@@ -44,7 +44,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
             });
 
             it("uses the workspace's summary for the text of the header", function() {
-                expect(this.page.mainContent.contentHeader.$(".text_content").text()).toBe(this.page.model.get("summary"));
+                expect(this.page.mainContent.contentHeader.$(".original").text()).toBe(this.page.model.get("summary"));
             });
 
             it("displays the breadcrumbs", function(){

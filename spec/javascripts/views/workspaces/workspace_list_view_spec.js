@@ -64,8 +64,8 @@ describe("chorus.views.WorkspaceList", function() {
         })
 
         it("links the workspace name to the show url", function() {
-            expect($("a", this.activeEl).text().trim()).toBe(this.activeWorkspace.get("name"));
-            expect($("a", this.activeEl).attr("href")).toBe(this.activeWorkspace.showUrl());
+            expect($("a.name span", this.activeEl).text().trim()).toBe(this.activeWorkspace.get("name"));
+            expect($("a.name", this.activeEl).attr("href")).toBe(this.activeWorkspace.showUrl());
         });
 
         it("indicates which workspaces are private", function() {
@@ -85,7 +85,7 @@ describe("chorus.views.WorkspaceList", function() {
         });
 
         it("displays the truncated text view", function() {
-            expect(this.view.$(".summary .truncated_text").length).toBe(5);
+            expect(this.view.$(".truncated_text").length).toBe(5);
         });
 
         describe("archived workspace", function() {
