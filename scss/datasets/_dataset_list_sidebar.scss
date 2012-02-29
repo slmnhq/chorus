@@ -11,6 +11,11 @@
         }
     }
 
+    .last_import {
+        @include results-console-message;
+        margin-bottom: 10px;
+    }
+
     .activity_list {
         .heading {
             display: none;

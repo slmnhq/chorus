@@ -1990,7 +1990,16 @@ beforeEach(function() {
         datasetImport: function(overrides) {
             var attributes = _.extend({
                 workspaceId: this.nextId().toString(),
-                datasetId: this.datasetCommonJson().id
+                datasetId: this.datasetCommonJson().id,
+                executionInfo : {
+                    startedStamp: "2012-02-29 14:23:58.169",
+                    completedStamp : "2012-02-29 14:23:59.027",
+                    result : {executeResult: "success"},
+                    state : "success",
+                    creator : "InitialUser"
+                },
+                toTable: "someTable",
+                destinationTable: "10000|dca_demo|ddemo|BASE_TABLE|wwww"
             }, overrides);
             return new chorus.models.DatasetImport(attributes);
         },

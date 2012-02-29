@@ -8,6 +8,10 @@
         <div class="notice no_credentials"><span class="bottom">{{{noCredentialsWarning}}}</span></div>
     {{/if}}
 
+    {{#if hasImport}}
+        <div class="last_import">{{{lastImport}}}</div>
+    {{/if}}
+
     <div class="actions">
         <ul>
             {{#unless browsingSchema}}

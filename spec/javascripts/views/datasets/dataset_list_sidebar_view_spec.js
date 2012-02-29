@@ -102,10 +102,17 @@ describe("chorus.views.DatasetListSidebar", function() {
 
                         context("and the dataset has an import schedule", function() {
                             beforeEach(function() {
-                                this.server.completeFetchFor(this.dataset.getImport(), {
-                                    id: '1234'
-                                });
+                                this.server.completeFetchFor(this.dataset.getImport(), fixtures.datasetImport({id: '1234', toTable: "aToTable", datasetId: this.dataset.id, workspaceId: this.dataset.get("workspace").id}).attributes);
                             });
+                            
+                            it("has an 'imported xx ago' description", function() {
+                                var execInfo = this.view.importConfiguration.get("executionInfo")
+                                var destTable = new chorus.models.Dataset({
+                                    id: this.view.importConfiguration.get("destinationTable"),
+                                    workspaceId: this.dataset.get("workspace").id})
+                                expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "aToTable"})
+                                expect(this.view.$(".last_import a").attr("href")).toBe(destTable.showUrl())
+                            })
 
                             it("has an 'edit import schedule' link", function() {
                                 var editScheduleLink = this.view.$("a.edit_schedule.dialog");

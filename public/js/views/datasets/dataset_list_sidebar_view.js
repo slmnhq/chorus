@@ -21,7 +21,7 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
     },
 
     render: function() {
-        if(!this.disabled) {
+        if (!this.disabled) {
             this._super("render", arguments);
         }
     },
@@ -78,7 +78,18 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
 
             if (this.resource.isImportable()) {
                 ctx.isImportable = this.importConfiguration.loaded;
-                ctx.hasImport = this.importConfiguration.has("id")
+                ctx.hasImport = this.importConfiguration.has("id");
+                if (ctx.hasImport) {
+                    var destinationTable = new chorus.models.Dataset({
+                        id: this.importConfiguration.get("destinationTable"),
+                        workspaceId: this.resource.get("workspace").id
+                    });
+                    var tableLink = "<a href='" + destinationTable.showUrl() + "'>" + this.importConfiguration.get("toTable") + "</a>";
+                    ctx.lastImport = t("import.last_imported", {
+                        timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
+                        tableLink: tableLink
+                    });
+                }
             }
 
             if (this.resource.get("hasCredentials") === false) {
