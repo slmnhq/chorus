@@ -40,6 +40,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
             it("has the 'importType' parameter set to 'oneTime'", function() {
                 expect(this.attrs.importType).toBe("oneTime");
             });
+
+            it("does not include any scheduling parameters", function() {
+                expect(_.find(this.attrs, function(val, key) { return key.indexOf("schedule") == 0 })).toBeFalsy();
+            });
         });
     });
 
@@ -260,6 +264,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
             it("should have a dropdown selector for existing tables", function() {
                 expect(this.dialog.$(".existing_table .names")).toBeDisabled();
+            });
+
+            it("disables the submit button", function() {
+                expect(this.dialog.$("button.submit")).toBeDisabled();
             });
 
             context("when 'Import into Existing Table' is checked", function() {

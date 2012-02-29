@@ -27,7 +27,7 @@
             <label class="main" for="import_scheduler_existing_table">{{t "import.existing_table"}}</label>
             <select class="names" disabled="disabled" name="toTable">
                 {{#each sandboxTables}}
-                    <option value="{{{this}}}">{{this}}</option>
+                    <option value="{{this}}">{{this}}</option>
                 {{/each}}
             </select>
         </legend>

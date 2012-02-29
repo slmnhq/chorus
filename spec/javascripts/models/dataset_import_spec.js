@@ -28,6 +28,22 @@ describe("chorus.models.DatasetImport", function() {
                 });
             });
 
+            context("with a conforming toTable name", function() {
+                it("validates", function() {
+                    expect(this.model.performValidation(this.attrs)).toBeTruthy();
+                });
+            });
+
+            context("with a non-conforming toTable name", function() {
+                beforeEach(function() {
+                    this.attrs.toTable = "__foo"
+                });
+
+                it("fails validations", function() {
+                    expect(this.model.performValidation(this.attrs)).toBeFalsy();
+                });
+            });
+
             context("when useLimitRows is enabled", function() {
                 beforeEach(function() {
                     this.attrs.useLimitRows = true;
@@ -50,6 +66,34 @@ describe("chorus.models.DatasetImport", function() {
                 });
             });
         });
+
+        context("when importing into an existing table", function() {
+            beforeEach(function() {
+                this.attrs = {
+                    toTable: "Foo",
+                    rowLimit: "23",
+                    truncate: "true",
+                    isNewTable: "false"
+                };
+            });
+
+            context("with a conforming toTable name", function() {
+                it("validates", function() {
+                    expect(this.model.performValidation(this.attrs)).toBeTruthy();
+                });
+            });
+
+            context("with a toTable name that does not conform to the new table regex constraints", function() {
+                beforeEach(function() {
+                    this.attrs.toTable = "__foo"
+                });
+
+                it("validates", function() {
+                    expect(this.model.performValidation(this.attrs)).toBeTruthy();
+                });
+            });
+        });
+
     });
 
     describe("saved", function() {
