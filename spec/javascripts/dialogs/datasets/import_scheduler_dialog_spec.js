@@ -8,8 +8,18 @@ describe("chorus.dialogs.ImportScheduler", function() {
     describe("#getNewModelAttrs", function() {
         describe("when creating a new schedule", function() {
             beforeEach(function() {
-                this.launchElement.addClass("create_schedule");
+                this.launchElement.addClass("create_schedule")
                 this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+                this.server.completeFetchAllFor(this.dialog.sandboxTables, [
+                    fixtures.datasetSandboxTable(),
+                    fixtures.datasetSandboxTable(),
+                    fixtures.datasetSandboxView(),
+                    fixtures.datasetExternalTable(),
+                    fixtures.datasetHadoopExternalTable()
+                ]);
+                this.dialog.$(".new_table input:radio").prop("checked", false);
+                this.dialog.$(".existing_table input:radio").prop("checked", true).change();
+                this.dialog.$(".existing_table input[name='schedule']").prop("checked", true).change();
                 this.attrs = this.dialog.getNewModelAttrs();
             });
 
@@ -20,8 +30,18 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
         describe("when editing an existing schedule", function() {
             beforeEach(function() {
-                this.launchElement.addClass("edit_schedule");
+                this.launchElement.addClass("edit_schedule")
                 this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+                this.server.completeFetchAllFor(this.dialog.sandboxTables, [
+                    fixtures.datasetSandboxTable(),
+                    fixtures.datasetSandboxTable(),
+                    fixtures.datasetSandboxView(),
+                    fixtures.datasetExternalTable(),
+                    fixtures.datasetHadoopExternalTable()
+                ]);
+                this.dialog.$(".new_table input:radio").prop("checked", false);
+                this.dialog.$(".existing_table input:radio").prop("checked", true).change();
+                this.dialog.$(".existing_table input[name='schedule']").prop("checked", true).change();
                 this.attrs = this.dialog.getNewModelAttrs();
             });
 
@@ -32,9 +52,15 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
         describe("when doing a single import", function() {
             beforeEach(function() {
-                this.launchElement.addClass("import_now");
-                this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
-                this.attrs = this.dialog.getNewModelAttrs();
+                 this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+                 this.server.completeFetchAllFor(this.dialog.sandboxTables, [
+                     fixtures.datasetSandboxTable(),
+                     fixtures.datasetSandboxTable(),
+                     fixtures.datasetSandboxView(),
+                     fixtures.datasetExternalTable(),
+                     fixtures.datasetHadoopExternalTable()
+                 ]);
+                 this.attrs = this.dialog.getNewModelAttrs();
             });
 
             it("has the 'importType' parameter set to 'oneTime'", function() {

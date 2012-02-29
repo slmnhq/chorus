@@ -138,7 +138,9 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         var $enabledFieldSet = this.$("fieldset").not(".disabled");
         _.each($enabledFieldSet.find("input:text, input[type=hidden], select"), function(i) {
             var input = $(i);
-            updates[input.attr("name")] = input.val() && input.val().trim();
+            if (input.closest(".schedule_widget").length == 0) {
+                updates[input.attr("name")] = input.val() && input.val().trim();
+            }
         });
 
         var $truncateCheckbox = $enabledFieldSet.find(".truncate");
@@ -153,9 +155,11 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
         if ($enabledFieldSet.find("input:checkbox[name='schedule']").prop("checked")) {
             _.extend(updates, this.scheduleView.fieldValues());
+            updates.importType = "schedule"
+        } else {
+            updates.importType = "oneTime"
         }
 
-        updates.importType = (this.options.launchElement.hasClass("import_now")) ? "oneTime" : "schedule";
         return updates;
     }
 });
