@@ -121,7 +121,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         beforeEach(function() {
                             this.dialog.$("input:checked[name='truncate']").prop("checked", false).change();
 
-                            this.dialog.$("select[name='toTable'] option").eq(0).attr("selected", true);
+                            this.dialog.$("select[name='toTable']").eq(0).attr("selected", true);
 
                             this.dialog.$("input[name='limit_num_rows']").prop("checked", true)
                             this.dialog.$("input[name='rowLimit']").val(123);
@@ -134,9 +134,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
                             this.dialog.$(".end input[name='month']").val("03");
                             this.dialog.$(".end input[name='day']").val("21");
 
-                            this.dialog.$("select.ampm option").val("PM");
-                            this.dialog.$("select.hours option").val("12");
-                            this.dialog.$("select.minutes option").val("09");
+                            this.dialog.$("select.ampm").val("PM");
+                            this.dialog.$("select.hours").val("12");
+                            this.dialog.$("select.minutes").val("09");
 
                             expect(this.dialog.$("button.submit")).toBeEnabled();
 
@@ -161,9 +161,14 @@ describe("chorus.dialogs.ImportScheduler", function() {
             this.import = fixtures.datasetImport({
                 id: '12',
                 truncate: true,
-                scheduleStartTime: "2013-02-21 13:30:00.0",
-                scheduleEndTime: "2013-05-27",
-                scheduleFrequency: "HOURLY"
+                scheduleInfo: {
+                    startTime: "2013-02-21 13:30:00.0",
+                    endTime: "2013-05-27",
+                    frequency: "HOURLY"
+                },
+                toTable: "my_table",
+                destinationTable: "10000|dca_demo|ddemo|BASE_TABLE|my_table",
+                sourceId: "10000|dca_demo|ddemo|BASE_TABLE|somebodys_table"
             });
             this.launchElement.addClass("edit_schedule");
             this.launchElement.data("import", this.import);
@@ -174,8 +179,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
         describe("when the sandbox table fetch completes", function() {
             beforeEach(function() {
                 this.server.completeFetchAllFor(this.dialog.sandboxTables, [
-                    fixtures.datasetSandboxTable(),
-                    fixtures.datasetSandboxTable()
+                    fixtures.datasetSandboxTable({ objectName: "your_table", id: "10000|dca_demo|ddemo|BASE_TABLE|your_table" }),
+                    fixtures.datasetSandboxTable({ objectName: "my_table",   id: "10000|dca_demo|ddemo|BASE_TABLE|my_table" }),
+                    fixtures.datasetSandboxTable({ objectName: "her_table",  id: "10000|dca_demo|ddemo|BASE_TABLE|her_table" })
                 ]);
             });
 
@@ -188,7 +194,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
             });
 
             it("has the 'schedule' checkbox checked by default", function() {
-                expect(this.dialog.$("input[name='schedule']").attr("checked")).toBeTruthy();
+                expect(this.dialog.$("input[name='schedule']")).toBeChecked();
             });
 
             it("pre-populates the schedule fields with the import's settings", function() {
@@ -203,6 +209,11 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 expect(this.dialog.$(".end input[name='year']").val()).toBe("2013");
                 expect(this.dialog.$(".end input[name='month']").val()).toBe("5");
                 expect(this.dialog.$(".end input[name='day']").val()).toBe("27");
+            });
+
+            it("pre-populates the destination table and truncation fields with the import's settings", function() {
+                expect(this.dialog.$("select[name='toTable']").val()).toBe("my_table");
+                expect(this.dialog.$(".truncate")).toBeChecked();
             });
         });
     });

@@ -62,7 +62,7 @@ chorus.views.ImportSchedule = chorus.views.Base.extend({
         this.$(".end input[name='month']").val(endTime.toString("M"));
         this.$(".end input[name='day']").val(endTime.toString("dd"));
 
-        this.$(".frequency option").val(model.get("scheduleFrequency"));
+        this.$(".frequency").val(model.frequency());
     },
 
     additionalContext: function() {

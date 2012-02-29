@@ -14,11 +14,11 @@ describe("chorus.views.ImportSchedule", function() {
             this.view.$(".end input[name='month']").val("03");
             this.view.$(".end input[name='day']").val("21");
 
-            this.view.$("select.ampm option").val("PM");
-            this.view.$("select.hours option").val("1");
-            this.view.$("select.minutes option").val("09");
+            this.view.$("select.ampm").val("PM");
+            this.view.$("select.hours").val("1");
+            this.view.$("select.minutes").val("09");
 
-            this.view.$("select.frequency option").val("HOURLY");
+            this.view.$("select.frequency").val("MONTHLY");
 
             this.attrs = this.view.fieldValues();
         });
@@ -43,7 +43,7 @@ describe("chorus.views.ImportSchedule", function() {
         });
 
         it("has the right frequency value", function() {
-            expect(this.attrs.scheduleFrequency).toBe("HOURLY");
+            expect(this.attrs.scheduleFrequency).toBe("MONTHLY");
         });
     });
 
@@ -54,13 +54,13 @@ describe("chorus.views.ImportSchedule", function() {
                 truncate: true,
                 scheduleStartTime: "2013-02-21 13:30:00.0",
                 scheduleEndTime: "2013-05-27",
-                scheduleFrequency: "HOURLY"
+                scheduleFrequency: "MONTHLY"
             });
             this.view.setFieldValues(importModel);
         });
 
         it("selects the right frequency", function() {
-            expect(this.view.$(".frequency").val()).toBe("HOURLY");
+            expect(this.view.$(".frequency").val()).toBe("MONTHLY");
         });
 
         it("selects the right start date", function() {

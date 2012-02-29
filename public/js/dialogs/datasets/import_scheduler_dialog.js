@@ -64,9 +64,20 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         if (this.import) {
             this.$("input[name='schedule']").attr("checked", "checked");
             this.scheduleView.setFieldValues(this.import);
+            this.setFieldValues(this.import);
         }
 
         _.defer(_.bind(function() {chorus.styleSelect(this.$("select.names"))}, this));
+    },
+
+    setFieldValues: function(model) {
+        if (model.get("truncate")) {
+            this.$(".truncate").attr("checked", "checked");
+        } else {
+            this.$(".truncate").attr("checked", false);
+        }
+
+        this.$("select[name='toTable']").val(model.get("toTable"));
     },
 
     resourcesLoaded: function() {
