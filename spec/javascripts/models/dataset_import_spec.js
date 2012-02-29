@@ -10,6 +10,53 @@ describe("chorus.models.DatasetImport", function() {
         expect(this.model.url()).toHaveUrlPath("/edc/workspace/101/dataset/102|my_db_name|my_schema_name|SOURCE_TABLE|my_table_name/import");
     });
 
+    describe("#startTime and #endTime", function() {
+        context("when the import has a 'scheduleStartTime' attribute (as required by the POST api)", function() {
+            beforeEach(function() {
+                this.model.unset("scheduleInfo");
+                this.model.set({
+                    scheduleStartTime: "2012-05-27 14:30:00.0",
+                    scheduleEndTime: "2012-08-28"
+                });
+            });
+
+            itReturnsTheCorrectTimes();
+        });
+
+        context("when the import has a 'scheduleInfo' attribute (as returned by the GET api)", function() {
+            beforeEach(function() {
+                this.model.unset("scheduleStartTime");
+                this.model.unset("scheduleEndTime");
+                this.model.set({ scheduleInfo: {
+                    startTime: "2012-05-27 14:30:00.0",
+                    endTime: "2012-08-28"
+                }});
+            });
+
+            itReturnsTheCorrectTimes();
+        });
+
+        context("when the import doesn't have a 'scheduleInfo' or a 'scheduleStartTime''", function() {
+            it("returns undefined", function() {
+                this.model.unset("scheduleStartTime");
+                this.model.unset("scheduleEndTime");
+                this.model.unset("scheduleInfo");
+                expect(this.model.startTime()).toBeUndefined();
+                expect(this.model.endTime()).toBeUndefined();
+            });
+        });
+
+        function itReturnsTheCorrectTimes() {
+            it("returns the import's scheduled start time, without the milliseconds", function() {
+                expect(this.model.startTime()).toBe("2012-05-27 14:30:00");
+            });
+
+            it("returns the import's end time", function() {
+                expect(this.model.endTime()).toBe("2012-08-28");
+            });
+        }
+    });
+
     describe("validations", function() {
         context("when creating a new table", function() {
             beforeEach(function() {
