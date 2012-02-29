@@ -102,12 +102,8 @@
 
                 a {
                     @include ellipsis;
+                    @include menu-triangle;
                     max-width: 140px;
-                    padding-right: 10px;
-                    background-image: url("/images/blue-menu-triangle.png");
-                    background-position: right;
-                    background-repeat: no-repeat;
-                    color : $link-color;
                     border-bottom: 1px dotted $link-color;
                     color: $link-color;
                 }

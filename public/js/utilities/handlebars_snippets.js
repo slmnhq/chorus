@@ -246,16 +246,26 @@
 
         usedInWorkspaces: function (workspacesUsed) {
             if (!workspacesUsed || workspacesUsed.workspaceCount == 0) { return ""; }
-            var primaryWorkspace = new chorus.models.Workspace(workspacesUsed.workspaceList[0])
-            var primaryLink = chorus.helpers.linkTo(primaryWorkspace.showUrl(), primaryWorkspace.get('name'));
 
-            var result = $("<div></div>")
-                .addClass('found_in')
-                .append(t('dataset.found_in', {workspaceLink: primaryLink}))
-
-            if (workspacesUsed.workspaceCount > 1) {
-                result.append($('<span class="other"></span>').text(" " + t('dataset.and_others', {count: workspacesUsed.workspaceCount - 1})));
+            function linkToWorkspace(workspaceJson) {
+                var workspace = new chorus.models.Workspace(workspaceJson)
+                return chorus.helpers.linkTo(workspace.showUrl(), workspace.get('name'))
             }
+
+            var workspaceLink = linkToWorkspace(workspacesUsed.workspaceList[0]);
+
+            var result = $("<div></div>").addClass('found_in')
+            var otherWorkspacesMenu = chorus.helpers.linkTo('#', t('workspaces_used_in.other_workspaces', {count: workspacesUsed.workspaceCount - 1}), {'class': 'open_other_menu'})
+
+            result.append(t('workspaces_used_in.body', {workspaceLink: workspaceLink, otherWorkspacesMenu: otherWorkspacesMenu, count: workspacesUsed.workspaceCount}));
+            if(workspacesUsed.workspaceCount > 1) {
+                var list = $('<ul></ul>').addClass('other_menu');
+                _.each(_.rest(workspacesUsed.workspaceList), function(workspaceJson) {
+                    list.append($('<li></li>').html(linkToWorkspace(workspaceJson)));
+                })
+                result.append(list);
+            }
+
             return result.outerHtml()
         }
     }

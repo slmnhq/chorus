@@ -620,7 +620,7 @@ describe("handlebars", function() {
                 itIncludesTheFoundInWorkspaceInformation();
 
                 it("should not indicate there are any other workspaces", function() {
-                    expect($(this.result).find('.other')).not.toExist();
+                    expect($(this.result).find('a').length).toBe(1);
                 })
             })
 
@@ -636,7 +636,7 @@ describe("handlebars", function() {
                 itIncludesTheFoundInWorkspaceInformation();
 
                 it("should indicate there is 1 other workspace", function() {
-                    expect($(this.result).find(".other")).toContainTranslation("dataset.and_others.one");
+                    expect($(this.result)).toContainTranslation("workspaces_used_in.other_workspaces", {count: 1});
                 })
             })
 
@@ -652,16 +652,23 @@ describe("handlebars", function() {
                 itIncludesTheFoundInWorkspaceInformation();
 
                 it("should indicate there is 2 other workspaces", function() {
-                    expect($(this.result).find(".other")).toContainTranslation("dataset.and_others.other", {count: 2});
+                    expect($(this.result)).toContainTranslation("workspaces_used_in.other_workspaces", {count: 2});
+                })
+
+                it("includes a menu to the other workspaces", function() {
+                    expect($(this.result).find("a.open_other_menu")).toExist();
+                    expect($(this.result).find(".other_menu li").length).toBe(2);
+                    var workspace = new chorus.models.Workspace(this.workspaceUsed.workspaceList[1]);
+                    expect($(this.result).find(".other_menu li a:eq(0)")).toHaveAttr('href', workspace.showUrl())
+                    expect($(this.result).find(".other_menu li a:eq(0)")).toContainText(workspace.get('name'))
                 })
             })
 
             function itIncludesTheFoundInWorkspaceInformation() {
                 it("includes the 'found in workspace' information", function() {
                     var workspace = new chorus.models.Workspace(this.workspaceUsed.workspaceList[0]);
-                    var workspaceLink = chorus.helpers.linkTo(workspace.showUrl(), workspace.get('name'));
-                    expect($(this.result).html()).toContainTranslation("dataset.found_in", { workspaceLink: workspaceLink });
                     expect($(this.result).find("a").attr("href")).toMatchUrl(workspace.showUrl());
+                    expect($(this.result).find("a")).toContainText(workspace.get('name'));
                 });
             }
         });
