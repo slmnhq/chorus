@@ -2200,6 +2200,87 @@ beforeEach(function() {
             return new chorus.collections.NotificationSet(models, overrides);
         },
 
+        hdfsDirectoryEntrySetJson: function(overrides) {
+            return _.extend({
+                "content": [
+                    {
+                        "name": "data",
+                        "isDir": true,
+                        "lastModified": "2012-02-24 10:28:42.337",
+                        "size": 0,
+                        "count": 6,
+                        "owner": "hadoop",
+                        "group": "supergroup",
+                        "permission": "rwxr-xr-x"
+                    },
+                    {
+                        "name": ".DS_Store",
+                        "isDir": false,
+                        "lastModified": "2012-02-24 10:28:42.303",
+                        "size": 6148,
+                        "count": 0,
+                        "owner": "hadoop",
+                        "group": "supergroup",
+                        "permission": "rw-r--r--"
+                    },
+                    {
+                        "name": "2010_Report_to_Congress_on_White_House_Staff.csv",
+                        "isDir": false,
+                        "lastModified": "2012-02-24 10:28:42.313",
+                        "size": 42092,
+                        "count": 0,
+                        "owner": "hadoop",
+                        "group": "supergroup",
+                        "permission": "rw-r--r--"
+                    },
+                    {
+                        "name": "cleardb.sql",
+                        "isDir": false,
+                        "lastModified": "2012-02-24 10:28:42.320",
+                        "size": 23,
+                        "count": 0,
+                        "owner": "hadoop",
+                        "group": "supergroup",
+                        "permission": "rw-r--r--"
+                    },
+                    {
+                        "name": "import.csv",
+                        "isDir": false,
+                        "lastModified": "2012-02-24 10:28:42.326",
+                        "size": 79,
+                        "count": 0,
+                        "owner": "hadoop",
+                        "group": "supergroup",
+                        "permission": "rw-r--r--"
+                    },
+                    {
+                        "name": "import1 copy.csv",
+                        "isDir": false,
+                        "lastModified": "2012-02-24 10:28:42.334",
+                        "size": 11001,
+                        "count": 0,
+                        "owner": "hadoop",
+                        "group": "supergroup",
+                        "permission": "rw-r--r--"
+                    },
+                    {
+                        "name": "import1.csv",
+                        "isDir": false,
+                        "lastModified": "2012-02-24 10:28:42.344",
+                        "size": 92,
+                        "count": 0,
+                        "owner": "hadoop",
+                        "group": "supergroup",
+                        "permission": "rw-r--r--"
+                    }
+                ]
+            }, overrides);
+        },
+
+        hdfsDirectoryEntrySet: function(overrides) {
+            return new chorus.collections.HdfsDirectoryEntrySet(fixtures.hdfsDirectoryEntrySetJson(overrides));
+        },
+
         searchResultJson: function(overrides) {
             return _.extend({
                     "workfile": {

@@ -29,7 +29,8 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
             userCanEditInstance:this.canEditInstance(),
             instanceAccountsCount:this.instance.accounts().length,
             workspaceCount:this.instance.usage().get('workspaces').length,
-            deleteable:this.instance.get("state") == "fault" && this.instance.get("provisionType") == "create"
+            deleteable:this.instance.get("state") == "fault" && this.instance.get("provisionType") == "create",
+            isHadoop: this.model.isHadoop()
         };
     },
 

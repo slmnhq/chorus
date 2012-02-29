@@ -114,6 +114,10 @@ describe("chorus.views.InstanceListSidebar", function() {
                     it("does display the edit instance link", function() {
                         expect(this.view.$(".actions .edit_instance")).toExist();
                     })
+
+                    it("displays a 'browse files' link", function() {
+                        expect(this.view.$(".actions .browse_files")).toContainTranslation("actions.browse_files");
+                    })
                 })
 
                 context("when the instance failed to provision", function() {

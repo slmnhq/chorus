@@ -57,7 +57,11 @@
                 <li><a class="dialog browse_datasets" href="#" data-dialog="BrowseDatasets">{{t "actions.browse_datasets"}}</a></li>
             {{else}}
                 <li><a class="disabled browse_datasets">{{t "actions.browse_datasets"}}</a></li>
+            {{/if}}
         {{/if}}
+
+        {{#if isHadoop}}
+            <li><a class="browse_files" href="#/instances/{{id}}/browse/">{{t "actions.browse_files"}}</a></li>
         {{/if}}
         <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="instance" data-allow-workspace-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
     </ul>

@@ -26,6 +26,7 @@
             ["/instances", "InstanceIndex"],
             ["/instances/:instanceId/database/:databaseName/schema/:schemaName", "SchemaBrowse"],
             ["/instances/:instanceId/database/:databaseName/schema/:schemaName/:metaType/:objectName", "DatabaseObjectShow"],
+            ["/instances/:instanceId/browse/*path", "HdfsDirectoryEntryIndex"],
             ["/styleguide", "StyleGuide"]
         ],
 
