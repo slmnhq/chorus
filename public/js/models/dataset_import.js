@@ -14,6 +14,12 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
         }
     },
 
+    beforeSave: function(attrs) {
+        if (attrs.sampleCount || this.has("sampleCount")) {
+            attrs.sampleMethod = "RANDOM_COUNT";
+        }
+    },
+
     initialize: function() {
         this.bind("saved", this.createImportTask, this);
     },

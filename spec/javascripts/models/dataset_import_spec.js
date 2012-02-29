@@ -65,6 +65,26 @@ describe("chorus.models.DatasetImport", function() {
         }
     });
 
+    describe("#beforeSave", function() {
+        context("when the model has a 'sampleCount'", function() {
+            beforeEach(function() {
+                this.model.set({
+                    isNewTable: 'true',
+                    truncate: 'true',
+                    useLimitRows: true,
+                    sampleCount: 477
+                });
+            });
+
+            it("sets the 'sampleMethod' parameter, as required by the API", function() {
+                this.model.save();
+                var params = this.server.lastCreate().params();
+                expect(params.sampleCount).toBe('477');
+                expect(params.sampleMethod).toBe("RANDOM_COUNT");
+            });
+        });
+    });
+
     describe("validations", function() {
         context("when creating a new table", function() {
             beforeEach(function() {
