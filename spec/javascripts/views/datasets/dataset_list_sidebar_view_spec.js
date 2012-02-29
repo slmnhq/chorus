@@ -85,17 +85,16 @@ describe("chorus.views.DatasetListSidebar", function() {
                             });
 
                             it("has a 'create import schedule' link", function() {
-                                expect(this.view.$(".actions .create_schedule")).toContainTranslation("actions.create_schedule");
-                                expect(this.view.$("a.create_schedule[data-create-schedule=true]")).toExist();
+                                var createScheduleLink = this.view.$("a.create_schedule");
+                                expect(createScheduleLink.text()).toMatchTranslation("actions.create_schedule");
                             });
 
                             it("should have the dataset attached as data-dataset", function() {
-                                expect(this.view.$("a.import_now[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
                                 expect(this.view.$("a.create_schedule[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
                             });
 
                             it("doesn't have an 'edit import schedule' link'", function() {
-                                expect(this.view.$(".actions .edit_schedule")).not.toExist();
+                                expect(this.view.$("a.edit_schedule")).not.toExist();
                             });
 
                             itHasAnImportNowLink();
@@ -109,13 +108,15 @@ describe("chorus.views.DatasetListSidebar", function() {
                             });
 
                             it("has an 'edit import schedule' link", function() {
-                                expect(this.view.$(".actions .edit_schedule")).toContainTranslation("actions.edit_schedule");
-                                expect(this.view.$("a.edit_schedule")).toExist();
+                                var editScheduleLink = this.view.$("a.edit_schedule.dialog");
+                                expect(editScheduleLink.data("dialog")).toBe("ImportScheduler");
+                                expect(editScheduleLink.text()).toMatchTranslation("actions.edit_schedule");
                             });
 
                             it("attaches the import object to the 'edit schedule' link", function() {
-                                expect(this.view.$("a.edit_schedule").data("import")).toBeA(chorus.models.DatasetImport);
-                                expect(this.view.$("a.edit_schedule").data("import").get("datasetId")).toBe(this.dataset.id);
+                                var importModel = this.view.$("a.edit_schedule").data("import");
+                                expect(importModel).toBeA(chorus.models.DatasetImport);
+                                expect(importModel.get("datasetId")).toBe(this.dataset.id);
                             });
 
                             it("should have the dataset attached as data-dataset", function() {
@@ -131,14 +132,10 @@ describe("chorus.views.DatasetListSidebar", function() {
                         });
 
                         function itHasAnImportNowLink() {
-                            describe("the 'Import Now' link", function() {
-                                it("should have the data-dialog attribute", function() {
-                                    expect(this.view.$("a[data-dialog=ImportScheduler]")).toHaveClass("dialog");
-                                });
-
-                                it("should have the right text", function() {
-                                    expect(this.view.$(".actions .import_now")).toContainTranslation("actions.import_now");
-                                });
+                            it("has an import now link", function() {
+                                var importNowLink = this.view.$("a.import_now.dialog");
+                                expect(importNowLink.text()).toMatchTranslation("actions.import_now");
+                                expect(importNowLink.data("dialog")).toBe("ImportScheduler");
                             });
                         }
                     });

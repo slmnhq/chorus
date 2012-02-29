@@ -43,13 +43,13 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     setup: function() {
         this.scheduleView = new chorus.views.ImportSchedule({enable: false});
         this.import = this.options.launchElement.data("import");
+        var launchElement = this.options.launchElement;
 
-        if (this.options.launchElement.data("createSchedule")) {
+        if (launchElement.hasClass("create_schedule")) {
             this.title = t("import.title_schedule");
             this.submitText = t("import.begin_schedule")
-
             this.showSchedule = true;
-        } else if (this.model.has("id")) {
+        } else if (launchElement.hasClass("edit_schedule")) {
             this.title = t("import.title_edit_schedule");
             this.submitText = t("actions.save_changes");
         } else {
@@ -148,6 +148,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         updates.scheduleInterval = $enabledFieldSet.find("input[name='scheduleInterval']").val() || "1";
         updates.scheduleDays = "1:2"; // ignored but required; API will be fixed at some point
 
+        updates.importType = (this.options.launchElement.hasClass("import_now")) ? "oneTime" : "schedule";
         return updates;
     }
 });

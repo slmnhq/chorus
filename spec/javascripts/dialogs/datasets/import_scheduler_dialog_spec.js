@@ -5,9 +5,47 @@ describe("chorus.dialogs.ImportScheduler", function() {
         this.launchElement.data("dataset", this.dataset);
     });
 
+    describe("#getNewModelAttrs", function() {
+        describe("when creating a new schedule", function() {
+            beforeEach(function() {
+                this.launchElement.addClass("create_schedule");
+                this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+                this.attrs = this.dialog.getNewModelAttrs();
+            });
+
+            it("has the 'importType' parameter set to 'schedule'", function() {
+                expect(this.attrs.importType).toBe("schedule");
+            });
+        });
+
+        describe("when editing an existing schedule", function() {
+            beforeEach(function() {
+                this.launchElement.addClass("edit_schedule");
+                this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+                this.attrs = this.dialog.getNewModelAttrs();
+            });
+
+            it("has the 'importType' parameter set to 'schedule'", function() {
+                expect(this.attrs.importType).toBe("schedule");
+            });
+        });
+
+        describe("when doing a single import", function() {
+            beforeEach(function() {
+                this.launchElement.addClass("import_now");
+                this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+                this.attrs = this.dialog.getNewModelAttrs();
+            });
+
+            it("has the 'importType' parameter set to 'oneTime'", function() {
+                expect(this.attrs.importType).toBe("oneTime");
+            });
+        });
+    });
+
     describe("creating a new schedule", function() {
         beforeEach(function() {
-            this.launchElement.attr("data-create-schedule", "true");
+            this.launchElement.addClass("create_schedule");
             this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
             this.dialog.render();
         });
@@ -112,6 +150,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
     describe("editing an existing schedule", function() {
         beforeEach(function() {
             this.import = fixtures.datasetImport({ id: '12' });
+            this.launchElement.addClass("edit_schedule");
             this.launchElement.data("import", this.import);
             this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
             this.dialog.render();
@@ -137,6 +176,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
     describe("import now!", function() {
         beforeEach(function() {
+            this.launchElement.addClass("import_now");
             this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
             this.dialog.render();
         });
