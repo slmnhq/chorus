@@ -14,7 +14,8 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             "val3.1,val3.2,val3.3,val3.4,val3.5",
             "val4.1,val4.2,val4.3,val4.4,val4.5"
         ],
-            toTable: "existingTable"
+            toTable: "existingTable",
+            truncate: true
         });
         this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv, datasetId: "dat-id"});
         this.columns = [
@@ -432,6 +433,13 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     describe("clicking the import button", function() {
         beforeEach(function() {
             spyOn(this.dialog, "closeModal");
+            this.expectedColumnsMap = []
+            for (var i = 0; i < 5; i++) {
+                this.dialog.$(".column_mapping .map:eq(" + i + ")").click();
+                this.qtip.find(".qtip:last .ui-tooltip-content li:eq(" + (4-i) + ") a").click();
+                this.expectedColumnsMap.push({sourceOrder: (i+1), targetOrder: (5-i)})
+            }
+
             this.dialog.$("button.submit").click();
         });
 
@@ -446,11 +454,17 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             expect(params.fileName).toBe(this.dialog.csv.get("fileName"));
             expect(params.toTable).toBe("existingTable");
             expect(params.delimiter).toBe(",");
+            expect(params.type).toBe("existingTable");
+            expect(params.hasHeader).toBe('true');
+            expect(params.truncate).toBe('true');
+            expect(JSON.parse(params.columnsMap)).toEqual(this.expectedColumnsMap);
+
         });
 
         context("when the post to import responds with success", function() {
             beforeEach(function() {
                 spyOn(chorus, 'toast');
+                spyOn(chorus.router, "navigate");
                 spyOn(chorus.PageEvents, 'broadcast');
                 this.server.lastCreateFor(this.dialog.csv).succeed();
             });
@@ -462,6 +476,10 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
             it("triggers csv_import:started", function() {
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("csv_import:started");
+            });
+
+            it("should navigate to the destination sandbox table", function() {
+                expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.dataset.showUrl(), true)
             });
         })
 

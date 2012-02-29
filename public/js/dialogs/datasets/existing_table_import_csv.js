@@ -18,9 +18,24 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         this.tableName = this.csv.get("toTable");
         chorus.PageEvents.subscribe("choice:setType", this.onSelectType, this);
         this.dataset = new chorus.models.Dataset({ workspace: {id: this.csv.get("workspaceId")}, id: this.options.datasetId })
+
         this.requiredResources.add(this.dataset);
         this.dataset.fetch();
         this.destinations = [];
+
+        this.bindings.add(this.csv, "saved", this.saved);
+        this.bindings.add(this.csv, "saveFailed", this.saveFailed);
+    },
+
+    saved: function() {
+        this.closeModal();
+        chorus.toast("dataset.import.started");
+        chorus.PageEvents.broadcast("csv_import:started");
+        chorus.router.navigate(this.dataset.showUrl(), true);
+    },
+
+    saveFailed: function() {
+        this.$("button.submit").stopLoading();
     },
 
     render: function() {
@@ -114,30 +129,20 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
 
     startImport: function() {
         this.$('button.submit').startLoading("dataset.import.importing");
-        var $names = this.$(".column_names input:text");
-        var $types = this.$(".data_types .chosen");
+        var self = this;
 
-        var columnData = _.map($names, function(name, i) {
+        var columnData = _.map(this.destinations, function(destination, i) {
             return {
-                columnName: chorus.Mixins.dbHelpers.safePGName($(name).val()),
-                columnType: $types.eq(i).text(),
-                columnOrder: i + 1
+                sourceOrder: i+1,
+                targetOrder: _.indexOf(_.pluck(self.dataset.get("columnNames"), "name"), destination.name)+1
             }
         })
         this.csv.set({
             delimiter: this.delimiter,
-            columnsDef: JSON.stringify(columnData)
-        })
-
-        this.csv.bindOnce("saved", function() {
-            this.closeModal();
-            chorus.toast("dataset.import.started");
-            chorus.PageEvents.broadcast("csv_import:started");
-        }, this);
-
-        this.csv.bindOnce("saveFailed", function() {
-            this.$("button.submit").stopLoading();
-        }, this);
+            type: "existingTable",
+            hasHeader: !!(this.$("#include_header").attr("checked")),
+            columnsMap: JSON.stringify(columnData)
+        }, {silent: true})
 
         this.$("button.submit").startLoading("dataset.import.importing");
 
@@ -226,7 +231,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
             this.resource.serverErrors = [{ message: t("dataset.import.table.too_many_source_columns")}];
             this.resource.trigger("validationFailed");
         } else {
-            this.resource.serverErrors = [];
+            this.resource.serverErrors = undefined;
         }
     }
 });
