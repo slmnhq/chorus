@@ -14,7 +14,11 @@
                 <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
                 {{#if isImportable}}
                     <li><a class="dialog import_now" href="#" data-dialog="ImportScheduler">{{t "actions.import_now"}}</a></li>
-                    <li><a class="dialog create_schedule" href="#" data-use-schedule="true" data-dialog="ImportScheduler">{{t "actions.create_schedule"}}</a></li>
+                    {{#if hasImport}}
+                        <li><a class="dialog edit_schedule" href="#" data-use-schedule="true" data-dialog="ImportScheduler">{{t "actions.edit_schedule"}}</a></li>
+                    {{else}}
+                        <li><a class="dialog create_schedule" href="#" data-use-schedule="true" data-dialog="ImportScheduler">{{t "actions.create_schedule"}}</a></li>
+                    {{/if}}
                 {{/if}}
             {{/unless}}
             {{#unless noCredentials}}

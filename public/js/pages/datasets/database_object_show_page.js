@@ -13,6 +13,7 @@
     });
 
     chorus.pages.DatabaseObjectShowPage = chorus.pages.Base.extend({
+        constructorName: "DatabaseObjectShowPage",
         helpId: "databaseObject",
         hideDeriveChorusView: true,
         additionalClass: 'tabular_data_show',

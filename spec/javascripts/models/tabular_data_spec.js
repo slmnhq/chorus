@@ -109,6 +109,32 @@ describe("chorus.models.TabularData", function() {
         });
     })
 
+    describe("#isImportable", function() {
+        it("returns false unless the object is a Dataset (with a workspace id)", function() {
+            var table = fixtures.databaseObject();
+            expect(table.isImportable()).toBeFalsy();
+        });
+
+        it("returns false when the dataset is a sandbox table or view", function() {
+            var dataset = fixtures.datasetSandboxTable();
+            expect(dataset.isImportable()).toBeFalsy();
+
+            dataset = fixtures.datasetSandboxView();
+            expect(dataset.isImportable()).toBeFalsy();
+        });
+
+        it("returns true when the dataset is a source table, source view or chorus view", function() {
+            var dataset = fixtures.datasetSourceTable();
+            expect(dataset.isImportable()).toBeTruthy();
+
+            dataset = fixtures.datasetSourceView();
+            expect(dataset.isImportable()).toBeTruthy();
+
+            dataset = fixtures.datasetChorusView();
+            expect(dataset.isImportable()).toBeTruthy();
+        });
+    });
+
     describe("#schema", function() {
         beforeEach(function() {
             this.schema = this.tabularData.schema();

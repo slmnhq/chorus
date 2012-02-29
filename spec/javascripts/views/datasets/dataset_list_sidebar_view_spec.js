@@ -29,8 +29,114 @@ describe("chorus.views.DatasetListSidebar", function() {
         describe("dataset:selected event handling", function() {
             context("when a dataset is selected", function() {
                 beforeEach(function() {
+                    this.server.reset();
                     this.dataset = fixtures.datasetSourceTable();
                     chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                });
+
+                it("doesn't display any import links", function() {
+                    expect(this.view.$("a.create_schedule, a.edit_schedule, a.import_now")).not.toExist();
+                });
+
+                context("when the dataset is a sandbox table or view", function() {
+                    beforeEach(function() {
+                        this.dataset = fixtures.datasetSandboxTable();
+                        chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                    });
+
+                    it("doesn't fetch the import configuration", function() {
+                        expect(this.dataset.getImport()).not.toHaveBeenFetched();
+                    });
+
+                    it("doesn't display a 'import now' link", function() {
+                        expect(this.view.$(".import_now")).not.toExist();
+                    });
+                });
+
+                context("when the dataset is a source table or view", function() {
+                    beforeEach(function() {
+                        this.dataset = fixtures.datasetSourceTable();
+                        chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                    });
+
+                    it("fetches the import configuration for the dataset", function() {
+                        expect(this.dataset.getImport()).toHaveBeenFetched();
+                    });
+
+                    describe("when a non-importable dataset is then selected", function() {
+                        beforeEach(function() {
+                            this.dataset = fixtures.datasetSandboxTable();
+                            chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                        });
+
+                        it("does not show the 'import now' link", function() {
+                            expect(this.view.$("a.import_now")).not.toExist();
+                        });
+
+                        it("does not try to fetch the import configuration", function() {
+                            expect(this.dataset.getImport()).not.toHaveBeenFetched();
+                        });
+                    });
+
+                    describe("when the import fetch completes", function() {
+                        context("and the dataset doesn't have an import schedule", function() {
+                            beforeEach(function() {
+                                this.server.completeFetchFor(this.dataset.getImport(), []);
+                            });
+
+                            it("has a 'create import schedule' link", function() {
+                                expect(this.view.$(".actions .create_schedule")).toContainTranslation("actions.create_schedule");
+                                expect(this.view.$("a.create_schedule[data-use-schedule=true]")).toExist();
+                            });
+
+                            it("should have the dataset attached as data-dataset", function() {
+                                expect(this.view.$("a.import_now[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
+                                expect(this.view.$("a.create_schedule[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
+                            });
+
+                            it("doesn't have an 'edit import schedule' link'", function() {
+                                expect(this.view.$(".actions .edit_schedule")).not.toExist();
+                            });
+
+                            itHasAnImportNowLink();
+                        });
+
+                        context("and the dataset has an import schedule", function() {
+                            beforeEach(function() {
+                                this.server.completeFetchFor(this.dataset.getImport(), {
+                                    id: '1234'
+                                });
+                            });
+
+                            it("has an 'edit import schedule' link", function() {
+                                expect(this.view.$(".actions .edit_schedule")).toContainTranslation("actions.edit_schedule");
+                                expect(this.view.$("a.edit_schedule[data-use-schedule=true]")).toExist();
+                            });
+
+                            it("should have the dataset attached as data-dataset", function() {
+                                expect(this.view.$("a.import_now[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
+                                expect(this.view.$("a.edit_schedule[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
+                            });
+
+                            it("doesn't have a 'create import schedule' link'", function() {
+                                expect(this.view.$(".actions .create_schedule")).not.toExist();
+                            });
+
+                            itHasAnImportNowLink();
+                        });
+
+                        function itHasAnImportNowLink() {
+                            describe("the 'Import Now' link", function() {
+                                it("should have the data-dialog attribute", function() {
+                                    expect(this.view.$("a[data-dialog=ImportScheduler]")).toHaveClass("dialog");
+                                });
+
+                                it("should have the right text", function() {
+                                    expect(this.view.$(".actions .import_now")).toContainTranslation("actions.import_now");
+                                });
+                            });
+                        }
+                    });
                 });
 
                 it("displays the selected dataset name", function() {
@@ -44,48 +150,6 @@ describe("chorus.views.DatasetListSidebar", function() {
                 it("displays the 'Preview Data' link", function() {
                     expect(this.view.$('.actions .dialog.dataset_preview').data('dialog')).toBe('DatasetPreview');
                     expect(this.view.$('.actions .dataset_preview')).toContainTranslation('actions.dataset_preview');
-                });
-
-
-                describe("the 'Import Now' and 'Create Schedule' links", function() {
-                    it("should have the data-dialog attribute", function() {
-                        expect(this.view.$("a[data-dialog=ImportScheduler]")).toHaveClass("dialog");
-                    });
-
-                    it("should have the dataset attached as data-dataset", function() {
-                        expect(this.view.$("a.import_now[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
-                        expect(this.view.$("a.create_schedule[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
-                    })
-
-                    it("should be visible for source objects", function() {
-                        _.each(["datasetSourceTable", "datasetSourceView", "datasetChorusView"], function(fixture) {
-                            chorus.PageEvents.broadcast("dataset:selected", fixtures[fixture]());
-                            expect(this.view.$(".actions .import_now")).toExist();
-                        }, this)
-                    });
-
-                    it("should not exist for sandbox tables/views", function() {
-                        _.each(["datasetSandboxTable", "datasetSandboxView"], function(fixture) {
-                            chorus.PageEvents.broadcast("dataset:selected", fixtures[fixture]());
-                            expect(this.view.$(".actions .import_now")).not.toExist();
-                        }, this)
-                    })
-
-                    describe("the 'Import Now' link", function() {
-                        it("should have the right text", function() {
-                            expect(this.view.$(".actions .import_now")).toContainTranslation("actions.import_now");
-                        });
-                    });
-
-                    describe("the 'Create Import Schedule' link", function() {
-                        it("should have the right text", function() {
-                            expect(this.view.$(".actions .create_schedule")).toContainTranslation("actions.create_schedule");
-                        });
-
-                        it("should have a data-use-schedule", function() {
-                            expect(this.view.$("a.create_schedule[data-use-schedule=true]")).toExist();
-                        });
-                    });
                 });
 
                 context("when hasCredentials is false for the dataset", function() {

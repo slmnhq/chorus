@@ -247,6 +247,13 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
+    describe("getImport", function() {
+        it("returns a DatasetImport object with the right ids", function() {
+            expect(this.dataset.getImport().get("datasetId")).toBe(this.dataset.id);
+            expect(this.dataset.getImport().get("workspaceId")).toBe(this.dataset.get("workspace").id);
+        });
+    });
+
     describe("#deriveChorusView", function() {
         beforeEach(function() {
             this.chorusView = this.dataset.deriveChorusView();

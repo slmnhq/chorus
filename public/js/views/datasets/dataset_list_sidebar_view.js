@@ -1,4 +1,5 @@
 chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
+    constructorName: "DatasetListSidebarView",
     className: "dataset_list_sidebar",
 
     events: {
@@ -51,9 +52,16 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
             });
 
             this.activityList.bind("content:changed", this.recalculateScrolling, this)
+
+            if (dataset.isImportable()) {
+                this.importConfiguration = dataset.getImport();
+                this.importConfiguration.onLoaded(this.render, this);
+                this.importConfiguration.fetch();
+            }
         } else {
             delete this.statistics;
             delete this.activityList;
+            delete this.importConfiguration;
         }
 
         this.render();
@@ -68,7 +76,10 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
         if (this.resource) {
             ctx.entityType = this.resource.entityType;
 
-            ctx.isImportable = this.resource.get("type") != "SANDBOX_TABLE";
+            if (this.resource.isImportable()) {
+                ctx.isImportable = this.importConfiguration.loaded;
+                ctx.hasImport = this.importConfiguration.has("id")
+            }
 
             if (this.resource.get("hasCredentials") === false) {
                 ctx.isImportable = false;
@@ -101,9 +112,8 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
     },
 
     postRender: function() {
-        this.$("a.import_now").data("dataset", this.resource);
-        this.$("a.create_schedule").data("dataset", this.resource);
-        this._super("postRender")
+        this.$("a.create_schedule, a.edit_schedule, a.import_now").data("dataset", this.resource);
+        this._super("postRender");
     },
 
     launchAddCredentialsDialog: function(e) {

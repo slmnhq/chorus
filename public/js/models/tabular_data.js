@@ -155,6 +155,10 @@ chorus.models.TabularData = chorus.models.Base.extend({
             return this.fromClauseBody() + " AS " + this.alias();
         }
         return this.fromClauseBody();
+    },
+
+    isImportable: function() {
+        return false;
     }
 }, {
 

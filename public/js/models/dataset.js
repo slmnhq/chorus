@@ -1,4 +1,6 @@
 chorus.models.Dataset = chorus.models.TabularData.extend({
+    constructorName: "Dataset",
+
     urlTemplate: function() {
         var components = [
             "workspace",
@@ -101,6 +103,13 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
         return stats;
     },
 
+    getImport: function() {
+        return new chorus.models.DatasetImport({
+            datasetId: this.get("id"),
+            workspaceId: this.get("workspace").id
+        });
+    },
+
     columns: function(options) {
         var result = this._super('columns', arguments);
         result.attributes.workspaceId = this.get("workspace").id;
@@ -109,5 +118,9 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
 
     hasOwnPage: function() {
         return true;
+    },
+
+    isImportable: function() {
+        return this.get("type") !== "SANDBOX_TABLE";
     }
 });

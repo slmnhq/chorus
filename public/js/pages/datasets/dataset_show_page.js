@@ -12,6 +12,7 @@
     });
 
     chorus.pages.DatasetShowPage = chorus.pages.DatabaseObjectShowPage.extend({
+        constructorName: "DatasetShowPage",
         helpId: "dataset",
         hideDeriveChorusView: false,
         sidebarOptions: {browsingSchema: false},
