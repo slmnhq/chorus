@@ -150,7 +150,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                             this.dialog.$("select[name='toTable']").eq(0).attr("selected", true);
 
                             this.dialog.$("input[name='limit_num_rows']").prop("checked", true)
-                            this.dialog.$("input[name='rowLimit']").val(123);
+                            this.dialog.$("input[name='sampleCount']").val(123);
 
                             this.dialog.$(".start input[name='year']").val("2012");
                             this.dialog.$(".start input[name='month']").val("02");
@@ -246,7 +246,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
             it("pre-populates the row limit", function() {
                 expect(this.dialog.$("input[name='limit_num_rows']")).toBeChecked();
-                expect(this.dialog.$("input[name='rowLimit']").val()).toBe("200");
+                expect(this.dialog.$("input[name='sampleCount']").val()).toBe("200");
             });
         });
     });

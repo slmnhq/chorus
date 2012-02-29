@@ -70,7 +70,7 @@ describe("chorus.models.DatasetImport", function() {
             beforeEach(function() {
                 this.attrs = {
                     toTable: "Foo",
-                    rowLimit: "23",
+                    sampleCount: "23",
                     truncate: "true",
                     isNewTable: "true"
                 };
@@ -105,7 +105,7 @@ describe("chorus.models.DatasetImport", function() {
                 });
 
                 it("should only allow digits for the row limit", function() {
-                    this.attrs.rowLimit = "a3v4s5";
+                    this.attrs.sampleCount = "a3v4s5";
                     expect(this.model.performValidation(this.attrs)).toBeFalsy();
                 });
             });
@@ -115,8 +115,8 @@ describe("chorus.models.DatasetImport", function() {
                     this.attrs.useLimitRows = false;
                 });
 
-                it("should not validate the rowLimit field", function() {
-                    this.attrs.rowLimit = "";
+                it("should not validate the sampleCount field", function() {
+                    this.attrs.sampleCount = "";
                     expect(this.model.performValidation(this.attrs)).toBeTruthy();
                 });
             });
@@ -126,7 +126,7 @@ describe("chorus.models.DatasetImport", function() {
             beforeEach(function() {
                 this.attrs = {
                     toTable: "Foo",
-                    rowLimit: "23",
+                    sampleCount: "23",
                     truncate: "true",
                     isNewTable: "false"
                 };

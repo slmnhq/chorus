@@ -80,7 +80,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         this.$("select[name='toTable']").val(model.get("toTable"));
         if (model.get("sampleCount")) {
             this.$("input[name='limit_num_rows']").attr("checked", "checked");
-            this.$("input[name='rowLimit']").val(model.get("sampleCount"));
+            this.$("input[name='sampleCount']").val(model.get("sampleCount"));
         }
     },
 
@@ -154,7 +154,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
         updates.useLimitRows = $enabledFieldSet.find(".limit input:checkbox").prop("checked");
         if (updates.useLimitRows) {
-            updates.sampleCount = $enabledFieldSet.find("input[name='rowLimit']").val();
+            updates.sampleCount = $enabledFieldSet.find("input[name='sampleCount']").val();
         }
 
         if ($enabledFieldSet.find("input:checkbox[name='schedule']").prop("checked")) {

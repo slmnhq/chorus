@@ -10,7 +10,7 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
         this.requirePattern("isNewTable", /^(true|false)$/, newAttrs);
 
         if (newAttrs.useLimitRows) {
-            this.requirePositiveInteger("rowLimit", newAttrs);
+            this.requirePositiveInteger("sampleCount", newAttrs);
         }
     },
 
