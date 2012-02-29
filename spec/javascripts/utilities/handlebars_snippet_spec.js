@@ -585,6 +585,16 @@ describe("handlebars", function() {
         });
 
         describe("usedInWorkspaces", function() {
+            context("when there is no data", function() {
+                beforeEach(function() {
+                    this.result = Handlebars.helpers.usedInWorkspaces(undefined);
+                });
+
+                it("does not render", function() {
+                    expect(this.result).toBeFalsy();
+                });
+            });
+
             context("when there aren't any 'found in' workspaces", function() {
                 beforeEach(function() {
                     this.workspaceUsed = {
@@ -594,7 +604,7 @@ describe("handlebars", function() {
                     this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceUsed);
                 });
 
-                it("does not render .found_in", function() {
+                it("does not render", function() {
                     expect(this.result).toBeFalsy();
                 });
             });

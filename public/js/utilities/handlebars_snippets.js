@@ -245,7 +245,7 @@
         },
 
         usedInWorkspaces: function (workspacesUsed) {
-            if (workspacesUsed.workspaceCount == 0) { return ""; }
+            if (!workspacesUsed || workspacesUsed.workspaceCount == 0) { return ""; }
             var primaryWorkspace = new chorus.models.Workspace(workspacesUsed.workspaceList[0])
             var primaryLink = chorus.helpers.linkTo(primaryWorkspace.showUrl(), primaryWorkspace.get('name'));
 
