@@ -67,7 +67,12 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
                 classes: "table_import_csv",
                 contentEvents: {
                     'a.name': _.bind(self.destinationColumnSelected, self)
-                }
+                },
+                position: {
+                    my: "left center",
+                    at: "right center"
+                },
+                mimic: "left center"
             });
         })
 

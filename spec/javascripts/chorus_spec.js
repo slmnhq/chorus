@@ -125,6 +125,11 @@ describe("chorus global", function() {
                 chorus.menu(this.element, {
                     content: "menu content<a class='test_link'></a>",
                     classes: "myClass",
+                    mimic: "left center",
+                    position: {
+                        my: "left center",
+                        at: "right center"
+                    },
                     contentEvents: {
                         '.test_link': this.eventSpy
                     }
@@ -161,12 +166,12 @@ describe("chorus global", function() {
             it("sets up our menu styling", function() {
                 expect(this.qtipArgs.show.event).toEqual('click');
                 expect(this.qtipArgs.hide).toEqual('unfocus');
-                expect(this.qtipArgs.position.my).toEqual("top center")
-                expect(this.qtipArgs.position.at).toEqual("bottom center")
+                expect(this.qtipArgs.position.my).toEqual("left center")
+                expect(this.qtipArgs.position.at).toEqual("right center")
                 expect(this.qtipArgs.style).toEqual({
                     classes: "myClass tooltip-white",
                     tip: {
-                        mimic: "top center",
+                        mimic: "left center",
                         width: 20,
                         height: 15
                     }

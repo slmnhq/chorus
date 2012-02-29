@@ -114,12 +114,16 @@ window.Chorus = function chorus$Global() {
             style: {
                 classes: classes,
                 tip: {
-                    mimic: "top center",
+                    mimic: options.mimic || "top center",
                     width: 20,
                     height: 15
                 }
             }
         };
+
+        if(options.position) {
+            _.extend(qtipArgs.position, options.position)
+        }
 
         if (options.orientation === "right") {
             qtipArgs.position.my = "top left";
