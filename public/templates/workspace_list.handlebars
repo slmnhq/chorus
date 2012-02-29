@@ -11,12 +11,6 @@
                 </a>
             </div>
             <div class="summary">
-                {{#if isTruncated }}
-                    <span class="truncated">{{truncatedSummary}} <a href ="#" class="link">{{t "workspace.more"}}</a></span>
-                    <span class="full">{{summary}} <a href ="#" class="link">{{t "workspace.less"}}</a></span>
-                {{else}}
-                    {{summary}}
-                {{/if}}
             </div>
             <div class="details">
                 <span class="owner">
@@ -28,8 +22,6 @@
                         <a href="{{archiverUrl}}">{{archiverFullName}}</a>
                         <span class="timestamp">{{relativeTimestamp archivedTimestamp}}</span>
                     {{/if}}
-
-
                 </span>
                 {{#unless isPublic}}
                     <span class="private">

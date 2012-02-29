@@ -123,29 +123,6 @@ describe("chorus.models.Workspace", function() {
         });
     });
 
-    describe("#trucatedSummary", function() {
-        beforeEach(function() {
-            this.model.set({
-                owner: "jhenry",
-                summary: "this is a summary this is a summary this is a summary this is a summary this is a summary this is a summary this is a summary this is a summary this is a summary this is a summary "})
-        });
-        it("creates a truncated summary text", function() {
-            expect(this.model.truncatedSummary(5)).toBe("this ");
-        });
-    });
-
-    describe("#isTruncate", function() {
-        it("sets isTruncate to true when summary is more than 100 characters", function() {
-            this.model.set({owner: "jhenry",summary: "this is a summary this is a summary this is a summary this is a summary this is a summary this is a summary" +
-                "this is a summary this is a summary this is a summary this is a summary this is a summary this is a summary this is a summary this is a summary "});
-            expect(this.model.isTruncated()).toBeTruthy();
-        })
-        it("sets isTruncate to false when summary is less than 100 characters", function() {
-            this.model.set({summary: "this is a summary this is a summary "})
-            expect(this.model.isTruncated()).toBeFalsy();
-        });
-    });
-
     describe("#archiver", function() {
         beforeEach(function() {
             this.model.set({archiver: "jhenry", archiverFirstName: "John" ,archiverLastName: "Henry"})

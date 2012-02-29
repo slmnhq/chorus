@@ -11,7 +11,6 @@ describe("chorus.views.WorkspaceList", function() {
             archivedTimestamp: "2011-12-05 13:25:25.704"
         });
 
-
         this.publicWorkspace = new chorus.models.Workspace({id: 4, isPublic: true, name: "my public workspace"});
         this.privateWorkspace = new chorus.models.Workspace({
             id: 3,
@@ -21,7 +20,6 @@ describe("chorus.views.WorkspaceList", function() {
             ownerLastName: "Mario",
             name: "my private workspace"
         });
-
 
         this.archivedBigSummaryWorkspace = new chorus.models.Workspace({
             id: 5,
@@ -51,7 +49,6 @@ describe("chorus.views.WorkspaceList", function() {
             this.archivedEl = this.view.$("li[data-id=2]");
             this.privateEl = this.view.$("li[data-id=3]");
             this.publicEl = this.view.$("li[data-id=4]");
-            this.archivedBigSummaryEl = this.view.$("li[data-id=5]");
         });
 
         it("displays all the workspaces", function() {
@@ -87,31 +84,10 @@ describe("chorus.views.WorkspaceList", function() {
             expect($(".owner a", this.privateEl).attr('href')).toBe(this.privateWorkspace.owner().showUrl());
         });
 
-        it("displays the truncated summary when it's not empty", function() {
-            expect($(".summary", this.archivedEl).text().trim()).toContain(this.archivedWorkspace.get("summary").trim())
+        it("displays the truncated text view", function() {
+            expect(this.view.$(".summary .truncated_text").length).toBe(5);
         });
 
-        describe("when the summary is less than 100", function() {
-
-            it("displays the truncated summary without option 'More' ", function() {
-                expect($(".summary", this.archivedEl).text().trim()).toContain(this.archivedWorkspace.get("summary").trim());
-                expect($(".summary a", this.archivedEl)).not.toHaveClass("moreLink");
-            });
-        });
-
-        describe("when the summary is more than 100 characters long", function() {
-            it("displays the truncated summary with option 'More' ", function() {
-                expect($(this.archivedBigSummaryEl)).not.toHaveClass("more");
-                expect($(".summary", this.archivedBigSummaryEl).text().trim()).toContain(this.archivedBigSummaryWorkspace.get("summary").substring(0, 100).trim());
-            });
-
-            it("displays the full summary with option 'Less' when clicked on More ", function() {
-                expect($(this.archivedBigSummaryEl)).not.toHaveClass("more");
-                $(".summary .truncated a.link ", this.archivedBigSummaryEl).click();
-                expect($(this.archivedBigSummaryEl)).toHaveClass("more");
-                expect($(".summary", this.archivedBigSummaryEl).text()).toContain(this.archivedBigSummaryWorkspace.get("summary"));
-            });
-        });
         describe("archived workspace", function() {
             it("displays the active workspace icon for the active workspace", function() {
                 expect(this.view.$("li[data-id=1] img").attr("src")).toBe(this.activeWorkspace.defaultIconUrl());

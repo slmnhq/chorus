@@ -91,18 +91,8 @@ chorus.models.Workspace = chorus.models.Base.extend({
         "name":"workspace.validation.name"
     },
 
-    truncatedSummary:function (length) {
-        if (this.get("summary")) {
-            return this.get("summary").substring(0, length);
-        }
-    },
-
     hasImage:function () {
         return this.get("iconId") != null;
-    },
-
-    isTruncated:function () {
-        return this.get("summary") ? this.get("summary").length > 100 : false;
     },
 
     canRead:function () {

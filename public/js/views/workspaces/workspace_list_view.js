@@ -2,9 +2,6 @@ chorus.views.WorkspaceList = chorus.views.Base.extend({
     className:"workspace_list",
     tagName:"ul",
     additionalClass:"list",
-    events:{
-        "click a.link":"toggleSummary"
-    },
 
     collectionModelContext:function (model) {
         var date = Date.parseFromApi(model.get("archivedTimestamp"));
@@ -15,14 +12,17 @@ chorus.views.WorkspaceList = chorus.views.Base.extend({
             ownerUrl:model.owner().showUrl(),
             archiverUrl:model.archiver().showUrl(),
             archiverFullName:model.archiver().get("fullName"),
-            truncatedSummary:model.truncatedSummary(100),
-            isTruncated:model.isTruncated(),
             ownerFullName:model.owner().displayName()
         };
     },
 
-    toggleSummary:function (e) {
-        e.preventDefault();
-        $(e.target).closest("li").toggleClass("more");
+    postRender: function() {
+        var i = 0;
+        var $summary = this.$('li .summary');
+        this.collection.each(function(model) {
+            model.loaded = true;
+            var text = new chorus.views.TruncatedText({model:model, attribute:"summary", characters:300, lines:2})
+            $summary.eq(i++).append(text.render().el);
+        });
     }
 });
