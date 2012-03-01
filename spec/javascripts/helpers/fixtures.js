@@ -1983,6 +1983,26 @@ beforeEach(function() {
             return new chorus.models.Dataset(attributes);
         },
 
+        datasetImportSuccessful: function(overrides) {
+            return this.datasetImport(_.extend({executionInfo : {
+                                startedStamp: "2012-02-29 14:23:58.169",
+                                completedStamp : "2012-02-29 14:23:59.027",
+                                result : {executeResult: "success"},
+                                state : "success",
+                                creator : "InitialUser"
+                            }}, overrides));
+        },
+
+        datasetImportFailed: function(overrides) {
+            return this.datasetImport(_.extend({executionInfo : {
+                                startedStamp: "2012-02-29 14:23:58.169",
+                                completedStamp : "2012-02-29 14:23:59.027",
+                                result : {executeResult: "failed"},
+                                state : "failed",
+                                creator : "InitialUser"
+                            }}, overrides));
+        },
+
         datasetImport: function(overrides) {
             var attributes = _.extend({
                 workspaceId: this.nextId().toString(),

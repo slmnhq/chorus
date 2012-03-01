@@ -85,10 +85,18 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
                         workspaceId: this.resource.get("workspace").id
                     });
                     var tableLink = "<a href='" + destinationTable.showUrl() + "'>" + this.importConfiguration.get("toTable") + "</a>";
-                    ctx.lastImport = t("import.last_imported", {
-                        timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
-                        tableLink: tableLink
-                    });
+                    if(this.importConfiguration.get("executionInfo").state == "success") {
+                        ctx.lastImport = t("import.last_imported", {
+                            timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
+                            tableLink: tableLink
+                        });
+                    } else {
+                        ctx.lastImport = t("import.last_import_failed", {
+                                timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
+                                tableLink: tableLink
+                        });
+                        ctx.importFailed = true;
+                    }
                 }
             }
 

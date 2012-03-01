@@ -9,7 +9,14 @@
     {{/if}}
 
     {{#if hasImport}}
-        <div class="last_import">{{{lastImport}}}</div>
+        <div class="last_import">
+            {{#if importFailed}}
+                <div class="icon">
+                    <img src="/images/message_error_small.png" />
+                </div>
+            {{/if}}
+            {{{lastImport}}}
+        </div>
     {{/if}}
 
     <div class="actions">

@@ -14,6 +14,11 @@
     .last_import {
         @include results-console-message;
         margin-bottom: 10px;
+        .icon {
+            float: left;
+            margin-top: 3px;
+            margin-right: 5px;
+        }
     }
 
     .activity_list {
