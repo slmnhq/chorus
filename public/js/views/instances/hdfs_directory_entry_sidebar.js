@@ -28,5 +28,11 @@ chorus.views.HdfsDirectoryEntrySidebar = chorus.views.Sidebar.extend({
         }
 
         this.render();
+    },
+
+    additionalContext: function() {
+        return {
+            lastUpdatedStamp: t("hdfs.last_updated", { when : chorus.helpers.relativeTimestamp(this.resource.get("lastModified"))})
+        }
     }
 });

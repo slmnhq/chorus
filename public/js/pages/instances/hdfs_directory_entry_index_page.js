@@ -1,9 +1,4 @@
 chorus.pages.HdfsDirectoryEntryIndexPage = chorus.pages.Base.extend({
-    crumbs:[
-        { label:t("breadcrumbs.home"), url:"#/" },
-        { label:t("breadcrumbs.instances"), url: "#/instances" }
-    ],
-
     setup:function (instanceId, path) {
         this.path = "/" + path;
         this.instance = new chorus.models.Instance({id: instanceId});
@@ -16,8 +11,13 @@ chorus.pages.HdfsDirectoryEntryIndexPage = chorus.pages.Base.extend({
     },
 
     resourcesLoaded: function() {
-        this.crumbs.push({ label : this.instance.get("name")});
+        this.crumbs = [
+            { label: t("breadcrumbs.home"), url: "#/" },
+            { label: t("breadcrumbs.instances"), url: "#/instances" },
+            { label: this.instance.get("name") }
+        ];
         this.mainContent = new chorus.views.MainContentList({
+
             modelClass: "HdfsDirectoryEntry",
             collection: this.collection,
             title: this.instance.get("name") + ": " + this.path

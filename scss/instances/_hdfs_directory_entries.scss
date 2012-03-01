@@ -1,0 +1,15 @@
+.hdfs_directory_entry_sidebar {
+    .info {
+        .name {
+            @include ellipsis;
+            @include heading-sidebar;
+            margin-bottom: 10px;
+        }
+
+        .last_updated {
+            color: $color-text4;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    }
+}

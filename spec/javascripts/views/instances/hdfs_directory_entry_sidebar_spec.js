@@ -12,7 +12,8 @@ describe("chorus.views.HdfsDirectoryEntrySidebar", function(){
         });
 
         it("should display the last updated timestamp", function() {
-            expect(this.view.$(".info .last_updated").text()).toBe(chorus.helpers.relativeTimestamp(this.hdfsEntry.get("lastModified")));
+            var when = chorus.helpers.relativeTimestamp(this.hdfsEntry.get("lastModified"));
+            expect(this.view.$(".info .last_updated").text().trim()).toMatchTranslation("hdfs.last_updated", {when: when});
         });
 
     })

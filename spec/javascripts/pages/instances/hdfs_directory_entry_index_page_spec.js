@@ -33,6 +33,8 @@ describe("chorus.pages.HdfsDirectoryEntryIndexPage", function() {
             expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toMatchTranslation("breadcrumbs.instances");
 
             expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe(this.instance.get("name"));
+
+            expect(this.page.$(".breadcrumb").length).toBe(3);
         });
 
         it("should have a sidebar", function() {
