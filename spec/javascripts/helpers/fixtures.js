@@ -696,6 +696,27 @@ beforeEach(function() {
                 });
             },
 
+            "WORKSPACE_ADD_TABLE": function(overrides) {
+                var attrs = _.extend({
+                    type: "WORKSPACE_ADD_TABLE",
+                    author: fixtures.authorJson(),
+                    comments: [ fixtures.commentJson() ],
+                    id: "10082",
+                    databaseObject: {
+                        id: "10000|Analytics|analytics|VIEW|__gp_fullname",
+                        name: "__gp_fullname",
+                        objectName: "__gp_fullname",
+                        objectType: "BASE_TABLE",
+                        type: "SOURCE_TABLE",
+                        workspaceId: "10000"
+                    },
+                    timestamp: "2012-02-29 15:24:42",
+                    workspace: fixtures.workspaceJson()
+                }, overrides);
+
+                return new chorus.models.Activity(attrs);
+            },
+
             "WORKFILE_CREATED": function() {
                 return new chorus.models.Activity({
                     author: fixtures.authorJson(),

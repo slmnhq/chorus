@@ -511,6 +511,36 @@ describe("chorus.presenters.Activity", function() {
         itShouldHaveTheAuthorsIconAndUrl();
     });
 
+    context(".WORKSPACE_ADD_TABLE", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.WORKSPACE_ADD_TABLE();
+            this.dataset = this.model.dataset();
+            this.workspace = this.model.workspace();
+            this.presenter = new chorus.presenters.Activity(this.model);
+        });
+
+        it("should have the correct workspace name", function() {
+            expect(this.presenter.workspaceName).toBe(this.workspace.get("name"));
+        });
+
+        it("should have the correct worksapce url", function() {
+            var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
+            expect(this.presenter.workspaceUrl).toBe(url);
+        });
+
+        it("should have the correct table name", function() {
+            expect(this.presenter.objectName).toBe(this.dataset.get("objectName"));
+        });
+
+        it("should have the correct table url", function() {
+            expect(this.presenter.objectUrl).toBe(this.dataset.showUrl());
+        });
+
+        it("should have the correct icon url", function() {
+            expect(this.presenter.iconSrc).toBe(this.dataset.iconUrl());
+        });
+    });
+
     context(".SOURCE_TABLE_CREATED", function() {
         context("for a table", function() {
             beforeEach(function() {
@@ -657,6 +687,14 @@ describe("chorus.presenters.Activity", function() {
     context("headerHtml", function() {
         beforeEach(function() {
             this.keyPrefix = 'activity_stream.header.html.';
+        });
+
+        describe("WORKSPACE_ADD_TABLE", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.WORKSPACE_ADD_TABLE();
+            });
+
+            itGetsTheTranslationKeyCorrectly('default');
         });
 
         describe("INSIGHT_CREATED", function() {

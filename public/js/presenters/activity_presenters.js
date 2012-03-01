@@ -133,6 +133,14 @@
         WORKSPACE_ARCHIVED: workspaceIsObject,
         WORKSPACE_UNARCHIVED: workspaceIsObject,
 
+        WORKSPACE_ADD_TABLE: function(model) {
+            return {
+                objectName: model.dataset().get("objectName"),
+                objectUrl: model.dataset().showUrl(),
+                iconSrc: model.dataset().iconUrl()
+            }
+        },
+        
         WORKFILE_CREATED: function(model) {
             return {
                 objectName: model.workfile().get("name"),
