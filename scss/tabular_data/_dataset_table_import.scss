@@ -90,16 +90,15 @@
                     display: inline-block;
                     font-size: 12px;
                     font-weight: $semibold;
-                    width: $cell-width - 68px;
+                    margin-right: 5px;
+                    max-width: $cell-width - 68px;
                     vertical-align: middle;
                     &.selection_conflict {
                         color: #cc0000;
                     }
                 }
                 .arrow {
-                    position: absolute;
-                    right: 10px;
-                    top: 14px;
+                    display: inline-block;
                     @include triangle(down, $link-color, 4px, 4px);
                     &.selection_conflict {
                         @include triangle(down, #cc0000, 4px, 4px);
