@@ -30,12 +30,13 @@ chorus.dialogs.InstancesEdit = chorus.dialogs.Base.extend({
         e.preventDefault();
 
         var attrs = {
-            name:this.$("input[name=name]").val().trim(),
-            description:this.$("textarea[name=description]").val().trim(),
-            host:this.$("input[name=host]").val(),
-            port:this.$("input[name=port]").val(),
-            size:this.$("input[name=size]").val()
-        }
+            name: this.$("input[name=name]").val().trim(),
+            description: this.$("textarea[name=description]").val().trim(),
+            host: this.$("input[name=host]").val(),
+            port: this.$("input[name=port]").val(),
+            size: this.$("input[name=size]").val(),
+            maintenanceDb: this.$("input[name='maintenanceDb']").val()
+        };
 
         this.$("button.submit").startLoading("instances.edit_dialog.saving");
         this.$("button.cancel").attr("disabled", "disabled");

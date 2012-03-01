@@ -1,7 +1,13 @@
-describe("InstanceEditDialog", function() {
+describe("chorus.dialogs.InstanceEditDialog", function() {
     beforeEach(function() {
         this.launchElement = $("<button/>");
-        this.instance = fixtures.instance({name : "pasta", host : "greenplum", port : "8555", description : "it is a food name" });
+        this.instance = fixtures.instance({
+            name : "pasta",
+            host : "greenplum",
+            port : "8555",
+            description : "it is a food name",
+            maintenanceDb: "postgres"
+        });
         this.dialog = new chorus.dialogs.InstancesEdit({launchElement : this.launchElement, pageModel : this.instance });
     });
 
@@ -30,6 +36,12 @@ describe("InstanceEditDialog", function() {
             it("Field called 'port' should be editable and pre populated", function() {
                 expect(this.dialog.$("input[name=port]").val()).toBe("8555");
                 expect(this.dialog.$("input[name=port]").attr("disabled")).toBeFalsy();
+            });
+
+            it("has a 'database' field that is pre-populated", function() {
+                expect(this.dialog.$("input[name='maintenanceDb']").val()).toBe("postgres");
+                expect(this.dialog.$("label[name='maintenanceDb']").text()).toMatchTranslation("instances.dialog.database_name");
+                expect(this.dialog.$("input[name='maintenanceDb']").attr("disabled")).toBeFalsy();
             });
         });
 
@@ -136,6 +148,7 @@ describe("InstanceEditDialog", function() {
             this.dialog.$("input[name=name]").val("test1");
             this.dialog.$("input[name=port]").val("8555");
             this.dialog.$("input[name=host]").val("testhost");
+            this.dialog.$("input[name=maintenanceDb]").val("not_postgres");
         });
 
         it("should update the model", function() {
@@ -145,6 +158,7 @@ describe("InstanceEditDialog", function() {
             expect(this.dialog.model.get("name")).toBe("test1");
             expect(this.dialog.model.get("port")).toBe("8555");
             expect(this.dialog.model.get("host")).toBe("testhost");
+            expect(this.dialog.model.get("maintenanceDb")).toBe("not_postgres");
         });
 
         it("puts the button in 'loading' mode", function() {

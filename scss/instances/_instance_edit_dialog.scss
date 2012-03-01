@@ -22,6 +22,10 @@
         display: inline-block;
     }
 
+    input[name=maintenanceDb] {
+        width: $host-width;
+    }
+
     label[name=port], input[name=port] {
         width: $dialog-width - $host-width - 40px;
         margin-left: 4px;

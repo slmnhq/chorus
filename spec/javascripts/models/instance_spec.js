@@ -251,49 +251,64 @@ describe("chorus.models.Instance", function() {
     })
 
     describe("validations", function() {
-        context("when registering an existing instance", function() {
+        context("with a registered instance", function() {
             beforeEach(function() {
+                this.instance.set({ provisionType: "register" });
                 this.attrs = {
                     name : "foo",
-                    provisionType : "register",
                     host : "gillette",
                     dbUserName : "dude",
                     dbPassword : "whatever",
                     port : "1234",
                     maintenanceDb: "postgres"
                 }
-            })
-
-            it("returns true when the model is valid", function() {
-                expect(this.instance.performValidation(this.attrs)).toBeTruthy();
-            })
-
-            _.each(["name", "host", "dbUserName", "dbPassword", "port", "maintenanceDb"], function(attr) {
-                it("requires " + attr, function() {
-                    this.attrs[attr] = "";
-                    expect(this.instance.performValidation(this.attrs)).toBeFalsy();
-                    expect(this.instance.errors[attr]).toBeTruthy();
-                })
             });
 
-            it("requires valid name", function() {
-                this.attrs.name = "foo bar"
-                expect(this.instance.performValidation(this.attrs)).toBeFalsy();
-                expect(this.instance.errors.name).toMatchTranslation("instance.validation.name_pattern")
-            })
 
-            it("requires valid port", function() {
-                this.attrs.port = "z123"
-                expect(this.instance.performValidation(this.attrs)).toBeFalsy();
-                expect(this.instance.errors.port).toBeTruthy();
-            })
-        })
+            context("when the instance is new", function() {
+                beforeEach(function() {
+                    this.instance.unset("id", { silent: true });
+                });
+
+                it("returns true when the model is valid", function() {
+                    expect(this.instance.performValidation(this.attrs)).toBeTruthy();
+                })
+
+                _.each(["name", "host", "dbUserName", "dbPassword", "port", "maintenanceDb"], function(attr) {
+                    it("requires " + attr, function() {
+                        this.attrs[attr] = "";
+                        expect(this.instance.performValidation(this.attrs)).toBeFalsy();
+                        expect(this.instance.errors[attr]).toBeTruthy();
+                    })
+                });
+
+                it("requires valid name", function() {
+                    this.attrs.name = "foo bar"
+                    expect(this.instance.performValidation(this.attrs)).toBeFalsy();
+                    expect(this.instance.errors.name).toMatchTranslation("instance.validation.name_pattern")
+                })
+
+                it("requires valid port", function() {
+                    this.attrs.port = "z123"
+                    expect(this.instance.performValidation(this.attrs)).toBeFalsy();
+                    expect(this.instance.errors.port).toBeTruthy();
+                });
+            });
+
+            context("when the instance has already been created", function() {
+                it("does not require a dbUserName or dbPassword", function() {
+                    delete this.attrs.dbPassword;
+                    delete this.attrs.dbUserName;
+                    expect(this.instance.performValidation(this.attrs)).toBeTruthy();
+                });
+            });
+        });
 
         context("when creating a new instance", function() {
             beforeEach(function() {
+                this.instance.set({ provisionType : "create" });
                 this.attrs = {
                     name : "foo",
-                    provisionType : "create",
                     size : "100000"
                 }
             })
@@ -313,9 +328,9 @@ describe("chorus.models.Instance", function() {
 
         context("when registering an existing hadoop instance", function() {
             beforeEach(function() {
+                this.instance.set({ provisionType : "registerHadoop" });
                 this.attrs = {
                     name : "foo",
-                    provisionType : "registerHadoop",
                     size : "100000"
                 }
             });

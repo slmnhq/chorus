@@ -20,16 +20,19 @@
         declareValidations:function (newAttrs) {
             this.require("name", newAttrs);
             this.requirePattern("name", /^[a-zA-Z][a-zA-Z0-9_]*$/, newAttrs, "instance.validation.name_pattern");
+            var provisionType = newAttrs.provisionType || this.get("provisionType");
 
-            switch (newAttrs.provisionType) {
+            switch (provisionType) {
                 case "register" :
                     // validating existing Greenplum instance
                     this.require("host", newAttrs);
-                    this.require("dbUserName", newAttrs);
-                    this.require("dbPassword", newAttrs);
                     this.require("port", newAttrs);
                     this.require("maintenanceDb", newAttrs);
                     this.requirePattern("port", /^\d+$/, newAttrs);
+                    if (this.isNew()) {
+                        this.require("dbUserName", newAttrs);
+                        this.require("dbPassword", newAttrs);
+                    }
                     break;
                 case "create" :
                     // validating create a new Greenplum instance
