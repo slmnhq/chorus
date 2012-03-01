@@ -84,49 +84,96 @@ describe("chorus.views.TabularDataListSidebar", function() {
                                 this.server.completeFetchFor(this.dataset.getImport(), []);
                             });
 
-                            it("has a 'create import schedule' link", function() {
-                                var createScheduleLink = this.view.$("a.create_schedule");
-                                expect(createScheduleLink.text()).toMatchTranslation("actions.create_schedule");
+                            context("and the current user has update permissions on the workspace", function() {
+                                beforeEach(function() {
+                                    this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
+                                    this.view.render();
+                                });
+
+                                it("has a 'create import schedule' link", function() {
+                                    var createScheduleLink = this.view.$("a.create_schedule");
+                                    expect(createScheduleLink.text()).toMatchTranslation("actions.create_schedule");
+                                });
+
+                                it("should have the dataset attached as data-dataset", function() {
+                                    expect(this.view.$("a.create_schedule[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
+                                });
                             });
 
-                            it("should have the dataset attached as data-dataset", function() {
-                                expect(this.view.$("a.create_schedule[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
+                            context("and the current user does not have update permissions on the workspace", function() {
+                                beforeEach(function() {
+                                    this.view.options.workspace = fixtures.workspace({ permission: ["read"] })
+                                    this.view.render();
+                                });
+
+                                it("does not have a 'create import schedule' link", function() {
+                                    expect(this.view.$("a.create_schedule")).not.toExist();
+                                });
+
+                                it("does not have an 'import now' link", function() {
+                                    expect(this.view.$("a.import_now.dialog")).not.toExist();
+                                });
+
                             });
 
                             it("doesn't have an 'edit import schedule' link'", function() {
                                 expect(this.view.$("a.edit_schedule")).not.toExist();
                             });
-
-                            itHasAnImportNowLink();
                         });
 
                         context("and the dataset has an import schedule", function() {
                             beforeEach(function() {
                                 this.server.completeFetchFor(this.dataset.getImport(), fixtures.datasetImport({id: '1234', toTable: "aToTable", datasetId: this.dataset.id, workspaceId: this.dataset.get("workspace").id}).attributes);
                             });
-                            
-                            it("has an 'edit import schedule' link", function() {
-                                var editScheduleLink = this.view.$("a.edit_schedule.dialog");
-                                expect(editScheduleLink.data("dialog")).toBe("ImportScheduler");
-                                expect(editScheduleLink.text()).toMatchTranslation("actions.edit_schedule");
-                            });
 
-                            it("attaches the import object to the 'edit schedule' link", function() {
-                                var importModel = this.view.$("a.edit_schedule").data("import");
-                                expect(importModel).toBeA(chorus.models.DatasetImport);
-                                expect(importModel.get("datasetId")).toBe(this.dataset.id);
-                            });
+                            context("and the current user has update permissions on the workspace", function() {
+                                beforeEach(function() {
+                                    this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
+                                    this.view.render();
+                                });
 
-                            it("should have the dataset attached as data-dataset", function() {
-                                expect(this.view.$("a.import_now[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
-                                expect(this.view.$("a.edit_schedule[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
+                                it("has an 'edit import schedule' link", function() {
+                                    var editScheduleLink = this.view.$("a.edit_schedule.dialog");
+                                    expect(editScheduleLink.data("dialog")).toBe("ImportScheduler");
+                                    expect(editScheduleLink.text()).toMatchTranslation("actions.edit_schedule");
+                                });
+
+                                it("attaches the import object to the 'edit schedule' link", function() {
+                                    var importModel = this.view.$("a.edit_schedule").data("import");
+                                    expect(importModel).toBeA(chorus.models.DatasetImport);
+                                    expect(importModel.get("datasetId")).toBe(this.dataset.id);
+                                });
+
+                                it("should have the dataset attached as data-dataset", function() {
+                                    expect(this.view.$("a.import_now[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
+                                    expect(this.view.$("a.edit_schedule[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
+                                });
+
+                                it("has an import now link", function() {
+                                    var importNowLink = this.view.$("a.import_now.dialog");
+                                    expect(importNowLink.text()).toMatchTranslation("actions.import_now");
+                                    expect(importNowLink.data("dialog")).toBe("ImportScheduler");
+                                });
+                            })
+
+                            context("and the current user does not have update permissions on the workspace", function() {
+                                beforeEach(function() {
+                                    this.view.options.workspace = fixtures.workspace({ permission: ["read"] })
+                                    this.view.render();
+                                });
+
+                                it("does not have an 'edit import schedule' link", function() {
+                                    expect(this.view.$("a.edit_schedule.dialog")).not.toExist();
+                                });
+
+                                it("does not have an import now link", function() {
+                                    expect(this.view.$("a.import_now.dialog")).not.toExist();
+                                });
                             });
 
                             it("doesn't have a 'create import schedule' link'", function() {
                                 expect(this.view.$(".actions .create_schedule")).not.toExist();
                             });
-
-                            itHasAnImportNowLink();
                         });
 
                         context("and the dataset has a recent successful import", function() {

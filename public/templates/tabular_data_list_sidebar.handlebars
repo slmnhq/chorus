@@ -28,11 +28,13 @@
             data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
             {{#unless browsingSchema}}
                 {{#if isImportable}}
-                    <li><a class="dialog import_now" href="#" data-dialog="ImportScheduler">{{t "actions.import_now"}}</a></li>
-                    {{#if hasImport}}
-                        <li><a class="dialog edit_schedule" href="#" data-dialog="ImportScheduler">{{t "actions.edit_schedule"}}</a></li>
-                    {{else}}
-                        <li><a class="dialog create_schedule" href="#" data-dialog="ImportScheduler">{{t "actions.create_schedule"}}</a></li>
+                    {{#if canImport}}
+                        <li><a class="dialog import_now" href="#" data-dialog="ImportScheduler">{{t "actions.import_now"}}</a></li>
+                        {{#if hasImport}}
+                            <li><a class="dialog edit_schedule" href="#" data-dialog="ImportScheduler">{{t "actions.edit_schedule"}}</a></li>
+                        {{else}}
+                            <li><a class="dialog create_schedule" href="#" data-dialog="ImportScheduler">{{t "actions.create_schedule"}}</a></li>
+                        {{/if}}
                     {{/if}}
                 {{/if}}
             {{/unless}}

@@ -113,6 +113,7 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
             if (this.resource.get("workspace")) {
                 ctx.workspaceId = this.resource.get("workspace").id;
             }
+
             ctx.displayEntityType = this.resource.metaType();
         }
 
@@ -129,6 +130,10 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
 
         if (this.selectedColumn) {
             ctx.column = this.selectedColumn.attributes;
+        }
+
+        if (this.options.workspace) {
+            ctx.canImport = this.options.workspace.canUpdate();
         }
 
         return ctx;

@@ -30,12 +30,17 @@
             this.workspace = new chorus.models.Workspace({id: workspaceId});
             this.workspace.fetch();
             this.model = this.tabularData = new chorus.models.Dataset({ workspace: { id: workspaceId }, id: datasetId })
+
+            this.sidebarOptions = _.clone(this.sidebarOptions);
+            this.sidebarOptions.requiredResources = [ this.workspace ];
         },
 
         columnSetFetched: function() {
             this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
 
             this._super('columnSetFetched');
+
+            this.sidebar.options.workspace = this.workspace;
 
             this.mainContent.contentDetails.bind("dataset:edit", this.editChorusView, this);
         },

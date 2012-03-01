@@ -51,8 +51,6 @@
                 ]
             });
 
-            this.sidebar = new chorus.views.TabularDataListSidebar();
-
             chorus.PageEvents.subscribe("tabularData:selected", function(dataset) {
                 this.model = dataset;
             }, this);
@@ -68,9 +66,16 @@
         },
 
         workspaceLoaded: function() {
+            this.sidebar = new chorus.views.TabularDataListSidebar({ workspace: this.workspace });
+
             var targetButton = this.mainContent.options.buttons[0];
 
-            if (this.workspace.sandbox()) {
+            if (!this.workspace.canUpdate()) {
+                this.mainContent.contentDetails.options.buttons = [];
+                this.mainContent.contentDetails.render();
+                this.collection.fetch();
+            }
+            else if (this.workspace.sandbox()) {
                 targetButton.dataAttributes.push({name: "canonical-name", value: this.workspace.sandbox().canonicalName()});
                 targetButton.disabled = false;
                 delete targetButton.helpText;

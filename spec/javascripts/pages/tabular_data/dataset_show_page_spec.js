@@ -36,6 +36,10 @@ describe("chorus.pages.DatasetShowPage", function() {
     })
 
     describe("#initialize", function() {
+        it("sets requiredResources in the sidebar", function() {
+            expect(this.page.sidebarOptions.requiredResources[0].id).toBe(this.page.workspace.id)
+        });
+
         context("when the workspace fetch completes", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.workspace);
@@ -64,6 +68,10 @@ describe("chorus.pages.DatasetShowPage", function() {
                     it("does not modify the tabularData reference the existing columns have", function() {
                         expect(this.page.columnSet.models[0].tabularData).toBe(this.page.tabularData);
                     });
+
+                    it("sets the sidebar's workspace", function() {
+                        expect(this.page.sidebar.options.workspace.id).toBe(this.workspace.id);
+                    })
 
                     describe("when editing a chorus view", function() {
                         beforeEach(function() {
