@@ -34,11 +34,12 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
         var hash = {
             modelClass:this.options.modelClass,
             pagination:this.collection.length > 0 ? this.collection.pagination : undefined,
-            records:this.collection.pagination ? this.collection.pagination.records : this.collection.length,
+            records:this.collection.pagination ? parseInt(this.collection.pagination.records) : this.collection.length,
             hideCounts:this.options.hideCounts,
             buttons:this.options.buttons
         }
 
+        hash.entityTypePluralization = t("entity.name." + this.options.modelClass, {count: hash.records});
         if (this.collection.loaded && this.collection.pagination) {
             var page = parseInt(this.collection.pagination.page);
             var total = parseInt(this.collection.pagination.total);

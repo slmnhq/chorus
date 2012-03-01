@@ -188,7 +188,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
         describe("when there are many tables to join", function() {
             it("shows pagination controls", function() {
                 expect(this.dialog.$(".list_content_details")).toBeHidden();
-                expect(this.dialog.$(".list_content_details .count .number")).toContainText("4");
+                expect(this.dialog.$(".list_content_details .count")).toContainText("4");
                 expect(this.server.lastFetchFor(this.schema.databaseObjects()).url).toContain("rows=9")
             })
         });

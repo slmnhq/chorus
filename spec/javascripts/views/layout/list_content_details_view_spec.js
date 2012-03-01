@@ -49,7 +49,7 @@ describe("ListContentDetails", function() {
                 })
 
                 it("renders the total number of items in the collection", function() {
-                    expect(this.view.$(".count .number").text().trim()).toBe("22");
+                    expect(this.view.$(".count")).toContainText("22");
                 })
             })
 
