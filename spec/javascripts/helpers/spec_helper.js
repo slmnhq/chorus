@@ -218,6 +218,17 @@
                     return actualURI.path() === targetPath;
                 },
 
+                toHaveHref: function(expectedHref) {
+                    var actualHref = this.actual.attr("href")
+                    this.message = function() {
+                        return [
+                            "Expected href " + actualHref + " to be equivalent to href " + expectedHref,
+                            "Expected href " + actualHref + " not to be equivalent to href " + expectedHref
+                        ];
+                    }
+                    return decodeURI(actualHref) === decodeURI(expectedHref);
+                },
+
                 toHaveVisibleQtip: function() {
                     return this.actual.find('.qtip').attr('aria-hidden') == 'false'
                 },

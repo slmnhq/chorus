@@ -118,4 +118,21 @@ describe("spec_helper", function() {
             expect(chorus.models.User.prototype.save).not.toHaveBeenCalledOn(this.model1)
         });
     });
+
+    describe("#toHaveHref", function() {
+        it("passes if the element has the href", function() {
+            var elem = $("<a/>").attr("href", "http://example.com/foo/bar")
+            expect(elem).toHaveHref("http://example.com/foo/bar")
+        });
+
+        it("decodes the expected and actual before comparison", function() {
+            var elem = $("<a/>").attr("href", "http://example.com/foo|bar%7Cbaz")
+            expect(elem).toHaveHref("http://example.com/foo%7Cbar|baz")
+        });
+
+        it("fails if element does not have the href", function() {
+            var elem = $("<a/>").attr("href", "http://example.com/foo/bar")
+            expect(elem).not.toHaveHref("http://yahoo.com")
+        });
+    });
 });

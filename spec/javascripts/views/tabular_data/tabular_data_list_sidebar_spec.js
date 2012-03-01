@@ -60,7 +60,7 @@ describe("chorus.views.TabularDataListSidebar", function() {
                                 timeAgo: chorus.helpers.relativeTimestamp("2012-02-29 14:35:38.165"),
                                 tableLink: "some_source_table"
                             });
-                            expect(this.view.$(".last_import a").attr("href")).toBe(sourceTable.showUrl())
+                            expect(this.view.$(".last_import a")).toHaveHref(sourceTable.showUrl())
                         });
 
                         it("doesn't fetch the import configuration", function() {
@@ -222,7 +222,7 @@ describe("chorus.views.TabularDataListSidebar", function() {
                                     id: this.view.importConfiguration.get("destinationTable"),
                                     workspaceId: this.dataset.get("workspace").id})
                                 expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "aToTable"})
-                                expect(this.view.$(".last_import a").attr("href")).toBe(destTable.showUrl())
+                                expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
                             });
                         });
 
@@ -237,7 +237,7 @@ describe("chorus.views.TabularDataListSidebar", function() {
                                     id: this.view.importConfiguration.get("destinationTable"),
                                     workspaceId: this.dataset.get("workspace").id})
                                 expect(this.view.$(".last_import")).toContainTranslation("import.last_import_failed", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "aToTable"})
-                                expect(this.view.$(".last_import a").attr("href")).toBe(destTable.showUrl())
+                                expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
                                 expect(this.view.$(".last_import img").attr("src")).toBe("/images/message_error_small.png");
                             });
                         });
