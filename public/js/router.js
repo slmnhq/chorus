@@ -25,7 +25,7 @@
             ["/workspaces/:workspaceId/datasets", "DatasetIndex"],
             ["/instances", "InstanceIndex"],
             ["/instances/:instanceId/database/:databaseName/schema/:schemaName", "SchemaBrowse"],
-            ["/instances/:instanceId/database/:databaseName/schema/:schemaName/:metaType/:objectName", "DatabaseObjectShow"],
+            ["/instances/:instanceId/database/:databaseName/schema/:schemaName/:metaType/:objectName", "TabularDataShow"],
             ["/instances/:instanceId/browse/*path", "HdfsDirectoryEntryIndex"],
             ["/styleguide", "StyleGuide"]
         ],

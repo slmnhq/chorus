@@ -1,4 +1,4 @@
-describe("chorus.pages.DatabaseObjectShowPage", function() {
+describe("chorus.pages.TabularDataShowPage", function() {
     beforeEach(function() {
         this.databaseObject = fixtures.databaseTable();
         this.databaseObject.get('workspaceUsed').workspaceCount = 3;
@@ -7,7 +7,7 @@ describe("chorus.pages.DatabaseObjectShowPage", function() {
 
         var a = this.databaseObject.attributes
 
-        this.page = new chorus.pages.DatabaseObjectShowPage(a.instance.id, a.databaseName, a.schemaName, a.objectType, a.objectName);
+        this.page = new chorus.pages.TabularDataShowPage(a.instance.id, a.databaseName, a.schemaName, a.objectType, a.objectName);
     })
 
     it("has a helpId", function() {

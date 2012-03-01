@@ -16,7 +16,7 @@
         }
     });
 
-    chorus.pages.DatasetShowPage = chorus.pages.DatabaseObjectShowPage.extend({
+    chorus.pages.DatasetShowPage = chorus.pages.TabularDataShowPage.extend({
         constructorName: "DatasetShowPage",
         helpId: "dataset",
         hideDeriveChorusView: false,
