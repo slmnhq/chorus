@@ -24,6 +24,18 @@
         <input type="text" disabled="disabled" name="size" value="{{size}}" tabindex="1"/>
     {{/if}}
 
+    {{#if hadoopInstance}}
+        <label name="host" class="required">{{t "instances.dialog.host"}}</label>
+        <label name="port" class="required">{{t "instances.dialog.port"}}</label>
+        <input type="text" name="host" value="{{host}}" tabindex="1"/>
+        <input type="text" name="port" value="{{port}}" tabindex="1"/>
+
+        <label class="required" name="userName">{{t "instances.dialog.hadoop_account"}}</label>
+        <label class="required" name="userGroups">{{t "instances.dialog.hadoop_group_list"}}</label>
+        <input type="text" name="userName"   value="{{userName}}" maxlength="255"/>
+        <input type="text" name="userGroups" value="{{userGroups}}" maxlength="255"/>
+    {{/if}}
+
     <div class="modal_controls">
         <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
         <button type="submit" class="submit" tabindex="99">{{t "instances.edit_dialog.save"}}</button>

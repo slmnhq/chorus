@@ -20,10 +20,11 @@ chorus.dialogs.InstancesEdit = chorus.dialogs.Base.extend({
 
     additionalContext:function () {
         return {
-            registeredInstance:this.options.pageModel.get("provisionType") == "register",
-            provisionedInstance:this.options.pageModel.get("provisionType") == "create",
-            users:this.users.models
-        }
+            registeredInstance: this.model.get("provisionType") == "register",
+            provisionedInstance: this.model.get("provisionType") == "create",
+            hadoopInstance: this.model.get("provisionType") == "registerHadoop",
+            users: this.users.models
+        };
     },
 
     save:function (e) {

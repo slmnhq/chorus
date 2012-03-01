@@ -12,13 +12,13 @@ describe("chorus.dialogs.InstanceEditDialog", function() {
     });
 
     describe("#render", function() {
-        describe("when the instance is a registered instance", function() {
+        describe("when editing a registered instance", function() {
             beforeEach(function() {
                 this.dialog.model.set({ provisionType : "register"})
                 this.dialog.render();
             });
 
-            it("Field called 'Names' should be editable and pre populated", function() {
+            it("Field called 'name' should be editable and pre populated", function() {
                 expect(this.dialog.$("input[name=name]").val()).toBe("pasta");
                 expect(this.dialog.$("input[name=name]").attr("disabled")).toBeFalsy();
             })
@@ -45,7 +45,7 @@ describe("chorus.dialogs.InstanceEditDialog", function() {
             });
         });
 
-        describe("when the instance is a provisioned instance", function() {
+        describe("when editing a provisioned instance", function() {
             beforeEach(function() {
                 this.dialog.model.set({ provisionType : "create" , size: "10"})
                 this.dialog.render();
@@ -77,58 +77,95 @@ describe("chorus.dialogs.InstanceEditDialog", function() {
             })
         });
 
-        describe("#fetchUserSet", function() {
+        describe("when editing a hadoop instance", function() {
             beforeEach(function() {
-                this.dialog.users = new chorus.collections.UserSet();
-            })
-            context("when the instance has shared account", function() {
-                beforeEach(function() {
-                    spyOn(this.dialog.model, "isShared").andReturn(true);
-                    spyOn(this.dialog.users, "fetchAll")
-                    this.dialog.fetchUserSet();
-                });
-                it("users to be fetched", function() {
-                  expect(this.dialog.users.fetchAll).toHaveBeenCalled();
-                });
+                this.dialog.model.set({ provisionType : "registerHadoop" , userName: "user", userGroups: "hadoop"})
+                this.dialog.render();
             });
 
-            context("when the instance has individual account", function() {
-                beforeEach(function() {
-                    spyOn(this.dialog.model, "isShared").andReturn(false);
-                    spyOn(this.dialog.users, "fetchAll")
-                    spyOn(this.dialog.accounts, "fetchAll")
-                    this.dialog.fetchUserSet();
-                });
+            it("has a pre-populated and enabled 'name' field", function() {
+                expect(this.dialog.$("input[name=name]").val()).toBe("pasta");
+                expect(this.dialog.$("input[name=name]").attr("disabled")).toBeFalsy();
+            })
 
-                it("fetches the accounts", function() {
-                    expect(this.dialog.users.fetchAll).not.toHaveBeenCalled();
-                    expect(this.dialog.accounts.fetchAll).toHaveBeenCalled();
-                });
+            it("has a pre-populated and enabled 'description' field", function() {
+                expect(this.dialog.$("textarea[name=description]").val()).toBe("it is a food name");
+                expect(this.dialog.$("textarea[name=description]").attr("disabled")).toBeFalsy();
+            })
 
-                it("fills in the users on a successful accounts fetch", function() {
-                    spyOn(this.dialog.users, "add").andCallThrough();
+            it("has a pre-populated and enabled 'host' field", function() {
+                expect(this.dialog.$("input[name=host]").val()).toBe("greenplum");
+                expect(this.dialog.$("input[name=host]").attr("disabled")).toBeFalsy();
+            })
 
-                    var user1 = { id: '1', firstName: 'barnie', lastName: 'rubble' }
-                    var user2 = { id: '2', firstName: 'fred', lastName: 'flinstone' }
+            it("has a pre-populated and enabled 'port' field", function() {
+                expect(this.dialog.$("input[name=port]").val()).toBe("8555");
+                expect(this.dialog.$("input[name=port]").attr("disabled")).toBeFalsy();
+            });
 
-                    var instanceAccounts = [
-                        fixtures.instanceAccount({user : user1}),
-                        fixtures.instanceAccount({user: user2})
-                    ];
-                    this.dialog.accounts.reset(instanceAccounts);
-                    this.dialog.accounts.trigger("reset");
-                    expect(this.dialog.users.add).toHaveBeenCalled();
+            it("has a pre-populated and enabled 'HDFS account' field", function() {
+                expect(this.dialog.$("input[name=userName]").val()).toBe("user");
+                expect(this.dialog.$("input[name=userName]").attr("disabled")).toBeFalsy();
+            });
 
-                    expect(this.dialog.users.models[0]).toBeA(chorus.models.User);
-                    expect(this.dialog.users.models[0].get("id")).toBe("2");
-                    expect(this.dialog.users.models[0].get("firstName")).toBe("fred");
-                    expect(this.dialog.users.models[0].get("lastName")).toBe("flinstone");
+            it("has a pre-populated and enabled 'group list' field", function() {
+                expect(this.dialog.$("input[name=userGroups]").val()).toBe("hadoop");
+                expect(this.dialog.$("input[name=userGroups]").attr("disabled")).toBeFalsy();
+            });
+        });
+    });
 
-                    expect(this.dialog.users.models[1]).toBeA(chorus.models.User);
-                    expect(this.dialog.users.models[1].get("id")).toBe("1");
-                    expect(this.dialog.users.models[1].get("firstName")).toBe("barnie");
-                    expect(this.dialog.users.models[1].get("lastName")).toBe("rubble");
-                });
+    describe("#fetchUserSet", function() {
+        beforeEach(function() {
+            this.dialog.users = new chorus.collections.UserSet();
+        })
+        context("when the instance has shared account", function() {
+            beforeEach(function() {
+                spyOn(this.dialog.model, "isShared").andReturn(true);
+                spyOn(this.dialog.users, "fetchAll")
+                this.dialog.fetchUserSet();
+            });
+            it("users to be fetched", function() {
+                expect(this.dialog.users.fetchAll).toHaveBeenCalled();
+            });
+        });
+
+        context("when the instance has individual account", function() {
+            beforeEach(function() {
+                spyOn(this.dialog.model, "isShared").andReturn(false);
+                spyOn(this.dialog.users, "fetchAll")
+                spyOn(this.dialog.accounts, "fetchAll")
+                this.dialog.fetchUserSet();
+            });
+
+            it("fetches the accounts", function() {
+                expect(this.dialog.users.fetchAll).not.toHaveBeenCalled();
+                expect(this.dialog.accounts.fetchAll).toHaveBeenCalled();
+            });
+
+            it("fills in the users on a successful accounts fetch", function() {
+                spyOn(this.dialog.users, "add").andCallThrough();
+
+                var user1 = { id: '1', firstName: 'barnie', lastName: 'rubble' }
+                var user2 = { id: '2', firstName: 'fred', lastName: 'flinstone' }
+
+                var instanceAccounts = [
+                    fixtures.instanceAccount({user : user1}),
+                    fixtures.instanceAccount({user: user2})
+                ];
+                this.dialog.accounts.reset(instanceAccounts);
+                this.dialog.accounts.trigger("reset");
+                expect(this.dialog.users.add).toHaveBeenCalled();
+
+                expect(this.dialog.users.models[0]).toBeA(chorus.models.User);
+                expect(this.dialog.users.models[0].get("id")).toBe("2");
+                expect(this.dialog.users.models[0].get("firstName")).toBe("fred");
+                expect(this.dialog.users.models[0].get("lastName")).toBe("flinstone");
+
+                expect(this.dialog.users.models[1]).toBeA(chorus.models.User);
+                expect(this.dialog.users.models[1].get("id")).toBe("1");
+                expect(this.dialog.users.models[1].get("firstName")).toBe("barnie");
+                expect(this.dialog.users.models[1].get("lastName")).toBe("rubble");
             });
         });
     });
