@@ -120,6 +120,17 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
         return true;
     },
 
+    lastImportSource: function() {
+        var importInfo = this.get("importInfo");
+        if (importInfo) {
+            return new chorus.models.Dataset({
+                id: importInfo.sourceId,
+                objectName: importInfo.sourceTable,
+                workspaceId: this.get("workspace").id
+            });
+        }
+    },
+
     isImportable: function() {
         return this.get("type") !== "SANDBOX_TABLE";
     }

@@ -277,4 +277,34 @@ describe("chorus.models.Dataset", function() {
             expect(this.dataset.hasOwnPage()).toBeTruthy();
         })
     })
+
+    describe("#lastImportSource", function() {
+        context("when the dataset has been imported into (and has a 'importInfo' key)", function() {
+            beforeEach(function() {
+                this.dataset.set({ importInfo: {
+                    completedStamp: "2012-02-29 14:35:38.165",
+                    sourceId: "10032|dca_demo|ddemo|BASE_TABLE|a2",
+                    sourceTable: "some_source_table"
+                }})
+                this.source = this.dataset.lastImportSource();
+            });
+
+            it("returns a dataset", function() {
+                expect(this.source).toBeA(chorus.models.Dataset);
+            });
+
+            it("has the right name, id and workspace id", function() {
+                expect(this.source.get("id")).toBe("10032|dca_demo|ddemo|BASE_TABLE|a2");
+                expect(this.source.get("workspaceId")).toBe(this.dataset.get("workspace").id);
+                expect(this.source.get("objectName")).toBe("some_source_table");
+            });
+        });
+
+        context("when the dataset has NOT been imported into", function() {
+            it("returns undefined", function() {
+                this.dataset.unset("importInfo");
+                expect(this.dataset.lastImportSource()).toBeUndefined();
+            });
+        });
+    });
 })
