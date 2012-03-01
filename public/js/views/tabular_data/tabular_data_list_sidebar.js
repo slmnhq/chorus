@@ -79,28 +79,32 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
             if (this.resource.isImportable()) {
                 ctx.isImportable = this.importConfiguration.loaded;
                 ctx.hasImport = this.importConfiguration.has("id");
-                if (ctx.hasImport) {
+                if (this.importConfiguration.has("executionInfo")) {
+                    var importStatusKey;
+                    if (this.importConfiguration.get("executionInfo").state == "success") {
+                        importStatusKey = "import.last_imported";
+                    } else {
+                        importStatusKey = "import.last_import_failed";
+                        ctx.importFailed = true;
+                    }
                     var destinationTable = new chorus.models.Dataset({
                         id: this.importConfiguration.get("destinationTable"),
                         workspaceId: this.resource.get("workspace").id
                     });
-
-                    if (this.importConfiguration.has("executionInfo")) {
-                        var tableLink = "<a href='" + destinationTable.showUrl() + "'>" + this.importConfiguration.get("toTable") + "</a>";
-                        if (this.importConfiguration.get("executionInfo").state == "success") {
-                            ctx.lastImport = t("import.last_imported", {
-                                timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
-                                tableLink: tableLink
-                            });
-                        } else {
-                            ctx.lastImport = t("import.last_import_failed", {
-                                    timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
-                                    tableLink: tableLink
-                            });
-                            ctx.importFailed = true;
-                        }
-                    }
-
+                    ctx.lastImport = t(importStatusKey, {
+                        timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
+                        tableLink: chorus.helpers.linkTo(destinationTable.showUrl(), this.importConfiguration.get("toTable")),
+                    });
+                }
+            } else {
+                var importInfo = this.resource.get("importInfo");
+                if (importInfo) {
+                    var sourceTable = this.resource.lastImportSource();
+                    ctx.hasImport = true;
+                    ctx.lastImport = t("import.last_imported_into", {
+                        timeAgo: chorus.helpers.relativeTimestamp(importInfo.completedStamp),
+                        tableLink: chorus.helpers.linkTo(sourceTable.showUrl(), sourceTable.get("objectName"))
+                    });
                 }
             }
 
