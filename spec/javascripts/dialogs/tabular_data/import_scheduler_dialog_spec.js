@@ -52,15 +52,15 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
         describe("when doing a single import", function() {
             beforeEach(function() {
-                 this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
-                 this.server.completeFetchAllFor(this.dialog.sandboxTables, [
-                     fixtures.datasetSandboxTable(),
-                     fixtures.datasetSandboxTable(),
-                     fixtures.datasetSandboxView(),
-                     fixtures.datasetExternalTable(),
-                     fixtures.datasetHadoopExternalTable()
-                 ]);
-                 this.attrs = this.dialog.getNewModelAttrs();
+                this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+                this.server.completeFetchAllFor(this.dialog.sandboxTables, [
+                    fixtures.datasetSandboxTable(),
+                    fixtures.datasetSandboxTable(),
+                    fixtures.datasetSandboxView(),
+                    fixtures.datasetExternalTable(),
+                    fixtures.datasetHadoopExternalTable()
+                ]);
+                this.attrs = this.dialog.getNewModelAttrs();
             });
 
             it("has the 'importType' parameter set to 'oneTime'", function() {
@@ -77,6 +77,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
         beforeEach(function() {
             this.launchElement.addClass("create_schedule");
             this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+            spyOn(chorus.views.ImportSchedule.prototype, "enable");
             this.dialog.render();
         });
 
@@ -89,10 +90,13 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     fixtures.datasetExternalTable(),
                     fixtures.datasetHadoopExternalTable()
                 ]);
+                this.dialog.$(".new_table input.name").val("abc").trigger("keyup");
             });
 
             it("should have a checkbox for scheduling an import", function() {
                 expect(this.dialog.$(".schedule_import label")).toContainTranslation("import.schedule_import");
+                expect(this.dialog.$(".schedule_import input:checkbox")).toBeChecked();
+                expect(this.dialog.$(".schedule_import input:checkbox")).toBeDisabled();
             });
 
             it("should set executeAfterSave to be false on the DatasetImport", function() {
@@ -116,170 +120,255 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 expect(this.dialog.$(".existing_table .names option").length).toBe(2);
             });
 
-            describe("checking the import on a schedule checkbox", function() {
-                beforeEach(function() {
-                    spyOn(this.dialog.scheduleView, "enable").andCallThrough();
-                    this.dialog.$(".existing_table input[name='schedule']").prop("checked", true).change();
-                });
 
-                it("should enable the schedule view", function() {
-                    expect(this.dialog.scheduleView.enable).toHaveBeenCalled();
-                });
-
-                context("when the schedule view is enabled", function() {
-                    beforeEach(function() {
-                        spyOn(this.dialog.scheduleView, "disable");
-                        this.dialog.$(".existing_table input[name='schedule']").prop("checked", false).change();
-                    });
-
-                    it("should disable the schedule view", function() {
-                        expect(this.dialog.scheduleView.disable).toHaveBeenCalled();
-                    });
-                });
-
-                context("when 'Import into Existing Table' is checked", function() {
-                    beforeEach(function() {
-                        this.dialog.$(".new_table input:radio").prop("checked", false);
-                        this.dialog.$(".existing_table input:radio").prop("checked", true).change();
-                    });
-
-                    context("when all the fields are filled out and the form is submitted", function() {
-                        beforeEach(function() {
-                            this.dialog.$("input:checked[name='truncate']").prop("checked", false).change();
-
-                            this.dialog.$("select[name='toTable']").eq(0).attr("selected", true);
-
-                            this.dialog.$("input[name='limit_num_rows']").prop("checked", true)
-                            this.dialog.$("input[name='sampleCount']").val(123);
-
-                            this.dialog.$(".start input[name='year']").val("2012");
-                            this.dialog.$(".start input[name='month']").val("02");
-                            this.dialog.$(".start input[name='day']").val("29");
-
-                            this.dialog.$(".end input[name='year']").val("2012");
-                            this.dialog.$(".end input[name='month']").val("03");
-                            this.dialog.$(".end input[name='day']").val("21");
-
-                            this.dialog.$("select.ampm").val("PM");
-                            this.dialog.$("select.hours").val("12");
-                            this.dialog.$("select.minutes").val("09");
-
-                            expect(this.dialog.$("button.submit")).toBeEnabled();
-
-                            this.dialog.$("button.submit").click();
-                        });
-
-                        it("should put the values in the correct API form fields", function() {
-                            var params = this.server.lastCreate().params()
-                            expect(params.truncate).toBe("false");
-                            expect(params.sampleCount).toBe("123");
-                            expect(params.scheduleStartTime).toBe("2012-02-29 12:09:00.0");
-                            expect(params.scheduleEndTime).toBe("2012-03-21")
-                            expect(params.scheduleDays).toBe("1:2");
-                        });
-                    });
-                });
+            context("when 'Import into New Table' is checked", function() {
+                itShouldHaveAllTheFields(".new_table");
             });
+
+            context("when 'Import into Existing Table' is checked", function() {
+                beforeEach(function() {
+                    this.dialog.activeScheduleView.enable.reset();
+                    this.dialog.$(".new_table input:radio").prop("checked", false);
+                    this.dialog.$(".existing_table input:radio").prop("checked", true).change();
+                });
+
+                itShouldHaveAllTheFields(".existing_table");
+            });
+
+
+            function itShouldHaveAllTheFields(selector) {
+                it("should enable the schedule view", function() {
+                    expect(chorus.views.ImportSchedule.prototype.enable).toHaveBeenCalled();
+                });
+
+                context("when all the fields are filled out and the form is submitted", function() {
+                    beforeEach(function() {
+                        this.dialog.$("input:checked[name='truncate']").prop("checked", false).change();
+
+                        this.dialog.$("select[name='toTable']").eq(0).attr("selected", true);
+
+                        this.dialog.$("input[name='limit_num_rows']").prop("checked", true)
+                        this.dialog.$("input[name='sampleCount']").val(123);
+
+                        this.dialog.activeScheduleView.$(".start input[name='year']").val("2012");
+                        this.dialog.activeScheduleView.$(".start input[name='month']").val("02");
+                        this.dialog.activeScheduleView.$(".start input[name='day']").val("29");
+
+                        this.dialog.activeScheduleView.$(".end input[name='year']").val("2012");
+                        this.dialog.activeScheduleView.$(".end input[name='month']").val("03");
+                        this.dialog.activeScheduleView.$(".end input[name='day']").val("21");
+
+                        this.dialog.activeScheduleView.$("select.ampm").val("PM");
+                        this.dialog.activeScheduleView.$("select.hours").val("12");
+                        this.dialog.activeScheduleView.$("select.minutes").val("09");
+
+                        expect(this.dialog.$("button.submit")).toBeEnabled();
+
+                        this.dialog.$("button.submit").click();
+                    });
+
+                    it("should put the values in the correct API form fields", function() {
+                        var params = this.server.lastCreate().params()
+                        expect(params.truncate).toBe("false");
+                        expect(params.sampleCount).toBe("123");
+                        expect(params.scheduleStartTime).toBe("2012-02-29 12:09:00.0");
+                        expect(params.scheduleEndTime).toBe("2012-03-21")
+                        expect(params.scheduleDays).toBe("1:2");
+                    });
+                });
+            }
         });
     });
 
     describe("editing an existing schedule", function() {
-        beforeEach(function() {
-            this.import = fixtures.datasetImport({
-                id: '12',
-                truncate: true,
-                sampleCount: 200,
-                scheduleInfo: {
-                    startTime: "2013-02-21 13:30:00.0",
-                    endTime: "2013-05-27",
-                    frequency: "HOURLY"
-                },
-                toTable: "my_table",
-                destinationTable: "10000|dca_demo|ddemo|BASE_TABLE|my_table",
-                sourceId: "10000|dca_demo|ddemo|BASE_TABLE|somebodys_table"
+        describe("when the schedule is active", function() {
+            beforeEach(function() {
+                this.import = fixtures.datasetImport({
+                    id: '12',
+                    truncate: true,
+                    sampleCount: 200,
+                    scheduleInfo: {
+                        startTime: "2013-02-21 13:30:00.0",
+                        endTime: "2013-05-27",
+                        frequency: "HOURLY",
+                        jobName: "job123"
+                    },
+                    toTable: "my_table",
+                    destinationTable: "10000|dca_demo|ddemo|BASE_TABLE|my_table",
+                    sourceId: "10000|dca_demo|ddemo|BASE_TABLE|somebodys_table"
+                });
+                this.launchElement.addClass("edit_schedule");
+                this.launchElement.data("import", this.import);
+                this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+                this.dialog.render();
             });
-            this.launchElement.addClass("edit_schedule");
-            this.launchElement.data("import", this.import);
-            this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
-            this.dialog.render();
+
+            describe("when the sandbox table fetch completes", function() {
+                context("and the toTable is not an existing Table", function() {
+                    beforeEach(function() {
+                        this.server.completeFetchAllFor(this.dialog.sandboxTables, [
+                            fixtures.datasetSandboxTable({ objectName: "your_table", id: "10000|dca_demo|ddemo|BASE_TABLE|your_table" }),
+                            fixtures.datasetSandboxTable({ objectName: "not_my_table", id: "10000|dca_demo|ddemo|BASE_TABLE|not_my_table" }),
+                            fixtures.datasetSandboxTable({ objectName: "her_table", id: "10000|dca_demo|ddemo|BASE_TABLE|her_table" })
+                        ]);
+                    });
+
+                    it("has the right title", function() {
+                        expect(this.dialog.title).toMatchTranslation("import.title_edit_schedule");
+                    });
+
+                    it("has a submit button with the right text", function() {
+                        expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.save_changes");
+                    });
+
+                    it("has the right fieldset selected", function() {
+                        expect(this.dialog.$("input[type='radio']#import_scheduler_existing_table")).not.toBeChecked();
+                        expect(this.dialog.$("input[type='radio']#import_scheduler_new_table")).toBeChecked();
+                        expect(this.dialog.$(".existing_table fieldset")).toHaveClass("disabled");
+                        expect(this.dialog.$(".new_table fieldset")).not.toHaveClass("disabled");
+                    });
+
+                    it("pre-populates the table name", function() {
+                        expect(this.dialog.$(".new_table input.name").val()).toBe("my_table");
+                    })
+                });
+
+                context("and the toTable is an existing Table", function() {
+                    beforeEach(function() {
+                        this.server.completeFetchAllFor(this.dialog.sandboxTables, [
+                            fixtures.datasetSandboxTable({ objectName: "your_table", id: "10000|dca_demo|ddemo|BASE_TABLE|your_table" }),
+                            fixtures.datasetSandboxTable({ objectName: "my_table", id: "10000|dca_demo|ddemo|BASE_TABLE|my_table" }),
+                            fixtures.datasetSandboxTable({ objectName: "her_table", id: "10000|dca_demo|ddemo|BASE_TABLE|her_table" })
+                        ]);
+                    });
+
+                    it("has the right title", function() {
+                        expect(this.dialog.title).toMatchTranslation("import.title_edit_schedule");
+                    });
+
+                    it("has a submit button with the right text", function() {
+                        expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.save_changes");
+                    });
+
+                    it("has the right fieldset selected", function() {
+                        expect(this.dialog.$("input[type='radio']#import_scheduler_existing_table")).toBeChecked();
+                        expect(this.dialog.$("input[type='radio']#import_scheduler_new_table")).not.toBeChecked();
+                        expect(this.dialog.$(".existing_table fieldset")).not.toHaveClass("disabled");
+                        expect(this.dialog.$(".new_table fieldset")).toHaveClass("disabled");
+                    });
+
+                    it("has the 'schedule' checkbox checked by default", function() {
+                        expect(this.dialog.$("input[name='schedule']")).toBeChecked();
+                    });
+
+                    it("pre-populates the schedule fields with the import's settings", function() {
+                        expect(this.dialog.activeScheduleView.$(".start input[name='year']").val()).toBe("2013");
+                        expect(this.dialog.activeScheduleView.$(".start input[name='month']").val()).toBe("2");
+                        expect(this.dialog.activeScheduleView.$(".start input[name='day']").val()).toBe("21");
+
+                        expect(this.dialog.activeScheduleView.$(".hours").val()).toBe("1");
+                        expect(this.dialog.activeScheduleView.$(".minutes").val()).toBe("30");
+                        expect(this.dialog.activeScheduleView.$(".ampm").val()).toBe("PM");
+
+                        expect(this.dialog.activeScheduleView.$(".end input[name='year']").val()).toBe("2013");
+                        expect(this.dialog.activeScheduleView.$(".end input[name='month']").val()).toBe("5");
+                        expect(this.dialog.activeScheduleView.$(".end input[name='day']").val()).toBe("27");
+                    });
+
+                    it("pre-populates the destination table and truncation fields with the import's settings", function() {
+                        expect(this.dialog.$("select[name='toTable']").val()).toBe("my_table");
+                        expect(this.dialog.$(".truncate")).toBeChecked();
+                    });
+
+                    it("pre-populates the row limit", function() {
+                        expect(this.dialog.$("input[name='limit_num_rows']")).toBeChecked();
+                        expect(this.dialog.$("input[name='sampleCount']").val()).toBe("200");
+                    });
+
+                    describe("submitting the form", function() {
+                        beforeEach(function() {
+                            this.dialog.$("input[name='sampleCount']").val("201");
+                            this.dialog.$("button.submit").trigger("click");
+                        });
+
+                        it("has the right loading text in the submit button", function() {
+                            expect(this.dialog.$("button.submit").text()).toMatchTranslation("import.saving");
+                        });
+
+                        it("sends activateSchedule", function() {
+                            expect(this.server.lastUpdate().params().activateSchedule).toBeTruthy();
+                        });
+
+                        context("when the save completes", function() {
+                            beforeEach(function() {
+                                spyOn(chorus, "toast");
+                                spyOn(this.dialog, "closeModal");
+                                this.dialog.model.trigger("saved");
+                            });
+
+                            it("displays the right toast message", function() {
+                                expect(chorus.toast).toHaveBeenCalledWith("import.schedule.toast");
+                            });
+                        });
+                    });
+                });
+            });
         });
 
-        describe("when the sandbox table fetch completes", function() {
+        describe("when the schedule is inactive", function() {
             beforeEach(function() {
-                this.server.completeFetchAllFor(this.dialog.sandboxTables, [
-                    fixtures.datasetSandboxTable({ objectName: "your_table", id: "10000|dca_demo|ddemo|BASE_TABLE|your_table" }),
-                    fixtures.datasetSandboxTable({ objectName: "my_table",   id: "10000|dca_demo|ddemo|BASE_TABLE|my_table" }),
-                    fixtures.datasetSandboxTable({ objectName: "her_table",  id: "10000|dca_demo|ddemo|BASE_TABLE|her_table" })
-                ]);
-            });
-
-            it("has the right title", function() {
-                expect(this.dialog.title).toMatchTranslation("import.title_edit_schedule");
-            });
-
-            it("has a submit button with the right text", function() {
-                expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.save_changes");
-            });
-
-            it("has the right fieldset selected", function() {
-                expect(this.dialog.$("input[type='radio']#import_scheduler_existing_table")).toBeChecked();
-                expect(this.dialog.$("input[type='radio']#import_scheduler_new_table")).not.toBeChecked();
-                expect(this.dialog.$(".existing_table fieldset")).not.toHaveClass("disabled");
-                expect(this.dialog.$(".new_table fieldset")).toHaveClass("disabled");
-            });
-
-            it("has the 'schedule' checkbox checked by default", function() {
-                expect(this.dialog.$("input[name='schedule']")).toBeChecked();
-            });
-
-            it("pre-populates the schedule fields with the import's settings", function() {
-                expect(this.dialog.$(".start input[name='year']").val()).toBe("2013");
-                expect(this.dialog.$(".start input[name='month']").val()).toBe("2");
-                expect(this.dialog.$(".start input[name='day']").val()).toBe("21");
-
-                expect(this.dialog.$(".hours").val()).toBe("1");
-                expect(this.dialog.$(".minutes").val()).toBe("30");
-                expect(this.dialog.$(".ampm").val()).toBe("PM");
-
-                expect(this.dialog.$(".end input[name='year']").val()).toBe("2013");
-                expect(this.dialog.$(".end input[name='month']").val()).toBe("5");
-                expect(this.dialog.$(".end input[name='day']").val()).toBe("27");
-            });
-
-            it("pre-populates the destination table and truncation fields with the import's settings", function() {
-                expect(this.dialog.$("select[name='toTable']").val()).toBe("my_table");
-                expect(this.dialog.$(".truncate")).toBeChecked();
-            });
-
-            it("pre-populates the row limit", function() {
-                expect(this.dialog.$("input[name='limit_num_rows']")).toBeChecked();
-                expect(this.dialog.$("input[name='sampleCount']").val()).toBe("200");
-            });
-
-            describe("submitting the form", function() {
-                beforeEach(function() {
-                    this.dialog.$("input[name='sampleCount']").val("201");
-                    this.dialog.$("button.submit").trigger("click");
+                this.import = fixtures.datasetImport({
+                    id: '12',
+                    truncate: true,
+                    sampleCount: 200,
+                    scheduleInfo: {
+                        startTime: "2013-02-21 13:30:00.0",
+                        endTime: "2013-05-27",
+                        frequency: "HOURLY"
+                    },
+                    toTable: "my_table",
+                    destinationTable: "10000|dca_demo|ddemo|BASE_TABLE|my_table",
+                    sourceId: "10000|dca_demo|ddemo|BASE_TABLE|somebodys_table"
                 });
+                this.launchElement.addClass("edit_schedule");
+                this.launchElement.data("import", this.import);
+                this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+                this.dialog.render();
+            });
 
-                it("has the right loading text in the submit button", function() {
-                    expect(this.dialog.$("button.submit").text()).toMatchTranslation("import.saving");
-                });
-
-                context("when the save completes", function() {
+            describe("when the sandbox table fetch completes", function() {
+                context("and the toTable is not an existing Table", function() {
                     beforeEach(function() {
-                        spyOn(chorus, "toast");
-                        spyOn(this.dialog, "closeModal");
-                        this.dialog.model.trigger("saved");
+                        this.server.completeFetchAllFor(this.dialog.sandboxTables, [
+                            fixtures.datasetSandboxTable({ objectName: "your_table", id: "10000|dca_demo|ddemo|BASE_TABLE|your_table" }),
+                            fixtures.datasetSandboxTable({ objectName: "not_my_table", id: "10000|dca_demo|ddemo|BASE_TABLE|not_my_table" }),
+                            fixtures.datasetSandboxTable({ objectName: "her_table", id: "10000|dca_demo|ddemo|BASE_TABLE|her_table" })
+                        ]);
                     });
 
-                    it("displays the right toast message", function() {
-                        expect(chorus.toast).toHaveBeenCalledWith("import.schedule.toast");
+                    it("has the 'schedule' checkbox unchecked by default", function() {
+                        expect(this.dialog.$("input[name='schedule']")).not.toBeChecked();
                     });
-                });
+
+                    it("pre-populates the schedule fields with the import's settings", function() {
+                        expect(this.dialog.activeScheduleView.$(".start input[name='year']").val()).toBe("2013");
+                        expect(this.dialog.activeScheduleView.$(".start input[name='month']").val()).toBe("2");
+                        expect(this.dialog.activeScheduleView.$(".start input[name='day']").val()).toBe("21");
+
+                        expect(this.dialog.activeScheduleView.$(".hours").val()).toBe("1");
+                        expect(this.dialog.activeScheduleView.$(".minutes").val()).toBe("30");
+                        expect(this.dialog.activeScheduleView.$(".ampm").val()).toBe("PM");
+
+                        expect(this.dialog.activeScheduleView.$(".end input[name='year']").val()).toBe("2013");
+                        expect(this.dialog.activeScheduleView.$(".end input[name='month']").val()).toBe("5");
+                        expect(this.dialog.activeScheduleView.$(".end input[name='day']").val()).toBe("27");
+                    });
+
+                })
             });
         });
     });
+
 
     describe("import now!", function() {
         beforeEach(function() {
