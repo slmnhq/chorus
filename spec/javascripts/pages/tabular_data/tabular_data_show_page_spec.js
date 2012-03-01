@@ -88,12 +88,12 @@ describe("chorus.pages.TabularDataShowPage", function() {
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1).text()).toBe(t("breadcrumbs.instances"));
 
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toHaveClass("dialog");
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2).data("dialog")).toBe("BrowseDatasets");
+                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2).data("dialog")).toBe("SchemaBrowser");
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2).data("instance")).toEqual({id: this.databaseObject.get("instance").id, name: this.databaseObject.get("instance").name});
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toContainText(this.databaseObject.get("instance").name);
 
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toHaveClass("dialog");
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3).data("dialog")).toBe("BrowseDatasets");
+                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3).data("dialog")).toBe("SchemaBrowser");
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3).data("instance")).toEqual({id: this.databaseObject.get("instance").id, name: this.databaseObject.get("instance").name});
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3).data("databaseName")).toBe(this.databaseObject.get("databaseName"));
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toContainText(this.databaseObject.get("databaseName"));

@@ -5,8 +5,8 @@
             return [
                 {label: t("breadcrumbs.home"), url: "#/"},
                 {label: t("breadcrumbs.instances"), url: '#/instances'},
-                {label: this.model.get("instanceName"), dialog: "BrowseDatasets", data: { instance: instance} },
-                {label: this.model.get("databaseName"), dialog: "BrowseDatasets",
+                {label: this.model.get("instanceName"), dialog: "SchemaBrowser", data: { instance: instance} },
+                {label: this.model.get("databaseName"), dialog: "SchemaBrowser",
                     data: { instance: instance, databaseName: this.model.get("databaseName")} },
                 {label: this.model.get("name")}
             ];

@@ -1,9 +1,9 @@
-chorus.dialogs.BrowseDatasets = chorus.dialogs.Base.extend({
-    className: 'browse_datasets',
-    title: t("browse_datasets_dialog.title"),
+chorus.dialogs.SchemaBrowser = chorus.dialogs.Base.extend({
+    className: 'schema_browser',
+    title: t("schema_browser_dialog.title"),
 
     events: {
-        "click button.submit": "clickShowDatasets"
+        "click button.submit": "showSchema"
     },
 
     subviews: {
@@ -25,7 +25,7 @@ chorus.dialogs.BrowseDatasets = chorus.dialogs.Base.extend({
         this.bindings.add(this.schemaPicker, "change", this.setSubmitButtonState);
     },
 
-    clickShowDatasets: function() {
+    showSchema: function() {
         if(_.all(this.schemaPicker.fieldValues(), _.identity)) {
             this.navigate();
         }

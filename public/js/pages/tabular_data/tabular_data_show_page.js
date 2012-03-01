@@ -4,8 +4,8 @@
             return [
                 {label: t("breadcrumbs.home"), url: "#/"},
                 {label: t("breadcrumbs.instances"), url: '#/instances'},
-                {label: this.model.get("instance").name, dialog: "BrowseDatasets", data: { instance: this.model.get('instance')} },
-                {label: this.model.get("databaseName"), dialog: "BrowseDatasets", data: { instance: this.model.get('instance'), databaseName: this.model.get("databaseName")} },
+                {label: this.model.get("instance").name, dialog: "SchemaBrowser", data: { instance: this.model.get('instance')} },
+                {label: this.model.get("databaseName"), dialog: "SchemaBrowser", data: { instance: this.model.get('instance'), databaseName: this.model.get("databaseName")} },
                 {label: this.model.get("schemaName"), url: this.model.schema().showUrl()},
                 {label: this.model.get("objectName")}
             ];

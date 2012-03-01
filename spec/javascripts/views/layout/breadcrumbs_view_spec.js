@@ -5,8 +5,8 @@ describe("chorus.views.BreadcrumbView", function() {
             this.view = new chorus.views.BreadcrumbsView({ breadcrumbs : [
                 {label : "Home", url : "#/"},
                 {label : "Foo", url : "#/foo"},
-                {label : "DataDialog", dialog: "BrowseDatasets", data : { obj: this.dataObject }},
-                {label : "SimpleDialog", dialog: "BrowseDatasets"},
+                {label : "DataDialog", dialog: "SchemaBrowser", data : { obj: this.dataObject }},
+                {label : "SimpleDialog", dialog: "SchemaBrowser"},
                 {label : "Bar"}
             ]});
             this.view.render();
@@ -38,9 +38,9 @@ describe("chorus.views.BreadcrumbView", function() {
         })
 
         it("sets the data-dialog option and the class 'dialog' if there's a dialog option", function() {
-            expect(this.view.$(".breadcrumb:eq(2) a").attr("data-dialog")).toBe("BrowseDatasets")
+            expect(this.view.$(".breadcrumb:eq(2) a").attr("data-dialog")).toBe("SchemaBrowser")
             expect(this.view.$(".breadcrumb:eq(2) a")).toHaveClass("dialog")
-            expect(this.view.$(".breadcrumb:eq(3) a").attr("data-dialog")).toBe("BrowseDatasets")
+            expect(this.view.$(".breadcrumb:eq(3) a").attr("data-dialog")).toBe("SchemaBrowser")
             expect(this.view.$(".breadcrumb:eq(3) a")).toHaveClass("dialog")
         })
 

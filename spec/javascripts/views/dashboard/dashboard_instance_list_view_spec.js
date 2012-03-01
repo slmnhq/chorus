@@ -23,7 +23,7 @@ describe("chorus.views.DashboardInstanceList", function() {
         });
 
         it("has a link to browse each instance", function() {
-            var browseLinks = this.view.$("a.dialog[data-dialog=BrowseDatasets]");
+            var browseLinks = this.view.$("a.dialog[data-dialog=SchemaBrowser]");
 
             expect(browseLinks.eq(0).text()).toMatchTranslation("dashboard.instances.browse_datasets");
 

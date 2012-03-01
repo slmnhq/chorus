@@ -258,13 +258,13 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 describe("browse datasets", function() {
                     it("should be a dialog link", function() {
-                        expect(this.view.$('.actions .browse_datasets').data('dialog')).toBe('BrowseDatasets');
-                        expect(this.view.$('.actions .browse_datasets')).toContainTranslation('actions.browse_datasets');
+                        expect(this.view.$('.actions .schema_browser').data('dialog')).toBe('SchemaBrowser');
+                        expect(this.view.$('.actions .schema_browser')).toContainTranslation('actions.browse_datasets');
                     })
 
                     it("should not show up if the instance is not a greenplum database", function() {
                         this.instance.set({instanceProvider: 'Something Else'});
-                        expect(this.view.$('.actions .browse_datasets')).not.toExist();
+                        expect(this.view.$('.actions .schema_browser')).not.toExist();
                     })
                 });
             });
@@ -294,8 +294,8 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                         describe("browse datasets link", function() {
                             it("shouled be grayed out, and not be a dialog", function() {
-                                expect(this.view.$('.actions .browse_datasets').data('dialog')).toBeUndefined();
-                                expect(this.view.$('.actions .browse_datasets')).toHaveClass('disabled');
+                                expect(this.view.$('.actions .schema_browser').data('dialog')).toBeUndefined();
+                                expect(this.view.$('.actions .schema_browser')).toHaveClass('disabled');
                             })
                         });
                     });

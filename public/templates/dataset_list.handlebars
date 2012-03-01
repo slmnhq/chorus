@@ -26,8 +26,8 @@
                 {{#if noCredentials}}
                     {{instance.name}}.{{databaseName}}.{{schemaName}}
                 {{else}}
-                    <a href="#" class="dialog instance" data-dialog="BrowseDatasets">{{instance.name}}</a>.{{! suppress whitespace
-                    }}<a href="#" class="dialog database" data-dialog="BrowseDatasets" data-database-name="{{databaseName}}">{{databaseName}}</a>.{{! suppress whitespace
+                    <a href="#" class="dialog instance" data-dialog="SchemaBrowser">{{instance.name}}</a>.{{! suppress whitespace
+                    }}<a href="#" class="dialog database" data-dialog="SchemaBrowser" data-database-name="{{databaseName}}">{{databaseName}}</a>.{{! suppress whitespace
                     }}<a href="{{{schemaShowUrl}}}" class="schema">{{schemaName}}</a>
                 {{/if}}
             </div>

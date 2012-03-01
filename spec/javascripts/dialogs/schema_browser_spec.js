@@ -1,9 +1,9 @@
-describe("chorus.dialogs.BrowseDatasets", function () {
+describe("chorus.dialogs.SchemaBrowser", function () {
     context("when falling back to the page model", function() {
         beforeEach(function () {
             this.instance = fixtures.instance();
-            this.launchElement = $("<a data-dialog='BrowseDatasets'></a>")
-            this.view = new chorus.dialogs.BrowseDatasets({
+            this.launchElement = $("<a data-dialog='SchemaBrowser'></a>")
+            this.view = new chorus.dialogs.SchemaBrowser({
                 launchElement: this.launchElement,
                 pageModel: this.instance
             });
@@ -70,10 +70,10 @@ describe("chorus.dialogs.BrowseDatasets", function () {
     context("when the launch element provides the instance", function() {
         beforeEach(function () {
             this.instance = fixtures.instance();
-            this.launchElement = $("<a data-dialog='BrowseDatasets'></a>");
+            this.launchElement = $("<a data-dialog='SchemaBrowser'></a>");
             this.launchElement.data("instance", this.instance.attributes);
 
-            this.view = new chorus.dialogs.BrowseDatasets({
+            this.view = new chorus.dialogs.SchemaBrowser({
                 launchElement: this.launchElement,
                 pageModel: null
             });
@@ -91,11 +91,11 @@ describe("chorus.dialogs.BrowseDatasets", function () {
             this.instance = fixtures.instance();
             this.database = fixtures.database({instanceId: this.instance.get("id")});
 
-            this.launchElement = $("<a data-dialog='BrowseDatasets'></a>");
+            this.launchElement = $("<a data-dialog='SchemaBrowser'></a>");
             this.launchElement.data("instance", this.instance.attributes);
             this.launchElement.data("databaseName", this.database.get("name"));
 
-            this.view = new chorus.dialogs.BrowseDatasets({
+            this.view = new chorus.dialogs.SchemaBrowser({
                 launchElement: this.launchElement,
                 pageModel: null
             });
