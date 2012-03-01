@@ -23,11 +23,6 @@ describe("chorus.pages.DatasetIndexPage", function() {
         it("does not create the sidebar", function() {
             expect(this.page.sidebar).toBeUndefined();
         })
-
-        it("declares required resources", function() {
-            expect(this.page.requiredResources.length).toBe(1);
-            expect(this.page.requiredResources.at(0)).toBe(this.page.workspace);
-        });
     });
 
     context("it does not have a sandbox", function() {
@@ -118,6 +113,32 @@ describe("chorus.pages.DatasetIndexPage", function() {
         }
     });
 
+    describe("#initialize", function() {
+        beforeEach(function() {
+            this.page.render();
+        });
+
+        it("fetches the workspace", function() {
+            expect(this.workspace).toHaveBeenFetched();
+        });
+
+        it("creates the header and breadcrumbs", function() {
+            expect(this.page.$("#header")).toExist();
+            expect(this.page.$("#breadcrumbs")).toExist();
+        });
+
+        it("does not create the main content (because of the import button in the content details)", function() {
+            expect(this.page.mainContent).toBeUndefined();
+            expect(this.page.$("#main_content")).toExist();
+            expect(this.page.$("#main_content")).toBeEmpty();
+        });
+
+        it("does not render the sidebar", function() {
+            expect(this.page.$(".sidebar_content")).toExist();
+            expect(this.page.$(".sidebar_content")).toBeEmpty();
+        });
+    });
+
     context("after the workspace has loaded", function() {
         context("and the user has update permission on the workspace", function() {
             beforeEach(function() {
@@ -129,7 +150,15 @@ describe("chorus.pages.DatasetIndexPage", function() {
             it("creates the sidebar", function() {
                 expect(this.page.sidebar).toBeDefined();
                 expect(this.page.sidebar.options.workspace.id).toEqual(this.workspace.id);
-            })
+            });
+
+            it("creates the main content", function() {
+                expect(this.page.mainContent).toBeDefined();
+                expect(this.page.mainContent.model).toBeA(chorus.models.Workspace);
+                expect(this.page.mainContent.model.get("id")).toBe(this.workspace.get("id"));
+                expect(this.page.$("#main_content")).toExist();
+                expect(this.page.$("#main_content")).not.toBeEmpty();
+            });
 
             it("fetches the collection when csv_import:started is triggered", function() {
                 chorus.PageEvents.broadcast("csv_import:started");
@@ -137,7 +166,6 @@ describe("chorus.pages.DatasetIndexPage", function() {
             });
 
             context("it has a sandbox", function() {
-
                 it("fetches the account for the current user", function() {
                     expect(this.server.lastFetchFor(this.account)).not.toBeUndefined();
                 });

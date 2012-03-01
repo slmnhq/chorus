@@ -1,6 +1,7 @@
 chorus.views.DatasetList = chorus.views.Base.extend({
     tagName: "ul",
     className: "dataset_list",
+    useLoadingSection: true,
     additionalClass: "list",
     events: {
         "click li": "selectDatasetByClick"

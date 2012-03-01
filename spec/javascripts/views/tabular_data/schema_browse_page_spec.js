@@ -69,11 +69,12 @@ describe("chorus.pages.SchemaBrowsePage", function() {
                 expect(this.page.collection.attributes.schemaName).toBe(this.schema.get("name"))
             })
 
-            context("with some items in the dataset", function() {
+            context("when the fetch for the tables and views in the schema completes", function() {
                 beforeEach(function() {
-                    this.page.collection.add(fixtures.databaseTable());
-                    this.page.collection.add(fixtures.databaseView());
-                    this.page.render();
+                    this.server.completeFetchFor(this.page.collection, [
+                        fixtures.databaseTable(),
+                        fixtures.databaseView(),
+                    ]);
                 });
 
                 it("pre-selects the first item", function() {

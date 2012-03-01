@@ -16,13 +16,22 @@
         setup: function(workspaceId) {
             this.workspace = new chorus.models.Workspace({id: workspaceId});
             this.workspace.onLoaded(this.workspaceLoaded, this);
-            this.requiredResources.add(this.workspace);
             this.workspace.fetch();
             this.breadcrumbs = new breadcrumbsView({model: this.workspace});
 
             this.collection = new chorus.collections.DatasetSet([], {workspaceId: workspaceId});
             this.collection.sortAsc("objectName");
 
+            chorus.PageEvents.subscribe("tabularData:selected", function(dataset) {
+                this.model = dataset;
+            }, this);
+
+            chorus.PageEvents.subscribe("csv_import:started", function() {
+                this.collection.fetch();
+            }, this)
+        },
+
+        workspaceLoaded: function() {
             this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
             this.mainContent = new chorus.views.MainContentList({
                 modelClass: "Dataset",
@@ -44,29 +53,20 @@
                     {
                         view: "DatasetImport",
                         text: t("dataset.import.title"),
-                        dataAttributes : [ {name: 'workspace-id', value: workspaceId} ],
+                        dataAttributes : [{name: 'workspace-id', value: this.workspace.get("id") }],
                         helpText: t("dataset.import.need_sandbox", {hereLink: '<a class="dialog" href="#" data-dialog="SandboxNew" data-workspace-id="'+this.workspace.get("id")+'">'+t("actions.click_here")+'</a>'}),
                         disabled: true
                     }
                 ]
             });
 
-            chorus.PageEvents.subscribe("tabularData:selected", function(dataset) {
-                this.model = dataset;
-            }, this);
-
-            chorus.PageEvents.subscribe("csv_import:started", function() {
-                this.collection.fetch();
-            }, this)
-
             this.mainContent.contentHeader.bind("choice:filter", function(choice) {
                 this.collection.attributes.type = choice;
                 this.collection.fetch();
             }, this)
-        },
 
-        workspaceLoaded: function() {
             this.sidebar = new chorus.views.TabularDataListSidebar({ workspace: this.workspace });
+            this.render();
 
             var targetButton = this.mainContent.options.buttons[0];
 
@@ -74,8 +74,7 @@
                 this.mainContent.contentDetails.options.buttons = [];
                 this.mainContent.contentDetails.render();
                 this.collection.fetch();
-            }
-            else if (this.workspace.sandbox()) {
+            } else if (this.workspace.sandbox()) {
                 targetButton.dataAttributes.push({name: "canonical-name", value: this.workspace.sandbox().canonicalName()});
                 targetButton.disabled = false;
                 delete targetButton.helpText;
