@@ -30,10 +30,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         this.sandboxTables.sortAsc("objectName");
         this.sandboxTables.fetchAll();
 
-        this.bindings.add(this.model, "saved", function() {
-            chorus.toast("import.success");
-            this.closeModal();
-        });
+        this.bindings.add(this.model, "saved", this.importSaved);
 
         this.bindings.add(this.model, "saveFailed", function() {
             this.$("button.submit").stopLoading();
@@ -139,8 +136,21 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     },
 
     beginImport: function() {
-        this.$("button.submit").startLoading("import.importing");
+        if (this.model.has("scheduleInfo")) {
+            this.$("button.submit").startLoading("import.saving");
+        } else {
+            this.$("button.submit").startLoading("import.importing");
+        }
         this.model.save(this.getNewModelAttrs());
+    },
+
+    importSaved: function() {
+        if (this.model.has("scheduleInfo")) {
+            chorus.toast("import.schedule.toast");
+        } else {
+            chorus.toast("import.success");
+        }
+        this.closeModal();
     },
 
     getNewModelAttrs: function() {

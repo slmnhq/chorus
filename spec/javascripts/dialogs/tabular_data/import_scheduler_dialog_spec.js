@@ -255,6 +255,29 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 expect(this.dialog.$("input[name='limit_num_rows']")).toBeChecked();
                 expect(this.dialog.$("input[name='sampleCount']").val()).toBe("200");
             });
+
+            describe("submitting the form", function() {
+                beforeEach(function() {
+                    this.dialog.$("input[name='sampleCount']").val("201");
+                    this.dialog.$("button.submit").trigger("click");
+                });
+
+                it("has the right loading text in the submit button", function() {
+                    expect(this.dialog.$("button.submit").text()).toMatchTranslation("import.saving");
+                });
+
+                context("when the save completes", function() {
+                    beforeEach(function() {
+                        spyOn(chorus, "toast");
+                        spyOn(this.dialog, "closeModal");
+                        this.dialog.model.trigger("saved");
+                    });
+
+                    it("displays the right toast message", function() {
+                        expect(chorus.toast).toHaveBeenCalledWith("import.schedule.toast");
+                    });
+                });
+            });
         });
     });
 
