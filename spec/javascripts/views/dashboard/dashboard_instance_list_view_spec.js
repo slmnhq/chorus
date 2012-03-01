@@ -1,7 +1,7 @@
 describe("chorus.views.DashboardInstanceList", function() {
     beforeEach(function(){
         this.instance1 = fixtures.instance({ name: "Broccoli" });
-        this.instance2 = fixtures.instance({ name: "Camels" });
+        this.instance2 = fixtures.instance({ name: "Camels", instanceProvider: "Hadoop" });
         this.collection = new chorus.collections.InstanceSet([ this.instance1, this.instance2 ]);
         this.collection.loaded = true;
         this.view = new chorus.views.DashboardInstanceList({ collection : this.collection });
@@ -25,12 +25,16 @@ describe("chorus.views.DashboardInstanceList", function() {
         it("has a link to browse each instance", function() {
             var browseLinks = this.view.$("a.dialog[data-dialog=SchemaBrowser]");
 
+            expect(browseLinks.length).toBe(1);
             expect(browseLinks.eq(0).text()).toMatchTranslation("dashboard.instances.browse_datasets");
 
             expect(browseLinks.eq(0).data("instance").id).toEqual(this.instance1.get("id"));
-            expect(browseLinks.eq(1).data("instance").id).toEqual(this.instance2.get("id"));
             expect(browseLinks.eq(0).data("instance").name).toEqual(this.instance1.get("name"));
-            expect(browseLinks.eq(1).data("instance").name).toEqual(this.instance2.get("name"));
+
+            var hdfsLink = this.view.$("a.browse_hadoop");
+            expect(hdfsLink.length).toBe(1);
+            expect(hdfsLink.eq(0).attr("href")).toBe("#/instances/" + this.instance2.id + "/browse/");
+            expect(hdfsLink.eq(0)).toContainTranslation("dashboard.instances.browse_files");
         });
     });
 });

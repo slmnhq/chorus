@@ -9,7 +9,11 @@
                 <span class="name" title="{{name}}">{{name}}</span>
             </div>
             <div class="browse">
-                <a href="#" class="dialog" data-dialog="SchemaBrowser">{{t "dashboard.instances.browse_datasets"}}</a>
+                {{#if isHadoop}}
+                    <a href="#/instances/{{id}}/browse/" class="browse_hadoop" >{{t "dashboard.instances.browse_files"}}</a>
+                {{else}}
+                    <a href="#" class="dialog" data-dialog="SchemaBrowser">{{t "dashboard.instances.browse_datasets"}}</a>
+                {{/if}}
             </div>
 
        </div>

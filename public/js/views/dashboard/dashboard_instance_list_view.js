@@ -7,7 +7,8 @@ chorus.views.DashboardInstanceList = chorus.views.Base.extend({
 
     collectionModelContext: function(model) {
         return { 
-            imageUrl: model.providerIconUrl()
+            imageUrl: model.providerIconUrl(),
+            isHadoop: model.isHadoop()
         }
     },
 
