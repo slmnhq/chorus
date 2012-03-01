@@ -42,5 +42,9 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
         } else if (this.get("scheduleEndTime")) {
             return this.get("scheduleEndTime");
         }
+    },
+
+    wasSuccessfullyExecuted: function() {
+        return this.get("executionInfo") && this.get("executionInfo").state == "success";
     }
 });

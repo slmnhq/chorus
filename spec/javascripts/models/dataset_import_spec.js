@@ -10,6 +10,23 @@ describe("chorus.models.DatasetImport", function() {
         expect(this.model.url()).toHaveUrlPath("/edc/workspace/101/dataset/102|my_db_name|my_schema_name|SOURCE_TABLE|my_table_name/import");
     });
 
+    describe("#wasSuccessfullyExecuted", function() {
+        it("returns true when the import succeeded on its last execution", function() {
+            this.model.set({ executionInfo: { state: "success" } })
+            expect(this.model.wasSuccessfullyExecuted()).toBeTruthy();
+        });
+
+        it("returns false if the import failed on its last execution", function() {
+            this.model.set({ executionInfo: { state: "failed" } })
+            expect(this.model.wasSuccessfullyExecuted()).toBeFalsy();
+        });
+
+        it("returns false if the import has not been executed", function() {
+            this.model.unset("executionInfo");
+            expect(this.model.wasSuccessfullyExecuted()).toBeFalsy();
+        });
+    });
+
     describe("#startTime, #endTime, #frequency", function() {
         context("when the import has the 'scheduleStartTime' attribute (as required by the POST api)", function() {
             beforeEach(function() {

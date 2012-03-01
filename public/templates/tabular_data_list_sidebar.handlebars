@@ -21,29 +21,24 @@
 
     <div class="actions">
         <ul>
-            <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}"
-            {{#unless browsingSchema}}
-                data-allow-workspace-attachments="true"
-            {{/unless}}
-            data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
-            {{#unless browsingSchema}}
-                {{#if isImportable}}
-                    {{#if canImport}}
-                        <li><a class="dialog import_now" href="#" data-dialog="ImportScheduler">{{t "actions.import_now"}}</a></li>
-                        {{#if hasImport}}
-                            <li><a class="dialog edit_schedule" href="#" data-dialog="ImportScheduler">{{t "actions.edit_schedule"}}</a></li>
-                        {{else}}
-                            <li><a class="dialog create_schedule" href="#" data-dialog="ImportScheduler">{{t "actions.create_schedule"}}</a></li>
-                        {{/if}}
+            {{#if browsingSchema}}
+                <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}">{{t "actions.add_note"}}</a></li>
+                <li class="associate"><a class="dialog" data-dialog="AssociateWithWorkspace" href="#">{{t "actions.associate_with_workspace"}}</a></li>
+            {{else}}
+                <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workspace-attachments="true">{{t "actions.add_note"}}</a></li>
+                {{#if canImport}}
+                    <li><a class="dialog import_now" data-dialog="ImportScheduler" href="#">{{t "actions.import_now"}}</a></li>
+                    {{#if hasImport}}
+                        <li><a class="dialog edit_schedule" data-dialog="ImportScheduler" href="#">{{t "actions.edit_schedule"}}</a></li>
+                    {{else}}
+                        <li><a class="dialog create_schedule" data-dialog="ImportScheduler" href="#">{{t "actions.create_schedule"}}</a></li>
                     {{/if}}
                 {{/if}}
-            {{/unless}}
-            {{#unless noCredentials}}
-                <li class="tabular_data_preview"><a class="dialog tabular_data_preview" href="#" data-dialog="TabularDataPreview">{{t "actions.tabular_data_preview"}}</a></li>
-            {{/unless}}
-            {{#if browsingSchema}}
-                <li class="associate"><a class="dialog" href="#" data-dialog="AssociateWithWorkspace">{{t "actions.associate_with_workspace"}}</a></li>
             {{/if}}
+
+            {{#unless noCredentials}}
+                <li><a class="dialog tabular_data_preview" data-dialog="TabularDataPreview" href="#">{{t "actions.tabular_data_preview"}}</a></li>
+            {{/unless}}
         </ul>
     </div>
 
