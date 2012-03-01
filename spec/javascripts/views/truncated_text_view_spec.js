@@ -4,7 +4,7 @@ describe("chorus.views.TruncatedText", function() {
             '</div><div><span style="font-weight: normal;"><br></span></div><div><span style="font-weight: normal; "><br></span>' +
             '</div><div><span style="font-weight: normal; ">some </span><b>great</b> stuff <div style="font-weight: normal; "><ul>' +
             '<li><span style="font-size: 10pt; ">one</span></li><li><span style="font-size: 10pt; ">two</span></li><li>' +
-            '<span style="font-size: 10pt;">three</span> </li></ul></div></div>';
+            '<span style="font-size: 10pt;">three</span> </li></ul><a href="http://example.com">hi</a></div></div>';
         this.model = fixtures.workspace({ summary: this.text })
         this.model.loaded = true;
         this.view = new chorus.views.TruncatedText({model: this.model, attribute: "summary"})
@@ -86,4 +86,16 @@ describe("chorus.views.TruncatedText", function() {
             })
         })
     })
+
+    describe("clicking links in the text", function() {
+        beforeEach(function() {
+            spyOn(window, "open")
+            this.view.render();
+            this.view.$(".original a").click();
+        });
+
+        it("opens the link in a new window", function() {
+            expect(window.open).toHaveBeenCalledWith("http://example.com")
+        });
+    });
 })

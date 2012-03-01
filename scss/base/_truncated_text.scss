@@ -8,13 +8,17 @@
         .original {
             @include summary-text;
 
+            a {
+                font-size: 10pt;
+            }
+
             b {
                 font-weight: bold;
             }
 
             i {
                 font-style: italic;
-            }
+             }
 
             ul {
                 list-style-type: disc;

@@ -2,7 +2,8 @@ chorus.views.TruncatedText = chorus.views.Base.extend({
     className: "truncated_text",
 
     events: {
-        "click .links a": "toggleMore"
+        "click .links a": "toggleMore",
+        "click .original a": "openLink"
     },
 
     additionalContext: function() {
@@ -22,6 +23,11 @@ chorus.views.TruncatedText = chorus.views.Base.extend({
     toggleMore: function(e) {
         e.preventDefault();
         $(this.el).toggleClass("expanded");
+    },
+
+    openLink: function(event) {
+        event.preventDefault();
+        window.open($(event.currentTarget).attr("href"))
     }
 });
 
