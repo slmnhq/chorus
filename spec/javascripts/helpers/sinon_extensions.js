@@ -48,6 +48,14 @@ _.extend(sinon.fakeServer, {
         return _.last(this.destroys());
     },
 
+    lastDestroyFor: function(model) {
+        return _.last(_.filter(this.destroys(), function(potentialRequest) {
+            var uri = new URI(potentialRequest.url);
+            var modelUri = new URI(model.url());
+            return uri.equals(modelUri);
+        }));
+    },
+
     lastCreateFor: function(model) {
         return _.last(_.filter(this.creates(), function(potentialRequest) {
             var uri = new URI(potentialRequest.url);

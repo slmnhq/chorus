@@ -283,6 +283,28 @@ describe("chorus.views.Header", function() {
                         expect(this.view.$(".popup_notifications li").length).toBe(2);
                     });
                 });
+
+                describe("clicking delete for a notification", function() {
+                    beforeEach(function() {
+                        chorus.bindModalLaunchingClicks(this.view);
+                        this.modalSpy = stubModals();
+                        this.view.$('.popup_notifications .delete_link:eq(0)').click();
+                    });
+
+                    it("launches the NotificationDeleteAlert", function() {
+                        expect(this.modalSpy).toHaveModal(chorus.alerts.NotificationDeleteAlert);
+                    });
+
+                    describe("clicking the confirmation", function() {
+                        beforeEach(function() {
+                            $(this.modalSpy.mostRecentCall.args[0]).find("button.submit").click();
+                        });
+
+                        it("deletes the notification", function() {
+                            expect(this.server.lastDestroyFor(this.view.notifications.at(0))).toBeDefined();
+                        });
+                    });
+                });
             });
 
             describe("when a notification:deleted event occurs", function() {

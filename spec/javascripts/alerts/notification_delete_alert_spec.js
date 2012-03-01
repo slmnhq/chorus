@@ -1,14 +1,14 @@
 describe("chorus.alerts.NotificationDeleteAlert", function() {
     beforeEach(function() {
         this.activity = fixtures.activities.NOTE_ON_WORKSPACE();
-        this.activity.set({notificationId: 1234});
+        this.activity.set({id: '1234'});
         this.launchElement = $("<a/>");
         this.launchElement.data("activity", this.activity);
         this.alert = new chorus.alerts.NotificationDeleteAlert({launchElement: this.launchElement});
     });
 
     it("makes a notification model", function() {
-        expect(this.alert.model.get("id")).toBe(1234);
+        expect(this.alert.model.get("id")).toBe('1234');
         expect(this.alert.model).toBeA(chorus.models.Notification);
     });
 

@@ -58,6 +58,20 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
         this.requiredResources.reset(options.requiredResources);
     },
 
+    createDialog: function(e) {
+        e.preventDefault();
+        var button = $(e.target).closest("button, a");
+        var dialog = new chorus.dialogs[button.data("dialog")]({ launchElement: button, pageModel: this.model, pageCollection: this.collection });
+        dialog.launchModal();
+    },
+
+    createAlert: function(e) {
+        e.preventDefault();
+        var launchElement = $(e.target).closest("button, a");
+        var alert = new chorus.alerts[launchElement.data("alert")]({launchElement: launchElement, pageModel: this.model, pageCollection: this.collection });
+        alert.launchModal();
+    },
+
     verifyResourcesLoaded: function(preventRender) {
         if (this.requiredResources.length == 0) {
             return;
