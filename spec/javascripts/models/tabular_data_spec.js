@@ -277,7 +277,7 @@ describe("chorus.models.TabularData", function() {
         })
 
         function checkPreview() {
-            it("should return a DatasetPreview", function() {
+            it("should return a TabularDataPreview", function() {
                 expect(this.preview).toBeA(chorus.models.TabularDataPreview);
             });
 

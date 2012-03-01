@@ -157,8 +157,8 @@ describe("chorus.views.TabularDataListSidebar", function() {
                 });
 
                 it("displays the 'Preview Data' link", function() {
-                    expect(this.view.$('.actions .dialog.dataset_preview').data('dialog')).toBe('DatasetPreview');
-                    expect(this.view.$('.actions .dataset_preview')).toContainTranslation('actions.dataset_preview');
+                    expect(this.view.$('.actions .dialog.tabular_data_preview').data('dialog')).toBe('TabularDataPreview');
+                    expect(this.view.$('.actions .tabular_data_preview')).toContainTranslation('actions.tabular_data_preview');
                 });
 
                 context("when hasCredentials is false for the dataset", function() {
@@ -168,7 +168,7 @@ describe("chorus.views.TabularDataListSidebar", function() {
                     });
 
                     it("does not show the preview data link", function() {
-                        expect(this.view.$('.actions .dataset_preview')).not.toExist();
+                        expect(this.view.$('.actions .tabular_data_preview')).not.toExist();
                     });
 
                     it("does not have the 'Import Now' action", function() {

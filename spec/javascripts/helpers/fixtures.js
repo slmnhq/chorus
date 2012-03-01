@@ -1983,13 +1983,6 @@ beforeEach(function() {
             return new chorus.models.Dataset(attributes);
         },
 
-        datasetPreview: function(overrides) {
-            return new chorus.models.TabularDataPreview(_.extend({
-                columns: [],
-                rows: []
-            }, overrides));
-        },
-
         datasetImport: function(overrides) {
             var attributes = _.extend({
                 workspaceId: this.nextId().toString(),

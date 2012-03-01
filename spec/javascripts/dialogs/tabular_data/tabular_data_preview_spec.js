@@ -1,9 +1,9 @@
-describe("chorus.dialogs.DatasetPreview", function () {
+describe("chorus.dialogs.TabularDataPreview", function () {
     beforeEach(function () {
         this.dataset = fixtures.datasetSandboxTable();
-        this.launchElement = $("<a data-dialog='DatasetPreview'></a>")
+        this.launchElement = $("<a data-dialog='TabularDataPreview'></a>")
         spyOn(chorus.views.ResultsConsole.prototype, 'execute').andCallThrough();
-        this.view = new chorus.dialogs.DatasetPreview({
+        this.view = new chorus.dialogs.TabularDataPreview({
             launchElement: this.launchElement,
             pageModel: this.dataset
         });

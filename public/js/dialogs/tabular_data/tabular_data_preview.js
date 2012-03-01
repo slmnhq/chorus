@@ -1,5 +1,5 @@
-chorus.dialogs.DatasetPreview = chorus.dialogs.Base.extend({
-    className: 'dataset_preview',
+chorus.dialogs.TabularDataPreview = chorus.dialogs.Base.extend({
+    className: 'tabular_data_preview',
     title: function() {return t("dataset.data_preview_title", {name: this.model.get("objectName")}); },
 
     subviews: {
