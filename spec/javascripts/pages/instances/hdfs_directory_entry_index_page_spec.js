@@ -14,8 +14,10 @@ describe("chorus.pages.HdfsDirectoryEntryIndexPage", function() {
 
     describe("when all of the fetches complete", function() {
         beforeEach(function() {
-            var entries = fixtures.hdfsDirectoryEntrySetJson({instanceId: "1234", path: "/foo"});
+            var entries = fixtures.hdfsDirectoryEntrySet(null, {instanceId: "1234", path: "/foo"});
+            entries.loaded = true;
             this.server.completeFetchFor(this.page.collection, entries);
+            this.page.collection = entries;
             this.server.completeFetchFor(this.page.instance, this.instance);
         });
 

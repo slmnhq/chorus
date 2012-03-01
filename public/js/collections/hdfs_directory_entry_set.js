@@ -8,5 +8,14 @@ chorus.collections.HdfsDirectoryEntrySet = chorus.collections.Base.extend({
 
     urlTemplate: function() {
         return "data/{{instanceId}}/hdfs/{{encodedPath}}";
+    },
+
+    parse: function(data) {
+        // temporary fix until backend bug fix
+        if (data.resource[0].content) {
+            data.resource = data.resource[0].content;
+        }
+
+        return this._super("parse", [data]);
     }
 });
