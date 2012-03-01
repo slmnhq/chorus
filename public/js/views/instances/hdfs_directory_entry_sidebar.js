@@ -19,7 +19,8 @@ chorus.views.HdfsDirectoryEntrySidebar = chorus.views.Sidebar.extend({
             activities.fetch();
             this.activityList = new chorus.views.ActivityList({
                 collection: activities,
-                additionalClass: "sidebar"
+                additionalClass: "sidebar",
+                type: t("hdfs." + (entry.get("isDir") ? "directory" : "file"))
             });
 
             this.activityList.bind("content:changed", this.recalculateScrolling, this)
