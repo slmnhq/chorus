@@ -139,7 +139,7 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
             }
         } else {
             var importInfo = this.resource.get("importInfo");
-            if (importInfo) {
+            if (importInfo && importInfo.sourceId) {
                 var sourceTable = this.resource.lastImportSource();
                 ctx.hasImport = true;
                 ctx.lastImport = t("import.last_imported_into", {

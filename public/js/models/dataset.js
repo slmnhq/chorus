@@ -122,7 +122,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
 
     lastImportSource: function() {
         var importInfo = this.get("importInfo");
-        if (importInfo) {
+        if (importInfo && importInfo.sourceId) {
             return new chorus.models.Dataset({
                 id: importInfo.sourceId,
                 objectName: importInfo.sourceTable,
