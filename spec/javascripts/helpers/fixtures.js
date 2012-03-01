@@ -2606,6 +2606,58 @@ beforeEach(function() {
                             [
 
                             ]
+                        },
+                        {
+                            comments: [],
+                            entityType: "hdfs",
+                            instance: {id:10010, name:"HadoopOnGillette"},
+                            id: "10010",
+                            name: "HadoopOnGillette",
+                            isDeleted: false,
+                            lastUpdatedStamp: "2012-03-01 11:49:31",
+                            name: "<em>edc</em>-text.png",
+                            parentType: "hdfs_10010",
+                            path: "hdfs://gillette/webui/images/edc-text.png"
+                        },
+                        {
+                            comments: [],
+                            databaseName: "Analytics",
+                            entityType: "databaseObject",
+                            id: "10000|Analytics|analytics|BASE_TABLE|clv_data",
+                            instance: {id:10000, name:"gillette"},
+                            isDeleted: false,
+                            objectName: "<em>clv</em>_data",
+                            objectType: "BASE_TABLE",
+                            parentType: "gpdb_10000_Analytics",
+                            schemaName: "analytics",
+                            workspaces: []
+                        },
+                        {
+                            comments: [],
+                            compositeId: "10000|dca_demo|ddemo|QUERY|aaaaaaaachorus_view_1815",
+                            content: "SELECT a.presidency, a.president, a.wikipedia_entry, a.party, a.left_office, a.thumbnail, a.home_state, a.portrait, a.took_office↵FROM _uspresident AS a↵",
+                            databaseName: "dca_demo",
+                            datasetType: "CHORUS_VIEW",
+                            entityType: "chorusView",
+                            id: "10040",
+                            instance:{
+                                id: "10000",
+                                name: "gillette"
+                            },
+                            isDeleted: false,
+                            lastUpdatedStamp: "2012-03-01 14:43:14",
+                            objectName: "aaaaaaaachorus_view_<em>1815</em>",
+                            objectType: "QUERY",
+                            owner: {
+                                firstName: "EDC",
+                                id: "InitialUser",
+                                lastName: "Admin"
+                            },
+                            schemaName: "ddemo",
+                            workspace: {
+                                id: "10000",
+                                name: "ws"
+                            }
                         }
                     ],
                     "numFound": 3

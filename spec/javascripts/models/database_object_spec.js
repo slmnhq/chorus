@@ -67,6 +67,22 @@ describe("chorus.models.DatabaseObject", function() {
                 var url = encodeURI(pieces.join('/'));
                 expect(this.databaseObject.showUrl()).toMatchUrl(url);
             });
+
+            it("works when there is markup in the name (e.g. result from type ahead search", function() {
+                this.databaseObject.set({objectName: "<em>foo</em>_bar"})
+                var pieces = [
+                    "#/instances",
+                    this.databaseObject.get('instance').id,
+                    "database",
+                    this.databaseObject.get("databaseName"),
+                    "schema",
+                    this.databaseObject.get('schemaName'),
+                    this.databaseObject.get('objectType'),
+                    "foo_bar"
+                ]
+                var url = encodeURI(pieces.join('/'));
+                expect(this.databaseObject.showUrl()).toMatchUrl(url);
+            })
         });
 
         context("when it is a view", function() {

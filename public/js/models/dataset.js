@@ -20,7 +20,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
             "workspaces",
             this.get("workspaceId") || this.get("workspace").id,
             "datasets",
-            this.get("id")
+            this.get("compositeId") || this.get("id")
         ].join("/");
     },
 

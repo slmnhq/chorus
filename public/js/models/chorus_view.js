@@ -1,4 +1,5 @@
 chorus.models.ChorusView = chorus.models.Dataset.extend({
+    constructorName: "ChorusView",
     initialize: function() {
         this._super('initialize');
         this.joins = []

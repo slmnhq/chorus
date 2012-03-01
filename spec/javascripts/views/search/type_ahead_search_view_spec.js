@@ -12,6 +12,7 @@ describe("chorus.views.TypeAheadSearch", function() {
 
     describe("when the fetch completes with results", function() {
         beforeEach(function() {
+            this.view.resultLimit = 10;
             this.server.completeFetchFor(this.result);
         });
 
@@ -45,8 +46,30 @@ describe("chorus.views.TypeAheadSearch", function() {
             expect(this.view.$("li.result:eq(2) .type").text()).toMatchTranslation("type_ahead.entity.workspace");
         })
 
+        it("should display the correct name and type for hdfs", function() {
+            var hdfs = this.result.get("typeAhead").docs[3];
+            expect(this.view.$("li.result:eq(3) .name").html()).toBe(hdfs.name);
+            expect(this.view.$("li.result:eq(3) .name").attr("href")).toBe('#/instances/10010/browse/');
+            expect(this.view.$("li.result:eq(3) .type").text()).toMatchTranslation("type_ahead.entity.hdfs");
+        })
+
+        it("should display the correct name and type for databaseObject", function() {
+            var databaseObject = this.result.get("typeAhead").docs[4];
+            expect(this.view.$("li.result:eq(4) .name").html()).toBe(databaseObject.objectName);
+            expect(this.view.$("li.result:eq(4) .name").attr("href")).toBe((new chorus.models.DatabaseObject(databaseObject)).showUrl());
+            expect(this.view.$("li.result:eq(4) .type").text()).toMatchTranslation("type_ahead.entity.databaseObject");
+        })
+
+        it("should display the correct name and type for chorusView", function() {
+            var chorusView = this.result.get("typeAhead").docs[5];
+            expect(this.view.$("li.result:eq(5) .name").html()).toBe(chorusView.objectName);
+            expect(this.view.$("li.result:eq(5) .name").attr("href")).toBe((new chorus.models.ChorusView(chorusView)).showUrl());
+            expect(this.view.$("li.result:eq(5) .type").text()).toMatchTranslation("type_ahead.entity.chorusView");
+        })
+
         context("when search results return more than 5 rows", function() {
             beforeEach(function() {
+                this.view.resultLimit = 5;
                 this.result.get("typeAhead").docs =
                     this.result.get("typeAhead").docs.concat(fixtures.typeAheadSearchResultJson().typeAhead.docs);
 
