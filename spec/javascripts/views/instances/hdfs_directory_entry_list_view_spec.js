@@ -5,6 +5,7 @@ describe("chorus.views.HdfsDirectoryEntryList", function() {
     });
     describe("#render", function() {
         beforeEach(function() {
+            spyOn(chorus.PageEvents, "broadcast");
             this.view.render();
         });
 
@@ -25,6 +26,26 @@ describe("chorus.views.HdfsDirectoryEntryList", function() {
         it("renders the icon for each item", function() {
             expect(this.view.$("li:eq(0) img")).toExist();
             expect(this.view.$("li:eq(1) img")).toExist();
+        })
+
+        it("pre-selects the first item", function() {
+            expect(this.view.$("li:eq(0)")).toHaveClass("selected");
+            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("hdfs_entry:selected", this.collection.at(0));
+        })
+
+        describe("clicking on an li", function() {
+            beforeEach(function() {
+                this.view.$("li:eq(1)").click();
+            });
+
+            it("broadcasts hdfs_entry:selected", function() {
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("hdfs_entry:selected", this.collection.at(1));
+            })
+
+            it("adds the selected class to only that item", function() {
+                expect(this.view.$("li:eq(1)")).toHaveClass("selected");
+                expect(this.view.$("li:eq(0)")).not.toHaveClass("selected");
+            })
         })
     });
 });

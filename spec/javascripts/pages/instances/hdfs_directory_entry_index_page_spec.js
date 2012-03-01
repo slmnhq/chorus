@@ -35,5 +35,9 @@ describe("chorus.pages.HdfsDirectoryEntryIndexPage", function() {
             expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe(this.instance.get("name"));
         });
 
+        it("should have a sidebar", function() {
+            expect($(this.page.el).find(this.page.sidebar.el)).toExist();
+            expect(this.page.sidebar).toBeA(chorus.views.HdfsDirectoryEntrySidebar);
+        })
     })
 })

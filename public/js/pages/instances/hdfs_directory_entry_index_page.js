@@ -22,5 +22,7 @@ chorus.pages.HdfsDirectoryEntryIndexPage = chorus.pages.Base.extend({
             collection: this.collection,
             title: this.instance.get("name") + ": " + this.path
         });
+
+        this.sidebar = new chorus.views.HdfsDirectoryEntrySidebar();
     }
 });

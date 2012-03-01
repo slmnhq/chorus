@@ -2210,6 +2210,14 @@ beforeEach(function() {
             return new chorus.collections.HdfsDirectoryEntrySet(models, overrides);
         },
 
+        hdfsDirectoryEntryDir: function(overrides) {
+            return new chorus.models.HdfsDirectoryEntry(this.hdfsDirectoryEntryDirJson(overrides));
+        },
+
+        hdfsDirectoryEntryFile: function(overrides) {
+            return new chorus.models.HdfsDirectoryEntry(this.hdfsDirectoryEntryFileJson(overrides));
+        },
+
         hdfsDirectoryEntryDirJson: function(overrides) {
             var id = fixtures.nextId();
             return {
