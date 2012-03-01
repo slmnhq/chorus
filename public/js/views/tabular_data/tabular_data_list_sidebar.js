@@ -84,19 +84,23 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
                         id: this.importConfiguration.get("destinationTable"),
                         workspaceId: this.resource.get("workspace").id
                     });
-                    var tableLink = "<a href='" + destinationTable.showUrl() + "'>" + this.importConfiguration.get("toTable") + "</a>";
-                    if(this.importConfiguration.get("executionInfo").state == "success") {
-                        ctx.lastImport = t("import.last_imported", {
-                            timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
-                            tableLink: tableLink
-                        });
-                    } else {
-                        ctx.lastImport = t("import.last_import_failed", {
+
+                    if (this.importConfiguration.has("executionInfo")) {
+                        var tableLink = "<a href='" + destinationTable.showUrl() + "'>" + this.importConfiguration.get("toTable") + "</a>";
+                        if (this.importConfiguration.get("executionInfo").state == "success") {
+                            ctx.lastImport = t("import.last_imported", {
                                 timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
                                 tableLink: tableLink
-                        });
-                        ctx.importFailed = true;
+                            });
+                        } else {
+                            ctx.lastImport = t("import.last_import_failed", {
+                                    timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
+                                    tableLink: tableLink
+                            });
+                            ctx.importFailed = true;
+                        }
                     }
+
                 }
             }
 
