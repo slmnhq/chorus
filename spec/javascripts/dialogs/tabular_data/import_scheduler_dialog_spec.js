@@ -293,10 +293,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
             expect(this.dialog.$(".schedule_widget")).not.toExist();
         });
 
-        it("should set executeAfterSave to be true on the DatasetImport", function() {
-            expect(this.dialog.model.executeAfterSave).toBeTruthy();
-        });
-
         it("should have the correct title", function() {
             expect(this.dialog.title).toMatchTranslation("import.title");
         });
