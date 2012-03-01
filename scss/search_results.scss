@@ -63,6 +63,13 @@
             }
         }
 
+        .prefix {
+            @include font-content-details;
+        }
+        .content {
+            @include font-normal-alpha;
+        }
+
         .comments, .moreComments {
             @include font-content-details;
             margin: 0;

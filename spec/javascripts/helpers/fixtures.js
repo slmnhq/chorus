@@ -2295,7 +2295,7 @@ beforeEach(function() {
 
         searchResultJson: function(overrides) {
             return _.extend({
-                    "workfile": {
+                   "workfile": {
                         "docs": [{
                             "id": "10020",
                             "isDeleted": false,
@@ -2379,7 +2379,7 @@ beforeEach(function() {
                         ],
                         "numFound": 2
                     },
-                    "dataset": {
+                   "dataset": {
                         "docs": [{
                             "schemaName": "public",
                             "parentType": "gpdb_10000_data_types",
@@ -2580,13 +2580,74 @@ beforeEach(function() {
                         }],
                         "numFound": 39
                     },
-                    "instance": {
+                   "instance": {
                         "docs": [],
                         "numFound": 0
                     },
-                    "user": {
-                        "docs": [],
-                        "numFound": 0
+                   "user": {
+                        "docs": [
+                            {
+                                "admin": "false",
+                                "comments": [],
+                                "emailAddress": null,
+                                "entityType": "user",
+                                "firstName": "John",
+                                "id": "10023",
+                                "isDeleted": "false",
+                                "lastName": "Doe",
+                                "lastUpdatedStamp": "2012-03-01 11:07:13",
+                                "name": "<em>test</em>",
+                                "title": "",
+                                "ou": "<em>Test</em>",
+                                "content": "Hello",
+                                "owner": {}
+                            },
+                            {
+                                admin: "false",
+                                comments: [],
+                                emailAddress: "test1@emc.com",
+                                entityType: "user",
+                                firstName: "<em>Test</em>",
+                                id: "10020",
+                                isDeleted: "false",
+                                lastName: "McTest",
+                                lastUpdatedStamp: "2012-03-01 11:06:05",
+                                name: null,
+                                "title": "nobody",
+                                "ou": "",
+                                "content": "<em>Test</em>",
+                                owner: {}
+                            },
+                            {
+                                admin: "false",
+                                comments: [],
+                                emailAddress: "test2@emc.com",
+                                entityType: "user",
+                                firstName: "Jack",
+                                id: "10021",
+                                isDeleted: "false",
+                                lastName: "<em>Test</em>",
+                                lastUpdatedStamp: "2012-03-01 11:06:32",
+                                name: "",
+                                "title": "<em>test</em>er",
+                                owner: {}
+                            },
+                            {
+                                admin: "false",
+                                comments: [],
+                                emailAddress: "",
+                                entityType: "user",
+                                firstName: "Sally",
+                                id: "10022",
+                                isDeleted: "false",
+                                lastName: "<em>Test</em>",
+                                lastUpdatedStamp: "2012-03-01 11:06:59",
+                                name: "<em>test</em>3",
+                                "title": null,
+                                owner: {}
+                            }
+                        ],
+                        "numFound": "4"
                     }
             }, overrides)
         },

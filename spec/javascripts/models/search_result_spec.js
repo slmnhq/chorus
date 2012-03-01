@@ -91,4 +91,20 @@ describe("chorus.models.SearchResult", function() {
             expect(this.tabularData.attributes.total).toBe(this.model.get('dataset').numFound);
         })
     });
+
+    describe("#users", function() {
+        beforeEach(function() {
+            this.model.set(fixtures.searchResultJson());
+            this.users = this.model.users();
+        });
+
+        it("returns a UserSet", function() {
+            expect(this.users).toBeA(chorus.collections.UserSet)
+        });
+
+        it("has the correct number of users", function() {
+            expect(this.users.models.length).toBe(4);
+        });
+
+    });
 })

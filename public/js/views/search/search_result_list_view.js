@@ -2,6 +2,7 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     className: "search_result_list",
 
     subviews: {
+        ".user_list": "userList",
         ".workfile_list": "workfileList",
         ".workspace_list": "workspaceList",
         ".tabular_data_list": "tabularDataList"
@@ -24,6 +25,7 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     },
 
     setup: function() {
+        this.userList = new chorus.views.SearchUserList({collection: this.model.users(), total: this.model.get("user").numFound});
         this.workfileList = new chorus.views.SearchWorkfileList({ collection : this.model.workfiles(), total: this.model.get("workfile").numFound });
         this.workspaceList = new chorus.views.SearchWorkspaceList({ collection : this.model.workspaces(), total: this.model.get("workspace").numFound });
         this.tabularDataList = new chorus.views.SearchTabularDataList({ collection : this.model.tabularData(), total: this.model.get("dataset").numFound });

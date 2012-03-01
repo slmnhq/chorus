@@ -12,6 +12,10 @@ chorus.models.SearchResult = chorus.models.Base.extend({
         return (name.length < length) ? name : name.slice(0, length) + "...";
     },
 
+    users: function() {
+        return new chorus.collections.UserSet(this.get("user").docs);
+    },
+
     workfiles: function() {
         var workfiles = _.map(this.get("workfile").docs, function(workfileJson) {
             workfileJson.fileName = $.stripHtml(workfileJson.name);
