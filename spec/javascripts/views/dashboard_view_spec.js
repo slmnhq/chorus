@@ -59,9 +59,26 @@ describe("chorus.views.Dashboard", function(){
             });
 
             it("has a 'browse all' link in the content details", function() {
-                var browse_link = this.view.$(".dashboard_instance_list_content_details a")
-                expect(browse_link.text().trim()).toMatchTranslation("dashboard.instances.browse_all");
-                expect(browse_link.attr("href")).toBe("#/instances");
+                var browseLink = this.view.$(".dashboard_instance_list_content_details a.browse_all")
+                expect(browseLink.text().trim()).toMatchTranslation("dashboard.instances.browse_all");
+                expect(browseLink.attr("href")).toBe("#/instances");
+            });
+
+            it("has an 'add an instance' link", function() {
+                var link = this.view.$(".dashboard_instance_list_content_details a.add")
+                expect(link.text().trim()).toMatchTranslation("dashboard.instances.add");
+                expect(link.data("dialog")).toBe("InstancesNew");
+            });
+
+            describe("when an instance is added using the dialog", function() {
+                beforeEach(function() {
+                    chorus.PageEvents.broadcast("instance:added", '5');
+                });
+
+                it("re-fetches the instances", function() {
+                    var allInstances = new chorus.collections.InstanceSet();
+                    expect(allInstances).toHaveBeenFetched();
+                });
             });
         });
 
