@@ -1,4 +1,5 @@
 chorus.models.DatabaseObject = chorus.models.TabularData.extend({
+    constructorName: "DatabaseObject",
 
     initialize: function() {
         this._super('initialize', arguments);
@@ -9,7 +10,7 @@ chorus.models.DatabaseObject = chorus.models.TabularData.extend({
     },
 
     showUrlTemplate: function() {
-        return "instances/" + this.get("instance").id + "/database/{{databaseName}}/schema/{{schemaName}}/{{objectType}}/{{objectName}}"
+        return "instances/" + (this.get("instance") && this.get("instance").id) + "/database/{{databaseName}}/schema/{{schemaName}}/{{objectType}}/{{objectName}}"
     },
 
     toText: function() {

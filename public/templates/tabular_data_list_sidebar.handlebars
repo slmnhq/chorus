@@ -14,8 +14,12 @@
 
     <div class="actions">
         <ul>
+            <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}"
             {{#unless browsingSchema}}
-                <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+                data-allow-workspace-attachments="true"
+            {{/unless}}
+            data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+            {{#unless browsingSchema}}
                 {{#if isImportable}}
                     <li><a class="dialog import_now" href="#" data-dialog="ImportScheduler">{{t "actions.import_now"}}</a></li>
                     {{#if hasImport}}

@@ -884,8 +884,11 @@ beforeEach(function() {
                     databaseObject: {
                         id: instanceId + '|dca_demo|public|__a_table_name',
                         name: '__a_table_name',
-                        objectType: "BASE_TABLE",
-                        type: "databaseObject"
+                        objectType: "TABLE",
+                        type: "databaseObject",
+                        databaseName: "dca_demo",
+                        schemaName: "public",
+                        instance: fixtures.instanceJson()
                     },
                     artifacts: [
                         {

@@ -222,6 +222,7 @@ describe("chorus.views.TabularDataListSidebar", function() {
                     expect(notesNew.data("entity-id")).toBe(this.dataset.get("id"));
                     expect(notesNew.data("entity-type")).toBe(this.dataset.entityType);
                     expect(notesNew.data("display-entity-type")).toBe(this.dataset.metaType());
+                    expect(notesNew.attr("data-allow-workspace-attachments")).toBeDefined();
                 });
 
                 context("when browsing a schema", function() {
@@ -235,9 +236,13 @@ describe("chorus.views.TabularDataListSidebar", function() {
                         expect(this.view.$('.actions .associate a').data('dialog')).toBe("AssociateWithWorkspace");
                     });
 
-                    it("does not have the 'add a note' link", function() {
-                        expect(this.view.$("a.dialog[data-dialog=NotesNew]")).not.toExist();
-                    })
+                    it("has the 'add a note' link with the correct data", function() {
+                        var notesNew = this.view.$("a.dialog[data-dialog=NotesNew]");
+                        expect(notesNew.data("entity-id")).toBe(this.dataset.get("id"));
+                        expect(notesNew.data("entity-type")).toBe("databaseObject");
+                        expect(notesNew.data("display-entity-type")).toBe(this.dataset.metaType());
+                        expect(notesNew.attr("data-allow-workspace-attachments")).not.toBeDefined();
+                    });
 
                     it("does not have the 'Import Now' action", function() {
                         expect(this.view.$(".actions .import_now")).not.toExist();

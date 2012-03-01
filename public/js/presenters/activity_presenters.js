@@ -69,6 +69,8 @@
                 }
                 else if (object instanceof chorus.models.Dataset) {
                     return t("dataset.title_lower")
+                } else if (object instanceof chorus.models.DatabaseObject) {
+                    return t("database_object." + object.get("objectType"));
                 }
             }
 

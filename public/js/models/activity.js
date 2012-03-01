@@ -60,12 +60,10 @@ chorus.models.Activity = chorus.models.Base.extend({
     databaseObject: function() {
         var databaseObjectField = this.get("databaseObject");
         if (databaseObjectField) {
-            return new chorus.models.DatabaseObject({
-                id: databaseObjectField.id,
-                type: databaseObjectField.type,
-                objectType: databaseObjectField.objectType,
-                objectName: databaseObjectField.name
-            });
+            var attrs = _.clone(databaseObjectField)
+            attrs.objectName = attrs.name;
+            delete attrs.name;
+            return new chorus.models.DatabaseObject(attrs);
         }
     },
 
