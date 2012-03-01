@@ -278,9 +278,6 @@ describe("chorus global", function() {
 
     describe("resizing the window", function() {
         beforeEach(function() {
-            spyOn(_, "debounce").andCallFake(function(func) {
-                return func;
-            });
             this.chorus.bindGlobalCallbacks();
 
             this.page1 = new chorus.pages.Base();

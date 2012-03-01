@@ -2,6 +2,9 @@
     var loadTemplatesOnce = _.once(function() {
         var allTemplatesLoaded = false;
 
+        // Code that only needs to be run once before all the tests run
+        _.debounce = function(func) { return func; }
+
         runs(loadAllTemplates);
         waitsFor(function() {
             return allTemplatesLoaded;
@@ -251,6 +254,7 @@
                 return fakeSpinner
             });
 
+            $.fx.off = true;
             spyOn($.fn, 'jGrowl');
 
             chorus.PageEvents.reset();
