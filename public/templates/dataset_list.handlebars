@@ -16,6 +16,13 @@
         {{/if}}
 
         <div class="right">
+
+            {{#if importFrequency}}
+            <span class="tag import_frequency">
+                <span class="arrow_left"></span><span class="tag_name">{{importFrequency}}</span>
+            </span>
+            {{/if}}
+
             {{#if noCredentials}}
                 <span class="name">{{objectName}}</span>
             {{else}}

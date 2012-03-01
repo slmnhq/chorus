@@ -42,6 +42,7 @@ chorus.views.DatasetList = chorus.views.Base.extend({
             iconImgUrl: model.iconUrl(),
             showUrl: model.showUrl(),
             schemaShowUrl: model.schema().showUrl(),
+            importFrequency: model.get("importFrequency") && t("import.frequency." + model.get("importFrequency").toLowerCase()),
             noCredentials: model.get('hasCredentials') === false
         };
 

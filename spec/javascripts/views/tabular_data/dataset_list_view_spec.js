@@ -101,6 +101,22 @@ describe("chorus.views.DatasetList", function() {
                     expect(this.view.$("li .location").eq(i).find("a").eq(2).text()).toBe(model.get("schemaName"));
                 }
             }
+        });
+
+        context("import tag", function() {
+            beforeEach(function() {
+                this.collection.at(0).set({ importFrequency: "WEEKLY"});
+                this.collection.at(1).set({ importFrequency: "MONTHLY"});
+                this.collection.at(2).set({ importFrequency: "DAILY"});
+                this.collection.at(3).set({ importFrequency: null});
+            });
+
+            it("displays the correct import tag", function() {
+                expect(this.view.$("li:eq(0) .tag .tag_name").text()).toContainTranslation("import.frequency.weekly");
+                expect(this.view.$("li:eq(1) .tag .tag_name").text()).toContainTranslation("import.frequency.monthly");
+                expect(this.view.$("li:eq(2) .tag .tag_name").text()).toContainTranslation("import.frequency.daily");
+                expect(this.view.$("li:eq(3) .tag")).not.toExist();
+            });
         })
 
         describe("workspace usage", function() {
