@@ -253,8 +253,12 @@
 }
 
 .table_import_csv.qtip {
-    max-height: 500px;
-    overflow: auto;
+
+    .ui-tooltip-content {
+        max-height: 500px;
+        overflow-y: auto;
+        width: 280px;
+    }
 
     .check_wrapper {
         display: inline-block;
@@ -274,7 +278,7 @@
             @include font-menu;
             vertical-align: baseline;
             @include ellipsis;
-            width: 250px;
+            max-width: 250px;
             display: inline-block;
             height: 16px;
 
