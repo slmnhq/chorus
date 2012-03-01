@@ -1,5 +1,5 @@
-chorus.views.DatasetContentDetails = chorus.views.Base.extend({
-    className: "dataset_content_details",
+chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
+    className: "tabular_data_content_details",
     persistent: true,
 
     subviews: {

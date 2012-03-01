@@ -268,7 +268,7 @@
             this.page.render();
 
             this.dataset = fixtures.datasetSourceTable();
-            chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+            chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
         })
 
         it("sets the selected dataset as its own model", function() {

@@ -1,6 +1,6 @@
-describe("chorus.views.DatasetListSidebar", function() {
+describe("chorus.views.TabularDataListSidebar", function() {
     beforeEach(function() {
-        this.view = new chorus.views.DatasetListSidebar();
+        this.view = new chorus.views.TabularDataListSidebar();
     });
 
     describe("#render", function() {
@@ -26,12 +26,12 @@ describe("chorus.views.DatasetListSidebar", function() {
             });
         })
 
-        describe("dataset:selected event handling", function() {
+        describe("tabularData:selected event handling", function() {
             context("when a dataset is selected", function() {
                 beforeEach(function() {
                     this.server.reset();
                     this.dataset = fixtures.datasetSourceTable();
-                    chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                    chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                 });
 
                 it("doesn't display any import links", function() {
@@ -41,7 +41,7 @@ describe("chorus.views.DatasetListSidebar", function() {
                 context("when the dataset is a sandbox table or view", function() {
                     beforeEach(function() {
                         this.dataset = fixtures.datasetSandboxTable();
-                        chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                        chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
 
                     it("doesn't fetch the import configuration", function() {
@@ -56,7 +56,7 @@ describe("chorus.views.DatasetListSidebar", function() {
                 context("when the dataset is a source table or view", function() {
                     beforeEach(function() {
                         this.dataset = fixtures.datasetSourceTable();
-                        chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                        chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
 
                     it("fetches the import configuration for the dataset", function() {
@@ -66,7 +66,7 @@ describe("chorus.views.DatasetListSidebar", function() {
                     describe("when a non-importable dataset is then selected", function() {
                         beforeEach(function() {
                             this.dataset = fixtures.datasetSandboxTable();
-                            chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                            chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                         });
 
                         it("does not show the 'import now' link", function() {
@@ -227,7 +227,7 @@ describe("chorus.views.DatasetListSidebar", function() {
                 context("when browsing a schema", function() {
                     beforeEach(function() {
                         this.view.options.browsingSchema = true;
-                        chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                        chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
 
                     it("has a link to associate the dataset with a workspace", function() {
@@ -312,8 +312,8 @@ describe("chorus.views.DatasetListSidebar", function() {
 
                     describe("when the partitions are 0", function() {
                         beforeEach(function() {
-                            this.view = new chorus.views.DatasetListSidebar();
-                            this.view.setDataset(this.dataset);
+                            this.view = new chorus.views.TabularDataListSidebar();
+                            this.view.setTabularData(this.dataset);
                             this.stats.set({ partitions: 0 });
                             this.view.render();
                         });
@@ -325,8 +325,8 @@ describe("chorus.views.DatasetListSidebar", function() {
 
                     describe("when the lastAnalyzedTime is null", function() {
                         beforeEach(function() {
-                            this.view = new chorus.views.DatasetListSidebar();
-                            this.view.setDataset(this.dataset)
+                            this.view = new chorus.views.TabularDataListSidebar();
+                            this.view.setTabularData(this.dataset)
                             this.stats.set({ lastAnalyzedTime: null, rows: 5837 });
                             this.view.render();
                         })
@@ -356,7 +356,7 @@ describe("chorus.views.DatasetListSidebar", function() {
                     typeCategory: "WHOLE_NUMBER"
                 });
 
-                chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                 this.view.statistics.set({lastAnalyzedTime: "2012-01-24 12:25:11.077"});
                 chorus.PageEvents.broadcast("column:selected", this.column);
                 this.view.render();

@@ -65,7 +65,7 @@ chorus.views.DatasetList = chorus.views.Base.extend({
         $li.addClass("selected");
 
         this.selectedDataset = $li.data("dataset");
-        chorus.PageEvents.broadcast("dataset:selected", this.selectedDataset);
+        chorus.PageEvents.broadcast("tabularData:selected", this.selectedDataset);
     },
 
     selectDatasetByClick: function(e) {

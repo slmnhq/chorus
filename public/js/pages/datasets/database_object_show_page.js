@@ -83,12 +83,12 @@
                 collection: this.columnSet,
                 persistent: true,
                 contentHeader: customHeaderView,
-                contentDetails: new chorus.views.DatasetContentDetails({ tabularData: this.tabularData, collection: this.columnSet, hideDeriveChorusView: this.hideDeriveChorusView })
+                contentDetails: new chorus.views.TabularDataContentDetails({ tabularData: this.tabularData, collection: this.columnSet, hideDeriveChorusView: this.hideDeriveChorusView })
             });
 
             this.mainContent.contentDetails.options.$columnList = $(this.mainContent.content.el);
-            this.sidebar = new chorus.views.DatasetListSidebar(this.sidebarOptions);
-            this.sidebar.setDataset(this.tabularData);
+            this.sidebar = new chorus.views.TabularDataListSidebar(this.sidebarOptions);
+            this.sidebar.setTabularData(this.tabularData);
 
             this.mainContent.contentDetails.bind("transform:sidebar", this.showSidebar, this);
             this.mainContent.contentDetails.bind("column:select_all", this.mainContent.content.selectAll, this.mainContent.content);
@@ -164,7 +164,6 @@
 
         removeOldSecondaryClasses: function(type) {
             this.$('.sidebar_content.secondary').removeClass("dataset_visualization_" + type + "_sidebar");
-            this.$('.sidebar_content.secondary').removeClass("dataset_create_" + type + "_sidebar");
         }
     });
 })();

@@ -43,7 +43,7 @@
         editChorusView: function() {
             this.mainContent = new chorus.views.MainContentView({
                 content: new chorus.views.DatasetEditChorusView({model: this.tabularData}),
-                contentDetails: new chorus.views.DatasetContentDetails({ tabularData: this.tabularData, collection: this.columnSet, inEditChorusView: true })
+                contentDetails: new chorus.views.TabularDataContentDetails({ tabularData: this.tabularData, collection: this.columnSet, inEditChorusView: true })
             });
 
             this.mainContent.contentDetails.bind("dataset:cancelEdit", this.fetchTabularData, this);
@@ -80,7 +80,7 @@
         },
 
         removeOldSecondaryClasses: function(type) {
-            this.$('.sidebar_content.secondary').removeClass("dataset_visualization_" + type + "_sidebar");
+            this._super('removeOldSecondaryClasses', arguments);
             this.$('.sidebar_content.secondary').removeClass("dataset_create_" + type + "_sidebar");
         }
     });

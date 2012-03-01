@@ -1,15 +1,17 @@
 @import "_common.scss";
 @import "datasets/_column_select";
 @import "datasets/_dataset_list";
-@import "datasets/_dataset_list_sidebar";
 @import "datasets/_database_column_list";
-@import "datasets/_dataset_content_details.scss";
 @import "datasets/_dataset_create_chorus_view_sidebar.scss";
 @import "datasets/_dataset_filter.scss";
 @import "datasets/_dataset_found_in.scss";
 @import "datasets/_dataset_import.scss";
 @import "datasets/_dataset_preview.scss";
-@import "datasets/_tabular_data_show.scss";
 @import "datasets/_dataset_table_import.scss";
 @import "datasets/_dataset_visualization_sidebar.scss";
+
 @import "datasets/_name_chorus_view.scss";
+
+@import "datasets/_tabular_data_content_details.scss";
+@import "datasets/_tabular_data_list_sidebar.scss";
+@import "datasets/_tabular_data_show.scss";

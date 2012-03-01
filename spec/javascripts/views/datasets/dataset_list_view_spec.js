@@ -151,8 +151,8 @@ describe("chorus.views.DatasetList", function() {
                 expect(this.view.$("li").eq(1)).toHaveClass("selected");
             });
 
-            it("broadcasts dataset:selected with an argument of the selected dataset", function() {
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("dataset:selected", this.collection.models[1]);
+            it("broadcasts tabularData:selected with an argument of the selected dataset", function() {
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("tabularData:selected", this.collection.models[1]);
             });
         });
     });

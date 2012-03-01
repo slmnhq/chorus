@@ -43,9 +43,9 @@
                 title: this.schema.canonicalName()
             });
 
-            this.sidebar = new chorus.views.DatasetListSidebar({browsingSchema: true});
+            this.sidebar = new chorus.views.TabularDataListSidebar({browsingSchema: true});
 
-            chorus.PageEvents.subscribe("dataset:selected", function(dataset) {
+            chorus.PageEvents.subscribe("tabularData:selected", function(dataset) {
                 this.model = dataset;
             }, this);
         }

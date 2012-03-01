@@ -1,6 +1,6 @@
-chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
-    constructorName: "DatasetListSidebarView",
-    className: "dataset_list_sidebar",
+chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
+    constructorName: "TabularDataListSidebarView",
+    className: "tabular_data_list_sidebar",
 
     events: {
         "click .no_credentials a.add_credentials": "launchAddCredentialsDialog"
@@ -12,7 +12,7 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
     },
 
     setup: function() {
-        chorus.PageEvents.subscribe("dataset:selected", this.setDataset, this);
+        chorus.PageEvents.subscribe("tabularData:selected", this.setTabularData, this);
         chorus.PageEvents.subscribe("column:selected", this.setColumn, this);
         this.tabControl = new chorus.views.TabControl([
             {name: 'activity', selector: ".activity_list"},
@@ -36,7 +36,7 @@ chorus.views.DatasetListSidebar = chorus.views.Sidebar.extend({
         this.render();
     },
 
-    setDataset: function(tabularData) {
+    setTabularData: function(tabularData) {
         this.resource = tabularData;
         if (tabularData) {
             this.statistics = tabularData.statistics();

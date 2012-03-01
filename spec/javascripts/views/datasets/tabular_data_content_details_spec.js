@@ -1,4 +1,4 @@
-describe("chorus.views.DatasetContentDetails", function() {
+describe("chorus.views.TabularDataContentDetails", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.$columnList = $("<ul/>");
@@ -6,7 +6,7 @@ describe("chorus.views.DatasetContentDetails", function() {
             this.tabularData = fixtures.datasetSourceTable();
             this.collection = this.tabularData.columns([fixtures.databaseColumn(), fixtures.databaseColumn()]);
 
-            this.view = new chorus.views.DatasetContentDetails({
+            this.view = new chorus.views.TabularDataContentDetails({
                 tabularData: this.tabularData,
                 collection: this.collection,
                 $columnList: this.$columnList
@@ -76,7 +76,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                 context("when there is no sql", function() {
                     beforeEach(function() {
                         var tabularData = fixtures.datasetSourceTable()
-                        this.view = new chorus.views.DatasetContentDetails({tabularData: tabularData, collection: this.collection});
+                        this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection});
                         this.server.completeFetchFor(tabularData.statistics(), fixtures.datasetStatisticsTable());
                         this.view.render();
                     });
@@ -90,7 +90,7 @@ describe("chorus.views.DatasetContentDetails", function() {
             context("when the object is a CHORUS VIEW", function() {
                 beforeEach(function() {
                     var tabularData = fixtures.datasetChorusView();
-                    this.view = new chorus.views.DatasetContentDetails({tabularData: tabularData, collection: this.collection});
+                    this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection});
                     this.server.completeFetchFor(tabularData.statistics());
                     this.view.render();
 
@@ -464,7 +464,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                 beforeEach(function() {
                     var tabularData = fixtures.datasetChorusView();
                     tabularData.initialQuery = "select * from abc";
-                    this.view = new chorus.views.DatasetContentDetails({tabularData: tabularData, collection: this.collection});
+                    this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection});
                     this.server.completeFetchFor(tabularData.statistics());
                     this.view.render();
                 });

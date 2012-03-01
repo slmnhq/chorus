@@ -51,9 +51,9 @@
                 ]
             });
 
-            this.sidebar = new chorus.views.DatasetListSidebar();
+            this.sidebar = new chorus.views.TabularDataListSidebar();
 
-            chorus.PageEvents.subscribe("dataset:selected", function(dataset) {
+            chorus.PageEvents.subscribe("tabularData:selected", function(dataset) {
                 this.model = dataset;
             }, this);
 
