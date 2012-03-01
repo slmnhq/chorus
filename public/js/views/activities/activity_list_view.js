@@ -21,7 +21,7 @@ chorus.views.ActivityList = chorus.views.Base.extend({
     },
 
     additionalContext:function () {
-        var ctx = {};
+        var ctx = { activityType: this.options.type };
         if (this.collection.loaded && this.collection.pagination) {
             var page = parseInt(this.collection.pagination.page);
             var total = parseInt(this.collection.pagination.total);

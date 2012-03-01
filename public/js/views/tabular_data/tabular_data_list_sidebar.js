@@ -45,10 +45,12 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
 
             var activities = tabularData.activities();
             activities.fetch();
+
             this.activityList = new chorus.views.ActivityList({
                 collection: activities,
                 additionalClass: "sidebar",
-                displayStyle: this.options.browsingSchema ? ['default'] : ['without_workspace']
+                displayStyle: this.options.browsingSchema ? ['default'] : ['without_workspace'],
+                type: t("database_object." + tabularData.get('objectType'))
             });
 
             this.activityList.bind("content:changed", this.recalculateScrolling, this)

@@ -1,6 +1,10 @@
-<ul class="activities"/>
-{{#if showMoreLink}}
-    <div class="more_activities">
-        <a href="#">{{t "activity_stream.more"}}</a>
-    </div>
+{{#if models.length}}
+    <ul class="activities"/>
+    {{#if showMoreLink}}
+        <div class="more_activities">
+            <a href="#">{{t "activity_stream.more"}}</a>
+        </div>
+    {{/if}}
+{{else}}
+    <div class="no_activity">{{t "activity_stream.none" type=activityType}}</div>
 {{/if}}

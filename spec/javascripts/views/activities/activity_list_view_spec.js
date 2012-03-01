@@ -2,7 +2,7 @@ describe("chorus.views.ActivityList", function() {
     beforeEach(function() {
         fixtures.model = 'ActivitySet';
         this.collection = fixtures.modelFor('fetch');
-        this.view = new chorus.views.ActivityList({collection: this.collection, additionalClass : "foo_class"});
+        this.view = new chorus.views.ActivityList({collection: this.collection, additionalClass : "foo_class", type: "Foo"});
     });
 
     describe("#render", function() {
@@ -33,6 +33,19 @@ describe("chorus.views.ActivityList", function() {
             expect(link.data("dialog")).toBe("Comment");
             expect(link.data("entity-type")).toBe("comment");
             expect(link.data("entity-id")).toBe(10001);
+        })
+
+        describe("when there are no activity items", function() {
+            beforeEach(function() {
+                this.collection.reset([]);
+                this.view.render();
+            });
+
+            it("displays the 'no notes' message", function() {
+                expect(this.view.$("ul.activities li")).not.toExist();
+
+                expect(this.view.$(".no_activity")).toContainTranslation("activity_stream.none", {type: "Foo"});
+            })
         })
 
         describe("the isNotification option", function() {

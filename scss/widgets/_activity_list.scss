@@ -58,6 +58,10 @@ $system-action-color: #7C7D7D;
         font-size: 12px;
         padding: $activity-gutter $big-gutter;
     }
+
+    .no_activity {
+        @include results-console-message;
+    }
 }
 
 .activity_item {
