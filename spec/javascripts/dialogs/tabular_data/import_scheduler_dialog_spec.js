@@ -221,6 +221,13 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.save_changes");
             });
 
+            it("has the right fieldset selected", function() {
+                expect(this.dialog.$("input[type='radio']#import_scheduler_existing_table")).toBeChecked();
+                expect(this.dialog.$("input[type='radio']#import_scheduler_new_table")).not.toBeChecked();
+                expect(this.dialog.$(".existing_table fieldset")).not.toHaveClass("disabled");
+                expect(this.dialog.$(".new_table fieldset")).toHaveClass("disabled");
+            });
+
             it("has the 'schedule' checkbox checked by default", function() {
                 expect(this.dialog.$("input[name='schedule']")).toBeChecked();
             });
