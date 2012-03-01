@@ -18,8 +18,7 @@ describe("chorus.views.HdfsDirectoryEntryList", function() {
             expect(this.view.$("li:eq(1) .name")).toContainText(this.collection.at(1).get("name"));
         })
 
-        it("renders the type for each item", function() {
-            expect(this.view.$("li:eq(0) .size")).toContainText(I18n.toHumanSize(this.collection.at(0).get("size")));
+        it("renders the size for the file", function() {
             expect(this.view.$("li:eq(1) .size")).toContainText(I18n.toHumanSize(this.collection.at(1).get("size")));
         });
 
@@ -36,6 +35,11 @@ describe("chorus.views.HdfsDirectoryEntryList", function() {
         it("links the directory name to that browse page", function() {
             expect(this.view.$("li:eq(0) a.name").attr("href")).toBe("#/instances/1234/browse/abc/" + this.collection.at(0).get("name"));
         })
+
+        it("shows 'Directory - x files' in the subtitle line for the directory", function() {
+            expect(this.view.$("li:eq(0) .dir")).toContainTranslation("hdfs.directory_files", {count: this.collection.at(0).get("count")})
+        })
+
 
         describe("when browsing the root directory", function() {
             beforeEach(function() {

@@ -15,7 +15,8 @@ chorus.views.HdfsDirectoryEntryList = chorus.views.Base.extend({
         return {
             humanSize: I18n.toHumanSize(model.get("size")),
             iconUrl: chorus.urlHelpers.fileIconUrl(_.last(model.get("name").split("."))),
-            showUrl: url
+            showUrl: url,
+            dirInfo: t("hdfs.directory_files", {count: model.get("count")})
         }
     },
 

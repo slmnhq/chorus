@@ -2,8 +2,15 @@
     <li>
         <span class="spacer left"/>
         <img src="{{iconUrl}}"/>
-        <a class="name" href="{{showUrl}}">{{name}}</a>
-        <span class="size">{{humanSize}}</span>
+        <div class="description">
+            {{#if isDir}}
+                <a class="name" href="{{showUrl}}">{{name}}</a>
+                <span class="dir">{{dirInfo}}</span>
+            {{else}}
+                <span class="name">{{name}}</span>
+                <span class="size">{{humanSize}}</span>
+            {{/if}}
+        </div>
         <span class="spacer right"/>
     </li>
 {{/each}}
