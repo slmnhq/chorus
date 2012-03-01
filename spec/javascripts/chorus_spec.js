@@ -388,6 +388,7 @@ describe("chorus global", function() {
             describe("when the 'x' is clicked", function() {
                 beforeEach(function() {
                     this.input1.val("nit").trigger("textchange");
+                    spyOn($.fn, "blur")
                     this.clearLink.click();
                 });
 
@@ -404,6 +405,10 @@ describe("chorus global", function() {
                     expect(this.list.find("li").eq(1)).not.toHaveClass("hidden");
                     expect(this.list.find("li").eq(2)).not.toHaveClass("hidden");
                 });
+
+                it("blurs the element so the placeholder text reappears", function() {
+                    expect($.fn.blur).toHaveBeenCalled();
+                })
             });
         });
 

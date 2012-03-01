@@ -197,7 +197,7 @@ window.Chorus = function chorus$Global() {
                 .append("<img src='/images/icon_clear_search.png'></a>")
                 .bind('click', function(e) {
                     e.preventDefault();
-                    $el.val("").trigger('textchange');
+                    $el.val("").trigger('textchange').blur();
                 });
 
             var container = $("<div class='chorus_search_container'></div>");
