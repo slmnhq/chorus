@@ -1,6 +1,6 @@
 describe("chorus.views.HdfsDirectoryEntryList", function() {
     beforeEach(function() {
-        this.collection = fixtures.hdfsDirectoryEntrySet(null, {instanceId: "1234", path: "abc"});
+        this.collection = fixtures.hdfsDirectoryEntrySet(null, {instanceId: "1234", path: "/abc"});
         this.view = new chorus.views.HdfsDirectoryEntryList({ collection : this.collection});
     });
     describe("#render", function() {
@@ -31,6 +31,21 @@ describe("chorus.views.HdfsDirectoryEntryList", function() {
         it("pre-selects the first item", function() {
             expect(this.view.$("li:eq(0)")).toHaveClass("selected");
             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("hdfs_entry:selected", this.collection.at(0));
+        })
+
+        it("links the directory name to that browse page", function() {
+            expect(this.view.$("li:eq(0) a.name").attr("href")).toBe("#/instances/1234/browse/abc/" + this.collection.at(0).get("name"));
+        })
+
+        describe("when browsing the root directory", function() {
+            beforeEach(function() {
+                this.collection.attributes.path = "/";
+                this.view.render();
+            });
+
+            it("links the directory name to that browse page", function() {
+                expect(this.view.$("li:eq(0) a.name").attr("href")).toBe("#/instances/1234/browse/" + this.collection.at(0).get("name"));
+            })
         })
 
         describe("clicking on an li", function() {

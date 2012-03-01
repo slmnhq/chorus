@@ -4,14 +4,18 @@ chorus.views.HdfsDirectoryEntryList = chorus.views.Base.extend({
     tagName: "ul",
     additionalClass: "list",
 
-    events:{
+    events: {
         "click li": "selectItem"
     },
 
     collectionModelContext: function(model) {
+        var instanceId = this.collection.attributes.instanceId;
+        var path = this.collection.attributes.path;
+        var url = "#/instances/" + instanceId + "/browse" + ( (path == "/") ? "" : path ) + "/" + model.get("name");
         return {
             humanSize: I18n.toHumanSize(model.get("size")),
-            iconUrl: chorus.urlHelpers.fileIconUrl(_.last(model.get("name").split(".")))
+            iconUrl: chorus.urlHelpers.fileIconUrl(_.last(model.get("name").split("."))),
+            showUrl: url
         }
     },
 
@@ -29,7 +33,7 @@ chorus.views.HdfsDirectoryEntryList = chorus.views.Base.extend({
 
     postRender: function() {
         this.collection.each(function(model, index) {
-            this.$("li").eq(index).data("model",model);
+            this.$("li").eq(index).data("model", model);
         }, this);
 
         this.$("li:eq(0)").click();

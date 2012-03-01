@@ -1,7 +1,7 @@
 chorus.pages.HdfsDirectoryEntryIndexPage = chorus.pages.Base.extend({
     crumbs:[
         { label:t("breadcrumbs.home"), url:"#/" },
-        { label:t("breadcrumbs.instances"), url: "#/instances" },
+        { label:t("breadcrumbs.instances"), url: "#/instances" }
     ],
 
     setup:function (instanceId, path) {
