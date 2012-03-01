@@ -884,7 +884,7 @@ beforeEach(function() {
                     databaseObject: {
                         id: instanceId + '|dca_demo|public|__a_table_name',
                         name: '__a_table_name',
-                        objectType: "TABLE",
+                        objectType: "BASE_TABLE",
                         type: "databaseObject",
                         databaseName: "dca_demo",
                         schemaName: "public",
