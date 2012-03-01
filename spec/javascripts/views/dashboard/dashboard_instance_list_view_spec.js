@@ -34,6 +34,7 @@ describe("chorus.views.DashboardInstanceList", function() {
             var hdfsLink = this.view.$("a.browse_hadoop");
             expect(hdfsLink.length).toBe(1);
             expect(hdfsLink.eq(0).attr("href")).toBe("#/instances/" + this.instance2.id + "/browse/");
+            expect(this.view.$(".name").eq(1).attr("href")).toBe("#/instances/" + this.instance2.id + "/browse/");
             expect(hdfsLink.eq(0)).toContainTranslation("dashboard.instances.browse_files");
         });
     });

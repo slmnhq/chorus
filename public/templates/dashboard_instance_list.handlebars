@@ -6,7 +6,11 @@
         </a>
         <div class="text">
             <div class="main">
-                <span class="name" title="{{name}}">{{name}}</span>
+                {{#if isHadoop}}
+                    <a href="#/instances/{{id}}/browse/" class="name" title="{{name}}">{{name}}</a>
+                {{else}}
+                    <span class="name" title="{{name}}">{{name}}</span>
+                {{/if}}
             </div>
             <div class="browse">
                 {{#if isHadoop}}
