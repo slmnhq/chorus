@@ -76,13 +76,15 @@
     background-color: $dataset-number-background-color;
     display: inline-block;
     @include border-radius(5px);
-    color: white;
-    height: 8px;
-    line-height: 19px;
-    vertical-align: bottom;
-    padding: 0px 5px 9px;
     margin-right: 5px;
-    font-size: 14px;
-    font-weight: normal;
-    font-style: normal;
+    padding: 0 6px 1px 6px;
+
+    .letter {
+        display: inline;
+        color: white;
+        font-size: 14px;
+        line-height: 19px;
+        font-weight: normal;
+        font-style: normal;
+    }
 }

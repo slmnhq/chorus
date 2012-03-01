@@ -3,7 +3,10 @@
         <span class="spacer left"></span>
         <div class="text right">
             <div class="main">
-                <span class="name">{{#if ../view.showDatasetName}}<span class="aliased_name">{{model.tabularData.aliasedName}}</span>{{/if}}{{name}}</span>
+                {{#if ../view.showDatasetName}}
+                    <span class="aliased_name"><span class="letter">{{model.tabularData.aliasedName}}</span></span>
+                {{/if}}
+                <span class="name"><span>{{name}}</span></span>
             </div>
             <div class="summary">{{comment}}</div>
         </div>

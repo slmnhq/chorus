@@ -13,8 +13,8 @@
                 <span class="title">{{t "dataset.chorusview.sidebar.joins"}}</span>
                 {{#each joins}}
                     <div class="join" data-cid={{destinationColumn.tabularData.cid}}>
-                        <span class="aliased_name">{{sourceColumn.tabularData.aliasedName}}</span><span class="column" title="{{sourceColumn.attributes.name}}">{{sourceColumn.attributes.name}}</span> =
-                        <span class="aliased_name">{{destinationColumn.tabularData.aliasedName}}</span><span class="column" title="{{destinationColumn.attributes.name}}">{{destinationColumn.attributes.name}}</span>
+                        <span class="aliased_name"><span class="letter">{{sourceColumn.tabularData.aliasedName}}</span></span><span class="column" title="{{sourceColumn.attributes.name}}">{{sourceColumn.attributes.name}}</span> =
+                        <span class="aliased_name"><span class="letter">g</span></span><span class="column" title="{{destinationColumn.attributes.name}}">{{destinationColumn.attributes.name}}</span>
                         <img class="delete" src="images/trashcan.png" />
                     </div>
                 {{/each}}
@@ -22,7 +22,7 @@
         {{/if}}
         <span class="title">{{t "dataset.chorusview.sidebar.selected_columns"}}</span>
         <div class="dataset">
-            <span class="aliased_name">{{resource.aliasedName}}</span><span class="label">{{t "dataset.statistics.dataset"}}:</span>
+            <span class="aliased_name"><span class="letter">{{resource.aliasedName}}</span></span><span class="label">{{t "dataset.statistics.dataset"}}:</span>
             <span class="name" title="{{objectName}}">{{objectName}}</span>
         </div>
 
@@ -43,7 +43,7 @@
 
         {{#each joins}}
             <div class="dataset">
-                <span class="aliased_name">{{destinationColumn.tabularData.aliasedName}}</span><span class="label">{{t "dataset.statistics.dataset"}}:</span>
+                <span class="aliased_name"><span class="letter">{{destinationColumn.tabularData.aliasedName}}</span></span><span class="label">{{t "dataset.statistics.dataset"}}:</span>
                 <span class="name" title="{{destinationColumn.tabularData.attributes.objectName}}">{{destinationColumn.tabularData.attributes.objectName}}</span>
             </div>
             {{#if columns.length}}

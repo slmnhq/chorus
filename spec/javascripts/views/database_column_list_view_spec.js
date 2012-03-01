@@ -181,7 +181,7 @@ describe("chorus.views.DatabaseColumnList", function() {
                 })
 
                 it("shows the dataset name", function() {
-                    expect(this.view.$("li:eq(0) .aliased_name")).toContainText(this.column1.tabularData.aliasedName);
+                    expect(this.view.$("li:eq(0) .aliased_name .letter")).toContainText(this.column1.tabularData.aliasedName);
                 })
             })
 

@@ -11,7 +11,7 @@ chorus.views.ColumnSelect = chorus.views.Base.extend({
             chorus.styleSelect(self.$('select'), {format: function(text, option) {
                 var aliasedName = $(option).data('aliasedName');
                 if (aliasedName && self.options.showAliasedName) {
-                    return '<span class="aliased_name">' + aliasedName + '</span>' + text;
+                    return '<span class="aliased_name"><span class="letter">' + aliasedName + '</span></span>' + text;
                 } else {
                     return text;
                 }

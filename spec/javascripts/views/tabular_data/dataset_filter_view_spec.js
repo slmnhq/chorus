@@ -57,7 +57,7 @@ describe("chorus.views.DatasetFilter", function() {
 
             it("has the aliased_name options", function() {
                 expect(this.selectMenuStub.find(".aliased_name")).toExist();
-                expect(this.selectMenuStub.find(".aliased_name")).toContainText(this.tabularData.aliasedName);
+                expect(this.selectMenuStub.find(".aliased_name .letter")).toContainText(this.tabularData.aliasedName);
             });
         })
 
