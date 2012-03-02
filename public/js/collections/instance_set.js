@@ -4,5 +4,9 @@ chorus.collections.InstanceSet = chorus.collections.Base.extend({
 
     urlParams: function() {
         return _.extend(this._super('urlParams') || {}, {hasCredentials: this.attributes.hasCredentials});
+    },
+
+    comparator: function(instance) {
+        return instance.get("name").toLowerCase();
     }
 });
