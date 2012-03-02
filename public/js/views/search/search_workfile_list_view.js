@@ -33,6 +33,9 @@ chorus.views.SearchWorkfileList = chorus.views.Base.extend({
         var comments = model.get("comments") ? model.get("comments").map(function(comment) {
                         return comment.attributes || comment;
                     }) : [];
+        _.each(model.get("commitMessage"), function(commitMessage) {
+            comments.push({isCommitMessage:true, content: commitMessage});
+        }, this);
         return {
             showUrl: model.showUrl(),
             iconUrl: model.iconUrl(),

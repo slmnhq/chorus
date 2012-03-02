@@ -30,7 +30,9 @@
                                 {{# if isComment}}
                                     {{t "activity_stream.comment"}}:
                                 {{else}}
-                                    {{t "activity_stream.note"}}:
+                                    {{#unless isCommitMessage}}
+                                        {{t "activity_stream.note"}}:
+                                    {{/unless}}
                                 {{/if}}
                             {{/if}}
                             </span>
@@ -53,7 +55,13 @@
                             {{#if isInsight}}
                                 {{t "insight.title"}}:
                             {{else}}
-                                {{t "activity_stream.comment"}}:
+                                {{# if isComment}}
+                                    {{t "activity_stream.comment"}}:
+                                {{else}}
+                                    {{#unless isCommitMessage}}
+                                        {{t "activity_stream.note"}}:
+                                    {{/unless}}
+                                {{/if}}
                             {{/if}}
                             </span>
                             <span class="comment_content">&#8220;{{{content}}}&#8221;</span>

@@ -147,5 +147,21 @@ describe("chorus.views.SearchWorkfileList", function() {
             expect(this.view.$('li .comments').eq(0).find('.hasMore a.hasMoreLink')).toHaveClass("hidden");
         });
 
+        describe("shows version commit messages in the comments area", function() {
+            beforeEach(function() {
+                this.view.collection.models[0].set({
+                    commitMessage: [
+                        "this is a <em>cool</em> version",
+                        "this is a <em>cooler</em> version"
+                    ]
+                });
+                this.view.render();
+            });
+
+            it("looks correct", function() {
+                expect(this.view.$('li:eq(0) .moreComments .comment:eq(2) .comment_type').text().trim()).toBe('');
+                expect(this.view.$('li:eq(0) .moreComments .comment:eq(2) .comment_content').html()).toContain(this.view.collection.models[0].get("commitMessage")[1]);
+            });
+        });
     });
 });
