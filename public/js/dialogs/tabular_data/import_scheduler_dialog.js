@@ -32,7 +32,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         this.sandboxTables.fetchAll();
 
         this.bindings.add(this.model, "saved", this.importSaved);
-        this.bindings.add(this.model, "saveFailed", function() {
+        this.bindings.add(this.model, "saveFailed validationFailed", function() {
             this.$("button.submit").stopLoading();
         });
     },
@@ -114,6 +114,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     },
 
     onDestinationChosen: function() {
+        this.clearErrors();
         var disableExisting = this.$(".new_table input:radio").prop("checked");
 
         var $tableName = this.$(".new_table input.name");
@@ -144,7 +145,6 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
     onInputFieldChanged: function() {
         this.model.performValidation(this.getNewModelAttrs());
-        this.$("button.submit").prop("disabled", !this.model.isValid());
         this.showErrors(this.model);
     },
 

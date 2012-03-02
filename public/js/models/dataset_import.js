@@ -3,14 +3,14 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
 
     declareValidations: function(newAttrs) {
         if (newAttrs.isNewTable == "true") {
-            this.requirePattern("toTable", /^[a-zA-Z][a-zA-Z0-9_]{0,63}$/, newAttrs);
+            this.requirePattern("toTable", /^[a-zA-Z][a-zA-Z0-9_]{0,63}$/, newAttrs, 'import.validation.toTable.required');
         }
 
         this.requirePattern("truncate", /^(true|false)$/, newAttrs);
         this.requirePattern("isNewTable", /^(true|false)$/, newAttrs);
 
         if (newAttrs.useLimitRows) {
-            this.requirePositiveInteger("sampleCount", newAttrs);
+            this.requirePositiveInteger("sampleCount", newAttrs, 'import.validation.sampleCount.positive');
         }
 
         if (newAttrs.activateSchedule) {

@@ -177,6 +177,35 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     });
                 });
             }
+
+            describe("switching between new table and existing table", function() {
+                context("switching from new to existing", function() {
+                    beforeEach(function() {
+                        this.dialog.$(".new_table input:radio").prop("checked", true).change();
+                        this.dialog.$(".existing_table input:radio").prop("checked", false);
+                        spyOn(this.dialog, 'clearErrors');
+                        this.dialog.$(".new_table input:radio").prop("checked", false);
+                        this.dialog.$(".existing_table input:radio").prop("checked", true).change();
+                    })
+                    
+                    it("clears the errors", function() {
+                        expect(this.dialog.clearErrors).toHaveBeenCalled();
+                    })
+                })
+                context("switching from existing to new", function() {
+                    beforeEach(function() {
+                        this.dialog.$(".new_table input:radio").prop("checked", false);
+                        this.dialog.$(".existing_table input:radio").prop("checked", true).change();
+                        spyOn(this.dialog, 'clearErrors');
+                        this.dialog.$(".new_table input:radio").prop("checked", true).change();
+                        this.dialog.$(".existing_table input:radio").prop("checked", false);
+                    })
+                    
+                    it("clears the errors", function() {
+                        expect(this.dialog.clearErrors).toHaveBeenCalled();
+                    })
+                })
+            })
         });
     });
 
@@ -377,7 +406,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
         });
     });
 
-
     describe("import now!", function() {
         context("with an existing import", function() {
             beforeEach(function() {
@@ -442,7 +470,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
             it("should have a 'Begin Import' button", function() {
                 expect(this.dialog.$("button.submit")).toContainTranslation("import.begin");
-                expect(this.dialog.$("button.submit")).toBeDisabled();
             });
 
             it("should have an 'Import Into New Table' radio button", function() {
@@ -468,10 +495,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
             it("should have a dropdown selector for existing tables", function() {
                 expect(this.dialog.$(".existing_table .names")).toBeDisabled();
-            });
-
-            it("disables the submit button", function() {
-                expect(this.dialog.$("button.submit")).toBeDisabled();
             });
 
             context("when 'Import into Existing Table' is checked", function() {
@@ -527,18 +550,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
                             });
 
                             it("should enable the submit button when a row limit is entered", function() {
-                                expect(this.dialog.$("button.submit")).toBeEnabled();
-                            });
-                        });
-
-                        context("entering an invalid row limit", function() {
-                            beforeEach(function() {
-                                this.dialog.$(".new_table .limit input:text").val("ddd").trigger("keyup");
-                            });
-
-                            it("should keep the submit enabled when the row limit is unchecked", function() {
-                                expect(this.dialog.$("button.submit")).toBeDisabled();
-                                this.dialog.$(".new_table .limit input:checkbox").prop("checked", false).change();
                                 expect(this.dialog.$("button.submit")).toBeEnabled();
                             });
                         });
