@@ -702,13 +702,9 @@ beforeEach(function() {
                     author: fixtures.authorJson(),
                     comments: [ fixtures.commentJson() ],
                     id: "10082",
-                    databaseObject: {
+                    table: {
                         id: "10000|Analytics|analytics|VIEW|__gp_fullname",
-                        name: "__gp_fullname",
-                        objectName: "__gp_fullname",
-                        objectType: "BASE_TABLE",
-                        type: "SOURCE_TABLE",
-                        workspaceId: "10000"
+                        name: "__gp_fullname"
                     },
                     timestamp: "2012-02-29 15:24:42",
                     workspace: fixtures.workspaceJson()

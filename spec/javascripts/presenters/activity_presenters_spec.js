@@ -537,8 +537,12 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the correct icon url", function() {
-            expect(this.presenter.iconSrc).toBe(this.dataset.iconUrl());
+            expect(this.presenter.iconSrc).toBe("/images/table_large.png");
         });
+
+        it("should not have the profile icon class", function() {
+            expect(this.presenter.iconClass).not.toEqual("profile")
+        })
     });
 
     context(".SOURCE_TABLE_CREATED", function() {

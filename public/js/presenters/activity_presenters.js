@@ -137,7 +137,8 @@
             return {
                 objectName: model.dataset().get("objectName"),
                 objectUrl: model.dataset().showUrl(),
-                iconSrc: model.dataset().iconUrl()
+                iconSrc: "/images/table_large.png",
+                iconClass: ''
             }
         },
         
