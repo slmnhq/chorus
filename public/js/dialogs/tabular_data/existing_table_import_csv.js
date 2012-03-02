@@ -240,7 +240,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
 
     validateColumns: function() {
         var sourceColumnsNum = this.csv.columnOrientedData().length;
-        var destinationColumnsNum = this.dataset.get("columnNames").length
+        var destinationColumnsNum = this.dataset.get("columnNames") ? this.dataset.get("columnNames").length : 0;
         if (destinationColumnsNum < sourceColumnsNum) {
             this.resource.serverErrors = [
                 { message: t("dataset.import.table.too_many_source_columns")}
