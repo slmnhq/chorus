@@ -14,7 +14,7 @@ describe("chorus.views.SearchTabularDataList", function() {
         expect(this.view.$(".count")).toContainTranslation("search.count", {shown: this.models.length, total: this.models.attributes.total});
     });
 
-    context("when the dataset is found in more than one workspace", function() {
+    describe("the 'found in workspaces' section", function() {
         beforeEach(function() {
             this.models.at(0).set({workspaces: [
                 {
@@ -30,57 +30,26 @@ describe("chorus.views.SearchTabularDataList", function() {
                     name: "Baz"
                 }
             ]});
-            this.fakeQtip = stubQtip("li:eq(0) .location .workspace a.other");
+            this.fakeQtip = stubQtip();
             this.view.render();
         });
 
-        it("should display a link to the workspace", function() {
-            expect(this.view.$("li:eq(0) .location .workspace")).toContainTranslation("search.found_in_multiple_workspaces", {
+        it("should display a link to the first workspace", function() {
+            expect(this.view.$("li:eq(0) .location .found_in")).toContainTranslation("workspaces_used_in.body.other", {
                 workspaceLink: "Foo",
-                otherWorkspacesLink: "2 other workspaces"
+                otherWorkspacesMenu: "2 other workspaces"
             });
         });
 
-        describe("the 'other workspaces' link", function() {
-            it("shows a popup menu containing links to the other workspaces", function() {
-                this.view.$("li:eq(0) .location .workspace a.other").click();
-                var workspaceLinks = this.fakeQtip.find("a.workspace");
+        it("shows a popup menu containing links to the other workspaces", function() {
+            this.view.$("li:eq(0) .location .found_in a.open_other_menu").click();
+            var workspaceLinks = this.fakeQtip.find("a");
 
-                expect(workspaceLinks.length).toBe(2);
-                expect(workspaceLinks.eq(0)).toHaveText("Bar");
-                expect(workspaceLinks.eq(1)).toHaveText("Baz");
-                expect(workspaceLinks.eq(0)).toHaveAttr("href", fixtures.workspace({ id: '10010' }).showUrl());
-                expect(workspaceLinks.eq(1)).toHaveAttr("href", fixtures.workspace({ id: '10011' }).showUrl());
-            });
-        });
-    });
-
-    context("when the dataset is found in only one workspace", function() {
-        beforeEach(function() {
-            this.models.at(0).set({workspaces: [
-                {
-                    id: 10000,
-                    name: "Foo"
-                }
-            ]});
-            this.view.render();
-        });
-
-        it("should display a link to the workspace", function() {
-            expect(this.view.$("li:eq(0) .location .workspace")).toContainTranslation("search.found_in_one_workspace", {
-                workspaceLink: "Foo"
-            });
-        });
-    });
-
-    context("when the dataset is not found in any workspace", function() {
-        beforeEach(function() {
-            this.models.at(0).set({ workspaces: [] });
-            this.view.render();
-        });
-
-        it("does not display a link to the workspace", function() {
-            expect(this.view.$("li:eq(0) .location .workspace")).not.toExist();
+            expect(workspaceLinks.length).toBe(2);
+            expect(workspaceLinks.eq(0)).toHaveText("Bar");
+            expect(workspaceLinks.eq(1)).toHaveText("Baz");
+            expect(workspaceLinks.eq(0)).toHaveAttr("href", fixtures.workspace({ id: '10010' }).showUrl());
+            expect(workspaceLinks.eq(1)).toHaveAttr("href", fixtures.workspace({ id: '10011' }).showUrl());
         });
     });
 

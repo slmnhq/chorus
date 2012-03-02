@@ -19,25 +19,9 @@
                 <a class="name" href="{{showUrl}}">{{{objectName}}}</a>
                 <div class="location">
                     {{{tabularDataLocation model}}}
-
-                    {{#if hasWorkspaces}}
-                        <div class="workspace">
-                        {{#if hasOtherWorkspaces}}
-                            {{{t "search.found_in_multiple_workspaces" workspaceLink=workspaceLink otherWorkspacesLink=otherWorkspacesLink}}}
-                        {{else}}
-                            {{{t "search.found_in_one_workspace" workspaceLink=workspaceLink}}}
-                        {{/if}}
-                        </div>
-                    {{/if}}
+                    {{{usedInWorkspaces workspacesUsed}}}
                 </div>
 
-                <div class="other_workspaces_menu_container hidden">
-                    <ul class="other_workspaces_menu">
-                        {{#each otherWorkspaces}}
-                            <li><a class="workspace" href="{{showUrl}}">{{name}}</a></li>
-                        {{/each}}
-                    </ul>
-                </div>
                 <div class="comments">
                     {{#each comments}}
                     <div class="comment">

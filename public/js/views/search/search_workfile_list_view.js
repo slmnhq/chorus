@@ -30,14 +30,14 @@ chorus.views.SearchWorkfileList = chorus.views.Base.extend({
     },
 
     collectionModelContext: function(model){
-        var workspace = model.workspace()
-
         var comments = model.get("comments") ? model.get("comments").map(function(comment) {
                         return comment.attributes || comment;
                     }) : [];
+
         _.each(model.get("commitMessage"), function(commitMessage) {
             comments.push({isCommitMessage:true, content: commitMessage});
         }, this);
+
         return {
             showUrl: model.showUrl(),
             iconUrl: model.iconUrl(),
@@ -45,7 +45,7 @@ chorus.views.SearchWorkfileList = chorus.views.Base.extend({
             comments: comments.slice(0, 3),
             moreComments: comments.slice(3),
             hasMoreComments: Math.max(0, comments.length - 3),
-            workspaceLink: "<a href='"+workspace.showUrl()+"'>"+workspace.get('name')+"</a>"
+            workspaces: {workspaceList: [model.workspace().attributes], workspaceCount: 1}
         }
     }
 });
