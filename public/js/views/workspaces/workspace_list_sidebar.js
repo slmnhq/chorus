@@ -4,19 +4,21 @@ chorus.views.WorkspaceListSidebar = chorus.views.Sidebar.extend({
 
     subviews: {
         '.activity_list': 'activityList',
-        '.tab_control': 'tabControl'
+        '.tab_control': 'tabControl',
+        ".workspace_member_list": "workspaceMemberList"
     },
 
     setup: function() {
         chorus.PageEvents.subscribe("workspace:selected", this.setWorkspace, this)
         this.tabControl = new chorus.views.TabControl([ {name: 'activity', selector: ".activity_list"} ])
+        this.workspaceMemberList = new chorus.views.WorkspaceMemberList()
     },
 
     additionalContext: function() {
-        return {
+        return this.model ? {
             imageSrc: this.model.imageUrl(),
             hasImage: this.model.hasImage()
-        }
+        } : {};
     },
 
     setWorkspace: function(model) {

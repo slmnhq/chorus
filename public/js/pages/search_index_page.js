@@ -9,6 +9,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         this.model = new chorus.models.SearchResult({query: query});
         this.requiredResources.add(this.model);
         this.model.fetch();
+        chorus.PageEvents.subscribe("workspace:selected", this.workspaceSelected, this);
     },
 
     resourcesLoaded: function() {
@@ -22,11 +23,28 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
             content: new chorus.views.SearchResultList({ model: this.model })
         });
 
-        this.sidebar = new chorus.views.WorkfileListSidebar({ hideAddNoteLink: true });
+        this.sidebars = {
+            workfile: new chorus.views.WorkfileListSidebar({ hideAddNoteLink: true }),
+            workspace: new chorus.views.WorkspaceListSidebar()
+        };
 
-        this.mainContent.content.bind("workfile:selected", function(workfile) {
-            this.sidebar.setWorkfile(workfile);
-        }, this);
+        this.mainContent.content.bind("workfile:selected", this.workfileSelected, this);
+    },
+
+    workspaceSelected: function() {
+        this.renderSidebar(this.sidebars.workspace)
+    },
+
+    renderSidebar: function(sidebar) {
+        this.sidebar = sidebar;
+        this.renderSubview('sidebar');
+        this.trigger('resized');
+    },
+
+    workfileSelected: function(workfile) {
+        this.sidebars.workfile.setWorkfile(workfile);
+
+        this.renderSidebar(this.sidebars.workfile)
     },
 
     postRender: function() {

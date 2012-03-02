@@ -13,15 +13,21 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     },
 
     selectItem:function selectItem(e) {
-        if ($(e.currentTarget).hasClass("selected")) return;
+        var $target = $(e.currentTarget);
+        if ($target.hasClass("selected")) return;
 
         this.$("li").removeClass("selected");
-        $(e.currentTarget).addClass("selected");
+        $target.addClass("selected");
 
-        var workfileId = $(e.currentTarget).data("id");
-        var workfile = this.workfileList.collection.get(workfileId);
+        if ($target.closest(".workfile_list").length) {
+            var workfileId = $target.data("id");
+            var workfile = this.workfileList.collection.get(workfileId);
 
-        this.trigger("workfile:selected", workfile);
+            this.trigger("workfile:selected", workfile);
+        } else if ($target.closest(".workspace_list")) {
+            var workspace = this.workspaceList.collection.get($target.data("id"));
+            chorus.PageEvents.broadcast("workspace:selected", workspace);
+        }
     },
 
     setup: function() {

@@ -34,8 +34,8 @@ describe("chorus.views.WorkspaceListSidebar", function() {
         });
     });
 
-    xit("has the workspace member list", function() {
-        expect("workspace members").toBe("on the page");
+    it("has the workspace member list", function() {
+        expect(this.view.$(".workspace_member_list")[0]).toBe(this.view.workspaceMemberList.el);
     })
 
     describe("when the activity fetch completes", function() {
