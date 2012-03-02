@@ -19,9 +19,9 @@
     </div>
     <div class="messages">
         {{#if notifications.length}}
-            <a href="#" class="notifications" title="notifications">{{notifications.length}}</a>
+            <a href="#" class="notifications" title="notifications">{{notifications.pagination.records}}</a>
         {{else}}
-            <div class="notifications empty">{{notifications.length}}</div>
+            <a class="notifications empty" title="notifications">0</a>
         {{/if}}
     </div>
     <div class="menu hidden popup_notifications">

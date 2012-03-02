@@ -17,7 +17,7 @@ chorus.views.Header = chorus.views.Base.extend({
         this.popupEventName = "chorus:menu:popup." + this.cid;
         $(document).bind(this.popupEventName, _.bind(this.popupEventHandler, this))
         this.session = chorus.session;
-        this.notifications = new chorus.collections.NotificationSet();
+        this.notifications = new chorus.collections.NotificationSet([], { type: 'unread' });
         this.requiredResources.add([this.session, this.notifications]);
 
         this.typeAheadView = new chorus.views.TypeAheadSearch();
@@ -74,15 +74,22 @@ chorus.views.Header = chorus.views.Base.extend({
         e.preventDefault();
         e.stopImmediatePropagation();
 
-        var notificationsWasPoppedUp = !this.$(".menu.popup_notifications").hasClass("hidden");
+        if ($(e.currentTarget).hasClass("empty")) { return; }
+
+        var beingShown = this.$(".menu.popup_notifications").hasClass("hidden");
         this.dismissPopups();
         this.triggerPopupEvent(e.target);
 
-        if(!notificationsWasPoppedUp) {
+        if (beingShown) {
             this.captureClicks();
+            this.notifications.markAllRead({ success: _.bind(this.clearNotificationCount, this) });
         }
 
-        this.$(".menu.popup_notifications").toggleClass("hidden", notificationsWasPoppedUp);
+        this.$(".menu.popup_notifications").toggleClass("hidden", !beingShown);
+    },
+
+    clearNotificationCount: function() {
+        this.$("a.notifications").text("0").addClass("empty")
     },
 
     togglePopupUsername:function (e) {

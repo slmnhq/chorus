@@ -12,8 +12,22 @@ describe("chorus.collections.NotificationSet", function() {
         expect(this.collection.model).toBe(chorus.models.Notification);
     })
 
-    it("has the correct urlTemplate", function() {
-        expect(this.collection.urlTemplate).toBe("notification");
+    describe("#url", function() {
+        context("when constructed with no type option", function() {
+            it("is correct", function() {
+                expect(this.collection.url()).toHaveUrlPath("/edc/notification")
+            });
+        });
+
+        context("when constructed with a type option", function() {
+            beforeEach(function() {
+                this.collection = fixtures.notificationSet([], { type: "unread" })
+            });
+
+            it("is correct", function() {
+                expect(this.collection.url()).toMatchUrl("/edc/notification?type=unread", { paramsToIgnore: ["page", "rows" ]})
+            });
+        });
     });
 
     describe("#activities", function() {
@@ -41,6 +55,37 @@ describe("chorus.collections.NotificationSet", function() {
             expect(this.activities.models[1].get("type")).toBe("WORKSPACE_CREATED");
             expect(this.activities.models[2].get("type")).toBe("MEMBERS_ADDED");
             expect(this.activities.models[3].get("type")).toBe("INSTANCE_CREATED");
+        });
+    });
+
+    describe("#markAllRead", function() {
+        beforeEach(function() {
+            this.successSpy = jasmine.createSpy();
+            this.collection.markAllRead({ success: this.successSpy });
+        });
+
+        it("calls the correct API", function() {
+            expect(this.server.lastUpdate().url).toBe("/edc/notification/101,102,103,104/read")
+        });
+
+        describe("when the call succeeds", function() {
+            beforeEach(function() {
+                this.server.lastUpdate().succeed();
+            });
+
+            it("calls the success function", function() {
+                expect(this.successSpy).toHaveBeenCalled();
+            });
+        });
+
+        describe("when the call fails", function() {
+            beforeEach(function() {
+                this.server.lastUpdate().fail();
+            });
+
+            it("does not call the success function", function() {
+                expect(this.successSpy).not.toHaveBeenCalled();
+            });
         });
     });
 });

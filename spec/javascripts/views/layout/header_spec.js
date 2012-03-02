@@ -24,7 +24,8 @@ describe("chorus.views.Header", function() {
             expect(this.view.model).toBeUndefined();
         })
 
-        it("fetches the notifications", function() {
+        it("fetches unread notifications", function() {
+            expect(this.view.notifications.attributes.type).toBe("unread");
             expect(this.server.lastFetchAllFor(this.view.notifications)).toBeDefined();
         });
 
@@ -50,7 +51,16 @@ describe("chorus.views.Header", function() {
             this.view.session.loaded = true;
             this.view.session.trigger("loaded");
             this.server.completeFetchAllFor(this.view.notifications,
-                [fixtures.notification(), fixtures.notification()])
+                [
+                    fixtures.notification(),
+                    fixtures.notification()
+                ],
+                null,
+                {
+                    page: 1,
+                    total: 1,
+                    records: 2
+                })
         })
 
         it("should have a search field", function() {
@@ -106,10 +116,6 @@ describe("chorus.views.Header", function() {
                 this.view.notifications.reset();
                 this.view.render();
             });
-
-            it("does not make the notification count a link", function() {
-                expect(this.view.$("a.notifications")).not.toExist();
-            })
 
             it("marks the notifications with an empty class", function() {
                 expect(this.view.$(".notifications")).toHaveClass("empty");
@@ -251,83 +257,125 @@ describe("chorus.views.Header", function() {
                 beforeEach(function() {
                     this.popupSpy = jasmine.createSpy();
                     $(document).bind("chorus:menu:popup", this.popupSpy);
-                    this.view.$("a.notifications").click();
+                    spyOn(this.view.notifications, "markAllRead").andCallFake(_.bind(function(options) {
+                        this.successFunction = options.success;
+                    }, this));
                 })
 
-                it("shows a popup menu", function() {
-                    expect(this.view.$(".menu.popup_notifications")).not.toHaveClass("hidden");
-                    expect(this.view.$(".menu.popup_notifications .pointer")).toExist();
-                });
-
-                it("triggers chorus:menu:popup on the document", function() {
-                    expect(this.popupSpy).toHaveBeenCalled();
-                });
-
-                describe("and when clicked again", function() {
+                context("and there are no notifications", function() {
                     beforeEach(function() {
+                        this.view.$("a.notifications").addClass("empty");
                         this.view.$("a.notifications").click();
                     });
 
-                    it("becomes hidden again", function() {
+                    it("does not show a popup menu", function() {
                         expect(this.view.$(".menu.popup_notifications")).toHaveClass("hidden");
                     });
                 });
 
-                describe("the notification list", function() {
-                    it("is an activity list", function() {
-                        expect(this.view.notificationList).toBeA(chorus.views.ActivityList);
-                        expect(this.view.$(".popup_notifications")).toContain(this.view.notificationList.el);
-                    });
-
-                    it("renders an li for each unread notification", function() {
-                        expect(this.view.$(".popup_notifications li").length).toBe(2);
-                    });
-                });
-
-                describe("clicking delete for a notification", function() {
+                context("and there are notifications", function() {
                     beforeEach(function() {
-                        chorus.bindModalLaunchingClicks(this.view);
-                        this.modalSpy = stubModals();
-                        this.view.$('.popup_notifications .delete_link:eq(0)').click();
+                        this.view.$("a.notifications").click();
                     });
 
-                    it("launches the NotificationDeleteAlert", function() {
-                        expect(this.modalSpy).toHaveModal(chorus.alerts.NotificationDeleteAlert);
+                    it("shows a popup menu", function() {
+                        expect(this.view.$(".menu.popup_notifications")).not.toHaveClass("hidden");
                     });
 
-                    describe("clicking the confirmation", function() {
+                    it("triggers chorus:menu:popup on the document", function() {
+                        expect(this.popupSpy).toHaveBeenCalled();
+                    });
+
+                    it("marks the notifications as read", function() {
+                        expect(this.view.notifications.markAllRead).toHaveBeenCalled();
+                        expect(this.successFunction).toBeDefined();
+                    })
+
+                    describe("when the mark-all-read call succeeds", function() {
                         beforeEach(function() {
-                            $(this.modalSpy.mostRecentCall.args[0]).find("button.submit").click();
+                            this.successFunction();
                         });
 
-                        it("deletes the notification", function() {
-                            expect(this.server.lastDestroyFor(this.view.notifications.at(0))).toBeDefined();
+                        it("updates the unread notification count", function() {
+                            expect(this.view.$("a.notifications")).toHaveText("0");
+                        });
+
+                        it("makes the notifications look empty", function() {
+                            expect(this.view.$("a.notifications")).toHaveClass("empty");
                         });
                     });
-                });
-            });
 
-            describe("when a notification:deleted event occurs", function() {
-                beforeEach(function() {
-                    this.server.reset();
-                    chorus.PageEvents.broadcast("notification:deleted");
-                });
+                    describe("and when clicked again", function() {
+                        beforeEach(function() {
+                            this.view.notifications.markAllRead.reset();
+                            this.view.$("a.notifications").click();
+                        });
 
-                it("should re-fetch the notifications", function() {
-                    expect(this.server.lastFetchAllFor(this.view.notifications)).toBeDefined();
-                });
+                        it("becomes hidden again", function() {
+                            expect(this.view.$(".menu.popup_notifications")).toHaveClass("hidden");
+                        });
 
-                context("when the fetch completes", function() {
-                    beforeEach(function() {
-                        this.server.completeFetchAllFor(this.view.notifications, [fixtures.notification()]);
+                        it("does not re-mark the notifications as read", function() {
+                            expect(this.view.notifications.markAllRead).not.toHaveBeenCalled();
+                        });
+
                     });
 
-                    it("should display the new notification count", function() {
-                        expect(this.view.$("a.notifications").text()).toBe("1");
+                    describe("the notification list", function() {
+                        it("is an activity list", function() {
+                            expect(this.view.notificationList).toBeA(chorus.views.ActivityList);
+                            expect(this.view.$(".popup_notifications")).toContain(this.view.notificationList.el);
+                        });
+
+                        it("renders an li for each unread notification", function() {
+                            expect(this.view.$(".popup_notifications li").length).toBe(2);
+                        });
                     });
 
-                    it("should render the new notification list", function() {
-                        expect(this.view.$(".popup_notifications li").length).toBe(1);
+                    describe("clicking delete for a notification", function() {
+                        beforeEach(function() {
+                            chorus.bindModalLaunchingClicks(this.view);
+                            this.modalSpy = stubModals();
+                            this.view.$('.popup_notifications .delete_link:eq(0)').click();
+                        });
+
+                        it("launches the NotificationDeleteAlert", function() {
+                            expect(this.modalSpy).toHaveModal(chorus.alerts.NotificationDeleteAlert);
+                        });
+
+                        describe("clicking the confirmation", function() {
+                            beforeEach(function() {
+                                $(this.modalSpy.mostRecentCall.args[0]).find("button.submit").click();
+                            });
+
+                            it("deletes the notification", function() {
+                                expect(this.server.lastDestroyFor(this.view.notifications.at(0))).toBeDefined();
+                            });
+                        });
+                    });
+                    describe("when a notification:deleted event occurs", function() {
+                        beforeEach(function() {
+                            this.server.reset();
+                            chorus.PageEvents.broadcast("notification:deleted");
+                        });
+
+                        it("should re-fetch the notifications", function() {
+                            expect(this.server.lastFetchAllFor(this.view.notifications)).toBeDefined();
+                        });
+
+                        context("when the fetch completes", function() {
+                            beforeEach(function() {
+                                this.server.completeFetchAllFor(this.view.notifications, [fixtures.notification()]);
+                            });
+
+                            it("should display the new notification count", function() {
+                                expect(this.view.$("a.notifications").text()).toBe("1");
+                            });
+
+                            it("should render the new notification list", function() {
+                                expect(this.view.$(".popup_notifications li").length).toBe(1);
+                            });
+                        });
                     });
                 });
             });
