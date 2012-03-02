@@ -290,7 +290,7 @@ window.Chorus = function chorus$Global() {
 
     self.log = function() {
         var grossHack = window["con"+"sole"];
-        grossHack && grossHack.log && grossHack.log.apply(grossHack, arguments);
+        grossHack && grossHack.log && grossHack.log.apply(grossHack, ["Chorus Log: "].concat(_.toArray(arguments)));
     }
 }
 
