@@ -1,4 +1,4 @@
-describe("chorus.views.DatasetVisualizationHeatmapSidebar", function() {
+describe("chorus.views.TabularDataVisualizationHeatmapSidebar", function() {
     describe("#render", function() {
         context("with valid column data", function() {
             beforeEach(function() {
@@ -7,7 +7,7 @@ describe("chorus.views.DatasetVisualizationHeatmapSidebar", function() {
                 this.columns = fixtures.databaseColumnSet([this.column1, this.column2]);
 
                 this.model = fixtures.datasetChorusView({objectName: "Foo"});
-                this.view = new chorus.views.DatasetVisualizationHeatmapSidebar({model: this.model, collection: this.columns})
+                this.view = new chorus.views.TabularDataVisualizationHeatmapSidebar({model: this.model, collection: this.columns})
 
                 spyOn(chorus, 'styleSelect').andCallFake(_.bind(function() {
                     this.styledSelected = this.view.$(".y_axis select").val()
@@ -41,8 +41,8 @@ describe("chorus.views.DatasetVisualizationHeatmapSidebar", function() {
                 })
             })
 
-            itBehavesLike.DatasetVisualizationSidebarRangeChooser('.limiter.x_axis');
-            itBehavesLike.DatasetVisualizationSidebarRangeChooser('.limiter.y_axis');
+            itBehavesLike.TabularDataVisualizationSidebarRangeChooser('.limiter.x_axis');
+            itBehavesLike.TabularDataVisualizationSidebarRangeChooser('.limiter.y_axis');
 
             describe("#chartOptions", function() {
                 it("should return all the chart options for a heatmap", function() {
@@ -60,7 +60,7 @@ describe("chorus.views.DatasetVisualizationHeatmapSidebar", function() {
         context("with no columns", function() {
             beforeEach(function() {
                 this.columns = new chorus.collections.DatabaseColumnSet();
-                this.view = new chorus.views.DatasetVisualizationHeatmapSidebar({model: this.model, collection: this.columns})
+                this.view = new chorus.views.TabularDataVisualizationHeatmapSidebar({model: this.model, collection: this.columns})
                 this.view.render();
             })
 

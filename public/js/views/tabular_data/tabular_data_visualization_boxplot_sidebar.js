@@ -1,5 +1,5 @@
-chorus.views.DatasetVisualizationBoxplotSidebar = chorus.views.DatasetVisualizationSidebar.extend({
-    className: "dataset_visualization_boxplot_sidebar",
+chorus.views.TabularDataVisualizationBoxplotSidebar = chorus.views.TabularDataVisualizationSidebar.extend({
+    className: "tabular_data_visualization_boxplot_sidebar",
 
     postRender: function() {
         this.$(".category option:eq(1)").attr('selected', 'selected');

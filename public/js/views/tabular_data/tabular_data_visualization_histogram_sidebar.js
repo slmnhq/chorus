@@ -1,5 +1,5 @@
-chorus.views.DatasetVisualizationHistogramSidebar = chorus.views.DatasetVisualizationSidebar.extend({
-    className: "dataset_visualization_histogram_sidebar",
+chorus.views.TabularDataVisualizationHistogramSidebar = chorus.views.TabularDataVisualizationSidebar.extend({
+    className: "tabular_data_visualization_histogram_sidebar",
 
     chartOptions: function() {
         return {

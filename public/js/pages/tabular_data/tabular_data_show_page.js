@@ -134,19 +134,19 @@
         constructSidebarForType: function(type) {
             switch (type) {
                 case 'boxplot':
-                    this.secondarySidebar = new chorus.views.DatasetVisualizationBoxplotSidebar({model: this.model, collection: this.columnSet});
+                    this.secondarySidebar = new chorus.views.TabularDataVisualizationBoxplotSidebar({model: this.model, collection: this.columnSet});
                     break;
                 case 'frequency':
-                    this.secondarySidebar = new chorus.views.DatasetVisualizationFrequencySidebar({model: this.model, collection: this.columnSet});
+                    this.secondarySidebar = new chorus.views.TabularDataVisualizationFrequencySidebar({model: this.model, collection: this.columnSet});
                     break;
                 case 'histogram':
-                    this.secondarySidebar = new chorus.views.DatasetVisualizationHistogramSidebar({model: this.model, collection: this.columnSet});
+                    this.secondarySidebar = new chorus.views.TabularDataVisualizationHistogramSidebar({model: this.model, collection: this.columnSet});
                     break;
                 case 'heatmap':
-                    this.secondarySidebar = new chorus.views.DatasetVisualizationHeatmapSidebar({model: this.model, collection: this.columnSet});
+                    this.secondarySidebar = new chorus.views.TabularDataVisualizationHeatmapSidebar({model: this.model, collection: this.columnSet});
                     break;
                 case 'timeseries':
-                    this.secondarySidebar = new chorus.views.DatasetVisualizationTimeSeriesSidebar({model: this.model, collection: this.columnSet});
+                    this.secondarySidebar = new chorus.views.TabularDataVisualizationTimeSeriesSidebar({model: this.model, collection: this.columnSet});
                     break;
             }
         },
@@ -163,7 +163,7 @@
         },
 
         removeOldSecondaryClasses: function(type) {
-            this.$('.sidebar_content.secondary').removeClass("dataset_visualization_" + type + "_sidebar");
+            this.$('.sidebar_content.secondary').removeClass("tabular_data_visualization_" + type + "_sidebar");
         }
     });
 })();

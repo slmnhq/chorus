@@ -1,5 +1,5 @@
-chorus.views.DatasetVisualizationFrequencySidebar = chorus.views.DatasetVisualizationSidebar.extend({
-    className: "dataset_visualization_frequency_sidebar",
+chorus.views.TabularDataVisualizationFrequencySidebar = chorus.views.TabularDataVisualizationSidebar.extend({
+    className: "tabular_data_visualization_frequency_sidebar",
 
     additionalContext: function() {
         return {

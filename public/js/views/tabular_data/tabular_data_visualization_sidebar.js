@@ -1,7 +1,7 @@
 ;
 (function() {
-    chorus.views.DatasetVisualizationSidebar = chorus.views.Sidebar.extend({
-        additionalClass: "dataset_visualization_sidebar",
+    chorus.views.TabularDataVisualizationSidebar = chorus.views.Sidebar.extend({
+        additionalClass: "tabular_data_visualization_sidebar",
 
         events: {
             "click button.create": "launchVisualizationDialog",

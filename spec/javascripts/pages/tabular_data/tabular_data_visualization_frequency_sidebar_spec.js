@@ -1,4 +1,4 @@
-describe("chorus.views.DatasetVisualizationFrequencySidebar", function() {
+describe("chorus.views.TabularDataVisualizationFrequencySidebar", function() {
     describe("#render", function() {
         context("with valid column data", function() {
             beforeEach(function() {
@@ -6,7 +6,7 @@ describe("chorus.views.DatasetVisualizationFrequencySidebar", function() {
                 this.columns = fixtures.databaseColumnSet([this.column]);
 
                 this.model = fixtures.datasetChorusView({objectName: "Foo"})
-                this.view = new chorus.views.DatasetVisualizationFrequencySidebar({collection: this.columns, model: this.model})
+                this.view = new chorus.views.TabularDataVisualizationFrequencySidebar({collection: this.columns, model: this.model})
                 this.view.render();
                 this.view.$(".limiter .selected_value").text("3")
             })
@@ -16,7 +16,7 @@ describe("chorus.views.DatasetVisualizationFrequencySidebar", function() {
                     expect(this.view.$(".category select option").length).toBe(this.columns.models.length);
                 })
             })
-            itBehavesLike.DatasetVisualizationSidebarRangeChooser();
+            itBehavesLike.TabularDataVisualizationSidebarRangeChooser();
 
             describe("#chartOptions", function() {
                 it("should return all the chart options for a frequency plot", function() {
@@ -32,7 +32,7 @@ describe("chorus.views.DatasetVisualizationFrequencySidebar", function() {
         context("with no columns", function() {
             beforeEach(function() {
                 this.columns = new chorus.collections.DatabaseColumnSet();
-                this.view = new chorus.views.DatasetVisualizationFrequencySidebar({collection: this.columns})
+                this.view = new chorus.views.TabularDataVisualizationFrequencySidebar({collection: this.columns})
                 this.view.render();
             })
 

@@ -1,4 +1,4 @@
-describe("chorus.views.DatasetVisualizationTimeSeriesSidebar", function() {
+describe("chorus.views.TabularDataVisualizationTimeSeriesSidebar", function() {
     describe("#render", function() {
         context("with valid column data", function() {
             beforeEach(function() {
@@ -8,7 +8,7 @@ describe("chorus.views.DatasetVisualizationTimeSeriesSidebar", function() {
                 this.columns = fixtures.databaseColumnSet([this.column1, this.column2, this.column3]);
 
                 this.model = fixtures.datasetChorusView({objectName: "Foo"});
-                this.view = new chorus.views.DatasetVisualizationTimeSeriesSidebar({model: this.model, collection: this.columns})
+                this.view = new chorus.views.TabularDataVisualizationTimeSeriesSidebar({model: this.model, collection: this.columns})
                 this.view.render();
             })
 
@@ -22,8 +22,8 @@ describe("chorus.views.DatasetVisualizationTimeSeriesSidebar", function() {
                     expect(this.view.$(".time .labels").text()).toContainTranslation("dataset.visualization.sidebar.time")
                 })
 
-                itBehavesLike.DatasetVisualizationSidebarChooser(2, "maximum", ".value .limiter");
-                itBehavesLike.DatasetVisualizationSidebarChooser(2, "day", ".time .limiter");
+                itBehavesLike.TabularDataVisualizationSidebarChooser(2, "maximum", ".value .limiter");
+                itBehavesLike.TabularDataVisualizationSidebarChooser(2, "day", ".time .limiter");
             })
 
             describe("#chartOptions", function() {
@@ -43,7 +43,7 @@ describe("chorus.views.DatasetVisualizationTimeSeriesSidebar", function() {
         context("with no columns", function() {
             beforeEach(function() {
                 this.columns = new chorus.collections.DatabaseColumnSet();
-                this.view = new chorus.views.DatasetVisualizationTimeSeriesSidebar({model: this.model, collection: this.columns})
+                this.view = new chorus.views.TabularDataVisualizationTimeSeriesSidebar({model: this.model, collection: this.columns})
                 this.view.render();
             })
 

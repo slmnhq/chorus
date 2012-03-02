@@ -1,5 +1,5 @@
-chorus.views.DatasetVisualizationHeatmapSidebar = chorus.views.DatasetVisualizationSidebar.extend({
-    className:"dataset_visualization_heatmap_sidebar",
+chorus.views.TabularDataVisualizationHeatmapSidebar = chorus.views.TabularDataVisualizationSidebar.extend({
+    className:"tabular_data_visualization_heatmap_sidebar",
 
     postRender:function () {
         this.$(".x_axis option:eq(0)").attr('selected', 'selected');

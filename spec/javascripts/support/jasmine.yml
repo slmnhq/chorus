@@ -33,7 +33,7 @@ src_files:
   - js/alerts.js
   - js/presenters.js
   - js/views/sidebar_view.js
-  - js/views/tabular_data/dataset_visualization_sidebar.js
+  - js/views/tabular_data/tabular_data_visualization_sidebar.js
   - js/views/database_sidebar_list_view.js
   - js/views/utilities/code_editor_view.js
   - js/views/workfiles/workfile_content_details_view.js
