@@ -14,6 +14,7 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
     setup: function() {
         chorus.PageEvents.subscribe("tabularData:selected", this.setTabularData, this);
         chorus.PageEvents.subscribe("column:selected", this.setColumn, this);
+        chorus.PageEvents.subscribe("importSchedule:changed", this.updateImportSchedule, this);
         this.tabControl = new chorus.views.TabControl([
             {name: 'activity', selector: ".activity_list"},
             {name: 'statistics', selector: ".statistics_detail"}
@@ -169,5 +170,10 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
         if (tabularData.get("objectType")) { keys.push(tabularData.get("objectType")); }
         var key = keys.join(".");
         return t(key);
+    },
+
+    updateImportSchedule: function(importConfiguration) {
+        this.importConfiguration = importConfiguration;
+        this.render();
     }
 });

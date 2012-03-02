@@ -338,6 +338,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
                         context("when the save completes", function() {
                             beforeEach(function() {
+                                spyOn(chorus.PageEvents, 'broadcast');
                                 spyOn(chorus, "toast");
                                 spyOn(this.dialog, "closeModal");
                                 this.dialog.model.trigger("saved");
@@ -345,6 +346,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
                             it("displays the right toast message", function() {
                                 expect(chorus.toast).toHaveBeenCalledWith("import.schedule.toast");
+                            });
+
+                            it("triggers a importSchedule:changed event", function() {
+                                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("importSchedule:changed", this.dialog.model);
                             });
                         });
                     });

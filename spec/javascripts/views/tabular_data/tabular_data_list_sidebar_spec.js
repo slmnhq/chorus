@@ -597,6 +597,18 @@ describe("chorus.views.TabularDataListSidebar", function() {
                 });
             });
         });
+
+        describe("when importSchedule:changed is triggered", function() {
+            beforeEach(function() {
+                this.newImport = fixtures.importConfiguration();
+                spyOn(this.view, 'render').andCallThrough();
+                chorus.PageEvents.broadcast("importSchedule:changed", this.newImport);
+            })
+            it("updates the importConfiguration and renders", function() {
+                expect(this.view.importConfiguration).toBe(this.newImport);
+                expect(this.view.render).toHaveBeenCalled();
+            })
+        })
     });
 
     describe("#datasetType", function() {

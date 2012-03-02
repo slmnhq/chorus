@@ -183,6 +183,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         } else {
             chorus.toast("import.success");
         }
+        chorus.PageEvents.broadcast('importSchedule:changed', this.model);
         this.closeModal();
     },
 
