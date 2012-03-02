@@ -130,6 +130,7 @@ describe("chorus.views.SearchUserList", function() {
                 });
 
                 it("display the show-more link", function() {
+                    expect(this.view.$(".showMoreSupportingMessage")).toContainTranslation("search.comments_more.and");
                     expect(this.view.$(".showMoreSupportingMessage")).toContainTranslation("search.comments_more.other", {count:2});
                     expect(this.view.$(".hideMoreSupportingMessage")).toContainTranslation("search.comments_less");
 

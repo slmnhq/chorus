@@ -31,7 +31,7 @@ chorus.views.SearchUserList = chorus.views.Base.extend({
 
     collectionModelContext: function(model) {
         var supportingMessage = _.compact(_.map(
-            ["title", "ou", "emailAddress", "name", "content"],
+            ["title", "ou", "content", "emailAddress", "name"],
             function(fieldName) {
                 var value = model.get(fieldName);
                 if (value) {

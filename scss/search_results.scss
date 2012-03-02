@@ -70,7 +70,17 @@
             @include font-normal-alpha;
         }
 
-        .comments, .moreComments {
+        .showMoreSupportingMessage, .hideMoreSupportingMessage {
+            font-size: 12px;
+            padding-top: 5px;
+            display: inline-block;
+
+            .and {
+                @include results-console-message;
+            }
+        }
+
+        .comments, .moreComments{
             @include font-content-details;
             margin: 0;
 
