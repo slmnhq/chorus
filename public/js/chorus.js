@@ -176,7 +176,24 @@ window.Chorus = function chorus$Global() {
             formElementParams[uniqueId] = format;
         });
 
-        _.defer(function() { datePickerController.createDatePicker({ formElements: formElementParams, dragDisabled: true }) });
+        _.defer(function() {
+            datePickerController.createDatePicker({
+                formElements: formElementParams,
+                dragDisabled: true,
+                callbackFunctions: {
+                    "datereturned": [], // documented but never fires, so we do the following _.defer instead
+                    "dateset": [
+                        function() {
+                            _.defer(function() {
+                                for (formElement in formElementParams) {
+                                    $("#" + formElement).trigger("paste");
+                                }
+                            })
+                        }
+                    ]
+                }
+            });
+        });
     };
 
     self.placeholder = function(element) {
