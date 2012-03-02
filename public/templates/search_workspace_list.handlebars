@@ -26,7 +26,11 @@
                             {{#if isInsight}}
                                 {{t "insight.title"}}:
                             {{else}}
-                                {{t "activity_stream.comment"}}:
+                                {{#if isComment}}
+                                    {{t "activity_stream.comment"}}:
+                                {{else}}
+                                    {{t "activity_stream.note"}}:
+                                {{/if}}
                             {{/if}}
                             </span>
 
