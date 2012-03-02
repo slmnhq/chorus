@@ -459,4 +459,7 @@
         $('#jasmine_content').empty();
     }
 
+    if (window.location.search.indexOf("profile=") != -1) {
+        jasmine.getEnv().addReporter(new jasmine.ProfileReporter())
+    }
 })();
