@@ -1,29 +1,24 @@
 chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
     className:"workspace_show_sidebar",
 
+    subviews: {
+        ".workspace_member_list": "workspaceMemberList"
+    },
+
     setup:function () {
         this.bindings.add(this.model, "image:change", this.render);
         this.model.members().fetch();
         this.bindings.add(this.model.members(), "reset", this.render);
+        this.workspaceMemberList = new chorus.views.WorkspaceMemberList();
+        this.workspaceMemberList.setWorkspace(this.model);
     },
-
-    numMembers:24,
 
     additionalContext:function () {
         return {
             workspaceAdmin:this.model.workspaceAdmin(),
             imageUrl:this.model.imageUrl() + "&buster=" + (new Date().getTime()),
             hasImage:this.model.hasImage(),
-            hasSandbox:!!this.model.sandbox(),
-            members:this.model.members().chain().first(this.numMembers).map(
-                function (member) {
-                    return {
-                        imageUrl:member.imageUrl({size:'icon'}),
-                        showUrl:member.showUrl(),
-                        displayName:member.displayName()
-                    };
-                }).value(),
-            extra_members:Math.max(this.model.members().length - this.numMembers, 0)
+            hasSandbox:!!this.model.sandbox()
         };
     },
 

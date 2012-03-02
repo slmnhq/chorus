@@ -145,62 +145,9 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
             expect(this.view.$("a[data-dialog=InsightsNew]").attr("data-workspace-id")).toBe(this.model.get("id"))
         });
 
-        describe("the members list", function() {
-            var members;
-            beforeEach(function() {
-                members = this.model.members();
-                _.times(3, function() {
-                    members.add(fixtures.user());
-                });
-                this.view.render();
-            });
-
-            it("includes an image for each member", function() {
-                var images = this.view.$(".members img");
-                expect(images.length).toBe(3);
-                expect(images.eq(0).attr("src")).toBe(members.models[0].imageUrl({ size: 'icon' }));
-                expect(images.eq(1).attr("src")).toBe(members.models[1].imageUrl({ size: 'icon' }));
-                expect(images.eq(2).attr("src")).toBe(members.models[2].imageUrl({ size: 'icon' }));
-            });
-
-            it("has a title for each member that is their display Name", function() {
-                var links = this.view.$(".members li a");
-                expect(links.eq(0).attr("title")).toBe(members.models[0].displayName());
-                expect(links.eq(1).attr("title")).toBe(members.models[1].displayName());
-                expect(links.eq(2).attr("title")).toBe(members.models[2].displayName());
-            })
-
-            it("includes a link to each member's page", function() {
-                var links = this.view.$(".members li a");
-                expect(links.length).toBe(3);
-                expect(links.eq(0).attr("href")).toBe(members.models[0].showUrl());
-                expect(links.eq(1).attr("href")).toBe(members.models[1].showUrl());
-                expect(links.eq(2).attr("href")).toBe(members.models[2].showUrl());
-            });
-
-            it("does not have the more workspace members link", function() {
-                expect(this.view.$(".members a.dialog[data-dialog=WorkspaceMembersMore]").length).toBe(0)
-            })
-
-            context("when there are more than 24 members", function() {
-                beforeEach(function() {
-                    _.times(25, function() {
-                        members.add(fixtures.user());
-                    });
-                    this.view.render();
-                });
-
-                it("only shows the first 24 images", function() {
-                    expect(this.view.$(".members img").length).toBe(24);
-                });
-
-                it("has a X more workspace members link", function() {
-                    expect(this.view.$(".members a.dialog[data-dialog=WorkspaceMembersMore]").length).toBe(1)
-                });
-
-
-            });
-        });
+        it("should have a members list subview", function() {
+            expect(this.view.$(".workspace_member_list")[0]).toBe(this.view.workspaceMemberList.el);
+        })
     });
 
     describe("#post_render", function() {

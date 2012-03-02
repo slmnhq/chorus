@@ -22,16 +22,5 @@
         </ul>
     </div>
 
-    <div class="members">
-        <ul>
-            {{#each members}}
-                <li>
-                    <a href="{{{showUrl}}}" title="{{displayName}}"><img class="profile" src="{{{imageUrl}}}"/></a>
-                </li>
-            {{/each}}
-        </ul>
-        {{#if extra_members}}
-        <a class="dialog" href="#" data-dialog="WorkspaceMembersMore">{{t "workspace.members_more" count=extra_members}}</a>
-        {{/if}}
-    </div>
+    <div class="workspace_member_list"></div>
 </div>
