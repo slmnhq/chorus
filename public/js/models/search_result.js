@@ -22,6 +22,10 @@ chorus.models.SearchResult = chorus.models.Base.extend({
         return new chorus.collections.WorkfileSet(workfiles);
     },
 
+    tabularData: function() {
+        return new chorus.collections.TabularDataSet(this.get("dataset").docs, {total: this.get("dataset").numFound});
+    },
+
     workspaces: function() {
         var workspaces = _.map(this.get("workspace").docs, function(workspaceJson) {
             workspaceJson.fileName = $.stripHtml(workspaceJson.name);

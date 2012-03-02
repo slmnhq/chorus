@@ -105,6 +105,16 @@ describe("chorus.models.DatabaseObject", function() {
                 expect(this.databaseObject.showUrl()).toMatchUrl(url);
             });
         });
+
+        context("when it contains html", function() {
+            beforeEach(function() {
+                this.databaseObject = fixtures.databaseTable({objectName: '<em>mmmm</em> good'});
+            })
+
+            it("removes the html", function() {
+                expect(this.databaseObject.showUrl()).toMatchUrl("#/instances/12/database/database_name/schema/schema_name/BASE_TABLE/mmmm good");
+            })
+        })
     })
 
     describe("when the 'invalidated' event is triggered", function() {

@@ -1,0 +1,25 @@
+<div class="details">
+    <div class="right">
+        {{#if moreResults}}
+            <span class="count">{{t "search.count" shown=shown total=total}}</span>
+            <a class="show_all" href="#">{{t "search.show_all"}}</a>
+        {{else}}
+            <span class="count">{{t "search.count_short" shown=shown}}</span>
+        {{/if}}
+    </div>
+    <span class="title">{{t "dataset.title_plural"}}</span>
+</div>
+
+<ul>
+    {{#each models}}
+        <li class="result_item" data-id={{id}}>
+            <div class="spacer left"></div>
+            <img class="icon" src="{{iconUrl}}"></img>
+            <div class="description">
+                <a class="name" href="{{showUrl}}">{{{objectName}}}</a>
+                <div class="location">{{{tabularDataLocation model}}}</div>
+            </div>
+            <div class="spacer right"></div>
+        </li>
+    {{/each}}
+</ul>

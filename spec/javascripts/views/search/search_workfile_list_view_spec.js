@@ -11,7 +11,7 @@ describe("chorus.views.SearchWorkfileList", function() {
                     ]
                 },
                 {id: "4", workspace: {id: "3", name: "Other"}, fileType: "txt",
-                    description: "this is a <EM>cool</EM> file description",
+                    description: "this is a <EM>cool</EM> file description"
                 }
             ]),
             total: "24"
@@ -97,14 +97,14 @@ describe("chorus.views.SearchWorkfileList", function() {
         });
 
         it("shows which workspace each result was found in", function() {
-            expect(this.view.$("li .found_in_workspace:eq(0) a").attr('href')).toBe('#/workspaces/2');
-            expect(this.view.$("li .found_in_workspace:eq(1) a").attr('href')).toBe('#/workspaces/3');
+            expect(this.view.$("li .location:eq(0) a").attr('href')).toBe('#/workspaces/2');
+            expect(this.view.$("li .location:eq(1) a").attr('href')).toBe('#/workspaces/3');
 
-            expect(this.view.$('li .found_in_workspace').eq(0)).toContainTranslation(
+            expect(this.view.$('li .location').eq(0)).toContainTranslation(
                 "search.found_in_workspace",
                 {workspaceLink: "Test"}
             )
-            expect(this.view.$('li .found_in_workspace').eq(1)).toContainTranslation(
+            expect(this.view.$('li .location').eq(1)).toContainTranslation(
                 "search.found_in_workspace",
                 {workspaceLink: "Other"}
             )

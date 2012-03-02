@@ -1,15 +1,17 @@
 describe("chorus.models.SearchResult", function() {
-    beforeEach(function() {
-        this.model = new chorus.models.SearchResult({query: "the longest query in the world"})
-    });
+    describe("#shortName", function() {
+        beforeEach(function() {
+            this.model = new chorus.models.SearchResult({query: "the longest query in the world"})
+        });
 
-    it("returns a short name", function() {
-        expect(this.model.displayShortName()).toBe("the longest query in...")
+        it("returns a short name", function() {
+            expect(this.model.displayShortName()).toBe("the longest query in...")
+        });
     });
 
     describe("#workfiles", function() {
         beforeEach(function() {
-            this.model.set({
+            this.model = fixtures.searchResult({
                 workfile: {
                     numFound: 3,
                     docs: [
@@ -72,5 +74,21 @@ describe("chorus.models.SearchResult", function() {
             expect(this.workfiles.models[0].comments.at(1).get("isInsight")).toBeFalsy();
             expect(this.workfiles.models[0].comments.at(2).get("isInsight")).toBeTruthy();
         });
+    });
+
+    describe("#tabularData", function() {
+        beforeEach(function() {
+            this.model = fixtures.searchResult();
+            this.tabularData = this.model.tabularData();
+        });
+
+        it("returns a collection of tabular data", function() {
+            expect(this.tabularData.length).toBe(10);
+            expect(this.tabularData).toBeA(chorus.collections.TabularDataSet);
+        });
+
+        it("has numFound in 'total'", function() {
+            expect(this.tabularData.attributes.total).toBe(this.model.get('dataset').numFound);
+        })
     });
 })

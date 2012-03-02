@@ -2377,21 +2377,25 @@ beforeEach(function() {
                             "comments": []
                         },
                         {
-                            "schemaName": "public",
-                            "parentType": "gpdb_10000_data_types",
-                            "objectType": "BASE_TABLE",
-                            "id": "10000|data_types|public|BASE_TABLE|bigint",
-                            "databaseName": "data_types",
-                            "objectName": "bigint",
-                            "isDeleted": false,
-                            "description": "(Total 10) This is a <em>test<\/em> of long table description 1. This is a <em>test<\/em> of long table description 2",
-                            "entityType": "databaseObject",
-                            "instance": {
-                                "id": "10000",
-                                "name": "gillette"
+                            compositeId: "10000|dca_demo|ddemo|QUERY|cv_us_president",
+                            content: "SELECT * FROM <em>test</em> AS a",
+                            databaseName: "dca_demo",
+                            datasetType: "CHORUS_VIEW",
+                            entityType: "chorusView",
+                            id: "10010",
+                            instance: {
+                                id: '10000',
+                                name: 'gillette'
                             },
-                            "workspaces": [],
-                            "comments": []
+                            isDeleted: false,
+                            objectName: "cv_us_president",
+                            objectType: "QUERY",
+                            schemaName: "ddemo",
+                            workspace: {
+                                id: '10000',
+                                name: 'New Workspace'
+                            },
+                            comments: []
                         },
                         {
                             "schemaName": "analytics",
