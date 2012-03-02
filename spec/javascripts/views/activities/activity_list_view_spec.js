@@ -183,4 +183,10 @@ describe("chorus.views.ActivityList", function() {
         })
 
     });
+
+    it("can handle errors in an activity item", function() {
+        this.collection.models.push({});
+        this.view.render();
+        expect("we didn't blow up").toBeTruthy();
+    });
 });
