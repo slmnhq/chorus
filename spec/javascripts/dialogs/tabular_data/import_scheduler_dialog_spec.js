@@ -213,6 +213,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         ]);
                     });
 
+                    it("initially has no errors", function() {
+                        expect(this.dialog.$(".has_error")).not.toExist();
+                    });
+
                     it("has the right title", function() {
                         expect(this.dialog.title).toMatchTranslation("import.title_edit_schedule");
                     });
@@ -344,6 +348,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
                             fixtures.datasetSandboxTable({ objectName: "not_my_table", id: "10000|dca_demo|ddemo|BASE_TABLE|not_my_table" }),
                             fixtures.datasetSandboxTable({ objectName: "her_table", id: "10000|dca_demo|ddemo|BASE_TABLE|her_table" })
                         ]);
+                    });
+
+                    it("initially has no errors", function() {
+                        expect(this.dialog.$(".has_error")).not.toExist();
                     });
 
                     it("has the 'schedule' checkbox unchecked by default", function() {
