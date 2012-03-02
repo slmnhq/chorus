@@ -21,7 +21,7 @@
                 <input class="row_limit" type="text" name="sampleCount" disabled="disabled" value="500"/>
             </div>
             {{#if showSchedule}}
-                <div class="row schedule_import">
+                <div class="row schedule_import{{#if hideScheduleCheckbox}} hidden{{/if}}">
                     <input type="checkbox" name="schedule" id="import_scheduler_schedule_new"/>
                     <label for="import_scheduler_schedule_new">{{t "import.schedule_import"}}</label>
                 </div>
@@ -59,7 +59,7 @@
             </div>
 
             {{#if showSchedule}}
-                <div class="row schedule_import">
+                <div class="row schedule_import{{#if hideScheduleCheckbox}} hidden{{/if}}">
                     <input type="checkbox" name="schedule" id="import_scheduler_schedule_existing"/>
                     <label for="import_scheduler_schedule_existing">{{t "import.schedule_import"}}</label>
                 </div>

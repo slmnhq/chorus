@@ -96,7 +96,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
             it("should have a checkbox for scheduling an import", function() {
                 expect(this.dialog.$(".schedule_import label")).toContainTranslation("import.schedule_import");
                 expect(this.dialog.$(".schedule_import input:checkbox")).toBeChecked();
-                expect(this.dialog.$(".schedule_import input:checkbox")).toBeDisabled();
+                expect(this.dialog.$(".schedule_import").not(".hidden")).not.toExist();
             });
 
             it("should set executeAfterSave to be false on the DatasetImport", function() {
@@ -273,6 +273,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
                             fixtures.datasetSandboxTable({ objectName: "my_table", id: "10000|dca_demo|ddemo|BASE_TABLE|my_table" }),
                             fixtures.datasetSandboxTable({ objectName: "her_table", id: "10000|dca_demo|ddemo|BASE_TABLE|her_table" })
                         ]);
+                    });
+
+                    it("has a visible schedule_import checkbox", function() {
+                        expect(this.dialog.$(".schedule_import.hidden")).not.toExist();
                     });
 
                     it("has the right title", function() {
