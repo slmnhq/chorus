@@ -53,7 +53,7 @@
                     }
                 }
             );
-            this.sidebar = new chorus.views.WorkfileListSidebar({model:workspace});
+            this.sidebar = new chorus.views.WorkfileListSidebar({workspace:workspace});
 
             this.mainContent.content.forwardEvent("workfile:selected", this.sidebar);
             this.mainContent.content.bind("workfile:selected", this.setModel, this);

@@ -54,6 +54,10 @@ describe("chorus.pages.SearchIndexPage", function() {
                 it("does not show the 'add a note' link in the sidebar", function() {
                     expect(this.page.sidebar.$("a[data-dialog='NotesNew']")).not.toExist()
                 })
+
+                it("sets the page model to that workfile", function() {
+                    expect(this.page.model).toBe(this.page.mainContent.content.workfileList.collection.at(1));
+                })
             });
         });
 
@@ -66,11 +70,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 expect(this.workspaceLis.length).toBeGreaterThan(0);
             });
 
-            xit("selects the first workspace by default", function() {
-                expect(this.workspaceLis.eq(0)).toHaveClass("selected");
-            });
-
-            xdescribe("clicking on a workspace search result", function() {
+            describe("clicking on a workspace search result", function() {
                 beforeEach(function() {
                     this.workspaceLis.eq(1).trigger("click");
                 });
@@ -80,7 +80,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 });
 
                 it("shows that workspace in the sidebar", function() {
-                    expect(this.page.sidebar.$("h1")).toHaveText("other_ws");
+                    expect(this.page.sidebar.$(".info .name")).toHaveText("other_ws");
                 });
 
                 it("show the 'add a note' link in the sidebar", function() {
@@ -88,7 +88,11 @@ describe("chorus.pages.SearchIndexPage", function() {
                 })
 
                 it("show the 'add an insight' link in the sidebar", function() {
-                    expect(this.page.sidebar.$("a[data-dialog='InsightNew']")).toExist()
+                    expect(this.page.sidebar.$("a[data-dialog='InsightsNew']")).toExist()
+                })
+
+                it("sets the page model to that workfile", function() {
+                    expect(this.page.model).toBe(this.page.mainContent.content.workspaceList.collection.at(1));
                 })
             });
         });

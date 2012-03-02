@@ -9,7 +9,6 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         this.model = new chorus.models.SearchResult({query: query});
         this.requiredResources.add(this.model);
         this.model.fetch();
-        chorus.PageEvents.subscribe("workspace:selected", this.workspaceSelected, this);
     },
 
     resourcesLoaded: function() {
@@ -28,6 +27,8 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
             workspace: new chorus.views.WorkspaceListSidebar()
         };
 
+        // explicitly set up bindings after initializing sidebar collection
+        chorus.PageEvents.subscribe("workspace:selected", this.workspaceSelected, this);
         this.mainContent.content.bind("workfile:selected", this.workfileSelected, this);
     },
 
@@ -38,6 +39,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
     renderSidebar: function(sidebar) {
         this.sidebar && $(this.sidebar.el).removeClass("workspace_list_sidebar dataset_list_sidebar workfile_list_sidebar");
         this.sidebar = sidebar;
+        this.model = this.sidebar.model;
         this.renderSubview('sidebar');
         this.trigger('resized');
     },

@@ -9,7 +9,7 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
     },
 
     setWorkfile:function (workfile) {
-        this.workfile = workfile;
+        this.model = this.workfile = workfile;
         if (this.workfile) {
             this.collection = this.workfile.activities();
             this.bindings.add(this.collection, "reset", this.render);
@@ -35,7 +35,11 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
     },
 
     additionalContext:function () {
-        var ctx = { canUpdate: this.model && this.model.canUpdate() , hideAddNoteLink: this.options.hideAddNoteLink };
+        var ctx = {
+            canUpdate: this.options.workspace && this.options.workspace.canUpdate(),
+            hideAddNoteLink: this.options.hideAddNoteLink
+        };
+
         if (this.workfile) {
             var modifier = this.workfile.modifier();
             var attributes = _.extend({}, this.workfile.attributes);
