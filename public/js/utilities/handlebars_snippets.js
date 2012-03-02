@@ -267,6 +267,25 @@
             }
 
             return result.outerHtml()
+        },
+
+        tabularDataLocation: function(tabularData) {
+            var schemaPieces = [];
+            if(tabularData.get('hasCredentials') === false) {
+                schemaPieces.push(tabularData.get('instance').name);
+                schemaPieces.push(tabularData.get('databaseName'));
+                schemaPieces.push(tabularData.get('schemaName'));
+            } else {
+                schemaPieces.push(chorus.helpers.linkTo('#', tabularData.get('instance').name,
+                    {'class': 'dialog instance', 'data-dialog': 'SchemaBrowser'}))
+
+                schemaPieces.push(chorus.helpers.linkTo('#', tabularData.get('databaseName'),
+                    {'class': 'dialog database', 'data-dialog': 'SchemaBrowser', 'data-database-name': tabularData.get("databaseName")}))
+
+                schemaPieces.push(chorus.helpers.linkTo(tabularData.schema().showUrl(), tabularData.get('schemaName'),
+                    {'class': 'schema'}))
+            }
+            return $("<span></span>").html(t("dataset.from", {location: schemaPieces.join('.')})).outerHtml();
         }
     }
 

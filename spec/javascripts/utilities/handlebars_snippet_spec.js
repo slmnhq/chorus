@@ -672,6 +672,42 @@ describe("handlebars", function() {
                 });
             }
         });
+
+        describe("tabularDataLocation", function() {
+            beforeEach(function() {
+                this.model = fixtures.tabularData();
+                this.result = Handlebars.helpers.tabularDataLocation(this.model);
+            });
+
+            it("includes the from text", function() {
+                expect($(this.result)).toContainTranslation('dataset.from', {location: ''});
+            })
+
+            it("includes the instance name, database name, and schema name", function() {
+                expect($(this.result).find("a.instance")).toContainText(this.model.get("instance").name);
+                expect($(this.result).find("a.instance").data("dialog")).toBe("SchemaBrowser");
+
+                expect($(this.result).find("a.database")).toContainText(this.model.get("databaseName"));
+                expect($(this.result).find("a.instance").data("dialog")).toBe("SchemaBrowser");
+
+                expect($(this.result).find("a.schema")).toContainText(this.model.get("schemaName"));
+                expect($(this.result).find("a.schema").attr("href")).toMatchUrl(this.model.schema().showUrl());
+            });
+
+            context("when credentials are not present", function() {
+                beforeEach(function() {
+                    this.model = fixtures.tabularData({hasCredentials: false})
+                    this.result = Handlebars.helpers.tabularDataLocation(this.model);
+                });
+
+                it("includes the instance name, database name, and schema name", function() {
+                    expect($(this.result)).toContainText(this.model.get("instance").name);
+                    expect($(this.result)).toContainText(this.model.get("databaseName"));
+                    expect($(this.result)).toContainText(this.model.get("schemaName"));
+                    expect($(this.result).find('a')).not.toExist();
+                });
+            });
+        });
     });
 
     describe("partials", function() {
