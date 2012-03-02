@@ -45,7 +45,7 @@ chorus.views.SearchWorkfileList = chorus.views.Base.extend({
             comments: comments.slice(0, 3),
             moreComments: comments.slice(3),
             hasMoreComments: Math.max(0, comments.length - 3),
-            workspaces: {workspaceList: [model.workspace().attributes], workspaceCount: 1}
+            workspaces: [model.workspace().attributes]
         }
     }
 });

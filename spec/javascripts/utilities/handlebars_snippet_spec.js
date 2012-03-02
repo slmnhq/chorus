@@ -597,11 +597,8 @@ describe("handlebars", function() {
 
             context("when there aren't any 'found in' workspaces", function() {
                 beforeEach(function() {
-                    this.workspaceUsed = {
-                        workspaceList: [],
-                        workspaceCount: 0
-                    }
-                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceUsed);
+                    this.workspaceList = [];
+                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList);
                 });
 
                 it("does not render", function() {
@@ -611,11 +608,10 @@ describe("handlebars", function() {
 
             context("when there is exactly 1 'found in' workspace", function() {
                 beforeEach(function() {
-                    this.workspaceUsed = {
-                        workspaceList: [fixtures.nestedWorkspaceJson()],
-                        workspaceCount: 1
-                    }
-                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceUsed);
+                    this.workspaceList = [
+                        fixtures.nestedWorkspaceJson()
+                    ];
+                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList);
                 });
                 itIncludesTheFoundInWorkspaceInformation();
 
@@ -626,11 +622,11 @@ describe("handlebars", function() {
 
             context("when there are exactly 2 'found in' workspaces", function() {
                 beforeEach(function() {
-                    this.workspaceUsed = {
-                        workspaceList: [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()],
-                        workspaceCount: 2
-                    }
-                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceUsed);
+                    this.workspaceList = [
+                        fixtures.nestedWorkspaceJson(),
+                        fixtures.nestedWorkspaceJson()
+                    ];
+                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList);
                 });
 
                 itIncludesTheFoundInWorkspaceInformation();
@@ -642,11 +638,12 @@ describe("handlebars", function() {
 
             context("when there are exactly 3 'found in' workspaces", function() {
                 beforeEach(function() {
-                    this.workspaceUsed = {
-                        workspaceList: [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()],
-                        workspaceCount: 3
-                    }
-                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceUsed);
+                    this.workspaceList = [
+                        fixtures.nestedWorkspaceJson(),
+                        fixtures.nestedWorkspaceJson(),
+                        fixtures.nestedWorkspaceJson()
+                    ];
+                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList);
                 });
 
                 itIncludesTheFoundInWorkspaceInformation();
@@ -658,7 +655,7 @@ describe("handlebars", function() {
                 it("includes a menu to the other workspaces", function() {
                     expect($(this.result).find("a.open_other_menu")).toExist();
                     expect($(this.result).find(".other_menu li").length).toBe(2);
-                    var workspace = new chorus.models.Workspace(this.workspaceUsed.workspaceList[1]);
+                    var workspace = fixtures.workspace(this.workspaceList[1]);
                     expect($(this.result).find(".other_menu li a:eq(0)")).toHaveAttr('href', workspace.showUrl())
                     expect($(this.result).find(".other_menu li a:eq(0)")).toContainText(workspace.get('name'))
                 })
@@ -666,7 +663,7 @@ describe("handlebars", function() {
 
             function itIncludesTheFoundInWorkspaceInformation() {
                 it("includes the 'found in workspace' information", function() {
-                    var workspace = new chorus.models.Workspace(this.workspaceUsed.workspaceList[0]);
+                    var workspace = new chorus.models.Workspace(this.workspaceList[0]);
                     expect($(this.result).find("a").attr("href")).toMatchUrl(workspace.showUrl());
                     expect($(this.result).find("a")).toContainText(workspace.get('name'));
                 });

@@ -15,7 +15,7 @@
     var headerView = chorus.views.ListHeaderView.extend({
         postRender: function() {
             this._super('postRender', arguments);
-            this.$('.menus').after(chorus.helpers.usedInWorkspaces(this.model.get("workspaceUsed")));
+            this.$('.menus').after(chorus.helpers.usedInWorkspaces(this.model.get("workspaceUsed").workspaceList));
         }
     })
 

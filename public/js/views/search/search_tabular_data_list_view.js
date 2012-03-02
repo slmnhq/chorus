@@ -28,7 +28,7 @@ chorus.views.SearchTabularDataList = chorus.views.Base.extend({
 
         var workspaces = model.get("workspaces");
         if (workspaces && workspaces.length > 0) {
-            context.workspacesUsed = { workspaceList: workspaces, workspaceCount: workspaces.length }
+            context.workspaces = workspaces;
         }
 
         return context;
