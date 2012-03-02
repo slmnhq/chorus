@@ -371,6 +371,22 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
 
     describe("import now!", function() {
+        context("with an existing import", function() {
+            beforeEach(function() {
+                this.launchElement.addClass("import_now");
+                this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+                spyOn(this.dialog.model, "isNew").andReturn(false)
+                this.dialog.render();
+                this.server.completeFetchAllFor(this.dialog.sandboxTables, [fixtures.datasetSandboxTable(), fixtures.datasetSandboxTable()]);
+                this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
+                expect(this.dialog.$("button.submit")).toBeEnabled();
+            });
+            it("does a post when the form is submitted", function() {
+                this.dialog.$("button.submit").click();
+                expect(this.server.lastCreate().url).toContain('import');
+            });
+        });
+
         beforeEach(function() {
             this.launchElement.addClass("import_now");
             this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});

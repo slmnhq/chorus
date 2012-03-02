@@ -167,7 +167,13 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         } else {
             this.$("button.submit").startLoading("import.importing");
         }
-        this.model.save(this.getNewModelAttrs());
+
+        saveOptions = {};
+        if (this.options.launchElement.hasClass("import_now")){
+            saveOptions.method = "create";
+        }
+
+        this.model.save(this.getNewModelAttrs(), saveOptions);
     },
 
     importSaved: function() {
