@@ -12,6 +12,12 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
         if (newAttrs.useLimitRows) {
             this.requirePositiveInteger("sampleCount", newAttrs);
         }
+
+        if (newAttrs.activateSchedule) {
+            if (newAttrs.scheduleStartTime > newAttrs.scheduleEndTime) {
+                this.setValidationError("year", "import.schedule.error.start_date_must_precede_end_date", null, newAttrs);
+            }
+        }
     },
 
     beforeSave: function(attrs) {

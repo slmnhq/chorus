@@ -12,8 +12,8 @@
             <input type="hidden" name="truncate" value="false"/>
             <input type="hidden" name="isNewTable" value="true"/>
             <div class="row">
-                <input type="checkbox" class="truncate" name="truncate" id="import_scheduler_truncate"/>
-                <label for="import_scheduler_truncate">{{t "import.truncate"}}</label>
+                <input type="checkbox" class="truncate" name="truncate" id="import_scheduler_truncate_new"/>
+                <label for="import_scheduler_truncate_new">{{t "import.truncate"}}</label>
             </div>
             <div class="row limit">
                 <input type="checkbox" name="limit_num_rows" id="import_scheduler_limit_rows_new"/>
@@ -22,8 +22,8 @@
             </div>
             {{#if showSchedule}}
                 <div class="row schedule_import">
-                    <input type="checkbox" name="schedule" id="import_scheduler_schedule"/>
-                    <label for="import_scheduler_schedule">{{t "import.schedule_import"}}</label>
+                    <input type="checkbox" name="schedule" id="import_scheduler_schedule_new"/>
+                    <label for="import_scheduler_schedule_new">{{t "import.schedule_import"}}</label>
                 </div>
 
                 <div class="schedule_widget">
@@ -49,8 +49,8 @@
         <div class="inputs">
             <input type="hidden" name="isNewTable" value="false"/>
             <div class="row">
-                <input type="checkbox" class="truncate" name="truncate" id="import_scheduler_truncate"/>
-                <label for="import_scheduler_truncate">{{t "import.truncate"}}</label>
+                <input type="checkbox" class="truncate" name="truncate" id="import_scheduler_truncate_existing"/>
+                <label for="import_scheduler_truncate_existing">{{t "import.truncate"}}</label>
             </div>
             <div class="row limit">
                 <input type="checkbox" name="limit_num_rows" id="import_scheduler_limit_rows_existing"/>
@@ -60,8 +60,8 @@
 
             {{#if showSchedule}}
                 <div class="row schedule_import">
-                    <input type="checkbox" name="schedule" id="import_scheduler_schedule"/>
-                    <label for="import_scheduler_schedule">{{t "import.schedule_import"}}</label>
+                    <input type="checkbox" name="schedule" id="import_scheduler_schedule_existing"/>
+                    <label for="import_scheduler_schedule_existing">{{t "import.schedule_import"}}</label>
                 </div>
 
                 <div class="schedule_widget">

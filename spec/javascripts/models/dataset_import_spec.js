@@ -187,4 +187,17 @@ describe("chorus.models.DatasetImport", function() {
         });
 
     });
+
+    it("demands that the start date is before the end date", function() {
+        this.attrs = {
+            activateSchedule: true,
+            scheduleStartTime: "y",
+            scheduleEndTime: "x",
+            toTable: "Foo",
+            sampleCount: "23",
+            truncate: "true",
+            isNewTable: "false"
+        };
+        expect(this.model.performValidation(this.attrs)).toBeFalsy();
+    });
 });
