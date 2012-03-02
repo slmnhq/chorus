@@ -2,6 +2,11 @@ chorus.views.SearchTabularDataList = chorus.views.Base.extend({
     className: "search_tabular_data_list",
     additionalClass: "list",
 
+    events: {
+        "click a.more_comments": "onMoreCommentsClicked",
+        "click a.fewer_comments": "onLessCommentsClicked"
+    },
+
     additionalContext: function() {
         return {
             shown: this.collection.models.length,
@@ -11,9 +16,14 @@ chorus.views.SearchTabularDataList = chorus.views.Base.extend({
     },
 
     collectionModelContext: function(model) {
+        var comments = model.get("comments") || [];
+
         return {
             showUrl: model.showUrl(),
-            iconUrl: model.iconUrl()
+            iconUrl: model.iconUrl(),
+            comments: comments.slice(0, 3),
+            moreCommentCount: Math.max(0, comments.length - 3),
+            moreComments: comments.slice(3)
         }
     },
 
@@ -24,5 +34,17 @@ chorus.views.SearchTabularDataList = chorus.views.Base.extend({
             var $li = lis.eq(index);
             $li.find("a.instance, a.database").data("instance", model.get("instance"));
         });
+    },
+
+    onLessCommentsClicked: function(e) {
+        e.preventDefault();
+        this.$("div.more_comments").addClass("hidden");
+        this.$("a.more_comments").removeClass("hidden");
+    },
+
+    onMoreCommentsClicked: function(e) {
+        e.preventDefault();
+        this.$("a.more_comments").addClass("hidden");
+        this.$("div.more_comments").removeClass("hidden");
     }
 });

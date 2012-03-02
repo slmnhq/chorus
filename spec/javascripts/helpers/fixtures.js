@@ -1344,12 +1344,12 @@ beforeEach(function() {
             }
         },
 
-        commentJson: function() {
-            return {
+        commentJson: function(overrides) {
+            return _.extend({
                 text: "sub-comment 1",
                 author: fixtures.authorJson(),
                 timestamp: "2011-12-15 12:34:56"
-            }
+            }, overrides);
         },
 
         configJson: function(overrides) {
