@@ -287,6 +287,11 @@ window.Chorus = function chorus$Global() {
         }
         return Backbone.Model.extend.call(this, protoProps, classProps);
     }
+
+    self.log = function() {
+        var grossHack = window["con"+"sole"];
+        grossHack && grossHack.log && grossHack.log.apply(grossHack, arguments);
+    }
 }
 
 window.chorus = window.chorus || new Chorus();
