@@ -49,7 +49,7 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
             this.activityList = new chorus.views.ActivityList({
                 collection: activities,
                 additionalClass: "sidebar",
-                displayStyle: this.options.browsingSchema ? ['default'] : ['without_workspace'],
+                displayStyle: ['without_workspace'],
                 type: t("database_object." + tabularData.get('objectType'))
             });
 

@@ -352,8 +352,8 @@ describe("chorus.views.TabularDataListSidebar", function() {
                         expect(this.view.$(".actions .import_now")).not.toExist();
                     });
 
-                    it("prefers only the default type for the activity list", function() {
-                        expect(this.view.activityList.options.displayStyle).toEqual(['default']);
+                    it("prefers only the without_workspace type for the activity list", function() {
+                        expect(this.view.activityList.options.displayStyle).toEqual(['without_workspace']);
                     });
                 });
 
