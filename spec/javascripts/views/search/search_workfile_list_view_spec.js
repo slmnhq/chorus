@@ -101,11 +101,11 @@ describe("chorus.views.SearchWorkfileList", function() {
             expect(this.view.$("li .location:eq(1) a").attr('href')).toBe('#/workspaces/3');
 
             expect(this.view.$('li .location').eq(0)).toContainTranslation(
-                "search.found_in_workspace",
+                "search.found_in_one_workspace",
                 {workspaceLink: "Test"}
             )
             expect(this.view.$('li .location').eq(1)).toContainTranslation(
-                "search.found_in_workspace",
+                "search.found_in_one_workspace",
                 {workspaceLink: "Other"}
             )
         })

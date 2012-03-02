@@ -2415,22 +2415,21 @@ beforeEach(function() {
                             comments: []
                         },
                         {
-                            "schemaName": "analytics",
-                            "parentType": "gpdb_10000_Analytics",
-                            "objectType": "BASE_TABLE",
-                            "id": "10000|Analytics|analytics|BASE_TABLE|test1",
-                            "databaseName": "Analytics",
-                            "objectName": "test1",
-                            "isDeleted": false,
-                            "entityType": "databaseObject",
-                            "instance": {
-                                "id": "10000",
-                                "name": "gillette"
+                            schemaName: "analytics",
+                            parentType: "gpdb_10000_Analytics",
+                            objectType: "BASE_TABLE",
+                            id: "10000|Analytics|analytics|BASE_TABLE|test1",
+                            databaseName: "Analytics",
+                            objectName: "test1",
+                            isDeleted: false,
+                            entityType: "databaseObject",
+                            instance: {
+                                id: "10000",
+                                name: "gillette"
                             },
-                            "workspaces": [{
-                                "id": "10000",
-                                "name": "danny",
-                                "compositeId": "10000|Analytics|analytics|BASE_TABLE|test1"
+                            workspaces: [{
+                                id: "10000",
+                                name: "danny"
                             }],
                             "comments": []
                         },
@@ -2449,8 +2448,7 @@ beforeEach(function() {
                             },
                             "workspaces": [{
                                 "id": "10000",
-                                "name": "danny",
-                                "compositeId": "10000|Analytics|analytics|BASE_TABLE|test2"
+                                "name": "danny"
                             }],
                             "comments": []
                         },
@@ -2469,8 +2467,7 @@ beforeEach(function() {
                             },
                             "workspaces": [{
                                 "id": "10000",
-                                "name": "danny",
-                                "compositeId": "10000|Analytics|analytics|BASE_TABLE|test3"
+                                "name": "danny"
                             }],
                             "comments": []
                         },
@@ -2489,8 +2486,7 @@ beforeEach(function() {
                             },
                             "workspaces": [{
                                 "id": "10000",
-                                "name": "danny",
-                                "compositeId": "10000|Analytics|analytics|BASE_TABLE|test4"
+                                "name": "danny"
                             }],
                             "comments": []
                         },
@@ -2509,8 +2505,7 @@ beforeEach(function() {
                             },
                             "workspaces": [{
                                 "id": "10000",
-                                "name": "danny",
-                                "compositeId": "10000|Analytics|analytics|BASE_TABLE|test5"
+                                "name": "danny"
                             }],
                             "comments": []
                         },
@@ -2529,8 +2524,7 @@ beforeEach(function() {
                             },
                             "workspaces": [{
                                 "id": "10000",
-                                "name": "danny",
-                                "compositeId": "10000|Analytics|analytics|BASE_TABLE|test6"
+                                "name": "danny"
                             }],
                             "comments": []
                         },
@@ -2549,8 +2543,7 @@ beforeEach(function() {
                             },
                             "workspaces": [{
                                 "id": "10000",
-                                "name": "danny",
-                                "compositeId": "10000|Analytics|analytics|BASE_TABLE|test"
+                                "name": "danny"
                             }],
                             "comments": []
                         },
@@ -2569,8 +2562,7 @@ beforeEach(function() {
                             },
                             "workspaces": [{
                                 "id": "10000",
-                                "name": "danny",
-                                "compositeId": "10000|Analytics|analytics|BASE_TABLE|test7"
+                                "name": "danny"
                             }],
                             "comments": []
                         }],
