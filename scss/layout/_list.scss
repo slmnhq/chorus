@@ -13,7 +13,7 @@
         &.selected {
             background: white;
 
-            .spacer {
+            .spacer_left, .spacer_right {
                 background: white;
             }
         }
@@ -22,14 +22,19 @@
             border-bottom: none;
         }
 
-        .spacer {
+        .spacer_left, .spacer_right {
             position: absolute;
             top: 0;
             bottom: 0;
             width: $padding-x;
+        }
 
-            &.left  { left: -$padding-x; }
-            &.right { right: -$padding-x; }
+        .spacer_left {
+            left: -$padding-x;
+        }
+
+        .spacer_right {
+            right: -$padding-x;
         }
 
         .image {

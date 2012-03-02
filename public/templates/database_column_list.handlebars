@@ -1,6 +1,6 @@
 {{#each models}}
     <li {{#if model.selected}}class="selected"{{/if}} data-cid={{model.cid}}>
-        <span class="spacer left"></span>
+        <span class="spacer_left"></span>
         <div class="text right">
             <div class="main">
                 {{#if ../view.showDatasetName}}
@@ -11,6 +11,6 @@
             <div class="summary">{{comment}}</div>
         </div>
         <div class="type {{typeClass}}"><span class="left"/><span class="type_name">{{typeString}}</span><span class="right"/></div>
-        <span class="spacer right"></span>
+        <span class="spacer_right"></span>
     </li>
 {{/each}}
