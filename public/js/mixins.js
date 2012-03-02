@@ -42,9 +42,10 @@ chorus.Mixins.Urls = {
         }
 
         var template = _.isFunction(this.showUrlTemplate) ? this.showUrlTemplate() : this.showUrlTemplate;
+        var attributes = _.isFunction(this.urlTemplateAttributes) ? this.urlTemplateAttributes() : this.attributes;
 
         var prefix = hidePrefix ? '' : "#/"
-        return prefix + Handlebars.compile(template)(this.attributes);
+        return prefix + Handlebars.compile(template)(attributes);
     }
 };
 

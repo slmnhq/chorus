@@ -240,6 +240,21 @@ describe("chorus.Mixins", function() {
                     expect(this.object.showUrl()).toBe("#/my_items/show/45")
                 });
             });
+
+            context("when urlTemplateAttributes exists to modify the attributes", function() {
+                beforeEach(function() {
+                    this.object.showUrlTemplate = "my_items/show/{{id}}";
+                    this.object.urlTemplateAttributes = function() {
+                        return {
+                            id: 46
+                        }
+                    }
+                });
+
+                it("uses the modified attributes", function() {
+                    expect(this.object.showUrl()).toBe('#/my_items/show/46');
+                })
+            })
         });
     });
 
