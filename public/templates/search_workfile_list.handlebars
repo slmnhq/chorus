@@ -42,8 +42,9 @@
                         {{/each}}
                         {{#if hasMoreComments}}
                         <div class='hasMore'>
+                            <span class="and">{{t "search.comments_more.and"}}</span>
                             <a href="#" class="hasMoreLink">
-                                <span class="and">{{t "search.comments_more.and"}}</span>{{t "search.comments_more" count=hasMoreComments}}
+                                {{t "search.comments_more" count=hasMoreComments}}
                             </a>
                         </div>
                         {{/if}}

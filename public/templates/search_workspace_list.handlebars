@@ -18,7 +18,7 @@
                 <img class="icon" src="{{iconUrl}}"></img>
                 <div class="description">
                     <a class="name" href="{{showUrl}}">{{{name}}}</a>
-                    <div class="description_content">{{{description}}}</div>
+                    {{#if description}}<div class="description_content">&#8220;{{{description}}}&#8221;</div>{{/if}}
                     <div class="comments">
                         {{#each comments}}
                         <div class="comment">
@@ -39,6 +39,7 @@
                         {{/each}}
                         {{#if hasMoreComments}}
                         <div class='hasMore'>
+                            <span class="and">{{t "search.comments_more.and"}}</span>
                             <a href="#" class="hasMoreLink">
                                 {{t "search.comments_more" count=hasMoreComments}}
                             </a>

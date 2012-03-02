@@ -9,14 +9,16 @@ chorus.views.SearchWorkspaceList = chorus.views.Base.extend({
 
     showMoreComments: function(evt) {
         evt && evt.preventDefault();
-        $(evt.target).closest("li").find(".moreComments").removeClass("hidden");
-        $(evt.target).addClass("hidden");
+        var $li = $(evt.target).closest("li");
+        $li.find(".hasMore").addClass("hidden");
+        $li.find(".moreComments").removeClass("hidden");
     },
 
     showLessComments: function(evt) {
         evt && evt.preventDefault();
-        $(evt.target).closest("li").find(".moreComments").addClass("hidden");
-        $(evt.target).closest("li").find("a.hasMoreLink").removeClass("hidden");
+        var $li = $(evt.target).closest("li");
+        $li.find(".hasMore").removeClass("hidden");
+        $li.find(".moreComments").addClass("hidden");
     },
 
     additionalContext: function() {
