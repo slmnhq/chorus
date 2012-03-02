@@ -459,4 +459,125 @@ describe("chorus.models.TabularData", function() {
         })
     })
 
+    describe("#makeBoxplotTask", function() {
+        beforeEach(function() {
+            this.task = this.tabularData.makeBoxplotTask({
+                xAxis: "dog_breed",
+                yAxis: "blindness_rate"
+            });
+        });
+
+        it("returns a BoxplotTask model", function() {
+            expect(this.task).toBeA(chorus.models.BoxplotTask);
+        });
+
+        it("has the tabularData", function() {
+            expect(this.task.tabularData).toBe(this.tabularData);
+        });
+    });
+
+    describe("#makeHistogramTask", function() {
+        beforeEach(function() {
+            this.task = this.tabularData.makeHistogramTask({
+                bins: 5,
+                xAxis: "blindness_rate"
+            });
+        });
+
+        it("returns a HistogramTask model", function() {
+            expect(this.task).toBeA(chorus.models.HistogramTask);
+        });
+
+        it("has the given number of bins and y axis", function() {
+            expect(this.task.get("bins")).toBe(5);
+            expect(this.task.get("xAxis")).toBe("blindness_rate");
+        });
+
+        it("has the tabularData", function() {
+            expect(this.task.tabularData).toBe(this.tabularData);
+        });
+    });
+
+    describe("#makeHeatmapTask", function() {
+        beforeEach(function() {
+            this.task = this.tabularData.makeHeatmapTask({
+                xBins: 5,
+                yBins: 6,
+                xAxis: "dog_breed",
+                yAxis: "blindness_rate"
+            });
+        });
+
+        it("returns a HeatmapTask model", function() {
+            expect(this.task).toBeA(chorus.models.HeatmapTask);
+        });
+
+        it("has the given number of bins and y axis", function() {
+            expect(this.task.get("xBins")).toBe(5);
+            expect(this.task.get("yBins")).toBe(6);
+            expect(this.task.get("xAxis")).toBe("dog_breed");
+            expect(this.task.get("yAxis")).toBe("blindness_rate");
+        });
+
+        it("has the tabularData", function() {
+            expect(this.task.tabularData).toBe(this.tabularData);
+        });
+    });
+
+    describe("#makeFrequencyTask", function() {
+        beforeEach(function() {
+            this.task = this.tabularData.makeFrequencyTask({
+                yAxis: "blindness_rate",
+                bins: "12"
+            });
+        })
+
+        it("returns a FrequencyTask model", function() {
+            expect(this.task).toBeA(chorus.models.FrequencyTask);
+        });
+
+        it("has the given y axis", function() {
+            expect(this.task.get("yAxis")).toBe("blindness_rate");
+        });
+
+        it("has the tabularData and bins", function() {
+            expect(this.task.tabularData).toBe(this.tabularData);
+            expect(this.task.get("bins")).toBe("12")
+        });
+    })
+
+    describe("#makeTimeseriesTask", function() {
+        beforeEach(function() {
+            this.task = this.tabularData.makeTimeseriesTask({
+                xAxis: "years",
+                yAxis: "height_in_inches",
+                aggregation: "sum",
+                timeInterval: "minute",
+                timeType: "datetime"
+            });
+        });
+
+        it("returns a TimeseriesTask model", function() {
+            expect(this.task).toBeA(chorus.models.TimeseriesTask);
+        });
+
+        it("has the given x axis", function() {
+            expect(this.task.get("xAxis")).toBe("years");
+            expect(this.task.get("aggregation")).toBe("sum");
+            expect(this.task.get("timeInterval")).toBe("minute");
+        });
+
+        it("has the given y axis", function() {
+            expect(this.task.get("yAxis")).toBe("height_in_inches");
+        });
+
+        it("has the tabularData", function() {
+            expect(this.task.tabularData).toBe(this.tabularData);
+        });
+
+        it("has the right timeType", function() {
+            expect(this.task.get("timeType")).toBe('datetime')
+        })
+    });
+
 });

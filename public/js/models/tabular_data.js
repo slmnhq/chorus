@@ -136,7 +136,7 @@ chorus.models.TabularData = chorus.models.Base.extend({
     },
 
     fromClauseBody: function() {
-        if(this.has("query")) {
+        if (this.has("query")) {
             return "(" + this.get("query") + ")";
         }
         return this.quotedName();
@@ -151,7 +151,7 @@ chorus.models.TabularData = chorus.models.Base.extend({
     },
 
     fromClause: function() {
-        if(this.aliased()) {
+        if (this.aliased()) {
             return this.fromClauseBody() + " AS " + this.alias();
         }
         return this.fromClauseBody();
@@ -159,6 +159,52 @@ chorus.models.TabularData = chorus.models.Base.extend({
 
     isImportable: function() {
         return false;
+    },
+
+    makeBoxplotTask: function(taskAttrs) {
+        return new chorus.models.BoxplotTask({
+            xAxis: taskAttrs.xAxis,
+            yAxis: taskAttrs.yAxis,
+            tabularData: this,
+            bins: taskAttrs.bins
+        });
+    },
+
+    makeFrequencyTask: function(taskAttrs) {
+        return new chorus.models.FrequencyTask({
+            yAxis: taskAttrs.yAxis,
+            tabularData: this,
+            bins: taskAttrs.bins
+        });
+    },
+
+    makeHistogramTask: function(taskAttrs) {
+        return new chorus.models.HistogramTask({
+            bins: taskAttrs.bins,
+            xAxis: taskAttrs.xAxis,
+            tabularData: this
+        });
+    },
+
+    makeHeatmapTask: function(taskAttrs) {
+        return new chorus.models.HeatmapTask({
+            xBins: taskAttrs.xBins,
+            yBins: taskAttrs.yBins,
+            xAxis: taskAttrs.xAxis,
+            yAxis: taskAttrs.yAxis,
+            tabularData: this
+        });
+    },
+
+    makeTimeseriesTask: function(taskAttrs) {
+        return new chorus.models.TimeseriesTask({
+            xAxis: taskAttrs.xAxis,
+            yAxis: taskAttrs.yAxis,
+            aggregation: taskAttrs.aggregation,
+            timeInterval: taskAttrs.timeInterval,
+            tabularData: this,
+            timeType: taskAttrs.timeType
+        });
     }
 }, {
 

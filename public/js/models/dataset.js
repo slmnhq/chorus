@@ -32,52 +32,6 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
         return result;
     },
 
-    makeBoxplotTask: function(taskAttrs) {
-        return new chorus.models.BoxplotTask({
-            xAxis: taskAttrs.xAxis,
-            yAxis: taskAttrs.yAxis,
-            dataset: this,
-            bins : taskAttrs.bins
-        });
-    },
-
-    makeFrequencyTask: function(taskAttrs) {
-        return new chorus.models.FrequencyTask({
-            yAxis: taskAttrs.yAxis,
-            dataset: this,
-            bins: taskAttrs.bins
-        });
-    },
-
-    makeHistogramTask: function(taskAttrs) {
-        return new chorus.models.HistogramTask({
-            bins: taskAttrs.bins,
-            xAxis: taskAttrs.xAxis,
-            dataset: this
-        });
-    },
-
-    makeHeatmapTask: function(taskAttrs) {
-        return new chorus.models.HeatmapTask({
-            xBins: taskAttrs.xBins,
-            yBins: taskAttrs.yBins,
-            xAxis: taskAttrs.xAxis,
-            yAxis: taskAttrs.yAxis,
-            dataset: this
-        });
-    },
-
-    makeTimeseriesTask: function(taskAttrs) {
-        return new chorus.models.TimeseriesTask({
-            xAxis: taskAttrs.xAxis,
-            yAxis: taskAttrs.yAxis,
-            aggregation: taskAttrs.aggregation,
-            timeInterval: taskAttrs.timeInterval,
-            dataset: this,
-            timeType: taskAttrs.timeType
-        });
-    },
-
     tableOrViewTranslationKey: function() {
         return "dataset.types." + this.metaType();
     },
