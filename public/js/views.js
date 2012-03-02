@@ -290,20 +290,21 @@ chorus.views.Base = chorus.views.Bare.extend({
         }
     },
 
-    context: function context() {
+    context: function context(resource) {
+        resource = resource || this.resource;
         var ctx;
         var self = this;
 
-        if (this.resource) {
-            ctx = _.clone(this.resource.attributes);
-            ctx.resource = this.resource;
-            ctx.loaded = this.resource.loaded;
+        if (resource) {
+            ctx = _.clone(resource.attributes);
+            ctx.resource = resource;
+            ctx.loaded = resource.loaded;
             if (this.collection) {
                 ctx.models = _.map(this.collection.models, function(model) {
                     return _.extend({model: model}, model.attributes, self.collectionModelContext(model));
                 });
             }
-            if (this.resource.serverErrors) ctx.serverErrors = this.resource.serverErrors;
+            if (resource.serverErrors) ctx.serverErrors = resource.serverErrors;
             $.extend(ctx, this.additionalContext(ctx));
         } else {
             ctx = this.additionalContext({})
@@ -345,7 +346,7 @@ chorus.views.Base = chorus.views.Bare.extend({
             self.markInputAsInvalid($input, val, isModal);
         });
 
-        this.$(".errors").replaceWith(Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context(), Handlebars.helpers, Handlebars.partials));
+        this.$(".errors").replaceWith(Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context(model), Handlebars.helpers, Handlebars.partials));
     },
 
     markInputAsInvalid: function($input, message, isModal) {

@@ -36,14 +36,12 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     },
 
     additionalContext:function (context) {
-        var accountServerErrors = (this.account && this.account.serverErrors) || [];
         return {
             sharedAccount:!!this.instance.sharedAccount(),
             accountCount:this.collection.reject(
                 function (account) {
                     return account.isNew()
-                }).length,
-            serverErrors:accountServerErrors.concat(context.serverErrors || [])
+                }).length
         };
     },
 

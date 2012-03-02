@@ -423,6 +423,18 @@ describe("chorus.views.Base", function() {
             });
         });
 
+        describe("when passed a resource", function() {
+            beforeEach(function() {
+                this.model = new chorus.models.Base({ bar: "foo"});
+                this.actualResource = new chorus.models.Base({ bar: "bar"});
+                this.view = new chorus.views.Base({ model: this.model });
+            })
+
+            it("uses the provided resource", function() {
+                var context = this.view.context(this.actualResource);
+                expect(context.bar).toBe('bar');
+            })
+        })
     });
 
     describe("validation", function() {

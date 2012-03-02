@@ -169,7 +169,6 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
                 workfile.set(workfile.parse(data.result), {silent: true});
                 if (workfile.serverErrors) {
                     self.showErrors(workfile);
-                    fileChosen(e, data);
                 } else {
                     chorus.toast("dataset.import.workfile_success", {fileName: workfile.get("fileName")});
                     chorus.router.navigate(workfile.showUrl(), true);

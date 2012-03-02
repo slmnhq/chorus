@@ -342,6 +342,34 @@ describe("chorus.dialogs.DatasetImport", function() {
                             expect(chorus.router.navigate).toHaveBeenCalledWith(this.workfile.showUrl(), true);
                         });
                     });
+                    context("when upload fails", function() {
+                        beforeEach(function() {
+                            spyOn(chorus.router, "navigate");
+                            spyOn(chorus, "toast");
+                            this.workfile = fixtures.workfile({id: "23", fileName: "myFile"});
+                            this.data = {
+                                result: {
+                                    resource: [],
+                                    status: "fail",
+                                    message: [
+                                        {message: "Bad File"}
+                                    ]
+                                }
+                            };
+                            this.fileUploadOptions.done(null, this.data)
+
+                        });
+
+                        it("does not present a toast message", function() {
+                            expect(chorus.toast).not.toHaveBeenCalled();
+                        });
+
+                        it("displays the errors", function() {
+                            expect(this.dialog.$('.errors')).toContainText('Bad File');
+                        })
+
+                    });
+
                 })
             })
         });
@@ -402,13 +430,14 @@ describe("chorus.dialogs.DatasetImport", function() {
 
                 context("when the upload fails", function() {
                     beforeEach(function() {
-                        this.data = {result: {
-                            resource: [],
-                            message: [
-                                {message: "You failed"}
-                            ],
-                            status: "fail"
-                        },
+                        this.data = {
+                            result: {
+                                resource: [],
+                                message: [
+                                    {message: "You failed"}
+                                ],
+                                status: "fail"
+                            },
                             files: [
                                 {name: "myfile"}
                             ]
