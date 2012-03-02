@@ -124,7 +124,7 @@ describe("chorus.views.SearchWorkspaceList", function() {
             expect(this.view.$('li').eq(0).find('.moreComments')).toHaveClass("hidden");
 
             this.view.$('li .comments').eq(0).find('.hasMore a.hasMoreLink').click();
-            expect(this.view.$('li .comments').eq(0).find('.hasMore a.hasMoreLink')).toHaveClass("hidden");
+            expect(this.view.$('li .comments').eq(0).find('.hasMore')).toHaveClass("hidden");
 
             expect(this.view.$('li').eq(0).find('.moreComments')).not.toHaveClass("hidden");
         });
@@ -134,7 +134,7 @@ describe("chorus.views.SearchWorkspaceList", function() {
             this.view.$('li .comments').eq(0).find('a.lessComments').click();
 
             expect(this.view.$('li').eq(0).find('.moreComments')).not.toHaveClass("hidden");
-            expect(this.view.$('li .comments').eq(0).find('.hasMore a.hasMoreLink')).toHaveClass("hidden");
+            expect(this.view.$('li .comments').eq(0).find('.hasMore')).toHaveClass("hidden");
         });
 
     });
