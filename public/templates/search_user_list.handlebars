@@ -17,33 +17,75 @@
     <img class="icon" src="{{iconSrc}}"/>
     <div class="description">
         <a class="name" href="{{link}}">{{{displayName}}}</a>
-        <div class="title">
-            {{#if title}}
-                <span class="prefix">{{t "users.title"}}:</span>
-                <span class="content">&#8220;{{{title}}}&#8221;</span>
-            {{/if}}
+        <div class="supportingMessage">
+            {{#each supportingMessage}}
+                {{#if title}}
+                <div class="title">
+                        <span class="prefix">{{t "users.title"}}:</span>
+                        <span class="content">&#8220;{{{title}}}&#8221;</span>
+                </div>
+                {{/if}}
+                {{#if ou}}
+                <div class="ou">
+                        <span class="prefix">{{t "users.department"}}:</span>
+                        <span class="content">&#8220;{{{ou}}}&#8221;</span>
+                </div>
+                {{/if}}
+                {{#if content}}
+                <div class="notes">
+                        <span class="prefix">{{t "users.notes"}}:</span>
+                        <span class="content">&#8220;{{{content}}}&#8221;</span>
+                </div>
+                {{/if}}
+                {{#if emailAddress}}
+                <div class="email">
+                    <span class="content">&#8220;{{{emailAddress}}&#8221;</span>
+                </div>
+                {{/if}}
+                {{#if name}}
+                <div class="username">
+                        <span class="content">&#8220;{{{name}}&#8221;</span>
+                </div>
+                {{/if}}
+            {{/each}}
         </div>
-        <div class="ou">
-            {{#if ou}}
-                <span class="prefix">{{t "users.department"}}:</span>
-                <span class="content">&#8220;{{{ou}}}&#8221;</span>
-            {{/if}}
-        </div>
-        <div class="notes">
-            {{#if content}}
-                <span class="prefix">{{t "users.notes"}}:</span>
-                <span class="content">&#8220;{{{content}}}&#8221;</span>
-            {{/if}}
-        </div>
-        <div class="email">
-            {{#if emailAddress}}
-            <span class="content">&#8220;{{{emailAddress}}&#8221;</span>
-            {{/if}}
-        </div>
-        <div class="username">
-            {{#if name}}
-                <span class="content">&#8220;{{{name}}&#8221;</span>
-            {{/if}}
+
+        {{#if hasMoreSupportingMessage}}
+            <a href="#" class="showMoreSupportingMessage">{{t "search.comments_more" count=hasMoreSupportingMessage}}</a>
+        {{/if}}
+
+        <div class="moreSupportingMessage hidden">
+            {{#each moreSupportingMessage}}
+                {{#if title}}
+                <div class="title">
+                    <span class="prefix">{{t "users.title"}}:</span>
+                    <span class="content">&#8220;{{{title}}}&#8221;</span>
+                </div>
+                {{/if}}
+                {{#if ou}}
+                <div class="ou">
+                    <span class="prefix">{{t "users.department"}}:</span>
+                    <span class="content">&#8220;{{{ou}}}&#8221;</span>
+                </div>
+                {{/if}}
+                {{#if content}}
+                <div class="notes">
+                    <span class="prefix">{{t "users.notes"}}:</span>
+                    <span class="content">&#8220;{{{content}}}&#8221;</span>
+                </div>
+                {{/if}}
+                {{#if emailAddress}}
+                <div class="email">
+                    <span class="content">&#8220;{{{emailAddress}}&#8221;</span>
+                </div>
+                {{/if}}
+                {{#if name}}
+                <div class="username">
+                    <span class="content">&#8220;{{{name}}&#8221;</span>
+                </div>
+                {{/if}}
+            {{/each}}
+        <a href="#" class="hideMoreSupportingMessage">{{t "search.comments_less"}}</a>
         </div>
         <div class="spacer right"></div>
     </div>

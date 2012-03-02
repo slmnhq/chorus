@@ -102,39 +102,123 @@ describe("chorus.views.SearchUserList", function() {
             expect(this.view.$('li a.name').eq(3).html()).toContain(this.collection.at(3).displayName());
         });
 
+        describe("supporting message", function() {
+            context("when there are more than 3 supporting messages", function() {
+                beforeEach(function() {
+                    this.collection.at(0).set({
+                        "admin": "false",
+                        "comments": [],
+                        "emailAddress": "test@emc.com",
+                        "entityType": "user",
+                        "firstName": "John",
+                        "id": "10023",
+                        "isDeleted": "false",
+                        "lastName": "Doe",
+                        "lastUpdatedStamp": "2012-03-01 11:07:13",
+                        "name": "<em>test</em>",
+                        "title": "affd",
+                        "ou": "<em>Test</em>",
+                        "content": "Hello",
+                        "owner": {}
+                    });
+                    this.view.render();
+                });
+
+                it("displays 3 messages in the supporting message and the rest in the more section", function() {
+                    expect(this.view.$("li:eq(0) .supportingMessage div").length).toBe(3);
+                    expect(this.view.$("li:eq(0) .moreSupportingMessage div").length).toBe(2);
+                });
+
+                it("display the show-more link", function() {
+                    expect(this.view.$(".showMoreSupportingMessage")).toContainTranslation("search.comments_more.other", {count:2});
+                    expect(this.view.$(".hideMoreSupportingMessage")).toContainTranslation("search.comments_less");
+
+                });
+
+                it("clicking the show-more link shows the rest of the messages", function() {
+                    expect(this.view.$("li:eq(0) .moreSupportingMessage")).toHaveClass("hidden");
+                    expect(this.view.$("li:eq(0) .showMoreSupportingMessage")).not.toHaveClass("hidden");
+
+                    this.view.$("li:eq(0) .showMoreSupportingMessage").click();
+
+                    expect(this.view.$("li:eq(0) .moreSupportingMessage")).not.toHaveClass("hidden");
+                    expect(this.view.$("li:eq(0) .showMoreSupportingMessage")).toHaveClass("hidden");
+                });
+
+                it("clicking the hide-more link hides the surplus messages and re-enables the more link", function() {
+                    this.view.$("li:eq(0) .showMoreSupportingMessage").click();
+                    this.view.$("li:eq(0) .hideMoreSupportingMessage").click();
+
+                    expect(this.view.$("li:eq(0) .moreSupportingMessage")).toHaveClass("hidden");
+                    expect(this.view.$("li:eq(0) .showMoreSupportingMessage")).not.toHaveClass("hidden");
+                });
+            });
+
+            context("when there are less than 3 supporting messages", function() {
+                beforeEach(function() {
+                    this.collection.at(0).set({
+                        "admin": "false",
+                        "comments": [],
+                        "emailAddress": "test@emc.com",
+                        "entityType": "user",
+                        "firstName": "John",
+                        "id": "10023",
+                        "isDeleted": "false",
+                        "lastName": "Doe",
+                        "lastUpdatedStamp": "2012-03-01 11:07:13",
+                        "name": "<em>test</em>",
+                        "content": "",
+                        "title": "",
+                        "ou": "",
+                        "owner": {}
+                    });
+                    this.view.render();
+                });
+
+                it("displays up to 2 messages in the supporting message and none in the rest in the more section", function() {
+                    expect(this.view.$("li:eq(0) .supportingMessage div").length).toBe(2);
+                    expect(this.view.$("li:eq(0) .moreSupportingMessage div").length).toBe(0);
+                });
+
+                it("display the more show more link", function() {
+                    expect(this.view.$(".showMoreSupportingMessage")).not.toExist();
+                });
+            })
+        });
+
         it("has each user's Title in the collection", function() {
-            expect(this.view.$('li .title:eq(0) .content')).not.toExist();
-            expect(this.view.$('li .title:eq(1) .content').html()).toContain(this.collection.at(1).get("title"));
-            expect(this.view.$('li .title:eq(2) .content').html()).toContain(this.collection.at(2).get("title"));
-            expect(this.view.$('li .title:eq(3) .content')).not.toExist();
+            expect(this.view.$('li:eq(0) .title .content')).not.toExist();
+            expect(this.view.$('li:eq(1) .title .content').html()).toContain(this.collection.at(1).get("title"));
+            expect(this.view.$('li:eq(2) .title .content').html()).toContain(this.collection.at(2).get("title"));
+            expect(this.view.$('li:eq(3) .title .content')).not.toExist();
         });
 
         it("has each user's Department in the collection", function() {
-            expect(this.view.$('li .ou:eq(0) .content').html()).toContain(this.collection.at(1).get("ou"));
-            expect(this.view.$('li .ou:eq(1) .content')).not.toExist();
-            expect(this.view.$('li .ou:eq(2) .content')).not.toExist();
-            expect(this.view.$('li .ou:eq(3) .content')).not.toExist();
+            expect(this.view.$('li:eq(0) .ou .content').html()).toContain(this.collection.at(1).get("ou"));
+            expect(this.view.$('li:eq(1) .ou .content')).not.toExist();
+            expect(this.view.$('li:eq(2) .ou .content')).not.toExist();
+            expect(this.view.$('li:eq(3) .ou .content')).not.toExist();
         });
 
         it("has each user's Notes in the collection", function() {
-            expect(this.view.$('li .notes:eq(0) .content').html()).toContain(this.collection.at(0).get("content"));
-            expect(this.view.$('li .notes:eq(1) .content').html()).toContain(this.collection.at(1).get("content"));
-            expect(this.view.$('li .notes:eq(2) .content')).not.toExist();
-            expect(this.view.$('li .notes:eq(3) .content')).not.toExist();
+            expect(this.view.$('li:eq(0) .notes .content').html()).toContain(this.collection.at(0).get("content"));
+            expect(this.view.$('li:eq(1) .notes .content').html()).toContain(this.collection.at(1).get("content"));
+            expect(this.view.$('li:eq(2) .notes .content')).not.toExist();
+            expect(this.view.$('li:eq(3) .notes .content')).not.toExist();
         });
 
         it("has each user's e-mail in the collection", function() {
-            expect(this.view.$('li .email:eq(0) .content')).not.toExist();
-            expect(this.view.$('li .email:eq(1) .content').html()).toContain(this.collection.at(1).get("emailAddress"));
-            expect(this.view.$('li .email:eq(2) .content').html()).toContain(this.collection.at(2).get("emailAddress"));
-            expect(this.view.$('li .email:eq(3) .content')).not.toExist();
+            expect(this.view.$('li:eq(0) .email .content')).not.toExist();
+            expect(this.view.$('li:eq(1) .email .content').html()).toContain(this.collection.at(1).get("emailAddress"));
+            expect(this.view.$('li:eq(2) .email .content').html()).toContain(this.collection.at(2).get("emailAddress"));
+            expect(this.view.$('li:eq(3) .email .content')).not.toExist();
         });
 
         it("has each user's username in the collection", function() {
-            expect(this.view.$('li .username:eq(0) .content').html()).toContain(this.collection.at(0).get("name"));
-            expect(this.view.$('li .username:eq(1) .content')).not.toExist();
-            expect(this.view.$('li .username:eq(2) .content')).not.toExist();
-            expect(this.view.$('li .username:eq(3) .content').html()).toContain(this.collection.at(3).get("name"));
+            expect(this.view.$('li:eq(0) .username .content').html()).toContain(this.collection.at(0).get("name"));
+            expect(this.view.$('li:eq(1) .username .content')).not.toExist();
+            expect(this.view.$('li:eq(2) .username .content')).not.toExist();
+            expect(this.view.$('li:eq(3) .username .content').html()).toContain(this.collection.at(3).get("name"));
         });
     });
 });
