@@ -1,9 +1,9 @@
 describe("chorus.models.SearchResult", function() {
-    describe("#shortName", function() {
-        beforeEach(function() {
-            this.model = new chorus.models.SearchResult({query: "the longest query in the world"})
-        });
+    beforeEach(function() {
+        this.model = new chorus.models.SearchResult({query: "the longest query in the world"})
+    });
 
+    describe("#shortName", function() {
         it("returns a short name", function() {
             expect(this.model.displayShortName()).toBe("the longest query in...")
         });
