@@ -5,6 +5,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     events: {
         "change input:radio": "onRadioSelect",
         "submit form": "uploadFile",
+        "click button.submit": "uploadFile",
         "change select": "onSelectChanged"
     },
 
@@ -31,7 +32,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
 
         if (this.importTarget == "new") {
             this.$(".new_table input:text").attr("disabled", false);
-
+            this.$("button.submit").attr("disabled", false);
         } else if (this.importTarget == "existing") {
             this.$(".existing_table select").attr("disabled", false);
             this.$(".existing_table .options").removeClass("hidden");
@@ -39,7 +40,10 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             if (!this.$("select").val()) {
                 this.$("button.submit").attr("disabled", "disabled");
             }
+        } else {
+            this.$("button.submit").attr("disabled", false);
         }
+
         chorus.styleSelect(this.$("select"));
     },
 
@@ -88,19 +92,27 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     uploadFile: function(e) {
         e && e.preventDefault();
 
-        if (this.importTarget === "existing") {
-            this.datasetId = this.tableMap[this.$('select').val()]
+        if (this.importTarget === "workfile") {
+            this.$("button.submit").startLoading("actions.uploading");
+            this.uploadObj.url = "/edc/workspace/" + this.options.launchElement.data("workspaceId") + "/workfile";
+            this.uploadObj.source = "fs";
+            this.request = this.uploadObj.submit();
+        } else {
+            if (this.importTarget === "existing") {
+                this.datasetId = this.tableMap[this.$('select').val()]
+            }
+
+            var toTable = this.$('.new_table input:text').is(':disabled') ? this.$(".existing_table select").val() : chorus.models.CSVImport.normalizeForDatabase(this.$(".new_table input[type='text']").val())
+            this.csv.set({
+                toTable: toTable,
+                truncate: this.$(".existing_table input#truncate").is(':checked')
+            }, {silent: true})
+
+            this.$("button.submit").startLoading("actions.uploading");
+
+            this.uploadObj.url = "/edc/workspace/" + this.options.launchElement.data("workspaceId") + "/csv/sample";
+            this.request = this.uploadObj.submit();
         }
-
-        var toTable = this.$('.new_table input:text').is(':disabled') ? this.$(".existing_table select").val() : chorus.models.CSVImport.normalizeForDatabase(this.$(".new_table input[type='text']").val())
-        this.csv.set({
-            toTable: toTable,
-            truncate: this.$(".existing_table input#truncate").is(':checked')
-        }, {silent: true})
-
-        this.$("button.submit").startLoading("actions.uploading");
-        this.uploadObj.url = "/edc/workspace/" + this.options.launchElement.data("workspaceId") + "/csv/sample"
-        this.request = this.uploadObj.submit();
     },
 
     modalClosed: function() {
@@ -152,19 +164,31 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             e && e.preventDefault();
             self.$("button.submit").stopLoading();
 
-            self.csv.set(self.csv.parse(data.result), {silent: true});
-            if (self.csv.serverErrors) {
-                self.csv.trigger("saveFailed");
-                fileChosen(e, data);
-            }
-            else {
-                var dialog;
-                if (self.importTarget === "existing") {
-                    dialog = new chorus.dialogs.ExistingTableImportCSV({csv: self.csv, datasetId: self.datasetId});
+            if (self.importTarget === "workfile") {
+                var workfile = new chorus.models.Workfile();
+                workfile.set(workfile.parse(data.result), {silent: true});
+                if (workfile.serverErrors) {
+                    self.showErrors(workfile);
+                    fileChosen(e, data);
                 } else {
-                    dialog = new chorus.dialogs.NewTableImportCSV({csv: self.csv});
+                    chorus.toast("dataset.import.workfile_success", {fileName: workfile.get("fileName")});
+                    chorus.router.navigate(workfile.showUrl(), true);
                 }
-                dialog.launchModal();
+            } else {
+                self.csv.set(self.csv.parse(data.result), {silent: true});
+                if (self.csv.serverErrors) {
+                    self.csv.trigger("saveFailed");
+                    fileChosen(e, data);
+                }
+                else {
+                    var dialog;
+                    if (self.importTarget === "existing") {
+                        dialog = new chorus.dialogs.ExistingTableImportCSV({csv: self.csv, datasetId: self.datasetId});
+                    } else {
+                        dialog = new chorus.dialogs.NewTableImportCSV({csv: self.csv});
+                    }
+                    dialog.launchModal();
+                }
             }
         }
     }

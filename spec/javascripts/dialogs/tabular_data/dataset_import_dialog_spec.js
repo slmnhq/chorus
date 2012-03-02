@@ -304,6 +304,46 @@ describe("chorus.dialogs.DatasetImport", function() {
 
                 })
             });
+
+            describe("selecting 'Upload as a work file'", function() {
+                beforeEach(function() {
+                    this.dialog.$("input:radio").val("workfile");
+                    this.dialog.$(".new_table input:radio").removeAttr('checked').change();
+                    this.dialog.$(".workfile input:radio").attr('checked', 'checked').change();
+                });
+
+                it("should enable the upload button", function() {
+                    expect(this.dialog.$('button.submit')).toBeEnabled();
+                });
+
+                context("clicking the upload button", function() {
+                    beforeEach(function() {
+                        this.dialog.$("button.submit").click();
+                    });
+
+                    context("when upload succeeds", function() {
+                        beforeEach(function() {
+                            spyOn(chorus.router, "navigate");
+                            spyOn(chorus, "toast");
+                            this.workfile = fixtures.workfile({id: "23", fileName: "myFile"});
+                            this.data = {result: {
+                                resource: [this.workfile.attributes],
+                                status: "ok"
+                            }};
+                            this.fileUploadOptions.done(null, this.data)
+
+                        });
+
+                        it("presents a toast message", function() {
+                            expect(chorus.toast).toHaveBeenCalledWith("dataset.import.workfile_success", {fileName: "myFile"});
+                        });
+
+                        it("navigates to the new workfile page", function() {
+                            expect(chorus.router.navigate).toHaveBeenCalledWith(this.workfile.showUrl(), true);
+                        });
+                    });
+                })
+            })
         });
 
         describe("clicking 'Upload File'", function() {
