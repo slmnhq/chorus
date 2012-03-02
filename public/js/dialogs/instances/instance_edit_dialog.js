@@ -34,10 +34,15 @@ chorus.dialogs.InstancesEdit = chorus.dialogs.Base.extend({
             name: this.$("input[name=name]").val().trim(),
             description: this.$("textarea[name=description]").val().trim(),
             host: this.$("input[name=host]").val(),
-            port: this.$("input[name=port]").val(),
-            size: this.$("input[name=size]").val(),
-            maintenanceDb: this.$("input[name='maintenanceDb']").val()
+            port: this.$("input[name=port]").val()
         };
+
+        _(["size", "maintenanceDb", "userName", "userGroups"]).each(function(name) {
+            var input = this.$("input[name=" + name + "]")
+            if (input) {
+                attrs[name] = input.val();
+            }
+        }, this)
 
         this.$("button.submit").startLoading("instances.edit_dialog.saving");
         this.$("button.cancel").attr("disabled", "disabled");
