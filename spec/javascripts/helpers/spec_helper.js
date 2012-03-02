@@ -4,6 +4,16 @@
 
         // Code that only needs to be run once before all the tests run
         _.debounce = function(func) { return func; }
+        jasmine.getEnv().updateInterval = 2500;
+
+        $(window).focus(function(){
+            jasmine.getEnv().updateInterval = 2500;
+        });
+
+        $(window).blur(function() {
+            // if you get 'unresponsive script' warnings in Firefox, you can override the dom.max_script_time variable
+            delete jasmine.getEnv().updateInterval;
+        });
 
         runs(loadAllTemplates);
         waitsFor(function() {
