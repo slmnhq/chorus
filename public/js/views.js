@@ -134,10 +134,13 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
             }
             var element = this.$(selector);
             if (element.length) {
-                var id = element.attr("id"), klass = element.attr("class");
-                $(view.el).attr("id", id);
-                $(view.el).addClass(klass);
-                element.replaceWith(view.el);
+                if(element[0] !== view.el) {
+                    var id = element.attr("id"), klass = element.attr("class");
+                    $(view.el).attr("id", id);
+                    $(view.el).addClass(klass);
+                    element.replaceWith(view.el);
+                }
+
                 if (!view.requiredResources || view.requiredResources.allLoaded()) {
                     view.render()
                 }

@@ -299,6 +299,7 @@ describe("chorus.views.Base", function() {
                         beforeEach(function() {
                             this.view.render();
                             this.subview.render.reset();
+                            this.subview.render.andCallThrough();
                         });
 
                         it("renders when given both object name and selector", function() {
@@ -310,6 +311,31 @@ describe("chorus.views.Base", function() {
                             this.view.renderSubview('foo');
                             expect(this.subview.render).toHaveBeenCalled();
                         });
+
+                        it("doesn't remove the element from the dom when re-rendering the same subview", function() {
+                            expect(this.view.$(".foo")[0]).toBe(this.subview.el);
+
+                            this.view.renderSubview("foo");
+                            expect(this.view.$(".foo")[0]).toBe(this.subview.el);
+                        })
+
+                        describe("after a new subview has been assigned", function() {
+                            beforeEach(function() {
+                                this.otherSubview =new chorus.views.Base();
+                                this.otherSubview.className = "plain_text";
+                                this.otherSubview.additionalClass = "other_subview";
+
+                                this.view.foo = this.otherSubview;
+                            });
+
+                            it("can successfully call renderSubview when the subview object has been reassigned", function() {
+                                expect(this.view.$(".foo")[0]).toBe(this.subview.el);
+
+                                this.view.renderSubview("foo");
+
+                                expect(this.view.$(".foo")[0]).toBe(this.otherSubview.el);
+                            })
+                        })
                     });
                 })
             })
