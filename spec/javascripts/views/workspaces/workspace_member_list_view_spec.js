@@ -1,7 +1,6 @@
 describe("chorus.views.WorkspaceMemberList", function() {
     beforeEach(function() {
         this.view = new chorus.views.WorkspaceMemberList();
-
     });
 
     describe("when there are less than 24 members", function() {
@@ -14,8 +13,13 @@ describe("chorus.views.WorkspaceMemberList", function() {
                 members.add(fixtures.user());
             });
 
+            spyOn(this.members, "fetchAllIfNotLoaded");
             chorus.PageEvents.broadcast("workspace:selected", this.workspace);
         });
+
+        it("calls fetchIfNotLoaded on members", function() {
+            expect(this.members.fetchAllIfNotLoaded).toHaveBeenCalled();
+        })
 
         it("includes an image for each member", function() {
             var images = this.view.$(".members img");
@@ -49,12 +53,19 @@ describe("chorus.views.WorkspaceMemberList", function() {
         beforeEach(function() {
             this.workspace = fixtures.workspace();
             var members = this.workspace.members();
+            this.members = this.workspace.members();
+
             _.times(25, function() {
                 members.add(fixtures.user());
             });
 
+            spyOn(this.members, "fetchAllIfNotLoaded");
             chorus.PageEvents.broadcast("workspace:selected", this.workspace);
         });
+
+        it("calls fetchIfNotLoaded on members", function() {
+            expect(this.members.fetchAllIfNotLoaded).toHaveBeenCalled();
+        })
 
         it("only shows the first 24 images", function() {
             expect(this.view.$(".members img").length).toBe(24);

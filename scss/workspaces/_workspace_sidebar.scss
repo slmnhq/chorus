@@ -1,0 +1,15 @@
+@import "../_common.scss";
+
+.workspace_list_sidebar, .workspace_show_sidebar {
+    .info {
+        .name {
+            @include ellipsis;
+            @include heading-sidebar;
+            margin-bottom: 10px;
+        }
+    }
+
+    .workspace_member_list {
+        margin: 5px 0px;
+    }
+}

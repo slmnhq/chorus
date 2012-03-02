@@ -92,7 +92,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     hasImage:function () {
-        return this.get("iconId") != null;
+        return this.get("iconId") || this.get("imageId");
     },
 
     canRead:function () {

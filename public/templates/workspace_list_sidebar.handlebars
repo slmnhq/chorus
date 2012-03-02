@@ -1,11 +1,10 @@
-<div class="info">
-    <div title="{{name}}" class="name">{{name}}</div>
-    <div class="last_updated">{{lastUpdatedStamp}}</div>
-</div>
-
 {{#if hasImage}}
-    <img class="workspace_image"/ src="{{imageSrc}}">
+    <img class="workspace_image" src="{{imageSrc}}"/>
 {{/if}}
+
+<div class="info">
+    <div title="{{prettyName}}" class="name">{{prettyName}}</div>
+</div>
 
 <ul class="actions">
     <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workspace" data-workspace-id="{{id}}" data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>

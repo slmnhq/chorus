@@ -27,6 +27,8 @@ chorus.views.WorkspaceMemberList = chorus.views.Base.extend({
 
     setWorkspace: function(workspace) {
         this.resource = this.model = workspace
+        workspace.members().fetchAllIfNotLoaded()
+        workspace.members().onLoaded(this.render, this)
         this.render()
     }
 });

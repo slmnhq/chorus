@@ -36,6 +36,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
     },
 
     renderSidebar: function(sidebar) {
+        this.sidebar && $(this.sidebar.el).removeClass("workspace_list_sidebar dataset_list_sidebar workfile_list_sidebar");
         this.sidebar = sidebar;
         this.renderSubview('sidebar');
         this.trigger('resized');
