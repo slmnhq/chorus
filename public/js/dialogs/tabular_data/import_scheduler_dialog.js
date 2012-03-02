@@ -145,7 +145,6 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     },
 
     onInputFieldChanged: function() {
-        this.model.performValidation(this.getNewModelAttrs());
         this.showErrors(this.model);
     },
 
