@@ -1702,6 +1702,11 @@ beforeEach(function() {
             return new chorus.collections.WorkfileSet(models);
         },
 
+        workspaceSet: function(models) {
+            models = models || [this.workspace(), this.workspace()];
+            return new chorus.collections.WorkspaceSet(models);
+        },
+
         artifact: function(overrides) {
             var attributes = _.extend({
                 id: this.nextId().toString(),
@@ -2321,8 +2326,37 @@ beforeEach(function() {
                         "numFound": 2
                     },
                     "workspace": {
-                        "docs": [],
-                        "numFound": 0
+                        "docs": [
+                            {
+                                comments: [],
+                                entityType: "workspace",
+                                id: "10000",
+                                isDeleted: false,
+                                isPublic: false,
+                                lastUpdatedStamp: "2012-02-24 16:08:32",
+                                name: "<em>ws</em>",
+                                owner: {
+                                    firstName: "EDC",
+                                    id: "InitialUser",
+                                    lastName: "Admin"
+                                }
+                            },
+                            {
+                                comments: [],
+                                entityType: "workspace",
+                                id: "10001",
+                                isDeleted: false,
+                                isPublic: false,
+                                lastUpdatedStamp: "2012-02-24 16:08:32",
+                                name: "other_<em>ws</em>",
+                                owner: {
+                                    firstName: "EDC",
+                                    id: "InitialUser",
+                                    lastName: "Admin"
+                                }
+                            }
+                        ],
+                        "numFound": 2
                     },
                     "dataset": {
                         "docs": [{

@@ -2,7 +2,8 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     className: "search_result_list",
 
     subviews: {
-        ".workfile_list": "workfileList"
+        ".workfile_list": "workfileList",
+        ".workspace_list": "workspaceList"
     },
 
     events: {
@@ -23,5 +24,6 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
 
     setup: function() {
         this.workfileList = new chorus.views.SearchWorkfileList({ collection : this.model.workfiles(), total: this.model.get("workfile").numFound });
+        this.workspaceList = new chorus.views.SearchWorkspaceList({ collection : this.model.workspaces(), total: this.model.get("workspace").numFound });
     }
 })

@@ -56,5 +56,41 @@ describe("chorus.pages.SearchIndexPage", function() {
                 })
             });
         });
+
+        describe("the workspace section", function() {
+            beforeEach(function() {
+                this.workspaceLis = this.page.$(".workspace_list li");
+            });
+
+            it("shows a list of search results", function() {
+                expect(this.workspaceLis.length).toBeGreaterThan(0);
+            });
+
+            xit("selects the first workspace by default", function() {
+                expect(this.workspaceLis.eq(0)).toHaveClass("selected");
+            });
+
+            xdescribe("clicking on a workspace search result", function() {
+                beforeEach(function() {
+                    this.workspaceLis.eq(1).trigger("click");
+                });
+
+                it("selects that workspace", function() {
+                    expect(this.workspaceLis.eq(1)).toHaveClass("selected");
+                });
+
+                it("shows that workspace in the sidebar", function() {
+                    expect(this.page.sidebar.$("h1")).toHaveText("other_ws");
+                });
+
+                it("show the 'add a note' link in the sidebar", function() {
+                    expect(this.page.sidebar.$("a[data-dialog='NotesNew']")).toExist()
+                })
+
+                it("show the 'add an insight' link in the sidebar", function() {
+                    expect(this.page.sidebar.$("a[data-dialog='InsightNew']")).toExist()
+                })
+            });
+        });
     });
 });

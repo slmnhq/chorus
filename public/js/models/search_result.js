@@ -20,5 +20,15 @@ chorus.models.SearchResult = chorus.models.Base.extend({
             return workfile;
         });
         return new chorus.collections.WorkfileSet(workfiles);
+    },
+
+    workspaces: function() {
+        var workspaces = _.map(this.get("workspace").docs, function(workspaceJson) {
+            workspaceJson.fileName = $.stripHtml(workspaceJson.name);
+            var workspace = new chorus.models.Workspace(workspaceJson);
+            workspace.comments = new chorus.collections.ActivitySet(workspaceJson.comments);
+            return workspace;
+        });
+        return new chorus.collections.WorkspaceSet(workspaces);
     }
 });
