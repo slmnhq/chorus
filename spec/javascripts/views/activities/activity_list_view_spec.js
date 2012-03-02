@@ -2,7 +2,7 @@ describe("chorus.views.ActivityList", function() {
     beforeEach(function() {
         fixtures.model = 'ActivitySet';
         this.collection = fixtures.modelFor('fetch');
-        this.view = new chorus.views.ActivityList({collection: this.collection, additionalClass : "foo_class", type: "Foo"});
+        this.view = new chorus.views.ActivityList({collection: this.collection, additionalClass: "foo_class", type: "Foo"});
     });
 
     describe("#render", function() {
@@ -176,7 +176,7 @@ describe("chorus.views.ActivityList", function() {
                     it("fetches the next page of the activity stream", function() {
                         spyOn(this.collection, 'fetchPage');
                         this.view.$(".more_activities a").click();
-                        expect(this.collection.fetchPage).toHaveBeenCalledWith(2, { add : true });
+                        expect(this.collection.fetchPage).toHaveBeenCalledWith(2, { add: true });
                     })
                 })
             })
@@ -184,9 +184,19 @@ describe("chorus.views.ActivityList", function() {
 
     });
 
-    it("can handle errors in an activity item", function() {
-        this.collection.models.push({});
-        this.view.render();
-        expect("we didn't blow up").toBeTruthy();
+    describe("error handling", function() {
+        beforeEach(function() {
+            spyOn(chorus, "log");
+            this.collection.add({ workspace: {} })
+        })
+
+        it("does not raise an exception", function() {
+            this.view.render();
+        });
+
+        it("logs the exception", function() {
+            this.view.render();
+            expect(chorus.log).toHaveBeenCalled();
+        })
     });
 });
