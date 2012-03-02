@@ -79,22 +79,42 @@ describe("chorus.views.InstanceList", function() {
                 expect(this.view.$(".other_instance li:eq(2) .name").text().trim()).toBe("Whatever10")
             })
 
-            context("when the selected instance is destroyed", function() {
+            describe("when an instance is destroyed", function() {
                 beforeEach(function() {
                     this.oldLength = this.collection.length;
-                    // simplify destroy working right under test
-                    this.collection.at(0).isNew = function() { return true; }
-                    this.collection.at(0).destroy();
+                    var liToSelect = this.view.$("li").eq(3);
+                    liToSelect.click();
+                    this.selectedId = liToSelect.data("instanceId");
                 });
 
-                it("selects the next available instance", function() {
-                    expect(this.view.$("li:first-child")).toHaveClass("selected");
-                    expect(this.view.$("li.selected").length).toBe(1);
+                context("when it is currently selected", function() {
+                    beforeEach(function() {
+                        this.collection.get(this.selectedId).destroy();
+                        this.server.lastDestroy().succeed();
+                    });
+
+                    it("selects the next available instance", function() {
+                        expect(this.view.$("li:first-child")).toHaveClass("selected");
+                        expect(this.view.$("li.selected").length).toBe(1);
+                    });
+
+                    it("renders only the existing items", function() {
+                        expect(this.collection.models.length).toBe(this.oldLength - 1);
+                        expect(this.view.$("li .instance").length).toBe(this.oldLength - 1);
+                    });
                 });
 
-                it("renders only the existing items", function() {
-                    expect(this.collection.models.length).toBe(this.oldLength - 1);
-                    expect(this.view.$("li .instance").length).toBe(this.oldLength - 1);
+                context("when a non-selected instance is destroyed", function() {
+                    beforeEach(function() {
+                        var nonSelectedLi = this.view.$("li").not(".selected").eq(0);
+                        var id = nonSelectedLi.data("instanceId");
+                        this.collection.get(id).destroy();
+                        this.server.lastDestroy().succeed();
+                    });
+
+                    it("leaves the same instance selected", function() {
+                        expect(this.view.$("li.selected").data("instanceId")).toBe(this.selectedId);
+                    });
                 });
             });
 
@@ -122,13 +142,15 @@ describe("chorus.views.InstanceList", function() {
                 beforeEach(function() {
                     this.eventSpy = jasmine.createSpy();
                     chorus.PageEvents.subscribe("instance:selected", this.eventSpy);
-                    this.li2 = this.view.$('li:eq(1)');
-                    this.li3 = this.view.$('li:eq(2)');
+                    this.li2 = this.view.$('li:contains("whatever1")');
+                    this.li3 = this.view.$('li:contains("Whatever9")');
                     this.li2.click();
                 });
 
                 it("triggers the instance:selected event", function() {
-                    expect(this.eventSpy).toHaveBeenCalledWith(this.collection.models[0]);
+                    expect(this.eventSpy).toHaveBeenCalled();
+                    var instancePassed = this.eventSpy.mostRecentCall.args[0];
+                    expect(instancePassed.get("name")).toBe("whatever1");
                 });
 
                 it("adds the selected class to that item", function() {
@@ -141,7 +163,7 @@ describe("chorus.views.InstanceList", function() {
                     });
 
                     it("selects the li that was previously clicked", function() {
-                        this.li2 = this.view.$('li:eq(1)');
+                        this.li2 = this.view.$('li:contains("whatever1")');
                         expect(this.li2).toHaveClass("selected");
                     });
                 });

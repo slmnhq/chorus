@@ -10,12 +10,12 @@ chorus.views.InstanceList = chorus.views.Base.extend({
             this.collection.fetchAll();
             this.selectedInstanceId = id;
         }, this);
-        this.bindings.add(this.collection, "remove", function () {
-            this.$('.instance_provider li:first').click();
+        this.bindings.add(this.collection, "remove", function(model) {
+            if (this.selectedInstanceId === model.get("id")) delete this.selectedInstanceId;
         });
     },
 
-    postRender:function () {
+    postRender: function() {
         var otherEl = this.$(".other_instance ul");
         var elMap = {
             "Greenplum Database":this.$(".greenplum_instance ul"),
@@ -25,7 +25,7 @@ chorus.views.InstanceList = chorus.views.Base.extend({
         models.sort(function (a, b) {
             return naturalSort(a.get("name").toLowerCase(), b.get("name").toLowerCase());
         });
-        _.each(models, function (model) {
+        _.each(models, function(model) {
             var view = new chorus.views.Instance({model:model});
             view.render();
             var li = $("<li />").append(view.el);
