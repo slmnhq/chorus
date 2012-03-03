@@ -43,7 +43,8 @@ chorus.views.DatasetList = chorus.views.Base.extend({
             showUrl: model.showUrl(),
             schemaShowUrl: model.schema().showUrl(),
             importFrequency: model.get("importFrequency") && t("import.frequency." + model.get("importFrequency").toLowerCase()),
-            noCredentials: model.get('hasCredentials') === false
+            noCredentials: model.get('hasCredentials') === false,
+            workspaces: model.get("workspaceUsed") && model.get("workspaceUsed").workspaceList
         };
 
         var recentComment = model.lastComment();

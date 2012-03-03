@@ -122,7 +122,7 @@ describe("chorus.views.DatasetList", function() {
         describe("workspace usage", function() {
             it("is rendered", function() {
                 expect(this.view.$('.found_in:eq(3)')).toExist();
-            })
+            });
 
             it("qtip-ifies the other_menu", function() {
                 expect(this.qtipSpy).not.toHaveVisibleQtip();
@@ -135,7 +135,18 @@ describe("chorus.views.DatasetList", function() {
                 this.view.$('.found_in:eq(4) .open_other_menu').click()
                 expect(this.qtipSpy).toHaveVisibleQtip();
                 expect(this.qtipSpy.find('li').length).toBe(1);
-            })
+            });
+
+            context("when the dataset is not used in any workspace", function() {
+                beforeEach(function() {
+                    this.collection.at(0).unset("workspaceUsed");
+                    this.view.render();
+                });
+
+                it("renders successfully without the workspace usage section", function() {
+                    expect(this.view.$("li:eq(0) .found_in")).not.toExist();
+                });
+            });
         })
 
         context("when no item was previously selected", function() {
