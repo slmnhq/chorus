@@ -38,8 +38,8 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     },
 
     setup: function() {
-        this.scheduleViewNew = new chorus.views.ImportSchedule({ enable: false });
-        this.scheduleViewExisting = new chorus.views.ImportSchedule({ enable: false });
+        this.scheduleViewNew = new chorus.views.ImportSchedule();
+        this.scheduleViewExisting = new chorus.views.ImportSchedule();
         var launchElement = this.options.launchElement;
 
         if (launchElement.hasClass("create_schedule")) {

@@ -107,17 +107,6 @@ describe("chorus.views.ImportSchedule", function() {
         expect(this.view.$(".ampm option:selected").text().trim()).toBe("AM");
     });
 
-    itShouldDisableTheControls();
-
-    context("when the view is disabled", function() {
-        beforeEach(function() {
-            this.view.options.enable = false;
-            this.view.render();
-        });
-
-        itShouldDisableTheControls()
-    });
-
     describe("enable/disable schedule", function() {
         beforeEach(function() {
             this.view.disable();

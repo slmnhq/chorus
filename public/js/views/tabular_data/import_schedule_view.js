@@ -75,7 +75,6 @@ chorus.views.ImportSchedule = chorus.views.Base.extend({
             minutes: _.map(_.range(60), function(num) {
                 return _.lpad(num, 2, "0");
             }),
-            enable: this.options.enable,
             start: {
                 month: now.getMonth() + 1,
                 day: now.getDate(),
