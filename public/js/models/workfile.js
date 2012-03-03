@@ -130,14 +130,20 @@
         downloadUrl: function() {
             var url = URI(this.url())
             var path = url.path() + "/file/";
+
             if (this.get("hasDraft")) {
                 path += this.get("draftInfo").draftFileId;
+                url.path(path)
             } else if (this.get("versionInfo")) {
-                path += this.get("versionInfo").versionFileId;
+                url = URI("/edc/workspace/" + this.get("workspaceId") + "/workfile/" + this.id + "/file/" + this.get("versionInfo").versionFileId);
+            } else {
+                url.path(path)
             }
-            url.path(path)
+
             url.addSearch({ download: "true" })
-            return url.toString();
+            url.addSearch({iebuster: window.jasmine ? 12345 : new Date().getTime()});
+
+            return url.normalizeSearch().toString();
         },
 
         workfilesUrl: function() {

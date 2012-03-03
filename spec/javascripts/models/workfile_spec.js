@@ -257,14 +257,10 @@ describe("chorus.models.Workfile", function() {
         })
 
         it("has the right download URL", function() {
-            expect(this.model.downloadUrl()).toBe("/edc/workspace/10/workfile/5/file/12345?download=true");
+            expect(this.model.downloadUrl()).toBe("/edc/workspace/10/workfile/5/file/12345?download=true&iebuster=12345");
         });
 
         describe("#downloadUrl", function() {
-            beforeEach(function() {
-                spyOn(this.model, 'url').andReturn("/edc/workspace/10/workfile/5?iebuster=12345")
-            })
-
             it("has the right download URL, even if iebuster is appended as a parameter", function() {
                 expect(this.model.downloadUrl()).toContain("/edc/workspace/10/workfile/5/file/12345")
                 expect(this.model.downloadUrl()).toContain("?")
@@ -279,7 +275,7 @@ describe("chorus.models.Workfile", function() {
             });
 
             it("has the right download URL", function() {
-                expect(this.model.downloadUrl()).toBe("/edc/workspace/10/workfile/5/file/99999?download=true");
+                expect(this.model.downloadUrl()).toBe("/edc/workspace/10/workfile/5/file/99999?download=true&iebuster=12345");
             });
         })
     });
