@@ -78,6 +78,10 @@ describe("chorus.models.SearchResult", function() {
         it("has numFound in 'total'", function() {
             expect(this.workfiles.attributes.total).toBe(this.model.get('workfile').numFound);
         });
+
+        it("memoizes", function() {
+            expect(this.workfiles).toBe(this.model.workfiles());
+        });
     });
 
     // TODO: #workspaces
@@ -95,6 +99,10 @@ describe("chorus.models.SearchResult", function() {
 
         it("has numFound in 'total'", function() {
             expect(this.tabularData.attributes.total).toBe(this.model.get('dataset').numFound);
+        });
+
+        it("memoizes", function() {
+            expect(this.tabularData).toBe(this.model.tabularData());
         });
     });
 
@@ -114,6 +122,21 @@ describe("chorus.models.SearchResult", function() {
 
         it("has numFound in 'total'", function() {
             expect(this.users.attributes.total).toBe(this.model.get('user').numFound);
+        });
+
+        it("memoizes", function() {
+            expect(this.users).toBe(this.model.users());
+        });
+    });
+
+    describe("#workspaces", function() {
+        beforeEach(function() {
+            this.model.set(fixtures.searchResultJson());
+            this.workspaces = this.model.workspaces();
+        });
+
+        it("memoizes", function() {
+            expect(this.workspaces).toBe(this.model.workspaces());
         });
     });
 })
