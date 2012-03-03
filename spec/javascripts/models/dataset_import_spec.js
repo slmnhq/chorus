@@ -4,6 +4,7 @@ describe("chorus.models.DatasetImport", function() {
             workspaceId: '101',
             datasetId: '102|my_db_name|my_schema_name|SOURCE_TABLE|my_table_name'
         });
+        this.model.unset("id");
     });
 
     it("has the right url", function() {

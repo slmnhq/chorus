@@ -119,7 +119,7 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
         var ctx = {};
         if (this.resource.isImportable()) {
             ctx.isImportable = this.importConfiguration.loaded;
-            ctx.hasImport = this.importConfiguration.has("id");
+            ctx.hasImport = this.importConfiguration && this.importConfiguration.hasActiveSchedule();
 
             if (this.importConfiguration.has("executionInfo")) {
                 var importStatusKey;
@@ -154,7 +154,7 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
 
     postRender: function() {
         this.$("a.create_schedule, a.edit_schedule, a.import_now").data("dataset", this.resource);
-        this.$("a.edit_schedule, a.import_now").data("import", this.importConfiguration);
+        this.$("a.create_schedule, a.edit_schedule, a.import_now").data("import", this.importConfiguration);
         this._super("postRender");
     },
 

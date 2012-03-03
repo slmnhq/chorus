@@ -158,7 +158,7 @@ describe("chorus.views.TabularDataListSidebar", function() {
 
                         context("and the dataset has an import schedule", function() {
                             beforeEach(function() {
-                                this.server.completeFetchFor(this.dataset.getImport(), fixtures.datasetImport({id: '1234', toTable: "aToTable", datasetId: this.dataset.id, workspaceId: this.dataset.get("workspace").id}).attributes);
+                                this.server.completeFetchFor(this.dataset.getImport(), fixtures.datasetImport());
                             });
 
                             context("and the current user has update permissions on the workspace", function() {
@@ -208,6 +208,20 @@ describe("chorus.views.TabularDataListSidebar", function() {
 
                             it("doesn't have a 'create import schedule' link'", function() {
                                 expect(this.view.$(".actions .create_schedule")).not.toExist();
+                            });
+                        });
+
+                        context("and the dataset has an import config, but no schedule", function() {
+                            beforeEach(function() {
+                                var importConfig = fixtures.datasetImport();
+                                importConfig.get('scheduleInfo').jobName = null;
+                                this.server.completeFetchFor(this.dataset.getImport(), importConfig);
+                                this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
+                                this.view.render();
+                            });
+
+                            it("has a 'create import schedule' link", function() {
+                                expect(this.view.$("a.create_schedule")).toExist();
                             });
                         });
 
@@ -600,7 +614,7 @@ describe("chorus.views.TabularDataListSidebar", function() {
 
         describe("when importSchedule:changed is triggered", function() {
             beforeEach(function() {
-                this.newImport = fixtures.importConfiguration();
+                this.newImport = fixtures.datasetImport();
                 spyOn(this.view, 'render').andCallThrough();
                 chorus.PageEvents.broadcast("importSchedule:changed", this.newImport);
             })

@@ -139,7 +139,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
             sandboxTables: this.sandboxTables.pluck("objectName"),
             canonicalName: this.dataset.schema().canonicalName(),
             showSchedule: this.showSchedule,
-            hideScheduleCheckbox: this.model.isNew(),
+            hideScheduleCheckbox: !this.model.hasActiveSchedule(),
             submitText: this.submitText
         }
     },

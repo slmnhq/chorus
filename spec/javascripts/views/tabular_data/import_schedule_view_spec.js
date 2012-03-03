@@ -52,9 +52,11 @@ describe("chorus.views.ImportSchedule", function() {
             var importModel = fixtures.datasetImport({
                 id: '12',
                 truncate: true,
-                scheduleStartTime: "2013-02-21 13:30:00.0",
-                scheduleEndTime: "2013-05-27",
-                scheduleFrequency: "MONTHLY"
+                scheduleInfo: {
+                    endTime: "2013-05-27",
+                    startTime: "2013-02-21 13:30:00.0",
+                    frequency: "MONTHLY"
+                }
             });
             this.view.setFieldValues(importModel);
         });

@@ -2028,17 +2028,32 @@ beforeEach(function() {
 
         datasetImport: function(overrides) {
             var attributes = _.extend({
-                workspaceId: this.nextId().toString(),
-                datasetId: this.datasetCommonJson().id,
-                executionInfo : {
+                destinationTable: "10000|Analytics|analytics|BASE_TABLE|asdfsfsdf",
+                id: this.nextId().toString(),
+                nextImportTime: "2013-03-02 01:00:00.0",
+                sampleCount: 500,
+                sampleMethod: "RANDOM_COUNT",
+                executionInfo: {
                     startedStamp: "2012-02-29 14:23:58.169",
-                    completedStamp : "2012-02-29 14:23:59.027",
-                    result : {executeResult: "success"},
-                    state : "success",
-                    creator : "InitialUser"
+                    completedStamp: "2012-02-29 14:23:59.027",
+                    result: {
+                        executeResult: "success"
+                    },
+                    state: "success",
+                    creator: "InitialUser"
                 },
-                toTable: "someTable",
-                destinationTable: "10000|dca_demo|ddemo|BASE_TABLE|wwww"
+                scheduleInfo: {
+                    endTime: "2013-06-02",
+                    frequency: "WEEKLY",
+                    jobName: "ScheduleJob_1330719934443",
+                    startTime: "2012-02-29 14:23:58.169"
+                },
+                sourceId: "10000|dca_demo|ddemo|BASE_TABLE|_uspresident",
+                sourceTable: null,
+                sourceType: "dataset",
+                toTable: "asdfsfsdf",
+                truncate: false,
+                workspaceId: this.nextId().toString()
             }, overrides);
             return new chorus.models.DatasetImport(attributes);
         },
@@ -2287,28 +2302,6 @@ beforeEach(function() {
                 "group": "supergroup",
                 "permission": "rw-r--r--"
             }
-        },
-
-        importConfiguration: function(overrides) {
-            return _.extend({
-                destinationTable: "10000|Analytics|analytics|BASE_TABLE|asdfsfsdf",
-                id: this.nextId().toString(),
-                nextImportTime: "2013-03-02 01:00:00.0",
-                sampleCount: 500,
-                sampleMethod: "RANDOM_COUNT",
-                scheduleInfo: {
-                    endTime: "2013-06-02",
-                    frequency: "WEEKLY",
-                    jobName: "ScheduleJob_1330719934443",
-                    startTime: "2013-03-02 01:00:00.0"
-                },
-                sourceId: "10000|dca_demo|ddemo|BASE_TABLE|_uspresident",
-                sourceTable: null,
-                sourceType: "dataset",
-                toTable: "asdfsfsdf",
-                truncate: false,
-                workspaceId: this.nextId().toString()
-            }, overrides)
         },
 
         searchResultJson: function(overrides) {
