@@ -401,6 +401,57 @@ describe("chorus.views.Activity", function() {
             });
         });
 
+        context("type: IMPORT_SUCCESS", function() {
+            context("for a file", function() {
+                beforeEach(function() {
+                    this.view.model = fixtures.activities.IMPORT_SUCCESS_FILE();
+                    this.presenter = new chorus.presenters.Activity(this.view.model)
+                    this.view.render();
+                });
+
+                it("should contain the type of import(file)", function() {
+                    expect($(this.view.el)).toContainTranslation("dataset.import.types.file")
+                });
+
+
+                itShouldRenderObjectDetails({checkLink: true});
+                itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+                itShouldNotRenderAnInsightLink();
+            })
+            context("for a source table", function() {
+                beforeEach(function() {
+                    this.view.model = fixtures.activities.IMPORT_SUCCESS_SOURCE_TABLE();
+                    this.presenter = new chorus.presenters.Activity(this.view.model)
+                    this.view.render();
+                });
+
+                it("should contain the type of import(table)", function() {
+                    expect($(this.view.el)).toContainTranslation("dataset.import.types.table")
+                });
+
+
+                itShouldRenderObjectDetails({checkLink: true});
+                itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+                itShouldNotRenderAnInsightLink();
+            })
+            context("for a view", function() {
+                beforeEach(function() {
+                    this.view.model = fixtures.activities.IMPORT_SUCCESS_VIEW();
+                    this.presenter = new chorus.presenters.Activity(this.view.model)
+                    this.view.render();
+                });
+
+                it("should contain the type of import(view)", function() {
+                    expect($(this.view.el)).toContainTranslation("dataset.import.types.view")
+                });
+
+
+                itShouldRenderObjectDetails({checkLink: true});
+                itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+                itShouldNotRenderAnInsightLink();
+            })
+        })
+
         context("type: WORKSPACE_ADD_SANDBOX", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activities.WORKSPACE_ADD_SANDBOX();

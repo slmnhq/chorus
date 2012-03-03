@@ -96,6 +96,15 @@
                 header.tableLink = chorus.helpers.linkTo(this.presenter.tableUrl, this.presenter.tableName);
             }
 
+            if (this.presenter.importType) {
+                header.importType = this.presenter.importType;
+                header.objectType = this.presenter.objectType;
+            }
+
+            if (this.presenter.importSourceName && this.presenter.importSourceUrl) {
+                header.importSourceLink = chorus.helpers.linkTo(this.presenter.importSourceUrl, this.presenter.importSourceName);
+            }
+
             return header;
         },
 
@@ -126,6 +135,34 @@
         NOTE: showNote,
         INSIGHT_CREATED: showNote,
         RECEIVE_NOTE: showNote,
+
+        IMPORT_SUCCESS: function(model) {
+            var ctx = {};
+            var destinationTable = new chorus.models.Dataset(model.get("databaseObject"));
+            if(model.attributes.hasOwnProperty("file")){
+                ctx = {
+                    importType: t("dataset.import.types.file")
+                }
+            } else {
+                ctx = {
+                    importSourceName: destinationTable.get("objectName"),
+                    importSourceUrl: destinationTable.showUrl()
+                }
+
+                var metaType = destinationTable.metaType();
+                if( metaType == "table") ctx.importType = t("dataset.import.types.table");
+                if( metaType == "view" || metaType == "query") ctx.importType = t("dataset.import.types.view");
+            }
+
+            _.extend(ctx, {
+                objectName: model.dataset().get("objectName"),
+                objectType: t("database_object.TABLE"),
+                objectUrl: model.dataset().showUrl(),
+                iconSrc: "/images/import_icon.png"
+            });
+
+            return ctx;
+        },
 
         WORKSPACE_CREATED: workspaceIsObject,
         WORKSPACE_MAKE_PRIVATE: workspaceIsObject,
