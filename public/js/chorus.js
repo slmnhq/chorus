@@ -122,6 +122,8 @@ window.Chorus = function chorus$Global() {
             }
         };
 
+        _.extend(qtipArgs, options.qtipArgs);
+
         if(options.position) {
             _.extend(qtipArgs.position, options.position)
         }

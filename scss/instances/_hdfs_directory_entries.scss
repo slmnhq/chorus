@@ -46,3 +46,22 @@
         }
     }
 }
+
+ul.hdfs_link_menu {
+    min-width:130px;
+    padding: 9px 7px 9px 2px;
+    line-height: 16px;
+
+    li {
+        margin: 2px 4px 0px;
+
+        a {
+            font-weight: 400;
+            color: black !important;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
