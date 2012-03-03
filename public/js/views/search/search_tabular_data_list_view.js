@@ -26,9 +26,11 @@ chorus.views.SearchTabularDataList = chorus.views.Base.extend({
             moreComments: comments.slice(3)
         };
 
-        var workspaces = model.get("workspaces");
-        if (workspaces && workspaces.length > 0) {
-            context.workspaces = workspaces;
+        var workspaces;
+        if (model.get("workspaces")) {
+            context.workspaces = model.get("workspaces");
+        } else if (model.get("workspace")) {
+            context.workspaces = [model.get("workspace")];
         }
 
         return context;

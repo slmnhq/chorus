@@ -53,6 +53,19 @@ describe("chorus.views.SearchTabularDataList", function() {
         });
     });
 
+    context("when the search results include a chorus view", function() {
+        beforeEach(function() {
+            this.models.reset([ fixtures.searchResultChorusView({ workspace: { name: "Chorus View Thing" } }) ]);
+            this.view.render();
+        });
+
+        it("should display a link to the single workspace", function() {
+            expect(this.view.$("li:eq(0) .location .found_in")).toContainTranslation("workspaces_used_in.body.one", {
+                workspaceLink: "Chorus View Thing"
+            });
+        });
+    });
+
     context("when there are three or fewer results", function() {
         beforeEach(function() {
             this.models = new chorus.collections.TabularDataSet([

@@ -2655,6 +2655,31 @@ beforeEach(function() {
             }, overrides)
         },
 
+        searchResultChorusView: function(overrides) {
+            var attributes = _.extend({
+                compositeId: "10000|dca_demo|ddemo|QUERY|cv_us_president",
+                content: "SELECT * FROM <em>test</em> AS a",
+                databaseName: "dca_demo",
+                datasetType: "CHORUS_VIEW",
+                entityType: "chorusView",
+                id: "10010",
+                instance: {
+                    id: '10000',
+                    name: 'gillette'
+                },
+                isDeleted: false,
+                objectName: "cv_us_president",
+                objectType: "QUERY",
+                schemaName: "ddemo",
+                workspace: {
+                    id: '10000',
+                    name: 'New Workspace'
+                },
+                comments: []
+            }, overrides);
+            return new chorus.models.Dataset(attributes);
+        },
+
         searchResult : function(overrides) {
             return new chorus.models.SearchResult(this.searchResultJson(overrides))
         },
