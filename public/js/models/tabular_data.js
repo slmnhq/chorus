@@ -205,7 +205,10 @@ chorus.models.TabularData = chorus.models.Base.extend({
             tabularData: this,
             timeType: taskAttrs.timeType
         });
-    }
+    },
+
+    importFrequency: $.noop
+
 }, {
 
     metaTypeMap: {

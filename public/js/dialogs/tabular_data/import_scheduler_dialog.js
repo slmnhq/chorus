@@ -18,14 +18,10 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
     makeModel: function() {
         this.dataset = this.options.launchElement.data("dataset");
+
+        this.model = this.dataset.getImport();
+
         var workspaceId = this.dataset.get("workspace").id;
-
-        if (this.options.launchElement.data("import")) {
-            this.model = this.options.launchElement.data("import");
-        } else {
-            this.model = new chorus.models.DatasetImport({datasetId: this.dataset.id, workspaceId: workspaceId});
-        }
-
         this.sandboxTables = new chorus.collections.DatasetSet([], {workspaceId: workspaceId, type: "SANDBOX_TABLE"});
         this.requiredResources.push(this.sandboxTables);
         this.sandboxTables.sortAsc("objectName");
@@ -183,6 +179,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
             chorus.toast("import.success");
         }
         chorus.PageEvents.broadcast('importSchedule:changed', this.model);
+        this.dataset.trigger('change');
         this.closeModal();
     },
 

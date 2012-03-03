@@ -1984,6 +1984,7 @@ beforeEach(function() {
                 isDeleted: false,
                 importInfo: {},
                 hasCredentials: true,
+                importFrequency: null,
                 owner: {id: "InitialUser", userName: "edcadmin"},
                 modifiedBy: {id: "InitialUser", userName: "edcadmin"},
                 workspace: {id: fixtures.nextId(), name: "some_workspace"},

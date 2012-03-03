@@ -173,12 +173,6 @@ describe("chorus.views.TabularDataListSidebar", function() {
                                     expect(editScheduleLink.text()).toMatchTranslation("actions.edit_schedule");
                                 });
 
-                                it("attaches the import object to the 'edit schedule' link", function() {
-                                    var importModel = this.view.$("a.edit_schedule").data("import");
-                                    expect(importModel).toBeA(chorus.models.DatasetImport);
-                                    expect(importModel.get("datasetId")).toBe(this.dataset.id);
-                                });
-
                                 it("should have the dataset attached as data-dataset", function() {
                                     expect(this.view.$("a.import_now[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
                                     expect(this.view.$("a.edit_schedule[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);

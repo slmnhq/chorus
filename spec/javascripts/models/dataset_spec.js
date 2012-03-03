@@ -117,6 +117,10 @@ describe("chorus.models.Dataset", function() {
             expect(this.dataset.getImport().get("datasetId")).toBe(this.dataset.id);
             expect(this.dataset.getImport().get("workspaceId")).toBe(this.dataset.get("workspace").id);
         });
+
+        it("memoizes", function() {
+            expect(this.dataset.getImport()).toBe(this.dataset.getImport());
+        })
     });
 
     describe("#deriveChorusView", function() {
@@ -172,4 +176,24 @@ describe("chorus.models.Dataset", function() {
             });
         });
     });
+
+    describe("#importFrequency", function() {
+        beforeEach(function() {
+            this.dataset.set({importFrequency: 'WEEKLY'});
+        })
+
+        it("returns the importFrequency", function() {
+            expect(this.dataset.importFrequency()).toBe('WEEKLY');
+        })
+
+        context("when datasetImport has a different frequency", function() {
+            beforeEach(function() {
+                this.dataset.getImport().set({scheduleInfo: {frequency: 'DAILY'}});
+            })
+
+            it("returns the frequency of the import", function() {
+                expect(this.dataset.importFrequency()).toBe("DAILY");
+            })
+        })
+    })
 })

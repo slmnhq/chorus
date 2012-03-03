@@ -58,10 +58,21 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
     },
 
     getImport: function() {
-        return new chorus.models.DatasetImport({
-            datasetId: this.get("id"),
-            workspaceId: this.get("workspace").id
-        });
+        if (!this._datasetImport) {
+            this._datasetImport = new chorus.models.DatasetImport({
+                datasetId: this.get("id"),
+                workspaceId: this.get("workspace").id
+            });
+        }
+        return this._datasetImport
+    },
+
+    setImport: function(datasetImport) {
+        this._datasetImport = datasetImport;
+    },
+
+    importFrequency: function() {
+        return this.getImport().frequency() || this.get('importFrequency')
     },
 
     columns: function(options) {

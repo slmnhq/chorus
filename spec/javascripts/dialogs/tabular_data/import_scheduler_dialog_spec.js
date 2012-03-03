@@ -227,7 +227,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     sourceId: "10000|dca_demo|ddemo|BASE_TABLE|somebodys_table"
                 });
                 this.launchElement.addClass("edit_schedule");
-                this.launchElement.data("import", this.import);
+                this.dataset.setImport(this.import);
                 this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
                 this.dialog.render();
             });
@@ -338,6 +338,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
                         context("when the save completes", function() {
                             beforeEach(function() {
+                                spyOnEvent(this.dataset, 'change');
                                 spyOn(chorus.PageEvents, 'broadcast');
                                 spyOn(chorus, "toast");
                                 spyOn(this.dialog, "closeModal");
@@ -351,6 +352,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
                             it("triggers a importSchedule:changed event", function() {
                                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("importSchedule:changed", this.dialog.model);
                             });
+
+                            it("triggers change on the dataset", function() {
+                                expect('change').toHaveBeenTriggeredOn(this.dataset);
+                            })
                         });
                     });
                 });
@@ -373,7 +378,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     sourceId: "10000|dca_demo|ddemo|BASE_TABLE|somebodys_table"
                 });
                 this.launchElement.addClass("edit_schedule");
-                this.launchElement.data("import", this.import);
+                this.dataset.setImport(this.import);
                 this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
                 this.dialog.render();
             });
