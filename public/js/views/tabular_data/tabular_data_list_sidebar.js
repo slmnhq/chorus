@@ -121,6 +121,10 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
             ctx.isImportable = this.importConfiguration.loaded;
             ctx.hasImport = this.importConfiguration && this.importConfiguration.hasActiveSchedule();
 
+            if (this.importConfiguration.get("nextImportTime")) {
+                ctx.nextImport = chorus.helpers.relativeTimestamp(this.importConfiguration.get("nextImportTime"));
+            }
+
             if (this.importConfiguration.has("executionInfo")) {
                 var importStatusKey;
                 if (this.importConfiguration.wasSuccessfullyExecuted()) {
@@ -135,7 +139,7 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
                 });
                 ctx.lastImport = t(importStatusKey, {
                     timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
-                    tableLink: chorus.helpers.linkTo(destinationTable.showUrl(), this.importConfiguration.get("toTable")),
+                    tableLink: chorus.helpers.linkTo(destinationTable.showUrl(), this.importConfiguration.get("toTable"))
                 });
             }
         } else {

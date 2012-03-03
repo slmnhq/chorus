@@ -1,4 +1,6 @@
 /**
+ * from http://stackoverflow.com/questions/3764459/why-will-this-dateparser-not-work-in-safari
+ *
  * Returns a description of this past date in relative terms.
  * Takes an optional parameter (default: 0) setting the threshold in ms which
  * is considered "Just now".
@@ -29,7 +31,7 @@ Date.prototype.toRelativeTime = function(now_threshold) {
     now_threshold = 0;
   }
 
-  if (delta <= now_threshold) {
+  if (Math.abs(delta) <= now_threshold) {
     return 'Just now';
   }
 
@@ -45,7 +47,7 @@ Date.prototype.toRelativeTime = function(now_threshold) {
   };
 
   for (var key in conversions) {
-    if (delta < conversions[key]) {
+    if (Math.abs(delta) < conversions[key]) {
       break;
     } else {
       units = key; // keeps track of the selected key over the iteration
@@ -54,9 +56,14 @@ Date.prototype.toRelativeTime = function(now_threshold) {
   }
 
   // pluralize a unit when the difference is greater than 1.
-  delta = Math.floor(delta);
-  if (delta !== 1) { units += "s"; }
-  return [delta, units, "ago"].join(" ");
+  delta = delta > 0 ? Math.floor(delta) : Math.ceil(delta);
+  if (Math.abs(delta) !== 1) { units += "s"; }
+
+  if (delta > 0) {
+    return [delta, units, "ago"].join(" ");
+  } else {
+    return ["in", -delta, units].join(" ");
+  }
 };
 
 /*

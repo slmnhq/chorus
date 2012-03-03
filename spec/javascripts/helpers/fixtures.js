@@ -2125,10 +2125,13 @@ beforeEach(function() {
         },
 
         datasetImport: function(overrides) {
+            var in1year = new Date();
+            in1year.setFullYear(in1year.getFullYear()+1);
+
             var attributes = _.extend({
                 destinationTable: "10000|Analytics|analytics|BASE_TABLE|asdfsfsdf",
                 id: this.nextId().toString(),
-                nextImportTime: "2013-03-02 01:00:00.0",
+                nextImportTime: in1year.getFullYear()+"-"+(in1year.getMonth()+1)+"-"+in1year.getDate()+" "+in1year.getHours()+":"+in1year.getMinutes()+":"+in1year.getSeconds()+"."+in1year.getMilliseconds(),
                 sampleCount: 500,
                 sampleMethod: "RANDOM_COUNT",
                 executionInfo: {

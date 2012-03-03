@@ -209,6 +209,10 @@ describe("chorus.views.TabularDataListSidebar", function() {
                             it("doesn't have a 'create import schedule' link'", function() {
                                 expect(this.view.$(".actions .create_schedule")).not.toExist();
                             });
+
+                            it("shows the next import time", function() {
+                                expect(this.view.$(".next_import").html()).toContain("in 1 year");
+                            });
                         });
 
                         context("and the dataset has an import config, but no schedule", function() {
