@@ -178,6 +178,9 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
                 if (self.csv.serverErrors) {
                     self.csv.trigger("saveFailed");
                     fileChosen(e, data);
+                } else if (self.csv.columnOrientedData().length == 0) {
+                    alert = new chorus.alerts.EmptyCSV();
+                    alert.launchModal();
                 }
                 else {
                     var dialog;

@@ -393,25 +393,64 @@ describe("chorus.dialogs.DatasetImport", function() {
 
                 context("when upload succeeds", function() {
                     beforeEach(function() {
-                        this.data = {result: {
-                            resource: [fixtures.csvImport({lines: ["col1,col2,col3", "val1,val2,val3"]}).attributes],
-                            status: "ok"
-                        }};
                         spyOn(chorus.dialogs.NewTableImportCSV.prototype, "setup").andCallThrough()
-                        this.fileUploadOptions.done(null, this.data)
+                        spyOn(chorus.alerts.EmptyCSV.prototype, "setup").andCallThrough();
                     });
 
-                    it("stops the spinner", function() {
-                        expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                    context("when the csv contains column data", function() {
+                        beforeEach(function() {
+                            this.data = {result: {
+                                resource: [fixtures.csvImport({lines: ["col1,col2,col3", "val1,val2,val3"]}).attributes],
+                                status: "ok"
+                            }};
+                            this.fileUploadOptions.done(null, this.data)
+                        });
+
+                        it("stops the spinner", function() {
+                            expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                        });
+
+                        it("sets the lines in the CSV", function() {
+                            expect(this.dialog.csv.get('lines').length).toBe(2);
+                        });
+
+                        it("launches the import new table dialog", function() {
+                            expect(chorus.dialogs.NewTableImportCSV.prototype.setup).toHaveBeenCalledWith({csv: this.dialog.csv});
+                            expect(this.modalSpy).toHaveModal(chorus.dialogs.NewTableImportCSV);
+                        });
+
+                        it("does not show an alert dialog", function() {
+                            expect(chorus.alerts.EmptyCSV.prototype.setup).not.toHaveBeenCalled();
+                            expect(this.modalSpy).not.toHaveModal(chorus.alerts.EmptyCSV);
+                        })
                     });
 
-                    it("sets the lines in the CSV", function() {
-                        expect(this.dialog.csv.get('lines').length).toBe(2);
-                    });
+                    context("when the csv contains no column data", function() {
+                        beforeEach(function() {
+                            this.data = {result: {
+                                resource: [fixtures.csvImport({lines: []}).attributes],
+                                status: "ok"
+                            }};
+                            this.fileUploadOptions.done(null, this.data)
+                        });
 
-                    it("launches the import new table dialog", function() {
-                        expect(chorus.dialogs.NewTableImportCSV.prototype.setup).toHaveBeenCalledWith({csv: this.dialog.csv});
-                        expect(this.modalSpy).toHaveModal(chorus.dialogs.NewTableImportCSV);
+                        it("stops the spinner", function() {
+                            expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                        });
+
+                        it("sets the lines in the CSV", function() {
+                            expect(this.dialog.csv.get('lines').length).toBe(0);
+                        });
+
+                        it("does not launch the import new table dialog", function() {
+                            expect(chorus.dialogs.NewTableImportCSV.prototype.setup).not.toHaveBeenCalled()
+                            expect(this.modalSpy).not.toHaveModal(chorus.dialogs.NewTableImportCSV);
+                        });
+
+                        it("shows an alert dialog", function() {
+                            expect(chorus.alerts.EmptyCSV.prototype.setup).toHaveBeenCalled();
+                            expect(this.modalSpy).toHaveModal(chorus.alerts.EmptyCSV);
+                        })
                     });
                 });
 
