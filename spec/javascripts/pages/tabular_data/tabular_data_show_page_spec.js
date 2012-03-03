@@ -65,6 +65,20 @@ describe("chorus.pages.TabularDataShowPage", function() {
                 expect(this.qtipSpy).toHaveVisibleQtip();
                 expect(this.qtipSpy.find('li').length).toBe(2);
             })
+
+            context("when the tabular data is not used in any workspace", function() {
+                beforeEach(function() {
+                    this.databaseObject.unset("workspaceUsed");
+                });
+
+                it("renders successfully, without the workspace usage section", function() {
+                    var a = this.databaseObject.attributes;
+                    this.page = new chorus.pages.TabularDataShowPage(a.instance.id, a.databaseName, a.schemaName, a.objectType, a.objectName);
+                    this.server.completeFetchFor(this.databaseObject);
+                    this.server.completeFetchAllFor(this.columnSet, [fixtures.databaseColumn(), fixtures.databaseColumn()]);
+                    expect(this.page.$('.content_header .found_in')).not.toExist();
+                });
+            });
         })
 
         it("has a search field in the content details that filters the column list", function() {
