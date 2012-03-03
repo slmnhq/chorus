@@ -36,16 +36,31 @@ describe("chorus.views.ActivityList", function() {
         })
 
         describe("when there are no activity items", function() {
-            beforeEach(function() {
-                this.collection.reset([]);
-                this.view.render();
+            context("and there is an type", function() {
+                beforeEach(function() {
+                    this.collection.reset([]);
+                    this.view.render();
+                });
+
+                it("displays the 'no notes' message", function() {
+                    expect(this.view.$("ul.activities li")).not.toExist();
+
+                    expect(this.view.$(".no_activity")).toContainTranslation("activity_stream.none", {type: "Foo"});
+                })
             });
 
-            it("displays the 'no notes' message", function() {
-                expect(this.view.$("ul.activities li")).not.toExist();
+            context("and there is no type", function() {
+                beforeEach(function() {
+                    delete this.view.options.type;
+                    this.collection.reset([]);
+                    this.view.render();
+                });
 
-                expect(this.view.$(".no_activity")).toContainTranslation("activity_stream.none", {type: "Foo"});
-            })
+                it("displays the 'no notes' message", function() {
+                    expect(this.view.$("ul.activities li")).not.toExist();
+                    expect(this.view.$(".no_activity")).toContainTranslation("activity_stream.no_recent");
+                })
+            });
         })
 
         describe("the isNotification option", function() {
