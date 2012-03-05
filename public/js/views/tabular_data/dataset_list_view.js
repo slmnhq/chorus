@@ -39,6 +39,7 @@ chorus.views.DatasetList = chorus.views.Base.extend({
 
     collectionModelContext: function(model) {
         var ctx = {
+            dataset: model.asDataset(),
             iconImgUrl: model.iconUrl(),
             showUrl: model.showUrl(),
             schemaShowUrl: model.schema().showUrl(),

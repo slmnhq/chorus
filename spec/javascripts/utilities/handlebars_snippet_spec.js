@@ -585,9 +585,17 @@ describe("handlebars", function() {
         });
 
         describe("usedInWorkspaces", function() {
+            var contextObjectClass = chorus.models.Base.extend({
+                showUrlTemplate: "{{workspaceId}}/contextObject",
+                setWorkspace: function(workspace) {this.attributes.workspaceId = workspace.get('id')}
+            })
+            beforeEach(function() {
+                this.contextObject = new contextObjectClass();
+            });
+
             context("when there is no data", function() {
                 beforeEach(function() {
-                    this.result = Handlebars.helpers.usedInWorkspaces(undefined);
+                    this.result = Handlebars.helpers.usedInWorkspaces(undefined, this.contextObject);
                 });
 
                 it("does not render", function() {
@@ -598,7 +606,7 @@ describe("handlebars", function() {
             context("when there aren't any 'found in' workspaces", function() {
                 beforeEach(function() {
                     this.workspaceList = [];
-                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList);
+                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject);
                 });
 
                 it("does not render", function() {
@@ -611,12 +619,16 @@ describe("handlebars", function() {
                     this.workspaceList = [
                         fixtures.nestedWorkspaceJson()
                     ];
-                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList);
+                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject);
                 });
                 itIncludesTheFoundInWorkspaceInformation();
 
                 it("should not indicate there are any other workspaces", function() {
                     expect($(this.result).find('a').length).toBe(1);
+                })
+
+                it("does not modify the contexObject", function() {
+                    expect(this.contextObject.get('workspaceId')).toBeUndefined();
                 })
             })
 
@@ -626,7 +638,7 @@ describe("handlebars", function() {
                         fixtures.nestedWorkspaceJson(),
                         fixtures.nestedWorkspaceJson()
                     ];
-                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList);
+                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject);
                 });
 
                 itIncludesTheFoundInWorkspaceInformation();
@@ -643,7 +655,7 @@ describe("handlebars", function() {
                         fixtures.nestedWorkspaceJson(),
                         fixtures.nestedWorkspaceJson()
                     ];
-                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList);
+                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject);
                 });
 
                 itIncludesTheFoundInWorkspaceInformation();
@@ -656,7 +668,7 @@ describe("handlebars", function() {
                     expect($(this.result).find("a.open_other_menu")).toExist();
                     expect($(this.result).find(".other_menu li").length).toBe(2);
                     var workspace = fixtures.workspace(this.workspaceList[1]);
-                    expect($(this.result).find(".other_menu li a:eq(0)")).toHaveAttr('href', workspace.showUrl())
+                    expect($(this.result).find(".other_menu li a:eq(0)")).toHaveAttr('href', '#/' + workspace.get('id') + '/contextObject')
                     expect($(this.result).find(".other_menu li a:eq(0)")).toContainText(workspace.get('name'))
                 })
             })
@@ -664,7 +676,7 @@ describe("handlebars", function() {
             function itIncludesTheFoundInWorkspaceInformation() {
                 it("includes the 'found in workspace' information", function() {
                     var workspace = new chorus.models.Workspace(this.workspaceList[0]);
-                    expect($(this.result).find("a").attr("href")).toMatchUrl(workspace.showUrl());
+                    expect($(this.result).find("a").attr("href")).toMatchUrl('#/' + workspace.get('id') + '/contextObject');
                     expect($(this.result).find("a")).toContainText(workspace.get('name'));
                 });
             }

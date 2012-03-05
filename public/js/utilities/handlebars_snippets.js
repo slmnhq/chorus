@@ -244,15 +244,17 @@
             return value;
         },
 
-        usedInWorkspaces: function (workspaceList) {
+        usedInWorkspaces: function (workspaceList, contextObject) {
+            contextObject = contextObject.clone();
             if (!workspaceList || workspaceList.length == 0) { return ""; }
 
-            function linkToWorkspace(workspaceJson) {
+            function linkToContextObject(workspaceJson) {
                 var workspace = new chorus.models.Workspace(workspaceJson)
-                return chorus.helpers.linkTo(workspace.showUrl(), workspace.get('name'))
+                contextObject.setWorkspace(workspace);
+                return chorus.helpers.linkTo(contextObject.showUrl(), workspace.get('name'))
             }
 
-            var workspaceLink = linkToWorkspace(workspaceList[0]);
+            var workspaceLink = linkToContextObject(workspaceList[0]);
 
             var result = $("<div></div>").addClass('found_in')
             var otherWorkspacesMenu = chorus.helpers.linkTo('#', t('workspaces_used_in.other_workspaces', {count: workspaceList.length - 1}), {'class': 'open_other_menu'})
@@ -261,7 +263,7 @@
             if(workspaceList.length > 1) {
                 var list = $('<ul></ul>').addClass('other_menu');
                 _.each(_.rest(workspaceList), function(workspaceJson) {
-                    list.append($('<li></li>').html(linkToWorkspace(workspaceJson)));
+                    list.append($('<li></li>').html(linkToContextObject(workspaceJson)));
                 })
                 result.append(list);
             }

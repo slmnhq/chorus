@@ -204,7 +204,7 @@ describe("chorus.Mixins", function() {
 
     describe("Urls", function() {
         beforeEach(function() {
-            this.object = fixtures.workfile({ id: '45' });
+            this.object = fixtures.workspace({ id: '45' });
         });
 
         describe("#showUrl", function() {

@@ -196,4 +196,15 @@ describe("chorus.models.Dataset", function() {
             })
         })
     })
+
+    describe("#setWorkspace", function() {
+        beforeEach(function() {
+            this.newWorkspace = fixtures.workspace();
+            this.dataset.setWorkspace(this.newWorkspace);
+        });
+
+        it("should set the workspace object properly", function() {
+            expect(this.dataset.get("workspace").id).toBe(this.newWorkspace.get("id"))
+        })
+    })
 })

@@ -4,9 +4,12 @@
 
     chorus.models.Workfile = chorus.models.Base.extend({
         constructorName: "Workfile",
-        entityType:"workfile",
+        entityType: "workfile",
 
         urlTemplate: function() {
+            if(this.isNew()) {
+                return "workspace/{{workspaceId}}/workfile";
+            }
             if (this.isLatestVersion()) {
                 return "workspace/{{workspaceId}}/workfile/{{id}}"
             } else {
@@ -22,13 +25,21 @@
             }
         },
 
+        showUrl: function() {
+           if(this.showable()) {
+               return this._super("showUrl", arguments);
+           } else {
+               return this.downloadUrl();
+           }
+        },
+
         showUrlForVersion: function(version) {
             return "#/workspaces/" + this.get("workspaceId") + "/workfiles/" + this.get("id") + "/versions/" + version;
         },
 
         initialize: function() {
             if (this.collection && this.collection.attributes && this.collection.attributes.workspaceId) {
-                this.set({workspaceId:this.collection.attributes.workspaceId}, {silent:true});
+                this.set({workspaceId: this.collection.attributes.workspaceId}, {silent: true});
             }
 
             if (!this.get("workspaceId") && this.get("workspace") && this.get("workspace").id) {
@@ -42,6 +53,10 @@
             return this._workspace;
         },
 
+        setWorkspace: function(workspace) {
+            this.set({workspaceId: workspace.get("id")});
+        },
+
         sandbox: function() {
             return this.workspace().sandbox()
         },
@@ -50,12 +65,12 @@
             var executionInfo = this.get("executionInfo");
             if (executionInfo && executionInfo.schemaName) {
                 return new chorus.models.Schema({
-                    instanceId:executionInfo.instanceId,
-                    instanceName:executionInfo.instanceName,
-                    databaseId:executionInfo.databaseId,
-                    databaseName:executionInfo.databaseName,
-                    id:executionInfo.schemaId,
-                    name:executionInfo.schemaName
+                    instanceId: executionInfo.instanceId,
+                    instanceName: executionInfo.instanceName,
+                    databaseId: executionInfo.databaseId,
+                    databaseName: executionInfo.databaseName,
+                    id: executionInfo.schemaId,
+                    name: executionInfo.schemaName
                 });
             } else {
                 return this.sandbox() && this.sandbox().schema();
@@ -64,16 +79,16 @@
 
         modifier: function() {
             return new chorus.models.User({
-                firstName:this.get("modifiedBy").firstName,
-                lastName:this.get("modifiedBy").lastName,
-                id:this.get("modifiedBy").id
+                firstName: this.get("modifiedBy").firstName,
+                lastName: this.get("modifiedBy").lastName,
+                id: this.get("modifiedBy").id
             })
         },
 
         content: function(newContent, options) {
             if (arguments.length) {
                 this.get("versionInfo").content = newContent;
-                this.set({content:newContent}, options);
+                this.set({content: newContent}, options);
             } else {
                 return this.get("versionInfo").content;
             }
@@ -82,25 +97,25 @@
         lastComment: function() {
             var comments = this.get("recentComments");
             return comments && comments.length > 0 && new chorus.models.Comment({
-                body:comments[0].text,
-                author:comments[0].author,
-                commentCreatedStamp:comments[0].timestamp
+                body: comments[0].text,
+                author: comments[0].author,
+                commentCreatedStamp: comments[0].timestamp
             });
         },
 
         createDraft: function() {
-            var draft = new chorus.models.Draft({workfileId:this.get("id"), workspaceId:this.get("workspaceId"), content:this.content()});
+            var draft = new chorus.models.Draft({workfileId: this.get("id"), workspaceId: this.get("workspaceId"), content: this.content()});
             draft.bind("saved", function() {
                 this.isDraft = true;
-                this.set({ hasDraft:true }, { silent:true });
+                this.set({ hasDraft: true }, { silent: true });
             }, this);
             return draft;
         },
 
         allVersions: function() {
             return new chorus.collections.WorkfileVersionSet([], {
-                workspaceId:this.get("workspaceId"),
-                workfileId:this.get("id")
+                workspaceId: this.get("workspaceId"),
+                workfileId: this.get("id")
             });
         },
 
@@ -108,8 +123,8 @@
             this.require("fileName", newAttrs);
         },
 
-        attrToLabel:{
-            "fileName":"workfiles.validation.name"
+        attrToLabel: {
+            "fileName": "workfiles.validation.name"
         },
 
         isImage: function() {
@@ -178,8 +193,8 @@
             options = options || {};
 
             var overrides = {
-                method:'create',
-                url:"/edc/workspace/" + this.get("workspaceId") + "/workfile/" + this.get("id") + "/version"
+                method: 'create',
+                url: "/edc/workspace/" + this.get("workspaceId") + "/workfile/" + this.get("id") + "/version"
             };
 
             return this._super("save", [attrs, _.extend(options, overrides)])
@@ -197,13 +212,17 @@
             }
         },
 
+        showable: function() {
+            return this.isText() || this.isImage();
+        },
+
         iconUrl: function(options) {
             var fileExtension = this.get("fileType") || this.get('type');
             return chorus.urlHelpers.fileIconUrl(fileExtension, options && options.size);
         },
 
         hasOwnPage: function() {
-            if(this.isImage() || this.isText()) {
+            if (this.isImage() || this.isText()) {
                 return true;
             }
             return false;

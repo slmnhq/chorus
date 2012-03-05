@@ -19,6 +19,7 @@ chorus.views.SearchTabularDataList = chorus.views.Base.extend({
         var comments = model.get("comments") || [];
 
         var context = {
+            dataset: model.asDataset(),
             showUrl: model.showUrl(),
             iconUrl: model.iconUrl(),
             comments: comments.slice(0, 3),

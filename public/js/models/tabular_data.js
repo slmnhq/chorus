@@ -161,6 +161,10 @@ chorus.models.TabularData = chorus.models.Base.extend({
         return false;
     },
 
+    asDataset: function() {
+        return new chorus.models.Dataset(this);
+    },
+
     makeBoxplotTask: function(taskAttrs) {
         return new chorus.models.BoxplotTask({
             xAxis: taskAttrs.xAxis,

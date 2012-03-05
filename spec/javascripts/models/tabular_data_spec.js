@@ -580,4 +580,12 @@ describe("chorus.models.TabularData", function() {
         })
     });
 
+    describe("#asDataset", function() {
+        it("converts the object to a dataset", function() {
+            var dataset = this.tabularData.asDataset();
+            expect(dataset).toBeA(chorus.models.Dataset);
+            expect(dataset.attributes).toEqual(this.tabularData.attributes);
+        })
+    })
+
 });

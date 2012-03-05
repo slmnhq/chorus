@@ -41,17 +41,6 @@ describe("chorus.views.SearchTabularDataList", function() {
                 otherWorkspacesMenu: "2 other workspaces"
             });
         });
-
-        it("shows a popup menu containing links to the other workspaces", function() {
-            this.view.$("li:eq(0) .location .found_in a.open_other_menu").click();
-            var workspaceLinks = this.fakeQtip.find("a");
-
-            expect(workspaceLinks.length).toBe(2);
-            expect(workspaceLinks.eq(0)).toHaveText("Bar");
-            expect(workspaceLinks.eq(1)).toHaveText("Baz");
-            expect(workspaceLinks.eq(0)).toHaveAttr("href", fixtures.workspace({ id: '10010' }).showUrl());
-            expect(workspaceLinks.eq(1)).toHaveAttr("href", fixtures.workspace({ id: '10011' }).showUrl());
-        });
     });
 
     context("when the search results include a chorus view", function() {

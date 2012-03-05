@@ -17,7 +17,7 @@
             this._super('postRender', arguments);
 
             var workspaces = this.model.get("workspaceUsed") || [];
-            this.$('.menus').after(chorus.helpers.usedInWorkspaces(workspaces.workspaceList));
+            this.$('.menus').after(chorus.helpers.usedInWorkspaces(workspaces.workspaceList, this.model.asDataset()));
         }
     })
 

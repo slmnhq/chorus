@@ -30,7 +30,7 @@ chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.extend({
         })
 
         this.$("button.submit").startLoading("actions.adding")
-        this.resource.save({source:"empty"}, {url:$(e.target).attr("action")});
+        this.resource.save({source:"empty"});
     },
 
     saved:function () {

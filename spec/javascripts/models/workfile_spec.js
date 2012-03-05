@@ -256,6 +256,18 @@ describe("chorus.models.Workfile", function() {
             })
         })
 
+        describe("#showUrl", function() {
+            context("when file is not showable", function() {
+                beforeEach(function() {
+                    spyOn(this.model, 'showable').andReturn(false);
+                })
+
+                it("uses downloadUrl", function() {
+                    expect(this.model.showUrl()).toBe(this.model.downloadUrl());
+                })
+            })
+        })
+
         it("has the right download URL", function() {
             expect(this.model.downloadUrl()).toBe("/edc/workspace/10/workfile/5/file/12345?download=true&iebuster=12345");
         });
@@ -279,6 +291,26 @@ describe("chorus.models.Workfile", function() {
             });
         })
     });
+
+    describe("showable", function() {
+        it("is true when the file is text", function() {
+            spyOn(this.model, 'isText').andReturn(true);
+            spyOn(this.model, 'isImage').andReturn(undefined);
+            expect(this.model.showable()).toBeTruthy();
+        })
+
+        it("is true when the file is an image", function() {
+            spyOn(this.model, 'isText').andReturn(undefined);
+            spyOn(this.model, 'isImage').andReturn(true);
+            expect(this.model.showable()).toBeTruthy();
+        })
+
+        it("is false otherwise", function() {
+            spyOn(this.model, 'isText').andReturn(false);
+            spyOn(this.model, 'isImage').andReturn(false);
+            expect(this.model.showable()).toBeFalsy();
+        })
+    })
 
     describe("isImage", function() {
         context("when the workfile is an image", function() {
@@ -647,4 +679,15 @@ describe("chorus.models.Workfile", function() {
             expect(this.model.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('SQL', 'large'));
         })
     });
+
+    describe("#setWorkspace", function() {
+        beforeEach(function() {
+            this.newWorkspace = fixtures.workspace();
+            this.model.setWorkspace(this.newWorkspace);
+        });
+
+        it("should set the workspaceId properly", function() {
+            expect(this.model.get("workspaceId")).toBe(this.newWorkspace.get("id"))
+        })
+    })
 });

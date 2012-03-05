@@ -98,5 +98,9 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
 
     isImportable: function() {
         return this.get("type") !== "SANDBOX_TABLE";
+    },
+
+    setWorkspace: function(workspace) {
+        this.set({workspace: {id: workspace.get('id')}});
     }
 });

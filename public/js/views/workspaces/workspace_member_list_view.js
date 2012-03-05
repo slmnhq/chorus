@@ -10,7 +10,7 @@ chorus.views.WorkspaceMemberList = chorus.views.Base.extend({
     context: function() {
         if (this.model) {
             return {
-                members:this.model.members().chain().first(this.numMembers).map(
+                members: this.model.members().chain().first(this.numMembers).map(
                     function(member) {
                         return {
                             imageUrl: member.imageUrl({size: 'icon'}),
@@ -27,8 +27,10 @@ chorus.views.WorkspaceMemberList = chorus.views.Base.extend({
 
     setWorkspace: function(workspace) {
         this.resource = this.model = workspace
-        workspace.members().fetchAllIfNotLoaded()
-        workspace.members().onLoaded(this.render, this)
+        if (workspace) {
+            workspace.members().fetchAllIfNotLoaded()
+            workspace.members().onLoaded(this.render, this)
+        }
         this.render()
     }
 });

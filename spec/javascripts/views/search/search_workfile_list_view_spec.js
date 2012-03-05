@@ -2,7 +2,7 @@ describe("chorus.views.SearchWorkfileList", function() {
     beforeEach(function() {
         this.view = new chorus.views.SearchWorkfileList({
             collection: fixtures.workfileSet([
-                {id: "1", workspace: {id: "2", name: "Test"}, fileType: "SQL",
+                {id: "1", workspace: {id: "2", name: "Test"}, fileType: "SQL", mimeType: 'text/text',
                     comments: [
                         {"lastUpdatedStamp": "2012-02-28 14:07:34", "isPublished": false, "id": "10000", "workspaceId": "10000", "isComment": false, "isInsight": false, "content": "nice <em>cool<\/em> file", "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
                         {"lastUpdatedStamp": "2012-02-28 14:07:46", "isPublished": false, "id": "10001", "workspaceId": "10000", "isComment": true, "isInsight": false, "content": "nice <em>cool<\/em> comment", "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
@@ -10,7 +10,7 @@ describe("chorus.views.SearchWorkfileList", function() {
                         {"lastUpdatedStamp": "2012-02-28 14:09:56", "isPublished": false, "id": "10003", "workspaceId": "10000", "isComment": false, "isInsight": true, "content": "Nice <em>cool<\/em> insight", "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}}
                     ]
                 },
-                {id: "4", workspace: {id: "3", name: "Other"}, fileType: "txt",
+                {id: "4", workspace: {id: "3", name: "Other"}, fileType: "txt", mimeType: 'text/text',
                     description: "this is a <EM>cool</EM> file description"
                 }
             ]),
@@ -30,7 +30,7 @@ describe("chorus.views.SearchWorkfileList", function() {
             beforeEach(function() {
                 this.view = new chorus.views.SearchWorkfileList({
                     collection: fixtures.workfileSet([
-                        {id: "1",  workspace: {id: "2", name: "Test"}},
+                        {id: "1", workspace: {id: "2", name: "Test"}},
                         {id: "4", workspace: {id: "3", name: "Other"}}
                     ]),
 
@@ -78,7 +78,7 @@ describe("chorus.views.SearchWorkfileList", function() {
 
     describe("list elements", function() {
         it("there is one for each model in the collection", function() {
-                expect(this.view.$('li').length).toBe(2);
+            expect(this.view.$('li').length).toBe(2);
         });
 
         it("has the right data-id attribute", function() {
@@ -97,9 +97,6 @@ describe("chorus.views.SearchWorkfileList", function() {
         });
 
         it("shows which workspace each result was found in", function() {
-            expect(this.view.$("li .location:eq(0) a").attr('href')).toBe('#/workspaces/2');
-            expect(this.view.$("li .location:eq(1) a").attr('href')).toBe('#/workspaces/3');
-
             expect(this.view.$('li .location').eq(0)).toContainTranslation(
                 "workspaces_used_in.body.one",
                 {workspaceLink: "Test"}
