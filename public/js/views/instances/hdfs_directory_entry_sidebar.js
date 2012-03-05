@@ -14,7 +14,9 @@ chorus.views.HdfsDirectoryEntrySidebar = chorus.views.Sidebar.extend({
 
     setEntry: function(entry) {
         this.resource = entry;
-        if (entry && false) {
+        if (entry) {
+            entry.entityId = this.makeEntityId();
+
             var activities = entry.activities();
             activities.fetch();
             this.activityList = new chorus.views.ActivityList({
@@ -33,7 +35,14 @@ chorus.views.HdfsDirectoryEntrySidebar = chorus.views.Sidebar.extend({
 
     additionalContext: function() {
         return {
+            entityId: this.makeEntityId(),
             lastUpdatedStamp: t("hdfs.last_updated", { when : chorus.helpers.relativeTimestamp(this.resource.get("lastModified"))})
+        }
+    },
+
+    makeEntityId: function() {
+        if (this.resource) {
+            return this.options.instanceId + "|" + encodeURIComponent(this.options.rootPath + "/" +this.resource.get("name"));
         }
     }
 });
