@@ -71,17 +71,7 @@
             @include font-normal-alpha;
         }
 
-        .showMoreSupportingMessage, .hideMoreSupportingMessage {
-            font-size: 12px;
-            padding-top: 5px;
-            display: inline-block;
-
-            .and {
-                @include results-console-message;
-            }
-        }
-
-        .comments, .moreComments{
+        .comments, .moreComments, .supportingMessage, .moreSupportingMessage {
             @include font-content-details;
             margin: 0;
 
