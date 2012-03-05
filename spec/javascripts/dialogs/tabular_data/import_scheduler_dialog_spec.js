@@ -329,6 +329,13 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         expect(this.dialog.$("input[name='sampleCount']").val()).toBe("200");
                     });
 
+                    it("sets activateSchedule to false, not null, on submission", function() {
+                        this.dialog.$("input[name='schedule']").prop("checked", false);
+                        this.dialog.$("button.submit").trigger("click");
+                        // must explicitly be false https://www.pivotaltracker.com/story/show/25783061
+                        expect(this.server.lastUpdate().params().activateSchedule).toBe("false");
+                    });
+
                     describe("submitting the form", function() {
                         beforeEach(function() {
                             this.dialog.$("input[name='sampleCount']").val("201");
@@ -340,7 +347,8 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         });
 
                         it("sends activateSchedule", function() {
-                            expect(this.server.lastUpdate().params().activateSchedule).toBeTruthy();
+                            // must explicitly be true https://www.pivotaltracker.com/story/show/25783061
+                            expect(this.server.lastUpdate().params().activateSchedule).toBe("true");
                         });
 
                         context("when the save completes", function() {
