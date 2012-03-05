@@ -5,7 +5,7 @@ chorus.dialogs.InstancesEdit = chorus.dialogs.Base.extend({
         "submit form":"save"
     },
     makeModel:function () {
-        this.model = this.options.pageModel;
+        this.model = new chorus.models.Instance(this.options.pageModel.attributes);
 
         this.users = new chorus.collections.UserSet();
         this.fetchUserSet();
@@ -46,8 +46,7 @@ chorus.dialogs.InstancesEdit = chorus.dialogs.Base.extend({
 
         this.$("button.submit").startLoading("instances.edit_dialog.saving");
         this.$("button.cancel").attr("disabled", "disabled");
-        this.model.set(attrs, { silent:true })
-        this.model.save();
+        this.model.save(attrs);
     },
 
     saveSuccess:function () {

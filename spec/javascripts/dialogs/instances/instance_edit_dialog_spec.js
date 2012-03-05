@@ -11,6 +11,11 @@ describe("chorus.dialogs.InstanceEditDialog", function() {
         this.dialog = new chorus.dialogs.InstancesEdit({launchElement: this.launchElement, pageModel: this.instance });
     });
 
+    it("should make a copy of the page model", function() {
+        expect(this.dialog.model).not.toBe(this.instance);
+        expect(this.dialog.model.attributes).toEqual(this.instance.attributes);
+    });
+
     describe("#render", function() {
         describe("when editing a registered instance", function() {
             beforeEach(function() {
@@ -229,14 +234,16 @@ describe("chorus.dialogs.InstanceEditDialog", function() {
                 this.dialog.$("input[name=name]").val("test2");
                 this.dialog.$("input[name=port]").val("8556");
                 this.dialog.$("input[name=host]").val("testhost2");
+                this.dialog.$("input[name=size]").val("123");
                 this.dialog.$("button[type=submit]").submit();
             });
 
             it("updates the model", function() {
-                expect(this.dialog.model.get("name")).toBe("test2");
-                expect(this.dialog.model.get("port")).toBe("8556");
-                expect(this.dialog.model.get("host")).toBe("testhost2");
-                expect(this.dialog.model.has("maintenanceDb")).toBeFalsy();
+                expect(this.server.lastUpdate().params().name).toBe("test2");
+                expect(this.server.lastUpdate().params().port).toBe("8556");
+                expect(this.server.lastUpdate().params().host).toBe("testhost2");
+                expect(this.server.lastUpdate().params().size).toBe("123");
+                expect(this.server.lastUpdate().params().maintenanceDb).toBeUndefined();
             });
         });
 
