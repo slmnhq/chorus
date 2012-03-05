@@ -1,5 +1,6 @@
 describe("chorus.views.TabularDataListSidebar", function() {
     beforeEach(function() {
+        stubModals();
         this.view = new chorus.views.TabularDataListSidebar();
     });
 
@@ -297,12 +298,11 @@ describe("chorus.views.TabularDataListSidebar", function() {
 
                     context("clicking on the link to add credentials", function() {
                         beforeEach(function() {
-                            this.modalStub = stubModals();
                             this.view.$('.no_credentials a.add_credentials').click();
                         })
 
                         it("launches the InstanceAccount dialog", function() {
-                            expect(this.modalStub).toHaveModal(chorus.dialogs.InstanceAccount);
+                            expect(chorus.modal).toBeA(chorus.dialogs.InstanceAccount);
                         });
 
                         context("saving the credentials", function() {
@@ -347,11 +347,6 @@ describe("chorus.views.TabularDataListSidebar", function() {
                         chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
 
-                    it("has a link to associate the dataset with a workspace", function() {
-                        expect(this.view.$('.actions .associate')).toContainTranslation('actions.associate_with_workspace');
-                        expect(this.view.$('.actions .associate a').data('dialog')).toBe("AssociateWithWorkspace");
-                    });
-
                     it("has the 'add a note' link with the correct data", function() {
                         var notesNew = this.view.$("a.dialog[data-dialog=NotesNew]");
                         expect(notesNew.data("entity-id")).toBe(this.dataset.get("id"));
@@ -366,6 +361,20 @@ describe("chorus.views.TabularDataListSidebar", function() {
 
                     it("prefers only the without_workspace type for the activity list", function() {
                         expect(this.view.activityList.options.displayStyle).toEqual(['without_workspace']);
+                    });
+
+                    it("has a link to associate the dataset with a workspace", function() {
+                        expect(this.view.$('.actions .associate')).toContainTranslation('actions.associate_with_workspace');
+                    });
+
+                    describe("when the 'associate with workspace' link is clicked", function() {
+                        beforeEach(function() {
+                            this.view.$("li.associate a").click();
+                        });
+
+                        it("displays the associate with workspace dialog", function() {
+                            expect(chorus.modal).toBeA(chorus.dialogs.AssociateWithWorkspace);
+                        });
                     });
                 });
 

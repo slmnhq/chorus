@@ -3,7 +3,8 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
     className: "tabular_data_list_sidebar",
 
     events: {
-        "click .no_credentials a.add_credentials": "launchAddCredentialsDialog"
+        "click .no_credentials a.add_credentials": "launchAddCredentialsDialog",
+        "click .associate a": "launchAssociateWithWorkspaceDialog"
     },
 
     subviews: {
@@ -164,6 +165,13 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
     launchAddCredentialsDialog: function(e) {
         e && e.preventDefault();
         new chorus.dialogs.InstanceAccount({pageModel: this.resource.instance(), title: t("instances.sidebar.add_credentials"), reload: true}).launchModal();
+    },
+
+    launchAssociateWithWorkspaceDialog: function(e) {
+        e.preventDefault();
+
+        var dialog = new chorus.dialogs.AssociateWithWorkspace({model: this.resource});
+        dialog.launchModal();
     },
 
     datasetType: function(tabularData) {

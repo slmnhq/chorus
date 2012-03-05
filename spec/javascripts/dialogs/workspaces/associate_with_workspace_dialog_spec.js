@@ -4,19 +4,27 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
     });
 
     it("does not re-render when the model changes", function() {
-        var dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement : this.launchElement });
+        var dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement : this.launchElement, model: fixtures.datasetSourceTable() });
         expect(dialog.persistent).toBeTruthy()
     })
 
+    describe("intialization", function() {
+        it("should complain if it isn't given a model", function() {
+            expect(function() {
+                new chorus.dialogs.AssociateWithWorkspace({launchElement : this.launchElement });
+            }).toThrow();
+        });
+    });
+
     describe("clicking Associate Dataset", function() {
         beforeEach(function() {
-            this.pageModel = fixtures.datasetSourceTable();
+            this.model = fixtures.datasetSourceTable();
             this.workspace = fixtures.workspace();
-            this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement : this.launchElement, pageModel: this.pageModel });
+            this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement : this.launchElement, model: this.model });
             this.dialog.render();
 
             spyOn(chorus, "toast");
-            spyOn(this.pageModel.activities(), "fetch");
+            spyOn(this.model.activities(), "fetch");
             spyOn(this.dialog.picklistView, "selectedItem").andReturn(this.workspace);
             this.dialog.picklistView.trigger("item:selected", this.workspace);
             spyOn(chorus.router, "navigate")
@@ -28,12 +36,12 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             expect(_.last(this.server.requests).url).toMatchUrl("/edc/workspace/" + this.workspace.get("id") + "/dataset");
             expect(_.last(this.server.requests).params()).toEqual({
                 type: "SOURCE_TABLE",
-                instanceId: this.pageModel.get("instance").id.toString(),
+                instanceId: this.model.get("instance").id.toString(),
 
-                databaseName: this.pageModel.get("databaseName"),
-                schemaName: this.pageModel.get("schemaName"),
-                objectName: this.pageModel.get("objectName"),
-                objectType: this.pageModel.get("objectType")
+                databaseName: this.model.get("databaseName"),
+                schemaName: this.model.get("schemaName"),
+                objectName: this.model.get("objectName"),
+                objectType: this.model.get("objectType")
             });
             expect(_.last(this.server.requests).method).toBe("POST");
         })
@@ -53,7 +61,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             });
 
             it("pops toast", function() {
-                expect(chorus.toast).toHaveBeenCalledWith("dataset.associate.toast", {datasetTitle:this.pageModel.get("objectName"), workspaceNameTarget: this.workspace.get("name")});
+                expect(chorus.toast).toHaveBeenCalledWith("dataset.associate.toast", {datasetTitle:this.model.get("objectName"), workspaceNameTarget: this.workspace.get("name")});
             });
 
             it("does not navigate", function() {
@@ -61,7 +69,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             });
 
             it("fetch the activities for the dataset", function() {
-                expect(this.pageModel.activities().fetch).toHaveBeenCalled();
+                expect(this.model.activities().fetch).toHaveBeenCalled();
             });
         })
 
