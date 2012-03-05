@@ -230,13 +230,6 @@
         MEMBERS_ADDED: memberExtension,
         MEMBERS_DELETED: memberExtension,
 
-        BE_MEMBER: function(model) {
-            return {
-                objectName: model.workspace().get("name"),
-                objectUrl: model.workspace().showUrl()
-            }
-        },
-
         WORKSPACE_DELETED: function(model) {
             return {
                 objectName: this.presenter.workspaceName,
