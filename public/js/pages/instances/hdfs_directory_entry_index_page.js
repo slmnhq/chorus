@@ -56,7 +56,7 @@ chorus.pages.HdfsDirectoryEntryIndexPage = chorus.pages.Base.extend({
 
             qtipArgs: {
                 show: { event: "mouseenter"},
-                hide: { event: "mouseleave", delay: 2000, fixed: true }
+                hide: { event: "mouseleave", delay: 500, fixed: true }
             }
         });
     },
