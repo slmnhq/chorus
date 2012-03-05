@@ -27,7 +27,7 @@
         <ul>
             {{#if browsingSchema}}
                 <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}">{{t "actions.add_note"}}</a></li>
-                <li class="associate"><a class="dialog" href="#">{{t "actions.associate_with_workspace"}}</a></li>
+                <li><a class="associate" href="#">{{t "actions.associate_with_workspace"}}</a></li>
             {{else}}
                 <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workspace-attachments="true">{{t "actions.add_note"}}</a></li>
                 {{#if canImport}}
@@ -41,7 +41,7 @@
             {{/if}}
 
             {{#unless noCredentials}}
-                <li><a class="dialog tabular_data_preview" data-dialog="TabularDataPreview" href="#">{{t "actions.tabular_data_preview"}}</a></li>
+                <li><a class="tabular_data_preview" href="#">{{t "actions.tabular_data_preview"}}</a></li>
             {{/unless}}
         </ul>
     </div>

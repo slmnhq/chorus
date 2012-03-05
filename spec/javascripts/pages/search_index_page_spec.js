@@ -28,24 +28,24 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         describe("the workfile section", function() {
             beforeEach(function() {
-                this.workfileLis = this.page.$(".workfile_list li");
+                this.workfileLIs = this.page.$(".workfile_list li");
             });
 
             it("shows a list of search results", function() {
-                expect(this.workfileLis.length).toBeGreaterThan(0);
+                expect(this.workfileLIs.length).toBeGreaterThan(0);
             });
 
             it("selects the first workfile by default", function() {
-                expect(this.workfileLis.eq(0)).toHaveClass("selected");
+                expect(this.workfileLIs.eq(0)).toHaveClass("selected");
             });
 
             describe("clicking on a workfile search result", function() {
                 beforeEach(function() {
-                    this.workfileLis.eq(1).trigger("click");
+                    this.workfileLIs.eq(1).trigger("click");
                 });
 
                 it("selects that workfile", function() {
-                    expect(this.workfileLis.eq(1)).toHaveClass("selected");
+                    expect(this.workfileLIs.eq(1)).toHaveClass("selected");
                 });
 
                 it("shows that workfile in the sidebar", function() {
@@ -60,20 +60,20 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         describe("the workspace section", function() {
             beforeEach(function() {
-                this.workspaceLis = this.page.$(".workspace_list li");
+                this.workspaceLIs = this.page.$(".workspace_list li");
             });
 
             it("shows a list of search results", function() {
-                expect(this.workspaceLis.length).toBeGreaterThan(0);
+                expect(this.workspaceLIs.length).toBeGreaterThan(0);
             });
 
             describe("clicking on a workspace search result", function() {
                 beforeEach(function() {
-                    this.workspaceLis.eq(1).trigger("click");
+                    this.workspaceLIs.eq(1).trigger("click");
                 });
 
                 it("selects that workspace", function() {
-                    expect(this.workspaceLis.eq(1)).toHaveClass("selected");
+                    expect(this.workspaceLIs.eq(1)).toHaveClass("selected");
                 });
 
                 it("shows that workspace in the sidebar", function() {
@@ -92,20 +92,20 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         describe("the dataset section", function() {
             beforeEach(function() {
-                this.datasetLis = this.page.$(".tabular_data_list li");
+                this.datasetLIs = this.page.$(".tabular_data_list li");
             });
 
             it("shows a list of search results", function() {
-                expect(this.datasetLis.length).toBeGreaterThan(0);
+                expect(this.datasetLIs.length).toBeGreaterThan(0);
             });
 
             describe("clicking on a tabular data search result", function() {
                 beforeEach(function() {
-                    this.datasetLis.eq(2).trigger("click");
+                    this.datasetLIs.eq(2).trigger("click");
                 });
 
                 it("selects that tabular data item", function() {
-                    expect(this.datasetLis.eq(2)).toHaveClass("selected");
+                    expect(this.datasetLIs.eq(2)).toHaveClass("selected");
                 });
 
                 it("shows the tabular data item in the sidebar", function() {

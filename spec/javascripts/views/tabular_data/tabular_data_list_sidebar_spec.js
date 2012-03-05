@@ -274,8 +274,17 @@ describe("chorus.views.TabularDataListSidebar", function() {
                 });
 
                 it("displays the 'Preview Data' link", function() {
-                    expect(this.view.$('.actions .dialog.tabular_data_preview').data('dialog')).toBe('TabularDataPreview');
                     expect(this.view.$('.actions .tabular_data_preview')).toContainTranslation('actions.tabular_data_preview');
+                });
+
+                describe("when the 'Preview Data' link is clicked", function() {
+                    beforeEach(function() {
+                        this.view.$(".tabular_data_preview").click();
+                    });
+
+                    it("displays the preview data dialog", function() {
+                        expect(chorus.modal).toBeA(chorus.dialogs.TabularDataPreview);
+                    });
                 });
 
                 context("when hasCredentials is false for the dataset", function() {

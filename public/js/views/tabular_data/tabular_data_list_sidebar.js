@@ -4,7 +4,8 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
 
     events: {
         "click .no_credentials a.add_credentials": "launchAddCredentialsDialog",
-        "click .associate a": "launchAssociateWithWorkspaceDialog"
+        "click .associate": "launchAssociateWithWorkspaceDialog",
+        "click .tabular_data_preview": "launchTabularDataPreviewDialog"
     },
 
     subviews: {
@@ -170,8 +171,13 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
     launchAssociateWithWorkspaceDialog: function(e) {
         e.preventDefault();
 
-        var dialog = new chorus.dialogs.AssociateWithWorkspace({model: this.resource});
-        dialog.launchModal();
+        new chorus.dialogs.AssociateWithWorkspace({model: this.resource}).launchModal();
+    },
+
+    launchTabularDataPreviewDialog: function(e) {
+        e.preventDefault();
+
+        new chorus.dialogs.TabularDataPreview({model: this.resource}).launchModal();
     },
 
     updateImportSchedule: function(importConfiguration) {
