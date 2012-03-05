@@ -8,11 +8,13 @@
         height: 32px;
     }
 
-    li div.text {
-        left: 57px;
-    }
+    li {
+        div.text {
+            left: 57px;
+        }
 
-    .details span{
-        @include font-normal-alpha;
+        .details span {
+            @include font-normal-alpha;
+        }
     }
 }

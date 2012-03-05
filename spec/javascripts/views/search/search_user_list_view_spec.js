@@ -1,7 +1,9 @@
 describe("chorus.views.SearchUserList", function() {
     beforeEach(function() {
+        this.collection = fixtures.searchResult().users();
+
         this.view = new chorus.views.SearchUserList({
-            collection: fixtures.userSet(fixtures.searchResultJson().user.docs)
+            collection: this.collection
         });
 
         this.collection = this.view.collection;
@@ -16,47 +18,41 @@ describe("chorus.views.SearchUserList", function() {
 
         context("has no additional results", function() {
             beforeEach(function() {
-                this.view = new chorus.views.SearchUserList({
-                    collection: fixtures.userSet(fixtures.searchResultJson().user.docs.slice(0, 3)),
-                    total: 3
-                });
-
+                this.collection.attributes.total = this.collection.models.length;
                 this.view.render()
             });
 
             it("has a short count", function() {
-                expect(this.view.$(".details .count")).toContainTranslation("search.count_short", {shown: "3"});
+                expect(this.view.$(".details .count")).toContainTranslation("search.count_short", {shown: this.collection.models.length});
             });
 
             it("has no showAll link", function() {
                 expect(this.view.$(".details a.show_all")).not.toExist();
-            })
-        })
+            });
+        });
 
         context("has additional results", function() {
             beforeEach(function() {
-                this.view = new chorus.views.SearchUserList({
-                    collection: fixtures.userSet(fixtures.searchResultJson().user.docs.slice(0, 3)),
-                    total: 4
-                });
-
+                this.collection.attributes.total = this.collection.models.length + 1;
                 this.view.render()
             });
 
             it("has a long count", function() {
-                expect(this.view.$(".details .count")).toContainTranslation("search.count", {shown: "3", total: "4"});
+                expect(this.view.$(".details .count")).toContainTranslation("search.count", {
+                    shown: this.collection.models.length,
+                    total: (this.collection.models.length + 1)
+                });
             });
 
             it("has a showAll link", function() {
                 expect(this.view.$(".details a.show_all")).toContainTranslation("search.show_all")
             })
-        })
+        });
 
         context("has no results at all", function() {
             beforeEach(function() {
                 this.view = new chorus.views.SearchUserList({
-                    collection: fixtures.userSet([]),
-                    total: "0"
+                    collection: fixtures.userSet([], {total: 0})
                 });
 
                 this.view.render()
@@ -70,7 +66,7 @@ describe("chorus.views.SearchUserList", function() {
     });
 
     describe("list elements", function() {
-        it("there is one for each model in the collection, up to 3", function() {
+        it("there is one for each model in the collection", function() {
             expect(this.view.$('li').length).toBe(4);
         });
 
@@ -102,7 +98,7 @@ describe("chorus.views.SearchUserList", function() {
             expect(this.view.$('li a.name').eq(3).html()).toContain(this.collection.at(3).displayName());
         });
 
-        describe("supporting message", function() {
+        describe("supporting messages (title, notes, etc.)", function() {
             context("when there are more than 3 supporting messages", function() {
                 beforeEach(function() {
                     this.collection.at(0).set({
@@ -184,42 +180,42 @@ describe("chorus.views.SearchUserList", function() {
                 it("display the more show more link", function() {
                     expect(this.view.$(".showMoreSupportingMessage")).not.toExist();
                 });
-            })
-        });
+            });
 
-        it("has each user's Title in the collection", function() {
-            expect(this.view.$('li:eq(0) .title .content')).not.toExist();
-            expect(this.view.$('li:eq(1) .title .content').html()).toContain(this.collection.at(1).get("title"));
-            expect(this.view.$('li:eq(2) .title .content').html()).toContain(this.collection.at(2).get("title"));
-            expect(this.view.$('li:eq(3) .title .content')).not.toExist();
-        });
+            it("has each user's Title in the collection", function() {
+                expect(this.view.$('li:eq(0) .title .content')).not.toExist();
+                expect(this.view.$('li:eq(1) .title .content').html()).toContain(this.collection.at(1).get("title"));
+                expect(this.view.$('li:eq(2) .title .content').html()).toContain(this.collection.at(2).get("title"));
+                expect(this.view.$('li:eq(3) .title .content')).not.toExist();
+            });
 
-        it("has each user's Department in the collection", function() {
-            expect(this.view.$('li:eq(0) .ou .content').html()).toContain(this.collection.at(1).get("ou"));
-            expect(this.view.$('li:eq(1) .ou .content')).not.toExist();
-            expect(this.view.$('li:eq(2) .ou .content')).not.toExist();
-            expect(this.view.$('li:eq(3) .ou .content')).not.toExist();
-        });
+            it("has each user's Department in the collection", function() {
+                expect(this.view.$('li:eq(0) .ou .content').html()).toContain(this.collection.at(1).get("ou"));
+                expect(this.view.$('li:eq(1) .ou .content')).not.toExist();
+                expect(this.view.$('li:eq(2) .ou .content')).not.toExist();
+                expect(this.view.$('li:eq(3) .ou .content')).not.toExist();
+            });
 
-        it("has each user's Notes in the collection", function() {
-            expect(this.view.$('li:eq(0) .notes .content').html()).toContain(this.collection.at(0).get("content"));
-            expect(this.view.$('li:eq(1) .notes .content').html()).toContain(this.collection.at(1).get("content"));
-            expect(this.view.$('li:eq(2) .notes .content')).not.toExist();
-            expect(this.view.$('li:eq(3) .notes .content')).not.toExist();
-        });
+            it("has each user's Notes in the collection", function() {
+                expect(this.view.$('li:eq(0) .notes .content').html()).toContain(this.collection.at(0).get("content"));
+                expect(this.view.$('li:eq(1) .notes .content').html()).toContain(this.collection.at(1).get("content"));
+                expect(this.view.$('li:eq(2) .notes .content')).not.toExist();
+                expect(this.view.$('li:eq(3) .notes .content')).not.toExist();
+            });
 
-        it("has each user's e-mail in the collection", function() {
-            expect(this.view.$('li:eq(0) .email .content')).not.toExist();
-            expect(this.view.$('li:eq(1) .email .content').html()).toContain(this.collection.at(1).get("emailAddress"));
-            expect(this.view.$('li:eq(2) .email .content').html()).toContain(this.collection.at(2).get("emailAddress"));
-            expect(this.view.$('li:eq(3) .email .content')).not.toExist();
-        });
+            it("has each user's e-mail in the collection", function() {
+                expect(this.view.$('li:eq(0) .email .content')).not.toExist();
+                expect(this.view.$('li:eq(1) .email .content').html()).toContain(this.collection.at(1).get("emailAddress"));
+                expect(this.view.$('li:eq(2) .email .content').html()).toContain(this.collection.at(2).get("emailAddress"));
+                expect(this.view.$('li:eq(3) .email .content')).not.toExist();
+            });
 
-        it("has each user's username in the collection", function() {
-            expect(this.view.$('li:eq(0) .username .content').html()).toContain(this.collection.at(0).get("name"));
-            expect(this.view.$('li:eq(1) .username .content')).not.toExist();
-            expect(this.view.$('li:eq(2) .username .content')).not.toExist();
-            expect(this.view.$('li:eq(3) .username .content').html()).toContain(this.collection.at(3).get("name"));
+            it("has each user's username in the collection", function() {
+                expect(this.view.$('li:eq(0) .username .content').html()).toContain(this.collection.at(0).get("name"));
+                expect(this.view.$('li:eq(1) .username .content')).not.toExist();
+                expect(this.view.$('li:eq(2) .username .content')).not.toExist();
+                expect(this.view.$('li:eq(3) .username .content').html()).toContain(this.collection.at(3).get("name"));
+            });
         });
     });
 });

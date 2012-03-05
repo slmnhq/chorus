@@ -74,7 +74,13 @@ describe("chorus.models.SearchResult", function() {
             expect(this.workfiles.models[0].comments.at(1).get("isInsight")).toBeFalsy();
             expect(this.workfiles.models[0].comments.at(2).get("isInsight")).toBeTruthy();
         });
+
+        it("has numFound in 'total'", function() {
+            expect(this.workfiles.attributes.total).toBe(this.model.get('workfile').numFound);
+        });
     });
+
+    // TODO: #workspaces
 
     describe("#tabularData", function() {
         beforeEach(function() {
@@ -89,7 +95,7 @@ describe("chorus.models.SearchResult", function() {
 
         it("has numFound in 'total'", function() {
             expect(this.tabularData.attributes.total).toBe(this.model.get('dataset').numFound);
-        })
+        });
     });
 
     describe("#users", function() {
@@ -106,5 +112,8 @@ describe("chorus.models.SearchResult", function() {
             expect(this.users.models.length).toBe(4);
         });
 
+        it("has numFound in 'total'", function() {
+            expect(this.users.attributes.total).toBe(this.model.get('user').numFound);
+        });
     });
 })

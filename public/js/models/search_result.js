@@ -2,7 +2,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
     urlTemplate: "search/global/",
 
     urlParams: function() {
-        return {query: this.get("query")}
+        return {query: this.get("query"), rows: 3, page: 1}
     },
 
     displayShortName:function (length) {
@@ -13,7 +13,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
     },
 
     users: function() {
-        return new chorus.collections.UserSet(this.get("user").docs);
+        return new chorus.collections.UserSet(this.get("user").docs, { total: this.get("user").numFound });
     },
 
     workfiles: function() {
@@ -23,7 +23,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
             workfile.comments = new chorus.collections.ActivitySet(workfileJson.comments);
             return workfile;
         });
-        return new chorus.collections.WorkfileSet(workfiles);
+        return new chorus.collections.WorkfileSet(workfiles, { total: this.get("user").numFound });
     },
 
     tabularData: function() {
@@ -37,6 +37,6 @@ chorus.models.SearchResult = chorus.models.Base.extend({
             workspace.comments = new chorus.collections.ActivitySet(workspaceJson.comments);
             return workspace;
         });
-        return new chorus.collections.WorkspaceSet(workspaces);
+        return new chorus.collections.WorkspaceSet(workspaces, { total: this.get("workspace").numFound });
     }
 });

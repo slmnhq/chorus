@@ -24,8 +24,8 @@ chorus.views.SearchUserList = chorus.views.Base.extend({
     additionalContext: function() {
         return {
             shown: this.collection.models.length,
-            total: this.options.total,
-            moreResults: (this.collection.models.length < this.options.total)
+            total: this.collection.attributes.total,
+            moreResults: (this.collection.models.length < this.collection.attributes.total)
         }
     },
 
