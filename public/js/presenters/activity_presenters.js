@@ -76,7 +76,7 @@
 
             var header = {
                 type: this.model.get("type"),
-                objectLink: chorus.helpers.linkTo(this.presenter.objectUrl, this.presenter.objectName),
+                objectLink: chorus.helpers.linkTo(this.presenter.objectUrl, this.presenter.objectName, {'class': 'object_link'}),
                 workspaceLink: chorus.helpers.linkTo(this.presenter.workspaceUrl, this.presenter.workspaceName)
             }
 

@@ -513,7 +513,7 @@ describe("chorus.views.Activity", function() {
 
         if (options.checkLink) {
             it("contains the object's url", function() {
-                expect(this.view.$('.activity_header a[href="' + this.presenter.objectUrl + '"]')).toExist();
+                expect(decodeURI(this.view.$('.activity_header a.object_link').attr('href'))).toBe(this.presenter.objectUrl);
             });
         }
     }
