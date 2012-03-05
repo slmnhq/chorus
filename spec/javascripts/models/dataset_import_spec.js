@@ -57,15 +57,21 @@ describe("chorus.models.DatasetImport", function() {
         });
 
         context("when the import doesn't have a 'scheduleInfo' or a 'scheduleStartTime''", function() {
-            it("returns undefined", function() {
+            beforeEach(function() {
                 this.model.unset("scheduleStartTime");
                 this.model.unset("scheduleEndTime");
                 this.model.unset("scheduleInfo");
                 this.model.unset("scheduleFrequency");
-                expect(this.model.startTime()).toBeUndefined();
+            });
+
+            it("returns undefined for endTime and frequency", function() {
                 expect(this.model.endTime()).toBeUndefined();
                 expect(this.model.frequency()).toBeUndefined();
             });
+
+            it("returns 11pm today for startTime", function() {
+                expect(this.model.startTime().compareTo(Date.today().set({hour: 23, minute: 00}))).toBe(0);
+            })
         });
 
         function itReturnsTheCorrectTimes() {

@@ -31,6 +31,8 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
             return this.get("scheduleInfo").startTime.split(".")[0];
         } else if (this.get("scheduleStartTime")) {
             return this.get("scheduleStartTime").split(".")[0];
+        } else {
+            return Date.today().set({hour: 23});
         }
     },
 
