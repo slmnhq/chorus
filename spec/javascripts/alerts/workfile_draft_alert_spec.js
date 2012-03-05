@@ -2,7 +2,7 @@ describe("chorus.alerts.WorkfileDraft", function() {
     beforeEach(function() {
         this.clock = sinon.useFakeTimers();
         this.workfile = fixtures.workfile();
-        this.alert = new chorus.alerts.WorkfileDraft({ model : this.workfile });
+        this.alert = new chorus.alerts.WorkfileDraft({ model: this.workfile });
         this.alert.render();
     });
 
@@ -36,10 +36,10 @@ describe("chorus.alerts.WorkfileDraft", function() {
             it("sets the isDraft flag in the page model", function() {
                 expect(this.alert.model.isDraft).toBeTruthy();
             });
-        })
 
-        it("closes the alert", function() {
-            expect(this.alert.closeModal).toHaveBeenCalled();
+            it("closes the alert", function() {
+                expect(this.alert.closeModal).toHaveBeenCalled();
+            })
         })
     })
 
@@ -50,7 +50,7 @@ describe("chorus.alerts.WorkfileDraft", function() {
         })
 
         it("fetches the draft", function() {
-            expect(this.server.lastFetch().url).toBe("/edc/workspace/"+this.workfile.get('workspaceId')+"/workfile/"+this.workfile.get('id')+"/draft");
+            expect(this.server.lastFetch().url).toBe("/edc/workspace/" + this.workfile.get('workspaceId') + "/workfile/" + this.workfile.get('id') + "/draft");
             expect(this.server.lastFetch().method).toBe("GET");
         });
 
@@ -60,7 +60,7 @@ describe("chorus.alerts.WorkfileDraft", function() {
             })
 
             it("deletes the draft", function() {
-                expect(this.server.lastDestroy().url).toBe("/edc/workspace/"+this.workfile.get('workspaceId')+"/workfile/"+this.workfile.get('id')+"/draft");
+                expect(this.server.lastDestroy().url).toBe("/edc/workspace/" + this.workfile.get('workspaceId') + "/workfile/" + this.workfile.get('id') + "/draft");
             })
 
             context("when the delete succeeds", function() {
@@ -70,6 +70,10 @@ describe("chorus.alerts.WorkfileDraft", function() {
 
                 it("sets hasDraft to false in the workfile", function() {
                     expect(this.workfile.get("hasDraft")).toBeFalsy();
+                })
+
+                it("closes the alert", function() {
+                    expect(this.alert.closeModal).toHaveBeenCalled();
                 })
             })
         })

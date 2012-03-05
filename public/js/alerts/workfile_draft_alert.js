@@ -6,10 +6,6 @@ chorus.alerts.WorkfileDraft = chorus.alerts.Base.extend({
     additionalClass:"info",
 
     postRender:function () {
-        this.$("button.cancel").click(_.bind(function () {
-            this.deleteDraft();
-        }, this))
-
         _.delay(_.bind(function () {
             this.$("button.submit").focus()
         }, this), 250);
@@ -20,13 +16,13 @@ chorus.alerts.WorkfileDraft = chorus.alerts.Base.extend({
         this.bindings.add(draft, "change", function (draft) {
             this.model.isDraft = true;
             this.model.content(draft.get("draftInfo").content);
+            this.closeModal();
         });
 
         draft.fetch();
-        this.closeModal();
     },
 
-    deleteDraft:function () {
+    cancelAlert:function () {
         var draft = new chorus.models.Draft({workspaceId:this.model.get("workspaceId"), workfileId:this.model.get("id"), id:"Dummy"});
 
         this.bindings.add(draft, "change", function () {
@@ -35,6 +31,7 @@ chorus.alerts.WorkfileDraft = chorus.alerts.Base.extend({
 
         this.bindings.add(draft, "destroy", function () {
             this.model.set({ hasDraft:false })
+            this.closeModal();
         });
 
         draft.fetch();
