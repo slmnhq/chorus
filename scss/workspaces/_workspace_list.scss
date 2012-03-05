@@ -21,6 +21,10 @@
     }
 
     li {
+
+        margin-left: 0px;
+        margin-right: 0px;
+
         .full {
             display: none;
         }
@@ -39,6 +43,16 @@
         .badge {
             position:absolute;
             top: 5px;
+        }
+
+        .spacer {
+            display: inline-block;
+            width: 10px;
+            min-height: 45px;
+        }
+
+        &.selected {
+            background: white;
         }
     }
 }
