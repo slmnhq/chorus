@@ -23,7 +23,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
             workfile.comments = new chorus.collections.ActivitySet(workfileJson.comments);
             return workfile;
         });
-        return new chorus.collections.WorkfileSet(workfiles, { total: this.get("user").numFound });
+        return new chorus.collections.WorkfileSet(workfiles, { total: this.get("workfile").numFound });
     },
 
     tabularData: function() {
