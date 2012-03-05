@@ -1136,7 +1136,9 @@ beforeEach(function() {
                         id: "10002|bizarro_world|public|BASE_TABLE|morley2",
                         name: "morley2"
                     },
-                    file: {},
+                    file: {
+                        name: "some.csv"
+                    },
                     id: fixtures.nextId().toString(),
                     import:{
                         id: fixtures.nextId().toString()

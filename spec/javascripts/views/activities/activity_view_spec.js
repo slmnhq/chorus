@@ -413,6 +413,10 @@ describe("chorus.views.Activity", function() {
                     expect($(this.view.el)).toContainTranslation("dataset.import.types.file")
                 });
 
+                it("should contain the name of the file", function() {
+                    expect($(this.view.el)).toContainText('some.csv')
+                })
+
 
                 itShouldRenderObjectDetails({checkLink: true});
                 itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))

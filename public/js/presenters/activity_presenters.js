@@ -101,9 +101,11 @@
                 header.objectType = this.presenter.objectType;
             }
 
-            if (this.presenter.importSourceName && this.presenter.importSourceUrl) {
-                header.importSourceLink = chorus.helpers.linkTo(this.presenter.importSourceUrl, this.presenter.importSourceName);
+            if (this.presenter.importSourceName) {
+                header.importSourceLink = this.presenter.importSourceUrl ? chorus.helpers.linkTo(this.presenter.importSourceUrl, this.presenter.importSourceName)
+                    : this.presenter.importSourceName;
             }
+
 
             return header;
         },
@@ -141,7 +143,8 @@
             var destinationTable = new chorus.models.Dataset(model.get("databaseObject"));
             if(model.attributes.hasOwnProperty("file")){
                 ctx = {
-                    importType: t("dataset.import.types.file")
+                    importType: t("dataset.import.types.file"),
+                    importSourceName: model.get('file').name
                 }
             } else {
                 ctx = {

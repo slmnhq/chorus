@@ -11,6 +11,11 @@ describe("chorus.presenters.Activity", function() {
                 this.presenter = new chorus.presenters.Activity(this.model);
             });
 
+            it("should have the file name", function() {
+                expect(this.presenter.importSourceName).toBe("some.csv");
+            });
+
+
             it("should have the right importType", function() {
                 expect(this.presenter.importType).toMatchTranslation("dataset.import.types.file")
             });
