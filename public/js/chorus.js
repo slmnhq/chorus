@@ -34,6 +34,10 @@ window.Chorus = function chorus$Global() {
         self.startHistory();
     };
 
+    // to enable development mode, create the following file:
+    //   public/js/environment.js
+    // it should contain the following line:
+    //   window.CHORUS_DEV_MODE = true;
     self.isDevMode = function() {
         return !!window.CHORUS_DEV_MODE;
     };
