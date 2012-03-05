@@ -43,7 +43,6 @@ describe("chorus.views.UserShowSidebar", function() {
         });
     });
 
-
     describe("#render", function() {
         context("when logged in as an admin", function() {
             beforeEach(function() {
@@ -77,17 +76,17 @@ describe("chorus.views.UserShowSidebar", function() {
                 setLoggedInUser({'userName': 'bill', 'id' : "42"});
                 this.view.render();
             });
+
             it("should have the edit user action", function() {
                 expect(this.view.$("a.edit_user")).toExist();
                 expect(this.view.$("a.edit_user")).toHaveAttr("href", "#/users/42/edit")
             });
+
             it("should not allow delete user", function() {
                 expect(this.view.$("a.delete_user")).not.toExist();
             });
-
         })
-
-    })
+    });
 
     context("user being shown is user logged in", function() {
         beforeEach(function() {

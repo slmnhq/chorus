@@ -1,0 +1,11 @@
+@import "../_common.scss";
+
+.user_list_sidebar {
+    .info {
+        .full_name {
+            @include ellipsis;
+            @include heading-sidebar;
+            margin-bottom: 10px;
+        }
+    }
+}

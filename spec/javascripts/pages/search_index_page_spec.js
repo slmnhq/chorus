@@ -11,7 +11,8 @@ describe("chorus.pages.SearchIndexPage", function() {
 
     describe("when the search result fetch completes", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.model, fixtures.searchResult({ query: "I'm a happy camper" }));
+            this.model = fixtures.searchResult({ query: "I'm a happy camper" });
+            this.server.completeFetchFor(this.model);
         });
 
         it("has breadcrumbs", function() {
@@ -113,6 +114,43 @@ describe("chorus.pages.SearchIndexPage", function() {
 
                 it("shows the associate-with-workspace link in the sidebar", function() {
                     expect(this.page.sidebar.$('.associate a')).toExist();
+                });
+            });
+        });
+
+        describe("the user section", function() {
+            beforeEach(function() {
+                this.users = this.model.users();
+                this.userLis = this.page.$(".user_list li");
+            });
+
+            it("shows a list of search results", function() {
+                expect(this.userLis.length).toBeGreaterThan(0);
+            });
+
+            describe("clicking on a user search result", function() {
+                beforeEach(function() {
+                    this.clickedUser = this.users.at(1);
+                    this.userLis.eq(1).trigger("click");
+                });
+
+                it("selects that user", function() {
+                    expect(this.userLis.eq(1)).toHaveClass("selected");
+                });
+
+                it("fetches the user's activities'", function() {
+                    expect(this.clickedUser.activities()).toHaveBeenFetched();
+                });
+
+                describe("when all of the sidebar's fetches complete", function() {
+                    beforeEach(function() {
+                        this.server.completeFetchFor(this.clickedUser.activities(), []);
+                        this.server.completeFetchFor(chorus.models.Config.instance());
+                    });
+
+                    it("shows that user in the sidebar", function() {
+                        expect(this.page.sidebar.$(".info .full_name")).toHaveText(this.users.at(1).displayName());
+                    });
                 });
             });
         });

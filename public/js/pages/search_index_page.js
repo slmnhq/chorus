@@ -23,6 +23,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         });
 
         this.sidebars = {
+            user: new chorus.views.UserListSidebar(),
             workfile: new chorus.views.WorkfileListSidebar({ hideAddNoteLink: true }),
             workspace: new chorus.views.WorkspaceListSidebar(),
             tabularData: new chorus.views.TabularDataListSidebar({browsingSchema: true})
@@ -32,6 +33,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         chorus.PageEvents.subscribe("workspace:selected", this.workspaceSelected, this);
         chorus.PageEvents.subscribe("tabularData:selected", this.tabularDataSelected, this);
         chorus.PageEvents.subscribe("workfile:selected", this.workfileSelected, this);
+        chorus.PageEvents.subscribe("user:selected", this.userSelected, this);
     },
 
     workspaceSelected: function() {
@@ -46,8 +48,13 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         this.renderSidebar(this.sidebars.workfile)
     },
 
+    userSelected: function(user) {
+        this.sidebars.user.setUser(user);
+        this.renderSidebar(this.sidebars.user);
+    },
+
     renderSidebar: function(sidebar) {
-        this.sidebar && $(this.sidebar.el).removeClass("workspace_list_sidebar dataset_list_sidebar workfile_list_sidebar");
+        this.sidebar && $(this.sidebar.el).removeClass("workspace_list_sidebar dataset_list_sidebar workfile_list_sidebar user_list_sidebar");
         this.sidebar = sidebar;
         this.renderSubview('sidebar');
         this.trigger('resized');

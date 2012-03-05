@@ -24,14 +24,15 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
         if (containingView.hasClass("workfile_list")) {
             var workfile = this.workfileList.collection.get(id);
             chorus.PageEvents.broadcast("workfile:selected", workfile);
-
         } else if (containingView.hasClass("workspace_list")) {
             var workspace = this.workspaceList.collection.get(id);
             chorus.PageEvents.broadcast("workspace:selected", workspace);
-
         } else if (containingView.hasClass("tabular_data_list")) {
             var tabularData = this.tabularDataList.collection.get(id);
             chorus.PageEvents.broadcast("tabularData:selected", tabularData);
+        } else if (containingView.hasClass("user_list")) {
+            var user = this.userList.collection.get($target.data("id"));
+            chorus.PageEvents.broadcast("user:selected", user);
         }
     },
 

@@ -1,5 +1,6 @@
 chorus.models.SearchResult = chorus.models.Base.extend({
     urlTemplate: "search/global/",
+    constructorName: "SearchResult",
 
     urlParams: function() {
         return {query: this.get("query"), rows: 3, page: 1}
