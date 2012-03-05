@@ -36,7 +36,7 @@ chorus.Mixins.Events = {
 };
 
 chorus.Mixins.Urls = {
-    showUrl: function(hidePrefix) {
+    showUrl: function() {
         if (!this.showUrlTemplate) {
             throw "No showUrlTemplate defined";
         }
@@ -44,7 +44,7 @@ chorus.Mixins.Urls = {
         var template = _.isFunction(this.showUrlTemplate) ? this.showUrlTemplate() : this.showUrlTemplate;
         var attributes = _.isFunction(this.urlTemplateAttributes) ? this.urlTemplateAttributes() : this.attributes;
 
-        var prefix = hidePrefix ? '' : "#/"
+        var prefix = "#/"
         return prefix + Handlebars.compile(template)(attributes);
     }
 };
