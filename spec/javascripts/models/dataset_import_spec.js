@@ -76,7 +76,7 @@ describe("chorus.models.DatasetImport", function() {
 
         function itReturnsTheCorrectTimes() {
             it("returns the import's scheduled start time, without the milliseconds", function() {
-                expect(this.model.startTime()).toBe("2012-05-27 14:30:00");
+                expect(this.model.startTime().compareTo(Date.parse("2012-05-27 14:30:00"))).toBe(0);
             });
 
             it("returns the import's frequency", function() {
@@ -84,7 +84,7 @@ describe("chorus.models.DatasetImport", function() {
             });
 
             it("returns the import's end time", function() {
-                expect(this.model.endTime()).toBe("2012-08-28");
+                expect(this.model.endTime().compareTo(Date.parse('2012-08-28'))).toBe(0);
             });
         }
     });

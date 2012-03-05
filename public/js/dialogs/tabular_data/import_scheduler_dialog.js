@@ -79,16 +79,15 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         }
 
         if (this.model.get("scheduleInfo")) {
-            if (this.model.get("scheduleInfo").jobName)
-            {
+            if (this.model.get("scheduleInfo").jobName) {
                 this.$("input[name='schedule']").attr("checked", "checked");
             }
-            else
-            {
+            else {
                 this.$("input[name='schedule']").removeAttr("checked");
             }
-            this.activeScheduleView.setFieldValues(this.model);
         }
+        this.scheduleViewExisting.setFieldValues(this.model);
+        this.scheduleViewNew.setFieldValues(this.model);
 
         if (model.get("truncate")) {
             this.$(".truncate").attr("checked", "checked");
@@ -98,7 +97,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
         if (model.get("sampleCount")) {
             this.$("input[name='limit_num_rows']").attr("checked", "checked");
-            this.$("input[name='sampleCount']").attr("disabled" , false);
+            this.$("input[name='sampleCount']").attr("disabled", false);
             this.$("input[name='sampleCount']").val(model.get("sampleCount"));
         }
     },
@@ -165,7 +164,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         }
 
         saveOptions = {};
-        if (this.options.launchElement.hasClass("import_now")){
+        if (this.options.launchElement.hasClass("import_now")) {
             saveOptions.method = "create";
         }
 

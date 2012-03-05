@@ -28,9 +28,9 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
 
     startTime: function() {
         if (this.get("scheduleInfo")) {
-            return this.get("scheduleInfo").startTime.split(".")[0];
+            return Date.parse(this.get("scheduleInfo").startTime.split(".")[0]);
         } else if (this.get("scheduleStartTime")) {
-            return this.get("scheduleStartTime").split(".")[0];
+            return Date.parse(this.get("scheduleStartTime").split(".")[0]);
         } else {
             return Date.today().set({hour: 23});
         }
@@ -46,9 +46,9 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
 
     endTime: function() {
         if (this.get("scheduleInfo")) {
-            return this.get("scheduleInfo").endTime;
+            return Date.parse(this.get("scheduleInfo").endTime);
         } else if (this.get("scheduleEndTime")) {
-            return this.get("scheduleEndTime");
+            return Date.parse(this.get("scheduleEndTime"));
         }
     },
 

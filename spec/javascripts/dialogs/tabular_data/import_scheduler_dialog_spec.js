@@ -120,6 +120,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 expect(this.dialog.$(".existing_table .names option").length).toBe(2);
             });
 
+            it("sets the time fields to the model defaults", function() {
+                expect(this.dialog.$('.new_table select.hours')).toHaveValue(this.dialog.model.startTime().toString("h"));
+            });
 
             context("when 'Import into New Table' is checked", function() {
                 itShouldHaveAllTheFields(".new_table");
@@ -191,6 +194,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     it("clears the errors", function() {
                         expect(this.dialog.clearErrors).toHaveBeenCalled();
                     })
+
+                    it("sets the time fields to the model defaults", function() {
+                        expect(this.dialog.$('.existing_table select.hours')).toHaveValue(this.dialog.model.startTime().toString("h"));
+                    });
                 })
                 context("switching from existing to new", function() {
                     beforeEach(function() {

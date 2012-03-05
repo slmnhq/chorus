@@ -79,6 +79,20 @@ describe("chorus.views.ImportSchedule", function() {
             expect(this.view.$(".end input[name='month']").val()).toBe("5");
             expect(this.view.$(".end input[name='day']").val()).toBe("27");
         });
+
+        context("when there is no time data", function() {
+            beforeEach(function() {
+                this.importModel = fixtures.datasetImport({
+                    id: '12',
+                    truncate: true
+                });
+                this.importModel.unset('scheduleInfo');
+            })
+
+            it("does not blow up", function() {
+                this.view.setFieldValues(this.importModel);
+            })
+        })
     });
 
     it("should have a select with daily, weekly, monthly as options", function() {
@@ -165,15 +179,15 @@ describe("chorus.views.ImportSchedule", function() {
     function itShouldEnableTheControls() {
 
         it("should enable the start date picker", function() {
-             expect(this.view.$(".date.start input[name='year']")).toBeEnabled();
-             expect(this.view.$(".date.start input[name='month']")).toBeEnabled();
-             expect(this.view.$(".date.start input[name='day']")).toBeEnabled();
+            expect(this.view.$(".date.start input[name='year']")).toBeEnabled();
+            expect(this.view.$(".date.start input[name='month']")).toBeEnabled();
+            expect(this.view.$(".date.start input[name='day']")).toBeEnabled();
         });
 
         it("should enable the end date picker", function() {
-             expect(this.view.$(".date.end input[name='year']")).toBeEnabled();
-             expect(this.view.$(".date.end input[name='month']")).toBeEnabled();
-             expect(this.view.$(".date.end input[name='day']")).toBeEnabled();
+            expect(this.view.$(".date.end input[name='year']")).toBeEnabled();
+            expect(this.view.$(".date.end input[name='month']")).toBeEnabled();
+            expect(this.view.$(".date.end input[name='day']")).toBeEnabled();
         });
 
         it("should enable the time picker", function() {
@@ -187,15 +201,15 @@ describe("chorus.views.ImportSchedule", function() {
     function itShouldDisableTheControls() {
 
         it("should disable the start date picker", function() {
-             expect(this.view.$(".date.start input[name='year']")).toBeDisabled();
-             expect(this.view.$(".date.start input[name='month']")).toBeDisabled();
-             expect(this.view.$(".date.start input[name='day']")).toBeDisabled();
+            expect(this.view.$(".date.start input[name='year']")).toBeDisabled();
+            expect(this.view.$(".date.start input[name='month']")).toBeDisabled();
+            expect(this.view.$(".date.start input[name='day']")).toBeDisabled();
         });
 
         it("should disable the end date picker", function() {
-             expect(this.view.$(".date.end input[name='year']")).toBeDisabled();
-             expect(this.view.$(".date.end input[name='month']")).toBeDisabled();
-             expect(this.view.$(".date.end input[name='day']")).toBeDisabled();
+            expect(this.view.$(".date.end input[name='year']")).toBeDisabled();
+            expect(this.view.$(".date.end input[name='month']")).toBeDisabled();
+            expect(this.view.$(".date.end input[name='day']")).toBeDisabled();
         });
 
         it("should disable the time picker", function() {
