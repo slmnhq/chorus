@@ -27,7 +27,7 @@ describe("WorkfileListSidebar", function() {
                 this.workfile = fixtures.sqlWorkfile({
                     lastUpdatedStamp: "2011-11-22 10:46:03.152"
                 });
-                this.view.trigger("workfile:selected", this.workfile);
+                chorus.PageEvents.broadcast("workfile:selected", this.workfile);
             })
 
             it("displays the selected filename", function() {
@@ -79,7 +79,7 @@ describe("WorkfileListSidebar", function() {
 
             context("when it is in a search result workfile list", function() {
                 beforeEach(function() {
-                    this.view.options.hideAddNoteLink = true 
+                    this.view.options.hideAddNoteLink = true
                     this.view.render()
                 });
 
@@ -113,7 +113,7 @@ describe("WorkfileListSidebar", function() {
     context("when no workfile is selected", function() {
         beforeEach(function() {
             this.view.workfile = "foo";
-            this.view.trigger("workfile:selected");
+            chorus.PageEvents.broadcast("workfile:selected");
         })
 
         it("sets the local workfile as undefined", function() {

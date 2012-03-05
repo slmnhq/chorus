@@ -1,11 +1,13 @@
 describe("WorkfileListView", function() {
     describe("#render", function() {
+        beforeEach(function() {
+            spyOn(chorus.PageEvents, "broadcast");
+        });
+
         context("with no workfiles in the collection", function() {
             beforeEach(function() {
                 this.collection = new chorus.collections.WorkfileSet([], {workspaceId : 1234});
                 this.view = new chorus.views.WorkfileList({collection: this.collection});
-                this.workfileSelectedSpy = jasmine.createSpy("workfile:selected");
-                this.view.bind("workfile:selected", this.workfileSelectedSpy);
                 this.view.render();
             });
 
@@ -13,8 +15,8 @@ describe("WorkfileListView", function() {
                 expect(this.view.$("li").length).toBe(0);
             });
 
-            it("triggers workfile:selected with an undefined argument", function() {
-                expect(this.workfileSelectedSpy.calls[0].args[0]).toBeFalsy();
+            it("does not trigger workfile:selected", function() {
+                expect(chorus.PageEvents.broadcast).not.toHaveBeenCalled();
             })
         });
 
@@ -146,8 +148,6 @@ describe("WorkfileListView", function() {
 
             context("clicking on another item", function() {
                 beforeEach(function() {
-                    this.eventSpy = jasmine.createSpy();
-                    this.view.bind("workfile:selected", this.eventSpy);
                     $(this.li2).click();
                 });
 
@@ -156,18 +156,17 @@ describe("WorkfileListView", function() {
                 });
 
                 it("triggers the workfile:selected event", function() {
-                    expect(this.eventSpy).toHaveBeenCalledWith(this.model2);
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('workfile:selected', this.model2);
                 });
 
                 context("clicking on the same item again", function() {
-                    beforeEach(function() {
-                        this.eventCount = this.eventSpy.calls.length;
+                     beforeEach(function() {
+                        this.eventCount = chorus.PageEvents.broadcast.callCount;
                         this.view.$("li").eq(1).click();
                     });
 
                     it("does not raise the event again", function() {
-                        // raising the event again causes unnecessary fetches
-                        expect(this.eventSpy.calls.length).toBe(this.eventCount);
+                        expect(chorus.PageEvents.broadcast.callCount).toBe(this.eventCount);
                     });
                 });
 
@@ -185,7 +184,7 @@ describe("WorkfileListView", function() {
                     });
 
                     it("triggers the workfile:selected event", function() {
-                        expect(this.eventSpy).toHaveBeenCalledWith(this.model3);
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('workfile:selected', this.model3);
                     });
                 });
             });

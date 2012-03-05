@@ -24,30 +24,33 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
 
         this.sidebars = {
             workfile: new chorus.views.WorkfileListSidebar({ hideAddNoteLink: true }),
-            workspace: new chorus.views.WorkspaceListSidebar()
+            workspace: new chorus.views.WorkspaceListSidebar(),
+            tabularData: new chorus.views.TabularDataListSidebar({browsingSchema: true})
         };
 
         // explicitly set up bindings after initializing sidebar collection
         chorus.PageEvents.subscribe("workspace:selected", this.workspaceSelected, this);
-        this.mainContent.content.bind("workfile:selected", this.workfileSelected, this);
+        chorus.PageEvents.subscribe("tabularData:selected", this.tabularDataSelected, this);
+        chorus.PageEvents.subscribe("workfile:selected", this.workfileSelected, this);
     },
 
     workspaceSelected: function() {
-        this.renderSidebar(this.sidebars.workspace)
+        this.renderSidebar(this.sidebars.workspace);
+    },
+
+    tabularDataSelected: function() {
+        this.renderSidebar(this.sidebars.tabularData);
+    },
+
+    workfileSelected: function() {
+        this.renderSidebar(this.sidebars.workfile)
     },
 
     renderSidebar: function(sidebar) {
         this.sidebar && $(this.sidebar.el).removeClass("workspace_list_sidebar dataset_list_sidebar workfile_list_sidebar");
         this.sidebar = sidebar;
-        this.model = this.sidebar.model;
         this.renderSubview('sidebar');
         this.trigger('resized');
-    },
-
-    workfileSelected: function(workfile) {
-        this.sidebars.workfile.setWorkfile(workfile);
-
-        this.renderSidebar(this.sidebars.workfile)
     },
 
     postRender: function() {

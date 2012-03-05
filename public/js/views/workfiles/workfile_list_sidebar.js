@@ -5,7 +5,7 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
     },
 
     setup:function () {
-        this.bind("workfile:selected", this.setWorkfile, this);
+        chorus.PageEvents.subscribe("workfile:selected", this.setWorkfile, this);
     },
 
     setWorkfile:function (workfile) {

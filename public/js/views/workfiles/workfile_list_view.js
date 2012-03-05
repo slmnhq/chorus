@@ -17,7 +17,7 @@ chorus.views.WorkfileList = chorus.views.Base.extend({
         $(e.currentTarget).addClass("selected");
         var workfileId = $(e.currentTarget).data("id");
         var workfile = this.collection.get(workfileId);
-        this.trigger("workfile:selected", workfile);
+        chorus.PageEvents.broadcast("workfile:selected", workfile);
     },
 
     collectionModelContext:function (model) {

@@ -18,15 +18,20 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
 
         this.$("li").removeClass("selected");
         $target.addClass("selected");
+        var id = $target.data("id");
+        var containingView = $target.parent().parent();
 
-        if ($target.closest(".workfile_list").length) {
-            var workfileId = $target.data("id");
-            var workfile = this.workfileList.collection.get(workfileId);
+        if (containingView.hasClass("workfile_list")) {
+            var workfile = this.workfileList.collection.get(id);
+            chorus.PageEvents.broadcast("workfile:selected", workfile);
 
-            this.trigger("workfile:selected", workfile);
-        } else if ($target.closest(".workspace_list")) {
-            var workspace = this.workspaceList.collection.get($target.data("id"));
+        } else if (containingView.hasClass("workspace_list")) {
+            var workspace = this.workspaceList.collection.get(id);
             chorus.PageEvents.broadcast("workspace:selected", workspace);
+
+        } else if (containingView.hasClass("tabular_data_list")) {
+            var tabularData = this.tabularDataList.collection.get(id);
+            chorus.PageEvents.broadcast("tabularData:selected", tabularData);
         }
     },
 

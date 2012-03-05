@@ -67,19 +67,8 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             this.page.render();
         })
 
-        it("triggers the event on the sidebar view", function() {
-            var listView = this.page.mainContent.content;
-            var sidebar = this.page.sidebar;
-            var workfileSelectedSpy = jasmine.createSpy("workfile:selected");
-            sidebar.bind("workfile:selected", workfileSelectedSpy);
-            listView.trigger("workfile:selected", this.model);
-
-            expect(workfileSelectedSpy).toHaveBeenCalledWith(this.model);
-        });
-
         it("sets the model of the page", function() {
-            var listView = this.page.mainContent.content;
-            listView.trigger("workfile:selected", this.model);
+            chorus.PageEvents.broadcast("workfile:selected", this.model);
             expect(this.page.model).toBe(this.model);
         })
     });

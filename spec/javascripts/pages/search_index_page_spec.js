@@ -54,10 +54,6 @@ describe("chorus.pages.SearchIndexPage", function() {
                 it("does not show the 'add a note' link in the sidebar", function() {
                     expect(this.page.sidebar.$("a[data-dialog='NotesNew']")).not.toExist()
                 })
-
-                it("sets the page model to that workfile", function() {
-                    expect(this.page.model).toBe(this.page.mainContent.content.workfileList.collection.at(1));
-                })
             });
         });
 
@@ -90,10 +86,34 @@ describe("chorus.pages.SearchIndexPage", function() {
                 it("show the 'add an insight' link in the sidebar", function() {
                     expect(this.page.sidebar.$("a[data-dialog='InsightsNew']")).toExist()
                 })
+            });
+        });
 
-                it("sets the page model to that workfile", function() {
-                    expect(this.page.model).toBe(this.page.mainContent.content.workspaceList.collection.at(1));
-                })
+        describe("the dataset section", function() {
+            beforeEach(function() {
+                this.datasetLis = this.page.$(".tabular_data_list li");
+            });
+
+            it("shows a list of search results", function() {
+                expect(this.datasetLis.length).toBeGreaterThan(0);
+            });
+
+            describe("clicking on a tabular data search result", function() {
+                beforeEach(function() {
+                    this.datasetLis.eq(2).trigger("click");
+                });
+
+                it("selects that tabular data item", function() {
+                    expect(this.datasetLis.eq(2)).toHaveClass("selected");
+                });
+
+                it("shows the tabular data item in the sidebar", function() {
+                    expect(this.page.sidebar.$(".info .name")).toHaveText("test1");
+                });
+
+                it("shows the associate-with-workspace link in the sidebar", function() {
+                    expect(this.page.sidebar.$('a[data-dialog="AssociateWithWorkspace"]')).toExist();
+                });
             });
         });
     });
