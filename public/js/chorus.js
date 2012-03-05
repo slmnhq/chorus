@@ -34,6 +34,10 @@ window.Chorus = function chorus$Global() {
         self.startHistory();
     };
 
+    self.isDevMode = function() {
+        return !!window.CHORUS_DEV_MODE;
+    };
+
     self.bindGlobalCallbacks = function() {
         $(window).resize(_.debounce(function() {
             self.page && self.page.trigger && self.page.trigger("resized");
@@ -279,15 +283,16 @@ window.Chorus = function chorus$Global() {
         "})");
     };
 
-    self.classExtend = function(protoProps, classProps) {
-        var constructorName = protoProps.constructorName || this.prototype.constructorName;
-        if (constructorName) {
-
-            // this line should be removed in production, to avoid use of `eval`
-            _.extend(protoProps, { constructor: self.namedConstructor(this, "chorus$" + constructorName) });
-
+    if (self.isDevMode()) {
+        self.classExtend = function(protoProps, classProps) {
+            var constructorName = protoProps.constructorName || this.prototype.constructorName;
+            if (constructorName) {
+                _.extend(protoProps, { constructor: self.namedConstructor(this, "chorus$" + constructorName) });
+            }
+            return Backbone.Model.extend.call(this, protoProps, classProps);
         }
-        return Backbone.Model.extend.call(this, protoProps, classProps);
+    } else {
+        self.classExtend = Backbone.Model.extend;
     }
 
     self.log = function() {

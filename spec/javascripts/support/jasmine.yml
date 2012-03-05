@@ -20,6 +20,7 @@ src_files:
   - js/vendor/es5-shim.js
   - js/vendor/d3.js
   - js/vendor/**/*.js
+  - js/environment.js
   - js/bootstrap.js
   - js/chorus.js
   - js/utilities/**/*.js
