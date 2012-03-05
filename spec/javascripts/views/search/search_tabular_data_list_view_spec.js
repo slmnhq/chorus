@@ -12,6 +12,7 @@ describe("chorus.views.SearchTabularDataList", function() {
 
     it("should show the number of results", function() {
         expect(this.view.$(".count")).toContainTranslation("search.count", {shown: this.models.length, total: this.models.attributes.total});
+        expect(this.view.$(".show_all")).toExist();
     });
 
     describe("the 'found in workspaces' section", function() {
@@ -78,6 +79,7 @@ describe("chorus.views.SearchTabularDataList", function() {
 
         it("should show the short count", function() {
             expect(this.view.$(".count")).toContainTranslation('search.count_short', {shown: 2});
+            expect(this.view.$(".show_all")).not.toExist();
         });
     });
 
