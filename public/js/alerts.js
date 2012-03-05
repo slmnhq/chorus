@@ -3,11 +3,15 @@ chorus.alerts.Base = chorus.Modal.extend({
     className: "alert",
 
     events: {
-        "click button.cancel": "closeModal",
+        "click button.cancel": "cancelAlert",
         "click button.submit": "confirmAlert"
     },
 
     confirmAlert: $.noop,
+
+    cancelAlert: function() {
+        this.closeModal();
+    },
 
     additionalContext: function(ctx) {
         return {

@@ -1,5 +1,6 @@
 describe("chorus.alerts", function() {
     beforeEach(function() {
+        spyOn(chorus.alerts.Base.prototype, "cancelAlert").andCallThrough();
         this.model = new chorus.models.Base({ id: "foo"});
         this.alert = new chorus.alerts.Base({ model : this.model });
         this.alert.title = "OH HAI";
@@ -92,8 +93,14 @@ describe("chorus.alerts", function() {
             this.alert.$("button.cancel").click();
         })
 
-        it("dismisses the alert", function() {
-            expect("close.facebox").toHaveBeenTriggeredOn($(document))
+        it("calls cancelAlert", function() {
+            expect(this.alert.cancelAlert).toHaveBeenCalled();
+        })
+
+        describe("the default cancelAlert", function() {
+            it("dismisses the alert", function() {
+                expect("close.facebox").toHaveBeenTriggeredOn($(document))
+            });
         });
     });
 })
