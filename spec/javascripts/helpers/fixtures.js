@@ -2368,7 +2368,12 @@ beforeEach(function() {
         },
 
         hdfsDirectoryEntrySet: function(models, overrides) {
-            models = models || [fixtures.hdfsDirectoryEntryDirJson(overrides), fixtures.hdfsDirectoryEntryFileJson(overrides)];
+            models = models || [
+                fixtures.hdfsDirectoryEntryDirJson(overrides),
+                fixtures.hdfsDirectoryEntryFileJson(overrides),
+                fixtures.hdfsDirectoryEntryBinaryFileJson(overrides),
+                fixtures.hdfsDirectoryEntryUnknownIfBinaryFileJson(overrides)
+            ];
             return new chorus.collections.HdfsDirectoryEntrySet(models, overrides);
         },
 
@@ -2399,8 +2404,39 @@ beforeEach(function() {
             return {
                 "name": "file" + id + ".sql",
                 "isDir": false,
+                "isBinary": false,
                 "lastModified": "2012-02-24 10:28:42.320",
                 "size": 23,
+                "count": 0,
+                "owner": "hadoop",
+                "group": "supergroup",
+                "permission": "rw-r--r--"
+            }
+        },
+
+        hdfsDirectoryEntryBinaryFileJson: function(overrides) {
+            var id = fixtures.nextId();
+            return {
+                "name": "file" + id + ".bin",
+                "isDir": false,
+                "isBinary": true,
+                "lastModified": "2012-02-24 10:28:42.320",
+                "size": 1337,
+                "count": 0,
+                "owner": "hadoop",
+                "group": "supergroup",
+                "permission": "rw-r--r--"
+            }
+        },
+
+        hdfsDirectoryEntryUnknownIfBinaryFileJson: function(overrides) {
+            var id = fixtures.nextId();
+            return {
+                "name": "file" + id + ".???",
+                "isDir": false,
+                "isBinary": null,
+                "lastModified": "2012-02-24 10:28:42.320",
+                "size": 1337,
                 "count": 0,
                 "owner": "hadoop",
                 "group": "supergroup",

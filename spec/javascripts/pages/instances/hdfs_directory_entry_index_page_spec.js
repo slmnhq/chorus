@@ -42,6 +42,19 @@ describe("chorus.pages.HdfsDirectoryEntryIndexPage", function() {
             expect(this.page.sidebar).toBeA(chorus.views.HdfsDirectoryEntrySidebar);
         })
 
+        it("shows a link if a file is not binary", function() {
+            var filename = this.page.collection.models[1].get('name')
+            expect(this.page.$(".hdfs_directory_entry_list li:eq(1) .name a").attr('href')).toEqual('#/instances/1234/browse/foo/' + filename)
+        })
+
+        it("shows no link if a file is binary", function() {
+            expect(this.page.$(".hdfs_directory_entry_list li:eq(2) .name a")).not.toExist()
+        })
+
+        it("shows no link if isBinary equals 'null'", function() {
+            expect(this.page.$(".hdfs_directory_entry_list li:eq(3) .name a")).not.toExist()
+        })
+
         describe("when the path is long", function() {
             beforeEach(function() {
                 spyOn(chorus, "menu")
