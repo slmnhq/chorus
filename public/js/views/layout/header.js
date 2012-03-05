@@ -5,7 +5,8 @@ chorus.views.Header = chorus.views.Base.extend({
         "click .username a":"togglePopupUsername",
         "click .account a":"togglePopupAccount",
         "click a.notifications":"togglePopupNotifications",
-        "submit .search form": "startSearch"
+        "submit .search form": "startSearch",
+        "click .type_ahead_result a": "dismissSearch"
     },
 
     subviews: {
@@ -45,6 +46,11 @@ chorus.views.Header = chorus.views.Base.extend({
         var query = this.$(".search input").val();
         this.typeAheadView.searchFor(query);
         this.$(".type_ahead_result").toggleClass("hidden", query.length === 0);
+    },
+
+    dismissSearch: function() {
+        this.$(".search input").val('');
+        this.$(".type_ahead_result").addClass("hidden");
     },
 
     beforeNavigateAway: function() {

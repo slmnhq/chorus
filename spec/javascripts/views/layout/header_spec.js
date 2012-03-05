@@ -103,6 +103,16 @@ describe("chorus.views.Header", function() {
                 this.view.$(".search input:text").val("").trigger("textchange");
                 expect($(this.view.typeAheadView.el)).toHaveClass("hidden");
             })
+            
+            it("hides the search view when a link is clicked (if navigating to same route as displayed in browser url bar)", function() {
+                var $a = $("<a/>");
+                $(this.view.typeAheadView.el).append($a);
+
+                $a.click();
+
+                expect($(this.view.typeAheadView.el)).toHaveClass("hidden");
+                expect(this.view.$(".search input:text").val()).toBe("");
+            });
         })
 
         context("when there are notifications", function() {
