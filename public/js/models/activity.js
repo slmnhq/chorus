@@ -85,6 +85,18 @@ chorus.models.Activity = chorus.models.Base.extend({
         return this._workfile;
     },
 
+    hdfs: function() {
+        var hdfsJson = this.get("hdfs");
+        if (hdfsJson) {
+            var attrs = _.clone(hdfsJson);
+            attrs.entityId = attrs.id;
+            attrs.fullName = attrs.name;
+            attrs.name = _.last(attrs.fullName.split("/"));
+            attrs.instanceId = _.first(attrs.id.split("|"));
+            return new chorus.models.HdfsDirectoryEntry(attrs);
+        }
+    },
+
     promoteToInsight: function(options) {
         var insight = new chorus.models.CommentInsight({
             id: this.get("id"),
@@ -162,6 +174,7 @@ chorus.models.Activity = chorus.models.Base.extend({
             this.dataset() ||
             this.databaseObject() ||
             (this.has("user") && new chorus.models.User(this.get("user")[0])) ||
-            this.workspace();
+            this.workspace() ||
+            this.hdfs();
     }
 });

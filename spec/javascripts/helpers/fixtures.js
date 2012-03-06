@@ -1070,6 +1070,30 @@ beforeEach(function() {
                 return new chorus.models.Activity(fixtures.activities.NOTE_ON_DATASET_JSON());
             },
 
+            "NOTE_ON_HDFS": function() {
+                return new chorus.models.Activity({
+                    artifacts: [],
+                    author: fixtures.authorJson(),
+                    comments: [fixtures.commentJson()],
+                    hdfs: {
+                        id: "10010|/webui/chart.html",
+                        isDeleted: false,
+                        name: "/webui/chart.html"
+                    },
+                    id: fixtures.nextId().toString(),
+                    isDeleted: false,
+                    isInsight: false,
+                    isPublished: false,
+                    promotionActioner: null,
+                    promotionTime: null,
+                    publishUnpublishActioner: null,
+                    publishUnpublishTime: null,
+                    text: "hdfs is fun",
+                    timestamp: "2012-03-05 15:31:34",
+                    type: "NOTE"
+                });
+            },
+
             "NOTE_ON_THING_WE_DONT_SUPPORT_YET": function() {
                 return new chorus.models.Activity({
                     author: fixtures.authorJson(),

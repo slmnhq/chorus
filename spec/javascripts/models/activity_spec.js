@@ -48,6 +48,11 @@ describe("chorus.models.Activity", function() {
             this.model = fixtures.activities.MEMBERS_DELETED();
             expect(this.model.noteworthy()).toBeA(chorus.models.User);
         })
+
+        it("should return an HDFS entry when the note is on an HDFS instance", function() {
+            this.model = fixtures.activities.NOTE_ON_HDFS();
+            expect(this.model.noteworthy()).toBeA(chorus.models.HdfsDirectoryEntry);
+        })
     })
 
     describe("#promoteToInsight", function() {
@@ -250,6 +255,26 @@ describe("chorus.models.Activity", function() {
             it("doesn't create a workspace", function() {
                 expect(this.model.workspace()).toBeFalsy();
             });
+        });
+    });
+
+    describe("#hdfs", function() {
+        beforeEach(function() {
+            this.activity = fixtures.activities.NOTE_ON_HDFS();
+            this.model = this.activity.hdfs();
+        });
+
+        it("copies the id field to the entityId", function() {
+            expect(this.model.get("entityId")).toEqual(this.activity.get("hdfs").id);
+        });
+
+        it("moves the original name to fullName, and puts just the file name as name", function() {
+            expect(this.model.get("fullName")).toBe("/webui/chart.html");
+            expect(this.model.get("name")).toBe("chart.html");
+        });
+
+        it("extracts the instance ID", function() {
+            expect(this.model.get("instanceId").toString()).toBe("10010");
         });
     });
 

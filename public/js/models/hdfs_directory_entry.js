@@ -1,4 +1,5 @@
 chorus.models.HdfsDirectoryEntry = chorus.models.Base.extend({
     constructorName: "HdfsDirectoryEntry",
-    entityType: "hdfs"
+    entityType: "hdfs",
+    showUrlTemplate: "#"
 });
