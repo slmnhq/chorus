@@ -11,6 +11,7 @@
     });
 
     chorus.pages.DatasetIndexPage = chorus.pages.Base.extend({
+        constructorName: "DatasetIndexPage",
         helpId: "datasets",
 
         setup: function(workspaceId) {

@@ -1,4 +1,6 @@
 chorus.pages.DashboardPage = chorus.pages.Base.extend({
+    constructorName: "DashboardPage",
+
     crumbs:[
         { label:t("breadcrumbs.home") }
     ],
