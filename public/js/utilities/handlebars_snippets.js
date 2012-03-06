@@ -290,6 +290,15 @@
             return $("<span></span>").html(t("dataset.from", {location: schemaPieces.join('.')})).outerHtml();
         },
 
+        displaySearchMatch: function(attributeName) {
+            if (this.highlightedAttributes && this.highlightedAttributes[attributeName]) {
+                var attribute = this.highlightedAttributes[attributeName]
+                return _.isArray(attribute) ? attribute[0] : attribute
+            } else {
+                return this[attributeName];
+            }
+        },
+
         humanizedTabularDataType: function(tabularData) {
             if (!tabularData) { return ""; }
 

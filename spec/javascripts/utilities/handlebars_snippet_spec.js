@@ -728,6 +728,31 @@ describe("handlebars", function() {
                 expect(window.t).toHaveBeenCalledWith("dataset.types.type.objectType")
             });
         });
+
+        describe("displaySearchMatch", function() {
+            beforeEach(function() {
+                this.model = fixtures.searchResultChorusView();
+            });
+
+            it("falls back to the model's attribute", function() {
+                expect(Handlebars.helpers.displaySearchMatch.call(this.model.attributes, 'schemaName')).toBe('ddemo');
+            });
+
+            it("uses the search result if present", function() {
+                expect(Handlebars.helpers.displaySearchMatch.call(this.model.attributes, 'content')).toBe("SELECT * FROM <em>test</em> AS a");
+            });
+
+            it("doesn't complain if the model does not have any highlightedAttributes", function() {
+                this.model.set({highlightedAttributes: null});
+                expect(Handlebars.helpers.displaySearchMatch.call(this.model.attributes, 'schemaName')).toBe('ddemo');
+            });
+
+            it("doesn't complain if it is not wrapped in an array", function() {
+                this.model.set({highlightedAttributes: {'content' : "SELECT * FROM <em>test</em> AS a"}});
+                expect(Handlebars.helpers.displaySearchMatch.call(this.model.attributes, 'content')).toBe("SELECT * FROM <em>test</em> AS a");
+            });
+
+        });
     });
 
     describe("partials", function() {

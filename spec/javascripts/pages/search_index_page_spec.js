@@ -113,7 +113,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 });
 
                 it("shows the associate-with-workspace link in the sidebar", function() {
-                    expect(this.page.sidebar.$('.associate a')).toExist();
+                    expect(this.page.sidebar.$('a.associate')).toExist();
                 });
             });
         });

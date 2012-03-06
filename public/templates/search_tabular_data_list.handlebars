@@ -16,7 +16,7 @@
             <div class="spacer_left"></div>
             <img class="icon" src="{{iconUrl}}" title="{{humanizedTabularDataType this}}"/>
             <div class="description">
-                <a class="name" href="{{showUrl}}">{{{objectName}}}</a>
+                <a class="name" href="{{showUrl}}">{{{displaySearchMatch "objectName"}}}</a>
                 <div class="location">
                     {{{tabularDataLocation model}}}
                     {{{usedInWorkspaces workspaces dataset}}}
@@ -32,7 +32,7 @@
                             {{t "activity_stream.comment"}}:
                         {{/if}}
                         </span>
-                        <span class="comment_content">&#8220;{{{content}}}&#8221;</span>
+                        <span class="comment_content">&#8220;{{{displaySearchMatch "content"}}}&#8221;</span>
                     </div>
                     {{/each}}
                     {{#if moreCommentCount}}
@@ -47,7 +47,7 @@
                                         {{t "activity_stream.comment"}}:
                                     {{/if}}
                                     </span>
-                                    <span class="comment_content">&#8220;{{{content}}}&#8221;</span>
+                                    <span class="comment_content">&#8220;{{{displaySearchMatch "content"}}}&#8221;</span>
                                 </div>
                             {{/each}}
                             <a class="fewer_comments" href="#">{{t "search.comments_less"}}</a>

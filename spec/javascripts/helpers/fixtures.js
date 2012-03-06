@@ -2453,7 +2453,7 @@ beforeEach(function() {
                             "isDeleted": false,
                             "lastUpdate": "Tue Feb 21 10:53:48 PST 2012",
                             "fileType": "SQL",
-                            "name": "<em>test<\/em>.sql",
+                            "name": "test.sql",
                             "entityType": "workfile",
                             "modifiedBy": {
                                 "id": "422",
@@ -2470,14 +2470,17 @@ beforeEach(function() {
                                 "id": "10050",
                                 "name": "Lenny & Corina"
                             },
-                            "comments": []
+                            "comments": [],
+                            highlightedAttributes: {
+                                "name": ["<em>test<\/em>.sql"]
+                            }
                         },
                         {
                             "id": "10040",
                             "isDeleted": false,
                             "lastUpdate": "Thu Feb 23 12:28:56 PST 2012",
                             "fileType": "SQL",
-                            "name": "<em>test<\/em>.sql",
+                            "name": "test.sql",
                             "entityType": "workfile",
                             "modifiedBy": {
                                 "id": "422",
@@ -2494,7 +2497,10 @@ beforeEach(function() {
                                 "id": "10039",
                                 "name": "mine"
                             },
-                            "comments": []
+                            "comments": [],
+                            highlightedAttributes: {
+                                "name": ["<em>test<\/em>.sql"]
+                            }
                         }],
                         "numFound": 2
                     },
@@ -2507,11 +2513,14 @@ beforeEach(function() {
                                 isDeleted: false,
                                 isPublic: false,
                                 lastUpdatedStamp: "2012-02-24 16:08:32",
-                                name: "<em>ws</em>",
+                                name: "ws",
                                 owner: {
                                     firstName: "EDC",
                                     id: "InitialUser",
                                     lastName: "Admin"
+                                },
+                                highlightedAttributes: {
+                                    name: ["<em>ws</em>"]
                                 }
                             },
                             {
@@ -2521,11 +2530,14 @@ beforeEach(function() {
                                 isDeleted: false,
                                 isPublic: false,
                                 lastUpdatedStamp: "2012-02-24 16:08:32",
-                                name: "other_<em>ws</em>",
+                                name: "other_ws",
                                 owner: {
                                     firstName: "EDC",
                                     id: "InitialUser",
                                     lastName: "Admin"
+                                },
+                                highlightedAttributes: {
+                                    name: ["other_<em>ws</em>"]
                                 }
                             }
                         ],
@@ -2533,25 +2545,28 @@ beforeEach(function() {
                     },
                    "dataset": {
                         "docs": [{
-                            "schemaName": "public",
-                            "parentType": "gpdb_10000_data_types",
-                            "objectType": "BASE_TABLE",
-                            "id": "10000|data_types|public|BASE_TABLE|a",
-                            "databaseName": "data_types",
-                            "objectName": "a",
-                            "isDeleted": false,
-                            "description": "This is a <em>test<\/em> of table description.",
-                            "entityType": "databaseObject",
-                            "instance": {
-                                "id": "10000",
-                                "name": "gillette"
+                            schemaName: "public",
+                            parentType: "gpdb_10000_data_types",
+                            objectType: "BASE_TABLE",
+                            id: "10000|data_types|public|BASE_TABLE|a",
+                            databaseName: "data_types",
+                            objectName: "a",
+                            isDeleted: false,
+                            description: "This is a test of table description.",
+                            entityType: "databaseObject",
+                            instance: {
+                                id: "10000",
+                                name: "gillette"
                             },
-                            "workspaces": [],
-                            "comments": []
+                            workspaces: [],
+                            comments: [],
+                            highlightedAttributes: {
+                                description: ["This is a <em>test<\/em> of table description."]
+                            }
                         },
                         {
                             compositeId: "10000|dca_demo|ddemo|QUERY|cv_us_president",
-                            content: "SELECT * FROM <em>test</em> AS a",
+                            content: "SELECT * FROM test AS a",
                             databaseName: "dca_demo",
                             datasetType: "CHORUS_VIEW",
                             entityType: "chorusView",
@@ -2568,7 +2583,10 @@ beforeEach(function() {
                                 id: '10000',
                                 name: 'New Workspace'
                             },
-                            comments: []
+                            comments: [],
+                            highlightedAttributes : {
+                                content: ["SELECT * FROM <em>test</em> AS a"]
+                            }
                         },
                         {
                             schemaName: "analytics",
@@ -2587,7 +2605,8 @@ beforeEach(function() {
                                 id: "10000",
                                 name: "danny"
                             }],
-                            "comments": []
+                            "comments": [],
+                            highlightedAttributes: {}
                         },
                         {
                             "schemaName": "analytics",
@@ -2606,7 +2625,8 @@ beforeEach(function() {
                                 "id": "10000",
                                 "name": "danny"
                             }],
-                            "comments": []
+                            "comments": [],
+                            highlightedAttributes: {}
                         },
                         {
                             "schemaName": "analytics",
@@ -2625,7 +2645,8 @@ beforeEach(function() {
                                 "id": "10000",
                                 "name": "danny"
                             }],
-                            "comments": []
+                            "comments": [],
+                            highlightedAttributes: {}
                         },
                         {
                             "schemaName": "analytics",
@@ -2644,7 +2665,8 @@ beforeEach(function() {
                                 "id": "10000",
                                 "name": "danny"
                             }],
-                            "comments": []
+                            "comments": [],
+                            highlightedAttributes: {}
                         },
                         {
                             "schemaName": "analytics",
@@ -2663,7 +2685,8 @@ beforeEach(function() {
                                 "id": "10000",
                                 "name": "danny"
                             }],
-                            "comments": []
+                            "comments": [],
+                            highlightedAttributes: {}
                         },
                         {
                             "schemaName": "analytics",
@@ -2682,7 +2705,8 @@ beforeEach(function() {
                                 "id": "10000",
                                 "name": "danny"
                             }],
-                            "comments": []
+                            "comments": [],
+                            highlightedAttributes: {}
                         },
                         {
                             "schemaName": "analytics",
@@ -2701,7 +2725,8 @@ beforeEach(function() {
                                 "id": "10000",
                                 "name": "danny"
                             }],
-                            "comments": []
+                            "comments": [],
+                            highlightedAttributes: {}
                         },
                         {
                             "schemaName": "analytics",
@@ -2720,7 +2745,8 @@ beforeEach(function() {
                                 "id": "10000",
                                 "name": "danny"
                             }],
-                            "comments": []
+                            "comments": [],
+                            highlightedAttributes: {}
                         }],
                         "numFound": 39
                     },
@@ -2740,27 +2766,35 @@ beforeEach(function() {
                                 "isDeleted": "false",
                                 "lastName": "Doe",
                                 "lastUpdatedStamp": "2012-03-01 11:07:13",
-                                "name": "<em>test</em>",
+                                "name": "test",
                                 "title": "",
-                                "ou": "<em>Test</em>",
+                                "ou": "Test",
                                 "content": "Hello",
-                                "owner": {}
+                                "owner": {},
+                                highlightedAttributes: {
+                                    "name": ["<em>test</em>"],
+                                    "ou": ["<em>Test</em>"]
+                                }
                             },
                             {
                                 admin: "false",
                                 comments: [],
                                 emailAddress: "test1@emc.com",
                                 entityType: "user",
-                                firstName: "<em>Test</em>",
+                                firstName: "Test",
                                 id: "10020",
                                 isDeleted: "false",
                                 lastName: "McTest",
                                 lastUpdatedStamp: "2012-03-01 11:06:05",
                                 name: null,
-                                "title": "nobody",
-                                "ou": "",
-                                "content": "<em>Test</em>",
-                                owner: {}
+                                title: "nobody",
+                                ou: "",
+                                content: "Test",
+                                owner: {},
+                                highlightedAttributes: {
+                                    firstName: ["<em>Test</em>"],
+                                    content: ["<em>Test</em>"]
+                                }
                             },
                             {
                                 admin: "false",
@@ -2770,11 +2804,15 @@ beforeEach(function() {
                                 firstName: "Jack",
                                 id: "10021",
                                 isDeleted: "false",
-                                lastName: "<em>Test</em>",
+                                lastName: "Test",
                                 lastUpdatedStamp: "2012-03-01 11:06:32",
                                 name: "",
-                                "title": "<em>test</em>er",
-                                owner: {}
+                                "title": "tester",
+                                owner: {},
+                                highlightedAttributes: {
+                                    lastName: ["<em>Test</em>"],
+                                    "title": ["<em>test</em>er"]
+                                }
                             },
                             {
                                 admin: "false",
@@ -2784,11 +2822,15 @@ beforeEach(function() {
                                 firstName: "Sally",
                                 id: "10022",
                                 isDeleted: "false",
-                                lastName: "<em>Test</em>",
+                                lastName: "Test",
                                 lastUpdatedStamp: "2012-03-01 11:06:59",
-                                name: "<em>test</em>3",
+                                name: "test",
                                 "title": null,
-                                owner: {}
+                                owner: {},
+                                highlightedAttributes: {
+                                    lastName: ["<em>Test</em>"],
+                                    name: ["<em>test</em>3"]
+                                }
                             }
                         ],
                         "numFound": "4"
@@ -2799,7 +2841,7 @@ beforeEach(function() {
         searchResultChorusView: function(overrides) {
             var attributes = _.extend({
                 compositeId: "10000|dca_demo|ddemo|QUERY|cv_us_president",
-                content: "SELECT * FROM <em>test</em> AS a",
+                content: "SELECT * FROM test AS a",
                 databaseName: "dca_demo",
                 datasetType: "CHORUS_VIEW",
                 entityType: "chorusView",
@@ -2816,7 +2858,10 @@ beforeEach(function() {
                     id: '10000',
                     name: 'New Workspace'
                 },
-                comments: []
+                comments: [],
+                highlightedAttributes: {
+                    content: ["SELECT * FROM <em>test</em> AS a"]
+                }
             }, overrides);
             return new chorus.models.Dataset(attributes);
         },

@@ -378,7 +378,7 @@ describe("chorus.views.TabularDataListSidebar", function() {
 
                     describe("when the 'associate with workspace' link is clicked", function() {
                         beforeEach(function() {
-                            this.view.$("li.associate a").click();
+                            this.view.$("a.associate").click();
                         });
 
                         it("displays the associate with workspace dialog", function() {
