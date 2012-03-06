@@ -5,15 +5,15 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
     ],
 
     setup: function() {
-        var type, query;
-        if(arguments.length > 1){
-            type = decodeURIComponent(arguments[0])
-            query = decodeURIComponent(arguments[1]);
-        } else {
-            type = "all";
-            query = decodeURIComponent(arguments[0]);
+        var attrs = {
+            query: decodeURIComponent(arguments[2] || arguments[0]),
+            entityType: 'all'
         }
-        this.model = new chorus.models.SearchResult({query: query, type: type});
+        if (arguments.length === 3) {
+            attrs.myWorkspaces = (arguments[0] === "my_workspaces");
+            attrs.entityType = arguments[1];
+        }
+        this.model = this.search = new chorus.models.SearchResult(attrs);
         this.requiredResources.add(this.model);
         this.model.fetch();
     },
@@ -25,6 +25,14 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
                     query: this.model.displayShortName()
                 }),
                 linkMenus: {
+                    search_in: {
+                        title: t("search.search_in"),
+                        options: [
+                            {data: "all", text: t("search.in.all_of_chorus")},
+                            {data: "my_workspaces", text: t("search.in.my_workspaces")}
+                        ],
+                        event: "search_in"
+                    },
                     type: {
                         title: t("search.show"),
                         options: [
@@ -35,7 +43,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
                             {data: "workspace", text: t("search.type.workspace")},
                             {data: "user", text: t("search.type.user")}
                         ],
-                        chosen: t("search.type." + this.model.get("type")),
+                        chosen: t("search.type." + (this.search.get("entityType") || 'all')),
                         event: "filter"
                     }
                 }
@@ -57,6 +65,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         chorus.PageEvents.subscribe("workfile:selected", this.workfileSelected, this);
         chorus.PageEvents.subscribe("user:selected", this.userSelected, this);
 
+        chorus.PageEvents.subscribe("choice:search_in", this.scopeSearchResults, this);
         chorus.PageEvents.subscribe("choice:filter", this.filterSearchResults, this);
     },
 
@@ -86,6 +95,10 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
 
     postRender: function() {
         this.$('li.result_item').eq(0).click()
+    },
+
+    scopeSearchResults: function(data) {
+        chorus.router.navigate('#/search/' + data + "/all/" + encodeURI(this.model.get("query")), true);
     },
 
     filterSearchResults: function(type) {

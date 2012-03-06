@@ -1,7 +1,7 @@
 describe("chorus.views.SearchResultList", function() {
     beforeEach(function() {
         this.model = fixtures.searchResult();
-        this.model.set({type: "all"});
+        this.model.set({entityType: "all"});
         this.view = new chorus.views.SearchResultList({model: this.model});
         this.view.render();
     });
@@ -16,7 +16,7 @@ describe("chorus.views.SearchResultList", function() {
 
     context("when filtering by workspace", function() {
         beforeEach(function() {
-            this.model.set({type: "workspace"});
+            this.model.set({entityType: "workspace"});
             this.view = new chorus.views.SearchResultList({model: this.model});
             this.view.render();
         });
