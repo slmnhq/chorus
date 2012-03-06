@@ -23,10 +23,19 @@ describe("chorus.views.Instance", function() {
             itUsesPngForState("red", "fault");
 
             function itUsesPngForState(png, state) {
-                it("uses " + png + ".png for state: " + state, function() {
-                    this.model.set({state: state});
-                    this.view.render();
-                    expect(this.view.$("img.state").attr("src")).toBe("/images/instances/" + png + ".png");
+                describe("in the " + state + " state", function() {
+                    beforeEach(function() {
+                        this.model.set({ state: state })
+                        this.view.render();
+                    });
+
+                    it("uses " + png + ".png for the image", function() {
+                        expect(this.view.$("img.state").attr("src")).toBe("/images/instances/" + png + ".png");
+                    });
+
+                    it("sets the image's title", function() {
+                        expect(this.view.$("img.state").attr("title")).toBe(_.str.capitalize(state));
+                    });
                 });
             }
         });
