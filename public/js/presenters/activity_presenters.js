@@ -155,7 +155,7 @@
         WORKSPACE_UNARCHIVED: workspaceIsObject,
 
         WORKSPACE_ADD_TABLE: function(model) {
-            var datasetAdded = model.dataset();
+            var datasetAdded = model.databaseObject().asDataset();
             return {
                 objectName: datasetAdded.get("objectName"),
                 objectUrl:  datasetAdded.showUrl(),

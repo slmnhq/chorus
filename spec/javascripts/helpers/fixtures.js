@@ -697,17 +697,23 @@ beforeEach(function() {
             },
 
             "WORKSPACE_ADD_TABLE": function(overrides) {
+                var workspace = fixtures.workspaceJson()
                 var attrs = _.extend({
                     type: "WORKSPACE_ADD_TABLE",
                     author: fixtures.authorJson(),
                     comments: [ fixtures.commentJson() ],
                     id: "10082",
-                    table: {
+                    databaseObject: {
                         id: "10000|Analytics|analytics|VIEW|__gp_fullname",
-                        name: "__gp_fullname"
+                        name: "__gp_fullname",
+                        objectName: "__gp_fullname",
+                        objectType: "BASE_TABLE",
+                        query: null,
+                        type: "SOURCE_TABLE",
+                        workspaceId: workspace.id
                     },
                     timestamp: "2012-02-29 15:24:42",
-                    workspace: fixtures.workspaceJson()
+                    workspace: workspace
                 }, overrides);
 
                 return new chorus.models.Activity(attrs);
