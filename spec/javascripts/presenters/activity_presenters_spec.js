@@ -182,6 +182,56 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context(".IMPORT_UPDATED", function() {
+        context("when importing from a source table", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.IMPORT_UPDATED_TABLE();
+                this.presenter = new chorus.presenters.Activity(this.model);
+            });
+
+            it("should have the right importType", function() {
+                expect(this.presenter.importType).toMatchTranslation("dataset.import.types.table")
+            });
+
+            it("should pass the importType to the header", function() {
+                expect(this.presenter.header.importType).toMatchTranslation("dataset.import.types.table");
+            });
+
+            it("should have the right importSourceName", function() {
+                expect(this.presenter.importSourceName).toBe(this.model.databaseObject().get("objectName"))
+            });
+
+            it("should have the right importSourceUrl", function() {
+                expect(this.presenter.importSourceUrl).toBe(this.model.databaseObject().asDataset().showUrl());
+            });
+
+            it("should have the right message", function() {
+                expect(this.presenter.headerHtml).toContainTranslation("activity_stream.header.html.IMPORT_UPDATED.default", this.presenter.header);
+            });
+
+            it("should have an importSourceLink in the header", function() {
+                var $link = $(this.presenter.header.importSourceLink);
+                var importSource = this.model.databaseObject().asDataset();
+                expect($link.attr("href")).toMatchUrl(importSource.showUrl());
+                expect($link.text()).toBe(importSource.get("objectName"));
+            });
+
+            itShouldHaveUserIcon();
+            itShouldHaveDestinationTableLink();
+        });
+
+        context("when importing from a view", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.IMPORT_UPDATED_VIEW();
+                this.presenter = new chorus.presenters.Activity(this.model);
+            });
+
+            it("should have the right importType", function() {
+                expect(this.presenter.importType).toMatchTranslation("dataset.import.types.view")
+            });
+        });
+    });
+
     context(".NOTE_ON_ANYTHING", function() {
         beforeEach(function() {
             this.model = fixtures.activities.NOTE_ON_DATASET_TABLE({});

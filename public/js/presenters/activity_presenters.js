@@ -145,6 +145,7 @@
             return ctx;
         },
         IMPORT_CREATED: importIsObject,
+        IMPORT_UPDATED: importIsObject,
 
         WORKSPACE_CREATED: workspaceIsObject,
         WORKSPACE_MAKE_PRIVATE: workspaceIsObject,
@@ -153,9 +154,10 @@
         WORKSPACE_UNARCHIVED: workspaceIsObject,
 
         WORKSPACE_ADD_TABLE: function(model) {
+            var datasetAdded = model.dataset();
             return {
-                objectName: model.dataset().get("objectName"),
-                objectUrl: model.dataset().showUrl(),
+                objectName: datasetAdded.get("objectName"),
+                objectUrl:  datasetAdded.showUrl(),
                 iconSrc: "/images/table_large.png",
                 iconClass: ''
             }
@@ -278,27 +280,28 @@
 
     function importIsObject(model) {
         var ctx = {};
-        var destinationTable = new chorus.models.Dataset(model.get("databaseObject"));
-        if(model.attributes.hasOwnProperty("file")){
+        var sourceTable = model.databaseObject().asDataset();
+        var destinationObject = model.dataset();
+        if (model.has("file")) {
             ctx = {
                 importType: t("dataset.import.types.file"),
                 importSourceName: model.get('file').name
             }
         } else {
             ctx = {
-                importSourceName: destinationTable.get("objectName"),
-                importSourceUrl: destinationTable.showUrl()
+                importSourceName: sourceTable.get("objectName"),
+                importSourceUrl: sourceTable.showUrl()
             }
 
-            var metaType = destinationTable.metaType();
+            var metaType = sourceTable.metaType();
             if( metaType == "table") ctx.importType = t("dataset.import.types.table");
             if( metaType == "view" || metaType == "query") ctx.importType = t("dataset.import.types.view");
         }
 
         _.extend(ctx, {
-            objectName: model.dataset().get("objectName"),
+            objectName: destinationObject.get("objectName"),
             objectType: t("database_object.TABLE"),
-            objectUrl: model.dataset().showUrl(),
+            objectUrl: destinationObject.showUrl(),
         });
 
         return ctx;

@@ -61,7 +61,8 @@ chorus.models.Activity = chorus.models.Base.extend({
         var databaseObjectField = this.get("databaseObject");
         if (databaseObjectField) {
             var attrs = _.clone(databaseObjectField)
-            attrs.objectName = attrs.name;
+            attrs.objectName = attrs.objectName || attrs.name;
+            attrs.workspace = this.get('workspace');
             delete attrs.name;
             return new chorus.models.DatabaseObject(attrs);
         }

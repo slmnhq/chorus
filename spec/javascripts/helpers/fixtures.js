@@ -1148,6 +1148,68 @@ beforeEach(function() {
                     }));
             },
 
+            "IMPORT_UPDATED_TABLE": function() {
+                return new chorus.models.Activity({
+                    author: {
+                        firstName: "EDC",
+                        id: "InitialUser",
+                        lastName: "Admin"
+                    },
+                    comments: [],
+                    databaseObject: {
+                        id: "10002|bizarro_world|public|BASE_TABLE|morley2",
+                        objectName: "morley2",
+                        objectType: "BASE_TABLE",
+                        type: "SOURCE_TABLE"
+                    },
+                    id: fixtures.nextId().toString(),
+                    import:{
+                        id: fixtures.nextId().toString()
+                    },
+                    table: {
+                        id: "10002|bizarro_world|public|BASE_TABLE|new_imported_table",
+                        name: "new_imported_table"
+                    },
+                    timestamp: "2012-03-02 12:19:50",
+                    type: "IMPORT_UPDATED",
+                    workspace: {
+                        id: "10000",
+                        name: "a"
+                    }
+                })
+            },
+
+            "IMPORT_UPDATED_VIEW": function() {
+                return new chorus.models.Activity({
+                    author: {
+                        firstName: "EDC",
+                        id: "InitialUser",
+                        lastName: "Admin"
+                    },
+                    comments: [],
+                    databaseObject: {
+                        id: "10002|bizarro_world|public|BASE_TABLE|morley2",
+                        objectName: "morley2",
+                        objectType: "VIEW",
+                        type: "SOURCE_VIEW"
+                    },
+                    id: fixtures.nextId().toString(),
+                    import:{
+                        id: fixtures.nextId().toString()
+                    },
+                    table: {
+                        id: "10002|bizarro_world|public|BASE_TABLE|new_imported_table",
+                        name: "new_imported_table"
+                    },
+                    timestamp: "2012-03-02 12:19:50",
+                    type: "IMPORT_UPDATED",
+                    workspace: {
+                        id: "10000",
+                        name: "a"
+                    }
+                })
+            },
+
             "IMPORT_SUCCESS_FILE": function() {
                 return new chorus.models.Activity({
                     author: {
