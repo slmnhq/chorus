@@ -193,16 +193,6 @@ describe("chorus.dialogs.InstanceEditDialog", function() {
             this.dialog.$("input[name=maintenanceDb]").val("not_postgres");
         });
 
-        it("should update the model", function() {
-            spyOn(this.dialog.model, "save").andCallThrough();
-            this.dialog.$("button[type=submit]").submit();
-
-            expect(this.dialog.model.get("name")).toBe("test1");
-            expect(this.dialog.model.get("port")).toBe("8555");
-            expect(this.dialog.model.get("host")).toBe("testhost");
-            expect(this.dialog.model.get("maintenanceDb")).toBe("not_postgres");
-        });
-
         it("puts the button in 'loading' mode", function() {
             spyOn(this.dialog.model, "save");
             this.dialog.$("button[type=submit]").submit();
@@ -214,6 +204,18 @@ describe("chorus.dialogs.InstanceEditDialog", function() {
             this.dialog.$("button[type=submit]").submit();
             expect(this.dialog.model.save).toHaveBeenCalled();
         });
+
+        it("should call save with the right parameters ( to make sure that we pass in the provisionType for validation )", function() {
+            spyOn(this.dialog.model, "save").andCallThrough();
+            this.dialog.$("button[type=submit]").submit();
+
+            expect(this.dialog.model.save.argsForCall[0][0].name).toBe("test1");
+            expect(this.dialog.model.save.argsForCall[0][0].port).toBe("8555");
+            expect(this.dialog.model.save.argsForCall[0][0].host).toBe("testhost");
+            expect(this.dialog.model.save.argsForCall[0][0].maintenanceDb).toBe("not_postgres");
+            expect(this.dialog.model.save.argsForCall[0][0].provisionType).toBe("register");
+        });
+
 
         it("changes the text on the upload button to 'saving'", function() {
             spyOn(this.dialog.model, "save");

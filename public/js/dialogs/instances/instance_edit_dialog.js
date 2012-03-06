@@ -29,12 +29,12 @@ chorus.dialogs.InstancesEdit = chorus.dialogs.Base.extend({
 
     save:function (e) {
         e.preventDefault();
-
         var attrs = {
             name: this.$("input[name=name]").val().trim(),
             description: this.$("textarea[name=description]").val().trim(),
             host: this.$("input[name=host]").val(),
-            port: this.$("input[name=port]").val()
+            port: this.$("input[name=port]").val(),
+            provisionType: this.model.get("provisionType")
         };
 
         _(["size", "maintenanceDb", "userName", "userGroups"]).each(function(name) {

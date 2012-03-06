@@ -20,9 +20,7 @@
         declareValidations:function (newAttrs) {
             this.require("name", newAttrs);
             this.requirePattern("name", /^[a-zA-Z][a-zA-Z0-9_]*$/, newAttrs, "instance.validation.name_pattern");
-            var provisionType = newAttrs.provisionType || this.get("provisionType");
-
-            switch (provisionType) {
+            switch (newAttrs.provisionType) {
                 case "register" :
                     // validating existing Greenplum instance
                     this.require("host", newAttrs);

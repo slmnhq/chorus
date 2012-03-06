@@ -253,14 +253,14 @@ describe("chorus.models.Instance", function() {
     describe("validations", function() {
         context("with a registered instance", function() {
             beforeEach(function() {
-                this.instance.set({ provisionType: "register" });
                 this.attrs = {
                     name : "foo",
                     host : "gillette",
                     dbUserName : "dude",
                     dbPassword : "whatever",
                     port : "1234",
-                    maintenanceDb: "postgres"
+                    maintenanceDb: "postgres",
+                    provisionType: "register"
                 }
             });
 
@@ -306,10 +306,10 @@ describe("chorus.models.Instance", function() {
 
         context("when creating a new instance", function() {
             beforeEach(function() {
-                this.instance.set({ provisionType : "create" });
                 this.attrs = {
                     name : "foo",
-                    size : "100000"
+                    size : "100000",
+                    provisionType: "create"
                 }
             })
 
@@ -328,10 +328,10 @@ describe("chorus.models.Instance", function() {
 
         context("when registering an existing hadoop instance", function() {
             beforeEach(function() {
-                this.instance.set({ provisionType : "registerHadoop" });
                 this.attrs = {
                     name : "foo",
-                    size : "100000"
+                    size : "100000",
+                    provisionType : "registerHadoop"
                 }
             });
 
