@@ -208,8 +208,8 @@
                     }
 
                     var paramsToIgnore = (options && options.paramsToIgnore) || [];
-                    var targetURI = new URI(target).removeSearch(paramsToIgnore);
-                    var actualURI = new URI(this.actual).removeSearch(paramsToIgnore);
+                    var targetURI = new URI(decodeURI(target)).removeSearch(paramsToIgnore);
+                    var actualURI = new URI(decodeURI(this.actual)).removeSearch(paramsToIgnore);
                     return (actualURI).equals(targetURI);
                 },
 
