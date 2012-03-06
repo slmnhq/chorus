@@ -749,7 +749,7 @@ describe("chorus.views.Base", function() {
             this.view = new chorus.views.ListHeaderView({
                 title: "Hi there",
                 linkMenus: {
-                    type: {
+                    my_menu: {
                         title: "Title",
                         options: [
                             {data: "", text: "All"},
@@ -777,6 +777,10 @@ describe("chorus.views.Base", function() {
             it("does not render an image", function() {
                 expect(this.view.$(".icon")).not.toExist();
             })
+
+            it("adds a class based on the key in the linkMenu's hash", function() {
+                expect(this.view.$('.menus > .my_menu')).toExist();
+            });
 
             context("when an imageUrl is provided", function() {
                 beforeEach(function() {

@@ -421,11 +421,12 @@ chorus.views.ListHeaderView = chorus.views.Base.extend({
     postRender: function() {
         var self = this;
         if (this.options.linkMenus) {
-            _.each(_.keys(this.options.linkMenus), function(key) {
-                var menu = new chorus.views.LinkMenu(self.options.linkMenus[key]);
+            _.each(this.options.linkMenus, function(menuOptions, menuKey) {
+                var menu = new chorus.views.LinkMenu(menuOptions);
                 self.$(".menus").append(
                     menu.render().el
                 )
+                $(menu.el).addClass(menuKey);
                 menu.bind("choice", function(eventType, choice) {
                     self.trigger("choice:" + eventType, choice);
                 })
