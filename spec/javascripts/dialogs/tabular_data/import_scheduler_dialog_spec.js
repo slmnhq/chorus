@@ -179,6 +179,42 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         expect(params.scheduleDays).toBe("1:2");
                     });
                 });
+
+                context("when the row limit is not checked and the form is submitted", function() {
+                    beforeEach(function() {
+                        this.dialog.$("input:checked[name='truncate']").prop("checked", false).change();
+
+                        this.dialog.$("select[name='toTable']").eq(0).attr("selected", true);
+
+                        this.dialog.$("input[name='limit_num_rows']").prop("checked", false)
+
+                        this.dialog.activeScheduleView.$(".start input[name='year']").val("2012");
+                        this.dialog.activeScheduleView.$(".start input[name='month']").val("02");
+                        this.dialog.activeScheduleView.$(".start input[name='day']").val("29");
+
+                        this.dialog.activeScheduleView.$(".end input[name='year']").val("2012");
+                        this.dialog.activeScheduleView.$(".end input[name='month']").val("03");
+                        this.dialog.activeScheduleView.$(".end input[name='day']").val("21");
+
+                        this.dialog.activeScheduleView.$("select.ampm").val("PM");
+                        this.dialog.activeScheduleView.$("select.hours").val("12");
+                        this.dialog.activeScheduleView.$("select.minutes").val("09");
+
+                        expect(this.dialog.$("button.submit")).toBeEnabled();
+
+                        this.dialog.$("button.submit").click();
+                    });
+
+                    it("should put the values in the correct API form fields", function() {
+                        var params = this.server.lastCreate().params()
+                        expect(params.truncate).toBe("false");
+                        expect(params.sampleCount).toBe(undefined);
+                        expect(params.scheduleStartTime).toBe("2012-02-29 12:09:00.0");
+                        expect(params.scheduleEndTime).toBe("2012-03-21")
+                        expect(params.scheduleDays).toBe("1:2");
+                    });
+
+                });
             }
 
             describe("switching between new table and existing table", function() {

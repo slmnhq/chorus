@@ -187,7 +187,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         var $enabledFieldSet = this.$("fieldset").not(".disabled");
         _.each($enabledFieldSet.find("input:text, input[type=hidden], select"), function(i) {
             var input = $(i);
-            if (input.closest(".schedule_widget").length == 0) {
+            if (input.is(":enabled") && input.closest(".schedule_widget").length == 0) {
                 updates[input.attr("name")] = input.val() && input.val().trim();
             }
         });
