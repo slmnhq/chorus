@@ -228,20 +228,8 @@ describe("chorus.views.Header", function() {
                     expect(this.view.$(".menu.popup_username a[href='#/users/55']").text()).toBe(t("header.your_profile"));
                 });
 
-                it("has a link to 'Users'", function() {
-                    expect(this.view.$(".menu.popup_username a[href='#/users']").text()).toBe(t("header.users_list"));
-                });
-
-                it("has a link to instances", function() {
-                    expect(this.view.$(".menu.popup_username a[href='#/instances']").text()).toMatchTranslation("header.instances");
-                });
-
                 it("has a link to 'sign out'", function() {
                     expect(this.view.$(".menu.popup_username a[href='#/logout']").text()).toBe(t("header.sign_out"));
-                });
-
-                it("has a link to the workspaces list", function() {
-                    expect(this.view.$(".menu.popup_username a[href='#/workspaces']").text()).toBe(t("header.workspaces"));
                 });
             });
 
@@ -390,5 +378,66 @@ describe("chorus.views.Header", function() {
                 });
             });
         });
+
+        describe("the gear menu", function() {
+            it("is rendered", function() {
+                expect(this.view.$(".gear a img")).toHaveAttr("src", "/images/gear_menu.png")
+            });
+
+            it("has a hidden popup menu", function() {
+                expect(this.view.$(".menu.popup_gear")).toHaveClass("hidden");
+            })
+
+            describe("when clicked", function() {
+                beforeEach(function() {
+                    this.popupSpy = jasmine.createSpy();
+                    $(document).bind("chorus:menu:popup", this.popupSpy);
+                    this.view.$(".gear a").click();
+                })
+
+                it("shows a popup menu", function() {
+                    expect(this.view.$(".menu.popup_gear")).not.toHaveClass("hidden");
+                })
+
+                it("triggers chorus:menu:popup on the document", function() {
+                    expect(this.popupSpy).toHaveBeenCalled();
+                })
+
+                describe("and when clicked again", function() {
+                    beforeEach(function() {
+                        this.view.$(".gear a").click();
+                    });
+                    it("becomes hidden again", function() {
+                        expect(this.view.$(".menu.popup_gear")).toHaveClass("hidden");
+                    });
+                });
+            });
+
+            describe("the popup menu", function() {
+                it("has a link to 'Users'", function() {
+                    expect(this.view.$(".menu.popup_gear a[href='#/users']").text()).toBe(t("header.users_list"));
+                });
+
+                it("has a link to instances", function() {
+                    expect(this.view.$(".menu.popup_gear a[href='#/instances']").text()).toMatchTranslation("header.instances");
+                });
+
+                it("has a link to the workspaces list", function() {
+                    expect(this.view.$(".menu.popup_gear a[href='#/workspaces']").text()).toBe(t("header.workspaces"));
+                });
+            });
+
+            describe("chorus:menu:popup handling", function() {
+                beforeEach(function() {
+                    this.view.$(".gear a").click();
+                    expect(this.view.$(".menu.popup_gear")).not.toHaveClass("hidden");
+                    $(document).trigger("chorus:menu:popup", $(""));
+                })
+
+                it("dismisses the popup", function() {
+                    expect(this.view.$(".menu.popup_gear")).toHaveClass("hidden");
+                })
+            })
+        })
     });
 });

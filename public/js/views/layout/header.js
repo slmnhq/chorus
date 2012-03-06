@@ -1,10 +1,11 @@
 chorus.views.Header = chorus.views.Base.extend({
     constructorName: "HeaderView",
-    className:"header",
-    events:{
-        "click .username a":"togglePopupUsername",
-        "click .account a":"togglePopupAccount",
-        "click a.notifications":"togglePopupNotifications",
+    className: "header",
+    events: {
+        "click .username a": "togglePopupUsername",
+        "click .account a": "togglePopupAccount",
+        "click a.notifications": "togglePopupNotifications",
+        "click .gear a": "togglePopupGear",
         "submit .search form": "startSearch",
         "click .type_ahead_result a": "dismissSearch"
     },
@@ -14,7 +15,7 @@ chorus.views.Header = chorus.views.Base.extend({
         ".type_ahead_result": "typeAheadView"
     },
 
-    setup:function () {
+    setup: function() {
         this.popupEventName = "chorus:menu:popup." + this.cid;
         $(document).bind(this.popupEventName, _.bind(this.popupEventHandler, this))
         this.session = chorus.session;
@@ -58,7 +59,7 @@ chorus.views.Header = chorus.views.Base.extend({
         this._super("beforeNavigateAway");
     },
 
-    additionalContext:function (ctx) {
+    additionalContext: function(ctx) {
         this.requiredResources.reset()
         var user = this.session.user();
         var firstName = this.session.get("firstName");
@@ -72,7 +73,7 @@ chorus.views.Header = chorus.views.Base.extend({
         });
     },
 
-    refreshNotifications : function() {
+    refreshNotifications: function() {
         this.notifications.fetchAll();
     },
 
@@ -98,7 +99,7 @@ chorus.views.Header = chorus.views.Base.extend({
         this.$("a.notifications").text("0").addClass("empty")
     },
 
-    togglePopupUsername:function (e) {
+    togglePopupUsername: function(e) {
         e.preventDefault();
         e.stopImmediatePropagation();
 
@@ -113,7 +114,22 @@ chorus.views.Header = chorus.views.Base.extend({
         this.$(".menu.popup_username").toggleClass("hidden", userNameWasPoppedUp);
     },
 
-    togglePopupAccount:function (e) {
+    togglePopupGear: function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        var gearNameWasPoppedUp = !this.$(".menu.popup_gear").hasClass("hidden");
+        this.dismissPopups();
+        this.triggerPopupEvent(e.target);
+
+        if (!gearNameWasPoppedUp) {
+            this.captureClicks();
+        }
+
+        this.$(".menu.popup_gear").toggleClass("hidden", gearNameWasPoppedUp);
+    },
+
+    togglePopupAccount: function(e) {
         e.preventDefault();
         e.stopImmediatePropagation();
 
@@ -128,26 +144,26 @@ chorus.views.Header = chorus.views.Base.extend({
         this.$(".menu.popup_account").toggleClass("hidden", accountNameWasPoppedUp)
     },
 
-    triggerPopupEvent:function (el) {
+    triggerPopupEvent: function(el) {
         $(document).trigger("chorus:menu:popup", el);
     },
 
-    captureClicks:function () {
+    captureClicks: function() {
         $(document).bind("click.popup_menu", _.bind(this.dismissPopups, this));
     },
 
-    releaseClicks:function () {
+    releaseClicks: function() {
         $(document).unbind("click.popup_menu");
     },
 
-    popupEventHandler:function (ev, el) {
+    popupEventHandler: function(ev, el) {
         if ($(el).closest(".header").length == 0) {
             this.dismissPopups();
             this.releaseClicks();
         }
     },
 
-    dismissPopups:function () {
+    dismissPopups: function() {
         this.releaseClicks();
         this.$(".menu").addClass("hidden");
     },
