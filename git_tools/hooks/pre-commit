@@ -1,14 +1,19 @@
-for FILE in `git diff-index --name-status HEAD -- | cut -c3-` ; do
+for FILE in `git diff --staged --name-only`; do
     if [[ "$FILE" =~ [.]js$ ]]
     then
         if [[ `grep debugger $FILE` ]]
         then
-            echo $FILE 'contains debugger!'
+            echo $FILE 'contains a debugger!'
             exit 1
         fi
         if [[ `grep -F console. $FILE` ]]
         then
             echo $FILE 'contains a reference to console!'
+            exit 1
+        fi
+        if [[ `grep -F 'alert(' $FILE` ]]
+        then
+            echo $FILE 'contains a call to alert!'
             exit 1
         fi
     fi
