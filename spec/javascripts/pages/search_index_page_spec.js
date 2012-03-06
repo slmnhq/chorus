@@ -26,6 +26,22 @@ describe("chorus.pages.SearchIndexPage", function() {
             expect(this.page.$(".default_content_header h1")).toContainTranslation("search.index.title", {query: this.query});
         });
 
+        it("has a 'Show All Results' link", function() {
+            expect(this.page.$('.default_content_header .title')).toContainTranslation("search.show")
+            expect(this.page.$('.default_content_header a')).toContainTranslation("search.type.all")
+            expect(this.page.$('.default_content_header a')).toContainTranslation("search.type.workfiles")
+            expect(this.page.$('.default_content_header a')).toContainTranslation("search.type.hadoop")
+            expect(this.page.$('.default_content_header a')).toContainTranslation("search.type.datasets")
+            expect(this.page.$('.default_content_header a')).toContainTranslation("search.type.workspaces")
+            expect(this.page.$('.default_content_header a')).toContainTranslation("search.type.users")
+        });
+
+        it("clicking on search filter navigates to the search all page", function() {
+            spyOn(chorus.router, "navigate");
+            this.page.$("li[data-type='workfiles'] a").click();
+            expect(chorus.router.navigate).toHaveBeenCalledWith("#/search/workfiles/" + encodeURI(this.query), true);
+        });
+
         describe("the workfile section", function() {
             beforeEach(function() {
                 this.workfileLIs = this.page.$(".workfile_list li");

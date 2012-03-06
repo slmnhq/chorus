@@ -13,14 +13,30 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
 
     resourcesLoaded: function() {
         this.mainContent = new chorus.views.MainContentView({
-            contentHeader: new chorus.views.StaticTemplate("default_content_header", {
+            contentHeader: new chorus.views.ListHeaderView({
                 title: t("search.index.title", {
                     query: this.model.displayShortName()
-                })
+                }),
+                linkMenus: {
+                    type: {
+                        title: t("search.show"),
+                        options: [
+                            {data: "all", text: t("search.type.all")},
+                            {data: "workfiles", text: t("search.type.workfiles")},
+                            {data: "hadoop", text: t("search.type.hadoop")},
+                            {data: "datasets", text: t("search.type.datasets")},
+                            {data: "workspaces", text: t("search.type.workspaces")},
+                            {data: "users", text: t("search.type.users")}
+                        ],
+                        event: "filter"
+                    }
+                }
             }),
 
             content: new chorus.views.SearchResultList({ model: this.model })
         });
+
+        chorus.PageEvents.subscribe("choice:filter", this.filterSearchResults, this);
 
         this.sidebars = {
             user: new chorus.views.UserListSidebar(),
@@ -62,5 +78,9 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
 
     postRender: function() {
         this.$('li.result_item').eq(0).click()
+    },
+
+    filterSearchResults: function(data) {
+        chorus.router.navigate('#/search/' + data + "/" + encodeURI(this.model.get("query")), true);
     }
 });
