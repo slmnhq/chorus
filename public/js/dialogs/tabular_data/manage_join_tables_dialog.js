@@ -33,10 +33,6 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
         this.joinTablePaginator = new chorus.views.ListContentDetails({collection:this.collection, modelClass:"Dataset", hideIfNoPagination:true});
     },
 
-    postRender: function() {
-        this.setupScrolling(this.$(".list"));
-    },
-
     tableClicked: function(e) {
         var clickedLi = $(e.target).closest("li");
         this.$("li").removeClass("selected");
