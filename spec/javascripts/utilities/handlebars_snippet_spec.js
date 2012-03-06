@@ -757,7 +757,6 @@ describe("handlebars", function() {
         describe("sqlDefinition", function() {
             it("html escapes the input", function() {
                 var definition = Handlebars.helpers.sqlDefinition("<script>");
-                alert(definition)
                 expect(definition).not.toMatch('<script>');
             });
         })
