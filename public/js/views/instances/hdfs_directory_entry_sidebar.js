@@ -9,7 +9,12 @@ chorus.views.HdfsDirectoryEntrySidebar = chorus.views.Sidebar.extend({
 
     setup: function() {
         chorus.PageEvents.subscribe("hdfs_entry:selected", this.setEntry, this);
+        chorus.PageEvents.subscribe("memo:added:hdfs", this.refreshActivities, this);
         this.tabControl = new chorus.views.TabControl([ {name: 'activity', selector: ".activity_list"} ]);
+    },
+
+    refreshActivities: function() {
+        this.activityList && this.activityList.collection.fetch();
     },
 
     setEntry: function(entry) {
@@ -19,6 +24,10 @@ chorus.views.HdfsDirectoryEntrySidebar = chorus.views.Sidebar.extend({
 
             var activities = entry.activities();
             activities.fetch();
+
+            this.bindings.add(activities, "changed", this.render);
+            this.bindings.add(activities, "reset", this.render);
+
             this.activityList = new chorus.views.ActivityList({
                 collection: activities,
                 additionalClass: "sidebar",

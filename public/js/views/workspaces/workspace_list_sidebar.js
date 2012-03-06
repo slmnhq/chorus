@@ -28,6 +28,10 @@ chorus.views.WorkspaceListSidebar = chorus.views.Sidebar.extend({
         if (model) {
             var activities = model.activities();
             activities.fetch();
+
+            this.bindings.add(activities, "changed", this.render);
+            this.bindings.add(activities, "reset", this.render);
+
             this.activityList = new chorus.views.ActivityList({
                 collection: activities,
                 additionalClass: "sidebar"

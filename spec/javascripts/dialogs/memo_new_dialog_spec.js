@@ -686,7 +686,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             spyOn(chorus.PageEvents, "broadcast");
             this.dialog.model.trigger("saved");
             // broadcasts the entityType from the launchElement
-            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("memo:added", "workfile");
+            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("memo:added:workfile");
         })
 
         it("disables the attachment_links", function() {

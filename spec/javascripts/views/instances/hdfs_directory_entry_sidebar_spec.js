@@ -10,7 +10,7 @@ describe("chorus.views.HdfsDirectoryEntrySidebar", function(){
                 chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
             });
 
-            itDisplaysTheRightNameAndTimestamp();
+            itHasTheRightDefaultBehavior();
 
             it("does not have a link to add a note", function() {
                 expect(this.view.$("a.dialog.add_note")).not.toExist();
@@ -23,7 +23,7 @@ describe("chorus.views.HdfsDirectoryEntrySidebar", function(){
                 chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
             });
 
-            itDisplaysTheRightNameAndTimestamp();
+            itHasTheRightDefaultBehavior();
 
             describe("clicking the add a note link", function() {
                 beforeEach(function() {
@@ -45,20 +45,10 @@ describe("chorus.views.HdfsDirectoryEntrySidebar", function(){
                     expect(this.server.lastCreate().url).toBe("/edc/comment/hdfs/123%7C%2Ffoo%2Fmy_file.sql");
                 });
             });
-
-            xit("has a link to add a note", function() {
-                var $link = this.view.$("a.dialog.add_note");
-                expect($link.data("dialog")).toBe("NotesNew");
-                expect($link.data("entityType")).toBe("hdfs");
-                expect($link.data("entityId")).toBe("123|%2Ffoo%2F" + encodeURIComponent(this.hdfsEntry.get("name")));
-                expect($link.data("allowWorkspaceAttachments")).toBeFalsy();
-                expect($link.data("displayEntityType")).toMatchTranslation("hdfs.file_lower");
-                expect($link.text()).toMatchTranslation("actions.add_note");
-            });
         });
     })
 
-    function itDisplaysTheRightNameAndTimestamp() {
+    function itHasTheRightDefaultBehavior() {
         it("should display the file name", function() {
             expect(this.view.$(".info .name").text()).toBe(this.hdfsEntry.get("name"));
         });
@@ -67,5 +57,11 @@ describe("chorus.views.HdfsDirectoryEntrySidebar", function(){
             var when = chorus.helpers.relativeTimestamp(this.hdfsEntry.get("lastModified"));
             expect(this.view.$(".info .last_updated").text().trim()).toMatchTranslation("hdfs.last_updated", {when: when});
         });
+
+        it("re-fetches when memo:added is broadcast with hdfs", function() {
+            this.server.reset();
+            chorus.PageEvents.broadcast("memo:added:hdfs");
+            expect(this.view.activityList.collection).toHaveBeenFetched();
+        })
     }
 })
