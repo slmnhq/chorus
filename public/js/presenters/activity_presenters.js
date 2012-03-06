@@ -299,7 +299,6 @@
 
     function importIsObject(model) {
         var ctx = {};
-        var sourceTable = model.databaseObject().asDataset();
         var destinationObject = model.dataset();
         if (model.has("file")) {
             ctx = {
@@ -307,6 +306,7 @@
                 importSourceName: model.get('file').name
             }
         } else {
+            var sourceTable = model.databaseObject().asDataset();
             ctx = {
                 importSourceName: sourceTable.get("objectName"),
                 importSourceUrl: sourceTable.showUrl()

@@ -1226,6 +1226,13 @@ describe("chorus.presenters.Activity", function() {
         });
     }
 
+    function itShouldHaveImportFailedIcon() {
+        it("should have the right icon", function() {
+            expect(this.presenter.iconSrc).toBe("/images/med_red_alert.png");
+            expect(this.presenter.iconClass).toBe("");
+        });
+    }
+
     function itShouldHaveDestinationTableLink() {
         it("should have the right object name( destination view )", function() {
             expect(this.presenter.objectName).toBe('new_imported_table')
@@ -1237,6 +1244,24 @@ describe("chorus.presenters.Activity", function() {
 
         it("should have the right object url", function() {
             expect(this.presenter.objectUrl).toBe(this.model.dataset().showUrl());
+        });
+    }
+
+    function itShouldNotHaveDetailsLink() {
+        it("does not have a details link", function() {
+            expect(this.presenter.detailsLink).toBeFalsy();
+        });
+    }
+
+    function itShouldHaveDetailsLink(text, attributes) {
+        it("has a link to error details", function() {
+            expect(this.presenter.detailsLink).toBeDefined();
+            var link = $(this.presenter.detailsLink);
+            expect(link).toHaveText(text);
+
+            _.each(attributes, function(value, key) {
+                expect(link).toHaveAttr(key, value);
+            })
         });
     }
 });
