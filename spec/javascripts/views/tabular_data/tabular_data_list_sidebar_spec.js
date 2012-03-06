@@ -206,7 +206,14 @@ describe("chorus.views.TabularDataListSidebar", function() {
                             });
 
                             it("shows the next import time", function() {
-                                expect(this.view.$(".next_import").html()).toContain("in 1 year");
+                                expect(this.view.$(".next_import").text()).toContainTranslation("import.next_import",
+                                    {nextTime: "in 1 year", tableLink: this.dataset.getImport().get("toTable")});
+
+                                expect(this.view.$(".next_import a")).toContainText(this.dataset.getImport().get("toTable"));
+                                var destTable = new chorus.models.Dataset({
+                                    id: this.view.importConfiguration.get("destinationTable"),
+                                    workspaceId: this.dataset.get("workspace").id})
+                                expect(this.view.$(".next_import a")).toHaveHref(destTable.showUrl());
                             });
                         });
 

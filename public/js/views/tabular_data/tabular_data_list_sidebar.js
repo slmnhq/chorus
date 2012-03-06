@@ -123,8 +123,16 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
             ctx.isImportable = this.importConfiguration.loaded;
             ctx.hasImport = this.importConfiguration && this.importConfiguration.hasActiveSchedule();
 
+            var destinationTable = new chorus.models.Dataset({
+                id: this.importConfiguration.get("destinationTable"),
+                workspaceId: this.resource.get("workspace").id
+            });
+
             if (this.importConfiguration.get("nextImportTime")) {
-                ctx.nextImport = chorus.helpers.relativeTimestamp(this.importConfiguration.get("nextImportTime"));
+                ctx.nextImport = t("import.next_import", {
+                    nextTime: chorus.helpers.relativeTimestamp(this.importConfiguration.get("nextImportTime")),
+                    tableLink: chorus.helpers.linkTo(destinationTable.showUrl(), this.importConfiguration.get("toTable"))
+                });
             }
 
             if (this.importConfiguration.has("executionInfo")) {
@@ -135,10 +143,6 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
                     importStatusKey = "import.last_import_failed";
                     ctx.importFailed = true;
                 }
-                var destinationTable = new chorus.models.Dataset({
-                    id: this.importConfiguration.get("destinationTable"),
-                    workspaceId: this.resource.get("workspace").id
-                });
                 ctx.lastImport = t(importStatusKey, {
                     timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
                     tableLink: chorus.helpers.linkTo(destinationTable.showUrl(), this.importConfiguration.get("toTable"))
