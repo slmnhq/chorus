@@ -15,6 +15,9 @@ describe("chorus.presenters.Activity", function() {
                 expect(this.presenter.importSourceName).toBe("some.csv");
             });
 
+            it("should not have an iconClass", function() {
+                expect(this.presenter.iconClass).toBe('');
+            });
 
             it("should have the right importType", function() {
                 expect(this.presenter.importType).toMatchTranslation("dataset.import.types.file")

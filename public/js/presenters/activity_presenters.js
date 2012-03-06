@@ -161,6 +161,7 @@
                 objectName: model.dataset().get("objectName"),
                 objectType: t("database_object.TABLE"),
                 objectUrl: model.dataset().showUrl(),
+                iconClass: '',
                 iconSrc: "/images/import_icon.png"
             });
 
