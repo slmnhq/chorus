@@ -2388,7 +2388,7 @@ beforeEach(function() {
 
         hdfsDirectoryEntryDirJson: function(overrides) {
             var id = fixtures.nextId();
-            return {
+            return _.extend({
                 "name": "folder" + id,
                 "isDir": true,
                 "lastModified": "2012-02-24 10:28:42.337",
@@ -2397,12 +2397,12 @@ beforeEach(function() {
                 "owner": "hadoop",
                 "group": "supergroup",
                 "permission": "rwxr-xr-x"
-            }
+            }, overrides);
         },
 
         hdfsDirectoryEntryFileJson: function(overrides) {
             var id = fixtures.nextId();
-            return {
+            return _.extend({
                 "name": "file" + id + ".sql",
                 "isDir": false,
                 "isBinary": false,
@@ -2412,12 +2412,12 @@ beforeEach(function() {
                 "owner": "hadoop",
                 "group": "supergroup",
                 "permission": "rw-r--r--"
-            }
+            }, overrides);
         },
 
         hdfsDirectoryEntryBinaryFileJson: function(overrides) {
             var id = fixtures.nextId();
-            return {
+            return _.extend({
                 "name": "file" + id + ".bin",
                 "isDir": false,
                 "isBinary": true,
@@ -2427,12 +2427,12 @@ beforeEach(function() {
                 "owner": "hadoop",
                 "group": "supergroup",
                 "permission": "rw-r--r--"
-            }
+            }, overrides);
         },
 
         hdfsDirectoryEntryUnknownIfBinaryFileJson: function(overrides) {
             var id = fixtures.nextId();
-            return {
+            return _.extend({
                 "name": "file" + id + ".???",
                 "isDir": false,
                 "isBinary": null,
@@ -2442,7 +2442,7 @@ beforeEach(function() {
                 "owner": "hadoop",
                 "group": "supergroup",
                 "permission": "rw-r--r--"
-            }
+            }, overrides);
         },
 
         searchResultJson: function(overrides) {

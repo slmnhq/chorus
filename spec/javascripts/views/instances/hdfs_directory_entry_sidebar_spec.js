@@ -19,13 +19,34 @@ describe("chorus.views.HdfsDirectoryEntrySidebar", function(){
 
         context("when the model is a file", function() {
             beforeEach(function() {
-                this.hdfsEntry = fixtures.hdfsDirectoryEntryFile();
+                this.hdfsEntry = fixtures.hdfsDirectoryEntryFile({name: "my_file.sql"});
                 chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
             });
 
             itDisplaysTheRightNameAndTimestamp();
 
-            it("has a link to add a note", function() {
+            describe("clicking the add a note link", function() {
+                beforeEach(function() {
+                    // set up page to catch launch dialog click
+                    var page = new chorus.pages.Base();
+                    $(page.el).append(this.view.el);
+                    chorus.bindModalLaunchingClicks(page);
+
+                    stubModals();
+
+                    this.view.$("a.dialog.add_note").click();
+
+                    chorus.modal.$("textarea").text("test comment").change();
+                    chorus.modal.$("button.submit").submit();
+                });
+
+                it("makes a request to the correct URL", function() {
+                    // testing this URL explicitly because tracking the URL through encodings has proven to be difficult
+                    expect(this.server.lastCreate().url).toBe("/edc/comment/hdfs/123%7C%2Ffoo%2Fmy_file.sql");
+                });
+            });
+
+            xit("has a link to add a note", function() {
                 var $link = this.view.$("a.dialog.add_note");
                 expect($link.data("dialog")).toBe("NotesNew");
                 expect($link.data("entityType")).toBe("hdfs");
