@@ -69,7 +69,7 @@ describe("chorus.views.TypeAheadSearch", function() {
 
         it("should display the correct name and type for instance", function() {
             var instance = this.result.get("typeAhead").docs[6];
-            expect(this.view.$("li.result:eq(6) .name").html()).toBe(instance.name);
+            expect(this.view.$("li.result:eq(6) .name").html()).toBe(instance.highlightedAttributes.name[0]);
             expect(this.view.$("li.result:eq(6) .name").attr("href")).toBe((new chorus.models.Instance(instance)).showUrl());
             expect(this.view.$("li.result:eq(6) .type").text()).toMatchTranslation("type_ahead.entity.instance");
         })

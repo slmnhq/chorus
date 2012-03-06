@@ -41,7 +41,7 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
                     url = new chorus.models.Dataset(result).showUrl();
                     break;
                 case "instance":
-                    name = result.name;
+                    name = result.highlightedAttributes.name[0];
                     url = new chorus.models.Instance(result).showUrl();
                     break;
                 default:
