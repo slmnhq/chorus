@@ -2545,6 +2545,19 @@ beforeEach(function() {
             }, overrides);
         },
 
+        hdfsFile: function(overrides) {
+            var json= fixtures.hdfsFileJson(overrides);
+            return new chorus.models.HdfsFile(json);
+        },
+
+        hdfsFileJson: function(overrides) {
+            return _.extend({
+                content: "DROP TABLE pivots;",
+                instanceId: "1234",
+                path: "%2Fdata%2Fcleardb.sql"
+            })
+        },
+
         searchResultJson: function(overrides) {
             return _.extend({
                    "workfile": {

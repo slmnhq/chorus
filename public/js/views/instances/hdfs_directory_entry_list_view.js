@@ -11,11 +11,13 @@ chorus.views.HdfsDirectoryEntryList = chorus.views.Base.extend({
     collectionModelContext: function(model) {
         var instanceId = this.collection.attributes.instanceId;
         var path = this.collection.attributes.path;
-        var url = "#/instances/" + instanceId + "/browse" + ( (path == "/") ? "" : path ) + "/" + model.get("name");
+        var dirUrl = "#/instances/" + instanceId + "/browse" + ( (path == "/") ? "" : path ) + "/" + model.get("name");
+        var fileUrl = "#/instances/" + instanceId + "/browseFile" + ( (path == "/") ? "" : path ) + "/" + model.get("name");
+
         return {
             humanSize: I18n.toHumanSize(model.get("size")),
             iconUrl: chorus.urlHelpers.fileIconUrl(_.last(model.get("name").split("."))),
-            showUrl: url,
+            showUrl: model.get('isDir') ? dirUrl :  fileUrl,
             dirInfo: t("hdfs.directory_files", {count: model.get("count")}),
             displayableFiletype: model.get('isBinary') === false
         }

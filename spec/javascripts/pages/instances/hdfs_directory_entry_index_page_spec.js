@@ -44,7 +44,7 @@ describe("chorus.pages.HdfsDirectoryEntryIndexPage", function() {
 
         it("shows a link if a file is not binary", function() {
             var filename = this.page.collection.models[1].get('name')
-            expect(this.page.$(".hdfs_directory_entry_list li:eq(1) .name a").attr('href')).toEqual('#/instances/1234/browse/foo/' + filename)
+            expect(this.page.$(".hdfs_directory_entry_list li:eq(1) .name a").attr('href')).toEqual('#/instances/1234/browseFile/foo/' + filename)
         })
 
         it("shows no link if a file is binary", function() {
