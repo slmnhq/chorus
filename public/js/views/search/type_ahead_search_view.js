@@ -40,6 +40,10 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
                     name = result.objectName;
                     url = new chorus.models.Dataset(result).showUrl();
                     break;
+                case "instance":
+                    name = result.name;
+                    url = new chorus.models.Instance(result).showUrl();
+                    break;
                 default:
                     name = "Don't know how to find name for " + result.entityType;
                     break;

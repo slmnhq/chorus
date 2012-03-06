@@ -3217,6 +3217,26 @@ beforeEach(function() {
                                 id: "10000",
                                 name: "ws"
                             }
+                        },
+                        {
+                            comments: [],
+                            entityType: "instance",
+                            highlightedAttributes: {
+                                name: [
+                                    "<em>Awesome</em>_instance"
+                                ]
+                            },
+                            host: "gillette",
+                            id: "10042",
+                            isDeleted: false,
+                            lastUpdatedStamp: "2012-03-06 09:02:00",
+                            name: "Awesome_instance",
+                            owner: {
+                                firstName: "EDC",
+                                id: "InitialUser",
+                                lastName: "Admin"
+                            },
+                            port: 5432
                         }
                     ],
                     "numFound": 3
