@@ -46,7 +46,9 @@ describe("chorus.pages.SearchIndexPage", function() {
                 });
 
                 it("should navigate to the filtered result type page", function() {
-                    expect(chorus.router.navigate).toHaveBeenCalledWith('#/search/workspace/foo', true);
+                    expect(this.page.search.get("entityType")).toBe("workspace");
+                    expect(this.page.search.get("myWorkspaces")).toBeFalsy();
+                    expect(chorus.router.navigate).toHaveBeenCalledWith(this.page.search.showUrl(), true);
                 });
             });
 
@@ -63,12 +65,6 @@ describe("chorus.pages.SearchIndexPage", function() {
                 });
             });
 
-            it("clicking on search filter navigates to the search workfiles page", function() {
-                spyOn(chorus.router, "navigate");
-                this.page.$("li[data-type='workfile'] a").click();
-                expect(chorus.router.navigate).toHaveBeenCalledWith("#/search/workfile/" + encodeURI(this.query), true);
-            });
-
             it("has a 'Search in' filter link", function() {
                 expect(this.page.$('.default_content_header .search_in .title')).toContainTranslation("search.search_in")
                 expect(this.page.$('.default_content_header .search_in a')).toContainTranslation("search.in.all_of_chorus")
@@ -78,9 +74,9 @@ describe("chorus.pages.SearchIndexPage", function() {
             it("navigates to the right page when 'my workspaces' is selected from the 'search in' menu", function() {
                 spyOn(chorus.router, "navigate");
                 chorus.PageEvents.broadcast("choice:search_in", "my_workspaces");
-                expect(chorus.router.navigate).toHaveBeenCalled();
-                var url = chorus.router.navigate.mostRecentCall.args[0];
-                expect(url).toMatchUrl("#/search/my_workspaces/all/" + encodeURI(this.query), true);
+                expect(this.page.search.get("entityType")).toBe("all");
+                expect(this.page.search.get("myWorkspaces")).toBeTruthy();
+                expect(chorus.router.navigate).toHaveBeenCalledWith(this.page.search.showUrl(), true);
             });
 
             describe("the workfile section", function() {

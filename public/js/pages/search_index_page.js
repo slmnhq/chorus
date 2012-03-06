@@ -98,10 +98,12 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
     },
 
     scopeSearchResults: function(data) {
-        chorus.router.navigate('#/search/' + data + "/all/" + encodeURI(this.model.get("query")), true);
+        if (data === "my_workspaces") this.search.set({ myWorkspaces: true });
+        chorus.router.navigate(this.search.showUrl(), true);
     },
 
-    filterSearchResults: function(type) {
-        chorus.router.navigate("#/search/" + type + "/" + encodeURIComponent(this.model.get("query")), true);
+    filterSearchResults: function(entityType) {
+        this.search.set({ entityType: entityType });
+        chorus.router.navigate(this.search.showUrl(), true);
     }
 });

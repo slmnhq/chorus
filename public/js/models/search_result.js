@@ -5,7 +5,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
         if (this.get("myWorkspaces")) {
             return "search/workspaces";
         } else {
-            return "search/global";
+            return "search/global/";
         }
     },
 
