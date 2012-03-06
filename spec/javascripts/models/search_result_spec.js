@@ -1,10 +1,61 @@
 describe("chorus.models.SearchResult", function() {
     beforeEach(function() {
-        this.model = new chorus.models.SearchResult({query: "the longest query in the world"})
+        this.model = new chorus.models.SearchResult({ query: "jackson5", entityType: 'all' })
+    });
+
+    describe("#url and #showUrl", function() {
+        context("when the 'myWorkspaces' parameter is set to true", function() {
+            beforeEach(function() {
+                this.model.set({ myWorkspaces: true });
+            });
+
+            it("uses the workspaces search api", function() {
+                expect(this.model.url()).toMatchUrl("/edc/search/workspaces?query=jackson5", {
+                    paramsToIgnore: [ "rows", "page" ]
+                });
+            });
+
+            it("has the show url for the workspace-scope", function() {
+                expect(this.model.showUrl()).toMatchUrl("#/search/my_workspaces/all/jackson5");
+            });
+        });
+
+        context("when there is a specific 'entityType' (not 'all')", function() {
+            beforeEach(function() {
+                this.model.set({ entityType: "users", myWorkspaces: null });
+            });
+
+            it("uses the entityType-specific search api", function() {
+                expect(this.model.url()).toMatchUrl("/edc/search/global?query=jackson5&entityType=users", {
+                    paramsToIgnore: [ "rows", "page" ]
+                });
+            });
+
+            it("has the show url for searching for only that entity type", function() {
+                expect(this.model.showUrl()).toMatchUrl("#/search/all/users/jackson5");
+            });
+        });
+
+        context("when the entityType parameter is set to 'all' and the 'myWorkspaces' parameter is not set", function() {
+            beforeEach(function() {
+                this.model.set({ entityType: "all", myWorkspaces: null });
+            });
+
+            it("doesn't include the entityType in the API url", function() {
+                expect(this.model.url()).toMatchUrl("/edc/search/global?query=jackson5", {
+                    paramsToIgnore: [ "rows", "page" ]
+                });
+            });
+
+            it("has the global search show url", function() {
+                expect(this.model.showUrl()).toMatchUrl("#/search/jackson5");
+            });
+        });
     });
 
     describe("#shortName", function() {
         it("returns a short name", function() {
+            this.model.set({ query: "the longest query in the world" });
             expect(this.model.displayShortName()).toBe("the longest query in...")
         });
     });

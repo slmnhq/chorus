@@ -1,12 +1,41 @@
 chorus.models.SearchResult = chorus.models.Base.extend({
-    urlTemplate: "search/global/",
     constructorName: "SearchResult",
 
-    urlParams: function() {
-        return {query: this.get("query"), rows: 3, page: 1}
+    urlTemplate: function() {
+        if (this.get("myWorkspaces")) {
+            return "search/workspaces";
+        } else {
+            return "search/global";
+        }
     },
 
-    displayShortName:function (length) {
+    showUrlTemplate: function() {
+        if (this.get("myWorkspaces") || this.hasSpecificEntityType()) {
+            return "search/" + this.scopeUrlSegment() + "/" + this.get("entityType") + "/" + this.get("query");
+        } else {
+            return "search/" + this.get("query");
+        }
+    },
+
+    scopeUrlSegment: function() {
+        return (this.get("myWorkspaces") ? 'my_workspaces' : 'all')
+    },
+
+    hasSpecificEntityType: function() {
+        return this.has("entityType") && (this.get("entityType") !== "all");
+    },
+
+    urlParams: function() {
+        var params = {
+            query: this.get("query"),
+            rows: 3,
+            page: 1
+        };
+        if (this.hasSpecificEntityType()) params.entityType = this.get("entityType");
+        return params;
+    },
+
+    displayShortName: function(length) {
         length = length || 20;
 
         var name = this.get("query") || "";
