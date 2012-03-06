@@ -35,24 +35,31 @@
                         <span class="comment_content">&#8220;{{{displaySearchMatch "content"}}}&#8221;</span>
                     </div>
                     {{/each}}
+
                     {{#if moreCommentCount}}
-                        <a class="more_comments" href="#">{{t "search.comments_more" count=moreCommentCount}}</a>
-                        <div class="more_comments hidden">
-                            {{#each moreComments}}
-                                <div class="comment">
-                                    <span class="comment_type">
-                                    {{#if isInsight}}
-                                        {{t "insight.title"}}:
-                                    {{else}}
-                                        {{t "activity_stream.comment"}}:
-                                    {{/if}}
-                                    </span>
-                                    <span class="comment_content">&#8220;{{{displaySearchMatch "content"}}}&#8221;</span>
-                                </div>
-                            {{/each}}
-                            <a class="fewer_comments" href="#">{{t "search.comments_less"}}</a>
-                        </div>
+                    <div class='hasMore'>
+                        <span class="and">{{t "search.comments_more.and"}}</span>
+                        <a href="#" class="show_more_comments">
+                            {{t "search.comments_more" count=moreCommentCount}}
+                        </a>
+                    </div>
                     {{/if}}
+
+                    <div class="moreComments hidden">
+                        {{#each moreComments}}
+                            <div class="comment">
+                                <span class="comment_type">
+                                {{#if isInsight}}
+                                    {{t "insight.title"}}:
+                                {{else}}
+                                    {{t "activity_stream.comment"}}:
+                                {{/if}}
+                                </span>
+                                <span class="comment_content">&#8220;{{{displaySearchMatch "content"}}}&#8221;</span>
+                            </div>
+                        {{/each}}
+                        <a class="show_fewer_comments" href="#">{{t "search.comments_less"}}</a>
+                    </div>
                 </div>
             </div>
             <div class="spacer_right"></div>

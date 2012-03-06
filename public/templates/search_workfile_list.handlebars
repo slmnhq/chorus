@@ -43,7 +43,7 @@
                         {{#if hasMoreComments}}
                         <div class='hasMore'>
                             <span class="and">{{t "search.comments_more.and"}}</span>
-                            <a href="#" class="hasMoreLink">
+                            <a href="#" class="show_more_comments">
                                 {{t "search.comments_more" count=hasMoreComments}}
                             </a>
                         </div>
@@ -68,7 +68,7 @@
                             <span class="comment_content">&#8220;{{{displaySearchMatch "content"}}}&#8221;</span>
                         </div>
                         {{/each}}
-                        <a href="#" class="lessComments">{{t "search.comments_less"}}</a>
+                        <a href="#" class="show_fewer_comments">{{t "search.comments_less"}}</a>
                     </div>
                 </div>
                 <div class="spacer_right"></div>

@@ -1,25 +1,8 @@
-chorus.views.SearchUserList = chorus.views.Base.extend({
+chorus.views.SearchUserList = chorus.views.SearchResultListBase.extend({
+    searchResultType: "user",
     className: "search_user_list",
     additionalClass: "list",
     constructorName: "SearchUserListView",
-
-    events: {
-        "click li a.showMoreSupportingMessage": "showMoreMessages",
-        "click li .moreSupportingMessage a.hideMoreSupportingMessage": "showLessMessages"
-    },
-
-    showMoreMessages: function(evt) {
-        evt && evt.preventDefault();
-        $(evt.target).closest("li").find(".moreSupportingMessage").removeClass("hidden");
-        $(evt.target).addClass("hidden");
-    },
-
-    showLessMessages: function(evt) {
-        evt && evt.preventDefault();
-        $(evt.target).closest("li").find(".moreSupportingMessage").addClass("hidden");
-        $(evt.target).closest("li").find("a.showMoreSupportingMessage").removeClass("hidden");
-    },
-
 
     additionalContext: function() {
         return {

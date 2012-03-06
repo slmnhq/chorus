@@ -51,11 +51,15 @@
         </div>
 
         {{#if hasMoreSupportingMessage}}
-            <a href="#" class="showMoreSupportingMessage"><span class="and">{{t "search.comments_more.and"}}</span>
-            {{t "search.comments_more" count=hasMoreSupportingMessage}}</a>
+            <div class='hasMore'>
+                <span class="and">{{t "search.comments_more.and"}}</span>
+                <a href="#" class="show_more_comments">
+                    {{t "search.comments_more" count=hasMoreSupportingMessage}}
+                </a>
+            </div>
         {{/if}}
 
-        <div class="moreSupportingMessage hidden">
+        <div class="moreComments hidden">
             {{#each moreSupportingMessage}}
                 {{#if title}}
                 <div class="title">
@@ -86,7 +90,7 @@
                 </div>
                 {{/if}}
             {{/each}}
-        <a href="#" class="hideMoreSupportingMessage">{{t "search.comments_less"}}</a>
+            <a href="#" class="show_fewer_comments">{{t "search.comments_less"}}</a>
         </div>
         <div class="spacer_right"></div>
     </div>

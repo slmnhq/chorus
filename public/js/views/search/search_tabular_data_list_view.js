@@ -1,11 +1,7 @@
-chorus.views.SearchTabularDataList = chorus.views.Base.extend({
+chorus.views.SearchTabularDataList = chorus.views.SearchResultListBase.extend({
+    searchResultType: "dataset",
     className: "search_tabular_data_list",
     additionalClass: "list",
-
-    events: {
-        "click a.more_comments": "onMoreCommentsClicked",
-        "click a.fewer_comments": "onLessCommentsClicked"
-    },
 
     additionalContext: function() {
         return {
@@ -49,16 +45,4 @@ chorus.views.SearchTabularDataList = chorus.views.Base.extend({
             });
         });
     },
-
-    onLessCommentsClicked: function(e) {
-        e.preventDefault();
-        this.$("div.more_comments").addClass("hidden");
-        this.$("a.more_comments").removeClass("hidden");
-    },
-
-    onMoreCommentsClicked: function(e) {
-        e.preventDefault();
-        this.$("a.more_comments").addClass("hidden");
-        this.$("div.more_comments").removeClass("hidden");
-    }
 });

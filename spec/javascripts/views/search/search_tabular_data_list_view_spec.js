@@ -2,7 +2,7 @@ describe("chorus.views.SearchTabularDataList", function() {
     beforeEach(function() {
         this.result = fixtures.searchResult();
         this.models = this.result.tabularData();
-        this.view = new chorus.views.SearchTabularDataList({collection: this.models});
+        this.view = new chorus.views.SearchTabularDataList({collection: this.models, query: "foo"});
         this.view.render();
     });
 
@@ -13,6 +13,17 @@ describe("chorus.views.SearchTabularDataList", function() {
     it("should show the number of results", function() {
         expect(this.view.$(".count")).toContainTranslation("search.count", {shown: this.models.length, total: this.models.attributes.total});
         expect(this.view.$(".show_all")).toExist();
+    });
+
+    context("clicking the show all link", function() {
+        beforeEach(function() {
+            spyOn(chorus.router, "navigate");
+            this.view.$("a.show_all").click();
+        });
+
+        it("should navigate to the user results page", function() {
+            expect(chorus.router.navigate).toHaveBeenCalledWith("#/search/dataset/foo", true);
+        });
     });
 
     describe("the 'found in workspaces' section", function() {
@@ -130,12 +141,12 @@ describe("chorus.views.SearchTabularDataList", function() {
         });
 
         it("should have a link to display more comments", function() {
-            expect(this.view.$('li:eq(0) a.more_comments')).toContainTranslation("search.comments_more", {count: 1});
+            expect(this.view.$('li:eq(0) a.show_more_comments')).toContainTranslation("search.comments_more", {count: 1});
         });
 
         context("when the display more comments link is clicked", function() {
             beforeEach(function() {
-                this.view.$("li:eq(0) a.more_comments").click();
+                this.view.$("li:eq(0) a.show_more_comments").click();
             });
 
             it("display the remainder of the comments", function() {
@@ -144,13 +155,13 @@ describe("chorus.views.SearchTabularDataList", function() {
             });
 
             it("should have a link to display fewer comments, and hide the 'more comments' link", function() {
-                expect(this.view.$('li:eq(0) a.fewer_comments')).toContainTranslation("search.comments_less");
-                expect(this.view.$('li:eq(0) a.more_comments')).toBeHidden();
+                expect(this.view.$('li:eq(0) a.show_fewer_comments')).toContainTranslation("search.comments_less");
+                expect(this.view.$('li:eq(0) a.show_more_comments')).toBeHidden();
             });
 
             context("clicking the fewer comments link", function() {
                 beforeEach(function() {
-                    this.view.$("li:eq(0) a.fewer_comments").click();
+                    this.view.$("li:eq(0) a.show_fewer_comments").click();
                 });
 
                 it("should hide the remainder of the comments", function() {
@@ -159,7 +170,7 @@ describe("chorus.views.SearchTabularDataList", function() {
                 });
 
                 it("should show the 'more comments' link", function() {
-                    expect(this.view.$('li:eq(0) a.more_comments')).toBeVisible();
+                    expect(this.view.$('li:eq(0) a.show_more_comments')).toBeVisible();
                 });
             });
         });
