@@ -36,7 +36,7 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
         this.statistics.fetchIfNotLoaded();
 
         this.requiredResources.add(this.statistics);
-        this.bindings.add(this.collection, "add remove", this.render);
+        this.bindings.add(this.collection, "add remove", this.updateColumnCount);
     },
 
     dataPreview: function(e) {
@@ -208,5 +208,9 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
         this.$('.dataset_errors').removeClass('hidden')
         this.alertClass = alertClass
         this.taskWithErrors = task
+    },
+
+    updateColumnCount: function() {
+        this.$('.count').text(t("dataset.column_count", {count: this.collection.length}))
     }
 });
