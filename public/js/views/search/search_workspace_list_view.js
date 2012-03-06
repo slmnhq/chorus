@@ -36,7 +36,6 @@ chorus.views.SearchWorkspaceList = chorus.views.Base.extend({
         return {
             showUrl: model.showUrl(),
             iconUrl: model.customIconUrl(),
-            description: model.get("description"),
             comments: comments.slice(0, 3),
             moreComments: comments.slice(3),
             hasMoreComments: Math.max(0, comments.length - 3)

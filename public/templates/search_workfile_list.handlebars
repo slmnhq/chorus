@@ -17,9 +17,9 @@
                 <div class="spacer_left"></div>
                 <img class="icon" src="{{iconUrl}}"></img>
                 <div class="description">
-                    <a class="name" href="{{showUrl}}">{{{name}}}</a>
+                    <a class="name" href="{{showUrl}}">{{{displaySearchMatch "name"}}}</a>
                     <div class="location">{{{usedInWorkspaces workspaces model}}}</div>
-                    <div class="description_content">{{{description}}}</div>
+                    <div class="description_content">{{{displaySearchMatch "description"}}}</div>
                     <div class="comments">
                         {{#each comments}}
                         <div class="comment">
@@ -37,7 +37,7 @@
                             {{/if}}
                             </span>
 
-                            <span class="comment_content">&#8220;{{{content}}}&#8221;</span>
+                            <span class="comment_content">&#8220;{{{displaySearchMatch "content"}}}&#8221;</span>
                         </div>
                         {{/each}}
                         {{#if hasMoreComments}}
@@ -65,7 +65,7 @@
                                 {{/if}}
                             {{/if}}
                             </span>
-                            <span class="comment_content">&#8220;{{{content}}}&#8221;</span>
+                            <span class="comment_content">&#8220;{{{displaySearchMatch "content"}}}&#8221;</span>
                         </div>
                         {{/each}}
                         <a href="#" class="lessComments">{{t "search.comments_less"}}</a>

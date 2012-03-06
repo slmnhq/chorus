@@ -4,21 +4,26 @@ describe("chorus.views.SearchWorkspaceList", function() {
             collection: fixtures.workspaceSet([
                 {
                     comments: [
-                        { content: "<em>yay0</em>", id: "10061", isComment: false, isInsight: false, isPublished: false, lastUpdatedStamp: "2012-02-28 11:10:28", owner: { firstName: "EDC", id: "InitialUser", lastName: "Admin" }, workspaceId: "10000" },
-                        { content: "<em>yay1</em>", id: "10062", isComment: false, isInsight: false, isPublished: false, lastUpdatedStamp: "2012-02-28 11:10:28", owner: { firstName: "EDC", id: "InitialUser", lastName: "Admin" }, workspaceId: "10000" },
-                        { content: "<em>yay2</em>", id: "10063", isComment: false, isInsight: false, isPublished: false, lastUpdatedStamp: "2012-02-28 11:10:28", owner: { firstName: "EDC", id: "InitialUser", lastName: "Admin" }, workspaceId: "10000" },
-                        { content: "<em>yay3</em>", id: "10064", isComment: false, isInsight: false, isPublished: false, lastUpdatedStamp: "2012-02-28 11:10:28", owner: { firstName: "EDC", id: "InitialUser", lastName: "Admin" }, workspaceId: "10000" }
+                        { highlightedAttributes: {content: "<em>yay0</em>"}, content: "yay0", id: "10061", isComment: false, isInsight: false, isPublished: false, lastUpdatedStamp: "2012-02-28 11:10:28", owner: { firstName: "EDC", id: "InitialUser", lastName: "Admin" }, workspaceId: "10000" },
+                        { highlightedAttributes: {content: "<em>yay1</em>"}, content: "yay1", id: "10062", isComment: false, isInsight: false, isPublished: false, lastUpdatedStamp: "2012-02-28 11:10:28", owner: { firstName: "EDC", id: "InitialUser", lastName: "Admin" }, workspaceId: "10000" },
+                        { highlightedAttributes: {content: "<em>yay2</em>"}, content: "yay2", id: "10063", isComment: false, isInsight: false, isPublished: false, lastUpdatedStamp: "2012-02-28 11:10:28", owner: { firstName: "EDC", id: "InitialUser", lastName: "Admin" }, workspaceId: "10000" },
+                        { highlightedAttributes: {content: "<em>yay3</em>"}, content: "yay3", id: "10064", isComment: false, isInsight: false, isPublished: false, lastUpdatedStamp: "2012-02-28 11:10:28", owner: { firstName: "EDC", id: "InitialUser", lastName: "Admin" }, workspaceId: "10000" }
                     ],
                     entityType: "workspace",
                     id: "10000",
                     isDeleted: false,
                     isPublic: false,
                     lastUpdatedStamp: "2012-02-24 16:08:32",
-                    name: "<em>ws</em>",
+                    name: "ws",
+                    description: "ws <i>other text</i>",
                     owner: {
                         firstName: "EDC",
                         id: "InitialUser",
                         lastName: "Admin"
+                    },
+                    highlightedAttributes: {
+                        name: "<em>ws</em>",
+                        description: "<em>ws</em> <i>other text</i>"
                     }
                 }
             ]),
@@ -103,7 +108,11 @@ describe("chorus.views.SearchWorkspaceList", function() {
         });
 
         it("shows matching description if any", function() {
-            expect(this.view.$("li .description .description_content").eq(0)).toBeEmpty();
+            expect(this.view.$("li .description .description_content").eq(0).html()).toContain("<em>ws</em> <i>other text</i>");
+        });
+
+        it("shows matching name", function() {
+            expect(this.view.$("li .name").eq(0).html()).toContain("<em>ws</em>");
         });
 
         it("shows associated comments/notes/insights", function() {
@@ -115,9 +124,9 @@ describe("chorus.views.SearchWorkspaceList", function() {
             expect(this.view.$('li .comments').eq(0).find('.comment .comment_type').eq(1)).toContainTranslation("activity_stream.note");
             expect(this.view.$('li .comments').eq(0).find('.comment .comment_type').eq(2)).toContainTranslation("activity_stream.note");
 
-            expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(0).html()).toContain(this.view.collection.models[0].get("comments")[0].content);
-            expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(1).html()).toContain(this.view.collection.models[0].get("comments")[1].content);
-            expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(2).html()).toContain(this.view.collection.models[0].get("comments")[2].content);
+            expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(0).html()).toContain("<em>yay0</em>");
+            expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(1).html()).toContain("<em>yay1</em>");
+            expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(2).html()).toContain("<em>yay2</em>");
         });
 
         it("shows the rest of the comments/notes/insights when the user clicks the link", function() {

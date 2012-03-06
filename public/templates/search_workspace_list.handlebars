@@ -17,8 +17,8 @@
                 <div class="spacer left"></div>
                 <img class="icon" src="{{iconUrl}}"></img>
                 <div class="description">
-                    <a class="name" href="{{showUrl}}">{{{name}}}</a>
-                    <div class="description_content">{{#if description}}&#8220;{{{description}}}&#8221;{{/if}}</div>
+                    <a class="name" href="{{showUrl}}">{{{displaySearchMatch "name"}}}</a>
+                    <div class="description_content">{{#if description}}&#8220;{{{displaySearchMatch "description"}}}&#8221;{{/if}}</div>
                     <div class="comments">
                         {{#each comments}}
                         <div class="comment">
@@ -34,7 +34,7 @@
                             {{/if}}
                             </span>
 
-                            <span class="comment_content">&#8220;{{{content}}}&#8221;</span>
+                            <span class="comment_content">&#8220;{{{displaySearchMatch "content"}}}&#8221;</span>
                         </div>
                         {{/each}}
                         {{#if hasMoreComments}}
@@ -56,7 +56,7 @@
                                 {{t "activity_stream.comment"}}:
                             {{/if}}
                             </span>
-                            <span class="comment_content">&#8220;{{{content}}}&#8221;</span>
+                            <span class="comment_content">&#8220;{{{displaySearchMatch "content"}}}&#8221;</span>
                         </div>
                         {{/each}}
                         <a href="#" class="lessComments">{{t "search.comments_less"}}</a>

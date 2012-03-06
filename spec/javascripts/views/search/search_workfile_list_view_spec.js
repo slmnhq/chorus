@@ -2,16 +2,28 @@ describe("chorus.views.SearchWorkfileList", function() {
     beforeEach(function() {
         this.view = new chorus.views.SearchWorkfileList({
             collection: fixtures.workfileSet([
-                {id: "1", workspace: {id: "2", name: "Test"}, fileType: "SQL", mimeType: 'text/text',
+                {
+                    id: "1",
+                    workspace: {id: "2", name: "Test"},
+                    fileType: "SQL",
+                    mimeType: 'text/text',
                     comments: [
-                        {"lastUpdatedStamp": "2012-02-28 14:07:34", "isPublished": false, "id": "10000", "workspaceId": "10000", "isComment": false, "isInsight": false, "content": "nice <em>cool<\/em> file", "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
-                        {"lastUpdatedStamp": "2012-02-28 14:07:46", "isPublished": false, "id": "10001", "workspaceId": "10000", "isComment": true, "isInsight": false, "content": "nice <em>cool<\/em> comment", "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
-                        {"lastUpdatedStamp": "2012-02-28 14:09:56", "isPublished": false, "id": "10002", "workspaceId": "10000", "isComment": false, "isInsight": true, "content": "Nice <em>cool<\/em> insight", "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
-                        {"lastUpdatedStamp": "2012-02-28 14:09:56", "isPublished": false, "id": "10003", "workspaceId": "10000", "isComment": false, "isInsight": true, "content": "Nice <em>cool<\/em> insight", "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}}
+                        {highlightedAttributes: { "content": "nice <em>cool<\/em> file"   }, "content": "nice cool file",    "lastUpdatedStamp": "2012-02-28 14:07:34", "isPublished": false, "id": "10000", "workspaceId": "10000", "isComment": false, "isInsight": false, "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
+                        {highlightedAttributes: { "content": "nice <em>cool<\/em> comment"}, "content": "nice cool comment", "lastUpdatedStamp": "2012-02-28 14:07:46", "isPublished": false, "id": "10001", "workspaceId": "10000", "isComment": true, "isInsight": false,  "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
+                        {highlightedAttributes: { "content": "Nice <em>cool<\/em> insight"}, "content": "Nice cool insight", "lastUpdatedStamp": "2012-02-28 14:09:56", "isPublished": false, "id": "10002", "workspaceId": "10000", "isComment": false, "isInsight": true,  "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
+                        {highlightedAttributes: { "content": "Nice <em>cool<\/em> insight"}, "content": "Nice cool insight", "lastUpdatedStamp": "2012-02-28 14:09:56", "isPublished": false, "id": "10003", "workspaceId": "10000", "isComment": false, "isInsight": true,  "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}}
                     ]
                 },
-                {id: "4", workspace: {id: "3", name: "Other"}, fileType: "txt", mimeType: 'text/text',
-                    description: "this is a <EM>cool</EM> file description"
+                {
+                    id: "4",
+                    workspace: {id: "3", name: "Other"},
+                    fileType: "txt",
+                    mimeType: 'text/text',
+                    description: "this is a cool file description",
+                    highlightedAttributes: {
+                        description: "this is a <EM>cool</EM> file description",
+                        name: "<em>cool</em> file"
+                    }
                 }
             ]),
             total: "24"
@@ -109,7 +121,11 @@ describe("chorus.views.SearchWorkfileList", function() {
 
         it("shows matching description if any", function() {
             expect(this.view.$("li .description .description_content").eq(0)).toBeEmpty();
-            expect(this.view.$("li .description .description_content").eq(1)).toContainText("this is a cool file description");
+            expect(this.view.$("li .description .description_content").eq(1).html()).toContain("this is a <em>cool</em> file description");
+        });
+
+        it("shows matching name", function() {
+            expect(this.view.$("li .name").eq(1).html()).toContain("<em>cool</em> file");
         });
 
         it("shows associated comments/notes/insights", function() {
@@ -122,9 +138,9 @@ describe("chorus.views.SearchWorkfileList", function() {
             expect(this.view.$('li .comments').eq(0).find('.comment .comment_type').eq(1)).toContainTranslation("activity_stream.comment");
             expect(this.view.$('li .comments').eq(0).find('.comment .comment_type').eq(2)).toContainTranslation("activity_stream.insight");
 
-            expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(0).html()).toContain(this.view.collection.models[0].get("comments")[0].content);
-            expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(1).html()).toContain(this.view.collection.models[0].get("comments")[1].content);
-            expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(2).html()).toContain(this.view.collection.models[0].get("comments")[2].content);
+            expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(0).html()).toContain("nice <em>cool</em> file");
+            expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(1).html()).toContain("nice <em>cool</em> comment");
+            expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(2).html()).toContain("Nice <em>cool</em> insight");
         });
 
         it("shows the rest of the comments/notes/insights when the user clicks the link", function() {
@@ -147,6 +163,8 @@ describe("chorus.views.SearchWorkfileList", function() {
         describe("shows version commit messages in the comments area", function() {
             beforeEach(function() {
                 this.view.collection.models[0].set({
+                    // TODO: This should be in the highlightedAttributes sub-object.  Fix
+                    // after https://www.pivotaltracker.com/story/show/26023235 is done.
                     commitMessage: [
                         "this is a <em>cool</em> version",
                         "this is a <em>cooler</em> version"
@@ -157,7 +175,7 @@ describe("chorus.views.SearchWorkfileList", function() {
 
             it("looks correct", function() {
                 expect(this.view.$('li:eq(0) .moreComments .comment:eq(2) .comment_type').text().trim()).toBe('');
-                expect(this.view.$('li:eq(0) .moreComments .comment:eq(2) .comment_content').html()).toContain(this.view.collection.models[0].get("commitMessage")[1]);
+                expect(this.view.$('li:eq(0) .moreComments .comment:eq(2) .comment_content').html()).toContain("this is a <em>cooler</em> version");
             });
         });
     });
