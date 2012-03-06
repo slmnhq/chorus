@@ -208,7 +208,7 @@
             return new Handlebars.SafeString(markup);
         },
 
-        sql_definition: function(definition) {
+        sqlDefinition: function(definition) {
             if(!definition) {
                 return '';
             }
