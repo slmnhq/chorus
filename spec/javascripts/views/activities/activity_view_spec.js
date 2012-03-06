@@ -517,7 +517,7 @@ describe("chorus.views.Activity", function() {
 
         if (options.checkLink) {
             it("contains the object's url", function() {
-                expect(decodeURI(this.view.$('.activity_header a.object_link').attr('href'))).toBe(this.presenter.objectUrl);
+                expect(this.view.$('.activity_header a.object_link').attr('href')).toMatchUrl(this.presenter.objectUrl);
             });
         }
     }
