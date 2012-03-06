@@ -203,7 +203,14 @@ describe("chorus.presenters.Activity", function() {
 
             itShouldHaveImportFailedIcon();
             itShouldHaveDestinationTableLink();
-            itShouldNotHaveDetailsLink();
+            itShouldHaveDetailsLink(t("activity_stream.view_error_details"), {
+                href: '#',
+                class: "alert",
+                "data-alert": "ImportFailed",
+                "data-id": "some.csv",
+                "data-workspace-id": "10000",
+                "data-import-type": "CSV"
+            });
         });
 
         context("when importing from a source table", function() {
@@ -239,7 +246,8 @@ describe("chorus.presenters.Activity", function() {
                 class: "alert",
                 "data-alert": "ImportFailed",
                 "data-id": "10010|Analytics|analytics|BASE_TABLE|clv_data",
-                "data-workspace-id": "10000"
+                "data-workspace-id": "10000",
+                "data-import-type": "DATASET"
             });
         });
 
@@ -276,7 +284,8 @@ describe("chorus.presenters.Activity", function() {
                 class: "alert",
                 "data-alert": "ImportFailed",
                 "data-id": "10002|bizarro_world|public|QUERY|song_view",
-                "data-workspace-id": "10000"
+                "data-workspace-id": "10000",
+                "data-import-type": "DATASET"
             });
         });
     });
@@ -1244,12 +1253,6 @@ describe("chorus.presenters.Activity", function() {
 
         it("should have the right object url", function() {
             expect(this.presenter.objectUrl).toBe(this.model.dataset().showUrl());
-        });
-    }
-
-    function itShouldNotHaveDetailsLink() {
-        it("does not have a details link", function() {
-            expect(this.presenter.detailsLink).toBeFalsy();
         });
     }
 

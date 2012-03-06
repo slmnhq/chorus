@@ -4,8 +4,13 @@ chorus.alerts.ImportFailed = chorus.alerts.Error.extend({
     makeModel: function() {
         var id = this.options.launchElement.data("id")
         var workspaceId = this.options.launchElement.data("workspace-id")
+        var importType = this.options.launchElement.data("import-type")
 
-        this.model = new chorus.models.DatasetImport({ workspaceId: workspaceId, datasetId: id })
+        this.model = new chorus.models.DatasetImport({ workspaceId: workspaceId, datasetId: id });
+        if (importType){
+            this.model.urlParams = {"importType" : importType};
+        }
+
     },
 
     setup: function() {

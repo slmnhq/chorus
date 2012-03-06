@@ -19,6 +19,17 @@ describe("chorus.alerts.ImportFailed", function() {
         it("declares the import details as a required resource", function() {
             expect(this.alert.requiredResources).toContain(this.alert.model)
         });
+
+        context("when the launchElement has data-import-type", function() {
+            beforeEach(function() {
+                this.launchElement.attr("data-import-type", "CSV");
+                this.alert = new chorus.alerts.ImportFailed({ launchElement: this.launchElement });
+            });
+
+            it("sets urlParams", function() {
+                expect(this.alert.model.url()).toContainQueryParams({ importType: "CSV" })
+            });
+        });
     });
 
     describe("#render", function() {

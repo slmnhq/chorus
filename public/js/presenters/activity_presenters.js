@@ -150,16 +150,17 @@
             var ctx = importIsObject(model);
             ctx.iconClass = ''
             ctx.iconSrc = "/images/med_red_alert.png";
-            if (!model.get("file")) {
-                var destinationTable = new chorus.models.Dataset(model.get("databaseObject"));
 
-                ctx.detailsLink = chorus.helpers.linkTo('#', t("activity_stream.view_error_details"), {
-                    "class": 'alert',
-                    "data-alert": "ImportFailed",
-                    "data-id": destinationTable.get("id"),
-                    "data-workspace-id": model.workspace().get("id")
-                })
-            }
+            var destinationTable = new chorus.models.Dataset(model.get("databaseObject"));
+
+            ctx.detailsLink = chorus.helpers.linkTo('#', t("activity_stream.view_error_details"), {
+                "class": 'alert',
+                "data-alert": "ImportFailed",
+                "data-id": model.has("file") ? model.get("file").name : destinationTable.get("id"),
+                "data-workspace-id": model.workspace().get("id"),
+                "data-import-type": model.has("file") ? "CSV" : "DATASET"
+            });
+
             return ctx;
         },
 
@@ -176,7 +177,7 @@
             var datasetAdded = model.databaseObject().asDataset();
             return {
                 objectName: datasetAdded.get("objectName"),
-                objectUrl:  datasetAdded.showUrl(),
+                objectUrl: datasetAdded.showUrl(),
                 iconSrc: "/images/table_large.png",
                 iconClass: ''
             }
@@ -313,8 +314,8 @@
             }
 
             var metaType = sourceTable.metaType();
-            if( metaType == "table") ctx.importType = t("dataset.import.types.table");
-            if( metaType == "view" || metaType == "query") ctx.importType = t("dataset.import.types.view");
+            if (metaType == "table") ctx.importType = t("dataset.import.types.table");
+            if (metaType == "view" || metaType == "query") ctx.importType = t("dataset.import.types.view");
         }
 
         _.extend(ctx, {
