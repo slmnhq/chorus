@@ -84,6 +84,13 @@ describe("chorus.views.SearchTabularDataList", function() {
         expect(this.view.$("li:eq(0) .name")).toHaveAttr("href", this.models.at(0).showUrl());
     });
 
+    it("displays an icon for the item", function() {
+        var img = this.view.$("li:eq(0) .icon");
+        expect(img).toExist();
+        expect(img).toHaveAttr("src", this.models.at(0).iconUrl())
+        expect(img).toHaveAttr("title", Handlebars.helpers.humanizedTabularDataType(this.models.at(0).attributes))
+    });
+
     context("for a chorus view", function() {
         beforeEach(function() {
             expect(this.models.at(1).get("datasetType")).toBe('CHORUS_VIEW');

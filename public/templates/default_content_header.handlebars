@@ -1,6 +1,6 @@
 <div class="menus">
 </div>
 {{#if imageUrl}}
-    <img class="icon" src="{{imageUrl}}"/>
+    <img class="icon" {{#if imageTitle}}title="{{imageTitle}}"{{/if}} src="{{imageUrl}}"/>
 {{/if}}
 <h1>{{title}}</h1>

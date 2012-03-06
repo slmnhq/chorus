@@ -787,6 +787,17 @@ describe("chorus.views.Base", function() {
                 it("renders the image", function() {
                     expect(this.view.$(".icon")).toHaveAttr("src", "edc/image/foo/bar.png")
                 })
+
+                context("and an imageTitle is provided", function() {
+                    beforeEach(function() {
+                        this.view.options.imageTitle = "a title";
+                        this.view.render();
+                    });
+
+                    it("sets the title on the image", function() {
+                        expect(this.view.$(".icon")).toHaveAttr("title", "a title")
+                    });
+                });
             });
         })
 

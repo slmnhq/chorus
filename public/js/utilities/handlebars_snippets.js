@@ -288,6 +288,15 @@
                     {'class': 'schema'}))
             }
             return $("<span></span>").html(t("dataset.from", {location: schemaPieces.join('.')})).outerHtml();
+        },
+
+        humanizedTabularDataType: function(tabularData) {
+            if (!tabularData) { return ""; }
+
+            var keys = ["dataset.types", tabularData.type];
+            if (tabularData.objectType) { keys.push(tabularData.objectType); }
+            var key = keys.join(".");
+            return t(key);
         }
     }
 

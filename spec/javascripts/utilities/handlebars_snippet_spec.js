@@ -717,6 +717,17 @@ describe("handlebars", function() {
                 });
             });
         });
+
+        describe("humanizedTabularDataType", function() {
+            beforeEach(function() {
+                spyOn(window, "t");
+            });
+
+            it("loads the correct message key", function() {
+                Handlebars.helpers.humanizedTabularDataType({ type: "type", objectType: "objectType"})
+                expect(window.t).toHaveBeenCalledWith("dataset.types.type.objectType")
+            });
+        });
     });
 
     describe("partials", function() {

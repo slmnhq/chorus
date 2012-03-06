@@ -73,7 +73,7 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
 
     additionalContext: function() {
         var ctx = {
-            typeString: this.datasetType(this.resource),
+            typeString: Handlebars.helpers.humanizedTabularDataType(this.resource && this.resource.attributes),
             browsingSchema: this.options.browsingSchema
         }
 
@@ -172,15 +172,6 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
 
         var dialog = new chorus.dialogs.AssociateWithWorkspace({model: this.resource});
         dialog.launchModal();
-    },
-
-    datasetType: function(tabularData) {
-        if (!tabularData) { return ""; }
-
-        var keys = ["dataset.types", tabularData.get("type")];
-        if (tabularData.get("objectType")) { keys.push(tabularData.get("objectType")); }
-        var key = keys.join(".");
-        return t(key);
     },
 
     updateImportSchedule: function(importConfiguration) {

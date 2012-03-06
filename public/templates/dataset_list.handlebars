@@ -7,11 +7,11 @@
         <span class="spacer_left"></span>
         {{#if noCredentials}}
             <span class="image">
-                <img src="{{iconImgUrl}}"/>
+                <img src="{{iconImgUrl}}" title="{{humanizedTabularDataType this}}"/>
             </span>
         {{else}}
             <a class="image" href="{{showUrl}}">
-                 <img src="{{iconImgUrl}}"/>
+                 <img src="{{iconImgUrl}}" title="{{humanizedTabularDataType this}}"/>
             </a>
         {{/if}}
 

@@ -79,7 +79,14 @@
         columnSetFetched: function() {
             this.columnSet = new chorus.collections.DatabaseColumnSet(this.columnSet.models);
             this.columnSet.loaded = true;
-            var customHeaderView = new headerView({model: this.tabularData, title: this.title(), imageUrl: this.tabularData.iconUrl()});
+
+            var customHeaderView = new headerView({
+                model: this.tabularData,
+                title: this.title(),
+                imageUrl: this.tabularData.iconUrl(),
+                imageTitle: Handlebars.helpers.humanizedTabularDataType(this.tabularData.attributes)
+            });
+
             this.mainContent = new chorus.views.MainContentList({
                 modelClass: "DatabaseColumn",
                 collection: this.columnSet,

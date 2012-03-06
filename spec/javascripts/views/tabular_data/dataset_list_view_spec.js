@@ -73,7 +73,9 @@ describe("chorus.views.DatasetList", function() {
             expect(this.view.$("li img").length).toBe(5);
             for (var i = 0; i < this.collection.length; i++) {
                 var model = this.collection.models[i];
-                expect(this.view.$("li img").eq(i).attr("src")).toBe(model.iconUrl());
+                var img = this.view.$("li img").eq(i);
+                expect(img).toHaveAttr("src", model.iconUrl());
+                expect(img).toHaveAttr("title", Handlebars.helpers.humanizedTabularDataType(model.attributes))
             }
         });
 
