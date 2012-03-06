@@ -1072,7 +1072,15 @@ beforeEach(function() {
 
             "NOTE_ON_HDFS": function() {
                 return new chorus.models.Activity({
-                    artifacts: [],
+                    artifacts: [
+                        {
+                            entityId: fixtures.nextId().toString(),
+                            entityType: "file",
+                            id: fixtures.nextId().toString(),
+                            name: "something.sql",
+                            type: "SQL"
+                        }
+                    ],
                     author: fixtures.authorJson(),
                     comments: [fixtures.commentJson()],
                     hdfs: {
@@ -1226,7 +1234,7 @@ beforeEach(function() {
                         name: "some.csv"
                     },
                     id: fixtures.nextId().toString(),
-                    import:{
+                    import: {
                         id: fixtures.nextId().toString()
                     },
                     table: {
@@ -1260,7 +1268,7 @@ beforeEach(function() {
                         workspaceId: "10000"
                     },
                     id: fixtures.nextId().toString(),
-                    import:{
+                    import: {
                         id: fixtures.nextId().toString()
                     },
                     table: {
@@ -1326,7 +1334,7 @@ beforeEach(function() {
                         name: "some.csv"
                     },
                     id: fixtures.nextId().toString(),
-                    import:{
+                    import: {
                         id: fixtures.nextId().toString()
                     },
                     table: {
@@ -1360,7 +1368,7 @@ beforeEach(function() {
                         workspaceId: "10000"
                     },
                     id: fixtures.nextId().toString(),
-                    import:{
+                    import: {
                         id: fixtures.nextId().toString()
                     },
                     table: {
@@ -2294,28 +2302,28 @@ beforeEach(function() {
         },
 
         datasetImportSuccessful: function(overrides) {
-            return this.datasetImport(_.extend({executionInfo : {
-                                startedStamp: "2012-02-29 14:23:58.169",
-                                completedStamp : "2012-02-29 14:23:59.027",
-                                result : {executeResult: "success"},
-                                state : "success",
-                                creator : "InitialUser"
-                            }}, overrides));
+            return this.datasetImport(_.extend({executionInfo: {
+                startedStamp: "2012-02-29 14:23:58.169",
+                completedStamp: "2012-02-29 14:23:59.027",
+                result: {executeResult: "success"},
+                state: "success",
+                creator: "InitialUser"
+            }}, overrides));
         },
 
         datasetImportFailed: function(overrides) {
-            return this.datasetImport(_.extend({executionInfo : {
-                                startedStamp: "2012-02-29 14:23:58.169",
-                                completedStamp : "2012-02-29 14:23:59.027",
-                                result : {executeResult: "failed"},
-                                state : "failed",
-                                creator : "InitialUser"
-                            }}, overrides));
+            return this.datasetImport(_.extend({executionInfo: {
+                startedStamp: "2012-02-29 14:23:58.169",
+                completedStamp: "2012-02-29 14:23:59.027",
+                result: {executeResult: "failed"},
+                state: "failed",
+                creator: "InitialUser"
+            }}, overrides));
         },
 
         datasetImport: function(overrides) {
             var in1year = new Date();
-            in1year.setFullYear(in1year.getFullYear()+1);
+            in1year.setFullYear(in1year.getFullYear() + 1);
             var in1yearStr = in1year.toString("yyyy-MM-dd HH:mm:ss.000");
 
             var attributes = _.extend({
@@ -2632,7 +2640,7 @@ beforeEach(function() {
         },
 
         hdfsFile: function(overrides) {
-            var json= fixtures.hdfsFileJson(overrides);
+            var json = fixtures.hdfsFileJson(overrides);
             return new chorus.models.HdfsFile(json);
         },
 
@@ -2646,8 +2654,9 @@ beforeEach(function() {
 
         searchResultJson: function(overrides) {
             return _.extend({
-                   "workfile": {
-                        "docs": [{
+                "workfile": {
+                    "docs": [
+                        {
                             "id": "10020",
                             "isDeleted": false,
                             "lastUpdate": "Tue Feb 21 10:53:48 PST 2012",
@@ -2700,50 +2709,52 @@ beforeEach(function() {
                             highlightedAttributes: {
                                 "name": ["<em>test<\/em>.sql"]
                             }
-                        }],
-                        "numFound": 2
-                    },
-                    "workspace": {
-                        "docs": [
-                            {
-                                comments: [],
-                                entityType: "workspace",
-                                id: "10000",
-                                isDeleted: false,
-                                isPublic: false,
-                                lastUpdatedStamp: "2012-02-24 16:08:32",
-                                name: "ws",
-                                owner: {
-                                    firstName: "EDC",
-                                    id: "InitialUser",
-                                    lastName: "Admin"
-                                },
-                                highlightedAttributes: {
-                                    name: ["<em>ws</em>"]
-                                }
+                        }
+                    ],
+                    "numFound": 2
+                },
+                "workspace": {
+                    "docs": [
+                        {
+                            comments: [],
+                            entityType: "workspace",
+                            id: "10000",
+                            isDeleted: false,
+                            isPublic: false,
+                            lastUpdatedStamp: "2012-02-24 16:08:32",
+                            name: "ws",
+                            owner: {
+                                firstName: "EDC",
+                                id: "InitialUser",
+                                lastName: "Admin"
                             },
-                            {
-                                comments: [],
-                                entityType: "workspace",
-                                id: "10001",
-                                isDeleted: false,
-                                isPublic: false,
-                                lastUpdatedStamp: "2012-02-24 16:08:32",
-                                name: "other_ws",
-                                owner: {
-                                    firstName: "EDC",
-                                    id: "InitialUser",
-                                    lastName: "Admin"
-                                },
-                                highlightedAttributes: {
-                                    name: ["other_<em>ws</em>"]
-                                }
+                            highlightedAttributes: {
+                                name: ["<em>ws</em>"]
                             }
-                        ],
-                        "numFound": 2
-                    },
-                   "dataset": {
-                        "docs": [{
+                        },
+                        {
+                            comments: [],
+                            entityType: "workspace",
+                            id: "10001",
+                            isDeleted: false,
+                            isPublic: false,
+                            lastUpdatedStamp: "2012-02-24 16:08:32",
+                            name: "other_ws",
+                            owner: {
+                                firstName: "EDC",
+                                id: "InitialUser",
+                                lastName: "Admin"
+                            },
+                            highlightedAttributes: {
+                                name: ["other_<em>ws</em>"]
+                            }
+                        }
+                    ],
+                    "numFound": 2
+                },
+                "dataset": {
+                    "docs": [
+                        {
                             schemaName: "public",
                             parentType: "gpdb_10000_data_types",
                             objectType: "BASE_TABLE",
@@ -2783,7 +2794,7 @@ beforeEach(function() {
                                 name: 'New Workspace'
                             },
                             comments: [],
-                            highlightedAttributes : {
+                            highlightedAttributes: {
                                 content: ["SELECT * FROM <em>test</em> AS a"]
                             }
                         },
@@ -2800,10 +2811,12 @@ beforeEach(function() {
                                 id: "10000",
                                 name: "gillette"
                             },
-                            workspaces: [{
-                                id: "10000",
-                                name: "danny"
-                            }],
+                            workspaces: [
+                                {
+                                    id: "10000",
+                                    name: "danny"
+                                }
+                            ],
                             "comments": [],
                             highlightedAttributes: {}
                         },
@@ -2820,10 +2833,12 @@ beforeEach(function() {
                                 "id": "10000",
                                 "name": "gillette"
                             },
-                            "workspaces": [{
-                                "id": "10000",
-                                "name": "danny"
-                            }],
+                            "workspaces": [
+                                {
+                                    "id": "10000",
+                                    "name": "danny"
+                                }
+                            ],
                             "comments": [],
                             highlightedAttributes: {}
                         },
@@ -2840,10 +2855,12 @@ beforeEach(function() {
                                 "id": "10000",
                                 "name": "gillette"
                             },
-                            "workspaces": [{
-                                "id": "10000",
-                                "name": "danny"
-                            }],
+                            "workspaces": [
+                                {
+                                    "id": "10000",
+                                    "name": "danny"
+                                }
+                            ],
                             "comments": [],
                             highlightedAttributes: {}
                         },
@@ -2860,10 +2877,12 @@ beforeEach(function() {
                                 "id": "10000",
                                 "name": "gillette"
                             },
-                            "workspaces": [{
-                                "id": "10000",
-                                "name": "danny"
-                            }],
+                            "workspaces": [
+                                {
+                                    "id": "10000",
+                                    "name": "danny"
+                                }
+                            ],
                             "comments": [],
                             highlightedAttributes: {}
                         },
@@ -2880,10 +2899,12 @@ beforeEach(function() {
                                 "id": "10000",
                                 "name": "gillette"
                             },
-                            "workspaces": [{
-                                "id": "10000",
-                                "name": "danny"
-                            }],
+                            "workspaces": [
+                                {
+                                    "id": "10000",
+                                    "name": "danny"
+                                }
+                            ],
                             "comments": [],
                             highlightedAttributes: {}
                         },
@@ -2900,10 +2921,12 @@ beforeEach(function() {
                                 "id": "10000",
                                 "name": "gillette"
                             },
-                            "workspaces": [{
-                                "id": "10000",
-                                "name": "danny"
-                            }],
+                            "workspaces": [
+                                {
+                                    "id": "10000",
+                                    "name": "danny"
+                                }
+                            ],
                             "comments": [],
                             highlightedAttributes: {}
                         },
@@ -2920,10 +2943,12 @@ beforeEach(function() {
                                 "id": "10000",
                                 "name": "gillette"
                             },
-                            "workspaces": [{
-                                "id": "10000",
-                                "name": "danny"
-                            }],
+                            "workspaces": [
+                                {
+                                    "id": "10000",
+                                    "name": "danny"
+                                }
+                            ],
                             "comments": [],
                             highlightedAttributes: {}
                         },
@@ -2940,100 +2965,103 @@ beforeEach(function() {
                                 "id": "10000",
                                 "name": "gillette"
                             },
-                            "workspaces": [{
-                                "id": "10000",
-                                "name": "danny"
-                            }],
+                            "workspaces": [
+                                {
+                                    "id": "10000",
+                                    "name": "danny"
+                                }
+                            ],
                             "comments": [],
                             highlightedAttributes: {}
-                        }],
-                        "numFound": 39
-                    },
-                   "instance": {
-                        "docs": [],
-                        "numFound": 0
-                    },
-                   "user": {
-                        "docs": [
-                            {
-                                "admin": "false",
-                                "comments": [],
-                                "emailAddress": null,
-                                "entityType": "user",
-                                "firstName": "John",
-                                "id": "10023",
-                                "isDeleted": "false",
-                                "lastName": "Doe",
-                                "lastUpdatedStamp": "2012-03-01 11:07:13",
-                                "name": "test",
-                                "title": "",
-                                "ou": "Test",
-                                "content": "Hello",
-                                "owner": {},
-                                highlightedAttributes: {
-                                    "name": ["<em>test</em>"],
-                                    "ou": ["<em>Test</em>"]
-                                }
-                            },
-                            {
-                                admin: "false",
-                                comments: [],
-                                emailAddress: "test1@emc.com",
-                                entityType: "user",
-                                firstName: "Test",
-                                id: "10020",
-                                isDeleted: "false",
-                                lastName: "McTest",
-                                lastUpdatedStamp: "2012-03-01 11:06:05",
-                                name: null,
-                                title: "nobody",
-                                ou: "",
-                                content: "Test",
-                                owner: {},
-                                highlightedAttributes: {
-                                    firstName: ["<em>Test</em>"],
-                                    content: ["<em>Test</em>"]
-                                }
-                            },
-                            {
-                                admin: "false",
-                                comments: [],
-                                emailAddress: "test2@emc.com",
-                                entityType: "user",
-                                firstName: "Jack",
-                                id: "10021",
-                                isDeleted: "false",
-                                lastName: "Test",
-                                lastUpdatedStamp: "2012-03-01 11:06:32",
-                                name: "",
-                                "title": "tester",
-                                owner: {},
-                                highlightedAttributes: {
-                                    lastName: ["<em>Test</em>"],
-                                    "title": ["<em>test</em>er"]
-                                }
-                            },
-                            {
-                                admin: "false",
-                                comments: [],
-                                emailAddress: "",
-                                entityType: "user",
-                                firstName: "Sally",
-                                id: "10022",
-                                isDeleted: "false",
-                                lastName: "Test",
-                                lastUpdatedStamp: "2012-03-01 11:06:59",
-                                name: "test",
-                                "title": null,
-                                owner: {},
-                                highlightedAttributes: {
-                                    lastName: ["<em>Test</em>"],
-                                    name: ["<em>test</em>3"]
-                                }
+                        }
+                    ],
+                    "numFound": 39
+                },
+                "instance": {
+                    "docs": [],
+                    "numFound": 0
+                },
+                "user": {
+                    "docs": [
+                        {
+                            "admin": "false",
+                            "comments": [],
+                            "emailAddress": null,
+                            "entityType": "user",
+                            "firstName": "John",
+                            "id": "10023",
+                            "isDeleted": "false",
+                            "lastName": "Doe",
+                            "lastUpdatedStamp": "2012-03-01 11:07:13",
+                            "name": "test",
+                            "title": "",
+                            "ou": "Test",
+                            "content": "Hello",
+                            "owner": {},
+                            highlightedAttributes: {
+                                "name": ["<em>test</em>"],
+                                "ou": ["<em>Test</em>"]
                             }
-                        ],
-                        "numFound": "4"
-                    }
+                        },
+                        {
+                            admin: "false",
+                            comments: [],
+                            emailAddress: "test1@emc.com",
+                            entityType: "user",
+                            firstName: "Test",
+                            id: "10020",
+                            isDeleted: "false",
+                            lastName: "McTest",
+                            lastUpdatedStamp: "2012-03-01 11:06:05",
+                            name: null,
+                            title: "nobody",
+                            ou: "",
+                            content: "Test",
+                            owner: {},
+                            highlightedAttributes: {
+                                firstName: ["<em>Test</em>"],
+                                content: ["<em>Test</em>"]
+                            }
+                        },
+                        {
+                            admin: "false",
+                            comments: [],
+                            emailAddress: "test2@emc.com",
+                            entityType: "user",
+                            firstName: "Jack",
+                            id: "10021",
+                            isDeleted: "false",
+                            lastName: "Test",
+                            lastUpdatedStamp: "2012-03-01 11:06:32",
+                            name: "",
+                            "title": "tester",
+                            owner: {},
+                            highlightedAttributes: {
+                                lastName: ["<em>Test</em>"],
+                                "title": ["<em>test</em>er"]
+                            }
+                        },
+                        {
+                            admin: "false",
+                            comments: [],
+                            emailAddress: "",
+                            entityType: "user",
+                            firstName: "Sally",
+                            id: "10022",
+                            isDeleted: "false",
+                            lastName: "Test",
+                            lastUpdatedStamp: "2012-03-01 11:06:59",
+                            name: "test",
+                            "title": null,
+                            owner: {},
+                            highlightedAttributes: {
+                                lastName: ["<em>Test</em>"],
+                                name: ["<em>test</em>3"]
+                            }
+                        }
+                    ],
+                    "numFound": "4"
+                }
             }, overrides)
         },
 
@@ -3065,7 +3093,7 @@ beforeEach(function() {
             return new chorus.models.Dataset(attributes);
         },
 
-        searchResult : function(overrides) {
+        searchResult: function(overrides) {
             return new chorus.models.SearchResult(this.searchResultJson(overrides))
         },
 
@@ -3074,76 +3102,68 @@ beforeEach(function() {
                 "typeAhead": {
                     "docs": [
                         {
-                            "id" : "InitialUser",
-                            "isDeleted" : false,
-                            "lastUpdatedStamp" : "2012-02-29 11:05:26",
-                            "admin" : true,
-                            "name" : "edcadmin",
-                            "lastName" : "Admin",
-                            "emailAddress" : "edcadmin@example.com",
-                            "content" : "Cool person",
-                            "firstName" : "<em>EDC</em>",
-                            "entityType" : "user",
-                            "owner" :
-                            {
+                            "id": "InitialUser",
+                            "isDeleted": false,
+                            "lastUpdatedStamp": "2012-02-29 11:05:26",
+                            "admin": true,
+                            "name": "edcadmin",
+                            "lastName": "Admin",
+                            "emailAddress": "edcadmin@example.com",
+                            "content": "Cool person",
+                            "firstName": "<em>EDC</em>",
+                            "entityType": "user",
+                            "owner": {
 
                             },
-                            "comments" :
-                            [
+                            "comments": [
 
                             ]
                         },
                         {
-                            "id" : "10010",
-                            "isDeleted" : false,
-                            "lastUpdatedStamp" : "2012-02-29 09:36:01",
-                            "fileType" : "SQL",
-                            "name" : "<em>edc</em>_query.sql",
-                            "entityType" : "workfile",
-                            "owner" :
-                            {
-                                "id" : "InitialUser",
-                                "lastName" : "Admin",
-                                "firstName" : "EDC"
+                            "id": "10010",
+                            "isDeleted": false,
+                            "lastUpdatedStamp": "2012-02-29 09:36:01",
+                            "fileType": "SQL",
+                            "name": "<em>edc</em>_query.sql",
+                            "entityType": "workfile",
+                            "owner": {
+                                "id": "InitialUser",
+                                "lastName": "Admin",
+                                "firstName": "EDC"
                             },
-                            "modifiedBy" :
-                            {
-                                "id" : "InitialUser",
-                                "lastName" : "Admin",
-                                "firstName" : "EDC"
+                            "modifiedBy": {
+                                "id": "InitialUser",
+                                "lastName": "Admin",
+                                "firstName": "EDC"
                             },
-                            "workspace" :
-                            {
-                                "id" : "10000",
-                                "name" : "ws"
+                            "workspace": {
+                                "id": "10000",
+                                "name": "ws"
                             },
-                            "comments" :
-                            [
+                            "comments": [
 
                             ]
                         },
                         {
-                            "id" : "10000",
-                            "isDeleted" : false,
-                            "lastUpdatedStamp" : "2012-02-24 16:08:32",
-                            "isPublic" : false,
-                            "name" : "<em>ws</em>",
-                            "entityType" : "workspace",
-                            "owner" :
-                            {
-                                "id" : "InitialUser",
-                                "lastName" : "Admin",
-                                "firstName" : "EDC"
+                            "id": "10000",
+                            "isDeleted": false,
+                            "lastUpdatedStamp": "2012-02-24 16:08:32",
+                            "isPublic": false,
+                            "name": "<em>ws</em>",
+                            "entityType": "workspace",
+                            "owner": {
+                                "id": "InitialUser",
+                                "lastName": "Admin",
+                                "firstName": "EDC"
                             },
-                            "comments" :
-                            [
+                            "comments": [
 
                             ]
                         },
                         {
                             comments: [],
                             entityType: "hdfs",
-                            instance: {id:10010, name:"HadoopOnGillette"},
+                            instance: {id: 10010, name: "HadoopOnGillette"},
                             id: "10010",
                             name: "HadoopOnGillette",
                             isDeleted: false,
@@ -3157,7 +3177,7 @@ beforeEach(function() {
                             databaseName: "Analytics",
                             entityType: "databaseObject",
                             id: "10000|Analytics|analytics|BASE_TABLE|clv_data",
-                            instance: {id:10000, name:"gillette"},
+                            instance: {id: 10000, name: "gillette"},
                             isDeleted: false,
                             objectName: "<em>clv</em>_data",
                             objectType: "BASE_TABLE",
@@ -3173,7 +3193,7 @@ beforeEach(function() {
                             datasetType: "CHORUS_VIEW",
                             entityType: "chorusView",
                             id: "10040",
-                            instance:{
+                            instance: {
                                 id: "10000",
                                 name: "gillette"
                             },

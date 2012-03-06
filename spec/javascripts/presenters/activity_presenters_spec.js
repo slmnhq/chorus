@@ -399,7 +399,30 @@ describe("chorus.presenters.Activity", function() {
 
         itShouldHaveFileAttachments();
         itShouldHaveTheAuthorsIconAndUrl();
-    })
+    });
+
+    context(".NOTE_ON_HDFS", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.NOTE_ON_HDFS();
+            this.hdfsfile = this.model.hdfs();
+            this.presenter = new chorus.presenters.Activity(this.model)
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.hdfsfile.get("name"));
+        });
+
+        it("should have the right objectUrl", function() {
+            expect(this.presenter.objectUrl).toBe(this.hdfsfile.showUrl());
+        });
+
+        it("should have the right objectType", function() {
+            expect(this.presenter.header.objectType).toMatchTranslation("hdfs.file_lower")
+        })
+
+        itShouldHaveFileAttachments();
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
 
     context(".NOTE_ON_THING_WE_DONT_SUPPORT_YET", function() {
         beforeEach(function() {
@@ -1039,10 +1062,10 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("does not set the author-related keys", function() {
-            expect(this.presenter.author).toBeUndefined(); 
-            expect(this.presenter.iconSrc).toBeUndefined(); 
-            expect(this.presenter.iconHref).toBeUndefined(); 
-            expect(this.presenter.header.authorLink).toBeUndefined(); 
+            expect(this.presenter.author).toBeUndefined();
+            expect(this.presenter.iconSrc).toBeUndefined();
+            expect(this.presenter.iconHref).toBeUndefined();
+            expect(this.presenter.header.authorLink).toBeUndefined();
         });
     });
     function itShouldHaveTheAuthorsIconAndUrl() {

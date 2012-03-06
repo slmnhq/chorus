@@ -66,11 +66,12 @@
                     return t("workfiles.title_lower")
                 } else if (object instanceof chorus.models.Workspace) {
                     return t("workspaces.title_lower")
-                }
-                else if (object instanceof chorus.models.Dataset) {
+                } else if (object instanceof chorus.models.Dataset) {
                     return t("dataset.title_lower")
                 } else if (object instanceof chorus.models.DatabaseObject) {
                     return t("database_object." + object.get("objectType"));
+                } else if (object instanceof chorus.models.HdfsDirectoryEntry) {
+                    return t("hdfs.file_lower");
                 }
             }
 
