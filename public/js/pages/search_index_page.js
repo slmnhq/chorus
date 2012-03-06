@@ -4,9 +4,16 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         { label: t("breadcrumbs.search_results") }
     ],
 
-    setup: function(query) {
-        query = decodeURIComponent(query);
-        this.model = new chorus.models.SearchResult({query: query});
+    setup: function() {
+        var type, query;
+        if(arguments.length > 1){
+            type = decodeURIComponent(arguments[0])
+            query = decodeURIComponent(arguments[1]);
+        } else {
+            type = "all";
+            query = decodeURIComponent(arguments[0]);
+        }
+        this.model = new chorus.models.SearchResult({query: query, type: type});
         this.requiredResources.add(this.model);
         this.model.fetch();
     },
@@ -22,12 +29,13 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
                         title: t("search.show"),
                         options: [
                             {data: "all", text: t("search.type.all")},
-                            {data: "workfiles", text: t("search.type.workfiles")},
+                            {data: "workfile", text: t("search.type.workfile")},
                             {data: "hadoop", text: t("search.type.hadoop")},
-                            {data: "datasets", text: t("search.type.datasets")},
-                            {data: "workspaces", text: t("search.type.workspaces")},
-                            {data: "users", text: t("search.type.users")}
+                            {data: "dataset", text: t("search.type.dataset")},
+                            {data: "workspace", text: t("search.type.workspace")},
+                            {data: "user", text: t("search.type.user")}
                         ],
+                        chosen: t("search.type." + this.model.get("type")),
                         event: "filter"
                     }
                 }
@@ -35,8 +43,6 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
 
             content: new chorus.views.SearchResultList({ model: this.model })
         });
-
-        chorus.PageEvents.subscribe("choice:filter", this.filterSearchResults, this);
 
         this.sidebars = {
             user: new chorus.views.UserListSidebar(),
@@ -50,6 +56,8 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         chorus.PageEvents.subscribe("tabularData:selected", this.tabularDataSelected, this);
         chorus.PageEvents.subscribe("workfile:selected", this.workfileSelected, this);
         chorus.PageEvents.subscribe("user:selected", this.userSelected, this);
+
+        chorus.PageEvents.subscribe("choice:filter", this.filterSearchResults, this);
     },
 
     workspaceSelected: function() {
@@ -80,7 +88,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         this.$('li.result_item').eq(0).click()
     },
 
-    filterSearchResults: function(data) {
-        chorus.router.navigate('#/search/' + data + "/" + encodeURI(this.model.get("query")), true);
+    filterSearchResults: function(type) {
+        chorus.router.navigate("#/search/" + type + "/" + encodeURIComponent(this.model.get("query")), true);
     }
 });

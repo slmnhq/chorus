@@ -1,8 +1,8 @@
 describe("chorus.pages.SearchIndexPage", function() {
     beforeEach(function() {
-        this.query = "I'm a happy camper";
+        this.query = "foo";
         this.model = new chorus.models.SearchResult({ query: this.query });
-        this.page = new chorus.pages.SearchIndexPage(this.query);
+        this.page = new chorus.pages.SearchIndexPage("all", this.query);
     });
 
     it("fetches the search results for the given query", function() {
@@ -11,7 +11,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
     describe("when the search result fetch completes", function() {
         beforeEach(function() {
-            this.model = fixtures.searchResult({ query: "I'm a happy camper" });
+            this.model = fixtures.searchResult({ query: "foo" });
             this.server.completeFetchFor(this.model);
         });
 
@@ -29,17 +29,35 @@ describe("chorus.pages.SearchIndexPage", function() {
         it("has a 'Show All Results' link", function() {
             expect(this.page.$('.default_content_header .title')).toContainTranslation("search.show")
             expect(this.page.$('.default_content_header a')).toContainTranslation("search.type.all")
-            expect(this.page.$('.default_content_header a')).toContainTranslation("search.type.workfiles")
+            expect(this.page.$('.default_content_header a')).toContainTranslation("search.type.workfile")
             expect(this.page.$('.default_content_header a')).toContainTranslation("search.type.hadoop")
-            expect(this.page.$('.default_content_header a')).toContainTranslation("search.type.datasets")
-            expect(this.page.$('.default_content_header a')).toContainTranslation("search.type.workspaces")
-            expect(this.page.$('.default_content_header a')).toContainTranslation("search.type.users")
+            expect(this.page.$('.default_content_header a')).toContainTranslation("search.type.dataset")
+            expect(this.page.$('.default_content_header a')).toContainTranslation("search.type.workspace")
+            expect(this.page.$('.default_content_header a')).toContainTranslation("search.type.user")
         });
 
-        it("clicking on search filter navigates to the search all page", function() {
-            spyOn(chorus.router, "navigate");
-            this.page.$("li[data-type='workfiles'] a").click();
-            expect(chorus.router.navigate).toHaveBeenCalledWith("#/search/workfiles/" + encodeURI(this.query), true);
+        describe("filtering by result type", function() {
+            beforeEach(function() {
+                spyOn(chorus.router, "navigate");
+                this.page.$('.default_content_header li[data-type="workspace"] a').click();
+            });
+
+            it("should navigate to the filtered result type page", function() {
+                expect(chorus.router.navigate).toHaveBeenCalledWith('#/search/workspace/foo', true);
+            });
+        });
+
+        context("when searching for a workspace", function() {
+            beforeEach(function() {
+                this.query = "Foo";
+                this.model = fixtures.searchResult({ query: this.query });
+                this.page = new chorus.pages.SearchIndexPage("workspace", this.query);
+                this.server.completeFetchFor(this.model);
+            });
+
+            it("selects the search result type in the menu", function() {
+                expect(this.page.$(".default_content_header .chosen")).toContainTranslation("search.type.workspace");
+            });
         });
 
         describe("the workfile section", function() {
@@ -108,7 +126,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         describe("the dataset section", function() {
             beforeEach(function() {
-                this.datasetLIs = this.page.$(".tabular_data_list li");
+                this.datasetLIs = this.page.$(".dataset_list li");
             });
 
             it("shows a list of search results", function() {

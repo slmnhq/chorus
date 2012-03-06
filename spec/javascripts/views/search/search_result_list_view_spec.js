@@ -1,6 +1,7 @@
 describe("chorus.views.SearchResultList", function() {
     beforeEach(function() {
         this.model = fixtures.searchResult();
+        this.model.set({type: "all"});
         this.view = new chorus.views.SearchResultList({model: this.model});
         this.view.render();
     });
@@ -11,6 +12,21 @@ describe("chorus.views.SearchResultList", function() {
 
     it("should include the search results for tabular data", function() {
         expect(this.view.$(".search_tabular_data_list")).toExist();
+    });
+
+    context("when filtering by workspace", function() {
+        beforeEach(function() {
+            this.model.set({type: "workspace"});
+            this.view = new chorus.views.SearchResultList({model: this.model});
+            this.view.render();
+        });
+
+        it("should only show the workspaces section", function() {
+            expect(this.view.$(".search_workspace_list")).toExist();
+            expect(this.view.$(".search_workfile_list")).not.toExist();
+            expect(this.view.$(".search_user_list")).not.toExist();
+            expect(this.view.$(".search_dataset_list")).not.toExist();
+        });
     });
 
     describe("clicking an li", function() {
@@ -37,7 +53,7 @@ describe("chorus.views.SearchResultList", function() {
         context("when the li is for a tabular data", function() {
             it("broadcasts the 'tabularData:selected' page event, with the clicked tabular data", function() {
                 var modelToClick = this.model.tabularData().at(0);
-                this.view.$(".tabular_data_list li").eq(0).click();
+                this.view.$(".dataset_list li").eq(0).click();
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("tabularData:selected", modelToClick);
             });
         });

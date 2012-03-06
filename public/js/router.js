@@ -12,7 +12,7 @@
             ["/", "Dashboard"],
             ["/login", "Login"],
             ["/search/:query", "SearchIndex"],
-            ["/search/:type/:query", "SearchAllIndex"],
+            ["/search/:type/:query", "SearchIndex"],
             ["/users", "UserIndex"],
             ["/users/:id", "UserShow"],
             ["/users/:id/edit", "UserEdit"],

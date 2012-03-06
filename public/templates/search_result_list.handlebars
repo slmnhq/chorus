@@ -1,4 +1,12 @@
-<div class="workfile_list"></div>
-<div class="tabular_data_list"></div>
-<div class="workspace_list"></div>
-<div class="user_list"></div>
+{{#if hasWorkfile}}
+    <div class="workfile_list"></div>
+{{/if}}
+{{#if hasDataset}}
+    <div class="dataset_list"></div>
+{{/if}}
+{{#if hasWorkspace}}
+    <div class="workspace_list"></div>
+{{/if}}
+{{#if hasUser}}
+    <div class="user_list"></div>
+{{/if}}
