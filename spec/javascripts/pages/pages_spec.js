@@ -8,11 +8,6 @@ describe("chorus.pages.Base", function() {
 
     });
 
-    it("has the right constructor name (for console output)", function() {
-        var page = new chorus.pages.Base();
-        expect(page.constructor.name).toBe("chorus$Page");
-    });
-
     describe("initialize", function() {
         beforeEach(function() {
             spyOn(chorus.user, "bind");

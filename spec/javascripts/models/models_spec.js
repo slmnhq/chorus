@@ -5,12 +5,6 @@ describe("chorus.models.Abstract", function() {
             this.model.urlTemplate = "my_items/{{id}}";
         });
 
-        it("has the right constructor name (for console output)", function() {
-            var klass = chorus.models.Base.extend({});
-            var instance = new klass();
-            expect(instance.constructor.name).toBe("chorus$Model");
-        });
-
         describe("#url", function() {
 
             context("when the model's urlTemplate is a function", function() {
@@ -844,12 +838,6 @@ describe("chorus.models.Abstract", function() {
         beforeEach(function() {
             this.collection = new chorus.collections.Base([], { foo: "bar" });
             this.collection.urlTemplate = "bar/{{foo}}";
-        });
-
-        it("has the right constructor name (for console output)", function() {
-            var subclass = chorus.collections.Base.extend({});
-            var instance = new subclass;
-            expect(instance.constructor.name).toBe("chorus$Collection");
         });
 
         describe("#url", function() {

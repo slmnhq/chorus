@@ -4,6 +4,18 @@ describe("chorus global", function() {
         this.backboneSpy = spyOn(Backbone.history, "start")
     })
 
+    if (chorus.isDevMode()) {
+        describe(".classExtend", function() {
+            it("creates a constructor with the given name", function() {
+                var SomeClass = chorus.models.Base.extend({
+                    constructorName: "Foo"
+                });
+
+                expect(SomeClass.name).toBe("chorus$Foo");
+            });
+        });
+    }
+
     describe("#initialize", function() {
         it("should start the Backbone history after the session has been set", function() {
             var self = this;

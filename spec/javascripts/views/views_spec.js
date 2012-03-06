@@ -54,11 +54,6 @@ describe("chorus.views.Base", function() {
         });
     });
 
-    it("has the right constructor name (for console output)", function() {
-        var view = new chorus.views.Base();
-        expect(view.constructor.name).toBe("chorus$View");
-    });
-
     describe("event bindings", function() {
         beforeEach(function() {
             this.model = new chorus.models.Base();
