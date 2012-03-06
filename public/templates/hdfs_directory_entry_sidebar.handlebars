@@ -6,6 +6,7 @@
 <div class="actions">
     <ul>
         {{#unless isDir}}
+        <li><a class="external_table" href="#">{{t "hdfs.create_external_table"}}</a></li>
         <li><a class="dialog add_note" href="#" data-entity-id="{{encodedEntityId}}" data-entity-type="hdfs" data-allow-workspace-attachments="false" data-display-entity-type='{{t "hdfs.file_lower"}}' data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
         {{/unless}}
     </ul>
