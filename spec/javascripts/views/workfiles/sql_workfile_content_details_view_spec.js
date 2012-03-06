@@ -25,6 +25,10 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             expect(this.view.$('button.run_file')).toContainTranslation('workfile.content_details.run_file')
         });
 
+        it("shows the execution schema name", function() {
+            expect(this.view.$(".execution_schema")).toHaveText(this.model.executionSchema().canonicalName())
+        });
+
         context("opening the Run File menu", function() {
             beforeEach(function() {
                 this.view.$(".run_file").click()
