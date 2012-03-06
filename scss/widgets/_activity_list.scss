@@ -141,6 +141,7 @@ $system-action-color: #7C7D7D;
     .activity_header, .comment_header {
         word-wrap: break-word;
         @include secondary-text-normal;
+        line-height: 18px;
         padding-bottom: $text-padding-y;
         .author {
             font-weight: $semibold;
@@ -148,10 +149,18 @@ $system-action-color: #7C7D7D;
     }
 
     .actions {
-        height: 20px;
-
         .timestamp {
             @include secondary-text-small;
+            line-height: 20px;
+        }
+        
+        .details {
+            padding-bottom: 4px;
+
+            a {
+                @include secondary-text-small-semibold;
+                color: $link-color;
+            }
         }
 
         a.delete_link {

@@ -182,6 +182,105 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context(".IMPORT_FAILED", function() {
+        context("when importing from a file", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.IMPORT_FAILED_FILE();
+                this.presenter = new chorus.presenters.Activity(this.model);
+            });
+
+            it("should have the file name", function() {
+                expect(this.presenter.importSourceName).toBe("some.csv");
+            });
+
+            it("should have the right importType", function() {
+                expect(this.presenter.importType).toMatchTranslation("dataset.import.types.file")
+            });
+
+            it("should pass the importType to the header", function() {
+                expect(this.presenter.header.importType).toMatchTranslation("dataset.import.types.file");
+            });
+
+            itShouldHaveImportFailedIcon();
+            itShouldHaveDestinationTableLink();
+            itShouldNotHaveDetailsLink();
+        });
+
+        context("when importing from a source table", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.IMPORT_FAILED_SOURCE_TABLE();
+                this.presenter = new chorus.presenters.Activity(this.model);
+            });
+
+            it("should have the right importType", function() {
+                expect(this.presenter.importType).toMatchTranslation("dataset.import.types.table")
+            });
+
+            it("should pass the importType to the header", function() {
+                expect(this.presenter.header.importType).toMatchTranslation("dataset.import.types.table");
+            });
+
+            it("should have the right importSourceName", function() {
+                expect(this.presenter.importSourceName).toBe("clv_data")
+            });
+
+            it("should have the right importSourceUrl", function() {
+                expect(this.presenter.importSourceUrl).toBe("#/workspaces/10000/datasets/10010|Analytics|analytics|BASE_TABLE|clv_data")
+            });
+
+            it("should have an importSourceLink in the header", function() {
+                expect(this.presenter.header.importSourceLink).toBeDefined();
+            });
+
+            itShouldHaveImportFailedIcon();
+            itShouldHaveDestinationTableLink();
+            itShouldHaveDetailsLink(t("activity_stream.view_error_details"), {
+                href: '#',
+                class: "alert",
+                "data-alert": "ImportFailed",
+                "data-id": "10010|Analytics|analytics|BASE_TABLE|clv_data",
+                "data-workspace-id": "10000"
+            });
+        });
+
+        context("when importing from a view", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.IMPORT_FAILED_VIEW();
+                this.presenter = new chorus.presenters.Activity(this.model);
+            });
+
+            it("should have the right importType", function() {
+                expect(this.presenter.importType).toMatchTranslation("dataset.import.types.view")
+            });
+
+            it("should pass the importType to the header", function() {
+                expect(this.presenter.header.importType).toMatchTranslation("dataset.import.types.view");
+            });
+
+            it("should have the right importSourceName", function() {
+                expect(this.presenter.importSourceName).toBe("song_view")
+            });
+
+            it("should have the right importSourceUrl", function() {
+                expect(this.presenter.importSourceUrl).toBe("#/workspaces/10000/datasets/10002|bizarro_world|public|QUERY|song_view")
+            });
+
+            it("should have an importSourceLink in the header", function() {
+                expect(this.presenter.header.importSourceLink).toBeDefined();
+            });
+
+            itShouldHaveImportFailedIcon();
+            itShouldHaveDestinationTableLink();
+            itShouldHaveDetailsLink(t("activity_stream.view_error_details"), {
+                href: '#',
+                class: "alert",
+                "data-alert": "ImportFailed",
+                "data-id": "10002|bizarro_world|public|QUERY|song_view",
+                "data-workspace-id": "10000"
+            });
+        });
+    });
+
     context(".IMPORT_UPDATED", function() {
         context("when importing from a source table", function() {
             beforeEach(function() {

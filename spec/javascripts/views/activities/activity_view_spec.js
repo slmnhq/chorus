@@ -456,6 +456,61 @@ describe("chorus.views.Activity", function() {
             })
         })
 
+        context("type: IMPORT_FAILED", function() {
+            context("for a file", function() {
+                beforeEach(function() {
+                    this.view.model = fixtures.activities.IMPORT_FAILED_FILE();
+                    this.presenter = new chorus.presenters.Activity(this.view.model)
+                    this.view.render();
+                });
+
+                it("should contain the type of import(file)", function() {
+                    expect($(this.view.el)).toContainTranslation("dataset.import.types.file")
+                });
+
+                it("should contain the name of the file", function() {
+                    expect($(this.view.el)).toContainText('some.csv')
+                })
+
+
+                itShouldRenderObjectDetails({checkLink: true});
+                itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+                itShouldNotRenderAnInsightLink();
+            })
+
+            context("for a source table", function() {
+                beforeEach(function() {
+                    this.view.model = fixtures.activities.IMPORT_FAILED_SOURCE_TABLE();
+                    this.presenter = new chorus.presenters.Activity(this.view.model)
+                    this.view.render();
+                });
+
+                it("should contain the type of import(table)", function() {
+                    expect($(this.view.el)).toContainTranslation("dataset.import.types.table")
+                });
+
+                itShouldRenderObjectDetails({checkLink: true});
+                itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+                itShouldNotRenderAnInsightLink();
+            })
+
+            context("for a view", function() {
+                beforeEach(function() {
+                    this.view.model = fixtures.activities.IMPORT_FAILED_VIEW();
+                    this.presenter = new chorus.presenters.Activity(this.view.model)
+                    this.view.render();
+                });
+
+                it("should contain the type of import(view)", function() {
+                    expect($(this.view.el)).toContainTranslation("dataset.import.types.view")
+                });
+
+                itShouldRenderObjectDetails({checkLink: true});
+                itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+                itShouldNotRenderAnInsightLink();
+            })
+        })
+
         context("type: WORKSPACE_ADD_SANDBOX", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activities.WORKSPACE_ADD_SANDBOX();
@@ -490,6 +545,18 @@ describe("chorus.views.Activity", function() {
             it("returns a default header", function() {
                 this.model.set({ type: "GEN MAI CHA" });
                 expect(this.view.render().$(".activity_header .author")).toExist();
+            });
+        });
+
+        context("when the presentation contains a detailsLink", function() {
+            beforeEach(function() {
+                this.view.model = fixtures.activities.IMPORT_FAILED_SOURCE_TABLE();
+                this.presenter = new chorus.presenters.Activity(this.view.model)
+                this.view.render();
+            });
+
+            it("links to the details", function() {
+                expect(this.view.$(".actions .details a")).toExist();
             });
         });
     });

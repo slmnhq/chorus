@@ -26,6 +26,9 @@
         {{/each}}
         </ul>
         <div class="actions">
+            {{#if detailsLink}}
+                <div class="details">{{{detailsLink}}}</div>
+            {{/if}}
             <span class="timestamp">{{relativeTimestamp timestamp}}</span>
             {{#if isNotification}}
                 <a class="delete_link alert" data-alert="NotificationDeleteAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>

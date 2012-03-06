@@ -29,9 +29,9 @@
             };
 
             var activityTypeToEntityType = {
-                "NOTE" : "comment",
-                "INSIGHT_CREATED" : "comment",
-                "RECEIVE_NOTE" : "comment"
+                "NOTE": "comment",
+                "INSIGHT_CREATED": "comment",
+                "RECEIVE_NOTE": "comment"
             }
             var entityType = activityTypeToEntityType[this.activityType] || "activitystream";
 
@@ -145,6 +145,24 @@
             ctx.iconSrc = "/images/import_icon.png";
             return ctx;
         },
+
+        IMPORT_FAILED: function(model) {
+            var ctx = importIsObject(model);
+            ctx.iconClass = ''
+            ctx.iconSrc = "/images/med_red_alert.png";
+            if (!model.get("file")) {
+                var destinationTable = new chorus.models.Dataset(model.get("databaseObject"));
+
+                ctx.detailsLink = chorus.helpers.linkTo('#', t("activity_stream.view_error_details"), {
+                    "class": 'alert',
+                    "data-alert": "ImportFailed",
+                    "data-id": destinationTable.get("id"),
+                    "data-workspace-id": model.workspace().get("id")
+                })
+            }
+            return ctx;
+        },
+
         IMPORT_CREATED: importIsObject,
         IMPORT_UPDATED: importIsObject,
 
@@ -163,7 +181,7 @@
                 iconClass: ''
             }
         },
-        
+
         WORKFILE_CREATED: function(model) {
             return {
                 objectName: model.workfile().get("name"),
@@ -302,7 +320,7 @@
         _.extend(ctx, {
             objectName: destinationObject.get("objectName"),
             objectType: t("database_object.TABLE"),
-            objectUrl: destinationObject.showUrl(),
+            objectUrl: destinationObject.showUrl()
         });
 
         return ctx;

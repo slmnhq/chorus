@@ -1324,6 +1324,102 @@ beforeEach(function() {
                 })
             },
 
+            "IMPORT_FAILED_FILE": function() {
+                return new chorus.models.Activity({
+                    author: {
+                        firstName: "EDC",
+                        id: "InitialUser",
+                        lastName: "Admin"
+                    },
+                    comments: [],
+                    file: {
+                        name: "some.csv"
+                    },
+                     id: fixtures.nextId().toString(),
+                    import: {
+                        id: fixtures.nextId().toString()
+                    },
+                    table: {
+                        id: "10002|bizarro_world|public|BASE_TABLE|new_imported_table",
+                        name: "new_imported_table"
+                    },
+                    timestamp: "2012-03-02 12:19:50",
+                    type: "IMPORT_FAILED",
+                    workspace: {
+                        id: "10000",
+                        name: "a"
+                    }
+                })
+            },
+
+            "IMPORT_FAILED_SOURCE_TABLE": function() {
+                return new chorus.models.Activity({
+                    author: {
+                        firstName: "EDC",
+                        id: "InitialUser",
+                        lastName: "Admin"
+                    },
+                    comments: [],
+                    databaseObject: {
+                        id: "10010|Analytics|analytics|BASE_TABLE|clv_data",
+                        name: "clv_data",
+                        objectName: "clv_data",
+                        objectType: "BASE_TABLE",
+                        query: null,
+                        type: "SOURCE_TABLE",
+                        workspaceId: "10000"
+                    },
+                    id: fixtures.nextId().toString(),
+                    import:{
+                        id: fixtures.nextId().toString()
+                    },
+                    table: {
+                        id: "10002|bizarro_world|public|BASE_TABLE|new_imported_table",
+                        name: "new_imported_table"
+                    },
+                    timestamp: "2012-03-02 12:19:50",
+                    type: "IMPORT_FAILED",
+                    workspace: {
+                        id: "10000",
+                        name: "a"
+                    }
+                })
+            },
+
+            "IMPORT_FAILED_VIEW": function() {
+                return new chorus.models.Activity({
+                    author: {
+                        firstName: "EDC",
+                        id: "InitialUser",
+                        lastName: "Admin"
+                    },
+                    comments: [],
+                    databaseObject: {
+                        id: "10002|bizarro_world|public|QUERY|song_view",
+                        name: "song_view",
+                        objectName: "song_view",
+                        objectType: "QUERY",
+                        query: "SELECT a.spotify_url, a.year, a.artist, a.title, a.theme↵FROM top_1_000_songs_to_hear_before_you_die AS a↵",
+                        type: "CHORUS_VIEW",
+                        workspaceId: "10000"
+                    },
+                    id: fixtures.nextId().toString(),
+                    import: {
+                        id: fixtures.nextId().toString()
+                    },
+                    table: {
+                        id: "10002|bizarro_world|public|BASE_TABLE|new_imported_table",
+                        name: "new_imported_table"
+                    },
+                    timestamp: "2012-03-02 12:19:50",
+                    type: "IMPORT_FAILED",
+                    workspace: {
+                        id: "10000",
+                        name: "a"
+                    }
+                })
+            },
+
             "IMPORT_CREATED_FILE": function() {
                 return new chorus.models.Activity({
                     author: {
@@ -2321,7 +2417,7 @@ beforeEach(function() {
             return this.datasetImport(_.extend({executionInfo: {
                 startedStamp: "2012-02-29 14:23:58.169",
                 completedStamp: "2012-02-29 14:23:59.027",
-                result: {executeResult: "failed"},
+                result : "That import was totally bogus",
                 state: "failed",
                 creator: "InitialUser"
             }}, overrides));
@@ -2335,6 +2431,7 @@ beforeEach(function() {
             var attributes = _.extend({
                 destinationTable: "10000|Analytics|analytics|BASE_TABLE|asdfsfsdf",
                 id: this.nextId().toString(),
+                datasetId: this.nextId().toString(),
                 nextImportTime: in1yearStr,
                 sampleCount: 500,
                 sampleMethod: "RANDOM_COUNT",
