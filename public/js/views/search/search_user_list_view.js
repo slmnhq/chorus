@@ -30,10 +30,11 @@ chorus.views.SearchUserList = chorus.views.Base.extend({
     },
 
     collectionModelContext: function(model) {
+        var modelWithSearchResults = chorus.helpers.withSearchResults(model);
         var supportingMessage = _.compact(_.map(
             ["title", "ou", "content", "emailAddress", "name"],
             function(fieldName) {
-                var value = model.get(fieldName);
+                var value = modelWithSearchResults.get(fieldName);
                 if (value) {
                     var result = {};
                     result[fieldName] = value;
@@ -45,7 +46,7 @@ chorus.views.SearchUserList = chorus.views.Base.extend({
         return {
             iconSrc: model.imageUrl({size:"icon"}),
             link: model.showUrl(),
-            displayName: model.displayName(),
+            displayName: modelWithSearchResults.displayName(),
             supportingMessage: supportingMessage.slice(0,3),
             moreSupportingMessage: supportingMessage.slice(3),
             hasMoreSupportingMessage: Math.max(0, supportingMessage.length - 3)

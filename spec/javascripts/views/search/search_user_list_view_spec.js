@@ -91,11 +91,11 @@ describe("chorus.views.SearchUserList", function() {
             expect(this.view.$('li a.name').eq(3).attr('href')).toBe("#/users/"+this.collection.at(3).get("id"));
         });
 
-        it("has each user's display name in the collection", function() {
-            expect(this.view.$('li a.name').eq(0).html()).toContain(this.collection.at(0).displayName());
-            expect(this.view.$('li a.name').eq(1).html()).toContain(this.collection.at(1).displayName());
-            expect(this.view.$('li a.name').eq(2).html()).toContain(this.collection.at(2).displayName());
-            expect(this.view.$('li a.name').eq(3).html()).toContain(this.collection.at(3).displayName());
+        it("has each user's display name (or highlighted display name) in the collection", function() {
+            expect(this.view.$('li a.name').eq(0).html()).toContain("John Doe");
+            expect(this.view.$('li a.name').eq(1).html()).toContain("<em>Test</em> McTest");
+            expect(this.view.$('li a.name').eq(2).html()).toContain("Jack <em>Test</em>");
+            expect(this.view.$('li a.name').eq(3).html()).toContain("Sally <em>Test</em>");
         });
 
         describe("supporting messages (title, notes, etc.)", function() {
@@ -111,11 +111,15 @@ describe("chorus.views.SearchUserList", function() {
                         "isDeleted": "false",
                         "lastName": "Doe",
                         "lastUpdatedStamp": "2012-03-01 11:07:13",
-                        "name": "<em>test</em>",
+                        "name": "test",
                         "title": "affd",
-                        "ou": "<em>Test</em>",
+                        "ou": "Test",
                         "content": "Hello",
-                        "owner": {}
+                        "owner": {},
+                        highlightedAttributes: {
+                            "name": "<em>test</em>",
+                            "ou": "<em>Test</em>"
+                        }
                     });
                     this.view.render();
                 });
@@ -149,6 +153,11 @@ describe("chorus.views.SearchUserList", function() {
                     expect(this.view.$("li:eq(0) .moreSupportingMessage")).toHaveClass("hidden");
                     expect(this.view.$("li:eq(0) .showMoreSupportingMessage")).not.toHaveClass("hidden");
                 });
+
+                it("uses the highlighted attributes when available", function() {
+                    expect(this.view.$("li:eq(0) .title").html()).toContain("affd");
+                    expect(this.view.$("li:eq(0) .ou").html()).toContain("<em>Test</em>");
+                });
             });
 
             context("when there are less than 3 supporting messages", function() {
@@ -167,12 +176,13 @@ describe("chorus.views.SearchUserList", function() {
                         "content": "",
                         "title": "",
                         "ou": "",
-                        "owner": {}
+                        "owner": {},
+                        "highlightedAttributes" : {}
                     });
                     this.view.render();
                 });
 
-                it("displays up to 2 messages in the supporting message and none in the rest in the more section", function() {
+                it("displays all messages in the supporting message and none in the rest in the more section", function() {
                     expect(this.view.$("li:eq(0) .supportingMessage div").length).toBe(2);
                     expect(this.view.$("li:eq(0) .moreSupportingMessage div").length).toBe(0);
                 });
@@ -184,8 +194,8 @@ describe("chorus.views.SearchUserList", function() {
 
             it("has each user's Title in the collection", function() {
                 expect(this.view.$('li:eq(0) .title .content')).not.toExist();
-                expect(this.view.$('li:eq(1) .title .content').html()).toContain(this.collection.at(1).get("title"));
-                expect(this.view.$('li:eq(2) .title .content').html()).toContain(this.collection.at(2).get("title"));
+                expect(this.view.$('li:eq(1) .title .content').html()).toContain("nobody");
+                expect(this.view.$('li:eq(2) .title .content').html()).toContain("<em>test</em>er");
                 expect(this.view.$('li:eq(3) .title .content')).not.toExist();
             });
 

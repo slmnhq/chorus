@@ -290,12 +290,24 @@
         },
 
         displaySearchMatch: function(attributeName) {
-            if (this.highlightedAttributes && this.highlightedAttributes[attributeName]) {
-                var attribute = this.highlightedAttributes[attributeName]
-                return _.isArray(attribute) ? attribute[0] : attribute
-            } else {
-                return this[attributeName];
-            }
+            return chorus.helpers.withSearchResults(this).get(attributeName);
+        },
+
+        withSearchResults: function(modelOrAttributes) {
+            getReal = modelOrAttributes.get || function(attributeName) { return modelOrAttributes[attributeName]; };
+            modelOrAttributes = Object.create(modelOrAttributes);
+
+            modelOrAttributes.get =
+                function(attributeName) {
+                    if (getReal.call(modelOrAttributes, 'highlightedAttributes') && getReal.call(modelOrAttributes, 'highlightedAttributes')[attributeName]) {
+                        var attribute = getReal.call(modelOrAttributes, 'highlightedAttributes')[attributeName]
+                        return _.isArray(attribute) ? attribute[0] : attribute
+                    } else {
+                        return getReal.call(modelOrAttributes, attributeName);
+                    }
+                }
+
+            return modelOrAttributes;
         },
 
         humanizedTabularDataType: function(tabularData) {

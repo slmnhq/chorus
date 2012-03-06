@@ -730,28 +730,49 @@ describe("handlebars", function() {
         });
 
         describe("displaySearchMatch", function() {
-            beforeEach(function() {
-                this.model = fixtures.searchResultChorusView();
+            context("on plain JS objects", function() {
+                it("uses the search result if present", function() {
+                    var attributes = { schemaName: 'ddemo', highlightedAttributes: {schemaName: ["d<em>demo</em>"]}}
+                    expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'schemaName')).toBe("d<em>demo</em>");
+                });
+
+                it("falls back to the attributes", function() {
+                    var attributes = { schemaName: 'ddemo', highlightedAttributes: {anotherAttribute: ["d<em>demo</em>"]}}
+                    expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'schemaName')).toBe('ddemo');
+                });
+
+                it("doesn't complain if the highlightedAttributes are missing", function() {
+                    var attributes = { schemaName: 'ddemo'}
+                    expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'schemaName')).toBe('ddemo');
+                });
+
+                it("doesn't complain if highlighted value is not wrapped in an array", function() {
+                    var attributes = {highlightedAttributes: {content : "SELECT * FROM <em>test</em> AS a"}};
+                    expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'content')).toBe("SELECT * FROM <em>test</em> AS a");
+                });
             });
 
-            it("falls back to the model's attribute", function() {
-                expect(Handlebars.helpers.displaySearchMatch.call(this.model.attributes, 'schemaName')).toBe('ddemo');
-            });
+            context("on backbone models", function() {
+                it("uses the search result if present", function() {
+                    var model = new chorus.models.Base({ schemaName: 'ddemo', highlightedAttributes: {schemaName: ["d<em>demo</em>"]}});
+                    expect(Handlebars.helpers.displaySearchMatch.call(model, 'schemaName')).toBe("d<em>demo</em>");
+                });
 
-            it("uses the search result if present", function() {
-                expect(Handlebars.helpers.displaySearchMatch.call(this.model.attributes, 'content')).toBe("SELECT * FROM <em>test</em> AS a");
-            });
+                it("falls back to the attributes", function() {
+                    var model = new chorus.models.Base({ schemaName: 'ddemo', highlightedAttributes: {anotherAttribute: ["d<em>demo</em>"]}});
+                    expect(Handlebars.helpers.displaySearchMatch.call(model, 'schemaName')).toBe('ddemo');
+                });
 
-            it("doesn't complain if the model does not have any highlightedAttributes", function() {
-                this.model.set({highlightedAttributes: null});
-                expect(Handlebars.helpers.displaySearchMatch.call(this.model.attributes, 'schemaName')).toBe('ddemo');
-            });
+                it("doesn't complain if the highlightedAttributes are missing", function() {
+                    var model = new chorus.models.Base({ schemaName: 'ddemo'});
+                    expect(Handlebars.helpers.displaySearchMatch.call(model, 'schemaName')).toBe('ddemo');
+                });
 
-            it("doesn't complain if it is not wrapped in an array", function() {
-                this.model.set({highlightedAttributes: {'content' : "SELECT * FROM <em>test</em> AS a"}});
-                expect(Handlebars.helpers.displaySearchMatch.call(this.model.attributes, 'content')).toBe("SELECT * FROM <em>test</em> AS a");
+                it("doesn't complain if highlighted value is not wrapped in an array", function() {
+                    var model = new chorus.models.Base({highlightedAttributes: {content : "SELECT * FROM <em>test</em> AS a"}});
+                    expect(Handlebars.helpers.displaySearchMatch.call(model, 'content')).toBe("SELECT * FROM <em>test</em> AS a");
+                });
             });
-
         });
 
         describe("sqlDefinition", function() {
