@@ -1224,6 +1224,106 @@ beforeEach(function() {
                 })
             },
 
+            "IMPORT_CREATED_FILE": function() {
+                return new chorus.models.Activity({
+                    author: {
+                        firstName: "EDC",
+                        id: "InitialUser",
+                        lastName: "Admin"
+                    },
+                    comments: [],
+                    databaseObject: {
+                        id: "10002|bizarro_world|public|BASE_TABLE|morley2",
+                        name: "morley2"
+                    },
+                    file: {
+                        name: "some.csv"
+                    },
+                    id: fixtures.nextId().toString(),
+                    import:{
+                        id: fixtures.nextId().toString()
+                    },
+                    table: {
+                        id: "10002|bizarro_world|public|BASE_TABLE|new_imported_table",
+                        name: "new_imported_table"
+                    },
+                    timestamp: "2012-03-02 12:19:50",
+                    type: "IMPORT_CREATED",
+                    workspace: {
+                        id: "10000",
+                        name: "a"
+                    }
+                })
+            },
+
+            "IMPORT_CREATED_SOURCE_TABLE": function() {
+                return new chorus.models.Activity({
+                    author: {
+                        firstName: "EDC",
+                        id: "InitialUser",
+                        lastName: "Admin"
+                    },
+                    comments: [],
+                    databaseObject: {
+                        id: "10010|Analytics|analytics|BASE_TABLE|clv_data",
+                        name: "clv_data",
+                        objectName: "clv_data",
+                        objectType: "BASE_TABLE",
+                        query: null,
+                        type: "SOURCE_TABLE",
+                        workspaceId: "10000"
+                    },
+                    id: fixtures.nextId().toString(),
+                    import:{
+                        id: fixtures.nextId().toString()
+                    },
+                    table: {
+                        id: "10002|bizarro_world|public|BASE_TABLE|new_imported_table",
+                        name: "new_imported_table"
+                    },
+                    timestamp: "2012-03-02 12:19:50",
+                    type: "IMPORT_CREATED",
+                    workspace: {
+                        id: "10000",
+                        name: "a"
+                    }
+                })
+            },
+
+            "IMPORT_CREATED_VIEW": function() {
+                return new chorus.models.Activity({
+                    author: {
+                        firstName: "EDC",
+                        id: "InitialUser",
+                        lastName: "Admin"
+                    },
+                    comments: [],
+                    databaseObject: {
+                        id: "10002|bizarro_world|public|QUERY|song_view",
+                        name: "song_view",
+                        objectName: "song_view",
+                        objectType: "QUERY",
+                        query: "SELECT a.spotify_url, a.year, a.artist, a.title, a.theme↵FROM top_1_000_songs_to_hear_before_you_die AS a↵",
+                        type: "CHORUS_VIEW",
+                        workspaceId: "10000"
+                    },
+                    id: fixtures.nextId().toString(),
+                    import: {
+                        id: fixtures.nextId().toString()
+                    },
+                    table: {
+                        id: "10002|bizarro_world|public|BASE_TABLE|new_imported_table",
+                        name: "new_imported_table"
+                    },
+                    timestamp: "2012-03-02 12:19:50",
+                    type: "IMPORT_CREATED",
+                    workspace: {
+                        id: "10000",
+                        name: "a"
+                    }
+                })
+            },
+
             "USER_ADDED": function() {
                 return new chorus.models.Activity({
                     author: fixtures.authorJson(),

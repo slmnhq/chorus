@@ -4,6 +4,95 @@ describe("chorus.presenters.Activity", function() {
         this.model = fixtures.modelFor("fetch")
     });
 
+    context(".IMPORT_CREATED", function() {
+        context("when importing from a file", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.IMPORT_CREATED_FILE();
+                this.presenter = new chorus.presenters.Activity(this.model);
+            });
+
+            it("should have the file name", function() {
+                expect(this.presenter.importSourceName).toBe("some.csv");
+            });
+
+            it("should have an iconClass", function() {
+                expect(this.presenter.iconClass).toBe('profile');
+            });
+
+            it("should have the right importType", function() {
+                expect(this.presenter.importType).toMatchTranslation("dataset.import.types.file")
+            });
+
+            it("should pass the importType to the header", function() {
+                expect(this.presenter.header.importType).toMatchTranslation("dataset.import.types.file");
+            });
+
+            itShouldHaveUserIcon();
+            itShouldHaveDestinationTableLink();
+        });
+
+        context("when importing from a source table", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.IMPORT_CREATED_SOURCE_TABLE();
+                this.presenter = new chorus.presenters.Activity(this.model);
+            });
+
+            it("should have the right importType", function() {
+                expect(this.presenter.importType).toMatchTranslation("dataset.import.types.table")
+            });
+
+            it("should pass the importType to the header", function() {
+                expect(this.presenter.header.importType).toMatchTranslation("dataset.import.types.table");
+            });
+
+            it("should have the right importSourceName", function() {
+                expect(this.presenter.importSourceName).toBe("clv_data")
+            });
+
+            it("should have the right importSourceUrl", function() {
+                expect(this.presenter.importSourceUrl).toBe("#/workspaces/10000/datasets/10010|Analytics|analytics|BASE_TABLE|clv_data")
+            });
+
+
+            it("should have an importSourceLink in the header", function() {
+                expect(this.presenter.header.importSourceLink).toBeDefined();
+            });
+
+            itShouldHaveUserIcon();
+            itShouldHaveDestinationTableLink();
+        });
+
+        context("when importing from a view", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.IMPORT_CREATED_VIEW();
+                this.presenter = new chorus.presenters.Activity(this.model);
+            });
+
+            it("should have the right importType", function() {
+                expect(this.presenter.importType).toMatchTranslation("dataset.import.types.view")
+            });
+
+            it("should pass the importType to the header", function() {
+                expect(this.presenter.header.importType).toMatchTranslation("dataset.import.types.view");
+            });
+
+            it("should have the right importSourceName", function() {
+                expect(this.presenter.importSourceName).toBe("song_view")
+            });
+
+            it("should have the right importSourceUrl", function() {
+                expect(this.presenter.importSourceUrl).toBe("#/workspaces/10000/datasets/10002|bizarro_world|public|QUERY|song_view")
+            });
+
+            it("should have an importSourceLink in the header", function() {
+                expect(this.presenter.header.importSourceLink).toBeDefined();
+            });
+
+            itShouldHaveUserIcon();
+            itShouldHaveDestinationTableLink();
+        });
+    });
+
     context(".IMPORT_SUCCESS", function() {
         context("when importing from a file", function() {
             beforeEach(function() {
@@ -27,7 +116,8 @@ describe("chorus.presenters.Activity", function() {
                 expect(this.presenter.header.importType).toMatchTranslation("dataset.import.types.file");
             });
 
-            itShouldHaveImportIconAndDestinationTableLink();
+            itShouldHaveImportIcon();
+            itShouldHaveDestinationTableLink();
         });
 
         context("when importing from a source table", function() {
@@ -57,7 +147,8 @@ describe("chorus.presenters.Activity", function() {
                 expect(this.presenter.header.importSourceLink).toBeDefined();
             });
 
-            itShouldHaveImportIconAndDestinationTableLink();
+            itShouldHaveImportIcon();
+            itShouldHaveDestinationTableLink();
         });
 
         context("when importing from a view", function() {
@@ -86,7 +177,8 @@ describe("chorus.presenters.Activity", function() {
                 expect(this.presenter.header.importSourceLink).toBeDefined();
             });
 
-            itShouldHaveImportIconAndDestinationTableLink();
+            itShouldHaveImportIcon();
+            itShouldHaveDestinationTableLink();
         });
     });
 
@@ -948,11 +1040,21 @@ describe("chorus.presenters.Activity", function() {
         })
     }
 
-    function itShouldHaveImportIconAndDestinationTableLink() {
+    function itShouldHaveUserIcon() {
+        it("should have the user icon", function() {
+            expect(this.presenter.iconSrc).toContain("/edc/userimage/");
+            expect(this.presenter.iconClass).toBe("profile");
+        });
+    }
+
+    function itShouldHaveImportIcon() {
         it("should have the right icon", function() {
             expect(this.presenter.iconSrc).toBe("/images/import_icon.png");
+            expect(this.presenter.iconClass).toBe("");
         });
+    }
 
+    function itShouldHaveDestinationTableLink() {
         it("should have the right object name( destination view )", function() {
             expect(this.presenter.objectName).toBe('new_imported_table')
         });
