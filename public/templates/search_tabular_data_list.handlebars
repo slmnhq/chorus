@@ -1,61 +1,63 @@
-<div class="details">
-    <div class="right">
-        {{#if moreResults}}
-            <span class="count">{{t "search.count" shown=shown total=total}}</span>
-            <a class="show_all" href="#">{{t "search.show_all"}}</a>
-        {{else}}
-            <span class="count">{{t "search.count_short" shown=shown}}</span>
-        {{/if}}
+{{#if shown}}
+    <div class="details">
+        <div class="right">
+            {{#if moreResults}}
+                <span class="count">{{t "search.count" shown=shown total=total}}</span>
+                <a class="show_all" href="#">{{t "search.show_all"}}</a>
+            {{else}}
+                <span class="count">{{t "search.count_short" shown=shown}}</span>
+            {{/if}}
+        </div>
+        <span class="title">{{t "dataset.title_plural"}}</span>
     </div>
-    <span class="title">{{t "dataset.title_plural"}}</span>
-</div>
 
-<ul>
-    {{#each models}}
-        <li class="result_item" data-id={{id}}>
-            <div class="spacer_left"></div>
-            <img class="icon" src="{{iconUrl}}" title="{{humanizedTabularDataType this}}"/>
-            <div class="description">
-                <a class="name" href="{{showUrl}}">{{{displaySearchMatch "objectName"}}}</a>
-                <div class="location">
-                    {{{tabularDataLocation model}}}
-                    {{{usedInWorkspaces workspaces dataset}}}
-                </div>
-
-                <div class="comments">
-                    {{#each comments}}
-                    <div class="comment">
-                        <span class="comment_type">
-                        {{#if isInsight}}
-                            {{t "insight.title"}}:
-                        {{else}}
-                            {{t "activity_stream.comment"}}:
-                        {{/if}}
-                        </span>
-                        <span class="comment_content">&#8220;{{{displaySearchMatch "content"}}}&#8221;</span>
+    <ul>
+        {{#each models}}
+            <li class="result_item" data-id={{id}}>
+                <div class="spacer_left"></div>
+                <img class="icon" src="{{iconUrl}}" title="{{humanizedTabularDataType this}}"/>
+                <div class="description">
+                    <a class="name" href="{{showUrl}}">{{{displaySearchMatch "objectName"}}}</a>
+                    <div class="location">
+                        {{{tabularDataLocation model}}}
+                        {{{usedInWorkspaces workspaces dataset}}}
                     </div>
-                    {{/each}}
-                    {{#if moreCommentCount}}
-                        <a class="more_comments" href="#">{{t "search.comments_more" count=moreCommentCount}}</a>
-                        <div class="more_comments hidden">
-                            {{#each moreComments}}
-                                <div class="comment">
-                                    <span class="comment_type">
-                                    {{#if isInsight}}
-                                        {{t "insight.title"}}:
-                                    {{else}}
-                                        {{t "activity_stream.comment"}}:
-                                    {{/if}}
-                                    </span>
-                                    <span class="comment_content">&#8220;{{{displaySearchMatch "content"}}}&#8221;</span>
-                                </div>
-                            {{/each}}
-                            <a class="fewer_comments" href="#">{{t "search.comments_less"}}</a>
+
+                    <div class="comments">
+                        {{#each comments}}
+                        <div class="comment">
+                            <span class="comment_type">
+                            {{#if isInsight}}
+                                {{t "insight.title"}}:
+                            {{else}}
+                                {{t "activity_stream.comment"}}:
+                            {{/if}}
+                            </span>
+                            <span class="comment_content">&#8220;{{{displaySearchMatch "content"}}}&#8221;</span>
                         </div>
-                    {{/if}}
+                        {{/each}}
+                        {{#if moreCommentCount}}
+                            <a class="more_comments" href="#">{{t "search.comments_more" count=moreCommentCount}}</a>
+                            <div class="more_comments hidden">
+                                {{#each moreComments}}
+                                    <div class="comment">
+                                        <span class="comment_type">
+                                        {{#if isInsight}}
+                                            {{t "insight.title"}}:
+                                        {{else}}
+                                            {{t "activity_stream.comment"}}:
+                                        {{/if}}
+                                        </span>
+                                        <span class="comment_content">&#8220;{{{displaySearchMatch "content"}}}&#8221;</span>
+                                    </div>
+                                {{/each}}
+                                <a class="fewer_comments" href="#">{{t "search.comments_less"}}</a>
+                            </div>
+                        {{/if}}
+                    </div>
                 </div>
-            </div>
-            <div class="spacer_right"></div>
-        </li>
-    {{/each}}
-</ul>
+                <div class="spacer_right"></div>
+            </li>
+        {{/each}}
+    </ul>
+{{/if}}
