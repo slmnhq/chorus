@@ -147,8 +147,11 @@ chorus.models = {
 
         requirePattern: function(attr, regex, newAttrs, messageKey, allowBlank) {
             var value = newAttrs && newAttrs.hasOwnProperty(attr) ? newAttrs[attr] : this.get(attr);
+            if(allowBlank && !value) {
+                return
+            }
 
-            if ((!allowBlank && !value) || !value.match(regex)) {
+            if (!value || !value.match(regex)) {
                 this.setValidationError(attr, "validation.required_pattern", messageKey);
             }
         },

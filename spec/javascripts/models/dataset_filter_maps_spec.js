@@ -67,8 +67,16 @@ describe("chorus.models.DatasetFilterMaps", function() {
             expect(this.datasetFilterMap.performValidation({ value: "I'm the string" })).toBeFalsy();
         })
 
-        it("marks negative numbers as invalid", function() {
-            expect(this.datasetFilterMap.performValidation({ value: "-1" })).toBeFalsy();
+        it("marks negative numbers as valid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "-1" })).toBeTruthy();
+        })
+
+        it("marks numbers with lots of dashes as invalid", function() {
+            expect(this.datasetFilterMap.performValidation({ value: "--1" })).toBeFalsy();
+            expect(this.datasetFilterMap.performValidation({ value: "-1-" })).toBeFalsy();
+            expect(this.datasetFilterMap.performValidation({ value: "-" })).toBeFalsy();
+            expect(this.datasetFilterMap.performValidation({ value: "-1,2,.-" })).toBeFalsy();
+            expect(this.datasetFilterMap.performValidation({ value: "1-" })).toBeFalsy();
         })
 
         it("marks the empty field valid", function() {

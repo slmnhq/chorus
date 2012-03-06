@@ -53,7 +53,7 @@
         },
 
         declareValidations: function(attrs) {
-            this.requirePattern("value", /^[0-9,.]*$/, attrs, "dataset.filter.number_required", "allowBlank");
+            this.requirePattern("value", /^-?[0-9]+[.,]?[0-9]*$/, attrs, "dataset.filter.number_required", "allowBlank");
         }
     });
 
