@@ -273,6 +273,7 @@ describe("chorus.dialogs.InstanceEditDialog", function() {
 
         context("when save completes", function() {
             beforeEach(function() {
+                spyOnEvent(this.instance, "change")
                 this.dialog.model.trigger("saved");
             });
 
@@ -283,6 +284,10 @@ describe("chorus.dialogs.InstanceEditDialog", function() {
             it("closes the dialog", function() {
                 expect(this.dialog.closeModal).toHaveBeenCalled();
             });
+
+            it("triggers change on the page model", function() {
+                expect("change").toHaveBeenTriggeredOn(this.instance);
+            })
         });
 
         context("when the upload gives a server error", function() {
