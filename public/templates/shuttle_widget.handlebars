@@ -19,7 +19,7 @@
     {{#each models}}
         <li data-id="{{id}}" class="{{#if isAdded}}added{{/if}} {{#if isNonRemovable}}non_removable{{/if}}">
             <div class="image">
-                <img class="profile" src="{{{imageUrl}}}"/>
+                <img class="profile" src="{{imageUrl}}"/>
                 <img class="checkmark" src="/images/checkmark.png"/>
             </div>
             <div class="name" title="{{displayName}}">{{displayName}}</div>
@@ -34,7 +34,7 @@
     {{#each models}}
     <li data-id="{{id}}" class="{{#if isAdded}}added{{/if}} {{#if isNonRemovable}}non_removable{{/if}}">
             <div class="image">
-                <img class="profile" src="{{{imageUrl}}}"/>
+                <img class="profile" src="{{imageUrl}}"/>
             </div>
             <div class="name" title="{{displayName}}">{{displayName}}</div>
             {{#if isNonRemovable}}

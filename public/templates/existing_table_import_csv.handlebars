@@ -1,5 +1,5 @@
 <div class="directions">
-    {{{directions}}}:
+    {{directions}}:
 </div>
 <div class="progress">{{t "dataset.import.table.progress" count=count total=total}}</div>
 <div class="options">
@@ -32,7 +32,7 @@
     <div class="data_table">
         <div class="thead list">
             <div class="column_names">
-                {{#each columns}}<div class="th"><div class="field_name" title="{{{name}}}">{{name}}</div></div>{{/each}}
+                {{#each columns}}<div class="th"><div class="field_name" title="{{name}}">{{name}}</div></div>{{/each}}
             </div>
             <div class="column_mapping">
                 {{#each columns}}<div class="th"><div class="map"><span>{{t "dataset.import.table.existing.map_to"}}</span>
@@ -44,7 +44,7 @@
         <div class="tbody">
             {{#each columns}}<div class="column">
                 {{#each values}}
-                <div class="td" title="{{{this}}}">{{renderTableData this}}</div>
+                <div class="td" title="{{this}}">{{renderTableData this}}</div>
                 {{/each}}
             </div>{{/each}}
         </div>

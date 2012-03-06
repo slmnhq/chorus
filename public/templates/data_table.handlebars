@@ -1,7 +1,7 @@
 <div class="thead">
     {{! These divs are right next to the each statements to prevent whitespace between the elements. }}
     {{#each columns}}<div class="th">
-        <div class="name" title="{{{name}}}">{{name}}</div>
+        <div class="name" title="{{name}}">{{name}}</div>
         {{#if ../shuttle}}
             <a class="move_to_first" href="#"/>
         {{/if}}
@@ -11,7 +11,7 @@
 <div class="tbody">
     {{#each columns}}<div class="column" data-type="{{type}}">
         {{#each values}}
-        <div class="td" title="{{{this}}}">{{renderTableData this}}</div>
+        <div class="td" title="{{this}}">{{renderTableData this}}</div>
         {{/each}}
     </div>{{/each}}
 </div>

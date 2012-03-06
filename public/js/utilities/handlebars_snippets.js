@@ -123,8 +123,7 @@
         },
 
         userProfileLink:function (user) {
-            templates.userLinkTemplate = templates.userLinkTemplate || Handlebars.compile('<a class="user" href="{{url}}">{{name}}</a>');
-            return templates.userLinkTemplate({ url:user.showUrl(), name:user.displayName() });
+            return chorus.helpers.linkTo(user.showUrl(), user.displayName(), {'class': 'user'});
         },
 
         pluralize: function(numberOrArray, key, options) {
