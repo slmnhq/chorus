@@ -34,7 +34,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 expect(this.page.$('.default_content_header .type .title')).toContainTranslation("search.show")
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.all")
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.workfile")
-                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.hadoop")
+                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.hdfs")
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.dataset")
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.workspace")
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.user")
@@ -192,6 +192,42 @@ describe("chorus.pages.SearchIndexPage", function() {
 
                         it("shows that user in the sidebar", function() {
                             expect(this.page.sidebar.$(".info .full_name")).toHaveText(this.users.at(1).displayName());
+                        });
+                    });
+                });
+            });
+
+            describe("the hdfs section", function() {
+                beforeEach(function() {
+                    this.files = this.page.search.hdfs();
+                    this.fileLis = this.page.$(".hdfs_list li");
+                });
+
+                it("shows a list of search results", function() {
+                    expect(this.fileLis.length).toBe(1);
+                });
+
+                describe("clicking on a file search result", function() {
+                    beforeEach(function() {
+                        this.clickedFile = this.files.at(0);
+                        this.fileLis.eq(0).trigger("click");
+                    });
+
+                    it("selects that file", function() {
+                        expect(this.fileLis.eq(0)).toHaveClass("selected");
+                    });
+
+                    it("fetches the file's activities'", function() {
+                        expect(this.clickedFile.activities()).toHaveBeenFetched();
+                    });
+
+                    describe("when all of the sidebar's fetches complete", function() {
+                        beforeEach(function() {
+                            this.server.completeFetchFor(this.clickedFile.activities(), []);
+                        });
+
+                        it("shows that file in the sidebar", function() {
+                            expect(this.page.sidebar.$(".info .full_name")).toHaveText("");
                         });
                     });
                 });

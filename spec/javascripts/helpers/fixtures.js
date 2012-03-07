@@ -3170,6 +3170,24 @@ beforeEach(function() {
                         }
                     ],
                     "numFound": "4"
+                },
+                hdfs: {
+                    docs: [{
+                        comments: [],
+                        entityType: "hdfs",
+                        highlightedAttributes: {
+                            name: ["Thumbs.<em>db</em>"]
+                        },
+                        id: "10001|/webui/images/thirdparty/jquerybubblepopup-theme/green/Thumbs.db",
+                        instance: {
+                            id:"10001", name:"hadoop"
+                        },
+                        lastUpdatedStamp: "2012-03-05 15:23:55",
+                        name: "Thumbs.db",
+                        path: "/webui/images/thirdparty/jquerybubblepopup-theme/green/Thumbs.db"
+
+                    }],
+                    numFound: "1"
                 }
             }, overrides)
         },

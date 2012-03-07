@@ -74,8 +74,12 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
             chorus.PageEvents.broadcast("tabularData:selected", tabularData);
 
         } else if (containingView.hasClass("user_list")) {
-            var user = this.userList.collection.get($target.data("id"));
+            var user = this.userList.collection.get(id);
             chorus.PageEvents.broadcast("user:selected", user);
+
+        } else if (containingView.hasClass("hdfs_list")) {
+            var hdfs = this.hdfsList.collection.get(id);
+            chorus.PageEvents.broadcast("hdfs_entry:selected", hdfs);
         }
     },
 

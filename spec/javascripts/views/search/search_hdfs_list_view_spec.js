@@ -21,7 +21,7 @@ describe("chorus.views.SearchHdfsList", function() {
 
     describe("the details bar", function() {
         it("should display the title", function() {
-            expect(this.view.$(".details .title")).toContainTranslation("search.type.hadoop");
+            expect(this.view.$(".details .title")).toContainTranslation("search.type.hdfs");
         });
 
         it("should display the result count", function() {

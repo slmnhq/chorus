@@ -1,14 +1,6 @@
 describe("chorus.views.SearchResultList", function() {
     beforeEach(function() {
-        this.model = fixtures.searchResult({hdfs: {
-            docs: [
-                fixtures.searchResultHdfsJson(),
-                fixtures.searchResultHdfsJson(),
-                fixtures.searchResultHdfsJson(),
-                fixtures.searchResultHdfsJson()
-            ],
-            numFound: "4"}
-        });
+        this.model = fixtures.searchResult();
         this.model.set({entityType: "all"});
         this.view = new chorus.views.SearchResultList({model: this.model});
         this.view.render();
@@ -41,6 +33,7 @@ describe("chorus.views.SearchResultList", function() {
             expect(this.view.$(".search_workfile_list")).not.toExist();
             expect(this.view.$(".search_user_list")).not.toExist();
             expect(this.view.$(".search_dataset_list")).not.toExist();
+            expect(this.view.$(".search_hdfs_list")).not.toExist();
         });
     });
 
@@ -70,6 +63,14 @@ describe("chorus.views.SearchResultList", function() {
                 var modelToClick = this.model.tabularData().at(0);
                 this.view.$(".dataset_list li").eq(0).click();
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("tabularData:selected", modelToClick);
+            });
+        });
+
+        context("when the li is for a hadoop file", function() {
+            it("broadcasts the 'hdfs_entry:selected' page event with the clicked hdfs file", function() {
+                var modelToClick = this.model.hdfs().at(0);
+                this.view.$(".hdfs_list li").eq(0).click();
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("hdfs_entry:selected", modelToClick);
             });
         });
     });

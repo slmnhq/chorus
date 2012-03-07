@@ -38,7 +38,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
                         options: [
                             {data: "all", text: t("search.type.all")},
                             {data: "workfile", text: t("search.type.workfile")},
-                            {data: "hadoop", text: t("search.type.hadoop")},
+                            {data: "hdfs", text: t("search.type.hdfs")},
                             {data: "dataset", text: t("search.type.dataset")},
                             {data: "workspace", text: t("search.type.workspace")},
                             {data: "user", text: t("search.type.user")}
@@ -53,6 +53,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         });
 
         this.sidebars = {
+            hdfs: new chorus.views.HdfsDirectoryEntrySidebar(),
             user: new chorus.views.UserListSidebar(),
             workfile: new chorus.views.WorkfileListSidebar({ hideAddNoteLink: true }),
             workspace: new chorus.views.WorkspaceListSidebar(),
@@ -60,6 +61,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         };
 
         // explicitly set up bindings after initializing sidebar collection
+        chorus.PageEvents.subscribe("hdfs_entry:selected", this.hdfsSelected, this);
         chorus.PageEvents.subscribe("workspace:selected", this.workspaceSelected, this);
         chorus.PageEvents.subscribe("tabularData:selected", this.tabularDataSelected, this);
         chorus.PageEvents.subscribe("workfile:selected", this.workfileSelected, this);
@@ -67,6 +69,10 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
 
         chorus.PageEvents.subscribe("choice:search_in", this.scopeSearchResults, this);
         chorus.PageEvents.subscribe("choice:filter", this.filterSearchResults, this);
+    },
+
+    hdfsSelected: function() {
+        this.renderSidebar(this.sidebars.hdfs);
     },
 
     workspaceSelected: function() {
@@ -87,7 +93,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
     },
 
     renderSidebar: function(sidebar) {
-        this.sidebar && $(this.sidebar.el).removeClass("workspace_list_sidebar dataset_list_sidebar workfile_list_sidebar user_list_sidebar");
+        this.sidebar && $(this.sidebar.el).removeClass("workspace_list_sidebar dataset_list_sidebar workfile_list_sidebar user_list_sidebar hdfs_list_sidebar");
         this.sidebar = sidebar;
         this.renderSubview('sidebar');
         this.trigger('resized');

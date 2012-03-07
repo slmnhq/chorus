@@ -71,7 +71,11 @@ chorus.views.HdfsDirectoryEntrySidebar = chorus.views.Sidebar.extend({
 
     makeEncodedEntityId: function() {
         if (this.resource) {
-            return encodeURIComponent(this.options.instanceId + "|" + (this.options.rootPath + "/" +this.resource.get("name")));
+            if (this.resource.get("id")) {
+                return encodeURIComponent(this.resource.get("id"));
+            } else {
+                return encodeURIComponent(this.options.instanceId + "|" + (this.options.rootPath + "/" +this.resource.get("name")));
+            }
         }
     },
 
