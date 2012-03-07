@@ -118,7 +118,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         $tableName.prop("disabled", !disableExisting);
         $tableName.closest("fieldset").toggleClass("disabled", !disableExisting);
 
-        var $tableSelect = this.$(".existing_table select");
+        var $tableSelect = this.$(".existing_table select.names");
         $tableSelect.prop("disabled", disableExisting);
         $tableSelect.closest("fieldset").toggleClass("disabled", disableExisting);
 
