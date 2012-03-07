@@ -51,6 +51,13 @@ chorus.models.SearchResult = chorus.models.Base.extend({
         return (name.length < length) ? name : name.slice(0, length) + "...";
     },
 
+    hdfs: function() {
+        if (!this._hdfs && this.get("hdfs")) {
+            this._hdfs = new chorus.collections.HdfsDirectoryEntrySet(this.get("hdfs").docs, {total: this.get("hdfs").numFound});
+        }
+        return this._hdfs;
+    },
+
     users: function() {
         if (!this._users && this.get("user")) {
             this._users = new chorus.collections.UserSet(this.get("user").docs, { total: this.get("user").numFound });

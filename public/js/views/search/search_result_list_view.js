@@ -2,6 +2,7 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     className: "search_result_list",
 
     subviews: {
+        ".hdfs_list": "hdfsList",
         ".user_list": "userList",
         ".workfile_list": "workfileList",
         ".workspace_list": "workspaceList",
@@ -13,6 +14,13 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     },
 
     setup: function() {
+        if (this.model.hdfs()) {
+            this.hdfsList = new chorus.views.SearchHdfsList({
+                collection: this.model.hdfs(),
+                total: this.model.get("hdfs").numFound,
+                query: this.model
+            });
+        }
         if (this.model.users()) {
             this.userList = new chorus.views.SearchUserList({
                 collection: this.model.users(),
@@ -72,6 +80,7 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
+            hasHdfs: this.shouldShowSection("hdfs"),
             hasWorkspace : this.shouldShowSection("workspace"),
             hasWorkfile : this.shouldShowSection("workfile"),
             hasDataset : this.shouldShowSection("dataset"),

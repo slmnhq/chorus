@@ -149,8 +149,6 @@ describe("chorus.models.SearchResult", function() {
         });
     });
 
-    // TODO: #workspaces
-
     describe("#tabularData", function() {
         context("when there are dataset results", function() {
             beforeEach(function() {
@@ -232,6 +230,43 @@ describe("chorus.models.SearchResult", function() {
             it("returns undefined", function() {
                 this.model.unset("workspace");
                 expect(this.model.workspaces()).toBeUndefined();
+            });
+        });
+    });
+
+    describe("#hdfs", function() {
+        context("when there are search results", function() {
+            beforeEach(function() {
+                this.model = fixtures.searchResult({hdfs: {
+                    docs: [
+                        fixtures.searchResultHdfsJson()
+                    ],
+                    numFound: "1"}
+                });
+                this.entries = this.model.hdfs();
+            });
+
+            it("returns an HdfsDirectoryEntrySet", function() {
+                expect(this.entries).toBeA(chorus.collections.HdfsDirectoryEntrySet)
+            });
+
+            it("has the correct number of entries", function() {
+                expect(this.entries.models.length).toBe(1);
+            });
+
+            it("has numFound in 'total'", function() {
+                expect(this.entries.attributes.total).toBe("1");
+            });
+
+            it("memoizes", function() {
+                expect(this.entries).toBe(this.model.hdfs());
+            });
+        });
+
+        context("when there are no search results", function() {
+            it("returns undefined", function() {
+                this.model.unset("hdfs");
+                expect(this.model.hdfs()).toBeUndefined();
             });
         });
     });

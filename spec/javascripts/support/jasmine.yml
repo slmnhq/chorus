@@ -41,6 +41,7 @@ src_files:
   - js/views/workfiles/workfile_content_view.js
   - js/views/workfiles/text_workfile_content_view.js
   - js/views/visualizations/visualization_view.js
+  - js/views/search/search_result_list_base.js
   - js/views/**/*.js
   - js/dialogs/workspaces/pick_workspace_dialog.js
   - js/dialogs/memo_new_dialog.js

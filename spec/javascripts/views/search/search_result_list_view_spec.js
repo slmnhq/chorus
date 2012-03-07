@@ -1,6 +1,14 @@
 describe("chorus.views.SearchResultList", function() {
     beforeEach(function() {
-        this.model = fixtures.searchResult();
+        this.model = fixtures.searchResult({hdfs: {
+            docs: [
+                fixtures.searchResultHdfsJson(),
+                fixtures.searchResultHdfsJson(),
+                fixtures.searchResultHdfsJson(),
+                fixtures.searchResultHdfsJson()
+            ],
+            numFound: "4"}
+        });
         this.model.set({entityType: "all"});
         this.view = new chorus.views.SearchResultList({model: this.model});
         this.view.render();
@@ -12,6 +20,10 @@ describe("chorus.views.SearchResultList", function() {
 
     it("should include the search results for tabular data", function() {
         expect(this.view.$(".search_tabular_data_list")).toExist();
+    });
+
+    it("should include the search results for hdfs files", function() {
+        expect(this.view.$(".search_hdfs_list")).toExist();
     });
 
     context("when filtering by workspace", function() {
