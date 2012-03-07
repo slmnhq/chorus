@@ -105,7 +105,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
         }
 
         if (this.options.workspace) {
-            ctx.canImport = this.options.workspace.canUpdate() && !ctx.noCredentials && ctx.isImportable;
+            ctx.canImport = this.options.workspace.canUpdate() && !ctx.noCredentials && ctx.isImportable && this.options.workspace.sandbox()
             ctx.workspaceId = this.options.workspace.id;
         }
 

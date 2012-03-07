@@ -317,13 +317,45 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     this.view.render();
                                 });
 
-                                it("has a 'create import schedule' link", function() {
-                                    var createScheduleLink = this.view.$("a.create_schedule");
-                                    expect(createScheduleLink.text()).toMatchTranslation("actions.create_schedule");
+                                context("and the workspace has a sandbox", function() {
+                                    it("shows the 'import now' link", function() {
+                                        expect(this.view.$("a.import_now")).toExist();
+                                    });
+
+                                    it("has a 'create import schedule' link", function() {
+                                        var createScheduleLink = this.view.$("a.create_schedule");
+                                        expect(createScheduleLink.text()).toMatchTranslation("actions.create_schedule");
+                                    });
+
+                                    it("should have the dataset attached as data-dataset", function() {
+                                        expect(this.view.$("a.create_schedule[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
+                                    });
                                 });
 
-                                it("should have the dataset attached as data-dataset", function() {
-                                    expect(this.view.$("a.create_schedule[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
+                                context("and the workspace does not have a sandbox", function() {
+                                    beforeEach(function() {
+                                        delete this.view.options.workspace._sandbox;
+                                        this.view.options.workspace.set({
+                                            "sandboxInfo": {
+                                                databaseId: null,
+                                                databaseName: null,
+                                                instanceId: null,
+                                                instanceName: null,
+                                                sandboxId: null,
+                                                schemaId: null,
+                                                schemaName: null
+                                            }
+                                        })
+                                        this.view.render();
+                                    });
+
+                                    it("does not show the 'import now' link", function() {
+                                        expect(this.view.$("a.import_now")).not.toExist();
+                                    });
+
+                                    it("does not have a 'create import schedule' link", function() {
+                                        expect(this.view.$("a.create_schedule")).not.toExist();
+                                    });
                                 });
                             });
 
