@@ -250,7 +250,9 @@
             function linkToContextObject(workspaceJson) {
                 var workspace = new chorus.models.Workspace(workspaceJson)
                 contextObject.setWorkspace(workspace);
-                return chorus.helpers.linkTo(contextObject.showUrl(), workspace.get('name'))
+                return chorus.helpers.linkTo(contextObject.showUrl(), workspace.get('name'), {
+                    title: workspace.get('name')
+                })
             }
 
             var workspaceLink = linkToContextObject(workspaceList[0]);

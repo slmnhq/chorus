@@ -678,6 +678,7 @@ describe("handlebars", function() {
                     var workspace = new chorus.models.Workspace(this.workspaceList[0]);
                     expect($(this.result).find("a").attr("href")).toMatchUrl('#/' + workspace.get('id') + '/contextObject');
                     expect($(this.result).find("a")).toContainText(workspace.get('name'));
+                    expect($(this.result).find("a")).toHaveAttr("title", workspace.get('name'));
                 });
             }
         });
