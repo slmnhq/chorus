@@ -9,6 +9,7 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         this.workspaces = new chorus.collections.WorkspaceSet([], {userId: chorus.session.user().id});
         this.workspaces.fetchAll();
         this.requiredResources.push(this.workspaces);
+        this.toTable = chorus.models.CSVImport.normalizeForDatabase(this.csv.get("toTable")).replace(/\W/g, "_");
     },
 
     postRender : function() {
@@ -27,6 +28,7 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
     additionalContext: function() {
         var parentCtx = this._super("additionalContext", arguments);
         parentCtx.workspaces = _.pluck(this.workspaces.models, "attributes");
+        parentCtx.directions = "<input type='text' class='hdfs' name='table_name' value='" + this.toTable + "'/>"
         return parentCtx;
     }
 });

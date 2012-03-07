@@ -1,10 +1,12 @@
 <div class="directions">
     {{#if workspaces}}
+        <span class="select_label">{{t "hdfs.create_external.select_workspace"}}</span>
         <select>
             {{#each workspaces}}
             <option value="{{id}}">{{name}}</option>
             {{/each}}
         </select>
+        <span class="name_label">{{t "hdfs.create_external.table_name"}}</span>
     {{/if}}
     {{{directions}}}
 </div>
