@@ -8,12 +8,8 @@ describe("chorus.pages.HdfsShowFileView", function() {
         beforeEach(function() {
             this.view.render();
         });
-        it("shows the text in a textfield", function() {
-            expect(this.view.$("textarea.hdfs_file_content")).toContainText("My secret content")
-        })
-
-        it("is read-only", function() {
-            expect(this.view.$("textarea.hdfs_file_content").attr("disabled")).toBe("disabled")
+        it("shows the text", function() {
+            expect(this.view.$(".hdfs_file_content")).toContainText("My secret content")
         })
     })
 })

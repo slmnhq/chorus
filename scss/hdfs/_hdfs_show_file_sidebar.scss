@@ -1,0 +1,7 @@
+.hdfs_show_file_sidebar {
+    .file_name {
+        @include heading-sidebar;
+        @include ellipsis;
+        margin-bottom: 10px;
+    }
+}

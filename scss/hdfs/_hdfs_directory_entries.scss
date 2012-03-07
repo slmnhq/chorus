@@ -65,26 +65,3 @@ ul.hdfs_link_menu {
         }
     }
 }
-
-[data-page="HdfsShowFile"]{
-    .content_details {
-        background: $content-details-action-background-color;
-        height: 31px;
-        line-height: 30px;
-        vertical-align: middle;
-        color: $content-details-action-link-color;
-        text-align: right;
-    }
-
-    textarea.hdfs_file_content {
-        height: 500px;
-    }
-}
-
-.hdfs_show_file_sidebar {
-    .file_name {
-        @include ellipsis;
-        margin-bottom: 10px;
-    }
-}
-
