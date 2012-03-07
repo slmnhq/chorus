@@ -17,24 +17,22 @@
             }
         },
 
-        showUrlTemplate: function() {
-            if (this.isLatestVersion()) {
+        showUrlTemplate: function(options) {
+            options || (options = {});
+            if (this.isLatestVersion() && !options.version) {
                 return "workspaces/{{workspaceId}}/workfiles/{{id}}"
             } else {
-                return "workspaces/{{workspaceId}}/workfiles/{{id}}/versions/{{versionInfo.versionNum}}"
+                var version = options.version || this.get('versionInfo').versionNum;
+                return "workspaces/{{workspaceId}}/workfiles/{{id}}/versions/" + version;
             }
         },
 
         showUrl: function() {
-           if(this.showable()) {
+           if (this.hasOwnPage()) {
                return this._super("showUrl", arguments);
            } else {
                return this.downloadUrl();
            }
-        },
-
-        showUrlForVersion: function(version) {
-            return "#/workspaces/" + this.get("workspaceId") + "/workfiles/" + this.get("id") + "/versions/" + version;
         },
 
         initialize: function() {
@@ -200,32 +198,13 @@
             return this._super("save", [attrs, _.extend(options, overrides)])
         },
 
-        linkUrl: function(options) {
-            if (this.isText() || this.isImage()) {
-                if (options && options.version) {
-                    return this.showUrlForVersion(options.version);
-                } else {
-                    return this.showUrl();
-                }
-            } else {
-                return this.downloadUrl();
-            }
-        },
-
-        showable: function() {
-            return this.isText() || this.isImage();
-        },
-
         iconUrl: function(options) {
             var fileExtension = this.get("fileType") || this.get('type');
             return chorus.urlHelpers.fileIconUrl(fileExtension, options && options.size);
         },
 
         hasOwnPage: function() {
-            if (this.isImage() || this.isText()) {
-                return true;
-            }
-            return false;
+            return (this.isText() || this.isImage())
         }
     });
 })();

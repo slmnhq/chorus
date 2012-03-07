@@ -201,7 +201,7 @@ describe("chorus.models.Workfile", function() {
         });
     });
 
-    describe("#urls", function() {
+    describe("urls", function() {
         beforeEach(function() {
             this.model = fixtures.workfile({
                 id: 5,
@@ -220,66 +220,49 @@ describe("chorus.models.Workfile", function() {
             expect(this.model.url()).toBe("/edc/workspace/10/workfile/5");
         });
 
-        describe("#showUrlTemplate", function() {
+        describe("#showUrl", function() {
             context("when the workfile is the most recent version", function() {
-                beforeEach(function() {
+                it("does not include a version", function() {
                     this.model.get('versionInfo').versionNum = 1;
                     this.model.set({ latestVersionNum: 1 })
-                })
-
-                it("does not include a version", function() {
-                    expect(this.model.showUrlTemplate()).toBe("workspaces/{{workspaceId}}/workfiles/{{id}}")
-                })
-            })
+                    expect(this.model.showUrl()).toBe("#/workspaces/10/workfiles/5")
+                });
+            });
 
             context("when the workfile is not the most recent version", function() {
-                beforeEach(function() {
+                it("includes its version number", function() {
                     this.model.get("versionInfo").versionNum = 6
                     this.model.set({latestVersionNum: 9 })
-                })
+                    expect(this.model.showUrl()).toBe("#/workspaces/10/workfiles/5/versions/6")
+                });
+            });
 
-                it("includes a version", function() {
-                    expect(this.model.showUrlTemplate()).toBe("workspaces/{{workspaceId}}/workfiles/{{id}}/versions/{{versionInfo.versionNum}}")
-                })
-            })
-        })
+            context("when a 'version' option is passed", function() {
+                it("uses that version", function() {
+                    expect(this.model.showUrl({ version: 72 })).toBe("#/workspaces/10/workfiles/5/versions/72")
+                });
+            });
 
-        describe("#showUrlForVersion", function() {
-            beforeEach(function() {
-                this.model.get('versionInfo').versionNum = 1;
-                this.model.set({ latestVersionNum: 5 })
-            })
-
-            it("shows the initial workfile version's url", function() {
-                var otherModel = new chorus.models.Workfile({id: this.model.get("id"), workspaceId: this.model.get("workspaceId")});
-                expect(otherModel.showUrlForVersion(1)).toBe(this.model.showUrl());
-            })
-        })
-
-        describe("#showUrl", function() {
-            context("when file is not showable", function() {
-                beforeEach(function() {
-                    spyOn(this.model, 'showable').andReturn(false);
-                })
-
+            context("when file does not have its own page", function() {
                 it("uses downloadUrl", function() {
+                    spyOn(this.model, 'hasOwnPage').andReturn(false);
                     expect(this.model.showUrl()).toBe(this.model.downloadUrl());
-                })
-            })
-        })
-
-        it("has the right download URL", function() {
-            expect(this.model.downloadUrl()).toBe("/edc/workspace/10/workfile/5/file/12345?download=true&iebuster=12345");
+                });
+            });
         });
 
         describe("#downloadUrl", function() {
+            it("has the right download URL", function() {
+                expect(this.model.downloadUrl()).toBe("/edc/workspace/10/workfile/5/file/12345?download=true&iebuster=12345");
+            });
+
             it("has the right download URL, even if iebuster is appended as a parameter", function() {
                 expect(this.model.downloadUrl()).toContain("/edc/workspace/10/workfile/5/file/12345")
                 expect(this.model.downloadUrl()).toContain("?")
                 expect(this.model.downloadUrl()).toContain("download=true");
                 expect(this.model.downloadUrl()).toContain("iebuster=12345");
             });
-        })
+        });
 
         context("when the workfile is a draft", function() {
             beforeEach(function() {
@@ -291,26 +274,6 @@ describe("chorus.models.Workfile", function() {
             });
         })
     });
-
-    describe("showable", function() {
-        it("is true when the file is text", function() {
-            spyOn(this.model, 'isText').andReturn(true);
-            spyOn(this.model, 'isImage').andReturn(undefined);
-            expect(this.model.showable()).toBeTruthy();
-        })
-
-        it("is true when the file is an image", function() {
-            spyOn(this.model, 'isText').andReturn(undefined);
-            spyOn(this.model, 'isImage').andReturn(true);
-            expect(this.model.showable()).toBeTruthy();
-        })
-
-        it("is false otherwise", function() {
-            spyOn(this.model, 'isText').andReturn(false);
-            spyOn(this.model, 'isImage').andReturn(false);
-            expect(this.model.showable()).toBeFalsy();
-        })
-    })
 
     describe("isImage", function() {
         context("when the workfile is an image", function() {
@@ -570,59 +533,6 @@ describe("chorus.models.Workfile", function() {
         context("without an argument", function() {
             it("returns the content", function() {
                 expect(this.model.content()).toBe(this.model.get('versionInfo').content);
-            })
-        })
-    })
-
-    describe("#linkUrl", function() {
-        beforeEach(function() {
-            this.model.set({
-                versionInfo: {
-                    versionNum: 1,
-                    versionFileId: "foo"
-                },
-                latestVersionNum: 2
-            });
-        })
-
-        context("when the workfile is a text file", function() {
-            beforeEach(function() {
-                spyOn(this.model, "isText").andReturn(true);
-                spyOn(this.model, "isImage").andReturn(false);
-            });
-
-            it("returns the showUrl", function() {
-                expect(this.model.linkUrl()).toBe(this.model.showUrl());
-            })
-
-            it("accepts a version option", function() {
-                expect(this.model.linkUrl({ version: 4 })).toBe(this.model.showUrlForVersion(4))
-            })
-        })
-
-        context("when the workfile is an image file", function() {
-            beforeEach(function() {
-                spyOn(this.model, "isText").andReturn(false);
-                spyOn(this.model, "isImage").andReturn(true);
-            });
-
-            it("returns the showUrl", function() {
-                expect(this.model.linkUrl()).toBe(this.model.showUrl());
-            })
-
-            it("accepts a version option", function() {
-                expect(this.model.linkUrl({ version: 4 })).toBe(this.model.showUrlForVersion(4))
-            })
-        })
-
-        context("when the workfile neither a text file nor an image file", function() {
-            beforeEach(function() {
-                spyOn(this.model, "isText").andReturn(false);
-                spyOn(this.model, "isImage").andReturn(false);
-            });
-
-            it("returns the downloadUrl", function() {
-                expect(this.model.linkUrl()).toBe(this.model.downloadUrl());
             })
         })
     })

@@ -1808,7 +1808,9 @@ beforeEach(function() {
             var id = this.nextId().toString();
             return {
                 id: id,
-                name: "file" + id + ".sql"
+                name: "file" + id + ".sql",
+                mimeType: 'text/something',
+                type: 'SQL'
             }
         },
 

@@ -441,8 +441,9 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectUrl", function() {
-            var url = new chorus.models.Workfile({id: this.workfile.get("id"), workspaceId: this.workspace.get("id")}).showUrl();
-            expect(this.presenter.objectUrl).toBe(url);
+            var workfile = new chorus.models.Workfile({id: this.workfile.get("id"), workspaceId: this.workspace.get("id")});
+            spyOn(workfile, 'isText').andReturn(true)
+            expect(this.presenter.objectUrl).toBe(workfile.showUrl());
         });
 
         it('should have the right workspaceName', function() {
@@ -755,17 +756,11 @@ describe("chorus.presenters.Activity", function() {
             this.model = fixtures.activities.WORKFILE_CREATED();
             this.workspace = this.model.workspace();
             this.workfile = this.model.workfile();
-            spyOn(this.workfile, "linkUrl").andReturn("frobble");
             this.presenter = new chorus.presenters.Activity(this.model)
         });
 
         it("should have the right objectName", function() {
             expect(this.presenter.objectName).toBe(this.workfile.get("name"));
-        });
-
-        it("delegates to Workfile#linkUrl for the objectUrl", function() {
-            expect(this.workfile.linkUrl).toHaveBeenCalledWith({ version: 1 });
-            expect(this.presenter.objectUrl).toBe("frobble");
         });
 
         it("should have the right workspaceName", function() {
@@ -782,10 +777,11 @@ describe("chorus.presenters.Activity", function() {
 
     context(".WORKFILE_UPGRADED_VERSION", function() {
         beforeEach(function() {
-            this.model = fixtures.activities.WORKFILE_UPGRADED_VERSION();
+            this.model = fixtures.activities.WORKFILE_UPGRADED_VERSION({
+                version: '3'
+            });
             this.workspace = this.model.workspace();
             this.workfile = this.model.workfile();
-            spyOn(this.workfile, "linkUrl").andReturn("frobble");
             this.presenter = new chorus.presenters.Activity(this.model)
         });
 
@@ -805,17 +801,12 @@ describe("chorus.presenters.Activity", function() {
             expect(this.presenter.objectName).toBe(this.workfile.get("name"));
         });
 
-        it("delegates to Workfile#linkUrl for the objectUrl", function() {
-            expect(this.workfile.linkUrl).toHaveBeenCalled();
-            expect(this.presenter.objectUrl).toBe("frobble");
-        });
-
         it("has the right versionName", function() {
             expect(this.presenter.versionName).toMatchTranslation("workfile.version_title", { versionNum: this.model.get('version') });
         })
 
         it("has the right versionUrl", function() {
-            expect(this.presenter.versionUrl).toBe(this.workfile.showUrl());
+            expect(this.presenter.versionUrl).toMatch(/versions\/3/);
         })
 
         it("should have the right workspaceName", function() {

@@ -41,7 +41,7 @@ chorus.Mixins.Urls = {
             throw "No showUrlTemplate defined";
         }
 
-        var template = _.isFunction(this.showUrlTemplate) ? this.showUrlTemplate() : this.showUrlTemplate;
+        var template = _.isFunction(this.showUrlTemplate) ? this.showUrlTemplate.apply(this, arguments) : this.showUrlTemplate;
         var attributes = _.isFunction(this.urlTemplateAttributes) ? this.urlTemplateAttributes() : this.attributes;
 
         var prefix = "#/"
