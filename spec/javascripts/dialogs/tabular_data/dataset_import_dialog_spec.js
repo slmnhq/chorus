@@ -456,24 +456,15 @@ describe("chorus.dialogs.DatasetImport", function() {
                     context("when the csv contains unparseable data", function() {
                         beforeEach(function() {
                             this.data = {result: {
-                                resource: [fixtures.csvImport({lines: ["\"foo,\"bar\""]}).attributes],
+                                resource: [fixtures.csvImport({lines: ['"foo,"bar"']}).attributes],
                                 status: "ok"
                             }};
                             this.fileUploadOptions.done(null, this.data)
                         });
 
-                        it("stops the spinner", function() {
-                            expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
-                        });
-
-                        it("does not launch the import new table dialog", function() {
-                            expect(chorus.dialogs.NewTableImportCSV.prototype.setup).not.toHaveBeenCalled()
-                            expect(this.modalSpy).not.toHaveModal(chorus.dialogs.NewTableImportCSV);
-                        });
-
-                        it("shows errors on the dialog", function() {
-                            expect(this.dialog.$(".errors li").length).toBe(1);
-                            expect(this.dialog.$(".errors li:eq(0)")).toContainTranslation("dataset.import.invalid_csv")
+                        it("still launches the import new table dialog", function() {
+                            expect(chorus.dialogs.NewTableImportCSV.prototype.setup).toHaveBeenCalled()
+                            expect(this.modalSpy).toHaveModal(chorus.dialogs.NewTableImportCSV);
                         });
                     });
                 });

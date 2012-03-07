@@ -122,6 +122,34 @@ describe("chorus.models.CSVImport", function() {
         itParsesCorrectly()
     })
 
+    context("with unparseable values (for current delimiter)", function() {
+        beforeEach(function() {
+            this.model = fixtures.csvImport({
+                lines: [
+                    '"col1 ""colly"" column",col2,col3',
+                    '"row1""val1",row1val2,',
+                    'row2val1,,row2val3'
+                ]
+            });
+            this.model.set({'delimiter': ' '});
+        });
+
+        it("returns an empty array and sets serverErrors", function() {
+            var columns = this.model.columnOrientedData();
+            expect(columns).toEqual([]);
+            expect(this.model.serverErrors.length).toBe(1);
+        });
+
+        it("clears server errors when it parses correctly", function() {
+            this.model.columnOrientedData();
+            expect(this.model.serverErrors.length).toBe(1);
+            this.model.set({'delimiter': ','});
+            var columns = this.model.columnOrientedData();
+            expect(columns.length).toBe(3);
+            expect(this.model.serverErrors).toBeUndefined();
+        })
+    });
+
     context("datatypes", function() {
         beforeEach(function() {
             this.model = fixtures.csvImport({

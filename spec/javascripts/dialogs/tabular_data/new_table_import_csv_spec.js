@@ -31,6 +31,14 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
         expect(this.dialog.$('input[name=delimiter]:checked').val()).toBe(',');
     });
 
+    it("shows an error when the CSV doesn't parse correctly", function() {
+        this.csv.get("lines").push('"Has Spaces",2,3,4,5');
+        this.dialog.$("input.delimiter[value=' ']").click();
+
+        expect(this.csv.serverErrors).toBeDefined();
+        expect(this.dialog.$(".errors")).not.toBeEmpty();
+    });
+
     describe("click the 'tab' separator", hasRightSeparator('\t'));
     describe("click the 'comma' separator", hasRightSeparator(','));
     describe("click the 'semicolon' separator", hasRightSeparator(';'));

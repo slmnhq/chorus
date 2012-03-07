@@ -15,8 +15,12 @@ var CSV = function() {
             bufferPosition: 0
         }
 }
-_.extend(CSV.prototype, {
 
+CSV.ParseError = function(message) {
+    this.message = message;
+};
+
+_.extend(CSV.prototype, {
     defaultReadOptions: {
         delimiter: ',',
         quote: '"',
@@ -50,11 +54,7 @@ _.extend(CSV.prototype, {
                 self.end();
             })
         } else {
-            try {
-                this.parse(data);
-            } catch (e) {
-                throw(e);
-            }
+            this.parse(data);
         }
         this.end();
         return this;
@@ -92,7 +92,7 @@ _.extend(CSV.prototype, {
                             // Make sure a closing quote is followed by a delimiter
                             var nextChar = chars.charAt(i + 1);
                             if (nextChar && nextChar != '\r' && nextChar != '\n' && nextChar !== this.readOptions.delimiter) {
-                                throw new Error('Invalid closing quote; found "' + nextChar + '" instead of delimiter "' + this.readOptions.delimiter + '"');
+                                throw new CSV.ParseError('Invalid closing quote; found "' + nextChar + '" instead of delimiter "' + this.readOptions.delimiter + '"');
                             }
                             this.state.quoted = false;
                         } else if (this.state.field === '') {
@@ -154,7 +154,7 @@ _.extend(CSV.prototype, {
 
     end: function(){
         if (this.state.quoted) {
-            throw("Quoted field not terminated")
+            throw new CSV.ParseError("Quoted field not terminated")
         } else {
             // dump open record
             if (this.state.field) {
@@ -187,9 +187,7 @@ _.extend(CSV.prototype, {
         }
         var line;
         if(this.transformer){
-            transforming = true;
             line = this.transformer(this.state.line, this.state.count);
-            transforming = false;
         }else{
             line = this.state.line;
         }

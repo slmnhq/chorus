@@ -47,7 +47,13 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         this.setupScrolling(this.$(".tbody"));
 
         var $dataTypes = this.$(".data_types");
-        this.linkMenus = _.map(this.csv.columnOrientedData(), function(item) {
+
+        var columns = this.csv.columnOrientedData();
+        if (this.csv.serverErrors) {
+            this.showErrors();
+        }
+
+        this.linkMenus = _.map(columns, function(item) {
                     return new chorus.views.LinkMenu({
                         options: [
                             {data: "integer", text: "integer"},

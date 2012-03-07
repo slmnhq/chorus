@@ -47,9 +47,12 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     postRender: function() {
-
         this.handleScrolling();
         this.cleanUpQtip();
+
+        if (this.csv.serverErrors) {
+            this.showErrors();
+        }
 
         if (this.dataset.loaded) {
             this.validateColumns();
@@ -247,7 +250,15 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
             ];
             this.resource.trigger("validationFailed");
         } else {
-            this.resource.serverErrors = undefined;
+            var errors = _.reject(this.resource.serverErrors, function(item) {
+                return item.message === t("dataset.import.table.too_many_source_columns");
+            });
+
+            if (errors.length == 0) {
+                delete this.resource.serverErrors;
+            } else {
+                this.resource.serverErrors = errors;
+            }
         }
     }
 })
