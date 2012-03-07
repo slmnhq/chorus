@@ -19,12 +19,17 @@ chorus.views.SearchHdfsList = chorus.views.SearchResultListBase.extend({
             return chorus.helpers.linkTo(pathSoFar += item + "/", item);
         });
 
+        var comments = model.get("comments");
+
         return {
             showUrl: "#/instances/" + instance.id + "/browseFile" + model.get("path"),
             humanSize: I18n.toHumanSize(model.get("size")),
             iconUrl: chorus.urlHelpers.fileIconUrl(_.last(model.get("name").split("."))),
             instanceLink: chorus.helpers.linkTo("#/instances/" + instance.id + "/browse/", instance.name),
-            completePath: $paths.join(" / ")
+            completePath: $paths.join(" / "),
+            comments: comments.slice(0, 3),
+            moreComments: comments.slice(3),
+            hasMoreComments: Math.max(0, comments.length - 3)
         }
     }
 });
