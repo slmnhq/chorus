@@ -43,7 +43,7 @@
                 title: this.schema.canonicalName()
             });
 
-            this.sidebar = new chorus.views.TabularDataListSidebar({browsingSchema: true});
+            this.sidebar = new chorus.views.TabularDataListSidebar({listMode: true});
 
             chorus.PageEvents.subscribe("tabularData:selected", function(dataset) {
                 this.model = dataset;

@@ -25,10 +25,7 @@
 
     <div class="actions">
         <ul>
-            {{#if browsingSchema}}
-                <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}">{{t "actions.add_note"}}</a></li>
-                <li><a class="associate" href="#">{{t "actions.associate_with_workspace"}}</a></li>
-            {{else}}
+            {{#if workspace}}
                 <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workspace-attachments="true">{{t "actions.add_note"}}</a></li>
                 {{#if canImport}}
                     <li><a class="dialog import_now" data-dialog="ImportScheduler" href="#">{{t "actions.import_now"}}</a></li>
@@ -38,10 +35,15 @@
                         <li><a class="dialog create_schedule" data-dialog="ImportScheduler" href="#">{{t "actions.create_schedule"}}</a></li>
                     {{/if}}
                 {{/if}}
+            {{else}}
+                <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}">{{t "actions.add_note"}}</a></li>
+                <li><a class="associate" href="#">{{t "actions.associate_with_workspace"}}</a></li>
             {{/if}}
 
             {{#unless noCredentials}}
-                <li><a class="tabular_data_preview" href="#">{{t "actions.tabular_data_preview"}}</a></li>
+                {{#if listMode}}
+                    <li><a class="tabular_data_preview" href="#">{{t "actions.tabular_data_preview"}}</a></li>
+                {{/if}}
             {{/unless}}
         </ul>
     </div>

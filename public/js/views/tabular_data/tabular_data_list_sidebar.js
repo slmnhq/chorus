@@ -73,10 +73,8 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
     },
 
     additionalContext: function() {
-        var ctx = {
-            typeString: Handlebars.helpers.humanizedTabularDataType(this.resource && this.resource.attributes),
-            browsingSchema: this.options.browsingSchema
-        }
+        var ctx = _.extend({ typeString: Handlebars.helpers.humanizedTabularDataType(this.resource && this.resource.attributes) },
+                            this.options);
 
         if (this.resource) {
             ctx.entityType = this.resource.entityType;
@@ -86,10 +84,6 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
             if (this.resource.get("hasCredentials") === false) {
                 ctx.noCredentials = true;
                 ctx.noCredentialsWarning = t("dataset.credentials.missing.body", {linkText: chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'})})
-            }
-
-            if (this.resource.get("workspace")) {
-                ctx.workspaceId = this.resource.get("workspace").id;
             }
 
             ctx.displayEntityType = this.resource.metaType();
@@ -112,6 +106,7 @@ chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
 
         if (this.options.workspace) {
             ctx.canImport = this.options.workspace.canUpdate() && !ctx.noCredentials && ctx.isImportable;
+            ctx.workspaceId = this.options.workspace.id;
         }
 
         return ctx;

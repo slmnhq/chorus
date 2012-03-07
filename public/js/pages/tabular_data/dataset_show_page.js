@@ -20,7 +20,6 @@
         constructorName: "DatasetShowPage",
         helpId: "dataset",
         hideDeriveChorusView: false,
-        sidebarOptions: {browsingSchema: false},
 
         makeBreadcrumbs: function() {
             this.breadcrumbs = new breadcrumbsView({workspace: this.workspace, tabularData: this.tabularData});
@@ -31,7 +30,7 @@
             this.workspace.fetch();
             this.model = this.tabularData = new chorus.models.Dataset({ workspace: { id: workspaceId }, id: datasetId })
 
-            this.sidebarOptions = _.clone(this.sidebarOptions);
+            this.sidebarOptions = {workspace: this.workspace};
             this.sidebarOptions.requiredResources = [ this.workspace ];
         },
 

@@ -26,7 +26,7 @@
         helpId: "databaseObject",
         hideDeriveChorusView: true,
         additionalClass: 'tabular_data_show',
-        sidebarOptions: {browsingSchema: true},
+        sidebarOptions: {},
 
         title: function() {
             return this.tabularData.get('objectName')

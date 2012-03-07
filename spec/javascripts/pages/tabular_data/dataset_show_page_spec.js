@@ -114,8 +114,8 @@ describe("chorus.pages.DatasetShowPage", function() {
         })
 
         describe("sidebar", function() {
-            it("sets sidebar browsingSchema to false", function() {
-                expect(this.page.sidebar.options.browsingSchema).toBeFalsy();
+            it("sets workspace", function() {
+                expect(this.page.sidebar.options.workspace).toBeTruthy();
             })
         })
 

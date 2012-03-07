@@ -27,15 +27,206 @@ describe("chorus.views.TabularDataListSidebar", function() {
             });
         })
 
-        describe("tabularData:selected event handling", function() {
-            context("when a dataset is selected", function() {
-                beforeEach(function() {
-                    this.server.reset();
-                    this.dataset = fixtures.datasetSourceTable();
-                    chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
+        context("when a dataset is selected", function() {
+            beforeEach(function() {
+                this.server.reset();
+                this.dataset = fixtures.datasetSourceTable();
+                chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
+            });
+
+            it("displays the selected dataset name", function() {
+                expect(this.view.$(".name").text().trim()).toBe(this.dataset.get("objectName"))
+            });
+
+            it("displays the selected dataset type", function() {
+                expect(this.view.$(".type").text().trim()).toBe(Handlebars.helpers.humanizedTabularDataType(this.dataset.attributes))
+            });
+
+            describe("statistics", function() {
+
+                it("fetches the statistics for the dataset", function() {
+                    expect(this.dataset.statistics()).toHaveBeenFetched()
                 });
 
-                it("doesn't display any import links", function() {
+                context("when the statistics arrive", function() {
+                    beforeEach(function() {
+                        this.stats = this.dataset.statistics();
+                        this.stats.set({
+                            rows: 0,
+                            columns: 0,
+                            lastAnalyzedTime: "2011-12-12 12:34:56",
+                            onDiskSize: "1 GB",
+                            desc: "foo",
+                            partitions: 2
+                        });
+                        this.server.completeFetchFor(this.stats);
+                    });
+
+                    it("displays rows when the value is 0", function() {
+                        expect(this.view.$(".statistics .rows .value").text().trim()).toBe("0")
+                    });
+
+                    it("displays columns when the value is 0", function() {
+                        expect(this.view.$(".statistics .columns .value").text().trim()).toBe("0")
+                    });
+
+                    it("displays the on disk size", function() {
+                        expect(this.view.$(".size .value").text().trim()).toBe("1 GB");
+                    });
+
+                    it("displays the description", function() {
+                        expect(this.view.$(".description p").text().trim()).toBe("foo");
+                    });
+
+                    it("displays the last analyzed time", function() {
+                        expect(this.view.$(".last_analyzed_time .value").text()).toBe(chorus.helpers.relativeTimestamp(this.stats.get("lastAnalyzedTime")));
+                    });
+
+                    it("displays the partitions", function() {
+                        expect(this.view.$(".partitions .value").text()).toBe("2")
+                    })
+
+                    it("displays the statistics in the correct order", function() {
+                        expect(this.view.$(".statistics .pair").eq(0).find(".key").text().trim()).toMatchTranslation("dataset.statistics.type");
+                        expect(this.view.$(".statistics .pair").eq(1).find(".key").text().trim()).toMatchTranslation("dataset.statistics.partitions");
+                        expect(this.view.$(".statistics .pair").eq(2).find(".key").text().trim()).toMatchTranslation("dataset.statistics.columns");
+                        expect(this.view.$(".statistics .pair").eq(3).find(".key").text().trim()).toMatchTranslation("dataset.statistics.last_analyzed_time");
+                        expect(this.view.$(".statistics .pair").eq(4).find(".key").text().trim()).toMatchTranslation("dataset.statistics.rows");
+                        expect(this.view.$(".statistics .pair").eq(5).find(".key").text().trim()).toMatchTranslation("dataset.statistics.size");
+                    });
+
+                    describe("when the partitions are 0", function() {
+                        beforeEach(function() {
+                            this.view = new chorus.views.TabularDataListSidebar();
+                            this.view.setTabularData(this.dataset);
+                            this.stats.set({ partitions: 0 });
+                            this.view.render();
+                        });
+
+                        it("should not show the partitions pair", function() {
+                            expect(this.view.$(".partitions")).not.toExist()
+                        })
+                    })
+
+                    describe("when the lastAnalyzedTime is null", function() {
+                        beforeEach(function() {
+                            this.view = new chorus.views.TabularDataListSidebar();
+                            this.view.setTabularData(this.dataset)
+                            this.stats.set({ lastAnalyzedTime: null, rows: 5837 });
+                            this.view.render();
+                        })
+
+                        it("should not display the lastAnalyzedTime or row count", function() {
+                            expect(this.view.$(".rows")).not.toExist();
+                            expect(this.view.$(".last_analyzed_time")).not.toExist();
+                        });
+                    });
+                });
+
+            });
+
+            describe("activities", function() {
+                it("fetches the activities for the dataset", function() {
+                    expect(this.dataset.activities()).toHaveBeenFetched()
+                });
+
+                it("prefers only the without_workspace type for the activity list", function() {
+                    expect(this.view.activityList.options.displayStyle).toEqual(['without_workspace']);
+                });
+
+                context("when the activity fetch completes", function() {
+                    beforeEach(function() {
+                        this.server.completeFetchFor(this.dataset.activities());
+                    });
+
+                    it("renders an activity list inside the tabbed area", function() {
+                        expect(this.view.activityList).toBeA(chorus.views.ActivityList);
+                        expect(this.view.activityList.el).toBe(this.view.$(".tabbed_area .activity_list")[0]);
+                    });
+                });
+            });
+
+            context("when user does not have credentials", function() {
+                beforeEach(function() {
+                    this.dataset.set({hasCredentials: false})
+                });
+
+                it("does not show the preview data link even when on a list page", function() {
+                    this.view.options.listMode = true;
+                    this.view.render();
+                    expect(this.view.$('.actions .tabular_data_preview')).not.toExist();
+                });
+
+                it("does not have the 'Import Now' action even if there's a workspace", function() {
+                    this.view.options.workspace = fixtures.workspace();
+                    this.view.render();
+                    expect(this.view.$(".actions .import_now")).not.toExist();
+                });
+
+                it("shows a no-permissions message", function() {
+                    this.view.render();
+                    expect(this.view.$('.no_credentials')).toContainTranslation("dataset.credentials.missing.body", {linkText: t("dataset.credentials.missing.linkText")});
+                });
+
+                context("clicking on the link to add credentials", function() {
+                    beforeEach(function() {
+                        this.view.render();
+                        this.view.$('.no_credentials a.add_credentials').click();
+                    })
+
+                    it("launches the InstanceAccount dialog", function() {
+                        expect(chorus.modal).toBeA(chorus.dialogs.InstanceAccount);
+                    });
+
+                    context("saving the credentials", function() {
+                        beforeEach(function() {
+                            spyOn(chorus.router, "reload");
+                            chorus.modal.$('input').val('stuff');
+                            chorus.modal.$('form').submit();
+                            this.server.completeSaveFor(chorus.modal.model);
+                        })
+
+                        it("reloads the current page", function() {
+                            expect(chorus.router.reload).toHaveBeenCalled();
+                        })
+                    })
+                })
+            })
+
+            context("when in list mode", function() {
+                beforeEach(function() {
+                    this.view.options.listMode = true;
+                    this.view.render();
+                });
+
+                it("displays the 'Preview Data' link", function() {
+                    expect(this.view.$('.actions .tabular_data_preview')).toContainTranslation('actions.tabular_data_preview');
+                });
+
+                describe("when the 'Preview Data' link is clicked", function() {
+                    beforeEach(function() {
+                        this.view.$(".tabular_data_preview").click();
+                    });
+
+                    it("displays the preview data dialog", function() {
+                        expect(chorus.modal).toBeA(chorus.dialogs.TabularDataPreview);
+                    });
+                });
+            });
+
+            context("when not in list mode", function() {
+                it("does not display the 'Preview Data' link", function() {
+                    expect(this.view.$('.actions .tabular_data_preview')).not.toExist();
+                });
+            });
+
+            context("when there is a workspace", function() {
+                beforeEach(function() {
+                    this.view.options.workspace = fixtures.workspace();
+                    this.view.render();
+                });
+
+                it("doesn't display any import links by default", function() {
                     expect(this.view.$("a.create_schedule, a.edit_schedule, a.import_now")).not.toExist();
                 });
 
@@ -272,78 +463,6 @@ describe("chorus.views.TabularDataListSidebar", function() {
                     });
                 });
 
-                it("displays the selected dataset name", function() {
-                    expect(this.view.$(".name").text().trim()).toBe(this.dataset.get("objectName"))
-                });
-
-                it("displays the selected dataset type", function() {
-                    expect(this.view.$(".type").text().trim()).toBe(Handlebars.helpers.humanizedTabularDataType(this.dataset.attributes))
-                });
-
-                it("displays the 'Preview Data' link", function() {
-                    expect(this.view.$('.actions .tabular_data_preview')).toContainTranslation('actions.tabular_data_preview');
-                });
-
-                describe("when the 'Preview Data' link is clicked", function() {
-                    beforeEach(function() {
-                        this.view.$(".tabular_data_preview").click();
-                    });
-
-                    it("displays the preview data dialog", function() {
-                        expect(chorus.modal).toBeA(chorus.dialogs.TabularDataPreview);
-                    });
-                });
-
-                context("when hasCredentials is false for the dataset", function() {
-                    beforeEach(function() {
-                        this.dataset.set({hasCredentials: false})
-                        this.view.render();
-                    });
-
-                    it("does not show the preview data link", function() {
-                        expect(this.view.$('.actions .tabular_data_preview')).not.toExist();
-                    });
-
-                    it("does not have the 'Import Now' action", function() {
-                        expect(this.view.$(".actions .import_now")).not.toExist();
-                    });
-
-                    it("shows a no-permissions message", function() {
-                        expect(this.view.$('.no_credentials')).toContainTranslation("dataset.credentials.missing.body", {linkText: t("dataset.credentials.missing.linkText")});
-                    });
-
-                    context("clicking on the link to add credentials", function() {
-                        beforeEach(function() {
-                            this.view.$('.no_credentials a.add_credentials').click();
-                        })
-
-                        it("launches the InstanceAccount dialog", function() {
-                            expect(chorus.modal).toBeA(chorus.dialogs.InstanceAccount);
-                        });
-
-                        context("saving the credentials", function() {
-                            beforeEach(function() {
-                                spyOn(chorus.router, "reload");
-                                chorus.modal.$('input').val('stuff');
-                                chorus.modal.$('form').submit();
-                                this.server.completeSaveFor(chorus.modal.model);
-                            })
-
-                            it("reloads the current page", function() {
-                                expect(chorus.router.reload).toHaveBeenCalled();
-                            })
-                        })
-                    })
-                })
-
-                it("fetches the activities for the dataset", function() {
-                    expect(this.dataset.activities()).toHaveBeenFetched()
-                });
-
-                it("prefers only the without_workspace type for the activity list", function() {
-                    expect(this.view.activityList.options.displayStyle).toEqual(['without_workspace']);
-                });
-
                 it("does not have a link to associate the dataset with a workspace", function() {
                     expect(this.view.$('.actions .associate')).not.toExist();
                 });
@@ -356,134 +475,41 @@ describe("chorus.views.TabularDataListSidebar", function() {
                     expect(notesNew.data("display-entity-type")).toBe(this.dataset.metaType());
                     expect(notesNew.attr("data-allow-workspace-attachments")).toBeDefined();
                 });
+            });
 
-                context("when browsing a schema", function() {
-                    beforeEach(function() {
-                        this.view.options.browsingSchema = true;
-                        chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
-                    });
-
-                    it("has the 'add a note' link with the correct data", function() {
-                        var notesNew = this.view.$("a.dialog[data-dialog=NotesNew]");
-                        expect(notesNew.data("entity-id")).toBe(this.dataset.get("id"));
-                        expect(notesNew.data("entity-type")).toBe("databaseObject");
-                        expect(notesNew.data("display-entity-type")).toBe(this.dataset.metaType());
-                        expect(notesNew.attr("data-allow-workspace-attachments")).not.toBeDefined();
-                    });
-
-                    it("does not have the 'Import Now' action", function() {
-                        expect(this.view.$(".actions .import_now")).not.toExist();
-                    });
-
-                    it("prefers only the without_workspace type for the activity list", function() {
-                        expect(this.view.activityList.options.displayStyle).toEqual(['without_workspace']);
-                    });
-
-                    it("has a link to associate the dataset with a workspace", function() {
-                        expect(this.view.$('.actions .associate')).toContainTranslation('actions.associate_with_workspace');
-                    });
-
-                    describe("when the 'associate with workspace' link is clicked", function() {
-                        beforeEach(function() {
-                            this.view.$("a.associate").click();
-                        });
-
-                        it("displays the associate with workspace dialog", function() {
-                            expect(chorus.modal).toBeA(chorus.dialogs.AssociateWithWorkspace);
-                        });
-                    });
+            context("when there is not a workspace", function() {
+                beforeEach(function() {
+                    this.dataset = fixtures.databaseTable({id: "XYZ"});
+                    chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                 });
 
-                describe("when the activity fetch completes", function() {
-                    beforeEach(function() {
-                        this.server.completeFetchFor(this.dataset.activities());
-                    });
-
-                    it("renders an activity list inside the tabbed area", function() {
-                        expect(this.view.activityList).toBeA(chorus.views.ActivityList);
-                        expect(this.view.activityList.el).toBe(this.view.$(".tabbed_area .activity_list")[0]);
-                    });
+                it("has the 'add a note' link with the correct data", function() {
+                    var notesNew = this.view.$("a.dialog[data-dialog=NotesNew]");
+                    expect(notesNew.data("entity-id")).toBe(this.dataset.get("id"));
+                    expect(notesNew.data("entity-type")).toBe("databaseObject");
+                    expect(notesNew.data("display-entity-type")).toBe(this.dataset.metaType());
+                    expect(notesNew.attr("data-allow-workspace-attachments")).not.toBeDefined();
                 });
 
-                it("fetches the statistics for the dataset", function() {
-                    expect(this.dataset.statistics()).toHaveBeenFetched()
+                it("does not have the 'Import Now' action", function() {
+                    expect(this.view.$(".actions .import_now")).not.toExist();
                 });
 
-                context("when the statistics arrive", function() {
+                it("has a link to associate the dataset with a workspace", function() {
+                    expect(this.view.$('.actions .associate')).toContainTranslation('actions.associate_with_workspace');
+                });
+
+                describe("when the 'associate with workspace' link is clicked", function() {
                     beforeEach(function() {
-                        this.stats = this.dataset.statistics();
-                        this.stats.set({
-                            rows: 0,
-                            columns: 0,
-                            lastAnalyzedTime: "2011-12-12 12:34:56",
-                            onDiskSize: "1 GB",
-                            desc: "foo",
-                            partitions: 2
-                        });
-                        this.server.completeFetchFor(this.stats);
+                        this.view.$("a.associate").click();
                     });
 
-                    it("displays rows when the value is 0", function() {
-                        expect(this.view.$(".statistics .rows .value").text().trim()).toBe("0")
-                    });
-
-                    it("displays columns when the value is 0", function() {
-                        expect(this.view.$(".statistics .columns .value").text().trim()).toBe("0")
-                    });
-
-                    it("displays the on disk size", function() {
-                        expect(this.view.$(".size .value").text().trim()).toBe("1 GB");
-                    });
-
-                    it("displays the description", function() {
-                        expect(this.view.$(".description p").text().trim()).toBe("foo");
-                    });
-
-                    it("displays the last analyzed time", function() {
-                        expect(this.view.$(".last_analyzed_time .value").text()).toBe(chorus.helpers.relativeTimestamp(this.stats.get("lastAnalyzedTime")));
-                    });
-
-                    it("displays the partitions", function() {
-                        expect(this.view.$(".partitions .value").text()).toBe("2")
-                    })
-
-                    it("displays the statistics in the correct order", function() {
-                        expect(this.view.$(".statistics .pair").eq(0).find(".key").text().trim()).toMatchTranslation("dataset.statistics.type");
-                        expect(this.view.$(".statistics .pair").eq(1).find(".key").text().trim()).toMatchTranslation("dataset.statistics.partitions");
-                        expect(this.view.$(".statistics .pair").eq(2).find(".key").text().trim()).toMatchTranslation("dataset.statistics.columns");
-                        expect(this.view.$(".statistics .pair").eq(3).find(".key").text().trim()).toMatchTranslation("dataset.statistics.last_analyzed_time");
-                        expect(this.view.$(".statistics .pair").eq(4).find(".key").text().trim()).toMatchTranslation("dataset.statistics.rows");
-                        expect(this.view.$(".statistics .pair").eq(5).find(".key").text().trim()).toMatchTranslation("dataset.statistics.size");
-                    });
-
-                    describe("when the partitions are 0", function() {
-                        beforeEach(function() {
-                            this.view = new chorus.views.TabularDataListSidebar();
-                            this.view.setTabularData(this.dataset);
-                            this.stats.set({ partitions: 0 });
-                            this.view.render();
-                        });
-
-                        it("should not show the partitions pair", function() {
-                            expect(this.view.$(".partitions")).not.toExist()
-                        })
-                    })
-
-                    describe("when the lastAnalyzedTime is null", function() {
-                        beforeEach(function() {
-                            this.view = new chorus.views.TabularDataListSidebar();
-                            this.view.setTabularData(this.dataset)
-                            this.stats.set({ lastAnalyzedTime: null, rows: 5837 });
-                            this.view.render();
-                        })
-
-                        it("should not display the lastAnalyzedTime or row count", function() {
-                            expect(this.view.$(".rows")).not.toExist();
-                            expect(this.view.$(".last_analyzed_time")).not.toExist();
-                        });
+                    it("displays the associate with workspace dialog", function() {
+                        expect(chorus.modal).toBeA(chorus.dialogs.AssociateWithWorkspace);
                     });
                 });
             });
+
         });
 
         describe("column statistics", function() {
