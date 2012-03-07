@@ -25,8 +25,8 @@ describe("chorus.pages.HdfsShowFilePage", function() {
             expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toBe("myFile.txt");
         });
 
-        xit("has the file is read-only indicator", function() {
-
+        it("has the file is read-only indicator", function() {
+            expect(this.page.$(".content_details .plain_text")).toContainTranslation("hdfs.read_only")
         });
 
         xit("has the correct sidebar", function() {
