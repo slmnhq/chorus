@@ -54,8 +54,9 @@ describe("chorus.pages.SearchIndexPage", function() {
             });
 
             it("has a 'Search in' filter link", function() {
+                expect(this.page.$(".default_content_header .search_in .chosen")).toContainTranslation("search.in.all");
                 expect(this.page.$('.default_content_header .search_in .title')).toContainTranslation("search.search_in")
-                expect(this.page.$('.default_content_header .search_in a')).toContainTranslation("search.in.all_of_chorus")
+                expect(this.page.$('.default_content_header .search_in a')).toContainTranslation("search.in.all")
                 expect(this.page.$('.default_content_header .search_in a')).toContainTranslation("search.in.my_workspaces")
             });
 
@@ -209,9 +210,19 @@ describe("chorus.pages.SearchIndexPage", function() {
             expect(this.page.search).toHaveBeenFetched();
         });
 
-        it("selects the search result type in the menu", function() {
-            this.server.completeFetchFor(this.page.search, fixtures.searchResult(this.page.search.attributes));
-            expect(this.page.$(".default_content_header .type .chosen")).toContainTranslation("search.type.workspace");
+
+        describe("when the search result is fetched", function() {
+            beforeEach(function() {
+                this.server.completeFetchFor(this.page.search, fixtures.searchResult(this.page.search.attributes));
+            });
+
+            it("selects the 'all of chorus' option in the 'search in' menu", function() {
+                expect(this.page.$(".default_content_header .search_in .chosen")).toContainTranslation("search.in.all");
+            });
+
+            it("selects the search result type in the menu", function() {
+                expect(this.page.$(".default_content_header .type .chosen")).toContainTranslation("search.type.workspace");
+            });
         });
     });
 
@@ -226,6 +237,20 @@ describe("chorus.pages.SearchIndexPage", function() {
             expect(this.search.get("entityType")).toBe('all');
             expect(this.search).toHaveBeenFetched();
         });
+
+        describe("when the search result is fetched", function() {
+            beforeEach(function() {
+                this.server.completeFetchFor(this.page.search, fixtures.searchResult(this.page.search.attributes));
+            });
+
+            it("selects the 'my workspaces' option in the 'search in' menu", function() {
+                expect(this.page.$(".default_content_header .search_in .chosen")).toContainTranslation("search.in.my_workspaces");
+            });
+
+            it("selects the search result type in the menu", function() {
+                expect(this.page.$(".default_content_header .type .chosen")).toContainTranslation("search.type.all");
+            });
+        });
     });
 
     describe("when searching only for workfiles in the current user's workspaces", function() {
@@ -238,6 +263,20 @@ describe("chorus.pages.SearchIndexPage", function() {
             expect(this.search.get("searchIn")).toBe("my_workspaces");
             expect(this.search.get("entityType")).toBe("workfile");
             expect(this.search).toHaveBeenFetched();
+        });
+
+        describe("when the search result is fetched", function() {
+            beforeEach(function() {
+                this.server.completeFetchFor(this.page.search, fixtures.searchResult(this.page.search.attributes));
+            });
+
+            it("selects the 'my workspaces' option in the 'search in' menu", function() {
+                expect(this.page.$(".default_content_header .search_in .chosen")).toContainTranslation("search.in.my_workspaces");
+            });
+
+            it("selects the search result type in the menu", function() {
+                expect(this.page.$(".default_content_header .type .chosen")).toContainTranslation("search.type.workfile");
+            });
         });
     });
 });

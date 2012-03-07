@@ -12,7 +12,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
 
     urlTemplate: function() {
         if (this.isScopedToWorkspaces()) {
-            return "search/workspaces";
+            return "search/workspaces/";
         } else {
             return "search/global/";
         }

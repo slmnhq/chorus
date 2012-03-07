@@ -9,13 +9,13 @@ describe("chorus.models.SearchResult", function() {
     })
 
     describe("#url and #showUrl", function() {
-        context("when scope to the current user's workspaces", function() {
+        context("when scoped to the current user's workspaces", function() {
             beforeEach(function() {
                 this.model.set({ searchIn: "my_workspaces" });
             });
 
             it("uses the workspaces search api", function() {
-                expect(this.model.url()).toMatchUrl("/edc/search/workspaces?query=jackson5", {
+                expect(this.model.url()).toMatchUrl("/edc/search/workspaces/?query=jackson5", {
                     paramsToIgnore: [ "rows", "page" ]
                 });
             });
