@@ -1,6 +1,11 @@
 describe("chorus.dialogs.ImportScheduler", function() {
     beforeEach(function() {
         this.dataset = fixtures.datasetSourceTable();
+        this.datasetImport = fixtures.datasetImport({
+            datasetId: this.dataset.get('id'),
+            workspaceId: this.dataset.get('workspace').id
+        });
+        this.datasetImport.unset('sampleCount');
         this.launchElement = $("<a/>");
         this.launchElement.data("dataset", this.dataset);
     });
@@ -10,6 +15,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
             beforeEach(function() {
                 this.launchElement.addClass("create_schedule")
                 this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+                this.server.completeFetchFor(this.datasetImport);
                 this.server.completeFetchAllFor(this.dialog.sandboxTables, [
                     fixtures.datasetSandboxTable(),
                     fixtures.datasetSandboxTable(),
@@ -32,6 +38,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
             beforeEach(function() {
                 this.launchElement.addClass("edit_schedule")
                 this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+                this.server.completeFetchFor(this.datasetImport);
                 this.server.completeFetchAllFor(this.dialog.sandboxTables, [
                     fixtures.datasetSandboxTable(),
                     fixtures.datasetSandboxTable(),
@@ -60,6 +67,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     fixtures.datasetExternalTable(),
                     fixtures.datasetHadoopExternalTable()
                 ]);
+                this.server.completeFetchFor(this.datasetImport);
                 this.attrs = this.dialog.getNewModelAttrs();
             });
 
@@ -77,6 +85,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
         beforeEach(function() {
             this.launchElement.addClass("create_schedule");
             this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+            this.server.completeFetchFor(this.datasetImport, []);
             spyOn(chorus.views.ImportSchedule.prototype, "enable");
             this.dialog.render();
         });
@@ -150,7 +159,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
                         this.dialog.$("select[name='toTable']").eq(0).attr("selected", true);
 
-                        this.dialog.$("input[name='limit_num_rows']").prop("checked", true)
+                        this.dialog.$("input[name='limit_num_rows']").prop("checked", true).change();
                         this.dialog.$("input[name='sampleCount']").val(123);
 
                         this.dialog.activeScheduleView.$(".start input[name='year']").val("2012");
@@ -176,7 +185,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         expect(params.sampleCount).toBe("123");
                         expect(params.scheduleStartTime).toBe("2012-02-29 12:09:00.0");
                         expect(params.scheduleEndTime).toBe("2012-03-21")
-                        expect(params.scheduleDays).toBe("1:2");
                     });
                 });
 
@@ -208,10 +216,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     it("should put the values in the correct API form fields", function() {
                         var params = this.server.lastCreate().params()
                         expect(params.truncate).toBe("false");
-                        expect(params.sampleCount).toBe(undefined);
+                        expect(params.sampleCount).toBe('0');
                         expect(params.scheduleStartTime).toBe("2012-02-29 12:09:00.0");
                         expect(params.scheduleEndTime).toBe("2012-03-21")
-                        expect(params.scheduleDays).toBe("1:2");
                     });
 
                 });
@@ -255,8 +262,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
     describe("editing an existing schedule", function() {
         describe("when the schedule is active", function() {
             beforeEach(function() {
-                this.import = fixtures.datasetImport({
-                    id: '12',
+                this.datasetImport.set({
                     truncate: true,
                     sampleCount: 200,
                     scheduleInfo: {
@@ -272,6 +278,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 this.launchElement.addClass("edit_schedule");
                 this.dataset.setImport(this.import);
                 this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+                this.server.completeFetchFor(this.datasetImport);
                 this.dialog.render();
             });
 
@@ -365,6 +372,12 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         expect(this.dialog.$("input[name='sampleCount']").val()).toBe("200");
                     });
 
+                    it("pre-populates the row limit to 500 when row limit is 0", function() {
+                        this.dialog.model.set({sampleCount: '0'});
+                        this.dialog.render();
+                        expect(this.dialog.$("input[name='sampleCount']").val()).toBe("500");
+                    });
+
                     it("sets activateSchedule to false, not null, on submission", function() {
                         this.dialog.$("input[name='schedule']").prop("checked", false);
                         this.dialog.$("button.submit").trigger("click");
@@ -374,6 +387,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
                     describe("submitting the form", function() {
                         beforeEach(function() {
+                            this.dialog.$("input[name='limit_num_rows']").prop("checked", false)
                             this.dialog.$("input[name='sampleCount']").val("201");
                             this.dialog.$("button.submit").trigger("click");
                         });
@@ -385,6 +399,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         it("sends activateSchedule", function() {
                             // must explicitly be true https://www.pivotaltracker.com/story/show/25783061
                             expect(this.server.lastUpdate().params().activateSchedule).toBe("true");
+                        });
+
+                        it('correctly sets sampleCount to 0 when limit_num_rows is unchecked', function() {
+                            expect(this.server.lastUpdate().params().sampleCount).toBe('0');
                         });
 
                         context("when the save completes", function() {
@@ -415,8 +433,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
         describe("when the schedule is inactive", function() {
             beforeEach(function() {
-                this.import = fixtures.datasetImport({
-                    id: '12',
+                this.datasetImport.set({
                     truncate: true,
                     sampleCount: 200,
                     scheduleInfo: {
@@ -431,6 +448,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 this.launchElement.addClass("edit_schedule");
                 this.dataset.setImport(this.import);
                 this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+                this.server.completeFetchFor(this.datasetImport);
                 this.dialog.render();
             });
 
@@ -476,6 +494,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
             beforeEach(function() {
                 this.launchElement.addClass("import_now");
                 this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+                this.server.completeFetchFor(this.datasetImport);
                 spyOn(this.dialog.model, "isNew").andReturn(false)
                 this.dialog.render();
                 this.server.completeFetchAllFor(this.dialog.sandboxTables, [fixtures.datasetSandboxTable(), fixtures.datasetSandboxTable()]);
@@ -491,6 +510,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
         beforeEach(function() {
             this.launchElement.addClass("import_now");
             this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
+            this.server.completeFetchFor(this.datasetImport);
             this.dialog.render();
         });
 
@@ -647,7 +667,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                                 beforeEach(function() {
                                     spyOn(chorus, "toast");
                                     spyOn(this.dialog, "closeModal");
-                                    this.dialog.model.trigger("saved");
+                                    this.server.completeSaveFor(this.dialog.model);
                                 });
 
                                 it("should display a toast", function() {

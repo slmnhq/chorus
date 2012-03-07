@@ -20,6 +20,8 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         this.dataset = this.options.launchElement.data("dataset");
 
         this.model = this.dataset.getImport();
+        this.model.fetchIfNotLoaded();
+        this.requiredResources.push(this.model);
 
         var workspaceId = this.dataset.get("workspace").id;
         this.sandboxTables = new chorus.collections.DatasetSet([], {workspaceId: workspaceId, type: "SANDBOX_TABLE"});
@@ -95,7 +97,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
             this.$(".truncate").attr("checked", false);
         }
 
-        if (model.get("sampleCount")) {
+        if (model.get("sampleCount") && model.get("sampleCount") != '0') {
             this.$("input[name='limit_num_rows']").attr("checked", "checked");
             this.$("input[name='sampleCount']").attr("disabled", false);
             this.$("input[name='sampleCount']").val(model.get("sampleCount"));
@@ -156,11 +158,15 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         this.onInputFieldChanged();
     },
 
+    oneTimeImport: function() {
+        return !this.showSchedule;
+    },
+
     beginImport: function() {
-        if (this.model.has("scheduleInfo")) {
-            this.$("button.submit").startLoading("import.saving");
-        } else {
+        if (this.oneTimeImport()) {
             this.$("button.submit").startLoading("import.importing");
+        } else {
+            this.$("button.submit").startLoading("import.saving");
         }
 
         saveOptions = {};
@@ -172,10 +178,10 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     },
 
     importSaved: function() {
-        if (this.model.has("scheduleInfo")) {
-            chorus.toast("import.schedule.toast");
-        } else {
+        if (this.oneTimeImport()) {
             chorus.toast("import.success");
+        } else {
+            chorus.toast("import.schedule.toast");
         }
         chorus.PageEvents.broadcast('importSchedule:changed', this.model);
         this.dataset.trigger('change');
@@ -198,17 +204,16 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         }
 
         updates.useLimitRows = $enabledFieldSet.find(".limit input:checkbox").prop("checked");
-        if (updates.useLimitRows) {
-            updates.sampleCount = $enabledFieldSet.find("input[name='sampleCount']").val();
+        if (!updates.useLimitRows) {
+            updates.sampleCount = 0;
         }
 
         updates.activateSchedule = !!($enabledFieldSet.find("input:checkbox[name='schedule']").prop("checked"));
         if (updates.activateSchedule) {
             _.extend(updates, this.activeScheduleView.fieldValues());
-            updates.scheduleDays = "1:2";
         }
 
-        updates.importType = this.showSchedule ? "schedule" : "oneTime";
+        updates.importType = this.oneTimeImport() ? "oneTime" : "schedule";
 
         return updates;
     }
