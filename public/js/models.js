@@ -139,7 +139,7 @@ chorus.models = {
 
         requirePositiveInteger: function(attr, newAttrs, messageKey) {
             var value = newAttrs && newAttrs.hasOwnProperty(attr) ? newAttrs[attr] : this.get(attr);
-            var intValue = parseInt(value);
+            var intValue = parseInt(value, 10);
             if (!intValue || intValue <= 0 || parseFloat(value) !== intValue) {
                 this.setValidationError(attr, "validation.positive_integer", messageKey);
             }
@@ -179,7 +179,7 @@ chorus.models = {
 
         requireIntegerRange: function(attr, min, max, newAttrs, messageKey) {
             var value = newAttrs && newAttrs.hasOwnProperty(attr) ? newAttrs[attr] : this.get(attr);
-            var intValue = parseInt(value);
+            var intValue = parseInt(value, 10);
             if (!intValue || intValue < min || intValue > max || parseFloat(value) !== intValue) {
                 this.setValidationError(attr, "validation.integer_range", messageKey, { min: min, max: max });
             }

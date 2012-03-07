@@ -36,9 +36,9 @@ chorus.views.ImportSchedule = chorus.views.Base.extend({
         if (!isPM && startTime.getHours() === 12) startTime.addHours(-12);
 
         endTime.set({
-            year:   parseInt(this.$(".end input[name='year']").val()),
-            month:  parseInt(this.$(".end input[name='month']").val()) - 1,
-            day:    parseInt(this.$(".end input[name='day']").val())
+            year:   parseInt(this.$(".end input[name='year']").val(), 10),
+            month:  parseInt(this.$(".end input[name='month']").val(), 10) - 1,
+            day:    parseInt(this.$(".end input[name='day']").val(), 10)
         });
 
         return {

@@ -4,7 +4,7 @@ chorus.models.InstanceUsage = chorus.models.Base.extend({
     calculatePercentages:function () {
         _.each(this.get('workspaces'), function (workspace) {
             var config = chorus.models.Config.instance();
-            workspace.percentageUsed = Math.round(parseInt(workspace.sizeInBytes) / config.get('sandboxRecommendSizeInBytes') * 100);
+            workspace.percentageUsed = Math.round(parseInt(workspace.sizeInBytes, 10) / config.get('sandboxRecommendSizeInBytes') * 100);
         })
     }
 });

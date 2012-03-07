@@ -58,7 +58,7 @@ chorus.views.DatasetList = chorus.views.Base.extend({
                 on: date && date.toString("MMM d")
             }
 
-            ctx.otherCommentCount = parseInt(model.get("commentCount")) - 1;
+            ctx.otherCommentCount = parseInt(model.get("commentCount"), 10) - 1;
         }
 
         return ctx;

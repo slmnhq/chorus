@@ -13,7 +13,7 @@ describe("chorus.models.InstanceUsage", function() {
 
         it("should have a used percentage for each workspace", function() {
             _.each(this.workspaces, _.bind(function(workspace) {
-                var expectedPercentDecimal = parseInt(workspace.sizeInBytes) / this.config.get('sandboxRecommendSizeInBytes')
+                var expectedPercentDecimal = parseInt(workspace.sizeInBytes, 10) / this.config.get('sandboxRecommendSizeInBytes')
                 var expectedPercent = Math.round(expectedPercentDecimal * 100);
                 expect(workspace.percentageUsed).toBe(expectedPercent);
             }, this))

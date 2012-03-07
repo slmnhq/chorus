@@ -54,7 +54,7 @@ describe("chorus.dialogs.InstanceUsage", function() {
                 _.each(zipped, function(z) {
                     var el = $(z[0]);
                     var workspace = z[1];
-                    var expectedPercentage = parseInt(workspace.sizeInBytes) /recommendedSize;
+                    var expectedPercentage = parseInt(workspace.sizeInBytes, 10) /recommendedSize;
                     var actualPercentage = el.find(".used").width() / el.find(".usage_bar").width();
                     expect(actualPercentage).toBeCloseTo(expectedPercentage, 1);
                 });
