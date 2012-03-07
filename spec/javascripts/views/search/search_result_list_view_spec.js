@@ -16,7 +16,10 @@ describe("chorus.views.SearchResultList", function() {
 
     context("when filtering by workspace", function() {
         beforeEach(function() {
-            this.model.set({entityType: "workspace"});
+            this.model = fixtures.searchResult({entityType: "workspace"});
+            this.model.unset("workfile");
+            this.model.unset("user");
+            this.model.unset("dataset");
             this.view = new chorus.views.SearchResultList({model: this.model});
             this.view.render();
         });

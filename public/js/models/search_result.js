@@ -43,7 +43,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
     },
 
     users: function() {
-        if (!this._users) {
+        if (!this._users && this.get("user")) {
             this._users = new chorus.collections.UserSet(this.get("user").docs, { total: this.get("user").numFound });
         }
 
@@ -51,7 +51,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
     },
 
     workfiles: function() {
-        if (!this._workfiles) {
+        if (!this._workfiles && this.get("workfile")) {
             var workfiles = _.map(this.get("workfile").docs, function(workfileJson) {
                 workfileJson.fileName = $.stripHtml(workfileJson.name);
                 var workfile = new chorus.models.Workfile(workfileJson);
@@ -65,7 +65,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
     },
 
     tabularData: function() {
-        if (!this._tabularData) {
+        if (!this._tabularData && this.get("dataset")) {
             this._tabularData = new chorus.collections.TabularDataSet(this.get("dataset").docs, {total: this.get("dataset").numFound});
         }
 
@@ -73,7 +73,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
     },
 
     workspaces: function() {
-        if (!this._workspaces) {
+        if (!this._workspaces && this.get("workspace")) {
             var workspaces = _.map(this.get("workspace").docs, function(workspaceJson) {
                 workspaceJson.fileName = $.stripHtml(workspaceJson.name);
                 var workspace = new chorus.models.Workspace(workspaceJson);
