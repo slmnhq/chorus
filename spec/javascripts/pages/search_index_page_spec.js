@@ -3,19 +3,18 @@ describe("chorus.pages.SearchIndexPage", function() {
         this.query = "foo";
     });
 
-    describe("when searching all items, across all of chorus", function() {
+    describe("when searching for all items, across all of chorus", function() {
         beforeEach(function() {
             this.page = new chorus.pages.SearchIndexPage(this.query);
-            this.model = this.page.search;
         });
 
         it("fetches the search results for the given query", function() {
-            expect(this.model).toHaveBeenFetched();
+            expect(this.page.search).toHaveBeenFetched();
         });
 
         describe("when the search result fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.model, fixtures.searchResult());
+                this.server.completeFetchFor(this.page.search, fixtures.searchResult());
             });
 
             it("has breadcrumbs", function() {
@@ -49,19 +48,6 @@ describe("chorus.pages.SearchIndexPage", function() {
                     expect(this.page.search.get("entityType")).toBe("workspace");
                     expect(this.page.search.get("myWorkspaces")).toBeFalsy();
                     expect(chorus.router.navigate).toHaveBeenCalledWith(this.page.search.showUrl(), true);
-                });
-            });
-
-            context("when searching for a workspace", function() {
-                beforeEach(function() {
-                    this.query = "Foo";
-                    this.server.requests = [];
-                    this.page = new chorus.pages.SearchIndexPage("all", "workspace", this.query);
-                    this.server.completeFetchFor(this.page.search, fixtures.searchResult());
-                });
-
-                it("selects the search result type in the menu", function() {
-                    expect(this.page.$(".default_content_header .type .chosen")).toContainTranslation("search.type.workspace");
                 });
             });
 
@@ -173,7 +159,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
             describe("the user section", function() {
                 beforeEach(function() {
-                    this.users = this.model.users();
+                    this.users = this.page.search.users();
                     this.userLis = this.page.$(".user_list li");
                 });
 
@@ -210,7 +196,24 @@ describe("chorus.pages.SearchIndexPage", function() {
         });
     });
 
-    describe("when searching for all items, only in the current user's workspaces", function() {
+    describe("when searching for only workspaces, across all of chorus", function() {
+        beforeEach(function() {
+            this.page = new chorus.pages.SearchIndexPage("all", "workspace", this.query);
+        });
+
+        it("fetches from the right search url", function() {
+            expect(this.page.search.get("entityType")).toBe("workspace");
+            expect(this.page.search.get("myWorkspaces")).toBeFalsy();
+            expect(this.page.search).toHaveBeenFetched();
+        });
+
+        it("selects the search result type in the menu", function() {
+            this.server.completeFetchFor(this.page.search, fixtures.searchResult());
+            expect(this.page.$(".default_content_header .type .chosen")).toContainTranslation("search.type.workspace");
+        });
+    });
+
+    describe("when searching for all items in the current user's workspaces", function() {
         beforeEach(function() {
             this.page = new chorus.pages.SearchIndexPage("my_workspaces", "all", this.query);
             this.search = this.page.search;
@@ -223,7 +226,7 @@ describe("chorus.pages.SearchIndexPage", function() {
         });
     });
 
-    describe("when searching for only workfiles, only in the current user's workspaces", function() {
+    describe("when searching only for workfiles in the current user's workspaces", function() {
         beforeEach(function() {
             this.page = new chorus.pages.SearchIndexPage("my_workspaces", "workfile", this.query);
             this.search = this.page.search;
