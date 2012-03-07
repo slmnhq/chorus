@@ -31,7 +31,8 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
     additionalContext: function() {
         return {
             fileName: this.model.fileNameFromPath(),
-            encodedEntityId: this.makeEncodedEntityId()
+            encodedEntityId: this.makeEncodedEntityId(),
+            lastUpdated: t("hdfs.last_updated", { when: chorus.helpers.relativeTimestamp(this.model.get('lastModificationTime')) })
         }
     },
 

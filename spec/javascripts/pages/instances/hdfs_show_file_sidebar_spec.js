@@ -1,6 +1,13 @@
 describe("chorus.views.HdfsShowFileSidebar", function() {
     beforeEach(function() {
-        this.file = fixtures.hdfsFile({ path: "folder%2Ffilename.txt", instanceId: 9876 })
+        var now = Date.parse('yesterday').toISOString().toString();
+        var now_utc = now.slice(0,10) + " " + now.slice(12)
+
+        this.file = fixtures.hdfsFile({
+            path: "folder%2Ffilename.txt",
+            instanceId: 9876,
+            lastModificationTime: now_utc
+        })
         this.view = new chorus.views.HdfsShowFileSidebar({ model: this.file })
     });
 
@@ -20,8 +27,8 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
             expect(this.view.$(".file_name")).toContainText("filename.txt")
         })
 
-        xit("shows the correct last_updated value", function() {
-            // todo: API doesn't return last_updated information yet
+        it("shows the correct last_updated value", function() {
+            expect(this.view.$(".last_updated")).toContainTranslation("hdfs.last_updated", { when: "1 day ago" })
         })
 
         it("shows the 'add a note' link", function() {
