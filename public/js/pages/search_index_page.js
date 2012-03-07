@@ -56,7 +56,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
             user: new chorus.views.UserListSidebar(),
             workfile: new chorus.views.WorkfileListSidebar({ hideAddNoteLink: true }),
             workspace: new chorus.views.WorkspaceListSidebar(),
-            tabularData: new chorus.views.TabularDataListSidebar({listMode: true})
+            tabularData: new chorus.views.TabularDataSidebar({listMode: true})
         };
 
         // explicitly set up bindings after initializing sidebar collection

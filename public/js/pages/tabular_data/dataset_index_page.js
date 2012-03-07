@@ -66,7 +66,7 @@
                 this.collection.fetch();
             }, this)
 
-            this.sidebar = new chorus.views.TabularDataListSidebar({ workspace: this.workspace, listMode: true });
+            this.sidebar = new chorus.views.TabularDataSidebar({ workspace: this.workspace, listMode: true });
             this.render();
 
             var targetButton = this.mainContent.options.buttons[0];

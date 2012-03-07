@@ -1,6 +1,6 @@
-chorus.views.TabularDataListSidebar = chorus.views.Sidebar.extend({
-    constructorName: "TabularDataListSidebarView",
-    className: "tabular_data_list_sidebar",
+chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
+    constructorName: "TabularDataSidebarView",
+    className: "tabular_data_sidebar",
 
     events: {
         "click .no_credentials a.add_credentials": "launchAddCredentialsDialog",

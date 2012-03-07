@@ -1,7 +1,7 @@
-describe("chorus.views.TabularDataListSidebar", function() {
+describe("chorus.views.TabularDataSidebar", function() {
     beforeEach(function() {
         stubModals();
-        this.view = new chorus.views.TabularDataListSidebar();
+        this.view = new chorus.views.TabularDataSidebar();
     });
 
     describe("#render", function() {
@@ -97,7 +97,7 @@ describe("chorus.views.TabularDataListSidebar", function() {
 
                     describe("when the partitions are 0", function() {
                         beforeEach(function() {
-                            this.view = new chorus.views.TabularDataListSidebar();
+                            this.view = new chorus.views.TabularDataSidebar();
                             this.view.setTabularData(this.dataset);
                             this.stats.set({ partitions: 0 });
                             this.view.render();
@@ -110,7 +110,7 @@ describe("chorus.views.TabularDataListSidebar", function() {
 
                     describe("when the lastAnalyzedTime is null", function() {
                         beforeEach(function() {
-                            this.view = new chorus.views.TabularDataListSidebar();
+                            this.view = new chorus.views.TabularDataSidebar();
                             this.view.setTabularData(this.dataset)
                             this.stats.set({ lastAnalyzedTime: null, rows: 5837 });
                             this.view.render();
