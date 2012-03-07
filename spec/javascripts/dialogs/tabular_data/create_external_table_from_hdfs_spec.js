@@ -35,8 +35,30 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
             this.server.completeFetchAllFor(new chorus.collections.WorkspaceSet([], {userId: "54321"}));
         });
 
-        xit("populates the dialog's errors div", function() {
+        it("populates the dialog's errors div", function() {
             expect(this.dialog.$(".errors")).toContainTranslation("hdfs.create_external.no_workspaces");
+        })
+    })
+
+    context("when the workspace fetch completes and there are workspaces", function() {
+        beforeEach(function() {
+            spyOn(chorus, "styleSelect")
+            this.workspace1 = fixtures.workspace();
+            this.workspace2 = fixtures.workspace();
+            this.server.completeFetchAllFor(new chorus.collections.WorkspaceSet([], {userId: "54321"}), [this.workspace1, this.workspace2]);
+        });
+
+        it("has a select with the workspaces as options", function() {
+            expect(this.dialog.$(".directions option").length).toBe(2);
+            expect(this.dialog.$(".directions option").eq(0).text()).toBe(this.workspace1.get("name"));
+            expect(this.dialog.$(".directions option").eq(1).text()).toBe(this.workspace2.get("name"));
+
+            expect(this.dialog.$(".directions option").eq(0).val()).toBe(this.workspace1.id);
+            expect(this.dialog.$(".directions option").eq(1).val()).toBe(this.workspace2.id);
+        })
+
+        it("styles the select", function() {
+            expect(chorus.styleSelect).toHaveBeenCalled();
         })
     })
 });

@@ -1,4 +1,11 @@
 <div class="directions">
+    {{#if workspaces}}
+        <select>
+            {{#each workspaces}}
+            <option value="{{id}}">{{name}}</option>
+            {{/each}}
+        </select>
+    {{/if}}
     {{{directions}}}
 </div>
 <div class="options">
