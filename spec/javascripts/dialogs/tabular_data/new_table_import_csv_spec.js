@@ -250,6 +250,23 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
         });
     })
 
+    describe("with invalid data", function() {
+        beforeEach(function() {
+            this.$input =  this.dialog.$(".column_names input:text").eq(0);
+            this.$input.val('');
+
+            this.dialog.$("button.submit").click();
+        });
+
+        it("does not put the button in the loading state", function() {
+            expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+        })
+
+        it("marks that input invalid", function() {
+            expect(this.$input).toHaveClass("has_error");
+        })
+    });
+
     describe("clicking the import button", function() {
         beforeEach(function() {
             spyOn(this.dialog, "closeModal");

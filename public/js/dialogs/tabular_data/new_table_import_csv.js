@@ -2,6 +2,8 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     className: "new_table_import_csv",
     additionalClass: "table_import_csv",
     title: t("dataset.import.table.title"),
+    ok: t("dataset.import.table.submit"),
+
     delimiter: ',',
 
     events: {
@@ -68,7 +70,6 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         } else {
             this.$("input#delimiter_other").attr("checked", "true");
         }
-
     },
 
     additionalContext: function() {
@@ -77,31 +78,49 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             delimiter: this.other_delimiter ? this.delimiter : '',
             directions: t("dataset.import.table.new.directions", {
                tablename_input_field: "<input type='text' name='table_name' value='" + this.tableName + "'/>"
-            })
+            }),
+            ok: this.ok
         }
     },
 
     startImport: function() {
-        this.$('button.submit').startLoading("dataset.import.importing");
+        if (this.performValidation()) {
+            this.$('button.submit').startLoading("dataset.import.importing");
+            var $names = this.$(".column_names input:text");
+            var $types = this.$(".data_types .chosen");
+
+            var columnData = _.map($names, function(name, i) {
+                return {
+                    columnName: chorus.Mixins.dbHelpers.safePGName($(name).val()),
+                    columnType: $types.eq(i).text(),
+                    columnOrder: i+1
+                }
+            })
+            this.csv.set({
+                toTable: chorus.models.CSVImport.normalizeForDatabase(this.$(".directions input:text").val()),
+                delimiter: this.delimiter,
+                columnsDef: JSON.stringify(columnData)
+            })
+
+            this.$("button.submit").startLoading("dataset.import.importing");
+
+            this.csv.save();
+        }
+    },
+
+    performValidation : function() {
         var $names = this.$(".column_names input:text");
-        var $types = this.$(".data_types .chosen");
-
-        var columnData = _.map($names, function(name, i) {
-            return {
-                columnName: chorus.Mixins.dbHelpers.safePGName($(name).val()),
-                columnType: $types.eq(i).text(),
-                columnOrder: i+1
+        var pattern = /^[a-zA-Z][a-zA-Z0-9_]{0,63}/;
+        var allValid = true;
+        _.each($names, function(name, i){
+            var $name = $names.eq(i);
+            if (!$name.val().match(pattern)) {
+                allValid = false;
+                this.markInputAsInvalid($name, t("import.validation.column_name"), true);
             }
-        })
-        this.csv.set({
-            toTable: chorus.models.CSVImport.normalizeForDatabase(this.$(".directions input:text").val()),
-            delimiter: this.delimiter,
-            columnsDef: JSON.stringify(columnData)
-        })
+        }, this);
 
-        this.$("button.submit").startLoading("dataset.import.importing");
-
-        this.csv.save();
+        return allValid;
     },
 
     refreshCSV : function() {

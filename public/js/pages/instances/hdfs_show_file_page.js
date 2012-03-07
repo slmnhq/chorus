@@ -27,7 +27,7 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
             model:this.model,
             content:new chorus.views.HdfsShowFileView({model:this.model}),
             contentHeader:new chorus.views.HdfsShowFileHeader({ model:this.model }),
-            contentDetails:new chorus.views.StaticTemplate("plain_text", {text:"This file is read-only"})
+            contentDetails:new chorus.views.StaticTemplate("plain_text", {text:t("hdfs.read_only")})
         });
 
         this.render();
