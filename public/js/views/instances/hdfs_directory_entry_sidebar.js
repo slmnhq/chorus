@@ -21,24 +21,40 @@ chorus.views.HdfsDirectoryEntrySidebar = chorus.views.Sidebar.extend({
         this.activityList && this.activityList.collection.fetch();
     },
 
+    postRender: function() {
+        if (this.resource.get("isDir")) {
+            this.$(".tab_control").addClass("hidden")
+            this.$(".tabbed_area").addClass("hidden")
+        } else {
+            this.$(".tab_control").removeClass("hidden")
+            this.$(".tabbed_area").removeClass("hidden")
+        }
+    },
+
     setEntry: function(entry) {
         this.resource = entry;
         if (entry) {
             entry.entityId = this.makeEncodedEntityId();
 
-            var activities = entry.activities();
-            activities.fetch();
+            if (this.activityList) {
+                delete this.activityList;
+            }
 
-            this.bindings.add(activities, "changed", this.render);
-            this.bindings.add(activities, "reset", this.render);
+            if (!entry.get("isDir")) {
+                var activities = entry.activities();
+                activities.fetch();
 
-            this.activityList = new chorus.views.ActivityList({
-                collection: activities,
-                additionalClass: "sidebar",
-                type: t("hdfs." + (entry.get("isDir") ? "directory" : "file"))
-            });
+                this.bindings.add(activities, "changed", this.render);
+                this.bindings.add(activities, "reset", this.render);
 
-            this.activityList.bind("content:changed", this.recalculateScrolling, this)
+                this.activityList = new chorus.views.ActivityList({
+                    collection: activities,
+                    additionalClass: "sidebar",
+                    type: t("hdfs." + (entry.get("isDir") ? "directory" : "file"))
+                });
+
+                this.activityList.bind("content:changed", this.recalculateScrolling, this)
+            }
         } else {
             delete this.activityList;
         }

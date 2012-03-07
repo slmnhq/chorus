@@ -10,7 +10,7 @@ describe("chorus.views.HdfsDirectoryEntrySidebar", function(){
                 chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
             });
 
-            itHasTheRightDefaultBehavior();
+            itHasTheRightDefaultBehavior(false);
 
             it("does not have a link to add a note", function() {
                 expect(this.view.$("a.dialog.add_note")).not.toExist();
@@ -30,7 +30,7 @@ describe("chorus.views.HdfsDirectoryEntrySidebar", function(){
                 chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
             });
 
-            itHasTheRightDefaultBehavior();
+            itHasTheRightDefaultBehavior(true);
 
             describe("clicking the add a note link", function() {
                 beforeEach(function() {
@@ -61,7 +61,7 @@ describe("chorus.views.HdfsDirectoryEntrySidebar", function(){
         });
     })
 
-    function itHasTheRightDefaultBehavior() {
+    function itHasTheRightDefaultBehavior(withActivities) {
         it("should display the file name", function() {
             expect(this.view.$(".info .name").text()).toBe(this.hdfsEntry.get("name"));
         });
@@ -71,10 +71,28 @@ describe("chorus.views.HdfsDirectoryEntrySidebar", function(){
             expect(this.view.$(".info .last_updated").text().trim()).toMatchTranslation("hdfs.last_updated", {when: when});
         });
 
-        it("re-fetches when memo:added is broadcast with hdfs", function() {
-            this.server.reset();
-            chorus.PageEvents.broadcast("memo:added:hdfs");
-            expect(this.view.activityList.collection).toHaveBeenFetched();
-        })
+        if (withActivities) {
+            it("shows the activity stream", function() {
+                expect(this.view.$(".tab_control")).not.toHaveClass("hidden")
+            });
+
+            it("fetches the activity list", function() {
+                expect(this.view.activityList.collection).toHaveBeenFetched();
+            });
+
+            it("re-fetches when memo:added is broadcast with hdfs", function() {
+                this.server.reset();
+                chorus.PageEvents.broadcast("memo:added:hdfs");
+                expect(this.view.activityList.collection).toHaveBeenFetched();
+            })
+        } else {
+            it("does not fetch the activity list", function() {
+                expect(this.view.activityList).toBeUndefined();
+            });
+
+            it("hides the activity stream", function() {
+                expect(this.view.$(".tab_control")).toHaveClass("hidden")
+            });
+        }
     }
 })
