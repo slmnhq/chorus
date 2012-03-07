@@ -349,12 +349,14 @@ describe("chorus.views.TabularDataSidebar", function() {
                                         this.view.render();
                                     });
 
-                                    it("does not show the 'import now' link", function() {
+                                    it("disables the 'import now' link", function() {
                                         expect(this.view.$("a.import_now")).not.toExist();
+                                        expect(this.view.$("span.import_now")).toHaveClass('disabled');
                                     });
 
-                                    it("does not have a 'create import schedule' link", function() {
+                                    it("disables 'create import schedule' link", function() {
                                         expect(this.view.$("a.create_schedule")).not.toExist();
+                                        expect(this.view.$("span.create_schedule")).toHaveClass('disabled');
                                     });
                                 });
                             });
