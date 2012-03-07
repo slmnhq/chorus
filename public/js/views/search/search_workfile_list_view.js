@@ -1,25 +1,7 @@
-chorus.views.SearchWorkfileList = chorus.views.Base.extend({
+chorus.views.SearchWorkfileList = chorus.views.SearchResultListBase.extend({
+    searchResultType: "workfile",
     className: "search_workfile_list",
     additionalClass: "list",
-
-    events: {
-        "click li .comments .hasMore a.hasMoreLink": "showMoreComments",
-        "click li a.lessComments": "showLessComments"
-    },
-
-    showMoreComments: function(evt) {
-        evt && evt.preventDefault();
-        var $li = $(evt.target).closest("li");
-        $li.find(".hasMore").addClass("hidden");
-        $li.find(".moreComments").removeClass("hidden");
-    },
-
-    showLessComments: function(evt) {
-        evt && evt.preventDefault();
-        var $li = $(evt.target).closest("li");
-        $li.find(".hasMore").removeClass("hidden");
-        $li.find(".moreComments").addClass("hidden");
-    },
 
     additionalContext: function() {
         return {

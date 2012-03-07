@@ -3,7 +3,6 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
 
     setup:function (instanceId, path) {
         this.path = "/" + path;
-        this.fileName = _.last(this.path.split("/"));
 
         this.model = new chorus.models.HdfsFile({ instanceId: instanceId, path: encodeURIComponent(this.path) });
         this.model.fetch()
@@ -12,11 +11,6 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
         this.instance = new chorus.models.Instance({id: instanceId});
         this.instance.fetch();
         this.requiredResources.push(this.instance);
-
-        // move to model???
-        this.iconUrl = chorus.urlHelpers.fileIconUrl(_.last(this.fileName.split(".")));
-
-        this.mainContent = new chorus.views.HdfsShowFileView();
     },
 
     resourcesLoaded: function() {
@@ -26,7 +20,16 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
             { label: t("breadcrumbs.home"), url: "#/" },
             { label: t("breadcrumbs.instances"), url: "#/instances" },
             { label: this.instance.get("name") + (pathLength > 0 ? " (" + pathLength + ")" : "") , url: "#/instances"},
-            { label: this.fileName}
+            { label: this.model.fileNameFromPath()}
         ];
+
+        this.mainContent = new chorus.views.MainContentView({
+            model:this.model,
+            content:new chorus.views.HdfsShowFileView({model:this.model}),
+            contentHeader:new chorus.views.HdfsShowFileHeader({ model:this.model }),
+            contentDetails:new chorus.views.StaticTemplate("plain_text", {text:t("hdfs.read_only")})
+        });
+
+        this.render();
     }
 })

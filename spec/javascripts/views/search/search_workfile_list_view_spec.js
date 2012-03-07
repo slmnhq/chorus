@@ -26,7 +26,8 @@ describe("chorus.views.SearchWorkfileList", function() {
                     }
                 }
             ]),
-            total: "24"
+            total: "24",
+            query: "foo"
         });
 
         this.view.render()
@@ -88,6 +89,17 @@ describe("chorus.views.SearchWorkfileList", function() {
         })
     })
 
+    context("clicking the show all link", function() {
+        beforeEach(function() {
+            spyOn(chorus.router, "navigate");
+            this.view.$("a.show_all").click();
+        });
+
+        it("should navigate to the user results page", function() {
+            expect(chorus.router.navigate).toHaveBeenCalledWith("#/search/workfile/foo", true);
+        });
+    });
+
     describe("list elements", function() {
         it("there is one for each model in the collection", function() {
             expect(this.view.$('li').length).toBe(2);
@@ -132,7 +144,7 @@ describe("chorus.views.SearchWorkfileList", function() {
             expect(this.view.$('li .comments').eq(0).find('.comment').length).toBe(3);
             expect(this.view.$('li .comments').eq(1).find('.comment').length).toBe(0);
 
-            expect(this.view.$('li .comments').eq(0).find('.hasMore a.hasMoreLink')).toContainTranslation("search.comments_more", {count: 1});
+            expect(this.view.$('li .comments').eq(0).find('.hasMore a.show_more_comments')).toContainTranslation("search.comments_more", {count: 1});
 
             expect(this.view.$('li .comments').eq(0).find('.comment .comment_type').eq(0)).toContainTranslation("activity_stream.note");
             expect(this.view.$('li .comments').eq(0).find('.comment .comment_type').eq(1)).toContainTranslation("activity_stream.comment");
@@ -146,15 +158,15 @@ describe("chorus.views.SearchWorkfileList", function() {
         it("shows the rest of the comments/notes/insights when the user clicks the link", function() {
             expect(this.view.$('li').eq(0).find('.moreComments')).toHaveClass("hidden");
 
-            this.view.$('li .comments').eq(0).find('.hasMore a.hasMoreLink').click();
+            this.view.$('li .comments').eq(0).find('.hasMore a.show_more_comments').click();
             expect(this.view.$('li .comments').eq(0).find('.hasMore')).toHaveClass("hidden");
 
             expect(this.view.$('li').eq(0).find('.moreComments')).not.toHaveClass("hidden");
         });
 
         it("hides the rest of the comments/notes/insights when the user clicks the 'less' link", function() {
-            this.view.$('li .comments').eq(0).find('.hasMore a.hasMoreLink').click();
-            this.view.$('li .comments').eq(0).find('a.lessComments').click();
+            this.view.$('li .comments').eq(0).find('.hasMore a.show_more_comments').click();
+            this.view.$('li .comments').eq(0).find('a.show_fewer_comments').click();
 
             expect(this.view.$('li').eq(0).find('.moreComments')).not.toHaveClass("hidden");
             expect(this.view.$('li .comments').eq(0).find('.hasMore')).toHaveClass("hidden");

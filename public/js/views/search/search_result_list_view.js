@@ -13,11 +13,34 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     },
 
     setup: function() {
-
-        if (this.model.users())     this.userList = new chorus.views.SearchUserList({collection: this.model.users() });
-        if (this.model.workfiles()) this.workfileList = new chorus.views.SearchWorkfileList({ collection : this.model.workfiles(), total: this.model.get("workfile").numFound });
-        if (this.model.workspaces()) this.workspaceList = new chorus.views.SearchWorkspaceList({ collection : this.model.workspaces(), total: this.model.get("workspace").numFound });
-        if (this.model.tabularData()) this.tabularDataList = new chorus.views.SearchTabularDataList({ collection : this.model.tabularData(), total: this.model.get("dataset").numFound });
+        if (this.model.users()) {
+            this.userList = new chorus.views.SearchUserList({
+                collection: this.model.users(),
+                total: this.model.get("user").numFound,
+                query: this.model.get("query")
+            });
+        }
+        if (this.model.workfiles()) {
+            this.workfileList = new chorus.views.SearchWorkfileList({
+                collection: this.model.workfiles(),
+                total: this.model.get("workfile").numFound,
+                query: this.model.get("query")
+            });
+        }
+        if (this.model.workspaces()) {
+            this.workspaceList = new chorus.views.SearchWorkspaceList({
+                collection: this.model.workspaces(),
+                total: this.model.get("workspace").numFound,
+                query: this.model.get("query")
+            });
+        }
+        if (this.model.tabularData()) {
+            this.tabularDataList = new chorus.views.SearchTabularDataList({
+                collection: this.model.tabularData(),
+                total: this.model.get("dataset").numFound,
+                query: this.model.get("query")
+            });
+        }
     },
 
     selectItem:function selectItem(e) {

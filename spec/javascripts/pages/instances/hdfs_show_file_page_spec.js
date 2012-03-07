@@ -1,7 +1,7 @@
 describe("chorus.pages.HdfsShowFilePage", function() {
     beforeEach(function() {
         this.instance = fixtures.instance({id: "1234", name: "MyInstance"});
-        this.file = fixtures.hdfsFile({ name: "myFile.txt" });
+        this.file = fixtures.hdfsFile({ path: "myFile.txt" });
         this.page = new chorus.pages.HdfsShowFilePage(1234, "my/path/myFile.txt");
     });
 
@@ -25,24 +25,24 @@ describe("chorus.pages.HdfsShowFilePage", function() {
             expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toBe("myFile.txt");
         });
 
-        xit ("has the file icon", function() {
-            expect(this.page.$("img.fileIcon").attr("src")).toBe("abc");
-        });
-
-        it("has the file name", function() {
-
-        });
-
-        xit("has the flag / banner / tag?", function() {
-
-        });
-
         it("has the file is read-only indicator", function() {
+            expect(this.page.$(".content_details .plain_text")).toContainTranslation("hdfs.read_only")
+        });
+
+        xit("has the correct sidebar", function() {
 
         });
 
-        it("has the correct sidebar", function() {
+        it("has a header file", function() {
+            expect(this.page.mainContent.contentHeader).toBeA(chorus.views.HdfsShowFileHeader);
+            expect(this.page.mainContent.contentHeader.model.get('path')).toBe(this.file.get('path'));
+        })
 
-        });
+        it("shows the hdfs file", function() {
+            expect(this.page.mainContent.content).toBeA(chorus.views.HdfsShowFileView);
+            expect(this.page.mainContent.content.model.get('instanceId')).toBe(this.file.get('instanceId'));
+            expect(this.page.mainContent.content.model.get('content')).toBe(this.file.get('content'));
+            expect(this.page.mainContent.content.model.get('path')).toBe(this.file.get('path'));
+        })
     });
 });

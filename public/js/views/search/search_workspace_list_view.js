@@ -1,25 +1,7 @@
-chorus.views.SearchWorkspaceList = chorus.views.Base.extend({
+chorus.views.SearchWorkspaceList = chorus.views.SearchResultListBase.extend({
+    searchResultType: "workspace",
     className: "search_workspace_list",
     additionalClass: "list",
-
-    events: {
-        "click li .comments .hasMore a.hasMoreLink": "showMoreComments",
-        "click li a.lessComments": "showLessComments"
-    },
-
-    showMoreComments: function(evt) {
-        evt && evt.preventDefault();
-        var $li = $(evt.target).closest("li");
-        $li.find(".hasMore").addClass("hidden");
-        $li.find(".moreComments").removeClass("hidden");
-    },
-
-    showLessComments: function(evt) {
-        evt && evt.preventDefault();
-        var $li = $(evt.target).closest("li");
-        $li.find(".hasMore").removeClass("hidden");
-        $li.find(".moreComments").addClass("hidden");
-    },
 
     additionalContext: function() {
         return {
