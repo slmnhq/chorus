@@ -42,7 +42,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
                             {data: "workspace", text: t("search.type.workspace")},
                             {data: "user", text: t("search.type.user")}
                         ],
-                        chosen: t("search.type." + (this.search.get("entityType") || 'all')),
+                        chosen: t("search.type." + this.search.get("entityType")),
                         event: "filter"
                     }
                 }
