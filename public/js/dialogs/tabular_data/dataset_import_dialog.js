@@ -178,18 +178,31 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
                 if (self.csv.serverErrors) {
                     self.csv.trigger("saveFailed");
                     fileChosen(e, data);
-                } else if (self.csv.columnOrientedData().length == 0) {
-                    var alert = new chorus.alerts.EmptyCSV();
-                    alert.launchModal();
-                }
-                else {
-                    var dialog;
-                    if (self.importTarget === "existing") {
-                        dialog = new chorus.dialogs.ExistingTableImportCSV({csv: self.csv, datasetId: self.datasetId});
-                    } else {
-                        dialog = new chorus.dialogs.NewTableImportCSV({csv: self.csv});
+                } else {
+
+                    try {
+                        if (self.csv.columnOrientedData().length == 0) {
+                            var alert = new chorus.alerts.EmptyCSV();
+                            alert.launchModal();
+                        }
+                        else {
+                            var dialog;
+                            if (self.importTarget === "existing") {
+                                dialog = new chorus.dialogs.ExistingTableImportCSV({csv: self.csv, datasetId: self.datasetId});
+                            } else {
+                                dialog = new chorus.dialogs.NewTableImportCSV({csv: self.csv});
+                            }
+                            dialog.launchModal();
+                        }
                     }
-                    dialog.launchModal();
+                    catch(e) {
+                        self.csv.serverErrors = [
+                            {
+                                message: t("dataset.import.invalid_csv")
+                            }
+                        ]
+                        self.csv.trigger("saveFailed");
+                    }
                 }
             }
         }
