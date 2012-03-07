@@ -9,53 +9,125 @@ describe("chorus.models.SearchResult", function() {
     })
 
     describe("#url and #showUrl", function() {
-        context("when scoped to the current user's workspaces", function() {
+        context("when prioritizing a particular workspace", function() {
             beforeEach(function() {
-                this.model.set({ searchIn: "my_workspaces" });
+                this.model.set({ workspaceId: "5" });
             });
 
-            it("uses the workspaces search api", function() {
-                expect(this.model.url()).toMatchUrl("/edc/search/workspaces/?query=jackson5", {
-                    paramsToIgnore: [ "rows", "page" ]
+            context("when searching only the current user's workspaces", function() {
+                beforeEach(function() {
+                    this.model.set({ searchIn: "my_workspaces" });
+                });
+
+                context("when searching for a particular entity type", function() {
+                    beforeEach(function() {
+                        this.model.set({ entityType: "workfile" });
+                    });
+
+                    expectUrl("/edc/search/workspaces/?query=jackson5&entityType=workfile&workspaceId=5");
+                    expectShowUrl("#/workspaces/5/search/my_workspaces/workfile/jackson5");
+                });
+
+                context("when searching for any entity type", function() {
+                    beforeEach(function() {
+                        this.model.set({ entityType: "all" });
+                    });
+
+                    expectUrl("/edc/search/workspaces/?query=jackson5&workspaceId=5");
+                    expectShowUrl("#/workspaces/5/search/my_workspaces/all/jackson5");
                 });
             });
 
-            it("has the show url for the workspace-scope", function() {
-                expect(this.model.showUrl()).toMatchUrl("#/search/my_workspaces/all/jackson5");
+            context("when searching all of chorus", function() {
+                beforeEach(function() {
+                    this.model.set({ searchIn: "all" });
+                });
+
+                context("when searching for a particular entity type", function() {
+                    beforeEach(function() {
+                        this.model.set({ entityType: "workfile" });
+                    });
+
+                    expectUrl("/edc/search/global/?query=jackson5&entityType=workfile&workspaceId=5");
+                    expectShowUrl("#/workspaces/5/search/all/workfile/jackson5");
+                });
+
+                context("when searching for any entity type", function() {
+                    beforeEach(function() {
+                        this.model.set({ entityType: "all" });
+                    });
+
+                    expectUrl("/edc/search/global/?query=jackson5&workspaceId=5");
+                    expectShowUrl("#/workspaces/5/search/jackson5");
+                });
             });
         });
 
-        context("when there is a specific 'entityType' (not 'all')", function() {
+        context("when not prioritizing a particular workspace", function() {
             beforeEach(function() {
-                this.model.set({ entityType: "users" });
+                this.model.unset("workspaceId");
             });
 
-            it("uses the entityType-specific search api", function() {
-                expect(this.model.url()).toMatchUrl("/edc/search/global/?query=jackson5&entityType=users", {
-                    paramsToIgnore: [ "rows", "page" ]
+            context("when searching only the current user's workspaces", function() {
+                beforeEach(function() {
+                    this.model.set({ searchIn: "my_workspaces" });
+                });
+
+                context("when searching for a particular entity type", function() {
+                    beforeEach(function() {
+                        this.model.set({ entityType: "workfile" });
+                    });
+
+                    expectUrl("/edc/search/workspaces/?query=jackson5&entityType=workfile");
+                    expectShowUrl("#/search/my_workspaces/workfile/jackson5");
+                });
+
+                context("when searching for any entity type", function() {
+                    beforeEach(function() {
+                        this.model.set({ entityType: "all" });
+                    });
+
+                    expectUrl("/edc/search/workspaces/?query=jackson5");
+                    expectShowUrl("#/search/my_workspaces/all/jackson5");
                 });
             });
 
-            it("has the show url for searching for only that entity type", function() {
-                expect(this.model.showUrl()).toMatchUrl("#/search/all/users/jackson5");
-            });
-        });
+            context("when searching all of chorus", function() {
+                beforeEach(function() {
+                    this.model.set({ searchIn: "all" });
+                });
 
-        context("when the entityType parameter is set to 'all' and not scoped to the current user's workspaces", function() {
-            beforeEach(function() {
-                this.model.set({ entityType: "all" });
-            });
+                context("when searching for a particular entity type", function() {
+                    beforeEach(function() {
+                        this.model.set({ entityType: "workfile" });
+                    });
 
-            it("doesn't include the entityType in the API url", function() {
-                expect(this.model.url()).toMatchUrl("/edc/search/global/?query=jackson5", {
-                    paramsToIgnore: [ "rows", "page" ]
+                    expectUrl("/edc/search/global/?query=jackson5&entityType=workfile");
+                    expectShowUrl("#/search/all/workfile/jackson5");
+                });
+
+                context("when searching for any entity type", function() {
+                    beforeEach(function() {
+                        this.model.set({ entityType: "all" });
+                    });
+
+                    expectUrl("/edc/search/global/?query=jackson5");
+                    expectShowUrl("#/search/jackson5");
                 });
             });
-
-            it("has the global search show url", function() {
-                expect(this.model.showUrl()).toMatchUrl("#/search/jackson5");
-            });
         });
+
+        function expectUrl(url) {
+            it("has the right url", function() {
+                expect(this.model.url()).toMatchUrl(url, { paramsToIgnore: [ "rows", "page" ] });
+            });
+        }
+
+        function expectShowUrl(url) {
+            it("has the right show url", function() {
+                expect(this.model.showUrl()).toMatchUrl(url);
+            });
+        }
     });
 
     describe("#shortName", function() {

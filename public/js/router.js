@@ -24,6 +24,8 @@
             ["/workspaces/:workspaceId/workfiles/:workfileId", "WorkfileShow"],
             ["/workspaces/:workspaceId/workfiles/:workfileId/versions/:versionId", "WorkfileShow"],
             ["/workspaces/:workspaceId/datasets", "DatasetIndex"],
+            ["/workspaces/:workspaceId/search/:query", "SearchIndex"],
+            ["/workspaces/:workspaceId/search/:scope/:entityType/:query", "SearchIndex"],
             ["/instances", "InstanceIndex"],
             ["/instances/:instanceId/database/:databaseName/schema/:schemaName", "SchemaBrowse"],
             ["/instances/:instanceId/database/:databaseName/schema/:schemaName/:metaType/:objectName", "TabularDataShow"],

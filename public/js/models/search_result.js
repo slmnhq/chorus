@@ -11,7 +11,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
     },
 
     urlTemplate: function() {
-        if (this.isScopedToWorkspaces()) {
+        if (this.isScopedToUserWorkspaces()) {
             return "search/workspaces/";
         } else {
             return "search/global/";
@@ -19,14 +19,21 @@ chorus.models.SearchResult = chorus.models.Base.extend({
     },
 
     showUrlTemplate: function() {
-        if (this.isScopedToWorkspaces() || this.hasSpecificEntityType()) {
-            return "search/" + this.get("searchIn") + "/" + this.get("entityType") + "/" + this.get("query");
+        var prefix = "",
+            workspaceId = this.get("workspaceId");
+
+        if (workspaceId) {
+            prefix = "workspaces/" + workspaceId + "/";
+        }
+
+        if (this.isScopedToUserWorkspaces() || this.hasSpecificEntityType()) {
+            return prefix + "search/" + this.get("searchIn") + "/" + this.get("entityType") + "/" + this.get("query");
         } else {
-            return "search/" + this.get("query");
+            return prefix + "search/" + this.get("query");
         }
     },
 
-    isScopedToWorkspaces: function() {
+    isScopedToUserWorkspaces: function() {
         return this.get("searchIn") === "my_workspaces";
     },
 
@@ -41,6 +48,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
             page: 1
         };
         if (this.hasSpecificEntityType()) params.entityType = this.get("entityType");
+        if (this.has("workspaceId")) params.workspaceId = this.get("workspaceId");
         return params;
     },
 
