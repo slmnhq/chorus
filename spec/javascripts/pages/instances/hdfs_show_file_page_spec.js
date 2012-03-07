@@ -12,7 +12,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         });
 
         it ("has the breadcrumbs", function (){
-            expect(this.page.$(".spacer").length).toBe(3);
+            expect(this.page.$(".breadcrumbs .spacer").length).toBe(3);
 
             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
@@ -29,8 +29,8 @@ describe("chorus.pages.HdfsShowFilePage", function() {
             expect(this.page.$(".content_details .plain_text")).toContainTranslation("hdfs.read_only")
         });
 
-        xit("has the correct sidebar", function() {
-
+        it("has the correct sidebar", function() {
+            expect(this.page.sidebar).toBeA(chorus.views.HdfsShowFileSidebar);
         });
 
         it("has a header file", function() {
@@ -45,4 +45,35 @@ describe("chorus.pages.HdfsShowFilePage", function() {
             expect(this.page.mainContent.content.model.get('path')).toBe(this.file.get('path'));
         })
     });
+
+    describe("when the path is long", function() {
+        beforeEach(function() {
+            spyOn(chorus, "menu")
+
+            this.page = new chorus.pages.HdfsShowFilePage("1234", "start/m1/m2/m3/end");
+
+            this.server.completeFetchFor(this.page.model, this.file);
+            this.server.completeFetchFor(this.page.instance, this.instance);
+        });
+
+        it("constructs the breadcrumb links correctly", function() {
+            var options = chorus.menu.mostRecentCall.args[1]
+
+            var $content = $(options.content);
+
+            expect($content.find("a").length).toBe(5);
+
+            expect($content.find("a").eq(0).attr("href")).toBe("#/instances/1234/browse/")
+            expect($content.find("a").eq(1).attr("href")).toBe("#/instances/1234/browse/start")
+            expect($content.find("a").eq(2).attr("href")).toBe("#/instances/1234/browse/start/m1")
+            expect($content.find("a").eq(3).attr("href")).toBe("#/instances/1234/browse/start/m1/m2")
+            expect($content.find("a").eq(4).attr("href")).toBe("#/instances/1234/browse/start/m1/m2/m3")
+
+            expect($content.find("a").eq(0).text()).toBe(this.instance.get("name"))
+            expect($content.find("a").eq(1).text()).toBe("start")
+            expect($content.find("a").eq(2).text()).toBe("m1")
+            expect($content.find("a").eq(3).text()).toBe("m2")
+            expect($content.find("a").eq(4).text()).toBe("m3")
+        })
+    })
 });
