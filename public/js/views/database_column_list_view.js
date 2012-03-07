@@ -1,4 +1,5 @@
 chorus.views.DatabaseColumnList = chorus.views.Base.extend({
+    constructorName: "DatabaseColumnListView",
     tagName:"ul",
     className:"database_column_list",
     additionalClass:"list",

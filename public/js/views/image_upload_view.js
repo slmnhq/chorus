@@ -1,4 +1,5 @@
 chorus.views.ImageUpload = chorus.views.Base.extend({
+    constructorName: "ImageUploadView",
     className:"image_upload",
 
     additionalContext:function () {

@@ -1,5 +1,5 @@
 chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
-
+    constructorName: "InstanceListSidebarView",
     className:"instance_list_sidebar",
     useLoadingSection:true,
 

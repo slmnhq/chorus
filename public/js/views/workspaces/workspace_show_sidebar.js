@@ -1,4 +1,5 @@
 chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
+    constructorName: "WorkspaceShowSidebarView",
     className:"workspace_show_sidebar",
 
     subviews: {

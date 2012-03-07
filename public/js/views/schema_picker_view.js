@@ -1,4 +1,5 @@
 chorus.views.SchemaPicker = chorus.views.Base.extend({
+    constructorName: "SchemaPickerView",
     className:"schema_picker",
 
     events: {

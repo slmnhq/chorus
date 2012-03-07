@@ -1,4 +1,5 @@
 chorus.collections.InstanceSet = chorus.collections.Base.extend({
+    constructorName: "InstanceSet",
     model:chorus.models.Instance,
     urlTemplate:"instance/",
 

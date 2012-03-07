@@ -1,4 +1,5 @@
 chorus.models.InstanceUsage = chorus.models.Base.extend({
+    constructorName: "InstanceUsage",
     urlTemplate:"instance/{{instanceId}}/workspace",
 
     calculatePercentages:function () {

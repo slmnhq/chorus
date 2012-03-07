@@ -1,4 +1,5 @@
 chorus.models.TabularDataPreview = chorus.models.Base.extend(_.extend({}, chorus.Mixins.SQLResults, {
+    constructorName: "TabularDataPreview",
     urlTemplate: function() {
         if (this.get("tableName")) {
             return "data/{{instanceId}}/database/{{databaseName}}/schema/{{schemaName}}/table/{{tableName}}/sample";

@@ -1,4 +1,5 @@
 chorus.views.CollectionPicklist = chorus.views.Base.extend({
+    constructorName: "CollectionPicklistView",
     className:"collection_picklist",
 
     events:{

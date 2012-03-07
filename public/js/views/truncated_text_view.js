@@ -1,4 +1,5 @@
 chorus.views.TruncatedText = chorus.views.Base.extend({
+    constructorName: "TruncatedText",
     className: "truncated_text",
 
     events: {

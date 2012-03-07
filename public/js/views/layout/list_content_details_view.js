@@ -1,4 +1,5 @@
 chorus.views.ListContentDetails = chorus.views.Base.extend({
+    constructorName: "ListContentDetailsView",
     className:"list_content_details",
 
     events:{

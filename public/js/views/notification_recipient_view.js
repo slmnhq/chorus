@@ -1,4 +1,5 @@
 chorus.views.NotificationRecipient = chorus.views.Base.extend({
+    constructorName: "NotificationRecipientView",
     className: "notification_recipient",
     useLoadingSection: true,
     events: {

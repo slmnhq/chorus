@@ -1,4 +1,5 @@
 chorus.views.TabControl = chorus.views.Base.extend({
+    constructorName: "TabControlView",
     className:'tab_control',
     tagName:'ul',
 

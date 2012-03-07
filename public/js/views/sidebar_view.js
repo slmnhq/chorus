@@ -1,4 +1,5 @@
 chorus.views.Sidebar = chorus.views.Base.extend({
+    constructorName: "SidebarView",
     preRender:function () {
         this._super("preRender", arguments);
 

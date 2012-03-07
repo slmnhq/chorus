@@ -63,6 +63,7 @@
     });
 
     chorus.views.StyleGuideFonts = chorus.views.Base.extend({
+        constructorName: "StyleGuideFontsView",
         className:"style_guide_fonts",
 
         context:function () {

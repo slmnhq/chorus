@@ -1,4 +1,5 @@
 chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
+    constructorName: "DatabaseSidebarListView",
     events: {
         "click .context a": "contextClicked"
     },

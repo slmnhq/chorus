@@ -1,4 +1,5 @@
 chorus.views.DatabaseColumnSidebarList = chorus.views.DatabaseSidebarList.extend({
+    constructorName: "DatabaseColumnSidebarListView",
     className:"database_column_sidebar_list",
     useLoadingSection:true,
 

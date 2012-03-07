@@ -2,6 +2,7 @@
     var noStartingDigitRegex = /^[a-zA-Z]\w*$/;
 
     chorus.models.Sandbox = chorus.models.Base.extend({
+        constructorName: "Sandbox",
         attrToLabel:{
             "instanceName":"instances.dialog.instance_name",
             "databaseName":"instances.dialog.database_name",

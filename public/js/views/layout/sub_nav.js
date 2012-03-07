@@ -1,4 +1,5 @@
 chorus.views.SubNav = chorus.views.Base.extend({
+    constructorName: "SubNavView",
     className:"sub_nav",
     tagName:"ul",
 

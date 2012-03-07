@@ -1,4 +1,5 @@
 chorus.views.Login = chorus.views.Base.extend({
+    constructorName: "LoginView",
     className:"login",
     events:{
         "submit form":"submitLoginForm"

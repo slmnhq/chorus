@@ -1,4 +1,5 @@
 chorus.views.SearchResultList = chorus.views.Base.extend({
+    constructorName: "SearchResultListView",
     className: "search_result_list",
 
     subviews: {

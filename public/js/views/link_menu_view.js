@@ -1,4 +1,5 @@
 chorus.views.LinkMenu = chorus.views.Base.extend({
+    constructorName: "LinkMenuView",
     className:"link_menu",
 
     events:{

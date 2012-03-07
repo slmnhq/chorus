@@ -1,5 +1,6 @@
 chorus.models.InstanceAccount = chorus.models.Base.extend(
     {
+        constructorName: "InstanceAccount",
         urlTemplate:function (options) {
             var method = options && options.method;
             if (method === "update" || method === "delete") {

@@ -1,4 +1,5 @@
 chorus.views.ColumnSelect = chorus.views.Base.extend({
+    constructorName: "ColumnSelectView",
     className: "column_select",
 
     events: {
