@@ -1,11 +1,11 @@
-chorus.pages.HdfsDirectoryEntryIndexPage = chorus.pages.Base.extend({
+chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
     setup:function (instanceId, path) {
         this.path = "/" + path;
         this.instance = new chorus.models.Instance({id: instanceId});
         this.instance.fetch();
         this.requiredResources.push(this.instance);
 
-        this.collection = new chorus.collections.HdfsDirectoryEntrySet([], {instanceId: instanceId, path: this.path});
+        this.collection = new chorus.collections.HdfsEntrySet([], {instanceId: instanceId, path: this.path});
         this.collection.fetch();
         this.requiredResources.push(this.collection);
     },
@@ -19,13 +19,12 @@ chorus.pages.HdfsDirectoryEntryIndexPage = chorus.pages.Base.extend({
         ];
 
         this.mainContent = new chorus.views.MainContentList({
-
-            modelClass: "HdfsDirectoryEntry",
+            modelClass: "HdfsEntry",
             collection: this.collection,
             title: this.instance.get("name") + ": " + this.ellipsizePath()
         });
 
-        this.sidebar = new chorus.views.HdfsDirectoryEntrySidebar({
+        this.sidebar = new chorus.views.HdfsEntrySidebar({
             rootPath: this.path,
             instanceId: this.instance.get("id")
         });

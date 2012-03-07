@@ -70,7 +70,7 @@
                     return t("dataset.title_lower")
                 } else if (object instanceof chorus.models.DatabaseObject) {
                     return t("database_object." + object.get("objectType"));
-                } else if (object instanceof chorus.models.HdfsDirectoryEntry) {
+                } else if (object instanceof chorus.models.HdfsEntry) {
                     return t("hdfs.file_lower");
                 }
             }

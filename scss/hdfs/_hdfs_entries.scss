@@ -1,4 +1,4 @@
-.hdfs_directory_entry_sidebar {
+.hdfs_entry_sidebar {
     .info {
         .name {
             @include ellipsis;
@@ -14,7 +14,7 @@
     }
 }
 
-.hdfs_directory_entry_list {
+.hdfs_entry_list {
     li {
         img {
             display: inline-block;

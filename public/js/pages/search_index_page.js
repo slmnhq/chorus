@@ -53,7 +53,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         });
 
         this.sidebars = {
-            hdfs: new chorus.views.HdfsDirectoryEntrySidebar(),
+            hdfs: new chorus.views.HdfsEntrySidebar(),
             user: new chorus.views.UserListSidebar(),
             workfile: new chorus.views.WorkfileListSidebar({ hideAddNoteLink: true }),
             workspace: new chorus.views.WorkspaceListSidebar(),

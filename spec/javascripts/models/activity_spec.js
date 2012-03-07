@@ -51,7 +51,7 @@ describe("chorus.models.Activity", function() {
 
         it("should return an HDFS entry when the note is on an HDFS instance", function() {
             this.model = fixtures.activities.NOTE_ON_HDFS();
-            expect(this.model.noteworthy()).toBeA(chorus.models.HdfsDirectoryEntry);
+            expect(this.model.noteworthy()).toBeA(chorus.models.HdfsEntry);
         })
     })
 

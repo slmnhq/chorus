@@ -94,7 +94,7 @@ chorus.models.Activity = chorus.models.Base.extend({
             attrs.fullName = attrs.name;
             attrs.name = _.last(attrs.fullName.split("/"));
             attrs.instanceId = _.first(attrs.id.split("|"));
-            return new chorus.models.HdfsDirectoryEntry(attrs);
+            return new chorus.models.HdfsEntry(attrs);
         }
     },
 

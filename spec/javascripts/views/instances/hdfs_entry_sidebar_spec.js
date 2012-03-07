@@ -1,12 +1,12 @@
-describe("chorus.views.HdfsDirectoryEntrySidebar", function(){
+describe("chorus.views.HdfsEntrySidebar", function(){
     beforeEach(function() {
-        this.view = new chorus.views.HdfsDirectoryEntrySidebar({rootPath: "/foo", instanceId: 123});
+        this.view = new chorus.views.HdfsEntrySidebar({rootPath: "/foo", instanceId: 123});
     });
 
     describe("#render", function() {
         context("when the model is a directory", function() {
             beforeEach(function() {
-                this.hdfsEntry = fixtures.hdfsDirectoryEntryDir();
+                this.hdfsEntry = fixtures.hdfsEntryDir();
                 chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
             });
 
@@ -26,7 +26,7 @@ describe("chorus.views.HdfsDirectoryEntrySidebar", function(){
 
                 this.modalSpy = stubModals();
 
-                this.hdfsEntry = fixtures.hdfsDirectoryEntryFile({name: "my_file.sql"});
+                this.hdfsEntry = fixtures.hdfsEntryFile({name: "my_file.sql"});
                 chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
             });
 

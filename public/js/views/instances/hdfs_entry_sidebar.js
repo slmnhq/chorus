@@ -1,6 +1,6 @@
-chorus.views.HdfsDirectoryEntrySidebar = chorus.views.Sidebar.extend({
-    constructorName: "HdfsDirectoryEntrySidebar",
-    className: "hdfs_directory_entry_sidebar",
+chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
+    constructorName: "HdfsEntrySidebar",
+    className: "hdfs_entry_sidebar",
 
     subviews: {
         '.activity_list': 'activityList',

@@ -719,6 +719,28 @@ beforeEach(function() {
                 return new chorus.models.Activity(attrs);
             },
 
+            "WORKSPACE_ADD_HDFS_AS_EXT_TABLE": function(overrides) {
+                var attrs = _exnted({
+                    type: "WORKSPACE_ADD_HDFS_AS_EXT_TABLE",
+                    id: fixtures.nextId().toString(),
+                    timestamp: "2012-03-07 14:42:23",
+                    author: fixtures.authorJson(),
+                    comments: [],
+                    databaseObject: {
+                        id: '10000|dca_demo|ddemo|HDFS_EXTERNAL_TABLE|import_csv',
+                        name: 'import_csv'
+                    },
+                    hdfs: {
+                        id: "10010|/data/import.csv",
+                        isDeleted: false,
+                        name: "/data/import.csv"
+                    },
+                    workspace: fixtures.workspaceJson()
+                }, overrides);
+
+                return new chorus.models.Activity(attrs);
+            },
+
             "WORKFILE_CREATED": function() {
                 return new chorus.models.Activity({
                     author: fixtures.authorJson(),
@@ -2667,25 +2689,25 @@ beforeEach(function() {
             return new chorus.collections.NotificationSet(models, overrides);
         },
 
-        hdfsDirectoryEntrySet: function(models, overrides) {
+        hdfsEntrySet: function(models, overrides) {
             models = models || [
-                fixtures.hdfsDirectoryEntryDirJson(overrides),
-                fixtures.hdfsDirectoryEntryFileJson(overrides),
-                fixtures.hdfsDirectoryEntryBinaryFileJson(overrides),
-                fixtures.hdfsDirectoryEntryUnknownIfBinaryFileJson(overrides)
+                fixtures.hdfsEntryDirJson(overrides),
+                fixtures.hdfsEntryFileJson(overrides),
+                fixtures.hdfsEntryBinaryFileJson(overrides),
+                fixtures.hdfsEntryUnknownIfBinaryFileJson(overrides)
             ];
-            return new chorus.collections.HdfsDirectoryEntrySet(models, overrides);
+            return new chorus.collections.HdfsEntrySet(models, overrides);
         },
 
-        hdfsDirectoryEntryDir: function(overrides) {
-            return new chorus.models.HdfsDirectoryEntry(this.hdfsDirectoryEntryDirJson(overrides));
+        hdfsEntryDir: function(overrides) {
+            return new chorus.models.HdfsEntry(this.hdfsEntryDirJson(overrides));
         },
 
-        hdfsDirectoryEntryFile: function(overrides) {
-            return new chorus.models.HdfsDirectoryEntry(this.hdfsDirectoryEntryFileJson(overrides));
+        hdfsEntryFile: function(overrides) {
+            return new chorus.models.HdfsEntry(this.hdfsEntryFileJson(overrides));
         },
 
-        hdfsDirectoryEntryDirJson: function(overrides) {
+        hdfsEntryDirJson: function(overrides) {
             var id = fixtures.nextId();
             return _.extend({
                 "name": "folder" + id,
@@ -2699,7 +2721,7 @@ beforeEach(function() {
             }, overrides);
         },
 
-        hdfsDirectoryEntryFileJson: function(overrides) {
+        hdfsEntryFileJson: function(overrides) {
             var id = fixtures.nextId();
             return _.extend({
                 "name": "file" + id + ".sql",
@@ -2714,7 +2736,7 @@ beforeEach(function() {
             }, overrides);
         },
 
-        hdfsDirectoryEntryBinaryFileJson: function(overrides) {
+        hdfsEntryBinaryFileJson: function(overrides) {
             var id = fixtures.nextId();
             return _.extend({
                 "name": "file" + id + ".bin",
@@ -2729,7 +2751,7 @@ beforeEach(function() {
             }, overrides);
         },
 
-        hdfsDirectoryEntryUnknownIfBinaryFileJson: function(overrides) {
+        hdfsEntryUnknownIfBinaryFileJson: function(overrides) {
             var id = fixtures.nextId();
             return _.extend({
                 "name": "file" + id + ".???",

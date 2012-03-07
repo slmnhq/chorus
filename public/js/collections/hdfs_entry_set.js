@@ -1,6 +1,6 @@
-chorus.collections.HdfsDirectoryEntrySet = chorus.collections.Base.extend({
-    constructorName: "HdfsDirectoryEntrySet",
-    model: chorus.models.HdfsDirectoryEntry,
+chorus.collections.HdfsEntrySet = chorus.collections.Base.extend({
+    constructorName: "HdfsEntrySet",
+    model: chorus.models.HdfsEntry,
 
     setup: function() {
         this.attributes.encodedPath = encodeURIComponent(this.attributes.path);

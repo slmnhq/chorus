@@ -1,6 +1,6 @@
-chorus.views.HdfsDirectoryEntryList = chorus.views.Base.extend({
-    constructorName: "HdfsDirectoryEntryList",
-    className: "hdfs_directory_entry_list",
+chorus.views.HdfsEntryList = chorus.views.Base.extend({
+    constructorName: "HdfsEntryList",
+    className: "hdfs_entry_list",
     tagName: "ul",
     additionalClass: "list",
 

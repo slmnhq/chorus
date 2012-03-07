@@ -1,7 +1,7 @@
-describe("chorus.views.HdfsDirectoryEntryList", function() {
+describe("chorus.views.HdfsEntryList", function() {
     beforeEach(function() {
-        this.collection = fixtures.hdfsDirectoryEntrySet(null, {instanceId: "1234", path: "/abc"});
-        this.view = new chorus.views.HdfsDirectoryEntryList({ collection : this.collection});
+        this.collection = fixtures.hdfsEntrySet(null, {instanceId: "1234", path: "/abc"});
+        this.view = new chorus.views.HdfsEntryList({ collection : this.collection});
     });
     describe("#render", function() {
         beforeEach(function() {

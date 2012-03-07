@@ -246,8 +246,8 @@ describe("chorus.models.SearchResult", function() {
                 this.entries = this.model.hdfs();
             });
 
-            it("returns an HdfsDirectoryEntrySet", function() {
-                expect(this.entries).toBeA(chorus.collections.HdfsDirectoryEntrySet)
+            it("returns an HdfsEntrySet", function() {
+                expect(this.entries).toBeA(chorus.collections.HdfsEntrySet)
             });
 
             it("has the correct number of entries", function() {

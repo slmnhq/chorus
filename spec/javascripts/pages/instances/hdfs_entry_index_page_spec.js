@@ -1,7 +1,7 @@
-describe("chorus.pages.HdfsDirectoryEntryIndexPage", function() {
+describe("chorus.pages.HdfsEntryIndexPage", function() {
     beforeEach(function() {
         this.instance = fixtures.instance({id: "1234", name: "instance Name"});
-        this.page = new chorus.pages.HdfsDirectoryEntryIndexPage("1234", "foo");
+        this.page = new chorus.pages.HdfsEntryIndexPage("1234", "foo");
     });
 
     it("fetches the Hdfs entries for that directory", function() {
@@ -14,7 +14,7 @@ describe("chorus.pages.HdfsDirectoryEntryIndexPage", function() {
 
     describe("when all of the fetches complete", function() {
         beforeEach(function() {
-            var entries = fixtures.hdfsDirectoryEntrySet(null, {instanceId: "1234", path: "/foo"});
+            var entries = fixtures.hdfsEntrySet(null, {instanceId: "1234", path: "/foo"});
             entries.loaded = true;
             this.server.completeFetchFor(this.page.collection, entries);
             this.page.collection = entries;
@@ -39,28 +39,28 @@ describe("chorus.pages.HdfsDirectoryEntryIndexPage", function() {
 
         it("should have a sidebar", function() {
             expect($(this.page.el).find(this.page.sidebar.el)).toExist();
-            expect(this.page.sidebar).toBeA(chorus.views.HdfsDirectoryEntrySidebar);
+            expect(this.page.sidebar).toBeA(chorus.views.HdfsEntrySidebar);
         })
 
         it("shows a link if a file is not binary", function() {
             var filename = this.page.collection.models[1].get('name')
-            expect(this.page.$(".hdfs_directory_entry_list li:eq(1) .name a").attr('href')).toEqual('#/instances/1234/browseFile/foo/' + filename)
+            expect(this.page.$(".hdfs_entry_list li:eq(1) .name a").attr('href')).toEqual('#/instances/1234/browseFile/foo/' + filename)
         })
 
         it("shows no link if a file is binary", function() {
-            expect(this.page.$(".hdfs_directory_entry_list li:eq(2) .name a")).not.toExist()
+            expect(this.page.$(".hdfs_entry_list li:eq(2) .name a")).not.toExist()
         })
 
         it("shows no link if isBinary equals 'null'", function() {
-            expect(this.page.$(".hdfs_directory_entry_list li:eq(3) .name a")).not.toExist()
+            expect(this.page.$(".hdfs_entry_list li:eq(3) .name a")).not.toExist()
         })
 
         describe("when the path is long", function() {
             beforeEach(function() {
                 spyOn(chorus, "menu")
 
-                this.page = new chorus.pages.HdfsDirectoryEntryIndexPage("1234", "start/m1/m2/m3/end");
-                var entries = fixtures.hdfsDirectoryEntrySet(null, {instanceId: "1234", path: "/foo"});
+                this.page = new chorus.pages.HdfsEntryIndexPage("1234", "start/m1/m2/m3/end");
+                var entries = fixtures.hdfsEntrySet(null, {instanceId: "1234", path: "/foo"});
                 entries.loaded = true;
                 this.server.completeFetchFor(this.page.collection, entries);
                 this.page.collection = entries;
