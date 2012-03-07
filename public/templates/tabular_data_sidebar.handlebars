@@ -29,7 +29,7 @@
                 <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workspace-attachments="true">{{t "actions.add_note"}}</a></li>
                 {{#if canImport}}
                     <li><a class="dialog import_now" data-dialog="ImportScheduler" href="#">{{t "actions.import_now"}}</a></li>
-                    {{#if hasImport}}
+                    {{#if hasSchedule}}
                         <li><a class="dialog edit_schedule" data-dialog="ImportScheduler" href="#">{{t "actions.edit_schedule"}}</a></li>
                     {{else}}
                         <li><a class="dialog create_schedule" data-dialog="ImportScheduler" href="#">{{t "actions.create_schedule"}}</a></li>

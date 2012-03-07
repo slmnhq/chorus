@@ -306,9 +306,9 @@ describe("chorus.views.TabularDataSidebar", function() {
                     });
 
                     describe("when the import fetch completes", function() {
-                        context("and the dataset doesn't have an import schedule", function() {
+                        context("and the dataset has no import information", function() {
                             beforeEach(function() {
-                                this.server.completeFetchFor(this.dataset.getImport(), []);
+                                this.server.completeFetchFor(this.view.importConfiguration, []);
                             });
 
                             context("and the current user has update permissions on the workspace", function() {
@@ -372,7 +372,6 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 it("does not have an 'import now' link", function() {
                                     expect(this.view.$("a.import_now.dialog")).not.toExist();
                                 });
-
                             });
 
                             it("doesn't have an 'edit import schedule' link'", function() {
@@ -380,116 +379,224 @@ describe("chorus.views.TabularDataSidebar", function() {
                             });
                         });
 
-                        context("and the dataset has an import schedule", function() {
+                        context("when the dataset has an import schedule", function() {
                             beforeEach(function() {
-                                this.server.completeFetchFor(this.dataset.getImport(), fixtures.datasetImport());
+                                this.importResponse = fixtures.datasetImport({
+                                    scheduleInfo: {
+                                        endTime: "2013-06-02",
+                                        frequency: "WEEKLY",
+                                        jobName: "ScheduleJob_1330719934443",
+                                        startTime: "2012-02-29 14:23:58.169"
+                                    },
+                                    toTable: "our_destination",
+                                    destinationTable: "10000|Analytics|analytics|BASE_TABLE|our_destination"
+                                });
+                                this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
                             });
 
-                            context("and the current user has update permissions on the workspace", function() {
+                            it("shows the next import time", function() {
+                                this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
+                                expect(this.view.$(".next_import").text()).toContainTranslation("import.next_import", {
+                                    nextTime: "in 1 year",
+                                    tableLink: "our_destination"
+                                });
+                                expect(this.view.$(".next_import a")).toContainText("our_destination");
+
+                                var destTable = new chorus.models.Dataset({
+                                    id: "10000|Analytics|analytics|BASE_TABLE|our_destination",
+                                    workspaceId: this.dataset.get("workspace").id
+                                })
+                                expect(this.view.$(".next_import a")).toHaveHref(destTable.showUrl());
+                            });
+
+                            context("when the import has been successfully executed", function() {
+                                beforeEach(function() {
+                                    this.importResponse.set({
+                                        executionInfo: {
+                                            startedStamp: "2012-02-29 14:23:58.169",
+                                            completedStamp: "2012-02-29 14:23:59.027",
+                                            result: {
+                                                executeResult: "success"
+                                            },
+                                            state: "success",
+                                            creator: "InitialUser"
+                                        }
+                                    })
+
+                                    this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
+                                });
+
+                                itHasActionLinks(["import_now", "edit_schedule"]);
+
+                                it("has an 'imported xx ago' description", function() {
+                                    var execInfo = this.view.importConfiguration.get("executionInfo")
+                                    var destTable = new chorus.models.Dataset({
+                                        id: this.view.importConfiguration.get("destinationTable"),
+                                        workspaceId: this.dataset.get("workspace").id})
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination"})
+                                    expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
+                                });
+                            });
+
+                            context("when the import has failed to execute", function() {
+                                beforeEach(function() {
+                                    this.importResponse.set({
+                                        executionInfo: {
+                                            startedStamp: "2012-02-29 14:23:58.169",
+                                            completedStamp: "2012-02-29 14:23:59.027",
+                                            result: {
+                                                executeResult: "failed"
+                                            },
+                                            state: "failed",
+                                            creator: "InitialUser"
+                                        }
+                                    })
+
+                                    this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
+                                });
+
+                                it("has an 'import failed xx ago' description", function() {
+                                    var execInfo = this.view.importConfiguration.get("executionInfo")
+                                    var destTable = new chorus.models.Dataset({
+                                        id: this.view.importConfiguration.get("destinationTable"),
+                                        workspaceId: this.dataset.get("workspace").id})
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_import_failed", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination"})
+                                    expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
+                                    expect(this.view.$(".last_import img").attr("src")).toBe("/images/message_error_small.png");
+                                });
+
+                                itHasActionLinks(["import_now", "edit_schedule"]);
+                            });
+
+                            context("when the import has not yet executed", function() {
+                                beforeEach(function() {
+                                    this.importResponse.set({ executionInfo: null });
+                                    this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
+                                });
+
+                                itHasActionLinks(["import_now", "edit_schedule"]);
+                            });
+                        });
+
+                        context("when the dataset does not have an import schedule", function() {
+                            beforeEach(function() {
+                                this.importResponse = fixtures.datasetImport({
+                                    scheduleInfo: null,
+                                    toTable: "our_destination"
+                                });
+                                this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
+                            });
+
+                            context("when the import has been successfully executed", function() {
+                                beforeEach(function() {
+                                    this.importResponse.set({
+                                        executionInfo: {
+                                            startedStamp: "2012-02-29 14:23:58.169",
+                                            completedStamp: "2012-02-29 14:23:59.027",
+                                            result: {
+                                                executeResult: "success"
+                                            },
+                                            state: "success",
+                                            creator: "InitialUser"
+                                        }
+                                    })
+
+                                    this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
+                                });
+
+                                itHasActionLinks(["import_now", "create_schedule"]);
+
+                                it("has an 'imported xx ago' description", function() {
+                                    var execInfo = this.view.importConfiguration.get("executionInfo")
+                                    var destTable = new chorus.models.Dataset({
+                                        id: this.view.importConfiguration.get("destinationTable"),
+                                        workspaceId: this.dataset.get("workspace").id})
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination"})
+                                    expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
+                                });
+                            });
+
+                            context("when the import has failed to execute", function() {
+                                beforeEach(function() {
+                                    this.importResponse.set({
+                                        executionInfo: {
+                                            startedStamp: "2012-02-29 14:23:58.169",
+                                            completedStamp: "2012-02-29 14:23:59.027",
+                                            result: {
+                                                executeResult: "failed"
+                                            },
+                                            state: "failed",
+                                            creator: "InitialUser"
+                                        }
+                                    })
+
+                                    this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
+                                });
+
+                                itHasActionLinks(["import_now", "create_schedule"]);
+
+                                it("has an 'import failed xx ago' description", function() {
+                                    var execInfo = this.view.importConfiguration.get("executionInfo")
+                                    var destTable = new chorus.models.Dataset({
+                                        id: this.view.importConfiguration.get("destinationTable"),
+                                        workspaceId: this.dataset.get("workspace").id})
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_import_failed", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination"})
+                                    expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
+                                    expect(this.view.$(".last_import img").attr("src")).toBe("/images/message_error_small.png");
+                                });
+                            });
+
+                            context("when the import has not yet executed", function() {
+                                beforeEach(function() {
+                                    this.importResponse.set({ executionInfo: null });
+                                    this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
+                                });
+
+                                itHasActionLinks(["import_now", "create_schedule"]);
+                            });
+                        });
+
+                        function itHasActionLinks(linkClasses) {
+                            var possibleLinkClasses = ["import_now", "edit_schedule", "create_schedule"];
+
+                            context("when the user has permission to update in the workspace", function() {
                                 beforeEach(function() {
                                     this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
                                     this.view.render();
                                 });
 
-                                it("has an 'edit import schedule' link", function() {
-                                    var editScheduleLink = this.view.$("a.edit_schedule.dialog");
-                                    expect(editScheduleLink.data("dialog")).toBe("ImportScheduler");
-                                    expect(editScheduleLink.text()).toMatchTranslation("actions.edit_schedule");
+                                _.each(linkClasses, function(linkClass) {
+                                    it("has a '" + linkClass + "' link, which opens the import scheduler dialog", function() {
+                                        var link = this.view.$("a." + linkClass)
+                                        expect(link).toExist();
+                                        expect(link.text()).toMatchTranslation("actions." + linkClass);
+                                        expect(link.data("dialog")).toBe("ImportScheduler");
+                                    });
+
+                                    it("attaches the dataset to the '" + linkClass + "' link", function() {
+                                        var link = this.view.$("a." + linkClass)
+                                        expect(link.data("dataset")).toBe(this.dataset);
+                                    });
                                 });
 
-                                it("should have the dataset attached as data-dataset", function() {
-                                    expect(this.view.$("a.import_now[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
-                                    expect(this.view.$("a.edit_schedule[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
+                                _.each(_.difference(possibleLinkClasses, linkClasses), function(linkClass) {
+                                    it("does not have a '" + linkClass + "' link", function() {
+                                        expect(this.view.$("a." + linkClass)).not.toExist();
+                                    });
                                 });
+                            });
 
-                                it("has an import now link", function() {
-                                    var importNowLink = this.view.$("a.import_now.dialog");
-                                    expect(importNowLink.text()).toMatchTranslation("actions.import_now");
-                                    expect(importNowLink.data("dialog")).toBe("ImportScheduler");
-                                });
-                            })
-
-                            context("and the current user does not have update permissions on the workspace", function() {
+                            context("when the user does not have permission to update things in the workspace", function() {
                                 beforeEach(function() {
                                     this.view.options.workspace = fixtures.workspace({ permission: ["read"] })
                                     this.view.render();
                                 });
 
-                                it("does not have an 'edit import schedule' link", function() {
-                                    expect(this.view.$("a.edit_schedule.dialog")).not.toExist();
+                                _.each(possibleLinkClasses, function(linkClass) {
+                                    it("does not have a '" + linkClass + "' link", function() {
+                                        expect(this.view.$("a." + linkClass)).not.toExist();
+                                    });
                                 });
-
-                                it("does not have an import now link", function() {
-                                    expect(this.view.$("a.import_now.dialog")).not.toExist();
-                                });
-                            });
-
-                            it("doesn't have a 'create import schedule' link'", function() {
-                                expect(this.view.$(".actions .create_schedule")).not.toExist();
-                            });
-
-                            it("shows the next import time", function() {
-                                expect(this.view.$(".next_import").text()).toContainTranslation("import.next_import",
-                                    {nextTime: "in 1 year", tableLink: this.dataset.getImport().get("toTable")});
-
-                                expect(this.view.$(".next_import a")).toContainText(this.dataset.getImport().get("toTable"));
-                                var destTable = new chorus.models.Dataset({
-                                    id: this.view.importConfiguration.get("destinationTable"),
-                                    workspaceId: this.dataset.get("workspace").id})
-                                expect(this.view.$(".next_import a")).toHaveHref(destTable.showUrl());
-                            });
-                        });
-
-                        context("and the dataset has an import config, but no schedule", function() {
-                            beforeEach(function() {
-                                var importConfig = fixtures.datasetImport();
-                                importConfig.get('scheduleInfo').jobName = null;
-                                this.server.completeFetchFor(this.dataset.getImport(), importConfig);
-                                this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
-                                this.view.render();
-                            });
-
-                            it("has a 'create import schedule' link", function() {
-                                expect(this.view.$("a.create_schedule")).toExist();
-                            });
-                        });
-
-                        context("and the dataset has a recent successful import", function() {
-                            beforeEach(function() {
-                                this.server.completeFetchFor(this.dataset.getImport(), fixtures.datasetImportSuccessful({id: '1234', toTable: "aToTable", datasetId: this.dataset.id, workspaceId: this.dataset.get("workspace").id}).attributes);
-                            });
-
-                            it("has an 'imported xx ago' description", function() {
-                                var execInfo = this.view.importConfiguration.get("executionInfo")
-                                var destTable = new chorus.models.Dataset({
-                                    id: this.view.importConfiguration.get("destinationTable"),
-                                    workspaceId: this.dataset.get("workspace").id})
-                                expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "aToTable"})
-                                expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
-                            });
-                        });
-
-                        context("and the dataset has a recent failed import", function() {
-                            beforeEach(function() {
-                                this.server.completeFetchFor(this.dataset.getImport(), fixtures.datasetImportFailed({id: '1234', toTable: "aToTable", datasetId: this.dataset.id, workspaceId: this.dataset.get("workspace").id}).attributes);
-                            });
-
-                            it("has an 'import failed xx ago' description", function() {
-                                var execInfo = this.view.importConfiguration.get("executionInfo")
-                                var destTable = new chorus.models.Dataset({
-                                    id: this.view.importConfiguration.get("destinationTable"),
-                                    workspaceId: this.dataset.get("workspace").id})
-                                expect(this.view.$(".last_import")).toContainTranslation("import.last_import_failed", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "aToTable"})
-                                expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
-                                expect(this.view.$(".last_import img").attr("src")).toBe("/images/message_error_small.png");
-                            });
-                        });
-
-                        function itHasAnImportNowLink() {
-                            it("has an import now link", function() {
-                                var importNowLink = this.view.$("a.import_now.dialog");
-                                expect(importNowLink.text()).toMatchTranslation("actions.import_now");
-                                expect(importNowLink.data("dialog")).toBe("ImportScheduler");
                             });
                         }
                     });

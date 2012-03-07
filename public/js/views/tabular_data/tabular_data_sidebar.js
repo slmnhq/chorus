@@ -116,7 +116,8 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
         var ctx = {};
         if (this.resource.isImportable()) {
             ctx.isImportable = this.importConfiguration.loaded;
-            ctx.hasImport = this.importConfiguration && this.importConfiguration.hasActiveSchedule();
+            ctx.hasSchedule = this.importConfiguration && this.importConfiguration.hasActiveSchedule();
+            ctx.hasImport = this.importConfiguration && this.importConfiguration.has("id");
 
             var destinationTable = new chorus.models.Dataset({
                 id: this.importConfiguration.get("destinationTable"),
