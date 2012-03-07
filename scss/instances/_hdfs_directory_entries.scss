@@ -75,4 +75,16 @@ ul.hdfs_link_menu {
         color: $content-details-action-link-color;
         text-align: right;
     }
+
+    textarea.hdfs_file_content {
+        height: 500px;
+    }
 }
+
+.hdfs_show_file_sidebar {
+    .file_name {
+        @include ellipsis;
+        margin-bottom: 10px;
+    }
+}
+

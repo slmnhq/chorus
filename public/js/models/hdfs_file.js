@@ -1,5 +1,6 @@
 chorus.models.HdfsFile = chorus.models.Base.extend({
     constructorName: "HdfsFile",
+    entityType: "hdfs",
 
     urlTemplate: function() {
         return "data/{{instanceId}}/hdfs/{{path}}/sample";

@@ -7,6 +7,8 @@
         display: inline-block;
         font-size: inherit;
         font-weight: $semibold;
+        @include ellipsis;
+        max-width: 80%;
     }
 
     .open_other_menu {

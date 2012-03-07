@@ -220,13 +220,13 @@ describe("chorus.Mixins", function() {
 
             context("when showUrlTemplate is a function", function() {
                 beforeEach(function() {
-                    this.object.showUrlTemplate = function() {
-                        return "my_items/show/foo/{{id}}";
+                    this.object.showUrlTemplate = function(suffix) {
+                        return "my_items/show/foo/{{id}}/" + suffix;
                     }
                 })
 
-                it("calls the function ", function() {
-                    expect(this.object.showUrl()).toBe("#/my_items/show/foo/45")
+                it("calls the function with any arguments passed to 'showUrl'", function() {
+                    expect(this.object.showUrl("banana")).toBe("#/my_items/show/foo/45/banana");
                 });
             })
 

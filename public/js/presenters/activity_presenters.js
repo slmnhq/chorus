@@ -186,19 +186,19 @@
         WORKFILE_CREATED: function(model) {
             return {
                 objectName: model.workfile().get("name"),
-                objectUrl: model.workfile().linkUrl({ version: 1})
+                objectUrl: model.workfile().showUrl({ version: 1})
             }
         },
 
         WORKFILE_UPGRADED_VERSION: function(model) {
             return {
                 objectName: model.workfile().get("name"),
-                objectUrl: model.workfile().linkUrl(),
+                objectUrl: model.workfile().showUrl(),
                 iconSrc: "/images/version_large.png",
                 iconHref: model.workfile().showUrl(),
                 iconClass: '',
                 versionName: t("workfile.version_title", { versionNum: model.get("version")}),
-                versionUrl: model.workfile().showUrl(),
+                versionUrl: model.workfile().showUrl({version: model.get("version")}),
                 body: model.get("commitMessage")
             }
         },

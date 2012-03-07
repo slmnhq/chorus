@@ -1,5 +1,4 @@
 chorus.views.SearchWorkspaceList = chorus.views.SearchResultListBase.extend({
-    searchResultType: "workspace",
     className: "search_workspace_list",
     additionalClass: "list",
 

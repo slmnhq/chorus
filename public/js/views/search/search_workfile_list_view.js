@@ -1,5 +1,4 @@
 chorus.views.SearchWorkfileList = chorus.views.SearchResultListBase.extend({
-    searchResultType: "workfile",
     className: "search_workfile_list",
     additionalClass: "list",
 

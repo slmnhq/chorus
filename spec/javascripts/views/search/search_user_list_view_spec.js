@@ -1,11 +1,9 @@
 describe("chorus.views.SearchUserList", function() {
     beforeEach(function() {
-        this.collection = fixtures.searchResult().users();
-        this.view = new chorus.views.SearchUserList({
-            collection: this.collection,
-            query: "foo"
-        });
-        this.collection = this.view.collection;
+        this.result = fixtures.searchResult();
+        this.result.set({query: "foo"});
+        this.collection = this.result.users();
+        this.view = new chorus.views.SearchUserList({ collection: this.collection, query: this.result });
         this.view.render();
     });
 
@@ -53,7 +51,7 @@ describe("chorus.views.SearchUserList", function() {
                 });
 
                 it("should navigate to the user results page", function() {
-                    expect(chorus.router.navigate).toHaveBeenCalledWith("#/search/user/foo", true);
+                    expect(chorus.router.navigate).toHaveBeenCalledWith(this.result.showUrl(), true);
                 });
             });
         });

@@ -16,6 +16,22 @@
             display: inline-block;
             width: 401px;
         }
+
+        input.hdfs {
+            width: 215px;
+        }
+
+        select {
+            max-width: 160px;
+        }
+
+        .name_label {
+            padding: 0 5px;
+        }
+
+        .select_label {
+            padding-right: 5px;
+        }
     }
 
     .options {

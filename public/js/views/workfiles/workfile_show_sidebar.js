@@ -5,6 +5,7 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
     events:{
         "click a.version_list":"displayVersionList"
     },
+
     subviews:{
         '.activity_list':'activityList',
         '.tab_control':'tabControl'
