@@ -1,5 +1,6 @@
 describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
     beforeEach(function() {
+        setLoggedInUser({id: '54321'});
         chorus.page = {};
         this.sandbox = fixtures.sandbox({
             schemaName: "mySchema",
@@ -22,5 +23,20 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
     it("has the right labels", function() {
         expect(this.dialog.title).toMatchTranslation("hdfs.create_external.title");
         expect(this.dialog.$("button.submit").text()).toMatchTranslation("hdfs.create_external.ok");
+    })
+
+    it("fetches the list of workspaces for the logged in user", function() {
+        var workspaces = new chorus.collections.WorkspaceSet([], {userId: "54321"});
+        expect(workspaces).toHaveBeenFetched();
+    })
+
+    context("when the workspace fetch completes and there are no workspaces", function() {
+        beforeEach(function() {
+            this.server.completeFetchAllFor(new chorus.collections.WorkspaceSet([], {userId: "54321"}));
+        });
+
+        xit("populates the dialog's errors div", function() {
+            expect(this.dialog.$(".errors")).toContainTranslation("hdfs.create_external.no_workspaces");
+        })
     })
 });
