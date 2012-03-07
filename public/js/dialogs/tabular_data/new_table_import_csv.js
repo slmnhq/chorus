@@ -3,12 +3,13 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     additionalClass: "table_import_csv",
     title: t("dataset.import.table.title"),
     ok: t("dataset.import.table.submit"),
+    loadingKey: "dataset.import.importing",
 
     delimiter: ',',
 
     events: {
       "click button.submit": "startImport",
-        "change #include_header": "refreshCSV",
+        "change #hasHeader": "refreshCSV",
         "keyup input.delimiter[name=custom_delimiter]": "setOtherDelimiter",
         "paste input.delimiter[name=custom_delimiter]": "setOtherDelimiter",
         "click input.delimiter[type=radio]": "setDelimiter",
@@ -85,27 +86,30 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
 
     startImport: function() {
         if (this.performValidation()) {
-            this.$('button.submit').startLoading("dataset.import.importing");
-            var $names = this.$(".column_names input:text");
-            var $types = this.$(".data_types .chosen");
+            this.prepareCsv();
 
-            var columnData = _.map($names, function(name, i) {
-                return {
-                    columnName: chorus.Mixins.dbHelpers.safePGName($(name).val()),
-                    columnType: $types.eq(i).text(),
-                    columnOrder: i+1
-                }
-            })
-            this.csv.set({
-                toTable: chorus.models.CSVImport.normalizeForDatabase(this.$(".directions input:text").val()),
-                delimiter: this.delimiter,
-                columnsDef: JSON.stringify(columnData)
-            })
-
-            this.$("button.submit").startLoading("dataset.import.importing");
+            this.$("button.submit").startLoading(this.loadingKey);
 
             this.csv.save();
         }
+    },
+
+    prepareCsv: function() {
+        var $names = this.$(".column_names input:text");
+        var $types = this.$(".data_types .chosen");
+
+        var columnData = _.map($names, function(name, i) {
+            return {
+                columnName: chorus.Mixins.dbHelpers.safePGName($(name).val()),
+                columnType: $types.eq(i).text(),
+                columnOrder: i+1
+            }
+        })
+        this.csv.set({
+            toTable: chorus.models.CSVImport.normalizeForDatabase(this.$(".directions input:text").val()),
+            delimiter: this.delimiter,
+            columnsDef: JSON.stringify(columnData)
+        })
     },
 
     performValidation : function() {
@@ -124,7 +128,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     refreshCSV : function() {
-        this.csv.set({include_header: !!(this.$("#include_header").attr("checked")), delimiter: this.delimiter});
+        this.csv.set({hasHeader: !!(this.$("#hasHeader").prop("checked")), delimiter: this.delimiter});
         this.render();
         this.recalculateScrolling();
     },

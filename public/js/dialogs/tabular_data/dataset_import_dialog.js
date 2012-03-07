@@ -85,7 +85,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     makeModel: function() {
         this.resource = this.model = this.csv = new chorus.models.CSVImport({
             workspaceId: this.options.launchElement.data("workspaceId"),
-            include_header: true
+            hasHeader: true
         });
     },
 

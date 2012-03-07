@@ -145,7 +145,7 @@ describe("chorus.models.CSVImport", function() {
     context("no header row", function() {
         beforeEach(function() {
             this.model = fixtures.csvImport({
-                include_header: false,
+                hasHeader: false,
                 lines: [
                     'foo,2,3,1/2/3',
                     'bar,2.1,sna,456'

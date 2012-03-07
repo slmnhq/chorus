@@ -2477,7 +2477,7 @@ beforeEach(function() {
                 ],
                 fileName: "/file.csv",
                 workspaceId: this.nextId().toString(),
-                include_header: true
+                hasHeader: true
             }, overrides)
             return new chorus.models.CSVImport(attributes);
         },

@@ -85,7 +85,6 @@ chorus.views.HdfsDirectoryEntrySidebar = chorus.views.Sidebar.extend({
         csv.fetch();
 
         csv.onLoaded(function(){
-            csv.set({lines: csv.get("content").split("\n")})
             var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({csv: csv});
             dialog.launchModal();
         });

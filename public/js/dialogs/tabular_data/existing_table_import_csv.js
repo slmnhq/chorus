@@ -6,7 +6,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
 
     events: {
         "click button.submit": "startImport",
-        "change #include_header": "refreshCSV",
+        "change #hasHeader": "refreshCSV",
         "keyup input.delimiter[name=custom_delimiter]": "setOtherDelimiter",
         "paste input.delimiter[name=custom_delimiter]": "setOtherDelimiter",
         "click input.delimiter[type=radio]": "setDelimiter",
@@ -154,7 +154,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         this.csv.set({
             delimiter: this.delimiter,
             type: "existingTable",
-            hasHeader: !!(this.$("#include_header").attr("checked")),
+            hasHeader: !!(this.$("#hasHeader").prop("checked")),
             columnsMap: JSON.stringify(columnData)
         }, {silent: true})
 
@@ -164,7 +164,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     refreshCSV: function() {
-        this.csv.set({include_header: !!(this.$("#include_header").attr("checked")), delimiter: this.delimiter});
+        this.csv.set({hasHeader: !!(this.$("#hasHeader").prop("checked")), delimiter: this.delimiter});
         this.render();
         this.recalculateScrolling();
     },

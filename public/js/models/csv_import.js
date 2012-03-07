@@ -8,7 +8,7 @@ chorus.models.CSVImport = chorus.models.Base.extend({
         var rows = parser.lines;
 
         var column_names = [];
-        if(this.get("include_header")) {
+        if(this.get("hasHeader")) {
             column_names = _.map(rows.shift(), chorus.models.CSVImport.normalizeForDatabase);
         } else {
             column_names = _.map(rows[0], function(column, i){

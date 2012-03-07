@@ -159,7 +159,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     })
 
     it("checked the include header row checkbox by default", function() {
-        expect(this.dialog.$("#include_header")).toBeChecked();
+        expect(this.dialog.$("#hasHeader")).toBeChecked();
     });
 
     describe("the data table", function() {
@@ -370,12 +370,12 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         beforeEach(function() {
             spyOn(this.dialog, "postRender").andCallThrough();
             spyOn(this.dialog, "recalculateScrolling").andCallThrough();
-            this.dialog.$("#include_header").removeAttr("checked");
-            this.dialog.$("#include_header").change();
+            this.dialog.$("#hasHeader").removeAttr("checked");
+            this.dialog.$("#hasHeader").change();
         })
 
         it("sets header on the csv model", function() {
-            expect(this.dialog.csv.get("include_header")).toBeFalsy();
+            expect(this.dialog.csv.get("hasHeader")).toBeFalsy();
         });
 
         it("re-renders", function() {
@@ -383,7 +383,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         });
 
         it("the box is unchecked", function() {
-            expect(this.dialog.$("#include_header").attr("checked")).toBeFalsy();
+            expect(this.dialog.$("#hasHeader").attr("checked")).toBeFalsy();
         });
 
         it("calls recalculate Scrolling", function() {
@@ -393,17 +393,17 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         describe("rechecking the box", function() {
             beforeEach(function() {
                 this.dialog.postRender.reset();
-                this.dialog.$("#include_header").attr("checked", "checked");
-                this.dialog.$("#include_header").change();
+                this.dialog.$("#hasHeader").prop("checked", true);
+                this.dialog.$("#hasHeader").change();
             })
             it("sets header on the csv model", function() {
-                expect(this.dialog.csv.get("include_header")).toBeTruthy();
+                expect(this.dialog.csv.get("hasHeader")).toBeTruthy();
             })
             it("re-renders", function() {
                 expect(this.dialog.postRender).toHaveBeenCalled();
             })
             it("the box is checked", function() {
-                expect(this.dialog.$("#include_header").attr("checked")).toBeTruthy();
+                expect(this.dialog.$("#hasHeader").prop("checked")).toBeTruthy();
             })
         })
     });

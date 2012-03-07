@@ -1,7 +1,8 @@
 chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.extend({
     title: t("hdfs.create_external.title"),
     ok: t("hdfs.create_external.ok"),
-
+    useLoadingSection: true,
+    loadingKey: "hdfs.create_external.creating",
 
     setup: function() {
         this._super("setup", arguments);
@@ -23,6 +24,18 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
 
             chorus.styleSelect(this.$("select"));
         }
+    },
+
+    prepareCsv: function() {
+        this.csv.set({hasHeader: true});
+    },
+
+    resourcesLoaded : function() {
+        var withSandboxes = this.workspaces.filter(function(ws) {
+            return !!ws.sandbox();
+        });
+
+        this.workspaces.reset(withSandboxes, {silent: true});
     },
 
     additionalContext: function() {
