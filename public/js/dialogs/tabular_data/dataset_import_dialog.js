@@ -179,7 +179,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
                     self.csv.trigger("saveFailed");
                     fileChosen(e, data);
                 } else if (self.csv.columnOrientedData().length == 0) {
-                    alert = new chorus.alerts.EmptyCSV();
+                    var alert = new chorus.alerts.EmptyCSV();
                     alert.launchModal();
                 }
                 else {

@@ -19,6 +19,13 @@ describe("chorus.views.HdfsDirectoryEntrySidebar", function(){
 
         context("when the model is a file", function() {
             beforeEach(function() {
+                // set up page to catch launch dialog click
+                var page = new chorus.pages.Base();
+                $(page.el).append(this.view.el);
+                chorus.bindModalLaunchingClicks(page);
+
+                this.modalSpy = stubModals();
+
                 this.hdfsEntry = fixtures.hdfsDirectoryEntryFile({name: "my_file.sql"});
                 chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
             });
@@ -27,13 +34,6 @@ describe("chorus.views.HdfsDirectoryEntrySidebar", function(){
 
             describe("clicking the add a note link", function() {
                 beforeEach(function() {
-                    // set up page to catch launch dialog click
-                    var page = new chorus.pages.Base();
-                    $(page.el).append(this.view.el);
-                    chorus.bindModalLaunchingClicks(page);
-
-                    stubModals();
-
                     this.view.$("a.dialog.add_note").click();
 
                     chorus.modal.$("textarea").text("test comment").change();
@@ -45,6 +45,19 @@ describe("chorus.views.HdfsDirectoryEntrySidebar", function(){
                     expect(this.server.lastCreate().url).toBe("/edc/comment/hdfs/123%7C%2Ffoo%2Fmy_file.sql");
                 });
             });
+
+            describe("clicking the external table link", function() {
+                beforeEach(function() {
+                    this.view.$("a.external_table").click();
+                    this.csv = new chorus.models.CsvHdfs(fixtures.csvImport({instanceId: "123", path: "/foo/my_file.sql", content:"hello\nworld"}).attributes);
+                    this.server.completeFetchFor(this.csv);
+                });
+
+                it("launches the right dialog", function() {
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs)
+                    expect(chorus.modal.csv.get("encodedPath")).toBe("%2Ffoo%2Fmy_file.sql");
+                });
+            })
         });
     })
 

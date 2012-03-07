@@ -19,7 +19,7 @@ chorus.models.CSVImport = chorus.models.Base.extend({
         return _.map(column_names, function(column_name, i) {
             var column_values = [];
 
-            type = "float";
+            var type = "float";
             _.each(rows, function(row){
                 column_values.push(row[i] || "")
                 if (type == "float" && isNaN(+row[i])) {

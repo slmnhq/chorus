@@ -2751,8 +2751,8 @@ beforeEach(function() {
             return _.extend({
                 content: "DROP TABLE pivots;",
                 instanceId: "1234",
-                path: "%2Fdata%2Fcleardb.sql"
-            })
+                path: "%2Fdata%2FfixtureFile.sql"
+            }, overrides)
         },
 
         searchResultJson: function(overrides) {

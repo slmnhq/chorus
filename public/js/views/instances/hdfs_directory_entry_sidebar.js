@@ -7,6 +7,10 @@ chorus.views.HdfsDirectoryEntrySidebar = chorus.views.Sidebar.extend({
         '.tab_control': 'tabControl'
     },
 
+    events : {
+        'click .external_table': 'createExternalTable'
+    },
+
     setup: function() {
         chorus.PageEvents.subscribe("hdfs_entry:selected", this.setEntry, this);
         chorus.PageEvents.subscribe("memo:added:hdfs", this.refreshActivities, this);
@@ -53,5 +57,21 @@ chorus.views.HdfsDirectoryEntrySidebar = chorus.views.Sidebar.extend({
         if (this.resource) {
             return encodeURIComponent(this.options.instanceId + "|" + (this.options.rootPath + "/" +this.resource.get("name")));
         }
+    },
+
+    createExternalTable: function(e) {
+        e && e.preventDefault();
+        var csv = new chorus.models.CsvHdfs({
+            instanceId: this.options.instanceId,
+            toTable: this.resource.get("name"),
+            path: this.options.rootPath+"/"+this.resource.get("name")
+        });
+        csv.fetch();
+
+        csv.onLoaded(function(){
+            csv.set({lines: csv.get("content").split("\n")})
+            var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({csv: csv});
+            dialog.launchModal();
+        });
     }
 });

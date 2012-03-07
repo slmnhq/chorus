@@ -6,6 +6,21 @@ describe("chorus.views.SearchTabularDataList", function() {
         this.view.render();
     });
 
+    context("with no results", function() {
+        beforeEach(function() {
+            this.view = new chorus.views.SearchTabularDataList({
+                collection: new chorus.collections.Base()
+            });
+
+            this.view.render()
+        });
+
+        it("does not show the bar or the list", function() {
+            expect(this.view.$(".details")).not.toExist();
+            expect(this.view.$("ul")).not.toExist();
+        });
+    })
+
     it("should have a title", function() {
         expect(this.view.$(".title")).toContainTranslation("dataset.title_plural");
     });

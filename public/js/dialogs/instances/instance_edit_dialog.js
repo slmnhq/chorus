@@ -50,6 +50,7 @@ chorus.dialogs.InstancesEdit = chorus.dialogs.Base.extend({
     },
 
     saveSuccess:function () {
+        this.options.pageModel.set(this.model.attributes);
         chorus.toast("instances.edit_dialog.saved_message");
         this.closeModal();
     },
