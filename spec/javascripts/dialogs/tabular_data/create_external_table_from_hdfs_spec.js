@@ -18,4 +18,9 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
         this.dialog = new chorus.dialogs.CreateExternalTableFromHdfs({csv: this.csv});
         this.dialog.render();
     });
+
+    it("has the right labels", function() {
+        expect(this.dialog.title).toMatchTranslation("hdfs.create_external.title");
+        expect(this.dialog.$("button.submit").text()).toMatchTranslation("hdfs.create_external.ok");
+    })
 });
