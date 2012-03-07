@@ -18,6 +18,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
 
     setup: function() {
         this.resource = this.csv = this.options.csv;
+        this.csv.set({hasHeader: true});
         this.tableName = this.csv.get("toTable");
         chorus.PageEvents.subscribe("choice:setType", this.onSelectType, this);
 

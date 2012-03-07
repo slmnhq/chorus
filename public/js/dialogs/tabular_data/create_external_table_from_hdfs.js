@@ -13,12 +13,14 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         this.toTable = chorus.models.CSVImport.normalizeForDatabase(this.csv.get("toTable")).replace(/\W/g, "_");
     },
 
-    postRender : function() {
+    postRender: function() {
         this._super("postRender", arguments)
 
-        if(this.workspaces.loaded){
-            if(!this.workspaces.length) {
-                this.workspaces.serverErrors = [{message: t("hdfs.create_external.no_workspaces")}];
+        if (this.workspaces.loaded) {
+            if (!this.workspaces.length) {
+                this.workspaces.serverErrors = [
+                    {message: t("hdfs.create_external.no_workspaces")}
+                ];
                 this.showErrors(this.workspaces);
             }
 
@@ -27,10 +29,24 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
     },
 
     prepareCsv: function() {
-        this.csv.set({hasHeader: true});
+        var $names = this.$(".column_names input:text");
+        var $types = this.$(".data_types .chosen");
+        var toTable = this.$(".directions input:text").val();
+        var columns = _.map($names, function(name, i) {
+            var $name = $names.eq(i);
+            var $type = $types.eq(i);
+            return chorus.Mixins.dbHelpers.safePGName($name.val())+" "+$type.text();
+        })
+        var statement = toTable + " (" + columns.join(", ") + ")";
+
+        this.csv.set({
+            hasHeader: true,
+            workspaceId: this.$("option:selected").val(),
+            statement: statement
+        });
     },
 
-    resourcesLoaded : function() {
+    resourcesLoaded: function() {
         var withSandboxes = this.workspaces.filter(function(ws) {
             return !!ws.sandbox();
         });

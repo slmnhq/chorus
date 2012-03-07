@@ -16,7 +16,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
         ],
             instanceId: "234",
             path: "/foo/bar.txt",
-            toTable: "foo_quux_bar"
+            toTable: "bar_txt"
         });
         this.dialog = new chorus.dialogs.CreateExternalTableFromHdfs({csv: this.csv});
         this.dialog.render();
@@ -76,7 +76,14 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
             })
 
             it("posts to the right URL", function() {
-                expect(this.server.lastCreate().url).toMatchUrl("/edc/data/234/hdfs/%2Ffoo%2Fbar.txt/externaltable");
+                var workspaceId = this.dialog.$("option:selected").val();
+                var request = this.server.lastCreate();
+                var statement = "bar_txt (col1 text, col2 text, col3 text, col_4 text, col_5 text)";
+
+                expect(request.url).toMatchUrl("/edc/workspace/" + workspaceId + "/externaltable");
+                expect(request.params().path).toBe("/foo/bar.txt");
+                expect(request.params().instanceId).toBe("234");
+                expect(request.params().statement).toBe(statement);
             });
         })
     })
