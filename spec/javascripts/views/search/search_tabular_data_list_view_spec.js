@@ -1,8 +1,9 @@
 describe("chorus.views.SearchTabularDataList", function() {
     beforeEach(function() {
         this.result = fixtures.searchResult();
+        this.result.set({query: "foo"});
         this.models = this.result.tabularData();
-        this.view = new chorus.views.SearchTabularDataList({collection: this.models, query: "foo"});
+        this.view = new chorus.views.SearchTabularDataList({collection: this.models, query: this.result});
         this.view.render();
     });
 
@@ -37,7 +38,7 @@ describe("chorus.views.SearchTabularDataList", function() {
         });
 
         it("should navigate to the user results page", function() {
-            expect(chorus.router.navigate).toHaveBeenCalledWith("#/search/dataset/foo", true);
+            expect(chorus.router.navigate).toHaveBeenCalledWith(this.result.showUrl(), true);
         });
     });
 

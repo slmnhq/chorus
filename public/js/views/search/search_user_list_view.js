@@ -1,5 +1,4 @@
 chorus.views.SearchUserList = chorus.views.SearchResultListBase.extend({
-    searchResultType: "user",
     className: "search_user_list",
     additionalClass: "list",
     constructorName: "SearchUserListView",

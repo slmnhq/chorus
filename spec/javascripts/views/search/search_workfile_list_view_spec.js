@@ -1,38 +1,36 @@
 describe("chorus.views.SearchWorkfileList", function() {
     beforeEach(function() {
-        this.view = new chorus.views.SearchWorkfileList({
-            collection: fixtures.workfileSet([
-                {
-                    id: "1",
-                    workspace: {id: "2", name: "Test"},
-                    fileType: "SQL",
-                    mimeType: 'text/text',
-                    comments: [
-                        {highlightedAttributes: { "content": "nice <em>cool<\/em> file"   }, "content": "nice cool file",    "lastUpdatedStamp": "2012-02-28 14:07:34", "isPublished": false, "id": "10000", "workspaceId": "10000", "isComment": false, "isInsight": false, "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
-                        {highlightedAttributes: { "content": "nice <em>cool<\/em> comment"}, "content": "nice cool comment", "lastUpdatedStamp": "2012-02-28 14:07:46", "isPublished": false, "id": "10001", "workspaceId": "10000", "isComment": true, "isInsight": false,  "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
-                        {highlightedAttributes: { "content": "Nice <em>cool<\/em> insight"}, "content": "Nice cool insight", "lastUpdatedStamp": "2012-02-28 14:09:56", "isPublished": false, "id": "10002", "workspaceId": "10000", "isComment": false, "isInsight": true,  "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
-                        {highlightedAttributes: { "content": "Nice <em>cool<\/em> insight"}, "content": "Nice cool insight", "lastUpdatedStamp": "2012-02-28 14:09:56", "isPublished": false, "id": "10003", "workspaceId": "10000", "isComment": false, "isInsight": true,  "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}}
-                    ]
-                },
-                {
-                    id: "4",
-                    workspace: {id: "3", name: "Other"},
-                    fileType: "txt",
-                    mimeType: 'text/text',
-                    description: "this is a cool file description",
-                    highlightedAttributes: {
-                        description: "this is a <EM>cool</EM> file description",
-                        name: "<em>cool</em> file"
-                    }
+        this.result = fixtures.searchResult({workfile: {docs: [
+            {
+                id: "1",
+                workspace: {id: "2", name: "Test"},
+                fileType: "SQL",
+                mimeType: 'text/text',
+                comments: [
+                    {highlightedAttributes: { "content": "nice <em>cool<\/em> file"   }, "content": "nice cool file",    "lastUpdatedStamp": "2012-02-28 14:07:34", "isPublished": false, "id": "10000", "workspaceId": "10000", "isComment": false, "isInsight": false, "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
+                    {highlightedAttributes: { "content": "nice <em>cool<\/em> comment"}, "content": "nice cool comment", "lastUpdatedStamp": "2012-02-28 14:07:46", "isPublished": false, "id": "10001", "workspaceId": "10000", "isComment": true, "isInsight": false,  "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
+                    {highlightedAttributes: { "content": "Nice <em>cool<\/em> insight"}, "content": "Nice cool insight", "lastUpdatedStamp": "2012-02-28 14:09:56", "isPublished": false, "id": "10002", "workspaceId": "10000", "isComment": false, "isInsight": true,  "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
+                    {highlightedAttributes: { "content": "Nice <em>cool<\/em> insight"}, "content": "Nice cool insight", "lastUpdatedStamp": "2012-02-28 14:09:56", "isPublished": false, "id": "10003", "workspaceId": "10000", "isComment": false, "isInsight": true,  "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}}
+                ]
+            },
+            {
+                id: "4",
+                workspace: {id: "3", name: "Other"},
+                fileType: "txt",
+                mimeType: 'text/text',
+                description: "this is a cool file description",
+                highlightedAttributes: {
+                    description: "this is a <EM>cool</EM> file description",
+                    name: "<em>cool</em> file"
                 }
-            ]),
-            total: "24",
-            query: "foo"
-        });
+            }
+        ]}});
 
+        this.result.set({query: "foo"});
+        this.models = this.result.workfiles();
+        this.view = new chorus.views.SearchWorkfileList({collection: this.models, total: "24", query: this.result});
         this.view.render()
     });
-
 
     describe("details bar", function() {
         it("has a title", function() {
@@ -96,7 +94,7 @@ describe("chorus.views.SearchWorkfileList", function() {
         });
 
         it("should navigate to the user results page", function() {
-            expect(chorus.router.navigate).toHaveBeenCalledWith("#/search/workfile/foo", true);
+            expect(chorus.router.navigate).toHaveBeenCalledWith(this.result.showUrl(), true);
         });
     });
 

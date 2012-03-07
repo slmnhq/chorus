@@ -1,5 +1,4 @@
 chorus.views.SearchTabularDataList = chorus.views.SearchResultListBase.extend({
-    searchResultType: "dataset",
     className: "search_tabular_data_list",
     additionalClass: "list",
 
@@ -44,5 +43,5 @@ chorus.views.SearchTabularDataList = chorus.views.SearchResultListBase.extend({
                 content: $li.find(".other_menu")
             });
         });
-    },
+    }
 });
