@@ -6,9 +6,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
 
     setup: function() {
         var attrs = {
-            query: decodeURIComponent(arguments[2] || arguments[0]),
-            entityType: 'all',
-            searchIn: "all"
+            query: decodeURIComponent(arguments[2] || arguments[0])
         };
         if (arguments.length === 3) {
             attrs.searchIn = arguments[0];

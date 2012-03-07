@@ -210,7 +210,7 @@ describe("chorus.pages.SearchIndexPage", function() {
         });
 
         it("selects the search result type in the menu", function() {
-            this.server.completeFetchFor(this.page.search, fixtures.searchResult());
+            this.server.completeFetchFor(this.page.search, fixtures.searchResult(this.page.search.attributes));
             expect(this.page.$(".default_content_header .type .chosen")).toContainTranslation("search.type.workspace");
         });
     });
