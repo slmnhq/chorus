@@ -7,10 +7,11 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
     setup: function() {
         var attrs = {
             query: decodeURIComponent(arguments[2] || arguments[0]),
-            entityType: 'all'
-        }
+            entityType: 'all',
+            searchIn: "all"
+        };
         if (arguments.length === 3) {
-            attrs.myWorkspaces = (arguments[0] === "my_workspaces");
+            attrs.searchIn = arguments[0];
             attrs.entityType = arguments[1];
         }
         this.model = this.search = new chorus.models.SearchResult(attrs);
@@ -98,7 +99,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
     },
 
     scopeSearchResults: function(data) {
-        if (data === "my_workspaces") this.search.set({ myWorkspaces: true });
+        this.search.set({ searchIn: data });
         chorus.router.navigate(this.search.showUrl(), true);
     },
 

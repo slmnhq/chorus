@@ -1,8 +1,17 @@
 chorus.models.SearchResult = chorus.models.Base.extend({
     constructorName: "SearchResult",
 
+    initialize: function(attributes) {
+        if (!this.get('entityType')) {
+            this.set({entityType: 'all'})
+        }
+        if (!this.get('searchIn')) {
+            this.set({searchIn: 'all'})
+        }
+    },
+
     urlTemplate: function() {
-        if (this.get("myWorkspaces")) {
+        if (this.isScopedToWorkspaces()) {
             return "search/workspaces";
         } else {
             return "search/global/";
@@ -10,15 +19,15 @@ chorus.models.SearchResult = chorus.models.Base.extend({
     },
 
     showUrlTemplate: function() {
-        if (this.get("myWorkspaces") || this.hasSpecificEntityType()) {
-            return "search/" + this.scopeUrlSegment() + "/" + this.get("entityType") + "/" + this.get("query");
+        if (this.isScopedToWorkspaces() || this.hasSpecificEntityType()) {
+            return "search/" + this.get("searchIn") + "/" + this.get("entityType") + "/" + this.get("query");
         } else {
             return "search/" + this.get("query");
         }
     },
 
-    scopeUrlSegment: function() {
-        return (this.get("myWorkspaces") ? 'my_workspaces' : 'all')
+    isScopedToWorkspaces: function() {
+        return this.get("searchIn") === "my_workspaces";
     },
 
     hasSpecificEntityType: function() {

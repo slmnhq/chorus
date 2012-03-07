@@ -1,12 +1,17 @@
 describe("chorus.models.SearchResult", function() {
     beforeEach(function() {
-        this.model = new chorus.models.SearchResult({ query: "jackson5", entityType: 'all' })
+        this.model = new chorus.models.SearchResult({ query: "jackson5" })
     });
 
+    it("defaults entityType and searchIn to 'all'", function() {
+        expect(this.model.get("entityType")).toBe('all')
+        expect(this.model.get("searchIn")).toBe('all')
+    })
+
     describe("#url and #showUrl", function() {
-        context("when the 'myWorkspaces' parameter is set to true", function() {
+        context("when scope to the current user's workspaces", function() {
             beforeEach(function() {
-                this.model.set({ myWorkspaces: true });
+                this.model.set({ searchIn: "my_workspaces" });
             });
 
             it("uses the workspaces search api", function() {
@@ -22,7 +27,7 @@ describe("chorus.models.SearchResult", function() {
 
         context("when there is a specific 'entityType' (not 'all')", function() {
             beforeEach(function() {
-                this.model.set({ entityType: "users", myWorkspaces: null });
+                this.model.set({ entityType: "users" });
             });
 
             it("uses the entityType-specific search api", function() {
@@ -36,9 +41,9 @@ describe("chorus.models.SearchResult", function() {
             });
         });
 
-        context("when the entityType parameter is set to 'all' and the 'myWorkspaces' parameter is not set", function() {
+        context("when the entityType parameter is set to 'all' and not scoped to the current user's workspaces", function() {
             beforeEach(function() {
-                this.model.set({ entityType: "all", myWorkspaces: null });
+                this.model.set({ entityType: "all" });
             });
 
             it("doesn't include the entityType in the API url", function() {
