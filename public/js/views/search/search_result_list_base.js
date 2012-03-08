@@ -42,7 +42,7 @@ chorus.views.SearchResultListBase = chorus.views.Base.extend({
         this.query.set({entityType: $(e.currentTarget).data("type")})
         chorus.router.navigate(this.query.showUrl(), true);
     },
-    
+        
     showNext: function(e) {
         e && e.preventDefault();
         this.query.getNextPage();
@@ -53,20 +53,5 @@ chorus.views.SearchResultListBase = chorus.views.Base.extend({
         e && e.preventDefault();
         this.query.getPreviousPage();
         this.render();
-    },
-
-    makeCommentList: function(model) {
-        return new chorus.views.SearchResultCommentList({comments: model.get("comments")});
-    },
-
-    postRender: function() {
-        var models = this.collection.models;
-        for (var i = 0; i < models.length; i++ ) {
-            var model = models[i];
-            var view = this.makeCommentList(model);
-            view.render();
-
-            this.$("li").eq(i).find(".comments_container").append(view.el);
-        }
     }
 });

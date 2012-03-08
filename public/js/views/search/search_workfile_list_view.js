@@ -4,21 +4,18 @@ chorus.views.SearchWorkfileList = chorus.views.SearchResultListBase.extend({
     additionalClass: "list",
     entityType: "workfile",
 
-    collectionModelContext: function(model) {
-        return {
-            showUrl: model.showUrl(),
-            iconUrl: model.iconUrl(),
-            workspaces: [model.workspace().attributes]
-        }
+    makeListItemView: function(model) {
+        return new chorus.views.SearchWorkfile({ model: model });
     },
 
-    makeCommentList: function(model) {
-        var comments = model.get("comments") || [];
-        var commitMessages = model.get("highlightedAttributes") && model.get("highlightedAttributes").commitMessage;
-        _.each(commitMessages || [], function(commitMessage) {
-            comments.push({isCommitMessage:true, content: commitMessage});
+    postRender: function() {
+        var ul = this.$("ul");
+        this.collection.each(function(model) {
+            try {
+                ul.append(this.makeListItemView(model).render().el);
+            } catch (err) {
+                chorus.log(err);
+            }
         }, this);
-
-        return new chorus.views.SearchResultCommentList({comments: comments});
     }
 });

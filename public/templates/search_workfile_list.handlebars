@@ -32,21 +32,8 @@
             </div>
             <span class="title">{{t "workfiles.title"}}</span>
         </div>
-{{/if}}
-    <ul>
-        {{#each models}}
-            <li class="result_item" data-cid={{model.cid}}>
-                <div class="spacer_left"></div>
-                <img class="icon" src="{{iconUrl}}"></img>
-                <div class="description">
-                    <a class="name" href="{{showUrl}}">{{{displaySearchMatch "name"}}}</a>
-                    <div class="location">{{{usedInWorkspaces workspaces model}}}</div>
-                    <div class="description_content">{{{displaySearchMatch "description"}}}</div>
+        <span class="title">{{t "workfiles.title"}}</span>
+    {{/if}}
 
-                    <div class="comments_container"/>
-                </div>
-                <div class="spacer_right"></div>
-            </li>
-        {{/each}}
-    </ul>
+    <ul class="workfile_list"></ul>
 {{/if}}
