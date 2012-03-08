@@ -51,7 +51,7 @@
         </div>
 
         {{#if hasMoreSupportingMessage}}
-            <div class='hasMore'>
+            <div class='has_more_comments'>
                 <span class="and">{{t "search.comments_more.and"}}</span>
                 <a href="#" class="show_more_comments">
                     {{t "search.comments_more" count=hasMoreSupportingMessage}}
@@ -59,7 +59,7 @@
             </div>
         {{/if}}
 
-        <div class="moreComments hidden">
+        <div class="more_comments hidden">
             {{#each moreSupportingMessage}}
                 {{#if title}}
                 <div class="title">

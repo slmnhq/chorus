@@ -133,30 +133,30 @@ describe("chorus.views.SearchUserList", function() {
 
                 it("displays 3 messages in the supporting message and the rest in the more section", function() {
                     expect(this.view.$("li:eq(0) .supportingMessage div").length).toBe(3);
-                    expect(this.view.$("li:eq(0) .moreComments div").length).toBe(2);
+                    expect(this.view.$("li:eq(0) .more_comments div").length).toBe(2);
                 });
 
                 it("display the show-more link", function() {
-                    expect(this.view.$(".hasMore")).toContainTranslation("search.comments_more.and");
+                    expect(this.view.$(".has_more_comments")).toContainTranslation("search.comments_more.and");
                     expect(this.view.$(".show_more_comments")).toContainTranslation("search.comments_more.other", {count:2});
                     expect(this.view.$(".show_fewer_comments")).toContainTranslation("search.comments_less");
                 });
 
                 it("clicking the show-more link shows the rest of the messages", function() {
-                    expect(this.view.$("li:eq(0) .moreComments")).toHaveClass("hidden");
-                    expect(this.view.$("li:eq(0) .hasMore")).not.toHaveClass("hidden");
+                    expect(this.view.$("li:eq(0) .more_comments")).toHaveClass("hidden");
+                    expect(this.view.$("li:eq(0) .has_more_comments")).not.toHaveClass("hidden");
 
                     this.view.$("li:eq(0) .show_more_comments").click();
 
-                    expect(this.view.$("li:eq(0) .moreComments")).not.toHaveClass("hidden");
-                    expect(this.view.$("li:eq(0) .hasMore")).toHaveClass("hidden");
+                    expect(this.view.$("li:eq(0) .more_comments")).not.toHaveClass("hidden");
+                    expect(this.view.$("li:eq(0) .has_more_comments")).toHaveClass("hidden");
                 });
 
                 it("clicking the hide-more link hides the surplus messages and re-enables the more link", function() {
                     this.view.$("li:eq(0) .show_more_comments").click();
                     this.view.$("li:eq(0) .show_fewer_comments").click();
 
-                    expect(this.view.$("li:eq(0) .moreComments")).toHaveClass("hidden");
+                    expect(this.view.$("li:eq(0) .more_comments")).toHaveClass("hidden");
                     expect(this.view.$("li:eq(0) .show_more_comments")).not.toHaveClass("hidden");
                 });
 
@@ -190,11 +190,11 @@ describe("chorus.views.SearchUserList", function() {
 
                 it("displays all messages in the supporting message and none in the rest in the more section", function() {
                     expect(this.view.$("li:eq(0) .supportingMessage div").length).toBe(2);
-                    expect(this.view.$("li:eq(0) .moreComments div").length).toBe(0);
+                    expect(this.view.$("li:eq(0) .more_comments div").length).toBe(0);
                 });
 
                 it("display the more show more link", function() {
-                    expect(this.view.$(".showmoreComments")).not.toExist();
+                    expect(this.view.$(".showmore_comments")).not.toExist();
                 });
             });
 

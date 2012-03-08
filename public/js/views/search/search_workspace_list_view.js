@@ -12,15 +12,9 @@ chorus.views.SearchWorkspaceList = chorus.views.SearchResultListBase.extend({
     },
 
     collectionModelContext: function(model){
-        var comments = model.get("comments") ? model.get("comments").map(function(comment) {
-                        return comment.attributes || comment;
-                    }) : [];
         return {
             showUrl: model.showUrl(),
-            iconUrl: model.customIconUrl(),
-            comments: comments.slice(0, 3),
-            moreComments: comments.slice(3),
-            hasMoreComments: Math.max(0, comments.length - 3)
+            iconUrl: model.customIconUrl()
         }
     }
 });
