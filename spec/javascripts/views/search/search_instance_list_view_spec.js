@@ -4,9 +4,30 @@ describe("chorus.views.SearchInstanceList", function() {
 
         this.result.set({query: "foo"});
         this.models = this.result.instances();
-        this.view = new chorus.views.SearchInstanceList({ collection: this.models, total: "24", query: this.result });
+        this.view = new chorus.views.SearchInstanceList({ collection: this.models, total: 24, query: this.result });
         this.view.render()
     });
+
+    context("filtered search", function() {
+        beforeEach(function() {
+            this.result.set({entityType: "instance"});
+            this.view.render();
+        });
+
+        describe("pagination bar", function() {
+            it("has a count of total results", function() {
+                expect(this.view.$('.pagination .count')).toContainTranslation("search.results", {count: 24})
+            });
+
+            it("has a next button", function() {
+                expect(this.view.$('.pagination a.next')).toExist();
+            });
+            it("has a previous button", function() {
+                 expect(this.view.$('.pagination a.previous')).toExist();
+             });
+        });
+    });
+
 
     describe("details bar", function() {
         it("has a title", function() {

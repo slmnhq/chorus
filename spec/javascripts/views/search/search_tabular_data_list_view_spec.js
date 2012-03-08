@@ -60,6 +60,10 @@ describe("chorus.views.SearchTabularDataList", function() {
             it("has a next button", function() {
                 expect(this.view.$('.pagination a.next')).toExist();
             });
+
+            it("has a previous button", function() {
+                expect(this.view.$('.pagination a.previous')).toExist();
+            });
         });
     });
 

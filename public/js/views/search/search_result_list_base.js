@@ -4,7 +4,8 @@ chorus.views.SearchResultListBase = chorus.views.Base.extend({
         "click li a.show_more_comments": "showMoreComments",
         "click li a.show_fewer_comments": "showLessComments",
         "click a.show_all": "showAll",
-        "click a.next": "showNext"
+        "click a.next": "showNext",
+        "click a.previous": "showPrevious"
     },
 
     setup: function() {
@@ -34,6 +35,12 @@ chorus.views.SearchResultListBase = chorus.views.Base.extend({
     showNext: function(e) {
         e && e.preventDefault();
         this.query.getNextPage();
+        this.render();
+    },
+
+    showPrevious: function(e) {
+        e && e.preventDefault();
+        this.query.getPreviousPage();
         this.render();
     },
 

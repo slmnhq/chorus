@@ -42,6 +42,27 @@ describe("chorus.views.SearchResultListBase", function() {
             });
 
         })
+
+        context("when I click previous", function() {
+            beforeEach(function() {
+                spyOn(this.view, "render");
+                spyOn(this.result, "hasPreviousPage").andReturn(true);
+                this.result.set({page: 2});
+                this.view.$('.pagination a.previous').click();
+            });
+
+            it("should set the page to 1", function() {
+                expect(this.result.get("page")).toBe(1);
+            });
+
+            it("should fetch the first page of results", function() {
+                expect(this.server.lastFetch().url).toMatchUrl("/edc/search/global/?query=jackson5&entityType=user&rows=50&page=1")
+            })
+
+            it("should re-render", function() {
+                expect(this.view.render).toHaveBeenCalled();
+            });
+        });
     });
 
 });

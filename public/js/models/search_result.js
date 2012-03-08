@@ -26,6 +26,13 @@ chorus.models.SearchResult = chorus.models.Base.extend({
 
     },
 
+    getPreviousPage: function(){
+        if (this.hasPreviousPage()){
+            this.set({page: this.currentPageNumber() - 1});
+            this.fetch({success: _.bind(this.resetResults, this)});
+        }
+    },
+
     currentPageNumber: function() {
         return this.get("page") || 1;
     },
@@ -54,7 +61,14 @@ chorus.models.SearchResult = chorus.models.Base.extend({
             var total = this.getResults().attributes.total;
             var page = this.currentPageNumber();
             return total > (50 * page);
-        };
+        }
+    },
+
+    hasPreviousPage: function(){
+        if (this.hasSpecificEntityType()) {
+            var page = this.currentPageNumber();
+            return page > 1;
+        }
     },
 
     hasSpecificEntityType: function() {
@@ -77,7 +91,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
             params.rows = 50;
             params.page = this.currentPageNumber();
         }
-        if (this.has("workspaceId")) params.workspaceId = this.get("workspaceId");        
+        if (this.has("workspaceId")) params.workspaceId = this.get("workspaceId");
         return params;
     },
 
@@ -139,7 +153,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
 
         return this._workspaces;
     },
-    
+
     instances: function() {
         if (!this._instances && this.get("instance")) {
             var instances = _.map(this.get("instance").docs, function(instanceJson) {
