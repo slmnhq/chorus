@@ -3253,7 +3253,10 @@ beforeEach(function() {
 
         searchResultHdfsJson: function(overrides) {
             return _.extend({
-                comments: [],
+                comments: [
+                    fixtures.searchResultCommentJson(),
+                    fixtures.searchResultCommentJson()
+                ],
                 entityType: "hdfs",
                 highlightedAttributes: {
                     name: ["Thumbs.<em>db</em>"]
@@ -3265,6 +3268,20 @@ beforeEach(function() {
                 lastUpdatedStamp: "2012-03-05 15:23:55",
                 name: "Thumbs.db",
                 path: "/webui/images/thirdparty/jquerybubblepopup-theme/green/Thumbs.db"
+            }, overrides);
+        },
+
+        searchResultCommentJson: function(overrides) {
+            return _.extend({
+                content: "nice data!",
+                highlightedAttributes: {
+                    content:["nice <em>data</em>!"]
+                },
+                id: "10001",
+                isComment: false,
+                isInsight: false,
+                isPublished: false,
+                lastUpdatedStamp: "2012-03-07 15:03:43"
             }, overrides);
         },
 

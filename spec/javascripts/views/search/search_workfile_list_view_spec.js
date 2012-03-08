@@ -138,38 +138,6 @@ describe("chorus.views.SearchWorkfileList", function() {
             expect(this.view.$("li .name").eq(1).html()).toContain("<em>cool</em> file");
         });
 
-        it("shows associated comments/notes/insights", function() {
-            expect(this.view.$('li .comments').eq(0).find('.comment').length).toBe(3);
-            expect(this.view.$('li .comments').eq(1).find('.comment').length).toBe(0);
-
-            expect(this.view.$('li .comments').eq(0).find('.hasMore a.show_more_comments')).toContainTranslation("search.comments_more", {count: 1});
-
-            expect(this.view.$('li .comments').eq(0).find('.comment .comment_type').eq(0)).toContainTranslation("activity_stream.note");
-            expect(this.view.$('li .comments').eq(0).find('.comment .comment_type').eq(1)).toContainTranslation("activity_stream.comment");
-            expect(this.view.$('li .comments').eq(0).find('.comment .comment_type').eq(2)).toContainTranslation("activity_stream.insight");
-
-            expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(0).html()).toContain("nice <em>cool</em> file");
-            expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(1).html()).toContain("nice <em>cool</em> comment");
-            expect(this.view.$('li .comments').eq(0).find('.comment .comment_content').eq(2).html()).toContain("Nice <em>cool</em> insight");
-        });
-
-        it("shows the rest of the comments/notes/insights when the user clicks the link", function() {
-            expect(this.view.$('li').eq(0).find('.moreComments')).toHaveClass("hidden");
-
-            this.view.$('li .comments').eq(0).find('.hasMore a.show_more_comments').click();
-            expect(this.view.$('li .comments').eq(0).find('.hasMore')).toHaveClass("hidden");
-
-            expect(this.view.$('li').eq(0).find('.moreComments')).not.toHaveClass("hidden");
-        });
-
-        it("hides the rest of the comments/notes/insights when the user clicks the 'less' link", function() {
-            this.view.$('li .comments').eq(0).find('.hasMore a.show_more_comments').click();
-            this.view.$('li .comments').eq(0).find('a.show_fewer_comments').click();
-
-            expect(this.view.$('li').eq(0).find('.moreComments')).not.toHaveClass("hidden");
-            expect(this.view.$('li .comments').eq(0).find('.hasMore')).toHaveClass("hidden");
-        });
-
         describe("shows version commit messages in the comments area", function() {
             beforeEach(function() {
                 this.view.collection.models[0].set({
@@ -184,8 +152,8 @@ describe("chorus.views.SearchWorkfileList", function() {
             });
 
             it("looks correct", function() {
-                expect(this.view.$('li:eq(0) .moreComments .comment:eq(2) .comment_type').text().trim()).toBe('');
-                expect(this.view.$('li:eq(0) .moreComments .comment:eq(2) .comment_content').html()).toContain("this is a <em>cooler</em> version");
+                expect(this.view.$('li:eq(0) .more_comments .comment:eq(2) .comment_type').text().trim()).toBe('');
+                expect(this.view.$('li:eq(0) .more_comments .comment:eq(2) .comment_content').html()).toContain("this is a <em>cooler</em> version");
             });
         });
     });

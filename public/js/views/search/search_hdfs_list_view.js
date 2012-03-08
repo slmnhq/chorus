@@ -19,17 +19,26 @@ chorus.views.SearchHdfsList = chorus.views.SearchResultListBase.extend({
             return chorus.helpers.linkTo(pathSoFar += item + "/", item);
         });
 
-        var comments = model.get("comments");
-
         return {
             showUrl: "#/instances/" + instance.id + "/browseFile" + model.get("path"),
             humanSize: I18n.toHumanSize(model.get("size")),
             iconUrl: chorus.urlHelpers.fileIconUrl(_.last(model.get("name").split("."))),
             instanceLink: chorus.helpers.linkTo("#/instances/" + instance.id + "/browse/", instance.name),
-            completePath: $paths.join(" / "),
-            comments: comments.slice(0, 3),
-            moreComments: comments.slice(3),
-            hasMoreComments: Math.max(0, comments.length - 3)
+            completePath: $paths.join(" / ")
+        }
+    },
+
+    postRender: function() {
+        var models = this.collection.models;
+        for (var i = 0; i < models.length; i++ ) {
+            var comments = models[i].get("comments");
+
+            if (comments && comments.length > 0) {
+                var view = new chorus.views.SearchResultCommentList({comments: comments});
+                view.render();
+
+                this.$("li").eq(i).find(".comments_container").append(view.el);
+            }
         }
     }
 });

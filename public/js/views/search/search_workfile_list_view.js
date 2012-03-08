@@ -11,22 +11,30 @@ chorus.views.SearchWorkfileList = chorus.views.SearchResultListBase.extend({
         }
     },
 
-    collectionModelContext: function(model){
-        var comments = model.get("comments") ? model.get("comments").map(function(comment) {
-                        return comment.attributes || comment;
-                    }) : [];
-
-        _.each(model.get("commitMessage"), function(commitMessage) {
-            comments.push({isCommitMessage:true, content: commitMessage});
-        }, this);
-
+    collectionModelContext: function(model) {
         return {
             showUrl: model.showUrl(),
             iconUrl: model.iconUrl(),
-            comments: comments.slice(0, 3),
-            moreComments: comments.slice(3),
-            hasMoreComments: Math.max(0, comments.length - 3),
             workspaces: [model.workspace().attributes]
+        }
+    },
+
+    postRender: function() {
+        var models = this.collection.models;
+        for (var i = 0; i < models.length; i++ ) {
+            var model = models[i];
+
+            var comments = model.get("comments") || [];
+            _.each(model.get("commitMessage"), function(commitMessage) {
+                comments.push({isCommitMessage:true, content: commitMessage});
+            }, this);
+
+            if (comments.length > 0) {
+                var view = new chorus.views.SearchResultCommentList({comments: comments});
+                view.render();
+
+                this.$("li").eq(i).find(".comments_container").append(view.el);
+            }
         }
     }
 });
