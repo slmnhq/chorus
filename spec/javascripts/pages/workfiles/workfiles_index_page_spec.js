@@ -47,6 +47,10 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             expect(this.server.requests[0].url).toBe("/edc/workspace/" + this.model.get('workspaceId'));
         })
 
+        it("sets the workspace id, for prioritizing search", function() {
+            expect(this.page.workspaceId).toBe(this.workspace.get("id"));
+        });
+
         it("defaults to alphabetical sorting", function() {
             expect(this.page.collection.sortIndex).toBe("fileName")
             expect(this.page.collection.sortOrder).toBe("asc");

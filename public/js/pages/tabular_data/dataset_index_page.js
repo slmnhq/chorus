@@ -15,6 +15,7 @@
         helpId: "datasets",
 
         setup: function(workspaceId) {
+            this.workspaceId = workspaceId;
             this.workspace = new chorus.models.Workspace({id: workspaceId});
             this.workspace.onLoaded(this.workspaceLoaded, this);
             this.workspace.fetch();

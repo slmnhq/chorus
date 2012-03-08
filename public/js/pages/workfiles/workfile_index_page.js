@@ -14,7 +14,7 @@
         helpId: "workfiles",
 
         setup:function (workspaceId) {
-            // chorus.router supplies arguments to setup
+            this.workspaceId = workspaceId;
 
             var workspace = new chorus.models.Workspace({id:workspaceId});
             workspace.fetch();
