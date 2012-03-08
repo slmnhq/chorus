@@ -169,19 +169,19 @@ describe("chorus.views.DatasetList", function() {
             })
         })
 
-        describe("clicking an li", function() {
+        describe("clicking a dataset", function() {
             beforeEach(function() {
                 spyOn(chorus.PageEvents, "broadcast").andCallThrough();
-                this.view.$("li").eq(1).click();
+                this.view.$("li.dataset").eq(4).click();
             });
 
             it("selects only that item", function() {
-                expect(this.view.$("li.selected").length).toBe(1);
-                expect(this.view.$("li").eq(1)).toHaveClass("selected");
+                expect(this.view.$("li.dataset.selected").length).toBe(1);
+                expect(this.view.$("li.dataset").eq(4)).toHaveClass("selected");
             });
 
             it("broadcasts tabularData:selected with an argument of the selected dataset", function() {
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("tabularData:selected", this.collection.models[1]);
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("tabularData:selected", this.collection.models[4]);
             });
         });
     });

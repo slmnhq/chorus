@@ -4,7 +4,7 @@ chorus.views.DatasetList = chorus.views.Base.extend({
     useLoadingSection: true,
     additionalClass: "list",
     events: {
-        "click li": "selectDatasetByClick"
+        "click li.dataset": "selectDatasetByClick"
     },
 
     preRender: function() {
@@ -15,7 +15,7 @@ chorus.views.DatasetList = chorus.views.Base.extend({
     },
 
     postRender: function() {
-        var lis = this.$("li");
+        var lis = this.$("li.dataset");
 
         _.each(this.collection.models, function(model, index) {
             var $li = lis.eq(index);
