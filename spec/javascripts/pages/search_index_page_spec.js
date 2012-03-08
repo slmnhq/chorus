@@ -33,11 +33,15 @@ describe("chorus.pages.SearchIndexPage", function() {
             it("has a 'Show All Results' link", function() {
                 expect(this.page.$('.default_content_header .type .title')).toContainTranslation("search.show")
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.all")
+            });
+
+            it("has filtered result links", function() {
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.workfile")
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.hdfs")
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.dataset")
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.workspace")
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.user")
+                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.instance")
             });
 
             describe("filtering by result type", function() {
