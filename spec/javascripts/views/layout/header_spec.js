@@ -87,7 +87,7 @@ describe("chorus.views.Header", function() {
         describe("typing in the search bar", function() {
             beforeEach(function() {
                 spyOn(this.view.typeAheadView, "searchFor");
-                this.view.$(".search input:text").val("test").trigger("textchange");
+                this.view.$(".search input:text").val("test_query").trigger("textchange");
             });
 
             it("should display the type ahead search view", function() {
@@ -96,7 +96,7 @@ describe("chorus.views.Header", function() {
             });
 
             it("sets the query in the typeAhead view", function() {
-                expect(this.view.typeAheadView.searchFor).toHaveBeenCalledWith("test");
+                expect(this.view.typeAheadView.searchFor).toHaveBeenCalledWith("test_query");
             });
 
             it("hides the search results if the input is empty", function() {
@@ -112,6 +112,45 @@ describe("chorus.views.Header", function() {
 
                 expect($(this.view.typeAheadView.el)).toHaveClass("hidden");
                 expect(this.view.$(".search input:text").val()).toBe("");
+            });
+
+            describe("submitting the search", function() {
+                beforeEach(function() {
+                    spyOn(chorus.router, 'navigate');
+                });
+
+                it("includes the query", function() {
+                    this.view.$(".search form").trigger("submit");
+                    expect(chorus.router.navigate).toHaveBeenCalled();
+                    var url = chorus.router.navigate.mostRecentCall.args[0];
+                    expect(url).toMatch(/test_query/);
+                });
+
+                context("when the header has a workspace id", function() {
+                    beforeEach(function() {
+                        this.view.options.workspaceId = '11';
+                        this.view.$(".search form").trigger("submit");
+                    });
+
+                    it("navigates to the workspace search page", function() {
+                        expect(chorus.router.navigate).toHaveBeenCalled();
+                        var url = chorus.router.navigate.mostRecentCall.args[0];
+                        expect(url).toMatchUrl("#/workspaces/11/search/test_query");
+                    });
+                });
+
+                context("when the header doesn't have a workspace id", function() {
+                    beforeEach(function() {
+                        delete this.view.options.workspaceId;
+                        this.view.$(".search form").trigger("submit");
+                    });
+
+                    it("navigates to the global search page", function() {
+                        expect(chorus.router.navigate).toHaveBeenCalled();
+                        var url = chorus.router.navigate.mostRecentCall.args[0];
+                        expect(url).toMatchUrl("#/search/test_query");
+                    });
+                });
             });
         })
 

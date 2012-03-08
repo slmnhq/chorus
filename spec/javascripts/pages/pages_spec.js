@@ -28,8 +28,8 @@ describe("chorus.pages.Base", function() {
             this.view.mainContent = new Backbone.View();
         })
 
-        context("when supplied with an explicit header", function() {
-            it("uses the supplied header", function() {
+        context("when the page already has a header", function() {
+            it("uses the cached header", function() {
                 var header = stubView("I is yr header")
                 this.view.header = header
                 this.view.render();
@@ -37,11 +37,22 @@ describe("chorus.pages.Base", function() {
             });
         });
 
-        context("when not supplied a header", function() {
+        context("when the page does not have a header", function() {
             it("creates a Header view", function() {
                 this.view.render();
                 expect(this.view.$("#header.header")).toExist();
-                expect(this.view.header instanceof chorus.views.Header).toBeTruthy();
+                expect(this.view.header).toBeA(chorus.views.Header);
+            });
+        });
+
+        context("when the page has a 'workspaceId'", function() {
+            beforeEach(function() {
+                this.view.workspaceId = '5';
+                this.view.render();
+            });
+
+            it("passes the workspace id to the header", function() {
+                expect(this.view.header.options.workspaceId).toBe("5");
             });
         });
 

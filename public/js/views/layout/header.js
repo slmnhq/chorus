@@ -170,6 +170,10 @@ chorus.views.Header = chorus.views.Base.extend({
 
     startSearch: function(e) {
         e.preventDefault();
-        chorus.router.navigate("/search/" + encodeURIComponent(encodeURIComponent(this.$(".search input:text").val())), true);
+        var search = new chorus.models.SearchResult({
+            workspaceId: this.options.workspaceId,
+            query: encodeURIComponent(this.$(".search input:text").val())
+        });
+        chorus.router.navigate(search.showUrl(), true);
     }
 });

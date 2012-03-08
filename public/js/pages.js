@@ -19,7 +19,7 @@ chorus.pages.Base = chorus.pages.Bare.extend({
     },
 
     setupSubviews: function() {
-        this.header = this.header || new chorus.views.Header();
+        this.header = this.header || new chorus.views.Header({ workspaceId: this.workspaceId });
         this.breadcrumbs = this.breadcrumbs || new chorus.views.BreadcrumbsView({
             breadcrumbs: _.isFunction(this.crumbs) ? this.crumbs() : this.crumbs
         });
