@@ -3,29 +3,20 @@ chorus.views.SearchUserList = chorus.views.SearchResultListBase.extend({
     className: "search_user_list",
     additionalClass: "list",
     constructorName: "SearchUserListView",
-    entityType: "user",
-    
-    collectionModelContext: function(model) {
-        var modelWithSearchResults = chorus.helpers.withSearchResults(model);
-        var supportingMessage = _.compact(_.map(
-            ["title", "ou", "content", "emailAddress", "name"],
-            function(fieldName) {
-                var value = modelWithSearchResults.get(fieldName);
-                if (value) {
-                    var result = {};
-                    result[fieldName] = value;
-                    return result
-                };
-            }
-        ));
+    entityType: "user",    
 
-        return {
-            iconSrc: model.imageUrl({size:"icon"}),
-            link: model.showUrl(),
-            displayName: modelWithSearchResults.displayName(),
-            supportingMessage: supportingMessage.slice(0,3),
-            moreSupportingMessage: supportingMessage.slice(3),
-            hasMoreSupportingMessage: Math.max(0, supportingMessage.length - 3)
-        };
+    makeListItemView: function(model) {
+        return new chorus.views.SearchUser({ model: model });
+    },
+
+    postRender: function() {
+        var ul = this.$("ul");
+        this.collection.each(function(model) {
+            try {
+                ul.append(this.makeListItemView(model).render().el);
+            } catch (err) {
+                chorus.log(err);
+            }
+        }, this);
     }
 });
