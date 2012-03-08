@@ -22,7 +22,10 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.extend({
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Database",
             collection: this.collection,
-            title: this.instance.get("name")
+            title: this.instance.get("name"),
+            imageUrl: this.instance.providerIconUrl()
         });
+
+        this.sidebar = new chorus.views.DatabaseListSidebar();
     }
 });

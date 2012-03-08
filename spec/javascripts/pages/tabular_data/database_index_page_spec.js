@@ -23,6 +23,10 @@ describe("chorus.pages.DatabaseIndexPage", function() {
             expect(this.page.mainContent.contentHeader.$("h1")).toContainText(this.instance.get("name"));
         });
 
+        it("should have the correct instance icon in the header ", function() {
+            expect(this.page.mainContent.contentHeader.$("img")).toHaveAttr("src", this.instance.providerIconUrl());
+        });
+
         it("should have the correct breadcrumbs", function() {
             expect(this.page.$(".breadcrumb").length).toBe(3);
 
@@ -34,5 +38,10 @@ describe("chorus.pages.DatabaseIndexPage", function() {
 
             expect(this.page.$(".breadcrumb:eq(2)")).toContainText(this.instance.get("name"));
         });
+
+        it("has a sidebar", function() {
+            expect(this.page.sidebar).toBeA(chorus.views.DatabaseListSidebar);
+            expect(this.page.$(this.page.sidebar.el)).toExist();
+        })
     })
 })
