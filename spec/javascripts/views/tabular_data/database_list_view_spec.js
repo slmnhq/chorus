@@ -24,4 +24,24 @@ describe("chorus.views.DatabaseList", function() {
     it("displays the right icon for each database", function() {
         expect(this.view.$("li.database img").eq(0)).toHaveAttr("src", "/images/instances/greenplum_database.png")
     })
+
+    it("preselects the first item", function() {
+        expect(this.view.$("li.database").eq(0)).toHaveClass("selected");
+    })
+
+    describe("clicking another entry", function() {
+        beforeEach(function() {
+            spyOn(chorus.PageEvents, "broadcast");
+            this.view.$("li.database").eq(1).click();
+        });
+
+        it("selects only that entry", function() {
+            expect(this.view.$("li.database").eq(0)).not.toHaveClass("selected");
+            expect(this.view.$("li.database").eq(1)).toHaveClass("selected");
+        })
+
+        it("should broadcast a database:selected event with the selected item", function() {
+            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("database:selected", this.database2);
+        });
+    })
 });

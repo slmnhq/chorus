@@ -1,0 +1,13 @@
+.database_list_sidebar {
+    .info {
+        margin-bottom: 5px;
+
+        .name {
+            @include heading-sidebar;
+            margin-bottom: 5px;
+        }
+        .type {
+            @include secondary-text-small;
+        }
+    }
+}
