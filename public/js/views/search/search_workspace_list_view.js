@@ -1,7 +1,6 @@
 chorus.views.SearchWorkspaceList = chorus.views.SearchResultListBase.extend({
     constructorName: "SearchWorkspaceListView",
     className: "search_workspace_list",
-    additionalClass: "list",
     entityType: "workspace",
 
     makeListItemView: function(model) {

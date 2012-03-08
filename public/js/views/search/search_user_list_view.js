@@ -1,8 +1,7 @@
 chorus.views.SearchUserList = chorus.views.SearchResultListBase.extend({
     constructorName: "SearchUserListView",
     className: "search_user_list",
-    additionalClass: "list",
-    entityType: "user",    
+    entityType: "user",
 
     makeListItemView: function(model) {
         return new chorus.views.SearchUser({ model: model });

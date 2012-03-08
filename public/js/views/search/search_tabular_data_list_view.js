@@ -1,7 +1,6 @@
 chorus.views.SearchTabularDataList = chorus.views.SearchResultListBase.extend({
     constructorName: "SearchTabularDataListView",
     className: "search_tabular_data_list",
-    additionalClass: "list",
     entityType: "dataset",
 
     makeListItemView: function(model) {

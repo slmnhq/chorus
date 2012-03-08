@@ -1,5 +1,7 @@
 chorus.views.SearchResultListBase = chorus.views.Base.extend({
     constructorName: "SearchResultListBase",
+    additionalClass: "list",
+
     events: {
         "click li a.show_more_comments": "showMoreComments",
         "click li a.show_fewer_comments": "showLessComments",
