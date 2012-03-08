@@ -8,7 +8,9 @@
             {{# if isComment}}
                 {{t "activity_stream.comment"}}:
             {{else}}
-                {{t "activity_stream.note"}}:
+                {{#unless isCommitMessage}}
+                    {{t "activity_stream.note"}}:
+                {{/unless}}
             {{/if}}
         {{/if}}
         </span>

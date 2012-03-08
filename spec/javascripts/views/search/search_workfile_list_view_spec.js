@@ -141,12 +141,11 @@ describe("chorus.views.SearchWorkfileList", function() {
         describe("shows version commit messages in the comments area", function() {
             beforeEach(function() {
                 this.view.collection.models[0].set({
-                    // TODO: This should be in the highlightedAttributes sub-object.  Fix
-                    // after https://www.pivotaltracker.com/story/show/26023235 is done.
-                    commitMessage: [
-                        "this is a <em>cool</em> version",
-                        "this is a <em>cooler</em> version"
-                    ]
+                    highlightedAttributes: {
+                        commitMessage: [
+                            "this is a <em>cool</em> version",
+                            "this is a <em>cooler</em> version"
+                        ]}
                 });
                 this.view.render();
             });

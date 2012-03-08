@@ -25,7 +25,8 @@ chorus.views.SearchWorkfileList = chorus.views.SearchResultListBase.extend({
             var model = models[i];
 
             var comments = model.get("comments") || [];
-            _.each(model.get("commitMessage"), function(commitMessage) {
+            var commitMessages = model.get("highlightedAttributes") && model.get("highlightedAttributes").commitMessage;
+            _.each(commitMessages || [], function(commitMessage) {
                 comments.push({isCommitMessage:true, content: commitMessage});
             }, this);
 
