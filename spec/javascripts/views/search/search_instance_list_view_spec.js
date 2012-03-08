@@ -71,7 +71,7 @@ describe("chorus.views.SearchInstanceList", function() {
 
     describe("list elements", function() {
         it("there is one for each model in the collection", function() {
-                expect(this.view.$('li').length).toBe(2);
+            expect(this.view.$('li').length).toBe(2);
         });
 
         it("has the right data-id attribute", function() {
@@ -99,4 +99,34 @@ describe("chorus.views.SearchInstanceList", function() {
             expect(this.view.$("li .name").eq(1).html()).toContain("<em>my</em>_instance");
         });
     });
+
+    describe("comments", function() {
+        beforeEach(function() {
+            this.view.collection.models[0].set({
+                comments: [
+                    {
+                        "lastUpdatedStamp": "2012-03-07 17:19:14",
+                        "isPublished": false,
+                        "content": "what an awesome instance",
+                        "isComment": false,
+                        "id": "10120",
+                        "isInsight": true,
+                        "highlightedAttributes": {
+                            "content": ["what an <em>awesome<\/em> instance"]
+                        },
+                        "owner": {
+                            "id": "InitialUser",
+                            "lastName": "Admin",
+                            "firstName": "EDC"
+                        }
+                    }
+                ]
+            });
+            this.view.render();
+        });
+
+        it("renders the comments", function() {
+            expect(this.view.$("li:eq(0) .search_result_comment_list .comment").length).toBe(1);
+        });
+    })
 });

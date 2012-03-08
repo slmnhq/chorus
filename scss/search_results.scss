@@ -91,6 +91,12 @@
                 }
             }
 
+            .has_more_comments, .hasMore, .more_comments {
+                a {
+                    font-size: 12px;
+                }
+            }
+
             .hasMore, .lessComments {
                 vertical-align: bottom;
                 margin-top: 5px;

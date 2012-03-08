@@ -14,13 +14,16 @@
 <ul>
     {{#each models}}
         <li class="result_item" data-id={{id}}>
-            <div class="spacer left"></div>
+            <div class="spacer_left"></div>
             <div class="images">
                 <img class="state" src="{{stateUrl}}" title="{{stateText}}"/>
                 <img class="provider" src="{{iconUrl}}"/>
             </div>
-            <div class="description"><span class="name">{{{displaySearchMatch "name"}}}</span></div>
-            <div class="spacer right"></div>
+            <div class="description">
+                <span class="name">{{{displaySearchMatch "name"}}}</span>
+                <div class="comments_container"/>
+            </div>
+            <div class="spacer_right"></div>
         </li>
     {{/each}}
 </ul>
