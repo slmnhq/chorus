@@ -720,7 +720,7 @@ beforeEach(function() {
             },
 
             "WORKSPACE_ADD_HDFS_AS_EXT_TABLE": function(overrides) {
-                var attrs = _exnted({
+                var attrs = _.extend({
                     type: "WORKSPACE_ADD_HDFS_AS_EXT_TABLE",
                     id: fixtures.nextId().toString(),
                     timestamp: "2012-03-07 14:42:23",

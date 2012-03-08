@@ -107,6 +107,10 @@
                     : this.presenter.importSourceName;
             }
 
+            if (this.presenter.hdfsName) {
+                header.hdfsLink = chorus.helpers.linkTo(this.presenter.hdfsUrl, this.presenter.hdfsName);
+            }
+
 
             return header;
         },
@@ -180,6 +184,17 @@
                 objectUrl: datasetAdded.showUrl(),
                 iconSrc: "/images/table_large.png",
                 iconClass: ''
+            }
+        },
+
+        WORKSPACE_ADD_HDFS_AS_EXT_TABLE: function(model) {
+            var datasetAdded = model.databaseObject().asDataset();
+            var hdfs = model.hdfs();
+            return {
+                objectName: datasetAdded.get("objectName"),
+                objectUrl: datasetAdded.showUrl(),
+                hdfsName: hdfs.get("name"),
+                hdfsUrl: hdfs.showUrl()
             }
         },
 
