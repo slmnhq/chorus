@@ -342,4 +342,29 @@ describe("chorus.models.SearchResult", function() {
             });
         });
     });
+
+    describe("#instances", function() {
+        context("when there are instance search results", function() {
+            beforeEach(function() {
+                this.model = fixtures.searchResult();
+                this.entries = this.model.instances();
+            });
+
+            it("returns an InstanceSet", function() {
+                expect(this.entries).toBeA(chorus.collections.InstanceSet);
+            });
+
+            it("has the right number of entries", function() {
+                expect(this.entries.models.length).toBe(2);
+            });
+
+            it("has numFound in 'total'", function() {
+                expect(this.entries.attributes.total).toBe(2);
+            });
+
+            it("memoizes", function() {
+                expect(this.entries).toBe(this.model.instances());
+            });
+        });
+    });
 })

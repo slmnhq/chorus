@@ -7,7 +7,8 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
         ".user_list": "userList",
         ".workfile_list": "workfileList",
         ".workspace_list": "workspaceList",
-        ".dataset_list": "tabularDataList"
+        ".dataset_list": "tabularDataList",
+        ".instance_list": "instanceList"
     },
 
     events: {
@@ -50,6 +51,14 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
                 query: this.model
             });
         }
+        if (this.model.instances()) {
+            var instances = this.model.instances();
+            this.instanceList = new chorus.views.SearchInstanceList({
+                collection: instances,
+                total: this.model.get("instance").numFound,
+                query: this.model
+            });
+        }
     },
 
     selectItem:function selectItem(e) {
@@ -89,7 +98,8 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
             hasWorkspace : this.shouldShowSection("workspace"),
             hasWorkfile : this.shouldShowSection("workfile"),
             hasDataset : this.shouldShowSection("dataset"),
-            hasUser : this.shouldShowSection("user")
+            hasUser : this.shouldShowSection("user"),
+            hasInstance: this.shouldShowSection("instance")
         }
     },
 

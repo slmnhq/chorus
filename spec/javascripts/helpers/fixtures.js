@@ -1199,7 +1199,7 @@ beforeEach(function() {
                         type: "SOURCE_TABLE"
                     },
                     id: fixtures.nextId().toString(),
-                    import:{
+                    import: {
                         id: fixtures.nextId().toString()
                     },
                     table: {
@@ -1230,7 +1230,7 @@ beforeEach(function() {
                         type: "SOURCE_VIEW"
                     },
                     id: fixtures.nextId().toString(),
-                    import:{
+                    import: {
                         id: fixtures.nextId().toString()
                     },
                     table: {
@@ -1357,7 +1357,7 @@ beforeEach(function() {
                     file: {
                         name: "some.csv"
                     },
-                     id: fixtures.nextId().toString(),
+                    id: fixtures.nextId().toString(),
                     import: {
                         id: fixtures.nextId().toString()
                     },
@@ -1392,7 +1392,7 @@ beforeEach(function() {
                         workspaceId: "10000"
                     },
                     id: fixtures.nextId().toString(),
-                    import:{
+                    import: {
                         id: fixtures.nextId().toString()
                     },
                     table: {
@@ -2441,7 +2441,7 @@ beforeEach(function() {
             return this.datasetImport(_.extend({executionInfo: {
                 startedStamp: "2012-02-29 14:23:58.169",
                 completedStamp: "2012-02-29 14:23:59.027",
-                result : "That import was totally bogus",
+                result: "That import was totally bogus",
                 state: "failed",
                 creator: "InitialUser"
             }}, overrides));
@@ -3118,8 +3118,49 @@ beforeEach(function() {
                     "numFound": 39
                 },
                 "instance": {
-                    "docs": [],
-                    "numFound": 0
+                    "docs": [
+                        {
+                            "port": 8020,
+                            "id": "10040",
+                            "isDeleted": false,
+                            "lastUpdatedStamp": "2012-03-07 12:59:45",
+                            "host": "gillette",
+                            "instanceProvider": "Hadoop",
+                            "name": "my_hadoop",
+                            "state": "online",
+                            "highlightedAttributes": {
+                                "name": ["<em>my<\/em>_hadoop"]
+                            },
+                            "entityType": "instance",
+                            "owner": {
+                                "id": "InitialUser",
+                                "lastName": "Admin",
+                                "firstName": "EDC"
+                            },
+                            "comments": []
+                        },
+                        {
+                            "port": 5432,
+                            "id": "10043",
+                            "isDeleted": false,
+                            "lastUpdatedStamp": "2012-03-07 12:59:45",
+                            "host": "gillette",
+                            "instanceProvider": "Greenplum Database",
+                            "name": "my_instance",
+                            "state": "fault",
+                            "highlightedAttributes": {
+                                "name": ["<em>my<\/em>_instance"]
+                            },
+                            "entityType": "instance",
+                            "owner": {
+                                "id": "InitialUser",
+                                "lastName": "Admin",
+                                "firstName": "EDC"
+                            },
+                            "comments": []
+                        }
+                    ],
+                    "numFound": 2
                 },
                 "user": {
                     "docs": [
@@ -3203,21 +3244,23 @@ beforeEach(function() {
                     "numFound": "4"
                 },
                 hdfs: {
-                    docs: [{
-                        comments: [],
-                        entityType: "hdfs",
-                        highlightedAttributes: {
-                            name: ["Thumbs.<em>db</em>"]
-                        },
-                        id: "10001|/webui/images/thirdparty/jquerybubblepopup-theme/green/Thumbs.db",
-                        instance: {
-                            id:"10001", name:"hadoop"
-                        },
-                        lastUpdatedStamp: "2012-03-05 15:23:55",
-                        name: "Thumbs.db",
-                        path: "/webui/images/thirdparty/jquerybubblepopup-theme/green/Thumbs.db"
+                    docs: [
+                        {
+                            comments: [],
+                            entityType: "hdfs",
+                            highlightedAttributes: {
+                                name: ["Thumbs.<em>db</em>"]
+                            },
+                            id: "10001|/webui/images/thirdparty/jquerybubblepopup-theme/green/Thumbs.db",
+                            instance: {
+                                id: "10001", name: "hadoop"
+                            },
+                            lastUpdatedStamp: "2012-03-05 15:23:55",
+                            name: "Thumbs.db",
+                            path: "/webui/images/thirdparty/jquerybubblepopup-theme/green/Thumbs.db"
 
-                    }],
+                        }
+                    ],
                     numFound: "1"
                 }
             }, overrides)
@@ -3263,7 +3306,7 @@ beforeEach(function() {
                 },
                 id: "10001|/webui/images/thirdparty/jquerybubblepopup-theme/green/Thumbs.db",
                 instance: {
-                    id:"10001", name:"hadoop"
+                    id: "10001", name: "hadoop"
                 },
                 lastUpdatedStamp: "2012-03-05 15:23:55",
                 name: "Thumbs.db",

@@ -53,7 +53,7 @@ describe("chorus.views.SearchWorkspaceList", function() {
                 this.view.$("a.show_all").click();
             });
 
-            it("should navigate to the user results page", function() {
+            it("should navigate to the workspace results page", function() {
                 expect(chorus.router.navigate).toHaveBeenCalledWith(this.result.showUrl(), true);
             });
         });

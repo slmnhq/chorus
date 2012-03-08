@@ -109,5 +109,18 @@ chorus.models.SearchResult = chorus.models.Base.extend({
         }
 
         return this._workspaces;
+    },
+
+    instances: function() {
+        if (!this._instances && this.get("instance")) {
+            var instances = _.map(this.get("instance").docs, function(instanceJson) {
+                var instance = new chorus.models.Instance(instanceJson);
+                instance.comments = new chorus.collections.ActivitySet(instanceJson.comments);
+                return instance;
+            });
+            this._instances = new chorus.collections.InstanceSet(instances, { total: this.get("instance").numFound });
+        }
+
+        return this._instances;
     }
 });

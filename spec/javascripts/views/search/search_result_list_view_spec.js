@@ -18,6 +18,10 @@ describe("chorus.views.SearchResultList", function() {
         expect(this.view.$(".search_hdfs_list")).toExist();
     });
 
+    it("should include the search results for instances", function() {
+        expect(this.view.$(".search_instance_list")).toExist();
+    });
+
     context("when filtering by workspace", function() {
         beforeEach(function() {
             this.model = fixtures.searchResult({entityType: "workspace"});
