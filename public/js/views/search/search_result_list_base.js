@@ -32,7 +32,9 @@ chorus.views.SearchResultListBase = chorus.views.Base.extend({
         }, this);
     },
 
-    makeListItemView: $.noop,
+    makeListItemView: function(model) {
+        return new chorus.views[this.listItemConstructorName]({ model: model });
+    },
 
     showMoreComments: function(evt) {
         evt && evt.preventDefault();

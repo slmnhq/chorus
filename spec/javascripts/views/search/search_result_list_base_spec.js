@@ -1,28 +1,25 @@
 describe("chorus.views.SearchResultListBase", function() {
     beforeEach(function() {
         this.result = fixtures.searchResult();
-                this.result.set({ query: "jackson5", entityType: "user" });
-                this.models = this.result.users();
-                this.view = new chorus.views.SearchResultListBase({
-                    className: "search_user_list",
-                    collection: this.models,
-                    query: this.result,
-                    additionalClass: "list"
-                });
-
-                spyOn(this.view, "additionalContext").andReturn(
-                    {
-                        shown: true,
-                        filteredSearch: true,
-                        hasNext: true,
-                        hasPrevious: true,
-                        total: 5
-                    }
-                );
-
-        spyOn(this.view, 'makeListItemView').andCallFake(function (model) {
-            return new chorus.views.SearchUser({model: model});
+        this.result.set({ query: "jackson5", entityType: "user" });
+        this.models = this.result.users();
+        this.view = new chorus.views.SearchResultListBase({
+            className: "search_user_list",
+            collection: this.models,
+            query: this.result,
+            additionalClass: "list"
         });
+
+        this.view.listItemConstructorName = "SearchUser"
+        spyOn(this.view, "additionalContext").andReturn(
+            {
+                shown: true,
+                filteredSearch: true,
+                hasNext: true,
+                hasPrevious: true,
+                total: 5
+            }
+        );
 
         this.view.render();
     });
