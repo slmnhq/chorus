@@ -39,16 +39,16 @@ describe("chorus.views.SearchWorkfileList", function() {
                 expect(this.view.$(".details .title")).toContainTranslation("workfiles.title");
             });
 
-        context("has no additional results", function() {
-            beforeEach(function() {
-                var workfiles = fixtures.workfileSet([
-                    {id: "1", workspace: {id: "2", name: "Test"}},
-                    {id: "4", workspace: {id: "3", name: "Other"}}
-                ], {total: "2"})
-                this.view = new chorus.views.SearchWorkfileList({ collection: workfiles });
+            context("has no additional results", function() {
+                beforeEach(function() {
+                    var workfiles = fixtures.workfileSet([
+                        {id: "1", workspace: {id: "2", name: "Test"}},
+                        {id: "4", workspace: {id: "3", name: "Other"}}
+                    ], {total: "2"})
+                    this.view = new chorus.views.SearchWorkfileList({ collection: workfiles });
 
-                this.view.render()
-            });
+                    this.view.render()
+                });
 
                 it("has no showAll link", function() {
                     expect(this.view.$(".details a.show_all")).not.toExist();
