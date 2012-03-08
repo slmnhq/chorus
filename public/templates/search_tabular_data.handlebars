@@ -1,0 +1,14 @@
+<li class="result_item" data-cid={{resource.cid}}>
+    <div class="spacer_left"></div>
+    <img class="icon" src="{{iconUrl}}" title="{{humanizedTabularDataType this}}"/>
+    <div class="description">
+        <a class="name" href="{{showUrl}}">{{{displaySearchMatch "objectName"}}}</a>
+        <div class="location">
+            {{{tabularDataLocation resource}}}
+            {{{usedInWorkspaces workspaces dataset}}}
+        </div>
+
+        <div class="comments_container"/>
+    </div>
+    <div class="spacer_right"></div>
+</li>

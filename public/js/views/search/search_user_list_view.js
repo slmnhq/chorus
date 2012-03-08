@@ -12,11 +12,7 @@ chorus.views.SearchUserList = chorus.views.SearchResultListBase.extend({
     postRender: function() {
         var ul = this.$("ul");
         this.collection.each(function(model) {
-            try {
-                ul.append(this.makeListItemView(model).render().el);
-            } catch (err) {
-                chorus.log(err);
-            }
+            ul.append(this.makeListItemView(model).render().el);
         }, this);
     }
 });
