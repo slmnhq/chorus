@@ -2691,12 +2691,21 @@ beforeEach(function() {
 
         hdfsEntrySet: function(models, overrides) {
             models = models || [
-                fixtures.hdfsEntryDirJson(overrides),
-                fixtures.hdfsEntryFileJson(overrides),
-                fixtures.hdfsEntryBinaryFileJson(overrides),
-                fixtures.hdfsEntryUnknownIfBinaryFileJson(overrides)
+                fixtures.hdfsEntryDirJson(),
+                fixtures.hdfsEntryFileJson(),
+                fixtures.hdfsEntryBinaryFileJson(),
+                fixtures.hdfsEntryUnknownIfBinaryFileJson()
             ];
-            return new chorus.collections.HdfsEntrySet(models, overrides);
+            var attributes = _.extend({
+                path: '/data',
+                instance: {
+                    id: this.nextId().toString(),
+                    name: 'instanceName'
+                }
+            }, overrides);
+            var result = new chorus.collections.HdfsEntrySet(null, attributes);
+            result.reset(models);
+            return result;
         },
 
         hdfsEntryDir: function(overrides) {

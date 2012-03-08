@@ -61,7 +61,8 @@ chorus.models.SearchResult = chorus.models.Base.extend({
 
     hdfs: function() {
         if (!this._hdfs && this.get("hdfs")) {
-            this._hdfs = new chorus.collections.HdfsEntrySet(this.get("hdfs").docs, {total: this.get("hdfs").numFound});
+            this._hdfs = new chorus.collections.HdfsEntrySet(null, {total: this.get("hdfs").numFound});
+            this._hdfs.reset(this.get("hdfs").docs);
         }
         return this._hdfs;
     },
