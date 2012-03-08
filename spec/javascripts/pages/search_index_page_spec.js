@@ -164,6 +164,32 @@ describe("chorus.pages.SearchIndexPage", function() {
                 });
             });
 
+            describe("the instance section", function() {
+                beforeEach(function() {
+                    this.instanceLIs = this.page.$(".instance_list li");
+                });
+
+                it("shows a list of search results", function() {
+                    expect(this.instanceLIs.length).toBe(2)
+                });
+
+                describe("clicking on an instance search result", function() {
+                    beforeEach(function() {
+                        spyOn(this.page.sidebars.instance, "setInstance");
+                        this.instanceLIs.eq(1).trigger("click");
+                    });
+
+                    it("selects that instance", function() {
+                        expect(this.instanceLIs.eq(1)).toHaveClass("selected");
+                    });
+
+                    it("shows the instance in the sidebar", function() {
+                        expect($(this.page.sidebar.el)).toHaveClass("instance_list_sidebar")
+                        expect(this.page.sidebars.instance.setInstance).toHaveBeenCalledWith(this.page.search.instances().at(1))
+                    });
+                });
+            });
+
             describe("the user section", function() {
                 beforeEach(function() {
                     this.users = this.page.search.users();

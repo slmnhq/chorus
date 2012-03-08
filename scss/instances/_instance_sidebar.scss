@@ -29,8 +29,6 @@
     .instance_name {
         @include ellipsis;
         @include heading-sidebar;
-        font-size: 24px;
-        line-height: 34px;
     }
 
     .instance_type {
