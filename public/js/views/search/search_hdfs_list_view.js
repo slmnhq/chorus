@@ -4,18 +4,14 @@ chorus.views.SearchHdfsList = chorus.views.SearchResultListBase.extend({
     additionalClass: "list",
     entityType: "hdfs",
 
-    collectionModelContext: function(model) {
-        var pathLinks = _.map(model.pathSegments(), function(entry) {
-            return chorus.helpers.linkTo(entry.showUrl(), entry.get('name'));
-        });
-        var instance = model.getInstance();
+    makeListItemView: function(model) {
+        return new chorus.views.SearchHdfs({ model: model });
+    },
 
-        return {
-            showUrl: model.showUrl(),
-            humanSize: I18n.toHumanSize(model.get("size")),
-            iconUrl: chorus.urlHelpers.fileIconUrl(_.last(model.get("name").split("."))),
-            instanceLink: chorus.helpers.linkTo(instance.showUrl(), instance.get('name')),
-            completePath: pathLinks.join(" / ")
-        }
+    postRender: function() {
+        var ul = this.$("ul");
+        this.collection.each(function(model) {
+            ul.append(this.makeListItemView(model).render().el);
+        }, this);
     }
 });
