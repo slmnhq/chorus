@@ -77,5 +77,13 @@ describe("chorus.views.SearchResultList", function() {
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("hdfs_entry:selected", modelToClick);
             });
         });
+
+        context("when the li is for an instance", function() {
+            it("broadcasts the 'instance:selected' page event with the clicked instance", function() {
+                var modelToClick = this.model.instances().at(0);
+                this.view.$(".instance_list li").eq(0).click();
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("instance:selected", modelToClick);
+            });
+        });
     });
 });

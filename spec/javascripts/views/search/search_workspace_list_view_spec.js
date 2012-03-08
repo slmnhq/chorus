@@ -14,6 +14,19 @@ describe("chorus.views.SearchWorkspaceList", function() {
                     id: "InitialUser",
                     lastName: "Admin"
                 },
+                comments: [
+                    {
+                        "lastUpdatedStamp": "2012-03-08 09:57:46",
+                        "isPublished": false,
+                        "content": "good version",
+                        "isComment": false,
+                        "id": "10020",
+                        "workspaceId": "10000",
+                        "isInsight": false,
+                        "highlightedAttributes": {"content": ["good <em>version<\/em>"]},
+                        "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}
+                    }
+                ],
                 highlightedAttributes: {
                     name: "<em>ws</em>",
                     description: "<em>ws</em> <i>other text</i>"
@@ -116,5 +129,10 @@ describe("chorus.views.SearchWorkspaceList", function() {
         it("shows matching name", function() {
             expect(this.view.$("li .name").eq(0).html()).toContain("<em>ws</em>");
         });
+
+        it("shows comments", function() {
+            expect(this.view.$("li .comments .comment").length).toBe(1);
+        });
+
     });
 });

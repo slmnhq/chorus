@@ -26,10 +26,11 @@ chorus.views.SearchResultCommentList = chorus.views.Base.extend({
     },
 
     additionalContext: function() {
+        var comments = this.collection || [];
         return {
-            comments: this.collection.slice(0, 3),
-            moreComments: this.collection.slice(3),
-            hasMoreComments: Math.max(0, this.collection.length - 3)
+            comments: comments.slice(0, 3),
+            moreComments: comments.slice(3),
+            hasMoreComments: Math.max(0, comments.length - 3)
         }
     }
 });

@@ -1,11 +1,11 @@
 describe("chorus.pages.WorkspaceShowPage", function() {
     describe("#initialize", function() {
         beforeEach(function() {
-            this.page = new chorus.pages.WorkspaceShowPage(4);
+            this.page = new chorus.pages.WorkspaceShowPage('4');
         })
 
         it("sets up the model properly", function() {
-            expect(this.page.model.get("id")).toBe(4);
+            expect(this.page.model.get("id")).toBe('4');
         })
 
         it("fetches the model", function() {
@@ -15,6 +15,10 @@ describe("chorus.pages.WorkspaceShowPage", function() {
         it("has a helpId", function() {
             expect(this.page.helpId).toBe("workspace_summary")
         })
+
+        it("sets the workspaceId, for prioritizing search", function() {
+            expect(this.page.workspaceId).toBe('4');
+        });
     });
 
     describe("#render", function() {

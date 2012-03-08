@@ -23,6 +23,10 @@ describe("chorus.pages.DatasetIndexPage", function() {
         it("does not create the sidebar", function() {
             expect(this.page.sidebar).toBeUndefined();
         })
+
+        it("sets the workspace id, for prioritizing search", function() {
+            expect(this.page.workspaceId).toBe(9999);
+        });
     });
 
     context("it does not have a sandbox", function() {

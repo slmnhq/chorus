@@ -13,7 +13,7 @@
         helpId: "workspace_summary",
 
         setup:function (workspaceId) {
-            // chorus.router supplies arguments to setup
+            this.workspaceId = workspaceId;
             this.model = new chorus.models.Workspace({id:workspaceId});
             this.model.fetch();
             this.breadcrumbs = new breadcrumbsView({model:this.model});

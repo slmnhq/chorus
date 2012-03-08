@@ -53,6 +53,7 @@ src_files:
   - js/models/csv_import.js
   - js/models/**/*.js
   - js/pages/tabular_data/tabular_data_show_page.js
+  - js/pages/search_index_page.js
   - js/**/*.js
   - help/**/*.js
 

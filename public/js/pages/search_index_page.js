@@ -4,15 +4,20 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         { label: t("breadcrumbs.search_results") }
     ],
 
-    setup: function() {
+    parseSearchParams: function(searchParams) {
         var attrs = {
-            query: decodeURIComponent(arguments[2] || arguments[0])
+            query: decodeURIComponent(searchParams[2] || searchParams[0])
         };
-        if (arguments.length === 3) {
-            attrs.searchIn = arguments[0];
-            attrs.entityType = arguments[1];
+        if (searchParams.length === 3) {
+            attrs.searchIn = searchParams[0];
+            attrs.entityType = searchParams[1];
         }
-        this.model = this.search = new chorus.models.SearchResult(attrs);
+        return attrs;
+    },
+
+    setup: function() {
+        var searchParams = _.toArray(arguments);
+        this.model = this.search = new chorus.models.SearchResult(this.parseSearchParams(searchParams));
         this.requiredResources.add(this.model);
         this.model.fetch();
     },
@@ -40,6 +45,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
                             {data: "workfile", text: t("search.type.workfile")},
                             {data: "hdfs", text: t("search.type.hdfs")},
                             {data: "dataset", text: t("search.type.dataset")},
+                            {data: "instance", text: t("search.type.instance")},
                             {data: "workspace", text: t("search.type.workspace")},
                             {data: "user", text: t("search.type.user")}
                         ],
@@ -57,7 +63,8 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
             user: new chorus.views.UserListSidebar(),
             workfile: new chorus.views.WorkfileListSidebar({ hideAddNoteLink: true }),
             workspace: new chorus.views.WorkspaceListSidebar(),
-            tabularData: new chorus.views.TabularDataSidebar({listMode: true})
+            tabularData: new chorus.views.TabularDataSidebar({listMode: true}),
+            instance: new chorus.views.InstanceListSidebar()
         };
 
         // explicitly set up bindings after initializing sidebar collection
@@ -66,6 +73,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         chorus.PageEvents.subscribe("tabularData:selected", this.tabularDataSelected, this);
         chorus.PageEvents.subscribe("workfile:selected", this.workfileSelected, this);
         chorus.PageEvents.subscribe("user:selected", this.userSelected, this);
+        chorus.PageEvents.subscribe("instance:selected", this.instanceSelected, this);
 
         chorus.PageEvents.subscribe("choice:search_in", this.scopeSearchResults, this);
         chorus.PageEvents.subscribe("choice:filter", this.filterSearchResults, this);
@@ -90,6 +98,11 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
     userSelected: function(user) {
         this.sidebars.user.setUser(user);
         this.renderSidebar(this.sidebars.user);
+    },
+
+    instanceSelected: function(instance) {
+        this.sidebars.instance.setInstance(instance);
+        this.renderSidebar(this.sidebars.instance);
     },
 
     renderSidebar: function(sidebar) {

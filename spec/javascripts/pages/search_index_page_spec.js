@@ -33,11 +33,15 @@ describe("chorus.pages.SearchIndexPage", function() {
             it("has a 'Show All Results' link", function() {
                 expect(this.page.$('.default_content_header .type .title')).toContainTranslation("search.show")
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.all")
+            });
+
+            it("has filtered result links", function() {
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.workfile")
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.hdfs")
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.dataset")
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.workspace")
                 expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.user")
+                expect(this.page.$('.default_content_header .type a')).toContainTranslation("search.type.instance")
             });
 
             describe("filtering by result type", function() {
@@ -156,6 +160,32 @@ describe("chorus.pages.SearchIndexPage", function() {
 
                     it("shows the associate-with-workspace link in the sidebar", function() {
                         expect(this.page.sidebar.$('a.associate')).toExist();
+                    });
+                });
+            });
+
+            describe("the instance section", function() {
+                beforeEach(function() {
+                    this.instanceLIs = this.page.$(".instance_list li");
+                });
+
+                it("shows a list of search results", function() {
+                    expect(this.instanceLIs.length).toBe(2)
+                });
+
+                describe("clicking on an instance search result", function() {
+                    beforeEach(function() {
+                        spyOn(this.page.sidebars.instance, "setInstance");
+                        this.instanceLIs.eq(1).trigger("click");
+                    });
+
+                    it("selects that instance", function() {
+                        expect(this.instanceLIs.eq(1)).toHaveClass("selected");
+                    });
+
+                    it("shows the instance in the sidebar", function() {
+                        expect($(this.page.sidebar.el)).toHaveClass("instance_list_sidebar")
+                        expect(this.page.sidebars.instance.setInstance).toHaveBeenCalledWith(this.page.search.instances().at(1))
                     });
                 });
             });

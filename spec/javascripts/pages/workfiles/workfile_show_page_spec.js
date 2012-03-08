@@ -18,6 +18,10 @@ describe("chorus.pages.WorkfileShowPage", function() {
             expect(this.page.helpId).toBe("workfile")
         })
 
+        it("sets the workspace id, for prioritizing search", function() {
+            expect(this.page.workspaceId).toBe(4);
+        });
+
         it("instantiates and fetches a workfile with the given id", function() {
             var workfile = this.page.model;
             expect(workfile.get("id")).toBe(this.workfileId);

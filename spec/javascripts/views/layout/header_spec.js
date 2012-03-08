@@ -8,7 +8,7 @@ describe("chorus.views.Header", function() {
             id: "55"
         });
         chorus.user = chorus.session;
-    });
+    })
 
     describe("initialization", function() {
         beforeEach(function() {
