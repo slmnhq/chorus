@@ -4,10 +4,19 @@ chorus.views.SearchWorkspaceList = chorus.views.SearchResultListBase.extend({
     additionalClass: "list",
     entityType: "workspace",
 
-    collectionModelContext: function(model){
-        return {
-            showUrl: model.showUrl(),
-            iconUrl: model.customIconUrl()
-        }
+    makeListItemView: function(model) {
+        return new chorus.views.SearchWorkspace({ model: model });
+    },
+
+    postRender: function() {
+        var ul = this.$("ul");
+        this.collection.each(function(model) {
+            try {
+                ul.append(this.makeListItemView(model).render().el);
+            } catch (err) {
+                chorus.log(err);
+            }
+        }, this);
     }
+
 });
