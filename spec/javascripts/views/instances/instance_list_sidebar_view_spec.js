@@ -114,10 +114,6 @@ describe("chorus.views.InstanceListSidebar", function() {
                     it("does display the edit instance link", function() {
                         expect(this.view.$(".actions .edit_instance")).toExist();
                     })
-
-                    it("displays a 'browse files' link", function() {
-                        expect(this.view.$(".actions .browse_files")).toContainTranslation("actions.browse_files");
-                    })
                 })
 
                 context("when the instance failed to provision", function() {
@@ -255,18 +251,6 @@ describe("chorus.views.InstanceListSidebar", function() {
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).not.toExist();
                 });
-
-                describe("browse datasets", function() {
-                    it("should be a dialog link", function() {
-                        expect(this.view.$('.actions .schema_browser').data('dialog')).toBe('SchemaBrowser');
-                        expect(this.view.$('.actions .schema_browser')).toContainTranslation('actions.browse_datasets');
-                    })
-
-                    it("should not show up if the instance is not a greenplum database", function() {
-                        this.instance.set({instanceProvider: 'Something Else'});
-                        expect(this.view.$('.actions .schema_browser')).not.toExist();
-                    })
-                });
             });
 
             context("when the instance does not have a shared account", function() {
@@ -290,13 +274,6 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                         it("does not show the 'remove credentials' link", function() {
                             expect(this.view.$(".actions .remove_credentials")).not.toExist();
-                        });
-
-                        describe("browse datasets link", function() {
-                            it("shouled be grayed out, and not be a dialog", function() {
-                                expect(this.view.$('.actions .schema_browser').data('dialog')).toBeUndefined();
-                                expect(this.view.$('.actions .schema_browser')).toHaveClass('disabled');
-                            })
                         });
                     });
 

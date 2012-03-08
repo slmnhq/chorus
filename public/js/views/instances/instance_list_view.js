@@ -45,6 +45,7 @@ chorus.views.InstanceList = chorus.views.Base.extend({
 
         return {
             stateUrl: model.stateIconUrl(),
+            showUrl: model.showUrl(),
             stateText: _.str.capitalize(model.get("state") || "unknown"),
             providerUrl: model.providerIconUrl(),
             isGreenplum: isGreenplum,

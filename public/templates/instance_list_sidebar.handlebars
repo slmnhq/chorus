@@ -52,17 +52,7 @@
         {{else}}
             <li><span class="disabled workspace_usage">{{t "instances.sidebar.usage" count=workspaceCount}}</span></li>
         {{/if}}
-        {{#if isGreenplum}}
-            {{#if userHasAccount}}
-                <li><a class="dialog schema_browser" href="#" data-dialog="SchemaBrowser">{{t "actions.browse_datasets"}}</a></li>
-            {{else}}
-                <li><a class="disabled schema_browser">{{t "actions.browse_datasets"}}</a></li>
-            {{/if}}
-        {{/if}}
 
-        {{#if isHadoop}}
-            <li><a class="browse_files" href="#/instances/{{id}}/browse/">{{t "actions.browse_files"}}</a></li>
-        {{/if}}
         <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="instance" data-allow-workspace-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
     </ul>
 </div>

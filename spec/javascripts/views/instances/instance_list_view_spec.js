@@ -21,15 +21,15 @@ describe("chorus.views.InstanceList", function() {
     context("with instances", function() {
         beforeEach(function() {
             this.collection = new chorus.collections.InstanceSet();
-            this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database", name : "GP9"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database", name : "gP1"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database", name : "GP10"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Hadoop", name : "Hadoop9"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Hadoop", name : "hadoop1"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Hadoop", name : "Hadoop10"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Whatever9", name : "Whatever9"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Whatever1", name : "whatever1"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Whatever10", name : "Whatever10"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database", name : "GP9", id:"g9"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database", name : "gP1", id: "g1"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database", name : "GP10", id: "g10"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Hadoop", name : "Hadoop9", id: "h9"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Hadoop", name : "hadoop1", id: "h1"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Hadoop", name : "Hadoop10", id: "h10"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Whatever9", name : "Whatever9", id: "w9"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Whatever1", name : "whatever1", id: "w1"}));
+            this.collection.add(fixtures.instance({instanceProvider : "Whatever10", name : "Whatever10", id: "w10"}));
 
             this.view = new chorus.views.InstanceList({collection: this.collection});
         });
@@ -74,16 +74,25 @@ describe("chorus.views.InstanceList", function() {
 
             it("sorts each section in natural sort order", function() {
                 expect(this.view.$(".greenplum_instance li:eq(0) .name").text().trim()).toBe("gP1")
+                expect(this.view.$(".greenplum_instance li:eq(0) .name")).toHaveHref("#/instances/g1/databases");
                 expect(this.view.$(".greenplum_instance li:eq(1) .name").text().trim()).toBe("GP9")
+                expect(this.view.$(".greenplum_instance li:eq(1) .name")).toHaveHref("#/instances/g9/databases");
                 expect(this.view.$(".greenplum_instance li:eq(2) .name").text().trim()).toBe("GP10")
+                expect(this.view.$(".greenplum_instance li:eq(2) .name")).toHaveHref("#/instances/g10/databases");
 
                 expect(this.view.$(".hadoop_instance li:eq(0) .name").text().trim()).toBe("hadoop1")
+                expect(this.view.$(".hadoop_instance li:eq(0) .name")).toHaveHref("#/instances/h1/browse/");
                 expect(this.view.$(".hadoop_instance li:eq(1) .name").text().trim()).toBe("Hadoop9")
+                expect(this.view.$(".hadoop_instance li:eq(1) .name")).toHaveHref("#/instances/h9/browse/");
                 expect(this.view.$(".hadoop_instance li:eq(2) .name").text().trim()).toBe("Hadoop10")
+                expect(this.view.$(".hadoop_instance li:eq(2) .name")).toHaveHref("#/instances/h10/browse/");
 
                 expect(this.view.$(".other_instance li:eq(0) .name").text().trim()).toBe("whatever1")
+                expect(this.view.$(".other_instance li:eq(0) .name")).toHaveHref("#/instances/w1/databases");
                 expect(this.view.$(".other_instance li:eq(1) .name").text().trim()).toBe("Whatever9")
+                expect(this.view.$(".other_instance li:eq(1) .name")).toHaveHref("#/instances/w9/databases");
                 expect(this.view.$(".other_instance li:eq(2) .name").text().trim()).toBe("Whatever10")
+                expect(this.view.$(".other_instance li:eq(2) .name")).toHaveHref("#/instances/w10/databases");
             })
 
             describe("when an instance is destroyed", function() {

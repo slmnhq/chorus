@@ -5,16 +5,7 @@
             <img src="{{imageUrl}}"/>
         </a>
         <div class="text">
-            <div class="main">
-                <a href="{{showUrl}}" class="name" title="{{name}}">{{name}}</a>
-            </div>
-            <div class="browse">
-                {{#if isHadoop}}
-                    <a href="{{showUrl}}" class="browse">{{t "dashboard.instances.browse_files"}}</a>
-                {{else}}
-                    <a href="{{showUrl}}" class="browse">{{t "dashboard.instances.browse_datasets"}}</a>
-                {{/if}}
-            </div>
+            <a href="{{showUrl}}" class="name" title="{{name}}">{{name}}</a>
         </div>
         <span class="spacer_right"/>
     </li>
