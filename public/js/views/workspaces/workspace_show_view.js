@@ -4,7 +4,6 @@ chorus.views.WorkspaceShow = chorus.views.Base.extend({
     useLoadingSection: true,
 
     subviews: {
-        ".activity_list_header": "activityListHeader",
         ".activity_list": "activityList"
     },
 
@@ -17,13 +16,6 @@ chorus.views.WorkspaceShow = chorus.views.Base.extend({
             collection: this.collection,
             additionalClass: "workspace_detail",
             displayStyle: "without_workspace"
-        });
-
-        this.activityListHeader = new chorus.views.ActivityListHeader({
-            collection: this.collection,
-            allTitle: t("workspace.activity"),
-            insightsTitle: t("workspace.insights"),
-            workspace: this.model
         });
     }
 });

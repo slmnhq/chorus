@@ -23,7 +23,7 @@
             this.mainContent = new chorus.views.MainContentView({
                 model:this.model,
                 content:new chorus.views.WorkspaceShow({model:this.model }),
-                contentHeader:new chorus.views.TruncatedText({model:this.model, attribute:"summary"})
+                contentHeader:new chorus.views.WorkspaceSummaryContentHeader({model:this.model})
             });
         }
     });

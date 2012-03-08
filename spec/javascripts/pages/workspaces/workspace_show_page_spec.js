@@ -36,11 +36,24 @@ describe("chorus.pages.WorkspaceShowPage", function() {
         context("when the model has loaded", function(){
             beforeEach(function(){
                 this.server.completeFetchFor(this.page.model, fixtures.workspace({summary: "this is a summary", name : "Cool Workspace"}))
+                this.server.completeFetchFor(this.page.model.activities(), [fixtures.activities.NOTE_ON_WORKFILE(), fixtures.activities.INSIGHT_CREATED()])
+                this.server.completeFetchFor(this.page.mainContent.contentHeader.activityListHeader.insightCount, { numberOfInsight: 5 });
                 this.page.render();
             });
 
-            it("uses a TruncatedText view for the header", function() {
-                expect(this.page.mainContent.contentHeader instanceof chorus.views.TruncatedText).toBeTruthy();
+            it("displays all activities by default", function() {
+                expect(this.page.mainContent.content.$("ul.activities li.activity").length).toBe(2);
+            })
+
+            describe("clicking the insight/activity links", function() {
+                beforeEach(function() {
+                    this.server.reset();
+                    this.page.mainContent.contentHeader.$("a.insights").click();
+                });
+
+                it("fetches the insights", function() {
+                    expect(this.page.model.activities()).toHaveBeenFetched();
+                });
             });
 
             it("uses the workspace's summary for the text of the header", function() {

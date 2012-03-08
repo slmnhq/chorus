@@ -9,18 +9,18 @@ chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend({
     },
 
     setup: function() {
-        var activities = this.model.activities();
-        activities.fetchIfNotLoaded();
+        this.model.activities().fetchIfNotLoaded();
+        this.requiredResources.push(this.model);
+    },
 
-        this.model.onLoaded(function() {
-            this.truncatedSummary = new chorus.views.TruncatedText({model:this.model, attribute:"summary"});
+    resourcesLoaded : function() {
+        this.truncatedSummary = new chorus.views.TruncatedText({model:this.model, attribute:"summary"});
 
-            this.activityListHeader = new chorus.views.ActivityListHeader({
-                collection: activities,
-                allTitle: t("workspace.recent_activity", {name: this.model.get("name")}),
-                insightsTitle: t("workspace.recent_insights", {name: this.model.get("name")}),
-                workspace: this.model
-            });
-        }, this);
+        this.activityListHeader = new chorus.views.ActivityListHeader({
+            collection: this.model.activities(),
+            allTitle: t("workspace.recent_activity", {name: this.model.get("name")}),
+            insightsTitle: t("workspace.recent_insights", {name: this.model.get("name")}),
+            workspace: this.model
+        });
     }
 });
