@@ -68,6 +68,10 @@ describe("chorus.views.SearchTabularDataList", function() {
                 otherWorkspacesMenu: "2 other workspaces"
             });
         });
+
+        it("should attach an instance to the database and instance links", function() {
+            expect(this.view.$("li:eq(0) a.instance, a.database").data("instance")).toBe(this.models.at(0).get("instance"));
+        });
     });
 
     context("when the search results include a chorus view", function() {

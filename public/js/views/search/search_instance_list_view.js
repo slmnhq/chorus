@@ -19,16 +19,5 @@ chorus.views.SearchInstanceList = chorus.views.SearchResultListBase.extend({
             humanSize: I18n.toHumanSize(model.get("size")),
             iconUrl: model.providerIconUrl()
         }
-    },
-
-    postRender: function() {
-        this.collection.each(function(instance, index) {
-            var comments = instance.get("comments")
-            if (comments && comments.length > 0) {
-                var view = new chorus.views.SearchResultCommentList({comments: comments});
-                view.render();
-                this.$("li").eq(index).find(".comments_container").append(view.el);
-            }
-        }, this)
     }
 });

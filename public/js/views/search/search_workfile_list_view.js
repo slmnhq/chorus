@@ -19,23 +19,13 @@ chorus.views.SearchWorkfileList = chorus.views.SearchResultListBase.extend({
         }
     },
 
-    postRender: function() {
-        var models = this.collection.models;
-        for (var i = 0; i < models.length; i++ ) {
-            var model = models[i];
+    makeCommentList: function(model) {
+        var comments = model.get("comments") || [];
+        var commitMessages = model.get("highlightedAttributes") && model.get("highlightedAttributes").commitMessage;
+        _.each(commitMessages || [], function(commitMessage) {
+            comments.push({isCommitMessage:true, content: commitMessage});
+        }, this);
 
-            var comments = model.get("comments") || [];
-            var commitMessages = model.get("highlightedAttributes") && model.get("highlightedAttributes").commitMessage;
-            _.each(commitMessages || [], function(commitMessage) {
-                comments.push({isCommitMessage:true, content: commitMessage});
-            }, this);
-
-            if (comments.length > 0) {
-                var view = new chorus.views.SearchResultCommentList({comments: comments});
-                view.render();
-
-                this.$("li").eq(i).find(".comments_container").append(view.el);
-            }
-        }
+        return new chorus.views.SearchResultCommentList({comments: comments});
     }
 });

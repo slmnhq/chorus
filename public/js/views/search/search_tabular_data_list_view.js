@@ -29,26 +29,15 @@ chorus.views.SearchTabularDataList = chorus.views.SearchResultListBase.extend({
     },
 
     postRender: function() {
-        var lis = this.$("li");
+        this._super("postRender");
 
-        var $li = lis.eq(i);
-        _.each(this.collection.models, function(model) {
+        var lis = this.$("li");
+        _.each(this.collection.models, function(model, i) {
+            var $li = lis.eq(i);
             $li.find("a.instance, a.database").data("instance", model.get("instance"));
             chorus.menu($li.find(".location .found_in a.open_other_menu"), {
                 content: $li.find(".other_menu")
             });
         });
-
-        var models = this.collection.models;
-        for (var i = 0; i < models.length; i++ ) {
-            var comments = models[i].get("comments");
-
-            if (comments && comments.length > 0) {
-                var view = new chorus.views.SearchResultCommentList({comments: comments});
-                view.render();
-
-                lis.eq(i).find(".comments_container").append(view.el);
-            }
-        }
     }
 });

@@ -26,19 +26,5 @@ chorus.views.SearchHdfsList = chorus.views.SearchResultListBase.extend({
             instanceLink: chorus.helpers.linkTo("#/instances/" + instance.id + "/browse/", instance.name),
             completePath: $paths.join(" / ")
         }
-    },
-
-    postRender: function() {
-        var models = this.collection.models;
-        for (var i = 0; i < models.length; i++ ) {
-            var comments = models[i].get("comments");
-
-            if (comments && comments.length > 0) {
-                var view = new chorus.views.SearchResultCommentList({comments: comments});
-                view.render();
-
-                this.$("li").eq(i).find(".comments_container").append(view.el);
-            }
-        }
     }
 });
