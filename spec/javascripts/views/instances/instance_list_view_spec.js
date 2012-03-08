@@ -15,7 +15,6 @@ describe("chorus.views.InstanceList", function() {
                 expect(this.view.$(".hadoop_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
                 expect(this.view.$(".other_instance .no_instances").text().trim()).toMatchTranslation("instances.none");
             });
-
         });
     });
 
@@ -41,7 +40,7 @@ describe("chorus.views.InstanceList", function() {
             });
 
             it("renders an item for each instance", function() {
-                expect(this.view.$("li .instance").length).toBe(this.collection.length);
+                expect(this.view.$("li.instance").length).toBe(this.collection.length);
             });
 
             it("renders the three instance provider sections", function() {
@@ -53,11 +52,11 @@ describe("chorus.views.InstanceList", function() {
             });
 
             it("renders the greenplum instances in the correct instance div", function() {
-                expect(this.view.$(".greenplum_instance li .instance").length).toBe(3);
+                expect(this.view.$(".greenplum_instance li.instance").length).toBe(3);
             });
 
             it("renders the hadoop instances in the correct instance div", function() {
-                expect(this.view.$(".hadoop_instance li .instance").length).toBe(3);
+                expect(this.view.$(".hadoop_instance li.instance").length).toBe(3);
             });
 
             it("pre-selects the first instance", function() {
@@ -100,7 +99,7 @@ describe("chorus.views.InstanceList", function() {
 
                     it("renders only the existing items", function() {
                         expect(this.collection.models.length).toBe(this.oldLength - 1);
-                        expect(this.view.$("li .instance").length).toBe(this.oldLength - 1);
+                        expect(this.view.$("li.instance").length).toBe(this.oldLength - 1);
                     });
                 });
 
