@@ -12,6 +12,17 @@ describe("chorus.collections.HdfsEntrySet", function() {
                 expect(this.hdfsEntrySet.at(0).get('instance')).toBe(this.hdfsEntrySet.attributes.instance);
             })
         });
+
+        describe("hdfsEntry", function() {
+            it("returns a HdfsEntry representing the location of the Set", function() {
+                var model = this.hdfsEntrySet.hdfsEntry();
+                expect(model).toBeA(chorus.models.HdfsEntry);
+                expect(model.get('name')).toBe('somewhere');
+                expect(model.get('path')).toBe('/data');
+                expect(model.get('instance')).toBe(this.hdfsEntrySet.attributes.instance);
+                expect(model.get('isDir')).toBeTruthy();
+            });
+        });
     });
 
     context("when the collection does not have path and instanceId set", function() {

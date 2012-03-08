@@ -19,5 +19,12 @@ chorus.collections.HdfsEntrySet = chorus.collections.Base.extend({
             model.set({"path": this.attributes.path}, {silent: true});
         }
         return model;
+    },
+
+    hdfsEntry: function() {
+        var path = _.strLeftBack(this.attributes.path, '/');
+        var name = _.strRightBack(this.attributes.path, '/');
+        var instance = this.attributes.instance;
+        return new chorus.models.HdfsEntry({ name: name, path: path, isDir: true, instance: instance })
     }
 });

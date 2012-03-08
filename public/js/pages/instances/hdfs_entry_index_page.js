@@ -35,22 +35,18 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
             return;
         }
 
-        var instanceId = this.instance.get("id")
         var $content = $("<ul class='hdfs_link_menu'/>");
 
         var $li = $("<li/>");
-        $li.append($("<a/>").attr("href", "#/instances/" + instanceId + "/browse/").text(this.instance.get("name")))
+        $li.append(chorus.helpers.linkTo(this.instance.showUrl(), this.instance.get("name")));
         $content.append($li);
 
-        var pathElements = _.initial(_.compact(this.path.split("/")))
+        var pathSegments = this.collection.hdfsEntry().pathSegments();
         var maxLength = 20
 
-        _.each(pathElements, function(path, index, arr) {
-            var shortPath = (path.length <= maxLength) ? path : path.slice(0, maxLength) + "..."
-            var $li = $("<li/>");
-            var fullPath = _.first(arr, index + 1).join('/');
-            $li.append($("<a/>").attr("href", "#/instances/" + instanceId + "/browse/" + fullPath).text(shortPath))
-            $content.append($li);
+        _.each(pathSegments, function(hdfsEntry) {
+            var link = $("<a></a>").attr('href', hdfsEntry.showUrl()).text(_.truncate(hdfsEntry.get('name'), maxLength));
+            $content.append($("<li></li>").append(link));
         });
 
         chorus.menu(this.$(".breadcrumb").eq(2), {

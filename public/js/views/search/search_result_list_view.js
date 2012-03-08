@@ -90,7 +90,7 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
             var hdfs = this.hdfsList.collection.getByCid(cid);
             chorus.PageEvents.broadcast("hdfs_entry:selected", hdfs);
         } else if (containingView.hasClass("instance_list")) {
-            var instance = this.instanceList.collection.get(id);
+            var instance = this.instanceList.collection.getByCid(cid);
             chorus.PageEvents.broadcast("instance:selected", instance);
         }
     },

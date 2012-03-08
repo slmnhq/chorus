@@ -1,6 +1,6 @@
 describe("chorus.pages.HdfsEntryIndexPage", function() {
     beforeEach(function() {
-        this.instance = fixtures.instance({id: "1234", name: "instance Name"});
+        this.instance = fixtures.hadoopInstance({id: "1234", name: "instance Name"});
         this.page = new chorus.pages.HdfsEntryIndexPage("1234", "foo");
     });
 
@@ -58,10 +58,8 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
                 spyOn(chorus, "menu")
 
                 this.page = new chorus.pages.HdfsEntryIndexPage("1234", "start/m1/m2/m3/end");
-                var entries = fixtures.hdfsEntrySet(null, {instanceId: "1234", path: "/foo"});
-                entries.loaded = true;
-                this.server.completeFetchFor(this.page.collection, entries);
-                this.page.collection = entries;
+                this.page.collection.loaded = true;
+                this.server.completeFetchFor(this.page.collection, [fixtures.hdfsEntryFile()]);
                 this.server.completeFetchFor(this.page.instance, this.instance);
             });
 
