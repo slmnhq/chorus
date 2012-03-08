@@ -6,21 +6,16 @@
         </a>
         <div class="text">
             <div class="main">
-                {{#if isHadoop}}
-                    <a href="#/instances/{{id}}/browse/" class="name" title="{{name}}">{{name}}</a>
-                {{else}}
-                    <span class="name" title="{{name}}">{{name}}</span>
-                {{/if}}
+                <a href="{{showUrl}}" class="name" title="{{name}}">{{name}}</a>
             </div>
             <div class="browse">
                 {{#if isHadoop}}
-                    <a href="#/instances/{{id}}/browse/" class="browse_hadoop" >{{t "dashboard.instances.browse_files"}}</a>
+                    <a href="{{showUrl}}" class="browse">{{t "dashboard.instances.browse_files"}}</a>
                 {{else}}
-                    <a href="#" class="dialog" data-dialog="SchemaBrowser">{{t "dashboard.instances.browse_datasets"}}</a>
+                    <a href="{{showUrl}}" class="browse">{{t "dashboard.instances.browse_datasets"}}</a>
                 {{/if}}
             </div>
-
-       </div>
+        </div>
         <span class="spacer_right"/>
     </li>
 {{/each}}

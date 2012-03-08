@@ -40,30 +40,21 @@ describe("chorus.views.DashboardInstanceList", function() {
         });
 
         it("has a link to browse each instance", function() {
-            var browseLinks = this.view.$("a.dialog[data-dialog=SchemaBrowser]");
-
-            expect(browseLinks.length).toBe(3);
-            expect(browseLinks.eq(0).text()).toMatchTranslation("dashboard.instances.browse_datasets");
-
-            expect(browseLinks.eq(0).data("instance").id).toEqual(this.instance1.get("id"));
-            expect(browseLinks.eq(1).data("instance").id).toEqual(this.instance4.get("id"));
-            expect(browseLinks.eq(2).data("instance").id).toEqual(this.instance5.get("id"));
-
-            expect(browseLinks.eq(0).data("instance").name).toEqual(this.instance1.get("name"));
-            expect(browseLinks.eq(1).data("instance").name).toEqual(this.instance4.get("name"));
-            expect(browseLinks.eq(2).data("instance").name).toEqual(this.instance5.get("name"));
+            expect(this.view.$("a.browse").eq(0)).toHaveHref(this.instance1.showUrl());
+            expect(this.view.$("a.browse").eq(3)).toHaveHref(this.instance4.showUrl());
+            expect(this.view.$("a.browse").eq(4)).toHaveHref(this.instance5.showUrl());
         });
 
         it("has a link to browse the hadoop instances", function() {
-            var hdfsLink = this.view.$("a.browse_hadoop");
-            expect(hdfsLink.length).toBe(2);
+            var hdfsLink = this.view.$("a.browse");
 
-            expect(hdfsLink.eq(0)).toContainTranslation("dashboard.instances.browse_files");
-            expect(hdfsLink.eq(0).attr("href")).toBe("#/instances/" + this.instance2.id + "/browse/");
-            expect(hdfsLink.eq(1).attr("href")).toBe("#/instances/" + this.instance3.id + "/browse/");
+            expect(hdfsLink.eq(1)).toContainTranslation("dashboard.instances.browse_files");
+            expect(hdfsLink.eq(2)).toContainTranslation("dashboard.instances.browse_files");
+            expect(hdfsLink.eq(1).attr("href")).toBe("#/instances/" + this.instance2.id + "/browse/");
+            expect(hdfsLink.eq(2).attr("href")).toBe("#/instances/" + this.instance3.id + "/browse/");
 
-            expect(this.view.$("a.name").eq(0).attr("href")).toBe("#/instances/" + this.instance2.id + "/browse/");
-            expect(this.view.$("a.name").eq(1).attr("href")).toBe("#/instances/" + this.instance3.id + "/browse/");
+            expect(this.view.$("a.name").eq(1).attr("href")).toBe("#/instances/" + this.instance2.id + "/browse/");
+            expect(this.view.$("a.name").eq(2).attr("href")).toBe("#/instances/" + this.instance3.id + "/browse/");
         });
     });
 });
