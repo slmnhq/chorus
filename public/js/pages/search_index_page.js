@@ -4,15 +4,20 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         { label: t("breadcrumbs.search_results") }
     ],
 
-    setup: function() {
+    parseSearchParams: function(searchParams) {
         var attrs = {
-            query: decodeURIComponent(arguments[2] || arguments[0])
+            query: decodeURIComponent(searchParams[2] || searchParams[0])
         };
-        if (arguments.length === 3) {
-            attrs.searchIn = arguments[0];
-            attrs.entityType = arguments[1];
+        if (searchParams.length === 3) {
+            attrs.searchIn = searchParams[0];
+            attrs.entityType = searchParams[1];
         }
-        this.model = this.search = new chorus.models.SearchResult(attrs);
+        return attrs;
+    },
+
+    setup: function() {
+        var searchParams = _.toArray(arguments);
+        this.model = this.search = new chorus.models.SearchResult(this.parseSearchParams(searchParams));
         this.requiredResources.add(this.model);
         this.model.fetch();
     },
