@@ -2,8 +2,8 @@ chorus.models.SearchResult = chorus.models.Base.extend({
     constructorName: "SearchResult",
 
     initialize: function(attributes) {
-        if (!this.get('entityType')) {
-            this.set({entityType: 'all'})
+        if(!this._entityType) {
+            this._entityType = this.get("entityType") || "all"
         }
         if (!this.get('searchIn')) {
             this.set({searchIn: 'all'})
@@ -18,6 +18,18 @@ chorus.models.SearchResult = chorus.models.Base.extend({
         }
     },
 
+    getNextPage: function(){
+        if (this.hasNextPage()){
+            this.set({page: this.currentPageNumber() + 1});
+            this.fetch({success: _.bind(this.resetResults, this)});
+        }
+
+    },
+
+    currentPageNumber: function() {
+        return this.get("page") || 1;
+    },
+
     showUrlTemplate: function() {
         var prefix = "",
             workspaceId = this.get("workspaceId");
@@ -27,7 +39,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
         }
 
         if (this.isScopedToUserWorkspaces() || this.hasSpecificEntityType()) {
-            return prefix + "search/" + this.get("searchIn") + "/" + this.get("entityType") + "/" + this.get("query");
+            return prefix + "search/" + this.get("searchIn") + "/" + this.entityType() + "/" + this.get("query");
         } else {
             return prefix + "search/" + this.get("query");
         }
@@ -37,8 +49,21 @@ chorus.models.SearchResult = chorus.models.Base.extend({
         return this.get("searchIn") === "my_workspaces";
     },
 
+    hasNextPage: function(){
+        if (this.hasSpecificEntityType()) {
+            var total = this.getResults().attributes.total;
+            var page = this.currentPageNumber();
+            return total > (50 * page);
+        };
+    },
+
     hasSpecificEntityType: function() {
-        return this.has("entityType") && (this.get("entityType") !== "all");
+        return this.entityType() && (this.entityType() !== "all");
+    },
+
+    entityType: function() {
+        if(this.has("entityType"))this._entityType = this.get("entityType");
+        return this._entityType;
     },
 
     urlParams: function() {
@@ -47,8 +72,12 @@ chorus.models.SearchResult = chorus.models.Base.extend({
             rows: 3,
             page: 1
         };
-        if (this.hasSpecificEntityType()) params.entityType = this.get("entityType");
-        if (this.has("workspaceId")) params.workspaceId = this.get("workspaceId");
+        if (this.hasSpecificEntityType()) {
+            params.entityType = this.entityType();
+            params.rows = 50;
+            params.page = this.currentPageNumber();
+        }
+        if (this.has("workspaceId")) params.workspaceId = this.get("workspaceId");        
         return params;
     },
 
@@ -110,7 +139,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
 
         return this._workspaces;
     },
-
+    
     instances: function() {
         if (!this._instances && this.get("instance")) {
             var instances = _.map(this.get("instance").docs, function(instanceJson) {
@@ -122,5 +151,29 @@ chorus.models.SearchResult = chorus.models.Base.extend({
         }
 
         return this._instances;
+    },
+
+    getResults: function() {
+        switch(this.entityType()) {
+            case "user":
+                return this.users()
+                break;
+            case "workspace":
+                return this.workspaces()
+                break;
+            case "workfile":
+                return this.workfiles()
+                break;
+            case "dataset":
+                return this.tabularData();
+                break;
+            default:
+        }
+    },
+
+    resetResults: function() {
+        if(this.hasSpecificEntityType()) {
+            this.getResults().reset(this.get(this.entityType()).docs);
+        }
     }
 });

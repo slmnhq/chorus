@@ -6,8 +6,9 @@ chorus.views.SearchUserList = chorus.views.SearchResultListBase.extend({
 
     additionalContext: function() {
         return {
+            total: this.options.total,
             shown: this.collection.models.length,
-            total: this.collection.attributes.total,
+            filteredSearch: this.query && this.query.entityType() == "user",
             moreResults: (this.collection.models.length < this.collection.attributes.total)
         }
     },

@@ -36,74 +36,92 @@ describe("chorus.views.SearchWorkspaceList", function() {
 
         this.result.set({query: "foo"});
         this.models = this.result.workspaces();
-        this.view = new chorus.views.SearchWorkspaceList({ collection: this.models, total: "24", query: this.result });
+        this.view = new chorus.views.SearchWorkspaceList({ collection: this.models, total: 3, query: this.result });
         this.view.render()
     });
 
-    describe("details bar", function() {
-        it("has a title", function() {
-            expect(this.view.$(".details .title")).toContainTranslation("workspaces.title");
-        });
-
-        it("has a long count", function() {
-            expect(this.view.$(".details .count")).toContainTranslation("search.count", {shown: "1", total: "24"});
-        });
-
-        it("has a showAll link", function() {
-            expect(this.view.$('.details a.show_all')).not.toBeEmpty();
-            expect(this.view.$(".details a.show_all")).toContainTranslation("search.show_all")
-        })
-
-        context("clicking the show all link", function() {
-            beforeEach(function() {
-                spyOn(chorus.router, "navigate");
-                this.view.$("a.show_all").click();
+    context("unfiltered results", function() {
+        describe("details bar", function() {
+            it("has a title", function() {
+                expect(this.view.$(".details .title")).toContainTranslation("workspaces.title");
             });
+
+            it("has a long count", function() {
+                expect(this.view.$(".details .count")).toContainTranslation("search.count", {shown: "1", total: "3"});
+            });
+
+            it("has a showAll link", function() {
+                expect(this.view.$('.details a.show_all')).not.toBeEmpty();
+                expect(this.view.$(".details a.show_all")).toContainTranslation("search.show_all")
+            })
+
+            context("clicking the show all link", function() {
+                beforeEach(function() {
+                    spyOn(chorus.router, "navigate");
+                    this.view.$("a.show_all").click();
+                });
 
             it("should navigate to the workspace results page", function() {
                 expect(chorus.router.navigate).toHaveBeenCalledWith(this.result.showUrl(), true);
             });
-        });
 
-        context("has no additional results", function() {
-            beforeEach(function() {
-                this.view = new chorus.views.SearchWorkspaceList({
-                    collection: fixtures.workspaceSet([
-                        {id: "1",  workspace: {id: "2", name: "Test"}},
-                        {id: "4", workspace: {id: "3", name: "Other"}}
-                    ]),
+            context("has no additional results", function() {
+                beforeEach(function() {
+                    this.view = new chorus.views.SearchWorkspaceList({
+                        collection: fixtures.workspaceSet([
+                            {id: "1",  workspace: {id: "2", name: "Test"}},
+                            {id: "4", workspace: {id: "3", name: "Other"}}
+                        ]),
 
-                    total: "2"
+                        total: "2"
+                    });
+
+                    this.view.render()
                 });
 
-                this.view.render()
-            });
+                it("has a short count", function() {
+                    expect(this.view.$(".details .count")).toContainTranslation("search.count_short", {shown: "2"});
+                });
 
-            it("has a short count", function() {
-                expect(this.view.$(".details .count")).toContainTranslation("search.count_short", {shown: "2"});
-            });
+                it("has no showAll link", function() {
+                    expect(this.view.$(".details a.show_all")).not.toExist();
+                })
+            })
 
-            it("has no showAll link", function() {
-                expect(this.view.$(".details a.show_all")).not.toExist();
+            context("has no results at all", function() {
+                beforeEach(function() {
+                    this.view = new chorus.views.SearchWorkspaceList({
+                        collection: fixtures.workspaceSet([]),
+                        total: "0"
+                    });
+
+                    this.view.render()
+                });
+
+                it("does not show the bar or the list", function() {
+                    expect(this.view.$(".details")).not.toExist();
+                    expect(this.view.$("ul")).not.toExist();
+                });
             })
         })
-
-        context("has no results at all", function() {
-            beforeEach(function() {
-                this.view = new chorus.views.SearchWorkspaceList({
-                    collection: fixtures.workspaceSet([]),
-                    total: "0"
-                });
-
-                this.view.render()
-            });
-
-            it("does not show the bar or the list", function() {
-                expect(this.view.$(".details")).not.toExist();
-                expect(this.view.$("ul")).not.toExist();
-            });
-        })
     })
+
+    context("filtered results", function() {
+        beforeEach(function() {
+            this.result.set({entityType: "workspace"});
+            this.view.render();
+        });
+
+        describe("pagination bar", function() {
+            it("has a count of total results", function() {
+                expect(this.view.$('.pagination .count')).toContainTranslation("search.results", {count: 3})
+            });
+
+            it("has a next button", function() {
+                expect(this.view.$('.pagination a.next')).toExist();
+            });
+        });
+    });
 
     describe("list elements", function() {
         it("there is one for each model in the collection", function() {

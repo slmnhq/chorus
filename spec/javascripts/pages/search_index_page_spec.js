@@ -9,7 +9,7 @@ describe("chorus.pages.SearchIndexPage", function() {
         });
 
         it("fetches the search results for the given query", function() {
-            expect(this.page.search.get("entityType")).toBe("all");
+            expect(this.page.search.entityType()).toBe("all");
             expect(this.page.search.get("searchIn")).toBe("all");
             expect(this.page.search).toHaveBeenFetched();
         });
@@ -51,7 +51,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 });
 
                 it("should navigate to the filtered result type page", function() {
-                    expect(this.page.search.get("entityType")).toBe("workspace");
+                    expect(this.page.search.entityType()).toBe("workspace");
                     expect(this.page.search.get("searchIn")).toBe("all");
                     expect(chorus.router.navigate).toHaveBeenCalledWith(this.page.search.showUrl(), true);
                 });
@@ -67,7 +67,7 @@ describe("chorus.pages.SearchIndexPage", function() {
             it("navigates to the right page when 'my workspaces' is selected from the 'search in' menu", function() {
                 spyOn(chorus.router, "navigate");
                 chorus.PageEvents.broadcast("choice:search_in", "my_workspaces");
-                expect(this.page.search.get("entityType")).toBe("all");
+                expect(this.page.search.entityType()).toBe("all");
                 expect(this.page.search.get("searchIn")).toBe("my_workspaces");
                 expect(chorus.router.navigate).toHaveBeenCalledWith(this.page.search.showUrl(), true);
             });
@@ -271,7 +271,7 @@ describe("chorus.pages.SearchIndexPage", function() {
         });
 
         it("fetches from the right search url", function() {
-            expect(this.page.search.get("entityType")).toBe("workspace");
+            expect(this.page.search.entityType()).toBe("workspace");
             expect(this.page.search.get("searchIn")).toBe("all");
             expect(this.page.search).toHaveBeenFetched();
         });
@@ -300,7 +300,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         it("fetches the right search result", function() {
             expect(this.search.get("searchIn")).toBe("my_workspaces");
-            expect(this.search.get("entityType")).toBe('all');
+            expect(this.search.entityType()).toBe('all');
             expect(this.search).toHaveBeenFetched();
         });
 
@@ -327,7 +327,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         it("fetches the right search result", function() {
             expect(this.search.get("searchIn")).toBe("my_workspaces");
-            expect(this.search.get("entityType")).toBe("workfile");
+            expect(this.search.entityType()).toBe("workfile");
             expect(this.search).toHaveBeenFetched();
         });
 

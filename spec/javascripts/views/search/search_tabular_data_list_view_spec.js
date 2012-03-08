@@ -22,23 +22,44 @@ describe("chorus.views.SearchTabularDataList", function() {
         });
     })
 
-    it("should have a title", function() {
-        expect(this.view.$(".title")).toContainTranslation("dataset.title_plural");
+    context("unfiltered results", function() {
+        describe("the details bar", function() {
+            it("should have a title", function() {
+                    expect(this.view.$(".title")).toContainTranslation("dataset.title_plural");
+                });
+
+                it("should show the number of results", function() {
+                    expect(this.view.$(".count")).toContainTranslation("search.count", {shown: this.models.length, total: this.models.attributes.total});
+                    expect(this.view.$(".show_all")).toExist();
+                });
+
+                context("clicking the show all link", function() {
+                    beforeEach(function() {
+                        spyOn(chorus.router, "navigate");
+                        this.view.$("a.show_all").click();
+                    });
+
+                    it("should navigate to the user results page", function() {
+                        expect(chorus.router.navigate).toHaveBeenCalledWith(this.result.showUrl(), true);
+                    });
+                });
+        });
     });
 
-    it("should show the number of results", function() {
-        expect(this.view.$(".count")).toContainTranslation("search.count", {shown: this.models.length, total: this.models.attributes.total});
-        expect(this.view.$(".show_all")).toExist();
-    });
-
-    context("clicking the show all link", function() {
+    context("filtered results", function() {
         beforeEach(function() {
-            spyOn(chorus.router, "navigate");
-            this.view.$("a.show_all").click();
+            this.result.set({entityType: "dataset"});
+            this.view.render();
         });
 
-        it("should navigate to the user results page", function() {
-            expect(chorus.router.navigate).toHaveBeenCalledWith(this.result.showUrl(), true);
+        describe("pagination bar", function() {
+            it("has a count of total results", function() {
+                expect(this.view.$('.pagination .count')).toContainTranslation("search.results", {count: 39})
+            });
+
+            it("has a next button", function() {
+                expect(this.view.$('.pagination a.next')).toExist();
+            });
         });
     });
 

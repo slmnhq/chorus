@@ -7,10 +7,10 @@ describe("chorus.views.SearchWorkfileList", function() {
                 fileType: "SQL",
                 mimeType: 'text/text',
                 comments: [
-                    {highlightedAttributes: { "content": "nice <em>cool<\/em> file"   }, "content": "nice cool file",    "lastUpdatedStamp": "2012-02-28 14:07:34", "isPublished": false, "id": "10000", "workspaceId": "10000", "isComment": false, "isInsight": false, "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
-                    {highlightedAttributes: { "content": "nice <em>cool<\/em> comment"}, "content": "nice cool comment", "lastUpdatedStamp": "2012-02-28 14:07:46", "isPublished": false, "id": "10001", "workspaceId": "10000", "isComment": true, "isInsight": false,  "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
-                    {highlightedAttributes: { "content": "Nice <em>cool<\/em> insight"}, "content": "Nice cool insight", "lastUpdatedStamp": "2012-02-28 14:09:56", "isPublished": false, "id": "10002", "workspaceId": "10000", "isComment": false, "isInsight": true,  "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
-                    {highlightedAttributes: { "content": "Nice <em>cool<\/em> insight"}, "content": "Nice cool insight", "lastUpdatedStamp": "2012-02-28 14:09:56", "isPublished": false, "id": "10003", "workspaceId": "10000", "isComment": false, "isInsight": true,  "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}}
+                    {highlightedAttributes: { "content": "nice <em>cool<\/em> file"   }, "content": "nice cool file", "lastUpdatedStamp": "2012-02-28 14:07:34", "isPublished": false, "id": "10000", "workspaceId": "10000", "isComment": false, "isInsight": false, "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
+                    {highlightedAttributes: { "content": "nice <em>cool<\/em> comment"}, "content": "nice cool comment", "lastUpdatedStamp": "2012-02-28 14:07:46", "isPublished": false, "id": "10001", "workspaceId": "10000", "isComment": true, "isInsight": false, "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
+                    {highlightedAttributes: { "content": "Nice <em>cool<\/em> insight"}, "content": "Nice cool insight", "lastUpdatedStamp": "2012-02-28 14:09:56", "isPublished": false, "id": "10002", "workspaceId": "10000", "isComment": false, "isInsight": true, "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
+                    {highlightedAttributes: { "content": "Nice <em>cool<\/em> insight"}, "content": "Nice cool insight", "lastUpdatedStamp": "2012-02-28 14:09:56", "isPublished": false, "id": "10003", "workspaceId": "10000", "isComment": false, "isInsight": true, "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}}
                 ]
             },
             {
@@ -28,64 +28,84 @@ describe("chorus.views.SearchWorkfileList", function() {
 
         this.result.set({query: "foo"});
         this.models = this.result.workfiles();
-        this.view = new chorus.views.SearchWorkfileList({collection: this.models, total: "24", query: this.result});
+        this.view = new chorus.views.SearchWorkfileList({collection: this.models, total: 24, query: this.result});
         this.view.render()
     });
 
-    describe("details bar", function() {
-        it("has a title", function() {
-            expect(this.view.$(".details .title")).toContainTranslation("workfiles.title");
-        });
+    context("unfiltered search results", function() {
+        describe("details bar", function() {
+            it("has a title", function() {
+                expect(this.view.$(".details .title")).toContainTranslation("workfiles.title");
+            });
 
-        context("has no additional results", function() {
-            beforeEach(function() {
-                this.view = new chorus.views.SearchWorkfileList({
-                    collection: fixtures.workfileSet([
-                        {id: "1", workspace: {id: "2", name: "Test"}},
-                        {id: "4", workspace: {id: "3", name: "Other"}}
-                    ]),
+            context("has no additional results", function() {
+                beforeEach(function() {
+                    this.view = new chorus.views.SearchWorkfileList({
+                        collection: fixtures.workfileSet([
+                            {id: "1", workspace: {id: "2", name: "Test"}},
+                            {id: "4", workspace: {id: "3", name: "Other"}}
+                        ]),
 
-                    total: "2"
+                        total: "2"
+                    });
+
+                    this.view.render()
                 });
 
-                this.view.render()
-            });
-
-            it("has a short count", function() {
-                expect(this.view.$(".details .count")).toContainTranslation("search.count_short", {shown: "2"});
-            });
-
-            it("has no showAll link", function() {
-                expect(this.view.$(".details a.show_all")).not.toExist();
-            })
-        })
-
-        context("has additional results", function() {
-            it("has a long count", function() {
-                expect(this.view.$(".details .count")).toContainTranslation("search.count", {shown: "2", total: "24"});
-            });
-
-            it("has a showAll link", function() {
-                expect(this.view.$(".details a.show_all")).toContainTranslation("search.show_all")
-            })
-        })
-
-        context("has no results at all", function() {
-            beforeEach(function() {
-                this.view = new chorus.views.SearchWorkfileList({
-                    collection: fixtures.workfileSet([]),
-                    total: "0"
+                it("has a short count", function() {
+                    expect(this.view.$(".details .count")).toContainTranslation("search.count_short", {shown: "2"});
                 });
 
-                this.view.render()
-            });
+                it("has no showAll link", function() {
+                    expect(this.view.$(".details a.show_all")).not.toExist();
+                })
+            })
 
-            it("does not show the bar or the list", function() {
-                expect(this.view.$(".details")).not.toExist();
-                expect(this.view.$("ul")).not.toExist();
-            });
+            context("has additional results", function() {
+                it("has a long count", function() {
+                    expect(this.view.$(".details .count")).toContainTranslation("search.count", {shown: "2", total: "24"});
+                });
+
+                it("has a showAll link", function() {
+                    expect(this.view.$(".details a.show_all")).toContainTranslation("search.show_all")
+                })
+            })
+
+            context("has no results at all", function() {
+                beforeEach(function() {
+                    this.view = new chorus.views.SearchWorkfileList({
+                        collection: fixtures.workfileSet([]),
+                        total: "0"
+                    });
+
+                    this.view.render()
+                });
+
+                it("does not show the bar or the list", function() {
+                    expect(this.view.$(".details")).not.toExist();
+                    expect(this.view.$("ul")).not.toExist();
+                });
+            })
         })
     })
+
+    context("filtered search", function() {
+        beforeEach(function() {
+            this.result.set({entityType: "workfile"});
+            this.view.render();
+        });
+
+        describe("pagination bar", function() {
+            it("has a count of total results", function() {
+                expect(this.view.$('.pagination .count')).toContainTranslation("search.results", {count: 24})
+            });
+
+            it("has a next button", function() {
+                expect(this.view.$('.pagination a.next')).toExist();
+            });
+        });
+    })
+
 
     context("clicking the show all link", function() {
         beforeEach(function() {

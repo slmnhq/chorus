@@ -3,7 +3,8 @@ chorus.views.SearchResultListBase = chorus.views.Base.extend({
     events: {
         "click li a.show_more_comments": "showMoreComments",
         "click li a.show_fewer_comments": "showLessComments",
-        "click a.show_all": "showAll"
+        "click a.show_all": "showAll",
+        "click a.next": "showNext"
     },
 
     setup: function() {
@@ -28,6 +29,12 @@ chorus.views.SearchResultListBase = chorus.views.Base.extend({
         e && e.preventDefault();
         this.query.set({entityType: $(e.currentTarget).data("type")})
         chorus.router.navigate(this.query.showUrl(), true);
+    },
+    
+    showNext: function(e) {
+        e && e.preventDefault();
+        this.query.getNextPage();
+        this.render();
     },
 
     makeCommentList: function(model) {

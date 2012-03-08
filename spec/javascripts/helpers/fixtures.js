@@ -2897,7 +2897,7 @@ beforeEach(function() {
                             }
                         }
                     ],
-                    "numFound": 2
+                    "numFound": 3
                 },
                 "dataset": {
                     "docs": [
@@ -3228,27 +3228,9 @@ beforeEach(function() {
                                 lastName: ["<em>Test</em>"],
                                 "title": ["<em>test</em>er"]
                             }
-                        },
-                        {
-                            admin: "false",
-                            comments: [],
-                            emailAddress: "",
-                            entityType: "user",
-                            firstName: "Sally",
-                            id: "10022",
-                            isDeleted: "false",
-                            lastName: "Test",
-                            lastUpdatedStamp: "2012-03-01 11:06:59",
-                            name: "test",
-                            "title": null,
-                            owner: {},
-                            highlightedAttributes: {
-                                lastName: ["<em>Test</em>"],
-                                name: ["<em>test</em>3"]
-                            }
                         }
                     ],
-                    "numFound": "4"
+                    "numFound": 4
                 },
                 hdfs: {
                     docs: [
@@ -3268,7 +3250,7 @@ beforeEach(function() {
 
                         }
                     ],
-                    numFound: "1"
+                    numFound: 1
                 }
             }, overrides)
         },

@@ -107,6 +107,6 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     },
 
     shouldShowSection: function(sectionName) {
-        return _.include([sectionName, "all"], this.model.get("entityType"));
+        return _.include([sectionName, "all"], this.model.entityType());
     }
 })
