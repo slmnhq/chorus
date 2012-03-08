@@ -1,83 +1,81 @@
-<li class="result_item" data-cid={{resource.cid}}>
-    <div class="spacer_left"></div>
-    <img class="icon" src="{{iconSrc}}"/>
-    <div class="description">
-        <a class="name" href="{{link}}">{{{displayName}}}</a>
-        <div class="supportingMessage">
-            {{#each supportingMessage}}
-                {{#if title}}
-                <div class="title">
-                        <span class="prefix">{{t "users.title"}}:</span>
-                        <span class="content">&#8220;{{{title}}}&#8221;</span>
-                </div>
-                {{/if}}
-                {{#if ou}}
-                <div class="ou">
-                        <span class="prefix">{{t "users.department"}}:</span>
-                        <span class="content">&#8220;{{{ou}}}&#8221;</span>
-                </div>
-                {{/if}}
-                {{#if content}}
-                <div class="notes">
-                        <span class="prefix">{{t "users.notes"}}:</span>
-                        <span class="content">&#8220;{{{content}}}&#8221;</span>
-                </div>
-                {{/if}}
-                {{#if emailAddress}}
-                <div class="email">
-                    <span class="content">&#8220;{{{emailAddress}}}&#8221;</span>
-                </div>
-                {{/if}}
-                {{#if name}}
-                <div class="username">
-                        <span class="content">&#8220;{{{name}}}&#8221;</span>
-                </div>
-                {{/if}}
-            {{/each}}
-        </div>
-
-        {{#if hasMoreSupportingMessage}}
-            <div class='has_more_comments'>
-                <span class="and">{{t "search.comments_more.and"}}</span>
-                <a href="#" class="show_more_comments">
-                    {{t "search.comments_more" count=hasMoreSupportingMessage}}
-                </a>
-            </div>
-        {{/if}}
-
-        <div class="more_comments hidden">
-            {{#each moreSupportingMessage}}
-                {{#if title}}
-                <div class="title">
+<div class="spacer_left"></div>
+<img class="icon" src="{{iconSrc}}"/>
+<div class="description">
+    <a class="name" href="{{link}}">{{{displayName}}}</a>
+    <div class="supportingMessage">
+        {{#each supportingMessage}}
+            {{#if title}}
+            <div class="title">
                     <span class="prefix">{{t "users.title"}}:</span>
                     <span class="content">&#8220;{{{title}}}&#8221;</span>
-                </div>
-                {{/if}}
-                {{#if ou}}
-                <div class="ou">
+            </div>
+            {{/if}}
+            {{#if ou}}
+            <div class="ou">
                     <span class="prefix">{{t "users.department"}}:</span>
                     <span class="content">&#8220;{{{ou}}}&#8221;</span>
-                </div>
-                {{/if}}
-                {{#if content}}
-                <div class="notes">
+            </div>
+            {{/if}}
+            {{#if content}}
+            <div class="notes">
                     <span class="prefix">{{t "users.notes"}}:</span>
                     <span class="content">&#8220;{{{content}}}&#8221;</span>
-                </div>
-                {{/if}}
-                {{#if emailAddress}}
-                <div class="email">
-                    <span class="content">&#8220;{{{emailAddress}}}&#8221;</span>
-                </div>
-                {{/if}}
-                {{#if name}}
-                <div class="username">
+            </div>
+            {{/if}}
+            {{#if emailAddress}}
+            <div class="email">
+                <span class="content">&#8220;{{{emailAddress}}}&#8221;</span>
+            </div>
+            {{/if}}
+            {{#if name}}
+            <div class="username">
                     <span class="content">&#8220;{{{name}}}&#8221;</span>
-                </div>
-                {{/if}}
-            {{/each}}
-            <a href="#" class="show_fewer_comments">{{t "search.comments_less"}}</a>
-        </div>
-        <div class="spacer_right"></div>
+            </div>
+            {{/if}}
+        {{/each}}
     </div>
-</li>
+
+    {{#if hasMoreSupportingMessage}}
+        <div class='has_more_comments'>
+            <span class="and">{{t "search.comments_more.and"}}</span>
+            <a href="#" class="show_more_comments">
+                {{t "search.comments_more" count=hasMoreSupportingMessage}}
+            </a>
+        </div>
+    {{/if}}
+
+    <div class="more_comments hidden">
+        {{#each moreSupportingMessage}}
+            {{#if title}}
+            <div class="title">
+                <span class="prefix">{{t "users.title"}}:</span>
+                <span class="content">&#8220;{{{title}}}&#8221;</span>
+            </div>
+            {{/if}}
+            {{#if ou}}
+            <div class="ou">
+                <span class="prefix">{{t "users.department"}}:</span>
+                <span class="content">&#8220;{{{ou}}}&#8221;</span>
+            </div>
+            {{/if}}
+            {{#if content}}
+            <div class="notes">
+                <span class="prefix">{{t "users.notes"}}:</span>
+                <span class="content">&#8220;{{{content}}}&#8221;</span>
+            </div>
+            {{/if}}
+            {{#if emailAddress}}
+            <div class="email">
+                <span class="content">&#8220;{{{emailAddress}}}&#8221;</span>
+            </div>
+            {{/if}}
+            {{#if name}}
+            <div class="username">
+                <span class="content">&#8220;{{{name}}}&#8221;</span>
+            </div>
+            {{/if}}
+        {{/each}}
+        <a href="#" class="show_fewer_comments">{{t "search.comments_less"}}</a>
+    </div>
+    <div class="spacer_right"></div>
+</div>
