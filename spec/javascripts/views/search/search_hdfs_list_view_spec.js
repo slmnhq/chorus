@@ -12,11 +12,11 @@ describe("chorus.views.SearchHdfsList", function() {
                     path: "/ggg/hhh"
                 })
             ],
-            numFound: "5"}
+            numFound: 10}
         });
 
         this.models = this.result.hdfs();
-        this.view = new chorus.views.SearchHdfsList({collection: this.models, total: 10, query: this.result});
+        this.view = new chorus.views.SearchHdfsList({collection: this.models, query: this.result});
         this.view.render()
     });
 
@@ -37,10 +37,10 @@ describe("chorus.views.SearchHdfsList", function() {
                             fixtures.searchResultHdfsJson(),
                             fixtures.searchResultHdfsJson()
                         ],
-                        numFound: "2"}
+                        numFound: 2}
                     });
                     this.models = this.result.hdfs();
-                    this.view = new chorus.views.SearchHdfsList({collection: this.models, total: 2, query: this.result});
+                    this.view = new chorus.views.SearchHdfsList({collection: this.models, query: this.result});
                     this.view.render();
                 });
 

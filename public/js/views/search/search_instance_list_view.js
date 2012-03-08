@@ -2,17 +2,7 @@ chorus.views.SearchInstanceList = chorus.views.SearchResultListBase.extend({
     constructorName: "SearchInstanceList",
     className: "search_instance_list",
     additionalClass: "list",
-
-    additionalContext: function() {
-        return {
-            shown: this.collection.models.length,
-            filteredSearch: this.query && this.query.entityType() == "instance",
-            hasPrevious: this.query && this.query.hasPreviousPage(),
-            hasNext: this.query && this.query.hasNextPage(),
-            total: this.options.total,
-            moreResults: (this.collection.models.length < this.options.total)
-        }
-    },
+    entityType: "instance",
 
     collectionModelContext: function(model) {
         return {

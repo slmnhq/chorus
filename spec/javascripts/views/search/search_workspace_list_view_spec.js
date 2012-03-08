@@ -36,7 +36,8 @@ describe("chorus.views.SearchWorkspaceList", function() {
 
         this.result.set({query: "foo"});
         this.models = this.result.workspaces();
-        this.view = new chorus.views.SearchWorkspaceList({ collection: this.models, total: 3, query: this.result });
+        this.models.attributes.total = 3;
+        this.view = new chorus.views.SearchWorkspaceList({ collection: this.models, query: this.result });
         this.view.render()
     });
 
@@ -61,38 +62,34 @@ describe("chorus.views.SearchWorkspaceList", function() {
                     this.view.$("a.show_all").click();
                 });
 
-            it("should navigate to the workspace results page", function() {
-                expect(chorus.router.navigate).toHaveBeenCalledWith(this.result.showUrl(), true);
+                it("should navigate to the workspace results page", function() {
+                    expect(chorus.router.navigate).toHaveBeenCalledWith(this.result.showUrl(), true);
+                });
             });
 
             context("has no additional results", function() {
                 beforeEach(function() {
                     this.view = new chorus.views.SearchWorkspaceList({
                         collection: fixtures.workspaceSet([
-                            {id: "1",  workspace: {id: "2", name: "Test"}},
+                            {id: "1", workspace: {id: "2", name: "Test"}},
                             {id: "4", workspace: {id: "3", name: "Other"}}
-                        ]),
-
-                        total: "2"
+                        ], { total: "2"})
                     });
 
-                    this.view.render()
-                });
+                    it("has a short count", function() {
+                        expect(this.view.$(".details .count")).toContainTranslation("search.count_short", {shown: "2"});
+                    });
 
-                it("has a short count", function() {
-                    expect(this.view.$(".details .count")).toContainTranslation("search.count_short", {shown: "2"});
-                });
-
-                it("has no showAll link", function() {
-                    expect(this.view.$(".details a.show_all")).not.toExist();
+                    it("has no showAll link", function() {
+                        expect(this.view.$(".details a.show_all")).not.toExist();
+                    })
                 })
             })
 
             context("has no results at all", function() {
                 beforeEach(function() {
                     this.view = new chorus.views.SearchWorkspaceList({
-                        collection: fixtures.workspaceSet([]),
-                        total: "0"
+                        collection: fixtures.workspaceSet([], {total: "0"})
                     });
 
                     this.view.render()
@@ -103,7 +100,6 @@ describe("chorus.views.SearchWorkspaceList", function() {
                     expect(this.view.$("ul")).not.toExist();
                 });
             })
-        })
         });
     });
 
@@ -141,7 +137,7 @@ describe("chorus.views.SearchWorkspaceList", function() {
 
                 });
 
-                context("and I am on the second page", function(){
+                context("and I am on the second page", function() {
                     beforeEach(function() {
                         spyOn(this.result, "hasNextPage").andReturn(false);
                         spyOn(this.result, "hasPreviousPage").andReturn(true);
@@ -160,7 +156,6 @@ describe("chorus.views.SearchWorkspaceList", function() {
                     it("should have next in plain text", function() {
                         expect(this.view.$('.pagination span.next')).toContainTranslation("search.next");
                     });
-
 
 
                 });

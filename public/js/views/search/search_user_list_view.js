@@ -3,18 +3,8 @@ chorus.views.SearchUserList = chorus.views.SearchResultListBase.extend({
     className: "search_user_list",
     additionalClass: "list",
     constructorName: "SearchUserListView",
-
-    additionalContext: function() {
-        return {
-            total: this.options.total,
-            shown: this.collection.models.length,
-            hasPrevious: this.query && this.query.hasPreviousPage(),
-            hasNext: this.query && this.query.hasNextPage(),
-            filteredSearch: this.query && this.query.entityType() == "user",
-            moreResults: (this.collection.models.length < this.collection.attributes.total)
-        }
-    },
-
+    entityType: "user",
+    
     collectionModelContext: function(model) {
         var modelWithSearchResults = chorus.helpers.withSearchResults(model);
         var supportingMessage = _.compact(_.map(

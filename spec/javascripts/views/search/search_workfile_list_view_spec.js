@@ -28,7 +28,8 @@ describe("chorus.views.SearchWorkfileList", function() {
 
         this.result.set({query: "foo"});
         this.models = this.result.workfiles();
-        this.view = new chorus.views.SearchWorkfileList({collection: this.models, total: 24, query: this.result});
+        this.models.attributes.total = 24;
+        this.view = new chorus.views.SearchWorkfileList({collection: this.models, query: this.result});
         this.view.render()
     });
 
@@ -38,23 +39,16 @@ describe("chorus.views.SearchWorkfileList", function() {
                 expect(this.view.$(".details .title")).toContainTranslation("workfiles.title");
             });
 
-            context("has no additional results", function() {
-                beforeEach(function() {
-                    this.view = new chorus.views.SearchWorkfileList({
-                        collection: fixtures.workfileSet([
-                            {id: "1", workspace: {id: "2", name: "Test"}},
-                            {id: "4", workspace: {id: "3", name: "Other"}}
-                        ]),
+        context("has no additional results", function() {
+            beforeEach(function() {
+                var workfiles = fixtures.workfileSet([
+                    {id: "1", workspace: {id: "2", name: "Test"}},
+                    {id: "4", workspace: {id: "3", name: "Other"}}
+                ], {total: "2"})
+                this.view = new chorus.views.SearchWorkfileList({ collection: workfiles });
 
-                        total: "2"
-                    });
-
-                    this.view.render()
-                });
-
-                it("has a short count", function() {
-                    expect(this.view.$(".details .count")).toContainTranslation("search.count_short", {shown: "2"});
-                });
+                this.view.render()
+            });
 
                 it("has no showAll link", function() {
                     expect(this.view.$(".details a.show_all")).not.toExist();
@@ -74,8 +68,7 @@ describe("chorus.views.SearchWorkfileList", function() {
             context("has no results at all", function() {
                 beforeEach(function() {
                     this.view = new chorus.views.SearchWorkfileList({
-                        collection: fixtures.workfileSet([]),
-                        total: "0"
+                        collection: fixtures.workfileSet([], {total: "0"})
                     });
 
                     this.view.render()

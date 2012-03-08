@@ -4,7 +4,8 @@ describe("chorus.views.SearchInstanceList", function() {
 
         this.result.set({query: "foo"});
         this.models = this.result.instances();
-        this.view = new chorus.views.SearchInstanceList({ collection: this.models, total: 24, query: this.result });
+        this.models.attributes.total = 24;
+        this.view = new chorus.views.SearchInstanceList({ collection: this.models, query: this.result });
         this.view.render()
     });
 
@@ -113,8 +114,7 @@ describe("chorus.views.SearchInstanceList", function() {
             context("has no additional results", function() {
                 beforeEach(function() {
                     this.view = new chorus.views.SearchInstanceList({
-                        collection: new chorus.collections.InstanceSet([fixtures.instance(), fixtures.instance()]),
-                        total: "2"
+                        collection: new chorus.collections.InstanceSet([fixtures.instance(), fixtures.instance()], { total: "2" })
                     });
 
                     this.view.render()
@@ -132,8 +132,7 @@ describe("chorus.views.SearchInstanceList", function() {
             context("has no results at all", function() {
                 beforeEach(function() {
                     this.view = new chorus.views.SearchWorkspaceList({
-                        collection: new chorus.collections.InstanceSet(),
-                        total: "0"
+                        collection: new chorus.collections.InstanceSet([], {total: "0"})
                     });
 
                     this.view.render()

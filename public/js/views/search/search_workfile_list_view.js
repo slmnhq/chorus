@@ -2,17 +2,7 @@ chorus.views.SearchWorkfileList = chorus.views.SearchResultListBase.extend({
     constructorName: "SearchWorkfileListView",
     className: "search_workfile_list",
     additionalClass: "list",
-
-    additionalContext: function() {
-        return {
-            shown: this.collection.models.length,
-            total: this.options.total,
-            hasNext: this.query && this.query.hasNextPage(),
-            hasPrevious: this.query && this.query.hasPreviousPage(),
-            filteredSearch: this.query && this.query.entityType() == "workfile",
-            moreResults: (this.collection.models.length < this.options.total)
-        }
-    },
+    entityType: "workfile",
 
     collectionModelContext: function(model) {
         return {

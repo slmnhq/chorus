@@ -12,6 +12,17 @@ chorus.views.SearchResultListBase = chorus.views.Base.extend({
         this.query = this.options.query;
     },
 
+    additionalContext: function() {
+        return {
+            shown: this.collection.models.length,
+            total: this.collection.attributes.total,
+            hasNext: this.query && this.query.hasNextPage(),
+            hasPrevious: this.query && this.query.hasPreviousPage(),
+            filteredSearch: this.query && this.query.entityType() == this.entityType,
+            moreResults: (this.collection.models.length < this.collection.attributes.total)
+        }
+    },
+
     showMoreComments: function(evt) {
         evt && evt.preventDefault();
         var $li = $(evt.target).closest("li");
