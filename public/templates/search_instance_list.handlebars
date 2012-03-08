@@ -20,7 +20,7 @@
             </div>
             <span class="count">{{t "search.results" count=total}}</span>
         </div>
-{{else}}
+    {{else}}
         <div class="details">
             <div class="right">
                 {{#if moreResults}}
@@ -32,21 +32,7 @@
             </div>
             <span class="title">{{t "instances.title"}}</span>
         </div>
-{{/if}}
-<ul>
-    {{#each models}}
-        <li class="result_item" data-cid={{model.cid}}>
-            <div class="spacer_left"></div>
-            <div class="images">
-                <img class="state" src="{{stateUrl}}" title="{{stateText}}"/>
-                <img class="provider" src="{{iconUrl}}"/>
-            </div>
-            <div class="description">
-                <span class="name">{{{displaySearchMatch "name"}}}</span>
-                <div class="comments_container"/>
-            </div>
-            <div class="spacer_right"></div>
-        </li>
-    {{/each}}
-</ul>
+    {{/if}}
+        
+    <ul class="instance_list"></ul>
 {{/if}}

@@ -4,13 +4,18 @@ chorus.views.SearchInstanceList = chorus.views.SearchResultListBase.extend({
     additionalClass: "list",
     entityType: "instance",
 
-    collectionModelContext: function(model) {
-        return {
-            stateUrl: model.stateIconUrl(),
-            stateText: _.str.capitalize(model.get("state") || "unknown"),
-            showUrl: model.showUrl(),
-            humanSize: I18n.toHumanSize(model.get("size")),
-            iconUrl: model.providerIconUrl()
-        }
+    makeListItemView: function(model) {
+        return new chorus.views.SearchInstance({ model: model });
+    },
+
+    postRender: function() {
+        var ul = this.$("ul");
+        this.collection.each(function(model) {
+            try {
+                ul.append(this.makeListItemView(model).render().el);
+            } catch (err) {
+                chorus.log(err);
+            }
+        }, this);
     }
 });
