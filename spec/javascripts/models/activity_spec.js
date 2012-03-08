@@ -264,18 +264,9 @@ describe("chorus.models.Activity", function() {
             this.model = this.activity.hdfs();
         });
 
-        it("copies the id field to the entityId", function() {
-            expect(this.model.get("entityId")).toEqual(this.activity.get("hdfs").id);
-        });
-
-        it("moves the original name to fullName, and puts just the file name as name", function() {
-            expect(this.model.get("fullName")).toBe("/webui/chart.html");
-            expect(this.model.get("name")).toBe("chart.html");
-        });
-
-        it("extracts the instance ID", function() {
-            expect(this.model.get("instanceId").toString()).toBe("10010");
-        });
+        it("returns a HdfsEntry object", function() {
+            expect(this.model).toBeA(chorus.models.HdfsEntry);
+        })
     });
 
     describe("#workfile", function() {

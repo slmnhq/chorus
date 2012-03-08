@@ -1,6 +1,6 @@
 describe("chorus.views.HdfsEntryList", function() {
     beforeEach(function() {
-        this.collection = fixtures.hdfsEntrySet(null, {instanceId: "1234", path: "/abc"});
+        this.collection = fixtures.hdfsEntrySet(null, {instance: {id: "1234"}, path: "/abc"});
         this.view = new chorus.views.HdfsEntryList({ collection : this.collection});
     });
     describe("#render", function() {
@@ -44,6 +44,7 @@ describe("chorus.views.HdfsEntryList", function() {
         describe("when browsing the root directory", function() {
             beforeEach(function() {
                 this.collection.attributes.path = "/";
+                this.collection.reset(this.collection.models);
                 this.view.render();
             });
 

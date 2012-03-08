@@ -731,9 +731,12 @@ beforeEach(function() {
                         name: 'import_csv'
                     },
                     hdfs: {
-                        id: "10010|/data/import.csv",
-                        isDeleted: false,
-                        name: "/data/import.csv"
+                        instance: {
+                            id: '10010',
+                            name: 'instanceName'
+                        },
+                        path: '/data',
+                        name: "import.csv"
                     },
                     workspace: fixtures.workspaceJson()
                 }, overrides);
@@ -1112,9 +1115,13 @@ beforeEach(function() {
                     author: fixtures.authorJson(),
                     comments: [fixtures.commentJson()],
                     hdfs: {
-                        id: "10010|/webui/chart.html",
-                        isDeleted: false,
-                        name: "/webui/chart.html"
+                        instance: {
+                            id: '10010',
+                            name: 'instanceName'
+                        },
+                        path: '/webui',
+                        name: "chart.html",
+                        isDeleted: false
                     },
                     id: fixtures.nextId().toString(),
                     isDeleted: false,

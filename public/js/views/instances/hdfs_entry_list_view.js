@@ -9,15 +9,10 @@ chorus.views.HdfsEntryList = chorus.views.Base.extend({
     },
 
     collectionModelContext: function(model) {
-        var instanceId = this.collection.attributes.instanceId;
-        var path = this.collection.attributes.path;
-        var dirUrl = "#/instances/" + instanceId + "/browse" + ( (path == "/") ? "" : path ) + "/" + model.get("name");
-        var fileUrl = "#/instances/" + instanceId + "/browseFile" + ( (path == "/") ? "" : path ) + "/" + model.get("name");
-
         return {
             humanSize: I18n.toHumanSize(model.get("size")),
             iconUrl: chorus.urlHelpers.fileIconUrl(_.last(model.get("name").split("."))),
-            showUrl: model.get('isDir') ? dirUrl :  fileUrl,
+            showUrl: model.showUrl(),
             dirInfo: t("hdfs.directory_files", {count: model.get("count")}),
             displayableFiletype: model.get('isBinary') === false
         }

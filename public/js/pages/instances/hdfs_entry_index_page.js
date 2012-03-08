@@ -5,7 +5,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         this.instance.fetch();
         this.requiredResources.push(this.instance);
 
-        this.collection = new chorus.collections.HdfsEntrySet([], {instanceId: instanceId, path: this.path});
+        this.collection = new chorus.collections.HdfsEntrySet([], {instance: this.instance, path: this.path});
         this.collection.fetch();
         this.requiredResources.push(this.collection);
     },

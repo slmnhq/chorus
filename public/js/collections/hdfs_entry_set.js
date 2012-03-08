@@ -7,7 +7,7 @@ chorus.collections.HdfsEntrySet = chorus.collections.Base.extend({
     },
 
     urlTemplate: function() {
-        return "data/{{instanceId}}/hdfs/{{encodedPath}}";
+        return "data/{{instance.id}}/hdfs/{{encodedPath}}";
     },
 
     _add: function(model, options) {

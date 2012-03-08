@@ -89,12 +89,7 @@ chorus.models.Activity = chorus.models.Base.extend({
     hdfs: function() {
         var hdfsJson = this.get("hdfs");
         if (hdfsJson) {
-            var attrs = _.clone(hdfsJson);
-            attrs.entityId = attrs.id;
-            attrs.fullName = attrs.name;
-            attrs.name = _.last(attrs.fullName.split("/"));
-            attrs.instanceId = _.first(attrs.id.split("|"));
-            return new chorus.models.HdfsEntry(attrs);
+            return new chorus.models.HdfsEntry(hdfsJson);
         }
     },
 
