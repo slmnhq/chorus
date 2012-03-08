@@ -67,27 +67,27 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
 
         this.$("li").removeClass("selected");
         $target.addClass("selected");
-        var id = $target.data("id");
+        var cid = $target.data("cid");
         var containingView = $target.parent().parent();
 
         if (containingView.hasClass("workfile_list")) {
-            var workfile = this.workfileList.collection.get(id);
+            var workfile = this.workfileList.collection.getByCid(cid);
             chorus.PageEvents.broadcast("workfile:selected", workfile);
 
         } else if (containingView.hasClass("workspace_list")) {
-            var workspace = this.workspaceList.collection.get(id);
+            var workspace = this.workspaceList.collection.getByCid(cid);
             chorus.PageEvents.broadcast("workspace:selected", workspace);
 
         } else if (containingView.hasClass("dataset_list")) {
-            var tabularData = this.tabularDataList.collection.get(id);
+            var tabularData = this.tabularDataList.collection.getByCid(cid);
             chorus.PageEvents.broadcast("tabularData:selected", tabularData);
 
         } else if (containingView.hasClass("user_list")) {
-            var user = this.userList.collection.get(id);
+            var user = this.userList.collection.getByCid(cid);
             chorus.PageEvents.broadcast("user:selected", user);
 
         } else if (containingView.hasClass("hdfs_list")) {
-            var hdfs = this.hdfsList.collection.get(id);
+            var hdfs = this.hdfsList.collection.getByCid(cid);
             chorus.PageEvents.broadcast("hdfs_entry:selected", hdfs);
         }
     },

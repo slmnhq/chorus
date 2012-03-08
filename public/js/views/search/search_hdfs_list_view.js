@@ -12,25 +12,23 @@ chorus.views.SearchHdfsList = chorus.views.SearchResultListBase.extend({
     },
 
     collectionModelContext: function(model) {
-        var instance = model.get("instance");
-        var pathSoFar = "#/instances/" + instance.id + "/browse/";
-        var parts = _.compact(model.get("path").split("/"));
-        var $paths = _.map(parts.slice(0, -1), function(item) {
-            return chorus.helpers.linkTo(pathSoFar += item + "/", item);
+        var pathLinks = _.map(model.pathSegments(), function(entry) {
+            return chorus.helpers.linkTo(entry.showUrl(), entry.get('name'));
         });
+        var instance = model.getInstance();
 
         return {
-            showUrl: "#/instances/" + instance.id + "/browseFile" + model.get("path"),
+            showUrl: model.showUrl(),
             humanSize: I18n.toHumanSize(model.get("size")),
             iconUrl: chorus.urlHelpers.fileIconUrl(_.last(model.get("name").split("."))),
-            instanceLink: chorus.helpers.linkTo("#/instances/" + instance.id + "/browse/", instance.name),
-            completePath: $paths.join(" / ")
+            instanceLink: chorus.helpers.linkTo(instance.showUrl(), instance.get('name')),
+            completePath: pathLinks.join(" / ")
         }
     },
 
     postRender: function() {
         var models = this.collection.models;
-        for (var i = 0; i < models.length; i++ ) {
+        for (var i = 0; i < models.length; i++) {
             var comments = models[i].get("comments");
 
             if (comments && comments.length > 0) {

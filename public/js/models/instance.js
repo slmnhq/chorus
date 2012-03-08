@@ -14,7 +14,13 @@
     chorus.models.Instance = chorus.models.Base.extend({
         constructorName: "Instance",
         urlTemplate:"instance/{{id}}",
-        showUrlTemplate:"instances",
+        showUrlTemplate: function() {
+            if(this.isHadoop()) {
+                return "instances/{{id}}/browse/";
+            }
+            return "instances"
+        },
+
         entityType:"instance",
 
         declareValidations:function (newAttrs) {

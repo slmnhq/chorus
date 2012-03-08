@@ -77,11 +77,11 @@ describe("chorus.views.SearchUserList", function() {
             expect(this.view.$('li').length).toBe(4);
         });
 
-        it("has the right data-id attribute", function() {
-            expect(""+this.view.$("li").eq(0).data("id")).toBe(this.collection.at(0).get("id"));
-            expect(""+this.view.$("li").eq(1).data("id")).toBe(this.collection.at(1).get("id"));
-            expect(""+this.view.$("li").eq(2).data("id")).toBe(this.collection.at(2).get("id"));
-            expect(""+this.view.$("li").eq(3).data("id")).toBe(this.collection.at(3).get("id"));
+        it("has the right data-cid attribute", function() {
+            expect(this.view.$("li").eq(0).data("cid")).toBe(this.collection.at(0).cid);
+            expect(this.view.$("li").eq(1).data("cid")).toBe(this.collection.at(1).cid);
+            expect(this.view.$("li").eq(2).data("cid")).toBe(this.collection.at(2).cid);
+            expect(this.view.$("li").eq(3).data("cid")).toBe(this.collection.at(3).cid);
         });
 
         it("includes the correct user icon", function() {

@@ -3,8 +3,20 @@ describe("chorus.models.Instance", function() {
         this.instance = fixtures.instance();
     });
 
-    it("has a valid showUrl", function() {
-        expect(this.instance.showUrl()).toBe("#/instances");
+    describe("showUrl", function() {
+        it("links to the instances page", function() {
+            expect(this.instance.showUrl()).toBe("#/instances");
+        });
+
+        context("for a hadoop instance", function() {
+            beforeEach(function() {
+                this.instance = fixtures.hadoopInstance();
+            });
+
+            it("links to the root of the hadoop instance", function() {
+                expect(this.instance.showUrl()).toBe("#/instances/" + this.instance.get('id') + "/browse/");
+            })
+        });
     });
 
     it("has a valid url", function() {
@@ -142,7 +154,7 @@ describe("chorus.models.Instance", function() {
             this.owner = this.instance.owner();
             this.account1 = fixtures.instanceAccount();
             this.account2 = fixtures.instanceAccount({
-                user : this.owner.attributes
+                user: this.owner.attributes
             })
             this.accounts = fixtures.instanceAccountSet([this.account1, this.account2]);
             spyOn(this.instance, "accounts").andReturn(this.accounts);
@@ -254,11 +266,11 @@ describe("chorus.models.Instance", function() {
         context("with a registered instance", function() {
             beforeEach(function() {
                 this.attrs = {
-                    name : "foo",
-                    host : "gillette",
-                    dbUserName : "dude",
-                    dbPassword : "whatever",
-                    port : "1234",
+                    name: "foo",
+                    host: "gillette",
+                    dbUserName: "dude",
+                    dbPassword: "whatever",
+                    port: "1234",
                     maintenanceDb: "postgres",
                     provisionType: "register"
                 }
@@ -307,8 +319,8 @@ describe("chorus.models.Instance", function() {
         context("when creating a new instance", function() {
             beforeEach(function() {
                 this.attrs = {
-                    name : "foo",
-                    size : "100000",
+                    name: "foo",
+                    size: "100000",
                     provisionType: "create"
                 }
             })
@@ -329,9 +341,9 @@ describe("chorus.models.Instance", function() {
         context("when registering an existing hadoop instance", function() {
             beforeEach(function() {
                 this.attrs = {
-                    name : "foo",
-                    size : "100000",
-                    provisionType : "registerHadoop"
+                    name: "foo",
+                    size: "100000",
+                    provisionType: "registerHadoop"
                 }
             });
 
@@ -346,20 +358,24 @@ describe("chorus.models.Instance", function() {
     })
 
     describe("#isHadoop", function() {
-        context("when the instance is a hadoop instance", function() {{
-            beforeEach(function() {
-                this.instance = fixtures.hadoopInstance();
-            });
+        context("when the instance is a hadoop instance", function() {
+            {
+                beforeEach(function() {
+                    this.instance = fixtures.hadoopInstance();
+                });
 
-            it("returns true", function() {
-                expect(this.instance.isHadoop()).toBeTruthy();
-            })
-        }})
+                it("returns true", function() {
+                    expect(this.instance.isHadoop()).toBeTruthy();
+                })
+            }
+        })
 
-        context("when the instance is not a hadoop instance", function() {{
-            it("returns false", function() {
-                expect(this.instance.isHadoop()).toBeFalsy();
-            })
-        }})
+        context("when the instance is not a hadoop instance", function() {
+            {
+                it("returns false", function() {
+                    expect(this.instance.isHadoop()).toBeFalsy();
+                })
+            }
+        })
     })
 });

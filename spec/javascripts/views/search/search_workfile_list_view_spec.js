@@ -103,9 +103,9 @@ describe("chorus.views.SearchWorkfileList", function() {
             expect(this.view.$('li').length).toBe(2);
         });
 
-        it("has the right data-id attribute", function() {
-            expect(this.view.$("li").eq(0).data("id")).toBe(1);
-            expect(this.view.$("li").eq(1).data("id")).toBe(4);
+        it("has the right data-cid attribute", function() {
+            expect(this.view.$("li").eq(0).data("cid")).toBe(this.models.at(0).cid);
+            expect(this.view.$("li").eq(1).data("cid")).toBe(this.models.at(1).cid);
         });
 
         it("includes the correct workspace file icon", function() {

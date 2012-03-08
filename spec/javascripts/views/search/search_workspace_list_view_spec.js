@@ -98,7 +98,7 @@ describe("chorus.views.SearchWorkspaceList", function() {
         });
 
         it("has the right data-id attribute", function() {
-            expect(this.view.$("li").eq(0).data("id")).toBe(10000);
+            expect(this.view.$("li").eq(0).data("cid")).toBe(this.models.at(0).cid);
         });
 
         it("includes the correct workspace file icon", function() {

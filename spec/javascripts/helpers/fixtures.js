@@ -3258,13 +3258,13 @@ beforeEach(function() {
                             highlightedAttributes: {
                                 name: ["Thumbs.<em>db</em>"]
                             },
-                            id: "10001|/webui/images/thirdparty/jquerybubblepopup-theme/green/Thumbs.db",
                             instance: {
-                                id: "10001", name: "hadoop"
+                                id: "10001",
+                                name: "hadoop"
                             },
                             lastUpdatedStamp: "2012-03-05 15:23:55",
                             name: "Thumbs.db",
-                            path: "/webui/images/thirdparty/jquerybubblepopup-theme/green/Thumbs.db"
+                            path: "/webui/images/thirdparty/jquerybubblepopup-theme/green"
 
                         }
                     ],
@@ -3311,13 +3311,13 @@ beforeEach(function() {
                 highlightedAttributes: {
                     name: ["Thumbs.<em>db</em>"]
                 },
-                id: "10001|/webui/images/thirdparty/jquerybubblepopup-theme/green/Thumbs.db",
                 instance: {
-                    id: "10001", name: "hadoop"
+                    id: "10001",
+                    name: "hadoop"
                 },
                 lastUpdatedStamp: "2012-03-05 15:23:55",
                 name: "Thumbs.db",
-                path: "/webui/images/thirdparty/jquerybubblepopup-theme/green/Thumbs.db"
+                path: "/webui/images/thirdparty/jquerybubblepopup-theme/green"
             }, overrides);
         },
 
