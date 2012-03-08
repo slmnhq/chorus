@@ -6,12 +6,5 @@ chorus.views.SearchHdfsList = chorus.views.SearchResultListBase.extend({
 
     makeListItemView: function(model) {
         return new chorus.views.SearchHdfs({ model: model });
-    },
-
-    postRender: function() {
-        var ul = this.$("ul");
-        this.collection.each(function(model) {
-            ul.append(this.makeListItemView(model).render().el);
-        }, this);
     }
 });

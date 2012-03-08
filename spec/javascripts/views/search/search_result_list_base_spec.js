@@ -20,6 +20,10 @@ describe("chorus.views.SearchResultListBase", function() {
                     }
                 );
 
+        spyOn(this.view, 'makeListItemView').andCallFake(function (model) {
+            return new chorus.views.SearchUser({model: model});
+        });
+
         this.view.render();
     });
 

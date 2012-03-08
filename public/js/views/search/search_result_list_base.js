@@ -23,6 +23,15 @@ chorus.views.SearchResultListBase = chorus.views.Base.extend({
         }
     },
 
+    postRender: function() {
+        var ul = this.$("ul");
+        this.collection.each(function(model) {
+            ul.append(this.makeListItemView(model).render().el);
+        }, this);
+    },
+
+    makeListItemView: $.noop,
+
     showMoreComments: function(evt) {
         evt && evt.preventDefault();
         var $li = $(evt.target).closest("li");
