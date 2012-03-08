@@ -39,6 +39,14 @@ describe("chorus.views.InstanceList", function() {
                 this.view.render();
             });
 
+            it("renders a description for each instance", function() {
+                expect(this.view.$("li.instance .description").length).toBe(9);
+            })
+
+            it("renders a status dot for each instance", function() {
+                expect(this.view.$("li.instance img.state").length).toBe(9);
+            })
+
             it("renders an item for each instance", function() {
                 expect(this.view.$("li.instance").length).toBe(this.collection.length);
             });
