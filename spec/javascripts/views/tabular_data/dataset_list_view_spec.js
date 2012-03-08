@@ -91,6 +91,13 @@ describe("chorus.views.DatasetList", function() {
             expect(this.view.$(".name_disabled")).not.toExist();
         });
 
+        it("should broadcast tabularData:selected when itemSelected is called", function() {
+            var model = this.collection.at(2);
+            spyOn(chorus.PageEvents, "broadcast");
+            this.view.itemSelected(model);
+            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("tabularData:selected", model);
+        });
+
         it("displays the location of the dataset", function() {
             for (var i = 0; i < this.collection.length; i++) {
                 var model = this.collection.models[i];
@@ -150,39 +157,5 @@ describe("chorus.views.DatasetList", function() {
                 });
             });
         })
-
-        context("when no item was previously selected", function() {
-            it("pre-selects the first item", function() {
-                expect(this.view.$("li").eq(0)).toHaveClass("selected");
-            });
-        });
-
-        context("when an item was previously selected", function() {
-            beforeEach(function() {
-                this.view.$("li:eq(1)").click();
-                this.view.render();
-            })
-
-            it("restores that item selection", function() {
-                expect(this.view.$("li").eq(0)).not.toHaveClass("selected");
-                expect(this.view.$("li").eq(1)).toHaveClass("selected");
-            })
-        })
-
-        describe("clicking a dataset", function() {
-            beforeEach(function() {
-                spyOn(chorus.PageEvents, "broadcast").andCallThrough();
-                this.view.$("li.dataset").eq(4).click();
-            });
-
-            it("selects only that item", function() {
-                expect(this.view.$("li.dataset.selected").length).toBe(1);
-                expect(this.view.$("li.dataset").eq(4)).toHaveClass("selected");
-            });
-
-            it("broadcasts tabularData:selected with an argument of the selected dataset", function() {
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("tabularData:selected", this.collection.models[4]);
-            });
-        });
     });
 });

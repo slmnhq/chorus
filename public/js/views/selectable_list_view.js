@@ -13,7 +13,7 @@ chorus.views.SelectableList = chorus.views.Base.extend({
             return;
         }
 
-        var $lis = this.$("li");
+        var $lis = this.$("> li");
         $lis.removeClass("selected");
         $target.addClass("selected");
 
@@ -21,6 +21,6 @@ chorus.views.SelectableList = chorus.views.Base.extend({
     },
 
     postRender: function() {
-        this.$("li:eq(0)").click();
+        this.$(">li:eq(0)").click();
     }
 });

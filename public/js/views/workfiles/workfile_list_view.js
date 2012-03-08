@@ -1,23 +1,8 @@
-chorus.views.WorkfileList = chorus.views.Base.extend({
-    tagName:"ul",
+chorus.views.WorkfileList = chorus.views.SelectableList.extend({
     className:"workfile_list",
-    additionalClass:"list",
-    events:{
-        "click li":"selectItem"
-    },
 
-    selectItem:function selectItem(e) {
-        if ($(e.currentTarget).hasClass("selected")) {
-            // don't repeatedly raise events for the same item
-            // e.g. the user clicks the item to highlight text
-            return;
-        }
-
-        this.$("li").removeClass("selected");
-        $(e.currentTarget).addClass("selected");
-        var workfileId = $(e.currentTarget).data("id");
-        var workfile = this.collection.get(workfileId);
-        chorus.PageEvents.broadcast("workfile:selected", workfile);
+    itemSelected: function(model) {
+        chorus.PageEvents.broadcast("workfile:selected", model);
     },
 
     collectionModelContext:function (model) {
