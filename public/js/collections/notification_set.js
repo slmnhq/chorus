@@ -7,6 +7,13 @@ chorus.collections.NotificationSet = chorus.collections.Base.extend({
         return this.attributes;
     },
 
+    _add: function(model) {
+        var result = this._super('_add', arguments);
+        if (this.attributes && this.attributes.type == "unread") {
+            result.set({ unread: true }, { silent: true })
+        }
+    },
+
     activities: function() {
         var models = this.models.map(function(model) {
             return model.activity();

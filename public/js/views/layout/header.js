@@ -19,24 +19,33 @@ chorus.views.Header = chorus.views.Base.extend({
         this.popupEventName = "chorus:menu:popup." + this.cid;
         $(document).bind(this.popupEventName, _.bind(this.popupEventHandler, this))
         this.session = chorus.session;
-        this.notifications = new chorus.collections.NotificationSet([], { type: 'unread' });
-        this.requiredResources.add([this.session, this.notifications]);
+        this.unreadNotifications = new chorus.collections.NotificationSet([], { type: 'unread' });
+        this.notifications = new chorus.collections.NotificationSet();
+        this.requiredResources.add([this.session, this.unreadNotifications, this.notifications]);
 
         this.typeAheadView = new chorus.views.TypeAheadSearch();
 
-        this.notificationList = new chorus.views.ActivityList({
-            collection: new chorus.collections.ActivitySet(),
-            isNotification: true
+        this.notificationList = new chorus.views.NotificationList({
+            collection: new chorus.collections.NotificationSet()
         });
 
-        this.bindings.add(this.notifications, "reset", function() {
-            this.notificationList.collection.reset(this.notifications.activities().models);
-            this.notificationList.collection.loaded = true;
-            this.render();
-        });
-        this.notifications.fetchAll();
+        this.unreadNotifications.fetchAll();
+        this.notifications.fetch();
 
         chorus.PageEvents.subscribe("notification:deleted", this.refreshNotifications, this);
+    },
+
+    resourcesLoaded: function() {
+        this.notificationList.collection.reset(this.unreadNotifications.models, { silent: true });
+        var numberToAdd = (5 - this.unreadNotifications.length);
+        if (numberToAdd > 0) {
+            this.notificationList.collection.add(this.notifications.chain().reject(function(model) {
+                return !!this.unreadNotifications.get(model.get("id"));
+            }, this).first(numberToAdd).value());
+        }
+
+        this.notificationList.collection.loaded = true;
+        this.render();
     },
 
     postRender: function() {
@@ -67,14 +76,16 @@ chorus.views.Header = chorus.views.Base.extend({
         var fullName = this.session.get("fullName") || ([firstName, lastName].join(' '));
 
         return _.extend(ctx, this.session.attributes, {
-            notifications: this.notifications,
+            notifications: this.unreadNotifications,
             displayName: (fullName.length > 20 ? (firstName + ' ' + lastName[0] + '.') : fullName),
             userUrl: user && user.showUrl()
         });
     },
 
     refreshNotifications: function() {
-        this.notifications.fetchAll();
+        this.notifications.fetch();
+        this.unreadNotifications.fetchAll();
+        this.requiredResources.add([this.unreadNotifications, this.notifications]);
     },
 
     togglePopupNotifications: function(e) {
@@ -89,7 +100,7 @@ chorus.views.Header = chorus.views.Base.extend({
 
         if (beingShown) {
             this.captureClicks();
-            this.notifications.markAllRead({ success: _.bind(this.clearNotificationCount, this) });
+            this.unreadNotifications.markAllRead({ success: _.bind(this.clearNotificationCount, this) });
         }
 
         this.$(".menu.popup_notifications").toggleClass("hidden", !beingShown);

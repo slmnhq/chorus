@@ -58,6 +58,28 @@ describe("chorus.collections.NotificationSet", function() {
         });
     });
 
+    describe("when adding models", function() {
+        context("when the notification set has the type 'unread'", function() {
+            beforeEach(function() {
+                this.collection.attributes.type = "unread";
+            });
+
+            it("sets 'unread' to true on each model", function() {
+                var model = fixtures.notification();
+                this.collection.add(model);
+                expect(model.get("unread")).toBeTruthy();
+            });
+        });
+
+        context("when the notification set does not have the type 'unread'", function() {
+            it("does not set the 'unread' attribute on the model", function() {
+                var model = fixtures.notification();
+                this.collection.add(model);
+                expect(model.get("unread")).toBeUndefined();
+            });
+        });
+    });
+
     describe("#markAllRead", function() {
         beforeEach(function() {
             this.successSpy = jasmine.createSpy();

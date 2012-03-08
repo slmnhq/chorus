@@ -8,16 +8,14 @@ describe("chorus.views.Header", function() {
             id: "55"
         });
         chorus.user = chorus.session;
+        chorus._navigated();
+        this.view = new chorus.views.Header();
+        this.view.session.loaded = true;
     })
 
     describe("initialization", function() {
-        beforeEach(function() {
-            chorus._navigated();
-            this.view = new chorus.views.Header();
-        })
-
         it("has required resources", function() {
-            expect(this.view.requiredResources.length).toBe(2);
+            expect(this.view.requiredResources.length).toBe(3);
         })
 
         it("does not have a model", function() {
@@ -25,32 +23,97 @@ describe("chorus.views.Header", function() {
         })
 
         it("fetches unread notifications", function() {
-            expect(this.view.notifications.attributes.type).toBe("unread");
-            expect(this.server.lastFetchAllFor(this.view.notifications)).toBeDefined();
+            expect(this.view.unreadNotifications.attributes.type).toBe("unread");
+            expect(this.view.unreadNotifications).toHaveBeenFetched();
+        });
+
+        it("fetches the first page of notifications (not just unread ones)", function() {
+            expect(this.view.notifications.attributes.type).toBeUndefined();
+            expect(this.view.notifications).toHaveBeenFetched();
         });
 
         it("binds to the document for menu popup", function() {
             expect($(document).data("events")["chorus:menu:popup"]).toBeDefined();
         })
+    });
 
-        describe("navigating away", function() {
+    describe("navigating away", function() {
+        beforeEach(function() {
+            this.oldChorusMenuPopupCount = $(document).data("events")["chorus:menu:popup"].length;
+            chorus._navigated();
+        });
+
+        it("should unbind from document", function() {
+            expect(($(document).data("events")["chorus:menu:popup"] || []).length).toBe(this.oldChorusMenuPopupCount - 1);
+        });
+    });
+
+    describe("the notifications", function() {
+        beforeEach(function() {
+            this.server.completeFetchFor(this.view.notifications, [
+                fixtures.notification({ id: '1' }),
+                fixtures.notification({ id: '2' }),
+                fixtures.notification({ id: '3' }),
+                fixtures.notification({ id: '4' }),
+                fixtures.notification({ id: '5' }),
+                fixtures.notification({ id: '6' }),
+                fixtures.notification({ id: '7' })
+            ]);
+        });
+
+        context("when there are at least 5 unread notifications", function() {
             beforeEach(function() {
-                this.oldChorusMenuPopupCount = $(document).data("events")["chorus:menu:popup"].length;
-                chorus._navigated();
+                this.server.completeFetchAllFor(this.view.unreadNotifications, [
+                    fixtures.notification(),
+                    fixtures.notification(),
+                    fixtures.notification(),
+                    fixtures.notification(),
+                    fixtures.notification(),
+                    fixtures.notification()
+                ]);
             });
 
-            it("should unbind from document", function() {
-                expect(($(document).data("events")["chorus:menu:popup"] || []).length).toBe(this.oldChorusMenuPopupCount - 1);
+            it("shows all of the unread notifications in the notification popup", function() {
+                expect(this.view.notificationList.collection.length).toBe(6);
+                this.view.unreadNotifications.each(function(notification, index) {
+                    expect(this.view.notificationList.collection.at(index).get("cid")).toEqual(notification.get("cid"))
+                }, this);
             });
         });
-    })
+
+        context("when there are less than 5 unread notifications", function() {
+            beforeEach(function() {
+                this.server.completeFetchAllFor(this.view.unreadNotifications,
+                    [
+                        fixtures.notification({ id: '1' }),
+                        fixtures.notification({ id: '2' })
+                    ],
+                    null,
+                    {
+                        page: 1,
+                        total: 1,
+                        records: 2
+                    })
+            });
+
+            it("renders exactly 5 notifications, including read ones if necessary", function() {
+                var listNotifications = this.view.notificationList.collection;
+                expect(listNotifications.length).toBe(5);
+                expect(listNotifications.at(0).get("id")).toEqual('1');
+                expect(listNotifications.at(1).get("id")).toEqual('2');
+                expect(listNotifications.at(2).get("id")).toEqual('3');
+                expect(listNotifications.at(3).get("id")).toEqual('4');
+                expect(listNotifications.at(4).get("id")).toEqual('5');
+            });
+        });
+
+    });
 
     describe("#render", function() {
         beforeEach(function() {
-            this.view = new chorus.views.Header();
             this.view.session.loaded = true;
             this.view.session.trigger("loaded");
-            this.server.completeFetchAllFor(this.view.notifications,
+            this.server.completeFetchAllFor(this.view.unreadNotifications,
                 [
                     fixtures.notification(),
                     fixtures.notification()
@@ -61,6 +124,14 @@ describe("chorus.views.Header", function() {
                     total: 1,
                     records: 2
                 })
+            this.server.completeFetchFor(this.view.notifications,
+                [
+                    fixtures.notification(),
+                    fixtures.notification(),
+                    fixtures.notification(),
+                    fixtures.notification(),
+                    fixtures.notification()
+                ]);
         })
 
         it("should have a search field", function() {
@@ -75,8 +146,8 @@ describe("chorus.views.Header", function() {
             expect(this.view.requiredResources.length).toBe(0);
         })
 
-        it("inserts the number of notifications into the markup", function() {
-            expect(this.view.$(".notifications").text().trim()).toBe("2")
+        it("inserts the number of unread notifications into the markup", function() {
+            expect(this.view.$("a.notifications").text().trim()).toBe("2")
         })
 
         it("should have a hidden type ahead search view", function() {
@@ -162,7 +233,7 @@ describe("chorus.views.Header", function() {
 
         context("when there are no notifications", function() {
             beforeEach(function() {
-                this.view.notifications.reset();
+                this.view.unreadNotifications.reset();
                 this.view.render();
             });
 
@@ -294,7 +365,7 @@ describe("chorus.views.Header", function() {
                 beforeEach(function() {
                     this.popupSpy = jasmine.createSpy();
                     $(document).bind("chorus:menu:popup", this.popupSpy);
-                    spyOn(this.view.notifications, "markAllRead").andCallFake(_.bind(function(options) {
+                    spyOn(this.view.unreadNotifications, "markAllRead").andCallFake(_.bind(function(options) {
                         this.successFunction = options.success;
                     }, this));
                 })
@@ -324,7 +395,7 @@ describe("chorus.views.Header", function() {
                     });
 
                     it("marks the notifications as read", function() {
-                        expect(this.view.notifications.markAllRead).toHaveBeenCalled();
+                        expect(this.view.unreadNotifications.markAllRead).toHaveBeenCalled();
                         expect(this.successFunction).toBeDefined();
                     })
 
@@ -344,7 +415,7 @@ describe("chorus.views.Header", function() {
 
                     describe("and when clicked again", function() {
                         beforeEach(function() {
-                            this.view.notifications.markAllRead.reset();
+                            this.view.unreadNotifications.markAllRead.reset();
                             this.view.$("a.notifications").click();
                         });
 
@@ -353,20 +424,14 @@ describe("chorus.views.Header", function() {
                         });
 
                         it("does not re-mark the notifications as read", function() {
-                            expect(this.view.notifications.markAllRead).not.toHaveBeenCalled();
+                            expect(this.view.unreadNotifications.markAllRead).not.toHaveBeenCalled();
                         });
 
                     });
 
-                    describe("the notification list", function() {
-                        it("is an activity list", function() {
-                            expect(this.view.notificationList).toBeA(chorus.views.ActivityList);
-                            expect(this.view.$(".popup_notifications")).toContain(this.view.notificationList.el);
-                        });
-
-                        it("renders an li for each unread notification", function() {
-                            expect(this.view.$(".popup_notifications li").length).toBe(2);
-                        });
+                    it("has a notification list", function() {
+                        expect(this.view.notificationList).toBeA(chorus.views.NotificationList);
+                        expect(this.view.$(".popup_notifications")).toContain(this.view.notificationList.el);
                     });
 
                     describe("clicking delete for a notification", function() {
@@ -386,10 +451,11 @@ describe("chorus.views.Header", function() {
                             });
 
                             it("deletes the notification", function() {
-                                expect(this.server.lastDestroyFor(this.view.notifications.at(0))).toBeDefined();
+                                expect(this.server.lastDestroyFor(this.view.unreadNotifications.at(0))).toBeDefined();
                             });
                         });
                     });
+
                     describe("when a notification:deleted event occurs", function() {
                         beforeEach(function() {
                             this.server.reset();
@@ -397,20 +463,27 @@ describe("chorus.views.Header", function() {
                         });
 
                         it("should re-fetch the notifications", function() {
-                            expect(this.server.lastFetchAllFor(this.view.notifications)).toBeDefined();
+                            expect(this.server.lastFetchAllFor(this.view.unreadNotifications)).toBeDefined();
+                            expect(this.view.notifications).toHaveBeenFetched();
                         });
 
                         context("when the fetch completes", function() {
                             beforeEach(function() {
-                                this.server.completeFetchAllFor(this.view.notifications, [fixtures.notification()]);
+                                this.server.completeFetchAllFor(this.view.unreadNotifications, [], null, { records: 0 });
+                                this.server.completeFetchAllFor(this.view.notifications, [
+                                    fixtures.notification({ id: '1' }),
+                                    fixtures.notification({ id: '2' }),
+                                    fixtures.notification({ id: '3' }),
+                                    fixtures.notification({ id: '4' })
+                                ]);
                             });
 
-                            it("should display the new notification count", function() {
-                                expect(this.view.$("a.notifications").text()).toBe("1");
+                            it("should display the new unread notification count", function() {
+                                expect(this.view.$("a.notifications").text()).toBe("0");
                             });
 
                             it("should render the new notification list", function() {
-                                expect(this.view.$(".popup_notifications li").length).toBe(1);
+                                expect(this.view.$(".popup_notifications li").length).toBe(4);
                             });
                         });
                     });
