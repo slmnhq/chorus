@@ -3,14 +3,11 @@ chorus.views.DatasetList = chorus.views.SelectableList.extend({
     useLoadingSection: true,
 
     postRender: function() {
-        this._super("postRender");
-
+        this._super("postRender", arguments);
         var lis = this.$("li.dataset");
 
         _.each(this.collection.models, function(model, index) {
-            var $li = lis.eq(index);
-            $li.data("dataset", model);
-            $li.find("a.instance, a.database").data("instance", model.get("instance"));
+            lis.eq(index).find("a.instance, a.database").data("instance", model.get("instance"));
         });
 
         this.$('.found_in .open_other_menu').each(function() {
