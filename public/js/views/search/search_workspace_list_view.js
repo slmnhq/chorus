@@ -16,5 +16,20 @@ chorus.views.SearchWorkspaceList = chorus.views.SearchResultListBase.extend({
             showUrl: model.showUrl(),
             iconUrl: model.customIconUrl()
         }
+    },
+
+    postRender: function() {
+        var lis = this.$("li");
+        var models = this.collection.models;
+        for (var i = 0; i < models.length; i++ ) {
+            var comments = models[i].get("comments");
+
+            if (comments && comments.length > 0) {
+                var view = new chorus.views.SearchResultCommentList({comments: comments});
+                view.render();
+
+                lis.eq(i).find(".comments_container").append(view.el);
+            }
+        }
     }
 });
