@@ -72,10 +72,13 @@ describe("chorus.Mixins", function() {
         });
 
         describe("bindOnce", function() {
+            var fakeContext = function(name) {this.name = name};
             beforeEach(function() {
                 this.source = {};
                 _.extend(this.source, Backbone.Events, chorus.Mixins.Events);
                 this.callback = jasmine.createSpy("callbackBoundOnce");
+                this.context1 = new fakeContext('context1');
+                this.context2 = new fakeContext('context2');
             });
 
             describe("with no bind context", function() {
@@ -111,6 +114,22 @@ describe("chorus.Mixins", function() {
                 itCallsTheBoundFunctionOnlyOnce();
                 itTriggersOnlyOnMatchingEventName();
                 itUnbindsCorrectly();
+            });
+            describe("when #bindOnce is called more than once with a different context", function() {
+                beforeEach(function() {
+                    this.source.bindOnce("increment", this.callback, this.context1);
+                    this.source.bindOnce("increment", this.callback, this.context2);
+                });
+
+                it("calls each function one time in the correct context", function() {
+                    this.source.trigger('increment', 'foo');
+                    this.source.trigger('increment', 'bar');
+                    expect(this.callback.callCount).toBe(2);
+                    expect(this.callback.calls[0].args[0]).toBe('foo');
+                    expect(this.callback.calls[0].object).toBe(this.context1);
+                    expect(this.callback.calls[1].args[0]).toBe('foo');
+                    expect(this.callback.calls[1].object).toBe(this.context2);
+                });
             });
 
             function itPassesArgumentsCorrectly() {

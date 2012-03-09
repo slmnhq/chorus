@@ -12,8 +12,10 @@ chorus.Mixins.Events = {
     bindOnce: function(eventName, callback, context) {
         var callbacksForThisEvent = this._callbacks && this._callbacks[eventName];
         var callbackAlreadyBound = _.any(callbacksForThisEvent, function(pair) {
-            var boundCallback = pair && pair[0];
-            return boundCallback === callback;
+            if(!pair) {
+                return;
+            }
+            return pair[0] === callback && pair[1] === context;
         });
         if (callbackAlreadyBound) return;
 
@@ -21,8 +23,8 @@ chorus.Mixins.Events = {
         this.bind(eventName, unbinder, this);
 
         function unbinder() {
-            this.unbind(eventName, callback);
-            this.unbind(eventName, unbinder);
+            this.unbind(eventName, callback, context);
+            this.unbind(eventName, unbinder, this);
         }
     },
 

@@ -13,13 +13,22 @@
     });
 
     var headerView = chorus.views.ListHeaderView.extend({
+        additionalContext: function() {
+            return {
+                importFrequency: chorus.helpers.importFrequencyForModel(this.model)
+            }
+        },
+
         postRender: function() {
             this._super('postRender', arguments);
 
             var workspaces = this.model.get("workspaceUsed") || [];
             this.$('.menus').after(chorus.helpers.usedInWorkspaces(workspaces.workspaceList, this.model.asDataset()));
+            if (this.model.importFrequency && this.model.importFrequency()) {
+                $(this.el).addClass('has_import');
+            }
         }
-    })
+    });
 
     chorus.pages.TabularDataShowPage = chorus.pages.Base.extend({
         constructorName: "TabularDataShowPage",
@@ -34,7 +43,7 @@
 
         setup: function() {
             this.makeModel.apply(this, arguments)
-            this.fetchTabularData();
+            this.fetchResources();
             this.makeBreadcrumbs();
         },
 
@@ -54,9 +63,14 @@
             })
         },
 
-        fetchTabularData: function() {
-            this.tabularData.bindOnce("loaded", this.fetchColumnSet, this);
+        fetchResources: function() {
+            this.requiredResources.remove(this.tabularData);
+            this.requiredResources.push(this.tabularData);
             this.tabularData.fetch();
+        },
+
+        resourcesLoaded: function() {
+            this.fetchColumnSet();
         },
 
         fetchColumnSet: function() {

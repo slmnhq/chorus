@@ -15,7 +15,7 @@ describe("chorus.pages.DatasetShowPage", function() {
 
         var sanboxInfo = this.workspace.get("sandboxInfo")
 
-        this.dataset = fixtures.datasetSandboxTable({
+        this.dataset = fixtures.datasetSourceTable({
             id: this.datasetId,
             instance: { id: sanboxInfo.instanceId, name: sanboxInfo.instanceName},
             databaseName: sanboxInfo.databaseName,
@@ -29,7 +29,7 @@ describe("chorus.pages.DatasetShowPage", function() {
         this.datasetId = this.dataset.get('id');
 
         this.page = new chorus.pages.DatasetShowPage(this.workspace.get("id"), this.datasetId);
-        spyOn(this.page, "fetchTabularData").andCallThrough();
+        spyOn(this.page, "fetchResources").andCallThrough();
     })
 
     it("has a helpId", function() {
@@ -58,6 +58,7 @@ describe("chorus.pages.DatasetShowPage", function() {
             context("when the dataset fetch completes", function() {
                 beforeEach(function() {
                     this.server.completeFetchFor(this.dataset);
+                    this.server.completeFetchFor(this.dataset.getImport());
                 });
 
                 describe("when the columnSet fetch completes", function() {
@@ -94,12 +95,12 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                         describe("when user cancel edit dataset and dataset:cancelEdit is triggered", function() {
                             beforeEach(function() {
-                                this.page.fetchTabularData.reset();
+                                this.page.fetchResources.reset();
                                 this.page.mainContent.contentDetails.trigger("dataset:cancelEdit");
                             });
 
                             it("fetches the dataset again", function() {
-                                expect(this.page.fetchTabularData).toHaveBeenCalled();
+                                expect(this.page.fetchResources).toHaveBeenCalled();
                             })
                         })
                     });
@@ -114,6 +115,7 @@ describe("chorus.pages.DatasetShowPage", function() {
             this.server.completeFetchFor(this.workspace);
             this.resizedSpy = spyOnEvent(this.page, 'resized');
             this.server.completeFetchFor(this.dataset);
+            this.server.completeFetchFor(this.dataset.getImport());
             this.server.completeFetchAllFor(this.columnSet, [fixtures.databaseColumn(), fixtures.databaseColumn()]);
             this.server.completeFetchFor(this.dataset.statistics());
         })
@@ -298,6 +300,39 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                 it("removes all classes added when transform:sidebar is triggered", function() {
                     expect(this.page.$('#sidebar .sidebar_content.secondary')).not.toHaveClass("tabular_data_visualization_boxplot_sidebar");
+                })
+            });
+        });
+
+        describe("#contentHeader", function() {
+            context("when the dataset has an import schedule", function() {
+                beforeEach(function() {
+                    this.server.completeFetchFor(this.page.tabularData.getImport(), fixtures.datasetImport());
+                    expect(this.page.tabularData.getImport().get('scheduleInfo').frequency).toBe("WEEKLY");
+                    this.page.render();
+                });
+
+                it("shows the icon for import frequency", function() {
+                    expect(this.page.$(".tag.import_frequency")).toContainText("Weekly")
+                });
+
+                it("sets a has_import class on the default_content_header", function() {
+                    expect(this.page.$(".default_content_header.has_import")).toExist();
+                })
+            });
+
+            context("when the dataset does not have an import schedule", function() {
+                beforeEach(function() {
+                    this.server.completeFetchFor(this.page.tabularData.getImport(), []);
+                    this.page.render();
+                });
+
+                it("does not show the icon for import frequency", function() {
+                    expect(this.page.$(".tag.import_frequency")).not.toExist();
+                });
+
+                it("does not set a has_import class on the default_content_header", function() {
+                    expect(this.page.$(".default_content_header.has_import")).not.toExist();
                 })
             });
         });

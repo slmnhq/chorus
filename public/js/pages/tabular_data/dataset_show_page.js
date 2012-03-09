@@ -30,6 +30,9 @@
             this.workspace = new chorus.models.Workspace({id: workspaceId});
             this.workspace.fetch();
             this.model = this.tabularData = new chorus.models.Dataset({ workspace: { id: workspaceId }, id: datasetId })
+            var datasetImport = this.tabularData.getImport();
+            this.requiredResources.push(datasetImport);
+            datasetImport.fetchIfNotLoaded();
 
             this.sidebarOptions = {workspace: this.workspace};
             this.sidebarOptions.requiredResources = [ this.workspace ];
@@ -51,7 +54,7 @@
                 contentDetails: new chorus.views.TabularDataContentDetails({ tabularData: this.tabularData, collection: this.columnSet, inEditChorusView: true })
             });
 
-            this.mainContent.contentDetails.bind("dataset:cancelEdit", this.fetchTabularData, this);
+            this.mainContent.contentDetails.bind("dataset:cancelEdit", this.fetchResources, this);
             this.mainContent.contentDetails.forwardEvent("dataset:saveEdit", this.mainContent.content, this);
 
             this.renderSubview('mainContent');

@@ -81,6 +81,27 @@ Backbone.sync = function(method, model, options) {
     }
 };
 
+// Unbind gets attached to the prototype of the base classes, we have to clobber it down at the bottom of this file.
+Backbone.Events.unbind = function(ev, callback, context) {
+    var calls;
+    if (!ev) {
+        this._callbacks = {};
+    } else if (calls = this._callbacks) {
+        if (!callback) {
+            calls[ev] = [];
+        } else {
+            var list = calls[ev];
+            if (!list) return this;
+            for (var i = 0, l = list.length; i < l; i++) {
+                if (list[i] && callback === list[i][0] && (context == list[i][1] || context === undefined) ) {
+                    list[i] = null;
+                }
+            }
+        }
+    }
+    return this;
+}
+
 // super function, taken from here:
 // -- https://gist.github.com/1542120
 ;(function(Backbone) {
@@ -119,6 +140,7 @@ Backbone.sync = function(method, model, options) {
 
   _.each(["Model", "Collection", "View", "Router"], function(klass) {
     Backbone[klass].prototype._super = _super;
+    Backbone[klass].prototype.unbind = Backbone.Events.unbind;
   });
 
 })(Backbone);

@@ -1,5 +1,14 @@
 #page {
     .tabular_data_show {
+        .content_header {
+            .has_import {
+                h1 {
+                    padding-top: 0;
+                    padding-bottom: 5px;
+                }
+            }
+        }
+
         .content_details {
             padding: 0;
             height: auto;

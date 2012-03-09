@@ -416,8 +416,10 @@ chorus.views.MainContentView = chorus.views.Base.extend({
 chorus.views.ListHeaderView = chorus.views.Base.extend({
     className: "default_content_header",
     context: function() {
-        return this.options
+        var ctx = this.options
+        return _.extend({}, ctx, this.additionalContext());
     },
+
     postRender: function() {
         var self = this;
         if (this.options.linkMenus) {

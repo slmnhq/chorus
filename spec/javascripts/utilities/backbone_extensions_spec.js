@@ -294,5 +294,38 @@ describe("backbone_extensions", function() {
             });
         }
     });
+
+    describe("unbind", function() {
+        var fakeContext = function(name) { this.name = name };
+        beforeEach(function() {
+            this.callback = jasmine.createSpy();
+            this.context1 = new fakeContext("1");
+            this.context2 = new fakeContext("2");
+            this.model = new Backbone.Model();
+            this.model.bind("fake", this.callback, this.context1);
+            this.model.bind("fake", this.callback, this.context2);
+        });
+
+        it("does not unbind both events when unbind is called with a context", function() {
+            this.model.unbind('fake', this.callback, this.context2);
+            this.model.trigger('fake');
+            expect(this.callback.callCount).toBe(1);
+            expect(this.callback.mostRecentCall.object).toBe(this.context1);
+        });
+
+        it("unbinds all events that match a given event, callback, and context", function() {
+            this.model.bind("fake", this.callback, this.context2);
+            this.model.unbind('fake', this.callback, this.context2);
+            this.model.trigger('fake');
+            expect(this.callback.callCount).toBe(1);
+            expect(this.callback.mostRecentCall.object).toBe(this.context1);
+        });
+
+        it("unbinds all events that match a given event and callback when no context is passed", function() {
+            this.model.unbind('fake', this.callback);
+            this.model.trigger('fake');
+            expect(this.callback).not.toHaveBeenCalled();
+        });
+    });
 });
 
