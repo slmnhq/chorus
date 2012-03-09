@@ -1,8 +1,14 @@
 describe("chorus.pages.HdfsShowFilePage", function() {
     beforeEach(function() {
         this.instance = fixtures.instance({id: "1234", name: "MyInstance"});
-        this.file = fixtures.hdfsFile({ path: "myFile.txt" });
-        this.page = new chorus.pages.HdfsShowFilePage(1234, "my/path/myFile.txt");
+        this.file = fixtures.hdfsFile({ path: "my file.txt" });
+        this.page = new chorus.pages.HdfsShowFilePage("1234", "my/path/my file.txt");
+    });
+
+    it("constructs an HDFS file model with the right instance id and path", function() {
+        expect(this.page.model).toBeA(chorus.models.HdfsFile);
+        expect(this.page.model.get("path")).toBe("/my/path/my file.txt");
+        expect(this.page.model.get("instanceId")).toBe("1234");
     });
 
     describe("fetches complete", function(){
@@ -11,7 +17,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
             this.server.completeFetchFor(this.page.model, this.file);
         });
 
-        it ("has the breadcrumbs", function (){
+        it("has the breadcrumbs", function (){
             expect(this.page.$(".breadcrumbs .spacer").length).toBe(3);
 
             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
@@ -22,7 +28,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
 
             expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("MyInstance (2)");
 
-            expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toBe("myFile.txt");
+            expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toBe("my file.txt");
         });
 
         it("has the file is read-only indicator", function() {

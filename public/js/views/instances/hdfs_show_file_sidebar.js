@@ -37,6 +37,6 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
     },
 
     makeEncodedEntityId: function() {
-        return encodeURIComponent(this.model.get("instanceId") + "|") + this.model.get("path");
+        return encodeURIComponent(this.model.get("instanceId") + "|" + this.model.get("path"));
     }
 })

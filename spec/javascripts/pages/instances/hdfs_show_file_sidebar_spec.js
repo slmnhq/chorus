@@ -4,7 +4,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
         var now_utc = now.slice(0,10) + " " + now.slice(12)
 
         this.file = fixtures.hdfsFile({
-            path: "folder%2Ffilename.txt",
+            path: "/folder/filename.txt",
             instanceId: 9876,
             lastModificationTime: now_utc
         })
@@ -13,7 +13,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
 
     describe("#setup", function() {
         it("fetches the ActivitySet for the hdfs file", function() {
-            expect(this.server.requests[0].url).toContain("/edc/activitystream/hdfs/" + this.view.makeEncodedEntityId());
+            expect(this.server.requests[0].url).toContain("/edc/activitystream/hdfs/9876%7C%2Ffolder%2Ffilename.txt");
             expect(this.server.requests[0].method).toBe("GET");
         })
     })
@@ -33,7 +33,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
 
         it("shows the 'add a note' link", function() {
             expect(this.view.$("a.dialog").data("dialog")).toBe("NotesNew");
-            expect(this.view.$("a.dialog").data("entity-id")).toBe("9876%7Cfolder%2Ffilename.txt");
+            expect(this.view.$("a.dialog").data("entity-id")).toBe("9876%7C%2Ffolder%2Ffilename.txt");
             expect(this.view.$("a.dialog").data("entity-type")).toBe("hdfs");
         })
 
@@ -59,7 +59,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
 
     describe("#makeEncodedEntityId", function() {
         it("encodes the string correctly", function() {
-            expect(this.view.makeEncodedEntityId()).toBe("9876%7Cfolder%2Ffilename.txt")
+            expect(this.view.makeEncodedEntityId()).toBe("9876%7C%2Ffolder%2Ffilename.txt")
         })
     })
 })
