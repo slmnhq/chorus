@@ -330,16 +330,34 @@ describe("chorus.dialogs.DatasetImport", function() {
                                 resource: [this.workfile.attributes],
                                 status: "ok"
                             }};
-                            this.fileUploadOptions.done(null, this.data)
-
                         });
 
-                        it("presents a toast message", function() {
-                            expect(chorus.toast).toHaveBeenCalledWith("dataset.import.workfile_success", {fileName: "myFile"});
+                        context("and the workfile is showable", function() {
+                            beforeEach(function() {
+                                this.fileUploadOptions.done(null, this.data)
+                            });
+                            it("presents a toast message", function() {
+                                expect(chorus.toast).toHaveBeenCalledWith("dataset.import.workfile_success", {fileName: "myFile"});
+                            });
+
+                            it("navigates to the new workfile page", function() {
+                                expect(chorus.router.navigate).toHaveBeenCalledWith(this.workfile.showUrl(), true);
+                            });
                         });
 
-                        it("navigates to the new workfile page", function() {
-                            expect(chorus.router.navigate).toHaveBeenCalledWith(this.workfile.showUrl(), true);
+                        context("and the workfile is not showable", function() {
+                            beforeEach(function() {
+                                spyOn(chorus.models.Workfile.prototype, "hasOwnPage").andReturn(false);
+                                this.fileUploadOptions.done(null, this.data)
+                            });
+
+                            it("presents a toast message", function() {
+                                expect(chorus.toast).toHaveBeenCalledWith("dataset.import.workfile_success", {fileName: "myFile"});
+                            });
+
+                            it("navigates to the workfile list page", function() {
+                                expect(chorus.router.navigate).toHaveBeenCalledWith(this.workfile.workfilesUrl(), true);
+                            });
                         });
                     });
                     context("when upload fails", function() {
