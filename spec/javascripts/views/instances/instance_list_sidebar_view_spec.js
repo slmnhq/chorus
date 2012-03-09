@@ -15,7 +15,6 @@ describe("chorus.views.InstanceListSidebar", function() {
     context("when an instance is selected", function() {
         beforeEach(function() {
             this.instance = fixtures.instance({instanceProvider: "Greenplum Database", name : "Harry's House of Glamour"})
-            spyOn(this.instance, 'fetch').andCallThrough();
             spyOn(this.instance.accounts(), 'fetch').andCallThrough();
             spyOn(this.instance.usage(), 'fetch').andCallThrough();
             spyOn(this.instance.activities(), 'fetch').andCallThrough();
@@ -41,17 +40,12 @@ describe("chorus.views.InstanceListSidebar", function() {
             expect(this.instance.accounts().fetch).toHaveBeenCalled();
         });
 
-        it("fetches the details for the instance", function() {
-            expect(this.instance.fetch).toHaveBeenCalled();
-        });
-
         context("when the data has been loaded", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.instance.activities());
                 this.server.completeFetchFor(this.instance.accounts());
                 this.server.completeFetchFor(this.instance.usage(), fixtures.instanceUsage());
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
-                this.server.completeFetchFor(this.instance);
             });
 
             it("sets the instance on the instance usage dialog launch anchor", function() {

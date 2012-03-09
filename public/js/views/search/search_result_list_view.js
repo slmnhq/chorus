@@ -12,7 +12,7 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     },
 
     events: {
-        "click li": "selectItem"
+        "click li.result_item": "selectItem"
     },
 
     setup: function() {
@@ -70,7 +70,7 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
         var $target = $(e.currentTarget);
         if ($target.hasClass("selected")) return;
 
-        this.$("li").removeClass("selected");
+        this.$("li.result_item").removeClass("selected");
         $target.addClass("selected");
         var cid = $target.data("cid");
         var containingView = $target.parent().parent();
