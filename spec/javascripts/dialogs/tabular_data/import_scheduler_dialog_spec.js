@@ -55,6 +55,18 @@ describe("chorus.dialogs.ImportScheduler", function() {
             it("has the 'importType' parameter set to 'schedule'", function() {
                 expect(this.attrs.importType).toBe("schedule");
             });
+
+            context("when the dialog has errors", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog.model, "clearErrors")
+                })
+
+                it("clears any errors on the model when the dialog is closed", function() {
+                    this.dialog.model.errors = { name: "wrong name" }
+                    this.dialog.$("button.cancel").click()
+                    expect(this.dialog.model.clearErrors).toHaveBeenCalled()
+                })
+            })
         });
 
         describe("when doing a single import", function() {

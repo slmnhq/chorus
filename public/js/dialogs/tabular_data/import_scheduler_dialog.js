@@ -13,7 +13,8 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         "change input:checkbox": "onCheckboxClicked",
         "keyup input:text": "onInputFieldChanged",
         "paste input:text": "onInputFieldChanged",
-        "click button.submit": "beginImport"
+        "click button.submit": "beginImport",
+        "click button.cancel": "onClickCancel"
     },
 
     makeModel: function() {
@@ -216,5 +217,10 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         updates.importType = this.oneTimeImport() ? "oneTime" : "schedule";
 
         return updates;
+    },
+
+    onClickCancel: function() {
+        this.model.clearErrors();
+        this.closeModal();
     }
 });
