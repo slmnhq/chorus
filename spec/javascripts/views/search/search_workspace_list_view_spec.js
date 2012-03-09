@@ -186,30 +186,5 @@ describe("chorus.views.SearchWorkspaceList", function() {
         it("there is one for each model in the collection", function() {
             expect(this.view.$('li').length).toBe(1);
         });
-
-        it("has the right data-id attribute", function() {
-            expect(this.view.$("li").eq(0).data("cid")).toBe(this.models.at(0).cid);
-        });
-
-        it("includes the correct workspace file icon", function() {
-            expect($(this.view.$("li img.icon")[0]).attr("src")).toBe("/edc/workspace/10000/image?size=original");
-        });
-
-        it("has a link to the workspace for each workspace in the collection", function() {
-            expect(this.view.$('li a.name').eq(0).attr('href')).toBe("#/workspaces/10000");
-        });
-
-        it("shows matching description if any", function() {
-            expect(this.view.$("li .description .description_content").eq(0).html()).toContain("<em>ws</em> <i>other text</i>");
-        });
-
-        it("shows matching name", function() {
-            expect(this.view.$("li .name").eq(0).html()).toContain("<em>ws</em>");
-        });
-
-        it("shows comments", function() {
-            expect(this.view.$("li .comments .comment").length).toBe(1);
-        });
-
     });
 });

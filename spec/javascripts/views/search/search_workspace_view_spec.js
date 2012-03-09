@@ -1,0 +1,65 @@
+describe("chorus.views.SearchWorkspace", function() {
+    beforeEach(function() {
+        this.result = fixtures.searchResult({workspace: {docs: [
+            {
+                entityType: "workspace",
+                id: "10000",
+                isDeleted: false,
+                isPublic: false,
+                lastUpdatedStamp: "2012-02-24 16:08:32",
+                name: "ws",
+                description: "ws <i>other text</i>",
+                owner: {
+                    firstName: "EDC",
+                    id: "InitialUser",
+                    lastName: "Admin"
+                },
+                comments: [
+                    {
+                        "lastUpdatedStamp": "2012-03-08 09:57:46",
+                        "isPublished": false,
+                        "content": "good version",
+                        "isComment": false,
+                        "id": "10020",
+                        "workspaceId": "10000",
+                        "isInsight": false,
+                        "highlightedAttributes": {"content": ["good <em>version<\/em>"]},
+                        "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}
+                    }
+                ],
+                highlightedAttributes: {
+                    name: "<em>ws</em>",
+                    description: "<em>ws</em> <i>other text</i>"
+                }
+            }
+        ]}});
+
+        this.model = this.result.workspaces().models[0];
+        this.view = new chorus.views.SearchWorkspace({ model: this.model });
+        this.view.render()
+    });
+
+    it("has the right data-id attribute", function() {
+        expect($(this.view.el).data("cid")).toBe(this.model.cid);
+    });
+
+    it("includes the correct workspace file icon", function() {
+        expect(this.view.$("img.icon").attr("src")).toBe("/edc/workspace/10000/image?size=original");
+    });
+
+    it("has a link to the workspace for each workspace in the collection", function() {
+        expect(this.view.$('a.name').attr('href')).toBe("#/workspaces/10000");
+    });
+
+    it("shows matching description if any", function() {
+        expect(this.view.$(".description .description_content").html()).toContain("<em>ws</em> <i>other text</i>");
+    });
+
+    it("shows matching name", function() {
+        expect(this.view.$(".name").html()).toContain("<em>ws</em>");
+    });
+
+    it("shows comments", function() {
+        expect(this.view.$(".comments .comment").length).toBe(1);
+    });
+});
