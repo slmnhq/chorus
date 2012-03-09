@@ -418,6 +418,21 @@ describe("chorus.models.SearchResult", function() {
         });
     });
 
+    describe("#totalPageNumber", function() {
+        it("should return the correct number of total pages", function() {
+            this.model.set({entityType: "user"});
+            this.model.set(fixtures.searchResult());
+            this.model.users().attributes.total = 1;
+            expect(this.model.totalPageNumber()).toBe(1)
+
+            this.model.users().attributes.total = 51;
+            expect(this.model.totalPageNumber()).toBe(2);
+
+            this.model.users().attributes.total = 101;
+            expect(this.model.totalPageNumber()).toBe(3);
+        });
+    });
+
     describe("#getNextPage", function() {
         beforeEach(function() {
             this.model.set({user: { docs: [], numFound: 100 }, page: 1, entityType: "user"})

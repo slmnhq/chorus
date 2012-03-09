@@ -13,14 +13,21 @@ chorus.views.SearchResultListBase = chorus.views.Base.extend({
     },
 
     additionalContext: function() {
-        return {
+        var ctx = {
             shown: this.collection.models.length,
             total: this.collection.attributes.total,
             hasNext: this.query && this.query.hasNextPage(),
             hasPrevious: this.query && this.query.hasPreviousPage(),
             filteredSearch: this.query && this.query.entityType() == this.entityType,
             moreResults: (this.collection.models.length < this.collection.attributes.total)
+        };
+
+        if(ctx.hasNext || ctx.hasPrevious) {
+            ctx.currentPage = this.query.currentPageNumber();
+            ctx.totalPages = this.query.totalPageNumber();
         }
+
+        return ctx;
     },
 
     postRender: function() {

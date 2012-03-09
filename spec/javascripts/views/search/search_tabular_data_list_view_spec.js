@@ -25,25 +25,25 @@ describe("chorus.views.SearchTabularDataList", function() {
     context("unfiltered results", function() {
         describe("the details bar", function() {
             it("should have a title", function() {
-                    expect(this.view.$(".title")).toContainTranslation("dataset.title_plural");
+                expect(this.view.$(".title")).toContainTranslation("dataset.title_plural");
+            });
+
+            it("should show the number of results", function() {
+                expect(this.view.$(".count")).toContainTranslation("search.count", {shown: this.models.length, total: this.models.attributes.total});
+                expect(this.view.$(".show_all")).toExist();
+                expect(this.view.$(".show_all").data("type")).toBe("dataset");
+            });
+
+            context("clicking the show all link", function() {
+                beforeEach(function() {
+                    spyOn(chorus.router, "navigate");
+                    this.view.$("a.show_all").click();
                 });
 
-                it("should show the number of results", function() {
-                    expect(this.view.$(".count")).toContainTranslation("search.count", {shown: this.models.length, total: this.models.attributes.total});
-                    expect(this.view.$(".show_all")).toExist();
-                    expect(this.view.$(".show_all").data("type")).toBe("dataset");
+                it("should navigate to the tabular data results page", function() {
+                    expect(chorus.router.navigate).toHaveBeenCalledWith(this.result.showUrl(), true);
                 });
-
-                context("clicking the show all link", function() {
-                    beforeEach(function() {
-                        spyOn(chorus.router, "navigate");
-                        this.view.$("a.show_all").click();
-                    });
-
-                    it("should navigate to the tabular data results page", function() {
-                        expect(chorus.router.navigate).toHaveBeenCalledWith(this.result.showUrl(), true);
-                    });
-                });
+            });
         });
     });
 
@@ -59,6 +59,10 @@ describe("chorus.views.SearchTabularDataList", function() {
             });
 
             context("when there are two pages of results", function() {
+                beforeEach(function() {
+                    spyOn(this.result, "totalPageNumber").andReturn(2);
+                });
+
                 context("and I am on the first page", function() {
                     beforeEach(function() {
                         spyOn(this.result, "hasPreviousPage").andReturn(false);
@@ -79,9 +83,14 @@ describe("chorus.views.SearchTabularDataList", function() {
                         expect(this.view.$('.pagination span.previous')).toContainTranslation("search.previous");
                     });
 
+                    it("should have the 'Page x of y' text", function() {
+                        expect(this.view.$('.pagination span.page_numbers')).toExist();
+                        expect(this.view.$('.pagination span.page_numbers')).toContainTranslation("search.page", {shown: 1, total: 2})
+                    });
+
                 });
 
-                context("and I am on the second page", function(){
+                context("and I am on the second page", function() {
                     beforeEach(function() {
                         spyOn(this.result, "hasNextPage").andReturn(false);
                         spyOn(this.result, "hasPreviousPage").andReturn(true);
@@ -100,7 +109,6 @@ describe("chorus.views.SearchTabularDataList", function() {
                     it("should have next in plain text", function() {
                         expect(this.view.$('.pagination span.next')).toContainTranslation("search.next");
                     });
-
 
 
                 });
@@ -122,6 +130,11 @@ describe("chorus.views.SearchTabularDataList", function() {
                     expect(this.view.$('.pagination span.next')).toContainTranslation("search.next");
                     expect(this.view.$('.pagination span.previous')).toContainTranslation("search.previous");
                 });
+
+                it ("should not have the 'Page x of y' text", function (){
+                    expect(this.view.$('.pagination span.page_numbers')).not.toExist();
+                });
+
             })
         });
     });

@@ -37,6 +37,11 @@ chorus.models.SearchResult = chorus.models.Base.extend({
         return this.get("page") || 1;
     },
 
+    totalPageNumber: function(){
+        var total = this.getResults().attributes.total;
+        return Math.ceil(total/50);
+    },
+
     showUrlTemplate: function() {
         var prefix = "",
             workspaceId = this.get("workspaceId");
