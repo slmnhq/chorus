@@ -813,5 +813,15 @@ describe("chorus.views.TabularDataSidebar", function() {
                 expect(this.view.render).toHaveBeenCalled();
             })
         })
+
+        describe("has all the translations for all objectTypes", function() {
+            _.each(["QUERY", "VIEW", "TABLE", "BASE_TABLE", "HDFS_EXTERNAL_TABLE", "EXTERNAL_TABLE"], function(type){
+                it("does not have any missing translations for"+type, function() {
+                    this.dataset = fixtures.datasetSourceTable({objectType: type});
+                    chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
+                    expect(this.view.activityList.options.type).not.toContain("missing");
+                })
+            }, this)
+        })
     });
 });
