@@ -7,7 +7,8 @@ chorus.views.Header = chorus.views.Base.extend({
         "click a.notifications": "togglePopupNotifications",
         "click .gear a": "togglePopupGear",
         "submit .search form": "startSearch",
-        "click .type_ahead_result a": "dismissSearch"
+        "click .type_ahead_result a": "dismissSearch",
+        "keydown .search input": "searchKeyPressed"
     },
 
     subviews: {
@@ -50,6 +51,10 @@ chorus.views.Header = chorus.views.Base.extend({
 
     postRender: function() {
         this.$(".search input").unbind("textchange").bind("textchange", _.bind(this.displayResult, this));
+    },
+
+    searchKeyPressed: function(event) {
+        this.typeAheadView.handleKeyEvent(event);
     },
 
     displayResult: function() {

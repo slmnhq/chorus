@@ -74,6 +74,164 @@ describe("chorus.views.TypeAheadSearch", function() {
             expect(this.view.$("li.result:eq(6) .type").text()).toMatchTranslation("type_ahead.entity.instance");
         })
 
+        describe("keyboard navigation", function() {
+            var view;
+
+            beforeEach(function() {
+                view = this.view;
+            });
+
+            it("selects no item by default", function() {
+                expectNothingSelected();
+            })
+
+            describe("#downArrow", function() {
+                context("when no item is selected", function() {
+                    it("selects the first item", function() {
+                        this.view.downArrow();
+                        expectSelectedIndex(0);
+                    });
+                });
+
+                context("when the last item is selected", function() {
+                    beforeEach(function() {
+                        this.view.downArrow();
+                        this.view.downArrow();
+                        this.view.downArrow();
+                        this.view.downArrow();
+                        this.view.downArrow();
+                        this.view.downArrow();
+                        expectSelectedIndex(5);
+                        this.view.downArrow();
+                        expectSelectedIndex(6);
+                        this.view.downArrow();
+                        expectSelectedIndex(7);
+                    });
+
+                    it("does nothing", function() {
+                        this.view.downArrow();
+                        expectSelectedIndex(7);
+                    });
+                })
+            });
+
+            describe("#upArrow", function() {
+                context("when no item is selected", function() {
+                    beforeEach(function() {
+                        this.view.upArrow();
+                    });
+
+                    it("does nothing", function() {
+                        expectNothingSelected();
+                    });
+                });
+
+                context("when the first item is selected", function() {
+                    beforeEach(function() {
+                        this.view.downArrow();
+                        expectSelectedIndex(0);
+                    });
+
+                    it("removes the selection", function() {
+                        this.view.upArrow();
+                        expectNothingSelected();
+                    });
+                });
+
+                context("when some intermediate item is selected", function() {
+                    beforeEach(function() {
+                        this.view.downArrow();
+                        this.view.downArrow();
+                        this.view.downArrow();
+                        expectSelectedIndex(2);
+                    });
+
+                    it("selects the previous item", function() {
+                        this.view.upArrow();
+                        expectSelectedIndex(1);
+                    });
+                });
+            });
+
+            describe("#enter", function() {
+                beforeEach(function() {
+                    spyOn(chorus.router, 'navigate');
+                    this.view.downArrow();
+                });
+
+                it("navigates to the page for the selected search result", function() {
+                    this.view.enterKey();
+                    var href = this.view.$("li.selected a").attr("href");
+                    expect(chorus.router.navigate).toHaveBeenCalledWith(href, true);
+                });
+            });
+
+            function expectSelectedIndex(index) {
+                expect(view.$("li").eq(index)).toHaveClass("selected");
+                expect(view.$("li.selected").length).toBe(1);
+            }
+
+            function expectNothingSelected() {
+                expect(view.$("li.selected").length).toBe(0);
+            }
+        });
+
+        describe("#handleKeyEvent", function() {
+            describe("when down arrow key is pressed", function() {
+                beforeEach(function() {
+                    spyOn(this.view, "downArrow")
+                    var event = jQuery.Event("keydown", { keyCode: 40 });
+                    this.view.handleKeyEvent(event);
+                });
+
+                it("calls #downArrow", function() {
+                    expect(this.view.downArrow).toHaveBeenCalled();
+                });
+            });
+
+            describe("when up arrow key is pressed", function() {
+                beforeEach(function() {
+                    spyOn(this.view, "upArrow")
+                    var event = jQuery.Event("keydown", { keyCode: 38 });
+                    this.view.handleKeyEvent(event);
+                });
+
+                it("calls #upArrow on the type-ahead view", function() {
+                    expect(this.view.upArrow).toHaveBeenCalled();
+                });
+            });
+
+            describe("when the enter key is pressed", function() {
+                beforeEach(function() {
+                    spyOn(this.view, "enterKey")
+                    this.event = jQuery.Event("keydown", { keyCode: 13 });
+                });
+
+                it("calls #enterKey on the type-ahead view", function() {
+                    this.view.handleKeyEvent(this.event);
+                    expect(this.view.enterKey).toHaveBeenCalled();
+                });
+
+                context("when nothing is selected", function() {
+                    it("does NOT prevent the event's default (to allow the search to submit)", function() {
+                        this.view.handleKeyEvent(this.event);
+                        expect(this.event.isDefaultPrevented()).toBeFalsy();
+                    });
+                });
+
+                context("when an item is selected", function() {
+                    beforeEach(function() {
+                        this.view.downArrow();
+                        this.view.handleKeyEvent(this.event);
+                    });
+
+                    it("prevents the event's default (to prevent the search from submitting)", function() {
+                        expect(this.event.isDefaultPrevented()).toBeTruthy();
+                    });
+                });
+            });
+        });
+
         context("when search results return more than 5 rows", function() {
             beforeEach(function() {
                 this.view.resultLimit = 5;

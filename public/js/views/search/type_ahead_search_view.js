@@ -59,6 +59,53 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
         return ctx;
     },
 
+    handleKeyEvent: function(event) {
+        switch (event.keyCode) {
+            case 40:
+                this.downArrow();
+                break;
+            case 38:
+                this.upArrow();
+                break;
+            case 13:
+                this.enterKey();
+                if (this.$("li.selected").length > 0) { event.preventDefault(); }
+                break;
+        }
+    },
+
+    downArrow: function() {
+        var selectedLi = this.$("li.selected");
+        if (selectedLi.length) {
+            var nextLi = selectedLi.next("li");
+            if (nextLi.length) {
+                nextLi.addClass("selected");
+                selectedLi.removeClass("selected");
+            }
+        } else {
+            this.$("li").eq(0).addClass("selected");
+        }
+    },
+
+    upArrow: function() {
+        var selectedLi = this.$("li.selected");
+        if (selectedLi.length) {
+            var prevLi = selectedLi.prev("li");
+            if (prevLi.length) {
+                prevLi.addClass("selected");
+            }
+
+            selectedLi.removeClass("selected");
+        }
+    },
+
+    enterKey: function() {
+        var selectedLi = this.$("li.selected");
+        if (selectedLi.length) {
+            chorus.router.navigate(selectedLi.find("a").attr("href"), true);
+        }
+    },
+
     searchFor: function(query) {
         this.model.set({query: query}, {silent: true});
         this.model.fetch();

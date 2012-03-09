@@ -185,6 +185,13 @@ describe("chorus.views.Header", function() {
                 expect(this.view.$(".search input:text").val()).toBe("");
             });
 
+            it("calls #handleKeyEvent on the type-ahead view", function() {
+                spyOn(this.view.typeAheadView, 'handleKeyEvent');
+                var event = jQuery.Event("keydown", { keyCode: 38 });
+                this.view.$(".search input").trigger(event);
+                expect(this.view.typeAheadView.handleKeyEvent).toHaveBeenCalledWith(event);
+            });
+
             describe("submitting the search", function() {
                 beforeEach(function() {
                     spyOn(chorus.router, 'navigate');
