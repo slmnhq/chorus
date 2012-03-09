@@ -2184,6 +2184,7 @@ beforeEach(function() {
                 description: "description for jasmine",
                 expire: null,
                 freeSpace: null,
+                hasCredentials: true,
                 host: "localhost",
                 instanceProvider: "Greenplum Database",
                 instanceVersion: null,

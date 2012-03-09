@@ -39,18 +39,15 @@ chorus.views.InstanceList = chorus.views.Base.extend({
     },
 
     collectionModelContext: function(model) {
-        var isHadoop = model.isHadoop(),
-            isGreenplum = model.isGreenplum(),
-            isOther = !(isHadoop || isGreenplum);
-
         return {
             stateUrl: model.stateIconUrl(),
             showUrl: model.showUrl(),
             stateText: _.str.capitalize(model.get("state") || "unknown"),
             providerUrl: model.providerIconUrl(),
-            isGreenplum: isGreenplum,
-            isHadoop: isHadoop,
-            isOther: isOther
+            isGreenplum: model.isGreenplum(),
+            isHadoop: model.isHadoop(),
+            isOther: !(model.isHadoop() || model.isGreenplum()),
+            userHasCredentials: model.isShared() || model.get("hasCredentials")
         }
     },
 
