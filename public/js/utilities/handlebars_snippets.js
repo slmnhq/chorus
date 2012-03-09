@@ -157,7 +157,7 @@
                 if (!tag.length) throw "No template for " + templateName;
                 chorus.templates[templateName] = Handlebars.compile(tag.html());
             }
-            return chorus.templates[templateName](context);
+            return new Handlebars.SafeString(chorus.templates[templateName](context));
         },
 
         hotKeyName: function(hotKeyChar) {

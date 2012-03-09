@@ -202,7 +202,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.extend({
     },
 
     showDataset: function(dataset) {
-        var datasetDetailsRow = $(Handlebars.helpers.renderTemplate("notes_new_file_attachment"));
+        var datasetDetailsRow = $(Handlebars.helpers.renderTemplate("notes_new_file_attachment").toString());
         this.$(".options_area").append(datasetDetailsRow);
 
         var iconSrc = dataset.iconUrl({size: 'medium'});
@@ -214,7 +214,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.extend({
     },
 
     showFile: function(file, filename, filetype, uploadModel) {
-        var fileDetailsRow = $(Handlebars.helpers.renderTemplate("notes_new_file_attachment"));
+        var fileDetailsRow = $(Handlebars.helpers.renderTemplate("notes_new_file_attachment").toString());
         this.$(".options_area").append(fileDetailsRow);
 
         var iconSrc = chorus.urlHelpers.fileIconUrl(filetype, "medium");

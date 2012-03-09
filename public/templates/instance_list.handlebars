@@ -3,7 +3,7 @@
     <ul class="list">
         {{#each models}}
             {{#if isGreenplum}}
-                <li class="instance" data-instance-id="{{id}}">{{{renderTemplate "instance" this}}}</li>
+                <li class="instance" data-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
             {{/if}}
         {{/each}}
     </ul>
@@ -17,7 +17,7 @@
     <ul class="list">
         {{#each models}}
             {{#if isHadoop}}
-                <li class="instance" data-instance-id="{{id}}">{{{renderTemplate "instance" this}}}</li>
+                <li class="instance" data-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
             {{/if}}
         {{/each}}
     </ul>
@@ -31,7 +31,7 @@
     <ul class="list">
         {{#each models}}
             {{#if isOther}}
-                <li class="instance" data-instance-id="{{id}}">{{{renderTemplate "instance" this}}}</li>
+                <li class="instance" data-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
             {{/if}}
         {{/each}}
     </ul>

@@ -192,7 +192,7 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
         if (this.displayLoadingSection()) {
             return '<div class="loading_section"/>';
         } else {
-            return Handlebars.helpers.renderTemplate(this.className, context);
+            return Handlebars.helpers.renderTemplate(this.className, context).toString();
         }
     },
 

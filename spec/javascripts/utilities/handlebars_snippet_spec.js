@@ -431,7 +431,7 @@ describe("handlebars", function() {
 
         describe("renderTemplate", function() {
             it("renders the template", function() {
-                expect(Handlebars.helpers.renderTemplate('plain_text', {text: 'foo'}).trim()).toBe('foo');
+                expect(Handlebars.helpers.renderTemplate('plain_text', {text: 'foo'}).toString().trim()).toBe('foo');
             });
         });
 
