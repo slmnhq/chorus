@@ -22,19 +22,19 @@ describe("chorus.views.DashboardInstanceList", function() {
         });
 
         it("displays the names of the instances", function() {
-            expect(this.view.$(".name").eq(0).text()).toBe("broccoli");
+            expect(this.view.$(".name").eq(0)).toContainText("broccoli");
             expect(this.view.$(".name").eq(0)).toHaveHref(this.instance1.showUrl());
 
-            expect(this.view.$(".name").eq(1).text()).toBe("Camels");
+            expect(this.view.$(".name").eq(1)).toContainText("Camels");
             expect(this.view.$(".name").eq(1)).toHaveHref(this.instance2.showUrl());
         });
 
         it("sorts the instances case-insensitively", function() {
-            expect(this.view.$(".name").eq(0).text()).toBe("broccoli");
-            expect(this.view.$(".name").eq(1).text()).toBe("Camels");
-            expect(this.view.$(".name").eq(2).text()).toBe("doppler");
-            expect(this.view.$(".name").eq(3).text()).toBe("Ego");
-            expect(this.view.$(".name").eq(4).text()).toBe("fatoush");
+            expect(this.view.$(".name").eq(0)).toContainText("broccoli");
+            expect(this.view.$(".name").eq(1)).toContainText("Camels");
+            expect(this.view.$(".name").eq(2)).toContainText("doppler");
+            expect(this.view.$(".name").eq(3)).toContainText("Ego");
+            expect(this.view.$(".name").eq(4)).toContainText("fatoush");
         });
 
         it("displays the icon for each instance", function() {

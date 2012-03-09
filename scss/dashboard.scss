@@ -79,23 +79,12 @@ div[data-page="Dashboard"] {
     }
 
     .main_content.instance_list {
+        font-weight: $semibold;
+
         .dashboard_instance_list {
 
             .main {
                 padding-bottom: 5px;
-            }
-
-            .browse {
-                a {
-                    font-size: 13px;
-                    font-weight: normal;
-                }
-            }
-
-            .name {
-                font-size: 18px;
-                font-weight: $semibold;
-                color: $color-text2;
             }
 
             > li:last-child {
