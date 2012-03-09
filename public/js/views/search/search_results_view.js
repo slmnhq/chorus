@@ -1,6 +1,6 @@
-chorus.views.SearchResultList = chorus.views.Base.extend({
-    constructorName: "SearchResultListView",
-    className: "search_result_list",
+chorus.views.SearchResults = chorus.views.Base.extend({
+    constructorName: "SearchResults",
+    className: "search_results",
 
     subviews: {
         ".hdfs_list": "hdfsList",
@@ -37,7 +37,7 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     },
 
     buildListView: function(entityType, collection) {
-        return new chorus.views.SearchResultListBase({
+        return new chorus.views.SearchResultList({
             entityType: entityType,
             collection: collection,
             total: this.model.get(entityType).numFound,

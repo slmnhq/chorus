@@ -1,4 +1,4 @@
-describe("chorus.views.SearchResultListBase", function() {
+describe("chorus.views.SearchResultList", function() {
     context("body", function() {
         beforeEach(function() {
             this.result = fixtures.searchResult();
@@ -7,7 +7,7 @@ describe("chorus.views.SearchResultListBase", function() {
             var instances = this.result.instances();
             instances.attributes.total = 24;
 
-            this.view = new chorus.views.SearchResultListBase({
+            this.view = new chorus.views.SearchResultList({
                 entityType: "instance",
                 collection: instances,
                 query: this.result
@@ -26,7 +26,7 @@ describe("chorus.views.SearchResultListBase", function() {
             this.result = fixtures.searchResult();
             this.result.set({query: "foo"});
             this.collection = this.result.users();
-            this.view = new chorus.views.SearchResultListBase({ collection: this.collection, query: this.result, entityType: "user"});
+            this.view = new chorus.views.SearchResultList({ collection: this.collection, query: this.result, entityType: "user"});
         });
 
         context("when there are three or fewer results", function() {
@@ -35,7 +35,7 @@ describe("chorus.views.SearchResultListBase", function() {
                     fixtures.tabularDataJson(),
                     fixtures.tabularDataJson()
                 ]);
-                this.view = new chorus.views.SearchResultListBase({collection: this.models, query: this.result, entityType: "dataset"});
+                this.view = new chorus.views.SearchResultList({collection: this.models, query: this.result, entityType: "dataset"});
                 this.view.render();
             });
 
@@ -102,7 +102,7 @@ describe("chorus.views.SearchResultListBase", function() {
 
                 context("has no results at all", function() {
                     beforeEach(function() {
-                        this.view = new chorus.views.SearchResultListBase({
+                        this.view = new chorus.views.SearchResultList({
                             collection: fixtures.userSet([], {total: 0}),
                             entityType: "user"
                         });

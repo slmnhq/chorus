@@ -1,8 +1,8 @@
-describe("chorus.views.SearchResultList", function() {
+describe("chorus.views.SearchResults", function() {
     beforeEach(function() {
         this.model = fixtures.searchResult();
         this.model.set({entityType: "all"});
-        this.view = new chorus.views.SearchResultList({model: this.model});
+        this.view = new chorus.views.SearchResults({model: this.model});
         this.view.render();
     });
 
@@ -28,7 +28,7 @@ describe("chorus.views.SearchResultList", function() {
             this.model.unset("workfile");
             this.model.unset("user");
             this.model.unset("dataset");
-            this.view = new chorus.views.SearchResultList({model: this.model});
+            this.view = new chorus.views.SearchResults({model: this.model});
             this.view.render();
         });
 
