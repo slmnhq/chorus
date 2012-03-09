@@ -34,6 +34,12 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
             expect(this.view.truncatedSummary.options.attribute).toBe("summary");
         })
 
+        it("hides the summary if the workspace does not have one", function() {
+            this.view.model.unset("summary");
+            this.view.render();
+            expect(this.view.$(".truncated_summary")).toHaveClass("hidden");
+        });
+
         describe("when the 'insights' link is clicked", function() {
             beforeEach(function() {
                 this.view.$("a.insights").click();

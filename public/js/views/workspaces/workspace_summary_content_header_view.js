@@ -22,5 +22,13 @@ chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend({
             insightsTitle: t("workspace.recent_insights", {name: this.model.get("name")}),
             workspace: this.model
         });
+    },
+
+    postRender: function() {
+        if(this.model.get("summary")) {
+            this.$(".truncated_summary").removeClass("hidden");
+        } else {
+            this.$(".truncated_summary").addClass("hidden");
+        }
     }
 });
