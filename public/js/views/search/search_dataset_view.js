@@ -1,6 +1,6 @@
-chorus.views.SearchTabularData = chorus.views.SearchItemBase.extend({
-    constructorName: "SearchTabularDataView",
-    className: "search_tabular_data",
+chorus.views.SearchDataset = chorus.views.SearchItemBase.extend({
+    constructorName: "SearchDatasetView",
+    className: "search_dataset",
 
     additionalContext: function() {
         var context = {

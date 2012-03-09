@@ -1,9 +1,9 @@
-describe("chorus.views.SearchTabularData", function() {
+describe("chorus.views.SearchDataset", function() {
     beforeEach(function() {
         this.result = fixtures.searchResult();
         this.result.set({query: "foo"});
         this.model = this.result.tabularData().models[0];
-        this.view = new chorus.views.SearchTabularData({model: this.model});
+        this.view = new chorus.views.SearchDataset({model: this.model});
         this.view.render();
     });
 
@@ -42,7 +42,7 @@ describe("chorus.views.SearchTabularData", function() {
     context("when the search results include a chorus view", function() {
         beforeEach(function() {
             this.model = fixtures.searchResultChorusView({ workspace: { name: "Chorus View Thing" }, type: "CHORUS_VIEW" });
-            this.view = new chorus.views.SearchTabularData({model: this.model});
+            this.view = new chorus.views.SearchDataset({model: this.model});
             this.view.render();
         });
 

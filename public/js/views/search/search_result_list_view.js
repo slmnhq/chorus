@@ -17,42 +17,48 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
 
     setup: function() {
         if (this.model.hdfs()) {
-            this.hdfsList = new chorus.views.SearchHdfsList({
+            this.hdfsList = new chorus.views.SearchResultListBase({
+                entityType: 'hdfs',
                 collection: this.model.hdfs(),
                 total: this.model.get("hdfs").numFound,
                 query: this.model
             });
         }
         if (this.model.users()) {
-            this.userList = new chorus.views.SearchUserList({
+            this.userList = new chorus.views.SearchResultListBase({
+                entityType: 'user',
                 collection: this.model.users(),
                 total: this.model.get("user").numFound,
                 query: this.model
             });
         }
         if (this.model.workfiles()) {
-            this.workfileList = new chorus.views.SearchWorkfileList({
+            this.workfileList = new chorus.views.SearchResultListBase({
+                entityType: 'workfile',
                 collection: this.model.workfiles(),
                 total: this.model.get("workfile").numFound,
                 query: this.model
             });
         }
         if (this.model.workspaces()) {
-            this.workspaceList = new chorus.views.SearchWorkspaceList({
+            this.workspaceList = new chorus.views.SearchResultListBase({
+                entityType: 'workspace',
                 collection: this.model.workspaces(),
                 total: this.model.get("workspace").numFound,
                 query: this.model
             });
         }
         if (this.model.tabularData()) {
-            this.tabularDataList = new chorus.views.SearchTabularDataList({
+            this.tabularDataList = new chorus.views.SearchResultListBase({
+                entityType: 'dataset',
                 collection: this.model.tabularData(),
                 total: this.model.get("dataset").numFound,
                 query: this.model
             });
         }
         if (this.model.instances()) {
-            this.instanceList = new chorus.views.SearchInstanceList({
+            this.instanceList = new chorus.views.SearchResultListBase({
+                entityType: 'instance',
                 collection: this.model.instances(),
                 total: this.model.get("instance").numFound,
                 query: this.model

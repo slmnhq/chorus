@@ -10,6 +10,9 @@ chorus.views.SearchResultListBase = chorus.views.Base.extend({
 
     setup: function() {
         this.query = this.options.query;
+        this.entityType = this.options.entityType;
+        this.className = "search_" + this.entityType + "_list";
+        this.listItemConstructorName = "Search" + _.capitalize(this.entityType);
     },
 
     additionalContext: function() {
@@ -46,7 +49,7 @@ chorus.views.SearchResultListBase = chorus.views.Base.extend({
         this.query.set({entityType: $(e.currentTarget).data("type")})
         chorus.router.navigate(this.query.showUrl(), true);
     },
-        
+
     showNext: function(e) {
         e && e.preventDefault();
         this.query.getNextPage();

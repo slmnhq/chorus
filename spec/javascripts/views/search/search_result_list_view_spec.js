@@ -10,8 +10,8 @@ describe("chorus.views.SearchResultList", function() {
         expect(this.view.$(".search_workfile_list")).toExist();
     });
 
-    it("should include the search results for tabular data", function() {
-        expect(this.view.$(".search_tabular_data_list")).toExist();
+    it("should include the search results for datasets", function() {
+        expect(this.view.$(".search_dataset_list")).toExist();
     });
 
     it("should include the search results for hdfs files", function() {

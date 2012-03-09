@@ -2,7 +2,6 @@
     {{#if filteredSearch}}
         <div class="pagination">
             <div class="right">
-
                 {{#ifAny hasPrevious hasNext }}
                     <span class="page_numbers">{{t "search.page" shown=currentPage total=totalPages}}</span>
                 {{/ifAny}}
@@ -22,7 +21,6 @@
                 {{else}}
                     <span class="next">{{t "search.next"}}</span>
                 {{/if}}
-
             </div>
             <span class="count">{{t "search.results" count=total}}</span>
         </div>
