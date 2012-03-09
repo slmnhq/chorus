@@ -55,6 +55,15 @@
             }
         }
 
+        div.main {
+            display: inline-block;
+        }
+
+        .description {
+            @include secondary-text-small;
+            padding-top: 4px;
+        }
+
         div.details {
             font-size: 13px;
             position: absolute;
