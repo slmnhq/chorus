@@ -33,7 +33,7 @@ describe("chorus.views.NotificationList", function() {
 
     describe("more link", function() {
         beforeEach(function() {
-            this.collection.pagination = this.collection.pagination || {};
+            this.collection.pagination = (this.collection.pagination || {});
             this.collection.pagination.page = "1";
             this.collection.pagination.total = "99999999";
         });
@@ -72,31 +72,26 @@ describe("chorus.views.NotificationList", function() {
                     context("when the fetch completes", function() {
                         beforeEach(function() {
                             spyOn(chorus.collections.NotificationSet.prototype, "markAllRead").andCallThrough();
-                            this.server.completeFetchFor(this.collection, this.collection, {page:2});
+                            this.server.completeFetchFor(this.collection, this.collection, {page:2}, {page: "2", total: "9999999"});
                         });
 
                         it("marks all notification read again", function() {
                             expect(chorus.collections.NotificationSet.prototype.markAllRead).toHaveBeenCalled();
                         });
 
-                        xcontext("clicking the more link again", function() {
+                        context("clicking the more link again", function() {
                             beforeEach(function() {
-                                this.view.render();
-                                chorus.collections.NotificationSet.prototype.markAllRead.reset();
                                 expect(this.view.$(".more_notifications a")).toExist();
                                 this.view.$(".more_notifications a").click();
                             });
 
-                            it("lets you fetches again", function() {
+                            it("marks everything read again", function() {
                                 expect(this.server.lastFetch().params().page).toBe("3");
-                                this.server.completeFetchFor(this.collection, this.collection, {page:3});
+                                this.server.completeFetchFor(this.collection, this.collection, {page:3}, {page: "3", total: "9999999"});
                                 expect(chorus.collections.NotificationSet.prototype.markAllRead).toHaveBeenCalled();
                             });
                         });
                     });
-
-
-
                 });
             });
 
@@ -109,7 +104,6 @@ describe("chorus.views.NotificationList", function() {
                 it("doesn't show the more link", function() {
                     expect(this.view.$(".more_notifications a")).not.toExist();
                 });
-
             });
         });
     });
