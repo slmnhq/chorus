@@ -21,6 +21,18 @@
         height: $breadcrumbs-height + $padding-y;
     }
 
+    .info {
+        margin-bottom: 5px;
+
+        .name {
+            @include heading-sidebar;
+            margin-bottom: 5px;
+        }
+        .type {
+            @include secondary-text-small;
+        }
+    }
+
     .image {
         padding-bottom: 16px;
         text-align: center;

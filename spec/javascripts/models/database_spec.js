@@ -4,7 +4,7 @@ describe("chorus.models.Database", function() {
     });
 
     it("should have the correct show url", function() {
-        expect(this.model.showUrl()).toMatchUrl("#/instances/1/databases/2");
+        expect(this.model.showUrl()).toMatchUrl("#/instances/1/database/love_poems");
     });
 
     describe("#schemas", function() {

@@ -28,6 +28,7 @@
             ["/workspaces/:workspaceId/search/:scope/:entityType/:query", "WorkspaceSearchIndex"],
             ["/instances", "InstanceIndex"],
             ["/instances/:instanceId/databases", "DatabaseIndex"],
+            ["/instances/:instanceId/database/:databaseName", "SchemaIndex"],
             ["/instances/:instanceId/database/:databaseName/schema/:schemaName", "SchemaBrowse"],
             ["/instances/:instanceId/database/:databaseName/schema/:schemaName/:metaType/:objectName", "TabularDataShow"],
             ["/instances/:instanceId/browse/*path", "HdfsEntryIndex"],
