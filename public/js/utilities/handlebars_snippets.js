@@ -337,6 +337,10 @@
 
         importFrequencyForModel: function(model) {
             return model.importFrequency && model.importFrequency() && t("import.frequency." + model.importFrequency().toLowerCase())
+        },
+
+        safeT: function() {
+            return new Handlebars.SafeString(Handlebars.helpers.t.apply(this, arguments));
         }
     };
 

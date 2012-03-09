@@ -5,7 +5,7 @@
     </div>
 
     {{#if noCredentials}}
-        <div class="notice no_credentials"><span class="bottom">{{{noCredentialsWarning}}}</span></div>
+        <div class="notice no_credentials"><span class="bottom">{{noCredentialsWarning}}</span></div>
     {{/if}}
 
     {{#if hasImport}}
@@ -15,11 +15,11 @@
                     <img src="/images/message_error_small.png" />
                 </div>
             {{/if}}
-            {{{lastImport}}}
+            {{lastImport}}
         </div>
 
         <div class="next_import">
-            {{{nextImport}}}
+            {{nextImport}}
         </div>
     {{/if}}
 

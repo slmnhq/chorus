@@ -52,7 +52,7 @@
                                 <span class="separator">|</span> <a href="#" class="publish">{{t "insight.publish.link"}}</a>
                             {{/if}}
                         {{/ifAdminOr}}
-                    <span class="separator">|</span> <span class="promoted_by">{{{t "insight.promoted_by" promoterLink=promoterLink relativeTimestamp=promotionTimestamp}}}</span>
+                    <span class="separator">|</span> <span class="promoted_by">{{safeT "insight.promoted_by" promoterLink=promoterLink relativeTimestamp=promotionTimestamp}}</span>
                 {{/if}}
             </div>
         {{/unless}}

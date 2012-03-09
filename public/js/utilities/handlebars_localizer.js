@@ -1,5 +1,6 @@
 Handlebars.registerHelper("t", function(key) {
-    var args = arguments;
-    args[args.length - 1] = args[args.length - 1].hash;
-    return t.apply(this, args);
+    if(arguments[arguments.length - 1].hash) {
+        arguments[arguments.length - 1] = arguments[arguments.length - 1].hash;
+    }
+    return t.apply(this, arguments);
 });

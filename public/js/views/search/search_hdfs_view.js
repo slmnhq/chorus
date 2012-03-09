@@ -13,7 +13,7 @@ chorus.views.SearchHdfs = chorus.views.SearchItemBase.extend({
             humanSize: I18n.toHumanSize(this.model.get("size")),
             iconUrl: chorus.urlHelpers.fileIconUrl(_.last(this.model.get("name").split("."))),
             instanceLink: chorus.helpers.linkTo(instance.showUrl(), instance.get('name')),
-            completePath: pathLinks.join(" / ")
+            completePath: new Handlebars.SafeString(pathLinks.join(" / "))
         }
     }
 });

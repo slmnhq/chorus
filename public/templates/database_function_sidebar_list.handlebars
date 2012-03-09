@@ -1,6 +1,6 @@
 {{#if schemaAssociated}}
 <input class="search" placeholder='{{t "schema.functions.list.hint"}}'/>
-<div class="context">{{{t "schema.functions.search_in" schemaLink=schemaLink}}}</div>
+<div class="context">{{safeT "schema.functions.search_in" schemaLink=schemaLink}}</div>
 {{#if models}}{{#if models.length}}
     <ul class="list">
         {{#each models}}

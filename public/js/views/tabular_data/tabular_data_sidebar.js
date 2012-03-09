@@ -83,7 +83,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
 
             if (this.resource.get("hasCredentials") === false) {
                 ctx.noCredentials = true;
-                ctx.noCredentialsWarning = t("dataset.credentials.missing.body", {linkText: chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'}).toString()})
+                ctx.noCredentialsWarning = chorus.helpers.safeT("dataset.credentials.missing.body", {linkText: chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'})})
             }
 
             ctx.displayEntityType = this.resource.metaType();
@@ -126,7 +126,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
             });
 
             if (this.importConfiguration.get("nextImportTime")) {
-                ctx.nextImport = t("import.next_import", {
+                ctx.nextImport = chorus.helpers.safeT("import.next_import", {
                     nextTime: chorus.helpers.relativeTimestamp(this.importConfiguration.get("nextImportTime")),
                     tableLink: chorus.helpers.linkTo(destinationTable.showUrl(), this.importConfiguration.get("toTable"))
                 });
@@ -140,7 +140,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
                     importStatusKey = "import.last_import_failed";
                     ctx.importFailed = true;
                 }
-                ctx.lastImport = t(importStatusKey, {
+                ctx.lastImport = chorus.helpers.safeT(importStatusKey, {
                     timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
                     tableLink: chorus.helpers.linkTo(destinationTable.showUrl(), this.importConfiguration.get("toTable"))
                 });
@@ -150,7 +150,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
             if (importInfo && importInfo.sourceId) {
                 var sourceTable = this.resource.lastImportSource();
                 ctx.hasImport = true;
-                ctx.lastImport = t("import.last_imported_into", {
+                ctx.lastImport = chorus.helpers.safeT("import.last_imported_into", {
                     timeAgo: chorus.helpers.relativeTimestamp(importInfo.completedStamp),
                     tableLink: chorus.helpers.linkTo(sourceTable.showUrl(), sourceTable.get("objectName"))
                 });
