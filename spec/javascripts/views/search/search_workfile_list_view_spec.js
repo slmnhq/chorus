@@ -178,58 +178,5 @@ describe("chorus.views.SearchWorkfileList", function() {
         it("there is one for each model in the collection", function() {
             expect(this.view.$('li').length).toBe(2);
         });
-
-        it("has the right data-cid attribute", function() {
-            expect(this.view.$("li").eq(0).data("cid")).toBe(this.models.at(0).cid);
-            expect(this.view.$("li").eq(1).data("cid")).toBe(this.models.at(1).cid);
-        });
-
-        it("includes the correct workspace file icon", function() {
-            expect($(this.view.$("li img.icon")[0]).attr("src")).toBe("/images/workfiles/large/sql.png");
-            expect($(this.view.$("li img.icon")[1]).attr("src")).toBe("/images/workfiles/large/txt.png");
-        });
-
-        it("has a link to the workfile for each workfile in the collection", function() {
-            expect(this.view.$('li a.name').eq(0).attr('href')).toBe("#/workspaces/2/workfiles/1");
-            expect(this.view.$('li a.name').eq(1).attr('href')).toBe("#/workspaces/3/workfiles/4");
-        });
-
-        it("shows which workspace each result was found in", function() {
-            expect(this.view.$('li .location').eq(0)).toContainTranslation(
-                "workspaces_used_in.body.one",
-                {workspaceLink: "Test"}
-            )
-            expect(this.view.$('li .location').eq(1)).toContainTranslation(
-                "workspaces_used_in.body.one",
-                {workspaceLink: "Other"}
-            )
-        })
-
-        it("shows matching description if any", function() {
-            expect(this.view.$("li .description .description_content").eq(0)).toBeEmpty();
-            expect(this.view.$("li .description .description_content").eq(1).html()).toContain("this is a <em>cool</em> file description");
-        });
-
-        it("shows matching name", function() {
-            expect(this.view.$("li .name").eq(1).html()).toContain("<em>cool</em> file");
-        });
-
-        describe("shows version commit messages in the comments area", function() {
-            beforeEach(function() {
-                this.view.collection.models[0].set({
-                    highlightedAttributes: {
-                        commitMessage: [
-                            "this is a <em>cool</em> version",
-                            "this is a <em>cooler</em> version"
-                        ]}
-                });
-                this.view.render();
-            });
-
-            it("looks correct", function() {
-                expect(this.view.$('li:eq(0) .more_comments .comment:eq(2) .comment_type').text().trim()).toBe('');
-                expect(this.view.$('li:eq(0) .more_comments .comment:eq(2) .comment_content').html()).toContain("this is a <em>cooler</em> version");
-            });
-        });
     });
 });
