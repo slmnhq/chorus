@@ -10,6 +10,7 @@ chorus.views.WorkspaceListSidebar = chorus.views.Sidebar.extend({
 
     setup: function() {
         chorus.PageEvents.subscribe("workspace:selected", this.setWorkspace, this)
+        chorus.PageEvents.subscribe("memo:added:workspace", this.refreshActivities, this);
         this.tabControl = new chorus.views.TabControl([ {name: 'activity', selector: ".activity_list"} ])
         this.workspaceMemberList = new chorus.views.WorkspaceMemberList()
     },
@@ -20,6 +21,10 @@ chorus.views.WorkspaceListSidebar = chorus.views.Sidebar.extend({
             hasImage: this.model.hasImage(),
             prettyName: $.stripHtml(this.model.get("name"))
         } : {};
+    },
+
+    refreshActivities: function() {
+        this.resource && this.resource.activities().fetch();
     },
 
     setWorkspace: function(model) {
