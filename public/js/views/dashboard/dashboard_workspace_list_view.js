@@ -54,7 +54,7 @@ chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
                 displayStyle: 'without_workspace'
             });
             var el = $(commentList.render().el);
-            el.find("ul").addClass("tooltip");
+            el.find("ul").addClass("tooltip activity");
 
             // reassign the offset function so that when qtip calls it, qtip correctly positions the tooltips
             // with regard to the fixed-height header.
