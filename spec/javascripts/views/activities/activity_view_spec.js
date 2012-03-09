@@ -563,7 +563,7 @@ describe("chorus.views.Activity", function() {
 
     function itShouldRenderAuthorDetails() {
         it("renders the author's icon", function() {
-            expect(this.view.$('img').attr('src')).toBe(this.view.model.author().imageUrl({size: "icon"}));
+            expect(this.view.$('img').attr('src')).toBe(this.view.model.author().imageUrl());
         });
 
         it("contains the author's name", function() {

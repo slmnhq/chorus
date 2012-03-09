@@ -729,7 +729,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the new user's icon", function() {
-            expect(this.presenter.iconSrc).toBe(this.user.imageUrl({size: "icon"}));
+            expect(this.presenter.iconSrc).toBe(this.user.imageUrl());
         });
 
         it("should link the new user's icon to the new user's show page", function() {
@@ -1211,7 +1211,7 @@ describe("chorus.presenters.Activity", function() {
     });
     function itShouldHaveTheAuthorsIconAndUrl() {
         it("should have the author's icon", function() {
-            expect(this.presenter.iconSrc).toBe(this.model.author().imageUrl({size: "icon"}));
+            expect(this.presenter.iconSrc).toBe(this.model.author().imageUrl());
         });
 
         it("should link the new user's icon to the new user's show page", function() {
