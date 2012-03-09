@@ -102,5 +102,14 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
 
     setWorkspace: function(workspace) {
         this.set({workspace: {id: workspace.get('id')}});
+    },
+
+     activities: function() {
+        var original = this._super("activities", arguments);
+        if (this.isChorusView()) {
+           original.attributes.workspace = this.get("workspace");
+        }
+
+        return original;
     }
 });
