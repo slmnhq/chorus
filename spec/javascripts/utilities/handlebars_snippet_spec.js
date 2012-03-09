@@ -694,11 +694,13 @@ describe("handlebars", function() {
             })
 
             it("includes the instance name, database name, and schema name", function() {
-                expect($(this.result).find("a.instance")).toContainText(this.model.get("instance").name);
-                expect($(this.result).find("a.instance").data("dialog")).toBe("SchemaBrowser");
+                var instance = new chorus.models.Instance({id: this.model.get("instance").id, name: this.model.get("instance").name});
+                expect($(this.result).find("a.instance")).toContainText(instance.get("name"));
+                expect($(this.result).find("a.instance")).toHaveHref(instance.showUrl());
 
-                expect($(this.result).find("a.database")).toContainText(this.model.get("databaseName"));
-                expect($(this.result).find("a.instance").data("dialog")).toBe("SchemaBrowser");
+                var database = new chorus.models.Database({instanceId: instance.id, name: this.model.get("databaseName")});
+                expect($(this.result).find("a.database")).toContainText(database.get("name"));
+                expect($(this.result).find("a.database")).toHaveHref(database.showUrl());
 
                 expect($(this.result).find("a.schema")).toContainText(this.model.get("schemaName"));
                 expect($(this.result).find("a.schema").attr("href")).toMatchUrl(this.model.schema().showUrl());

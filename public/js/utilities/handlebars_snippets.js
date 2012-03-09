@@ -279,11 +279,11 @@
                 schemaPieces.push(tabularData.get('databaseName'));
                 schemaPieces.push(tabularData.get('schemaName'));
             } else {
-                schemaPieces.push(chorus.helpers.linkTo('#', tabularData.get('instance').name,
-                    {'class': 'dialog instance', 'data-dialog': 'SchemaBrowser'}))
+                var instance = new chorus.models.Instance(tabularData.get("instance"));
+                schemaPieces.push(chorus.helpers.linkTo(instance.showUrl(), instance.get("name"), {"class": "instance"}));
 
-                schemaPieces.push(chorus.helpers.linkTo('#', tabularData.get('databaseName'),
-                    {'class': 'dialog database', 'data-dialog': 'SchemaBrowser', 'data-database-name': tabularData.get("databaseName")}))
+                var database = new chorus.models.Database({instanceId: instance.id, name: tabularData.get("databaseName")});
+                schemaPieces.push(chorus.helpers.linkTo(database.showUrl(), tabularData.get('databaseName'), {"class": "database"}));
 
                 schemaPieces.push(chorus.helpers.linkTo(tabularData.schema().showUrl(), tabularData.get('schemaName'),
                     {'class': 'schema'}))

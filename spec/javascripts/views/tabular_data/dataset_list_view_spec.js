@@ -51,18 +51,14 @@ describe("chorus.views.DatasetList", function() {
             }
         })
 
-        it("links the small instance breadcrumb to the BrowseDatasetDialog, set to instance", function() {
-            expect(this.view.$(".location a:eq(0)")).toHaveClass("dialog")
-            expect(this.view.$(".location a:eq(0)").attr("data-dialog")).toBe("SchemaBrowser")
-            expect(this.view.$(".location a:eq(0)").data("instance")).toEqual(this.instance);
+        it("links the small instance breadcrumb to the DatabaseIndexPage for that instance", function() {
+            var instance = new chorus.models.Instance(this.instance);
+            expect(this.view.$(".location a:eq(0)")).toHaveHref(instance.showUrl());
         })
 
-        it("links the small database breadcrumb to the BrowseDatasetDialog, set to database", function() {
-            expect(this.view.$(".location a:eq(1)")).toHaveClass("dialog")
-            expect(this.view.$(".location a:eq(1)").attr("data-dialog")).toBe("SchemaBrowser")
-            expect(this.view.$(".location a:eq(1)").data("instance")).toEqual(this.instance);
-            expect(this.view.$(".location a:eq(1)").data("databaseName")).toEqual(
-                this.collection.models[0].get('databaseName'));
+        it("links the small database breadcrumb to the SchemaIndexPage, for that database", function() {
+            var database = new chorus.models.Database({instanceId: this.instance.id, name: this.collection.at(0).get("databaseName")});
+            expect(this.view.$(".location a:eq(1)")).toHaveHref(database.showUrl());
         })
 
         it("links the small schema breadcrumb to the show URL of the schema", function() {
