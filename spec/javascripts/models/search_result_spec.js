@@ -3,8 +3,7 @@ describe("chorus.models.SearchResult", function() {
         this.model = new chorus.models.SearchResult({ query: "jackson5" })
     });
 
-    it("defaults entityType and searchIn to 'all'", function() {
-        expect(this.model.entityType()).toBe('all')
+    it("defaults searchIn to 'all'", function() {
         expect(this.model.get("searchIn")).toBe('all')
     })
 
@@ -376,6 +375,49 @@ describe("chorus.models.SearchResult", function() {
         });
     });
 
+    describe("#entityType", function() {
+        it("defaults to 'all'", function() {
+            expect(this.model.entityType()).toBe('all');
+        });
+
+        context("when an entity type is set", function() {
+            beforeEach(function() {
+                this.model.set({entityType: "foo"});
+            });
+            it("gives back any set entity type", function() {
+                expect(this.model.entityType()).toBe("foo");
+            });
+
+            it("is preserved through fetches", function() {
+                this.model.fetch();
+                this.server.completeFetchFor(this.model, fixtures.searchResult());
+                expect(this.model.entityType()).toBe("foo");
+            });
+        });
+    });
+
+    describe("#currentPageNumber", function() {
+        it("defaults to 1", function() {
+            expect(this.model.currentPageNumber()).toBe(1);
+        });
+
+        context("when a page is set", function() {
+            beforeEach(function() {
+                this.model.set({page: 5});
+            });
+
+            it("gives back any set page", function() {
+                expect(this.model.currentPageNumber()).toBe(5);
+            });
+
+            it("is preserved through fetches", function() {
+                this.model.fetch();
+                this.server.completeFetchFor(this.model, fixtures.searchResult());
+                expect(this.model.currentPageNumber()).toBe(5);
+            });
+        });
+    });
+
     describe("#getNextPage", function() {
         beforeEach(function() {
             this.model.set({user: { docs: [], numFound: 100 }, page: 1, entityType: "user"})
@@ -396,6 +438,27 @@ describe("chorus.models.SearchResult", function() {
             expect(users.models.length).toBe(this.users.length)
         });
     });
+
+    describe("#getPreviousPage", function() {
+            beforeEach(function() {
+                this.model.set({user: { docs: [], numFound: 100 }, page: 2, entityType: "user"})
+                this.model.users();
+                this.model.getPreviousPage();
+                var searchResult = fixtures.searchResult();
+                this.users = searchResult.get("user").docs;
+                this.server.completeFetchFor(this.model, searchResult);
+            });
+
+            it("sets page to 1", function() {
+                expect(this.model.get("page")).toBe(1);
+            });
+
+            it("should replace the current results with the previous page of results", function() {
+                var users = this.model.users()
+                expect(users).toBeA(chorus.collections.UserSet);
+                expect(users.models.length).toBe(this.users.length)
+            });
+        });
 
     describe("#hasNextPage", function() {
         context("when we have a specific entity type", function() {
@@ -436,6 +499,31 @@ describe("chorus.models.SearchResult", function() {
             this.model.set({numFound: 51, page: 2});
             expect(this.model.hasNextPage()).toBeFalsy();
         });
+    });
+
+    describe("#hasPreviousPage", function() {
+        context("when we have a specific entity type", function() {
+            beforeEach(function() {
+                this.model.set(fixtures.searchResultJson());
+                this.model.set({entityType: "user"});
+            });
+
+            it("should return true when there are 51 results", function() {
+                this.model.set({page: 4})
+                expect(this.model.hasPreviousPage()).toBeTruthy();
+            });
+
+            it("should return false when already on page 1", function() {
+                this.model.set({page: 1})
+                expect(this.model.hasPreviousPage()).toBeFalsy();
+            });
+        });
+
+        context("when entity type is all or undefined", function() {
+            it("should return false", function() {
+                expect(this.model.hasPreviousPage()).toBeFalsy();
+            });
+        })
     });
 
     describe("#resetResults", function() {

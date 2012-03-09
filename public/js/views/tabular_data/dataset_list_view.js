@@ -1,29 +1,14 @@
-chorus.views.DatasetList = chorus.views.Base.extend({
-    tagName: "ul",
+chorus.views.DatasetList = chorus.views.SelectableList.extend({
     className: "dataset_list",
     useLoadingSection: true,
-    additionalClass: "list",
-    events: {
-        "click li.dataset": "selectDatasetByClick"
-    },
-
-    preRender: function() {
-        var selectedLi = this.$("li.selected");
-        if (selectedLi.length > 0) {
-            this.selectedIndex = selectedLi.index(selectedLi.parentNode)
-        }
-    },
 
     postRender: function() {
+        this._super("postRender", arguments);
         var lis = this.$("li.dataset");
 
         _.each(this.collection.models, function(model, index) {
-            var $li = lis.eq(index);
-            $li.data("dataset", model);
-            $li.find("a.instance, a.database").data("instance", model.get("instance"));
+            lis.eq(index).find("a.instance, a.database").data("instance", model.get("instance"));
         });
-
-        this.selectDataset(lis.eq(this.selectedIndex || 0));
 
         this.$('.found_in .open_other_menu').each(function() {
             var $el = $(this);
@@ -64,15 +49,7 @@ chorus.views.DatasetList = chorus.views.Base.extend({
         return ctx;
     },
 
-    selectDataset: function($li) {
-        this.$("li").removeClass("selected");
-        $li.addClass("selected");
-
-        this.selectedDataset = $li.data("dataset");
-        chorus.PageEvents.broadcast("tabularData:selected", this.selectedDataset);
-    },
-
-    selectDatasetByClick: function(e) {
-        this.selectDataset($(e.target).closest("li"));
+    itemSelected: function(model) {
+        chorus.PageEvents.broadcast("tabularData:selected", model);
     }
 });

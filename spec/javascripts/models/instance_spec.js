@@ -1,11 +1,11 @@
 describe("chorus.models.Instance", function() {
     beforeEach(function() {
-        this.instance = fixtures.instance();
+        this.instance = fixtures.instance({id: 1});
     });
 
     describe("showUrl", function() {
-        it("links to the instances page", function() {
-            expect(this.instance.showUrl()).toBe("#/instances");
+        it("links to the database index page", function() {
+            expect(this.instance.showUrl()).toBe("#/instances/1/databases");
         });
 
         context("for a hadoop instance", function() {

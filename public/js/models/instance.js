@@ -18,7 +18,7 @@
             if(this.isHadoop()) {
                 return "instances/{{id}}/browse/";
             }
-            return "instances"
+            return "instances/{{id}}/databases";
         },
 
         entityType:"instance",

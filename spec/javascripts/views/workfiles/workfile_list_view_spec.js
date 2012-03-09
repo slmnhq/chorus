@@ -92,6 +92,11 @@ describe("WorkfileListView", function() {
                 expect(this.view.$("li:first-child")).toHaveClass("selected");
             });
 
+            it("should broadcast a workfile:selected event when itemSelected is called", function() {
+                this.view.itemSelected(this.model1);
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:selected", this.model1);
+            });
+
             describe("when a workfileId is provided in pageOptions", function() {
                 beforeEach(function() {
                     chorus.page = chorus.page || {};
@@ -143,51 +148,7 @@ describe("WorkfileListView", function() {
                         expect(chorus.page.pageOptions).toBeDefined();
                     })
                 })
-
             })
-
-            context("clicking on another item", function() {
-                beforeEach(function() {
-                    $(this.li2).click();
-                });
-
-                it("adds the selected class to that item", function() {
-                    expect($(this.li2)).toHaveClass("selected");
-                });
-
-                it("triggers the workfile:selected event", function() {
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('workfile:selected', this.model2);
-                });
-
-                context("clicking on the same item again", function() {
-                     beforeEach(function() {
-                        this.eventCount = chorus.PageEvents.broadcast.callCount;
-                        this.view.$("li").eq(1).click();
-                    });
-
-                    it("does not raise the event again", function() {
-                        expect(chorus.PageEvents.broadcast.callCount).toBe(this.eventCount);
-                    });
-                });
-
-                context("and then clicking on yet another item", function() {
-                    beforeEach(function() {
-                        this.li3 = this.view.$("li")[2];
-                        $(this.li3).click();
-                    });
-                    it("removes the selected class from the first li", function() {
-                        expect($(this.li2)).not.toHaveClass("selected");
-                    });
-
-                    it("adds the selected class to the second li", function() {
-                        expect($(this.li3)).toHaveClass("selected");
-                    });
-
-                    it("triggers the workfile:selected event", function() {
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('workfile:selected', this.model3);
-                    });
-                });
-            });
         });
     });
 

@@ -7,6 +7,8 @@ chorus.views.SearchWorkfileList = chorus.views.SearchResultListBase.extend({
         return {
             shown: this.collection.models.length,
             total: this.options.total,
+            hasNext: this.query && this.query.hasNextPage(),
+            hasPrevious: this.query && this.query.hasPreviousPage(),
             filteredSearch: this.query && this.query.entityType() == "workfile",
             moreResults: (this.collection.models.length < this.options.total)
         }

@@ -231,11 +231,11 @@
                     var actualHref = this.actual.attr("href")
                     this.message = function() {
                         return [
-                            "Expected href " + actualHref + " to be equivalent to href " + expectedHref,
-                            "Expected href " + actualHref + " not to be equivalent to href " + expectedHref
+                            "Expected href " + actualHref + " to be an `a` and equivalent to href " + expectedHref,
+                            "Expected href " + actualHref + " to be an `a` and not to be equivalent to href " + expectedHref
                         ];
                     }
-                    return decodeURI(actualHref) === decodeURI(expectedHref);
+                    return this.actual.is("a") && decodeURI(actualHref) === decodeURI(expectedHref);
                 },
 
                 toHaveVisibleQtip: function() {

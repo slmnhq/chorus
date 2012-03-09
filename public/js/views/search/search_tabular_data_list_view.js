@@ -7,6 +7,8 @@ chorus.views.SearchTabularDataList = chorus.views.SearchResultListBase.extend({
         return {
             shown: this.collection.models.length,
             filteredSearch: this.query && this.query.entityType() == "dataset",
+            hasNext: this.query && this.query.hasNextPage(),
+            hasPrevious: this.query && this.query.hasPreviousPage(),
             total: this.collection.attributes.total,
             moreResults: (this.collection.length < this.collection.attributes.total)
         }
