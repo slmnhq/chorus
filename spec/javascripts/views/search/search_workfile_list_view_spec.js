@@ -62,6 +62,7 @@ describe("chorus.views.SearchWorkfileList", function() {
 
                 it("has a showAll link", function() {
                     expect(this.view.$(".details a.show_all")).toContainTranslation("search.show_all")
+                    expect(this.view.$(".details a.show_all").data("type")).toBe("workfile");
                 })
             })
 

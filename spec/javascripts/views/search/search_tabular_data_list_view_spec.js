@@ -31,6 +31,7 @@ describe("chorus.views.SearchTabularDataList", function() {
                 it("should show the number of results", function() {
                     expect(this.view.$(".count")).toContainTranslation("search.count", {shown: this.models.length, total: this.models.attributes.total});
                     expect(this.view.$(".show_all")).toExist();
+                    expect(this.view.$(".show_all").data("type")).toBe("dataset");
                 });
 
                 context("clicking the show all link", function() {
@@ -39,7 +40,7 @@ describe("chorus.views.SearchTabularDataList", function() {
                         this.view.$("a.show_all").click();
                     });
 
-                    it("should navigate to the user results page", function() {
+                    it("should navigate to the tabular data results page", function() {
                         expect(chorus.router.navigate).toHaveBeenCalledWith(this.result.showUrl(), true);
                     });
                 });

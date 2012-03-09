@@ -54,6 +54,7 @@ describe("chorus.views.SearchWorkspaceList", function() {
             it("has a showAll link", function() {
                 expect(this.view.$('.details a.show_all')).not.toBeEmpty();
                 expect(this.view.$(".details a.show_all")).toContainTranslation("search.show_all")
+                expect(this.view.$(".details a.show_all").data("type")).toBe("workspace");
             })
 
             context("clicking the show all link", function() {
