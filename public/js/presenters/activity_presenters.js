@@ -50,7 +50,7 @@
             };
 
             if (this.author) {
-                obj.iconSrc = this.author.imageUrl();
+                obj.iconSrc = this.author.imageUrl({size: "icon"});
                 obj.iconHref = this.author.showUrl();
                 obj.isOwner = this.author.id == chorus.session.user().id;
             }
@@ -231,7 +231,7 @@
             return {
                 objectName: model.get("user").name,
                 objectUrl: user.showUrl(),
-                iconSrc: user.imageUrl(),
+                iconSrc: user.imageUrl({size: "icon"}),
                 iconHref: user.showUrl()
             }
         },
