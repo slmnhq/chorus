@@ -19,15 +19,13 @@ chorus.views.SearchItemBase = chorus.views.Base.extend({
 
     showMoreComments: function(evt) {
         evt && evt.preventDefault();
-        var $li = $(evt.target).closest("li");
-        $li.find(".has_more_comments").addClass("hidden");
-        $li.find(".more_comments").removeClass("hidden");
+        this.$(".has_more_comments").addClass("hidden");
+        this.$(".more_comments").removeClass("hidden");
     },
 
     showLessComments: function(evt) {
         evt && evt.preventDefault();
-        var $li = $(evt.target).closest("li");
-        $li.find(".has_more_comments").removeClass("hidden");
-        $li.find(".more_comments").addClass("hidden");
+        this.$(".has_more_comments").removeClass("hidden");
+        this.$(".more_comments").addClass("hidden");
     }
 })
