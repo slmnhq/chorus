@@ -1,4 +1,4 @@
-describe("chorus.views.HdfsEntrySidebar", function(){
+describe("chorus.views.HdfsEntrySidebar", function() {
     beforeEach(function() {
         this.view = new chorus.views.HdfsEntrySidebar({rootPath: "/foo", instanceId: 123});
     });
@@ -17,7 +17,7 @@ describe("chorus.views.HdfsEntrySidebar", function(){
             });
         });
 
-        context("when the model is a file", function() {
+        context("when the model is a non-binary file", function() {
             beforeEach(function() {
                 // set up page to catch launch dialog click
                 var page = new chorus.pages.Base();
@@ -26,7 +26,7 @@ describe("chorus.views.HdfsEntrySidebar", function(){
 
                 this.modalSpy = stubModals();
 
-                this.hdfsEntry = fixtures.hdfsEntryFile({name: "my_file.sql"});
+                this.hdfsEntry = fixtures.hdfsEntryFile({name: "my_file.sql", isBinary: false});
                 chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
             });
 
@@ -49,7 +49,7 @@ describe("chorus.views.HdfsEntrySidebar", function(){
             describe("clicking the external table link", function() {
                 beforeEach(function() {
                     this.view.$("a.external_table").click();
-                    this.csv = new chorus.models.CsvHdfs(fixtures.csvImport({instanceId: "123", path: "/foo/my_file.sql", content:"hello\nworld"}).attributes);
+                    this.csv = new chorus.models.CsvHdfs(fixtures.csvImport({instanceId: "123", path: "/foo/my_file.sql", content: "hello\nworld"}).attributes);
                     this.server.completeFetchFor(this.csv);
                 });
 
@@ -59,6 +59,25 @@ describe("chorus.views.HdfsEntrySidebar", function(){
                 });
             })
         });
+
+        context("when the model is a binary file", function() {
+            beforeEach(function() {
+                // set up page to catch launch dialog click
+                var page = new chorus.pages.Base();
+                $(page.el).append(this.view.el);
+                chorus.bindModalLaunchingClicks(page);
+
+                this.modalSpy = stubModals();
+
+                this.hdfsEntry = fixtures.hdfsEntryFile({name: "my_file.exe", isBinary: true});
+                chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
+            });
+
+            it("does not have a create external table link", function() {
+                expect(this.view.$("a.external_table")).not.toExist();
+            })
+
+        })
     })
 
     function itHasTheRightDefaultBehavior(withActivities) {
