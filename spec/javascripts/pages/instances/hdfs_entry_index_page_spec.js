@@ -87,5 +87,16 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
                 expect($content.find("a").eq(4).text()).toBe("m3")
             })
         })
+
+        describe("when an entry is selected", function() {
+            beforeEach(function() {
+                this.entry = fixtures.hdfsEntryFile({id: "not_in_the_fixture"});
+                expect(this.page.model).toEqual(this.page.collection.models[0]);
+                chorus.PageEvents.broadcast("hdfs_entry:selected", this.entry);
+            });
+            it("sets the entry as the model", function() {
+                expect(this.page.model).toEqual(this.entry);
+            })
+        })
     })
 })
