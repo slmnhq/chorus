@@ -2,6 +2,18 @@
     {{#if filteredSearch}}
             <div class="pagination">
                 <div class="right">
+                    {{#ifAny hasPrevious hasNext }}
+                        <span class="page_numbers">{{t "search.page" shown=currentPage total=totalPages}}</span>
+                    {{/ifAny}}
+
+                    {{#if hasPrevious}}
+                        <a href="#" class="previous">
+                           {{t "search.previous"}}
+                        </a>
+                    {{else}}
+                        <span class="previous">{{t "search.previous"}}</span>
+                    {{/if}}
+                    |
                     {{#if hasNext}}
                         <a href="#" class="next">
                             {{t "search.next"}}
@@ -9,14 +21,7 @@
                     {{else}}
                         <span class="next">{{t "search.next"}}</span>
                     {{/if}}
-                    |
-                    {{#if hasPrevious}}
-                        <a href="#" class="previous">
-                           {{t "search.previous"}}
-                        </a>
-                    {{else}}
-                        <span class="previous">{{t "search.previous"}}</span>
-                    {{/if}}                </div>
+                </div>
                 <span class="count">{{t "search.results" count=total}}</span>
             </div>
     {{else}}

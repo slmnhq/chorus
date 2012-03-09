@@ -67,6 +67,10 @@ describe("chorus.views.SearchHdfsList", function() {
             });
 
             context("when there are two pages of results", function() {
+                beforeEach(function() {
+                    spyOn(this.result, "totalPageNumber").andReturn(2);
+                });
+
                 context("and I am on the first page", function() {
                     beforeEach(function() {
                         spyOn(this.result, "hasPreviousPage").andReturn(false);
@@ -87,9 +91,14 @@ describe("chorus.views.SearchHdfsList", function() {
                         expect(this.view.$('.pagination span.previous')).toContainTranslation("search.previous");
                     });
 
+                    it("should have the 'Page x of y' text", function() {
+                        expect(this.view.$('.pagination span.page_numbers')).toExist();
+                        expect(this.view.$('.pagination span.page_numbers')).toContainTranslation("search.page", {shown: 1, total: 2})
+                    });
+
                 });
 
-                context("and I am on the second page", function(){
+                context("and I am on the second page", function() {
                     beforeEach(function() {
                         spyOn(this.result, "hasNextPage").andReturn(false);
                         spyOn(this.result, "hasPreviousPage").andReturn(true);
@@ -109,8 +118,6 @@ describe("chorus.views.SearchHdfsList", function() {
                         expect(this.view.$('.pagination span.next')).toContainTranslation("search.next");
                     });
 
-
-
                 });
             });
 
@@ -129,6 +136,10 @@ describe("chorus.views.SearchHdfsList", function() {
                 it("should have next and previous in plain text", function() {
                     expect(this.view.$('.pagination span.next')).toContainTranslation("search.next");
                     expect(this.view.$('.pagination span.previous')).toContainTranslation("search.previous");
+                });
+
+                it ("should not have the 'Page x of y' text", function (){
+                    expect(this.view.$('.pagination span.page_numbers')).not.toExist();
                 });
             })
         });

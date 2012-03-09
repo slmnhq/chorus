@@ -95,6 +95,9 @@ describe("chorus.views.SearchWorkfileList", function() {
             });
 
             context("when there are two pages of results", function() {
+                beforeEach(function() {
+                    spyOn(this.result, "totalPageNumber").andReturn(2);
+                });
                 context("and I am on the first page", function() {
                     beforeEach(function() {
                         spyOn(this.result, "hasPreviousPage").andReturn(false);
@@ -113,6 +116,11 @@ describe("chorus.views.SearchWorkfileList", function() {
 
                     it("should have previous in plain text", function() {
                         expect(this.view.$('.pagination span.previous')).toContainTranslation("search.previous");
+                    });
+
+                    it ("should have the 'Page x of y' text", function (){
+                        expect(this.view.$('.pagination span.page_numbers')).toExist();
+                        expect(this.view.$('.pagination span.page_numbers')).toContainTranslation("search.page", {shown: 1, total: 2})
                     });
 
                 });
@@ -158,6 +166,11 @@ describe("chorus.views.SearchWorkfileList", function() {
                     expect(this.view.$('.pagination span.next')).toContainTranslation("search.next");
                     expect(this.view.$('.pagination span.previous')).toContainTranslation("search.previous");
                 });
+
+                it ("should not have the 'Page x of y' text", function (){
+                    expect(this.view.$('.pagination span.page_numbers')).not.toExist();
+                });
+
             })
         });
     })
