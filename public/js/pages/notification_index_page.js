@@ -12,6 +12,7 @@ chorus.pages.NotificationIndexPage = chorus.pages.Base.extend({
     },
 
     resourcesLoaded: function() {
+        this.collection.markAllRead({})
         this.mainContent = new chorus.views.MainContentView({
             collection: this.collection,
             contentHeader:chorus.views.StaticTemplate("default_content_header", {title:t("header.my_notifications")}),

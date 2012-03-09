@@ -60,9 +60,43 @@ describe("chorus.views.NotificationList", function() {
                     expect(this.view.$(".more_notifications a")).toExist();
                 });
 
-                it("clicking the more link loads more results", function() {
-                    this.view.$(".more_notifications a").click();
-                    expect(this.server.lastFetch().params().page).toBe("2");
+                context("clicking the more link", function() {
+                    beforeEach(function() {
+                        this.view.$(".more_notifications a").click();
+                    });
+
+                    it("loads more results", function() {
+                        expect(this.server.lastFetch().params().page).toBe("2");
+                    });
+
+                    context("when the fetch completes", function() {
+                        beforeEach(function() {
+                            spyOn(chorus.collections.NotificationSet.prototype, "markAllRead").andCallThrough();
+                            this.server.completeFetchFor(this.collection, this.collection, {page:2});
+                        });
+
+                        it("marks all notification read again", function() {
+                            expect(chorus.collections.NotificationSet.prototype.markAllRead).toHaveBeenCalled();
+                        });
+
+                        xcontext("clicking the more link again", function() {
+                            beforeEach(function() {
+                                this.view.render();
+                                chorus.collections.NotificationSet.prototype.markAllRead.reset();
+                                expect(this.view.$(".more_notifications a")).toExist();
+                                this.view.$(".more_notifications a").click();
+                            });
+
+                            it("lets you fetches again", function() {
+                                expect(this.server.lastFetch().params().page).toBe("3");
+                                this.server.completeFetchFor(this.collection, this.collection, {page:3});
+                                expect(chorus.collections.NotificationSet.prototype.markAllRead).toHaveBeenCalled();
+                            });
+                        });
+                    });
+
+
+
                 });
             });
 

@@ -5,7 +5,13 @@ describe("chorus.pages.NotificationIndexPage", function() {
 
     describe("when the notification fetches completes", function() {
         beforeEach(function() {
-            this.collection = fixtures.notificationSet();
+            spyOn(chorus.collections.NotificationSet.prototype, "markAllRead").andCallThrough();
+
+            this.collection = fixtures.notificationSet([
+                fixtures.notification(),
+                fixtures.notification({unread: true}),
+                fixtures.notification()
+            ]);
             this.server.completeFetchFor(this.collection);
         });
 
@@ -25,5 +31,9 @@ describe("chorus.pages.NotificationIndexPage", function() {
         it("has NotificationList as the main content view", function() {
             expect(this.page.mainContent.content).toBeA(chorus.views.NotificationList);
         })
+
+        it("should mark all notifications read", function() {
+            expect(chorus.collections.NotificationSet.prototype.markAllRead).toHaveBeenCalled();
+        });
     });
 });

@@ -9,6 +9,9 @@ chorus.views.NotificationList = chorus.views.Base.extend({
         ev.preventDefault();
         var pageToFetch = parseInt(this.collection.pagination.page) + 1;
         this.collection.fetchPage(pageToFetch, { add:true });
+        this.collection.bindOnce("loaded", function() {
+            this.collection.markAllRead({});
+        }, this);
     },
 
     additionalContext:function () {
