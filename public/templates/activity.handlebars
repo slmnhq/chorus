@@ -10,7 +10,7 @@
     </div>
     <div class="activity_content bd">
         <div class="activity_header">
-            {{{headerHtml}}}
+            {{headerHtml}}
         </div>
         {{#if body}}
             <div class="body">{{body}}</div>
@@ -27,7 +27,7 @@
         </ul>
         <div class="actions">
             {{#if detailsLink}}
-                <div class="details">{{{detailsLink}}}</div>
+                <div class="details">{{detailsLink}}</div>
             {{/if}}
             <span class="timestamp">{{relativeTimestamp timestamp}}</span>
             {{#if isNotification}}

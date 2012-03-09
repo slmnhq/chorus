@@ -314,7 +314,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right message", function() {
-                expect(this.presenter.headerHtml).toContainTranslation("activity_stream.header.html.IMPORT_UPDATED.default", this.presenter.header);
+                expect(this.presenter.headerHtml.toString()).toContainTranslation("activity_stream.header.html.IMPORT_UPDATED.default", this.presenter.header);
             });
 
             it("should have an importSourceLink in the header", function() {
@@ -912,7 +912,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have all the pieces", function() {
-            expect(this.presenter.headerHtml).not.toContain("[missing")
+            expect(this.presenter.headerHtml.toString()).not.toContain("[missing")
         });
 
         itShouldHaveTheAuthorsIconAndUrl();
@@ -939,7 +939,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should say 'table' in the header", function() {
-                expect(this.presenter.headerHtml).toContainTranslation("dataset.types.table");
+                expect(this.presenter.headerHtml.toString()).toContainTranslation("dataset.types.table");
             });
 
             it("should have the right objectName", function() {
@@ -973,7 +973,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should say 'view' in the header", function() {
-                expect(this.presenter.headerHtml).toContainTranslation("dataset.types.view");
+                expect(this.presenter.headerHtml.toString()).toContainTranslation("dataset.types.view");
             });
 
             it("should have the right objectName", function() {
@@ -1007,7 +1007,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should say 'table' in the header", function() {
-            expect(this.presenter.headerHtml).toContainTranslation("dataset.types.table");
+            expect(this.presenter.headerHtml.toString()).toContainTranslation("dataset.types.table");
         });
 
         it("should have the right objectName", function() {
@@ -1047,7 +1047,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should say 'edited chorus view' in the header", function() {
-            expect(this.presenter.headerHtml).toContainTranslation("dataset.types.query_change");
+            expect(this.presenter.headerHtml.toString()).toContainTranslation("dataset.types.query_change");
         });
 
         it("should have the right objectName", function() {
@@ -1292,7 +1292,7 @@ describe("chorus.presenters.Activity", function() {
     function itShouldHaveDetailsLink(text, attributes) {
         it("has a link to error details", function() {
             expect(this.presenter.detailsLink).toBeDefined();
-            var link = $(this.presenter.detailsLink);
+            var link = $(this.presenter.detailsLink.toString());
             expect(link).toHaveText(text);
 
             _.each(attributes, function(value, key) {

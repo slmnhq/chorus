@@ -437,7 +437,7 @@ describe("handlebars", function() {
 
         describe("linkTo", function() {
             it("returns an html string with the right text and href", function() {
-                var link = $(Handlebars.helpers.linkTo("/users/1", "Charlie"));
+                var link = $(Handlebars.helpers.linkTo("/users/1", "Charlie").toString());
 
                 // Coding like weirdos here to make IE8 happy
                 expect(link.is("a")).toBeTruthy();
@@ -446,12 +446,12 @@ describe("handlebars", function() {
             });
 
             it("applies the given attributes", function() {
-                var link = Handlebars.helpers.linkTo("/users/1", "Charlie", { 'class': "dude" });
+                var link = Handlebars.helpers.linkTo("/users/1", "Charlie", { 'class': "dude" }).toString();
                 expect($(link).hasClass("dude")).toBeTruthy();
             });
 
             it("html escapes the text", function() {
-                var link = Handlebars.helpers.linkTo("/", "<script>");
+                var link = Handlebars.helpers.linkTo("/", "<script>").toString();
                 expect(link).toMatch('&lt;script&gt;');
             });
         });
@@ -464,30 +464,30 @@ describe("handlebars", function() {
 
         describe("workspaceUsage", function() {
             it("should never have a width greater than 100%", function() {
-                expect($(Handlebars.helpers.workspaceUsage(101)).find('.used').attr('style')).toContain("100%");
+                expect($(Handlebars.helpers.workspaceUsage(101).toString()).find('.used').attr('style')).toContain("100%");
             })
 
             it("should be red if percentage is >= 100%", function() {
-                expect($(Handlebars.helpers.workspaceUsage(99, '1GB')).find('.used')).not.toHaveClass('full');
-                expect($(Handlebars.helpers.workspaceUsage(100, '1GB')).find('.used')).toHaveClass('full');
-                expect($(Handlebars.helpers.workspaceUsage(101, '1GB')).find('.used')).toHaveClass('full');
+                expect($(Handlebars.helpers.workspaceUsage(99, '1GB').toString()).find('.used')).not.toHaveClass('full');
+                expect($(Handlebars.helpers.workspaceUsage(100, '1GB').toString()).find('.used')).toHaveClass('full');
+                expect($(Handlebars.helpers.workspaceUsage(101, '1GB').toString()).find('.used')).toHaveClass('full');
             })
 
             it("with percentage >= 100% it has percentage text", function() {
-                expect($(Handlebars.helpers.workspaceUsage(99, '1GB')).find('.percentage_text')).not.toExist();
-                expect($(Handlebars.helpers.workspaceUsage(100, '1GB')).find('.percentage_text')).toContainText('100%');
-                expect($(Handlebars.helpers.workspaceUsage(101, '1GB')).find('.percentage_text')).toContainText('101%');
+                expect($(Handlebars.helpers.workspaceUsage(99, '1GB').toString()).find('.percentage_text')).not.toExist();
+                expect($(Handlebars.helpers.workspaceUsage(100, '1GB').toString()).find('.percentage_text')).toContainText('100%');
+                expect($(Handlebars.helpers.workspaceUsage(101, '1GB').toString()).find('.percentage_text')).toContainText('101%');
             });
 
             it("with percentage >= 50 it has size text inside the used bar", function() {
-                expect($(Handlebars.helpers.workspaceUsage(50, '1GB')).find('.used .size_text')).toContainText('1GB');
-                expect($(Handlebars.helpers.workspaceUsage(100, '1GB')).find('.used .size_text')).toContainText('1GB');
-                expect($(Handlebars.helpers.workspaceUsage(50, '1GB')).find('> .size_text')).not.toExist();
+                expect($(Handlebars.helpers.workspaceUsage(50, '1GB').toString()).find('.used .size_text')).toContainText('1GB');
+                expect($(Handlebars.helpers.workspaceUsage(100, '1GB').toString()).find('.used .size_text')).toContainText('1GB');
+                expect($(Handlebars.helpers.workspaceUsage(50, '1GB').toString()).find('> .size_text')).not.toExist();
             });
 
             it("with percentage < 50 it has size text outside the used bar", function() {
-                expect($(Handlebars.helpers.workspaceUsage(49, '1GB')).find('.used .size_text')).not.toExist();
-                expect($(Handlebars.helpers.workspaceUsage(49, '1GB')).find('> .size_text')).toContainText('1GB');
+                expect($(Handlebars.helpers.workspaceUsage(49, '1GB').toString()).find('.used .size_text')).not.toExist();
+                expect($(Handlebars.helpers.workspaceUsage(49, '1GB').toString()).find('> .size_text')).toContainText('1GB');
             });
         });
 
@@ -619,7 +619,7 @@ describe("handlebars", function() {
                     this.workspaceList = [
                         fixtures.nestedWorkspaceJson()
                     ];
-                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject);
+                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject).toString();
                 });
                 itIncludesTheFoundInWorkspaceInformation();
 
@@ -638,7 +638,7 @@ describe("handlebars", function() {
                         fixtures.nestedWorkspaceJson(),
                         fixtures.nestedWorkspaceJson()
                     ];
-                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject);
+                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject).toString();
                 });
 
                 itIncludesTheFoundInWorkspaceInformation();
@@ -655,7 +655,7 @@ describe("handlebars", function() {
                         fixtures.nestedWorkspaceJson(),
                         fixtures.nestedWorkspaceJson()
                     ];
-                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject);
+                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject).toString();
                 });
 
                 itIncludesTheFoundInWorkspaceInformation();
@@ -686,7 +686,7 @@ describe("handlebars", function() {
         describe("tabularDataLocation", function() {
             beforeEach(function() {
                 this.model = fixtures.tabularData();
-                this.result = Handlebars.helpers.tabularDataLocation(this.model);
+                this.result = Handlebars.helpers.tabularDataLocation(this.model).toString();
             });
 
             it("includes the from text", function() {
@@ -709,7 +709,7 @@ describe("handlebars", function() {
             context("when credentials are not present", function() {
                 beforeEach(function() {
                     this.model = fixtures.tabularData({hasCredentials: false})
-                    this.result = Handlebars.helpers.tabularDataLocation(this.model);
+                    this.result = Handlebars.helpers.tabularDataLocation(this.model).toString();
                 });
 
                 it("includes the instance name, database name, and schema name", function() {
@@ -736,44 +736,44 @@ describe("handlebars", function() {
             context("on plain JS objects", function() {
                 it("uses the search result if present", function() {
                     var attributes = { schemaName: 'ddemo', highlightedAttributes: {schemaName: ["d<em>demo</em>"]}}
-                    expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'schemaName')).toBe("d<em>demo</em>");
+                    expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'schemaName').toString()).toBe("d<em>demo</em>");
                 });
 
                 it("falls back to the attributes", function() {
                     var attributes = { schemaName: 'ddemo', highlightedAttributes: {anotherAttribute: ["d<em>demo</em>"]}}
-                    expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'schemaName')).toBe('ddemo');
+                    expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'schemaName').toString()).toBe('ddemo');
                 });
 
                 it("doesn't complain if the highlightedAttributes are missing", function() {
                     var attributes = { schemaName: 'ddemo'}
-                    expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'schemaName')).toBe('ddemo');
+                    expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'schemaName').toString()).toBe('ddemo');
                 });
 
                 it("doesn't complain if highlighted value is not wrapped in an array", function() {
                     var attributes = {highlightedAttributes: {content : "SELECT * FROM <em>test</em> AS a"}};
-                    expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'content')).toBe("SELECT * FROM <em>test</em> AS a");
+                    expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'content').toString()).toBe("SELECT * FROM <em>test</em> AS a");
                 });
             });
 
             context("on backbone models", function() {
                 it("uses the search result if present", function() {
                     var model = new chorus.models.Base({ schemaName: 'ddemo', highlightedAttributes: {schemaName: ["d<em>demo</em>"]}});
-                    expect(Handlebars.helpers.displaySearchMatch.call(model, 'schemaName')).toBe("d<em>demo</em>");
+                    expect(Handlebars.helpers.displaySearchMatch.call(model, 'schemaName').toString()).toBe("d<em>demo</em>");
                 });
 
                 it("falls back to the attributes", function() {
                     var model = new chorus.models.Base({ schemaName: 'ddemo', highlightedAttributes: {anotherAttribute: ["d<em>demo</em>"]}});
-                    expect(Handlebars.helpers.displaySearchMatch.call(model, 'schemaName')).toBe('ddemo');
+                    expect(Handlebars.helpers.displaySearchMatch.call(model, 'schemaName').toString()).toBe('ddemo');
                 });
 
                 it("doesn't complain if the highlightedAttributes are missing", function() {
                     var model = new chorus.models.Base({ schemaName: 'ddemo'});
-                    expect(Handlebars.helpers.displaySearchMatch.call(model, 'schemaName')).toBe('ddemo');
+                    expect(Handlebars.helpers.displaySearchMatch.call(model, 'schemaName').toString()).toBe('ddemo');
                 });
 
                 it("doesn't complain if highlighted value is not wrapped in an array", function() {
                     var model = new chorus.models.Base({highlightedAttributes: {content : "SELECT * FROM <em>test</em> AS a"}});
-                    expect(Handlebars.helpers.displaySearchMatch.call(model, 'content')).toBe("SELECT * FROM <em>test</em> AS a");
+                    expect(Handlebars.helpers.displaySearchMatch.call(model, 'content').toString()).toBe("SELECT * FROM <em>test</em> AS a");
                 });
             });
         });

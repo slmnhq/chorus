@@ -14,7 +14,7 @@
             this.extensions = this[this.activityType] && this[this.activityType](model)
             _.extend(this.presenter, this.extensions)
             this.presenter.header = _.extend(this.defaultHeader(), this.presenter.header) //presenter.header includes extensions.header
-            this.presenter.headerHtml = this.headerHtml();
+            this.presenter.headerHtml = new Handlebars.SafeString(this.headerHtml());
             this.presenter.isNotification = options.isNotification;
 
             this.presenter._impl = this;
@@ -77,12 +77,12 @@
 
             var header = {
                 type: this.model.get("type"),
-                objectLink: chorus.helpers.linkTo(this.presenter.objectUrl, this.presenter.objectName, {'class': 'object_link'}),
-                workspaceLink: chorus.helpers.linkTo(this.presenter.workspaceUrl, this.presenter.workspaceName)
+                objectLink: chorus.helpers.linkTo(this.presenter.objectUrl, this.presenter.objectName, {'class': 'object_link'}).toString(),
+                workspaceLink: chorus.helpers.linkTo(this.presenter.workspaceUrl, this.presenter.workspaceName).toString()
             }
 
             if (this.author) {
-                header.authorLink = chorus.helpers.linkTo(this.author.showUrl(), this.author.displayName(), { 'class': "author" })
+                header.authorLink = chorus.helpers.linkTo(this.author.showUrl(), this.author.displayName(), { 'class': "author" }).toString()
             }
 
             if (this.noteObject) {
@@ -90,11 +90,11 @@
             }
 
             if (this.presenter.versionName && this.presenter.versionUrl) {
-                header.versionLink = chorus.helpers.linkTo(this.presenter.versionUrl, this.presenter.versionName)
+                header.versionLink = chorus.helpers.linkTo(this.presenter.versionUrl, this.presenter.versionName).toString()
             }
 
             if (this.presenter.tableName && this.presenter.tableUrl) {
-                header.tableLink = chorus.helpers.linkTo(this.presenter.tableUrl, this.presenter.tableName);
+                header.tableLink = chorus.helpers.linkTo(this.presenter.tableUrl, this.presenter.tableName).toString();
             }
 
             if (this.presenter.importType) {
@@ -103,12 +103,12 @@
             }
 
             if (this.presenter.importSourceName) {
-                header.importSourceLink = this.presenter.importSourceUrl ? chorus.helpers.linkTo(this.presenter.importSourceUrl, this.presenter.importSourceName)
+                header.importSourceLink = this.presenter.importSourceUrl ? chorus.helpers.linkTo(this.presenter.importSourceUrl, this.presenter.importSourceName).toString()
                     : this.presenter.importSourceName;
             }
 
             if (this.presenter.hdfsName) {
-                header.hdfsLink = chorus.helpers.linkTo(this.presenter.hdfsUrl, this.presenter.hdfsName);
+                header.hdfsLink = chorus.helpers.linkTo(this.presenter.hdfsUrl, this.presenter.hdfsName).toString();
             }
 
 

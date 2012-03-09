@@ -83,7 +83,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
 
             if (this.resource.get("hasCredentials") === false) {
                 ctx.noCredentials = true;
-                ctx.noCredentialsWarning = t("dataset.credentials.missing.body", {linkText: chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'})})
+                ctx.noCredentialsWarning = t("dataset.credentials.missing.body", {linkText: chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'}).toString()})
             }
 
             ctx.displayEntityType = this.resource.metaType();

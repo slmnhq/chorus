@@ -38,7 +38,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         var $content = $("<ul class='hdfs_link_menu'/>");
 
         var $li = $("<li/>");
-        $li.append(chorus.helpers.linkTo(this.instance.showUrl(), this.instance.get("name")));
+        $li.append(chorus.helpers.linkTo(this.instance.showUrl(), this.instance.get("name")).toString());
         $content.append($li);
 
         var pathSegments = this.collection.hdfsEntry().pathSegments();

@@ -144,7 +144,7 @@
         },
 
         linkTo: function(url, text, attributes) {
-            return $("<a></a>").attr("href", url).text(text).attr(attributes || {}).outerHtml();
+            return new Handlebars.SafeString($("<a></a>").attr("href", url).text(text).attr(attributes || {}).outerHtml());
         },
 
         spanFor: function(text, attributes) {
@@ -186,7 +186,7 @@
                         '</div>'
                 }
             }
-            return markup
+            return new Handlebars.SafeString(markup)
         },
 
         range_chooser: function(options) {
@@ -215,7 +215,7 @@
             definition || (definition = '')
             var promptSpan = $('<span>').addClass('sql_prompt').text(t("dataset.content_details.sql_prompt")).outerHtml();
             var sqlSpan = $('<span>').addClass('sql_content').attr('title', definition).text(definition).outerHtml();
-            return t("dataset.content_details.definition", {sql_prompt: promptSpan, sql: sqlSpan});
+            return new Handlebars.SafeString(t("dataset.content_details.definition", {sql_prompt: promptSpan, sql: sqlSpan}));
         },
 
         renderTableData: function(tableData) {
@@ -252,13 +252,13 @@
                 contextObject.setWorkspace(workspace);
                 return chorus.helpers.linkTo(contextObject.showUrl(), workspace.get('name'), {
                     title: workspace.get('name')
-                })
+                }).toString()
             }
 
             var workspaceLink = linkToContextObject(workspaceList[0]);
 
             var result = $("<div></div>").addClass('found_in')
-            var otherWorkspacesMenu = chorus.helpers.linkTo('#', t('workspaces_used_in.other_workspaces', {count: workspaceList.length - 1}), {'class': 'open_other_menu'})
+            var otherWorkspacesMenu = chorus.helpers.linkTo('#', t('workspaces_used_in.other_workspaces', {count: workspaceList.length - 1}), {'class': 'open_other_menu'}).toString()
 
             result.append(t('workspaces_used_in.body', {workspaceLink: workspaceLink, otherWorkspacesMenu: otherWorkspacesMenu, count: workspaceList.length }));
             if (workspaceList.length > 1) {
@@ -269,7 +269,7 @@
                 result.append(list);
             }
 
-            return result.outerHtml()
+            return new Handlebars.SafeString(result.outerHtml());
         },
 
         tabularDataLocation: function(tabularData) {
@@ -280,19 +280,23 @@
                 schemaPieces.push(tabularData.get('schemaName'));
             } else {
                 var instance = new chorus.models.Instance(tabularData.get("instance"));
-                schemaPieces.push(chorus.helpers.linkTo(instance.showUrl(), instance.get("name"), {"class": "instance"}));
+                schemaPieces.push(chorus.helpers.linkTo(instance.showUrl(), instance.get("name"), {"class": "instance"}).toString());
 
                 var database = new chorus.models.Database({instanceId: instance.id, name: tabularData.get("databaseName")});
-                schemaPieces.push(chorus.helpers.linkTo(database.showUrl(), tabularData.get('databaseName'), {"class": "database"}));
+                schemaPieces.push(chorus.helpers.linkTo(database.showUrl(), tabularData.get('databaseName'), {"class": "database"}).toString());
 
                 schemaPieces.push(chorus.helpers.linkTo(tabularData.schema().showUrl(), tabularData.get('schemaName'),
-                    {'class': 'schema'}))
+                    {'class': 'schema'}).toString())
             }
-            return $("<span></span>").html(t("dataset.from", {location: schemaPieces.join('.')})).outerHtml();
+            return new Handlebars.SafeString($("<span></span>").html(t("dataset.from", {location: schemaPieces.join('.')})).outerHtml());
         },
 
         displaySearchMatch: function(attributeName) {
-            return chorus.helpers.withSearchResults(this).get(attributeName);
+            var attr = chorus.helpers.withSearchResults(this).get(attributeName);
+            if(attr) {
+                return new Handlebars.SafeString(attr);
+            }
+            return attr;
         },
 
         withSearchResults: function(modelOrAttributes) {

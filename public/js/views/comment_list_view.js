@@ -26,7 +26,7 @@ chorus.views.CommentList = chorus.views.Base.extend({
                 timestamp: comment.get("timestamp"),
                 id: comment.get("id"),
                 body: comment.get("text"),
-                headerHtml: t('activity_stream.comments.commented_on_note', {authorLink:chorus.helpers.linkTo(user.showUrl(), user.displayName(), {'class':'author'})})
+                headerHtml: new Handlebars.SafeString(t('activity_stream.comments.commented_on_note', {authorLink:chorus.helpers.linkTo(user.showUrl(), user.displayName(), {'class':'author'}).toString()}))
             };
         }
     }

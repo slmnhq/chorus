@@ -16,7 +16,7 @@
                     <div class="body">
                         {{lastComment.body}}
                     </div>
-                    {{{userProfileLink lastComment.creator}}}
+                    {{userProfileLink lastComment.creator}}
                     <span class="comment_info">
                         {{t "workfiles.commented_on"}} <span class="on">{{lastComment.on}}</span>
                         {{#if otherCommentCount }}

@@ -25,15 +25,15 @@
                 <a href="{{showUrl}}" class="name">{{objectName}}</a>
             {{/if}}
             <div class="location">
-                {{{tabularDataLocation model}}}
+                {{tabularDataLocation model}}
             </div>
-            {{{usedInWorkspaces workspaces dataset}}}
+            {{usedInWorkspaces workspaces dataset}}
             {{#if lastComment}}
                 <div class="comment">
                     <div class="body">
                         {{lastComment.body}}
                     </div>
-                    {{{userProfileLink lastComment.creator}}}
+                    {{userProfileLink lastComment.creator}}
                     <span class="comment_info">
                         {{t "comments.commented_on"}} <span class="on">{{lastComment.on}}</span>
                         {{#if otherCommentCount }}
