@@ -10,6 +10,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
 
     setup:function () {
         chorus.PageEvents.subscribe("instance:selected", this.setInstance, this);
+        chorus.PageEvents.subscribe("memo:added:instance", this.refreshActivities, this);
         this.tabControl = new chorus.views.TabControl([
             {name:'activity', selector:".activity_list"},
             {name:'configuration', selector:".configuration_detail"}
@@ -43,6 +44,10 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
         }
     },
 
+    refreshActivities: function() {
+        this.resource && this.resource.activities().fetch();
+    },
+
     setInstance:function (instance) {
         this.resource = this.instance = this.model = instance;
         var account = this.instance.accountForCurrentUser();
@@ -67,6 +72,10 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
         this.bindings.add(this.resource, "change", this.render);
 
         this.render();
+    },
+
+    postRender: function() {
+        this.$("a.dialog.workspace_usage").data("instance", this.instance);
     },
 
     canEditPermissions: function() {

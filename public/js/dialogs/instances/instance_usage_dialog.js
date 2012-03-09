@@ -5,7 +5,7 @@ chorus.dialogs.InstanceUsage = chorus.dialogs.Base.extend({
     additionalClass:'with_sub_header',
 
     setup:function () {
-        this.usage = this.resource = this.pageModel.usage();
+        this.usage = this.resource = this.options.launchElement.data("instance").usage();
         this.usage.fetchIfNotLoaded();
         this.requiredResources.push(this.usage);
         this.config = chorus.models.Config.instance();

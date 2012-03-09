@@ -54,6 +54,10 @@ describe("chorus.views.InstanceListSidebar", function() {
                 this.server.completeFetchFor(this.instance);
             });
 
+            it("sets the instance on the instance usage dialog launch anchor", function() {
+                expect(this.view.$(".dialog.workspace_usage")).toHaveData("instance", this.instance);
+            });
+
             it("displays instance name", function() {
                 expect(this.view.$(".instance_name").text()).toBe("Harry's House of Glamour");
             });
@@ -375,6 +379,18 @@ describe("chorus.views.InstanceListSidebar", function() {
                     });
                 })
             })
+
+            describe("when a new memo is created", function() {
+                beforeEach(function() {
+                    this.server.reset();
+                    chorus.PageEvents.broadcast("memo:added:instance");
+                })
+
+                it("re-fetches the activity list", function() {
+                    expect(this.instance.activities()).toHaveBeenFetched();
+                });
+            })
+
         });
     });
 });
