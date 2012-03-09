@@ -22,6 +22,23 @@
         }
     }
 
+    .count, .page_numbers {
+        font-size: 12px;
+        padding: 4px;
+        color: $color-text2;
+    }
+    .count {
+        font-weight: $semibold;
+    }
+
+    div.pagination .links .next {
+        padding-right: 10px;
+    }
+
+    span.previous, span.next {
+        color:$color-text4;
+    }
+
     li {
         min-height: 45px;
         a.name {

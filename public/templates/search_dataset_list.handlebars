@@ -1,41 +1,5 @@
 {{#if shown}}
-    {{#if filteredSearch}}
-            <div class="pagination">
-                <div class="right">
-                    {{#ifAny hasPrevious hasNext }}
-                        <span class="page_numbers">{{t "search.page" shown=currentPage total=totalPages}}</span>
-                    {{/ifAny}}
+    <div class="search_result_header"></div>
 
-                    {{#if hasPrevious}}
-                        <a href="#" class="previous">
-                           {{t "search.previous"}}
-                        </a>
-                    {{else}}
-                        <span class="previous">{{t "search.previous"}}</span>
-                    {{/if}}
-                    |
-                    {{#if hasNext}}
-                        <a href="#" class="next">
-                            {{t "search.next"}}
-                        </a>
-                    {{else}}
-                        <span class="next">{{t "search.next"}}</span>
-                    {{/if}}
-                </div>
-                <span class="count">{{t "search.results" count=total}}</span>
-            </div>
-    {{else}}
-        <div class="details">
-            <div class="right">
-                {{#if moreResults}}
-                    <span class="count">{{t "search.count" shown=shown total=total}}</span>
-                    <a class="show_all" data-type="dataset" href="#">{{t "search.show_all"}}</a>
-                {{else}}
-                    <span class="count">{{t "search.count_short" shown=shown}}</span>
-                {{/if}}
-            </div>
-            <span class="title">{{t "dataset.title_plural"}}</span>
-        </div>
-    {{/if}}
     <ul class="dataset_list"></ul>
 {{/if}}

@@ -2,10 +2,8 @@ chorus.views.SearchResultListBase = chorus.views.Base.extend({
     constructorName: "SearchResultListBase",
     additionalClass: "list",
 
-    events: {
-        "click a.show_all": "showAll",
-        "click a.next": "showNext",
-        "click a.previous": "showPrevious"
+    subviews: {
+        ".search_result_header": "header"
     },
 
     setup: function() {
@@ -13,6 +11,7 @@ chorus.views.SearchResultListBase = chorus.views.Base.extend({
         this.entityType = this.options.entityType;
         this.className = "search_" + this.entityType + "_list";
         this.listItemConstructorName = "Search" + _.capitalize(this.entityType);
+        this.header = new chorus.views.SearchResultHeader({query: this.query, collection: this.collection, entityType: this.entityType});
     },
 
     additionalContext: function() {
@@ -42,23 +41,5 @@ chorus.views.SearchResultListBase = chorus.views.Base.extend({
 
     makeListItemView: function(model) {
         return new chorus.views[this.listItemConstructorName]({ model: model });
-    },
-
-    showAll: function(e) {
-        e && e.preventDefault();
-        this.query.set({entityType: $(e.currentTarget).data("type")})
-        chorus.router.navigate(this.query.showUrl(), true);
-    },
-
-    showNext: function(e) {
-        e && e.preventDefault();
-        this.query.getNextPage();
-        this.render();
-    },
-
-    showPrevious: function(e) {
-        e && e.preventDefault();
-        this.query.getPreviousPage();
-        this.render();
     }
 });
