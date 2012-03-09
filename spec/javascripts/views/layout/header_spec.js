@@ -174,7 +174,7 @@ describe("chorus.views.Header", function() {
                 this.view.$(".search input:text").val("").trigger("textchange");
                 expect($(this.view.typeAheadView.el)).toHaveClass("hidden");
             })
-            
+
             it("hides the search view when a link is clicked (if navigating to same route as displayed in browser url bar)", function() {
                 var $a = $("<a/>");
                 $(this.view.typeAheadView.el).append($a);
@@ -487,6 +487,11 @@ describe("chorus.views.Header", function() {
                             });
                         });
                     });
+                });
+
+                it("has a show-all link", function() {
+                    expect(this.view.$(".popup_notifications a.notifications_all")).toContainTranslation("notification.see_all");
+                    expect(this.view.$(".popup_notifications a.notifications_all").attr("href")).toBe("#/notifications");
                 });
             });
         });

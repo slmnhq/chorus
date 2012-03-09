@@ -32,6 +32,7 @@
             ["/instances/:instanceId/database/:databaseName/schema/:schemaName/:metaType/:objectName", "TabularDataShow"],
             ["/instances/:instanceId/browse/*path", "HdfsEntryIndex"],
             ["/instances/:instanceId/browseFile/*path", "HdfsShowFile"],
+            ["/notifications", "NotificationIndex"],
             ["/styleguide", "StyleGuide"]
         ],
 
