@@ -52,9 +52,8 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
             });
         }
         if (this.model.instances()) {
-            var instances = this.model.instances();
             this.instanceList = new chorus.views.SearchInstanceList({
-                collection: instances,
+                collection: this.model.instances(),
                 total: this.model.get("instance").numFound,
                 query: this.model
             });
