@@ -15,11 +15,7 @@
         </ul>
     </div>
     <div class="messages">
-        {{#if notifications.length}}
-            <a href="#" class="notifications" title="notifications">{{notifications.pagination.records}}</a>
-        {{else}}
-            <a class="notifications empty" title="notifications">0</a>
-        {{/if}}
+        <a href="#" class="notifications {{#unless notifications.length}}empty{{/unless}}" title="notifications">{{notifications.pagination.records}}</a>
     </div>
     <div class="menu hidden popup_notifications">
         <div class="pointer"/>
