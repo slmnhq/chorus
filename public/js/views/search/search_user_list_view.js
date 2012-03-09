@@ -8,6 +8,8 @@ chorus.views.SearchUserList = chorus.views.SearchResultListBase.extend({
         return {
             total: this.options.total,
             shown: this.collection.models.length,
+            hasPrevious: this.query && this.query.hasPreviousPage(),
+            hasNext: this.query && this.query.hasNextPage(),
             filteredSearch: this.query && this.query.entityType() == "user",
             moreResults: (this.collection.models.length < this.collection.attributes.total)
         }

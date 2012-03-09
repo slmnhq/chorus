@@ -181,7 +181,11 @@ chorus.models.SearchResult = chorus.models.Base.extend({
             case "dataset":
                 return this.tabularData();
                 break;
-            default:
+            case "instance":
+                return this.instances();
+                break;
+            case "hdfs":
+                return this.hdfs();
         }
     },
 

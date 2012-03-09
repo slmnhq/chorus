@@ -2,10 +2,21 @@
     {{#if filteredSearch}}
         <div class="pagination">
             <div class="right">
-                <a href="#" class="next">{{t "search.next"}}</a>
+                {{#if hasNext}}
+                    <a href="#" class="next">
+                        {{t "search.next"}}
+                    </a>
+                {{else}}
+                    <span class="next">{{t "search.next"}}</span>
+                {{/if}}
                 |
-                <a href="#" class="previous">{{t "search.previous"}}</a>
-
+                {{#if hasPrevious}}
+                    <a href="#" class="previous">
+                       {{t "search.previous"}}
+                    </a>
+                {{else}}
+                    <span class="previous">{{t "search.previous"}}</span>
+                {{/if}}
             </div>
             <span class="count">{{t "search.results" count=total}}</span>
         </div>

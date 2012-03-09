@@ -3,8 +3,7 @@ describe("chorus.models.SearchResult", function() {
         this.model = new chorus.models.SearchResult({ query: "jackson5" })
     });
 
-    it("defaults entityType and searchIn to 'all'", function() {
-        expect(this.model.entityType()).toBe('all')
+    it("defaults searchIn to 'all'", function() {
         expect(this.model.get("searchIn")).toBe('all')
     })
 
@@ -372,6 +371,49 @@ describe("chorus.models.SearchResult", function() {
                 it("memoizes", function() {
                     expect(this.entries).toBe(this.model.instances());
                 });
+            });
+        });
+    });
+
+    describe("#entityType", function() {
+        it("defaults to 'all'", function() {
+            expect(this.model.entityType()).toBe('all');
+        });
+
+        context("when an entity type is set", function() {
+            beforeEach(function() {
+                this.model.set({entityType: "foo"});
+            });
+            it("gives back any set entity type", function() {
+                expect(this.model.entityType()).toBe("foo");
+            });
+
+            it("is preserved through fetches", function() {
+                this.model.fetch();
+                this.server.completeFetchFor(this.model, fixtures.searchResult());
+                expect(this.model.entityType()).toBe("foo");
+            });
+        });
+    });
+
+    describe("#currentPageNumber", function() {
+        it("defaults to 1", function() {
+            expect(this.model.currentPageNumber()).toBe(1);
+        });
+
+        context("when a page is set", function() {
+            beforeEach(function() {
+                this.model.set({page: 5});
+            });
+
+            it("gives back any set page", function() {
+                expect(this.model.currentPageNumber()).toBe(5);
+            });
+
+            it("is preserved through fetches", function() {
+                this.model.fetch();
+                this.server.completeFetchFor(this.model, fixtures.searchResult());
+                expect(this.model.currentPageNumber()).toBe(5);
             });
         });
     });

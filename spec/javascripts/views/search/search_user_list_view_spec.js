@@ -81,16 +81,74 @@ describe("chorus.views.SearchUserList", function() {
         });
 
         describe("pagination bar", function() {
+            context("when there are two pages of results", function() {
+                context("and I am on the first page", function() {
+                    beforeEach(function() {
+                        spyOn(this.result, "hasPreviousPage").andReturn(false);
+                        spyOn(this.result, "hasNextPage").andReturn(true);
+                        this.view.render();
+                    });
+
+                    it("should have a next link", function() {
+                        expect(this.view.$('.pagination a.next')).toExist();
+                        expect(this.view.$('.pagination a.next')).toContainTranslation("search.next");
+                    });
+
+                    it("should not have a previous link", function() {
+                        expect(this.view.$('.pagination a.previous')).not.toExist();
+                    });
+
+                    it("should have previous in plain text", function() {
+                        expect(this.view.$('.pagination span.previous')).toContainTranslation("search.previous");
+                    });
+
+                });
+
+                context("and I am on the second page", function(){
+                    beforeEach(function() {
+                        spyOn(this.result, "hasNextPage").andReturn(false);
+                        spyOn(this.result, "hasPreviousPage").andReturn(true);
+                        this.view.render();
+                    });
+
+                    it("should have a previous link", function() {
+                        expect(this.view.$('.pagination a.previous')).toExist();
+                        expect(this.view.$('.pagination a.previous')).toContainTranslation("search.previous");
+                    });
+
+                    it("should not have a next link", function() {
+                        expect(this.view.$('.pagination a.next')).not.toExist();
+                    });
+
+                    it("should have next in plain text", function() {
+                        expect(this.view.$('.pagination span.next')).toContainTranslation("search.next");
+                    });
+
+
+
+                });
+            })
+
+            context("when there is one page of results", function() {
+                beforeEach(function() {
+                    spyOn(this.result, "hasNextPage").andReturn(false);
+                    spyOn(this.result, "hasPreviousPage").andReturn(false);
+                    this.view.render();
+                });
+
+                it("should not have next and previous links", function() {
+                    expect(this.view.$('.pagination a.next')).not.toExist();
+                    expect(this.view.$('.pagination a.previous')).not.toExist();
+                });
+
+                it("should have next and previous in plain text", function() {
+                    expect(this.view.$('.pagination span.next')).toContainTranslation("search.next");
+                    expect(this.view.$('.pagination span.previous')).toContainTranslation("search.previous");
+                });
+            })
+
             it("has a count of total results", function() {
                 expect(this.view.$('.pagination .count')).toContainTranslation("search.results", {count: 4})
-            });
-
-            it("has a next button", function() {
-                expect(this.view.$('.pagination a.next')).toExist();
-            });
-
-            it("has a previous button", function() {
-                expect(this.view.$('.pagination a.previous')).toExist();
             });
         });
     })

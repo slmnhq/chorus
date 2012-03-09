@@ -7,6 +7,8 @@ chorus.views.SearchInstanceList = chorus.views.SearchResultListBase.extend({
         return {
             shown: this.collection.models.length,
             filteredSearch: this.query && this.query.entityType() == "instance",
+            hasPrevious: this.query && this.query.hasPreviousPage(),
+            hasNext: this.query && this.query.hasNextPage(),
             total: this.options.total,
             moreResults: (this.collection.models.length < this.options.total)
         }
