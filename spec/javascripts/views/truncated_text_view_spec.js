@@ -7,7 +7,7 @@ describe("chorus.views.TruncatedText", function() {
             '<span style="font-size: 10pt;">three</span> </li></ul><a href="http://example.com">hi</a></div></div>';
         this.model = fixtures.workspace({ summary: this.text })
         this.model.loaded = true;
-        this.view = new chorus.views.TruncatedText({model: this.model, attribute: "summary"})
+        this.view = new chorus.views.TruncatedText({model: this.model, attribute: "summary", attributeIsHtmlSafe: true})
     });
 
     describe("#render", function() {
@@ -47,6 +47,17 @@ describe("chorus.views.TruncatedText", function() {
 
                 it("marks the view as not expandable", function() {
                     expect($(this.view.el)).not.toHaveClass('expandable');
+                });
+            });
+
+            context("when attributeIsHtmlSafe is false", function() {
+                beforeEach(function() {
+                    this.view.options.attributeIsHtmlSafe = false;
+                    this.view.render();
+                });
+
+                it("escapes the HTML", function() {
+                    expect(this.view.$('span')).not.toExist();
                 });
             });
 

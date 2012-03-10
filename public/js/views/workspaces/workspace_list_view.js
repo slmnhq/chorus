@@ -19,7 +19,7 @@ chorus.views.WorkspaceList = chorus.views.Base.extend({
     postRender: function() {
         this.collection.each(function(model, index) {
             model.loaded = true;
-            this.summaryView = new chorus.views.TruncatedText({model:model, attribute:"summary"})
+            this.summaryView = new chorus.views.TruncatedText({model:model, attribute:"summary", attributeIsHtmlSafe: true})
             this.renderSubview("summaryView", this.$(".summary:eq(" + index + ")"))
         }, this);
     }

@@ -8,8 +8,12 @@ chorus.views.TruncatedText = chorus.views.Base.extend({
     },
 
     additionalContext: function() {
+        var value = this.model.get(this.options.attribute)
+        if(this.options.attributeIsHtmlSafe && value) {
+            value = new Handlebars.SafeString(value);
+        }
         return {
-            text: this.model.get(this.options.attribute)
+            text: value
         }
     },
 
