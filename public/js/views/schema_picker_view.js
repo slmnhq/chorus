@@ -209,7 +209,7 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
         });
         _.each(models, function (model) {
             select.append(
-                $("<option/>", {value:model.get("id"), disabled: disabledFunction(model)}).text(model.get("name"))
+                $("<option/>").prop("value", model.get("id")).prop("disabled", disabledFunction(model)).text(model.get("name"))
             );
         });
 
