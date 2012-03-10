@@ -205,7 +205,9 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
         });
         _.each(models, function (model) {
             select.append(
-                $("<option/>", {value:model.get("id")}).text(model.get("name"))
+                $("<option/>", {value:model.get("id")}).
+                    prop("disabled", type == "instance" && !model.get("hasCredentials")).
+                    text(model.get("name"))
             );
         });
 

@@ -96,7 +96,11 @@ describe("chorus.views.SchemaPicker", function () {
 
             context("when the instance list fetch completes", function () {
                 beforeEach(function () {
-                    this.server.completeFetchAllFor(this.view.instances, [fixtures.instance(), fixtures.instance()]);
+                    this.server.completeFetchAllFor(this.view.instances, [
+                        fixtures.instance({ hasCredentials: true, id : 1 }),
+                        fixtures.instance({ hasCredentials: true, id: 2 }),
+                        fixtures.instance({ hasCredentials: false, id: 3 })
+                    ]);
                 });
 
                 itShowsSelect('instance');
@@ -106,10 +110,14 @@ describe("chorus.views.SchemaPicker", function () {
 
                 itDisplaysDefaultOptionFor('instance')
 
-
-
                 it("hides the loading placeholder", function () {
                     expect(this.view.$(".instance .loading_text")).toHaveClass("hidden")
+                })
+
+                it("disables instances for which the loggged in user does not have permissions", function() {
+                    expect(this.view.$(".instance select option[value=1]")).not.toBeDisabled();
+                    expect(this.view.$(".instance select option[value=2]")).not.toBeDisabled();
+                    expect(this.view.$(".instance select option[value=3]")).toBeDisabled();
                 })
 
                 context("choosing an instance", function () {
