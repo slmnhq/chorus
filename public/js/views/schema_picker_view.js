@@ -111,11 +111,9 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
 
         if (options.loading) {
             section.find(".loading_text").removeClass('hidden');
-        }
-        else if (options.unavailable) {
+        } else if (options.unavailable) {
             section.find(".unavailable").removeClass("hidden");
-        }
-        else if (options.create) {
+        } else if (options.create) {
             var createContainer = section.find(".create_container");
             section.find("a.new").addClass("hidden");
             createContainer.removeClass("hidden");
@@ -148,8 +146,11 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
 
     updateInstances:function () {
         this.updateFor('instance', function (instance) {
-            return instance.get("instanceProvider") != "Hadoop"
-        });
+                return instance.get("instanceProvider") != "Hadoop";
+            },
+            function(instance) {
+                return !instance.get("hasCredentials");
+            });
     },
 
     updateDatabases:function () {
@@ -191,12 +192,15 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
         return attrs;
     },
 
-    updateFor:function (type, filter) {
+    updateFor:function (type, filter, disabledFunction) {
         var select = this.resetSelect(type);
         var collection = this[type + "s"];
 
         filter || (filter = function () {
             return true;
+        });
+        disabledFunction || (disabledFunction = function() {
+            return false;
         });
         // don't modify the original collection array object
         var models = _(collection.models).chain().clone().filter(filter).value();
@@ -205,9 +209,7 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
         });
         _.each(models, function (model) {
             select.append(
-                $("<option/>", {value:model.get("id")}).
-                    prop("disabled", type == "instance" && !model.get("hasCredentials")).
-                    text(model.get("name"))
+                $("<option/>", {value:model.get("id"), disabled: disabledFunction(model)}).text(model.get("name"))
             );
         });
 
