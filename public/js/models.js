@@ -196,9 +196,9 @@ chorus.models = {
         highlightedAttribute: function(attr) {
             var highlightedAttrs = this.get("highlightedAttributes");
             if(highlightedAttrs && highlightedAttrs[attr]) {
-                return highlightedAttrs[attr];
+                var attribute = highlightedAttrs[attr];
+                return _.isArray(attribute) ? attribute[0] : attribute;
             }
-            return this.get(attr);
         },
 
         name: function() {

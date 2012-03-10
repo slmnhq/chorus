@@ -836,7 +836,10 @@ describe("chorus.models.Abstract", function() {
             beforeEach(function() {
                 this.model.set({
                     highlightedAttributes: {
-                        name: '<em>foo</em>'
+                        name: '<em>foo</em>',
+                        otherThing: [
+                            '<em>flarp</em>'
+                        ]
                     },
                     name: 'foo',
                     title: 'foop',
@@ -848,8 +851,12 @@ describe("chorus.models.Abstract", function() {
                 expect(this.model.highlightedAttribute('name')).toBe('<em>foo</em>');
             });
 
-            it("returns the regular attribute if no highlighted one exists", function() {
-                expect(this.model.highlightedAttribute('title')).toBe('foop');
+            it("returns the first highlighted attribute when it is an array", function() {
+                expect(this.model.highlightedAttribute('otherThing')).toBe('<em>flarp</em>');
+            });
+
+            it("does not return the regular attribute if no highlighted one exists", function() {
+                expect(this.model.highlightedAttribute('title')).toBeUndefined();
             });
         });
 
