@@ -4,6 +4,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
     urlTemplate:"workspace/{{id}}",
     showUrlTemplate:"workspaces/{{id}}",
     entityType:"workspace",
+    nameAttribute: 'name',
 
     customIconUrl:function (options) {
         options = (options || {});

@@ -7,12 +7,12 @@ chorus.views.SearchUser = chorus.views.SearchItemBase.extend({
         var supportingMessage = _.compact(_.map(
             ["title", "ou", "content", "emailAddress", "name"],
             function(fieldName) {
-                var value = modelWithSearchResults.get(fieldName);
+                var value = modelWithSearchResults.get(fieldName).toString();
                 if (value) {
                     var result = {};
                     result[fieldName] = value;
                     return result
-                };
+                }
             }
         ));
 

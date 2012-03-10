@@ -14,6 +14,8 @@
     chorus.models.Instance = chorus.models.Base.extend({
         constructorName: "Instance",
         urlTemplate:"instance/{{id}}",
+        nameAttribute: 'name',
+
         showUrlTemplate: function() {
             if(this.isHadoop()) {
                 return "instances/{{id}}/browse/";

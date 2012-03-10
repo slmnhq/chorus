@@ -57,7 +57,7 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
     additionalContext: function() {
         var parentCtx = this._super("additionalContext", arguments);
         parentCtx.workspaces = _.pluck(this.workspaces.models, "attributes");
-        parentCtx.directions = "<input type='text' class='hdfs' name='table_name' value='" + this.toTable + "'/>"
+        parentCtx.directions = new Handlebars.SafeString("<input type='text' class='hdfs' name='table_name' value='" + Handlebars.Utils.escapeExpression(this.toTable) + "'/>");
         return parentCtx;
     }
 });

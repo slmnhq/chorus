@@ -1,5 +1,7 @@
 chorus.models.TabularData = chorus.models.Base.extend({
     constructorName: "TabularData",
+    nameAttribute: 'objectName',
+
     initialize: function() {
         this.resetEntityType();
         this.bind("change:type", this.resetEntityType, this);

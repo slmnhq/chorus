@@ -84,7 +84,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         return {
             columns: this.csv.columnOrientedData(),
             delimiter: this.other_delimiter ? this.delimiter : '',
-            directions: t("dataset.import.table.new.directions", {
+            directions: chorus.helpers.safeT("dataset.import.table.new.directions", {
                tablename_input_field: "<input type='text' name='table_name' value='" + this.tableName + "'/>"
             }),
             ok: this.ok

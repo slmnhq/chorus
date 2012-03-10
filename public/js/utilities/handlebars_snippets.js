@@ -306,12 +306,12 @@
             modelOrAttributes.get =
                 function(attributeName) {
                     if (getReal.call(modelOrAttributes, 'highlightedAttributes') && getReal.call(modelOrAttributes, 'highlightedAttributes')[attributeName]) {
-                        var attribute = getReal.call(modelOrAttributes, 'highlightedAttributes')[attributeName]
-                        return _.isArray(attribute) ? attribute[0] : attribute
+                        var attribute = getReal.call(modelOrAttributes, 'highlightedAttributes')[attributeName];
+                        return new Handlebars.SafeString(_.isArray(attribute) ? attribute[0] : attribute);
                     } else {
-                        return getReal.call(modelOrAttributes, attributeName);
+                        return new Handlebars.SafeString(Handlebars.Utils.escapeExpression(getReal.call(modelOrAttributes, attributeName)));
                     }
-                }
+                };
 
             return modelOrAttributes;
         },

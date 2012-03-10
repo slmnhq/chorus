@@ -189,6 +189,26 @@ chorus.models = {
             return false;
         },
 
+        highlightedAttribute: function(attr) {
+            var highlightedAttrs = this.get("highlightedAttributes");
+            if(highlightedAttrs && highlightedAttrs[attr]) {
+                return highlightedAttrs[attr];
+            }
+            return this.get(attr);
+        },
+
+        name: function() {
+            if(this.nameFunction) {
+                return this[this.nameFunction]();
+            }
+            return this.get(this.nameAttribute);
+        },
+
+        highlightedName: function() {
+            var highlightedModel = chorus.helpers.withSearchResults(this);
+            return new Handlebars.SafeString(highlightedModel.name());
+        },
+
         _textForAttr: function(attr) {
             return (this.attrToLabel && this.attrToLabel[attr]) ? t(this.attrToLabel[attr]) : attr;
         }

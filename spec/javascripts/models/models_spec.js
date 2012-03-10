@@ -72,7 +72,6 @@ describe("chorus.models.Abstract", function() {
             });
         });
 
-
         describe("activities", function() {
             it("throws when the model does not have an entityType", function() {
                 try {
@@ -832,6 +831,106 @@ describe("chorus.models.Abstract", function() {
                 expect(model.hasOwnPage()).toBeFalsy();
             })
         })
+        
+        describe("highlightedAttribute", function() {
+            beforeEach(function() {
+                this.model.set({
+                    highlightedAttributes: {
+                        name: '<em>foo</em>'
+                    },
+                    name: 'foo',
+                    title: 'foop',
+                    trouble: '<script>alert("hi!")</script>bye'
+                });
+            });
+            
+            it("returns the highlighted attribute", function() {
+                expect(this.model.highlightedAttribute('name')).toBe('<em>foo</em>');
+            });
+
+            it("returns the regular attribute if no highlighted one exists", function() {
+                expect(this.model.highlightedAttribute('title')).toBe('foop');
+            });
+        });
+
+        describe("name", function() {
+            context("when the model has a nameAttribute set", function() {
+                beforeEach(function() {
+                    this.model.set({iAmAName: 'jerry'});
+                    this.model.nameAttribute = 'iAmAName';
+                });
+
+                it("returns that attribute", function() {
+                    expect(this.model.name()).toBe('jerry');
+                });
+            });
+
+            context("when the model has a nameFunction set", function() {
+                beforeEach(function() {
+                    this.model.set({fName: 'herbert', lName: 'humphrey'});
+                    this.model.iAmANameFunction = function() {
+                        return this.get("fName") + ' ' + this.get("lName");
+                    };
+                    this.model.nameFunction = 'iAmANameFunction';
+                });
+
+                it("returns the result of that function", function() {
+                    expect(this.model.name()).toBe('herbert humphrey');
+                });
+            });
+        });
+
+        describe("highlightedName", function() {
+            context("when the model has a nameAttribute set", function() {
+                beforeEach(function() {
+                    this.model.set({
+                        iAmAName: '<script>alert("hi!")</script>jerry',
+                        highlightedAttributes: {
+                            iAmAName: '<em>jerry</em>'
+                        }
+                    });
+                    this.model.nameAttribute = 'iAmAName';
+                });
+
+                it("returns the highlighted attribute", function() {
+                    expect(this.model.highlightedName().toString()).toBe('<em>jerry</em>');
+                    expect(this.model.highlightedName()).toBeA(Handlebars.SafeString);
+                });
+                
+                it("returns the regular attribute when the highlighted one does not exist", function() {
+                    delete this.model.get('highlightedAttributes').iAmAName;
+                    expect(this.model.highlightedName().toString()).toBe('&lt;script&gt;alert(&quot;hi!&quot;)&lt;/script&gt;jerry');
+                    expect(this.model.highlightedName()).toBeA(Handlebars.SafeString);
+                });
+            });
+
+            context("when the model has a nameFunction set", function() {
+                beforeEach(function() {
+                    this.model.set({
+                        fName: '<script>alert("hi!")</script>herbert',
+                        lName: 'humphrey',
+                        highlightedAttributes: {
+                            fName: '<em>herbert</em>'
+                        }
+                    });
+                    this.model.iAmANameFunction = function() {
+                        return this.get("fName") + ' ' + this.get("lName");
+                    };
+                    this.model.nameFunction = 'iAmANameFunction';
+                });
+
+                it("returns the function with highlighted results", function() {
+                    expect(this.model.highlightedName().toString()).toBe('<em>herbert</em> humphrey');
+                    expect(this.model.highlightedName()).toBeA(Handlebars.SafeString);
+                });
+
+                it("returns the function with regular attribute when the highlighted ones do not exist", function() {
+                    delete this.model.get('highlightedAttributes').fName;
+                    expect(this.model.highlightedName().toString()).toBe('&lt;script&gt;alert(&quot;hi!&quot;)&lt;/script&gt;herbert humphrey');
+                    expect(this.model.highlightedName()).toBeA(Handlebars.SafeString);
+                });
+            });
+        });
     });
 
     describe("Collection", function() {

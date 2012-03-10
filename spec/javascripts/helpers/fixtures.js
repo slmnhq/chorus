@@ -3331,10 +3331,13 @@ beforeEach(function() {
                             "lastUpdatedStamp": "2012-02-29 11:05:26",
                             "admin": true,
                             "name": "edcadmin",
-                            "lastName": "Admin",
                             "emailAddress": "edcadmin@example.com",
                             "content": "Cool person",
-                            "firstName": "<em>EDC</em>",
+                            highlightedAttributes: {
+                                firstName: ["<em>EDC</em>"]
+                            },
+                            "firstName": "EDC",
+                            "lastName": "Admin",
                             "entityType": "user",
                             "owner": {
 
@@ -3348,7 +3351,10 @@ beforeEach(function() {
                             "isDeleted": false,
                             "lastUpdatedStamp": "2012-02-29 09:36:01",
                             "fileType": "SQL",
-                            "name": "<em>edc</em>_query.sql",
+                            "name": "edc_query.sql",
+                            highlightedAttributes: {
+                                name: ["<em>edc</em>_query.sql"]
+                            },
                             "entityType": "workfile",
                             "owner": {
                                 "id": "InitialUser",
@@ -3373,7 +3379,10 @@ beforeEach(function() {
                             "isDeleted": false,
                             "lastUpdatedStamp": "2012-02-24 16:08:32",
                             "isPublic": false,
-                            "name": "<em>ws</em>",
+                            "name": "ws",
+                            highlightedAttributes: {
+                                name: ["<em>ws</em>"]
+                            },
                             "entityType": "workspace",
                             "owner": {
                                 "id": "InitialUser",
@@ -3387,14 +3396,18 @@ beforeEach(function() {
                         {
                             comments: [],
                             entityType: "hdfs",
-                            instance: {id: 10010, name: "HadoopOnGillette"},
+                            instance: {id: '10010', name: "HadoopOnGillette"},
                             id: "10010",
                             name: "HadoopOnGillette",
                             isDeleted: false,
                             lastUpdatedStamp: "2012-03-01 11:49:31",
-                            name: "<em>edc</em>-text.png",
+                            highlightedAttributes: {
+                                name: [
+                                    "<em>Hadoop</em>OnGillette"
+                                ]
+                            },
                             parentType: "hdfs_10010",
-                            path: "hdfs://gillette/webui/images/edc-text.png"
+                            path: "/webui/images"
                         },
                         {
                             comments: [],
@@ -3403,7 +3416,10 @@ beforeEach(function() {
                             id: "10000|Analytics|analytics|BASE_TABLE|clv_data",
                             instance: {id: 10000, name: "gillette"},
                             isDeleted: false,
-                            objectName: "<em>clv</em>_data",
+                            objectName: "clv_data",
+                            highlightedAttributes: {
+                                objectName: ["<em>clv</em>_data"]
+                            },
                             objectType: "BASE_TABLE",
                             parentType: "gpdb_10000_Analytics",
                             schemaName: "analytics",
@@ -3423,7 +3439,10 @@ beforeEach(function() {
                             },
                             isDeleted: false,
                             lastUpdatedStamp: "2012-03-01 14:43:14",
-                            objectName: "aaaaaaaachorus_view_<em>1815</em>",
+                            objectName: "aaaaaaaachorus_view_1815",
+                            highlightedAttributes: {
+                                objectName: ["aaaaaaaachorus_view_<em>1815</em>"]
+                            },
                             objectType: "QUERY",
                             owner: {
                                 firstName: "EDC",
