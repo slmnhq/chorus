@@ -40,7 +40,6 @@ describe("chorus.views.HdfsEntryList", function() {
             expect(this.view.$("li:eq(0) .dir")).toContainTranslation("hdfs.directory_files", {count: this.collection.at(0).get("count")})
         })
 
-
         describe("when browsing the root directory", function() {
             beforeEach(function() {
                 this.collection.attributes.path = "/";
@@ -53,19 +52,11 @@ describe("chorus.views.HdfsEntryList", function() {
             })
         })
 
-        describe("clicking on an li", function() {
-            beforeEach(function() {
-                this.view.$("li:eq(1)").click();
-            });
-
-            it("broadcasts hdfs_entry:selected", function() {
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("hdfs_entry:selected", this.collection.at(1));
-            })
-
-            it("adds the selected class to only that item", function() {
-                expect(this.view.$("li:eq(1)")).toHaveClass("selected");
-                expect(this.view.$("li:eq(0)")).not.toHaveClass("selected");
-            })
+        it("broadcasts hdfs_entry:selected on itemSelected", function() {
+            var model = fixtures.hdfsEntryFile();
+            chorus.PageEvents.broadcast.reset();
+            this.view.itemSelected(model);
+            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("hdfs_entry:selected", model);
         })
     });
 });
