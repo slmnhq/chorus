@@ -2011,7 +2011,8 @@ beforeEach(function() {
                 createdStamp: "2012-01-04 14:42:15.318",
                 createdTxStamp: "2012-01-04 14:42:15.309",
                 instanceId: this.nextId().toString(),
-                databaseName: "My fixture database"
+                databaseName: "My fixture database",
+                datasetCount: 4
             }, overrides);
             return new chorus.models.Schema(attributes);
         },
@@ -2184,6 +2185,7 @@ beforeEach(function() {
                 description: "description for jasmine",
                 expire: null,
                 freeSpace: null,
+                hasCredentials: true,
                 host: "localhost",
                 instanceProvider: "Greenplum Database",
                 instanceVersion: null,

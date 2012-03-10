@@ -1,0 +1,16 @@
+set softtabstop=4
+set tabstop=4
+set smarttab
+set shiftwidth=4
+
+" don't blink cursor
+set gcr=n:blinkon0
+
+map <D-S-F8> :!/Users/pivotal/workspace/chorus/ofbiz/hot-deploy/client/ops/scripts/launch_jasmine.sh %<CR>
+
+set cursorline
+
+set foldmethod=syntax
+
+nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>""
+

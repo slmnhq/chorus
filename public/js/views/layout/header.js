@@ -97,8 +97,6 @@ chorus.views.Header = chorus.views.Base.extend({
         e.preventDefault();
         e.stopImmediatePropagation();
 
-        if ($(e.currentTarget).hasClass("empty")) { return; }
-
         var beingShown = this.$(".menu.popup_notifications").hasClass("hidden");
         this.dismissPopups();
         this.triggerPopupEvent(e.target);

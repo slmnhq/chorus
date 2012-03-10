@@ -1,6 +1,7 @@
-chorus.views.SearchResultListBase = chorus.views.Base.extend({
-    constructorName: "SearchResultListBase",
+chorus.views.SearchResultList = chorus.views.Base.extend({
+    constructorName: "SearchResultList",
     additionalClass: "list",
+    className: "search_result_list",
 
     events: {
         "click a.show_all": "showAll",
@@ -11,18 +12,20 @@ chorus.views.SearchResultListBase = chorus.views.Base.extend({
     setup: function() {
         this.query = this.options.query;
         this.entityType = this.options.entityType;
-        this.className = "search_" + this.entityType + "_list";
         this.listItemConstructorName = "Search" + _.capitalize(this.entityType);
+        this.additionalClass += " search_" + this.entityType + "_list";
     },
 
     additionalContext: function() {
         var ctx = {
+            entityType: this.entityType,
             shown: this.collection.models.length,
             total: this.collection.attributes.total,
             hasNext: this.query && this.query.hasNextPage(),
             hasPrevious: this.query && this.query.hasPreviousPage(),
             filteredSearch: this.query && this.query.entityType() == this.entityType,
-            moreResults: (this.collection.models.length < this.collection.attributes.total)
+            moreResults: (this.collection.models.length < this.collection.attributes.total),
+            title: t("search.type." + this.options.entityType)
         };
 
         if(ctx.hasNext || ctx.hasPrevious) {
@@ -38,10 +41,6 @@ chorus.views.SearchResultListBase = chorus.views.Base.extend({
         this.collection.each(function(model) {
             ul.append(this.makeListItemView(model).render().el);
         }, this);
-    },
-
-    makeListItemView: function(model) {
-        return new chorus.views[this.listItemConstructorName]({ model: model });
     },
 
     showAll: function(e) {
@@ -60,5 +59,9 @@ chorus.views.SearchResultListBase = chorus.views.Base.extend({
         e && e.preventDefault();
         this.query.getPreviousPage();
         this.render();
+    },
+
+    makeListItemView: function(model) {
+        return new chorus.views[this.listItemConstructorName]({ model: model });
     }
 });

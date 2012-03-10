@@ -232,23 +232,6 @@ describe("chorus.views.Header", function() {
             });
         })
 
-        context("when there are notifications", function() {
-            it("makes the notification count a link", function() {
-                expect(this.view.$("a.notifications")).toExist();
-            })
-        })
-
-        context("when there are no notifications", function() {
-            beforeEach(function() {
-                this.view.unreadNotifications.reset();
-                this.view.render();
-            });
-
-            it("marks the notifications with an empty class", function() {
-                expect(this.view.$(".notifications")).toHaveClass("empty");
-            })
-        })
-
         describe("username", function() {
             describe("where the user has no fullName", function() {
                 beforeEach(function() {
@@ -375,123 +358,110 @@ describe("chorus.views.Header", function() {
                     spyOn(this.view.unreadNotifications, "markAllRead").andCallFake(_.bind(function(options) {
                         this.successFunction = options.success;
                     }, this));
+                    this.view.$("a.notifications").click();
                 })
 
-                context("and there are no notifications", function() {
+                beforeEach(function() {
+                });
+
+                it("shows a popup menu", function() {
+                    expect(this.view.$(".menu.popup_notifications")).not.toHaveClass("hidden");
+                });
+
+                it("triggers chorus:menu:popup on the document", function() {
+                    expect(this.popupSpy).toHaveBeenCalled();
+                });
+
+                it("marks the notifications as read", function() {
+                    expect(this.view.unreadNotifications.markAllRead).toHaveBeenCalled();
+                    expect(this.successFunction).toBeDefined();
+                })
+
+                describe("when the mark-all-read call succeeds", function() {
                     beforeEach(function() {
-                        this.view.$("a.notifications").addClass("empty");
-                        this.view.$("a.notifications").click();
+                        this.successFunction();
                     });
 
-                    it("does not show a popup menu", function() {
-                        expect(this.view.$(".menu.popup_notifications")).toHaveClass("hidden");
+                    it("updates the unread notification count", function() {
+                        expect(this.view.$("a.notifications")).toHaveText("0");
+                    });
+
+                    it("makes the notifications look empty", function() {
+                        expect(this.view.$("a.notifications")).toHaveClass("empty");
                     });
                 });
 
-                context("and there are notifications", function() {
+                describe("and when clicked again", function() {
                     beforeEach(function() {
+                        this.view.unreadNotifications.markAllRead.reset();
                         this.view.$("a.notifications").click();
                     });
 
-                    it("shows a popup menu", function() {
-                        expect(this.view.$(".menu.popup_notifications")).not.toHaveClass("hidden");
+                    it("becomes hidden again", function() {
+                        expect(this.view.$(".menu.popup_notifications")).toHaveClass("hidden");
                     });
 
-                    it("triggers chorus:menu:popup on the document", function() {
-                        expect(this.popupSpy).toHaveBeenCalled();
+                    it("does not re-mark the notifications as read", function() {
+                        expect(this.view.unreadNotifications.markAllRead).not.toHaveBeenCalled();
                     });
 
-                    it("marks the notifications as read", function() {
-                        expect(this.view.unreadNotifications.markAllRead).toHaveBeenCalled();
-                        expect(this.successFunction).toBeDefined();
-                    })
+                });
 
-                    describe("when the mark-all-read call succeeds", function() {
+                it("has a notification list", function() {
+                    expect(this.view.notificationList).toBeA(chorus.views.NotificationList);
+                    expect(this.view.$(".popup_notifications")).toContain(this.view.notificationList.el);
+                });
+
+                describe("clicking delete for a notification", function() {
+                    beforeEach(function() {
+                        chorus.bindModalLaunchingClicks(this.view);
+                        this.modalSpy = stubModals();
+                        this.view.$('.popup_notifications .delete_link:eq(0)').click();
+                    });
+
+                    it("launches the NotificationDeleteAlert", function() {
+                        expect(this.modalSpy).toHaveModal(chorus.alerts.NotificationDeleteAlert);
+                    });
+
+                    describe("clicking the confirmation", function() {
                         beforeEach(function() {
-                            this.successFunction();
+                            $(this.modalSpy.mostRecentCall.args[0]).find("button.submit").click();
                         });
 
-                        it("updates the unread notification count", function() {
-                            expect(this.view.$("a.notifications")).toHaveText("0");
-                        });
-
-                        it("makes the notifications look empty", function() {
-                            expect(this.view.$("a.notifications")).toHaveClass("empty");
+                        it("deletes the notification", function() {
+                            expect(this.server.lastDestroyFor(this.view.unreadNotifications.at(0))).toBeDefined();
                         });
                     });
+                });
 
-                    describe("and when clicked again", function() {
+                describe("when a notification:deleted event occurs", function() {
+                    beforeEach(function() {
+                        this.server.reset();
+                        chorus.PageEvents.broadcast("notification:deleted");
+                    });
+
+                    it("should re-fetch the notifications", function() {
+                        expect(this.server.lastFetchAllFor(this.view.unreadNotifications)).toBeDefined();
+                        expect(this.view.notifications).toHaveBeenFetched();
+                    });
+
+                    context("when the fetch completes", function() {
                         beforeEach(function() {
-                            this.view.unreadNotifications.markAllRead.reset();
-                            this.view.$("a.notifications").click();
+                            this.server.completeFetchAllFor(this.view.unreadNotifications, [], null, { records: 0 });
+                            this.server.completeFetchAllFor(this.view.notifications, [
+                                fixtures.notification({ id: '1' }),
+                                fixtures.notification({ id: '2' }),
+                                fixtures.notification({ id: '3' }),
+                                fixtures.notification({ id: '4' })
+                            ]);
                         });
 
-                        it("becomes hidden again", function() {
-                            expect(this.view.$(".menu.popup_notifications")).toHaveClass("hidden");
+                        it("should display the new unread notification count", function() {
+                            expect(this.view.$("a.notifications").text()).toBe("0");
                         });
 
-                        it("does not re-mark the notifications as read", function() {
-                            expect(this.view.unreadNotifications.markAllRead).not.toHaveBeenCalled();
-                        });
-
-                    });
-
-                    it("has a notification list", function() {
-                        expect(this.view.notificationList).toBeA(chorus.views.NotificationList);
-                        expect(this.view.$(".popup_notifications")).toContain(this.view.notificationList.el);
-                    });
-
-                    describe("clicking delete for a notification", function() {
-                        beforeEach(function() {
-                            chorus.bindModalLaunchingClicks(this.view);
-                            this.modalSpy = stubModals();
-                            this.view.$('.popup_notifications .delete_link:eq(0)').click();
-                        });
-
-                        it("launches the NotificationDeleteAlert", function() {
-                            expect(this.modalSpy).toHaveModal(chorus.alerts.NotificationDeleteAlert);
-                        });
-
-                        describe("clicking the confirmation", function() {
-                            beforeEach(function() {
-                                $(this.modalSpy.mostRecentCall.args[0]).find("button.submit").click();
-                            });
-
-                            it("deletes the notification", function() {
-                                expect(this.server.lastDestroyFor(this.view.unreadNotifications.at(0))).toBeDefined();
-                            });
-                        });
-                    });
-
-                    describe("when a notification:deleted event occurs", function() {
-                        beforeEach(function() {
-                            this.server.reset();
-                            chorus.PageEvents.broadcast("notification:deleted");
-                        });
-
-                        it("should re-fetch the notifications", function() {
-                            expect(this.server.lastFetchAllFor(this.view.unreadNotifications)).toBeDefined();
-                            expect(this.view.notifications).toHaveBeenFetched();
-                        });
-
-                        context("when the fetch completes", function() {
-                            beforeEach(function() {
-                                this.server.completeFetchAllFor(this.view.unreadNotifications, [], null, { records: 0 });
-                                this.server.completeFetchAllFor(this.view.notifications, [
-                                    fixtures.notification({ id: '1' }),
-                                    fixtures.notification({ id: '2' }),
-                                    fixtures.notification({ id: '3' }),
-                                    fixtures.notification({ id: '4' })
-                                ]);
-                            });
-
-                            it("should display the new unread notification count", function() {
-                                expect(this.view.$("a.notifications").text()).toBe("0");
-                            });
-
-                            it("should render the new notification list", function() {
-                                expect(this.view.$(".popup_notifications li").length).toBe(4);
-                            });
+                        it("should render the new notification list", function() {
+                            expect(this.view.$(".popup_notifications li").length).toBe(4);
                         });
                     });
                 });

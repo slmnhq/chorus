@@ -44,7 +44,7 @@ describe("chorus.views.SearchWorkspace", function() {
     });
 
     it("includes the correct workspace file icon", function() {
-        expect(this.view.$("img.icon").attr("src")).toBe("/edc/workspace/10000/image?size=original");
+        expect(this.view.$("img.icon").attr("src")).toBe(this.model.defaultIconUrl());
     });
 
     it("has a link to the workspace for each workspace in the collection", function() {

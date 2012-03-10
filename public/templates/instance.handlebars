@@ -4,7 +4,11 @@
     <img class="provider" src="{{providerUrl}}"/>
 </div>
 <div class="instance_details">
-    <a class="name" href="{{showUrl}}">{{name}}</a>
+    {{#if userHasCredentials}}
+        <a class="name" href="{{showUrl}}">{{name}}</a>
+    {{else}}
+        <a class="name dialog" href="#" data-dialog="InstanceAccount" data-title='{{t "instances.account.add.title"}}'>{{name}}</a>
+    {{/if}}
     <div class="description">{{description}}</div>
 </div>
 <span class="spacer_right"></span>

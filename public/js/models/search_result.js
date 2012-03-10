@@ -1,6 +1,8 @@
 chorus.models.SearchResult = chorus.models.Base.extend({
     constructorName: "SearchResult",
 
+    numResultsPerPage: 50,
+
     initialize: function(attributes) {
         if(!this._entityType) {
             this._entityType = this.get("entityType") || "all"
@@ -39,7 +41,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
 
     totalPageNumber: function(){
         var total = this.getResults().attributes.total;
-        return Math.ceil(total/50);
+        return Math.ceil(total/this.numResultsPerPage);
     },
 
     showUrlTemplate: function() {
@@ -65,7 +67,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
         if (this.hasSpecificEntityType()) {
             var total = this.getResults().attributes.total;
             var page = this.currentPageNumber();
-            return total > (50 * page);
+            return total > (this.numResultsPerPage * page);
         }
     },
 
@@ -93,7 +95,7 @@ chorus.models.SearchResult = chorus.models.Base.extend({
         };
         if (this.hasSpecificEntityType()) {
             params.entityType = this.entityType();
-            params.rows = 50;
+            params.rows = this.numResultsPerPage;
             params.page = this.currentPageNumber();
         }
         if (this.has("workspaceId")) params.workspaceId = this.get("workspaceId");

@@ -111,6 +111,10 @@ chorus.models = {
             return _.isEmpty(this.errors);
         },
 
+        clearErrors: function() {
+            this.errors = {};
+        },
+
         performValidation: function(newAttrs) {
             this.errors = {};
             this.declareValidations(newAttrs);

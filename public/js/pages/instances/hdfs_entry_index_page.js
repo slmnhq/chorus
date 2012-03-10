@@ -8,6 +8,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         this.collection = new chorus.collections.HdfsEntrySet([], {instance: this.instance, path: this.path});
         this.collection.fetch();
         this.requiredResources.push(this.collection);
+        chorus.PageEvents.subscribe("hdfs_entry:selected", this.entrySelected, this)
     },
 
     resourcesLoaded: function() {
@@ -66,5 +67,9 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         } else {
             return this.path
         }
+    },
+
+    entrySelected : function(model) {
+        this.model = model;
     }
 });

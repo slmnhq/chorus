@@ -2,7 +2,12 @@
     <li class="schema">
         <span class="spacer_left"/>
         <img src="/images/instances/greenplum_schema.png"/>
-        <a class="name" href="{{showUrl}}">{{name}}</a>
+        <div class="main">
+            <a class="name" href="{{showUrl}}">{{name}}</a>
+            <div class="description">
+                {{t "entity.name.Dataset" count=datasetCount}}
+            </div>
+        </div>
         <span class="spacer_right"/>
     </li>
 {{/each}}

@@ -55,7 +55,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
                 }
             }),
 
-            content: new chorus.views.SearchResultList({ model: this.model })
+            content: new chorus.views.SearchResults({ model: this.model })
         });
 
         this.sidebars = {

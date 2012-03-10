@@ -1,6 +1,6 @@
-chorus.views.SearchResultList = chorus.views.Base.extend({
-    constructorName: "SearchResultListView",
-    className: "search_result_list",
+chorus.views.SearchResults = chorus.views.Base.extend({
+    constructorName: "SearchResults",
+    className: "search_results",
 
     subviews: {
         ".hdfs_list": "hdfsList",
@@ -17,53 +17,32 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
 
     setup: function() {
         if (this.model.hdfs()) {
-            this.hdfsList = new chorus.views.SearchResultListBase({
-                entityType: 'hdfs',
-                collection: this.model.hdfs(),
-                total: this.model.get("hdfs").numFound,
-                query: this.model
-            });
+            this.hdfsList = this.buildListView('hdfs', this.model.hdfs());
         }
         if (this.model.users()) {
-            this.userList = new chorus.views.SearchResultListBase({
-                entityType: 'user',
-                collection: this.model.users(),
-                total: this.model.get("user").numFound,
-                query: this.model
-            });
+            this.userList = this.buildListView('user', this.model.users());
         }
         if (this.model.workfiles()) {
-            this.workfileList = new chorus.views.SearchResultListBase({
-                entityType: 'workfile',
-                collection: this.model.workfiles(),
-                total: this.model.get("workfile").numFound,
-                query: this.model
-            });
+            this.workfileList = this.buildListView('workfile', this.model.workfiles());
         }
         if (this.model.workspaces()) {
-            this.workspaceList = new chorus.views.SearchResultListBase({
-                entityType: 'workspace',
-                collection: this.model.workspaces(),
-                total: this.model.get("workspace").numFound,
-                query: this.model
-            });
+            this.workspaceList = this.buildListView('workspace', this.model.workspaces());
         }
         if (this.model.tabularData()) {
-            this.tabularDataList = new chorus.views.SearchResultListBase({
-                entityType: 'dataset',
-                collection: this.model.tabularData(),
-                total: this.model.get("dataset").numFound,
-                query: this.model
-            });
+            this.tabularDataList = this.buildListView('dataset', this.model.tabularData());
         }
         if (this.model.instances()) {
-            this.instanceList = new chorus.views.SearchResultListBase({
-                entityType: 'instance',
-                collection: this.model.instances(),
-                total: this.model.get("instance").numFound,
-                query: this.model
-            });
+            this.instanceList = this.buildListView('instance', this.model.instances());
         }
+    },
+
+    buildListView: function(entityType, collection) {
+        return new chorus.views.SearchResultList({
+            entityType: entityType,
+            collection: collection,
+            total: this.model.get(entityType).numFound,
+            query: this.model
+        });
     },
 
     selectItem:function selectItem(e) {

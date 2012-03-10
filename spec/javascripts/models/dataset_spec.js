@@ -91,6 +91,28 @@ describe("chorus.models.Dataset", function() {
         })
     })
 
+    describe("#activities", function() {
+        context("for a chorus view", function() {
+            beforeEach(function() {
+                this.dataset.set({ type: "CHORUS_VIEW" })
+            });
+
+            it("sets the workspace info into the ActivitySet object", function() {
+                expect(this.dataset.activities().attributes.workspace).toEqual(this.dataset.get("workspace"))
+            })
+        })
+
+        context("for a non-chorus view", function() {
+            beforeEach(function() {
+                this.dataset.set({ type: "SANDBOX_TABLE" })
+            });
+
+            it("does not set the workspace info into the ActivitySet object", function() {
+                expect(this.dataset.activities().attributes.workspace).toBeUndefined();
+            })
+        })
+    })
+
     describe("#iconUrl", function() {
         context("when the user does not have credentials", function() {
             beforeEach(function() {

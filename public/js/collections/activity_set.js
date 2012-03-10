@@ -11,8 +11,8 @@ chorus.collections.ActivitySet = chorus.collections.Base.extend({
     },
 
     urlParams: function() {
-        if (this.attributes.insights && this.attributes.workspace) {
-            return { workspaceId: this.attributes.workspace.get("id") }
+        if (this.attributes.workspace) {
+            return { workspaceId: this.attributes.workspace.id }
         } else {
             return {};
         }

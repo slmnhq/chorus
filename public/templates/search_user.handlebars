@@ -2,24 +2,21 @@
 <img class="icon" src="{{iconSrc}}"/>
 <div class="description">
     <a class="name" href="{{link}}">{{{displayName}}}</a>
+    <div class="title">
+        <span class="content">{{{title}}</span>
+    </div>
     <div class="supportingMessage">
         {{#each supportingMessage}}
-            {{#if title}}
-            <div class="title">
-                    <span class="prefix">{{t "users.title"}}:</span>
-                    <span class="content">&#8220;{{{title}}}&#8221;</span>
-            </div>
-            {{/if}}
             {{#if ou}}
             <div class="ou">
-                    <span class="prefix">{{t "users.department"}}:</span>
-                    <span class="content">&#8220;{{{ou}}}&#8221;</span>
+                <span class="prefix">{{t "users.department"}}:</span>
+                <span class="content">&#8220;{{{ou}}}&#8221;</span>
             </div>
             {{/if}}
             {{#if content}}
             <div class="notes">
-                    <span class="prefix">{{t "users.notes"}}:</span>
-                    <span class="content">&#8220;{{{content}}}&#8221;</span>
+                <span class="prefix">{{t "users.notes"}}:</span>
+                <span class="content">&#8220;{{{content}}}&#8221;</span>
             </div>
             {{/if}}
             {{#if emailAddress}}
@@ -29,7 +26,7 @@
             {{/if}}
             {{#if name}}
             <div class="username">
-                    <span class="content">&#8220;{{{name}}}&#8221;</span>
+                <span class="content">&#8220;{{{name}}}&#8221;</span>
             </div>
             {{/if}}
         {{/each}}
@@ -46,12 +43,6 @@
 
     <div class="more_comments hidden">
         {{#each moreSupportingMessage}}
-            {{#if title}}
-            <div class="title">
-                <span class="prefix">{{t "users.title"}}:</span>
-                <span class="content">&#8220;{{{title}}}&#8221;</span>
-            </div>
-            {{/if}}
             {{#if ou}}
             <div class="ou">
                 <span class="prefix">{{t "users.department"}}:</span>

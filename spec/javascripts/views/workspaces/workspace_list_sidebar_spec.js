@@ -53,4 +53,15 @@ describe("chorus.views.WorkspaceListSidebar", function() {
         expect(this.view.$(".actions a[data-dialog=NotesNew]")).toContainTranslation("actions.add_note");
         expect(this.view.$(".actions a[data-dialog=InsightsNew]")).toContainTranslation("actions.add_insight");
     })
+
+    describe("when a memo:added:workspace event occurs", function() {
+        beforeEach(function() {
+            this.server.reset();
+            chorus.PageEvents.broadcast("memo:added:workspace");
+        })
+
+        it("re-fetches the activity stream", function() {
+            expect(this.view.activityList.collection).toHaveBeenFetched();
+        });
+    })
 })

@@ -5,7 +5,10 @@ describe("chorus.views.SearchUser", function() {
         this.model.set({highlightedAttributes: {
             title: '<em>test</em>er',
             emailAddress: '<em>test</em>@example.com',
-            firstName: "<em>John</em>"
+            firstName: "<em>John</em>",
+            ou: "<em>John</em>",
+            content: "<em>Here is some content</em>",
+            name: "<em>foo</em>"
         } })
         this.view = new chorus.views.SearchUser({ model: this.model });
         this.view.render();
@@ -27,17 +30,17 @@ describe("chorus.views.SearchUser", function() {
         expect(this.view.$('a.name').html()).toContain("<em>John</em> Doe");
     });
 
-    describe("supporting messages (title, notes, etc.)", function() {
-        it("has Title", function() {
-            expect(this.view.$('.title .content').html()).toContain("<em>test</em>er");
-        });
+    it("has the title", function() {
+        expect(this.view.$('.title .content').html()).toContain("<em>test</em>er");
+    });
 
+    describe("supporting messages (title, notes, etc.)", function() {
         it("has Department", function() {
-            expect(this.view.$('.ou .content').html()).toContain(this.model.get("ou"));
+            expect(this.view.$('.ou .content').html()).toContain("<em>John</em>");
         });
 
         it("has Notes", function() {
-            expect(this.view.$('.notes .content').html()).toContain(this.model.get("content"));
+            expect(this.view.$('.notes .content').html()).toContain("<em>Here is some content</em>");
         });
 
         it("has e-mail", function() {
@@ -45,7 +48,7 @@ describe("chorus.views.SearchUser", function() {
         });
 
         it("has username", function() {
-            expect(this.view.$('.username .content').html()).toContain(this.model.get("name"));
+            expect(this.view.$('.username .content').html()).toContain("<em>foo</em>");
         });
 
         context("when there are more than 3 supporting messages", function() {
@@ -67,7 +70,11 @@ describe("chorus.views.SearchUser", function() {
                     "owner": {},
                     highlightedAttributes: {
                         "name": "<em>test</em>",
-                        "ou": "<em>Test</em>"
+                        "ou": "<em>Test</em>",
+                        "title": "<em>affd</em>",
+                        "firstName": "<em>affd</em>",
+                        "emailAddress": "<em>test</em>@emc.com",
+                        "content": "<em>Hello</em>"
                     }
                 });
                 this.view = new chorus.views.SearchUser({ model: this.model });
@@ -76,12 +83,12 @@ describe("chorus.views.SearchUser", function() {
 
             it("displays 3 messages in the supporting message and the rest in the more section", function() {
                 expect(this.view.$(".supportingMessage div").length).toBe(3);
-                expect(this.view.$(".more_comments div").length).toBe(2);
+                expect(this.view.$(".more_comments div").length).toBe(1);
             });
 
             it("display the show-more link", function() {
                 expect(this.view.$(".has_more_comments")).toContainTranslation("search.comments_more.and");
-                expect(this.view.$(".show_more_comments")).toContainTranslation("search.comments_more.other", {count:2});
+                expect(this.view.$(".show_more_comments")).toContainTranslation("search.comments_more.one", {count:1});
                 expect(this.view.$(".show_fewer_comments")).toContainTranslation("search.comments_less");
             });
 
@@ -134,7 +141,7 @@ describe("chorus.views.SearchUser", function() {
             });
 
             it("displays all messages in the supporting message and none in the rest in the more section", function() {
-                expect(this.view.$(".supportingMessage div").length).toBe(2);
+                expect(this.view.$(".supportingMessage div").length).toBe(1);
                 expect(this.view.$(".more_comments div").length).toBe(0);
             });
 
@@ -142,6 +149,5 @@ describe("chorus.views.SearchUser", function() {
                 expect(this.view.$(".showmore_comments")).not.toExist();
             });
         });
-
     });
 });

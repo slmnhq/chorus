@@ -5,7 +5,7 @@ chorus.views.SearchWorkspace = chorus.views.SearchItemBase.extend({
     additionalContext: function(){
         return {
             showUrl: this.model.showUrl(),
-            iconUrl: this.model.customIconUrl()
+            iconUrl: this.model.defaultIconUrl()
         }
     }
 })
