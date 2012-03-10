@@ -1,6 +1,6 @@
 describe("chorus.views.Login", function() {
     beforeEach(function() {
-        this.view = new chorus.views.Login({model : chorus.session});
+        this.view = new chorus.views.Login({model: chorus.session});
         this.view.render();
     });
 
@@ -13,7 +13,7 @@ describe("chorus.views.Login", function() {
     })
 
     describe("when the version string is returned", function() {
-        beforeEach(function () {
+        beforeEach(function() {
             this.server.requests[0].respond(200, {}, "THE_VERSION");
         });
 
@@ -64,13 +64,47 @@ describe("chorus.views.Login", function() {
     });
 
     describe("when the login succeeds", function() {
-        beforeEach(function() {
-            this.navigationSpy = spyOn(chorus.router, "navigate");
-            this.view.model.trigger('saved', this.view.model);
+        context("with no prior logins", function() {
+            beforeEach(function() {
+                this.navigationSpy = spyOn(chorus.router, "navigate");
+                this.view.model.trigger('saved', this.view.model);
+            });
+
+            it("navigates to the dashboard", function() {
+                expect(this.navigationSpy).toHaveBeenCalledWith("/", true);
+            });
         });
 
-        it("navigates to the dashboard", function() {
-            expect(this.navigationSpy).toHaveBeenCalledWith("/", true);
+        context("with a prior login from the same user that timed out", function() {
+            beforeEach(function() {
+                chorus.session.previousUserId = "2";
+                chorus.session.pathBeforeLoggedOut = "/foo";
+                chorus.session.set({user: new chorus.models.User({id: "2", userName: "iAmNumberTwo"})});
+
+                this.navigationSpy = spyOn(chorus.router, "navigate");
+                this.view.model.trigger('saved', this.view.model);
+            });
+
+            it("navigates to the page before forced logout", function() {
+                expect(this.navigationSpy).toHaveBeenCalledWith("/foo", true);
+            });
         });
+
+        context("with a prior login from a different user that timed out", function() {
+            beforeEach(function() {
+                chorus.session.previousUserId = "2";
+                chorus.session.pathBeforeLoggedOut = "/foo";
+                chorus.session.set({user: new chorus.models.User({id: "3", userName: "iAmNumberThree"})});
+
+                this.navigationSpy = spyOn(chorus.router, "navigate");
+                this.navigationSpy.reset();
+                this.view.model.trigger('saved', this.view.model);
+            });
+
+            xit("navigates to the dashboard", function() {
+                expect(this.navigationSpy).toHaveBeenCalledWith("/", true);
+            });
+        })
+
     })
 })

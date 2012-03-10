@@ -16,7 +16,11 @@ chorus.views.Login = chorus.views.Base.extend({
     },
 
     navigateToDashboard:function (model) {
-        chorus.router.navigate("/", true);
+        if(chorus.session && chorus.session.pathBeforeLoggedOut) {
+            chorus.router.navigate(chorus.session.pathBeforeLoggedOut, true)
+        } else {
+            chorus.router.navigate("/", true);
+        }
     },
 
     submitLoginForm:function submitLoginForm(e) {

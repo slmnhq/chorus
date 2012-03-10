@@ -58,6 +58,7 @@ chorus.models.Session = chorus.models.Base.extend({
                 self.trigger("needsLogin")
             })
         } else {
+            chorus.session.pathBeforeLoggedOut = Backbone.history.fragment;
             this.trigger("needsLogin")
         }
     },

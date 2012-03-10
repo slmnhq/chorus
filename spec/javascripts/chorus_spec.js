@@ -533,4 +533,45 @@ describe("chorus global", function() {
             })
         })
     })
-});
+
+    describe("#requireLogin", function() {
+        beforeEach(function() {
+            this.chorus.initialize();
+        })
+        describe("from a 'needslogin' from the api", function() {
+            beforeEach(function() {
+                Backbone.history.fragment = "/foo";
+                this.chorus.session.set({user: new chorus.models.User({id: "1", userName: "iAmNumberOne"})});
+                this.chorus.session.trigger("needsLogin");
+            })
+
+            it("stores the pathBeforeLoggedOut", function() {
+                expect(this.chorus.session.pathBeforeLoggedOut).toBe("/foo")
+            })
+
+            it("stores the previousUser", function() {
+                expect(this.chorus.session.previousUserId).toBe("1")
+            })
+        })
+        describe("from manually logging out", function() {
+            beforeEach(function() {
+                this.chorus.session.pathBeforeLoggedOut = "/bar";
+                this.chorus.session.set({user: new chorus.models.User({id: "1", userName: "iAmNumberOne"})});
+
+                this.chorus.session.previousUserId = "1";
+
+                Backbone.history.fragment = "/logout";
+                this.chorus.session.trigger("needsLogin");
+            })
+
+            it("does not store the pathBeforeLoggedOut", function() {
+                expect(this.chorus.session.pathBeforeLoggedOut).toBeUndefined();
+            })
+
+            it("clears out the previousUser", function() {
+                expect(this.chorus.session.previousUserId).toBeUndefined();
+            })
+        })
+    })
+})
+;

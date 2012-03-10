@@ -19,7 +19,6 @@ window.Chorus = function chorus$Global() {
                 mode: "overlay"
             });
         }
-
         self.PageEvents = new chorus.utilities.PageEvents();
         self.session = new chorus.models.Session();
         self.router = new chorus.Router(self);
@@ -69,6 +68,15 @@ window.Chorus = function chorus$Global() {
     };
 
     self.requireLogin = function requireLogin() {
+        if(Backbone.history.fragment != "/logout") {
+            self.session.pathBeforeLoggedOut = Backbone.history.fragment;
+            self.session.previousUserId = self.session.get("user").id;
+
+        } else {
+            delete self.session.pathBeforeLoggedOut;
+            delete self.session.previousUserId;
+        }
+
         self.router.navigate("/login", true);
     };
 
