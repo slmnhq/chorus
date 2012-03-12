@@ -4,7 +4,7 @@ chorus.views.SearchItemBase = chorus.views.Base.extend({
 
     events: {
         "click a.show_more_comments": "showMoreComments",
-        "click a.show_fewer_comments": "showLessComments",
+        "click a.show_fewer_comments": "showFewerComments",
         "click": "itemSelected"
     },
 
@@ -23,7 +23,7 @@ chorus.views.SearchItemBase = chorus.views.Base.extend({
         this.$(".more_comments").removeClass("hidden");
     },
 
-    showLessComments: function(evt) {
+    showFewerComments: function(evt) {
         evt && evt.preventDefault();
         this.$(".has_more_comments").removeClass("hidden");
         this.$(".more_comments").addClass("hidden");

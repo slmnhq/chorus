@@ -78,7 +78,7 @@ describe("chorus.views.SearchUser", function() {
             });
 
             it("displays 3 messages in the supporting message and the rest in the more section", function() {
-                expect(this.view.$(".supportingMessage div").length).toBe(3);
+                expect(this.view.$(".supporting_message div").length).toBe(3);
                 expect(this.view.$(".more_comments div").length).toBe(1);
             });
 
@@ -137,7 +137,7 @@ describe("chorus.views.SearchUser", function() {
             });
 
             it("displays all messages in the supporting message and none in the rest in the more section", function() {
-                expect(this.view.$(".supportingMessage div").length).toBe(1);
+                expect(this.view.$(".supporting_message div").length).toBe(1);
                 expect(this.view.$(".more_comments div").length).toBe(0);
             });
 

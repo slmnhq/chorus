@@ -34,7 +34,7 @@
     }
 
     span.previous, span.next {
-        color:$color-text4;
+        color: $color-text4;
     }
 
     li {
@@ -82,11 +82,19 @@
         .prefix {
             @include font-content-details;
         }
+
         .content {
             @include font-normal-alpha;
         }
 
-        .comments, .moreComments, .supportingMessage, .moreSupportingMessage {
+        .supporting_message, .more_comments {
+            span {
+                line-height: 1.5em;
+                vertical-align: baseline;
+            }
+        }
+
+        .comments, .more_comments, .supporting_message, .more_supporting_message {
             @include font-content-details;
             margin: 0;
 
@@ -106,16 +114,10 @@
                 }
             }
 
-            .has_more_comments, .hasMore, .more_comments {
+            .has_more_comments, .more_comments {
                 a {
                     font-size: 12px;
                 }
-            }
-
-            .hasMore, .lessComments {
-                vertical-align: bottom;
-                margin-top: 5px;
-                line-height: 14px;
             }
         }
     }

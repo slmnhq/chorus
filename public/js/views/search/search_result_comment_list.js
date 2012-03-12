@@ -4,7 +4,7 @@ chorus.views.SearchResultCommentList = chorus.views.Base.extend({
 
     events: {
         "click a.show_more_comments": "showMoreComments",
-        "click a.show_fewer_comments": "showLessComments"
+        "click a.show_fewer_comments": "showFewerComments"
     },
 
     setup: function() {
@@ -18,7 +18,7 @@ chorus.views.SearchResultCommentList = chorus.views.Base.extend({
         this.$(".more_comments").removeClass("hidden");
     },
 
-    showLessComments: function(e) {
+    showFewerComments: function(e) {
         e && e.preventDefault();
         var $li = $(e.target).closest("li");
         this.$(".has_more_comments").removeClass("hidden");
