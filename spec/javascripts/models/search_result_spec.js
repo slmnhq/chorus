@@ -144,6 +144,30 @@ describe("chorus.models.SearchResult", function() {
         });
     });
 
+    describe("#workspace", function() {
+        context("when the model has a workspace id", function() {
+            beforeEach(function() {
+                this.model.set({ workspaceId: "123" });
+            });
+
+            it("returns a workspace model with the right id", function() {
+                var workspace = this.model.workspace();
+                expect(workspace).toBeA(chorus.models.Workspace);
+                expect(workspace.get("id")).toBe("123");
+            });
+
+            it("memoizes", function() {
+                expect(this.model.workspace()).toBe(this.model.workspace());
+            });
+        });
+
+        context("when the model does NOT have a workspace id", function() {
+            it("returns undefined", function() {
+                expect(this.model.workspace()).toBeUndefined();
+            });
+        });
+    });
+
     describe("#workspaceItems", function() {
         context("when there are worspace items", function() {
             beforeEach(function() {

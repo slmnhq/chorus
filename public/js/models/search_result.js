@@ -109,6 +109,14 @@ chorus.models.SearchResult = chorus.models.Base.extend({
         return (name.length < length) ? name : name.slice(0, length) + "...";
     },
 
+    workspace: function() {
+        var workspaceId = this.get("workspaceId");
+        if (!this._workspace && workspaceId) {
+            this._workspace = new chorus.models.Workspace({ id: workspaceId });
+        }
+        return this._workspace;
+    },
+
     workspaceItems: function() {
         if (!this._workspaceItems && this.get("thisWorkspace")) {
             this._workspaceItems = new chorus.collections.WorkspaceSearchItemSet(this.get("thisWorkspace").docs, { total: this.get("thisWorkspace").numFound });
