@@ -27,8 +27,8 @@
                 <span class="count">{{t "search.results" count=total}}</span>
             </div>
         {{else}}
-            <div class="details">
-                <div class="right">
+            <div class="list_content_details">
+                <div class="pagination">
                     {{#if moreResults}}
                         <span class="count">{{t "search.count" shown=shown total=total}}</span>
                         <a class="show_all" data-type="{{entityType}}" href="#">{{t "search.show_all"}}</a>

@@ -52,7 +52,7 @@ describe("chorus.views.SearchResultList", function() {
 
             describe("details bar", function() {
                 it("has a title", function() {
-                    expect(this.view.$(".details .title")).toContainTranslation("search.users.title");
+                    expect(this.view.$(".title")).toContainTranslation("search.users.title");
                 });
 
                 context("has no additional results", function() {
@@ -62,11 +62,11 @@ describe("chorus.views.SearchResultList", function() {
                     });
 
                     it("has a short count", function() {
-                        expect(this.view.$(".details .count")).toContainTranslation("search.count_short", {shown: this.collection.models.length});
+                        expect(this.view.$(".count")).toContainTranslation("search.count_short", {shown: this.collection.models.length});
                     });
 
                     it("has no showAll link", function() {
-                        expect(this.view.$(".details a.show_all")).not.toExist();
+                        expect(this.view.$("a.show_all")).not.toExist();
                     });
                 });
 
@@ -77,15 +77,15 @@ describe("chorus.views.SearchResultList", function() {
                     });
 
                     it("has a long count", function() {
-                        expect(this.view.$(".details .count")).toContainTranslation("search.count", {
+                        expect(this.view.$(".count")).toContainTranslation("search.count", {
                             shown: this.collection.models.length,
                             total: (this.collection.models.length + 1)
                         });
                     });
 
                     it("has a showAll link", function() {
-                        expect(this.view.$(".details a.show_all")).toContainTranslation("search.show_all")
-                        expect(this.view.$(".details a.show_all").data("type")).toBe("user");
+                        expect(this.view.$("a.show_all")).toContainTranslation("search.show_all")
+                        expect(this.view.$("a.show_all").data("type")).toBe("user");
                     });
 
                     context("clicking the show all link", function() {
@@ -111,8 +111,8 @@ describe("chorus.views.SearchResultList", function() {
                     });
 
                     it("does not show the bar or the list", function() {
-                        expect(this.view.$(".details")).not.toExist();
-                        expect(this.view.$("ul")).not.toExist();
+                        expect($(this.view.el)).toBeEmpty();
+                        expect($(this.view.el).html().trim()).toBe("");
                     });
                 });
             });

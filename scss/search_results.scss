@@ -1,8 +1,9 @@
 @import "_common.scss";
 
 .search_result_list {
-    .details {
+    .list_content_details {
         @include list-section-heading;
+        width: auto;
         padding: 5px 10px;
         @include background-image(linear-gradient(#ebeef2, #d7dfe9));
         border-top: 1px solid #cbcbcb;
@@ -11,11 +12,8 @@
         line-height: 20px;
         vertical-align: middle;
 
-        .right {
-            float: right;
-            font-size: 12px;
-
-            a {
+        .pagination {
+            span, a {
                 font-size: 12px;
                 padding-left: 15px;
             }
