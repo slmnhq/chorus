@@ -2,6 +2,7 @@ describe("chorus.views.SearchResults", function() {
     var makeSearchResults = function() {
         return fixtures.searchResult({
             entityType: "all",
+            workspaceId: '10001',
             thisWorkspace: {
                 docs: [
                     fixtures.searchResultWorkfileJson(),
@@ -16,6 +17,7 @@ describe("chorus.views.SearchResults", function() {
     beforeEach(function() {
         this.model = makeSearchResults()
         this.view = new chorus.views.SearchResults({model: this.model});
+        this.server.completeFetchFor(this.model.workspace());
         this.view.render();
     });
 
