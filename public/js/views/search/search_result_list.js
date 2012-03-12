@@ -24,7 +24,7 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
             hasPrevious: this.query && this.query.hasPreviousPage(),
             filteredSearch: this.query && this.query.entityType() == this.entityType,
             moreResults: (this.collection.models.length < this.collection.attributes.total),
-            title: t("search.type." + this.options.entityType)
+            title: this.title(),
         };
 
         if(ctx.hasNext || ctx.hasPrevious) {
@@ -33,6 +33,10 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
         }
 
         return ctx;
+    },
+
+    title: function() {
+         return t("search.type." + this.options.entityType);
     },
 
     postRender: function() {
