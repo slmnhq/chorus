@@ -1,13 +1,20 @@
-chorus.pages.InvalidRoutePage = chorus.pages.Base.extend({
-    crumbs:[
-        { label:t("breadcrumbs.home"), url:"#/" },
-        { label:"???" }
-    ],
+chorus.pages.InvalidRoutePage = chorus.pages.Bare.extend({
+    className: "invalid_route",
+    additionalClass: "logged_in_layout",
 
-    setup:function (path) {
-        this.mainContent = new chorus.views.MainContentView({
-            content:new chorus.views.StaticTemplate("plain_text", {text:"No route matched for: " + path}),
-            contentHeader:new chorus.views.StaticTemplate("default_content_header", {title:"Invalid Route: " + path})
-        });
+    events: {
+        "click button.submit": "navigateToHome"
+    },
+
+    subviews: {
+        "#header": "header"
+    },
+
+    setupSubviews: function() {
+        this.header = new chorus.views.Header();
+    },
+
+    navigateToHome: function() {
+        chorus.router.navigate("#", true);
     }
 });
