@@ -28,6 +28,12 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         }
     },
 
+    saved: function() {
+        this.closeModal();
+        chorus.toast("hdfs.create_external.success", {workspaceName: this.workspaceName, tableName: this.tableName});
+        chorus.PageEvents.broadcast("csv_import:started");
+    },
+
     prepareCsv: function() {
         var $names = this.$(".column_names input:text");
         var $types = this.$(".data_types .chosen");
@@ -38,6 +44,9 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
             return chorus.Mixins.dbHelpers.safePGName($name.val())+" "+$type.text();
         })
         var statement = toTable + " (" + columns.join(", ") + ")";
+
+        this.workspaceName = this.$("option:selected").text();
+        this.tableName = this.$(".directions input:text").val();
 
         this.csv.set({
             hasHeader: true,

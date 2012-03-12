@@ -14,6 +14,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     setup: function() {
         chorus.PageEvents.subscribe("hdfs_entry:selected", this.setEntry, this);
         chorus.PageEvents.subscribe("memo:added:hdfs", this.refreshActivities, this);
+        chorus.PageEvents.subscribe("csv_import:started", this.refreshActivities, this);
         this.tabControl = new chorus.views.TabControl([ {name: 'activity', selector: ".activity_list"} ]);
     },
 

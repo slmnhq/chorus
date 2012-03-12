@@ -67,6 +67,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
 
         context("clicking submit", function() {
             beforeEach(function() {
+                this.dialog.$("select").val(this.workspace3.id);
                 this.dialog.$('button.submit').click();
             })
 
@@ -76,7 +77,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
             })
 
             it("posts to the right URL", function() {
-                var workspaceId = this.dialog.$("option:selected").val();
+                var workspaceId = this.workspace3.id;
                 var request = this.server.lastCreate();
                 var statement = "bar_txt (col1 text, col2 text, col3 text, col_4 text, col_5 text)";
 
@@ -85,6 +86,24 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                 expect(request.params().instanceId).toBe("234");
                 expect(request.params().statement).toBe(statement);
             });
+
+            context("when the post to import responds with success", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog, "closeModal");
+                    spyOn(chorus, 'toast');
+                    spyOn(chorus.PageEvents, 'broadcast');
+                    this.server.lastCreate().succeed();
+                });
+
+                it("closes the dialog and displays the right toast", function() {
+                    expect(this.dialog.closeModal).toHaveBeenCalled();
+                    expect(chorus.toast).toHaveBeenCalledWith("hdfs.create_external.success", {workspaceName: this.workspace3.get("name"), tableName: this.dialog.$("input:text").eq(0).val()});
+                });
+
+                it("triggers csv_import:started", function() {
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("csv_import:started");
+                });
+            })
         })
     })
 });

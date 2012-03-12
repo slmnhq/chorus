@@ -104,6 +104,12 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                 chorus.PageEvents.broadcast("memo:added:hdfs");
                 expect(this.view.activityList.collection).toHaveBeenFetched();
             })
+
+            it("re-fetches when csv_import:started is broadcast", function() {
+                this.server.reset();
+                chorus.PageEvents.broadcast("csv_import:started");
+                expect(this.view.activityList.collection).toHaveBeenFetched();
+            })
         } else {
             it("does not fetch the activity list", function() {
                 expect(this.view.activityList).toBeUndefined();
