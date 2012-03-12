@@ -109,6 +109,13 @@ chorus.models.SearchResult = chorus.models.Base.extend({
         return (name.length < length) ? name : name.slice(0, length) + "...";
     },
 
+    workspaceItems: function() {
+        if (!this._workspaceItems && this.get("thisWorkspace")) {
+            this._workspaceItems = new chorus.collections.WorkspaceSearchItemSet(this.get("thisWorkspace").docs, { total: this.get("thisWorkspace").numFound });
+        }
+        return this._workspaceItems;
+    },
+
     hdfs: function() {
         if (!this._hdfs && this.get("hdfs")) {
             this._hdfs = new chorus.collections.HdfsEntrySet(null, {total: this.get("hdfs").numFound});

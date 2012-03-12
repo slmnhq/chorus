@@ -144,6 +144,50 @@ describe("chorus.models.SearchResult", function() {
         });
     });
 
+    describe("#workspaceItems", function() {
+        context("when there are worspace items", function() {
+            beforeEach(function() {
+                this.model = fixtures.searchResult({
+                    thisWorkspace: {
+                        numFound: 3,
+                        docs: [
+                            fixtures.searchResultWorkfileJson(),
+                            fixtures.searchResultDatabaseObjectJson(),
+                            fixtures.searchResultChorusViewJson(),
+                        ]
+                    }
+                });
+
+                this.workspaceItems = this.model.workspaceItems();
+            });
+
+            it("returns a collection", function() {
+                expect(this.workspaceItems).toBeA(chorus.collections.WorkspaceSearchItemSet);
+            });
+
+            it("instantiates the right type of model for each entry in the collection", function() {
+                expect(this.workspaceItems.at(0)).toBeA(chorus.models.Workfile);
+                expect(this.workspaceItems.at(1)).toBeA(chorus.models.DatabaseObject);
+                expect(this.workspaceItems.at(2)).toBeA(chorus.models.Dataset);
+            });
+
+            it("has numFound in 'total'", function() {
+                expect(this.workspaceItems.attributes.total).toBe(3);
+            });
+
+            it("memoizes", function() {
+                expect(this.workspaceItems).toBe(this.model.workspaceItems());
+            });
+        });
+
+        context("when there are no workfile results", function() {
+            it("returns undefined", function() {
+                this.model.unset("thisWorkspace");
+                expect(this.model.workspaceItems()).toBeUndefined();
+            })
+        });
+    });
+
     describe("#workfiles", function() {
         context("when there are workfile results", function() {
             beforeEach(function() {

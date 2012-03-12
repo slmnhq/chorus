@@ -3064,7 +3064,7 @@ beforeEach(function() {
                             "id": "10000|Analytics|analytics|BASE_TABLE|test6",
                             "databaseName": "Analytics",
                             "objectName": "test6",
-                            "isDeleted": false,
+                            "issearch_result_list.js:65Deleted": false,
                             "entityType": "databaseObject",
                             "instance": {
                                 "id": "10000",
@@ -3257,8 +3257,31 @@ beforeEach(function() {
             }, overrides)
         },
 
-        searchResultChorusView: function(overrides) {
-            var attributes = _.extend({
+        searchResultDatabaseObjectJson: function(overrides) {
+            return _.extend({
+                schemaName: "public",
+                parentType: "gpdb_10000_data_types",
+                objectType: "BASE_TABLE",
+                id: "10000|data_types|public|BASE_TABLE|a",
+                databaseName: "data_types",
+                objectName: "a",
+                isDeleted: false,
+                description: "This is a test of table description.",
+                entityType: "databaseObject",
+                instance: {
+                    id: "10000",
+                    name: "gillette"
+                },
+                workspaces: [],
+                comments: [],
+                highlightedAttributes: {
+                    description: ["This is a <em>test<\/em> of table description."]
+                }
+            }, overrides);
+        },
+
+        searchResultChorusViewJson: function(overrides) {
+            return _.extend({
                 compositeId: "10000|dca_demo|ddemo|QUERY|cv_us_president",
                 content: "SELECT * FROM test AS a",
                 databaseName: "dca_demo",
@@ -3282,7 +3305,58 @@ beforeEach(function() {
                     content: ["SELECT * FROM <em>test</em> AS a"]
                 }
             }, overrides);
+        },
+
+        searchResultChorusView: function(overrides) {
+            var attributes = this.searchResultChorusViewJson(overrides);
             return new chorus.models.Dataset(attributes);
+        },
+
+        searchResultWorkfileJson: function(overrides) {
+            return _.extend({
+                "lastUpdatedStamp":"2012-03-08 09:40:26",
+                "name":"foo.sql",
+                "fileType":"SQL",
+                "id":"10001",
+                "isDeleted":false,
+                "mimeType":"text/x-sql",
+                "highlightedAttributes":{
+                    "name":[
+                        "<em>foo<\/em>.sql"
+                    ],
+                    "commitMessage":[
+                        "comment with <em>foo<\/em>"
+                    ]
+                },
+                "entityType":"workfile",
+                "owner":{
+                    "id":"InitialUser",
+                    "lastName":"Admin",
+                    "firstName":"EDC"
+                },
+                "modifiedBy":{
+                    "id":"InitialUser",
+                    "lastName":"Admin",
+                    "firstName":"EDC"
+                },
+                "workspace":{
+                    "id":"10000",
+                    "name":"a"
+                },
+                "versionInfo": {
+                    "lastUpdatedStamp":"2012-03-08 09:40:26.847",
+                    "versionFileId":"1331228426846_64",
+                    "modifiedBy": {
+                        "id":"InitialUser",
+                        "lastName":"Admin",
+                        "firstName":"EDC"
+                    },
+                    "versionOwner":"edcadmin",
+                    "versionNum":2
+                },
+                "comments":[]
+            },
+            overrides);
         },
 
         searchResultHdfsJson: function(overrides) {
