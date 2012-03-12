@@ -3,12 +3,13 @@ chorus.views.SearchResults = chorus.views.Base.extend({
     className: "search_results",
 
     subviews: {
-        ".hdfs_list": "hdfsList",
-        ".user_list": "userList",
-        ".workfile_list": "workfileList",
-        ".workspace_list": "workspaceList",
-        ".dataset_list": "tabularDataList",
-        ".instance_list": "instanceList"
+        ".this_workspace": "thisWorkspaceList",
+        ".hdfs":          "hdfsList",
+        ".user":          "userList",
+        ".workfile":      "workfileList",
+        ".workspace":     "workspaceList",
+        ".dataset":       "tabularDataList",
+        ".instance":      "instanceList"
     },
 
     events: {
@@ -16,6 +17,13 @@ chorus.views.SearchResults = chorus.views.Base.extend({
     },
 
     setup: function() {
+        if (this.model.workspaceItems()) {
+            this.thisWorkspaceList = new chorus.views.WorkspaceSearchResultList({
+                collection: this.model.workspaceItems(),
+                total: this.model.workspaceItems().attributes.total,
+                query: this.model
+            });
+        }
         if (this.model.hdfs()) {
             this.hdfsList = this.buildListView('hdfs', this.model.hdfs());
         }
@@ -51,36 +59,11 @@ chorus.views.SearchResults = chorus.views.Base.extend({
 
         this.$("li.result_item").removeClass("selected");
         $target.addClass("selected");
-        var cid = $target.data("cid");
-        var containingView = $target.parent().parent();
-
-        if (containingView.hasClass("workfile_list")) {
-            var workfile = this.workfileList.collection.getByCid(cid);
-            chorus.PageEvents.broadcast("workfile:selected", workfile);
-
-        } else if (containingView.hasClass("workspace_list")) {
-            var workspace = this.workspaceList.collection.getByCid(cid);
-            chorus.PageEvents.broadcast("workspace:selected", workspace);
-
-        } else if (containingView.hasClass("dataset_list")) {
-            var tabularData = this.tabularDataList.collection.getByCid(cid);
-            chorus.PageEvents.broadcast("tabularData:selected", tabularData);
-
-        } else if (containingView.hasClass("user_list")) {
-            var user = this.userList.collection.getByCid(cid);
-            chorus.PageEvents.broadcast("user:selected", user);
-
-        } else if (containingView.hasClass("hdfs_list")) {
-            var hdfs = this.hdfsList.collection.getByCid(cid);
-            chorus.PageEvents.broadcast("hdfs_entry:selected", hdfs);
-        } else if (containingView.hasClass("instance_list")) {
-            var instance = this.instanceList.collection.getByCid(cid);
-            chorus.PageEvents.broadcast("instance:selected", instance);
-        }
     },
 
     additionalContext: function() {
         return {
+            hasThisWorkspace: this.shouldShowThisWorkspaceSection(),
             hasHdfs: this.shouldShowSection("hdfs"),
             hasWorkspace : this.shouldShowSection("workspace"),
             hasWorkfile : this.shouldShowSection("workfile"),
@@ -88,6 +71,11 @@ chorus.views.SearchResults = chorus.views.Base.extend({
             hasUser : this.shouldShowSection("user"),
             hasInstance: this.shouldShowSection("instance")
         }
+    },
+
+    shouldShowThisWorkspaceSection: function() {
+        return true;
+        // return !!this.model.workspaceItems();
     },
 
     shouldShowSection: function(sectionName) {

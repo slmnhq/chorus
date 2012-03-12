@@ -4,11 +4,11 @@ chorus.views.SearchItemBase = chorus.views.Base.extend({
 
     events: {
         "click a.show_more_comments": "showMoreComments",
-        "click a.show_fewer_comments": "showLessComments"
+        "click a.show_fewer_comments": "showLessComments",
+        "click": "itemSelected"
     },
 
     postRender: function() {
-        $(this.el).data('cid', this.model.cid);
         var commentsView = this.makeCommentList();
         this.$(".comments_container").append(commentsView.render().el);
     },
@@ -27,5 +27,9 @@ chorus.views.SearchItemBase = chorus.views.Base.extend({
         evt && evt.preventDefault();
         this.$(".has_more_comments").removeClass("hidden");
         this.$(".more_comments").addClass("hidden");
+    },
+
+    itemSelected: function(evt) {
+        chorus.PageEvents.broadcast(this.eventType + ":selected", this.model);
     }
 })

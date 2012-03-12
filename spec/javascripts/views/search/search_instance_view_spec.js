@@ -9,11 +9,6 @@ describe("chorus.views.SearchInstance", function() {
     });
 
 
-    it("has the right data-cid attribute", function() {
-        var $el = $(this.view.el)
-        expect($el.data("cid")).toBe(this.model.cid);
-    });
-
     it("includes the correct instance icon", function() {
         expect(this.view.$("img.provider").attr("src")).toBe("/images/instances/hadoop_instance.png");
     });

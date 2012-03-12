@@ -1,6 +1,7 @@
 chorus.views.SearchInstance = chorus.views.SearchItemBase.extend({
     constructorName: "SearchInstanceView",
     className: "search_instance",
+    eventType: "instance",
 
     additionalContext: function () {
         return {

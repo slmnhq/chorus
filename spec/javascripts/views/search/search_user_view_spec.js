@@ -14,10 +14,6 @@ describe("chorus.views.SearchUser", function() {
         this.view.render();
     });
 
-    it("has the data-cid attribute", function() {
-        expect($(this.view.el).data("cid")).toBe(this.model.cid);
-    });
-
     it("includes the user icon", function() {
         expect(this.view.$("img.icon").attr("src")).toBe("/edc/userimage/"+ this.model.get("id") + "?size=icon");
     });

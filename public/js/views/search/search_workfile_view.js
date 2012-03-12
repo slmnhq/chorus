@@ -1,6 +1,7 @@
 chorus.views.SearchWorkfile = chorus.views.SearchItemBase.extend({
     constructorName: "SearchWorkfileView",
     className: "search_workfile",
+    eventType: "workfile",
 
     additionalContext: function () {
         return {

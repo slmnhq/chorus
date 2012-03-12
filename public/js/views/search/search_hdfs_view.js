@@ -1,6 +1,7 @@
 chorus.views.SearchHdfs = chorus.views.SearchItemBase.extend({
     constructorName: "SearchHdfsView",
     className: "search_hdfs",
+    eventType: "hdfs_entry",
     
     additionalContext: function() {
         var pathLinks = _.map(this.model.pathSegments(), function(entry) {

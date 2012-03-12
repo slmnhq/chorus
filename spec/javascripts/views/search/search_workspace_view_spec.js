@@ -39,10 +39,6 @@ describe("chorus.views.SearchWorkspace", function() {
         this.view.render()
     });
 
-    it("has the right data-id attribute", function() {
-        expect($(this.view.el).data("cid")).toBe(this.model.cid);
-    });
-
     it("includes the correct workspace file icon", function() {
         expect(this.view.$("img.icon").attr("src")).toBe(this.model.defaultIconUrl());
     });

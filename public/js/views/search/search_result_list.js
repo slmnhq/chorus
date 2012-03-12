@@ -13,7 +13,6 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
         this.query = this.options.query;
         this.entityType = this.options.entityType;
         this.listItemConstructorName = "Search" + _.capitalize(this.entityType);
-        this.additionalClass += " search_" + this.entityType + "_list";
     },
 
     additionalContext: function() {

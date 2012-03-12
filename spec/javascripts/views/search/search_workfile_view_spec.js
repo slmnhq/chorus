@@ -32,10 +32,6 @@ describe("chorus.views.SearchWorkfile", function() {
         this.view.render()
     });
 
-    it("has the right data-cid attribute", function() {
-        expect($(this.view.el).data("cid")).toBe(this.model.cid);
-    });
-
     it("includes the correct workspace file icon", function() {
         expect(this.view.$("img.icon").attr("src")).toBe("/images/workfiles/large/sql.png");
     });
