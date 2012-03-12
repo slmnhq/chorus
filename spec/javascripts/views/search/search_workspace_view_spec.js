@@ -8,7 +8,7 @@ describe("chorus.views.SearchWorkspace", function() {
                 isPublic: false,
                 lastUpdatedStamp: "2012-02-24 16:08:32",
                 name: "ws",
-                description: "ws <i>other text</i>",
+                content: "ws <i>other text</i>",
                 owner: {
                     firstName: "EDC",
                     id: "InitialUser",
@@ -29,7 +29,7 @@ describe("chorus.views.SearchWorkspace", function() {
                 ],
                 highlightedAttributes: {
                     name: "<em>ws</em>",
-                    description: "<em>ws</em> <i>other text</i>"
+                    content: "<em>ws</em> <i>other text</i>"
                 }
             }
         ]}});
