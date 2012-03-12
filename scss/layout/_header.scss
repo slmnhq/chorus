@@ -215,6 +215,10 @@ $header-item-spacing: 2*$padding-x;
                 &.delete_link {
                     @include secondary-text-small;
                 }
+
+                &:hover {
+                    text-decoration: none;
+                }
             }
 
             li {

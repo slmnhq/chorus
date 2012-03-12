@@ -508,6 +508,32 @@ describe("chorus.models.Abstract", function() {
             });
         })
 
+        describe("#isDeleted", function() {
+            it("is true when the isDeleted attribute is equal to 'true'", function() {
+                this.model.set({isDeleted: 'true'});
+                expect(this.model.isDeleted()).toBeTruthy();
+            });
+
+            it("is true when the isDeleted attribute is equal to true", function() {
+                this.model.set({isDeleted: true});
+                expect(this.model.isDeleted()).toBeTruthy();
+            });
+
+            it("is false when the isDeleted attribute is equal to any other string", function() {
+                this.model.set({isDeleted: 'any other string'});
+                expect(this.model.isDeleted()).toBeFalsy();
+            });
+
+            it("is false when the isDeleted attribute is equal to false", function() {
+                this.model.set({isDeleted: false});
+                expect(this.model.isDeleted()).toBeFalsy();
+            });
+
+            it("is false when the isDeleted attribute is missing", function() {
+                expect(this.model.isDeleted()).toBeFalsy();
+            });
+        });
+
         describe("before parsing", function() {
             it("is not loaded", function() {
                 expect(this.model.loaded).toBeFalsy();
@@ -831,7 +857,7 @@ describe("chorus.models.Abstract", function() {
                 expect(model.hasOwnPage()).toBeFalsy();
             })
         })
-        
+
         describe("highlightedAttribute", function() {
             beforeEach(function() {
                 this.model.set({
@@ -846,7 +872,7 @@ describe("chorus.models.Abstract", function() {
                     trouble: '<script>alert("hi!")</script>bye'
                 });
             });
-            
+
             it("returns the highlighted attribute", function() {
                 expect(this.model.highlightedAttribute('name')).toBe('<em>foo</em>');
             });
@@ -903,7 +929,7 @@ describe("chorus.models.Abstract", function() {
                     expect(this.model.highlightedName().toString()).toBe('<em>jerry</em>');
                     expect(this.model.highlightedName()).toBeA(Handlebars.SafeString);
                 });
-                
+
                 it("returns the regular attribute when the highlighted one does not exist", function() {
                     delete this.model.get('highlightedAttributes').iAmAName;
                     expect(this.model.highlightedName().toString()).toBe('&lt;script&gt;alert(&quot;hi!&quot;)&lt;/script&gt;jerry');

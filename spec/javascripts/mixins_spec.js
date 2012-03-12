@@ -224,16 +224,31 @@ describe("chorus.Mixins", function() {
     describe("Urls", function() {
         beforeEach(function() {
             this.object = fixtures.workspace({ id: '45' });
+            this.object.isDeleted = function() { return false; }
         });
 
         describe("#showUrl", function() {
+            context("when model is deleted", function() {
+                beforeEach(function() {
+                    this.object.isDeleted = function() { return true; }
+                });
+
+                it("is empty", function() {
+                    expect(this.object.showUrl()).toBeNull();
+                });
+            });
+
+            it("is present", function() {
+                expect(this.object.showUrl()).not.toBeNull();
+            });
+
             context("when showUrlTemplate is not set", function() {
                 beforeEach(function() {
                     this.object.showUrlTemplate = null;
                 })
 
                 it("throws an exception", function() {
-                    expect(this.object.showUrl).toThrow("No showUrlTemplate defined");
+                    expect(_.bind(this.object.showUrl, this.object)).toThrow("No showUrlTemplate defined");
                 });
             })
 

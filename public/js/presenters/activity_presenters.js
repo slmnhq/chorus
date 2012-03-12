@@ -222,14 +222,14 @@
             var instance = model.instance();
             return {
                 objectName: instance.get("name"),
-                objectUrl: new chorus.models.Instance({id: instance.get("id")}).showUrl()
+                objectUrl: instance.showUrl()
             }
         },
 
         USER_ADDED: function(model) {
-            var user = new chorus.models.User({id: model.get("user").id});
+            var user = new chorus.models.User(model.get("user"));
             return {
-                objectName: model.get("user").name,
+                objectName: user.get("name"),
                 objectUrl: user.showUrl(),
                 iconSrc: user.imageUrl(),
                 iconHref: user.showUrl()

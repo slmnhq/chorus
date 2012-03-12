@@ -589,6 +589,13 @@ describe("chorus.presenters.Activity", function() {
             expect(this.presenter.isNote).toBeFalsy();
         });
 
+        it("should honor the isDeleted flag of the instance", function() {
+            var model = fixtures.activities.INSTANCE_CREATED();
+            model.get("instance").isDeleted = true;
+            this.presenter = new chorus.presenters.Activity(model);
+            expect(this.presenter.objectUrl).toBeNull();
+        });
+
         itShouldHaveTheAuthorsIconAndUrl();
     });
 
@@ -734,6 +741,12 @@ describe("chorus.presenters.Activity", function() {
 
         it("should link the new user's icon to the new user's show page", function() {
             expect(this.presenter.iconHref).toBe(this.user.showUrl());
+        });
+
+        it("should honor the isDeleted flag of the user", function() {
+            this.model.get("user").isDeleted = true;
+            this.presenter = new chorus.presenters.Activity(this.model)
+            expect(this.presenter.objectUrl).toBeNull();
         });
     });
 

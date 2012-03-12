@@ -39,6 +39,8 @@ chorus.Mixins.Events = {
 
 chorus.Mixins.Urls = {
     showUrl: function() {
+        if (this.isDeleted()) return null;
+
         if (!this.showUrlTemplate) {
             throw "No showUrlTemplate defined";
         }

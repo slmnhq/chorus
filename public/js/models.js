@@ -2,6 +2,10 @@ chorus.models = {
     Base: Backbone.Model.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, chorus.Mixins.dbHelpers, chorus.Mixins.Fetching, {
         constructorName: "Model",
 
+        isDeleted: function() {
+            return this.get("isDeleted") && (this.get("isDeleted") == true || this.get("isDeleted") == "true");
+        },
+
         url: function(options) {
             var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
             var context = _.extend({}, this.attributes, { entityId: this.entityId, entityType: this.entityType })

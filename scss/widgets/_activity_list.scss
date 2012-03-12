@@ -80,6 +80,10 @@ $system-action-color: #7C7D7D;
             height: $icon-image-height;
         }
 
+        a[href=''], a:not([href]) {
+            color: $color-text2;
+        }
+
         .insight_ribbon {
             padding: 0;
             position: absolute;
@@ -159,7 +163,7 @@ $system-action-color: #7C7D7D;
             @include secondary-text-small;
             line-height: 20px;
         }
-        
+
         .details {
             padding-bottom: 4px;
 
