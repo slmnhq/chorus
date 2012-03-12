@@ -111,7 +111,6 @@ describe("chorus.views.SearchResultList", function() {
                     });
 
                     it("does not show the bar or the list", function() {
-                        expect($(this.view.el)).toBeEmpty();
                         expect($(this.view.el).html().trim()).toBe("");
                     });
                 });
