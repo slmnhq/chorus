@@ -59,26 +59,5 @@ chorus.views.SearchResults = chorus.views.Base.extend({
 
         this.$("li.result_item").removeClass("selected");
         $target.addClass("selected");
-    },
-
-    additionalContext: function() {
-        return {
-            hasThisWorkspace: this.shouldShowThisWorkspaceSection(),
-            hasHdfs: this.shouldShowSection("hdfs"),
-            hasWorkspace : this.shouldShowSection("workspace"),
-            hasWorkfile : this.shouldShowSection("workfile"),
-            hasDataset : this.shouldShowSection("dataset"),
-            hasUser : this.shouldShowSection("user"),
-            hasInstance: this.shouldShowSection("instance")
-        }
-    },
-
-    shouldShowThisWorkspaceSection: function() {
-        return true;
-        // return !!this.model.workspaceItems();
-    },
-
-    shouldShowSection: function(sectionName) {
-        return _.include([sectionName, "all"], this.model.entityType());
     }
 })
