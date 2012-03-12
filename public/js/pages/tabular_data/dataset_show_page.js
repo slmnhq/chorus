@@ -30,6 +30,7 @@
             this.workspace = new chorus.models.Workspace({id: workspaceId});
             this.workspace.fetch();
             this.model = this.tabularData = new chorus.models.Dataset({ workspace: { id: workspaceId }, id: datasetId })
+            this.model.invalidRouteOnFetchFailed();
             var datasetImport = this.tabularData.getImport();
             this.requiredResources.push(datasetImport);
             datasetImport.fetchIfNotLoaded();

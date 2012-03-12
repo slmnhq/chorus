@@ -15,6 +15,7 @@
         setup:function (workspaceId) {
             this.workspaceId = workspaceId;
             this.model = new chorus.models.Workspace({id:workspaceId});
+            this.model.invalidRouteOnFetchFailed();
             this.model.fetch();
             this.breadcrumbs = new breadcrumbsView({model:this.model});
             this.subNav = new chorus.views.SubNav({workspace:this.model, tab:"summary"})

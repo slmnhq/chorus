@@ -34,6 +34,12 @@ chorus.Mixins.Events = {
         } else {
             this.bind('loaded', callback, context)
         }
+    },
+
+    invalidRouteOnFetchFailed: function() {
+        this.bind('fetchFailed', function() {
+            Backbone.history.loadUrl("/invalidRoute")
+        })
     }
 };
 

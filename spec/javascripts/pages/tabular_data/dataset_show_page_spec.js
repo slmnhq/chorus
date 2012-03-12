@@ -120,6 +120,17 @@ describe("chorus.pages.DatasetShowPage", function() {
             this.server.completeFetchFor(this.dataset.statistics());
         })
 
+        context("when the model fails to load properly", function() {
+            beforeEach(function() {
+                spyOn(Backbone.history, "loadUrl")
+                this.page.model.trigger('fetchFailed')
+            })
+
+            it("navigates to the 404 page", function() {
+                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
+            })
+        })
+
         describe("sidebar", function() {
             it("sets workspace", function() {
                 expect(this.page.sidebar.options.workspace).toBeTruthy();

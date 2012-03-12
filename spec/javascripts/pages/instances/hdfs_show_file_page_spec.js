@@ -11,7 +11,18 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         expect(this.page.model.get("instanceId")).toBe("1234");
     });
 
-    describe("fetches complete", function(){
+    context("fetches fail", function() {
+        beforeEach(function() {
+            spyOn(Backbone.history, "loadUrl")
+            this.page.model.trigger('fetchFailed')
+        })
+
+        it("navigates to the 404 page", function() {
+            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
+        })
+    })
+
+    context("fetches complete", function(){
         beforeEach(function() {
             this.server.completeFetchFor(this.page.instance, this.instance);
             this.server.completeFetchFor(this.page.model, this.file);

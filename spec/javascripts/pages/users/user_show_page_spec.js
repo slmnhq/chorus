@@ -15,6 +15,17 @@ describe("user_show_page", function(){
         it("has a helpId", function() {
             expect(this.view.helpId).toBe("user")
         })
+
+        context("when the model fails to load properly", function() {
+            beforeEach(function() {
+                spyOn(Backbone.history, "loadUrl")
+                this.view.model.trigger('fetchFailed')
+            })
+
+            it("navigates to the 404 page", function() {
+                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
+            })
+        })
     });
 
     describe("#render", function(){

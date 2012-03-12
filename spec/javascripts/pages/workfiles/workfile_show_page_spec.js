@@ -52,7 +52,17 @@ describe("chorus.pages.WorkfileShowPage", function() {
             it("configures the version number into the workfile model", function() {
                 expect(this.page.model.isLatestVersion()).toBeFalsy();
             })
+        })
 
+        context("when the model fails to load properly", function() {
+            beforeEach(function() {
+                spyOn(Backbone.history, "loadUrl")
+                this.page.model.trigger('fetchFailed')
+            })
+
+            it("navigates to the 404 page", function() {
+                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
+            })
         })
 
         describe("when the workspace and workfile are fetched", function() {

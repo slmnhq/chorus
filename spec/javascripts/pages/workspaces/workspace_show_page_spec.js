@@ -37,6 +37,17 @@ describe("chorus.pages.WorkspaceShowPage", function() {
             });
         });
 
+        context("when the model fails to load properly", function() {
+            beforeEach(function() {
+                spyOn(Backbone.history, "loadUrl")
+                this.page.model.trigger('fetchFailed')
+            })
+
+            it("navigates to the 404 page", function() {
+                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
+            })
+        })
+
         context("when the model has loaded", function(){
             beforeEach(function(){
                 this.server.completeFetchFor(this.page.model, fixtures.workspace({summary: "this is a summary", name : "Cool Workspace"}))

@@ -13,6 +13,7 @@
 
         setup:function (userId) {
             this.model = new chorus.models.User({id:userId});
+            this.model.invalidRouteOnFetchFailed();
             this.model.fetch();
             this.breadcrumbs = new breadcrumbsView({model:this.model});
 

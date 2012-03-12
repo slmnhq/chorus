@@ -60,7 +60,8 @@
                 schemaName: schemaName,
                 objectType: objectType,
                 objectName: objectName
-            })
+            });
+            this.model.invalidRouteOnFetchFailed();
         },
 
         fetchResources: function() {

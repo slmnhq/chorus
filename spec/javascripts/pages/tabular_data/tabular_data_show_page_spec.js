@@ -55,6 +55,17 @@ describe("chorus.pages.TabularDataShowPage", function() {
             this.server.completeFetchFor(this.databaseObject.statistics());
         })
 
+        context("when the model fails to load properly", function() {
+            beforeEach(function() {
+                spyOn(Backbone.history, "loadUrl")
+                this.page.model.trigger('fetchFailed')
+            })
+
+            it("navigates to the 404 page", function() {
+                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
+            })
+        })
+
         describe("workspace usage", function() {
             it("is in the custom header", function() {
                 expect(this.page.$('.content_header .found_in')).toExist();

@@ -79,7 +79,9 @@ chorus.models = {
             options || (options = {});
             var success = options.success;
             options.success = function(model, resp, xhr) {
-                if (model.serverErrors) model.trigger('fetchFailed', model, resp, xhr);
+                if (model.serverErrors) {
+                    model.trigger('fetchFailed', model, resp, xhr);
+                }
                 if (model.loaded) {
                     model.trigger('loaded');
                 }
