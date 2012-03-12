@@ -6,6 +6,10 @@ chorus.models.TabularData = chorus.models.Base.extend({
         this.resetEntityType();
         this.bind("change:type", this.resetEntityType, this);
         this.bind('invalidated', this.refetchAfterInvalidated, this);
+
+        if (!this.has("type")) {
+            this.set({type: this.get("datasetType") || "SOURCE_TABLE"}, { silent: true });
+        }
     },
 
     getEntityType: function() {

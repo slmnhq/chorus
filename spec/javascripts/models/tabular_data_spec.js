@@ -3,6 +3,23 @@ describe("chorus.models.TabularData", function() {
         this.tabularData = fixtures.tabularData();
     })
 
+    describe("#initialize", function() {
+        it("doesn't override type when type already exists", function() {
+            var model = new chorus.models.TabularData({ type: "foo"})
+            expect(model.get("type")).toBe("foo")
+        })
+
+        it("sets type to datasetType if datasetType exists", function() {
+            var model = new chorus.models.TabularData({ datasetType: "foo"})
+            expect(model.get("type")).toBe("foo")
+        })
+
+        it("sets type to SOURCE_TABLE if neither type nor datasetType exists", function() {
+            var model = new chorus.models.TabularData({})
+            expect(model.get("type")).toBe("SOURCE_TABLE")
+        })
+    });
+
     describe("#statistics", function() {
         beforeEach(function() {
             this.tabularDataProperties = this.tabularData.statistics()
