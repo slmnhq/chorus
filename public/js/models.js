@@ -294,6 +294,7 @@ chorus.collections = {
             var url = this.url({page: page});
             options = _.extend({}, options, { url: url });
             this.fetch(options);
+            this.trigger("paginate");
         },
 
         fetchAll: (function() {

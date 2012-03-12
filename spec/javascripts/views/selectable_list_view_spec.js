@@ -33,5 +33,26 @@ describe("chorus.views.SelectableList", function() {
         it("should call itemSelected with the selected model", function() {
             expect(this.view.itemSelected).toHaveBeenCalledWith(this.collection.at(1));
         });
+
+        describe("rerendering", function() {
+            beforeEach(function() {
+                this.view.render();
+            });
+
+            it("keeps the entry selected", function() {
+                expect(this.view.$("> li:eq(1)")).toHaveClass("selected");
+            });
+        });
+
+        describe("changing pages", function() {
+            beforeEach(function() {
+                this.collection.fetchPage(2);
+                this.server.completeFetchFor(this.collection, this.collection.models, {page: 2});
+            });
+
+            it("resets the selection to the first item", function() {
+                expect(this.view.$("> li:eq(0)")).toHaveClass("selected");
+            });
+        });
     })
 })

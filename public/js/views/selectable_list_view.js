@@ -2,6 +2,13 @@ chorus.views.SelectableList = chorus.views.Base.extend({
     additionalClass: "list",
     tagName: "ul",
 
+    setup: function() {
+        this.selectedIndex = 0;
+        this.collection.bind("paginate", function() {
+            this.selectedIndex = 0;
+        }, this);
+    },
+
     delegateEvents: function() {
         this._super("delegateEvents", arguments);
         $(this.el)
@@ -22,10 +29,11 @@ chorus.views.SelectableList = chorus.views.Base.extend({
         $lis.removeClass("selected");
         $target.addClass("selected");
 
-        this.itemSelected(this.collection.at($lis.index($target)));
+        this.selectedIndex = $lis.index($target);
+        this.itemSelected(this.collection.at(this.selectedIndex));
     },
 
     postRender: function() {
-        this.selectItem(this.$(">li:eq(0)"));
+        this.selectItem(this.$(">li").eq(this.selectedIndex));
     }
 });
