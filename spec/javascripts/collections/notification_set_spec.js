@@ -80,7 +80,24 @@ describe("chorus.collections.NotificationSet", function() {
         });
     });
 
-    describe("#markAllRead", function() {
+    describe("#markAllRead with no unread notifications", function() {
+        beforeEach(function() {
+            this.server.reset();
+            this.collection.reset();
+            this.successSpy = jasmine.createSpy();
+            this.collection.markAllRead({ success: this.successSpy });
+        });
+
+        it("does not make any requests", function() {
+            expect(this.server.requests.length).toBe(0);
+        })
+
+        it("calls the success function", function() {
+            expect(this.successSpy).toHaveBeenCalled();
+        })
+    })
+
+    describe("#markAllRead with unread notifications", function() {
         beforeEach(function() {
             this.successSpy = jasmine.createSpy();
             this.collection.markAllRead({ success: this.successSpy });

@@ -1,9 +1,9 @@
 chorus.collections.NotificationSet = chorus.collections.Base.extend({
     constructorName: "NotificationSet",
     model: chorus.models.Notification,
-    urlTemplate : "notification",
+    urlTemplate: "notification",
 
-    urlParams: function () {
+    urlParams: function() {
         return this.attributes;
     },
 
@@ -25,13 +25,17 @@ chorus.collections.NotificationSet = chorus.collections.Base.extend({
     },
 
     markAllRead: function(options) {
-        $.ajax({
-            type: "PUT",
-            url: "/edc/notification/" + this.pluck("id").join(",") + "/read"
-        }).success(function(response) {
-            if (response && response.status == "ok" && options.success) {
-                options.success(response);
-            }
-        });
+        if (this.length > 0) {
+            $.ajax({
+                type: "PUT",
+                url: "/edc/notification/" + this.pluck("id").join(",") + "/read"
+            }).success(function(response) {
+                    if (response && response.status == "ok" && options.success) {
+                        options.success(response);
+                    }
+                });
+        } else {
+            if (options.success) options.success();
+        }
     }
 })
