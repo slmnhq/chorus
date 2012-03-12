@@ -113,7 +113,11 @@ div[data-page="Dashboard"] {
 }
 
 .tooltip {
+    width: 250px;
     li.comment {
+        .insight_ribbon {
+            top: -18px;
+        }
         .object {
             display: inline;
         }
