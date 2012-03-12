@@ -70,7 +70,7 @@ window.Chorus = function chorus$Global() {
     self.requireLogin = function requireLogin() {
         if(Backbone.history.fragment != "/logout") {
             self.session.pathBeforeLoggedOut = Backbone.history.fragment;
-            self.session.previousUserId = self.session.get("user").id;
+            self.session.previousUserId = self.session.get("user") ? self.session.get("user").id : undefined;
 
         } else {
             delete self.session.pathBeforeLoggedOut;

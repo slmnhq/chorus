@@ -12,7 +12,7 @@ describe("chorus.dialogs.PickWorkspace", function() {
 
     describe("#setup", function() {
         it("fetches all the workspaces", function() {
-            expect(this.server.requests[0].url).toBe("/edc/workspace/?user=4003&page=1&rows=1000");
+            expect(this.server.lastFetch().url).toBe("/edc/workspace/?user=4003&page=1&rows=1000");
         })
 
         it("instantiates a CollectionPicklist with the workspace collection", function() {
