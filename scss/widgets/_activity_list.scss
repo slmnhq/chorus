@@ -212,7 +212,7 @@ $system-action-color: #7C7D7D;
 }
 
 .popup_notifications li:hover .activity_content a.delete_link,
-li[data-activity-type=NOTE] .activity_content:hover a.delete_link,
+li .activity_content:hover a.delete_link,
 li[data-activity-type=INSIGHT_CREATED] .activity_content:hover a.delete_link {
     display: inline;
 }
