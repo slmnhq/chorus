@@ -292,7 +292,15 @@
         },
 
         displaySearchMatch: function(attributeName) {
-            var attr = chorus.helpers.withSearchResults(this).get(attributeName);
+            var attr = chorus.helpers.withSearchResults(this).get(attributeName, false);
+            if(attr) {
+                return new Handlebars.SafeString(attr);
+            }
+            return attr;
+        },
+
+        displaySearchMatchFromSafeField: function(attributeName) {
+            var attr = chorus.helpers.withSearchResults(this).get(attributeName, true);
             if(attr) {
                 return new Handlebars.SafeString(attr);
             }
@@ -304,10 +312,12 @@
             modelOrAttributes = Object.create(modelOrAttributes);
 
             modelOrAttributes.get =
-                function(attributeName) {
+                function(attributeName, safe) {
                     if (getReal.call(modelOrAttributes, 'highlightedAttributes') && getReal.call(modelOrAttributes, 'highlightedAttributes')[attributeName]) {
                         var attribute = getReal.call(modelOrAttributes, 'highlightedAttributes')[attributeName];
                         return new Handlebars.SafeString(_.isArray(attribute) ? attribute[0] : attribute);
+                    } else if (safe){
+                        return new Handlebars.SafeString(modelOrAttributes[attributeName]);
                     } else {
                         return new Handlebars.SafeString(Handlebars.Utils.escapeExpression(getReal.call(modelOrAttributes, attributeName)));
                     }

@@ -2,7 +2,7 @@
 <img class="icon" src="{{iconUrl}}"></img>
 <div class="description">
     <a class="name" href="{{showUrl}}">{{displaySearchMatch "name"}}</a>
-    <div class="description_content">{{#if content}}&#8220;{{displaySearchMatch "content"}}&#8221;{{/if}}</div>
+    <div class="description_content">{{#if content}}&#8220;{{displaySearchMatchFromSafeField "content"}}&#8221;{{/if}}</div>
     <div class="comments_container"/>
 </div>
 <div class="spacer_right"></div>
