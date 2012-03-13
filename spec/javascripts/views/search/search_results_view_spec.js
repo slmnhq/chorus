@@ -17,7 +17,6 @@ describe("chorus.views.SearchResults", function() {
     beforeEach(function() {
         this.model = makeSearchResults()
         this.view = new chorus.views.SearchResults({model: this.model});
-        this.server.completeFetchFor(this.model.workspace());
         this.view.render();
     });
 

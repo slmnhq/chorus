@@ -8,12 +8,6 @@
     chorus.views.WorkspaceSearchResultList = chorus.views.SearchResultList.extend({
         constructorName: "WorkspaceSearchResultList",
 
-        setup: function() {
-            this._super("setup", arguments);
-            this.requiredResources.add(this.query.workspace());
-            this.query.workspace().fetch();
-        },
-
         title: function() {
             return t("search.type.this_workspace", { name: this.query.workspace().get("name") });
         },
