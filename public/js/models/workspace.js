@@ -85,7 +85,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     picklistImageUrl:function () {
-        return "/images/workspaces/workspace_small.png";
+        return this.get('active') ? "/images/workspaces/workspace_small.png" : "/images/workspaces/workspace_archived_small.png";
     },
 
     attrToLabel:{

@@ -22,6 +22,17 @@ describe("chorus.dialogs.PickWorkspace", function() {
         it("only gets the chorus.session.users()'s workspaces", function(){
             expect(this.dialog.collection.attributes.userId).toBe(chorus.session.user().get("id"));
         })
+
+        context("when the launch element activeOnly is set to true", function() {
+            beforeEach(function() {
+                this.launchElement.data('activeOnly', true);
+                this.dialog = new chorus.dialogs.PickWorkspace({launchElement : this.launchElement});
+            });
+
+            it("only fetches the active workspaces", function() {
+                expect(this.dialog.collection.attributes.active).toBeTruthy();
+            });
+        });
     })
 
     describe("#render", function() {

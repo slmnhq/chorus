@@ -16,9 +16,16 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.Base.extend({
 
     makeModel:function () {
         this.pageModel = this.options.pageModel;
-        this.collection = this.collection || chorus.session.user().workspaces();
+        this.collection = this.collection || this.defaultWorkspaces();
         this.collection.fetchAll();
         this.bindings.add(this.collection, "reset", this.workspacesFetched);
+    },
+
+    defaultWorkspaces: function() {
+        if(this.options.launchElement && this.options.launchElement.data("activeOnly")) {
+            return chorus.session.user().activeWorkspaces();
+        }
+        return chorus.session.user().workspaces();
     },
 
     workspacesFetched: function() {
