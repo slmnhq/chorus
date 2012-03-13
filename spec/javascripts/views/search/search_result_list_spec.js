@@ -10,7 +10,7 @@ describe("chorus.views.SearchResultList", function() {
             this.view = new chorus.views.SearchResultList({
                 entityType: "instance",
                 collection: instances,
-                query: this.result
+                search: this.result
             });
 
             this.view.render();
@@ -26,7 +26,7 @@ describe("chorus.views.SearchResultList", function() {
             this.result = fixtures.searchResult();
             this.result.set({query: "foo"});
             this.collection = this.result.users();
-            this.view = new chorus.views.SearchResultList({ collection: this.collection, query: this.result, entityType: "user"});
+            this.view = new chorus.views.SearchResultList({ collection: this.collection, search: this.result, entityType: "user"});
         });
 
         context("when there are three or fewer results", function() {
@@ -35,7 +35,7 @@ describe("chorus.views.SearchResultList", function() {
                     fixtures.tabularDataJson(),
                     fixtures.tabularDataJson()
                 ]);
-                this.view = new chorus.views.SearchResultList({collection: this.models, query: this.result, entityType: "dataset"});
+                this.view = new chorus.views.SearchResultList({collection: this.models, search: this.result, entityType: "dataset"});
                 this.view.render();
             });
 

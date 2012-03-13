@@ -10,7 +10,7 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.query = this.options.query;
+        this.search = this.options.search;
         this.entityType = this.options.entityType;
         this.listItemConstructorName = "Search" + _.capitalize(this.entityType);
     },
@@ -20,16 +20,16 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
             entityType: this.entityType,
             shown: this.collection.models.length,
             total: this.collection.attributes.total,
-            hasNext: this.query && this.query.hasNextPage(),
-            hasPrevious: this.query && this.query.hasPreviousPage(),
-            filteredSearch: this.query && this.query.entityType() == this.entityType,
+            hasNext: this.search && this.search.hasNextPage(),
+            hasPrevious: this.search && this.search.hasPreviousPage(),
+            filteredSearch: this.search && this.search.entityType() == this.entityType,
             moreResults: (this.collection.models.length < this.collection.attributes.total),
             title: this.title(),
         };
 
         if(ctx.hasNext || ctx.hasPrevious) {
-            ctx.currentPage = this.query.currentPageNumber();
-            ctx.totalPages = this.query.totalPageNumber();
+            ctx.currentPage = this.search.currentPageNumber();
+            ctx.totalPages = this.search.totalPageNumber();
         }
 
         return ctx;
@@ -48,19 +48,19 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
 
     showAll: function(e) {
         e && e.preventDefault();
-        this.query.set({entityType: $(e.currentTarget).data("type")})
-        chorus.router.navigate(this.query.showUrl(), true);
+        this.search.set({entityType: $(e.currentTarget).data("type")})
+        chorus.router.navigate(this.search.showUrl(), true);
     },
 
     showNext: function(e) {
         e && e.preventDefault();
-        this.query.getNextPage();
+        this.search.getNextPage();
         this.render();
     },
 
     showPrevious: function(e) {
         e && e.preventDefault();
-        this.query.getPreviousPage();
+        this.search.getPreviousPage();
         this.render();
     },
 

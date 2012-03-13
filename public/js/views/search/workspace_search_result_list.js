@@ -9,7 +9,7 @@
         constructorName: "WorkspaceSearchResultList",
 
         title: function() {
-            return t("search.type.this_workspace", { name: this.query.workspace().get("name") });
+            return t("search.type.this_workspace", { name: this.search.workspace().get("name") });
         },
 
         makeListItemView: function(model) {

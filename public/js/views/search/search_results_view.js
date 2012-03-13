@@ -21,7 +21,7 @@ chorus.views.SearchResults = chorus.views.Base.extend({
             this.thisWorkspaceList = new chorus.views.WorkspaceSearchResultList({
                 collection: this.model.workspaceItems(),
                 total: this.model.workspaceItems().attributes.total,
-                query: this.model
+                search: this.model
             });
         }
         if (this.model.hdfs()) {
@@ -49,7 +49,7 @@ chorus.views.SearchResults = chorus.views.Base.extend({
             entityType: entityType,
             collection: collection,
             total: this.model.get(entityType).numFound,
-            query: this.model
+            search: this.model
         });
     },
 

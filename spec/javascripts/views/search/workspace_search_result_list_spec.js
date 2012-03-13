@@ -1,21 +1,21 @@
 describe("chorus.views.WorkspaceSearchResultList", function() {
     beforeEach(function() {
-        this.result = fixtures.searchResult({
+        this.search = fixtures.searchResult({
             thisWorkspace: {
                 numFound: 3,
                 docs: [
                     fixtures.searchResultWorkfileJson(),
                     fixtures.searchResultDatabaseObjectJson(),
-                    fixtures.searchResultChorusViewJson(),
+                    fixtures.searchResultChorusViewJson()
                 ]
             }
         });
-        this.result.set({ query: "foo", workspaceId: "10001" });
-        this.result.workspace().set({ name: "John the workspace" });
-        var workspaceItems = this.result.workspaceItems();
+        this.search.set({ query: "foo", workspaceId: "10001" });
+        this.search.workspace().set({ name: "John the workspace" });
+        var workspaceItems = this.search.workspaceItems();
         this.view = new chorus.views.WorkspaceSearchResultList({
             collection: workspaceItems,
-            query: this.result
+            search: this.search
         });
         this.view.render();
     });
