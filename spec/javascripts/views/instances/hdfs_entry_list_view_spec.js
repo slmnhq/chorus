@@ -23,8 +23,8 @@ describe("chorus.views.HdfsEntryList", function() {
         });
 
         it("renders the icon for each item", function() {
-            expect(this.view.$("li:eq(0) img")).toExist();
-            expect(this.view.$("li:eq(1) img")).toExist();
+            expect(this.view.$("li:eq(0) img").attr("src")).toBe("/images/instances/hadoop_directory_large.png");
+            expect(this.view.$("li:eq(1) img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl(_.last(this.collection.at(1).get("name").split("."))));
         })
 
         it("pre-selects the first item", function() {
