@@ -28,6 +28,10 @@ chorus.views.Sidebar = chorus.views.Base.extend({
                 $(this).removeClass("clickable");
             }
         });
+
+        if (chorus.isDevMode) {
+            $("#sidebar_wrapper").attr("data-sidebar-template", this.className);
+        }
     },
 
     onMouseWheel:function (event, d) {
