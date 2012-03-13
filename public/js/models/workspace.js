@@ -13,9 +13,9 @@ chorus.models.Workspace = chorus.models.Base.extend({
 
     defaultIconUrl:function () {
         if (this.get("active")) {
-            return "/images/workspace-icon-large.png";
+            return "/images/workspaces/workspace_large.png";
         } else {
-            return "/images/workspace-archived-icon-large.png";
+            return "/images/workspaces/workspace_archived_large.png";
         }
     },
 
@@ -85,7 +85,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     picklistImageUrl:function () {
-        return "/images/workspace-icon-small.png";
+        return "/images/workspaces/workspace_small.png";
     },
 
     attrToLabel:{

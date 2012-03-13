@@ -75,6 +75,12 @@ describe("chorus.views.UserShow", function() {
               expect(this.view.$(".workspaces li a").eq(1).attr('href')).toBe('#/workspaces/2');
             });
 
+            it("renders the workspaces images", function() {
+                expect(this.view.$(".workspaces li img").eq(0).attr('src')).toBe('/images/workspaces/workspace_small.png');
+                expect(this.view.$(".workspaces li img").eq(1).attr('src')).toBe('/images/workspaces/workspace_small.png');
+            });
+
+
             context("When the user is not the administrator", function() {
                        beforeEach(function() {
                            this.model.set({admin: false}, {silent : true});

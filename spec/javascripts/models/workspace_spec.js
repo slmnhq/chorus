@@ -12,12 +12,12 @@ describe("chorus.models.Workspace", function() {
     describe("#defaultIconUrl", function() {
         it("links to the correct url when active", function() {
             this.model.set({active: true});
-            expect(this.model.defaultIconUrl()).toBe("/images/workspace-icon-large.png");
+            expect(this.model.defaultIconUrl()).toBe("/images/workspaces/workspace_large.png");
         });
 
         it("links to the correct url when archived", function() {
             this.model.set({active: false});
-            expect(this.model.defaultIconUrl()).toBe("/images/workspace-archived-icon-large.png");
+            expect(this.model.defaultIconUrl()).toBe("/images/workspaces/workspace_archived_large.png");
         });
     });
 
@@ -204,7 +204,7 @@ describe("chorus.models.Workspace", function() {
         })
 
         it("uses the right URL", function() {
-            expect(this.model.picklistImageUrl()).toBe("/images/workspace-icon-small.png");
+            expect(this.model.picklistImageUrl()).toBe("/images/workspaces/workspace_small.png");
         });
     });
 

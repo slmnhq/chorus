@@ -42,7 +42,7 @@ describe("chorus.dialogs.InstanceUsage", function() {
             })
 
             it("renders the workspace_small.png image for each workspace", function() {
-                expect(this.dialog.$("li img[src='/images/workspace-icon-small.png']").length).toBe(this.workspaces.length);
+                expect(this.dialog.$("li img[src='/images/workspaces/workspace_small.png']").length).toBe(this.workspaces.length);
             });
 
             it("displays a link to each workspace", function() {
