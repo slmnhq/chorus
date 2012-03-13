@@ -31,8 +31,6 @@
                 this.model.set({ versionInfo : { versionNum: versionNum } }, { silent:true })
             }
 
-            this.model.invalidRouteOnFetchFailed();
-
             this.model.fetch();
             this.model.workspace().fetch();
             this.requiredResources.push(this.model);

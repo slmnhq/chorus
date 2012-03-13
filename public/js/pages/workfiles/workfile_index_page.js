@@ -18,12 +18,14 @@
 
             var workspace = new chorus.models.Workspace({id:workspaceId});
             workspace.fetch();
+            this.requiredResources.push(workspace);
             this.breadcrumbs = new breadcrumbsView({model:workspace});
 
             this.collection = new chorus.collections.WorkfileSet([], {workspaceId:workspaceId});
             this.collection.fileType = "";
             this.collection.sortAsc("fileName");
             this.collection.fetch();
+            this.requiredResources.push(this.collection);
             this.subNav = new chorus.views.SubNav({workspace:workspace, tab:"workfiles"});
             this.mainContent = new chorus.views.MainContentList({
                     modelClass:"Workfile",
@@ -66,8 +68,10 @@
                 this.collection.sortAsc(field)
                 this.collection.fetch();
             }, this)
+        },
 
-            workspace.bind("change", this.updateButtons, this);
+        resourcesLoaded: function() {
+            this.updateButtons();
         },
 
         setModel:function (workfile) {

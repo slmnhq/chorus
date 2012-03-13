@@ -11,8 +11,9 @@ describe("chorus.pages.WorkfileIndexPage", function() {
 
     describe("breadcrumbs", function() {
         beforeEach(function() {
-            this.page.mainContent.model.set({name: "Cool Workspace"});
-            this.page.mainContent.model.loaded = true;
+            this.workspace.set({name: "Cool Workspace"});
+            this.server.completeFetchFor(this.workspace);
+            this.server.completeFetchFor(this.page.collection);
             this.page.render();
         });
 
@@ -79,7 +80,8 @@ describe("chorus.pages.WorkfileIndexPage", function() {
 
     describe("menus", function() {
         beforeEach(function() {
-            this.page.render();
+            this.server.completeFetchFor(this.workspace);
+            this.server.completeFetchFor(this.page.collection);
         })
 
         describe("filtering", function() {
@@ -172,7 +174,8 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             context("and the user can update the workspace", function() {
                 beforeEach(function() {
                     spyOn(this.page.mainContent.model, 'canUpdate').andReturn(true);
-                    this.page.mainContent.model.trigger("change")
+                    this.server.completeFetchFor(this.workspace);
+                    this.server.completeFetchFor(this.page.collection);
                 })
 
                 it("renders buttons", function() {
@@ -184,7 +187,8 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             context("and the user cannot update the workspace", function() {
                 beforeEach(function() {
                     spyOn(this.page.mainContent.model, 'canUpdate').andReturn(false);
-                    this.page.mainContent.model.trigger("change")
+                    this.server.completeFetchFor(this.workspace);
+                    this.server.completeFetchFor(this.page.collection);
                 })
 
                 it("does not render buttons", function() {

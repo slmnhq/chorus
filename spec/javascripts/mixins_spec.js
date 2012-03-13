@@ -219,28 +219,6 @@ describe("chorus.Mixins", function() {
             })
 
         });
-
-        describe("invalidRouteOnFetchFailed", function() {
-            beforeEach(function() {
-                this.source = {};
-                _.extend(this.source, Backbone.Events, chorus.Mixins.Events);
-                spyOn(Backbone.history, "loadUrl");
-                this.source.invalidRouteOnFetchFailed();
-            });
-            context("when the fetch fails", function() {
-                it("should navigate to the invalid route page", function() {
-                    this.source.trigger("fetchFailed");
-                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
-                });
-            });
-
-            context("when the fetch succeeds", function() {
-                it("should not navigate anywhere", function() {
-                    this.source.trigger("loaded");
-                    expect(Backbone.history.loadUrl).not.toHaveBeenCalled();
-                });
-            });
-        });
     });
 
     describe("Urls", function() {

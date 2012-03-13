@@ -5,7 +5,6 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
         this.path = "/" + path;
 
         this.model = new chorus.models.HdfsFile({ instanceId: instanceId, path: this.path });
-        this.model.invalidRouteOnFetchFailed();
         this.model.fetch()
         this.requiredResources.push(this.model)
 
