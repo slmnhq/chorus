@@ -47,7 +47,7 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     },
 
     showAll: function(e) {
-        e && e.preventDefault();
+        e.preventDefault();
         this.search.set({entityType: $(e.currentTarget).data("type")})
         chorus.router.navigate(this.search.showUrl(), true);
     },

@@ -3,17 +3,10 @@ chorus.models.SearchResult = chorus.models.Base.extend({
 
     numResultsPerPage: 50,
 
-    initialize: function(attributes) {
-        if(!this._entityType) {
-            this._entityType = this.get("entityType") || "all"
-        }
-        if (!this.get('searchIn')) {
-            this.set({searchIn: 'all'})
-        }
-    },
-
     urlTemplate: function() {
-        if (this.isScopedToUserWorkspaces()) {
+        if (this.isScopedToSingleWorkspace()) {
+            return "search/workspace/{{workspaceId}}";
+        } else if (this.isScopedToUserWorkspaces()) {
             return "search/workspaces/";
         } else {
             return "search/global/";
@@ -52,15 +45,23 @@ chorus.models.SearchResult = chorus.models.Base.extend({
             prefix = "workspaces/" + workspaceId + "/";
         }
 
-        if (this.isScopedToUserWorkspaces() || this.hasSpecificEntityType()) {
-            return prefix + "search/" + this.get("searchIn") + "/" + this.entityType() + "/" + this.get("query");
+        if (this.isScoped() || this.hasSpecificEntityType()) {
+            return prefix + "search/" + this.searchIn() + "/" + this.entityType() + "/" + this.get("query");
         } else {
             return prefix + "search/" + this.get("query");
         }
     },
 
+    isScoped: function() {
+        return this.isScopedToSingleWorkspace() || this.isScopedToUserWorkspaces();
+    },
+
+    isScopedToSingleWorkspace: function() {
+        return this.searchIn() === "this_workspace";
+    },
+
     isScopedToUserWorkspaces: function() {
-        return this.get("searchIn") === "my_workspaces";
+        return this.searchIn() === "my_workspaces";
     },
 
     hasNextPage: function(){
@@ -78,27 +79,37 @@ chorus.models.SearchResult = chorus.models.Base.extend({
         }
     },
 
+    isPaginated: function() {
+        return this.hasSpecificEntityType() || this.isScopedToSingleWorkspace();
+    },
+
     hasSpecificEntityType: function() {
         return this.entityType() && (this.entityType() !== "all");
     },
 
     entityType: function() {
-        if(this.has("entityType"))this._entityType = this.get("entityType");
-        return this._entityType;
+        return this.get("entityType") || "all";
+    },
+
+    searchIn: function() {
+        return this.get("searchIn") || "all";
     },
 
     urlParams: function() {
-        var params = {
-            query: this.get("query"),
-            rows: 3,
-            page: 1
-        };
+        var params = { query: this.get("query") };
         if (this.hasSpecificEntityType()) {
             params.entityType = this.entityType();
+        }
+        if (this.has("workspaceId") && !this.isScopedToSingleWorkspace()) {
+            params.workspaceId = this.get("workspaceId");
+        }
+        if (this.isPaginated()) {
             params.rows = this.numResultsPerPage;
             params.page = this.currentPageNumber();
+        } else {
+            params.rows = 3;
+            params.page = 1;
         }
-        if (this.has("workspaceId")) params.workspaceId = this.get("workspaceId");
         return params;
     },
 
