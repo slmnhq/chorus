@@ -173,12 +173,45 @@ describe("chorus.models.SearchResult", function() {
         });
     });
 
+    describe("#getResults", function() {
+        beforeEach(function() {
+            this.model = fixtures.searchResult({
+                thisWorkspace: {
+                    numFound: 3,
+                    docs: [ fixtures.searchResultWorkfileJson() ]
+                }
+            });
+        });
+
+        context("when the search result is scoped to a single workspace", function() {
+            it("returns the collection of items in that workspace", function() {
+                this.model.set({ workspaceId: "101", searchIn: "this_workspace" });
+                expect(this.model.getResults()).toBeDefined();
+                expect(this.model.getResults()).toBe(this.model.workspaceItems());
+            });
+        });
+
+        context("when the search results is filtered to a single entity type", function() {
+            it("returns the results collection for that entity type", function() {
+                this.model.set({ entityType: "workfile" });
+                expect(this.model.getResults()).toBeDefined();
+                expect(this.model.getResults()).toBe(this.model.workfiles());
+            });
+        });
+
+        context("when the search result has no entity type and is not scoped to a single workspace", function() {
+            it("returns undefined", function() {
+                expect(this.model.getResults()).toBeUndefined();
+            });
+        });
+    });
+
     describe("#workspaceItems", function() {
         context("when there are worspace items", function() {
             beforeEach(function() {
                 this.model = fixtures.searchResult({
                     thisWorkspace: {
-                        numFound: 3,
+                        numFound: 171,
                         docs: [
                             fixtures.searchResultWorkfileJson(),
                             fixtures.searchResultDatabaseObjectJson(),
@@ -200,9 +233,12 @@ describe("chorus.models.SearchResult", function() {
                 expect(this.workspaceItems.at(2)).toBeA(chorus.models.Dataset);
             });
 
-            it("has numFound in 'total'", function() {
-                expect(this.workspaceItems.attributes.total).toBe(3);
+            it("has the right pagination information", function() {
+                expect(this.workspaceItems.pagination.total).toBe(4);
+                expect(this.workspaceItems.pagination.records).toBe(171);
+                expect(this.workspaceItems.pagination.page).toBe(1);
             });
+
 
             it("memoizes", function() {
                 expect(this.workspaceItems).toBe(this.model.workspaceItems());
@@ -222,7 +258,7 @@ describe("chorus.models.SearchResult", function() {
             beforeEach(function() {
                 this.model = fixtures.searchResult({
                     workfile: {
-                        numFound: 3,
+                        numFound: 171,
                         docs: [
                             {
                                 id: '1',
@@ -284,8 +320,10 @@ describe("chorus.models.SearchResult", function() {
                 expect(this.workfiles.models[0].comments.at(2).get("isInsight")).toBeTruthy();
             });
 
-            it("has numFound in 'total'", function() {
-                expect(this.workfiles.attributes.total).toBe(this.model.get('workfile').numFound);
+            it("has the right pagination information", function() {
+                expect(this.workfiles.pagination.total).toBe(4);
+                expect(this.workfiles.pagination.records).toBe(171);
+                expect(this.workfiles.pagination.page).toBe(1);
             });
 
             it("memoizes", function() {
@@ -305,6 +343,7 @@ describe("chorus.models.SearchResult", function() {
         context("when there are dataset results", function() {
             beforeEach(function() {
                 this.model = fixtures.searchResult();
+                this.model.attributes.dataset.numFound = 171;
                 this.tabularData = this.model.tabularData();
             });
 
@@ -313,8 +352,10 @@ describe("chorus.models.SearchResult", function() {
                 expect(this.tabularData).toBeA(chorus.collections.TabularDataSet);
             });
 
-            it("has numFound in 'total'", function() {
-                expect(this.tabularData.attributes.total).toBe(this.model.get('dataset').numFound);
+            it("has the right pagination information", function() {
+                expect(this.tabularData.pagination.total).toBe(4);
+                expect(this.tabularData.pagination.records).toBe(171);
+                expect(this.tabularData.pagination.page).toBe(1);
             });
 
             it("memoizes", function() {
@@ -334,6 +375,7 @@ describe("chorus.models.SearchResult", function() {
         context("when there are results", function() {
             beforeEach(function() {
                 this.model.set(fixtures.searchResultJson());
+                this.model.attributes.user.numFound = 171;
                 this.users = this.model.users();
             });
 
@@ -345,8 +387,10 @@ describe("chorus.models.SearchResult", function() {
                 expect(this.users.models.length).toBe(3);
             });
 
-            it("has numFound in 'total'", function() {
-                expect(this.users.attributes.total).toBe(this.model.get('user').numFound);
+            it("has the right pagination information", function() {
+                expect(this.users.pagination.total).toBe(4);
+                expect(this.users.pagination.records).toBe(171);
+                expect(this.users.pagination.page).toBe(1);
             });
 
             it("memoizes", function() {
@@ -390,11 +434,9 @@ describe("chorus.models.SearchResult", function() {
         context("when there are search results", function() {
             beforeEach(function() {
                 this.model = fixtures.searchResult({hdfs: {
-                    docs: [
-                        fixtures.searchResultHdfsJson()
-                    ],
-                    numFound: "1"}
-                });
+                    docs: [ fixtures.searchResultHdfsJson() ],
+                    numFound: 171
+                }});
                 this.entries = this.model.hdfs();
             });
 
@@ -406,9 +448,12 @@ describe("chorus.models.SearchResult", function() {
                 expect(this.entries.models.length).toBe(1);
             });
 
-            it("has numFound in 'total'", function() {
-                expect(this.entries.attributes.total).toBe("1");
+            it("has the right pagination information", function() {
+                expect(this.entries.pagination.total).toBe(4);
+                expect(this.entries.pagination.records).toBe(171);
+                expect(this.entries.pagination.page).toBe(1);
             });
+
 
             it("memoizes", function() {
                 expect(this.entries).toBe(this.model.hdfs());
@@ -427,23 +472,26 @@ describe("chorus.models.SearchResult", function() {
         context("when there are instance search results", function() {
             beforeEach(function() {
                 this.model = fixtures.searchResult();
-                this.entries = this.model.instances();
+                this.model.attributes.instance.numFound = 171;
+                this.instances = this.model.instances();
             });
 
             it("returns an InstanceSet", function() {
-                expect(this.entries).toBeA(chorus.collections.InstanceSet);
+                expect(this.instances).toBeA(chorus.collections.InstanceSet);
             });
 
-            it("has the right number of entries", function() {
-                expect(this.entries.models.length).toBe(2);
+            it("has the right number of instances", function() {
+                expect(this.instances.models.length).toBe(2);
             });
 
-            it("has numFound in 'total'", function() {
-                expect(this.entries.attributes.total).toBe(2);
+            it("has the right pagination information", function() {
+                expect(this.instances.pagination.total).toBe(4);
+                expect(this.instances.pagination.records).toBe(171);
+                expect(this.instances.pagination.page).toBe(1);
             });
 
             it("memoizes", function() {
-                expect(this.entries).toBe(this.model.instances());
+                expect(this.instances).toBe(this.model.instances());
             });
         });
     });
@@ -507,13 +555,13 @@ describe("chorus.models.SearchResult", function() {
         it("should return the correct number of total pages", function() {
             this.model.set({entityType: "user"});
             this.model.set(fixtures.searchResult());
-            this.model.users().attributes.total = 1;
+            this.model.users().pagination.records = 1;
             expect(this.model.totalPageNumber()).toBe(1)
 
-            this.model.users().attributes.total = 51;
+            this.model.users().pagination.records = 51;
             expect(this.model.totalPageNumber()).toBe(2);
 
-            this.model.users().attributes.total = 101;
+            this.model.users().pagination.records = 101;
             expect(this.model.totalPageNumber()).toBe(3);
         });
     });

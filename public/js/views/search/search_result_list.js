@@ -19,11 +19,11 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
         var ctx = {
             entityType: this.entityType,
             shown: this.collection.models.length,
-            total: this.collection.attributes.total,
+            total: this.collection.pagination.records,
             hasNext: this.search && this.search.hasNextPage(),
             hasPrevious: this.search && this.search.hasPreviousPage(),
             filteredSearch: this.search && this.search.entityType() == this.entityType,
-            moreResults: (this.collection.models.length < this.collection.attributes.total),
+            moreResults: (this.collection.models.length < this.collection.pagination.records),
             title: this.title(),
         };
 

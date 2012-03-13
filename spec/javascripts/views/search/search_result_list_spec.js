@@ -5,7 +5,7 @@ describe("chorus.views.SearchResultList", function() {
             this.result.set({ query: "foo" });
 
             var instances = this.result.instances();
-            instances.attributes.total = 24;
+            instances.pagination.records = 24;
 
             this.view = new chorus.views.SearchResultList({
                 entityType: "instance",
@@ -31,11 +31,12 @@ describe("chorus.views.SearchResultList", function() {
 
         context("when there are three or fewer results", function() {
             beforeEach(function() {
-                this.models = new chorus.collections.TabularDataSet([
+                this.collection = new chorus.collections.TabularDataSet([
                     fixtures.tabularDataJson(),
                     fixtures.tabularDataJson()
                 ]);
-                this.view = new chorus.views.SearchResultList({collection: this.models, search: this.result, entityType: "dataset"});
+                this.collection.pagination = { records: 2 };
+                this.view = new chorus.views.SearchResultList({collection: this.collection, search: this.result, entityType: "dataset"});
                 this.view.render();
             });
 
@@ -57,7 +58,7 @@ describe("chorus.views.SearchResultList", function() {
 
                 context("has no additional results", function() {
                     beforeEach(function() {
-                        this.collection.attributes.total = this.collection.models.length;
+                        this.collection.pagination.records = this.collection.models.length;
                         this.view.render()
                     });
 
@@ -72,7 +73,7 @@ describe("chorus.views.SearchResultList", function() {
 
                 context("has additional results", function() {
                     beforeEach(function() {
-                        this.view.options.total = this.collection.models.length + 1;
+                        this.collection.pagination.records = this.collection.models.length + 1;
                         this.view.render()
                     });
 
@@ -102,8 +103,10 @@ describe("chorus.views.SearchResultList", function() {
 
                 context("has no results at all", function() {
                     beforeEach(function() {
+                        var collection = fixtures.userSet([], {total: 0});
+                        collection.pagination = { records: 0 };
                         this.view = new chorus.views.SearchResultList({
-                            collection: fixtures.userSet([], {total: 0}),
+                            collection: collection,
                             entityType: "user"
                         });
 

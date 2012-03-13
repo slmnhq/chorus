@@ -12,10 +12,11 @@ chorus.collections.HdfsEntrySet = chorus.collections.Base.extend({
 
     _add: function(model, options) {
         model = this._super("_add", arguments);
-        if(this.attributes.instance) {
-            model.set({"instance": this.attributes.instance}, {silent: true});
+        this.attributes || (this.attributes = {});
+        if (this.attributes.instance) {
+            model.set({ "instance": this.attributes.instance }, { silent: true });
         }
-        if(this.attributes.path) {
+        if (this.attributes.path) {
             model.set({"path": this.attributes.path}, {silent: true});
         }
         return model;
