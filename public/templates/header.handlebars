@@ -4,14 +4,15 @@
     </div>
 </div>
 <div class="right">
-    <div class="username">
-        <a href="#" title="{{fullName}}"><span>{{displayName}}</span><img src="/images/menu-indicator.png"/></a>
+    <div class="gear">
+        <a href="#" title=""><img src="/images/gear_menu.png"/></a>
     </div>
-    <div class="menu hidden popup_username">
+    <div class="menu hidden popup_gear">
         <div class="pointer"/>
         <ul>
-            <li><a href="{{userUrl}}">{{t "header.your_profile"}}</a></li>
-            <li><a href="#/logout">{{t "header.sign_out"}}</a></li>
+            <li><a href="#/users">{{t "header.users_list"}}</a></li>
+            <li><a href="#/workspaces">{{t "header.workspaces"}}</a></li>
+            <li><a href="#/instances">{{t "header.instances"}}</a></li>
         </ul>
     </div>
     <div class="messages">
@@ -22,15 +23,14 @@
         <ul/>
         <a class="notifications_all" href="#/notifications">{{t "notification.see_all"}}</a>
     </div>
-    <div class="gear">
-        <a href="#" title=""><img src="/images/gear_menu.png"/></a>
+    <div class="username">
+        <a href="#" title="{{fullName}}"><span>{{displayName}}</span><img src="/images/menu-indicator.png"/></a>
     </div>
-    <div class="menu hidden popup_gear">
+    <div class="menu hidden popup_username">
         <div class="pointer"/>
         <ul>
-            <li><a href="#/users">{{t "header.users_list"}}</a></li>
-            <li><a href="#/workspaces">{{t "header.workspaces"}}</a></li>
-            <li><a href="#/instances">{{t "header.instances"}}</a></li>
+            <li><a href="{{userUrl}}">{{t "header.your_profile"}}</a></li>
+            <li><a href="#/logout">{{t "header.sign_out"}}</a></li>
         </ul>
     </div>
 </div>

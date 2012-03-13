@@ -40,37 +40,10 @@ $header-item-spacing: 2*$padding-x;
         }
     }
 
-    .messages {
-        @include font-menu;
-        height: 22px;
-        padding-right: $header-padding;
-        border-right: 1px solid $header-border-color;
-
-        .notifications {
-            display: block;
-            @include border-radius(2px);
-            height: 18px;
-            padding: 4px 7px 0 7px;
-            background: $alert-background-color;
-            text-align: center;
-            margin-left: 8px;
-            min-width: 7px;
-            color: white;
-
-            &.empty {
-              background: $color-text2;
-            }
-
-            a {
-                color: white;
-            }
-        }
-    }
-
     .search {
         overflow: hidden;
         padding: 0 0 0 $header-item-spacing;
-        border-left: 1px solid $header-border-color;
+        border-left: 1px solid $color-text3;
         margin: 12px 0 0 0;
 
         input {
@@ -135,45 +108,73 @@ $header-item-spacing: 2*$padding-x;
         float: right;
         width: $sidebar-width + $padding-x;
         text-align: right;
-        .username {
-            border-right: 1px solid $header-border-color;
+        height: 100%;
 
+
+        .username, .account, .gear, .messages {
+            float: right;
+            line-height: 24px;
+            height: 24px;
+            padding: 0 $header-padding;
+            margin: 12px 0 0 0;
+        }
+
+        .username, .account, .gear, .messages {
+            a {
+                color: inherit;
+                font-size: 12px;
+                vertical-align: middle;
+                line-height: 24px;
+                height: 24px;
+
+                span {
+                    display: inline-block;
+                    vertical-align: middle;
+
+                }
+                img {
+                    padding: 0;
+                    vertical-align: middle;
+                }
+            }
+        }
+
+        .username {
+            border-right: 1px solid $color-text3;
             a {
                 span {
                     @include ellipsis;
                     max-width: 100px;
                 }
+                img {
+                    padding: 3px 0 3px 10px;
+                }
             }
         }
 
-        .username, .account, .gear {
-            padding: 0 $header-item-spacing;
-            display: inline-block;
-            font-size: 12px;
-            text-align: right;
-            height: 22px;
-            line-height: 22px;
+        .messages {
+            border-right: 1px solid $color-text3;
 
-            a {
-                color: inherit;
-                img {
-                    padding: 0 0 3px 10px;
-                }
+            .notifications {
+                @include font-menu;
+                vertical-align: baseline;
+                @include border-radius(2px);
+                height: 17px;
+                padding: 0 7px 0 7px;
+                background: $alert-background-color;
+                text-align: center;
+                min-width: 7px;
+                color: white;
 
-                span {
-                    display: inline-block;
-                    vertical-align: middle;
+                &.empty {
+                    background: $color-text2;
                 }
             }
         }
 
         .gear {
-            padding: 0 $header-padding;
-            a {
-                img {
-                    padding: 0;
-                    vertical-align: middle;
-                }
+            a img {
+                padding-bottom: 4px;
             }
         }
 
