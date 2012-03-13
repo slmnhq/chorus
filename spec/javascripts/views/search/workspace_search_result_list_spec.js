@@ -2,7 +2,7 @@ describe("chorus.views.WorkspaceSearchResultList", function() {
     beforeEach(function() {
         this.search = fixtures.searchResult({
             thisWorkspace: {
-                numFound: 3,
+                numFound: 9,
                 docs: [
                     fixtures.searchResultWorkfileJson(),
                     fixtures.searchResultDatabaseObjectJson(),
@@ -29,6 +29,18 @@ describe("chorus.views.WorkspaceSearchResultList", function() {
 
     it("has the right title", function() {
         expect(this.view.$(".title").text()).toMatchTranslation("search.type.this_workspace", { name: "John the workspace" });
+    });
+
+    describe("#clicking 'show all'", function() {
+        beforeEach(function() {
+            spyOn(chorus.router, 'navigate');
+            this.view.$("a.show_all").click();
+        });
+
+        it("navigates to the 'this workspace' search page", function() {
+            expect(this.view.search.searchIn()).toBe("this_workspace");
+            expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.search.showUrl(), true);
+        });
     });
 });
 

@@ -16,13 +16,17 @@ describe("chorus.pages.DatasetIndexPage", function() {
     })
 
     describe("#initialize", function() {
-        it("fetches the model", function() {
-            expect(this.server.lastFetchFor(this.workspace)).not.toBeUndefined();
+        it("fetches the workspace", function() {
+            expect(this.workspace).toHaveBeenFetched();
         });
 
         it("does not create the sidebar", function() {
             expect(this.page.sidebar).toBeUndefined();
-        })
+        });
+
+        it("does not create the main content (because of the import button in the content details)", function() {
+            expect(this.page.mainContent).toBeUndefined();
+        });
 
         it("sets the workspace id, for prioritizing search", function() {
             expect(this.page.workspaceId).toBe(9999);
@@ -117,32 +121,6 @@ describe("chorus.pages.DatasetIndexPage", function() {
         }
     });
 
-    describe("#initialize", function() {
-        beforeEach(function() {
-            this.page.render();
-        });
-
-        it("fetches the workspace", function() {
-            expect(this.workspace).toHaveBeenFetched();
-        });
-
-        it("creates the header and breadcrumbs", function() {
-            expect(this.page.$("#header")).toExist();
-            expect(this.page.$("#breadcrumbs")).toExist();
-        });
-
-        it("does not create the main content (because of the import button in the content details)", function() {
-            expect(this.page.mainContent).toBeUndefined();
-            expect(this.page.$("#main_content")).toExist();
-            expect(this.page.$("#main_content")).toBeEmpty();
-        });
-
-        it("does not render the sidebar", function() {
-            expect(this.page.$(".sidebar_content")).toExist();
-            expect(this.page.$(".sidebar_content")).toBeEmpty();
-        });
-    });
-
     context("after the workspace has loaded", function() {
         context("and the user has update permission on the workspace", function() {
             beforeEach(function() {
@@ -163,6 +141,12 @@ describe("chorus.pages.DatasetIndexPage", function() {
                 expect(this.page.$("#main_content")).toExist();
                 expect(this.page.$("#main_content")).not.toBeEmpty();
             });
+
+            it("creates the header and breadcrumbs", function() {
+                expect(this.page.$("#header")).toExist();
+                expect(this.page.$("#breadcrumbs")).toExist();
+            });
+
 
             it("fetches the collection when csv_import:started is triggered", function() {
                 chorus.PageEvents.broadcast("csv_import:started");

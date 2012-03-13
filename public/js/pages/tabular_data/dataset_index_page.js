@@ -19,6 +19,7 @@
             this.workspace = new chorus.models.Workspace({id: workspaceId});
             this.workspace.onLoaded(this.workspaceLoaded, this);
             this.workspace.fetch();
+            this.requiredResources.push(this.workspace);
             this.breadcrumbs = new breadcrumbsView({model: this.workspace});
 
             this.collection = new chorus.collections.DatasetSet([], {workspaceId: workspaceId});

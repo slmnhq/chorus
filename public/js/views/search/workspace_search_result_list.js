@@ -15,6 +15,12 @@
         makeListItemView: function(model) {
             var viewConstructor = viewConstructorMap[model.get("entityType")];
             return new viewConstructor({ model: model });
+        },
+
+        showAll: function(e) {
+            e.preventDefault();
+            this.search.set({ searchIn: "this_workspace" });
+            chorus.router.navigate(this.search.showUrl(), true);
         }
     });
 })();

@@ -33,9 +33,12 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
                         title: t("search.search_in"),
                         options: [
                             {data: "all", text: t("search.in.all")},
-                            {data: "my_workspaces", text: t("search.in.my_workspaces")}
+                            {data: "my_workspaces", text: t("search.in.my_workspaces")},
+
+                            // Need to talk to Dieu about this:
+                            {data: "this_workspace", text: t("search.in.this_workspace")}
                         ],
-                        chosen: t("search.in." + this.search.get("searchIn")),
+                        chosen: t("search.in." + this.search.searchIn()),
                         event: "search_in"
                     },
                     type: {

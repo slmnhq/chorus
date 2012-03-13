@@ -3,11 +3,16 @@ describe("chorus.models.SearchResult", function() {
         this.model = new chorus.models.SearchResult({ query: "jackson5" })
     });
 
-    it("defaults searchIn to 'all'", function() {
-        expect(this.model.get("searchIn")).toBe('all')
-    })
-
     describe("#url and #showUrl", function() {
+        context("when only searching for items in a single workspace", function() {
+            beforeEach(function() {
+                this.model.set({ workspaceId: "5", searchIn: "this_workspace" });
+            });
+
+            expectPaginatedUrl("/edc/search/workspace/5?query=jackson5");
+            expectShowUrl("#/workspaces/5/search/this_workspace/all/jackson5");
+        });
+
         context("when prioritizing a particular workspace", function() {
             beforeEach(function() {
                 this.model.set({ workspaceId: "5" });
@@ -443,6 +448,17 @@ describe("chorus.models.SearchResult", function() {
         });
     });
 
+    describe("#searchIn", function() {
+        it("defaults to 'all'", function() {
+            expect(this.model.searchIn()).toBe("all");
+        });
+
+        it("returns the 'searchIn' attribute, when one is set", function() {
+            this.model.set({ searchIn: "my_workspaces" });
+            expect(this.model.searchIn()).toBe("my_workspaces");
+        });
+    });
+
     describe("#entityType", function() {
         it("defaults to 'all'", function() {
             expect(this.model.entityType()).toBe('all');
@@ -452,6 +468,7 @@ describe("chorus.models.SearchResult", function() {
             beforeEach(function() {
                 this.model.set({entityType: "foo"});
             });
+
             it("gives back any set entity type", function() {
                 expect(this.model.entityType()).toBe("foo");
             });
