@@ -19,7 +19,7 @@
         vertical-align: middle;
         color: $content-details-action-link-color;
 
-        button {
+        button, a.button {
             margin-left: 0;
             color: $content-details-action-link-color;
             font-weight: $semibold;

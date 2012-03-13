@@ -212,6 +212,10 @@
 
         hasOwnPage: function() {
             return (this.isText() || this.isImage() || this.isAlpine())
+        },
+
+        diskPath: function() {
+            return chorus.workfileDir + "/" +  this.workspace().id + "/" + this.get("versionInfo").versionFileId;
         }
     });
 })();
