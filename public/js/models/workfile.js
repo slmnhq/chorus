@@ -142,6 +142,11 @@
             return type && type.match(textRegex);
         },
 
+        isAlpine: function() {
+            var fileName = this.get("fileName")
+            return fileName && _.str.endsWith(fileName.toLowerCase(), ".afm")
+        },
+
         downloadUrl: function() {
             var url = URI(this.url())
             var path = url.path() + "/file/";
@@ -206,7 +211,7 @@
         },
 
         hasOwnPage: function() {
-            return (this.isText() || this.isImage())
+            return (this.isText() || this.isImage() || this.isAlpine())
         }
     });
 })();

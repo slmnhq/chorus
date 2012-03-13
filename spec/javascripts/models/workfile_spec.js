@@ -309,6 +309,33 @@ describe("chorus.models.Workfile", function() {
         })
     });
 
+    describe("isAlpine", function() {
+        it("returns true when the workfile is an afm file", function() {
+            this.model.set({ fileName: 'example.afm'});
+            expect(this.model.isAlpine()).toBeTruthy();
+        })
+
+        it("returns true when the workfile's name ends with AFM ", function() {
+            this.model.set({ fileName: 'example.AFM'});
+            expect(this.model.isAlpine()).toBeTruthy();
+        })
+
+        it("returns false when the workfile only contains the letters afm", function() {
+            this.model.set({ fileName: 'example.afm.xml'});
+            expect(this.model.isAlpine()).toBeFalsy();
+        })
+
+        it("returns false when the workfile's name is missing", function() {
+            this.model.unset('fileName');
+            expect(this.model.isAlpine()).toBeFalsy();
+        })
+
+        it("returns false when the workfile is NOT a an afm file", function() {
+            this.model.set({ fileName: 'example.csv'});
+            expect(this.model.isAlpine()).toBeFalsy();
+        })
+    });
+
     describe("createDraft", function() {
         beforeEach(function() {
             this.workfile = fixtures.workfile();
@@ -542,6 +569,7 @@ describe("chorus.models.Workfile", function() {
             beforeEach(function() {
                 spyOn(this.model, 'isImage').andReturn(true)
                 spyOn(this.model, 'isText').andReturn(false)
+                spyOn(this.model, 'isAlpine').andReturn(false)
             })
 
             it("returns true", function() {
@@ -553,6 +581,7 @@ describe("chorus.models.Workfile", function() {
             beforeEach(function() {
                 spyOn(this.model, 'isImage').andReturn(false)
                 spyOn(this.model, 'isText').andReturn(true)
+                spyOn(this.model, 'isAlpine').andReturn(false)
             })
 
             it("returns true", function() {
@@ -560,10 +589,23 @@ describe("chorus.models.Workfile", function() {
             })
         })
 
-        context("when the workfile is a neither image or text", function() {
+        context("when the workfile is an alpine file", function() {
             beforeEach(function() {
                 spyOn(this.model, 'isImage').andReturn(false)
                 spyOn(this.model, 'isText').andReturn(false)
+                spyOn(this.model, 'isAlpine').andReturn(true)
+            })
+
+            it("returns true", function() {
+                expect(this.model.hasOwnPage()).toBeTruthy();
+            })
+        })
+
+        context("when the workfile is a neither image, text or alpine file", function() {
+            beforeEach(function() {
+                spyOn(this.model, 'isImage').andReturn(false)
+                spyOn(this.model, 'isText').andReturn(false)
+                spyOn(this.model, 'isAlpine').andReturn(false)
             })
 
             it("returns false", function() {

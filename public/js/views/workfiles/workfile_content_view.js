@@ -15,6 +15,10 @@ chorus.views.WorkfileContent = chorus.views.Base.extend({
                 return new chorus.views.TextWorkfileContent({ model:model });
             }
 
+            if (model.isAlpine()) {
+                return new chorus.views.AlpineWorkfileContent({ model:model });
+            }
+
             return new chorus.views.WorkfileContent({ model:model });
         }
     });

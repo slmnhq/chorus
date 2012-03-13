@@ -2133,6 +2133,16 @@ beforeEach(function() {
             return this.workfile(overrides);
         },
 
+        alpineWorkfile: function(overrides) {
+            overrides = _.extend({
+                fileName: "sample.afm",
+                fileType: "N/A",
+                mimeType: "application/octet-stream"
+            }, overrides);
+            return this.workfile(overrides);
+
+        },
+
         sqlWorkfile: function(overrides) {
             overrides = _.extend({
                 fileName: "sample.sql",
@@ -3314,49 +3324,49 @@ beforeEach(function() {
 
         searchResultWorkfileJson: function(overrides) {
             return _.extend({
-                "lastUpdatedStamp":"2012-03-08 09:40:26",
-                "name":"foo.sql",
-                "fileType":"SQL",
-                "id":"10001",
-                "isDeleted":false,
-                "mimeType":"text/x-sql",
-                "highlightedAttributes":{
-                    "name":[
-                        "<em>foo<\/em>.sql"
-                    ],
-                    "commitMessage":[
-                        "comment with <em>foo<\/em>"
-                    ]
-                },
-                "entityType":"workfile",
-                "owner":{
-                    "id":"InitialUser",
-                    "lastName":"Admin",
-                    "firstName":"EDC"
-                },
-                "modifiedBy":{
-                    "id":"InitialUser",
-                    "lastName":"Admin",
-                    "firstName":"EDC"
-                },
-                "workspace":{
-                    "id":"10000",
-                    "name":"a"
-                },
-                "versionInfo": {
-                    "lastUpdatedStamp":"2012-03-08 09:40:26.847",
-                    "versionFileId":"1331228426846_64",
-                    "modifiedBy": {
-                        "id":"InitialUser",
-                        "lastName":"Admin",
-                        "firstName":"EDC"
+                    "lastUpdatedStamp": "2012-03-08 09:40:26",
+                    "name": "foo.sql",
+                    "fileType": "SQL",
+                    "id": "10001",
+                    "isDeleted": false,
+                    "mimeType": "text/x-sql",
+                    "highlightedAttributes": {
+                        "name": [
+                            "<em>foo<\/em>.sql"
+                        ],
+                        "commitMessage": [
+                            "comment with <em>foo<\/em>"
+                        ]
                     },
-                    "versionOwner":"edcadmin",
-                    "versionNum":2
+                    "entityType": "workfile",
+                    "owner": {
+                        "id": "InitialUser",
+                        "lastName": "Admin",
+                        "firstName": "EDC"
+                    },
+                    "modifiedBy": {
+                        "id": "InitialUser",
+                        "lastName": "Admin",
+                        "firstName": "EDC"
+                    },
+                    "workspace": {
+                        "id": "10000",
+                        "name": "a"
+                    },
+                    "versionInfo": {
+                        "lastUpdatedStamp": "2012-03-08 09:40:26.847",
+                        "versionFileId": "1331228426846_64",
+                        "modifiedBy": {
+                            "id": "InitialUser",
+                            "lastName": "Admin",
+                            "firstName": "EDC"
+                        },
+                        "versionOwner": "edcadmin",
+                        "versionNum": 2
+                    },
+                    "comments": []
                 },
-                "comments":[]
-            },
-            overrides);
+                overrides);
         },
 
         searchResultHdfsJson: function(overrides) {
@@ -3383,7 +3393,7 @@ beforeEach(function() {
             return _.extend({
                 content: "nice data!",
                 highlightedAttributes: {
-                    content:["nice <em>data</em>!"]
+                    content: ["nice <em>data</em>!"]
                 },
                 id: "10001",
                 isComment: false,

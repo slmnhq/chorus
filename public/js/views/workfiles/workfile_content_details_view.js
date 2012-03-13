@@ -62,8 +62,14 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
         buildFor:function (model) {
             if (model.isImage()) {
                 return new chorus.views.ImageWorkfileContentDetails({ model:model });
-            } else if (model.isSql()) {
+            }
+
+            if (model.isSql()) {
                 return new chorus.views.SqlWorkfileContentDetails({ model:model });
+            }
+
+            if (model.isAlpine()) {
+                return new chorus.views.AlpineWorkfileContentDetails({ model:model });
             }
 
             return new chorus.views.WorkfileContentDetails({ model:model });

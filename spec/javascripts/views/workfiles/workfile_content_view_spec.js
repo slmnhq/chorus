@@ -40,6 +40,18 @@ describe("WorkfileContent", function() {
             });
         })
 
+        context("when the given workfile is an alpine file", function() {
+            beforeEach(function() {
+                this.model = fixtures.alpineWorkfile();
+                spyOn(chorus.views, "AlpineWorkfileContent");
+                chorus.views.WorkfileContent.buildFor(this.model);
+            });
+
+            it("instantiates an AlpineWorkfileContent view with the given workfile", function() {
+                expect(chorus.views.AlpineWorkfileContent).toHaveBeenCalledWith({ model : this.model });
+            });
+        })
+
         context("when the given workfile is nothing special", function() {
             beforeEach(function() {
                 this.model = fixtures.otherWorkfile();
