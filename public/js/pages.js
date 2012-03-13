@@ -1,6 +1,10 @@
 chorus.pages.Bare = chorus.views.Bare.extend({
     bindCallbacks: function() {
         if (chorus.user) this.bindings.add(chorus.user, "change", this.render);
+    },
+
+    requiredResourcesFetchFailed: function() {
+        Backbone.history.loadUrl("/invalidRoute");
     }
 });
 

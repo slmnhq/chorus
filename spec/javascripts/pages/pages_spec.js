@@ -1,8 +1,8 @@
 describe("chorus.pages.Base", function() {
     beforeEach(function() {
         chorus.user = new chorus.models.User({
-            "firstName" : "Daniel",
-            "lastName" : "Burkes",
+            "firstName": "Daniel",
+            "lastName": "Burkes",
             "fullName": "Daniel Francis Burkes"
         });
 
@@ -56,11 +56,29 @@ describe("chorus.pages.Base", function() {
             });
         });
 
+        context("when the page has required resources", function() {
+            beforeEach(function() {
+                this.resource = fixtures.user();
+                this.view.requiredResources.push(this.resource);
+            });
+
+            context("when the fetch fails", function() {
+                beforeEach(function() {
+                    spyOn(Backbone.history, "loadUrl");
+                    this.resource.trigger("fetchFailed");
+                });
+
+                it("navigates to the InvalidRoutePage if requiredResource fetch fails", function() {
+                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
+                })
+            });
+        });
+
         describe("breadcrumb handling", function() {
             context("with static breadcrumbs", function() {
                 beforeEach(function() {
                     this.view.crumbs = [
-                        {label : "Home"}
+                        {label: "Home"}
                     ]
                     this.view.render();
                 })
@@ -74,7 +92,7 @@ describe("chorus.pages.Base", function() {
                 beforeEach(function() {
                     this.view.crumbs = function() {
                         return [
-                            {label : "There"}
+                            {label: "There"}
                         ]
                     }
                     this.view.render();
@@ -88,7 +106,7 @@ describe("chorus.pages.Base", function() {
 
         it("renders the breadcrumbs", function() {
             this.view.crumbs = [
-                {label : "Home"}
+                {label: "Home"}
             ]
             this.view.render();
             expect(this.view.$("#breadcrumbs.breadcrumbs .breadcrumb")).toExist();

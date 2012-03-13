@@ -1136,7 +1136,21 @@ describe("chorus.models.Abstract", function() {
                 it("triggers the 'loaded' event on the collection", function() {
                     expect(this.loadedSpy).toHaveBeenCalled();
                 })
-            })
+            });
+
+            context("when there is a server error", function() {
+                beforeEach(function() {
+                    this.fetchFailedSpy = jasmine.createSpy("fetchFailed");
+                    this.collection.bind("fetchFailed", this.fetchFailedSpy);
+                    this.collection.fetch();
+                    this.server.lastFetchFor(this.collection).fail();
+                });
+
+                it("triggers the 'fetchFailed' event on the model", function() {
+                    expect(this.fetchFailedSpy).toHaveBeenCalled();
+                    expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.collection);
+                });
+            });
         });
 
         describe("#fetchAll", function() {

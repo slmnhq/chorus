@@ -157,7 +157,7 @@ chorus.models = {
 
         requirePattern: function(attr, regex, newAttrs, messageKey, allowBlank) {
             var value = newAttrs && newAttrs.hasOwnProperty(attr) ? newAttrs[attr] : this.get(attr);
-            if(allowBlank && !value) {
+            if (allowBlank && !value) {
                 return
             }
 
@@ -201,14 +201,14 @@ chorus.models = {
 
         highlightedAttribute: function(attr) {
             var highlightedAttrs = this.get("highlightedAttributes");
-            if(highlightedAttrs && highlightedAttrs[attr]) {
+            if (highlightedAttrs && highlightedAttrs[attr]) {
                 var attribute = highlightedAttrs[attr];
                 return _.isArray(attribute) ? attribute[0] : attribute;
             }
         },
 
         name: function() {
-            if(this.nameFunction) {
+            if (this.nameFunction) {
                 return this[this.nameFunction]();
             }
             return this.get(this.nameAttribute);
@@ -284,10 +284,15 @@ chorus.collections = {
             options || (options = {});
             var success = options.success;
             options.success = function(collection, resp) {
+                if (collection.serverErrors) {
+                    collection.trigger('fetchFailed', collection);
+                }
                 if (collection.loaded && !options.silent) {
                     collection.trigger('loaded');
                 }
-                if (success) success(collection, resp);
+                if (success) {
+                    success(collection, resp);
+                }
             };
             return this._super('fetch', [options])
                 .always(_.bind(function() {
@@ -340,6 +345,9 @@ chorus.collections = {
             this.pagination = data.pagination;
             if (data.status == 'ok') {
                 this.loaded = true;
+                this.serverErrors = undefined;
+            } else {
+                this.serverErrors = data.message;
             }
             return data.resource;
         },
