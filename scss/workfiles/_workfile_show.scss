@@ -108,3 +108,8 @@
         }
     }
 }
+
+.alpine_workfile_content .not_found {
+    @include font-menu;
+    padding: 5px;
+}
