@@ -2,7 +2,8 @@
     var viewConstructorMap = {
         workfile:       chorus.views.SearchWorkfile,
         databaseObject: chorus.views.SearchDataset,
-        chorusView:     chorus.views.SearchDataset
+        chorusView:     chorus.views.SearchDataset,
+        workspace:      chorus.views.SearchWorkspace
     };
 
     chorus.views.WorkspaceSearchResultList = chorus.views.SearchResultList.extend({

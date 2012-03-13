@@ -216,6 +216,7 @@ describe("chorus.models.SearchResult", function() {
                             fixtures.searchResultWorkfileJson(),
                             fixtures.searchResultDatabaseObjectJson(),
                             fixtures.searchResultChorusViewJson(),
+                            fixtures.searchResultWorkspaceJson()
                         ]
                     }
                 });
@@ -231,7 +232,9 @@ describe("chorus.models.SearchResult", function() {
                 expect(this.workspaceItems.at(0)).toBeA(chorus.models.Workfile);
                 expect(this.workspaceItems.at(1)).toBeA(chorus.models.DatabaseObject);
                 expect(this.workspaceItems.at(2)).toBeA(chorus.models.Dataset);
+                expect(this.workspaceItems.at(3)).toBeA(chorus.models.Workspace);
             });
+
 
             it("has the right pagination information", function() {
                 expect(this.workspaceItems.pagination.total).toBe(4);
@@ -239,10 +242,10 @@ describe("chorus.models.SearchResult", function() {
                 expect(this.workspaceItems.pagination.page).toBe(1);
             });
 
-
             it("memoizes", function() {
                 expect(this.workspaceItems).toBe(this.model.workspaceItems());
             });
+
         });
 
         context("when there are no workfile results", function() {
