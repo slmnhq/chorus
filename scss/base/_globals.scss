@@ -12,10 +12,7 @@ a {
     color: $link-color;
     font-size: 14px;
     text-decoration : none;
-
-    &[href=''], &:not([href]) {
-        color: inherit !important;
-    }
+    cursor: pointer;
 }
 
 body {
