@@ -13,6 +13,7 @@ chorus.pages.UserEditPage = chorus.pages.Base.extend({
         var self = this
         this.model = new chorus.models.User({id:userId});
         this.model.fetch();
+        this.requiredResources.push(this.model);
 
         this.mainContent = new chorus.views.MainContentView({
             model:this.model,
