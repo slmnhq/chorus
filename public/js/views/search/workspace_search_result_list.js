@@ -15,7 +15,7 @@
 
         makeListItemView: function(model) {
             var viewConstructor = viewConstructorMap[model.get("entityType")];
-            return new viewConstructor({ model: model });
+            return new viewConstructor({ model: model, search: this.search });
         },
 
         showAll: function(e) {

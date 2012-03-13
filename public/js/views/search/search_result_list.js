@@ -65,6 +65,6 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     },
 
     makeListItemView: function(model) {
-        return new chorus.views[this.listItemConstructorName]({ model: model });
+        return new chorus.views[this.listItemConstructorName]({ model: model, search: this.search });
     }
 });

@@ -30,6 +30,7 @@ chorus.views.SearchItemBase = chorus.views.Base.extend({
     },
 
     itemSelected: function(evt) {
+        this.options.search.selectedItem = this.model;
         chorus.PageEvents.broadcast(this.eventType + ":selected", this.model);
     }
 })

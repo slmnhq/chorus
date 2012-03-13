@@ -13,6 +13,12 @@
 
     chorus.models.SearchResult = chorus.models.Base.extend({
         constructorName: "SearchResult",
+        
+        initialize: function() {
+            this.bind('invalidated', function() {
+                this.selectedItem.trigger('invalidated');
+            });
+        },
 
         urlTemplate: function() {
             if (this.isScopedToSingleWorkspace()) {

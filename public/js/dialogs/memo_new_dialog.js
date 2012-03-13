@@ -120,8 +120,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.extend({
     },
 
     saved: function() {
-        chorus.PageEvents.broadcast("memo:added:"+this.options.launchElement.data("entityType"));
-        this.pageModel && this.pageModel.trigger("invalidated");
+        this.pageModel.trigger("invalidated");
         this.$("button.submit").stopLoading();
         this.closeModal();
     },

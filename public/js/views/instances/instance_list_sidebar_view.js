@@ -10,7 +10,6 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
 
     setup:function () {
         chorus.PageEvents.subscribe("instance:selected", this.setInstance, this);
-        chorus.PageEvents.subscribe("memo:added:instance", this.refreshActivities, this);
         this.tabControl = new chorus.views.TabControl([
             {name:'activity', selector:".activity_list"},
             {name:'configuration', selector:".configuration_detail"}
@@ -42,10 +41,6 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
                 displayStyle:'without_object'
             });
         }
-    },
-
-    refreshActivities: function() {
-        this.resource && this.resource.activities().fetch();
     },
 
     setInstance:function (instance) {

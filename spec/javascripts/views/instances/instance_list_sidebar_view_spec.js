@@ -372,19 +372,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                         expect(this.view.$('.actions .workspace_usage')).toContainTranslation('instances.sidebar.usage', {count: 2});
                     });
                 })
-            })
-
-            describe("when a new memo is created", function() {
-                beforeEach(function() {
-                    this.server.reset();
-                    chorus.PageEvents.broadcast("memo:added:instance");
-                })
-
-                it("re-fetches the activity list", function() {
-                    expect(this.instance.activities()).toHaveBeenFetched();
-                });
-            })
-
+            });
         });
     });
 });

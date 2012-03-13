@@ -143,12 +143,6 @@ describe("chorus.views.TabularDataSidebar", function() {
                         expect(this.view.activityList).toBeA(chorus.views.ActivityList);
                         expect(this.view.activityList.el).toBe(this.view.$(".tabbed_area .activity_list")[0]);
                     });
-
-                    it("re-fetches activities when memo:added:databaseObject is broadcast", function() {
-                        this.server.reset();
-                        chorus.PageEvents.broadcast("memo:added:databaseObject");
-                        expect(this.view.activityList.collection).toHaveBeenFetched();
-                    });
                 });
             });
 

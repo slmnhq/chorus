@@ -591,25 +591,25 @@ describe("chorus.models.SearchResult", function() {
     });
 
     describe("#getPreviousPage", function() {
-            beforeEach(function() {
-                this.model.set({user: { docs: [], numFound: 100 }, page: 2, entityType: "user"})
-                this.model.users();
-                this.model.getPreviousPage();
-                var searchResult = fixtures.searchResult();
-                this.users = searchResult.get("user").docs;
-                this.server.completeFetchFor(this.model, searchResult);
-            });
-
-            it("sets page to 1", function() {
-                expect(this.model.get("page")).toBe(1);
-            });
-
-            it("should replace the current results with the previous page of results", function() {
-                var users = this.model.users()
-                expect(users).toBeA(chorus.collections.UserSet);
-                expect(users.models.length).toBe(this.users.length)
-            });
+        beforeEach(function() {
+            this.model.set({user: { docs: [], numFound: 100 }, page: 2, entityType: "user"})
+            this.model.users();
+            this.model.getPreviousPage();
+            var searchResult = fixtures.searchResult();
+            this.users = searchResult.get("user").docs;
+            this.server.completeFetchFor(this.model, searchResult);
         });
+
+        it("sets page to 1", function() {
+            expect(this.model.get("page")).toBe(1);
+        });
+
+        it("should replace the current results with the previous page of results", function() {
+            var users = this.model.users()
+            expect(users).toBeA(chorus.collections.UserSet);
+            expect(users.models.length).toBe(this.users.length)
+        });
+    });
 
     describe("#hasNextPage", function() {
         context("when we have a specific entity type", function() {
@@ -712,5 +712,20 @@ describe("chorus.models.SearchResult", function() {
                 expect(this.model.workspaces()).toEqual(this.orig_workspaces);
             })
         });
+    });
+
+    describe("triggering invalidated", function() {
+        beforeEach(function() {
+            var search = fixtures.searchResult()
+            this.model = search;
+            this.model.selectedItem = search.users().at(0);
+            spyOnEvent(this.model.selectedItem, 'invalidated');
+            this.model.trigger("invalidated");
+        });
+
+        it("should trigger invalidated on the currently selected item", function() {
+            expect("invalidated").toHaveBeenTriggeredOn(this.model.selectedItem);
+        });
+
     });
 });

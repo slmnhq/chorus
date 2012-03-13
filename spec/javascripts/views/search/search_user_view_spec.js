@@ -73,7 +73,7 @@ describe("chorus.views.SearchUser", function() {
                         "content": "<em>Hello</em>"
                     }
                 });
-                this.view = new chorus.views.SearchUser({ model: this.model });
+                this.view = new chorus.views.SearchUser({ model: this.model, search: this.result });
                 this.view.render();
             });
 
