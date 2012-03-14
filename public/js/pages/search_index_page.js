@@ -39,7 +39,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
                     search_in: {
                         title: t("search.search_in"),
                         options: this.searchInMenuOptions(),
-                        chosen: t("search.in." + this.search.searchIn()),
+                        chosen: this.search.searchIn(),
                         event: "search_in"
                     },
                     type: {
@@ -53,7 +53,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
                             {data: "workspace", text: t("search.type.workspace")},
                             {data: "user", text: t("search.type.user")}
                         ],
-                        chosen: t("search.type." + this.search.entityType()),
+                        chosen: this.search.entityType(),
                         event: "filter"
                     }
                 }

@@ -1,6 +1,6 @@
 <span class="title">{{title}}</span>
 <a class="popup" href="#">
-    <span class="chosen">{{chosen}}</span>
+    <span class="chosen">{{chosenText}}</span>
     <img src="/images/blue-menu-triangle.png"/>
 </a>
 
@@ -9,7 +9,7 @@
     <ul data-event="{{event}}">
         {{#each options}}
             <li data-type="{{data}}">
-                <div class="check {{hiddenClass}}"></div>
+                <div class="check {{#unless isChecked}}hidden{{/unless}}"></div>
                 <a href="#">{{text}}</a>
             </li>
         {{/each}}

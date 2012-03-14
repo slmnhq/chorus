@@ -4,8 +4,8 @@ describe("chorus.views.LinkMenu", function() {
             beforeEach(function() {
                 this.view = new chorus.views.LinkMenu({
                     options : [
-                        {data : "mark", text : "bob"},
-                        {data : "joanne", text : "alice"}
+                        {data : "male", text : "bob"},
+                        {data : "female", text : "alice"}
                     ],
                     title: "Link Menu",
                     event : "name"
@@ -19,20 +19,20 @@ describe("chorus.views.LinkMenu", function() {
             });
 
             it("should have the correct popup options", function() {
-                expect(this.view.$("li[data-type=mark] a")).toHaveText("bob")
-                expect(this.view.$("li[data-type=joanne] a")).toHaveText("alice")
+                expect(this.view.$("li[data-type=male] a")).toHaveText("bob")
+                expect(this.view.$("li[data-type=female] a")).toHaveText("alice")
             })
 
             describe("chosen option", function() {
                 it("defaults to the first option", function() {
                     expect(this.view.$(".chosen")).toHaveText("bob")
-                    expect(this.view.$(".menu li[data-type=mark] .check")).not.toHaveClass("hidden");
-                    expect(this.view.$(".menu li[data-type=joanne] .check")).toHaveClass("hidden")
+                    expect(this.view.$(".menu li[data-type=male] .check")).not.toHaveClass("hidden");
+                    expect(this.view.$(".menu li[data-type=female] .check")).toHaveClass("hidden")
 
                 })
 
                 it("renders the chosen option", function() {
-                    this.view.options.chosen = "alice"
+                    this.view.options.chosen = "female"
                     this.view.render();
                     expect(this.view.$(".chosen")).toHaveText("alice")
                 })
@@ -82,19 +82,19 @@ describe("chorus.views.LinkMenu", function() {
                         spyOn(chorus.PageEvents, "broadcast").andCallThrough();
                         this.choiceSpy = jasmine.createSpy("choice");
                         this.view.bind("choice", this.choiceSpy);
-                        this.view.$(".menu li[data-type=joanne] a").click();
+                        this.view.$(".menu li[data-type=female] a").click();
                     });
 
                     it("broadcasts the choice", function(){
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("choice:name", "joanne", this.view);
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("choice:name", "female", this.view);
                     });
 
                     it("should trigger a choice event with the data", function() {
-                        expect(this.choiceSpy).toHaveBeenCalledWith("name", "joanne");
+                        expect(this.choiceSpy).toHaveBeenCalledWith("name", "female");
                     });
 
                     it("should set the chosen property", function() {
-                        expect(this.view.options.chosen).toBe("alice")
+                        expect(this.view.options.chosen).toBe("female")
                     });
 
                     it("should display the new choice", function() {
@@ -102,8 +102,8 @@ describe("chorus.views.LinkMenu", function() {
                     })
 
                     it("shows change what is checked", function() {
-                        expect(this.view.$(".menu li[data-type=mark] .check")).toHaveClass("hidden")
-                        expect(this.view.$(".menu li[data-type=joanne] .check")).not.toHaveClass("hidden")
+                        expect(this.view.$(".menu li[data-type=male] .check")).toHaveClass("hidden")
+                        expect(this.view.$(".menu li[data-type=female] .check")).not.toHaveClass("hidden")
                     });
                 });
             })
