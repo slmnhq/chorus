@@ -1,6 +1,5 @@
 describe("chorus.views.DashboardWorkspaceList", function() {
     beforeEach(function() {
-        fixtures.model = "Workspace"
         this.workspace1 = fixtures.workspace({ name: "Broccoli", latestCommentList: [] });
         this.workspace2 = fixtures.workspace({ name: "Camels", latestCommentList: [] });
         this.collection = new chorus.collections.WorkspaceSet([this.workspace1, this.workspace2]);

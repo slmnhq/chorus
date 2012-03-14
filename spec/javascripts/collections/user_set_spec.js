@@ -1,6 +1,5 @@
 describe("chorus.collections.UserSet", function() {
     beforeEach(function() {
-        fixtures.model = 'UserSet';
         this.collection = new chorus.collections.UserSet();
     });
 

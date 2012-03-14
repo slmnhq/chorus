@@ -7,7 +7,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
         this.workspace = fixtures.workspace({ id: this.workspaceId });
         setLoggedInUser({id: 4003});
         chorus.session.trigger("saved")
-        this.dialog = new chorus.dialogs.CopyWorkfile({launchElement : this.launchElement });
+        this.dialog = new chorus.dialogs.CopyWorkfile({launchElement: this.launchElement });
     });
 
     it("does not re-render when the model changes", function() {
@@ -39,7 +39,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
 
     describe("clicking Copy File", function() {
         beforeEach(function() {
-            this.dialog = new chorus.dialogs.CopyWorkfile({launchElement : this.launchElement });
+            this.dialog = new chorus.dialogs.CopyWorkfile({launchElement: this.launchElement });
             this.dialog.workfile = this.workfile;
             this.dialog.render();
 
@@ -58,7 +58,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
 
         describe("when the workfile contains a description", function() {
             beforeEach(function() {
-                this.workfile.set({ description : "my workfile" });
+                this.workfile.set({ description: "my workfile" });
                 this.dialog.$("button.submit").click();
             })
 
@@ -102,14 +102,11 @@ describe("chorus.dialogs.CopyWorkfile", function() {
 
         describe("when the API fails", function() {
             beforeEach(function() {
-
-                fixtures.model = "Workfile";
-                this.server.respondWith(
-                    'POST',
-                    "/edc/workspace/" + this.workspace.get("id") + "/workfile",
-                    this.prepareResponse(fixtures.jsonFor("copyFailed")));
-
-                this.server.respond();
+                this.server.lastRequest().fail([
+                    {
+                        "message": "Workspace already has a workfile with this name. Specify a different name.",
+                    }
+                ])
             })
 
             it("does not close the dialog", function() {

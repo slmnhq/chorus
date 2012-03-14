@@ -75,13 +75,11 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
 
         describe("when the API fails", function() {
             beforeEach(function() {
-                fixtures.model = "Workfile";
-                this.server.respondWith(
-                    'POST',
-                    "/edc/workspace/" + this.workspace.get("id") + "/dataset",
-                    this.prepareResponse(fixtures.jsonFor("copyFailed")));
-
-                this.server.respond();
+                this.server.lastRequest().fail([
+                    {
+                        "message": "Workspace already has a workfile with this name. Specify a different name."
+                    }
+                ])
             })
 
             it("does not close the dialog", function() {

@@ -1,9 +1,4 @@
 describe("chorus.presenters.Activity", function() {
-    beforeEach(function() {
-        fixtures.model = 'Activity';
-        this.model = fixtures.modelFor("fetch")
-    });
-
     context(".IMPORT_CREATED", function() {
         context("when importing from a file", function() {
             beforeEach(function() {
@@ -1211,6 +1206,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("when no author information is present", function() {
         beforeEach(function() {
+            this.model = fixtures.activities.NOTE_ON_DATABASE_TABLE();
             this.model.unset("author");
             this.presenter = new chorus.presenters.Activity(this.model);
         });

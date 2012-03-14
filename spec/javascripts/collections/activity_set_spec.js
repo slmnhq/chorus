@@ -1,6 +1,5 @@
 describe("chorus.collections.ActivitySet", function() {
     beforeEach(function() {
-        fixtures.model = 'ActivitySet';
         this.collection = new chorus.collections.ActivitySet([], {
             entityType: "workspace",
             entityId: "45"
