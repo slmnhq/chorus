@@ -794,6 +794,57 @@ describe("handlebars", function() {
                 expect(definition).not.toMatch('<script>');
             });
         })
+
+        describe("searchResultCommentTitle", function() {
+            context("when the comment is an insight", function() {
+                beforeEach(function() {
+                    this.comment = fixtures.searchResultCommentJson({isInsight: true});
+                });
+
+                it("returns the insight title", function() {
+                    expect(Handlebars.helpers.searchResultCommentTitle(this.comment)).toMatchTranslation("search.supporting_message_types.insight");
+                });
+            });
+            context("when the comment is a comment", function() {
+                beforeEach(function() {
+                    this.comment = fixtures.searchResultCommentJson({isComment: true});
+                });
+
+                it("returns the comment title", function() {
+                    expect(Handlebars.helpers.searchResultCommentTitle(this.comment)).toMatchTranslation("search.supporting_message_types.comment");
+                });
+            });
+
+            context("when the comment is an commit message for a workfile", function() {
+                beforeEach(function() {
+                    this.comment = fixtures.searchResultCommentJson({isCommitMessage: true});
+                });
+
+                it("returns an empty string", function() {
+                    expect(Handlebars.helpers.searchResultCommentTitle(this.comment)).toBe("");
+                });
+            });
+
+            context("when the comment is a column", function() {
+                beforeEach(function() {
+                    this.comment = fixtures.searchResultCommentJson({isColumn: true});
+                });
+
+                it("returns the column title", function() {
+                    expect(Handlebars.helpers.searchResultCommentTitle(this.comment)).toMatchTranslation("search.supporting_message_types.column");
+                });
+            });
+
+            context("when the comment nothing special", function() {
+                beforeEach(function() {
+                    this.comment = fixtures.searchResultCommentJson();
+                });
+
+                it("returns the note title", function() {
+                    expect(Handlebars.helpers.searchResultCommentTitle(this.comment)).toMatchTranslation("search.supporting_message_types.note");
+                });
+            });
+        });
     });
 
     describe("partials", function() {

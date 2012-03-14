@@ -3389,6 +3389,7 @@ beforeEach(function() {
                 isComment: false,
                 isInsight: false,
                 isPublished: false,
+                isColumn: false,
                 lastUpdatedStamp: "2012-03-07 15:03:43"
             }, overrides);
         },
