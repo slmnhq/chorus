@@ -2811,7 +2811,7 @@ beforeEach(function() {
                             "isDeleted": false,
                             "lastUpdate": "Tue Feb 21 10:53:48 PST 2012",
                             "fileType": "SQL",
-                            "name": "test.sql",
+                            "fileName": "test.sql",
                             "entityType": "workfile",
                             "modifiedBy": {
                                 "id": "422",
@@ -2830,7 +2830,7 @@ beforeEach(function() {
                             },
                             "comments": [],
                             highlightedAttributes: {
-                                "name": ["<em>test<\/em>.sql"]
+                                "fileName": ["<em>test<\/em>.sql"]
                             }
                         },
                         {
@@ -2838,7 +2838,7 @@ beforeEach(function() {
                             "isDeleted": false,
                             "lastUpdate": "Thu Feb 23 12:28:56 PST 2012",
                             "fileType": "SQL",
-                            "name": "test.sql",
+                            "fileName": "test.sql",
                             "entityType": "workfile",
                             "modifiedBy": {
                                 "id": "422",
@@ -2857,7 +2857,7 @@ beforeEach(function() {
                             },
                             "comments": [],
                             highlightedAttributes: {
-                                "name": ["<em>test<\/em>.sql"]
+                                "fileName": ["<em>test<\/em>.sql"]
                             }
                         }
                     ],
@@ -3450,9 +3450,9 @@ beforeEach(function() {
                             "isDeleted": false,
                             "lastUpdatedStamp": "2012-02-29 09:36:01",
                             "fileType": "SQL",
-                            "name": "edc_query.sql",
+                            "fileName": "edc_query.sql",
                             highlightedAttributes: {
-                                name: ["<em>edc</em>_query.sql"]
+                                fileName: ["<em>edc</em>_query.sql"]
                             },
                             "entityType": "workfile",
                             "owner": {

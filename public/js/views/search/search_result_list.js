@@ -20,7 +20,7 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
             total: this.collection.pagination.records,
             filteredSearch: this.search && this.search.isPaginated(),
             moreResults: (this.collection.models.length < this.collection.pagination.records),
-            title: this.title(),
+            title: this.title()
         };
     },
 

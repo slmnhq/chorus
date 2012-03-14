@@ -34,7 +34,7 @@ describe("chorus.views.TypeAheadSearch", function() {
 
         it("should display the correct name and type for workfile", function() {
             var workfile = this.result.get("typeAhead").docs[1];
-            expect(this.view.$("li.result:eq(1) .name").html()).toBe(workfile.highlightedAttributes.name[0]);
+            expect(this.view.$("li.result:eq(1) .name").html()).toBe(workfile.highlightedAttributes.fileName[0]);
             expect(this.view.$("li.result:eq(1) .name").attr("href")).toBe((new chorus.models.Workfile(workfile)).showUrl());
             expect(this.view.$("li.result:eq(1) .type").text()).toMatchTranslation("type_ahead.entity.workfile");
         });

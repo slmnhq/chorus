@@ -60,13 +60,6 @@
     }));
 
     chorus.collections.Search.WorkfileSet = chorus.collections.WorkfileSet.extend(_.extend({}, searchCollectionMixins, {
-        searchKey: "workfile",
-
-        refreshFromSearch: function() {
-            searchCollectionMixins.refreshFromSearch.call(this);
-            this.each(function(model){
-               model.set({fileName: $.stripHtml(model.get("name"))});
-            });
-        }
+        searchKey: "workfile"
     }));
 })();

@@ -5,8 +5,7 @@
     chorus.models.Workfile = chorus.models.Base.extend({
         constructorName: "Workfile",
         entityType: "workfile",
-        //TODO: Change nameAttribute to fileName when api story is done: https://www.pivotaltracker.com/story/show/26214231
-        nameAttribute: 'name',
+        nameAttribute: 'fileName',
 
         urlTemplate: function() {
             if(this.isNew()) {
