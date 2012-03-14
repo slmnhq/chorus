@@ -68,6 +68,8 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
         context("clicking submit", function() {
             context("with has header false", function() {
                 beforeEach(function() {
+                    this.dialog.$("input[name=table_name]").val("testisgreat").change();
+                    this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
                     this.dialog.$("#hasHeader").prop('checked', false).change();
                     this.dialog.$("select").val(this.workspace3.id);
                     this.dialog.$('button.submit').click();
@@ -76,12 +78,27 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                 it("posts to the right URL", function() {
                     var workspaceId = this.workspace3.id;
                     var request = this.server.lastCreate();
-                    var statement = "bar_txt (column_1 text, column_2 text, column_3 text, column_4 text, column_5 text)";
+                    var statement = "testisgreat (column_1 text, column_2 text, column_3 text, column_4 text, column_5 text)";
 
                     expect(request.url).toMatchUrl("/edc/workspace/" + workspaceId + "/externaltable");
                     expect(request.params().statement).toBe(statement);
                     expect(request.params().hasHeader).toBe('false');
                 });
+
+                context("switch header to on again", function() {
+                    beforeEach(function() {
+                        this.dialog.$("#hasHeader").prop("checked", true).change();
+                    })
+
+                    it("retains column names when changing column names back and forth between generated and header", function() {
+                        expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
+                    })
+
+
+                    it("retains the table name when changing column names back and forth between generated and header", function() {
+                        expect(this.dialog.$("input[name=table_name]").val()).toBe("testisgreat");
+                    })
+                })
             });
             context("with has header true", function() {
                 beforeEach(function() {
@@ -123,39 +140,24 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("csv_import:started");
                     });
                 })
+
+                context("when the post to import responds with failure", function() {
+                    beforeEach(function() {
+                        this.dialog.$("input[name=table_name]").val("testisgreat").change();
+                        this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
+                        this.dialog.$("button.submit").click();
+                        this.server.lastCreate().fail([{ message: "I like cheese" }]);
+                    })
+
+                    it("retains column names", function() {
+                        expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
+                    })
+
+                    it("retains the table name", function() {
+                        expect(this.dialog.$("input[name=table_name]").val()).toBe("testisgreat");
+                    })
+                })
             });
-        })
-
-        it("retains column names when saving", function() {
-            this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
-            this.dialog.$("button.submit").click();
-            this.server.lastCreate().fail([
-                {message: "I like cheese"}
-            ]);
-            expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
-        })
-
-        it("retains column names when changing column names back and forth between generated and header", function() {
-            this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
-            this.dialog.$("#hasHeader").prop("checked", false).change();
-            this.dialog.$("#hasHeader").prop("checked", true).change();
-            expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
-        })
-
-        it("retains the table name when saving", function() {
-            this.dialog.$("input[name=table_name]").val("testisgreat").change();
-            this.dialog.$("button.submit").click();
-            this.server.lastCreate().fail([
-                {message: "I like cheese"}
-            ]);
-            expect(this.dialog.$("input[name=table_name]").val()).toBe("testisgreat");
-        })
-
-        it("retains the table name when changing column names back and forth between generated and header", function() {
-            this.dialog.$("input[name=table_name]").val("testisgreat").change();
-            this.dialog.$("#hasHeader").prop("checked", false).change();
-            this.dialog.$("#hasHeader").prop("checked", true).change();
-            expect(this.dialog.$("input[name=table_name]").val()).toBe("testisgreat");
         })
     })
 });
