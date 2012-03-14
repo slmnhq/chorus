@@ -122,6 +122,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 context("when the spinner has not yet been started", function() {
                     beforeEach(function() {
                         this.view.$(".cancel").click();
+                        chorus.PageEvents.broadcast("file:executionFailed");
                     })
 
                     it("cancels the execution", function() {
@@ -138,6 +139,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                         delete this.view.spinnerTimer;
                         delete this.view.elapsedTimer;
                         this.view.$(".cancel").click();
+                        chorus.PageEvents.broadcast("file:executionFailed");
                     })
 
                     it("cancels the execution", function() {

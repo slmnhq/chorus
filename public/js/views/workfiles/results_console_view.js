@@ -84,7 +84,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     cancelExecution: function(event) {
         this.cancelTimers()
         event.preventDefault();
-        this.model.save({ action: "cancel" });
+        this.model.cancel();
         this.clickClose();
     },
 
