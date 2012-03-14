@@ -22,6 +22,13 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         this.model.fetch();
     },
 
+    searchInMenuOptions: function() {
+        return  [
+            {data: "all", text: t("search.in.all")},
+            {data: "my_workspaces", text: t("search.in.my_workspaces")}
+        ];
+    },
+
     resourcesLoaded: function() {
         this.mainContent = new chorus.views.MainContentView({
             contentHeader: new chorus.views.ListHeaderView({
@@ -31,13 +38,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
                 linkMenus: {
                     search_in: {
                         title: t("search.search_in"),
-                        options: [
-                            {data: "all", text: t("search.in.all")},
-                            {data: "my_workspaces", text: t("search.in.my_workspaces")},
-
-                            // Need to talk to Dieu about this:
-                            {data: "this_workspace", text: t("search.in.this_workspace")}
-                        ],
+                        options: this.searchInMenuOptions(),
                         chosen: t("search.in." + this.search.searchIn()),
                         event: "search_in"
                     },

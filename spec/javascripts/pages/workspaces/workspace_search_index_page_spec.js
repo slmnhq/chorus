@@ -28,6 +28,17 @@ describe("chorus.pages.WorkspaceSearchIndexPage", function() {
             expect(crumbs.eq(1).find("a")).toHaveHref(this.page.search.workspace().showUrl());
             expect(crumbs.eq(2)).toContainTranslation("breadcrumbs.search_results");
         });
+
+        it("has the 'this workspace' option in the 'Search in' menu", function() {
+            var searchInMenu = this.page.$(".default_content_header .search_in");
+            var searchInOptions = searchInMenu.find(".menu a");
+            expect(searchInMenu.find(".chosen")).toContainTranslation("search.in.all");
+            expect(searchInMenu.find(".title")).toContainTranslation("search.search_in")
+            expect(searchInOptions.length).toBe(3);
+            expect(searchInOptions).toContainTranslation("search.in.all");
+            expect(searchInOptions).toContainTranslation("search.in.my_workspaces");
+            expect(searchInOptions).toContainTranslation("search.in.this_workspace");
+        });
     });
 
     it("sets the workspace id, for prioritizing search", function() {

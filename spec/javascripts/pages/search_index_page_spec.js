@@ -58,10 +58,13 @@ describe("chorus.pages.SearchIndexPage", function() {
             });
 
             it("has a 'Search in' filter link", function() {
-                expect(this.page.$(".default_content_header .search_in .chosen")).toContainTranslation("search.in.all");
-                expect(this.page.$('.default_content_header .search_in .title')).toContainTranslation("search.search_in")
-                expect(this.page.$('.default_content_header .search_in a')).toContainTranslation("search.in.all")
-                expect(this.page.$('.default_content_header .search_in a')).toContainTranslation("search.in.my_workspaces")
+                var searchInMenu = this.page.$(".default_content_header .search_in");
+                var searchInOptions = searchInMenu.find(".menu a");
+                expect(searchInMenu.find(".chosen")).toContainTranslation("search.in.all");
+                expect(searchInMenu.find(".title")).toContainTranslation("search.search_in")
+                expect(searchInOptions.length).toBe(2);
+                expect(searchInOptions).toContainTranslation("search.in.all")
+                expect(searchInOptions).toContainTranslation("search.in.my_workspaces")
             });
 
             it("navigates to the right page when 'my workspaces' is selected from the 'search in' menu", function() {

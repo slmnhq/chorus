@@ -13,6 +13,12 @@ chorus.pages.WorkspaceSearchIndexPage = chorus.pages.SearchIndexPage.extend({
         ]
     },
 
+    searchInMenuOptions: function() {
+        return this._super("searchInMenuOptions", arguments).concat([
+            { data: "this_workspace", text: t("search.in.this_workspace") }
+        ]);
+    },
+
     setup: function() {
         this._super("setup", arguments);
         this.workspaceId = this.search.get("workspaceId");
