@@ -78,7 +78,7 @@ non_spec_src_files:
 # EXAMPLE:
 #
 stylesheets:
-  - css/*.css
+  - css/**/*.css
 
 # helpers
 #
