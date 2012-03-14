@@ -86,7 +86,8 @@
 
         postRender: function() {
             chorus.menu(this.$('.found_in .open_other_menu'), {
-                content: this.$('.found_in .other_menu')
+                content: this.$('.found_in .other_menu'),
+                classes: "found_in_other_workspaces_menu"
             });
         },
 

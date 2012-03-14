@@ -13,7 +13,8 @@ chorus.views.DatasetList = chorus.views.SelectableList.extend({
         this.$('.found_in .open_other_menu').each(function() {
             var $el = $(this);
             chorus.menu($el, {
-                content: $el.parent().find('.other_menu')
+                content: $el.parent().find('.other_menu'),
+                classes: "found_in_other_workspaces_menu"
             });
         })
     },
