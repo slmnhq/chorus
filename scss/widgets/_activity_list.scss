@@ -81,7 +81,8 @@ $system-action-color: #7C7D7D;
         }
 
         a[href=''], a:not([href]) {
-            color: $color-text2;
+            color: $color-text3;
+            cursor: auto;
         }
 
         .insight_ribbon {
