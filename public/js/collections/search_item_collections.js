@@ -9,12 +9,12 @@
 
         refreshFromSearch: function() {
             var entityJson = this.search.get(this.searchKey);
-            this.reset(entityJson.docs);
             this.pagination = {
                 page: this.search.currentPageNumber(),
                 total: this.search.numPages(entityJson.numFound),
                 records: entityJson.numFound
             };
+            this.reset(entityJson.docs);
         },
 
         fetchPage: function(pageNumber, options) {

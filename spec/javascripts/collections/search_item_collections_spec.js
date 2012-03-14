@@ -18,6 +18,13 @@ describe("chorus.collections.Search", function() {
 
     describe("#refreshFromSearch", function() {
         beforeEach(function() {
+            var collection = this.collection;
+            this.spy = jasmine.createSpy("resetSpy").andCallFake(function() {
+                expect(collection.pagination.records).toBe(131);
+                expect(collection.pagination.total).toBe(3);
+                expect(collection.pagination.page).toBe(1);
+            });
+            this.collection.bind("reset", this.spy);
             this.collection.refreshFromSearch();
         });
 
@@ -30,10 +37,9 @@ describe("chorus.collections.Search", function() {
             expect(this.collection.at(4).id).toBe('105');
         });
 
-        it("sets the collection's pagination information correctly", function() {
-            expect(this.collection.pagination.records).toBe(131);
-            expect(this.collection.pagination.total).toBe(3);
-            expect(this.collection.pagination.page).toBe(1);
+        it("sets the collection's pagination information correctly, *before* triggering a reset", function() {
+            expect(this.spy).toHaveBeenCalled();
+            this.spy();
         });
     });
 
