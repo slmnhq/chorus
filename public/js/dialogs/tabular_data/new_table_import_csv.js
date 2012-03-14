@@ -8,8 +8,8 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     delimiter: ',',
 
     events: {
-      "click button.submit": "startImport",
-        "change #hasHeader": "refreshCSV",
+        "click button.submit": "startImport",
+        "change #hasHeader": "setHeader",
         "keyup input.delimiter[name=custom_delimiter]": "setOtherDelimiter",
         "paste input.delimiter[name=custom_delimiter]": "setOtherDelimiter",
         "click input.delimiter[type=radio]": "setDelimiter",
@@ -19,7 +19,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     setup: function() {
         this.resource = this.csv = this.options.csv;
         this.csv.set({hasHeader: true});
-        this.tableName = this.csv.get("toTable");
+        this.csv.set({toTable : chorus.models.CSVImport.normalizeForDatabase(this.csv.get("toTable"))});
         chorus.PageEvents.subscribe("choice:setType", this.onSelectType, this);
 
         this.bindings.add(this.csv, "saved", this.saved);
@@ -41,7 +41,24 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         $typeDiv.removeClass("integer float text date time timestamp").addClass(data);
     },
 
-    postRender : function() {
+    storeColumnNames: function() {
+        var $names = this.$(".column_names input:text");
+
+        var column_names
+        if ($names.length) {
+            column_names = _.map($names, function(name, i) {
+                return $names.eq(i).val();
+            });
+
+            if (this.csv.get("hasHeader")) {
+                this.csv.set({headerColumnNames: column_names}, {silent: true})
+            } else {
+                this.csv.set({generatedColumnNames: column_names}, {silent: true})
+            }
+        }
+    },
+
+    postRender: function() {
         this.$(".tbody").unbind("scroll.follow_header");
         this.$(".tbody").bind("scroll.follow_header", _.bind(this.adjustHeaderPosition, this));
         this.setupScrolling(this.$(".tbody"));
@@ -54,26 +71,26 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         }
 
         this.linkMenus = _.map(columns, function(item) {
-                    return new chorus.views.LinkMenu({
-                        options: [
-                            {data: "integer", text: "integer"},
-                            {data: "float", text: "float"},
-                            {data: "text", text: "text"},
-                            {data: "date", text: "date"},
-                            {data: "time", text: "time"},
-                            {data: "timestamp", text: "timestamp"}
-                        ],
-                        title: '',
-                        event: "setType",
-                        chosen: item.type
-                    });
+            return new chorus.views.LinkMenu({
+                options: [
+                    {data: "integer", text: "integer"},
+                    {data: "float", text: "float"},
+                    {data: "text", text: "text"},
+                    {data: "date", text: "date"},
+                    {data: "time", text: "time"},
+                    {data: "timestamp", text: "timestamp"}
+                ],
+                title: '',
+                event: "setType",
+                chosen: item.type
+            });
         });
-        _.each(this.linkMenus, function(linkMenu, index){
+        _.each(this.linkMenus, function(linkMenu, index) {
             $dataTypes.find(".th").eq(index).find(".center").append(linkMenu.render().el);
         });
 
         this.$("input.delimiter").removeAttr("checked");
-        if(_.contains([",", "\t", ";", " "], this.delimiter)){
+        if (_.contains([",", "\t", ";", " "], this.delimiter)) {
             this.$("input.delimiter[value='" + this.delimiter + "']").attr("checked", "true");
         } else {
             this.$("input#delimiter_other").attr("checked", "true");
@@ -85,7 +102,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             columns: this.csv.columnOrientedData(),
             delimiter: this.other_delimiter ? this.delimiter : '',
             directions: chorus.helpers.safeT("dataset.import.table.new.directions", {
-               tablename_input_field: "<input type='text' name='table_name' value='" + this.tableName + "'/>"
+                tablename_input_field: "<input type='text' name='table_name' value='" + this.csv.get("toTable") + "'/>"
             }),
             ok: this.ok
         }
@@ -93,6 +110,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
 
     startImport: function() {
         if (this.performValidation()) {
+            this.storeColumnNames();
             this.prepareCsv();
 
             this.$("button.submit").startLoading(this.loadingKey);
@@ -109,7 +127,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             return {
                 columnName: chorus.Mixins.dbHelpers.safePGName($(name).val()),
                 columnType: $types.eq(i).text(),
-                columnOrder: i+1
+                columnOrder: i + 1
             }
         })
         this.csv.set({
@@ -119,11 +137,11 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         })
     },
 
-    performValidation : function() {
+    performValidation: function() {
         var $names = this.$(".column_names input:text");
         var pattern = /^[a-zA-Z][a-zA-Z0-9_]{0,63}/;
         var allValid = true;
-        _.each($names, function(name, i){
+        _.each($names, function(name, i) {
             var $name = $names.eq(i);
             if (!$name.val().match(pattern)) {
                 allValid = false;
@@ -134,8 +152,12 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         return allValid;
     },
 
-    refreshCSV : function() {
-        this.csv.set({hasHeader: !!(this.$("#hasHeader").prop("checked")), delimiter: this.delimiter});
+    refreshCSV: function() {
+        this.csv.set({
+            hasHeader: !!(this.$("#hasHeader").prop("checked")),
+            delimiter: this.delimiter,
+            toTable: chorus.models.CSVImport.normalizeForDatabase(this.$(".directions input:text").val())
+        });
         this.render();
         this.recalculateScrolling();
     },
@@ -157,6 +179,13 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             this.delimiter = e.target.value;
             this.other_delimiter = false;
         }
+        this.csv.unset("headerColumnNames", {silent: true});
+        this.csv.unset("generatedColumnNames", {silent: true});
+        this.refreshCSV();
+    },
+
+    setHeader: function() {
+        this.storeColumnNames();
         this.refreshCSV();
     },
 

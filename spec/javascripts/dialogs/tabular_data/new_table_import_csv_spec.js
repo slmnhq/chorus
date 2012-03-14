@@ -260,7 +260,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
 
     describe("with invalid data", function() {
         beforeEach(function() {
-            this.$input =  this.dialog.$(".column_names input:text").eq(0);
+            this.$input = this.dialog.$(".column_names input:text").eq(0);
             this.$input.val('');
 
             this.dialog.$("button.submit").click();
@@ -333,6 +333,34 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                 expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
             })
         })
+    })
+
+    it("retains column names when saving", function() {
+        this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
+        this.dialog.$("button.submit").click();
+        this.server.lastCreate().fail([{message: "I like cheese"}]);
+        expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
+    })
+
+    it("retains column names when changing column names back and forth between generated and header", function() {
+        this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
+        this.dialog.$("#hasHeader").prop("checked", false).change();
+        this.dialog.$("#hasHeader").prop("checked", true).change();
+        expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
+    })
+
+    it("retains the table name when saving", function() {
+        this.dialog.$("input[name=table_name]").val("testisgreat").change();
+        this.dialog.$("button.submit").click();
+        this.server.lastCreate().fail([{message: "I like cheese"}]);
+        expect(this.dialog.$("input[name=table_name]").val()).toBe("testisgreat");
+    })
+
+    it("retains the table name when changing column names back and forth between generated and header", function() {
+        this.dialog.$("input[name=table_name]").val("testisgreat").change();
+        this.dialog.$("#hasHeader").prop("checked", false).change();
+        this.dialog.$("#hasHeader").prop("checked", true).change();
+        expect(this.dialog.$("input[name=table_name]").val()).toBe("testisgreat");
     })
 })
 ;

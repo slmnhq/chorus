@@ -22,11 +22,18 @@ chorus.models.CSVImport = chorus.models.Base.extend({
 
         var column_names = [];
         if (this.get("hasHeader")) {
-            column_names = _.map(rows.shift(), chorus.models.CSVImport.normalizeForDatabase);
+            var header = rows.shift();
+            if (!this.get("headerColumnNames")) {
+                this.set({headerColumnNames: _.map(header, chorus.models.CSVImport.normalizeForDatabase) }, {silent: true});
+            }
+            column_names = this.get("headerColumnNames")
         } else {
-            column_names = _.map(rows[0], function(column, i) {
-                return "column_" + (i + 1);
-            });
+            if (!this.get("generatedColumnNames")) {
+                this.set({generatedColumnNames: _.map(rows[0], function(column, i) {
+                    return "column_" + (i + 1);
+                }) }, {silent: true});
+            }
+            column_names = this.get("generatedColumnNames");
         }
 
         return _.map(column_names, function(column_name, i) {
@@ -44,6 +51,6 @@ chorus.models.CSVImport = chorus.models.Base.extend({
     }
 }, {
     normalizeForDatabase: function(str) {
-        return _.str.underscored(str.toLowerCase());
+        return _.str.underscored(str.toLowerCase()).replace(".", "_");
     }
 });

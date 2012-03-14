@@ -189,6 +189,10 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
             this.delimiter = e.target.value;
             this.other_delimiter = false;
         }
+
+        this.csv.unset("headerColumnNames", {silent: true});
+        this.csv.unset("generatedColumnNames", {silent: true});
+
         this.refreshCSV();
     },
 

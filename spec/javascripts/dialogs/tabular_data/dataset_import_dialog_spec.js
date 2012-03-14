@@ -171,7 +171,7 @@ describe("chorus.dialogs.DatasetImport", function() {
             describe("selecting 'Import into existing table'", function() {
                 beforeEach(function() {
                     this.dialog.$(".new_table input:radio").removeAttr('checked').change();
-                    this.dialog.$(".existing_table input:radio").attr('checked', 'checked').change();
+                    this.dialog.$(".existing_table input:radio").prop('checked', 'checked').change();
                     this.dialog.$("input:radio").val("existing");
                 });
 

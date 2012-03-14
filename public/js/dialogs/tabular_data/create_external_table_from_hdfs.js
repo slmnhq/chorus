@@ -10,7 +10,7 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         this.workspaces = new chorus.collections.WorkspaceSet([], {userId: chorus.session.user().id});
         this.workspaces.fetchAll();
         this.requiredResources.push(this.workspaces);
-        this.toTable = chorus.models.CSVImport.normalizeForDatabase(this.csv.get("toTable")).replace(/\W/g, "_");
+        this.csv.set({toTable : chorus.models.CSVImport.normalizeForDatabase(this.csv.get("toTable"))});
     },
 
     postRender: function() {
@@ -30,7 +30,7 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
 
     saved: function() {
         this.closeModal();
-        chorus.toast("hdfs.create_external.success", {workspaceName: this.workspaceName, tableName: this.tableName});
+        chorus.toast("hdfs.create_external.success", {workspaceName: this.workspaceName, tableName: this.csv.get("toTable")});
         chorus.PageEvents.broadcast("csv_import:started");
     },
 
@@ -50,7 +50,8 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
 
         this.csv.set({
             workspaceId: this.$("option:selected").val(),
-            statement: statement
+            statement: statement,
+            toTable: chorus.models.CSVImport.normalizeForDatabase(this.$(".directions input:text").val())
         });
     },
 
@@ -65,7 +66,7 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
     additionalContext: function() {
         var parentCtx = this._super("additionalContext", arguments);
         parentCtx.workspaces = _.pluck(this.workspaces.models, "attributes");
-        parentCtx.directions = new Handlebars.SafeString("<input type='text' class='hdfs' name='table_name' value='" + Handlebars.Utils.escapeExpression(this.toTable) + "'/>");
+        parentCtx.directions = new Handlebars.SafeString("<input type='text' class='hdfs' name='table_name' value='" + Handlebars.Utils.escapeExpression(this.csv.get("toTable")) + "'/>");
         return parentCtx;
     }
 });
