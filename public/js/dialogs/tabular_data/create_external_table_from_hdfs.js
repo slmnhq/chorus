@@ -49,7 +49,6 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         this.tableName = this.$(".directions input:text").val();
 
         this.csv.set({
-            hasHeader: true,
             workspaceId: this.$("option:selected").val(),
             statement: statement
         });
