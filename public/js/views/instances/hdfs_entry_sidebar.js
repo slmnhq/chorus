@@ -22,6 +22,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     },
 
     postRender: function() {
+        this._super("postRender");
         if (this.resource.get("isDir")) {
             this.$(".tab_control").addClass("hidden")
             this.$(".tabbed_area").addClass("hidden")

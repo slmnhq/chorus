@@ -15,6 +15,12 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             it("does not have a link to add a note", function() {
                 expect(this.view.$("a.dialog.add_note")).not.toExist();
             });
+
+            it("calls the base implementation for postRender", function() {
+                spyOn(chorus.views.Sidebar.prototype, "postRender");
+                this.view.render();
+                expect(chorus.views.Sidebar.prototype.postRender).toHaveBeenCalled();
+            });
         });
 
         context("when the model is a non-binary file", function() {
