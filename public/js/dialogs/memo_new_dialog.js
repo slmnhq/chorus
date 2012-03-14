@@ -181,15 +181,17 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.extend({
         this.model.addFileUpload(uploadModel);
         var file = data.files[0];
         var extension = _.last(file.name.split('.'));
+        var iconSrc = chorus.urlHelpers.fileIconUrl(extension, "medium");
+
         file.isUpload = true
-        this.showFile(file, file.name, extension, uploadModel);
+        this.showFile(file, file.name, iconSrc, uploadModel);
     },
 
     workfileChosen: function(workfileSet) {
         this.$(".file_details.workfile").remove();
         this.model.workfiles = workfileSet;
         this.model.workfiles.each(function(workfile) {
-            this.showFile(workfile, workfile.get("fileName"), workfile.get("fileType"));
+            this.showFile(workfile, workfile.get("fileName"), workfile.iconUrl({size: 'medium'}));
         }, this);
     },
 
@@ -213,11 +215,10 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.extend({
         datasetDetailsRow.addClass("dataset dataset_details");
     },
 
-    showFile: function(file, filename, filetype, uploadModel) {
+    showFile: function(file, filename, iconSrc, uploadModel) {
         var fileDetailsRow = $(Handlebars.helpers.renderTemplate("notes_new_file_attachment").toString());
         this.$(".options_area").append(fileDetailsRow);
 
-        var iconSrc = chorus.urlHelpers.fileIconUrl(filetype, "medium");
         fileDetailsRow.find('img.icon').attr('src', iconSrc);
         fileDetailsRow.find('span.name').text(filename).attr('title', filename);
         fileDetailsRow.data("attachment", file);

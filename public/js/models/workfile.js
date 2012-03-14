@@ -143,7 +143,7 @@
         },
 
         isAlpine: function() {
-            var fileName = this.get("fileName")
+            var fileName = this.get("fileName") || this.get("name")
             return fileName && _.str.endsWith(fileName.toLowerCase(), ".afm")
         },
 
@@ -206,8 +206,12 @@
         },
 
         iconUrl: function(options) {
-            var fileExtension = this.get("fileType") || this.get('type');
-            return chorus.urlHelpers.fileIconUrl(fileExtension, options && options.size);
+            return chorus.urlHelpers.fileIconUrl(this.fileExtension(), options && options.size);
+        },
+
+        fileExtension: function () {
+            if (this.isAlpine()) { return 'afm'; }
+            return this.get("fileType") || this.get('type');
         },
 
         hasOwnPage: function() {

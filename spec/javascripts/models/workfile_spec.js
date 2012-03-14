@@ -317,12 +317,18 @@ describe("chorus.models.Workfile", function() {
     });
 
     describe("isAlpine", function() {
-        it("returns true when the workfile is an afm file", function() {
+        it("returns true when the workfile's fileName ends with 'afm'", function() {
             this.model.set({ fileName: 'example.afm'});
             expect(this.model.isAlpine()).toBeTruthy();
         })
 
-        it("returns true when the workfile's name ends with AFM ", function() {
+        it("returns true when the workfile's name ends with 'afm'", function() {
+            this.model.unset('fileName');
+            this.model.set({ name: 'example.afm'});
+            expect(this.model.isAlpine()).toBeTruthy();
+        })
+
+        it("returns true when the workfile's fileName ends with 'AFM'", function() {
             this.model.set({ fileName: 'example.AFM'});
             expect(this.model.isAlpine()).toBeTruthy();
         })
@@ -332,7 +338,7 @@ describe("chorus.models.Workfile", function() {
             expect(this.model.isAlpine()).toBeFalsy();
         })
 
-        it("returns false when the workfile's name is missing", function() {
+        it("returns false when the workfile's fileName and name are missing", function() {
             this.model.unset('fileName');
             expect(this.model.isAlpine()).toBeFalsy();
         })
@@ -624,20 +630,32 @@ describe("chorus.models.Workfile", function() {
     describe("#iconUrl", function() {
         it("proxies to fileIconUrl helper", function() {
             var url = this.model.iconUrl({size: 'medium'});
-            expect(url).toBe(chorus.urlHelpers.fileIconUrl(this.model.get('fileType'), 'medium'));
+            expect(url).toBe(chorus.urlHelpers.fileIconUrl('txt', 'medium'));
         })
 
         it("defaults to large size", function() {
             var url = this.model.iconUrl();
-            expect(url).toBe(chorus.urlHelpers.fileIconUrl(this.model.get('fileType', 'large')));
+            expect(url).toBe(chorus.urlHelpers.fileIconUrl('txt', 'large'));
+        })
+    });
+
+    describe("#fileExtension", function () {
+        it("uses fileType", function() {
+            expect(this.model.fileExtension()).toBe('txt');
         })
 
         it("uses type when fileType is not available", function() {
             this.model.unset("fileType");
             this.model.attributes.type = 'SQL';
-            expect(this.model.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('SQL', 'large'));
+            expect(this.model.fileExtension()).toBe('SQL');
+        })
+
+        it("handles afm files specially", function() {
+            this.model.attributes.fileName = 'example.afm';
+            expect(this.model.fileExtension()).toBe('afm');
         })
     });
+
 
     describe("#setWorkspace", function() {
         beforeEach(function() {

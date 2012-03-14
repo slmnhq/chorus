@@ -3,6 +3,7 @@
 
     // This mapping actually maps file extensions AND workfile 'fileType' attributes to filename values.
     var map = {
+        "afm":"afm",
         "c":"c",
         "c++":"cpp",
         "cc":"cpp",

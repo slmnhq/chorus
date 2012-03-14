@@ -251,6 +251,7 @@ describe("chorus global", function() {
         }
 
         it("maps known fileTypes to URLs correctly", function() {
+            verifyUrl("afm", "afm");
             verifyUrl("C", "c");
             verifyUrl("c++", "cpp");
             verifyUrl("cc", "cpp");

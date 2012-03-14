@@ -147,7 +147,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                 beforeEach(function() {
                     this.workfileSet = new chorus.collections.WorkfileSet([
                         new chorus.models.Workfile({ id: 1, fileName: "greed.sql", fileType: "sql" }),
-                        new chorus.models.Workfile({ id: 2, fileName: "generosity.cpp", fileType: "cpp" })
+                        new chorus.models.Workfile({ id: 2, fileName: "generosity.cpp", fileType: "cpp" }),
+                        new chorus.models.Workfile({ id: 3, fileName: "sloth.afm", fileType: "N/A" })
                     ]);
                     this.workfilesDialog = chorus.dialogs.WorkfilesAttach.prototype.render.mostRecentCall.object;
                     this.workfilesDialog.trigger("files:selected", this.workfileSet);
@@ -163,6 +164,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                     var fileIcons = this.dialog.$(".file_details:visible img.icon");
                     expect(fileIcons.eq(0).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "medium"));
                     expect(fileIcons.eq(1).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("cpp", "medium"));
+                    expect(fileIcons.eq(2).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("afm", "medium"));
                 });
 
                 it("stores the collection", function() {
@@ -188,7 +190,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                         });
 
                         it("clears any existing workfiles", function() {
-                            expect(this.dialog.$(".file_details").length).toBe(2);
+                            expect(this.dialog.$(".file_details").length).toBe(3);
                         });
                     })
                 })
