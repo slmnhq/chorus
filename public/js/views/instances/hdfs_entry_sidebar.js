@@ -65,7 +65,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     additionalContext: function() {
         return {
             encodedEntityId: this.makeEncodedEntityId(),
-            lastUpdatedStamp: t("hdfs.last_updated", { when : chorus.helpers.relativeTimestamp(this.resource.get("lastModified"))})
+            lastUpdatedStamp: t("hdfs.last_updated", { when : chorus.helpers.relativeTimestamp(this.resource.get("lastUpdatedStamp"))})
         }
     },
 
