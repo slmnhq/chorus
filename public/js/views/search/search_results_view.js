@@ -17,12 +17,6 @@ chorus.views.SearchResults = chorus.views.Base.extend({
     },
 
     setup: function() {
-        if (this.model.workspaceItems()) {
-            this.thisWorkspaceList = new chorus.views.WorkspaceSearchResultList({
-                collection: this.model.workspaceItems(),
-                search: this.model
-            });
-        }
         if (this.model.hdfs()) {
             this.hdfsList = this.buildListView('hdfs', this.model.hdfs());
         }
@@ -40,6 +34,12 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         }
         if (this.model.instances()) {
             this.instanceList = this.buildListView('instance', this.model.instances());
+        }
+        if (!this.model.hasSpecificEntityType() && this.model.workspaceItems()) {
+            this.thisWorkspaceList = new chorus.views.WorkspaceSearchResultList({
+                collection: this.model.workspaceItems(),
+                search: this.model
+            });
         }
     },
 

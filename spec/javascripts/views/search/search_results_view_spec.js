@@ -35,6 +35,7 @@ describe("chorus.views.SearchResults", function() {
     context("when searching for only workfiles", function() {
         beforeEach(function() {
             this.model = makeSearchResults()
+            this.model.set({ entityType: "workfile" });
             this.model.unset("workspace");
             this.model.unset("user");
             this.model.unset("hdfs");
@@ -44,8 +45,8 @@ describe("chorus.views.SearchResults", function() {
             this.view.render();
         });
 
-        it("shows the 'this workspace' section", function() {
-            expect(this.view.$(".search_result_list.this_workspace")).toExist();
+        it("does not show the 'this workspace' section", function() {
+            expect(this.view.$(".search_result_list.this_workspace")).not.toExist();
         });
 
         it("shows the workfile section", function() {
