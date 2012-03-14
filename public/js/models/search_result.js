@@ -1,19 +1,19 @@
 ;(function() {
-    var collectionMap = {
-        hdfs: { name: "hdfs", constructorName: "HdfsEntrySet" },
-        dataset: { name: "tabularData", constructorName: "TabularDataSet" },
-        workfile: { name: "workfiles", constructorName: "WorkfileSet" },
-        workspace: { name: "workspaces", constructorName: "WorkspaceSet" },
-        thisWorkspace: { name: "workspaceItems", constructorName: "WorkspaceSearchItemSet" },
-        instance: { name: "instances", constructorName: "InstanceSet" },
-        user: { name: "users", constructorName: "UserSet" }
-    };
-
     var NUM_RESULTS_PER_PAGE = 50;
+
+    var collectionMap = {
+        hdfs: "HdfsEntrySet",
+        tabularData: "TabularDataSet",
+        workfiles: "WorkfileSet",
+        workspaces: "WorkspaceSet",
+        workspaceItems: "WorkspaceItemSet",
+        instances: "InstanceSet",
+        users: "UserSet"
+    };
 
     chorus.models.SearchResult = chorus.models.Base.extend({
         constructorName: "SearchResult",
-        
+
         initialize: function() {
             this.bind('invalidated', function() {
                 this.selectedItem.trigger('invalidated');
@@ -35,7 +35,6 @@
                 this.set({page: this.currentPageNumber() + 1});
                 this.fetch({success: _.bind(this.resetResults, this)});
             }
-
         },
 
         getPreviousPage: function(){
@@ -50,7 +49,7 @@
         },
 
         totalPageNumber: function(){
-            return numPages(this.getResults().pagination.records);
+            return this.numPages(this.getResults().pagination.records);
         },
 
         showUrlTemplate: function() {
@@ -144,53 +143,14 @@
             return this._workspace;
         },
 
-        workspaceItems: function() {
-            if (!this._workspaceItems && this.get("thisWorkspace")) {
-                var entityJson = this.get("thisWorkspace");
-                this._workspaceItems = new chorus.collections.WorkspaceSearchItemSet(entityJson.docs);
-                this._workspaceItems.pagination = {
-                    total: null,
-                    page:  2,
-                    records: entityJson.numFound,
-                }
-            }
-            return this._workspaceItems;
-        },
 
-        workspaceItems: makeCollectionMethod("thisWorkspace"),
-
-        fetchPage: function(pageNum) {
-            this.set({ page: pageNum });
-            this.fetch({ success: function() {
-                //
-            }});
-        },
-
-        workfiles: function() {
-            if (!this._workfiles && this.get("workfile")) {
-                var entityJson = this.get("workfile");
-                var workfiles = _.map(entityJson.docs, function(workfileJson) {
-                    workfileJson.fileName = $.stripHtml(workfileJson.name);
-                    var workfile = new chorus.models.Workfile(workfileJson);
-                    workfile.comments = new chorus.collections.ActivitySet(workfileJson.comments);
-                    return workfile;
-                });
-                this._workfiles = new chorus.collections.WorkfileSet(workfiles, { total: this.get("workfile").numFound });
-                this._workfiles.pagination = {
-                    page: 1,
-                    total: numPages(entityJson.numFound),
-                    records: entityJson.numFound,
-                }
-            }
-
-            return this._workfiles;
-        },
-
-        tabularData: makeCollectionMethod("dataset"),
-        workspaces: makeCollectionMethod("workspace"),
-        instances: makeCollectionMethod("instance"),
-        users: makeCollectionMethod("user"),
+        workfiles: makeCollectionMethod("workfiles"),
+        tabularData: makeCollectionMethod("tabularData"),
+        workspaces: makeCollectionMethod("workspaces"),
+        instances: makeCollectionMethod("instances"),
+        users: makeCollectionMethod("users"),
         hdfs: makeCollectionMethod("hdfs"),
+        workspaceItems: makeCollectionMethod("workspaceItems"),
 
         getResults: function() {
             if (this.isScopedToSingleWorkspace()) {
@@ -222,32 +182,23 @@
             if(this.hasSpecificEntityType()) {
                 this.getResults().reset(this.get(this.entityType()).docs);
             }
+        },
+
+        numPages: function(totalFound) {
+            return Math.ceil(totalFound / NUM_RESULTS_PER_PAGE);
         }
     });
 
-    function numPages(totalFound) {
-        return Math.ceil(totalFound / NUM_RESULTS_PER_PAGE);
-    }
-
-    function makeCollectionMethod(entityType) {
-        var collectionName  = collectionMap[entityType].name;
-        var constructorName = collectionMap[entityType].constructorName;
-        var memoizedName    = "_" + collectionName;
+    function makeCollectionMethod(methodName) {
+        var constructorName = collectionMap[methodName];
+        var collection, memoizedName = "_" + methodName;
 
         return function() {
-            var ctor = chorus.collections[constructorName];
-
-            if (!this[memoizedName] && this.get(entityType)) {
-                var entityJson = this.get(entityType);
-                this[memoizedName] = new ctor(entityJson.docs);
-                this[memoizedName].pagination = {
-                    page: 1,
-                    total: numPages(entityJson.numFound),
-                    records: entityJson.numFound,
-                }
-                if (entityJson.comments) {
-                    this[memoizedName].comments = new chorus.collections.ActivitySet(entityJson.comments);
-                }
+            var ctor = chorus.collections.Search[constructorName];
+            var searchKey = ctor.prototype.searchKey;
+            if (!this[memoizedName] && this.get(searchKey)) {
+                collection = this[memoizedName] = new ctor([], { search: this });
+                collection.refreshFromSearch();
             }
             return this[memoizedName];
         };

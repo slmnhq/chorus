@@ -1794,12 +1794,12 @@ beforeEach(function() {
             }, overrides);
         },
 
-        instanceJson: function() {
+        instanceJson: function(overrides) {
             var id = this.nextId();
-            return {
+            return _.extend({
                 id: id.toString(),
                 name: 'Instance_' + id
-            }
+            }, overrides);
         },
 
         instanceWorkspaceUsageJson: function(overrides) {

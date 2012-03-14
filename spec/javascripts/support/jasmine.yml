@@ -54,6 +54,14 @@ src_files:
   - js/models/tasks/chart_task.js
   - js/models/csv_import.js
   - js/models/**/*.js
+  - js/collections/instance_set.js
+  - js/collections/hdfs_entry_set.js
+  - js/collections/tabular_data_set.js
+  - js/collections/user_set.js
+  - js/collections/workfile_set.js
+  - js/collections/workspace_set.js
+
+
   - js/pages/tabular_data/tabular_data_show_page.js
   - js/pages/search_index_page.js
   - js/**/*.js
