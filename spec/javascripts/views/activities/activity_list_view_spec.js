@@ -191,7 +191,23 @@ describe("chorus.views.ActivityList", function() {
                     it("fetches the next page of the activity stream", function() {
                         spyOn(this.collection, 'fetchPage');
                         this.view.$(".more_activities a").click();
-                        expect(this.collection.fetchPage).toHaveBeenCalledWith(2, { add: true });
+
+                        expect(this.collection.fetchPage).toHaveBeenCalledWith(2, { add: true, silent: true, success: jasmine.any(Function) });
+                    })
+
+                    it("only re-renders the page once", function() {
+                        spyOn(this.view, 'postRender');
+                        this.view.$(".more_activities a").click();
+
+                        var results = fixtures.jsonFor('fetch')
+
+                        this.server.lastFetchFor(this.collection, {page: 2}).respond(
+                            200,
+                            { 'Content-Type': 'application/json' },
+                            JSON.stringify(results)
+                        )
+
+                        expect(this.view.postRender.callCount).toBe(1);
                     })
                 })
             })
