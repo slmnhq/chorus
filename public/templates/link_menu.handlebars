@@ -10,7 +10,11 @@
         {{#each options}}
             <li data-type="{{data}}">
                 <div class="check {{#unless isChecked}}hidden{{/unless}}"></div>
-                <a href="#">{{text}}</a>
+                {{#if disabled}}
+                    <span class="unavailable">{{text}}</span>
+                {{else}}
+                    <a href="#">{{text}}</a>
+                {{/if}}
             </li>
         {{/each}}
     </ul>

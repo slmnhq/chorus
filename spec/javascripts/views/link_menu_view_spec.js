@@ -11,7 +11,33 @@ describe("chorus.views.LinkMenu", function() {
                     event : "name"
                 })
                 this.view.render();
-            })
+            });
+
+            context("when some options are disabled", function() {
+                beforeEach(function() {
+                    this.view = new chorus.views.LinkMenu({
+                        options : [
+                            {data : "mark", text : "bob"},
+                            {data : "joanne", text : "alice"},
+                            {data : "tim", text : "belgium", disabled: true },
+                            {data : "ofbiz", text : "framework", disabled: true }
+                        ],
+                        title: "Link Menu",
+                        event : "name"
+                    })
+                    this.view.render();
+                });
+
+                it("renders those options as spans, not links", function() {
+                    expect(this.view.$(".menu li[data-type=tim] a")).not.toExist();
+                    expect(this.view.$(".menu li[data-type=tim] span")).toHaveClass("unavailable");
+                    expect(this.view.$(".menu li[data-type=tim] span")).toHaveText("belgium");
+
+                    expect(this.view.$(".menu li[data-type=ofbiz] a")).not.toExist();
+                    expect(this.view.$(".menu li[data-type=ofbiz] span")).toHaveClass("unavailable");
+                    expect(this.view.$(".menu li[data-type=ofbiz] span")).toHaveText("framework");
+                });
+            });
 
             it("contains a filter menu", function() {
                 expect(this.view.$(".menu.popup_filter")).toExist();
