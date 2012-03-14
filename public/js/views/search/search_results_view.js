@@ -3,13 +3,13 @@ chorus.views.SearchResults = chorus.views.Base.extend({
     className: "search_results",
 
     subviews: {
-        ".this_workspace": "thisWorkspaceList",
-        ".hdfs":          "hdfsList",
-        ".user":          "userList",
-        ".workfile":      "workfileList",
-        ".workspace":     "workspaceList",
-        ".dataset":       "tabularDataList",
-        ".instance":      "instanceList"
+        ".this_workspace":     "thisWorkspaceList",
+        ".hdfs_list":          "hdfsList",
+        ".user_list":          "userList",
+        ".workfile_list":      "workfileList",
+        ".workspace_list":     "workspaceList",
+        ".dataset_list":       "tabularDataList",
+        ".instance_list":      "instanceList"
     },
 
     events: {
