@@ -220,13 +220,14 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             it("displays a link to add a note", function() {
                 var addLink = this.view.$(".actions a.dialog[data-dialog=NotesNew]");
                 expect(addLink).toExist();
-                expect(addLink).toHaveAttr("data-entity-type", "workfile")
-                expect(addLink).toHaveAttr("data-entity-id", this.workfile.get("id"))
+                expect(addLink).toHaveAttr("data-entity-type", "workfile");
+                expect(addLink).toHaveAttr("data-entity-id", this.workfile.get("id"));
+                expect(addLink).toHaveAttr("data-allow-workspace-attachments", "true");
             });
 
             it("displays the activity list", function() {
                 expect(this.view.$(".activity_list")).toExist();
-            })
+            });
         })
     });
 
