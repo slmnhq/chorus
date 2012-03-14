@@ -33,6 +33,7 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
 
     collectionModelContext:function (model) {
         return {
+            iconUrl: model.iconUrl({size:"medium"}),
             type:model.get("type"),
             name:model.get("objectName"),
             cid:model.cid

@@ -46,7 +46,7 @@ describe("chorus.models.TabularData", function() {
     describe("iconFor", function() {
         var largeIconMap = {
             "CHORUS_VIEW": {
-                "QUERY": "view_large.png"
+                "QUERY": "chorus_view_large.png"
             },
 
             "SOURCE_TABLE": {
@@ -57,17 +57,17 @@ describe("chorus.models.TabularData", function() {
             },
 
             "SANDBOX_TABLE": {
-                "BASE_TABLE": "table_large.png",
-                "EXTERNAL_TABLE": "table_large.png",
-                "MASTER_TABLE": "table_large.png",
-                "VIEW": "view_large.png",
-                "HDFS_EXTERNAL_TABLE": "table_large.png"
+                "BASE_TABLE": "sandbox_table_large.png",
+                "EXTERNAL_TABLE": "source_table_large.png",
+                "MASTER_TABLE": "sandbox_table_large.png",
+                "VIEW": "sandbox_view_large.png",
+                "HDFS_EXTERNAL_TABLE": "source_table_large.png"
             }
         };
 
         var mediumIconMap = {
             "CHORUS_VIEW": {
-                "QUERY": "view_medium.png"
+                "QUERY": "chorus_view_medium.png"
             },
 
             "SOURCE_TABLE": {
@@ -78,11 +78,11 @@ describe("chorus.models.TabularData", function() {
             },
 
             "SANDBOX_TABLE": {
-                "BASE_TABLE": "table_medium.png",
-                "EXTERNAL_TABLE": "table_medium.png",
-                "MASTER_TABLE": "table_medium.png",
-                "VIEW": "view_medium.png",
-                "HDFS_EXTERNAL_TABLE": "table_medium.png"
+                "BASE_TABLE": "sandbox_table_medium.png",
+                "EXTERNAL_TABLE": "source_table_medium.png",
+                "MASTER_TABLE": "sandbox_table_medium.png",
+                "VIEW": "sandbox_view_medium.png",
+                "HDFS_EXTERNAL_TABLE": "source_table_medium.png"
             }
         };
 

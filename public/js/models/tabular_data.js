@@ -238,7 +238,7 @@ chorus.models.TabularData = chorus.models.Base.extend({
 
     iconMap: {
         "CHORUS_VIEW": {
-            "QUERY": "view"
+            "QUERY": "chorus_view"
         },
 
         "SOURCE_TABLE": {
@@ -250,11 +250,11 @@ chorus.models.TabularData = chorus.models.Base.extend({
         },
 
         "SANDBOX_TABLE": {
-            "BASE_TABLE": "table",
-            "EXTERNAL_TABLE": "table",
-            "MASTER_TABLE": "table",
-            "VIEW": "view",
-            "HDFS_EXTERNAL_TABLE": "table"
+            "BASE_TABLE": "sandbox_table",
+            "EXTERNAL_TABLE": "source_table",
+            "MASTER_TABLE": "sandbox_table",
+            "VIEW": "sandbox_view",
+            "HDFS_EXTERNAL_TABLE": "source_table"
         }
     }
 });
