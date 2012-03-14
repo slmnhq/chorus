@@ -41,7 +41,7 @@ describe("chorus.views.SearchResultList", function() {
             });
 
             it("should show the short count", function() {
-                expect(this.view.$(".count")).toContainTranslation('search.count_short', {shown: 2});
+                expect(this.view.$(".count")).toContainTranslation('search.count_short', {count: 2});
                 expect(this.view.$(".show_all")).not.toExist();
             });
         });
@@ -63,7 +63,7 @@ describe("chorus.views.SearchResultList", function() {
                     });
 
                     it("has a short count", function() {
-                        expect(this.view.$(".count")).toContainTranslation("search.count_short", {shown: this.collection.models.length});
+                        expect(this.view.$(".count")).toContainTranslation("search.count_short", {count: this.collection.models.length});
                     });
 
                     it("has no showAll link", function() {
