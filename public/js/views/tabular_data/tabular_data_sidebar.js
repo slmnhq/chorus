@@ -142,7 +142,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
                 }
                 ctx.lastImport = chorus.helpers.safeT(importStatusKey, {
                     timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
-                    tableLink: chorus.helpers.linkTo(destinationTable.showUrl(), this.importConfiguration.get("toTable"))
+                    tableLink: chorus.helpers.linkTo(destinationTable.showUrl(), this.importConfiguration.get("executionInfo").toTable || this.importConfiguration.get("toTable"))
                 });
             }
         } else {

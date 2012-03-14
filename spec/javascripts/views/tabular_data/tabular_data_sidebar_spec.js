@@ -444,6 +444,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 beforeEach(function() {
                                     this.importResponse.set({
                                         executionInfo: {
+                                            toTable: "bad_destination_table",
                                             startedStamp: "2012-02-29 14:23:58.169",
                                             completedStamp: "2012-02-29 14:23:59.027",
                                             result: {
@@ -462,7 +463,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     var destTable = new chorus.models.Dataset({
                                         id: this.view.importConfiguration.get("destinationTable"),
                                         workspaceId: this.dataset.get("workspace").id})
-                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_import_failed", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination"})
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_import_failed", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "bad_destination_table"})
                                     expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
                                     expect(this.view.$(".last_import img").attr("src")).toBe("/images/message_error_small.png");
                                 });
