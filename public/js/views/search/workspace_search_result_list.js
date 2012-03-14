@@ -2,7 +2,8 @@
     var viewConstructorMap = {
         workfile:       chorus.views.SearchWorkfile,
         databaseObject: chorus.views.SearchDataset,
-        chorusView:     chorus.views.SearchDataset
+        chorusView:     chorus.views.SearchDataset,
+        workspace:      chorus.views.SearchWorkspace
     };
 
     chorus.views.WorkspaceSearchResultList = chorus.views.SearchResultList.extend({
@@ -14,7 +15,7 @@
 
         makeListItemView: function(model) {
             var viewConstructor = viewConstructorMap[model.get("entityType")];
-            return new viewConstructor({ model: model });
+            return new viewConstructor({ model: model, search: this.search });
         },
 
         showAll: function(e) {

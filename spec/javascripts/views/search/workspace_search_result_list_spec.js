@@ -6,7 +6,8 @@ describe("chorus.views.WorkspaceSearchResultList", function() {
                 docs: [
                     fixtures.searchResultWorkfileJson(),
                     fixtures.searchResultDatabaseObjectJson(),
-                    fixtures.searchResultChorusViewJson()
+                    fixtures.searchResultChorusViewJson(),
+                    fixtures.searchResultWorkspaceJson()
                 ]
             }
         });
@@ -25,6 +26,7 @@ describe("chorus.views.WorkspaceSearchResultList", function() {
         expect(listItems.eq(0)).toHaveClass("search_workfile");
         expect(listItems.eq(1)).toHaveClass("search_dataset");
         expect(listItems.eq(2)).toHaveClass("search_dataset");
+        expect(listItems.eq(3)).toHaveClass("search_workspace");
     });
 
     it("has the right title", function() {

@@ -60,6 +60,7 @@ describe("WorkfileListSidebar", function() {
                 expect(copyLink).toExist();
                 expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"))
                 expect(copyLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
+                expect(copyLink).toHaveAttr("data-active-only", 'true')
             })
 
             it("displays a link to download the workfile", function() {

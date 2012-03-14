@@ -58,6 +58,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
                 expect(copyLink).toExist();
                 expect(copyLink).toHaveAttr("data-workspace-id", this.view.model.get("workspaceId"))
                 expect(copyLink).toHaveAttr("data-workfile-id", this.view.model.get("id"))
+                expect(copyLink).toHaveAttr("data-active-only", 'true')
             })
 
             it("should have an activities tab", function() {

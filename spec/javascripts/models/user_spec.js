@@ -56,6 +56,32 @@ describe("chorus.models.User", function() {
         });
     });
 
+    describe("#activeWorkspaces", function() {
+        beforeEach(function() {
+            this.user = new models.User({userName: "dr_charlzz", id: "457"});
+            this.workspaces = this.user.activeWorkspaces();
+        });
+
+        it("returns an instance of WorkspaceSet", function() {
+            expect(this.workspaces instanceof chorus.collections.WorkspaceSet).toBeTruthy();
+        });
+
+        it("returns the same instance every time", function() {
+            expect(this.user.activeWorkspaces()).toBe(this.workspaces);
+        });
+
+        context("when fetched", function() {
+            beforeEach(function() {
+                this.workspaces.fetch();
+            });
+
+            it("hits the right url for that user", function() {
+                var expectedUrl = "/edc/workspace/?user=457&page=1&rows=50&active=true";
+                expect(this.server.requests[0].url).toMatchUrl(expectedUrl);
+            });
+        });
+    });
+
     describe("#savePassword", function() {
         it("PUTs to the right URL", function() {
             this.model = fixtures.modelFor('fetch')

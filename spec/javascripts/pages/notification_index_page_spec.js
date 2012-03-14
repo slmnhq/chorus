@@ -1,5 +1,6 @@
 describe("chorus.pages.NotificationIndexPage", function() {
     beforeEach(function() {
+        spyOn(chorus.PageEvents, "subscribe");
         this.page = new chorus.pages.NotificationIndexPage();
     });
 
@@ -15,6 +16,12 @@ describe("chorus.pages.NotificationIndexPage", function() {
             this.server.completeFetchFor(this.collection);
         });
 
+        it("subscribes to the notification:deleted event", function() {
+            expect(chorus.PageEvents.subscribe).toHaveBeenCalled();
+            expect(chorus.PageEvents.subscribe.callCount).toBe(2);
+            expect(chorus.PageEvents.subscribe.argsForCall[1][0]).toBe("notification:deleted");
+        });
+
         it("should have the right breadcrumbs", function() {
             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
@@ -25,7 +32,7 @@ describe("chorus.pages.NotificationIndexPage", function() {
         });
 
         it("displays the page header", function() {
-            expect(this.page.mainContent.contentHeader.$("h1").text()).toContainTranslation("header.my_notifications");
+            expect(this.page.mainContent.contentHeader.$("h1").text()).toContainTranslation("header.your_notifications");
         });
 
         it("has NotificationList as the main content view", function() {

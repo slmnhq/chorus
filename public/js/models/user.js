@@ -16,6 +16,14 @@ chorus.models.User = chorus.models.Base.extend({
         return this._workspaces;
     },
 
+    activeWorkspaces: function() {
+        if(!this._activeWorkspaces) {
+            this._activeWorkspaces = new chorus.collections.WorkspaceSet([], {userId: this.get("id"), active: true})
+        }
+
+        return this._activeWorkspaces;
+    },
+
     declareValidations:function (newAttrs) {
         this.require('firstName', newAttrs);
         this.require('lastName', newAttrs);

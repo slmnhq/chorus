@@ -676,21 +676,6 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             expect("invalidated").toHaveBeenTriggeredOn(this.dialog.pageModel);
         })
 
-        it("doesn't throw when there is no pageModel", function() {
-            delete this.dialog.pageModel;
-            var model = this.dialog.model;
-            expect(function() {
-                model.trigger("saved");
-            }).not.toThrow();
-        });
-
-        it("broadcasts a 'memo:added' event", function() {
-            spyOn(chorus.PageEvents, "broadcast");
-            this.dialog.model.trigger("saved");
-            // broadcasts the entityType from the launchElement
-            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("memo:added:workfile");
-        })
-
         it("disables the attachment_links", function() {
             expect(this.dialog.$('.attachment_links')).toHaveClass('disabled');
         })

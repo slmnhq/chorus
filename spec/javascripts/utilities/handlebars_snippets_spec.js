@@ -753,6 +753,16 @@ describe("handlebars", function() {
                     var attributes = {highlightedAttributes: {content : "SELECT * FROM <em>test</em> AS a"}};
                     expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'content').toString()).toBe("SELECT * FROM <em>test</em> AS a");
                 });
+
+                it("doesn't html-escape safe fields", function() {
+                    var attributes = {content: "this <b>content</b> has <i>html</i>"};
+                    expect(Handlebars.helpers.displaySearchMatchFromSafeField.call(attributes, 'content').toString()).toBe("this <b>content</b> has <i>html</i>")
+                })
+
+                it("html-escapes unsafe fields", function() {
+                    var attributes = {content: "this <b>content</b> has <i>html</i>"};
+                    expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'content').toString()).toBe("this &lt;b&gt;content&lt;/b&gt; has &lt;i&gt;html&lt;/i&gt;")
+                })
             });
 
             context("on backbone models", function() {

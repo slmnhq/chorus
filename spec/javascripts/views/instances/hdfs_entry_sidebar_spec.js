@@ -99,12 +99,6 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                 expect(this.view.activityList.collection).toHaveBeenFetched();
             });
 
-            it("re-fetches when memo:added is broadcast with hdfs", function() {
-                this.server.reset();
-                chorus.PageEvents.broadcast("memo:added:hdfs");
-                expect(this.view.activityList.collection).toHaveBeenFetched();
-            })
-
             it("re-fetches when csv_import:started is broadcast", function() {
                 this.server.reset();
                 chorus.PageEvents.broadcast("csv_import:started");

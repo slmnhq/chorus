@@ -198,13 +198,15 @@ describe("chorus.models.Workspace", function() {
         });
     });
 
-    describe("#picklistImageUrl", function() {
-        beforeEach(function() {
-            this.model = fixtures.modelFor("fetch");
-        })
+    describe("picklistImageUrl", function() {
+        it("returns the correct URL when the workspace is archived", function() {
+            this.model.set({active: false});
+            expect(this.model.picklistImageUrl()).toMatchUrl('/images/workspaces/workspace_archived_small.png');
+        });
 
-        it("uses the right URL", function() {
-            expect(this.model.picklistImageUrl()).toBe("/images/workspaces/workspace_small.png");
+        it("returns the correct URL when the workspace is not archived", function() {
+            this.model.set({active: true});
+            expect(this.model.picklistImageUrl()).toMatchUrl('/images/workspaces/workspace_small.png');
         });
     });
 

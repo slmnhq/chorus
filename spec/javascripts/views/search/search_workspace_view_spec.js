@@ -58,4 +58,49 @@ describe("chorus.views.SearchWorkspace", function() {
     it("shows comments", function() {
         expect(this.view.$(".comments .comment").length).toBe(1);
     });
+
+    context("the description does not contain the search string", function() {
+        beforeEach(function() {
+            this.result = fixtures.searchResult({workspace: {docs: [
+                {
+                    entityType: "workspace",
+                    id: "10000",
+                    isDeleted: false,
+                    isPublic: false,
+                    lastUpdatedStamp: "2012-02-24 16:08:32",
+                    name: "ws",
+                    content: "<i>that is not highlighted</i>",
+                    owner: {
+                        firstName: "EDC",
+                        id: "InitialUser",
+                        lastName: "Admin"
+                    },
+                    comments: [
+                        {
+                            "lastUpdatedStamp": "2012-03-08 09:57:46",
+                            "isPublished": false,
+                            "content": "good version",
+                            "isComment": false,
+                            "id": "10020",
+                            "workspaceId": "10000",
+                            "isInsight": false,
+                            "highlightedAttributes": {"content": ["good <em>version<\/em>"]},
+                            "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}
+                        }
+                    ],
+                    highlightedAttributes: {
+                        name: "<em>ws</em>"
+                    }
+                }
+            ]}});
+
+            this.model = this.result.workspaces().models[0];
+            this.view = new chorus.views.SearchWorkspace({ model: this.model });
+            this.view.render()
+        })
+
+        it("uses the displaySearchMatchFromSafeField method for the description", function() {
+            expect(this.view.$(".description .description_content").html()).toContain("<i>that is not highlighted</i>");
+        })
+    })
 });

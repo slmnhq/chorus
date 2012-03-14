@@ -3403,6 +3403,27 @@ beforeEach(function() {
             }, overrides);
         },
 
+        searchResultWorkspaceJson: function(overrides) {
+            return _.extend({
+                comments: [],
+                entityType: "workspace",
+                highlightedAttributes: {
+                    name: ["<em>three</em>"]
+                },
+                id: "10011",
+                isDeleted: false,
+                isPublic: true,
+                lastUpdatedStamp: "2012-03-12 10:11:47",
+                name: "three",
+                owner: {
+                    firstName: "EDC",
+                    id: "InitialUser",
+                    lastName: "Admin"
+                },
+                state: 0
+            }, overrides);
+        },
+
         searchResult: function(overrides) {
             return new chorus.models.SearchResult(this.searchResultJson(overrides))
         },

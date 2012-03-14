@@ -13,7 +13,7 @@ chorus.models.TabularData = chorus.models.Base.extend({
     },
 
     getEntityType: function() {
-        return this.constructor.entityTypeMap[this.get("type")] || "databaseObject"
+        return this.get("entityType") || this.constructor.entityTypeMap[this.get("type")] || "databaseObject"
     },
 
     resetEntityType: function() {

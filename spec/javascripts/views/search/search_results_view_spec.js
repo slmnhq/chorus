@@ -7,7 +7,7 @@ describe("chorus.views.SearchResults", function() {
                 docs: [
                     fixtures.searchResultWorkfileJson(),
                     fixtures.searchResultDatabaseObjectJson(),
-                    fixtures.searchResultChorusViewJson(),
+                    fixtures.searchResultChorusViewJson()
                 ],
                 numFound: 3
             }

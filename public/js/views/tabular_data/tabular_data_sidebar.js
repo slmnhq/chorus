@@ -17,15 +17,10 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
         chorus.PageEvents.subscribe("tabularData:selected", this.setTabularData, this);
         chorus.PageEvents.subscribe("column:selected", this.setColumn, this);
         chorus.PageEvents.subscribe("importSchedule:changed", this.updateImportSchedule, this);
-        chorus.PageEvents.subscribe("memo:added:databaseObject", this.refreshActivities, this);
         this.tabControl = new chorus.views.TabControl([
             {name: 'activity', selector: ".activity_list"},
             {name: 'statistics', selector: ".statistics_detail"}
         ]);
-    },
-
-    refreshActivities: function() {
-        this.activityList && this.activityList.collection.fetch();
     },
 
     render: function() {
