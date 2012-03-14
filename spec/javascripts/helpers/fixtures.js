@@ -2475,6 +2475,7 @@ beforeEach(function() {
                         executeResult: "success"
                     },
                     state: "success",
+                    toTable: 'someTable',
                     creator: "InitialUser"
                 },
                 scheduleInfo: {

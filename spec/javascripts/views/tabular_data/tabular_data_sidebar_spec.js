@@ -421,6 +421,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                                 executeResult: "success"
                                             },
                                             state: "success",
+                                            toTable: 'our_destination',
                                             creator: "InitialUser"
                                         }
                                     })
@@ -499,6 +500,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                             result: {
                                                 executeResult: "success"
                                             },
+                                            toTable: 'our_destination',
                                             state: "success",
                                             creator: "InitialUser"
                                         }
@@ -529,6 +531,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                                 executeResult: "failed"
                                             },
                                             state: "failed",
+                                            toTable: 'our_destination',
                                             creator: "InitialUser"
                                         }
                                     })
