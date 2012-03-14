@@ -44,4 +44,4 @@ chorus.views.Sidebar = chorus.views.Base.extend({
     recalculateScrolling : function() {
         this._super("recalculateScrolling", [$(this.el).closest(".custom_scroll")])
     }
-}); 
+});
