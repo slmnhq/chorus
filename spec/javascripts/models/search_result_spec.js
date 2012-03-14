@@ -242,6 +242,10 @@ describe("chorus.models.SearchResult", function() {
                 it("memoizes", function() {
                     expect(this.workspaceItems).toBe(this.model.workspaceItems());
                 });
+
+                it("sets the collection's 'loaded' flag", function() {
+                    expect(this.workspaceItems.loaded).toBeTruthy();
+                });
             });
 
             context("when there are no workfile results", function() {
@@ -354,166 +358,6 @@ describe("chorus.models.SearchResult", function() {
         });
     });
 
-    describe("#totalPageNumber", function() {
-        it("should return the correct number of total pages", function() {
-            this.model.set({entityType: "user"});
-            this.model.set(fixtures.searchResult());
-            this.model.users().pagination.records = 1;
-            expect(this.model.totalPageNumber()).toBe(1)
-
-            this.model.users().pagination.records = 51;
-            expect(this.model.totalPageNumber()).toBe(2);
-
-            this.model.users().pagination.records = 101;
-            expect(this.model.totalPageNumber()).toBe(3);
-        });
-    });
-
-    describe("#getNextPage", function() {
-        beforeEach(function() {
-            this.model.set({user: { docs: [], numFound: 100 }, page: 1, entityType: "user"})
-            this.model.users();
-            this.model.getNextPage();
-            var searchResult = fixtures.searchResult();
-            this.users = searchResult.get("user").docs;
-            this.server.completeFetchFor(this.model, searchResult);
-        });
-
-        it("sets page to 2", function() {
-            expect(this.model.get("page")).toBe(2);
-        });
-
-        it("should replace the current results with the next page of results", function() {
-            var users = this.model.users()
-            expect(users).toBeA(chorus.collections.UserSet);
-            expect(users.models.length).toBe(this.users.length)
-        });
-    });
-
-    describe("#getPreviousPage", function() {
-        beforeEach(function() {
-            this.model.set({user: { docs: [], numFound: 100 }, page: 2, entityType: "user"})
-            this.model.users();
-            this.model.getPreviousPage();
-            var searchResult = fixtures.searchResult();
-            this.users = searchResult.get("user").docs;
-            this.server.completeFetchFor(this.model, searchResult);
-        });
-
-        it("sets page to 1", function() {
-            expect(this.model.get("page")).toBe(1);
-        });
-
-        it("should replace the current results with the previous page of results", function() {
-            var users = this.model.users()
-            expect(users).toBeA(chorus.collections.UserSet);
-            expect(users.models.length).toBe(this.users.length)
-        });
-    });
-
-    describe("#hasNextPage", function() {
-        context("when we have a specific entity type", function() {
-            beforeEach(function() {
-                this.model.set(fixtures.searchResultJson());
-                this.model.set({entityType: "user"});
-            });
-            it("should return true when there are 51 results", function() {
-                this.model.get("user").numFound = 51;
-                this.model.set({page: 1})
-                expect(this.model.hasNextPage()).toBeTruthy();
-            });
-
-            it("should return true when there are 101 results", function() {
-                this.model.get("user").numFound = 101;
-
-                this.model.set({page: 2})
-                expect(this.model.hasNextPage()).toBeTruthy();
-            });
-
-            it("should return false when there are less than 51 results", function() {
-                this.model.get("user").numFound = 50;
-                this.model.set({page: 1})
-                expect(this.model.hasNextPage()).toBeFalsy();
-            });
-        });
-
-
-        context("when entity type is all or undefined", function() {
-            it("should return false", function() {
-                expect(this.model.hasNextPage()).toBeFalsy();
-            });
-
-        })
-
-
-        it("should return false when there are less than 101 results", function() {
-            this.model.set({numFound: 51, page: 2});
-            expect(this.model.hasNextPage()).toBeFalsy();
-        });
-    });
-
-    describe("#hasPreviousPage", function() {
-        context("when we have a specific entity type", function() {
-            beforeEach(function() {
-                this.model.set(fixtures.searchResultJson());
-                this.model.set({entityType: "user"});
-            });
-
-            it("should return true when there are 51 results", function() {
-                this.model.set({page: 4})
-                expect(this.model.hasPreviousPage()).toBeTruthy();
-            });
-
-            it("should return false when already on page 1", function() {
-                this.model.set({page: 1})
-                expect(this.model.hasPreviousPage()).toBeFalsy();
-            });
-        });
-
-        context("when entity type is all or undefined", function() {
-            it("should return false", function() {
-                expect(this.model.hasPreviousPage()).toBeFalsy();
-            });
-        })
-    });
-
-    describe("#resetResults", function() {
-        beforeEach(function() {
-            this.model.set(fixtures.searchResultJson());
-            this.orig_users = _.clone(this.model.users());
-            this.orig_tabularData = _.clone(this.model.tabularData());
-            this.orig_workfiles = _.clone(this.model.workfiles());
-            this.orig_workspaces = _.clone(this.model.workspaces());
-            this.model.get("user").docs[0] = {id: 3};
-        });
-
-        context("when we have a specific entityType", function() {
-            beforeEach(function() {
-                this.model.set({entityType: "user"});
-            });
-
-            it("should only reset the results for the current entityType", function() {
-                this.model.resetResults();
-
-                expect(this.model.users()).not.toEqual(this.orig_users);
-                expect(this.model.tabularData()).toEqual(this.orig_tabularData);
-                expect(this.model.workfiles()).toEqual(this.orig_workfiles);
-                expect(this.model.workspaces()).toEqual(this.orig_workspaces);
-            })
-        });
-
-        context("when we do not have a specific entityType", function() {
-            it("should do nothing", function() {
-                this.model.resetResults();
-
-                expect(this.model.users()).toEqual(this.orig_users);
-                expect(this.model.tabularData()).toEqual(this.orig_tabularData);
-                expect(this.model.workfiles()).toEqual(this.orig_workfiles);
-                expect(this.model.workspaces()).toEqual(this.orig_workspaces);
-            })
-        });
-    });
-
     describe("triggering invalidated", function() {
         beforeEach(function() {
             var search = fixtures.searchResult()
@@ -526,6 +370,5 @@ describe("chorus.models.SearchResult", function() {
         it("should trigger invalidated on the currently selected item", function() {
             expect("invalidated").toHaveBeenTriggeredOn(this.model.selectedItem);
         });
-
     });
 });

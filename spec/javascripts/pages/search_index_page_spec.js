@@ -280,7 +280,6 @@ describe("chorus.pages.SearchIndexPage", function() {
             expect(this.page.search).toHaveBeenFetched();
         });
 
-
         describe("when the search result is fetched", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.page.search, fixtures.searchResult(this.page.search.attributes));
@@ -292,6 +291,18 @@ describe("chorus.pages.SearchIndexPage", function() {
 
             it("selects the search result type in the menu", function() {
                 expect(this.page.$(".default_content_header .type .chosen")).toContainTranslation("search.type.workspace");
+            });
+
+            it("has a content details and footer with pagination controls", function() {
+                expect(this.page.mainContent.contentDetails).toBeA(chorus.views.ListContentDetails);
+                expect(this.page.mainContent.contentDetails.collection).toBe(this.page.search.workspaces());
+                expect(this.page.mainContent.contentDetails.options.modelClass).toBe("SearchResult");
+
+                expect(this.page.mainContent.contentFooter).toBeA(chorus.views.ListContentDetails);
+                expect(this.page.mainContent.contentFooter.collection).toBe(this.page.search.workspaces());
+                expect(this.page.mainContent.contentFooter.options.hideCounts).toBeTruthy();
+                expect(this.page.mainContent.contentFooter.options.hideIfNoPagination).toBeTruthy();
+                expect(this.page.mainContent.contentFooter.options.modelClass).toBe("SearchResult");
             });
         });
     });

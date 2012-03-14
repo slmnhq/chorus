@@ -30,26 +30,8 @@
             }
         },
 
-        getNextPage: function(){
-            if (this.hasNextPage()){
-                this.set({page: this.currentPageNumber() + 1});
-                this.fetch({success: _.bind(this.resetResults, this)});
-            }
-        },
-
-        getPreviousPage: function(){
-            if (this.hasPreviousPage()){
-                this.set({page: this.currentPageNumber() - 1});
-                this.fetch({success: _.bind(this.resetResults, this)});
-            }
-        },
-
         currentPageNumber: function() {
             return this.get("page") || 1;
-        },
-
-        totalPageNumber: function(){
-            return this.numPages(this.getResults().pagination.records);
         },
 
         showUrlTemplate: function() {
@@ -77,21 +59,6 @@
 
         isScopedToUserWorkspaces: function() {
             return this.searchIn() === "my_workspaces";
-        },
-
-        hasNextPage: function(){
-            if (this.hasSpecificEntityType()) {
-                var total = this.getResults().pagination.records;
-                var page = this.currentPageNumber();
-                return total > (NUM_RESULTS_PER_PAGE * page);
-            }
-        },
-
-        hasPreviousPage: function(){
-            if (this.hasSpecificEntityType()) {
-                var page = this.currentPageNumber();
-                return page > 1;
-            }
         },
 
         isPaginated: function() {
@@ -143,7 +110,6 @@
             return this._workspace;
         },
 
-
         workfiles: makeCollectionMethod("workfiles"),
         tabularData: makeCollectionMethod("tabularData"),
         workspaces: makeCollectionMethod("workspaces"),
@@ -178,12 +144,6 @@
             }
         },
 
-        resetResults: function() {
-            if(this.hasSpecificEntityType()) {
-                this.getResults().reset(this.get(this.entityType()).docs);
-            }
-        },
-
         numPages: function(totalFound) {
             return Math.ceil(totalFound / NUM_RESULTS_PER_PAGE);
         }
@@ -198,6 +158,7 @@
             var searchKey = ctor.prototype.searchKey;
             if (!this[memoizedName] && this.get(searchKey)) {
                 collection = this[memoizedName] = new ctor([], { search: this });
+                collection.loaded = true;
                 collection.refreshFromSearch();
             }
             return this[memoizedName];
