@@ -140,24 +140,44 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("csv_import:started");
                     });
                 })
-
-                context("when the post to import responds with failure", function() {
-                    beforeEach(function() {
-                        this.dialog.$("input[name=table_name]").val("testisgreat").change();
-                        this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
-                        this.dialog.$("button.submit").click();
-                        this.server.lastCreate().fail([{ message: "I like cheese" }]);
-                    })
-
-                    it("retains column names", function() {
-                        expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
-                    })
-
-                    it("retains the table name", function() {
-                        expect(this.dialog.$("input[name=table_name]").val()).toBe("testisgreat");
-                    })
-                })
             });
-        })
-    })
+
+            context("retain entered values when clicking submit", function() {
+                beforeEach(function() {
+                    this.$type = this.dialog.$(".th .type").eq(1);
+                    this.$type.find(".chosen").click();
+                    this.$type.find(".popup_filter li").eq(3).find("a").click();
+                    this.dialog.$("input[name=table_name]").val("testisgreat").change();
+                    this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
+
+                    this.dialog.$("button.submit").click();
+                    this.server.lastCreate().fail([
+                        { message: "I like cheese" }
+                    ]);
+                });
+
+                it("has no validation errors", function() {
+                    expect(this.dialog.$(".has_error").length).toBe(0)
+                });
+
+                it("retains column names", function() {
+                    expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
+                });
+
+                it("retains the table name", function() {
+                    expect(this.dialog.$("input[name=table_name]").val()).toBe("testisgreat");
+                });
+
+                it("retains the data types", function() {
+                    this.$type = this.dialog.$(".th .type").eq(1);
+                    expect(this.$type.find(".chosen")).toHaveText("date");
+                    expect(this.$type).toHaveClass("date");
+                });
+
+                it("retains the selected workspace", function() {
+                    //TODO
+                });
+            });
+        });
+    });
 });

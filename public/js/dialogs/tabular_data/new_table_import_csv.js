@@ -41,7 +41,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         $typeDiv.removeClass("integer float text date time timestamp").addClass(data);
     },
 
-    storeColumnNames: function() {
+    storeColumnInfo: function() {
         var $names = this.$(".column_names input:text");
 
         var column_names
@@ -56,6 +56,12 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
                 this.csv.set({generatedColumnNames: column_names}, {silent: true})
             }
         }
+
+        var $types = this.$(".data_types .chosen");
+        var types = _.map($types, function($type, i){
+            return $types.eq(i).text();
+        })
+        this.csv.set({types: types}, {silent: true});
     },
 
     postRender: function() {
@@ -110,7 +116,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
 
     startImport: function() {
         if (this.performValidation()) {
-            this.storeColumnNames();
+            this.storeColumnInfo();
             this.prepareCsv();
 
             this.$("button.submit").startLoading(this.loadingKey);
@@ -185,7 +191,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     setHeader: function() {
-        this.storeColumnNames();
+        this.storeColumnInfo();
         this.refreshCSV();
     },
 
