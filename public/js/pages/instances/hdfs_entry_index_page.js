@@ -11,6 +11,16 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         chorus.PageEvents.subscribe("hdfs_entry:selected", this.entrySelected, this)
     },
 
+    requiredResourcesFetchFailed: function(collection) {
+        var errorMessage = collection.serverErrors[0] && collection.serverErrors[0].message
+        if (errorMessage.match(/Account.*map.*needed/)) {
+            var dialog = new chorus.dialogs.InstanceAccount({ title: t("instances.account.add.title"), pageModel: this.instance, reload: true });
+            dialog.launchModal();
+        } else {
+            this._super("requiredResourcesFetchFailed", arguments);
+        }
+    },
+
     resourcesLoaded: function() {
         var pathLength = _.compact(this.path.split("/")).length
         this.crumbs = [

@@ -13,9 +13,8 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.extend({
     },
 
     requiredResourcesFetchFailed: function(collection) {
-        var errorKey = collection.serverErrors[0] && collection.serverErrors[0].msgkey
-
-        if (errorKey === "ACCOUNTMAP.NO_ACTIVE_ACCOUNT") {
+        var errorMessage = collection.serverErrors[0] && collection.serverErrors[0].message
+        if (errorMessage.match(/Account.*map.*needed/)) {
             var dialog = new chorus.dialogs.InstanceAccount({ title: t("instances.account.add.title"), pageModel: this.instance, reload: true });
             dialog.launchModal();
         } else {
