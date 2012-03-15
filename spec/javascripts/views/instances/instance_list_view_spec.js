@@ -95,39 +95,6 @@ describe("chorus.views.InstanceList", function() {
                 expect(this.view.$(".other_instance li:eq(2) .name")).toHaveHref("#/instances/w10/databases");
             })
 
-            describe("the instance credentials dialog", function() {
-                context("when the user does not have credentials", function() {
-                    beforeEach(function() {
-                        this.collection.at(0).set({
-                            hasCredentials: false
-                        });
-                        this.view.render();
-                    });
-
-                    it("includes the InstanceAccount dialog information in the name link", function() {
-                        expect(this.view.$(".name:eq(0)").data("dialog")).toBe("InstanceAccount");
-                        expect(this.view.$(".name:eq(0)").data("title")).toMatchTranslation("instances.account.add.title");
-                    });
-                });
-
-                context("when the account is shared", function() {
-                    beforeEach(function() {
-                        this.collection.at(0).set({
-                            hasCredentials: false,
-                            sharedAccount: {
-                                dbUserName: "gpadmin"
-                            }
-                        });
-                        this.view.render();
-                    });
-
-                    it("includes the InstanceAccount dialog information in the name link", function() {
-                        expect(this.view.$(".name:eq(0)").data("dialog")).toBeUndefined();
-                        expect(this.view.$(".name:eq(0)").data("title")).toBeUndefined();
-                    });
-                })
-            });
-
             describe("when an instance is destroyed", function() {
                 beforeEach(function() {
                     this.oldLength = this.collection.length;
