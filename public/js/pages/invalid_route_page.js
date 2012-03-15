@@ -16,5 +16,12 @@ chorus.pages.InvalidRoutePage = chorus.pages.Bare.extend({
 
     navigateToHome: function() {
         chorus.router.navigate("#", true);
+    },
+
+    context: function() {
+        return _.extend({
+            title: t("invalid_route.title"),
+            text: t("invalid_route.content")
+        }, this.pageOptions);
     }
 });

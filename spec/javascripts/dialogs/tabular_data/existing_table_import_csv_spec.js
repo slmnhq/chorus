@@ -572,7 +572,5 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 });
             });
         })
-
     })
-
 });

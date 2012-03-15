@@ -78,7 +78,6 @@
                 display: inline-block;
                 width: 10px;
                 height: 10px;
-                margin-right: 2px;
                 margin-left: -14px;
                 position: relative;
                 top: 1px;
@@ -91,6 +90,12 @@
             a {
                 font-weight : 400;
                 color: black !important;
+            }
+
+            .unavailable {
+                @include secondary-text-small;
+                font-style: italic;
+                margin-left: 3px;
             }
         }
     }

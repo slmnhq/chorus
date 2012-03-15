@@ -66,44 +66,98 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
         })
 
         context("clicking submit", function() {
-            beforeEach(function() {
-                this.dialog.$("select").val(this.workspace3.id);
-                this.dialog.$('button.submit').click();
-            })
-
-            it("starts the loading spinner", function() {
-                expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
-                expect(this.dialog.$("button.submit")).toContainTranslation("hdfs.create_external.creating")
-            })
-
-            it("posts to the right URL", function() {
-                var workspaceId = this.workspace3.id;
-                var request = this.server.lastCreate();
-                var statement = "bar_txt (col1 text, col2 text, col3 text, col_4 text, col_5 text)";
-
-                expect(request.url).toMatchUrl("/edc/workspace/" + workspaceId + "/externaltable");
-                expect(request.params().path).toBe("/foo/bar.txt");
-                expect(request.params().instanceId).toBe("234");
-                expect(request.params().statement).toBe(statement);
-            });
-
-            context("when the post to import responds with success", function() {
+            context("with has header false", function() {
                 beforeEach(function() {
-                    spyOn(this.dialog, "closeModal");
-                    spyOn(chorus, 'toast');
-                    spyOn(chorus.PageEvents, 'broadcast');
-                    this.server.lastCreate().succeed();
+                    this.dialog.$("input[name=table_name]").val("testisgreat").change();
+                    this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
+                    this.dialog.$("#hasHeader").prop('checked', false).change();
+                    this.dialog.$("select").val(this.workspace3.id);
+                    this.dialog.$('button.submit').click();
                 });
 
-                it("closes the dialog and displays the right toast", function() {
-                    expect(this.dialog.closeModal).toHaveBeenCalled();
-                    expect(chorus.toast).toHaveBeenCalledWith("hdfs.create_external.success", {workspaceName: this.workspace3.get("name"), tableName: this.dialog.$("input:text").eq(0).val()});
+                it("posts to the right URL", function() {
+                    var workspaceId = this.workspace3.id;
+                    var request = this.server.lastCreate();
+                    var statement = "testisgreat (column_1 text, column_2 text, column_3 text, column_4 text, column_5 text)";
+
+                    expect(request.url).toMatchUrl("/edc/workspace/" + workspaceId + "/externaltable");
+                    expect(request.params().statement).toBe(statement);
+                    expect(request.params().hasHeader).toBe('false');
                 });
 
-                it("triggers csv_import:started", function() {
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("csv_import:started");
+                context("switch header to on again", function() {
+                    beforeEach(function() {
+                        this.dialog.$("#hasHeader").prop("checked", true).change();
+                    })
+
+                    it("retains column names when changing column names back and forth between generated and header", function() {
+                        expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
+                    })
+
+
+                    it("retains the table name when changing column names back and forth between generated and header", function() {
+                        expect(this.dialog.$("input[name=table_name]").val()).toBe("testisgreat");
+                    })
+                })
+            });
+            context("with has header true", function() {
+                beforeEach(function() {
+                    this.dialog.$("select").val(this.workspace3.id);
+                    this.dialog.$('button.submit').click();
                 });
-            })
+
+                it("starts the loading spinner", function() {
+                    expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+                    expect(this.dialog.$("button.submit")).toContainTranslation("hdfs.create_external.creating")
+                });
+
+                it("posts to the right URL", function() {
+                    var workspaceId = this.workspace3.id;
+                    var request = this.server.lastCreate();
+                    var statement = "bar_txt (col1 text, col2 text, col3 text, col_4 text, col_5 text)";
+
+                    expect(request.url).toMatchUrl("/edc/workspace/" + workspaceId + "/externaltable");
+                    expect(request.params().path).toBe("/foo/bar.txt");
+                    expect(request.params().instanceId).toBe("234");
+                    expect(request.params().statement).toBe(statement);
+                    expect(request.params().hasHeader).toBe('true');
+                });
+
+                context("when the post to import responds with success", function() {
+                    beforeEach(function() {
+                        spyOn(this.dialog, "closeModal");
+                        spyOn(chorus, 'toast');
+                        spyOn(chorus.PageEvents, 'broadcast');
+                        this.server.lastCreate().succeed();
+                    });
+
+                    it("closes the dialog and displays the right toast", function() {
+                        expect(this.dialog.closeModal).toHaveBeenCalled();
+                        expect(chorus.toast).toHaveBeenCalledWith("hdfs.create_external.success", {workspaceName: this.workspace3.get("name"), tableName: this.dialog.$("input:text").eq(0).val()});
+                    });
+
+                    it("triggers csv_import:started", function() {
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("csv_import:started");
+                    });
+                })
+
+                context("when the post to import responds with failure", function() {
+                    beforeEach(function() {
+                        this.dialog.$("input[name=table_name]").val("testisgreat").change();
+                        this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
+                        this.dialog.$("button.submit").click();
+                        this.server.lastCreate().fail([{ message: "I like cheese" }]);
+                    })
+
+                    it("retains column names", function() {
+                        expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
+                    })
+
+                    it("retains the table name", function() {
+                        expect(this.dialog.$("input[name=table_name]").val()).toBe("testisgreat");
+                    })
+                })
+            });
         })
     })
 });

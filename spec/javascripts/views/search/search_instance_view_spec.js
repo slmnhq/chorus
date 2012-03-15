@@ -21,8 +21,8 @@ describe("chorus.views.SearchInstance", function() {
         expect(this.view.$("img.state").attr("title")).toBe("Online");
     });
 
-    it("shows matching name", function() {
-        expect(this.view.$(".name").html()).toContain("<em>my</em>_hadoop");
+    it("has a link to the instance for each instance in the collection", function() {
+        expect(this.view.$('.name').attr('href')).toBe(this.model.showUrl());
     });
 
     describe("comments", function() {

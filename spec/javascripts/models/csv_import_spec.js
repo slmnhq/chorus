@@ -190,6 +190,30 @@ describe("chorus.models.CSVImport", function() {
         itParsesCorrectly();
     })
 
+    describe("it retains values the user has entered", function() {
+        beforeEach(function() {
+            this.model = fixtures.csvImport({
+                lines: [
+                    'col1,col2,col3,col4',
+                    'foo,2,3,1/2/3',
+                    'bar,2.1,sna,456'
+                ]
+            });
+        })
+
+        it("stores changes to the generated column names", function() {
+            this.model.set({ generatedColumnNames: ["ggg", "ttt", "rrr", "eee"], hasHeader: false })
+            var result = _.pluck(this.model.columnOrientedData(), "name")
+            expect(result).toEqual(["ggg", "ttt", "rrr", "eee"])
+        })
+
+        it("stores changes to the header column names from the file", function() {
+            this.model.set({ headerColumnNames: ["f", "d", "s", "a"], hasHeader: true })
+            var result = _.pluck(this.model.columnOrientedData(), "name")
+            expect(result).toEqual(["f", "d", "s", "a"])
+        })
+    })
+
     function itParsesCorrectly() {
         describe("columnOrientedData", function() {
             beforeEach(function() {
@@ -215,7 +239,12 @@ describe("chorus.models.CSVImport", function() {
                     expect(column.values).toEqual(this.expectedColumns[i].values)
                 }, this))
             })
-
         })
     }
+
+    describe("#normalizeForDatabase", function() {
+        it("replaces dots with underscores", function() {
+            expect(chorus.models.CSVImport.normalizeForDatabase("filename.ext")).toBe("filename_ext")
+        })
+    })
 })

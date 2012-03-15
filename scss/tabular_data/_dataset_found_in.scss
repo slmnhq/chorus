@@ -15,7 +15,14 @@
         @include menu-triangle;
         border-bottom: 1px dotted $link-color;
     }
+
     .other_menu {
         display: none;
+    }
+}
+
+.found_in_other_workspaces_menu {
+    li {
+        line-height: 18px;
     }
 }

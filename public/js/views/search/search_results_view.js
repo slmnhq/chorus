@@ -3,13 +3,13 @@ chorus.views.SearchResults = chorus.views.Base.extend({
     className: "search_results",
 
     subviews: {
-        ".this_workspace": "thisWorkspaceList",
-        ".hdfs":          "hdfsList",
-        ".user":          "userList",
-        ".workfile":      "workfileList",
-        ".workspace":     "workspaceList",
-        ".dataset":       "tabularDataList",
-        ".instance":      "instanceList"
+        ".this_workspace":     "thisWorkspaceList",
+        ".hdfs_list":          "hdfsList",
+        ".user_list":          "userList",
+        ".workfile_list":      "workfileList",
+        ".workspace_list":     "workspaceList",
+        ".dataset_list":       "tabularDataList",
+        ".instance_list":      "instanceList"
     },
 
     events: {
@@ -17,12 +17,6 @@ chorus.views.SearchResults = chorus.views.Base.extend({
     },
 
     setup: function() {
-        if (this.model.workspaceItems()) {
-            this.thisWorkspaceList = new chorus.views.WorkspaceSearchResultList({
-                collection: this.model.workspaceItems(),
-                search: this.model
-            });
-        }
         if (this.model.hdfs()) {
             this.hdfsList = this.buildListView('hdfs', this.model.hdfs());
         }
@@ -40,6 +34,12 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         }
         if (this.model.instances()) {
             this.instanceList = this.buildListView('instance', this.model.instances());
+        }
+        if (!this.model.hasSpecificEntityType() && this.model.workspaceItems()) {
+            this.thisWorkspaceList = new chorus.views.WorkspaceSearchResultList({
+                collection: this.model.workspaceItems(),
+                search: this.model
+            });
         }
     },
 

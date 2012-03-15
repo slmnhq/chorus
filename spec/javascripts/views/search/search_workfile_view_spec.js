@@ -21,13 +21,13 @@ describe("chorus.views.SearchWorkfile", function() {
                 description: "this is a cool file description",
                 highlightedAttributes: {
                     description: "this is a <EM>cool</EM> file description",
-                    name: "<em>cool</em> file"
+                    fileName: "<em>cool</em> file"
                 }
             }
         ]}});
 
         this.model = this.result.workfiles().models[0];
-        this.model.set({highlightedAttributes: {name : "<em>cool</em> file"}});
+        this.model.set({highlightedAttributes: {fileName : "<em>cool</em> file"}});
         this.view = new chorus.views.SearchWorkfile({model: this.model});
         this.view.render()
     });

@@ -14,6 +14,12 @@ describe("chorus.pages.TabularDataShowPage", function() {
         expect(this.page.helpId).toBe("databaseObject")
     })
 
+    it("has the right #failurePageOptions (for populating the content of a 404 page)", function() {
+        var options = this.page.failurePageOptions();
+        expect(options.title).toMatchTranslation("invalid_route.tabular_data.title");
+        expect(options.text).toMatchTranslation("invalid_route.tabular_data.content");
+    });
+
     describe("#initialize", function() {
         context("when the databaseObject fetch completes", function() {
             beforeEach(function() {
@@ -62,7 +68,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
             })
 
             it("navigates to the 404 page", function() {
-                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
+                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
             })
         })
 

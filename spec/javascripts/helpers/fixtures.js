@@ -1794,12 +1794,12 @@ beforeEach(function() {
             }, overrides);
         },
 
-        instanceJson: function() {
+        instanceJson: function(overrides) {
             var id = this.nextId();
-            return {
+            return _.extend({
                 id: id.toString(),
                 name: 'Instance_' + id
-            }
+            }, overrides);
         },
 
         instanceWorkspaceUsageJson: function(overrides) {
@@ -2485,6 +2485,7 @@ beforeEach(function() {
                         executeResult: "success"
                     },
                     state: "success",
+                    toTable: 'someTable',
                     creator: "InitialUser"
                 },
                 scheduleInfo: {
@@ -2740,7 +2741,7 @@ beforeEach(function() {
             return _.extend({
                 "name": "folder" + id,
                 "isDir": true,
-                "lastModified": "2012-02-24 10:28:42.337",
+                "lastUpdatedStamp": "2012-02-24 10:28:42.337",
                 "size": 0,
                 "count": 6,
                 "owner": "hadoop",
@@ -2755,7 +2756,7 @@ beforeEach(function() {
                 "name": "file" + id + ".sql",
                 "isDir": false,
                 "isBinary": false,
-                "lastModified": "2012-02-24 10:28:42.320",
+                "lastUpdatedStamp": "2012-02-24 10:28:42.320",
                 "size": 23,
                 "count": 0,
                 "owner": "hadoop",
@@ -2770,7 +2771,7 @@ beforeEach(function() {
                 "name": "file" + id + ".bin",
                 "isDir": false,
                 "isBinary": true,
-                "lastModified": "2012-02-24 10:28:42.320",
+                "lastUpdatedStamp": "2012-02-24 10:28:42.320",
                 "size": 1337,
                 "count": 0,
                 "owner": "hadoop",
@@ -2785,7 +2786,7 @@ beforeEach(function() {
                 "name": "file" + id + ".???",
                 "isDir": false,
                 "isBinary": null,
-                "lastModified": "2012-02-24 10:28:42.320",
+                "lastUpdatedStamp": "2012-02-24 10:28:42.320",
                 "size": 1337,
                 "count": 0,
                 "owner": "hadoop",
@@ -2820,7 +2821,7 @@ beforeEach(function() {
                             "isDeleted": false,
                             "lastUpdate": "Tue Feb 21 10:53:48 PST 2012",
                             "fileType": "SQL",
-                            "name": "test.sql",
+                            "fileName": "test.sql",
                             "entityType": "workfile",
                             "modifiedBy": {
                                 "id": "422",
@@ -2839,7 +2840,7 @@ beforeEach(function() {
                             },
                             "comments": [],
                             highlightedAttributes: {
-                                "name": ["<em>test<\/em>.sql"]
+                                "fileName": ["<em>test<\/em>.sql"]
                             }
                         },
                         {
@@ -2847,7 +2848,7 @@ beforeEach(function() {
                             "isDeleted": false,
                             "lastUpdate": "Thu Feb 23 12:28:56 PST 2012",
                             "fileType": "SQL",
-                            "name": "test.sql",
+                            "fileName": "test.sql",
                             "entityType": "workfile",
                             "modifiedBy": {
                                 "id": "422",
@@ -2866,7 +2867,7 @@ beforeEach(function() {
                             },
                             "comments": [],
                             highlightedAttributes: {
-                                "name": ["<em>test<\/em>.sql"]
+                                "fileName": ["<em>test<\/em>.sql"]
                             }
                         }
                     ],
@@ -3399,6 +3400,7 @@ beforeEach(function() {
                 isComment: false,
                 isInsight: false,
                 isPublished: false,
+                isColumn: false,
                 lastUpdatedStamp: "2012-03-07 15:03:43"
             }, overrides);
         },
@@ -3458,9 +3460,9 @@ beforeEach(function() {
                             "isDeleted": false,
                             "lastUpdatedStamp": "2012-02-29 09:36:01",
                             "fileType": "SQL",
-                            "name": "edc_query.sql",
+                            "fileName": "edc_query.sql",
                             highlightedAttributes: {
-                                name: ["<em>edc</em>_query.sql"]
+                                fileName: ["<em>edc</em>_query.sql"]
                             },
                             "entityType": "workfile",
                             "owner": {

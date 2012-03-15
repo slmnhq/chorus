@@ -30,7 +30,7 @@ chorus.pages.UserIndexPage = chorus.pages.Base.extend({
                         {data:"lastName", text:t("users.header.menu.sort.last_name")}
                     ],
                     event:"sort",
-                    chosen:t("users.header.menu.sort.last_name")
+                    chosen: "lastName"
                 }
 
             },

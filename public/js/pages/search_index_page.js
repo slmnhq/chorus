@@ -22,6 +22,25 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         this.model.fetch();
     },
 
+    searchInMenuOptions: function() {
+        return  [
+            {data: "all", text: t("search.in.all")},
+            {data: "my_workspaces", text: t("search.in.my_workspaces")}
+        ];
+    },
+
+    typeOptions: function() {
+        return [
+            {data: "all", text: t("search.type.all")},
+            {data: "workfile", text: t("search.type.workfile")},
+            {data: "hdfs", text: t("search.type.hdfs")},
+            {data: "dataset", text: t("search.type.dataset")},
+            {data: "instance", text: t("search.type.instance")},
+            {data: "workspace", text: t("search.type.workspace")},
+            {data: "user", text: t("search.type.user")}
+        ]
+    },
+
     resourcesLoaded: function() {
         this.mainContent = new chorus.views.MainContentView({
             contentHeader: new chorus.views.ListHeaderView({
@@ -31,28 +50,14 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
                 linkMenus: {
                     search_in: {
                         title: t("search.search_in"),
-                        options: [
-                            {data: "all", text: t("search.in.all")},
-                            {data: "my_workspaces", text: t("search.in.my_workspaces")},
-
-                            // Need to talk to Dieu about this:
-                            {data: "this_workspace", text: t("search.in.this_workspace")}
-                        ],
-                        chosen: t("search.in." + this.search.searchIn()),
+                        options: this.searchInMenuOptions(),
+                        chosen: this.search.searchIn(),
                         event: "search_in"
                     },
                     type: {
                         title: t("search.show"),
-                        options: [
-                            {data: "all", text: t("search.type.all")},
-                            {data: "workfile", text: t("search.type.workfile")},
-                            {data: "hdfs", text: t("search.type.hdfs")},
-                            {data: "dataset", text: t("search.type.dataset")},
-                            {data: "instance", text: t("search.type.instance")},
-                            {data: "workspace", text: t("search.type.workspace")},
-                            {data: "user", text: t("search.type.user")}
-                        ],
-                        chosen: t("search.type." + this.search.entityType()),
+                        chosen: this.search.entityType(),
+                        options: this.typeOptions(),
                         event: "filter"
                     }
                 }
@@ -60,6 +65,11 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
 
             content: new chorus.views.SearchResults({ model: this.model })
         });
+
+        if (this.search.isPaginated()) {
+            this.mainContent.contentDetails = new chorus.views.ListContentDetails({ collection: this.search.getResults(), modelClass: "SearchResult"});
+            this.mainContent.contentFooter  = new chorus.views.ListContentDetails({ collection: this.search.getResults(), modelClass: "SearchResult", hideCounts: true, hideIfNoPagination: true })
+        }
 
         this.sidebars = {
             hdfs: new chorus.views.HdfsEntrySidebar(),

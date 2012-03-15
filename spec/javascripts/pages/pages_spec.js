@@ -65,10 +65,12 @@ describe("chorus.pages.Base", function() {
             context("when the fetch fails", function() {
                 beforeEach(function() {
                     spyOn(Backbone.history, "loadUrl");
+                    spyOn(this.view, "failurePageOptions").andReturn({foo: "bar"});
                     this.resource.trigger("fetchFailed");
                 });
 
                 it("navigates to the InvalidRoutePage if requiredResource fetch fails", function() {
+                    expect(chorus.pageOptions).toEqual({ foo: "bar" });
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
                 })
             });

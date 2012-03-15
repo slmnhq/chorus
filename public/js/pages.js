@@ -4,8 +4,11 @@ chorus.pages.Bare = chorus.views.Bare.extend({
     },
 
     requiredResourcesFetchFailed: function() {
+        chorus.pageOptions = this.failurePageOptions();
         Backbone.history.loadUrl("/invalidRoute");
-    }
+    },
+
+    failurePageOptions: function() {}
 });
 
 chorus.pages.Base = chorus.pages.Bare.extend({

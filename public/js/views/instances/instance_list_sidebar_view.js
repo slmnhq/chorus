@@ -69,6 +69,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
 
     postRender: function() {
         this.$("a.dialog.workspace_usage").data("instance", this.instance);
+        this._super("postRender");
     },
 
     canEditPermissions: function() {

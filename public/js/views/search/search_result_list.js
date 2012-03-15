@@ -4,9 +4,7 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     className: "search_result_list",
 
     events: {
-        "click a.show_all": "showAll",
-        "click a.next": "showNext",
-        "click a.previous": "showPrevious"
+        "click a.show_all": "showAll"
     },
 
     setup: function() {
@@ -16,23 +14,14 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     },
 
     additionalContext: function() {
-        var ctx = {
+        return {
             entityType: this.entityType,
             shown: this.collection.models.length,
             total: this.collection.pagination.records,
-            hasNext: this.search && this.search.hasNextPage(),
-            hasPrevious: this.search && this.search.hasPreviousPage(),
-            filteredSearch: this.search && this.search.entityType() == this.entityType,
+            filteredSearch: this.search && this.search.isPaginated(),
             moreResults: (this.collection.models.length < this.collection.pagination.records),
-            title: this.title(),
+            title: this.title()
         };
-
-        if(ctx.hasNext || ctx.hasPrevious) {
-            ctx.currentPage = this.search.currentPageNumber();
-            ctx.totalPages = this.search.totalPageNumber();
-        }
-
-        return ctx;
     },
 
     title: function() {
@@ -50,18 +39,6 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
         e.preventDefault();
         this.search.set({entityType: $(e.currentTarget).data("type")})
         chorus.router.navigate(this.search.showUrl(), true);
-    },
-
-    showNext: function(e) {
-        e && e.preventDefault();
-        this.search.getNextPage();
-        this.render();
-    },
-
-    showPrevious: function(e) {
-        e && e.preventDefault();
-        this.search.getPreviousPage();
-        this.render();
     },
 
     makeListItemView: function(model) {

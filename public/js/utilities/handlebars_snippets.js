@@ -351,6 +351,22 @@
 
         safeT: function() {
             return new Handlebars.SafeString(Handlebars.helpers.t.apply(this, arguments));
+        },
+
+        searchResultCommentTitle: function(comment) {
+            if(comment.isInsight) {
+                return t("search.supporting_message_types.insight");
+            }
+            if(comment.isComment) {
+                return t("search.supporting_message_types.comment");
+            }
+            if(comment.isCommitMessage) {
+                return "";
+            }
+            if(comment.isColumn) {
+                return t("search.supporting_message_types.column");
+            }
+            return t("search.supporting_message_types.note");
         }
     };
 

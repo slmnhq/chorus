@@ -42,6 +42,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
         context("when the data has been loaded", function() {
             beforeEach(function() {
+                spyOn(chorus.views.Sidebar.prototype, 'postRender');
                 this.server.completeFetchFor(this.instance.activities());
                 this.server.completeFetchFor(this.instance.accounts());
                 this.server.completeFetchFor(this.instance.usage(), fixtures.instanceUsage());
@@ -58,6 +59,10 @@ describe("chorus.views.InstanceListSidebar", function() {
 
             it("displays instance type", function() {
                 expect(this.view.$(".instance_type").text()).toBe("Greenplum Database");
+            });
+
+            it("calls super in postRender (so that scrolling works)", function() {
+                expect(chorus.views.Sidebar.prototype.postRender).toHaveBeenCalled();
             });
 
             it("renders ActivityList subview", function() {

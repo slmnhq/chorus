@@ -25,7 +25,8 @@ chorus.views.SearchDataset = chorus.views.SearchItemBase.extend({
 
         this.$("a.instance, a.database").data("instance", this.model.get("instance"));
         chorus.menu(this.$(".location .found_in a.open_other_menu"), {
-            content: this.$(".other_menu")
+            content: this.$(".other_menu"),
+            classes: "found_in_other_workspaces_menu"
         });
     }
 });

@@ -102,7 +102,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                             {data:"lastName", text:t("users.header.menu.sort.last_name")}
                         ],
                         event:"sort",
-                        chosen:t("users.header.menu.sort.last_name")
+                        chosen: "lastName"
                     }
                 },
                 buttons:[

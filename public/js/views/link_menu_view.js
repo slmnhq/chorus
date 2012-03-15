@@ -13,16 +13,21 @@ chorus.views.LinkMenu = chorus.views.Base.extend({
     },
 
     context:function () {
-        var self = this;
-        if (!this.options.chosen) this.options.chosen = this.options.options[0].text
-        var chosen = _.find(this.options.options, function (option) {
-            return option.text == self.options.chosen;
-        })
+        if (!this.options.chosen) {
+            this.options.chosen = this.options.options[0].data;
+        }
+
         _.each(this.options.options, function (option) {
-            option.hiddenClass = "hidden";
-        })
-        chosen.hiddenClass = "";
-        return this.options
+            if (option.data === this.options.chosen) {
+                option.isChecked = true;
+                this.options.chosenText = option.text;
+            } else {
+                option.isChecked = false;
+            }
+        }, this);
+
+        return this.options;
+
     },
 
     popupLinkClicked:function (ev) {
@@ -80,8 +85,9 @@ chorus.views.LinkMenu = chorus.views.Base.extend({
 
     choose:function (e) {
         e.preventDefault();
-        var ul = $(e.target).closest("ul");
-        this.options.chosen = $(e.target).text();
+        var ul = $(e.target).closest("ul"),
+            li = $(e.target).closest("li");
+        this.options.chosen = li.data("type");
         this.dismissMenu();
 
         var eventName = ul.data("event");

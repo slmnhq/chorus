@@ -22,6 +22,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     },
 
     postRender: function() {
+        this._super("postRender");
         if (this.resource.get("isDir")) {
             this.$(".tab_control").addClass("hidden")
             this.$(".tabbed_area").addClass("hidden")
@@ -65,7 +66,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     additionalContext: function() {
         return {
             encodedEntityId: this.makeEncodedEntityId(),
-            lastUpdatedStamp: t("hdfs.last_updated", { when : chorus.helpers.relativeTimestamp(this.resource.get("lastModified"))})
+            lastUpdatedStamp: t("hdfs.last_updated", { when : chorus.helpers.relativeTimestamp(this.resource.get("lastUpdatedStamp"))})
         }
     },
 

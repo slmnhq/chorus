@@ -24,17 +24,18 @@ describe("chorus.views.SearchResults", function() {
         it("includes a section for every type of item", function() {
             var sections = this.view.$(".search_result_list");
             expect(sections.filter(".this_workspace")).toExist();
-            expect(sections.filter(".user")).toExist();
-            expect(sections.filter(".workfile")).toExist();
-            expect(sections.filter(".workspace")).toExist();
-            expect(sections.filter(".hdfs")).toExist();
-            expect(sections.filter(".instance")).toExist();
+            expect(sections.filter(".user_list")).toExist();
+            expect(sections.filter(".workfile_list")).toExist();
+            expect(sections.filter(".workspace_list")).toExist();
+            expect(sections.filter(".hdfs_list")).toExist();
+            expect(sections.filter(".instance_list")).toExist();
         });
     });
 
     context("when searching for only workfiles", function() {
         beforeEach(function() {
             this.model = makeSearchResults()
+            this.model.set({ entityType: "workfile" });
             this.model.unset("workspace");
             this.model.unset("user");
             this.model.unset("hdfs");
@@ -44,20 +45,20 @@ describe("chorus.views.SearchResults", function() {
             this.view.render();
         });
 
-        it("shows the 'this workspace' section", function() {
-            expect(this.view.$(".search_result_list.this_workspace")).toExist();
+        it("does not show the 'this workspace' section", function() {
+            expect(this.view.$(".search_result_list.this_workspace")).not.toExist();
         });
 
         it("shows the workfile section", function() {
-            expect(this.view.$(".search_result_list.workfile")).toExist();
+            expect(this.view.$(".search_result_list.workfile_list")).toExist();
         });
 
         it("does not show the sections for other types of items", function() {
-            expect(this.view.$(".search_result_list.instance")).not.toExist();
-            expect(this.view.$(".search_result_list.workspace")).not.toExist();
-            expect(this.view.$(".search_result_list.user")).not.toExist();
-            expect(this.view.$(".search_result_list.dataset")).not.toExist();
-            expect(this.view.$(".search_result_list.hdfs")).not.toExist();
+            expect(this.view.$(".search_result_list.instance_list")).not.toExist();
+            expect(this.view.$(".search_result_list.workspace_list")).not.toExist();
+            expect(this.view.$(".search_result_list.user_list")).not.toExist();
+            expect(this.view.$(".search_result_list.dataset_list")).not.toExist();
+            expect(this.view.$(".search_result_list.hdfs_list")).not.toExist();
         });
     });
 
@@ -87,7 +88,7 @@ describe("chorus.views.SearchResults", function() {
         context("when the li is for a workfile", function() {
             it("triggers the 'workfile:selected' event on itself, with the clicked workfile", function() {
                 var workfileToClick = this.model.workfiles().at(1);
-                this.view.$(".workfile li").eq(1).click();
+                this.view.$(".workfile_list li").eq(1).click();
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:selected", workfileToClick);
             });
         });
@@ -95,7 +96,7 @@ describe("chorus.views.SearchResults", function() {
         context("when the li is for a workspace", function() {
             it("broadcasts the 'workspace:selected' page event, with the clicked workspace", function() {
                 var workspaceToClick = this.model.workspaces().at(1);
-                this.view.$(".workspace li").eq(1).click();
+                this.view.$(".workspace_list li").eq(1).click();
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workspace:selected", workspaceToClick);
             });
         });
@@ -103,7 +104,7 @@ describe("chorus.views.SearchResults", function() {
         context("when the li is for a tabular data", function() {
             it("broadcasts the 'tabularData:selected' page event, with the clicked tabular data", function() {
                 var modelToClick = this.model.tabularData().at(0);
-                this.view.$(".dataset li").eq(0).click();
+                this.view.$(".dataset_list li").eq(0).click();
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("tabularData:selected", modelToClick);
             });
         });
@@ -111,7 +112,7 @@ describe("chorus.views.SearchResults", function() {
         context("when the li is for a hadoop file", function() {
             it("broadcasts the 'hdfs_entry:selected' page event with the clicked hdfs file", function() {
                 var modelToClick = this.model.hdfs().at(0);
-                this.view.$(".hdfs li").eq(0).click();
+                this.view.$(".hdfs_list li").eq(0).click();
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("hdfs_entry:selected", modelToClick);
             });
         });
@@ -119,7 +120,7 @@ describe("chorus.views.SearchResults", function() {
         context("when the li is for an instance", function() {
             it("broadcasts the 'instance:selected' page event with the clicked instance", function() {
                 var modelToClick = this.model.instances().at(0);
-                this.view.$(".instance li").eq(0).click();
+                this.view.$(".instance_list li").eq(0).click();
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("instance:selected", modelToClick);
             });
         });
