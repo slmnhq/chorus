@@ -56,6 +56,10 @@ describe("chorus.views.TabularDataVisualizationTimeSeriesSidebar", function() {
                 expect(this.view.$(".time select option")).not.toExist()
                 expect(this.view.$(".time .no_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_datetime_columns")
             })
+
+            it("should disable the button", function() {
+                expect(this.view.$("button.create")).toBeDisabled();
+            });
         })
     })
 })

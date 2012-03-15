@@ -94,6 +94,10 @@ describe("chorus.views.TabularDataVisualizationBoxplotSidebar", function() {
                 expect(this.view.$(".category select option")).not.toExist()
                 expect(this.view.$(".no_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_columns")
             })
+
+            it("should disable the button", function() {
+                expect(this.view.$("button.create")).toBeDisabled();
+            });
         })
 
         describe("'create chart' button", function() {
