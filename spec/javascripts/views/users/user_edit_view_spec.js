@@ -1,11 +1,8 @@
 describe("chorus.views.userEdit", function() {
     beforeEach(function() {
-        setLoggedInUser({'userName': 'edcadmin'})
-        fixtures.model = 'User';
-        this.user = new chorus.models.User()
+        this.user = fixtures.user({admin: true});
+        setLoggedInUser({'userName': this.user.get("userName")})
         this.view = new chorus.views.UserEdit({model: this.user});
-        this.view.model.set(fixtures.jsonFor('fetch').resource[0]);
-        this.view.model.loaded = true;
     })
 
     describe("#setup", function() {
@@ -17,6 +14,10 @@ describe("chorus.views.userEdit", function() {
     });
 
     describe("#render", function() {
+        beforeEach(function() {
+            this.view.render();
+        });
+
         context("when editing yourself", function() {
             context("as an admin", function() {
                 beforeEach(function() {
@@ -26,14 +27,14 @@ describe("chorus.views.userEdit", function() {
                 });
 
                 it("initializes the form from the model", function() {
-                    expect(this.view.$("input[name=firstName]").val()).toBe("EDC");
-                    expect(this.view.$("input[name=lastName]").val()).toBe("Admin");
-                    expect(this.view.$("span[name=userName]").text()).toBe("edcadmin");
-                    expect(this.view.$("input[name=emailAddress]").val()).toBe("edcadmin@example.com");
-                    expect(this.view.$("input[name=title]").val()).toBe("");
-                    expect(this.view.$("textarea[name=notes]").text()).toBe("");
-                    expect(this.view.$("input[name=ou]").val()).toBe("");
-                    expect(this.view.$("input[name=admin]").prop("checked")).toBe(true);
+                    expect(this.view.$("input[name=firstName]").val()).toBe(this.user.get("firstName"));
+                    expect(this.view.$("input[name=lastName]").val()).toBe(this.user.get("lastName"));
+                    expect(this.view.$("span[name=userName]").text()).toBe(this.user.get("userName"));
+                    expect(this.view.$("input[name=emailAddress]").val()).toBe(this.user.get("emailAddress"));
+                    expect(this.view.$("input[name=title]").val()).toBe('');
+                    expect(this.view.$("textarea[name=notes]").text()).toBe('');
+                    expect(this.view.$("input[name=ou]").val()).toBe('');
+                    expect(this.view.$("input[name=admin]").prop("checked")).toBe(this.user.get("admin"));
                 })
 
                 it("limits the length of the notes field", function() {
@@ -56,11 +57,11 @@ describe("chorus.views.userEdit", function() {
 
                         it("modify the user with the form attributes", function() {
                             expect(this.user.attributes["firstName"]).toBe("Frankie");
-                            expect(this.user.attributes["lastName"]).toBe("Admin");
-                            expect(this.user.attributes["userName"]).toBe("edcadmin");
+                            expect(this.user.attributes["lastName"]).toBe(this.user.get("lastName"));
+                            expect(this.user.attributes["userName"]).toBe(this.user.get("userName"));
                             expect(this.user.attributes["emailAddress"]).toBe("frankie_knuckles@nyclol.com");
                             expect(this.user.attributes["ou"]).toBe("awesomeness dept");
-                            expect(this.user.attributes["admin"]).toBe(true);
+                            expect(this.user.attributes["admin"]).toBe(this.user.get("admin"));
                             expect(this.user.attributes["notes"]).toBe("Here are some notes\n more than one line");
                         });
 
@@ -177,13 +178,10 @@ describe("chorus.views.userEdit", function() {
 
         context("editing a user that is not yourself", function() {
             beforeEach(function() {
-                fixtures.model = 'User';
-                this.user = new chorus.models.User()
+                this.user = fixtures.user();
                 this.view = new chorus.views.UserEdit({model: this.user});
-                this.view.model.set(fixtures.jsonFor('fetch').resource[0]);
 
-                this.view.model.loaded = true;
-                setLoggedInUser({'userName': 'notedcadmin', 'admin': false})
+                setLoggedInUser({'userName': 'a_different_user', 'admin': false})
                 this.view.render();
             })
             it("renders the admin-only warning", function() {
@@ -192,14 +190,14 @@ describe("chorus.views.userEdit", function() {
 
             context("as an admin", function() {
                 beforeEach(function() {
-                    setLoggedInUser({'userName': 'notedcadmin', 'admin': true})
+                    setLoggedInUser({'userName': 'a_different_user', 'admin': true})
                     this.view.render();
                 })
                 it("gives you permission to edit the user", function() {
                     expect(this.view.$(".aint_admin")).not.toExist();
-                    expect(this.view.$("input[name=firstName]").val()).toBe("EDC");
-                    expect(this.view.$("input[name=lastName]").val()).toBe("Admin");
-                    expect(this.view.$("span[name=userName]").text()).toBe("edcadmin");
+                    expect(this.view.$("input[name=firstName]").val()).toBe(this.user.get("firstName"));
+                    expect(this.view.$("input[name=lastName]").val()).toBe(this.user.get("lastName"));
+                    expect(this.view.$("span[name=userName]").text()).toBe(this.user.get("userName"));
                 })
             })
         })

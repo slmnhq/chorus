@@ -102,45 +102,6 @@ beforeEach(function() {
             return obj;
         },
 
-        User: {
-            fetch: {
-                "message": [],
-                "status": "ok",
-                "requestId": 108,
-                "resource": [
-                    {
-                        "id": "42",
-                        "userName": "edcadmin",
-                        "firstName": "EDC",
-                        "lastName": "Admin",
-                        "emailAddress": "edcadmin@example.com",
-                        "title": null,
-                        "ou": null,
-                        "manager": null,
-                        "streetAddress": null,
-                        "l": null,
-                        "st": null,
-                        "c": null,
-                        "admin": true,
-                        "notes": null,
-                        "lastLogin": "2011-11-16 09:40:27.916",
-                        "imageId": "10036",
-                        "dn": null,
-                        "isDeleted": false,
-                        "dumb": null,
-                        "lastUpdatedStamp": "2011-11-16 12:34:47.632",
-                        "lastUpdatedTxStamp": "2011-11-16 12:34:47.454",
-                        "createdStamp": "2011-11-03 10:49:41.346",
-                        "createdTxStamp": "2011-11-03 10:49:41.342"
-                    }
-                ],
-                "method": "GET",
-                "resourcelink": "/edc/user/edcadmin",
-                "pagination": null,
-                "version": "0.1"
-            }
-        },
-
         UserSet: {
             fetch: {
                 "message": [],
@@ -1559,6 +1520,7 @@ beforeEach(function() {
                 userName: "user" + id,
                 firstName: "EDC" + id,
                 lastName: "Admin" + id,
+                emailAddress: "user" + id + "@example.com",
                 createdStamp: "2012-01-24 17:21:02.597",
                 isDeleted: false,
                 lastLogin: "2012-02-15 15:08:55",
@@ -1685,7 +1647,6 @@ beforeEach(function() {
         },
 
         user: function(overrides) {
-            var id = this.nextId().toString();
             return new chorus.models.User(this.userJson(_.extend({
                 admin: true,
                 use_external_ldap: false

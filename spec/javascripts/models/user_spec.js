@@ -1,7 +1,6 @@
 describe("chorus.models.User", function() {
     var models = chorus.models;
     beforeEach(function() {
-        fixtures.model = 'User';
         this.model = new models.User();
     });
 
@@ -84,7 +83,7 @@ describe("chorus.models.User", function() {
 
     describe("#savePassword", function() {
         it("PUTs to the right URL", function() {
-            this.model = fixtures.modelFor('fetch')
+            this.model = fixtures.user({id: 42})
             this.model.savePassword({
                 password: "w1zZz4rd",
                 passwordConfirmation: "w1zZz4rd"
@@ -110,7 +109,7 @@ describe("chorus.models.User", function() {
         });
 
         it("should return a truthy value for a valid user", function() {
-            this.model.set(fixtures.modelFor('fetch'));
+            this.model.set(fixtures.userJson());
             this.model.set({ password: "foo", passwordConfirmation: "foo" });
             expect(this.model.performValidation()).toBeTruthy();
         });
