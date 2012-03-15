@@ -88,9 +88,11 @@ chorus.views.Header = chorus.views.Base.extend({
     },
 
     refreshNotifications: function() {
+        this.notifications.loaded= false;
+        this.unreadNotifications.loaded = false;
+        this.requiredResources.add([this.unreadNotifications, this.notifications]);
         this.notifications.fetch();
         this.unreadNotifications.fetchAll();
-        this.requiredResources.add([this.unreadNotifications, this.notifications]);
     },
 
     togglePopupNotifications: function(e) {
