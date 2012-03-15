@@ -115,7 +115,7 @@ Backbone.Events.unbind = function(ev, callback, context) {
     // in order to handle nested calls to _super.
     this._superCallObjects || (this._superCallObjects = {});
     var currentObject = this._superCallObjects[methodName] || this,
-        parentObject  = findSuper(methodName, currentObject);
+        parentObject  = _findSuper(methodName, currentObject);
     this._superCallObjects[methodName] = parentObject;
 
     var result;
@@ -130,9 +130,9 @@ Backbone.Events.unbind = function(ev, callback, context) {
 
   // Find the next object up the prototype chain that has a
   // different implementation of the method.
-  function findSuper(methodName, childObject) {
+  function _findSuper(attributeName, childObject) {
     var object = childObject;
-    while (object[methodName] === childObject[methodName]) {
+    while (object && (object[attributeName] === childObject[attributeName])) {
       object = object.constructor.__super__;
     }
     return object;
@@ -140,6 +140,7 @@ Backbone.Events.unbind = function(ev, callback, context) {
 
   _.each(["Model", "Collection", "View", "Router"], function(klass) {
     Backbone[klass].prototype._super = _super;
+    Backbone[klass].prototype._findSuper = _findSuper;
     Backbone[klass].prototype.unbind = Backbone.Events.unbind;
   });
 

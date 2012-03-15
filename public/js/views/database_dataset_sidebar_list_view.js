@@ -3,9 +3,9 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
     className:"database_dataset_sidebar_list",
     useLoadingSection: true,
 
-    events:_.extend({}, chorus.views.DatabaseSidebarList.prototype.events, {
+    events: {
         "click li a":"datasetSelected"
-    }),
+    },
 
     fetchResourceAfterSchemaSelected: function() {
         this.resource = this.collection = this.schema.databaseObjects();
