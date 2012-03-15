@@ -44,16 +44,16 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     storeColumnInfo: function() {
         var $names = this.$(".column_names input:text");
 
-        var column_names
+        var columnNames;
         if ($names.length) {
-            column_names = _.map($names, function(name, i) {
+            columnNames = _.map($names, function(name, i) {
                 return $names.eq(i).val();
             });
 
             if (this.csv.get("hasHeader")) {
-                this.csv.set({headerColumnNames: column_names}, {silent: true})
+                this.csv.set({headerColumnNames: columnNames}, {silent: true})
             } else {
-                this.csv.set({generatedColumnNames: column_names}, {silent: true})
+                this.csv.set({generatedColumnNames: columnNames}, {silent: true})
             }
         }
 

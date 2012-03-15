@@ -4,17 +4,21 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
     useLoadingSection: true,
     loadingKey: "hdfs.create_external.creating",
 
+    events: {
+        "change select": "selectWorkspace"
+    },
+
     setup: function() {
         this._super("setup", arguments);
 
         this.workspaces = new chorus.collections.WorkspaceSet([], {userId: chorus.session.user().id});
         this.workspaces.fetchAll();
         this.requiredResources.push(this.workspaces);
-        this.csv.set({toTable : chorus.models.CSVImport.normalizeForDatabase(this.csv.get("toTable"))});
+        this.csv.set({toTable: chorus.models.CSVImport.normalizeForDatabase(this.csv.get("toTable"))});
     },
 
     postRender: function() {
-        this._super("postRender", arguments)
+        this._super("postRender", arguments);
 
         if (this.workspaces.loaded) {
             if (!this.workspaces.length) {
@@ -23,6 +27,8 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
                 ];
                 this.showErrors(this.workspaces);
             }
+
+            this.$("select").val(this.csv.get("workspaceId"));
 
             chorus.styleSelect(this.$("select"));
         }
@@ -41,7 +47,7 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         var columns = _.map($names, function(name, i) {
             var $name = $names.eq(i);
             var $type = $types.eq(i);
-            return chorus.Mixins.dbHelpers.safePGName($name.val())+" "+$type.text();
+            return chorus.Mixins.dbHelpers.safePGName($name.val()) + " " + $type.text();
         })
         var statement = toTable + " (" + columns.join(", ") + ")";
 
@@ -53,6 +59,10 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
             statement: statement,
             toTable: chorus.models.CSVImport.normalizeForDatabase(this.$(".directions input:text").val())
         });
+    },
+
+    selectWorkspace: function() {
+        this.csv.set({workspaceId: this.$("option:selected").val()});
     },
 
     resourcesLoaded: function() {

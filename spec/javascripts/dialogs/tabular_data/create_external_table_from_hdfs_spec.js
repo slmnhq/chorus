@@ -65,6 +65,17 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
             expect(this.dialog.$("button.submit").text()).toMatchTranslation("hdfs.create_external.ok");
         })
 
+        context("changing the workspace", function() {
+            beforeEach(function() {
+                this.dialog.$("select").val(this.workspace3.id).change();
+            });
+
+            it("populates the select when refresh happens", function() {
+                this.dialog.render();
+                expect(this.dialog.$("select")).toHaveValue(this.workspace3.id);
+            })
+        });
+
         context("clicking submit", function() {
             context("with has header false", function() {
                 beforeEach(function() {
