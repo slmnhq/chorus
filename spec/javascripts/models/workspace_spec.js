@@ -9,13 +9,18 @@ describe("chorus.models.Workspace", function() {
     });
 
     describe("#defaultIconUrl", function() {
-        it("links to the correct url when active", function() {
+        it("links to the active url when active:true", function() {
             this.model.set({active: true});
             expect(this.model.defaultIconUrl()).toBe("/images/workspaces/workspace_large.png");
         });
 
-        it("links to the correct url when archived", function() {
-            this.model.set({active: false});
+        it("links to the active url when state:1", function() {
+            this.model.set({state: "1"});
+            expect(this.model.defaultIconUrl()).toBe("/images/workspaces/workspace_large.png");
+        });
+
+        it("links to the archive url otherwise", function() {
+            this.model.set({active: false, state: "0"});
             expect(this.model.defaultIconUrl()).toBe("/images/workspaces/workspace_archived_large.png");
         });
     });
