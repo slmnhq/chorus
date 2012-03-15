@@ -244,7 +244,7 @@ describe("chorus.views.ActivityList", function() {
     describe("error handling", function() {
         beforeEach(function() {
             spyOn(chorus, "log");
-            this.collection.add({ workspace: {} })
+            spyOn(this.collection.at(0), 'get').andCallFake(function () {throw 'an error during rendering'})
         })
 
         it("does not raise an exception", function() {
