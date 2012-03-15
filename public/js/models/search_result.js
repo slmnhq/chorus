@@ -119,10 +119,6 @@
         workspaceItems: makeCollectionMethod("workspaceItems"),
 
         getResults: function() {
-            if (this.isScopedToSingleWorkspace()) {
-                return this.workspaceItems();
-            }
-
             switch(this.entityType()) {
                 case "user":
                     return this.users()
@@ -141,6 +137,10 @@
                     break;
                 case "hdfs":
                     return this.hdfs();
+            }
+
+            if (this.isScopedToSingleWorkspace()) {
+                return this.workspaceItems();
             }
         },
 

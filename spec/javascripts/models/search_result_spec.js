@@ -199,6 +199,15 @@ describe("chorus.models.SearchResult", function() {
             });
         });
 
+        context("when the search result is filtered by workspace AND by entity type", function() {
+            it("returns the collection for its entity type", function() {
+                this.model.set({ entityType: "workfile", searchIn: "this_workspace", workspaceId: "101" });
+                this.model.unset("thisWorkspace");
+                expect(this.model.getResults()).toBeDefined();
+                expect(this.model.getResults()).toBe(this.model.workfiles());
+            });
+        });
+
         context("when the search result has no entity type and is not scoped to a single workspace", function() {
             it("returns undefined", function() {
                 expect(this.model.getResults()).toBeUndefined();
