@@ -18,7 +18,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
     describe("#render", function () {
         beforeEach(function () {
             this.dialog.render();
-        })
+        });
 
         context("before the workspace fetch completes", function () {
             it("should show loading spinner", function () {
@@ -58,7 +58,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
             it("enables the Cancel button", function () {
                 expect(this.dialog.$("button.cancel")).toBeEnabled();
             })
-        })
+        });
 
         context("after the workspace fetch completes", function () {
             context("when the workspace has a sandbox", function () {
@@ -220,6 +220,44 @@ describe("chorus.dialogs.RunFileInSchema", function () {
                     })
                 })
             })
-        })
-    })
+        });
+
+        context("when the SchemaPicker triggers an error", function() {
+                beforeEach(function() {
+                    var modelWithError = fixtures.schemaSet();
+                    modelWithError.serverErrors = fixtures.serverErrors({
+                        message: 'oh nos!'
+                    });
+                    this.dialog.schemaPicker.trigger("error", modelWithError);
+                });
+
+                it("shows the error", function() {
+                    expect(this.dialog.$('.errors')).toContainText('oh nos!');
+                });
+
+                context("and then the schemaPicker triggers clearErrors", function(){
+                    it("clears the errors", function() {
+                        this.dialog.schemaPicker.trigger("clearErrors");
+                        expect(this.dialog.$('.errors')).toBeEmpty();
+                    });
+                });
+                context("and then selecting 'within the workspace sandbox'", function() {
+                    beforeEach(function() {
+                        this.server.completeFetchFor(fixtures.workspace({id: 999, sandboxInfo: {
+                            instanceId: 44,
+                            instanceName: "instance",
+                            databaseId: 55,
+                            databaseName: "database",
+                            schemaId: 66,
+                            schemaName: "schema",
+                            sandboxId: "10001"
+                        }}));
+                        this.dialog.$("input#sandbox_schema").click();
+                    });
+                    it("clears the errors", function() {
+                        expect(this.dialog.$('.errors')).toBeEmpty();
+                    });
+                });
+            });
+    });
 });

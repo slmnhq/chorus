@@ -21,6 +21,9 @@ chorus.dialogs.RunFileInSchema = chorus.dialogs.Base.extend({
 
         this.schemaPicker = new chorus.views.SchemaPicker();
         this.schemaPicker.bind("change", this.onSchemaPickerChange, this);
+
+        this.bindings.add(this.schemaPicker, "error", this.showErrors);
+        this.bindings.add(this.schemaPicker, "clearErrors", this.clearErrors);
     },
 
     additionalContext : function(ctx) {
@@ -64,6 +67,7 @@ chorus.dialogs.RunFileInSchema = chorus.dialogs.Base.extend({
     sandboxSchemaSelected:function () {
         this.$(".another_schema").addClass("collapsed");
         this.$("button.submit").attr("disabled", false);
+        this.clearErrors();
     },
 
     anotherSchemaSelected:function () {

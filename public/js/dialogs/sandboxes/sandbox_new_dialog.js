@@ -15,6 +15,8 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
     setup: function() {
         this.instanceMode = new chorus.views.SchemaPicker({allowCreate: true});
         this.instanceMode.bind("change", this.enableOrDisableSaveButton, this);
+        this.bindings.add(this.instanceMode, "error", this.showErrors);
+        this.bindings.add(this.instanceMode, "clearErrors", this.clearErrors);
     },
 
     makeModel: function() {

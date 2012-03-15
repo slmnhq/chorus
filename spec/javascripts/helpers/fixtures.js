@@ -3075,6 +3075,18 @@ beforeEach(function() {
 
         typeAheadSearchResult: function(overrides) {
             return new chorus.models.TypeAheadSearchResult(fixtures.typeAheadSearchResultJson(overrides));
+        },
+
+        serverErrors: function(overrides) {
+            return [
+                _.extend({
+                    description: null,
+                    message: "Terrible things happened",
+                    msgcode: "E_5_0003",
+                    msgkey: "DB.CONNECT_FAIL",
+                    severity: "error"
+                }, overrides)
+            ]
         }
     })
     ;
