@@ -19,6 +19,7 @@ describe("chorus.BindingGroup", function() {
         context("when a context is passed as the fourth parameter", function() {
             beforeEach(function() {
                 this.bindingGroup.add(this.model1, 'change', this.view1.render, this.view2);
+                this.bindingGroup.add(this.model1, 'change', this.view1.render, this.view2);
             });
 
             it("binds the callback to be called when the event is triggered", function() {
@@ -30,10 +31,28 @@ describe("chorus.BindingGroup", function() {
                 this.model1.trigger("change");
                 expect(this.view1.render.mostRecentCall.object).toBe(this.view2);
             });
+
+            it("only binds once", function() {
+                this.model1.trigger("change");
+                expect(this.view1.render.callCount).toBe(1);
+            })
+        });
+
+        context("when different contexts are passed", function() {
+            beforeEach(function() {
+                this.bindingGroup.add(this.model1, 'change', this.view1.render, this.view2);
+                this.bindingGroup.add(this.model1, 'change', this.view1.render, this.view1);
+            });
+
+            it("treats them as separate bindings", function() {
+                this.model1.trigger("change");
+                expect(this.view1.render.callCount).toBe(2);
+            })
         });
 
         context("when no context parameter is passed", function() {
             beforeEach(function() {
+                this.bindingGroup.add(this.model1, 'change', this.view1.render);
                 this.bindingGroup.add(this.model1, 'change', this.view1.render);
             });
 
@@ -41,10 +60,16 @@ describe("chorus.BindingGroup", function() {
                 this.model1.trigger("change");
                 expect(this.view1.render.mostRecentCall.object).toBe(this.view1);
             });
+
+            it("only binds once", function() {
+                this.model1.trigger("change");
+                expect(this.view1.render.callCount).toBe(1);
+            })
         });
 
         context("when a space-separated string of event names is passed", function() {
             beforeEach(function() {
+                this.bindingGroup.add(this.model1, 'change saved', this.view1.render);
                 this.bindingGroup.add(this.model1, 'change saved', this.view1.render);
             });
 
@@ -54,6 +79,14 @@ describe("chorus.BindingGroup", function() {
                 this.model1.trigger("saved");
                 expect(this.view1.render.callCount).toBe(2);
             });
+
+            it("only binds once", function() {
+                this.model1.trigger("change");
+                expect(this.view1.render.callCount).toBe(1);
+                this.view1.render.reset();
+                this.model1.trigger("saved");
+                expect(this.view1.render.callCount).toBe(1);
+            })
         });
     });
 
