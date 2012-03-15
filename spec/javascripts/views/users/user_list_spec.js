@@ -1,12 +1,12 @@
 describe("chorus.views.UserList", function() {
-    beforeEach(function() {
-        fixtures.model = 'UserSet';
-    });
-
     describe("#render", function() {
         describe("when the collection has loaded", function() {
             beforeEach(function() {
-                this.collection = fixtures.modelFor('fetch');
+                this.collection = fixtures.userSet([
+                    fixtures.user({id: 10000, firstName: "a", lastName: "a", admin: false}),
+                    fixtures.user({id: 10001, firstName: "a", lastName: "b", admin: true}),
+                    fixtures.user({id: 10002, firstName: "a", lastName: "b", admin: false})
+                ]);
                 this.collection.loaded = true;
                 this.view = new chorus.views.UserList({collection: this.collection});
                 this.view.render();
@@ -27,7 +27,7 @@ describe("chorus.views.UserList", function() {
             })
 
             it("displays the users' title", function() {
-                    expect(this.view.$("a[title=title] .title")).not.toBeEmpty();
+                expect(this.view.$("a[title=title] .title")).not.toBeEmpty();
             })
 
             it("sets title attributes", function() {
@@ -54,16 +54,16 @@ describe("chorus.views.UserList", function() {
             });
 
             it("displays a name for each user", function() {
-                expect(this.view.$("li:nth-child(1) .main > .name").text().trim()).toBe("Mark Rushakoff");
-                expect(this.view.$("li:nth-child(2) .main > .name").text().trim()).toBe("EDC Admin");
+                expect(this.view.$("li:nth-child(1) .main > .name").text().trim()).toBe("a a");
+                expect(this.view.$("li:nth-child(2) .main > .name").text().trim()).toBe("a b");
             });
 
-            it("links the user's name to the user show page", function(){
+            it("links the user's name to the user show page", function() {
                 expect(this.view.$("li:nth-child(1) a").attr("href")).toBe(this.collection.models[0].showUrl());
                 expect(this.view.$("li:nth-child(2) a").attr("href")).toBe(this.collection.models[1].showUrl());
             });
 
-            it("links the user's image to the user show page", function(){
+            it("links the user's image to the user show page", function() {
                 expect(this.view.$("li:nth-child(1) a img")).toExist();
                 expect(this.view.$("li:nth-child(2) a img")).toExist();
             });
