@@ -251,10 +251,10 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                 expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
             })
             it("retains the table name", function() {
-                this.dialog.$("input[name=table_name]").val("testisgreat").change();
+                this.dialog.$("input[name=toTable]").val("testisgreat").change();
                 this.dialog.$("#hasHeader").prop("checked", false).change();
                 this.dialog.$("#hasHeader").prop("checked", true).change();
-                expect(this.dialog.$("input[name=table_name]").val()).toBe("testisgreat");
+                expect(this.dialog.$("input[name=toTable]").val()).toBe("testisgreat");
             })
         })
     });
@@ -275,6 +275,9 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             this.$input = this.dialog.$(".column_names input:text").eq(0);
             this.$input.val('');
 
+            this.$input2 = this.dialog.$(".column_names input:text").eq(1);
+            this.$input2.val('a ');
+
             this.dialog.$("button.submit").click();
         });
 
@@ -282,9 +285,19 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
         })
 
-        it("marks that input invalid", function() {
+        it("marks that inputs invalid", function() {
             expect(this.$input).toHaveClass("has_error");
+            expect(this.$input2).toHaveClass("has_error");
         })
+
+        it("marks the table name as invalid", function() {
+            this.$input.val('ok');
+            this.$input2.val('ok');
+            this.dialog.$('.directions input:text').val('');
+            this.dialog.$("button.submit").click();
+
+            expect(this.dialog.$('.directions input:text')).toHaveClass("has_error");
+        });
     });
 
     describe("clicking the import button", function() {
@@ -352,12 +365,12 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                 expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
             })
             it("retains the table name", function() {
-                this.dialog.$("input[name=table_name]").val("testisgreat").change();
+                this.dialog.$("input[name=toTable]").val("testisgreat").change();
                 this.dialog.$("button.submit").click();
                 this.server.lastCreate().fail([
                     {message: "I like cheese"}
                 ]);
-                expect(this.dialog.$("input[name=table_name]").val()).toBe("testisgreat");
+                expect(this.dialog.$("input[name=toTable]").val()).toBe("testisgreat");
             })
         })
     })

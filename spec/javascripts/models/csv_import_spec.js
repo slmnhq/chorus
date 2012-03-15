@@ -1,5 +1,29 @@
 describe("chorus.models.CSVImport", function() {
 
+    describe("validation", function() {
+        beforeEach(function() {
+            this.model = fixtures.csvImport();
+        });
+        it("is valid with a valid toTable", function() {
+            this.model.set({toTable: "a_happyTable123"});
+            expect(this.model.performValidation()).toBeTruthy();
+        })
+
+        var badNames = [
+            "6",
+            "a table name",
+            new Array(100).join("a"),
+            ""
+        ];
+
+        _.each(badNames, function(name) {
+            it("is invalid for a name of " + name, function() {
+                this.model.set({toTable: name});
+                expect(this.model.performValidation()).toBeFalsy();
+            });
+        }, this);
+    });
+
     it("has the right url", function() {
         this.model = fixtures.csvImport({workspaceId: "23"})
         expect(this.model.url()).toBe("/edc/workspace/23/csv/import");

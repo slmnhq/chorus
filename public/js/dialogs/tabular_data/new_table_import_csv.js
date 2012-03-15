@@ -108,7 +108,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             columns: this.csv.columnOrientedData(),
             delimiter: this.other_delimiter ? this.delimiter : '',
             directions: chorus.helpers.safeT("dataset.import.table.new.directions", {
-                tablename_input_field: "<input type='text' name='table_name' value='" + this.csv.get("toTable") + "'/>"
+                tablename_input_field: "<input type='text' name='toTable' value='" + this.csv.get("toTable") + "'/>"
             }),
             ok: this.ok
         }
@@ -145,7 +145,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
 
     performValidation: function() {
         var $names = this.$(".column_names input:text");
-        var pattern = /^[a-zA-Z][a-zA-Z0-9_]{0,63}/;
+        var pattern = /^[a-zA-Z][a-zA-Z0-9_]{0,63}$/;
         var allValid = true;
         _.each($names, function(name, i) {
             var $name = $names.eq(i);
