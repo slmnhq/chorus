@@ -1,12 +1,11 @@
 describe("chorus.views.HdfsShowFileSidebar", function() {
     beforeEach(function() {
-        var now = Date.parse('yesterday').toISOString().toString();
-        var now_utc = now.slice(0,10) + " " + now.slice(12)
+        var now = new Date().addDays(-1).toString("yyyy-MM-dd HH:mm:ss.000")
 
         this.file = fixtures.hdfsFile({
             path: "/folder/filename.txt",
             instanceId: 9876,
-            lastModificationTime: now_utc
+            lastModificationTime: now
         })
         this.view = new chorus.views.HdfsShowFileSidebar({ model: this.file })
     });
