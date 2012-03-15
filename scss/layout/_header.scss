@@ -1,5 +1,4 @@
 @import "../_common.scss";
-@import "compass/css3/gradient";
 
 $header-padding: 13px;
 $header-item-spacing: 2*$padding-x;
@@ -201,8 +200,23 @@ $header-item-spacing: 2*$padding-x;
             right: 3px;
             top: 47px;
             width: 450px;
-            padding: 8px;
+            padding: 0;
             line-height: 14px;
+
+            .notification_area {
+                overflow: auto;
+                padding: 8px;
+                max-height: 900px;
+
+                $difference: 150px;
+                $window-height: 1000px;
+                @while $window-height > 300px {
+                    @media (max-height: #{$window-height}) {
+                        max-height: $window-height - $difference; 
+                    }
+                    $window-height: $window-height - 50px;
+                }
+            }
 
             .pointer {
                 right: 56px;
