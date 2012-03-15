@@ -56,7 +56,7 @@ chorus.Mixins.Urls = {
 chorus.Mixins.dbHelpers = {
     safePGName: function() {
         function encode(name) {
-            var isSafe = name.match(/^[a-z_"][a-zA-Z0-9_"]*/);
+            var isSafe = name.match(chorus.ValidationRegexes.SafePgName());
             return isSafe ? name : '"' + name + '"';
         }
 

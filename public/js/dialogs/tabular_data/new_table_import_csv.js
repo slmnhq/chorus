@@ -145,7 +145,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
 
     performValidation: function() {
         var $names = this.$(".column_names input:text");
-        var pattern = /^[a-zA-Z][a-zA-Z0-9_]{0,63}$/;
+        var pattern = chorus.ValidationRegexes.ChorusIdentifier64();
         var allValid = true;
         _.each($names, function(name, i) {
             var $name = $names.eq(i);

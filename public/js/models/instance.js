@@ -27,14 +27,14 @@
 
         declareValidations:function (newAttrs) {
             this.require("name", newAttrs);
-            this.requirePattern("name", /^[a-zA-Z][a-zA-Z0-9_]*$/, newAttrs, "instance.validation.name_pattern");
+            this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(), newAttrs, "instance.validation.name_pattern");
             switch (newAttrs.provisionType) {
                 case "register" :
                     // validating existing Greenplum instance
                     this.require("host", newAttrs);
                     this.require("port", newAttrs);
                     this.require("maintenanceDb", newAttrs);
-                    this.requirePattern("port", /^\d+$/, newAttrs);
+                    this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
                     if (this.isNew()) {
                         this.require("dbUserName", newAttrs);
                         this.require("dbPassword", newAttrs);
@@ -43,14 +43,14 @@
                 case "create" :
                     // validating create a new Greenplum instance
                     this.require("size", newAttrs);
-                    this.requirePattern("size", /^\d+$/, newAttrs);
+                    this.requirePattern("size", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
                     break;
                 case "registerHadoop":
                     this.require("host", newAttrs);
                     this.require("port", newAttrs);
                     this.require("userName", newAttrs);
                     this.require("userGroups", newAttrs);
-                    this.requirePattern("port", /^\d+$/, newAttrs);
+                    this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
                     break;
                 default :
             }

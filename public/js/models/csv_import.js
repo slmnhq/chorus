@@ -3,7 +3,7 @@ chorus.models.CSVImport = chorus.models.Base.extend({
     urlTemplate: "workspace/{{workspaceId}}/csv/import",
 
     declareValidations:function (newAttrs) {
-        this.requirePattern('toTable', /^[a-zA-Z][a-zA-Z0-9_]{0,63}$/, newAttrs, "import.validation.toTable.required");
+        this.requirePattern('toTable', chorus.ValidationRegexes.ChorusIdentifier64(), newAttrs, "import.validation.toTable.required");
     },
 
     columnOrientedData: function() {

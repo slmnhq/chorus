@@ -138,7 +138,7 @@ chorus.models = {
 
             var present = value;
 
-            if (value && _.isString(value) && value.match(/^\s*$/)) {
+            if (value && _.isString(value) && value.match(chorus.ValidationRegexes.AllWhitespace())) {
                 present = false;
             }
 
