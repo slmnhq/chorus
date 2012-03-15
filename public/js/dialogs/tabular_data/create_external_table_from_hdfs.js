@@ -1,4 +1,5 @@
 chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.extend({
+    constructorName: "CreateExternalTableFromHdfs",
     title: t("hdfs.create_external.title"),
     ok: t("hdfs.create_external.ok"),
     useLoadingSection: true,
@@ -76,7 +77,7 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
     additionalContext: function() {
         var parentCtx = this._super("additionalContext", arguments);
         parentCtx.workspaces = _.pluck(this.workspaces.models, "attributes");
-        parentCtx.directions = new Handlebars.SafeString("<input type='text' class='hdfs' name='table_name' value='" + Handlebars.Utils.escapeExpression(this.csv.get("toTable")) + "'/>");
+        parentCtx.directions = new Handlebars.SafeString("<input type='text' class='hdfs' name='toTable' value='" + Handlebars.Utils.escapeExpression(this.csv.get("toTable")) + "'/>");
         return parentCtx;
     }
 });

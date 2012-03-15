@@ -24,6 +24,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
 
         this.bindings.add(this.csv, "saved", this.saved);
         this.bindings.add(this.csv, "saveFailed", this.saveFailed);
+        this.bindings.add(this.csv, "validationFailed", this.saveFailed);
     },
 
     saved: function() {

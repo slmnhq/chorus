@@ -288,15 +288,23 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
         it("marks that inputs invalid", function() {
             expect(this.$input).toHaveClass("has_error");
             expect(this.$input2).toHaveClass("has_error");
-        })
+        });
 
-        it("marks the table name as invalid", function() {
-            this.$input.val('ok');
-            this.$input2.val('ok');
-            this.dialog.$('.directions input:text').val('');
-            this.dialog.$("button.submit").click();
+        context("when the table name is invalid", function() {
+            beforeEach(function() {
+                this.$input.val('ok');
+                this.$input2.val('ok');
+                this.dialog.$('.directions input:text').val('');
+                this.dialog.$("button.submit").click();
+            });
 
-            expect(this.dialog.$('.directions input:text')).toHaveClass("has_error");
+            it("marks the table name as invalid", function() {
+                expect(this.dialog.$('.directions input:text')).toHaveClass("has_error");
+            });
+
+            it("returns the button to the not loading state", function() {
+                expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+            });
         });
     });
 
