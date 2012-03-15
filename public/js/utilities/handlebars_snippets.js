@@ -278,21 +278,25 @@
 
         tabularDataLocation: function(tabularData) {
             var highlightedTabularData = chorus.helpers.withSearchResults(tabularData)
+            var instance = tabularData.instance();
+            var schema = tabularData.schema();
+            var database = schema.database();
+
             var schemaPieces = [];
+            var instanceName = instance.get("name")
+            var databaseName = highlightedTabularData.get('databaseName')
+            var schemaName = highlightedTabularData.get('schemaName')
+
             if (tabularData.get('hasCredentials') === false) {
-                schemaPieces.push(tabularData.get('instance').name);
-                schemaPieces.push(highlightedTabularData.get('databaseName'));
-                schemaPieces.push(highlightedTabularData.get('schemaName'));
+                schemaPieces.push(instanceName);
+                schemaPieces.push(databaseName);
+                schemaPieces.push(schemaName);
             } else {
-                var instance = new chorus.models.Instance(tabularData.get("instance"));
-                schemaPieces.push(chorus.helpers.linkTo(instance.showUrl(), instance.get("name"), {"class": "instance"}).toString());
-
-                var database = new chorus.models.Database({instanceId: instance.id, name: tabularData.get("databaseName")});
-                schemaPieces.push(chorus.helpers.linkTo(database.showUrl(), highlightedTabularData.get('databaseName'), {"class": "database"}).toString());
-
-                schemaPieces.push(chorus.helpers.linkTo(tabularData.schema().showUrl(), highlightedTabularData.get('schemaName'),
-                    {'class': 'schema'}).toString())
+                schemaPieces.push(chorus.helpers.linkTo(instance.showUrl(), instanceName, {"class": "instance"}).toString());
+                schemaPieces.push(chorus.helpers.linkTo(database.showUrl(), databaseName, {"class": "database"}).toString());
+                schemaPieces.push(chorus.helpers.linkTo(schema.showUrl(), schemaName, {'class': 'schema'}).toString())
             }
+
             return new Handlebars.SafeString($("<span></span>").html(t("dataset.from", {location: schemaPieces.join('.')})).outerHtml());
         },
 
