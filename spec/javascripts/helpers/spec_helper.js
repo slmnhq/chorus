@@ -276,6 +276,7 @@
 
             $.fx.off = true;
             spyOn($.fn, 'jGrowl');
+            spyOn(window.history, "back");
 
             chorus.PageEvents.reset();
             chorus.session.sandboxPermissionsCreated = {};

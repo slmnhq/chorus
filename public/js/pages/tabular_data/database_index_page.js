@@ -12,6 +12,17 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.extend({
         this.requiredResources.push(this.collection);
     },
 
+    requiredResourcesFetchFailed: function(collection) {
+        var errorKey = collection.serverErrors[0] && collection.serverErrors[0].msgkey
+
+        if (errorKey === "ACCOUNTMAP.NO_ACTIVE_ACCOUNT") {
+            var dialog = new chorus.dialogs.InstanceAccount({ title: t("instances.account.add.title"), pageModel: this.instance, reload: true });
+            dialog.launchModal();
+        } else {
+            this._super("requiredResourcesFetchFailed", arguments);
+        }
+    },
+
     resourcesLoaded: function() {
         this.crumbs = [
             { label: t("breadcrumbs.home"), url: "#/" },
