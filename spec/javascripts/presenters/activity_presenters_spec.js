@@ -876,7 +876,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the correct icon url", function() {
-            expect(this.presenter.iconSrc).toBe("/images/table_large.png");
+            expect(this.presenter.iconSrc).toBe("/images/sandbox_table_large.png");
         });
 
         it("should not have the profile icon class", function() {

@@ -182,7 +182,7 @@
             return {
                 objectName: datasetAdded.get("objectName"),
                 objectUrl: datasetAdded.showUrl(),
-                iconSrc: "/images/table_large.png",
+                iconSrc: datasetAdded.iconUrl(),
                 iconClass: ''
             }
         },

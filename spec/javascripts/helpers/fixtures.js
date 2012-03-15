@@ -201,7 +201,7 @@ beforeEach(function() {
                         objectName: "__gp_fullname",
                         objectType: "BASE_TABLE",
                         query: null,
-                        type: "SOURCE_TABLE",
+                        type: "SANDBOX_TABLE",
                         workspaceId: workspace.id
                     },
                     timestamp: "2012-02-29 15:24:42",
