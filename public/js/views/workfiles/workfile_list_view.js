@@ -45,7 +45,7 @@ chorus.views.WorkfileList = chorus.views.SelectableList.extend({
         }
 
         if (li.length) {
-            li.click();
+            this.selectItem(li);
         } else {
             this.trigger("workfile:selected");
         }
