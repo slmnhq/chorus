@@ -60,8 +60,9 @@ chorus.models.User = chorus.models.Base.extend({
     },
 
     savePassword:function (attrs) {
-        var passwordUrl = this.url() + "/password";
-        this.save(attrs, { url:passwordUrl });
+        var passwordUrl = URI(this.url());
+        passwordUrl.path(passwordUrl.path() + "/password");
+        this.save(attrs, { url:passwordUrl.toString() });
     },
 
     displayName:function () {
