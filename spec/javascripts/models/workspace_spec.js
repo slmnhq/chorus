@@ -1,7 +1,6 @@
 describe("chorus.models.Workspace", function() {
     var models = chorus.models;
     beforeEach(function() {
-        fixtures.model = 'Workspace';
         this.model = new models.Workspace();
     });
 
@@ -91,7 +90,7 @@ describe("chorus.models.Workspace", function() {
 
     describe("#comments", function() {
         beforeEach(function() {
-            this.model.set(fixtures.modelFor('fetchWithLatestComments'));
+            this.model.set(fixtures.workspaceJson({latestCommentList: [fixtures.commentJson()]}));
             this.model.set({id: 5});
             this.comments = this.model.comments();
         });
@@ -142,7 +141,7 @@ describe("chorus.models.Workspace", function() {
         });
 
         it("should return a truthy value for a valid workspace", function() {
-            this.model.set(fixtures.modelFor('fetch'));
+            this.model.set(fixtures.workspaceJson());
             expect(this.model.performValidation()).toBeTruthy();
         });
 
@@ -154,7 +153,7 @@ describe("chorus.models.Workspace", function() {
 
     describe("#displayName", function() {
         beforeEach(function() {
-            this.model = fixtures.modelFor("fetch");
+            this.model = fixtures.workspace();
         })
 
         it("returns the name", function() {
@@ -186,7 +185,7 @@ describe("chorus.models.Workspace", function() {
 
     describe("#imageUrl", function() {
         beforeEach(function() {
-            this.model = fixtures.modelFor("fetch");
+            this.model = fixtures.workspace({id: 10013});
         })
 
         it("uses the right URL", function() {

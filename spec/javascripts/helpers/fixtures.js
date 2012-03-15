@@ -157,93 +157,6 @@ beforeEach(function() {
 
         },
 
-        Workspace: {
-            fetch: {
-                "message": [],
-                "status": "ok",
-                "requestId": 3697,
-                "resource": [
-                    {
-                        "id": "10013",
-                        "ownerFullName": "EDC Admin",
-                        "name": "fortune",
-                        "description": "a cool workspace",
-                        "createdStamp": "2011-11-14",
-                        "owner": "edcadmin",
-                        "isPublic": true,
-                        "iconId": null,
-                        "state": 1,
-                        "summary": "this is the workspace summary",
-                        "sandboxInfo": {
-                            databaseId: null,
-                            databaseName: null,
-                            instanceId: null,
-                            instanceName: null,
-                            sandboxId: null,
-                            schemaId: null,
-                            schemaName: null
-                        },
-                        "active": true,
-                        "permission": ["admin"]
-                    }
-                ],
-                "method": "GET",
-                "resourcelink": "/edc/workspace/10013",
-                "pagination": null,
-                "version": "0.1"
-            },
-            fetchWithLatestComments: {
-                "message": [],
-                "status": "ok",
-                "requestId": 3697,
-                "resource": [
-                    {
-                        "id": "10013",
-                        "ownerFullName": "EDC Admin",
-                        "name": "fortune",
-                        "description": "a cool workspace",
-                        "createdStamp": "2011-11-14",
-                        "owner": "edcadmin",
-                        "isPublic": true,
-                        "iconId": null,
-                        "state": 1,
-                        "summary": "this is the workspace summary",
-                        "sandboxInfo": {
-                            databaseId: null,
-                            databaseName: null,
-                            instanceId: null,
-                            instanceName: null,
-                            sandboxId: null,
-                            schemaId: null,
-                            schemaName: null
-                        },
-                        "active": true,
-                        "permission": ["admin"],
-                        "latestCommentList": [
-                            {
-                                "timestamp": "2011-12-08 17:16:47",
-                                "id": 10050,
-                                "author": {
-                                    "id": "InitialUser",
-                                    "lastName": "Admin",
-                                    "firstName": "EDC"
-                                },
-                                "text": "This rocks, man",
-                                "attachments": [],
-                                "type": "NOTE",
-                                "comments": []
-                            }
-                        ]
-                    }
-                ],
-                "method": "GET",
-                "resourcelink": "/edc/workspace/10013",
-                "pagination": null,
-                "version": "0.1"
-            }
-
-        },
-
         currentId: 1,
         nextId: function() {
             return this.currentId++;
@@ -1623,12 +1536,13 @@ beforeEach(function() {
             }, overrides);
         },
 
-        workspaceJson: function() {
-            var id = this.nextId();
+        workspaceJson: function(overrides) {
+            overrides = overrides || {};
+            var id = overrides.id || this.nextId();
             var databaseId = this.nextId();
             var instanceId = this.nextId();
             var schemaId = this.nextId();
-            return {
+            return _.extend({
                 id: id.toString(),
                 name: 'Workspace ' + id,
                 ownerId: this.nextId().toString(),
@@ -1643,7 +1557,7 @@ beforeEach(function() {
                     schemaId: schemaId,
                     schemaName: 'schema' + schemaId
                 }
-            }
+            }, overrides);
         },
 
         user: function(overrides) {
