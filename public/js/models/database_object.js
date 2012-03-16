@@ -10,7 +10,7 @@ chorus.models.DatabaseObject = chorus.models.TabularData.extend({
     },
 
     showUrlTemplate: function() {
-        return "instances/" + (this.get("instance") && this.get("instance").id) + "/database/{{databaseName}}/schema/{{schemaName}}/{{objectType}}/" + $("<div/>").html(this.get("objectName")).text()
+        return "instances/" + (this.get("instance") && this.get("instance").id) + "/databases/{{databaseName}}/schemas/{{schemaName}}/{{objectType}}/" + $("<div/>").html(this.get("objectName")).text()
     },
 
     urlTemplateAttributes: function() {

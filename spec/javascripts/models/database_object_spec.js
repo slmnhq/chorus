@@ -57,9 +57,9 @@ describe("chorus.models.DatabaseObject", function() {
                 var pieces = [
                     "#/instances",
                     this.databaseObject.get('instance').id,
-                    "database",
+                    "databases",
                     this.databaseObject.get("databaseName"),
-                    "schema",
+                    "schemas",
                     this.databaseObject.get('schemaName'),
                     this.databaseObject.get('objectType'),
                     this.databaseObject.get('objectName')
@@ -73,9 +73,9 @@ describe("chorus.models.DatabaseObject", function() {
                 var pieces = [
                     "#/instances",
                     this.databaseObject.get('instance').id,
-                    "database",
+                    "databases",
                     this.databaseObject.get("databaseName"),
-                    "schema",
+                    "schemas",
                     this.databaseObject.get('schemaName'),
                     this.databaseObject.get('objectType'),
                     "foo_bar"
@@ -94,9 +94,9 @@ describe("chorus.models.DatabaseObject", function() {
                 var pieces = [
                     "#/instances",
                     this.databaseObject.get('instance').id,
-                    "database",
+                    "databases",
                     this.databaseObject.get("databaseName"),
-                    "schema",
+                    "schemas",
                     this.databaseObject.get('schemaName'),
                     this.databaseObject.get('objectType'),
                     this.databaseObject.get('objectName')
@@ -112,7 +112,7 @@ describe("chorus.models.DatabaseObject", function() {
             })
 
             it("removes the html", function() {
-                expect(this.databaseObject.showUrl()).toMatchUrl("#/instances/12/database/database_name/schema/schema_name/BASE_TABLE/mmmm good");
+                expect(this.databaseObject.showUrl()).toMatchUrl("#/instances/12/databases/database_name/schemas/schema_name/BASE_TABLE/mmmm good");
             })
         })
     })
