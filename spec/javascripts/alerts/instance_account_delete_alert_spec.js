@@ -2,7 +2,7 @@ describe("chorus.alerts.InstanceAccountDelete", function() {
     beforeEach(function() {
         this.launchElement = $("<a></a>");
         this.instance = fixtures.instance({ id: '456' });
-        setLoggedInUser({ userName: "licoriceEater" });
+        setLoggedInUser({ id: "1011" });
         this.alert = new chorus.alerts.InstanceAccountDelete({ pageModel: this.instance });
     });
 
@@ -12,7 +12,7 @@ describe("chorus.alerts.InstanceAccountDelete", function() {
 
     describe("#makeModel", function() {
         it("gets the current user's account for the instance that is the current page model", function(){
-            expect(this.alert.model.get("userName")).toBe("licoriceEater");
+            expect(this.alert.model.get("userId")).toBe("1011");
             expect(this.alert.model.get("instanceId")).toBe("456");
         });
     });

@@ -89,7 +89,7 @@
         },
 
         accountForUser:function (user) {
-            return new chorus.models.InstanceAccount({ instanceId:this.get("id"), userName:user.get("userName") });
+            return new chorus.models.InstanceAccount({ instanceId:this.get("id"), userId: user.get("id") });
         },
 
         accountForCurrentUser:function () {

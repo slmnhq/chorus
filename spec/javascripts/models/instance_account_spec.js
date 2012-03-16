@@ -1,6 +1,6 @@
 describe("chorus.models.InstanceAccount", function() {
     beforeEach(function() {
-        this.model = fixtures.instanceAccount({ id: '72', instanceId: '1045', userName: 'iceCream' });
+        this.model = fixtures.instanceAccount({ id: '72', instanceId: '1045', userId: "1011" });
     });
 
     describe("#url", function() {
@@ -18,11 +18,8 @@ describe("chorus.models.InstanceAccount", function() {
         });
 
         context("when fetching", function() {
-            it("has the right url for fetching an account by user name and instance id", function() {
-                var uri = new URI(this.model.url({ method: 'read' }));
-
-                expect(uri.path()).toBe("/edc/instance/accountmap");
-                expect(uri.query(true)).toEqual({ instanceId: "1045", userName: "iceCream" });
+            it("has the right url for fetching an account by user id and instance id", function() {
+                expect(this.model.url({ method: 'read' })).toMatchUrl("/edc/instance/accountmap?instanceId=1045&userId=1011");
             });
         });
     });
@@ -33,7 +30,7 @@ describe("chorus.models.InstanceAccount", function() {
                 firstName: "Ricardo",
                 lastName: "Henderson",
                 id: "45",
-                userName: "rickyH"
+                userId: "45"
             }})
         });
 
@@ -45,7 +42,7 @@ describe("chorus.models.InstanceAccount", function() {
             expect(this.model.user().get("firstName")).toBe("Ricardo");
             expect(this.model.user().get("lastName")).toBe("Henderson");
             expect(this.model.user().get("id")).toBe("45");
-            expect(this.model.user().get("userName")).toBe("rickyH");
+            expect(this.model.user().get("userId")).toBe("45");
         });
 
         context("when the account doesn't have a user", function() {

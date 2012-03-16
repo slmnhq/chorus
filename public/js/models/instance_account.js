@@ -13,8 +13,8 @@ chorus.models.InstanceAccount = chorus.models.Base.extend(
         urlParams:function (options) {
             if (options && options.method === "read") {
                 var params = { instanceId:this.get("instanceId") };
-                if (this.get("userName")) {
-                    params["userName"] = this.get("userName")
+                if (this.get("userId")) {
+                    params["userId"] = this.get("userId")
                 }
                 return params;
             } else {
