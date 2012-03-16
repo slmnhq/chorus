@@ -13,7 +13,7 @@ chorus.views.WorkspaceMemberList = chorus.views.Base.extend({
                 members: this.model.members().chain().first(this.numMembers).map(
                     function(member) {
                         return {
-                            imageUrl: member.imageUrl({size: 'icon'}),
+                            imageUrl: member.imageUrl(),
                             showUrl: member.showUrl(),
                             displayName: member.displayName()
                         };
