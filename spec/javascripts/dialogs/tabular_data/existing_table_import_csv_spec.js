@@ -418,11 +418,14 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
     describe("scrolling the data", function() {
         beforeEach(function() {
+            this.addMatchers(chorus.svgHelpers.matchers);
+
             spyOn(this.dialog, "adjustHeaderPosition").andCallThrough();
             $('#jasmine_content').append(this.dialog.el);
             this.dialog.render();
             this.dialog.$(".tbody").trigger("scroll");
         });
+
         it("sets the header position", function() {
             expect(this.dialog.adjustHeaderPosition).toHaveBeenCalled();
         });
@@ -430,13 +433,14 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         context("scroll position after the page re-renders", function() {
             beforeEach(function() {
                 var api = this.dialog.$(".tbody").data("jsp");
-                api.scrollTo(5, 2);
+                api.scrollTo(7, 9);
                 this.dialog.render();
             });
-            it("maintain the previous scroll position", function() {
+
+            it("roughly maintains the previous scroll position", function() {
                 var api = this.dialog.$(".tbody").data("jsp");
-                expect(api.getContentPositionX()).toBe(5);
-                expect(api.getContentPositionY()).toBe(2);
+                expect(api.getContentPositionX()).toBeWithinDeltaOf(7, 2);
+                expect(api.getContentPositionY()).toBeWithinDeltaOf(9, 2);
             })
         })
     })
