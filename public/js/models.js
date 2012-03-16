@@ -33,24 +33,10 @@ chorus.models = {
             return this._activities;
         },
 
-        dataStatusOk: function(data) {
-            return data.status == 'ok';
-        },
-
-        dataErrors: function(data) {
-            return data.message;
-        },
-
         parse: function(data) {
-            if (data.status == "needlogin") {
-                chorus.session.trigger("needsLogin");
-            }
-            if (this.dataStatusOk(data)) {
-                this.loaded = true;
-                this.serverErrors = undefined;
-                return data.resource[0]
-            } else {
-                this.serverErrors = this.dataErrors(data);
+            var errors = this.parseErrors(data);
+            if (!errors) {
+                return data.resource[0];
             }
         },
 
@@ -339,17 +325,13 @@ chorus.collections = {
 
 
         parse: function(data) {
-            if (data.status == "needlogin") {
-                chorus.session.trigger("needsLogin");
-            }
             this.pagination = data.pagination;
-            if (data.status == 'ok') {
-                this.loaded = true;
-                this.serverErrors = undefined;
+            var errors = this.parseErrors(data);
+            if (errors) {
+                return [];
             } else {
-                this.serverErrors = data.message;
+                return data.resource;
             }
-            return data.resource;
         },
 
         sortDesc: function(idx) {
