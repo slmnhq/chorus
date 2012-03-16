@@ -31,6 +31,10 @@ describe("chorus.pages.DatasetIndexPage", function() {
         it("sets the workspace id, for prioritizing search", function() {
             expect(this.page.workspaceId).toBe(9999);
         });
+
+        it("fetches the collection", function() {
+            expect(this.server.lastFetchFor(this.page.collection)).toBeDefined();
+        });
     });
 
     context("it does not have a sandbox", function() {
@@ -121,11 +125,11 @@ describe("chorus.pages.DatasetIndexPage", function() {
         }
     });
 
-    context("after the workspace has loaded", function() {
+    context("after the workspace and collection have loaded", function() {
         context("and the user has update permission on the workspace", function() {
             beforeEach(function() {
-                spyOn(this.page.collection, 'fetch').andCallThrough();
                 this.server.completeFetchFor(this.workspace);
+                this.server.completeFetchFor(this.page.collection);
                 this.account = this.workspace.sandbox().instance().accountForCurrentUser();
             });
 
@@ -147,8 +151,8 @@ describe("chorus.pages.DatasetIndexPage", function() {
                 expect(this.page.$("#breadcrumbs")).toExist();
             });
 
-
             it("fetches the collection when csv_import:started is triggered", function() {
+                spyOn(this.page.collection, 'fetch').andCallThrough();
                 chorus.PageEvents.broadcast("csv_import:started");
                 expect(this.page.collection.fetch).toHaveBeenCalled();
             });
@@ -187,13 +191,6 @@ describe("chorus.pages.DatasetIndexPage", function() {
                     beforeEach(function() {
                         spyOnEvent(this.page.collection, 'reset');
                         this.server.completeFetchFor(this.account, fixtures.emptyInstanceAccount())
-                    })
-
-                    it("does not fetch the datasets for the workspace, and marks it as loaded", function() {
-                        //TODO This is due to the api throwing an error.  Once this is fixed we should be fetching during setup: https://www.pivotaltracker.com/story/show/24237643
-                        expect(this.server.lastFetchFor(this.page.collection)).toBeUndefined();
-                        expect(this.page.collection.loaded).toBeTruthy();
-                        expect('reset').toHaveBeenTriggeredOn(this.page.collection);
                     });
 
                     it("pops up a WorkspaceInstanceAccount dialog", function() {
@@ -204,6 +201,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
 
                     context("after the account has been created", function() {
                         beforeEach(function() {
+                            spyOn(this.page.collection, 'fetch').andCallThrough();
                             this.page.account.trigger('saved');
                         });
 
@@ -224,61 +222,51 @@ describe("chorus.pages.DatasetIndexPage", function() {
                         it("should not pop up the WorkspaceInstanceAccountDialog", function() {
                             expect(this.modalSpy).not.toHaveBeenCalled();
                         });
-
-                        it("fetches the datasets for the workspace", function() {
-                            //TODO This is due to the api throwing an error.  Once this is fixed we should be fetching during setup: https://www.pivotaltracker.com/story/show/24237643
-                            expect(this.server.lastFetchFor(this.page.collection)).not.toBeUndefined();
-                        });
                     });
                 });
 
                 context("when the account loads and is valid", function() {
                     beforeEach(function() {
                         this.server.completeFetchFor(this.account, fixtures.instanceAccount())
-                    })
-
-                    it("fetches the datasets for the workspace", function() {
-                        //TODO This is due to the api throwing an error.  Once this is fixed we should be fetching during setup: https://www.pivotaltracker.com/story/show/24237643
-                        expect(this.server.lastFetchFor(this.page.collection)).not.toBeUndefined();
                     });
 
                     it("does not pop up the WorkspaceInstanceAccountDialog", function() {
                         expect(this.modalSpy).not.toHaveBeenCalled();
-                    })
+                    });
 
                     describe("filtering", function() {
                         beforeEach(function() {
                             this.page.render();
                             this.page.collection.type = undefined;
-                        })
+                            spyOn(this.page.collection, 'fetch').andCallThrough();
+                        });
 
                         it("has options for filtering", function() {
                             expect(this.page.$("ul[data-event=filter] li[data-type=]")).toExist();
                             expect(this.page.$("ul[data-event=filter] li[data-type=SOURCE_TABLE]")).toExist();
                             expect(this.page.$("ul[data-event=filter] li[data-type=CHORUS_VIEW]")).toExist();
                             expect(this.page.$("ul[data-event=filter] li[data-type=SANDBOX_TABLE]")).toExist();
-                        })
+                        });
 
                         it("can filter the list by 'all'", function() {
                             this.page.$("li[data-type=] a").click();
                             expect(this.page.collection.attributes.type).toBe("");
                             expect(this.page.collection.fetch).toHaveBeenCalled();
-                        })
+                        });
 
                         it("has can filter the list by 'SOURCE_TABLE'", function() {
                             this.page.$("li[data-type=SOURCE_TABLE] a").click();
                             expect(this.page.collection.attributes.type).toBe("SOURCE_TABLE");
                             expect(this.page.collection.fetch).toHaveBeenCalled();
                             expect(this.server.lastFetch().url).toContain("/edc/workspace/" + this.workspace.get("id") + "/dataset?type=SOURCE_TABLE");
-                        })
+                        });
 
                         it("has can filter the list by 'SANBOX_TABLE'", function() {
                             this.page.$("li[data-type=SANDBOX_TABLE] a").click();
                             expect(this.page.collection.attributes.type).toBe("SANDBOX_TABLE");
                             expect(this.page.collection.fetch).toHaveBeenCalled();
                             expect(this.server.lastFetch().url).toContain("/edc/workspace/" + this.workspace.get("id") + "/dataset?type=SANDBOX_TABLE");
-
-                        })
+                        });
 
                         it("has can filter the list by 'CHORUS_VIEW'", function() {
                             this.page.$("li[data-type=CHORUS_VIEW] a").click();
@@ -286,7 +274,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
                             expect(this.page.collection.fetch).toHaveBeenCalled();
                             expect(this.server.lastFetch().url).toContain("/edc/workspace/" + this.workspace.get("id") + "/dataset?type=CHORUS_VIEW");
 
-                        })
+                        });
                     });
                 });
             });
