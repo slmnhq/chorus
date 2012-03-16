@@ -4,6 +4,10 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
         this.page = new chorus.pages.HdfsEntryIndexPage("1234", "foo");
     });
 
+    it("has a helpId", function() {
+        expect(this.page.helpId).toBe("instances")
+    });
+
     it("fetches the Hdfs entries for that directory", function() {
         expect(this.page.collection).toHaveBeenFetched();
     });

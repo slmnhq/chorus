@@ -5,6 +5,10 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         this.page = new chorus.pages.HdfsShowFilePage("1234", "my/path/my file.txt");
     });
 
+    it("has a helpId", function() {
+        expect(this.page.helpId).toBe("instances")
+    });
+
     it("constructs an HDFS file model with the right instance id and path", function() {
         expect(this.page.model).toBeA(chorus.models.HdfsFile);
         expect(this.page.model.get("path")).toBe("/my/path/my file.txt");

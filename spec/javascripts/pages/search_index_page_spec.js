@@ -3,6 +3,12 @@ describe("chorus.pages.SearchIndexPage", function() {
         this.query = "foo";
     });
 
+    it("has a helpId", function() {
+        this.page = new chorus.pages.SearchIndexPage(this.query);
+        expect(this.page.helpId).toBe("search")
+    });
+
+
     describe("when searching for all items, across all of chorus", function() {
         beforeEach(function() {
             this.page = new chorus.pages.SearchIndexPage(this.query);

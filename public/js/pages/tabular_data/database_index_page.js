@@ -1,5 +1,6 @@
 chorus.pages.DatabaseIndexPage = chorus.pages.Base.extend(_.extend({}, chorus.Mixins.InstanceCredentials.page, {
     constructorName: "DatabaseIndexPage",
+    helpId: "instances",
 
     setup: function(instanceId) {
         this.instance = new chorus.models.Instance({id: instanceId});

@@ -3,6 +3,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         { label: t("breadcrumbs.home"), url: "#/" },
         { label: t("breadcrumbs.search_results") }
     ],
+    helpId: "search",
 
     parseSearchParams: function(searchParams) {
         var attrs = {

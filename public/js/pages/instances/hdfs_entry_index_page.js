@@ -1,4 +1,6 @@
 chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend(_.extend({}, chorus.Mixins.InstanceCredentials.page, {
+    helpId: "instances",
+
     setup:function (instanceId, path) {
         this.path = "/" + path;
         this.instance = new chorus.models.Instance({id: instanceId});

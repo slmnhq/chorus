@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="4" MadCap:lastHeight="579" MadCap:lastWidth="714" MadCap:ignoredWords="datasets;Greenplum;Hadoop" MadCap:disableMasterStylesheet="true" MadCap:tocPath="" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../" MadCap:HelpSystemFileName="Chorus_Help.xml" MadCap:SearchType="Stem">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="4" MadCap:lastHeight="933" MadCap:lastWidth="662" MadCap:ignoredWords="datasets;Greenplum;Hadoop" MadCap:disableMasterStylesheet="true" MadCap:tocPath="" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../" MadCap:HelpSystemFileName="Chorus_Help.xml" MadCap:SearchType="Stem">
     <!-- saved from url=(0014)about:internet -->
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -11,29 +11,46 @@
     </head>
     <body>
         <h1>Home</h1>
-        <p>This topic should open from the context-sensitive link <em>dashboard</em>.</p>
-        <p>When you log in to Chorus, you will see the Home page. You will use this page to access the main areas of Chorus. </p>
+        <p>The Home page allows you to explore and edit the major information in Chorus, whether it is related to the users, instances and datasets, or workspaces. The following topic presents a list of features that describe the information you can access and tasks you can perform from this page.</p>
         <h3>Features of the Home page</h3>
         <ul>
-            <li value="1">Displays recent activity.</li>
-            <li value="2">Displays the total number of Chorus users.</li>
-            <li value="3">Provides access to and displays the number of insights.</li>
-            <li value="4">Lists and provides access to workspaces.</li>
-            <li value="5">Lists and provides access to instances and datasets.</li>
+            <li value="1">Editing your profile</li>
+            <li value="2">Using search</li>
+            <li value="3">Viewing the list of Chorus users</li>
+            <li value="4">Exploring recent activity</li>
+            <li value="5">Exploring Instances</li>
+            <li value="6">Exploring workspaces</li>
         </ul>
-        <h3>Using the Home page</h3>
-        <p>You can use the Home page to perform the following major functions:</p>
-        <p>Manage your account: Select <b>Chorus Users</b>, located at the top of the right pane, to get to see the list of usernames, sorted last name first. You can reset the list to sort by first name.The list also shows which users are administrators. From this page,selecting <b>Add User</b> presents the New User dialog. <a href="users.htm" target="" title="" alt="" class="MCXref_0">See "Users"</a></p>
+        <h2>Editing your profile</h2>
+        <p>Use the drop down under your username in the top right pane to perform the following:</p>
         <ul>
-            <li value="1">Browse <b>Recent Activity</b>: This is located on the left pane and shows a complete list of any recent activity by a user, or of any data changes. Also allows you view all the insights that have been created.</li>
-            <li value="2">Select <b>Browse Data</b> to view all information about instances and datasets: This is located on the right pane. This section of the Home page provides information about available instances. You can perform the following from the Home page:</li>
+            <li value="1"><b>Your Profile</b> to edit it. <a href="user_edit.htm" target="" title="" alt="" class="MCXref_0">See "Editing your Profile"</a></li>
+            <li value="2"><b>Sign Out</b> to exit Greenplum Chorus.</li>
         </ul>
-        <ul style="list-style-type: circle;">
-            <li class="bullet2" value="1"><b>Add an Instance</b>: Presents the Create a New Instance dialog. You can register either an existing Greenplum Database instance or a Hadoop Distributed File System.</li>
-            <li class="bullet2" value="2"><b>View all Instances</b>:Presents a list of instances. <a href="instances.htm" target="" title="" alt="" class="MCXref_0">See "Instances"</a></li>
+        <h2>Using Search</h2>
+        <p>Type the name of a dataset, workspace, or user in the Search field. Accessing the Search function from this page, automatically defaults to <b>Search in All of Chorus</b> and <b>Show All Results</b>. For more information, <a href="search.htm" target="" title="" alt="" class="MCXref_0">See "Search"</a></p>
+        <h2>Viewing the list of Chorus users</h2>
+        <p>Select <b>Chorus Users</b> for a list of users. <a href="user.htm" target="" title="" alt="" class="MCXref_0">See "Users"</a></p>
+        <h2>Exploring Recent Activity</h2>
+        <p>
+            <p>Browse the list presented in the left pane which displays a complete list of  recent user activity, and data changes.</p>
+        </p>
+        <ul>
+            <li value="1"><b>Insights</b> to view the list of insights. You can browse through all the user comments against workspaces and the insights associated with them.</li>
         </ul>
         <ul>
-            <li value="1">Select <b>My Workspaces</b> to view all information about workspaces. This is located on the bottom of the right pane and lists all the existing workspaces. From this area of the Home page, you can <b>Create a new workspace</b> or select <b>Browse All</b> to browse all existing workspaces. <a href="workspaces.htm" target="" title="" alt="" class="MCXref_0">See "Workspaces"</a>.<a href="workfiles.htm" target="" title="" alt="" class="MCXref_0">See "Work Files"</a></li>
+            <li value="1"><b>Comment</b> about a workspace. You can also delete your comment. If you own the workspace, you can promote your comment to an insight. If you are an administrator, you can promote another user's comment to a insight and publish it for the benefit of all Chorus users.</li>
+        </ul>
+        <h2>Exploring Instances</h2>
+        <ul>
+            <li value="1"><b>Add an instance</b> to create a new instance on a registered Greenplum or Hadoop  instance.  presents the <b>Create a New Instance</b> dialog. See "Instances"</li>
+            <li value="2"><b>View  All</b> to bring up the Instances page, where you can view a list of instances. <a href="instances.htm" target="" title="" alt="" class="MCXref_0">See "Instances"</a></li>
+        </ul>
+        <h2>Exploring Workspaces</h2>
+        <p>View the list of workspaces. Each one shows the recent activity such as comments, insights, and timestamp</p>
+        <ul>
+            <li value="1"><b>Create a new workspace</b> allows you create a new workspace either as a public or private space.</li>
+            <li value="2"><b>View All</b> to bring up the Workspaces page. <a href="workspaces.htm" target="" title="" alt="" class="MCXref_0">See "Workspaces"</a>.</li>
         </ul>
         <script type="text/javascript" src="SkinSupport/MadCapBodyEnd.js">
         </script>

@@ -1,5 +1,6 @@
 chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
     constructorName: "HdfsShowFilePage",
+    helpId: "instances",
 
     setup:function (instanceId, path) {
         this.path = "/" + path;
