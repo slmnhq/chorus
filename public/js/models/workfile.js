@@ -165,7 +165,7 @@
         },
 
         canEdit: function() {
-            return this.isLatestVersion();
+            return this.get("canEdit") && this.isLatestVersion();
         },
 
         isLatestVersion: function() {
@@ -174,7 +174,7 @@
         },
 
         save: function(attrs, options) {
-            if (this.canEdit()) {
+            if (this.isNew() || this.canEdit()) {
                 options = options || {};
                 attrs = attrs || {};
                 var overrides = {};

@@ -103,6 +103,21 @@ describe("chorus.views.TextWorkfileContentView", function() {
             });
         });
 
+        describe("#render when read-only", function() {
+            beforeEach(function() {
+                this.textfile.set({canEdit: false});
+                this.view.render();
+            });
+
+            it("has no save button", function() {
+                expect(this.view.$("button")).not.toExist();
+            });
+
+            it("has read-only content area", function() {
+                expect(this.view.editor.getOption("readOnly")).toBe("nocursor");
+            });
+        });
+
         describe("#editText", function() {
             beforeEach(function() {
                 this.view.render();

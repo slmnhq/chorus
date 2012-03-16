@@ -1346,6 +1346,7 @@ beforeEach(function() {
         nestedWorkfileJson: function() {
             var id = this.nextId().toString();
             return {
+                canEdit: true,
                 id: id,
                 name: "file" + id + ".sql",
                 mimeType: 'text/something',
@@ -1415,6 +1416,7 @@ beforeEach(function() {
                     fixtures.activities.NOTE_ON_WORKFILE_JSON(),
                     fixtures.activities.NOTE_ON_WORKFILE_JSON()
                 ],
+                canEdit: true,
                 commentCount: 2,
                 draftInfo: {
                     content: null,
