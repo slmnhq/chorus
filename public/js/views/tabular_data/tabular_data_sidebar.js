@@ -172,7 +172,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
     launchAssociateWithWorkspaceDialog: function(e) {
         e.preventDefault();
 
-        new chorus.dialogs.AssociateWithWorkspace({model: this.resource}).launchModal();
+        new chorus.dialogs.AssociateWithWorkspace({model: this.resource, activeOnly: true}).launchModal();
     },
 
     launchTabularDataPreviewDialog: function(e) {

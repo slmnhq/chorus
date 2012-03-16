@@ -652,6 +652,10 @@ describe("chorus.views.TabularDataSidebar", function() {
                     it("displays the associate with workspace dialog", function() {
                         expect(chorus.modal).toBeA(chorus.dialogs.AssociateWithWorkspace);
                     });
+
+                    it("lists only active workspaces", function() {
+                        expect(chorus.modal.options.activeOnly).toBeTruthy();
+                    });
                 });
             });
 

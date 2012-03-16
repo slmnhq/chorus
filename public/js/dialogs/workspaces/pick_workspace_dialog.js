@@ -22,7 +22,7 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.Base.extend({
     },
 
     defaultWorkspaces: function() {
-        if(this.options.launchElement && this.options.launchElement.data("activeOnly")) {
+        if(this.options.activeOnly || (this.options.launchElement && this.options.launchElement.data("activeOnly"))) {
             return chorus.session.user().activeWorkspaces();
         }
         return chorus.session.user().workspaces();
