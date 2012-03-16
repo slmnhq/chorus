@@ -3,7 +3,6 @@ describe("chorus.models.Session", function() {
     beforeEach(function() {
         this.savedAuthCookie = $.cookie("authid")
         this.savedUserIdCookie = $.cookie("userId");
-        fixtures.model = 'Session';
     });
 
     afterEach(function() {

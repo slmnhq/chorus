@@ -1,9 +1,4 @@
 describe("chorus.presenters.Activity", function() {
-    beforeEach(function() {
-        fixtures.model = 'Activity';
-        this.model = fixtures.modelFor("fetch")
-    });
-
     context(".IMPORT_CREATED", function() {
         context("when importing from a file", function() {
             beforeEach(function() {
@@ -660,6 +655,29 @@ describe("chorus.presenters.Activity", function() {
         itShouldHaveTheAuthorsIconAndUrl();
     });
 
+    context(".WORKSPACE_CHANGE_NAME", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.WORKSPACE_CHANGE_NAME();
+            this.workspace = this.model.workspace();
+            this.presenter = new chorus.presenters.Activity(this.model);
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.workspace.get("name"));
+        });
+
+        it("should have the 'isNote' property set to false", function() {
+            expect(this.presenter.isNote).toBeFalsy();
+        });
+
+        it("should have the right objectUrl", function() {
+            var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
+            expect(this.presenter.objectUrl).toBe(url);
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
+
     context(".MEMBERS_ADDED", function() {
         beforeEach(function() {
             this.model = fixtures.activities.MEMBERS_ADDED();
@@ -881,7 +899,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the correct icon url", function() {
-            expect(this.presenter.iconSrc).toBe("/images/table_large.png");
+            expect(this.presenter.iconSrc).toBe("/images/sandbox_table_large.png");
         });
 
         it("should not have the profile icon class", function() {
@@ -1211,6 +1229,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("when no author information is present", function() {
         beforeEach(function() {
+            this.model = fixtures.activities.NOTE_ON_DATABASE_TABLE();
             this.model.unset("author");
             this.presenter = new chorus.presenters.Activity(this.model);
         });

@@ -129,7 +129,6 @@ describe("chorus.views.userNew", function() {
             context("cancelling", function() {
                 beforeEach(function() {
                     spyOn(this.view.$("form")[0], "submit");
-                    spyOn(window.history, "back");
                     this.view.$("button.cancel").click();
                 })
 

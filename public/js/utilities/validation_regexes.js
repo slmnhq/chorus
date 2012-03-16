@@ -1,0 +1,54 @@
+chorus.ValidationRegexes = (function(){
+    var chorusIdentifier64 = /^[a-zA-Z][a-zA-Z0-9_]{0,63}$/;
+    var chorusIdentifier = /^[a-zA-Z][a-zA-Z0-9_]*$/;
+    var safePgName = /^[a-z_"][a-zA-Z0-9_"]*$/;
+    var allWhitespace = /^\s*$/;
+    var time = /^(\d{1,2}(:\d{2}){1,2})?$/;
+    var year = /^[0-9]{1,4}$/;
+    var month = /^(0?[1-9]|1[0-2])$/;
+    var day = /^(0?[1-9]|[12][0-9]|3[01])$/;
+    var boolean = /^(true|false)$/;
+    var onlyDigits = /^\d+$/
+
+    return {
+        ChorusIdentifier64: function() {
+            return chorusIdentifier64;
+        },
+
+        ChorusIdentifier: function() {
+            return chorusIdentifier;
+        },
+
+        SafePgName: function() {
+            return safePgName;
+        },
+
+        AllWhitespace: function() {
+            return allWhitespace;
+        },
+
+        Time: function() {
+            return time;
+        },
+
+        Year: function() {
+            return year;
+        },
+
+        Month: function() {
+            return month;
+        },
+
+        Day: function() {
+            return day;
+        },
+
+        Boolean: function() {
+            return boolean;
+        },
+
+        OnlyDigits: function() {
+            return onlyDigits;
+        }
+    }
+})();

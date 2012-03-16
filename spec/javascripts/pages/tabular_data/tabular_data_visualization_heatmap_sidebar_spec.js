@@ -73,6 +73,10 @@ describe("chorus.views.TabularDataVisualizationHeatmapSidebar", function() {
                 expect(this.view.$(".y_axis select option")).not.toExist()
                 expect(this.view.$(".y_axis .no_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_numerical_columns")
             })
+
+            it("should disable the button", function() {
+                expect(this.view.$("button.create")).toBeDisabled();
+            });
         })
     })
 })

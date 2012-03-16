@@ -1,4 +1,4 @@
-chorus.pages.DatabaseIndexPage = chorus.pages.Base.extend({
+chorus.pages.DatabaseIndexPage = chorus.pages.Base.extend(_.extend({}, chorus.Mixins.InstanceCredentials.page, {
     constructorName: "DatabaseIndexPage",
 
     setup: function(instanceId) {
@@ -11,6 +11,7 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.extend({
         this.requiredResources.push(this.instance);
         this.requiredResources.push(this.collection);
     },
+
 
     resourcesLoaded: function() {
         this.crumbs = [
@@ -28,4 +29,4 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.extend({
 
         this.sidebar = new chorus.views.DatabaseListSidebar();
     }
-});
+}));

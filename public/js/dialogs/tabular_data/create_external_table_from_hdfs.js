@@ -1,8 +1,13 @@
 chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.extend({
+    constructorName: "CreateExternalTableFromHdfs",
     title: t("hdfs.create_external.title"),
     ok: t("hdfs.create_external.ok"),
     useLoadingSection: true,
     loadingKey: "hdfs.create_external.creating",
+
+    events: {
+        "change select": "selectWorkspace"
+    },
 
     setup: function() {
         this._super("setup", arguments);
@@ -10,11 +15,11 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         this.workspaces = new chorus.collections.WorkspaceSet([], {userId: chorus.session.user().id});
         this.workspaces.fetchAll();
         this.requiredResources.push(this.workspaces);
-        this.csv.set({toTable : chorus.models.CSVImport.normalizeForDatabase(this.csv.get("toTable"))});
+        this.csv.set({toTable: chorus.models.CSVImport.normalizeForDatabase(this.csv.get("toTable"))});
     },
 
     postRender: function() {
-        this._super("postRender", arguments)
+        this._super("postRender", arguments);
 
         if (this.workspaces.loaded) {
             if (!this.workspaces.length) {
@@ -23,6 +28,8 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
                 ];
                 this.showErrors(this.workspaces);
             }
+
+            this.$("select").val(this.csv.get("workspaceId"));
 
             chorus.styleSelect(this.$("select"));
         }
@@ -41,7 +48,7 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         var columns = _.map($names, function(name, i) {
             var $name = $names.eq(i);
             var $type = $types.eq(i);
-            return chorus.Mixins.dbHelpers.safePGName($name.val())+" "+$type.text();
+            return chorus.Mixins.dbHelpers.safePGName($name.val()) + " " + $type.text();
         })
         var statement = toTable + " (" + columns.join(", ") + ")";
 
@@ -55,6 +62,10 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         });
     },
 
+    selectWorkspace: function() {
+        this.csv.set({workspaceId: this.$("option:selected").val()});
+    },
+
     resourcesLoaded: function() {
         var withSandboxes = this.workspaces.filter(function(ws) {
             return !!ws.sandbox();
@@ -66,7 +77,7 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
     additionalContext: function() {
         var parentCtx = this._super("additionalContext", arguments);
         parentCtx.workspaces = _.pluck(this.workspaces.models, "attributes");
-        parentCtx.directions = new Handlebars.SafeString("<input type='text' class='hdfs' name='table_name' value='" + Handlebars.Utils.escapeExpression(this.csv.get("toTable")) + "'/>");
+        parentCtx.directions = new Handlebars.SafeString("<input type='text' class='hdfs' name='toTable' value='" + Handlebars.Utils.escapeExpression(this.csv.get("toTable")) + "'/>");
         return parentCtx;
     }
 });

@@ -22,7 +22,7 @@
 
         urlTemplate: function() {
             if (this.isScopedToSingleWorkspace()) {
-                return "search/workspace/{{workspaceId}}";
+                return "search/workspace/";
             } else if (this.isScopedToUserWorkspaces()) {
                 return "search/workspaces/";
             } else {
@@ -82,7 +82,7 @@
             if (this.hasSpecificEntityType()) {
                 params.entityType = this.entityType();
             }
-            if (this.has("workspaceId") && !this.isScopedToSingleWorkspace()) {
+            if (this.has("workspaceId")) {
                 params.workspaceId = this.get("workspaceId");
             }
             if (this.isPaginated()) {
@@ -119,10 +119,6 @@
         workspaceItems: makeCollectionMethod("workspaceItems"),
 
         getResults: function() {
-            if (this.isScopedToSingleWorkspace()) {
-                return this.workspaceItems();
-            }
-
             switch(this.entityType()) {
                 case "user":
                     return this.users()
@@ -141,6 +137,10 @@
                     break;
                 case "hdfs":
                     return this.hdfs();
+            }
+
+            if (this.isScopedToSingleWorkspace()) {
+                return this.workspaceItems();
             }
         },
 

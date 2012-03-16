@@ -94,9 +94,10 @@ describe("chorus.views.ResultsConsoleView", function() {
         describe("file:executionStarted", function() {
             beforeEach(function() {
                 spyOn(window, "clearTimeout");
+                spyOn(this.view, "closeError").andCallThrough();
 
                 chorus.PageEvents.broadcast("file:executionStarted")
-            })
+            });
 
             it("sets the executing class", function() {
                 expect(this.view.$(".right")).toHaveClass("executing");
@@ -108,15 +109,23 @@ describe("chorus.views.ResultsConsoleView", function() {
 
             it("sets a delay to start a spinner", function() {
                 expect(_.delay).toHaveBeenCalledWith(jasmine.any(Function), 250);
-            })
+            });
 
             it("saves the spinner timer id", function() {
                 expect(this.view.spinnerTimer).toBeDefined();
-            })
+            });
 
             it("starts tracking execution time", function() {
                 expect(_.delay).toHaveBeenCalledWith(jasmine.any(Function), 1000);
-            })
+            });
+
+            it("shows the result_content", function() {
+                expect(this.view.$(".result_content")).not.toHaveClass("hidden");
+            });
+
+            it("closes the errors", function() {
+                expect(this.view.closeError).toHaveBeenCalled();
+            });
 
             describe("cancelling the execution", function() {
                 context("when the spinner has not yet been started", function() {
@@ -208,6 +217,10 @@ describe("chorus.views.ResultsConsoleView", function() {
                         })
 
                         it("should hide the sql_errors content", function() {
+                            expect(this.view.$(".sql_errors")).toHaveClass("hidden");
+                        });
+
+                        it("should show the execution content area", function() {
                             expect(this.view.$(".sql_errors")).toHaveClass("hidden");
                         });
                     });

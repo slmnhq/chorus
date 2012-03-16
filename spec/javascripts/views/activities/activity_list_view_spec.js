@@ -1,7 +1,7 @@
 describe("chorus.views.ActivityList", function() {
     beforeEach(function() {
-        fixtures.model = 'ActivitySet';
-        this.collection = fixtures.modelFor('fetch');
+        this.collection = fixtures.activitySet();
+        this.collection.loaded = true;
         this.view = new chorus.views.ActivityList({collection: this.collection, additionalClass: "foo_class", type: "Foo"});
     });
 
@@ -19,20 +19,20 @@ describe("chorus.views.ActivityList", function() {
         });
 
         it("renders activity metadata on the li", function() {
-            expect(this.view.$("li[data-activity-id=10000]")).toHaveData("activity-type", "NOTE");
-            expect(this.view.$("li[data-activity-id=10001]")).toHaveData("activity-type", "NOTE");
+            expect(this.view.$("li[data-activity-id]:eq(0)")).toHaveData("activity-type", "NOTE");
+            expect(this.view.$("li[data-activity-id]:eq(1)")).toHaveData("activity-type", "NOTE");
         })
 
         it("displays a Comment link for each activity", function() {
-            var link = this.view.$("li[data-activity-id=10000] .links a.comment.dialog");
+            var link = this.view.$("li[data-activity-id]:eq(0) .links a.comment.dialog");
             expect(link.data("dialog")).toBe("Comment");
             expect(link.data("entity-type")).toBe("comment");
-            expect(link.data("entity-id")).toBe(10000);
+            expect(link.data("entity-id")).not.toBeNull();
 
-            link = this.view.$("li[data-activity-id=10001] .links a.comment.dialog");
+            link = this.view.$("li[data-activity-id]:eq(1) .links a.comment.dialog");
             expect(link.data("dialog")).toBe("Comment");
             expect(link.data("entity-type")).toBe("comment");
-            expect(link.data("entity-id")).toBe(10001);
+            expect(link.data("entity-id")).not.toBeNull();
         })
 
         describe("when there are no activity items", function() {
@@ -75,26 +75,42 @@ describe("chorus.views.ActivityList", function() {
         });
 
         describe("comment rendering", function() {
+            beforeEach(function() {
+                var comments = this.collection.at(0).comments();
+                comments.add([
+                    new chorus.models.Comment({
+                        author: {
+                            id: 10101,
+                            fullName: "John Commenter"
+                        },
+                        text: 'I love you all'
+                    })
+                ]);
+                var otherComments = this.collection.at(1).comments();
+                otherComments.reset([]);
+                this.view.render();
+            })
+
             it("displays comments for each activity, if any", function() {
-                expect(this.view.$("li[data-activity-id=10000] .comments")).toExist();
-                expect(this.view.$("li[data-activity-id=10000] .comments li").length).toBe(2);
-                expect(this.view.$("li[data-activity-id=10001] .comments")).not.toExist();
+                expect(this.view.$("li[data-activity-id]:eq(0) .comments")).toExist();
+                expect(this.view.$("li[data-activity-id]:eq(0) .comments li").length).toBe(2);
+                expect(this.view.$("li[data-activity-id]:eq(1) .comments")).not.toExist();
             })
 
             it("displays information for each comment", function() {
-                expect(this.view.$("li[data-comment-id=10023] .icon a")).toHaveAttr("href", "#/users/12")
-                expect(this.view.$("li[data-comment-id=10023] .icon a img")).toHaveAttr("src", "/edc/userimage/12?size=icon")
-                expect(this.view.$("li[data-comment-id=10023] .comment_header a")).toHaveText("Michael Sofaer");
-                expect(this.view.$("li[data-comment-id=10023] .comment_content .actions .timestamp")).toExist();
-                expect(this.view.$("li[data-comment-id=10024] .icon a")).toHaveAttr("href", "#/users/13")
-                expect(this.view.$("li[data-comment-id=10024] .icon a img")).toHaveAttr("src", "/edc/userimage/13?size=icon")
-                expect(this.view.$("li[data-comment-id=10024] .comment_header a")).toHaveText("Mark Rushakoff");
-                expect(this.view.$("li[data-comment-id=10024] .comment_content .timestamp")).toExist();
+                expect(this.view.$("li[data-comment-id]:eq(0) .icon a")).toHaveAttr("href", "#/users/1234")
+                expect(this.view.$("li[data-comment-id]:eq(0) .icon a img")).toHaveAttr("src", "/edc/userimage/1234?size=icon")
+                expect(this.view.$("li[data-comment-id]:eq(0) .comment_header a")).toHaveText("Bob Smith");
+                expect(this.view.$("li[data-comment-id]:eq(0) .comment_content .actions .timestamp")).toExist();
+                expect(this.view.$("li[data-comment-id]:eq(1) .icon a")).toHaveAttr("href", "#/users/10101")
+                expect(this.view.$("li[data-comment-id]:eq(1) .icon a img")).toHaveAttr("src", "/edc/userimage/10101?size=icon")
+                expect(this.view.$("li[data-comment-id]:eq(1) .comment_header a")).toHaveText("John Commenter");
+                expect(this.view.$("li[data-comment-id]:eq(1) .comment_content .timestamp")).toExist();
             });
 
             context("when there are less than three comments", function() {
                 it("does not render a 'more comments' link", function() {
-                    expect(this.view.$("li[data-activity-id=10000] .comments a.more")).not.toExist();
+                    expect(this.view.$("li[data-activity-id]:eq(0) .comments a.more")).not.toExist();
                 })
 
                 it("does not apply the 'more' class to any comments", function() {
@@ -105,17 +121,25 @@ describe("chorus.views.ActivityList", function() {
             context("when there are three or more comments", function() {
                 beforeEach(function() {
                     var comments = this.collection.at(0).comments();
-                    comments.add(new chorus.models.Comment({
-                        author: {
-                            id: 10101
-                        },
-                        text: 'I love you all'
-                    }));
+                    comments.add([
+                        new chorus.models.Comment({
+                            author: {
+                                id: 10102
+                            },
+                            text: 'I love you all'
+                        }),
+                        new chorus.models.Comment({
+                            author: {
+                                id: 10103
+                            },
+                            text: 'I love you all'
+                        })
+                    ]);
                     this.view.render();
                 })
 
                 it("renders a 'more comments' link", function() {
-                    expect(this.view.$("li[data-activity-id=10000] .comments a.more")).toExist();
+                    expect(this.view.$("li[data-activity-id]:eq(0) .comments a.more")).toExist();
                 })
 
                 it("applies the 'more' class to trailing elements", function() {
@@ -127,11 +151,11 @@ describe("chorus.views.ActivityList", function() {
                 describe("when the more link is clicked", function() {
                     beforeEach(function() {
                         spyOnEvent(this.view, "content:changed");
-                        this.view.$("li[data-activity-id=10000] .comments a.more").click();
+                        this.view.$("li[data-activity-id]:eq(0) .comments a.more").click();
                     });
 
                     it("adds the 'more' class to the comments section", function() {
-                        expect(this.view.$("li[data-activity-id=10000] .comments")).toHaveClass("more");
+                        expect(this.view.$("li[data-activity-id]:eq(0) .comments")).toHaveClass("more");
                     })
 
                     it("triggers a content:changed event", function() {
@@ -141,11 +165,11 @@ describe("chorus.views.ActivityList", function() {
                     describe("when the less link is clicked", function() {
                         beforeEach(function() {
                             resetBackboneEventSpies(this.view);
-                            this.view.$("li[data-activity-id=10000] .comments a.less").click();
+                            this.view.$("li[data-activity-id]:eq(0) .comments a.less").click();
                         });
 
                         it("removes the 'more' class to the comments section", function() {
-                            expect(this.view.$("li[data-activity-id=10000] .comments")).not.toHaveClass("more");
+                            expect(this.view.$("li[data-activity-id]:eq(0) .comments")).not.toHaveClass("more");
                         })
 
                         it("triggers a content:changed event", function() {
@@ -158,19 +182,27 @@ describe("chorus.views.ActivityList", function() {
 
         describe("attachment rendering", function() {
             it("displays info for each attached file", function() {
-                expect(this.view.$('li[data-activity-id=10000] ul.attachments li').length).toBe(2);
+                expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li').length).toBe(2);
 
-                expect(this.view.$('li[data-activity-id=10000] ul.attachments li:eq(0) a')).toHaveAttr('href', '/edc/file/10101')
-                expect(this.view.$('li[data-activity-id=10000] ul.attachments li:eq(0) img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl("SQL", "medium"))
-                expect(this.view.$('li[data-activity-id=10000] ul.attachments li:eq(0) .name').text().trim()).toBe("something.sql")
+                expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(0) a')).toHaveAttr('href', '/edc/file/10101')
+                expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(0) img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl("SQL", "medium"))
+                expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(0) .name').text().trim()).toBe("something.sql")
 
-                expect(this.view.$('li[data-activity-id=10000] ul.attachments li:eq(1) a')).toHaveAttr('href', '/edc/file/10102')
-                expect(this.view.$('li[data-activity-id=10000] ul.attachments li:eq(1) img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl("TXT", "medium"))
-                expect(this.view.$('li[data-activity-id=10000] ul.attachments li:eq(1) .name').text().trim()).toBe("something.txt")
+                expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(1) a')).toHaveAttr('href', '/edc/file/10102')
+                expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(1) img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl("TXT", "medium"))
+                expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(1) .name').text().trim()).toBe("something.txt")
             })
         })
 
         describe("pagination", function() {
+            beforeEach(function() {
+                this.collection.pagination = {};
+                this.collection.pagination.total = "1";
+                this.collection.pagination.page = "1";
+                this.collection.pagination.records = "8";
+                this.view.render();
+            });
+
             context("when there is no next page", function() {
                 it("does not render a 'more' link", function() {
                     expect(this.view.$("a.more_activities")).not.toExist();
@@ -191,7 +223,17 @@ describe("chorus.views.ActivityList", function() {
                     it("fetches the next page of the activity stream", function() {
                         spyOn(this.collection, 'fetchPage');
                         this.view.$(".more_activities a").click();
-                        expect(this.collection.fetchPage).toHaveBeenCalledWith(2, { add: true });
+
+                        expect(this.collection.fetchPage).toHaveBeenCalledWith(2, { add: true, silent: true, success: jasmine.any(Function) });
+                    })
+
+                    it("only re-renders the page once", function() {
+                        spyOn(this.view, 'postRender');
+                        this.view.$(".more_activities a").click();
+
+                        this.server.completeFetchFor(this.collection, fixtures.activitySet(), {page: 2})
+
+                        expect(this.view.postRender.callCount).toBe(1);
                     })
                 })
             })
@@ -202,7 +244,7 @@ describe("chorus.views.ActivityList", function() {
     describe("error handling", function() {
         beforeEach(function() {
             spyOn(chorus, "log");
-            this.collection.add({ workspace: {} })
+            spyOn(this.collection.at(0), 'get').andCallFake(function () {throw 'an error during rendering'})
         })
 
         it("does not raise an exception", function() {

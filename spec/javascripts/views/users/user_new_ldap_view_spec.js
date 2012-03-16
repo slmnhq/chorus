@@ -222,7 +222,6 @@ describe("chorus.views.UserNewLdap", function() {
 
             context("cancelling", function() {
                 beforeEach(function() {
-                    spyOn(window.history, "back");
                     this.view.$("button.cancel").click();
                 })
 

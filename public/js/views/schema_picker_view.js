@@ -13,9 +13,14 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
     },
 
     setup:function () {
+        //Prebind these so the BindingGroup detects duplicates each time and doesn't bind them multiple times.
+        this.instanceFetchFailed = _.bind(this.fetchFailed, this, null);
+        this.databaseFetchFailed = _.bind(this.fetchFailed, this, 'database');
+        this.schemaFetchFailed = _.bind(this.fetchFailed, this, 'schema');
         if (!this.options.instance) {
             this.instances = new chorus.collections.InstanceSet();
             this.instances.onLoaded(this.updateInstances, this);
+            this.bindings.add(this.instances, "fetchFailed", this.instanceFetchFailed);
             this.instances.fetchAll();
         }
     },
@@ -43,6 +48,7 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
             this.showSection("database", { loading:true });
             this.databases = this.selectedInstance.databases();
             this.databases.fetchIfNotLoaded();
+            this.bindings.add(this.databases, "fetchFailed", this.databaseFetchFailed);
             this.databases.onLoaded(this.updateDatabases, this);
         }
     },
@@ -58,8 +64,16 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
             this.showSection("schema", { loading:true });
             this.schemas = this.selectedDatabase.schemas();
             this.schemas.fetchIfNotLoaded();
+            this.bindings.add(this.schemas, "fetchFailed", this.schemaFetchFailed);
             this.schemas.onLoaded(this.updateSchemas, this);
         }
+    },
+
+    fetchFailed: function(type, collection) {
+        if(type) {
+            this.resetSelect(type);
+        }
+        this.trigger("error", collection);
     },
 
     getSelectedDatabase : function() {
@@ -136,6 +150,7 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
         section.find("a.new").addClass("hidden");
         delete this["selected" + _.capitalize(type)];
         this.triggerSchemaSelected();
+        this.trigger("clearErrors");
 
         var select = section.find("select");
         select.empty();

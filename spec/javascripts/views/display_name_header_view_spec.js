@@ -1,7 +1,6 @@
 describe("chorus.views.DisplayNameHeader", function() {
     beforeEach(function() {
-        fixtures.model = "User";
-        this.model = fixtures.modelFor("fetch");
+        this.model = fixtures.user()
         this.view = new chorus.views.DisplayNameHeader({ model : this.model })
     })
 
@@ -19,11 +18,12 @@ describe("chorus.views.DisplayNameHeader", function() {
 
         context("when the model is loaded", function() {
             beforeEach(function() {
+                this.model.loaded = true;
                 this.view.render();
             })
 
             it("shows the dipslay name", function() {
-                expect(this.view.$("h1").text().trim()).toBe("EDC Admin");
+                expect(this.view.$("h1").text().trim()).toBe(this.model.displayName());
             })
         })
     })

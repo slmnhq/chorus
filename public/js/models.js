@@ -9,7 +9,7 @@ chorus.models = {
         url: function(options) {
             var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
             var context = _.extend({}, this.attributes, { entityId: this.entityId, entityType: this.entityType })
-            var uri = new URI("/edc/" + Handlebars.compile(template)(context));
+            var uri = new URI("/edc/" + Handlebars.compile(template, {noEscape: true})(context));
             if (this.urlParams) {
                 var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;
                 uri.addSearch(params);
@@ -138,7 +138,7 @@ chorus.models = {
 
             var present = value;
 
-            if (value && _.isString(value) && value.match(/^\s*$/)) {
+            if (value && _.isString(value) && value.match(chorus.ValidationRegexes.AllWhitespace())) {
                 present = false;
             }
 
@@ -252,7 +252,7 @@ chorus.collections = {
             }, options);
 
             var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
-            var uri = new URI("/edc/" + Handlebars.compile(template)(this.attributes));
+            var uri = new URI("/edc/" + Handlebars.compile(template, {noEscape: true})(this.attributes));
 
             if (this.urlParams) {
                 var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;

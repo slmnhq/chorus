@@ -1,7 +1,6 @@
 describe("WorkfileListSidebar", function() {
     beforeEach(function() {
-        fixtures.model = 'Workspace';
-        this.workspace = fixtures.modelFor("fetch");
+        this.workspace = fixtures.workspace();
         this.view = new chorus.views.WorkfileListSidebar({ workspace : this.workspace });
     });
 

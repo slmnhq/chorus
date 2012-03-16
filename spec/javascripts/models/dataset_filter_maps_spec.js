@@ -162,15 +162,8 @@ describe("chorus.models.DatasetFilterMaps", function() {
         itReturnsTheRightClauseFor("null", "column_name", "some_value", "column_name IS NULL", true)
 
         it("marks times as valid", function() {
-            expect(this.datasetFilterMap.performValidation({ value: "13" })).toBeTruthy();
             expect(this.datasetFilterMap.performValidation({ value: "13:37" })).toBeTruthy();
-            expect(this.datasetFilterMap.performValidation({ value: "31:13:37" })).toBeTruthy();
-        })
-
-        it("marks weird, time-like stings as valid", function() {
-            expect(this.datasetFilterMap.performValidation({ value: "13:" })).toBeTruthy();
-            expect(this.datasetFilterMap.performValidation({ value: "1:::37" })).toBeTruthy();
-            expect(this.datasetFilterMap.performValidation({ value: "::::::::" })).toBeTruthy();
+            expect(this.datasetFilterMap.performValidation({ value: "13:13:37" })).toBeTruthy();
         })
 
         it("marks anything but times as invalid", function() {

@@ -45,22 +45,43 @@ describe("chorus.views.SearchResults", function() {
             this.view.render();
         });
 
-        it("does not show the 'this workspace' section", function() {
-            expect(this.view.$(".search_result_list.this_workspace")).not.toExist();
+        itShowsOnlyTheWorkfileSection();
+    });
+
+    context("when searching for only workfiles in a particular workspace", function() {
+        beforeEach(function() {
+            this.model = fixtures.searchResult({
+                entityType: "workfile",
+                workspaceId: "101",
+                searchIn: "this_workspace",
+
+                workspace: null,
+                instance: null,
+                dataset: null,
+                hdfs: null,
+                user: null
+            });
+            this.view = new chorus.views.SearchResults({ model: this.model });
+            this.view.render();
         });
 
+        itShowsOnlyTheWorkfileSection();
+    });
+
+    function itShowsOnlyTheWorkfileSection() {
         it("shows the workfile section", function() {
             expect(this.view.$(".search_result_list.workfile_list")).toExist();
         });
 
         it("does not show the sections for other types of items", function() {
+            expect(this.view.$(".search_result_list.this_workspace")).not.toExist();
             expect(this.view.$(".search_result_list.instance_list")).not.toExist();
             expect(this.view.$(".search_result_list.workspace_list")).not.toExist();
             expect(this.view.$(".search_result_list.user_list")).not.toExist();
             expect(this.view.$(".search_result_list.dataset_list")).not.toExist();
             expect(this.view.$(".search_result_list.hdfs_list")).not.toExist();
         });
-    });
+    }
 
     describe("clicking an li", function() {
         beforeEach(function() {

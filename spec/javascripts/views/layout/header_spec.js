@@ -106,7 +106,6 @@ describe("chorus.views.Header", function() {
                 expect(listNotifications.at(4).get("id")).toEqual('5');
             });
         });
-
     });
 
     describe("#render", function() {
@@ -361,9 +360,6 @@ describe("chorus.views.Header", function() {
                     this.view.$("a.notifications").click();
                 })
 
-                beforeEach(function() {
-                });
-
                 it("shows a popup menu", function() {
                     expect(this.view.$(".menu.popup_notifications")).not.toHaveClass("hidden");
                 });
@@ -437,6 +433,8 @@ describe("chorus.views.Header", function() {
                 describe("when a notification:deleted event occurs", function() {
                     beforeEach(function() {
                         this.server.reset();
+                        this.view.unreadNotifications.loaded = true;
+                        this.view.notifications.loaded = true;
                         chorus.PageEvents.broadcast("notification:deleted");
                     });
 
@@ -447,7 +445,7 @@ describe("chorus.views.Header", function() {
 
                     context("when the fetch completes", function() {
                         beforeEach(function() {
-                            this.server.completeFetchAllFor(this.view.unreadNotifications, [], null, { records: 0 });
+                            this.server.completeFetchAllFor(this.view.unreadNotifications, [], null, { total: 0, page: 1, records: 0 });
                             this.server.completeFetchAllFor(this.view.notifications, [
                                 fixtures.notification({ id: '1' }),
                                 fixtures.notification({ id: '2' }),

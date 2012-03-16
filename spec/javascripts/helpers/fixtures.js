@@ -38,524 +38,9 @@ beforeEach(function() {
         this.server.respond();
     }
 
-    window.fixtures = function(model) {
-        var self = this;
-
-        return {
-            jsonFor: function jsonFor(key, options) {
-                return self.fixtures.jsonFor(key, $.extend({
-                        model: model
-                    },
-                    options));
-            },
-
-            modelFor: function modelFor(key, options) {
-                var klass = chorus.models[model] || chorus.collections[model];
-                var obj = new klass(null, options);
-                var data = klass.prototype.parse.call(obj, self.fixtures.jsonFor(key, {
-                    model: model
-                }));
-                if (obj.set) {
-                    obj.set(data);
-                } else {
-                    obj.reset(data, options);
-                }
-                return obj;
-            }
-        };
-    };
+    window.fixtures = {};
 
     $.extend(window.fixtures, {
-        jsonFor: function jsonFor(key, options) {
-            var config = $.extend({
-                    model: this.model,
-                    overrides: {}
-                },
-                options || {});
-
-            var source = this[config.model];
-
-            if (!source) {
-                throw "The model you asked for (" + config.model + ") is not in fixtures";
-                this.fail("The model you asked for (" + config.model + ") is not in fixtures");
-            }
-
-            if (!source[key]) {
-                throw "The key you asked for (" + key + ") is not in fixtures for " + config.model;
-                this.fail("The key you asked for (" + key + ") is not in fixtures for " + config.model);
-            }
-
-            return $.extend(source[key], config.overrides);
-        },
-
-        modelFor: function modelFor(key, options) {
-            var klass = chorus.models[this.model] || chorus.collections[this.model];
-            var obj = new klass(null, options);
-            var data = klass.prototype.parse.call(obj, self.fixtures.jsonFor(key, {
-                model: this.model
-            }));
-            if (obj.set) {
-                obj.set(data);
-            } else {
-                obj.reset(data, options);
-            }
-            return obj;
-        },
-
-        Session: {
-            save: {
-                "message": [
-
-                ],
-                "status": "ok",
-                "requestId": 4,
-                "resource": [
-                    {
-                        "userName": "edcadminlol",
-                        "admin": true,
-                        "firstName": "EDC",
-                        "lastName": "Admin",
-                        "fullName": "EDC Admin",
-                        "authid": "4b11614a29bb62f3a56f7ff141e90db91320194325353.539273276006",
-                        "use_external_ldap": false
-                    }
-                ],
-                "method": "POST",
-                "resourcelink": "/edc/auth/login/",
-                "pagination": null,
-                "version": "0.1"
-            },
-
-            saveFailure: {
-                "message": [
-                    {
-                        "message": "Username or password is incorrect.",
-                        "msgcode": "E_2_0006",
-                        "description": null,
-                        "severity": "error",
-                        "msgkey": "USER.LOGIN_FAILED"
-                    }
-                ],
-                "status": "fail",
-                "requestId": 3,
-                "resource": [
-
-                ],
-                "method": "POST",
-                "resourcelink": "/edc/auth/login/",
-                "pagination": null,
-                "version": "0.1"
-            }
-        },
-
-        User: {
-            fetch: {
-                "message": [],
-                "status": "ok",
-                "requestId": 108,
-                "resource": [
-                    {
-                        "id": "42",
-                        "userName": "edcadmin",
-                        "firstName": "EDC",
-                        "lastName": "Admin",
-                        "emailAddress": "edcadmin@example.com",
-                        "title": null,
-                        "ou": null,
-                        "manager": null,
-                        "streetAddress": null,
-                        "l": null,
-                        "st": null,
-                        "c": null,
-                        "admin": true,
-                        "notes": null,
-                        "lastLogin": "2011-11-16 09:40:27.916",
-                        "imageId": "10036",
-                        "dn": null,
-                        "isDeleted": false,
-                        "dumb": null,
-                        "lastUpdatedStamp": "2011-11-16 12:34:47.632",
-                        "lastUpdatedTxStamp": "2011-11-16 12:34:47.454",
-                        "createdStamp": "2011-11-03 10:49:41.346",
-                        "createdTxStamp": "2011-11-03 10:49:41.342"
-                    }
-                ],
-                "method": "GET",
-                "resourcelink": "/edc/user/edcadmin",
-                "pagination": null,
-                "version": "0.1"
-            }
-        },
-
-        UserSet: {
-            fetch: {
-                "message": [],
-                "status": "ok",
-                "requestId": 8,
-                "resource": [
-                    {
-                        "id": "10000",
-                        "userName": "markr",
-                        "firstName": "Mark",
-                        "lastName": "Rushakoff",
-                        "emailAddress": "markymark@pivotallabs.com",
-                        "title": "Title",
-                        "admin": false,
-                        "notes": null,
-                        "lastLogin": "2011-11-03 17:45:39",
-                        "isDeleted": false
-                    },
-                    {
-                        "id": "10001",
-                        "userName": "edcadmin",
-                        "firstName": "EDC",
-                        "lastName": "Admin",
-                        "emailAddress": "edcadmin@greenplum.com",
-                        "title": "Engineer",
-                        "admin": true,
-                        "notes": null,
-                        "lastLogin": "2011-11-03 17:45:39",
-                        "isDeleted": false
-                    },
-                    {
-                        "id": "10002",
-                        "userName": "frogman",
-                        "firstName": "frOg",
-                        "lastName": "man",
-                        "emailAddress": "frogman@greenplum.com",
-                        "title": "Frog-man",
-                        "admin": false,
-                        "notes": null,
-                        "lastLogin": "2011-11-03 17:45:39",
-                        "isDeleted": false
-                    }
-                ],
-                "method": "GET",
-                "resourcelink": "/edc/user/",
-                "pagination": {
-                    "total": "2",
-                    "page": "1",
-                    "records": "22"
-                },
-                "version": "0.1"
-            }
-
-        },
-
-        Workspace: {
-            fetch: {
-                "message": [],
-                "status": "ok",
-                "requestId": 3697,
-                "resource": [
-                    {
-                        "id": "10013",
-                        "ownerFullName": "EDC Admin",
-                        "name": "fortune",
-                        "description": "a cool workspace",
-                        "createdStamp": "2011-11-14",
-                        "owner": "edcadmin",
-                        "isPublic": true,
-                        "iconId": null,
-                        "state": 1,
-                        "summary": "this is the workspace summary",
-                        "sandboxInfo": {
-                            databaseId: null,
-                            databaseName: null,
-                            instanceId: null,
-                            instanceName: null,
-                            sandboxId: null,
-                            schemaId: null,
-                            schemaName: null
-                        },
-                        "active": true,
-                        "permission": ["admin"]
-                    }
-                ],
-                "method": "GET",
-                "resourcelink": "/edc/workspace/10013",
-                "pagination": null,
-                "version": "0.1"
-            },
-            fetchWithLatestComments: {
-                "message": [],
-                "status": "ok",
-                "requestId": 3697,
-                "resource": [
-                    {
-                        "id": "10013",
-                        "ownerFullName": "EDC Admin",
-                        "name": "fortune",
-                        "description": "a cool workspace",
-                        "createdStamp": "2011-11-14",
-                        "owner": "edcadmin",
-                        "isPublic": true,
-                        "iconId": null,
-                        "state": 1,
-                        "summary": "this is the workspace summary",
-                        "sandboxInfo": {
-                            databaseId: null,
-                            databaseName: null,
-                            instanceId: null,
-                            instanceName: null,
-                            sandboxId: null,
-                            schemaId: null,
-                            schemaName: null
-                        },
-                        "active": true,
-                        "permission": ["admin"],
-                        "latestCommentList": [
-                            {
-                                "timestamp": "2011-12-08 17:16:47",
-                                "id": 10050,
-                                "author": {
-                                    "id": "InitialUser",
-                                    "lastName": "Admin",
-                                    "firstName": "EDC"
-                                },
-                                "text": "This rocks, man",
-                                "attachments": [],
-                                "type": "NOTE",
-                                "comments": []
-                            }
-                        ]
-                    }
-                ],
-                "method": "GET",
-                "resourcelink": "/edc/workspace/10013",
-                "pagination": null,
-                "version": "0.1"
-            }
-
-        },
-
-        Workfile: {
-            copyFailed: {
-                "message": [
-                    {
-                        "message": "Workspace already has a workfile with this name. Specify a different name.",
-                        "msgcode": "E_14_0013",
-                        "description": null,
-                        "severity": "error",
-                        "msgkey": "WORKFILE.FILENAME_EXISTS"
-                    }
-                ],
-                "status": "fail",
-                "requestId": 1156,
-                "resource": [],
-                "method": "POST",
-                "resourcelink": "/edc/workspace/10010/workfile",
-                "pagination": null,
-                "version": "0.1"
-            }
-        },
-
-        Activity: {
-            fetch: {
-                "message": [ ],
-                "status": "ok",
-                "requestId": 256,
-                "resource": [
-                    {
-                        id: 10000,
-                        timestamp: "2011-11-23 15:42:02.321",
-                        type: "NOT_IMPLEMENTED",
-                        author: {
-                            userName: "edcadmin",
-                            firstName: "EDC",
-                            lastName: "Admin"
-                        },
-
-                        comments: [
-                            {
-                                id: 10023,
-                                timestamp: "2011-11-23 15:42:02.321",
-                                author: {
-                                    userName: "msofaer",
-                                    firstName: "Michael",
-                                    lastName: "Sofaer"
-                                },
-                                text: "hi there"
-                            },
-                            {
-                                id: 10024,
-                                timestamp: "2011-11-23 15:42:02.321",
-                                author: {
-                                    userName: "mrushakoff",
-                                    firstName: "Mark",
-                                    lastName: "Rushakoff"
-                                },
-                                text: "hello"
-                            }
-                        ]
-                    }
-                ],
-                "method": "GET",
-                "resourcelink": "/edc/activitystream/workspace/10000",
-                "pagination": null,
-                "version": "0.1"
-            }
-
-        },
-
-        ActivitySet: {
-            fetch: {
-                "message": [ ],
-                "status": "ok",
-                "requestId": 256,
-                "resource": [
-                    {
-                        id: 10000,
-                        timestamp: "2011-11-23 15:42:02.321",
-                        type: "NOTE",
-                        author: {
-                            id: "11",
-                            userName: "edcadmin",
-                            firstName: "EDC",
-                            lastName: "Admin"
-                        },
-
-                        workspace: {
-                            id: "10203",
-                            name: "my workspace"
-                        },
-
-                        comments: [
-                            {
-                                id: 10023,
-                                timestamp: "2011-11-23 15:42:02.321",
-                                author: {
-                                    id: "12",
-                                    userName: "msofaer",
-                                    firstName: "Michael",
-                                    lastName: "Sofaer"
-                                },
-                                text: "hi there"
-                            },
-                            {
-                                id: 10024,
-                                timestamp: "2011-05-23 15:42:02.321",
-                                author: {
-                                    id: "13",
-                                    userName: "mrushakoff",
-                                    firstName: "Mark",
-                                    lastName: "Rushakoff"
-                                },
-                                text: "hello"
-                            }
-                        ],
-                        artifacts: [
-                            {
-                                entityId: "10101",
-                                entityType: "file",
-                                id: "10101",
-                                name: "something.sql",
-                                type: "SQL"
-                            },
-                            {
-                                entityId: "10102",
-                                entityType: "file",
-                                id: "10102",
-                                name: "something.txt",
-                                type: "TXT"
-                            }
-                        ]
-                    },
-                    {
-                        id: 10001,
-                        timestamp: "2011-04-23 15:42:02.321",
-                        type: "NOTE",
-                        author: {
-                            id: "14",
-                            userName: "dburkes",
-                            firstName: "Danny",
-                            lastName: "Burkes"
-                        },
-
-                        workspace: {
-                            id: "10203",
-                            name: "my workspace"
-                        },
-                        comments: [],
-                        artifacts: []
-                    }
-                ],
-                "method": "GET",
-                "resourcelink": "/edc/activitystream/workspace/10000",
-                "pagination": {
-                    "total": "1",
-                    "page": "1",
-                    "records": "8"
-                },
-                "version": "0.1"
-            }
-        },
-
-        Instance: {
-            fetch: {
-                "message": [],
-                "status": "ok",
-                "requestId": 260,
-                "resource": [
-                    {
-                        "name": "instance1",
-                        "description": "11",
-                        "owner": "edcadmin",
-                        "ownerFullName": "EDC Admin",
-                        "ownerId": "10111",
-                        "host": "10.32.88.200",
-                        "port": 5432,
-                        "state": "online",
-                        "provisionType": "register",
-                        "instanceProvider": "Greenplum Database and Hadoop",
-                        "isDeleted": false,
-                        "id": "10000",
-                        "lastUpdatedTxStamp": "2011-09-29 09:22:03.562",
-                        "createdTxStamp": "2011-09-29 09:22:03.562",
-                        "lastUpdatedStamp": "2011-09-29 09:22:03.836",
-                        "createdStamp": "2011-09-29 09:22:03.836"
-                    }
-                ],
-                "method": "GET",
-                "resourcelink": "/edc/instance/",
-                "pagination": null,
-                "version": "0.1"
-            },
-
-            fetchWithSharedAccount: {
-                "message": [],
-                "status": "ok",
-                "requestId": 260,
-                "resource": [
-                    {
-                        "name": "instance1",
-                        "description": "11",
-                        "owner": "edcadmin",
-                        "ownerFullName": "EDC Admin",
-                        "ownerId": "10111",
-                        "host": "10.32.88.200",
-                        "port": 5432,
-                        "state": "online",
-                        "provisionType": "register",
-                        "instanceProvider": "Greenplum Database and Hadoop",
-                        "isDeleted": false,
-                        "id": "10000",
-                        "lastUpdatedTxStamp": "2011-09-29 09:22:03.562",
-                        "createdTxStamp": "2011-09-29 09:22:03.562",
-                        "lastUpdatedStamp": "2011-09-29 09:22:03.836",
-                        "createdStamp": "2011-09-29 09:22:03.836",
-                        "sharedAccount": {
-                            "dbUserName": "the_dude"
-                        }
-                    }
-                ],
-                "method": "GET",
-                "resourcelink": "/edc/instance/",
-                "pagination": null,
-                "version": "0.1"
-            }
-        },
-
         currentId: 1,
         nextId: function() {
             return this.currentId++;
@@ -571,6 +56,13 @@ beforeEach(function() {
                     workspace: fixtures.workspaceJson()
                 }, overrides));
             }
+        },
+
+        activitySet: function() {
+            var models = [this.activities.NOTE_ON_CHORUS_VIEW(), this.activities.NOTE_ON_CHORUS_VIEW()]
+            var set = new chorus.collections.ActivitySet([])
+            set.reset(models);
+            return set;
         },
 
         activities: {
@@ -709,7 +201,7 @@ beforeEach(function() {
                         objectName: "__gp_fullname",
                         objectType: "BASE_TABLE",
                         query: null,
-                        type: "SOURCE_TABLE",
+                        type: "SANDBOX_TABLE",
                         workspaceId: workspace.id
                     },
                     timestamp: "2012-02-29 15:24:42",
@@ -742,6 +234,23 @@ beforeEach(function() {
                 }, overrides);
 
                 return new chorus.models.Activity(attrs);
+            },
+
+            "WORKSPACE_CHANGE_NAME": function(overrides) {
+                return new chorus.models.Activity(_.extend({
+                    type: "WORKSPACE_CHANGE_NAME",
+                    author: {
+                        firstName: "EDC",
+                        id: "InitialUser",
+                        isDeleted: false,
+                        lastName: "Admin"
+                    },
+                    comments: [],
+                    id: fixtures.nextId().toString(),
+                    isDeleted: false,
+                    timestamp: "2012-03-15 17:27:52",
+                    workspace: fixtures.workspaceJson()
+                }, overrides));
             },
 
             "WORKFILE_CREATED": function() {
@@ -1825,6 +1334,7 @@ beforeEach(function() {
                 userName: "user" + id,
                 firstName: "EDC" + id,
                 lastName: "Admin" + id,
+                emailAddress: "user" + id + "@example.com",
                 createdStamp: "2012-01-24 17:21:02.597",
                 isDeleted: false,
                 lastLogin: "2012-02-15 15:08:55",
@@ -1927,12 +1437,13 @@ beforeEach(function() {
             }, overrides);
         },
 
-        workspaceJson: function() {
-            var id = this.nextId();
+        workspaceJson: function(overrides) {
+            overrides = overrides || {};
+            var id = overrides.id || this.nextId();
             var databaseId = this.nextId();
             var instanceId = this.nextId();
             var schemaId = this.nextId();
-            return {
+            return _.extend({
                 id: id.toString(),
                 name: 'Workspace ' + id,
                 ownerId: this.nextId().toString(),
@@ -1947,11 +1458,10 @@ beforeEach(function() {
                     schemaId: schemaId,
                     schemaName: 'schema' + schemaId
                 }
-            }
+            }, overrides);
         },
 
         user: function(overrides) {
-            var id = this.nextId().toString();
             return new chorus.models.User(this.userJson(_.extend({
                 admin: true,
                 use_external_ldap: false
@@ -3592,6 +3102,18 @@ beforeEach(function() {
 
         typeAheadSearchResult: function(overrides) {
             return new chorus.models.TypeAheadSearchResult(fixtures.typeAheadSearchResultJson(overrides));
+        },
+
+        serverErrors: function(overrides) {
+            return [
+                _.extend({
+                    description: null,
+                    message: "Terrible things happened",
+                    msgcode: "E_5_0003",
+                    msgkey: "DB.CONNECT_FAIL",
+                    severity: "error"
+                }, overrides)
+            ]
         }
     })
     ;

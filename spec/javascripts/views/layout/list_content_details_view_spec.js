@@ -1,8 +1,13 @@
 describe("ListContentDetails", function() {
     beforeEach(function() {
-        fixtures.model = "UserSet";
-        this.collection = fixtures.modelFor("fetch");
-        this.view = new chorus.views.ListContentDetails({ collection : this.collection, modelClass : "User" });
+        this.collection = fixtures.userSet();
+        this.collection.pagination = {
+            "total": "2",
+            "page": "1",
+            "records": "22"
+        }
+        this.collection.loaded = true;
+        this.view = new chorus.views.ListContentDetails({ collection: this.collection, modelClass: "User" });
     })
 
     describe("#render", function() {
@@ -11,18 +16,18 @@ describe("ListContentDetails", function() {
                 beforeEach(function() {
                     this.view.options.buttons = [
                         {
-                            view : "WorkspacesNew",
-                            text : "Create a Workspace",
-                            dataAttributes : [
+                            view: "WorkspacesNew",
+                            text: "Create a Workspace",
+                            dataAttributes: [
                                 {
-                                    name : "foo",
-                                    value : "bar"
+                                    name: "foo",
+                                    value: "bar"
                                 }
                             ]
                         },
                         {
-                            url : "#/foo",
-                            text : "Create a Foo"
+                            url: "#/foo",
+                            text: "Create a Foo"
                         }
                     ];
 

@@ -1,12 +1,11 @@
 describe("chorus.views.HdfsShowFileSidebar", function() {
     beforeEach(function() {
-        var now = Date.parse('yesterday').toISOString().toString();
-        var now_utc = now.slice(0,10) + " " + now.slice(12)
+        var now = new Date().addDays(-1).toString("yyyy-MM-dd HH:mm:ss.000")
 
         this.file = fixtures.hdfsFile({
             path: "/folder/filename.txt",
             instanceId: 9876,
-            lastModificationTime: now_utc
+            lastModificationTime: now
         })
         this.view = new chorus.views.HdfsShowFileSidebar({ model: this.file })
     });
@@ -37,6 +36,10 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
             expect(this.view.$("a.dialog").data("entity-type")).toBe("hdfs");
         })
 
+        it("has a link to create external table", function() {
+            expect(this.view.$("a.external_table")).toExist();
+        })
+
         it("has an activity list", function() {
             expect(this.view.$(".activity_list")).toExist()
         });
@@ -44,6 +47,30 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
         it("should have an activities tab", function() {
             expect(this.view.$('.tabbed_area .activity_list')).toExist();
         });
+
+        describe("clicking the external table link", function() {
+            beforeEach(function() {
+                this.modalSpy = stubModals();
+                var $linkExternalTable = this.view.$("a.external_table");
+                expect($linkExternalTable).toExist();
+                $linkExternalTable.click();
+                this.csv = new chorus.models.CsvHdfs(fixtures.csvImport({instanceId: "9876", path: "/folder/filename.txt", content: "hello\nworld"}).attributes);
+                this.server.completeFetchFor(this.csv);
+            });
+
+            it("launches the right dialog", function() {
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs)
+                expect(chorus.modal.csv.get("encodedPath")).toBe("%2Ffolder%2Ffilename.txt");
+            });
+        });
+
+        it("should re-render when csv_import:started is triggered", function() {
+            this.server.reset();
+            chorus.PageEvents.broadcast("csv_import:started");
+            expect(this.server.requests[0].url).toContain("/edc/activitystream/hdfs/9876%7C%2Ffolder%2Ffilename.txt");
+            expect(this.server.requests[0].method).toBe("GET");
+        });
+
     });
 
     describe("when the activity list collection is changed", function() {

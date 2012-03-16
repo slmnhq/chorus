@@ -451,8 +451,15 @@ describe("handlebars", function() {
             });
 
             it("html escapes the text", function() {
-                var link = Handlebars.helpers.linkTo("/", "<script>").toString();
-                expect(link).toMatch('&lt;script&gt;');
+                var unsafeString = "<em>stuff</em>"
+                var link = Handlebars.helpers.linkTo("/", unsafeString).toString();
+                expect(link).toMatch('&lt;em&gt;');
+            });
+
+            it("does not html escape the text if it has been declared safe", function() {
+                var safeString = new Handlebars.SafeString("<em>stuff</em>")
+                var link = Handlebars.helpers.linkTo("/", safeString).toString();
+                expect(link).toMatch('<em>');
             });
         });
 
@@ -705,6 +712,16 @@ describe("handlebars", function() {
                 expect($(this.result).find("a.schema")).toContainText(this.model.get("schemaName"));
                 expect($(this.result).find("a.schema").attr("href")).toMatchUrl(this.model.schema().showUrl());
             });
+
+            it("includes the highlighted database and schema name", function() {
+                this.model = fixtures.tabularData({highlightedAttributes: {
+                    databaseName: 'db_<em>name</em>',
+                    schemaName: 'schema_<em>name</em>'
+                }});
+                this.result = Handlebars.helpers.tabularDataLocation(this.model).toString();
+                expect($(this.result).find('em').length).toBe(2);
+            });
+
 
             context("when credentials are not present", function() {
                 beforeEach(function() {

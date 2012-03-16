@@ -182,7 +182,7 @@
             return {
                 objectName: datasetAdded.get("objectName"),
                 objectUrl: datasetAdded.showUrl(),
-                iconSrc: "/images/table_large.png",
+                iconSrc: datasetAdded.iconUrl(),
                 iconClass: ''
             }
         },
@@ -195,6 +195,13 @@
                 objectUrl: datasetAdded.showUrl(),
                 hdfsName: hdfs.get("name"),
                 hdfsUrl: hdfs.showUrl()
+            }
+        },
+
+        WORKSPACE_CHANGE_NAME: function(model) {
+            return {
+                objectName: model.workspace().get("name"),
+                objectUrl: model.workspace().showUrl()
             }
         },
 

@@ -43,5 +43,5 @@ describe("chorus.pages.DatabaseIndexPage", function() {
             expect(this.page.sidebar).toBeA(chorus.views.DatabaseListSidebar);
             expect(this.page.$(this.page.sidebar.el)).toExist();
         })
-    })
-})
+    });
+});

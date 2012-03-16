@@ -5,7 +5,28 @@ describe("chorus.dialogs.SandboxNew", function() {
         var launchElement = $("<a data-workspace-id='45'></a>");
         this.dialog = new chorus.dialogs.SandboxNew({launchElement: launchElement, pageModel: this.workspace});
         this.dialog.render();
-    })
+    });
+
+    context("when the SchemaPicker triggers an error", function() {
+        beforeEach(function() {
+            var modelWithError = fixtures.schemaSet();
+            modelWithError.serverErrors = fixtures.serverErrors({
+                message: 'oh nos!'
+            });
+            this.dialog.instanceMode.trigger("error", modelWithError);
+        });
+
+        it("shows the error", function() {
+            expect(this.dialog.$('.errors')).toContainText('oh nos!');
+        });
+
+        context("and then the schemaPicker triggers clearErrors", function(){
+            it("clears the errors", function() {
+                this.dialog.instanceMode.trigger("clearErrors");
+                expect(this.dialog.$('.errors')).toBeEmpty();
+            });
+        })
+    });
 
     context("clicking the submit button", function() {
         beforeEach(function() {
@@ -80,7 +101,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
                 it("reloads the page", function() {
                     expect(chorus.router.reload).toHaveBeenCalled();
-                })
+                });
 
                 it("shows a toast message", function() {
                     expect(chorus.toast).toHaveBeenCalledWith("sandbox.create.toast");

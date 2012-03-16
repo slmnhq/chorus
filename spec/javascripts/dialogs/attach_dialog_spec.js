@@ -35,7 +35,7 @@ describe("chorus.dialogs.Attach", function() {
         beforeEach(function() {
             this.dialog.collectionModelContext = function() {
                 return {
-                    iconUrl: '/image.png',
+                    iconUrl: '/images/emc-logo.png',
                     name: 'my name'
                 }
             }
@@ -49,7 +49,7 @@ describe("chorus.dialogs.Attach", function() {
         it("includes an image for each entry", function() {
             var images = this.dialog.$(".collection_list img");
             expect(images.length).toBe(this.dialog.collection.length);
-            expect(images.eq(0)).toHaveAttr("src", '/image.png');
+            expect(images.eq(0)).toHaveAttr("src", '/images/emc-logo.png');
         });
 
         it("includes a name for each entry", function() {

@@ -13,4 +13,7 @@ set cursorline
 set foldmethod=syntax
 
 nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>""
+map <C-n> :tabnew 
+set gcr=a:blinkwait0
+
 

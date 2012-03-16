@@ -3,9 +3,9 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
     className:"database_dataset_sidebar_list",
     useLoadingSection: true,
 
-    events:_.extend({}, chorus.views.DatabaseSidebarList.prototype.events, {
+    events: {
         "click li a":"datasetSelected"
-    }),
+    },
 
     fetchResourceAfterSchemaSelected: function() {
         this.resource = this.collection = this.schema.databaseObjects();
@@ -33,6 +33,7 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
 
     collectionModelContext:function (model) {
         return {
+            iconUrl: model.iconUrl({size:"medium"}),
             type:model.get("type"),
             name:model.get("objectName"),
             cid:model.cid

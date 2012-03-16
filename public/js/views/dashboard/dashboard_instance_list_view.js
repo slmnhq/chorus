@@ -11,18 +11,6 @@ chorus.views.DashboardInstanceList = chorus.views.Base.extend({
             isHadoop: model.isHadoop(),
             showUrl: model.showUrl()
         }
-    },
-
-    postRender: function() {
-        var self = this;
-        this.$("li").each(function(i, li) {
-            var id = $(li).data("id");
-            var instance = self.collection.get(id);
-            $(li).find("a[data-dialog='SchemaBrowser']").data("instance", {
-                id: instance.get("id"),
-                name: instance.get("name")
-            });
-        })
     }
 });
 

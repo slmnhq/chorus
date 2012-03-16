@@ -19,11 +19,10 @@ describe("chorus.pages.UserEditPage", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            fixtures.model = 'User';
             chorus.session = new chorus.models.Session();
             setLoggedInUser({"userName" : "edcadmin"});
 
-            this.user = fixtures.modelFor('fetch')
+            this.user = fixtures.user()
 
             this.view = new chorus.pages.UserEditPage(this.user.get("id"));
             this.view.model.set(this.user.attributes)
@@ -32,7 +31,7 @@ describe("chorus.pages.UserEditPage", function() {
         });
 
         it("displays the first + last name in the header", function() {
-            expect(this.view.$(".content_header h1").text().trim()).toBe("EDC Admin");
+            expect(this.view.$(".content_header h1").text().trim()).toBe(this.user.displayName());
         });
 
         it("displays the word 'details' in the details-header", function() {

@@ -88,7 +88,7 @@
         },
 
         declareValidations: function(attrs) {
-            this.requirePattern("value", /^[0-9:]*$/, attrs, "dataset.filter.time_required", "allowBlank");
+            this.requirePattern("value", chorus.ValidationRegexes.Time(), attrs, "dataset.filter.time_required", "allowBlank");
         }
     });
 
@@ -106,9 +106,9 @@
         declareValidations: function(attrs) {
             if (attrs["year"] == "" && attrs["month"] == "" && attrs["day"] == "") return;
 
-            this.requirePattern("year", /^[0-9]{4}$/, attrs, "dataset.filter.year_required");
-            this.requirePattern("month", /^[0-9]{1,2}$/, attrs, "dataset.filter.month_required");
-            this.requirePattern("day", /^[0-9]{1,2}$/, attrs, "dataset.filter.day_required");
+            this.requirePattern("year", chorus.ValidationRegexes.Year(), attrs, "dataset.filter.year_required");
+            this.requirePattern("month", chorus.ValidationRegexes.Month(), attrs, "dataset.filter.month_required");
+            this.requirePattern("day", chorus.ValidationRegexes.Day(), attrs, "dataset.filter.day_required");
         }
     });
 

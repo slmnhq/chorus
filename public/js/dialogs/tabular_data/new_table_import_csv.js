@@ -24,6 +24,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
 
         this.bindings.add(this.csv, "saved", this.saved);
         this.bindings.add(this.csv, "saveFailed", this.saveFailed);
+        this.bindings.add(this.csv, "validationFailed", this.saveFailed);
     },
 
     saved: function() {
@@ -41,21 +42,27 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         $typeDiv.removeClass("integer float text date time timestamp").addClass(data);
     },
 
-    storeColumnNames: function() {
+    storeColumnInfo: function() {
         var $names = this.$(".column_names input:text");
 
-        var column_names
+        var columnNames;
         if ($names.length) {
-            column_names = _.map($names, function(name, i) {
+            columnNames = _.map($names, function(name, i) {
                 return $names.eq(i).val();
             });
 
             if (this.csv.get("hasHeader")) {
-                this.csv.set({headerColumnNames: column_names}, {silent: true})
+                this.csv.set({headerColumnNames: columnNames}, {silent: true})
             } else {
-                this.csv.set({generatedColumnNames: column_names}, {silent: true})
+                this.csv.set({generatedColumnNames: columnNames}, {silent: true})
             }
         }
+
+        var $types = this.$(".data_types .chosen");
+        var types = _.map($types, function($type, i){
+            return $types.eq(i).text();
+        })
+        this.csv.set({types: types}, {silent: true});
     },
 
     postRender: function() {
@@ -102,7 +109,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             columns: this.csv.columnOrientedData(),
             delimiter: this.other_delimiter ? this.delimiter : '',
             directions: chorus.helpers.safeT("dataset.import.table.new.directions", {
-                tablename_input_field: "<input type='text' name='table_name' value='" + this.csv.get("toTable") + "'/>"
+                tablename_input_field: "<input type='text' name='toTable' value='" + this.csv.get("toTable") + "'/>"
             }),
             ok: this.ok
         }
@@ -110,7 +117,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
 
     startImport: function() {
         if (this.performValidation()) {
-            this.storeColumnNames();
+            this.storeColumnInfo();
             this.prepareCsv();
 
             this.$("button.submit").startLoading(this.loadingKey);
@@ -139,7 +146,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
 
     performValidation: function() {
         var $names = this.$(".column_names input:text");
-        var pattern = /^[a-zA-Z][a-zA-Z0-9_]{0,63}/;
+        var pattern = chorus.ValidationRegexes.ChorusIdentifier64();
         var allValid = true;
         _.each($names, function(name, i) {
             var $name = $names.eq(i);
@@ -185,7 +192,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     setHeader: function() {
-        this.storeColumnNames();
+        this.storeColumnInfo();
         this.refreshCSV();
     },
 

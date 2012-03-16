@@ -30,6 +30,9 @@ chorus.views.SelectableList = chorus.views.Base.extend({
         $target.addClass("selected");
 
         this.selectedIndex = $lis.index($target);
+        if(this.selectedIndex == -1) {
+            this.selectedIndex = 0;
+        }
         this.itemSelected(this.collection.at(this.selectedIndex));
     },
 

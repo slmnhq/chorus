@@ -35,6 +35,8 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$(".right").addClass("executing")
         this.spinnerTimer = _.delay(_.bind(this.startSpinner, this), 250)
         this.elapsedTimer = _.delay(_.bind(this.incrementElapsedTime, this), 1000)
+        this.$(".result_content").removeClass("hidden");
+        this.closeError();
     },
 
     startSpinner: function() {
@@ -77,8 +79,6 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$(".sql_errors").removeClass("hidden");
         this.$(".result_content").addClass("hidden");
         this.$(".message").empty();
-        this.$(".controls").removeClass("hidden");
-        this.minimizeTable();
     },
 
     cancelExecution: function(event) {
@@ -153,7 +153,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     closeError: function(e) {
-        e.preventDefault();
+        e && e.preventDefault();
         this.$(".sql_errors").addClass("hidden");
     },
 

@@ -1,4 +1,4 @@
-chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
+chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend(_.extend({}, chorus.Mixins.InstanceCredentials.page, {
     setup:function (instanceId, path) {
         this.path = "/" + path;
         this.instance = new chorus.models.Instance({id: instanceId});
@@ -72,4 +72,4 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
     entrySelected : function(model) {
         this.model = model;
     }
-});
+}));

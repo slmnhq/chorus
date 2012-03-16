@@ -3,7 +3,6 @@
     Handlebars.registerPartial("errorDiv", '<div class="errors">{{#if serverErrors }}{{#if serverErrors.length}}<ul>{{#each serverErrors}}<li>{{message}}</li>{{/each}}</ul><a class="close_errors action" href="#">{{t "actions.close"}}</a>{{/if}}{{/if}}</div>');
 
     var templates = {}; //for memoizing handlebars helpers templates
-    var expectedDateFormat = /^(\d{4}-\d{1,2}-\d{1,2}\s+\d{1,2}:\d{2}:\d{2})/;
     chorus.helpers = {
         cache_buster: function() {
             return new Date().getTime();
@@ -144,7 +143,11 @@
         },
 
         linkTo: function(url, text, attributes) {
-            return new Handlebars.SafeString($("<a></a>").attr("href", url).text(text).attr(attributes || {}).outerHtml());
+            var link = $("<a></a>").attr("href", url).attr(attributes || {})
+
+            link.html(Handlebars.Utils.escapeExpression(text))
+
+            return new Handlebars.SafeString(link.outerHtml());
         },
 
         spanFor: function(text, attributes) {
@@ -273,21 +276,26 @@
         },
 
         tabularDataLocation: function(tabularData) {
+            var highlightedTabularData = chorus.helpers.withSearchResults(tabularData)
+            var instance = tabularData.instance();
+            var schema = tabularData.schema();
+            var database = schema.database();
+
             var schemaPieces = [];
+            var instanceName = instance.get("name")
+            var databaseName = highlightedTabularData.get('databaseName')
+            var schemaName = highlightedTabularData.get('schemaName')
+
             if (tabularData.get('hasCredentials') === false) {
-                schemaPieces.push(tabularData.get('instance').name);
-                schemaPieces.push(tabularData.get('databaseName'));
-                schemaPieces.push(tabularData.get('schemaName'));
+                schemaPieces.push(instanceName);
+                schemaPieces.push(databaseName);
+                schemaPieces.push(schemaName);
             } else {
-                var instance = new chorus.models.Instance(tabularData.get("instance"));
-                schemaPieces.push(chorus.helpers.linkTo(instance.showUrl(), instance.get("name"), {"class": "instance"}).toString());
-
-                var database = new chorus.models.Database({instanceId: instance.id, name: tabularData.get("databaseName")});
-                schemaPieces.push(chorus.helpers.linkTo(database.showUrl(), tabularData.get('databaseName'), {"class": "database"}).toString());
-
-                schemaPieces.push(chorus.helpers.linkTo(tabularData.schema().showUrl(), tabularData.get('schemaName'),
-                    {'class': 'schema'}).toString())
+                schemaPieces.push(chorus.helpers.linkTo(instance.showUrl(), instanceName, {"class": "instance"}).toString());
+                schemaPieces.push(chorus.helpers.linkTo(database.showUrl(), databaseName, {"class": "database"}).toString());
+                schemaPieces.push(chorus.helpers.linkTo(schema.showUrl(), schemaName, {'class': 'schema'}).toString())
             }
+
             return new Handlebars.SafeString($("<span></span>").html(t("dataset.from", {location: schemaPieces.join('.')})).outerHtml());
         },
 

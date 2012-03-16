@@ -1,7 +1,10 @@
 describe("chorus.views.ShuttleWidget", function() {
     beforeEach(function() {
-        fixtures.model = "UserSet";
-        this.collection = fixtures.modelFor("fetch");
+        this.collection = fixtures.userSet([
+            fixtures.user({id: 10000, firstName: "a", lastName: "a", admin: false}),
+            fixtures.user({id: 10001, firstName: "b", lastName: "b", admin: true}),
+            fixtures.user({id: 10002, firstName: "a", lastName: "c", admin: false})
+        ]);
         this.selectedItems = new Backbone.Collection([this.collection.get("10001")]);
         this.nonRemovableItems = [this.collection.get("10000")];
         this.nonRemovableText = "RockSteady"
@@ -142,7 +145,7 @@ describe("chorus.views.ShuttleWidget", function() {
         describe("search", function() {
             context("when typing something that matches one name", function() {
                 beforeEach(function() {
-                    this.view.$("input.search").val("admin");
+                    this.view.$("input.search").val("b");
                     this.view.$("input.search").trigger("textchange");
                 });
 
@@ -158,7 +161,7 @@ describe("chorus.views.ShuttleWidget", function() {
 
             context("when typing something that matches more than one name", function() {
                 beforeEach(function() {
-                    this.view.$("input.search").val("ma");
+                    this.view.$("input.search").val("a");
                     this.view.$("input.search").trigger("textchange");
                 });
 

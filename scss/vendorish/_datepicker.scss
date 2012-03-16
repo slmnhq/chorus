@@ -106,7 +106,7 @@
         border:0 none;
         padding:0;
         margin:0 4px;
-        background:transparent url(../images/datepicker-sprite.png) no-repeat 0 -72px;
+        background:transparent url(/images/datepicker-sprite.png) no-repeat 0 -72px;
         min-width:18px;
         line-height:1;
         cursor:pointer;
@@ -303,7 +303,7 @@
 .date-picker .month-out 
         {
         background-color:#fff;
-        background-image:url(../images/datepicker-gradient.gif);
+        background-image:url(/images/datepicker-gradient.gif);
         background-repeat:repeat-x;
         background-position:0 0;
         }
@@ -418,7 +418,7 @@
 /* The "todays date" cell style */
 .date-picker .date-picker-today
         {
-        background:#fff url(../images/datepicker-today.gif) no-repeat 0 0;
+        background:#fff url(/images/datepicker-today.gif) no-repeat 0 0;
         }
 .date-picker .month-out.date-picker-highlight 
         {
@@ -433,7 +433,7 @@
 .date-picker .date-picker-hover,
 .date-picker .month-out.date-picker-hover
         {
-        background:#fff url(../images/datepicker-cursor.jpg) no-repeat 0 0;
+        background:#fff url(/images/datepicker-cursor.jpg) no-repeat 0 0;
         cursor:pointer;
         border-color:rgb(100,130,170) !important;
         border-color:rgba(100,130,170,.7) !important;

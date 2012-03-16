@@ -64,10 +64,11 @@ describe("chorus.views.SchemaPicker", function() {
                 beforeEach(function() {
                     this.view = new chorus.views.SchemaPicker({ allowCreate: true });
                     spyOnEvent(this.view, 'change');
+                    spyOnEvent(this.view, 'clearErrors');
                     this.view.render();
                     this.dialogContainer = $("<div class='dialog sandbox_new'></div>").append(this.view.el);
                     $('#jasmine_content').append(this.dialogContainer);
-                })
+                });
 
                 it("renders creation markup", function() {
                     expect(this.view.$(".database a.new")).toExist();
@@ -428,9 +429,50 @@ describe("chorus.views.SchemaPicker", function() {
                                             });
                                         });
                                     });
+
+                                    context("when the schema list fetch fails", function() {
+                                        beforeEach(function() {
+                                            spyOnEvent(this.view, 'error');
+                                            this.server.lastFetchAllFor(this.view.schemas).fail('whoops!');
+                                        });
+
+                                        it("hides the loading section", function() {
+                                            expect(this.view.$(".schema")).toHaveClass("hidden")
+                                        });
+
+                                        it("triggers error with the message", function() {
+                                            expect("error").toHaveBeenTriggeredOn(this.view, [this.view.schemas]);
+                                        });
+                                    });
+                                });
+                            });
+
+                            context("when the database list fetch fails", function() {
+                                beforeEach(function() {
+                                    spyOnEvent(this.view, 'error');
+                                    this.server.lastFetchAllFor(this.view.databases).fail('whoops!');
+                                });
+
+                                it("hides the loading section", function() {
+                                    expect(this.view.$(".database")).toHaveClass("hidden")
+                                });
+
+                                it("triggers error with the message", function() {
+                                    expect("error").toHaveBeenTriggeredOn(this.view, [this.view.databases]);
                                 });
                             });
                         });
+                    });
+                });
+
+                context("when the instance list fetch fails", function() {
+                    beforeEach(function() {
+                        spyOnEvent(this.view, 'error');
+                        this.server.lastFetchAllFor(this.view.instances).fail('whoops!');
+                    });
+
+                    it("triggers error with the message", function() {
+                        expect("error").toHaveBeenTriggeredOn(this.view, [this.view.instances]);
                     });
                 });
 
@@ -603,6 +645,7 @@ describe("chorus.views.SchemaPicker", function() {
             it("should reset " + type + " select", function() {
                 expect(this.view.$('.' + type + ' select option:selected').val()).toBeFalsy();
                 expect(this.view.$('.' + type + ' select option').length).toBe(1);
+                expect('clearErrors').toHaveBeenTriggeredOn(this.view);
             });
 
             itTriggersTheChangeEvent(changeArgument);

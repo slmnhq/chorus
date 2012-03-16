@@ -1,7 +1,6 @@
 describe("chorus.views.SubNav", function() {
     beforeEach(function() {
-        fixtures.model = "Workspace";
-        this.model = fixtures.modelFor("fetch");
+        this.model = fixtures.workspace();
         this.view = new chorus.views.SubNav({ tab : "workfiles", model : this.model });
     })
 

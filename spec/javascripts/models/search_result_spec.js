@@ -9,7 +9,7 @@ describe("chorus.models.SearchResult", function() {
                 this.model.set({ workspaceId: "5", searchIn: "this_workspace" });
             });
 
-            expectPaginatedUrl("/edc/search/workspace/5?query=jackson5");
+            expectPaginatedUrl("/edc/search/workspace/?workspaceId=5&query=jackson5");
             expectShowUrl("#/workspaces/5/search/this_workspace/all/jackson5");
         });
 
@@ -194,6 +194,15 @@ describe("chorus.models.SearchResult", function() {
         context("when the search results is filtered to a single entity type", function() {
             it("returns the results collection for that entity type", function() {
                 this.model.set({ entityType: "workfile" });
+                expect(this.model.getResults()).toBeDefined();
+                expect(this.model.getResults()).toBe(this.model.workfiles());
+            });
+        });
+
+        context("when the search result is filtered by workspace AND by entity type", function() {
+            it("returns the collection for its entity type", function() {
+                this.model.set({ entityType: "workfile", searchIn: "this_workspace", workspaceId: "101" });
+                this.model.unset("thisWorkspace");
                 expect(this.model.getResults()).toBeDefined();
                 expect(this.model.getResults()).toBe(this.model.workfiles());
             });

@@ -76,10 +76,10 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                 context("and some data was fetched", function() {
                     beforeEach(function() {
                         this.server.completeFetchFor(this.schema.databaseObjects(), [
-                            fixtures.databaseObject({ objectName: "Data1", objectType: "VIEW" }),
-                            fixtures.databaseObject({ objectName: "zebra", objectType: "VIEW"}),
-                            fixtures.databaseObject({ objectName: "Data2", objectType: "SANDBOX_TABLE" }),
-                            fixtures.databaseObject({ objectName: "apple", objectType: "SANDBOX_TABLE"})
+                            fixtures.databaseObject({ objectName: "Data1", type: "SANDBOX_TABLE", objectType: "VIEW" }),
+                            fixtures.databaseObject({ objectName: "zebra", type: "SANDBOX_TABLE", objectType: "VIEW"}),
+                            fixtures.databaseObject({ objectName: "Data2", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" }),
+                            fixtures.databaseObject({ objectName: "apple", type: "SANDBOX_TABLE", objectType: "BASE_TABLE"})
                         ]);
 
                         this.view.render();
@@ -100,6 +100,14 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                         expect(this.view.$("li").eq(1).text().trim()).toBe("Data1");
                         expect(this.view.$("li").eq(2).text().trim()).toBe("Data2");
                         expect(this.view.$("li").eq(3).text().trim()).toBe("zebra");
+                    });
+
+                    it("renders appropriate icon for each item in the collection", function() {
+                        var $lisAlphabeticallySorted = this.view.$("li");
+                        expect($lisAlphabeticallySorted.eq(0).find("img").attr("src")).toContain("sandbox_table_medium.png");
+                        expect($lisAlphabeticallySorted.eq(1).find("img").attr("src")).toContain("sandbox_view_medium.png");
+                        expect($lisAlphabeticallySorted.eq(2).find("img").attr("src")).toContain("sandbox_table_medium.png");
+                        expect($lisAlphabeticallySorted.eq(3).find("img").attr("src")).toContain("sandbox_view_medium.png");
                     });
 
                     it("should not display a message saying there are no tables/views", function() {

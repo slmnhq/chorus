@@ -137,8 +137,26 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     });
 
                     it("broadcasts workfile:executed", function() {
-//                        expect(1).toBe(2);
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:executed", this.workfile, this.executionInfo);
+                    })
+                })
+
+                describe("when the task is cancelled", function() {
+                    beforeEach(function() {
+                        chorus.PageEvents.broadcast.reset();
+                        this.server.lastCreate().fail(fixtures.serverErrors({message: 'The task is cancelled'}), []);
+                    })
+
+                    it("broadcasts file:executionFailed", function() {
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionFailed", jasmine.any(chorus.models.SqlExecutionTask), jasmine.any(Object));
+                    });
+
+                    it("sets the executing property to false", function() {
+                        expect(this.view.executing).toBeFalsy();
+                    });
+
+                    it("does not broadcast workfile:executed", function() {
+                        expect(chorus.PageEvents.broadcast.callCount).toBe(1);
                     })
                 })
             });

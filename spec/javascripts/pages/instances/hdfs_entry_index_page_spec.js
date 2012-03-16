@@ -98,5 +98,5 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
                 expect(this.page.model).toEqual(this.entry);
             })
         })
-    })
-})
+    });
+});

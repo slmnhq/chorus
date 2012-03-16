@@ -1119,6 +1119,70 @@ describe("chorus.views.Base", function() {
                     expect('scroll').toHaveBeenTriggeredOn(this.view);
                 });
             });
+
+            describe("delegateEvents", function() {
+                var noEventsClass = chorus.views.Bare.extend({
+                    template: function() {
+                        return '<div class="hello world"></div>';
+                    }
+                });
+                var noEventsChildClass = noEventsClass.extend({
+                    events: {
+                        "click .world" : 'noEventsChildFunction'
+                    },
+                    template: function() {
+                        return '<div class="hello world"></div>';
+                    },
+                    noEventsChildFunction: jasmine.createSpy('noEventsChildFunction')
+                });
+                var grandparentViewClass = chorus.views.Bare.extend({
+                    events: {
+                        "click .world" : 'grandparentFunction',
+                        "click .hello" : "badFunction"
+                    },
+                    template: function() {
+                        return '<div class="hello world"></div>';
+                    },
+                    grandparentFunction: jasmine.createSpy('grandparentFunction'),
+                    badFunction: jasmine.createSpy('badFunction')
+                });
+                var parentViewClass = grandparentViewClass.extend({
+                    events: {
+                        "click .hello" : 'parentFunction'
+                    },
+
+                    parentFunction: jasmine.createSpy('parentFunction')
+                });
+                var childViewClass = parentViewClass.extend({
+                    events: {
+                        "click div.hello" : 'childFunction'
+                    },
+                    childFunction: jasmine.createSpy('childFunction')
+                });
+
+                it("binds all sets of events", function() {
+                    this.view = new childViewClass();
+                    this.view.render();
+                    this.view.$('.hello').click();
+                    expect(this.view.childFunction).toHaveBeenCalled();
+                    expect(this.view.parentFunction).toHaveBeenCalled();
+                    expect(this.view.grandparentFunction).toHaveBeenCalled();
+                    expect(this.view.badFunction).not.toHaveBeenCalled();
+                });
+
+                it("works if there are no events", function() {
+                    this.view = new noEventsClass();
+                    this.view.render();
+                    expect(this.view.$('.hello')).toExist();
+                });
+
+                it("works if the parent has no events", function() {
+                    this.view = new noEventsChildClass();
+                    this.view.render();
+                    this.view.$('.hello').click();
+                    expect(this.view.noEventsChildFunction).toHaveBeenCalled();
+                });
+            });
         })
     })
 })

@@ -1,7 +1,10 @@
 describe("chorus.views.CollectionPicklist", function() {
     beforeEach(function() {
-        fixtures.model = "UserSet";
-        this.collection = fixtures.modelFor("fetch");
+        this.collection = fixtures.userSet([
+            fixtures.user({firstName: "xyz", lastName: "3 ab"}),
+            fixtures.user({firstName: "EFG", lastName: "1"}),
+            fixtures.user({firstName: "hij", lastName: "2 a"})
+        ]);
         this.view = new chorus.views.CollectionPicklist({ collection : this.collection })
     })
 
@@ -19,6 +22,7 @@ describe("chorus.views.CollectionPicklist", function() {
 
         context("when the collection is loaded", function() {
             beforeEach(function() {
+                this.collection.loaded = true;
                 this.view.render();
             })
 
@@ -54,9 +58,9 @@ describe("chorus.views.CollectionPicklist", function() {
             })
 
             it("sorts the items alphabetically, case-insensitively", function() {
-                expect(this.view.$("li .name").eq(0).text().trim()).toBe("EDC Admin");
-                expect(this.view.$("li .name").eq(1).text().trim()).toBe("frOg man");
-                expect(this.view.$("li .name").eq(2).text().trim()).toBe("Mark Rushakoff");
+                expect(this.view.$("li .name").eq(0).text().trim()).toBe("EFG 1");
+                expect(this.view.$("li .name").eq(1).text().trim()).toBe("hij 2 a");
+                expect(this.view.$("li .name").eq(2).text().trim()).toBe("xyz 3 ab");
             })
         })
     })
@@ -134,7 +138,7 @@ describe("chorus.views.CollectionPicklist", function() {
 
         describe("typing the first character", function() {
             beforeEach(function() {
-                this.view.$("input").val("o");
+                this.view.$("input").val("a");
                 this.view.$(".search input").trigger("textchange");
             })
 
@@ -148,7 +152,7 @@ describe("chorus.views.CollectionPicklist", function() {
                 beforeEach(function() {
                     this.itemSelectedSpy = jasmine.createSpy();
                     this.view.bind("item:selected", this.itemSelectedSpy);
-                    this.view.$("input").val("of");
+                    this.view.$("input").val("ab");
                     this.view.$(".search input").trigger("textchange");
                 })
 
@@ -164,7 +168,7 @@ describe("chorus.views.CollectionPicklist", function() {
 
                 describe("backspacing", function() {
                     beforeEach(function() {
-                        this.view.$("input").val("o");
+                        this.view.$("input").val("a");
                         this.view.$(".search input").trigger("textchange");
                     })
 
@@ -184,7 +188,7 @@ describe("chorus.views.CollectionPicklist", function() {
 
             describe("when the filter text matches the selected item", function() {
                 beforeEach(function() {
-                    this.view.$("input").val("c");
+                    this.view.$("input").val("E");
                     this.view.$(".search input").trigger("textchange");
                 })
 
@@ -195,7 +199,7 @@ describe("chorus.views.CollectionPicklist", function() {
 
             describe("when the filter text does not match the selected item", function() {
                 beforeEach(function() {
-                    this.view.$("input").val("z");
+                    this.view.$("input").val("m");
                     this.view.$(".search input").trigger("textchange");
                 })
 
