@@ -8,7 +8,7 @@ describe("chorus.models.DatasetImport", function() {
     });
 
     it("has the right url", function() {
-        expect(this.model.url()).toHaveUrlPath("/edc/workspace/101/dataset/102|my_db_name|my_schema_name|SOURCE_TABLE|my_table_name/import");
+        expect(this.model.url()).toHaveUrlPath(new URI("/edc/workspace/101/dataset/102|my_db_name|my_schema_name|SOURCE_TABLE|my_table_name/import").normalize().toString());
     });
 
     describe("#wasSuccessfullyExecuted", function() {

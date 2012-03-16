@@ -8,14 +8,14 @@ chorus.models = {
 
         url: function(options) {
             var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
-            var context = _.extend({}, this.attributes, { entityId: this.entityId, entityType: this.entityType })
+            var context = _.extend({}, this.attributes, { entityId: this.entityId, entityType: this.entityType });
             var uri = new URI("/edc/" + Handlebars.compile(template, {noEscape: true})(context));
             if (this.urlParams) {
                 var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;
                 uri.addSearch(params);
             }
             if (!window.jasmine) { uri.addSearch({iebuster: new Date().getTime()}); }
-            return uri.normalizeSearch().toString();
+            return uri.normalize().toString();
         },
 
         activities: function(entityType) {
@@ -60,7 +60,7 @@ chorus.models = {
             this.beforeSave(effectiveAttrs, options);
             var success = options.success;
             options.success = function(model, resp, xhr) {
-                var savedEvent = model.serverErrors ? "saveFailed" : "saved"
+                var savedEvent = model.serverErrors ? "saveFailed" : "saved";
                 model.trigger(savedEvent, model, resp, xhr);
                 if (success) success(model, resp, xhr);
             };
@@ -276,7 +276,7 @@ chorus.collections = {
                 uri.addSearch({iebuster: new Date().getTime()});
             }
 
-            return uri.normalizeSearch().toString();
+            return uri.normalize().toString();
         },
 
         fetch: function(options) {

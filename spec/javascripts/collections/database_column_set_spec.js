@@ -72,7 +72,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
         })
 
         it("has the correct urlTemplate", function() {
-            expect(this.columns.url()).toContain("/edc/workspace/10/dataset/10000|dca_demo|ddemo|QUERY|chorus_view/column");
+            expect(this.columns.url()).toMatchUrl("/edc/workspace/10/dataset/10000|dca_demo|ddemo|QUERY|chorus_view/column", {paramsToIgnore: ['page', 'rows']});
         })
     })
 
