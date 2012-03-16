@@ -27,10 +27,15 @@
         <div class="right">
             <button class="close_dialog">{{t "actions.close"}}</button>
             <button class="save"
-            {{#unless hasChart}}
-                disabled="disabled"
-            {{/unless}}
-            >{{t "actions.save_chart"}}</button>
+                {{#unless hasChart}}
+                    disabled="disabled"
+                {{/unless}}
+                >{{t "actions.save_chart"}}</button>
+            <button class="save_as_workfile"
+                {{#unless hasChart}}
+                    disabled="disabled"
+                {{/unless}}
+                >{{t "actions.save_as_workfile"}}</button>
         </div>
     </div>
 </div>

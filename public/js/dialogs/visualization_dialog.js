@@ -9,7 +9,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         "click a.show":"showTabularData",
         "click a.hide":"hideTabularData",
         "click button.close_dialog":"closeModal",
-        "click button.save":"downloadVisualization"
+        "click button.save":"downloadVisualization",
+        "click button.save_as_workfile":"createWorkfileFromVisualization"
     },
 
     setup: function () {
@@ -54,19 +55,36 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         return !_.isEmpty(this.task.get("rows"));
     },
 
-    createDownloadForm: function () {
-        var serializer = new XMLSerializer;
+    makeSvgData: function() {
         var svg = this.$(".chart_area.visualization svg")[0];
-
         if (BrowserDetect.browser != "Explorer") {
             svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
         }
+        return new XMLSerializer().serializeToString(svg);
+    },
 
+    createDownloadForm: function () {
         var form = $("<form action='/downloadChart.jsp' method='post'></form>");
-        form.append($("<input name='svg' type='hidden'/>").val(serializer.serializeToString(svg)));
+        form.append($("<input name='svg' type='hidden'/>").val(this.makeSvgData()));
         form.append($("<input name='chart-name' type='hidden'/>").val(this.options.chartOptions.name));
         form.append($("<input name='chart-type' type='hidden'>/").val(this.options.chartOptions.type));
         return form;
+    },
+
+    createWorkfile: function() {
+        this.workfile = new chorus.models.Workfile({
+            workspaceId: this.task.get("workspaceId"),
+            source: "visualization",
+            svgData: this.makeSvgData(),
+            fileName: this.options.chartOptions.name + "-" + this.options.chartOptions.type + ".png"
+        });
+        this.workfile.save();
+        this.workfile.bindOnce('saved', this.onWorkfileSaved, this);
+    },
+
+    onWorkfileSaved: function() {
+        this.$('button.save_as_workfile').stopLoading();
+        chorus.toast("dataset.visualization.toast.workfile_from_chart", {fileName: this.workfile.get("fileName")})
     },
 
     additionalContext:function () {
@@ -100,5 +118,11 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         form.hide();
         $("body").append(form)
         form.submit();
+    },
+
+    createWorkfileFromVisualization: function(e) {
+        e.preventDefault();
+        this.$('button.save_as_workfile').startLoading("visualization.saving")
+        this.createWorkfile();
     }
 });
