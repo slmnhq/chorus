@@ -942,7 +942,7 @@ Handlebars.JavaScriptCompiler = function() {};
 
       this.opcode('invokeMustache', params.length, mustache.id.original);
 
-      if(mustache.escaped) {
+      if(mustache.escaped && !this.options.noEscape) {
         this.opcode('appendEscaped');
       } else {
         this.opcode('append');
