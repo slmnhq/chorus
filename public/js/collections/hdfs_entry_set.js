@@ -1,4 +1,4 @@
-chorus.collections.HdfsEntrySet = chorus.collections.Base.extend({
+chorus.collections.HdfsEntrySet = chorus.collections.Base.extend(_.extend({}, chorus.Mixins.InstanceCredentials.model, {
     constructorName: "HdfsEntrySet",
     model: chorus.models.HdfsEntry,
 
@@ -28,4 +28,4 @@ chorus.collections.HdfsEntrySet = chorus.collections.Base.extend({
         var instance = this.attributes.instance;
         return new chorus.models.HdfsEntry({ name: name, path: path, isDir: true, instance: instance })
     }
-});
+}));

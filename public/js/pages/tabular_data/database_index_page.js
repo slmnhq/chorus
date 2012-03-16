@@ -1,4 +1,4 @@
-chorus.pages.DatabaseIndexPage = chorus.pages.Base.extend({
+chorus.pages.DatabaseIndexPage = chorus.pages.Base.extend(_.extend({}, chorus.Mixins.InstanceCredentials.page, {
     constructorName: "DatabaseIndexPage",
 
     setup: function(instanceId) {
@@ -12,15 +12,6 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.extend({
         this.requiredResources.push(this.collection);
     },
 
-    requiredResourcesFetchFailed: function(collection) {
-        var errorMessage = collection.serverErrors[0] && collection.serverErrors[0].message
-        if (errorMessage.match(/Account.*map.*needed/)) {
-            var dialog = new chorus.dialogs.InstanceAccount({ title: t("instances.account.add.title"), pageModel: this.instance, reload: true });
-            dialog.launchModal();
-        } else {
-            this._super("requiredResourcesFetchFailed", arguments);
-        }
-    },
 
     resourcesLoaded: function() {
         this.crumbs = [
@@ -38,4 +29,4 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.extend({
 
         this.sidebar = new chorus.views.DatabaseListSidebar();
     }
-});
+}));

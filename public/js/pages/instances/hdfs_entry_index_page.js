@@ -1,4 +1,4 @@
-chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
+chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend(_.extend({}, chorus.Mixins.InstanceCredentials.page, {
     setup:function (instanceId, path) {
         this.path = "/" + path;
         this.instance = new chorus.models.Instance({id: instanceId});
@@ -9,16 +9,6 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
         this.collection.fetch();
         this.requiredResources.push(this.collection);
         chorus.PageEvents.subscribe("hdfs_entry:selected", this.entrySelected, this)
-    },
-
-    requiredResourcesFetchFailed: function(collection) {
-        var errorMessage = collection.serverErrors[0] && collection.serverErrors[0].message
-        if (errorMessage.match(/Account.*map.*needed/)) {
-            var dialog = new chorus.dialogs.InstanceAccount({ title: t("instances.account.add.title"), pageModel: this.instance, reload: true });
-            dialog.launchModal();
-        } else {
-            this._super("requiredResourcesFetchFailed", arguments);
-        }
     },
 
     resourcesLoaded: function() {
@@ -82,4 +72,4 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
     entrySelected : function(model) {
         this.model = model;
     }
-});
+}));
