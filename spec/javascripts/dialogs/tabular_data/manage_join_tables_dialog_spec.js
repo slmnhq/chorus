@@ -49,7 +49,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 columns: 21,
                 type: "SOURCE_TABLE",
                 objectType: "VIEW",
-                id: "10000|dca_demo|ddemo|VIEW|cats"
+                id: '"10000"|"dca_demo"|"ddemo"|"VIEW"|"cats"'
             });
 
             this.databaseObject2 = fixtures.databaseObject({
@@ -57,7 +57,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 columns: 22,
                 type: "SOURCE_TABLE",
                 objectType: "BASE_TABLE",
-                id: "10000|dca_demo|ddemo|BASE_TABLE|dogs"
+                id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"dogs"'
             });
 
             this.databaseObject3 = fixtures.databaseObject({
@@ -65,7 +65,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 columns: 24,
                 type: "SOURCE_TABLE",
                 objectType: "VIEW",
-                id: "10000|dca_demo|ddemo|VIEW|lions"
+                id: '"10000"|"dca_demo"|"ddemo"|"VIEW"|"lions"'
             });
 
             this.server.completeFetchFor(this.schema.databaseObjects(), [

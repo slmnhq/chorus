@@ -284,8 +284,8 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         jobName: "job123"
                     },
                     toTable: "my_table",
-                    destinationTable: "10000|dca_demo|ddemo|BASE_TABLE|my_table",
-                    sourceId: "10000|dca_demo|ddemo|BASE_TABLE|somebodys_table"
+                    destinationTable: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"my_table"',
+                    sourceId: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"somebodys_table"'
                 });
                 this.launchElement.addClass("edit_schedule");
                 this.dataset.setImport(this.import);
@@ -298,9 +298,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 context("and the toTable is not an existing Table", function() {
                     beforeEach(function() {
                         this.server.completeFetchAllFor(this.dialog.sandboxTables, [
-                            fixtures.datasetSandboxTable({ objectName: "your_table", id: "10000|dca_demo|ddemo|BASE_TABLE|your_table" }),
-                            fixtures.datasetSandboxTable({ objectName: "not_my_table", id: "10000|dca_demo|ddemo|BASE_TABLE|not_my_table" }),
-                            fixtures.datasetSandboxTable({ objectName: "her_table", id: "10000|dca_demo|ddemo|BASE_TABLE|her_table" })
+                            fixtures.datasetSandboxTable({ objectName: "your_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"your_table"' }),
+                            fixtures.datasetSandboxTable({ objectName: "not_my_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"not_my_table"' }),
+                            fixtures.datasetSandboxTable({ objectName: "her_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"her_table"' })
                         ]);
                     });
 
@@ -331,9 +331,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 context("and the toTable is an existing Table", function() {
                     beforeEach(function() {
                         this.server.completeFetchAllFor(this.dialog.sandboxTables, [
-                            fixtures.datasetSandboxTable({ objectName: "your_table", id: "10000|dca_demo|ddemo|BASE_TABLE|your_table" }),
-                            fixtures.datasetSandboxTable({ objectName: "my_table", id: "10000|dca_demo|ddemo|BASE_TABLE|my_table" }),
-                            fixtures.datasetSandboxTable({ objectName: "her_table", id: "10000|dca_demo|ddemo|BASE_TABLE|her_table" })
+                            fixtures.datasetSandboxTable({ objectName: "your_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"your_table"' }),
+                            fixtures.datasetSandboxTable({ objectName: "my_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"my_table"' }),
+                            fixtures.datasetSandboxTable({ objectName: "her_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"her_table"' })
                         ]);
                     });
 
@@ -454,8 +454,8 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         frequency: "HOURLY"
                     },
                     toTable: "my_table",
-                    destinationTable: "10000|dca_demo|ddemo|BASE_TABLE|my_table",
-                    sourceId: "10000|dca_demo|ddemo|BASE_TABLE|somebodys_table"
+                    destinationTable: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"my_table"',
+                    sourceId: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"somebodys_table"'
                 });
                 this.launchElement.addClass("edit_schedule");
                 this.dataset.setImport(this.import);
@@ -468,9 +468,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 context("and the toTable is not an existing Table", function() {
                     beforeEach(function() {
                         this.server.completeFetchAllFor(this.dialog.sandboxTables, [
-                            fixtures.datasetSandboxTable({ objectName: "your_table", id: "10000|dca_demo|ddemo|BASE_TABLE|your_table" }),
-                            fixtures.datasetSandboxTable({ objectName: "not_my_table", id: "10000|dca_demo|ddemo|BASE_TABLE|not_my_table" }),
-                            fixtures.datasetSandboxTable({ objectName: "her_table", id: "10000|dca_demo|ddemo|BASE_TABLE|her_table" })
+                            fixtures.datasetSandboxTable({ objectName: "your_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"your_table"' }),
+                            fixtures.datasetSandboxTable({ objectName: "not_my_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"not_my_table"' }),
+                            fixtures.datasetSandboxTable({ objectName: "her_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"her_table"' })
                         ]);
                     });
 

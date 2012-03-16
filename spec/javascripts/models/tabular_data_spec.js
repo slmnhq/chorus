@@ -271,7 +271,7 @@ describe("chorus.models.TabularData", function() {
 
         context("with a chorus view", function() {
             beforeEach(function() {
-                this.tabularData.set({id: "2|dca_demo|some_schema|BASE_TABLE|Dataset1", objectType: "QUERY", objectName: "my_chorusview", workspace: {id:"234", name: "abc"}});
+                this.tabularData.set({id: '"2"|"dca_demo"|"some_schema"|"BASE_TABLE"|"Dataset1"', objectType: "QUERY", objectName: "my_chorusview", workspace: {id:"234", name: "abc"}});
                 this.preview = this.tabularData.preview();
             });
 

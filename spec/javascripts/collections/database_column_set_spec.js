@@ -66,13 +66,13 @@ describe("chorus.collections.DatabaseColumnSet", function() {
                 workspace: {
                     id: '10'
                 },
-                id: "10000|dca_demo|ddemo|QUERY|chorus_view"
+                id: '"10000"|"dca_demo"|"ddemo"|"QUERY"|"chorus_view"'
             })
             this.columns = chrousView.columns();
         })
 
         it("has the correct urlTemplate", function() {
-            expect(this.columns.url()).toMatchUrl("/edc/workspace/10/dataset/10000|dca_demo|ddemo|QUERY|chorus_view/column", {paramsToIgnore: ['page', 'rows']});
+            expect(this.columns.url()).toMatchUrl('/edc/workspace/10/dataset/"10000"|"dca_demo"|"ddemo"|"QUERY"|"chorus_view"/column', {paramsToIgnore: ['page', 'rows']});
         })
     })
 

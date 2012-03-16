@@ -236,7 +236,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                             this.dataset = fixtures.datasetSandboxTable({
                                 importInfo: {
                                     completedStamp: "2012-02-29 14:35:38.165",
-                                    sourceId: "10032|dca_demo|ddemo|BASE_TABLE|a2",
+                                    sourceId: '"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"',
                                     sourceTable: "some_source_table"
                                 }
                             });
@@ -245,7 +245,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                         it("has an 'imported xx ago' description", function() {
                             var sourceTable = new chorus.models.Dataset({
-                                id: "10032|dca_demo|ddemo|BASE_TABLE|a2",
+                                id: '"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"',
                                 workspaceId: this.dataset.get("workspace").id
                             });
                             expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {
@@ -391,7 +391,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                         startTime: "2012-02-29 14:23:58.169"
                                     },
                                     toTable: "our_destination",
-                                    destinationTable: "10000|Analytics|analytics|BASE_TABLE|our_destination"
+                                    destinationTable: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"our_destination"'
                                 });
                                 this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
                             });
@@ -405,7 +405,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 expect(this.view.$(".next_import a")).toContainText("our_destination");
 
                                 var destTable = new chorus.models.Dataset({
-                                    id: "10000|Analytics|analytics|BASE_TABLE|our_destination",
+                                    id: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"our_destination"',
                                     workspaceId: this.dataset.get("workspace").id
                                 })
                                 expect(this.view.$(".next_import a")).toHaveHref(destTable.showUrl());

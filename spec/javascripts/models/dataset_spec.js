@@ -15,12 +15,12 @@ describe("chorus.models.Dataset", function() {
     })
 
     it("creates the correct showUrl", function() {
-        expect(this.dataset.showUrl()).toMatchUrl("#/workspaces/44/datasets/45|whirling_tops|diamonds|foo|japanese_teas");
+        expect(this.dataset.showUrl()).toMatchUrl('#/workspaces/44/datasets/"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"');
     });
 
     context("when the object has an id", function() {
         it("has the right url", function() {
-            var url = encodeURI("/edc/workspace/44/dataset/45|whirling_tops|diamonds|foo|japanese_teas");
+            var url = encodeURI('/edc/workspace/44/dataset/"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"');
             expect(this.dataset.url()).toMatchUrl(url);
         });
     });
@@ -174,7 +174,7 @@ describe("chorus.models.Dataset", function() {
             beforeEach(function() {
                 this.dataset.set({ importInfo: {
                     completedStamp: "2012-02-29 14:35:38.165",
-                    sourceId: "10032|dca_demo|ddemo|BASE_TABLE|a2",
+                    sourceId: '"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"',
                     sourceTable: "some_source_table"
                 }})
                 this.source = this.dataset.lastImportSource();
@@ -185,7 +185,7 @@ describe("chorus.models.Dataset", function() {
             });
 
             it("has the right name, id and workspace id", function() {
-                expect(this.source.get("id")).toBe("10032|dca_demo|ddemo|BASE_TABLE|a2");
+                expect(this.source.get("id")).toBe('"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"');
                 expect(this.source.get("workspaceId")).toBe(this.dataset.get("workspace").id);
                 expect(this.source.get("objectName")).toBe("some_source_table");
             });
