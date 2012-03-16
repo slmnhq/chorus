@@ -75,6 +75,17 @@ describe("chorus.views.TabularDataVisualizationBoxplotSidebar", function() {
                     expect(this.styledSelected).toBe(selected.text());
                 })
             })
+
+            describe("clicking on cancel button when there's sql errors", function() {
+                beforeEach(function() {
+                   spyOn(this.view, "clearSqlErrors");
+                   this.view.cleanup();
+                });
+
+                it("should clear the sql errors", function() {
+                    expect(this.view.clearSqlErrors).toHaveBeenCalled();
+                });
+            });
         })
 
         context("with no columns", function() {
@@ -127,6 +138,7 @@ describe("chorus.views.TabularDataVisualizationBoxplotSidebar", function() {
             it("should have the right caption", function() {
                 expect(this.view.$("button.create").text()).toMatchTranslation("dataset.visualization.sidebar.create_chart")
             });
-        })
+        });
+
     })
 })
