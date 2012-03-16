@@ -29,6 +29,7 @@
 
         cleanup: function() {
             this._super("cleanup");
+            this.clearSqlErrors();
             chorus.PageEvents.unsubscribe(this.cancelVisualizationHandle);
         },
 

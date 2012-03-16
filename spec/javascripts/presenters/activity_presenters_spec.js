@@ -45,7 +45,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toBe("#/workspaces/10000/datasets/10010|Analytics|analytics|BASE_TABLE|clv_data")
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"')
             });
 
 
@@ -76,7 +76,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toBe("#/workspaces/10000/datasets/10002|bizarro_world|public|QUERY|song_view")
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/"10002"|"bizarro_world"|"public"|"QUERY"|"song_view"')
             });
 
             it("should have an importSourceLink in the header", function() {
@@ -134,7 +134,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toBe("#/workspaces/10000/datasets/10010|Analytics|analytics|BASE_TABLE|clv_data")
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"')
             });
 
 
@@ -165,7 +165,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toBe("#/workspaces/10000/datasets/10002|bizarro_world|public|QUERY|song_view")
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/"10002"|"bizarro_world"|"public"|"QUERY"|"song_view"')
             });
 
             it("should have an importSourceLink in the header", function() {
@@ -227,7 +227,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toBe("#/workspaces/10000/datasets/10010|Analytics|analytics|BASE_TABLE|clv_data")
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"')
             });
 
             it("should have an importSourceLink in the header", function() {
@@ -240,7 +240,7 @@ describe("chorus.presenters.Activity", function() {
                 href: '#',
                 class: "alert",
                 "data-alert": "ImportFailed",
-                "data-id": "10010|Analytics|analytics|BASE_TABLE|clv_data",
+                "data-id": '"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"',
                 "data-workspace-id": "10000",
                 "data-import-type": "DATASET"
             });
@@ -265,7 +265,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toBe("#/workspaces/10000/datasets/10002|bizarro_world|public|QUERY|song_view")
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/"10002"|"bizarro_world"|"public"|"QUERY"|"song_view"')
             });
 
             it("should have an importSourceLink in the header", function() {
@@ -278,7 +278,7 @@ describe("chorus.presenters.Activity", function() {
                 href: '#',
                 class: "alert",
                 "data-alert": "ImportFailed",
-                "data-id": "10002|bizarro_world|public|QUERY|song_view",
+                "data-id": '"10002"|"bizarro_world"|"public"|"QUERY"|"song_view"',
                 "data-workspace-id": "10000",
                 "data-import-type": "DATASET"
             });
@@ -365,7 +365,7 @@ describe("chorus.presenters.Activity", function() {
         beforeEach(function() {
             this.model = fixtures.activities.NOTE_ON_DATASET_TABLE({
                 table: {
-                    id: "10014|silverware|forks|shiny",
+                    id: '"10014"|"silverware"|"forks"|"shiny"',
                     name: "shiny",
                     type: "SOURCE_TABLE",
                     objectType: "EXTERNAL_TABLE"
@@ -387,7 +387,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectUrl", function() {
-            expect(this.presenter.objectUrl).toBe('#/workspaces/4/datasets/10014|silverware|forks|shiny');
+            expect(this.presenter.objectUrl).toMatchUrl('#/workspaces/4/datasets/"10014"|"silverware"|"forks"|"shiny"');
         });
 
         it("should have the right objectType", function() {

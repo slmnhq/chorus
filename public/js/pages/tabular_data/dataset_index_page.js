@@ -24,6 +24,7 @@
 
             this.collection = new chorus.collections.DatasetSet([], {workspaceId: workspaceId});
             this.collection.sortAsc("objectName");
+            this.collection.fetch();
 
             chorus.PageEvents.subscribe("tabularData:selected", function(dataset) {
                 this.model = dataset;
@@ -76,7 +77,6 @@
             if (!this.workspace.canUpdate()) {
                 this.mainContent.contentDetails.options.buttons = [];
                 this.mainContent.contentDetails.render();
-                this.collection.fetch();
             } else if (this.workspace.sandbox()) {
                 targetButton.dataAttributes.push({name: "canonical-name", value: this.workspace.sandbox().canonicalName()});
                 targetButton.disabled = false;
@@ -95,22 +95,14 @@
                     this.mainContent.contentDetails.render();
                 }
 
-                this.collection.fetch();
             }
         },
 
         checkAccount: function() {
-            if (this.account.get('id')) {
-                this.collection.fetch();
-            } else {
-                if (chorus.session.sandboxPermissionsCreated[this.workspace.get("id")]) {
-                    this.collection.fetch();
-                }
-                else {
+            if (!this.account.get('id')) {
+                if (!chorus.session.sandboxPermissionsCreated[this.workspace.get("id")]) {
                     this.dialog = new chorus.dialogs.WorkspaceInstanceAccount({model: this.account, pageModel: this.workspace});
                     this.dialog.launchModal();
-                    this.collection.loaded = true;
-                    this.collection.trigger('reset');
                     this.account.bind('saved', function() {
                         this.collection.fetch();
                     }, this);

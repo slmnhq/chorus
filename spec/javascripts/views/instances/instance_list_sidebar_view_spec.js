@@ -117,6 +117,11 @@ describe("chorus.views.InstanceListSidebar", function() {
                     it("does display the edit instance link", function() {
                         expect(this.view.$(".actions .edit_instance")).toExist();
                     })
+
+                    it("does not display workspace usage information", function() {
+                        expect(this.view.$(".workspace_usage")).not.toExist();
+                    });
+
                 })
 
                 context("when the instance failed to provision", function() {

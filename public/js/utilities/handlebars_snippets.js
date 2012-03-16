@@ -4,10 +4,6 @@
 
     var templates = {}; //for memoizing handlebars helpers templates
     chorus.helpers = {
-        cache_buster: function() {
-            return new Date().getTime();
-        },
-
         ifAdmin: function(block) {
             var user = chorus && chorus.session && chorus.session.user();
             if (user && user.get("admin")) {

@@ -14,7 +14,7 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
             mode: "text/x-sql",
             fixedGutter: true,
             theme: "default",
-            lineWrapping: true,
+            lineWrapping: true
         };
 
         _.defer(_.bind(function() {

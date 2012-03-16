@@ -93,6 +93,11 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                 it("displays the new breadcrumb automatically", function(){
                     expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("bar");
                 });
+                
+                it("updates the title", function() {
+                    expect(this.page.mainContent.contentHeader.activityListHeader.allTitle).toContainText("bar");
+                    expect(this.page.mainContent.contentHeader.activityListHeader.insightsTitle).toContainText("bar");
+                });
             });
         });
     })

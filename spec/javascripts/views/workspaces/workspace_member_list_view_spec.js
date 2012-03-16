@@ -24,9 +24,9 @@ describe("chorus.views.WorkspaceMemberList", function() {
         it("includes an image for each member", function() {
             var images = this.view.$(".members img");
             expect(images.length).toBe(3);
-            expect(images.eq(0).attr("src")).toBe(this.members.models[0].imageUrl({ size: 'icon' }));
-            expect(images.eq(1).attr("src")).toBe(this.members.models[1].imageUrl({ size: 'icon' }));
-            expect(images.eq(2).attr("src")).toBe(this.members.models[2].imageUrl({ size: 'icon' }));
+            expect(images.eq(0).attr("src")).toBe(this.members.models[0].imageUrl());
+            expect(images.eq(1).attr("src")).toBe(this.members.models[1].imageUrl());
+            expect(images.eq(2).attr("src")).toBe(this.members.models[2].imageUrl());
         });
 
         it("has a title for each member that is their display Name", function() {

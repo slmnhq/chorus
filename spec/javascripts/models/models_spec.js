@@ -542,41 +542,25 @@ describe("chorus.models.Abstract", function() {
 
         describe("#parse", function() {
             beforeEach(function() {
-                this.thing = {hi: "there"};
+                this.thing = { hi: "there" };
             })
 
-            it("sets loaded when status is ok", function() {
-                this.model.parse({ foo: "bar", resource: this.thing, status: 'ok'});
-                expect(this.model.loaded).toBeTruthy();
+            context("when there are no errors", function() {
+                it("returns the enclosed resource", function() {
+                    expect(this.model.parse({ status: "ok", foo: "bar", resource: [ this.thing ]})).toBe(this.thing);
+                });
             });
 
-            it("does not set loaded when status is not ok", function() {
-                this.model.parse({ foo: "bar", resource: this.thing, status: 'needsLogin'});
-                expect(this.model.loaded).not.toBeTruthy();
+            context("when there are errors", function() {
+                it("returns undefined", function() {
+                    expect(this.model.parse({
+                        status: "fail",
+                        message: [{ message: "No." }],
+                        resource: [ this.thing ]
+                    })).toBeUndefined();
+                });
             });
-
-            it("returns the enclosed resource", function() {
-                expect(this.model.parse({ status: "ok", foo: "bar", resource: [ this.thing ]})).toBe(this.thing);
-            });
-
-            it("triggers needsLogin on chorus.session", function() {
-                spyOn(chorus.session, "trigger");
-                this.model.parse({status: "needlogin"});
-                expect(chorus.session.trigger).toHaveBeenCalledWith("needsLogin");
-            });
-
-            it("resets server errors when the status is ok", function() {
-                this.model.serverErrors = "error";
-                this.model.parse({ foo: "bar", resource: this.thing, status: 'ok'});
-                expect(this.model.serverErrors).not.toBeDefined();
-            })
-
-            it("populates serverErrors if there are errors", function() {
-                this.model.parse({ foo: "bar", resource: this.thing, status: 'fail', message: [{message: "baz"}]});
-                expect(this.model.serverErrors).toEqual([{message: "baz"}]);
-            })
-
-        })
+        });
 
         describe("#require", function() {
             beforeEach(function() {
@@ -1039,30 +1023,10 @@ describe("chorus.models.Abstract", function() {
         describe("#parse", function() {
             beforeEach(function() {
                 this.things = [
-                    {hi: "there"},
-                    {go: "away"}
+                    { hi: "there" },
+                    { go: "away" }
                 ];
-            })
-
-            it("sets loaded when status is ok", function() {
-                this.collection.parse({ foo: "bar", resource: this.things, status: 'ok'});
-                expect(this.collection.loaded).toBeTruthy();
             });
-
-            it("does not set loaded when status is not ok", function() {
-                this.collection.parse({ foo: "bar", resource: this.things, status: 'needsLogin'});
-                expect(this.collection.loaded).not.toBeTruthy();
-            });
-
-            it("returns the enclosed resource", function() {
-                expect(this.collection.parse({ foo: "bar", resource: this.things, status: 'ok'})).toEqual(this.things);
-            })
-
-            it("triggers needsLogin on chorus.session", function() {
-                spyOn(chorus.session, "trigger");
-                this.collection.parse({status: "needlogin"});
-                expect(chorus.session.trigger).toHaveBeenCalledWith("needsLogin");
-            })
 
             it("stores pagination info on the collection", function() {
                 var pagination = {
@@ -1073,8 +1037,24 @@ describe("chorus.models.Abstract", function() {
 
                 this.collection.parse({ resource: this.things, pagination: pagination });
                 expect(this.collection.pagination).toBe(pagination);
-            })
-        })
+            });
+
+            context("when there are errors", function() {
+                it("returns an empty array", function() {
+                    expect(this.collection.parse({
+                        message: [{ message: "No." }],
+                        resource: this.things,
+                        status: "fail"
+                    })).toEqual([]);
+                });
+            });
+
+            context("when there are no errors", function() {
+                it("returns the enclosed resource", function() {
+                    expect(this.collection.parse({ resource: this.things, status: 'ok'})).toEqual(this.things);
+                });
+            });
+        });
 
         describe("#findWhere", function() {
             beforeEach(function() {

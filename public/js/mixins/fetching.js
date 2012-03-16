@@ -15,5 +15,27 @@ chorus.Mixins.Fetching = {
         if (!this.fetching) {
             this.fetchAll();
         }
+    },
+
+    dataStatusOk: function(data) {
+        return data.status == 'ok';
+    },
+
+    dataErrors: function(data) {
+        return data.message;
+    },
+
+    parseErrors: function(data) {
+        if (data.status == "needlogin") {
+            chorus.session.trigger("needsLogin");
+        }
+        if (this.dataStatusOk(data)) {
+            this.loaded = true;
+            delete this.serverErrors;
+        } else {
+            this.errorData = data.resource && data.resource[0];
+            this.serverErrors = this.dataErrors(data);
+            return true;
+        }
     }
 };

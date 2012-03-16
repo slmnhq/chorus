@@ -387,9 +387,10 @@ describe("chorus.views.Header", function() {
                     });
                 });
 
-                describe("and when clicked again", function() {
+                describe("and then clicked again", function() {
                     beforeEach(function() {
                         this.view.unreadNotifications.markAllRead.reset();
+                        spyOn(this.view.notificationList, "postRender");
                         this.view.$("a.notifications").click();
                     });
 
@@ -397,10 +398,17 @@ describe("chorus.views.Header", function() {
                         expect(this.view.$(".menu.popup_notifications")).toHaveClass("hidden");
                     });
 
+                    it("internally marks the unread notifications as read", function() {
+                        expect(this.view.notificationList.collection.find(function(model) { return model.get("unread") })).toBeUndefined();
+                    });
+
+                    it("re-renders the notification list subview", function() {
+                        expect(this.view.notificationList.postRender).toHaveBeenCalled();
+                    });
+
                     it("does not re-mark the notifications as read", function() {
                         expect(this.view.unreadNotifications.markAllRead).not.toHaveBeenCalled();
                     });
-
                 });
 
                 it("has a notification list", function() {

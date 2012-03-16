@@ -116,8 +116,8 @@ describe("chorus.models.Instance", function() {
             expect(this.account.get("instanceId")).toBe(this.instance.get("id"));
         });
 
-        it("sets the user name based on the current user", function() {
-            expect(this.account.get("userName")).toBe(this.user.get("userName"));
+        it("sets the user id based on the given user", function() {
+            expect(this.account.get("userId")).toBe(this.user.get("id"));
         });
     });
 

@@ -1,9 +1,15 @@
 <ul>
-    <li class="search_all"><a href="#/search/{{query}}">{{t "type_ahead.show_all_results" query=query}}</a></li>
+    <li class="search_all">
+        <div class="container">
+            <a href="#/search/{{query}}">{{t "type_ahead.show_all_results" query=query}}</a>
+        </div>
+    </li>
 {{#each results}}
     <li class="result">
-        <a href="{{url}}" class="name">{{name}}</a>
-        <span class="type">{{type}}</span>
+        <div class="container">
+            <a href="{{url}}" class="name">{{name}}</a>
+            <span class="type">{{type}}</span>
+        </div>
     </li>
 {{/each}}
 </ul>

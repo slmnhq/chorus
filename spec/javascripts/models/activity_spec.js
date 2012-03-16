@@ -168,7 +168,7 @@ describe("chorus.models.Activity", function() {
             beforeEach(function() {
                 this.model = fixtures.activities.NOTE_ON_DATASET_TABLE({
                     databaseObject: {
-                        id: "10014|silverware|forks|shiny",
+                        id: '"10014"|"silverware"|"forks"|"shiny"',
                         name: "shiny",
                         type: "SOURCE_TABLE",
                         objectType: "BASE_TABLE"
@@ -182,7 +182,7 @@ describe("chorus.models.Activity", function() {
 
             it("returns a Dataset model with the right id, objectName, type and objectType", function() {
                 expect(this.model.dataset()).toBeA(chorus.models.Dataset);
-                expect(this.model.dataset().get("id")).toBe("10014|silverware|forks|shiny");
+                expect(this.model.dataset().get("id")).toBe('"10014"|"silverware"|"forks"|"shiny"');
                 expect(this.model.dataset().get("objectName")).toBe("shiny");
                 expect(this.model.dataset().get("type")).toBe("SOURCE_TABLE");
                 expect(this.model.dataset().get("objectType")).toBe("BASE_TABLE");
@@ -198,7 +198,7 @@ describe("chorus.models.Activity", function() {
             beforeEach(function() {
                 this.model = fixtures.activities.NOTE_ON_DATASET_VIEW({
                     databaseObject: {
-                        id: "10014|silverware|forks|shiny",
+                        id: '"10014"|"silverware"|"forks"|"shiny"',
                         name: "shiny"
                     },
                     workspaceId: '4'
@@ -207,7 +207,7 @@ describe("chorus.models.Activity", function() {
 
             it("returns a Dataset model with the right id", function() {
                 expect(this.model.dataset()).toBeA(chorus.models.Dataset);
-                expect(this.model.dataset().get("id")).toBe("10014|silverware|forks|shiny");
+                expect(this.model.dataset().get("id")).toBe('"10014"|"silverware"|"forks"|"shiny"');
             });
         });
 

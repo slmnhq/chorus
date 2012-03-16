@@ -11,7 +11,6 @@
 
         li {
             padding-right:10px;
-            margin-right: 0;
 
             .actions {
                 float: right;
@@ -45,12 +44,20 @@
 
             &.selected {
                 background-color: $picklist-selected-background-color;
-                .spacer {
-                    background-color: $picklist-selected-background-color;
-                }
 
                 .name, .column_count, a {
                     color: white;
+                }
+
+                .spacer_left, .spacer_right {
+                    background-color: $picklist-selected-background-color;
+                    margin-bottom: -1px;
+                }
+
+                &:last-child {
+                    .spacer_left, .spacer_right {
+                        margin-bottom: 0;
+                    }
                 }
             }
 

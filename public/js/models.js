@@ -8,14 +8,14 @@ chorus.models = {
 
         url: function(options) {
             var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
-            var context = _.extend({}, this.attributes, { entityId: this.entityId, entityType: this.entityType })
+            var context = _.extend({}, this.attributes, { entityId: this.entityId, entityType: this.entityType });
             var uri = new URI("/edc/" + Handlebars.compile(template, {noEscape: true})(context));
             if (this.urlParams) {
                 var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;
                 uri.addSearch(params);
             }
             if (!window.jasmine) { uri.addSearch({iebuster: new Date().getTime()}); }
-            return uri.normalizeSearch().toString();
+            return uri.normalize().toString();
         },
 
         activities: function(entityType) {
@@ -33,24 +33,10 @@ chorus.models = {
             return this._activities;
         },
 
-        dataStatusOk: function(data) {
-            return data.status == 'ok';
-        },
-
-        dataErrors: function(data) {
-            return data.message;
-        },
-
         parse: function(data) {
-            if (data.status == "needlogin") {
-                chorus.session.trigger("needsLogin");
-            }
-            if (this.dataStatusOk(data)) {
-                this.loaded = true;
-                this.serverErrors = undefined;
-                return data.resource[0]
-            } else {
-                this.serverErrors = this.dataErrors(data);
+            var errors = this.parseErrors(data);
+            if (!errors) {
+                return data.resource[0];
             }
         },
 
@@ -60,7 +46,7 @@ chorus.models = {
             this.beforeSave(effectiveAttrs, options);
             var success = options.success;
             options.success = function(model, resp, xhr) {
-                var savedEvent = model.serverErrors ? "saveFailed" : "saved"
+                var savedEvent = model.serverErrors ? "saveFailed" : "saved";
                 model.trigger(savedEvent, model, resp, xhr);
                 if (success) success(model, resp, xhr);
             };
@@ -276,7 +262,7 @@ chorus.collections = {
                 uri.addSearch({iebuster: new Date().getTime()});
             }
 
-            return uri.normalizeSearch().toString();
+            return uri.normalize().toString();
         },
 
         fetch: function(options) {
@@ -339,17 +325,13 @@ chorus.collections = {
 
 
         parse: function(data) {
-            if (data.status == "needlogin") {
-                chorus.session.trigger("needsLogin");
-            }
             this.pagination = data.pagination;
-            if (data.status == 'ok') {
-                this.loaded = true;
-                this.serverErrors = undefined;
+            var errors = this.parseErrors(data);
+            if (errors) {
+                return [];
             } else {
-                this.serverErrors = data.message;
+                return data.resource;
             }
-            return data.resource;
         },
 
         sortDesc: function(idx) {

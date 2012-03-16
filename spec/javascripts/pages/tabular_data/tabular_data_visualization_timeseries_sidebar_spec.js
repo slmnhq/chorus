@@ -61,5 +61,18 @@ describe("chorus.views.TabularDataVisualizationTimeSeriesSidebar", function() {
                 expect(this.view.$("button.create")).toBeDisabled();
             });
         })
+
+        context("with half of the columns", function() {
+            beforeEach(function() {
+                this.column1 = fixtures.databaseColumn({typeCategory: 'REAL_NUMBER', name: "Sandwich"});
+                this.columns = new chorus.collections.DatabaseColumnSet([this.column1]);
+                this.view = new chorus.views.TabularDataVisualizationTimeSeriesSidebar({model: this.model, collection: this.columns})
+                this.view.render();
+            });
+
+            it("should disable the button", function() {
+                expect(this.view.$("button.create")).toBeDisabled();
+            });
+        });
     })
 })

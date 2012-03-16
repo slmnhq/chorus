@@ -97,8 +97,12 @@ describe("chorus.dialogs.Visualization", function() {
                 this.dialog.render()
             });
 
-            it("disables the Save Chart button", function() {
+            it("disables the 'Download' button", function() {
                 expect(this.dialog.$("button.save")).toBeDisabled();
+            })
+
+            it("disables the 'Save as Work File' button", function() {
+                expect(this.dialog.$("button.save_as_workfile")).toBeDisabled();
             })
 
             it("should not show the 'Show Data Table' link (until the chart is loaded)", function() {
@@ -124,8 +128,12 @@ describe("chorus.dialogs.Visualization", function() {
                 expect(this.dialog.$(".modal_controls a.hide").text().trim()).toMatchTranslation("visualization.hide_table");
             });
 
-            it("should have a 'Save Chart' button", function() {
+            it("should have a 'Download' button", function() {
                 expect(this.dialog.$("button.save").text().trim()).toMatchTranslation("actions.save_chart");
+            });
+
+            it("should have a 'Save as Work File' button", function() {
+                expect(this.dialog.$("button.save_as_workfile").text().trim()).toMatchTranslation("actions.save_as_workfile");
             });
 
             it("should have a 'Close' button", function() {
@@ -182,7 +190,7 @@ describe("chorus.dialogs.Visualization", function() {
                 describe("clicking on the 'save chart' button", function() {
                     beforeEach(function () {
                         this.submitSpy = jasmine.createSpy("submit");
-                        this.hideSpy = jasmine.createSpy("hide")
+                        this.hideSpy = jasmine.createSpy("hide");
 
                         this.fakeForm = {
                             submit : this.submitSpy,
@@ -200,7 +208,7 @@ describe("chorus.dialogs.Visualization", function() {
 
                     it("hides the form", function() {
                         expect(this.hideSpy).toHaveBeenCalled();
-                    })
+                    });
 
                     it("submits the form", function() {
                         expect(this.submitSpy).toHaveBeenCalled();
@@ -209,23 +217,64 @@ describe("chorus.dialogs.Visualization", function() {
 
                 describe("constructing the download form", function() {
                     beforeEach(function () {
-                        this.dialog.$(".chart_area").addClass("visualization").append("<svg/>")
+                        this.dialog.$(".chart_area").addClass("visualization").append("<svg/>");
                         this.form = this.dialog.createDownloadForm();
                     });
 
                     it("has the correct action", function() {
-                        expect(this.form).toHaveAttr("action", "/downloadChart.jsp")
-                    })
+                        expect(this.form).toHaveAttr("action", "/downloadChart.jsp");
+                    });
 
                     it("has the correct form elements", function() {
                         expect($("input[name=svg]", this.form)).toExist();
-                        expect($("input[name=chart-name]", this.form)).toHaveValue("Foo")
+                        expect($("input[name=chart-name]", this.form)).toHaveValue("Foo");
                         expect($("input[name=chart-type]", this.form)).toHaveValue("boxplot");
-                    })
-                })
-            })
-        })
-    })
+                    });
+                });
+            });
+
+            describe("saving as work file", function() {
+                describe("clicking on the 'save as work file' button", function() {
+                    beforeEach(function () {
+                        spyOn(chorus.models.Workfile.prototype, 'save').andCallThrough();
+                        this.dialog.$(".chart_area").addClass("visualization").append("<svg/>");
+                        this.dialog.$("button.save_as_workfile").attr("disabled", false);
+                        this.dialog.$("button.save_as_workfile").click();
+                    });
+
+                    it("disables the save as workfile button and shows the loading spinner", function() {
+                        expect(this.dialog.$("button.save_as_workfile").isLoading()).toBeTruthy();
+                    });
+
+
+                    it("makes a workfile with the correct elements", function() {
+                        expect(this.dialog.workfile.get("svgData")).toBeDefined();
+                        expect(this.dialog.workfile.get("source")).toBe("visualization");
+                        expect(this.dialog.workfile.get("fileName")).toBe("Foo-boxplot.png");
+                    });
+
+                    it("saves the workfile", function() {
+                        expect(this.dialog.workfile.save).toHaveBeenCalled();
+                    });
+
+                    context("when the save completes", function() {
+                        beforeEach(function() {
+                            spyOn(chorus, "toast");
+                            this.server.completeSaveFor(this.dialog.workfile, {fileName: "Foo-boxplot_2.png"});
+                        });
+
+                        it("should restore the save as workfile button", function() {
+                            expect(this.dialog.$('button.save_as_workfile').isLoading()).toBeFalsy();
+                        });
+
+                        it("shows a toast message", function() {
+                            expect(chorus.toast).toHaveBeenCalledWith("dataset.visualization.toast.workfile_from_chart", {fileName: "Foo-boxplot_2.png"});
+                        });
+                    });
+                });
+            });
+        });
+    });
 
     describe("show and hide tabular data", function() {
         beforeEach(function() {

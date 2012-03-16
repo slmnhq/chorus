@@ -52,7 +52,9 @@ chorus.models.User = chorus.models.Base.extend({
 
     imageUrl:function (options) {
         options = (options || {});
-        return "/edc/userimage/" + this.get("id") + "?size=" + (options.size || "original");
+        var url = new URI("/edc/userimage/" + this.get("id") + "?size=" + (options.size || "original"));
+        window.jasmine || url.addSearch({iebuster: $.now()});
+        return url.toString();
     },
 
     picklistImageUrl:function () {

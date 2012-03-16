@@ -130,13 +130,14 @@
                 },
 
                 toContainText: function(text) {
+                    var actualText = _.isString(this.actual) ? this.actual : this.actual.text()
                     this.message = function() {
                         return [
-                            'Expected "' + this.actual.text() + '" to contain "' + text + '"',
-                            'Expected "' + this.actual.text() + '" not to contain "' + text + '"'
+                            'Expected "' + actualText + '" to contain "' + text + '"',
+                            'Expected "' + actualText + '" not to contain "' + text + '"'
                         ];
                     }
-                    return this.env.contains_(this.actual.text(), text);
+                    return this.env.contains_(actualText, text);
                 },
 
                 toHaveSpinner: function() {
