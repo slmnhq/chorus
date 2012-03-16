@@ -67,14 +67,16 @@
     }
     .binary_workfile_content_details {
         line-height: 31px;
-        background-color: #CCC;
+        background-image: url("/images/binary_workfile_action_bar_tile.png");
         a.download {
+            margin-top: -1px;
             float: right;
             button {
                 font-size: 13px;
                 font-weight: $semibold;
                 color: $color-text2;
                 @include content-details-button(#AAA);
+                background-color: #D2D8DD;
             }
         }
 
