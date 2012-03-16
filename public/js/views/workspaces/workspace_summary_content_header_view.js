@@ -24,6 +24,13 @@ chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend({
         });
     },
 
+    preRender: function() {
+        if (this.activityListHeader) {
+            this.activityListHeader.allTitle = t("workspace.recent_activity", {name: this.model.get("name")});
+            this.activityListHeader.insightsTitle = t("workspace.recent_insights", {name: this.model.get("name")});
+        }
+    },
+
     postRender: function() {
         if(this.model.get("summary")) {
             this.$(".truncated_summary").removeClass("hidden");
