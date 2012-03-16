@@ -21,7 +21,7 @@ describe("chorus.views.TypeAheadSearch", function() {
         });
 
         it("should show the link to show all search result", function() {
-            expect(this.view.$("li:eq(0)").text()).toMatchTranslation("type_ahead.show_all_results", {query: "test"});
+            expect(this.view.$("li:eq(0)").text().trim()).toMatchTranslation("type_ahead.show_all_results", {query: "test"});
             expect(this.view.$("li:eq(0) a").attr("href")).toBe("#/search/test");
         });
 
@@ -278,7 +278,7 @@ describe("chorus.views.TypeAheadSearch", function() {
         });
 
         it("should show the link to show all search result", function() {
-            expect(this.view.$("li:eq(0)").text()).toMatchTranslation("type_ahead.show_all_results", {query: "test"});
+            expect(this.view.$("li:eq(0)").text().trim()).toMatchTranslation("type_ahead.show_all_results", {query: "test"});
             expect(this.view.$("li:eq(0) a").attr("href")).toBe("#/search/test");
         });
     });
