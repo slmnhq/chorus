@@ -1,4 +1,4 @@
-describe("chorus.dialogs.InstanceEditDialog", function() {
+describe("chorus.dialogs.InstanceEdit", function() {
     beforeEach(function() {
         this.launchElement = $("<button/>");
         this.instance = fixtures.instance({
@@ -8,10 +8,11 @@ describe("chorus.dialogs.InstanceEditDialog", function() {
             description: "it is a food name",
             maintenanceDb: "postgres"
         });
-        this.dialog = new chorus.dialogs.InstancesEdit({launchElement: this.launchElement, pageModel: this.instance });
+        this.launchElement.data("instance", this.instance);
+        this.dialog = new chorus.dialogs.InstanceEdit({launchElement: this.launchElement});
     });
 
-    it("should make a copy of the page model", function() {
+    it("should make a copy of the source model", function() {
         expect(this.dialog.model).not.toBe(this.instance);
         expect(this.dialog.model.attributes).toEqual(this.instance.attributes);
     });
@@ -285,7 +286,7 @@ describe("chorus.dialogs.InstanceEditDialog", function() {
                 expect(this.dialog.closeModal).toHaveBeenCalled();
             });
 
-            it("triggers change on the page model", function() {
+            it("triggers change on the source model", function() {
                 expect("change").toHaveBeenTriggeredOn(this.instance);
             })
         });

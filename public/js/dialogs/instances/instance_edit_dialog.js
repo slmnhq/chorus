@@ -1,11 +1,12 @@
-chorus.dialogs.InstancesEdit = chorus.dialogs.Base.extend({
+chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
     className:"instance_edit",
     title:t("instances.edit_dialog.title"),
     events:{
         "submit form":"save"
     },
     makeModel:function () {
-        this.model = new chorus.models.Instance(this.options.pageModel.attributes);
+        this.sourceModel = this.options.launchElement.data("instance")
+        this.model = new chorus.models.Instance(this.sourceModel.attributes);
 
         this.users = new chorus.collections.UserSet();
         this.fetchUserSet();
@@ -50,7 +51,7 @@ chorus.dialogs.InstancesEdit = chorus.dialogs.Base.extend({
     },
 
     saveSuccess:function () {
-        this.options.pageModel.set(this.model.attributes);
+        this.sourceModel.set(this.model.attributes);
         chorus.toast("instances.edit_dialog.saved_message");
         this.closeModal();
     },
