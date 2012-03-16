@@ -132,7 +132,7 @@ describe("chorus.Mixins.Fetching", function() {
                     status: 'fail',
                     message: [{ message: "some problem" }],
                     resource: this.things
-                })).toEqual([{ message: "some problem" }]);
+                })).toBeTruthy();
             });
 
             it("stores the returned resource as the resource's errorData", function() {

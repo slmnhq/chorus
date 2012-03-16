@@ -34,7 +34,8 @@ chorus.Mixins.Fetching = {
             delete this.serverErrors;
         } else {
             this.errorData = data.resource && data.resource[0];
-            return this.serverErrors = this.dataErrors(data);
+            this.serverErrors = this.dataErrors(data);
+            return true;
         }
     }
 };
