@@ -433,14 +433,14 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         context("scroll position after the page re-renders", function() {
             beforeEach(function() {
                 var api = this.dialog.$(".tbody").data("jsp");
-                api.scrollTo(7, 9);
+                api.scrollTo(7, 4);
                 this.dialog.render();
             });
 
             it("roughly maintains the previous scroll position", function() {
                 var api = this.dialog.$(".tbody").data("jsp");
                 expect(api.getContentPositionX()).toBeWithinDeltaOf(7, 2);
-                expect(api.getContentPositionY()).toBeWithinDeltaOf(9, 2);
+                expect(api.getContentPositionY()).toBeWithinDeltaOf(4, 2);
             })
         })
     })
