@@ -62,10 +62,10 @@ describe("chorus.models.TabularData", function() {
 
             "SANDBOX_TABLE": {
                 "BASE_TABLE": "sandbox_table_large.png",
-                "EXTERNAL_TABLE": "source_table_large.png",
+                "EXTERNAL_TABLE": "sandbox_table_large.png",
                 "MASTER_TABLE": "sandbox_table_large.png",
                 "VIEW": "sandbox_view_large.png",
-                "HDFS_EXTERNAL_TABLE": "source_table_large.png"
+                "HDFS_EXTERNAL_TABLE": "sandbox_table_large.png"
             }
         };
 
@@ -83,10 +83,10 @@ describe("chorus.models.TabularData", function() {
 
             "SANDBOX_TABLE": {
                 "BASE_TABLE": "sandbox_table_medium.png",
-                "EXTERNAL_TABLE": "source_table_medium.png",
+                "EXTERNAL_TABLE": "sandbox_table_medium.png",
                 "MASTER_TABLE": "sandbox_table_medium.png",
                 "VIEW": "sandbox_view_medium.png",
-                "HDFS_EXTERNAL_TABLE": "source_table_medium.png"
+                "HDFS_EXTERNAL_TABLE": "sandbox_table_medium.png"
             }
         };
 

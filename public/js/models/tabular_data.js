@@ -251,10 +251,10 @@ chorus.models.TabularData = chorus.models.Base.extend(_.extend({}, chorus.Mixins
 
         "SANDBOX_TABLE": {
             "BASE_TABLE": "sandbox_table",
-            "EXTERNAL_TABLE": "source_table",
+            "EXTERNAL_TABLE": "sandbox_table",
             "MASTER_TABLE": "sandbox_table",
             "VIEW": "sandbox_view",
-            "HDFS_EXTERNAL_TABLE": "source_table"
+            "HDFS_EXTERNAL_TABLE": "sandbox_table"
         }
     }
 });
