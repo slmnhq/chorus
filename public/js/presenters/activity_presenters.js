@@ -198,6 +198,13 @@
             }
         },
 
+        WORKSPACE_CHANGE_NAME: function(model) {
+            return {
+                objectName: model.workspace().get("name"),
+                objectUrl: model.workspace().showUrl()
+            }
+        },
+
         WORKFILE_CREATED: function(model) {
             return {
                 objectName: model.workfile().get("name"),

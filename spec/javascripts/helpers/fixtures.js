@@ -236,6 +236,23 @@ beforeEach(function() {
                 return new chorus.models.Activity(attrs);
             },
 
+            "WORKSPACE_CHANGE_NAME": function(overrides) {
+                return new chorus.models.Activity(_.extend({
+                    type: "WORKSPACE_CHANGE_NAME",
+                    author: {
+                        firstName: "EDC",
+                        id: "InitialUser",
+                        isDeleted: false,
+                        lastName: "Admin"
+                    },
+                    comments: [],
+                    id: fixtures.nextId().toString(),
+                    isDeleted: false,
+                    timestamp: "2012-03-15 17:27:52",
+                    workspace: fixtures.workspaceJson()
+                }, overrides));
+            },
+
             "WORKFILE_CREATED": function() {
                 return new chorus.models.Activity({
                     author: fixtures.authorJson(),
