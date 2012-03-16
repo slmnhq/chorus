@@ -43,11 +43,11 @@ $header-item-spacing: 2*$padding-x;
         overflow: hidden;
         padding: 0 0 0 $header-item-spacing;
         border-left: 1px solid $color-text3;
-        margin: 12px 0 0 0;
+        margin: 9px 0 0 0;
 
         input {
             padding: 4px;
-            height: 26px;
+            height: 32px;
 
             html.ie8 & {
                 height: 17px;
