@@ -106,6 +106,11 @@ chorus.views.Header = chorus.views.Base.extend({
         if (beingShown) {
             this.captureClicks();
             this.unreadNotifications.markAllRead({ success: _.bind(this.clearNotificationCount, this) });
+        } else {
+            this.unreadNotifications.each(function(model) {
+                model.set({ unread: false }, { silent: true })
+            })
+            this.notificationList.collection.trigger("reset")
         }
 
         this.$(".menu.popup_notifications").toggleClass("hidden", !beingShown);
