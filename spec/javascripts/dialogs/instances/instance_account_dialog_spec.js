@@ -1,8 +1,10 @@
 describe("chorus.dialogs.InstanceAccount", function() {
     beforeEach(function() {
         this.instance = fixtures.instance();
-        var launchElement = $("<a></a>").data("title", t("instances.account.add.title"));
-        this.dialog = new chorus.dialogs.InstanceAccount({ pageModel: this.instance, launchElement: launchElement });
+        var launchElement = $("<a></a>")
+            .data("title", t("instances.account.add.title"))
+            .data("instance", this.instance);
+        this.dialog = new chorus.dialogs.InstanceAccount({ launchElement: launchElement });
         this.dialog.launchModal();
         this.dialog.render();
     });

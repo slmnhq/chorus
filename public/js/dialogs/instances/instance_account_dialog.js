@@ -9,7 +9,8 @@ chorus.dialogs.InstanceAccount = chorus.dialogs.Account.extend({
     },
 
     makeModel:function (options) {
-        this.model = options.pageModel.accountForCurrentUser();
+        var instance = this.options.instance || this.options.launchElement.data("instance");
+        this.model = instance.accountForCurrentUser();
         this._super("makeModel", arguments);
     },
 

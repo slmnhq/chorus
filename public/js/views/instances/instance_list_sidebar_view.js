@@ -69,6 +69,8 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
 
     postRender: function() {
         this.$("a.dialog.workspace_usage").data("instance", this.instance);
+        this.$("a.dialog.add_credentials").data("instance", this.instance);
+        this.$("a.dialog.edit_credentials").data("instance", this.instance);
         this._super("postRender");
     },
 

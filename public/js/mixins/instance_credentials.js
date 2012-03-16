@@ -10,7 +10,7 @@ chorus.Mixins.InstanceCredentials.model = {
 chorus.Mixins.InstanceCredentials.page = {
     requiredResourcesFetchFailed: function(resource) {
         if (_.isFunction(resource.needsInstanceCredentials) && resource.needsInstanceCredentials()) {
-            var dialog = new chorus.dialogs.InstanceAccount({ title: t("instances.account.add.title"), pageModel: this.instance, reload: true });
+            var dialog = new chorus.dialogs.InstanceAccount({ title: t("instances.account.add.title"), instance: this.instance, reload: true });
             dialog.launchModal();
         } else {
             this._super("requiredResourcesFetchFailed", arguments);

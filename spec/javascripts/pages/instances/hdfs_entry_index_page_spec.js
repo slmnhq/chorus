@@ -99,32 +99,4 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
             })
         })
     });
-
-    describe("when the user does not have permission to view the databases", function() {
-        beforeEach(function() {
-            spyOn(chorus.Modal.prototype, "launchModal")
-            spyOn(Backbone.history, "loadUrl")
-
-            this.server.completeFetchFor(this.instance);
-            this.server.lastFetchFor(this.page.collection).fail([{
-                description: null,
-                message: "com.emc.edc.common.AccountMapException: Account map is needed.",
-                msgcode: null,
-                msgkey: null,
-                severity: "error"
-            }]);
-        });
-
-        it("does not go to the 404 page", function() {
-            expect(Backbone.history.loadUrl).not.toHaveBeenCalled()
-        });
-
-        it("launches the 'add credentials' dialog, and reloads after the credentials have been added", function() {
-            expect(chorus.Modal.prototype.launchModal).toHaveBeenCalled()
-            var dialog = chorus.Modal.prototype.launchModal.mostRecentCall.object;
-            expect(dialog).toBeA(chorus.dialogs.InstanceAccount);
-            expect(dialog.options.reload).toBeTruthy();
-            expect(dialog.options.title).toMatchTranslation("instances.account.add.title");
-        });
-    });
-})
+});

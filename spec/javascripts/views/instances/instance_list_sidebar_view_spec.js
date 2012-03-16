@@ -265,10 +265,12 @@ describe("chorus.views.InstanceListSidebar", function() {
                         });
 
                         it("shows the add credentials link", function() {
-                            expect(this.view.$(".actions .add_credentials")).toExist();
-                            expect(this.view.$(".actions .add_credentials").data("dialog")).toBe("InstanceAccount");
-                            expect(this.view.$(".actions .add_credentials").data("title")).toMatchTranslation("instances.account.add.title");
-                            expect(this.view.$(".actions .add_credentials").text()).toMatchTranslation("instances.sidebar.add_credentials");
+                            var addCredentialsLink = this.view.$(".actions a.add_credentials");
+                            expect(addCredentialsLink).toExist();
+                            expect(addCredentialsLink.data("dialog")).toBe("InstanceAccount");
+                            expect(addCredentialsLink.data("title")).toMatchTranslation("instances.account.add.title");
+                            expect(addCredentialsLink.text()).toMatchTranslation("instances.sidebar.add_credentials");
+                            expect(addCredentialsLink.data("instance")).toBe(this.instance);
                         });
 
                         it("does not show the 'edit credentials' link", function() {
@@ -298,10 +300,12 @@ describe("chorus.views.InstanceListSidebar", function() {
                         });
 
                         it("shows the 'edit credentials' link", function() {
-                            expect(this.view.$(".actions .edit_credentials")).toExist();
-                            expect(this.view.$(".actions .edit_credentials").data("dialog")).toBe("InstanceAccount");
-                            expect(this.view.$(".actions .edit_credentials").data("title")).toMatchTranslation("instances.account.edit.title");
-                            expect(this.view.$(".actions .edit_credentials").text()).toMatchTranslation("instances.sidebar.edit_credentials");
+                            var editCredentialsLink = this.view.$(".actions .edit_credentials");
+                            expect(editCredentialsLink).toExist();
+                            expect(editCredentialsLink.data("dialog")).toBe("InstanceAccount");
+                            expect(editCredentialsLink.data("title")).toMatchTranslation("instances.account.edit.title");
+                            expect(editCredentialsLink.text()).toMatchTranslation("instances.sidebar.edit_credentials");
+                            expect(editCredentialsLink.data("instance")).toBe(this.instance);
                         });
 
                         it("does not show the 'add credentials' link", function() {
