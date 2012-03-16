@@ -1,5 +1,6 @@
 chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
         className:"workfile_content_details",
+        additionalClass: "workfile_content_details",
 
         setup:function () {
             chorus.PageEvents.subscribe("file:autosaved", this.updateAutosaveText, this);
@@ -64,6 +65,8 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
                 return new chorus.views.ImageWorkfileContentDetails({ model:model });
             } else if (model.isSql()) {
                 return new chorus.views.SqlWorkfileContentDetails({ model:model });
+            } else if (model.isBinary()) {
+                return new chorus.views.BinaryWorkfileContentDetails({ model:model });
             }
 
             return new chorus.views.WorkfileContentDetails({ model:model });

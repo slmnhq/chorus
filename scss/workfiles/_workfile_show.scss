@@ -27,6 +27,7 @@
             @include content-details-button($content-details-action-link-border-color);
         }
 
+        padding: 0;
         .save {
             float: right;
 
@@ -58,6 +59,27 @@
             color: $content-details-action-link-color;
             display: inline;
             padding-left: $padding-x;
+        }
+    }
+
+    .workfile_content_details {
+        padding: 0 10px;
+    }
+    .binary_workfile_content_details {
+        line-height: 31px;
+        background-color: #CCC;
+        a.download {
+            float: right;
+            button {
+                font-size: 13px;
+                font-weight: $semibold;
+                color: $color-text2;
+                @include content-details-button(#AAA);
+            }
+        }
+
+        .not_previewable {
+            @include font-content-details;
         }
     }
 

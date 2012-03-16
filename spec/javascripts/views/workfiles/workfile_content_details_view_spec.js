@@ -28,9 +28,21 @@ describe("WorkfileContentDetails", function() {
             });
         });
 
+        context("when the workfile is a binary file", function() {
+            beforeEach(function() {
+                this.model = fixtures.binaryWorkfile();
+                spyOn(chorus.views, "BinaryWorkfileContentDetails");
+                chorus.views.WorkfileContentDetails.buildFor(this.model);
+            });
+
+            it("instantiates a BinaryWorkfileContentDetails view with the given workfile", function() {
+                expect(chorus.views.BinaryWorkfileContentDetails).toHaveBeenCalledWith({ model: this.model });
+            });
+        });
+
         context("when given anything else", function() {
             beforeEach(function() {
-                fixtures.otherWorkfile();
+                fixtures.textWorkfile();
                 spyOn(chorus.views, "WorkfileContentDetails");
                 chorus.views.WorkfileContentDetails.buildFor = chorus.views.WorkfileContentDetails.originalValue.buildFor;
                 chorus.views.WorkfileContentDetails.buildFor(this.model);
@@ -136,8 +148,8 @@ describe("WorkfileContentDetails", function() {
                         expect($("a.save_as_current", this.qtipMenu)).not.toExist();
                         expect($("span.save_as_current.disabled", this.qtipMenu)).toExist();
                     });
-                })
-            })
+                });
+            });
         });
     });
 

@@ -38,13 +38,10 @@ describe("WorkfileListView", function() {
                 expect(this.view.$("li").length).toBe(3);
             });
 
-            it("links each workfile to its show page for text or image files", function() {
+            it("links each workfile to its show page", function() {
                 expect($(this.view.$("a.name")[0]).attr("href")).toBe(this.model1.showUrl());
                 expect($(this.view.$("a.name")[1]).attr("href")).toBe(this.model2.showUrl());
-            });
-
-            it("links to file download for other file types", function() {
-                expect($(this.view.$("a.name")[2]).attr("href")).toBe(this.model3.downloadUrl());
+                expect($(this.view.$("a.name")[2]).attr("href")).toBe(this.model3.showUrl());
             });
 
             it("includes data-id for each item", function() {

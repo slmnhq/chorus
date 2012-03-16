@@ -28,14 +28,6 @@
             }
         },
 
-        showUrl: function() {
-           if (this.hasOwnPage()) {
-               return this._super("showUrl", arguments);
-           } else {
-               return this.downloadUrl();
-           }
-        },
-
         initialize: function() {
             if (this.collection && this.collection.attributes && this.collection.attributes.workspaceId) {
                 this.set({workspaceId: this.collection.attributes.workspaceId}, {silent: true});
@@ -128,7 +120,7 @@
 
         isImage: function() {
             var type = this.get("mimeType");
-            return type && type.match(imageRegex);
+            return type && !!type.match(imageRegex);
         },
 
         isSql: function() {
@@ -138,7 +130,11 @@
 
         isText: function() {
             var type = this.get("mimeType");
-            return type && type.match(textRegex);
+            return type && !!type.match(textRegex);
+        },
+
+        isBinary: function() {
+            return !(this.isSql() || this.isImage() || this.isText());
         },
 
         downloadUrl: function() {
@@ -205,7 +201,7 @@
         },
 
         hasOwnPage: function() {
-            return (this.isText() || this.isImage())
+            return true;
         }
     });
 })();

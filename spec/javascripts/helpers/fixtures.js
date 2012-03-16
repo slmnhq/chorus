@@ -1654,6 +1654,15 @@ beforeEach(function() {
             return this.workfile(overrides);
         },
 
+        binaryWorkfile: function(overrides) {
+            overrides = _.extend({
+                fileType: "N/A",
+                fileName: "zipfile.zip",
+                mimeType: "application/zip"
+            }, overrides);
+            return this.workfile(overrides);
+        },
+
         workfileSet: function(models) {
             models = models || [this.workfile(), this.workfile()];
             return new chorus.collections.WorkfileSet(models);
