@@ -100,6 +100,22 @@ describe("chorus.views.TabularDataVisualizationBoxplotSidebar", function() {
             });
         })
 
+        context("with only one valid column", function() {
+            beforeEach(function() {
+                this.column2 = fixtures.databaseColumn({typeCategory: "ANIMAL", name: "a Speed"})
+
+                this.model = fixtures.datasetChorusView({objectName: "Foo"});
+                this.columns = fixtures.databaseColumnSet([this.column2]);
+                this.view = new chorus.views.TabularDataVisualizationBoxplotSidebar({model: this.model, collection: this.columns})
+                this.view.render();
+            })
+
+
+            it("should disable the button", function() {
+                expect(this.view.$("button.create")).toBeDisabled();
+            });
+        });
+
         describe("'create chart' button", function() {
             beforeEach(function() {
                 this.columns = fixtures.databaseColumnSet([]);

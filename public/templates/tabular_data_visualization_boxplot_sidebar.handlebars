@@ -35,10 +35,10 @@
     </div>
     <div class="button_wrapper">
         <button class="create"
-            {{#ifAny allColumnNames.length numericColumnNames.length}}
+            {{#ifAll allColumnNames.length numericColumnNames.length}}
             {{else}}
                 disabled="disabled"
-            {{/ifAny}}
+            {{/ifAll}}
                 >{{t "dataset.visualization.sidebar.create_chart"}}</button>
         <button class="cancel hidden">{{t "actions.cancel"}}</button>
     </div>
