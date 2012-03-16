@@ -34,6 +34,11 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            stubDefer();
+            this.disableSpy = jasmine.createSpy("disable")
+            spyOn($.fn, "cleditor").andReturn([{
+                disable: this.disableSpy
+            }])
             setLoggedInUser({ id: 11 });
             this.workspace.set({ ownerId: 11})
             this.dialog.render();
@@ -197,7 +202,8 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
         context("when the user is the owner of the workspace", function() {
             beforeEach(function() {
                 setLoggedInUser({ id: 11 });
-                this.workspace.set({ ownerId: 11})
+                this.workspace.set({ ownerId: 11});
+                this.disableSpy.reset();
                 this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
                 this.dialog.render();
             })
@@ -205,6 +211,10 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             it("does not disable the 'Publicly available' checkbox", function() {
                 expect(this.dialog.$("input[name=isPublic]")).not.toBeDisabled();
             })
+
+            it("does not disable the cleditor", function() {
+                expect(this.disableSpy).not.toHaveBeenCalled();
+            });
 
             describe("the owner select", function() {
                 it("shows up", function() {
@@ -275,6 +285,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             context("and the user is not an admin", function() {
                 beforeEach(function() {
                     setLoggedInUser({ id: 11, admin: false});
+                    this.disableSpy.reset();
                     this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
                     this.dialog.render();
                 })
@@ -305,6 +316,10 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     expect(this.dialog.$("button.submit")).not.toExist();
                     expect(this.dialog.$("button.cancel")).toContainTranslation("actions.close_window");
                 })
+
+                it("disables the cleditor", function() {
+                    expect(this.disableSpy).toHaveBeenCalledWith(true);
+                });
 
                 context("and the workspace is not archived", function() {
                     beforeEach(function() {
@@ -342,6 +357,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             context("and the user is an admin", function() {
                 beforeEach(function() {
                     setLoggedInUser({ id: 11, admin: true });
+                    this.disableSpy.reset();
                     this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
                     this.dialog.render();
                 })
@@ -349,6 +365,10 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 it("does not disable the 'Publicly available' checkbox", function() {
                     expect(this.dialog.$("input[name=isPublic]")).not.toBeDisabled();
                 })
+
+                it("does not disable the cleditor", function() {
+                    expect(this.disableSpy).not.toHaveBeenCalled();
+                });
 
                 describe("the owner select", function() {
                     it("shows up", function() {

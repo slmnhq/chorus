@@ -64,9 +64,12 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.extend({
 
     postRender: function() {
         this.$("select.owner").val(this.model.get("ownerId"));
-        _.defer(function() {
-            $("textarea[name=summary]").cleditor({controls: "bold italic | bullets numbering | link unlink"});
-        });
+        _.defer(_.bind(function() {
+            var clEditor = $("textarea[name=summary]").cleditor({controls: "bold italic | bullets numbering | link unlink"})[0];
+            if (!this.hasPermission) {
+                clEditor.disable(true)
+            }
+        }, this));
     },
 
     onClickToolbarBold: function(e) {
