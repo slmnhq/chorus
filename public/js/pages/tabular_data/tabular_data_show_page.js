@@ -30,7 +30,7 @@
         }
     });
 
-    chorus.pages.TabularDataShowPage = chorus.pages.Base.extend({
+    chorus.pages.TabularDataShowPage = chorus.pages.Base.extend(_.extend({}, chorus.Mixins.InstanceCredentials.page, {
         constructorName: "TabularDataShowPage",
         helpId: "databaseObject",
         hideDeriveChorusView: true,
@@ -196,5 +196,5 @@
         removeOldSecondaryClasses: function(type) {
             this.$('.sidebar_content.secondary').removeClass("tabular_data_visualization_" + type + "_sidebar");
         }
-    });
+    }));
 })();

@@ -3,6 +3,10 @@ describe("chorus.models.TabularData", function() {
         this.tabularData = fixtures.tabularData();
     })
 
+    it("includes the InstanceCredentials mixin", function() {
+        expect(this.tabularData.instanceRequiringCredentials).toBe(chorus.Mixins.InstanceCredentials.model.instanceRequiringCredentials);
+    });
+
     describe("#initialize", function() {
         it("doesn't override type when type already exists", function() {
             var model = new chorus.models.TabularData({ type: "foo"})

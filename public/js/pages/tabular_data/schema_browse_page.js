@@ -1,4 +1,4 @@
-chorus.pages.SchemaBrowsePage = chorus.pages.Base.extend({
+chorus.pages.SchemaBrowsePage = chorus.pages.Base.extend(_.extend({}, chorus.Mixins.InstanceCredentials.page, {
     helpId: "schema",
     useLoadingSection: true,
 
@@ -45,4 +45,4 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.extend({
 
         this.render();
     }
-});
+}));

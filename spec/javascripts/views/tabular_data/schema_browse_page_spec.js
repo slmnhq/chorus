@@ -10,6 +10,10 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         expect(this.page.helpId).toBe("schema")
     })
 
+    it("includes the InstanceCredentials mixin", function() {
+        expect(this.page.requiredResourcesFetchFailed).toBe(chorus.Mixins.InstanceCredentials.page.requiredResourcesFetchFailed);
+    });
+
     context("after everything has been fetched", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.instance);

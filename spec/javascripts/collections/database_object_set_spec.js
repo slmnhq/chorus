@@ -3,6 +3,10 @@ describe("chorus.collections.DatabaseObjectSet", function() {
         this.collection = new chorus.collections.DatabaseObjectSet([], { instanceId: '10000', databaseName:"some_database", schemaName: "some_schema" });
     });
 
+    it("includes the InstanceCredentials mixin", function() {
+        expect(this.collection.instanceRequiringCredentials).toBe(chorus.Mixins.InstanceCredentials.model.instanceRequiringCredentials);
+    });
+
     describe("#url", function() {
         it("is correct", function() {
             expect(this.collection.url({ rows: 10, page: 1})).toMatchUrl("/edc/data/10000/database/some_database/schema/some_schema?rows=10&page=1&type=meta");

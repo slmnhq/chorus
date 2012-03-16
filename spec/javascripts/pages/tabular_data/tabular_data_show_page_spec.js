@@ -10,6 +10,10 @@ describe("chorus.pages.TabularDataShowPage", function() {
         this.page = new chorus.pages.TabularDataShowPage(a.instance.id, a.databaseName, a.schemaName, a.objectType, a.objectName);
     })
 
+    it("includes the InstanceCredentials mixin", function() {
+        expect(this.page.requiredResourcesFetchFailed).toBe(chorus.Mixins.InstanceCredentials.page.requiredResourcesFetchFailed);
+    });
+
     it("has a helpId", function() {
         expect(this.page.helpId).toBe("databaseObject")
     })
@@ -59,12 +63,12 @@ describe("chorus.pages.TabularDataShowPage", function() {
             this.server.completeFetchFor(this.databaseObject);
             this.server.completeFetchAllFor(this.columnSet, [fixtures.databaseColumn(), fixtures.databaseColumn()]);
             this.server.completeFetchFor(this.databaseObject.statistics());
-        })
+        });
 
         context("when the model fails to load properly", function() {
             beforeEach(function() {
                 spyOn(Backbone.history, "loadUrl")
-                this.page.model.trigger('fetchFailed')
+                this.page.model.trigger('fetchFailed', this.page.model);
             })
 
             it("navigates to the 404 page", function() {

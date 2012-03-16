@@ -1,4 +1,4 @@
-chorus.collections.DatabaseObjectSet = chorus.collections.Base.extend({
+chorus.collections.DatabaseObjectSet = chorus.collections.Base.extend(_.extend({}, chorus.Mixins.InstanceCredentials.model, {
     model: chorus.models.DatabaseObject,
     urlTemplate: "data/{{instanceId}}/database/{{databaseName}}/schema/{{schemaName}}",
 
@@ -16,4 +16,4 @@ chorus.collections.DatabaseObjectSet = chorus.collections.Base.extend({
             }, modelJson);
         }, this);
     }
-});
+}));

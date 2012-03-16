@@ -1,4 +1,4 @@
-chorus.pages.SchemaIndexPage = chorus.pages.Base.extend({
+chorus.pages.SchemaIndexPage = chorus.pages.Base.extend(_.extend({}, chorus.Mixins.InstanceCredentials.page, {
     constructorName: "SchemaIndexPage",
 
     setup: function(instanceId, databaseName) {
@@ -30,4 +30,4 @@ chorus.pages.SchemaIndexPage = chorus.pages.Base.extend({
 
         this.sidebar = new chorus.views.SchemaListSidebar();
     }
-});
+}));
