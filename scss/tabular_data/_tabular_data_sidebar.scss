@@ -20,6 +20,10 @@
             margin-right: 5px;
         }
         .right {
+            a {
+                font-size: 12px;
+                font-weight: $semibold;
+            }
             padding-left: 22px;
             &.last_import_text {
                 padding-top: 10px;
